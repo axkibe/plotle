@@ -27,101 +27,99 @@ if( JION )
 	return{
 		id : 'widget_button',
 		attributes :
+		{
+			designFrame :
 			{
-				designFrame :
-					{
-						comment : 'designed frame (using anchors',
-						type : 'design_anchorRect'
-					},
-				down :
-					{
-						comment : 'true if the button is down',
-						type : 'boolean',
-						defaultValue : 'false'
-					},
-				facets :
-					{
-						comment : 'style facets',
-						type : 'design_facetRay'
-					},
-				font :
-					{
-						comment : 'font of the text',
-						type : 'euclid_font',
-						defaultValue : 'null'
-					},
-				hover :
-					{
-						comment : 'component hovered upon',
-						type : 'jion_path',
-						defaultValue : 'null',
-						prepare : 'widget_widget.concernsHover( hover, path )'
-					},
-				icon :
-					{
-						comment : 'icon to display',
-						type : '->icon',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						prepare : 'widget_widget.concernsMark( mark, path )',
-						defaultValue : 'undefined',
-						allowsNull : true // FIXME
-					},
-				path :
-					{
-						comment : 'the path of the widget',
-						type : 'jion_path',
-						defaultValue : 'null'
-					},
-				shape :
-					{
-						comment : 'shape of the button',
-						// FUTURE allow other types
-						type : 'design_anchorEllipse'
-					},
-				superFrame :
-					{
-						comment : 'the frame the widget resides in',
-						type : 'euclid_rect',
-						defaultValue : 'null'
-					},
-				text :
-					{
-						comment : 'the text written in the button',
-						type : 'string',
-						defaultValue : 'null'
-					},
-				textDesignPos :
-					{
-						comment : 'designed position of the text',
-						type : 'design_anchorPoint',
-						defaultValue : 'null'
-					},
-				textNewline :
-					{
-						comment : 'vertical distance of newline',
-						type : 'number',
-						defaultValue : 'null'
-					},
-				textRotation :
-					{
-						comment : 'rotation of the text',
-						type : 'number',
-						defaultValue : 'null'
-					},
-				visible :
-					{
-						comment : 'if false the button is hidden',
-						type : 'boolean',
-						defaultValue : 'true'
-					}
+				comment : 'designed frame (using anchors',
+				type : 'design_anchorRect'
 			},
-		init :
-			[ ]
+			down :
+			{
+				comment : 'true if the button is down',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			facets :
+			{
+				comment : 'style facets',
+				type : 'design_facetRay'
+			},
+			font :
+			{
+				comment : 'font of the text',
+				type : 'euclid_font',
+				defaultValue : 'undefined'  // FIXME why?
+			},
+			hover :
+			{
+				comment : 'component hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				prepare : 'widget_widget.concernsHover( hover, path )'
+			},
+			icon :
+			{
+				comment : 'icon to display',
+				type : '->icon',
+				defaultValue : 'undefined'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : '->mark',
+				prepare : 'widget_widget.concernsMark( mark, path )',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the widget',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			shape :
+			{
+				comment : 'shape of the button',
+				// FUTURE allow other types
+				type : 'design_anchorEllipse'
+			},
+			superFrame :
+			{
+				comment : 'the frame the widget resides in',
+				type : 'euclid_rect',
+				defaultValue : 'undefined'
+			},
+			text :
+			{
+				comment : 'the text written in the button',
+				type : 'string',
+				defaultValue : '""'
+			},
+			textDesignPos :
+			{
+				comment : 'designed position of the text',
+				type : 'design_anchorPoint',
+				defaultValue : 'undefined' // FIXME why?
+			},
+			textNewline :
+			{
+				comment : 'vertical distance of newline',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			textRotation :
+			{
+				comment : 'rotation of the text',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			visible :
+			{
+				comment : 'if false the button is hidden',
+				type : 'boolean',
+				defaultValue : 'true'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -140,9 +138,9 @@ widget_button.prototype._init =
 	}
 	else
 	{
-		this.frame = null;
+		this.frame = undefined;
 
-		this._shape = null;
+		this._shape = undefined;
 	}
 
 	// if true repeats the push action if held down
@@ -164,92 +162,90 @@ jools.lazyValue(
 	widget_button.prototype,
 	'_display',
 	function( )
-	{
-		var
-			display,
-			facet,
-			font,
-			newline,
-			textPos;
+{
+	var
+		a,
+		display,
+		facet,
+		font,
+		newline,
+		text,
+		textPos,
+		tZ,
+		x,
+		y;
 
-		display =
-			euclid_display.create(
-				'width', this.frame.width,
-				'height', this.frame.height
-			);
-
-		facet =
-			this.facets.getFacet(
-				'down', this.down,
-				'hover', !!( this.hover && this.hover.equals( this.path ) ),
-				'focus', !!this.mark
-			);
-
-		display.paint(
-			facet.fill,
-			facet.border,
-			this._shape,
-			euclid_view.proper
+	display =
+		euclid_display.create(
+			'width', this.frame.width,
+			'height', this.frame.height
 		);
 
-		if( this.text )
+	facet =
+		this.facets.getFacet(
+			'down', this.down,
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	display.paint(
+		facet.fill,
+		facet.border,
+		this._shape,
+		euclid_view.proper
+	);
+
+	if( this.text )
+	{
+		newline = this.textNewline;
+
+		font = this.font;
+
+		// FIXME put into _init
+		textPos =
+			this.textDesignPos.compute(
+				this.frame.zeropnw
+			);
+
+		if( newline === undefined )
 		{
-			newline = this.textNewline;
+			display.paintText(
+				'text', this.text,
+				'p', textPos,
+				'font', font,
+				'rotate', this.textRotation
+			);
+		}
+		else
+		{
+			x = textPos.x;
 
-			font = this.font;
+			y = textPos.y;
 
-			// FIXME put into _init
-			textPos =
-				this.textDesignPos.compute(
-					this.frame.zeropnw
-				);
+			text = this.text.split( '\n' );
 
-			if( newline === null )
+			tZ = text.length;
+
+			y -= Math.round( ( tZ - 1 ) / 2 * newline );
+
+			for( a = 0; a < tZ; a++, y += newline )
 			{
 				display.paintText(
-					'text', this.text,
-					'p', textPos,
-					'font', font,
-					'rotate', this.textRotation
+					'text', text[ a ],
+					'xy', x, y,
+					'font', font
 				);
 			}
-			else
-				{
-				var
-					x =
-						textPos.x,
-					y =
-						textPos.y,
-					text =
-						this.text.split( '\n' ),
-					tZ =
-						text.length;
-
-				y -=
-					Math.round( ( tZ - 1 ) / 2 * newline );
-
-				for(
-					var a = 0;
-					a < tZ;
-					a++, y += newline
-				)
-				{
-					display.paintText(
-						'text', text[ a ],
-						'xy', x, y,
-						'font', font
-					);
-				}
-			}
 		}
-
-		if( this.icon )
-		{
-			this.icon.draw( display, euclid_view.proper );
-		}
-
-		return display;
 	}
+
+	if( this.icon )
+	{
+		this.icon.draw( display, euclid_view.proper );
+	}
+
+	return display;
+}
 );
 
 
@@ -266,14 +262,14 @@ widget_button.prototype.pointingHover =
 
 	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	pp = p.sub( this.frame.pnw );
 
 	if( !this._display.withinSketch( this._shape, euclid_view.proper, pp ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	return(
@@ -304,20 +300,16 @@ widget_button.prototype.click =
 		!this.frame.within( euclid_view.proper, p )
 	)
 	{
-		return null;
+		return undefined;
 	}
 
 	pp = p.sub( this.frame.pnw );
 
-	if(!
-		this._display.withinSketch(
-			this._shape,
-			euclid_view.proper,
-			pp
-		)
+	if(
+		!this._display.withinSketch( this._shape, euclid_view.proper, pp )
 	)
 	{
-		return null;
+		return undefined;
 	}
 
 	root.pushButton( this.path );

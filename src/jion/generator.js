@@ -1451,22 +1451,12 @@ prototype.genCreatorChecks =
 
 		if( !allowsUndefined )
 		{
-			check =
-				check
-				.$if(
-					$( av, ' === undefined' ),
-					$fail( )
-				);
+			check = check.$if( $( av, ' === undefined' ), $fail( ) );
 		}
 
 		if( !allowsNull )
 		{
-			check =
-				check
-				.$if(
-					$( av, ' === null' ),
-					$fail( )
-				);
+			check = check.$if( $( av, ' === null' ), $fail( ));
 		}
 
 		if( attr.id.string === 'protean' )
@@ -1818,7 +1808,7 @@ prototype.genCreator =
 
 	creator =
 		$func( block )
-		.$arg( null, 'free strings' );
+		.$arg( undefined, 'free strings' );
 
 	funcName = abstract ? 'abstract' : 'create';
 
@@ -1951,11 +1941,11 @@ prototype.genFromJsonCreatorAttributeParser =
 			}
 			else
 			{
-				mif = null;
+				mif = undefined;
 
 				code = $block( );
 
-				cSwitch = null;
+				cSwitch = undefined;
 
 				idList = attr.id.idList;
 
@@ -2003,7 +1993,7 @@ prototype.genFromJsonCreatorAttributeParser =
 
 						default :
 
-							sif = null;
+							sif = undefined;
 
 							break;
 					}
@@ -2021,11 +2011,9 @@ prototype.genFromJsonCreatorAttributeParser =
 					}
 					else
 					{
-						if( cSwitch === null )
+						if( !cSwitch )
 						{
-							cSwitch =
-								$switch( 'arg.type' )
-								.$default( $fail( ) );
+							cSwitch = $switch( 'arg.type' ) .$default( $fail( ) );
 						}
 
 						cSwitch =
@@ -2043,14 +2031,10 @@ prototype.genFromJsonCreatorAttributeParser =
 
 				if( mif )
 				{
-					if( cSwitch )
-					{
-						code = mif.$elsewise( cSwitch );
-					}
-					else
-					{
-						code = mif;
-					}
+					code =
+						cSwitch
+						? mif.$elsewise( cSwitch )
+						: mif;
 				}
 				else
 				{
@@ -2239,14 +2223,7 @@ prototype.genFromJsonCreatorGroupProcessing =
 			.$( loopSwitch );
 	}
 
-	return(
-		result
-		.$forIn(
-			'k',
-			'jgroup',
-			loopBody
-		)
-	);
+	return result.$forIn( 'k', 'jgroup', loopBody );
 };
 
 /*

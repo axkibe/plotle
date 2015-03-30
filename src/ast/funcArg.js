@@ -15,30 +15,25 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'ast_funcArg',
+	return{
+		id : 'ast_funcArg',
 		attributes :
+		{
+			name :
 			{
-				name :
-					{
-						comment :
-							'argument name',
-						type :
-							'string',
-						allowsNull :
-							true
-					},
-				comment :
-					{
-						comment :
-							'argument comment',
-						type :
-							'string',
-						defaultValue :
-							'null'
-					}
+				comment : 'argument name',
+				type : 'string',
+				defaultValue : 'undefined',
+				allowsNull : true
+			},
+			comment :
+			{
+				comment : 'argument comment',
+				type : 'string',
+				defaultValue : 'undefined',
+				allowsNull : true
 			}
+		}
 	};
 }
 

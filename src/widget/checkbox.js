@@ -49,7 +49,7 @@ if( JION )
 					{
 						comment : 'component hovered upon',
 						type : 'jion_path',
-						defaultValue : 'null',
+						defaultValue : 'undefined',
 						prepare : 'widget_widget.concernsHover( hover, path )'
 					},
 				mark :
@@ -64,13 +64,13 @@ if( JION )
 					{
 						comment : 'the path of the widget',
 						type : 'jion_path',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				superFrame :
 					{
 						comment : 'the frame the widget resides in',
 						type : 'euclid_rect',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				visible :
 					{
@@ -96,7 +96,7 @@ widget_checkbox.prototype._init =
 	}
 	else
 	{
-		this.frame = null;
+		this.frame = undefined;
 	}
 
 };
@@ -112,7 +112,6 @@ jools.lazyValue(
 	{
 		return(
 			icon_check.create(
-				'border', null,
 				'fill', euclid_color.black,
 				'pc', this.frame.pc
 			)
@@ -137,7 +136,7 @@ widget_checkbox.prototype.pointingHover =
 {
 	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	return(
@@ -174,21 +173,18 @@ widget_checkbox.prototype.click =
 {
 	if( !this.visible )
 	{
-		return null;
+		return undefined;
 	}
 
 	if( this.frame.within( euclid_view.proper, p ) )
 	{
-		root.setPath(
-			this.path.append( 'checked' ),
-			!this.checked
-		);
+		root.setPath( this.path.append( 'checked' ), !this.checked );
 
 		return false;
 	}
 	else
 	{
-		return null;
+		return undefined;
 	}
 };
 

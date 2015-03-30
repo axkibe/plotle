@@ -101,9 +101,15 @@ Constructor =
 		}
 	}
 
-	this.comment = v_comment;
+	if( v_comment !== undefined )
+	{
+		this.comment = v_comment;
+	}
 
-	this.name = v_name;
+	if( v_name !== undefined )
+	{
+		this.name = v_name;
+	}
 
 	if( FREEZE )
 	{
@@ -183,11 +189,6 @@ prototype.abstract =
 /**/				throw new Error( );
 /**/			}
 		}
-	}
-
-	if( v_comment === undefined )
-	{
-		v_comment = null;
 	}
 
 /**/if( CHECK )
@@ -296,19 +297,9 @@ prototype.create =
 		}
 	}
 
-	if( v_comment === undefined )
-	{
-		v_comment = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_comment === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_comment !== null )
+/**/	if( v_comment !== null && v_comment !== undefined )
 /**/	{
 /**/		if(
 /**/			typeof( v_comment ) !== 'string'
@@ -320,12 +311,7 @@ prototype.create =
 /**/		}
 /**/	}
 /**/
-/**/	if( v_name === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_name !== null )
+/**/	if( v_name !== null && v_name !== undefined )
 /**/	{
 /**/		if(
 /**/			typeof( v_name ) !== 'string'

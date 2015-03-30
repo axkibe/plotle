@@ -19,68 +19,65 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'disc_jockey',
+	return{
+		id : 'disc_jockey',
 		attributes :
+		{
+			access :
 			{
-				access :
-					{
-						comment : 'users access to current space',
-						type : 'string',
-						defaultValue : 'null'
-					},
-				action :
-					{
-						comment : 'currently active action',
-						type : '->action',
-						defaultValue : 'undefined'
-					},
-				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'disc_jockey.concernsMark( mark )',
-						type : '->mark',
-						allowsUndefined : true
-					},
-				mode :
-					{
-						comment : 'current mode the UI is in',
-						type : 'string'
-					},
-				path :
-					{
-						comment : 'path of the disc',
-						type : 'jion_path'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view'
-					},
-				spaceRef :
-					{
-						comment : 'currently loaded space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null'
-					},
-				user :
-					{
-						comment : 'currently logged in user',
-						type : 'user_creds',
-						defaultValue : 'null'
-					}
+				comment : 'users access to current space',
+				type : 'string',
+				defaultValue : 'null'
 			},
-		init :
-			[ ],
-		twig :
-			[ 'disc_mainDisc', 'disc_createDisc' ]
+			action :
+			{
+				comment : 'currently active action',
+				type : '->action',
+				defaultValue : 'undefined'
+			},
+			hover :
+			{
+				comment : 'the widget hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'disc_jockey.concernsMark( mark )',
+				type : '->mark',
+				allowsUndefined : true
+			},
+			mode :
+			{
+				comment : 'current mode the UI is in',
+				type : 'string'
+			},
+			path :
+			{
+				comment : 'path of the disc',
+				type : 'jion_path'
+			},
+			spaceRef :
+			{
+				comment : 'currently loaded space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'null'
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'null'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view'
+			}
+		},
+		init : [ ],
+		twig : [ 'disc_mainDisc', 'disc_createDisc' ]
 	};
 }
 
@@ -168,7 +165,7 @@ prototype._init =
 				'view', this.view,
 				'spaceRef', this.spaceRef,
 				// FIXME hand user object
-				'username', this.user && this.user.name
+				'username', ( this.user && this.user.name ) || '' // FIXME
 			);
 	}
 

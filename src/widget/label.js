@@ -28,7 +28,7 @@ if( JION )
 			{
 				comment : 'true if the widget got focus',
 				type : 'boolean',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			designPos :
@@ -40,39 +40,39 @@ if( JION )
 			{
 				comment : 'component hovered upon',
 				type : 'jion_path',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			font :
 			{
 				comment : 'font of the text',
 				type : 'euclid_font',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			mark :
 			{
 				comment : 'the users mark',
 				type : '->mark',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			newline :
 			{
 				comment : 'vertical distance of newline',
 				type : 'number',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			path :
 			{
 				comment : 'the path of the widget',
 				type : 'jion_path',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			superFrame :
 			{
 				comment : 'the frame the widget resides in',
 				type : 'euclid_rect',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			text :
 			{
@@ -97,14 +97,10 @@ if( JION )
 widget_label.prototype._init =
 	function( )
 {
-	if( this.superFrame )
-	{
-		this.pos = this.designPos.compute( this.superFrame );
-	}
-	else
-	{
-		this.pos = null;
-	}
+	this.pos =
+		this.superFrame
+		? this.designPos.compute( this.superFrame )
+		: undefined;
 };
 
 
@@ -141,7 +137,7 @@ widget_label.prototype.pointingHover =
 		// ctrl
 	)
 {
-	return null;
+	return undefined;
 };
 
 
@@ -155,7 +151,7 @@ widget_label.prototype.click =
 		// ctrl
 	)
 {
-	return null;
+	return undefined;
 };
 
 

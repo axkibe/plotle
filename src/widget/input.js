@@ -54,7 +54,7 @@ if( JION )
 					{
 						comment : 'component hovered upon',
 						type : 'jion_path',
-						defaultValue : 'null',
+						defaultValue : 'undefined',
 						prepare : 'widget_widget.concernsHover( hover, path )'
 					},
 				font :
@@ -67,7 +67,7 @@ if( JION )
 						comment : 'the users mark',
 						prepare : 'widget_widget.concernsMark( mark, path )',
 						type : '->mark',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				maxlen :
 					{
@@ -84,13 +84,13 @@ if( JION )
 					{
 						comment : 'the path of the widget',
 						type : 'jion_path',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				superFrame :
 					{
 						comment : 'the frame the widget resides in',
 						type : 'euclid_rect',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				value :
 					{
@@ -144,7 +144,7 @@ prototype._init =
 		frame =
 		this.frame =
 		this._shape =
-			null;
+			undefined;
 	}
 
 
@@ -859,14 +859,14 @@ prototype.pointingHover =
 	if( !this.frame.within( euclid_view.proper, p )
 	)
 	{
-		return null;
+		return undefined;
 	}
 
 	pp = p.sub( this.frame.pnw );
 
 	if( !this._shape.within( euclid_view.proper, pp ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	return(
@@ -891,15 +891,9 @@ prototype.click =
 	var
 		pp;
 
-	if(
-		p === null ||
-		!this.frame.within(
-			euclid_view.proper,
-			p
-		)
-	)
+	if( !p || !this.frame.within( euclid_view.proper, p ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	pp = p.sub( this.frame.pnw );
@@ -911,7 +905,7 @@ prototype.click =
 		)
 	)
 	{
-		return null;
+		return undefined;
 	}
 
 	root.create(

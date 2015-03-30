@@ -38,15 +38,16 @@ widget_widget.concernsMark =
 		path
 	)
 {
+	// FIXME simplify
 	if( !mark )
 	{
-		return null;
+		return undefined;
 	}
 
 	return(
 		mark.containsPath( path )
 		? mark
-		: null
+		: undefined
 	);
 };
 
@@ -61,9 +62,10 @@ widget_widget.concernsHover =
 		path
 	)
 {
+	// FIXME ?:
 	if( !hover || !hover.equals( path ) )
 	{
-		return null;
+		return undefined;
 	}
 
 	return hover;

@@ -28,22 +28,23 @@ if( JION )
 		attributes :
 		{
 			border :
-				{
-					comment : 'border',
-					type : 'euclid_border',
-					allowsNull : true
-				},
+			{
+				comment : 'border',
+				type : 'euclid_border',
+				defaultValue : 'undefined',
+				allowsNull : true // FIXME
+			},
 			fill :
-				{
-					comment : 'fill',
-					type : 'euclid_color',
-					allowsNull : true
-				},
+			{
+				comment : 'fill',
+				type : 'euclid_color',
+				allowsNull : true
+			},
 			pc :
-				{
-					comment : 'center of the check',
-					type : 'euclid_point'
-				}
+			{
+				comment : 'center of the check',
+				type : 'euclid_point'
+			}
 		},
 		init : [ ]
 	};

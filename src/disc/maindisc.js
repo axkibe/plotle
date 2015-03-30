@@ -28,76 +28,75 @@ var
 if( JION )
 {
 	return {
-		id :
-			'disc_mainDisc',
+		id : 'disc_mainDisc',
 		attributes :
 			{
 				access :
-					{
-						comment : 'users access to current space',
-						type : 'string',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'users access to current space',
+					type : 'string',
+					defaultValue : 'null'
+				},
 				action :
-					{
-						comment : 'currently active action',
-						type : '->action',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'currently active action',
+					type : '->action',
+					defaultValue : 'undefined'
+				},
 				border :
-					{
-						comment : 'display border',
-						type : '->border'
-					},
+				{
+					comment : 'display border',
+					type : '->border'
+				},
 				fill :
-					{
-						comment : 'display fill',
-						type : '->fill'
-					},
+				{
+					comment : 'display fill',
+					type : '->fill'
+				},
 				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'the widget hovered upon',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'the users mark',
+					type : '->mark',
+					defaultValue : 'null'
+				},
 				mode :
-					{
-						comment : 'current mode the UI is in',
-						type : 'string',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'current mode the UI is in',
+					type : 'string',
+					defaultValue : 'null'
+				},
 				path :
-					{
-						comment : 'path of the disc',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'path of the disc',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				spaceRef :
-					{
-						comment : 'reference to current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'reference to current space',
+					type : 'fabric_spaceRef',
+					defaultValue : 'null'
+				},
 				// FIXME give user_creds object
 				username :
-					{
-						comment : 'currently logged in user',
-						type : 'string',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'currently logged in user',
+					type : 'string',
+					defaultValue : '""'
+				},
 				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						prepare : 'view !== null ? view.sizeOnly : null',
-						defaultValue : 'null'
-					}
+				{
+					comment : 'the current view',
+					type : 'euclid_view',
+					prepare : 'view !== null ? view.sizeOnly : null',
+					defaultValue : 'null'
+				}
 			},
 		init :
 			[ 'inherit', 'twigDup' ],

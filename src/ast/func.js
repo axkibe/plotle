@@ -49,6 +49,7 @@ ast_funcArg = require( './funcArg' );
 
 /*
 | Convenience shortcut.
+|
 | Returns the function with an argument appended.
 */
 ast_func.prototype.$arg =

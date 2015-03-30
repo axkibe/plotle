@@ -108,7 +108,7 @@ form_form.click =
 	{
 		res = this.atRank( r ).click( p, shift, ctrl );
 
-		if( res !== null )
+		if( res )
 		{
 			return res;
 		}
@@ -239,12 +239,11 @@ form_form.getAttentionCenter =
 
 	focus = this.focusedWidget;
 
-	if( !focus )
-	{
-		return null;
-	}
-
-	return focus.attentionCenter;
+	return(
+		focus
+		? focus.attentionCenter
+		: undefined
+	);
 };
 
 
@@ -264,14 +263,14 @@ form_form.getFocusedWidget =
 
 	if( !mark )
 	{
-		return null;
+		return undefined;
 	}
 
 	path = mark.widgetPath;
 
-	if( path.length === 0 )
+	if( path.length === 0 ) // FIXME
 	{
-		return null;
+		return undefined;
 	}
 
 /**/if( CHECK )
