@@ -736,18 +736,18 @@ prototype.dragStart =
 		bubble,
 		screen;
 
-	bubble = null;
-
 	screen = root._currentScreen( );
 
 	if( screen && screen.showDisc )
 	{
 		bubble = root._discJockey.dragStart( p, shift, ctrl );
+	
+		if( bubble ) return bubble;
 	}
 
-	if( bubble === null && screen )
+	if( screen )
 	{
-		bubble = screen.dragStart( p, shift, ctrl );
+		return screen.dragStart( p, shift, ctrl );
 	}
 };
 

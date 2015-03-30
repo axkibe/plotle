@@ -83,12 +83,11 @@ if( JION )
 					type : 'fabric_spaceRef',
 					defaultValue : 'null'
 				},
-				// FIXME give user_creds object
-				username :
+				user :
 				{
 					comment : 'currently logged in user',
-					type : 'string',
-					defaultValue : '""'
+					type : 'user_creds',
+					defaultValue : 'undefined'
 				},
 				view :
 				{
@@ -160,7 +159,7 @@ disc_mainDisc.prototype._init =
 				visible = true;
 
 				text =
-					this._userIsGuest
+					!this.user || this.user.isVisitor
 					? 'log\nin'
 					: 'log\nout';
 
@@ -185,7 +184,7 @@ disc_mainDisc.prototype._init =
 
 			case 'signUp' :
 
-				visible = this._userIsGuest;
+				visible = this.user ? this.user.isVisitor : true;
 
 				break;
 
@@ -206,7 +205,7 @@ disc_mainDisc.prototype._init =
 
 			case 'user' :
 
-				text = this.username;
+				text = this.user ? this.user.name : '';
 
 				visible = true;
 
@@ -240,26 +239,6 @@ disc_mainDisc.prototype._init =
 
 	this.twig = twig;
 };
-
-
-/*
-| True if current user is a guest.
-|
-| FIXME make user an own object.
-*/
-jools.lazyValue(
-	disc_mainDisc.prototype,
-	'_userIsGuest',
-	function( )
-	{
-		if( this.username === null )
-		{
-			return true;
-		}
-
-		return this.username.substr( 0, 5 ) === 'visit';
-	}
-);
 
 
 /*
@@ -326,7 +305,10 @@ disc_mainDisc.prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
-	if( buttonName === 'login' && !this._userIsGuest )
+	if(
+		buttonName === 'login'
+		&& this.user && !this.user.isVisitor
+	)
 	{
 		root.logout( );
 

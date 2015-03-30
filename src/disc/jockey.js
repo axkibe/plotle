@@ -68,7 +68,7 @@ if( JION )
 			{
 				comment : 'currently logged in user',
 				type : 'user_creds',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			view :
 			{
@@ -164,8 +164,7 @@ prototype._init =
 				'path', path,
 				'view', this.view,
 				'spaceRef', this.spaceRef,
-				// FIXME hand user object
-				'username', ( this.user && this.user.name ) || '' // FIXME
+				'user', this.user
 			);
 	}
 
@@ -186,24 +185,16 @@ prototype.dragStart =
 	var
 		bubble;
 
-	bubble =
-		this.twig.mainDisc.dragStart(
-			p,
-			shift,
-			ctrl
-		);
+	bubble = this.twig.mainDisc.dragStart( p, shift, ctrl );
 
-	if( bubble !== null )
-	{
-		return bubble;
-	}
+	if( bubble ) return bubble;
 
 	if( this.mode === 'create' )
 	{
 		return this.twig.createDisc.dragStart( p, shift, ctrl );
 	}
 
-	return null;
+	return;
 };
 
 

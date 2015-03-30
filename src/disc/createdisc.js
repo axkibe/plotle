@@ -84,11 +84,11 @@ if( JION )
 				defaultValue : 'null',
 				assign : ''
 			},
-			username :
+			user :
 			{
 				comment : 'currently logged in user',
-				type : 'string',
-				defaultValue : 'null',
+				type : 'user_creds',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			view :
