@@ -477,11 +477,6 @@ euclid_rect.renew =
 		pse,
 		r;
 
-	pnw = null;
-
-	pse = null;
-
-
 	for(
 		a = 4, aZ = arguments.length;
 		a < aZ;
