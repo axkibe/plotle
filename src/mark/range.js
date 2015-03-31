@@ -4,7 +4,6 @@
 
 
 var
-	jion_path,
 	jools,
 	mark_range;
 
@@ -178,7 +177,7 @@ jools.lazyValue(
 	{
 		if( this.begin.path.length < 3 )
 		{
-			return jion_path.empty;
+			return;
 		}
 
 		return this.begin.path.limit( 3 );

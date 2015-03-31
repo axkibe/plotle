@@ -19,28 +19,22 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'mark_text',
+	return{
+		id : 'mark_text',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment :
-							'path of the caret',
-						type :
-							'jion_path'
-					},
-				at :
-					{
-						comment :
-							'offset of the caret',
-						type :
-							'integer'
-					}
+				comment : 'path of the caret',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			at :
+			{
+				comment : 'offset of the caret',
+				type : 'integer'
+			}
+		},
+		init : [ ]
 	};
 }
 

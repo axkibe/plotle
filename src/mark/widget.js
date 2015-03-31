@@ -4,7 +4,6 @@
 
 
 var
-	jion_path,
 	jools,
 	mark_widget;
 
@@ -21,19 +20,16 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'mark_widget',
+	return{
+		id : 'mark_widget',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment :
-							'path of the item',
-						type :
-							'jion_path'
-					}
+				comment : 'path of the item',
+				type : 'jion_path'
 			}
+		}
 	};
 }
 
@@ -46,24 +42,33 @@ if( SERVER )
 }
 
 
+var
+	prototype;
+
+prototype = mark_widget.prototype;
+
+
+
 /*
 | A caret mark has a caret.
 |
 | (the text range is the other mark
 |  which has this too )
 */
-mark_widget.prototype.hasCaret = false;
+prototype.hasCaret = false;
 
 
 /*
 | The item's path.
+|
+| FIXME
 */
 jools.lazyValue(
-	mark_widget.prototype,
+	prototype,
 	'itemPath',
 	function( )
 	{
-		return jion_path.empty;
+		return;
 	}
 );
 
@@ -72,7 +77,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	mark_widget.prototype,
+	prototype,
 	'widgetPath',
 	function( )
 	{
@@ -84,15 +89,14 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 */
-mark_widget.prototype.clipboard =
-	'';
+prototype.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-mark_widget.prototype.containsPath =
+prototype.containsPath =
 	function(
 		path
 	)

@@ -26,42 +26,32 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'net_requestWrap',
+	return{
+		id : 'net_requestWrap',
 		attributes :
+		{
+			channelName :
 			{
-				channelName :
-					{
-						comment :
-							'name of the channel the request belongs to',
-						type :
-							'string'
-					},
-				request :
-					{
-						comment :
-							'the actual request',
-						type :
-							'->request'
-					},
-				receiverFuncName :
-					{
-						comment :
-							'name of the receiver function to call',
-						type :
-							'string'
-					},
-				_xhr :
-					{
-						comment :
-							'the underlaying "XMLHttpRequest"',
-						type :
-							'protean',
-						defaultValue :
-							'null'
-					}
+				comment : 'name of the channel the request belongs to',
+				type : 'string'
+			},
+			request :
+			{
+				comment : 'the actual request',
+				type : '->request'
+			},
+			receiverFuncName :
+			{
+				comment : 'name of the receiver function to call',
+				type : 'string'
+			},
+			_xhr :
+			{
+				comment : 'the underlaying "XMLHttpRequest"',
+				type : 'protean',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 
@@ -107,7 +97,7 @@ onReply =
 
 	wrap = this.wrap;
 
-	this.onreadystatechange = null;
+	this.onreadystatechange = undefined;
 
 	channel = root.ajax.get( wrap.channelName );
 
@@ -143,9 +133,6 @@ onReply =
 
 	channel.onReply( wrap, reply );
 };
-
-
-onReplyTransmitter = null;
 
 
 /*

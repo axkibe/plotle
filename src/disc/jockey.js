@@ -46,7 +46,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'disc_jockey.concernsMark( mark )',
 				type : '->mark',
-				allowsUndefined : true
+				defaultValue : 'undefined'
 			},
 			mode :
 			{

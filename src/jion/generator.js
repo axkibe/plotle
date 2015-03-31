@@ -1380,16 +1380,28 @@ prototype.genTypeCheckFailCondition =
 		a++
 	)
 	{
-		if( idList[ a ].string === 'null' )
+		switch( idList[ a ].string )
 		{
-			condArray.unshift( $( aVar, '!== null' ) );
+			case 'null' :
+			
+				condArray.unshift( $( aVar, '!== null' ) );
 
-			continue;
+				continue;
+
+			case 'undefined' :
+
+				condArray.unshift( $( aVar, '!== undefined' ) );
+
+				continue;
+
+			default :
+
+				condArray.push(
+					this.genSingleTypeCheckFailCondition( aVar, idList[ a ] )
+				);
+
+				continue;
 		}
-
-		condArray.push(
-			this.genSingleTypeCheckFailCondition( aVar, idList[ a ] )
-		);
 	}
 
 	return $and.apply( $and, condArray );
@@ -2229,6 +2241,7 @@ prototype.genFromJsonCreatorGroupProcessing =
 	return result.$forIn( 'k', 'jgroup', loopBody );
 };
 
+
 /*
 | Generates the fromJsonCreator's twig processing.
 */
@@ -2237,6 +2250,7 @@ prototype.genFromJsonCreatorRayProcessing =
 {
 	var
 		haveNull,
+		haveUndefined,
 		idList,
 		loopBody,
 		loopSwitch,
@@ -2246,6 +2260,8 @@ prototype.genFromJsonCreatorRayProcessing =
 		rZ;
 
 	haveNull = false;
+	
+	haveUndefined = false;
 
 	result =
 		$block( )
@@ -2272,6 +2288,13 @@ prototype.genFromJsonCreatorRayProcessing =
 
 			continue;
 		}
+		
+		if( rid.string === 'undefined' )
+		{
+			haveUndefined = true;
+
+			continue;
+		}
 
 		loopSwitch =
 			loopSwitch
@@ -2284,22 +2307,36 @@ prototype.genFromJsonCreatorRayProcessing =
 			);
 	}
 
-	if( !haveNull )
-	{
-		loopBody = loopSwitch;
-	}
-	else
+	loopBody = $block( );
+
+	if( haveNull )
 	{
 		loopBody =
-			$block( ).
+			loopBody.
 			$if(
 				'jray[ r ] === null',
 				$block( )
 				.$( 'ray [ r ] = null' )
 				.$continue( )
 			)
-			.append( loopSwitch );
 	}
+	
+	if( haveUndefined )
+	{
+		loopBody =
+			loopBody.
+			$if(
+				'jray[ r ] === undefined',
+				$block( )
+				.$( 'ray [ r ] = undefined' )
+				.$continue( )
+			)
+	}
+
+	loopBody =
+		loopBody.length > 0
+		? loopBody.append( loopSwitch )
+		: loopSwitch;
 
 	return(
 		result

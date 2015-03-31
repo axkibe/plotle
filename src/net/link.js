@@ -40,34 +40,31 @@ if( JION )
 					{
 						comment : 'reference to the current space',
 						type : 'fabric_spaceRef',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				user :
 					{
-						comment :
-							'currently logged in user',
-						type :
-							'user_creds',
-						defaultValue :
-							'null'
+						comment : 'currently logged in user',
+						type : 'user_creds',
+						defaultValue : 'undefined'
 					},
 				_outbox :
 					{
 						comment : 'changes to be send to the server',
 						type : 'change_wrapRay',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				_postbox :
 					{
 						comment : 'changes that are currently on the way',
 						type : 'change_wrapRay',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				_rSeq :
 					{
 						comment : 'the remote sequence number',
 						type : 'integer',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					}
 			}
 	};
@@ -271,8 +268,8 @@ net_link.prototype._onRegister =
 	// FIXME pass request / reply
 	root.onRegister(
 		ok,
-		ok ? request.user : null,
-		ok ? null : reply.message
+		ok ? request.user : undefined,
+		ok ? undefined : reply.message
 	);
 };
 
@@ -495,7 +492,7 @@ net_link.prototype._update =
 		request_update.create(
 			'spaceRef', this.spaceRef,
 			'seq',
-				this._rSeq !== null
+				this._rSeq !== undefined
 				? this._rSeq
 				: -1,
 			'user', this.user

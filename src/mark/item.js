@@ -4,7 +4,6 @@
 
 
 var
-	jion_path,
 	jools,
 	mark_item;
 
@@ -22,18 +21,15 @@ var
 if( JION )
 {
 	return {
-		id :
-			'mark_item',
+		id : 'mark_item',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment :
-							'path of the item',
-						type :
-							'jion_path'
-					}
+				comment : 'path of the item',
+				type : 'jion_path'
 			}
+		}
 	};
 }
 
@@ -77,13 +73,15 @@ jools.lazyValue(
 
 /*
 | The widget's path.
+|
+| FIXME just set it undefined in prototype.
 */
 jools.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
 	{
-		return jion_path.empty;
+		return;
 	}
 );
 
@@ -111,9 +109,7 @@ prototype.containsPath =
 /**/{
 /**/	if( path.length === 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid empty path'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

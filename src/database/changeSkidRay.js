@@ -27,7 +27,7 @@ if( JION )
 {
 	return {
 		id : 'database_changeSkidRay',
-		ray : [ 'database_changeSkid', 'null' ],  // FIXME
+		ray : [ 'database_changeSkid', 'undefined' ],
 		json : true,
 	};
 }

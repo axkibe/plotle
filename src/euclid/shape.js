@@ -24,20 +24,16 @@ var
 if( JION )
 {
 	return {
-		id :
-			'euclid_shape',
+		id : 'euclid_shape',
 		attributes :
+		{
+			pc :
 			{
-				pc :
-					{
-						comment :
-							'center point',
-						type :
-							'euclid_point'
-					}
-			},
-		ray :
-			'->shapeSection'
+				comment : 'center point',
+				type : 'euclid_point'
+			}
+		},
+		ray : '->shapeSection'
 	};
 }
 
@@ -99,8 +95,6 @@ euclid_shape.prototype.getProjection =
 
 	pp = pstart;
 
-	pn = null;
-
 	for(
 		r = 1, rZ = this.length;
 		r < rZ;
@@ -122,7 +116,7 @@ euclid_shape.prototype.getProjection =
 		{
 			pn = pstart;
 
-			pstart = null;
+			pstart = undefined;
 		}
 		else
 		{

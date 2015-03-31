@@ -169,9 +169,11 @@ disc_mainDisc.prototype._init =
 			case 'remove' :
 
 				visible =
-					this.access === 'rw'
-					&& this.mark
-					&& this.mark.itemPath.length > 0;
+					!!(
+						this.access === 'rw'
+						&& this.mark
+						&& this.mark.itemPath
+					);
 
 				break;
 

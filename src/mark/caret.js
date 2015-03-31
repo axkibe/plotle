@@ -113,7 +113,7 @@ jools.lazyValue(
 			|| this.path.get( 0 ) !== 'space'
 		)
 		{
-			return jion_path.empty;
+			return;
 		}
 
 		return this.path.limit( 3 );
@@ -129,13 +129,9 @@ jools.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		if(
-			this.path.length < 5
-			||
-			this.path.get( 0 ) !== 'form'
-		)
+		if( this.path.length < 5 || this.path.get( 0 ) !== 'form' )
 		{
-			return jion_path.empty;
+			return;
 		}
 
 		return this.path.limit( 5 );
@@ -216,9 +212,7 @@ prototype.containsPath =
 /**/{
 /**/	if( path.length === 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid empty path'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

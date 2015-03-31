@@ -17,48 +17,37 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'server_spaceBox',
+	return{
+		id : 'server_spaceBox',
 		attributes :
+		{
+			'seqZ' :
 			{
-				'seqZ' :
-					{
-						comment :
-							'latest sequence number',
-						type :
-							'integer'
-					},
-				'space' :
-					{
-						comment :
-							'latest space version',
-						type :
-							'fabric_space'
-					},
-				'spaceRef' :
-					{
-						comment :
-							'reference to the space',
-						type :
-							'fabric_spaceRef',
-					},
-				'_changesDB' :
-					{
-						comment :
-							'changes database collection',
-						type :
-							'protean'
-					},
-				'_changeSkids' :
-					{
-						// FIXME this should not be zero based
-						comment :
-							'changeSkids cached in RAM',
-						type :
-							'database_changeSkidRay'
-					}
+				comment : 'latest sequence number',
+				type : 'integer'
+			},
+			'space' :
+			{
+				comment : 'latest space version',
+				type : 'fabric_space'
+			},
+			'spaceRef' :
+			{
+				comment : 'reference to the space',
+				type : 'fabric_spaceRef',
+			},
+			'_changesDB' :
+			{
+				comment : 'changes database collection',
+				type : 'protean'
+			},
+			'_changeSkids' :
+			{
+				// FIXME this should not be zero based
+				comment : 'changeSkids cached in RAM',
+				type : 'database_changeSkidRay'
 			}
+		}
 	};
 }
 
@@ -97,7 +86,7 @@ server_spaceBox.loadSpace =
 		seqZ,
 		space;
 
-	changeSkids = database_changeSkidRay.create( 'ray:init', [ null ] );
+	changeSkids = database_changeSkidRay.create( 'ray:init', [ undefined ] );
 
 	seqZ = 1;
 
@@ -178,7 +167,7 @@ server_spaceBox.createSpace =
 					'changes:' + spaceRef.fullname
 				),
 			'_changeSkids',
-				database_changeSkidRay.create( 'ray:init', [ null ] )
+				database_changeSkidRay.create( 'ray:init', [ undefined ] )
 		)
 	);
 
@@ -222,7 +211,7 @@ server_spaceBox.prototype.appendChanges =
 		JSON.parse( JSON.stringify( changeSkidRay ) ).ray,
 		function( error /*, count */ )
 		{
-			if( error !== null )
+			if( error )
 			{
 				throw new Error( 'Database error' );
 			}
