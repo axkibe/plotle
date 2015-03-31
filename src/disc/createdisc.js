@@ -35,7 +35,7 @@ if( JION )
 			{
 				comment : 'users access to current space',
 				type : 'string',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			action :
 			{
@@ -63,13 +63,13 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type : '->mark',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			mode :
 			{
 				comment : 'current mode the UI is in',
 				type : 'string',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			path :
 			{
@@ -81,7 +81,7 @@ if( JION )
 			{
 				comment : 'reference to current space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			user :
@@ -95,8 +95,9 @@ if( JION )
 			{
 				comment : 'the current view',
 				type : 'euclid_view',
+				// prepare : 'view && view.sizeOnly', FIXME
 				prepare : 'view ? view.sizeOnly : view',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
@@ -355,7 +356,7 @@ disc_createDisc.prototype.click =
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	display = this._display,
@@ -365,7 +366,7 @@ disc_createDisc.prototype.click =
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
 	{
-		return null;
+		return;
 	}
 
 	// this is on the disc
@@ -440,7 +441,7 @@ disc_createDisc.prototype.dragStart =
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	if(
@@ -451,7 +452,7 @@ disc_createDisc.prototype.dragStart =
 		)
 	)
 	{
-		return null;
+		return;
 	}
 
 	return true;

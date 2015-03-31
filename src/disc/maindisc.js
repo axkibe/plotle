@@ -35,7 +35,7 @@ if( JION )
 				{
 					comment : 'users access to current space',
 					type : 'string',
-					defaultValue : 'null'
+					defaultValue : 'undefined'
 				},
 				action :
 				{
@@ -63,13 +63,13 @@ if( JION )
 				{
 					comment : 'the users mark',
 					type : '->mark',
-					defaultValue : 'null'
+					defaultValue : 'undefined'
 				},
 				mode :
 				{
 					comment : 'current mode the UI is in',
 					type : 'string',
-					defaultValue : 'null'
+					defaultValue : 'undefined'
 				},
 				path :
 				{
@@ -81,7 +81,7 @@ if( JION )
 				{
 					comment : 'reference to current space',
 					type : 'fabric_spaceRef',
-					defaultValue : 'null'
+					defaultValue : 'undefined'
 				},
 				user :
 				{
@@ -93,8 +93,9 @@ if( JION )
 				{
 					comment : 'the current view',
 					type : 'euclid_view',
-					prepare : 'view !== null ? view.sizeOnly : null',
-					defaultValue : 'null'
+					// prepare : 'view && view.sizeOnly', FIXME
+					prepare : 'view ? view.sizeOnly : undefined',
+					defaultValue : 'undefined'
 				}
 			},
 		init :
@@ -169,7 +170,7 @@ disc_mainDisc.prototype._init =
 
 				visible =
 					this.access === 'rw'
-					&& this.mark !== null
+					&& this.mark
 					&& this.mark.itemPath.length > 0;
 
 				break;
@@ -369,9 +370,9 @@ disc_mainDisc.prototype.pointingHover =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( null, p ) )
+	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	display = this._display,
@@ -382,7 +383,7 @@ disc_mainDisc.prototype.pointingHover =
 		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)
 	{
-		return null;
+		return;
 	}
 
 	// this is on the disc
@@ -402,7 +403,7 @@ disc_mainDisc.prototype.pointingHover =
 		}
 	}
 
-	return null;
+	return;
 };
 
 
@@ -424,14 +425,9 @@ disc_mainDisc.prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within(
-			null,
-			p
-		)
-	)
+	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	display = this._display;
@@ -442,7 +438,7 @@ disc_mainDisc.prototype.click =
 		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)
 	{
-		return null;
+		return;
 	}
 
 	// this is on the disc
@@ -501,14 +497,9 @@ disc_mainDisc.prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within(
-			null,
-			p
-		)
-	)
+	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	if(
@@ -519,7 +510,7 @@ disc_mainDisc.prototype.dragStart =
 		)
 	)
 	{
-		return null;
+		return;
 	}
 
 	return true;

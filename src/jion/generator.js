@@ -1585,7 +1585,10 @@ prototype.genCreatorPrepares =
 		if( node.reflect === 'ast_var' )
 		{
 			return(
-				node.name.indexOf( '_' ) >= 0
+				(
+					node.name.indexOf( '_' ) >= 0
+					|| node.name === 'undefined'
+				)
 				? node
 				: node.create( 'name', 'v_' + node.name )
 			);

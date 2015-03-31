@@ -27,7 +27,7 @@ if( JION )
 			{
 				comment : 'users access to current space',
 				type : 'string',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			action :
 			{
@@ -62,7 +62,7 @@ if( JION )
 			{
 				comment : 'currently loaded space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			user :
 			{
@@ -228,10 +228,9 @@ prototype.pointingHover =
 	var
 		hover;
 
-	hover =
-		this.twig.mainDisc.pointingHover( p, shift, ctrl );
+	hover = this.twig.mainDisc.pointingHover( p, shift, ctrl );
 
-	if( hover !== null )
+	if( hover )
 	{
 		return hover;
 	}
@@ -240,8 +239,6 @@ prototype.pointingHover =
 	{
 		return this.twig.createDisc.pointingHover( p, shift, ctrl );
 	}
-
-	return undefined;
 };
 
 
@@ -260,7 +257,7 @@ prototype.click =
 
 	start = this.twig.mainDisc.click( p, shift, ctrl );
 
-	if( start !== null )
+	if( start )
 	{
 		return start;
 	}
@@ -269,8 +266,6 @@ prototype.click =
 	{
 		return this.twig.createDisc.click( p, shift, ctrl );
 	}
-
-	return null;
 };
 
 
