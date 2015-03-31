@@ -16,143 +16,98 @@
 if( JION )
 {
 	return {
-		id :
-			'server_resource',
+		id : 'server_resource',
 		attributes :
+		{
+			aliases :
 			{
-				aliases :
-					{
-						comment :
-							'the list of aliases this is served under',
-						type :
-							'jion_stringRay',
-						defaultValue :
-							// by default determined from filePath
-							// FIXME why not undefined?
-							'null'
-					},
-				coding :
-					{
-						comment :
-							'"binary" or "utf-8"',
-						type :
-							'string',
-						defaultValue :
-							// by default determined from file extension
-							'undefined' // FIXME why not undefined?
-					},
-				data :
-					{
-						comment :
-							'cached or auto generated data',
-						type :
-							'protean',
-						defaultValue :
-							'undefined'
-					},
-				devel :
-					{
-						comment :
-							'if true is only loaded in devel mode',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				jionSrcPath :
-					{
-						comment :
-							'source file of a jion',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
-					},
-				gzip :
-					{
-						comment :
-							'cached or auto generated zip data',
-						type :
-							'protean',
-						defaultValue :
-							'undefined'
-					},
-				filePath :
-					{
-						comment :
-							'path of the resources file',
-						type :
-							'string',
-						allowsNull :
-							true
-					},
-				hasJion :
-					{
-						comment :
-							'true if this resource has a jion def.',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				inBundle :
-					{
-						comment :
-							'true if this resource is in the bundle',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				inTestPad :
-					{
-						comment :
-							'true if this resource is in the testpad',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				isJion :
-					{
-						comment :
-							'true if this resource is a jion.',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				maxage :
-					{
-						comment :
-							'"none", "short" or "long"',
-						type :
-							'string',
-						defaultValue :
-							'"none"'
-					},
-				mime :
-					{
-						comment :
-							'mime type',
-						type :
-							'string',
-						defaultValue :
-							// by default determined from file extension
-							'undefined'
-					},
-				postProcessor :
-					{
-						comment :
-							'post processor replacing stuff',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
-					}
+				comment : 'the list of aliases this is served under',
+				type : 'jion_stringRay',
+				defaultValue : 'undefined'
+				// by default determined from filePath
 			},
-		init :
-			[ ]
+			coding :
+			{
+				comment : '"binary" or "utf-8"',
+				type : 'string',
+				defaultValue : 'undefined'
+				// by default determined from file extension
+			},
+			data :
+			{
+				comment : 'cached or auto generated data',
+				type : 'protean',
+				defaultValue : 'undefined'
+			},
+			devel :
+			{
+				comment : 'if true is only loaded in devel mode',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			jionSrcPath :
+			{
+				comment : 'source file of a jion',
+				type : 'string',
+				defaultValue : 'undefined'
+			},
+			gzip :
+			{
+				comment : 'cached or auto generated zip data',
+				type : 'protean',
+				defaultValue : 'undefined'
+			},
+			filePath :
+			{
+				comment : 'path of the resources file',
+				type : 'string',
+				defaultValue : 'undefined'
+			},
+			hasJion :
+			{
+				comment : 'true if this resource has a jion def.',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			inBundle :
+			{
+				comment : 'true if this resource is in the bundle',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			inTestPad :
+			{
+				comment : 'true if this resource is in the testpad',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			isJion :
+			{
+				comment : 'true if this resource is a jion.',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			maxage :
+			{
+				comment : '"none", "short" or "long"',
+				type : 'string',
+				defaultValue : '"none"'
+			},
+			mime :
+			{
+				comment : 'mime type',
+				type : 'string',
+				defaultValue : 'undefined'
+				// by default determined from file extension
+			},
+			postProcessor :
+			{
+				comment : 'post processor replacing stuff',
+				type : 'string',
+				defaultValue : 'undefined'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -219,19 +174,21 @@ jools.lazyValue(
 	{
 		if( !this.hasJion )
 		{
-			return null;
+			return;
 		}
 
-		return this.create(
-			'aliases', null,
-			'jionSrcPath', this.filePath,
-			'filePath',
-				'jion/'
-				+ SHELLAPP
-				+ '/'
-				+ this.filePath.replace( /\//g, '-' ),
-			'hasJion', false,
-			'isJion', true
+		return(
+			this.create(
+				'aliases', undefined,
+				'jionSrcPath', this.filePath,
+				'filePath',
+					'jion/'
+					+ SHELLAPP
+					+ '/'
+					+ this.filePath.replace( /\//g, '-' ),
+				'hasJion', false,
+				'isJion', true
+			)
 		);
 	}
 );
@@ -252,7 +209,7 @@ jools.lazyValue(
 
 		if( !fp )
 		{
-			return null;
+			return;
 		}
 
 		return fp.split( '.' )[ 1 ];

@@ -1113,8 +1113,6 @@ euclid_display.prototype._sketchShape =
 
 	pp = pStart;
 
-	pn = null;
-
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
 
 	// FIXME why not store the point?
@@ -1143,7 +1141,7 @@ euclid_display.prototype._sketchShape =
 		{
 			pn = pStart;
 
-			pStart = null;
+			pStart = undefined;
 		}
 		else
 		{
@@ -1231,7 +1229,7 @@ euclid_display.prototype._sketchShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( pStart !== null )
+/**/	if( pStart )
 /**/	{
 /**/		// hull did not close
 /**/		throw new Error( );

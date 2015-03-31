@@ -122,7 +122,7 @@ GLOBAL.JION = false;
 GLOBAL.SERVER = true;
 
 // sets root as global variable
-GLOBAL.root = null;
+GLOBAL.root = undefined;
 
 var
 	database_repository,

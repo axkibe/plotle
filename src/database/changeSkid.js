@@ -15,57 +15,41 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'database_changeSkid',
+	return{
+		id : 'database_changeSkid',
 		attributes :
+		{
+			_id :
 			{
-				_id :
-					{
-						comment :
-							'sequence number',
-						json :
-							true,
-						type :
-							'number',
-					},
-				cid :
-					{
-						comment :
-							'change id',
-						json :
-							true,
-						type :
-							'string'
-					},
-				changeRay :
-					{
-						comment :
-							'change or change ray',
-						json :
-							true,
-						type :
-							'change_ray'
-					},
-				user :
-					{
-						comment :
-							'the user that issued the change',
-						json :
-							true,
-						type :
-							'string'
-					},
-				date :
-					{
-						comment :
-							'the date the change was issued',
-						json :
-							true,
-						type :
-							'integer'
-					}
+				comment : 'sequence number',
+				json : true,
+				type : 'number',
+			},
+			cid :
+			{
+				comment : 'change id',
+				json : true,
+				type : 'string'
+			},
+			changeRay :
+			{
+				comment : 'change or change ray',
+				json : true,
+				type : 'change_ray'
+			},
+			user :
+			{
+				comment : 'the user that issued the change',
+				json : true,
+				type : 'string'
+			},
+			date :
+			{
+				comment : 'the date the change was issued',
+				json : true,
+				type : 'integer'
 			}
+		}
 	};
 }
 
@@ -94,22 +78,20 @@ changeSkid.createFromChangeWrap =
 {
 	// FIXME aheadValue changeWrap asChangeWrap
 
-	if( changeWrap.changeRay !== null )
+	if( !changeWrap.changeRay )
 	{
-		return(
-			changeSkid.create(
-				'_id', seq === undefined ? changeWrap.seq : seq,
-				'cid', changeWrap.cid,
-				'changeRay', changeWrap.changeRay,
-				'user', user,
-				'date', Date.now( )
-			)
-		);
+		return;
 	}
-	else
-	{
-		return null;
-	}
+
+	return(
+		changeSkid.create(
+			'_id', seq === undefined ? changeWrap.seq : seq,
+			'cid', changeWrap.cid,
+			'changeRay', changeWrap.changeRay,
+			'user', user,
+			'date', Date.now( )
+		)
+	);
 };
 
 

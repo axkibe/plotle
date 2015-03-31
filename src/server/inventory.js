@@ -43,6 +43,10 @@ inventory.prototype.addResource =
 		inv;
 
 	inv = this;
+		
+	console.log( '---' );
+	console.log( res );
+	console.log( '---' );
 
 	for(
 		a = 0, aZ = res.aliases.length;
@@ -50,6 +54,8 @@ inventory.prototype.addResource =
 		a++
 	)
 	{
+		console.log( res.aliases.get( a ) );
+
 		inv =
 			inv.create(
 				'twig:add',
