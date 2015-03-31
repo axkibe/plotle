@@ -126,7 +126,7 @@ serveAlter =
 		}
 		catch( err )
 		{
-			return replyError( 'command not valid jion' );
+			return replyError( 'Command not valid jion' );
 		}
 	}
 	else
@@ -144,7 +144,7 @@ serveAlter =
 
 	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'invalid creds' );
+		return replyError( 'Invalid creds' );
 	}
 
 	if( root.testAccess( user.name, spaceRef ) !== 'rw' )
@@ -222,7 +222,7 @@ serveAuth =
 	{
 		console.log( err.stack );
 
-		return replyError( 'command not valid jion' );
+		return replyError( 'Command not valid jion' );
 	}
 
 	user = request.user;
@@ -265,7 +265,7 @@ serveRegister =
 	{
 		console.log( err.stack );
 
-		return replyError( 'command not valid jion' );
+		return replyError( 'Command not valid jion' );
 	}
 
 
@@ -330,7 +330,7 @@ serveUpdate =
 	{
 		console.log( err.stack );
 
-		return replyError( 'command not valid jion' );
+		return replyError( 'Command not valid jion' );
 	}
 
 	user = request.user;
@@ -341,7 +341,7 @@ serveUpdate =
 
 	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'invalid creds' );
+		return replyError( 'Invalid creds' );
 	}
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
@@ -416,14 +416,14 @@ serveAcquire =
 	{
 		console.log( err.stack );
 
-		return replyError( 'command not valid jion' );
+		return replyError( 'Command not valid jion' );
 	}
 
 	user = request.user;
 
 	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'invalid creds' );
+		return replyError( 'Invalid creds' );
 	}
 
 	access = root.testAccess( user.name, request.spaceRef );

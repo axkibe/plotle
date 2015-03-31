@@ -294,7 +294,7 @@ prototype.loadSpaces =
 
 	for(
 		o = yield cursor.nextObject( resume( ) );
-		o !== null;
+		o;
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
@@ -1496,7 +1496,7 @@ prototype.webAjax =
 
 		try
 		{
-			// FIXME REMOVE
+			// FUTURE REMOVE
 			if( DELAY_ALTER && cmd.type === 'request_alter' )
 			{
 				console.log( 'DELAYING ALTER');
@@ -1523,6 +1523,7 @@ prototype.webAjax =
 			{
 				jools.log( 'web', 'not ok', err.message );
 
+				// FIXME
 				asw = {
 					ok : false,
 					message : err.message
@@ -1530,10 +1531,7 @@ prototype.webAjax =
 			}
 		}
 
-		if( asw === null )
-		{
-			return;
-		}
+		if( !asw ) return;
 
 		jools.log( 'ajax', '->', asw );
 

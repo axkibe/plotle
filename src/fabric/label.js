@@ -424,7 +424,7 @@ jools.lazyValue(
 		display =
 			euclid_display.create(
 				'width', vzone.width,
-				'height', vzone.height
+				'height', vzone.height + 1
 			);
 
 		doc = this.doc;

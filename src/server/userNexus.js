@@ -17,21 +17,17 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'server_userNexus',
+	return{
+		id : 'server_userNexus',
 		attributes :
+		{
+			_cache :
 			{
-				_cache :
-				{
-					comment :
-						'table of all cached user credentials',
-					type :
-						'user_infoGroup',
-					defaultValue :
-						'user_infoGroup.create( )'
-				},
+				comment : 'table of all cached user credentials',
+				type : 'user_infoGroup',
+				defaultValue : 'user_infoGroup.create( )'
 			}
+		}
 	};
 }
 
@@ -40,11 +36,14 @@ var
 	database_userSkid,
 	fabric_spaceRef,
 	user_info,
+	prototype,
 	resume,
 	server_userNexus;
 
 
 server_userNexus = require( '../jion/this' )( module );
+
+prototype = server_userNexus.prototype;
 
 user_info = require( '../user/info' );
 
@@ -58,7 +57,7 @@ resume = require( 'suspend' ).resume;
 /*
 | Tests if a user is in the cache.
 */
-server_userNexus.prototype.testInCache =
+prototype.testInCache =
 	function(
 		user
 	)
@@ -78,7 +77,7 @@ server_userNexus.prototype.testInCache =
 /*
 | Tests if the user creds are ok.
 */
-server_userNexus.prototype.testUserCreds =
+prototype.testUserCreds =
 	function*(
 		user
 	)
@@ -101,16 +100,13 @@ server_userNexus.prototype.testUserCreds =
 			resume( )
 		);
 
-	if( val === null )
-	{
-		return null;
-	}
+	if( !val ) return;
 
-	cUser =
-		database_userSkid.createFromJSON( val ).asUser;
+	cUser = database_userSkid.createFromJSON( val ).asUser;
 
 	root.create(
-		'userNexus', this.create( '_cache', this._cache.set( cUser.name, cUser ) )
+		'userNexus',
+			this.create( '_cache', this._cache.set( cUser.name, cUser ) )
 	);
 
 	return cUser.passhash === user.passhash;
@@ -120,7 +116,7 @@ server_userNexus.prototype.testUserCreds =
 /*
 | Creates a new visitor.
 */
-server_userNexus.prototype.createVisitor =
+prototype.createVisitor =
 	function(
 		user
 	)
@@ -168,7 +164,7 @@ server_userNexus.prototype.createVisitor =
 /*
 | Registers a user.
 */
-server_userNexus.prototype.register =
+prototype.register =
 	function*(
 		user
 	)
@@ -187,7 +183,7 @@ server_userNexus.prototype.register =
 			resume( )
 		);
 
-	if( val !== null )
+	if( !val )
 	{
 		return false;
 	}

@@ -2318,7 +2318,7 @@ prototype.genFromJsonCreatorRayProcessing =
 				$block( )
 				.$( 'ray [ r ] = null' )
 				.$continue( )
-			)
+			);
 	}
 	
 	if( haveUndefined )
@@ -2330,7 +2330,7 @@ prototype.genFromJsonCreatorRayProcessing =
 				$block( )
 				.$( 'ray [ r ] = undefined' )
 				.$continue( )
-			)
+			);
 	}
 
 	loopBody =

@@ -4,7 +4,6 @@
 
 
 var
-	jion_path,
 	jools,
 	mark_caret,
 	mark_text;
