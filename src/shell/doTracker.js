@@ -21,30 +21,23 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'shell_doTracker',
+	return{
+		id : 'shell_doTracker',
 		attributes :
+		{
+			_undo :
 			{
-				_undo :
-					{
-						comment :
-							'the undo stack',
-						type :
-							'change_wrapRay',
-						defaultValue :
-							'null'
-					},
-				_redo :
-					{
-						comment :
-							'the redo stack',
-						type :
-							'change_wrapRay',
-						defaultValue :
-							'null'
-					}
+				comment : 'the undo stack',
+				type : 'change_wrapRay',
+				defaultValue : 'undefined'
+			},
+			_redo :
+			{
+				comment : 'the redo stack',
+				type : 'change_wrapRay',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 
@@ -150,7 +143,7 @@ shell_doTracker.prototype.update =
 		cw = changeWrapRay.transform( cw );
 
 		// the change vanished by transformation
-		if( cw === null )
+		if( !cw )
 		{
 			undo = undo.remove( a-- );
 
@@ -173,7 +166,7 @@ shell_doTracker.prototype.update =
 		cw = changeWrapRay.transform( cw );
 
 		// the change vanished by transformation
-		if( cw === null )
+		if( !cw )
 		{
 			redo = redo.remove( a-- );
 
