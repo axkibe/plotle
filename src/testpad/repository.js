@@ -28,40 +28,29 @@ var
 if( JION )
 {
 	return {
-		id :
-			'testpad_repository',
+		id : 'testpad_repository',
 		attributes :
+		{
+			seq :
 			{
-				seq :
-					{
-						comment :
-							'current sequence numer',
-						type :
-							'integer',
-						defaultValue :
-							'0'
-					},
-				_changeWrapRay :
-					{
-						comment :
-							'history of all changes',
-						type :
-							'change_wrapRay',
-						defaultValue :
-							'null'
-					},
-				_space :
-					{
-						comment :
-							'the action the user is preparing',
-						type :
-							'fabric_space',
-						defaultValue :
-							'null'
-					}
+				comment : 'current sequence numer',
+				type : 'integer',
+				defaultValue : '0'
 			},
-		init :
-			[ ]
+			_changeWrapRay :
+			{
+				comment : 'history of all changes',
+				type : 'change_wrapRay',
+				defaultValue : 'undefined'
+			},
+			_space :
+			{
+				comment : 'the action the user is preparing',
+				type : 'fabric_space',
+				defaultValue : 'undefined'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -78,7 +67,7 @@ testpad_repository.prototype._init =
 	function( )
 {
 	// the current space;
-	if( this._space === null )
+	if( !this._space )
 	{
 		this._space  =
 			fabric_space.create(
@@ -105,31 +94,23 @@ testpad_repository.prototype._init =
 						*/
 						fabric_doc.create(
 							'twig:add', '1',
-								fabric_para.create(
-									'text', 'Ameno'
-								),
+								fabric_para.create( 'text', 'Ameno' ),
 							'twig:add', '2',
-								fabric_para.create(
-									'text', 'Latire'
-								),
+								fabric_para.create( 'text', 'Latire' ),
 							'twig:add', '3',
-								fabric_para.create(
-									'text', 'Dorime'
-								)
+								fabric_para.create( 'text', 'Dorime' )
 						),
 					'zone',
 						euclid_rect.create(
-							'pnw',
-								euclid_point.create( 'x', 0, 'y', 0 ),
-							'pse',
-								euclid_point.create( 'x', 100, 'y', 100 )
+							'pnw', euclid_point.create( 'x', 0, 'y', 0 ),
+							'pse', euclid_point.create( 'x', 100, 'y', 100 )
 						),
 					'fontsize', 13
 			)
 		);
 	}
 
-	if( this._changeWrapRay === null )
+	if( !this._changeWrapRay )
 	{
 		this._changeWrapRay = change_wrapRay.create( );
 	}

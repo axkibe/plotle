@@ -262,8 +262,6 @@ formatAssign =
 
 	try
 	{
-		subtext = null;
-
 		subtext =
 			context.tab
 			+ formatExpression(
@@ -287,7 +285,7 @@ formatAssign =
 		}
 	}
 
-	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	if( subtext !== undefined && textLen( subtext ) < MAX_TEXT_WIDTH )
 	{
 		text += subtext;
 	}
@@ -348,8 +346,8 @@ formatBlock =
 			formatStatement(
 				blockContext,
 				block.get( a ),
-				a > 0 ?  block.get( a - 1 ) : null,
-				a + 1 < aZ ?  block.get( a + 1 ) : null
+				a > 0 ?  block.get( a - 1 ) : undefined,
+				a + 1 < aZ ?  block.get( a + 1 ) : undefined
 			);
 	}
 
@@ -434,7 +432,7 @@ formatCall =
 			a++
 		)
 		{
-			text += formatExpression( context.inc, call.get( a ), null );
+			text += formatExpression( context.inc, call.get( a ) );
 
 			if( a + 1 < aZ )
 			{
@@ -813,7 +811,7 @@ formatExpression =
 
 	prec = precTable[ expr.reflect ];
 
-	if( prec === undefined )
+	if( !prec )
 	{
 		throw new Error( 'cannot handle: ' + expr.reflectName );
 	}
@@ -827,7 +825,7 @@ formatExpression =
 		throw new Error( expr.reflectName );
 	}
 
-	bracket = pprec !== null && prec > pprec;
+	bracket = pprec !== undefined && prec > pprec;
 
 	subcontext = context;
 
@@ -840,12 +838,10 @@ formatExpression =
 		subcontext = context.inc;
 	}
 
-	subtext = null;
-
 	if(
 		!subcontext.inline
 		&& !bracket
-		&& pprec !== null && prec < pprec
+		&& pprec !== undefined && prec < pprec
 	)
 	{
 		// tries to go inline
@@ -865,7 +861,7 @@ formatExpression =
 		}
 	}
 
-	if( subtext === null || textLen( subtext ) > MAX_TEXT_WIDTH )
+	if( subtext === undefined || textLen( subtext ) > MAX_TEXT_WIDTH )
 	{
 		subtext = formatter( subcontext, expr );
 	}
@@ -935,8 +931,7 @@ formatFail =
 		+ messageContext.sep
 		+ formatExpression(
 			messageContext.inc,
-			fail.message,
-			null
+			fail.message
 		)
 		+ messageContext.sep
 		+ messageContext.tab
@@ -980,22 +975,19 @@ formatFor =
 		+ forContext.tab
 		+ formatExpression(
 			forContext.setInline,
-			forExpr.init,
-			null
+			forExpr.init
 		)
 		+ ';\n'
 		+ forContext.tab
 		+ formatExpression(
 			forContext.setInline,
-			forExpr.condition,
-			null
+			forExpr.condition
 		)
 		+ ';\n'
 		+ forContext.tab
 		+ formatExpression(
 			forContext.setInline,
-			forExpr.iterate,
-			null
+			forExpr.iterate
 		)
 		+ '\n'
 		+ context.tab
@@ -1161,9 +1153,7 @@ formatIf =
 		cond,
 		text;
 
-	cond = statement.condition,
-
-	text = null;
+	cond = statement.condition;
 
 	if( context.inline )
 	{
@@ -1182,7 +1172,7 @@ formatIf =
 		text =
 			context.tab
 			+ 'if( '
-			+ formatExpression( context.setInline, cond, null )
+			+ formatExpression( context.setInline, cond )
 			+ ' )\n';
 	}
 	catch ( e )
@@ -1194,12 +1184,12 @@ formatIf =
 		}
 	}
 
-	if( text === null || textLen( text ) > MAX_TEXT_WIDTH )
+	if( text === undefined || textLen( text ) > MAX_TEXT_WIDTH )
 	{
 		text =
 			context.tab
 			+ 'if(\n'
-			+ formatExpression( context.inc, cond, null )
+			+ formatExpression( context.inc, cond )
 			+ '\n'
 			+ context.tab
 			+ ')\n';
@@ -1322,18 +1312,10 @@ formatMember =
 /**/}
 
 	return (
-		formatExpression(
-			context,
-			expr.expr,
-			precTable.ast_member
-		)
+		formatExpression( context, expr.expr, precTable.ast_member )
 		+ '['
 		+ context.sep
-		+ formatExpression(
-			context.inc,
-			expr.member,
-			null
-		)
+		+ formatExpression( context.inc, expr.member )
 		+ context.sep
 		+ context.tab
 		+ ']'
@@ -1393,17 +1375,12 @@ formatMultiplyAssign =
 	var
 		text;
 
-	text = '';
-
 	context = context.incSame;
 
 	try
 	{
 		// first tries to inline the
 		// return expression.
-		text =
-			null;
-
 		text =
 			formatExpression(
 				context.setInline,
@@ -1426,7 +1403,7 @@ formatMultiplyAssign =
 		}
 	}
 
-	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
+	if( text !== undefined && textLen( text ) < MAX_TEXT_WIDTH )
 	{
 		return text;
 	}
@@ -1637,17 +1614,12 @@ formatPlusAssign =
 	var
 		text;
 
-	text = '';
-
 	context = context.incSame;
 
 	try
 	{
 		// first tries to inline the
 		// return expression.
-		text =
-			null;
-
 		text =
 			formatExpression(
 				context.setInline,
@@ -1670,7 +1642,7 @@ formatPlusAssign =
 		}
 	}
 
-	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
+	if( text !== undefined && textLen( text ) < MAX_TEXT_WIDTH )
 	{
 		return text;
 	}
@@ -1742,18 +1714,9 @@ formatReturn =
 		// first tries to inline the
 		// return expression.
 		text =
-			null;
-
-		text =
 			context.tab
-			+
-			'return '
-			+
-			formatExpression(
-				context.setInline,
-				statement.expr,
-				null
-			);
+			+ 'return '
+			+ formatExpression( context.setInline, statement.expr );
 	}
 	catch( e )
 	{
@@ -1764,7 +1727,7 @@ formatReturn =
 		}
 	}
 
-	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
+	if( text !== undefined && textLen( text ) < MAX_TEXT_WIDTH )
 	{
 		return text;
 	}
@@ -1779,7 +1742,7 @@ formatReturn =
 	text =
 		context.tab
 		+ 'return (\n'
-		+ formatExpression( context.inc, statement.expr, null )
+		+ formatExpression( context.inc, statement.expr )
 		+ '\n'
 		+ context.tab
 		+ ')';
@@ -1795,8 +1758,8 @@ formatStatement =
 	function(
 		context,    // context to be formated in
 		statement,  // the statement to be formated
-		lookBehind, // the previous statement (or null)
-		lookAhead   // the next statement (or null)
+		lookBehind, // the previous statement (or undefined)
+		lookAhead   // the next statement (or undefined)
 	)
 {
 	var
@@ -1804,8 +1767,6 @@ formatStatement =
 		subtext;
 
 	text = '';
-
-	subtext = null;
 
 	if(
 		lookBehind
@@ -1882,7 +1843,7 @@ formatStatement =
 				}
 			}
 
-			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+			if( subtext !== undefined && textLen( subtext ) < MAX_TEXT_WIDTH )
 			{
 				text += subtext;
 			}
@@ -1929,11 +1890,7 @@ formatStatement =
 			{
 				subtext =
 					context.tab
-					+ formatExpression(
-						context.setInline,
-						statement,
-						null
-					);
+					+ formatExpression( context.setInline, statement );
 			}
 			catch( e )
 			{
@@ -1944,18 +1901,13 @@ formatStatement =
 				}
 			}
 
-			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+			if( subtext !== undefined && textLen( subtext ) < MAX_TEXT_WIDTH )
 			{
 				text += subtext;
 			}
 			else
 			{
-				text +=
-					formatExpression(
-						context,
-						statement,
-						null
-					);
+				text += formatExpression( context, statement );
 			}
 	}
 
@@ -2055,11 +2007,7 @@ formatSwitch =
 	text =
 		context.tab
 		+ 'switch( '
-		+ formatExpression(
-			context.setInline,
-			switchExpr.statement,
-			null
-		)
+		+ formatExpression( context.setInline, switchExpr.statement )
 		+ ' )\n'
 		+ context.tab
 		+ '{\n';
@@ -2088,17 +2036,9 @@ formatSwitch =
 			text +=
 				caseContext.tab
 				+ 'case '
-				+ formatExpression(
-					caseContext.setInline,
-					caseExpr.get( b ),
-					null
-				)
+				+ formatExpression( caseContext.setInline, caseExpr.get( b ) )
 				+ ' :\n\n'
-				+ formatBlock(
-					caseContext.inc,
-					caseExpr.block,
-					true
-				)
+				+ formatBlock( caseContext.inc, caseExpr.block, true )
 				+ '\n'
 				+ caseContext.inc.tab
 				+ 'break;\n';
@@ -2221,21 +2161,13 @@ formatObjLiteral =
 		text +=
 			formatExpression(
 				context.inc.inc,
-				objliteral.twig[ key ],
-				null // FIXME precTable.Objliteral
+				objliteral.twig[ key ]
+				// FUTURE, precTable.Objliteral
 			)
-			+
-			(
-				a + 1 < aZ
-				? ',\n'
-				: '\n'
-			);
+			+ ( a + 1 < aZ ? ',\n' : '\n' );
 	}
 
-	text +=
-		context.tab
-		+
-		'}';
+	text += context.tab + '}';
 
 	return text;
 };
@@ -2341,17 +2273,11 @@ formatVarDec =
 			context = context.inc;
 		}
 
-		aText = null;
-
 		try
 		{
 			aText =
 				context.tab
-				+ formatExpression(
-					context.setInline,
-					varDec.assign,
-					null
-				);
+				+ formatExpression( context.setInline, varDec.assign );
 		}
 		catch( e )
 		{
@@ -2362,14 +2288,9 @@ formatVarDec =
 			}
 		}
 
-		if( aText === null || textLen( aText ) > MAX_TEXT_WIDTH )
+		if( aText === undefined || textLen( aText ) > MAX_TEXT_WIDTH )
 		{
-			aText =
-				formatExpression(
-					context,
-					varDec.assign,
-					null
-				);
+			aText = formatExpression( context, varDec.assign );
 		}
 
 		text += aText;
