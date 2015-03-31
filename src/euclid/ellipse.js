@@ -24,64 +24,43 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_ellipse',
+	return{
+		id : 'euclid_ellipse',
 		attributes :
+		{
+			pnw :
 			{
-				pnw :
-					{
-						comment :
-							'point in north west',
-						type :
-							'euclid_point'
-					},
-				pse :
-					{
-						comment :
-							'point in south east',
-						type :
-							'euclid_point'
-					},
-				gradientPC :
-					{
-						comment :
-							'center for gradient',
-						type :
-							'euclid_point',
-						defaultValue :
-							'null',
-						assign :
-							'_gradientPC'
-					},
-				gradientR0 :
-					{
-						comment :
-							'inner radius for circle gradients',
-						type :
-							'number',
-						defaultValue :
-							'null',
-						assign :
-							'_gradientR0'
-					},
-				gradientR1 :
-					{
-						comment :
-							'outer radius for circle gradients',
-						type :
-							'number',
-						defaultValue :
-							'null',
-						assign :
-							'_gradientR1'
-					}
+				comment : 'point in north west',
+				type : 'euclid_point'
 			},
-		init :
-			[
-				'pnw',
-				'pse'
-			]
+			pse :
+			{
+				comment : 'point in south east',
+				type : 'euclid_point'
+			},
+			gradientPC :
+			{
+				comment : 'center for gradient',
+				type : 'euclid_point',
+				defaultValue : 'undefined',
+				assign : '_gradientPC'
+			},
+			gradientR0 :
+			{
+				comment : 'inner radius for circle gradients',
+				type : 'number',
+				defaultValue : 'undefined',
+				assign : '_gradientR0'
+			},
+			gradientR1 :
+			{
+				comment : 'outer radius for circle gradients',
+				type : 'number',
+				defaultValue : 'undefined',
+				assign : '_gradientR1'
+			}
+		},
+		init : [ 'pnw', 'pse' ]
 	};
 }
 
