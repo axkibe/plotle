@@ -86,7 +86,7 @@ server_generateJion.run =
 	{
 		inputFileStat =
 		outputFileStat =
-			null;
+			undefined;
 	}
 
 	// true if the jion file needs to created

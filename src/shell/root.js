@@ -60,7 +60,7 @@ if( JION )
 				comment : 'access level to current space',
 				type : 'string',
 				assign : '_access',
-				defaultValue : 'undefined',
+				defaultValue : 'undefined'
 			},
 			action :
 			{

@@ -123,8 +123,6 @@ visual_handlesBezel.prototype.checkHandles =
 			return d;
 		}
 	}
-
-	return null;
 };
 
 

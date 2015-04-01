@@ -68,21 +68,9 @@ generator = require( '../jion/generator' );
 
 jools = require( '../jools/jools' );
 
-ast = null;
-
 all = false;
 
-input = null;
-
-listing = null;
-
-listingName = null;
-
 list = [ ];
-
-jion = null;
-
-output = null;
 
 readOptions =
 		{
@@ -216,7 +204,7 @@ for(
 	}
 	catch( e )
 	{
-		outStat = null;
+		outStat = undefined;
 	}
 
 	if(

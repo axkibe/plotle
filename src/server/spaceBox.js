@@ -104,7 +104,7 @@ server_spaceBox.loadSpace =
 
 	for(
 		o = yield cursor.nextObject( resume( ) );
-		o !== null;
+		o;
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{

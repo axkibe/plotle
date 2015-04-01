@@ -16,12 +16,8 @@ authors: [Christopher Pitt, Enrique Erne]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
-/*
-| Exports
-*/
 var
-	sha1hex =
-		null;
+	sha1hex;
 
 /*
 | Capsule
@@ -30,46 +26,62 @@ var
 'use strict';
 
 
-var toUTF8 =
+var
+	rotateLeft,
+	tohex,
+	toUTF8;
+
+
+toUTF8 =
 	function(
 		str
 	)
 {
-	var a, b;
-	var result = '';
-	var code = String.fromCharCode;
+	var
+		a,
+		b,
+		code,
+		result;
 
-	str = str.replace(/\r\n/g,"\n");
+	result = '';
 
-	for (a = 0; ( b = str.charCodeAt( a ) ); a++)
+	code = String.fromCharCode;
+
+	str = str.replace( /\r\n/g, '\n' );
+
+	for( a = 0; ( b = str.charCodeAt( a ) ); a++ )
 	{
-		if (b < 128)
+		if( b < 128 )
 		{
-			result += code(b);
+			result += code( b );
 		}
-		else if ((b > 127) && (b < 2048))
+		else if( ( b > 127 ) && ( b < 2048 ) )
 		{
-			result += code((b >> 6) | 192);
-			result += code((b & 63) | 128);
+			result +=
+				code( ( b >> 6 ) | 192 )
+				+ code( ( b & 63 ) | 128 );
 		}
 		else
 		{
-			result += code((b >> 12) | 224);
-			result += code(((b >> 6) & 63) | 128);
-			result += code((b & 63) | 128);
+			result +=
+				code( ( b >> 12 ) | 224 )
+				+ code( ( ( b >> 6 ) & 63 ) | 128 )
+				+ code( ( b & 63 ) | 128 );
 		}
 	}
 
 	return result;
 };
 
-var rotateLeft =
+
+rotateLeft =
 	function( a, b )
 {
 	return ( a << b ) | ( a >>> ( 32 - b ) );
 };
 
-var tohex =
+
+tohex =
 	function( a )
 {
 	var b, r;
@@ -84,37 +96,76 @@ var tohex =
 	return r;
 };
 
+
 sha1hex =
 	function( str )
 {
-	var a, b;
-	var h1 = 0x67452301;
-	var h2 = 0xEFCDAB89;
-	var h3 = 0x98BADCFE;
-	var h4 = 0x10325476;
-	var h5 = 0xC3D2E1F0;
-	var t1, t2, t3, t4, t5;
+	var
+		a,
+		assign,
+		b,
+		buffer,
+		code,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		len,
+		t1,
+		t2,
+		t3,
+		t4,
+		t5,
+		words;
+
+	h1 = 0x67452301;
+
+	h2 = 0xEFCDAB89;
+
+	h3 = 0x98BADCFE;
+
+	h4 = 0x10325476;
+
+	h5 = 0xC3D2E1F0;
 
 	str = toUTF8(str);
 
-	var len = str.length;
-	var words = [ ];
-	var buffer = new Array( 80 );
+	len = str.length;
 
-	var code = function(a) { return str.charCodeAt(a); };
+	words = [ ];
 
-	var	assign = function(c){
-		var b5 = t5;
+	buffer = new Array( 80 );
+
+	code = function( a ) { return str.charCodeAt( a ); };
+
+	assign =
+		function( c )
+	{
+		var
+			b5;
+
+		b5 = t5;
+
 		t5 = t4;
+
 		t4 = t3;
+
 		t3 = rotateLeft(t2, 30);
+
 		t2 = t1;
-		t1 = (rotateLeft(t1, 5) + b5 + buffer[a] + c) & 0x0ffffffff;
+
+		t1 = ( rotateLeft( t1, 5 ) + b5 + buffer[ a ] + c ) & 0x0ffffffff;
 	};
 
 	for( a = 0; a < len - 3; a += 4 )
 	{
-		words.push(code(a) << 24 | code(a + 1) << 16 | code(a + 2) << 8 | code(a + 3));
+		words.push(
+			code( a ) << 24
+			| code( a + 1 ) << 16
+			| code( a + 2 ) << 8
+			| code( a + 3 )
+		);
 	}
 
 	switch( len % 4 )
@@ -128,14 +179,15 @@ sha1hex =
 		case 3: a = code(len - 3) << 24 | code(len - 2) << 16 | code(len - 1) << 8 | 0x80; break;
 	}
 
-	words.push(a);
+	words.push( a );
 
-	while ((words.length % 16) != 14)
+	while( ( words.length % 16 ) != 14 )
 	{
-		words.push(0);
+		words.push( 0 );
 	}
 
 	words.push( len >>> 29 );
+
 	words.push( ( len << 3 ) & 0x0ffffffff );
 
 	for( b = 0; b < words.length; b += 16 )
@@ -149,10 +201,10 @@ sha1hex =
 		{
 			buffer[a] =
 				rotateLeft(
-					buffer[a - 3]
-					^ buffer[a - 8]
-					^ buffer[a - 14]
-					^ buffer[a - 16]
+					buffer[ a - 3 ]
+					^ buffer[ a - 8 ]
+					^ buffer[ a - 14 ]
+					^ buffer[ a - 16 ]
 					,
 					1
 				);
@@ -166,30 +218,34 @@ sha1hex =
 
 		a = 0;
 
-		for (; a < 20; a++)
+		for(; a < 20; a++ )
 		{
-			assign(((t2 & t3) | (~t2 & t4)) + 0x5A827999);
+			assign( ( ( t2 & t3 ) | ( ~t2 & t4 ) ) + 0x5A827999 );
 		}
 
-		for (; a < 40; a++)
+		for(; a < 40; a++ )
 		{
-			assign((t2 ^ t3 ^ t4) + 0x6ED9EBA1);
+			assign( ( t2 ^ t3 ^ t4 ) + 0x6ED9EBA1 );
 		}
 
-		for (; a < 60; a++)
+		for(; a < 60; a++ )
 		{
-			assign(((t2 & t3) | (t2 & t4) | (t3 & t4)) + 0x8F1BBCDC);
+			assign( ( ( t2 & t3 ) | ( t2 & t4 ) | ( t3 & t4 ) ) + 0x8F1BBCDC );
 		}
 
-		for (; a < 80; a++)
+		for(; a < 80; a++ )
 		{
-			assign((t2 ^ t3 ^ t4) + 0xCA62C1D6);
+			assign( ( t2 ^ t3 ^ t4 ) + 0xCA62C1D6 );
 		}
 
 		h1 = ( h1 + t1 ) & 0x0ffffffff;
+
 		h2 = ( h2 + t2 ) & 0x0ffffffff;
+
 		h3 = ( h3 + t3 ) & 0x0ffffffff;
+
 		h4 = ( h4 + t4 ) & 0x0ffffffff;
+
 		h5 = ( h5 + t5 ) & 0x0ffffffff;
 	}
 
@@ -214,4 +270,4 @@ if( SERVER )
 	};
 }
 
-})( );
+} )( );

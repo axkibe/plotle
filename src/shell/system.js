@@ -1355,7 +1355,7 @@ prototype._steerAttention =
 
 	ac = root.attentionCenter;
 
-	if( ac === undefined || ac === null ) // FIXME remove nullo
+	if( ac === undefined )
 	{
 		hiddenInput.style.top = '0';
 

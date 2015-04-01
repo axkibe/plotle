@@ -53,7 +53,7 @@ gruga_genericInputFacets =
 						'ray:append',
 						euclid_border.simpleBlack
 					)
-			),
+			)
 		]
 	);
 

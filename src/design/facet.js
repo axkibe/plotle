@@ -23,20 +23,20 @@ if( JION )
 	return{
 		id : 'design_facet',
 		attributes :
+		{
+			border :
 			{
-				border :
-					{
-						comment : 'border',
-						type : '->border',
-						defaultValue : 'undefined'
-					},
-				fill :
-					{
-						comment : 'fill',
-						type : '->fill',
-						defaultValue : 'undefined'
-					}
+				comment : 'border',
+				type : '->border',
+				defaultValue : 'undefined'
 			},
+			fill :
+			{
+				comment : 'fill',
+				type : '->fill',
+				defaultValue : 'undefined'
+			}
+		},
 		group : [ 'boolean' ]
 	};
 }

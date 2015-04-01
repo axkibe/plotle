@@ -72,8 +72,6 @@ prototype.getFacet =
 			return f;
 		}
 	}
-
-	return null;
 };
 
 

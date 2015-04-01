@@ -390,8 +390,6 @@ serveUpdate =
 	);
 
 	result.sleepID = sleepID;
-
-	return null;
 };
 
 

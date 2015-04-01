@@ -34,7 +34,7 @@ for( a = 0, aZ = fsTrace.length; a < aZ; a++ )
 
 	r = line.match( ':([0-9]*):([0-9]*)' );
 
-	if( r === null ) continue;
+	if( !r ) continue;
 
 	trace.push(
 		{

@@ -183,7 +183,7 @@ prototype.register =
 			resume( )
 		);
 
-	if( !val )
+	if( val )
 	{
 		return false;
 	}

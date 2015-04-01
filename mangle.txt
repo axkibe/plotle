@@ -1,9 +1,11 @@
-. FOCUS
-. HOFOC
-. HOVER
+. getFacet
+. prepareAction
+. facets
+. addGroup
+. _twig
+. _ranks
 > Label
 . MAX_INTEGER
-. NORMA
 > Note
 > PI
 > Portal
@@ -42,7 +44,6 @@
 . _gradientR1
 . _handles
 . _hover
-. _icon
 . _init
 . _isActiveButton
 . _keyBackspace
@@ -124,7 +125,6 @@
 . _undo
 . _update
 . _useCapture
-. _userIsGuest
 . _visitor
 . _x
 . _xhr
@@ -217,7 +217,6 @@
 . checkHandles
 . checkIcon
 . checkbox
-. checkboxCheck
 . checked
 . chop
 > cid
@@ -250,7 +249,6 @@
 . create
 . createArbitrary
 . createAroundHTMLCanvas
-. createButton
 . createDisc
 > createElement
 . createFromJSON
@@ -349,7 +347,6 @@
 . fullSkewNW
 . fullname
 > function
-. genericButton
 . genjion
 > get
 . getArea
@@ -370,7 +367,6 @@
 . getPointOffset
 . getProjection
 > getSeconds
-. getStyle
 > globalAlpha
 > globalCompositeOperation
 . gradientPC
@@ -398,13 +394,9 @@
 . headline
 > height
 . highlight
-. hofoc
 > home
 . hover
 . icon
-. iconNormal
-. iconRemove
-. iconStyle
 . id
 . ideoloomHome
 . ideoloomHomeButton
@@ -443,7 +435,7 @@
 . key
 > keyCode
 . keyNonGrata
-. keys
+> keys
 > la
 . label
 . lazyFunctionString
@@ -468,7 +460,6 @@
 . lookAlike
 . magic
 > mail
-. mainButton
 . mainDisc
 . margin
 > marginLeft
@@ -577,8 +568,6 @@
 > point
 . pointingHover
 . portal
-. portalButton
-. portalInput
 . pos
 . pos1
 . positioning
@@ -698,7 +687,6 @@
 . silhoutte
 . simpleBlack
 > sin
-. singleton
 . size
 . sizeOnly
 > slice
@@ -717,7 +705,6 @@
 > start
 . startPos
 . startup
-. state
 > status
 > stopPropagation
 . strength
@@ -726,7 +713,6 @@
 > stroke
 > strokeStyle
 > style
-. styles
 . sub
 . subPathOf
 > substr

@@ -40,12 +40,6 @@ vm = require( 'vm' );
 
 jionGenerator = require( '../jion/generator' );
 
-input = null;
-
-jion = null;
-
-output = null;
-
 readOptions =
 	{
 		encoding : 'utf8'
