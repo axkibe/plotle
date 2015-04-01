@@ -72,11 +72,7 @@ all = false;
 
 list = [ ];
 
-readOptions =
-		{
-			encoding :
-				'utf8'
-		};
+readOptions = { encoding : 'utf8' };
 
 
 /*
@@ -88,17 +84,13 @@ for(
 	a++
 )
 {
-	arg =
-		argV[ a ];
+	arg = argV[ a ];
 
 	if( arg[ 0 ] === '-' )
 	{
 		if( arg[ 1 ] !== '-' )
 		{
-			jools.log(
-				'fail',
-				'Invalid argument: ' + arg
-			);
+			console.log( 'Invalid argument: ' + arg );
 
 			process.exit( -1 );
 		}
@@ -107,17 +99,13 @@ for(
 		{
 			case '--all' :
 
-				all =
-					true;
+				all = true;
 
 				continue;
 
 			default :
 
-				jools.log(
-					'fail',
-					'Invalid argument: ' + arg
-				);
+				console.log( 'Invalid argument: ' + arg );
 
 				process.exit( -1 );
 		}
@@ -125,16 +113,12 @@ for(
 
 	if( listingName )
 	{
-		jools.log(
-			'fail',
-			'Cannot handle more than one listing.'
-		);
+		console.log( 'Cannot handle more than one listing.' );
 
 		process.exit( -1 );
 	}
 
-	listingName =
-		arg;
+	listingName = arg;
 }
 
 
@@ -143,10 +127,7 @@ for(
 */
 if( !listingName )
 {
-	jools.log(
-		'fail',
-		'Listing missing.'
-	);
+	console.log( 'Listing missing.' );
 
 	process.exit( -1 );
 }
@@ -213,35 +194,21 @@ for(
 		|| outStat.mtime <= inStat.mtime
 	)
 	{
-		jools.log(
-			'genjion',
-			'Reading ' + file.inFilename
-		);
+		console.log( 'Reading ' + file.inFilename );
 
 		input = fs.readFileSync( file.inFilename, readOptions );
 
-		global =
-			{
-				JION : true
-			};
+		global = { JION : true };
 
 		global.GLOBAL = global;
 
-		jion =
-			vm.runInNewContext(
-				input,
-				global,
-				file.inFilename
-			);
+		jion = vm.runInNewContext( input, global, file.inFilename );
 
 		ast = generator.generate( jion, false );
 
 		output = format_formatter.format( ast );
 
-		jools.log(
-			'genjion',
-			'Writing ' + file.outFilename
-		);
+		console.log( 'Writing ' + file.outFilename );
 
 		fs.writeFileSync( file.outFilename, output );
 
@@ -250,19 +217,13 @@ for(
 }
 
 
-if (didSomething )
+if( didSomething )
 {
-	jools.log(
-		'genjion',
-		'done updating ' + listingName
-	);
+	console.log( 'done updating ' + listingName );
 }
 else
 {
-	jools.log(
-		'genjion',
-		'nothing to be done for ' + listingName
-	);
+	console.log( 'nothing to be done for ' + listingName );
 }
 
 } )( );
