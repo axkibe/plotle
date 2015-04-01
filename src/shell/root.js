@@ -736,7 +736,7 @@ prototype.dragStart =
 	if( screen && screen.showDisc )
 	{
 		bubble = root._discJockey.dragStart( p, shift, ctrl );
-	
+
 		if( bubble ) return bubble;
 	}
 
@@ -830,12 +830,18 @@ prototype.mousewheel =
 		ctrl
 	)
 {
-	// FUTURE disc
-
 	var
+		bubble,
 		screen;
 
 	screen = root._currentScreen( );
+
+	if( screen && screen.showDisc )
+	{
+		bubble = root._discJockey.mousewheel( p, dir, shift, ctrl );
+
+		if( bubble ) return bubble;
+	}
 
 	if( screen )
 	{

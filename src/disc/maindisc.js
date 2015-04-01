@@ -111,10 +111,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = disc_mainDisc. prototype;
+
+
 /*
 | Initializes the main disc.
 */
-disc_mainDisc.prototype._init =
+prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -248,7 +254,7 @@ disc_mainDisc.prototype._init =
 | The disc panel's display.
 */
 jools.lazyValue(
-	disc_mainDisc.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
@@ -285,7 +291,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-disc_mainDisc.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -342,7 +348,7 @@ disc_mainDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-disc_mainDisc.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -357,7 +363,7 @@ disc_mainDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-disc_mainDisc.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -412,7 +418,7 @@ disc_mainDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel
 */
-disc_mainDisc.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -465,7 +471,7 @@ disc_mainDisc.prototype.click =
 /*
 | User is inputing text.
 */
-disc_mainDisc.prototype.input =
+prototype.input =
 	function(
 		// text
 	)
@@ -475,23 +481,55 @@ disc_mainDisc.prototype.input =
 
 
 /*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		p
+		// dir,
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if( !this.frame.within( p ) )
+	{
+		return;
+	}
+
+	if(
+		!this._display.withinSketch(
+			this.silhoutte,
+			euclid_view.proper,
+			p.sub( this.frame.pnw )
+		)
+	)
+	{
+		return;
+	}
+
+	return true;
+};
+
+
+/*
 | User is pressing a special key.
 */
-disc_mainDisc.prototype.specialKey =
+prototype.specialKey =
 	function(
 		// key,
 		// shift,
 		// ctrl
 	)
 {
-
+	// nothing
 };
 
 
 /*
 | Start of a dragging operation.
 */
-disc_mainDisc.prototype.dragStart =
+prototype.dragStart =
 	function(
 		p
 		// shift,

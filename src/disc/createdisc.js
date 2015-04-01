@@ -106,10 +106,15 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = disc_createDisc.prototype;
+
 /*
 | Initializes the create disc.
 */
-disc_createDisc.prototype._init =
+prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -171,7 +176,7 @@ disc_createDisc.prototype._init =
 | The disc panel's display.
 */
 jools.lazyValue(
-	disc_createDisc.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
@@ -205,7 +210,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-disc_createDisc.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -275,7 +280,7 @@ disc_createDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-disc_createDisc.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -291,7 +296,7 @@ disc_createDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-disc_createDisc.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -341,7 +346,7 @@ disc_createDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel.
 */
-disc_createDisc.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -393,7 +398,7 @@ disc_createDisc.prototype.click =
 /*
 | User is inputing text.
 */
-disc_createDisc.prototype.input =
+prototype.input =
 	function(
 		// text
 	)
@@ -405,7 +410,7 @@ disc_createDisc.prototype.input =
 /*
 | Cycles the focus
 */
-disc_createDisc.prototype.cycleFocus =
+prototype.cycleFocus =
 	function(
 		// dir
 	)
@@ -417,7 +422,7 @@ disc_createDisc.prototype.cycleFocus =
 /*
 | User is pressing a special key.
 */
-disc_createDisc.prototype.specialKey =
+prototype.specialKey =
 	function(
 	//	key,
 	//	shift,
@@ -434,6 +439,38 @@ disc_createDisc.prototype.specialKey =
 disc_createDisc.prototype.dragStart =
 	function(
 		p
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if( !this.frame.within( p ) )
+	{
+		return;
+	}
+
+	if(
+		!this._display.withinSketch(
+			this.silhoutte,
+			euclid_view.proper,
+			p.sub( this.frame.pnw )
+		)
+	)
+	{
+		return;
+	}
+
+	return true;
+};
+
+
+/*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		p
+		// dir,
 		// shift,
 		// ctrl
 	)

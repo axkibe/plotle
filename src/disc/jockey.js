@@ -216,6 +216,33 @@ prototype.draw =
 
 
 /*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble;
+
+	bubble = this.twig.mainDisc.mousewheel( p, dir, shift, ctrl );
+
+	if( bubble ) return bubble;
+
+	if( this.mode === 'create' )
+	{
+		return this.twig.createDisc.mousewheel( p, dir, shift, ctrl );
+	}
+
+	return;
+};
+
+
+/*
 | Returns true if point is on the disc panel.
 */
 prototype.pointingHover =

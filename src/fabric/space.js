@@ -435,7 +435,7 @@ prototype.draw =
 
 
 /*
-| Mouse wheel
+| Mouse wheel.
 */
 prototype.mousewheel =
 	function(
