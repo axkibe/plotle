@@ -15,30 +15,24 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'jion_id',
+	return{
+		id : 'jion_id',
 		attributes :
+		{
+			'name' :
 			{
-				'name' :
-					{
-						comment :
-							'the name part of the id if applicable',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
-					},
-				'unit' :
-					{
-						comment :
-							'the unit part of the id if applicable',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
-					}
+				comment : 'the name part of the id if applicable',
+				type : 'string',
+				// FIXME should not be allowed undefined
+				defaultValue : 'undefined'
+			},
+			'unit' :
+			{
+				comment : 'the unit part of the id if applicable',
+				type : 'string',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 
@@ -152,22 +146,91 @@ jion_id.compare =
 
 
 /*
+| This name as ast string.
+*/
+jools.lazyValue(
+	prototype,
+	'$abstractName',
+	function( )
+{
+	return shorthand.$string( this.name + ':abstract' );
+}
+);
+
+
+/*
+| This id as abstract as ast string.
+*/
+jools.lazyValue(
+	prototype,
+	'$abstractString',
+	function( )
+{
+	return shorthand.$string( this.string + ':abstract' );
+}
+);
+
+
+/*
+| This id as global varname
+*/
+jools.lazyValue(
+	prototype,
+	'global',
+	function( )
+{
+	return(
+		this.unit
+		? this.unit + '_' + this.name
+		: this.name
+	);
+}
+);
+
+
+/*
+| This id as ast variable.
+*/
+jools.lazyValue(
+	prototype,
+	'$global',
+	function( )
+{
+	return shorthand.$var( this.global );
+}
+);
+
+
+/*
+| This name as ast string.
+*/
+jools.lazyValue(
+	prototype,
+	'$name',
+	function( )
+{
+	return shorthand.$string( this.name );
+}
+);
+
+
+/*
 | This id as string.
 */
 jools.lazyValue(
 	prototype,
 	'string',
 	function( )
+{
+	if( this.unit )
 	{
-		if( this.unit )
-		{
-			return this.unit + '_' + this.name;
-		}
-		else
-		{
-			return this.name;
-		}
+		return this.unit + '_' + this.name;
 	}
+	else
+	{
+		return this.name;
+	}
+}
 );
 
 
@@ -178,43 +241,9 @@ jools.lazyValue(
 	prototype,
 	'$string',
 	function( )
-	{
-		return shorthand.$string( this.string );
-	}
-);
-
-
-
-/*
-| This id as global varname
-*/
-jools.lazyValue(
-	prototype,
-	'global',
-	function( )
-	{
-		if( this.unit )
-		{
-			return this.unit + '_' + this.name;
-		}
-		else
-		{
-			return this.name;
-		}
-	}
-);
-
-
-/*
-| This id as ast variable
-*/
-jools.lazyValue(
-	prototype,
-	'$global',
-	function( )
-	{
-		return shorthand.$var( this.global );
-	}
+{
+	return shorthand.$string( this.string );
+}
 );
 
 

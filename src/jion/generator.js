@@ -464,6 +464,12 @@ prototype.genImports =
 			b++
 		)
 		{
+			// FUTURE make this more elegant
+			if( nameList[ b ].indexOf( ':' ) >= 0 )
+			{
+				continue;
+			}
+
 			result =
 				result
 				.$varDec( unitList[ a ] + '_' + nameList[ b ] );
@@ -519,6 +525,14 @@ prototype.genNodeIncludes =
 
 			if( unitStr + '_' + name === this.id.global )
 			{
+				continue;
+			}
+
+			// FUTURE make sure the non-abstract
+			//        version is in unitlist
+			if( name.indexOf( ':' ) >= 0 )
+			{
+				// abstract
 				continue;
 			}
 
@@ -1836,7 +1850,7 @@ prototype.genCreator =
 		)
 		.$(
 			this.id.global, '.', funcName,
-		' = ', 'AbstractConstructor.prototype.', funcName,
+			' = ', 'AbstractConstructor.prototype.', funcName,
 			' = prototype.', funcName,
 			' = ', creator
 		)
@@ -2581,13 +2595,20 @@ prototype.genReflection =
 {
 	return(
 		$block( )
-		.$comment( 'Reflection.' )
-		.$assign( 'prototype.reflect', this.id.$string )
-		.$comment( 'Name Reflection.' )
-		.$assign(
-			'prototype.reflectName',
-			$string( this.id.name )
+		.$comment( 'Abstract Reflection.' )
+		.$(
+			'AbstractConstructor.prototype.reflect = ',
+			this.id.$abstractString
 		)
+		.$comment( 'Abstract Name Reflection.' )
+		.$(
+			'AbstractConstructor.prototype.reflectName = ',
+			this.id.$abstractName
+		)
+		.$comment( 'Reflection.' )
+		.$( 'prototype.reflect = ', this.id.$string )
+		.$comment( 'Name Reflection.' )
+		.$( 'prototype.reflectName =', this.id.$name )
 	);
 };
 

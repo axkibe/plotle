@@ -412,6 +412,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jion_stringRay:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'stringRay:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jion_stringRay';

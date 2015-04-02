@@ -198,6 +198,7 @@ jools.lazyValue(
 | Returns the id names as list of an unit.
 |
 | FIXME jools.lazyStringFunc
+| FIXME make it return an idGroup again
 */
 jion_idGroup.prototype.nameListOfUnit =
 	function(

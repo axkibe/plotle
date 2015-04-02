@@ -167,7 +167,7 @@ userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
 
 gruga_mainDisc =
-	disc_mainDisc.create(
+	disc_mainDisc.abstract(
 		'border',
 			euclid_borderRay.create(
 				'ray:append',

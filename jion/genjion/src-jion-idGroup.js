@@ -335,6 +335,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jion_idGroup:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'idGroup:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jion_idGroup';

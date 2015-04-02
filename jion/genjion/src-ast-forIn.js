@@ -644,6 +644,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_forIn:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'forIn:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_forIn';

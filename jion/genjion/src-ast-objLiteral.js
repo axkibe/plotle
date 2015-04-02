@@ -803,6 +803,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_objLiteral:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'objLiteral:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_objLiteral';

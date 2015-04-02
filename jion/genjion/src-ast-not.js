@@ -493,6 +493,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_not:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'not:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_not';

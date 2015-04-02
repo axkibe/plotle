@@ -1204,6 +1204,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jion_attribute:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'attribute:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jion_attribute';

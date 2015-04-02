@@ -277,6 +277,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_string:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'string:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_string';

@@ -686,6 +686,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_comma:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'comma:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_comma';

@@ -686,6 +686,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_greaterThan:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'greaterThan:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_greaterThan';

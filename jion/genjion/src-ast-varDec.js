@@ -569,6 +569,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_varDec:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'varDec:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_varDec';

@@ -412,6 +412,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_comment:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'comment:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_comment';

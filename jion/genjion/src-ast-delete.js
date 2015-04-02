@@ -493,6 +493,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_delete:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'delete:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_delete';

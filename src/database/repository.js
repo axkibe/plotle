@@ -16,33 +16,26 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'database_repository',
+	return{
+		id : 'database_repository',
 		attributes :
+		{
+			'_connection' :
 			{
-				'_connection' :
-					{
-						comment :
-							'the mongoDB connection',
-						type :
-							'protean'
-					},
-				'users' :
-					{
-						comment :
-							'the users collection',
-						type :
-							'protean'
-					},
-				'spaces' :
-					{
-						comment :
-							'the spaces collection',
-						type :
-							'protean'
-					}
+				comment : 'the mongoDB connection',
+				type : 'protean'
+			},
+			'users' :
+			{
+				comment : 'the users collection',
+				type : 'protean'
+			},
+			'spaces' :
+			{
+				comment : 'the spaces collection',
+				type : 'protean'
 			}
+		}
 	};
 }
 
@@ -82,7 +75,7 @@ database_repository.connect =
 		spaces,
 		users;
 
-	jools.log(
+	console.log(
 		'start',
 		'connecting to database',
 		config.database_host + ':' + config.database_port,
@@ -160,10 +153,7 @@ checkRepository =
 		global,
 		version;
 
-	jools.log(
-		'start',
-		'checking repository schema version'
-	);
+	console.log( 'start', 'checking repository schema version' );
 
 	global = yield connection.collection( 'global', resume( ) ),
 
@@ -209,10 +199,7 @@ initRepository =
 
 	spaces = yield connection.collection( 'spaces', resume( ) );
 
-	jools.log(
-		'start',
-		'found no repository, initializing a new one'
-	);
+	console.log( 'start', 'found no repository, initializing a new one' );
 
 	initSpaces =
 		[
@@ -234,7 +221,7 @@ initRepository =
 	{
 		sr = initSpaces[ s ];
 
-		jools.log( 'start', '  initializing space ' + sr.fullname );
+		console.log( 'start', '  initializing space ' + sr.fullname );
 
 		yield spaces.insert(
 			{
@@ -246,7 +233,7 @@ initRepository =
 		);
 	}
 
-	jools.log( 'start', '  initializing global.version' );
+	console.log( 'start', '  initializing global.version' );
 
 	global = yield connection.collection( 'global', resume( ) );
 

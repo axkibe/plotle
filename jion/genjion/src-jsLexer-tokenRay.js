@@ -415,6 +415,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jsLexer_tokenRay:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'tokenRay:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jsLexer_tokenRay';

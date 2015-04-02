@@ -288,6 +288,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_new:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'new:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_new';

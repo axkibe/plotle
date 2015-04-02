@@ -510,6 +510,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'format_context:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'context:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'format_context';

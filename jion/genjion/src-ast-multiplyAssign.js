@@ -686,6 +686,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_multiplyAssign:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'multiplyAssign:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_multiplyAssign';

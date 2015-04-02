@@ -103,7 +103,7 @@ genericButtonModel =
 
 
 gruga_createDisc =
-	disc_createDisc.create(
+	disc_createDisc.abstract(
 		'border',
 			euclid_borderRay.create(
 				'ray:append',

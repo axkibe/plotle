@@ -493,6 +493,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_preIncrement:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'preIncrement:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_preIncrement';

@@ -293,6 +293,9 @@ shell_root.startup =
 	var
 		ajaxPath,
 		canvas,
+		dj,
+		djPath,
+		djTwPath,
 		mode,
 		user,
 		view;
@@ -342,6 +345,25 @@ shell_root.startup =
 			);
 	}
 
+	djPath = jion_path.empty.append( 'disc' );
+
+	djTwPath = djPath.append( 'twig' );
+
+	dj =
+		disc_jockey.create(
+			'mode', mode,
+			'path', djPath,
+			'view', view,
+			'twig:add', 'mainDisc',
+				gruga_mainDisc.abstract(
+					'path', djTwPath.append( 'mainDisc' )
+				),
+			'twig:add', 'createDisc',
+				gruga_createDisc.abstract(
+					'path', djTwPath.append( 'createDisc' )
+				)
+		);
+
 	shell_root.create(
 		'ajax',
 			net_ajax.create(
@@ -357,15 +379,7 @@ shell_root.startup =
 		'mode', mode,
 		'systemFocus', true,
 		'view', view,
-		'_discJockey',
-			disc_jockey.create(
-				'access', '', // FIXME
-				'mode', mode,
-				'path', jion_path.empty.append( 'disc' ),
-				'view', view,
-				'twig:add', 'mainDisc', gruga_mainDisc,
-				'twig:add', 'createDisc', gruga_createDisc
-			),
+		'_discJockey', dj,
 		'_drawn', false,
 		'_formJockey',
 			form_jockey.create(

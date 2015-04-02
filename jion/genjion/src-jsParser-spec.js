@@ -508,6 +508,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jsParser_tokenSpec:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'tokenSpec:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jsParser_tokenSpec';

@@ -722,6 +722,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jsParser_state:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'state:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jsParser_state';

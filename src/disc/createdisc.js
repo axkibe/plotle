@@ -57,7 +57,8 @@ if( JION )
 			{
 				comment : 'the widget hovered upon',
 				type : 'jion_path',
-				defaultValue : 'undefined'
+				defaultValue : 'undefined',
+				prepare : 'disc_disc.concernsHover( hover, path )'
 			},
 			mark :
 			{

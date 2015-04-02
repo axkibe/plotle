@@ -787,6 +787,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'ast_switch:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'switch:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'ast_switch';

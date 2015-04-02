@@ -245,6 +245,18 @@ prototype.create =
 
 
 /*
+| Abstract Reflection.
+*/
+AbstractConstructor.prototype.reflect = 'jion_generator:abstract';
+
+
+/*
+| Abstract Name Reflection.
+*/
+AbstractConstructor.prototype.reflectName = 'generator:abstract';
+
+
+/*
 | Reflection.
 */
 prototype.reflect = 'jion_generator';

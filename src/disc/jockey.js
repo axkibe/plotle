@@ -77,7 +77,13 @@ if( JION )
 			}
 		},
 		init : [ ],
-		twig : [ 'disc_mainDisc', 'disc_createDisc' ]
+		twig :
+		[
+			'disc_mainDisc',
+			'disc_mainDisc:abstract',
+			'disc_createDisc',
+			'disc_createDisc:abstract'
+		]
 	};
 }
 
@@ -109,8 +115,9 @@ prototype._init =
 	function( )
 {
 	var
+		a,
+		aZ,
 		name,
-		path,
 		proto,
 		ranks,
 		twig;
@@ -129,7 +136,7 @@ prototype._init =
 	twig = jools.copy( this.twig );
 
 	for(
-		var a = 0, aZ = ranks.length;
+		a = 0, aZ = ranks.length;
 		a < aZ;
 		a++
 	)
@@ -138,30 +145,13 @@ prototype._init =
 
 		proto = twig[ name ];
 
-		if( !proto.path )
-		{
-			path =
-				this.path
-				.append( 'twig' )
-				.append( name );
-		}
-		else
-		{
-			path = pass;
-		}
-
 		twig[ name ] =
 			proto.create(
 				'access', this.access,
 				'action', this.action,
-				'hover',
-					// FIXME make a concernsHover in the disc
-					( this.hover && this.hover.get( 2 ) === name )
-					? this.hover
-					: undefined,
+				'hover', this.hover,
 				'mark', this.mark,
 				'mode', this.mode,
-				'path', path,
 				'view', this.view,
 				'spaceRef', this.spaceRef,
 				'user', this.user
