@@ -48,9 +48,16 @@ fabric_item.concernsMark =
 		path
 	)
 {
-	// FIXME fail on isEmpty
 
-	if( !path || path.isEmpty || !mark )
+/**/if( CHECK )
+/**/{
+/**/	if( path && path.isEmpty )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !path || !mark )
 	{
 		return undefined;
 	}

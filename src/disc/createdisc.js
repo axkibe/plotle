@@ -10,7 +10,6 @@ var
 	disc_disc,
 	euclid_display,
 	euclid_view,
-	jion_path,
 	jools,
 	root;
 
@@ -261,11 +260,7 @@ prototype.pushButton =
 
 			root.create(
 				'action',
-					action_createRelation.create(
-						'fromItemPath', jion_path.empty,
-						'relationState', 'start',
-						'toItemPath', jion_path.empty
-					)
+					action_createRelation.create( 'relationState', 'start' )
 			);
 
 			return;

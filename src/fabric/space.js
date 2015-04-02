@@ -375,16 +375,13 @@ prototype.draw =
 
 		case 'action_createRelation' :
 
-			if( !action.fromItemPath.isEmpty )
+			if( action.fromItemPath )
 			{
-				fromItem =
-					this.getItem(
-						action.fromItemPath.get( -1 )
-					);
+				fromItem = this.getItem( action.fromItemPath.get( -1 ) );
 
 				fromItem.highlight( display );
 
-				if( !action.toItemPath.isEmpty )
+				if( action.toItemPath )
 				{
 					toItem = this.getItem( action.toItemPath.get( -1 ) );
 
@@ -394,9 +391,8 @@ prototype.draw =
 				fromSilhoutte = fromItem.silhoutte;
 
 				if(
-					!action.toItemPath.isEmpty
-					&&
-					!action.toItemPath.equals( action.fromItemPath )
+					action.toItemPath
+					&& !action.toItemPath.equals( action.fromItemPath )
 				)
 				{
 					// arrow connects two items
@@ -889,10 +885,10 @@ prototype.dragStop =
 							'pnw', label.pnw,
 							'doc',
 								fabric_doc.create(
-								'twig:add', '1',
-								fabric_para.create( 'text', 'Label' )
-							)
-					);
+									'twig:add', '1',
+									fabric_para.create( 'text', 'Label' )
+								)
+							);
 
 					root.alter(
 						change_grow.create(
@@ -993,7 +989,7 @@ prototype.dragStop =
 
 				case 'hadSelect' :
 
-					if( !action.toItemPath.isEmpty )
+					if( action.toItemPath )
 					{
 						item = this.getItem( action.toItemPath.get( -1 ) );
 
@@ -1251,17 +1247,11 @@ prototype.dragMove =
 				return 'pointer';
 			}
 
-			root.create(
-				'action',
-					action.create(
-						'toItemPath', jion_path.empty, // FIXME
-						'toPoint', p
-					)
-			);
+			root.create( 'action', action = action.create( 'toPoint', p ) );
 
-			// FIXME why is this?
+			// Looks if the action is dragging to an item
 			for(
-				r = 0, rZ = this.ranks.length;
+				r = 0, rZ = this.length;
 				r < rZ;
 				r++
 			)
@@ -1271,6 +1261,8 @@ prototype.dragMove =
 					return 'pointer';
 				}
 			}
+
+			root.create( 'action', action.create( 'toItemPath', undefined ) );
 
 			return 'pointer';
 
