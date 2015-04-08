@@ -34,7 +34,7 @@ if( JION )
 
 if( SERVER )
 {
-	ccot_changeRay = require( '../jion/this' )( module );
+	ccot_changeRay = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools'  );
 

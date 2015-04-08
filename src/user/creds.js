@@ -42,7 +42,7 @@ if( JION )
 
 if( SERVER )
 {
-	user_creds = require( '../jion/this' )( module );
+	user_creds = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 }

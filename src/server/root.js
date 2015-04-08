@@ -15,6 +15,7 @@ var DELAY_ALTER = 5000;
 var DELAY_ACQUIRE = 5000;
 DELAY_ALTER = false;
 DELAY_ACQUIRE = false;
+//Error.stackTraceLimit = 99999;
 
 /*
 | The jion definition.
@@ -22,73 +23,52 @@ DELAY_ACQUIRE = false;
 if( GLOBAL.JION )
 {
 	return {
-		id :
-			'server_root',
+		id : 'server_root',
 		attributes :
+		{
+			bundleFilePath :
 			{
-				bundleFilePath :
-					{
-						comment :
-							'file path of the bundle',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
-					},
-				inventory :
-					{
-						comment :
-							'the servers inventory of ressources',
-						type :
-							'server_inventory'
-					},
-				nextSleepID :
-					{
-						comment :
-							'ID for next upsleep',
-						type :
-							'integer'
-					},
-				nextVisitor :
-					{
-						comment :
-							'next visitors ID',
-						type :
-							'integer'
-					},
-				repository :
-					{
-						comment :
-							'the database backend',
-						type :
-							'database_repository'
-					},
-				spaces :
-					{
-						comment :
-							'all spaces',
-						type :
-							'server_spaceNexus'
-					},
-				userNexus :
-					{
-						comment :
-							'manages users',
-						type :
-							'server_userNexus'
-					},
-				upSleeps :
-					{
-						comment :
-							'a table of all clients waiting for an update',
-						type :
-							'server_upSleepGroup'
-					}
+				comment : 'file path of the bundle',
+				type : 'string',
+				defaultValue : 'undefined'
 			},
-
-		// next visitors ID
-		init :
-			[ ]
+			inventory :
+			{
+				comment : 'the servers inventory of ressources',
+				type : 'server_inventory'
+			},
+			nextSleepID :
+			{
+				comment : 'ID for next upsleep',
+				type : 'integer'
+			},
+			nextVisitor :
+			{
+				comment : 'next visitors ID',
+				type : 'integer'
+			},
+			repository :
+			{
+				comment : 'the database backend',
+				type : 'database_repository'
+			},
+			spaces :
+			{
+				comment : 'all spaces',
+				type : 'server_spaceNexus'
+			},
+			userNexus :
+			{
+				comment : 'manages users',
+				type : 'server_userNexus'
+			},
+			upSleeps :
+			{
+				comment : 'a table of all clients waiting for an update',
+				type : 'server_upSleepGroup'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -208,7 +188,7 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 zlib = require( 'zlib' );
 
 
-server_root = require( '../jion/this' )( module );
+server_root = require( 'jion' ).this( module );
 
 
 prototype = server_root.prototype;
@@ -629,6 +609,7 @@ prototype.prepareInventory =
 							'CHECK' : config.shell_check,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
+							'NODE' : false,
 							'SERVER' : false
 						}
 					}
@@ -810,6 +791,7 @@ prototype.prependConfigFlags =
 						+ 'var CHECK = ' + config.shell_check + ';\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var SERVER = false;\n'
+						+ 'var NODE = false;\n'
 						+ resource.data
 				)
 			)

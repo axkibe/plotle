@@ -55,7 +55,7 @@ if( JION )
 */
 if( SERVER )
 {
-	ccot_change = require( '../jion/this' )( module );
+	ccot_change = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 

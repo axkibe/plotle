@@ -55,7 +55,7 @@ if( JION )
 
 if( SERVER )
 {
-	require( '../jion/this' )( module );
+	require( 'jion' ).this( module );
 }
 
 

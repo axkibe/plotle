@@ -15,38 +15,31 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'result_genjion',
+	return{
+		id : 'result_genjion',
 		attributes :
+		{
+			code :
 			{
-				code :
-					{
-						comment :
-							'the generated code',
-						type :
-							'string'
-					},
-				jionID :
-					{
-						comment :
-							'the id of the jion',
-						type :
-							'string'
-					},
-				hasJSON :
-					{
-						comment :
-							'true if generated jion supports json',
-						type :
-							'boolean'
-					}
+				comment : 'the generated code',
+				type : 'string'
+			},
+			jionID :
+			{
+				comment : 'the id of the jion',
+				type : 'string'
+			},
+			hasJSON :
+			{
+				comment : 'true if generated jion supports json',
+				type : 'boolean'
 			}
+		}
 	};
 }
 
 
-require( '../jion/this' )( module );
+require( 'jion' ).this( module );
 
 
 } )( );

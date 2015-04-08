@@ -42,7 +42,7 @@ if( JION )
 var
 	ast_lessThan;
 
-ast_lessThan = require( '../jion/this' )( module );
+ast_lessThan = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

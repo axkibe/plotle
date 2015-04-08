@@ -40,7 +40,7 @@ var
 	tools;
 
 
-ast_call = require( '../jion/this' )( module );
+ast_call = require( 'jion' ).this( module );
 
 jools = require( '../jools/jools' );
 

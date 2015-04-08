@@ -42,7 +42,7 @@ if( JION )
 var
 	ast_multiply;
 
-ast_multiply = require( '../jion/this' )( module );
+ast_multiply = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

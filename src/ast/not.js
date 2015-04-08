@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_not;
 
-ast_not = require( '../jion/this' )( module );
+ast_not = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

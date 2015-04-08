@@ -13,9 +13,13 @@
 | Imports
 */
 var
+	jion,
 	jion_stringRay,
 	resource,
 	stringRay;
+
+
+jion = require( 'jion' );
 
 jion_stringRay = require( '../jion/stringRay' );
 
@@ -47,7 +51,10 @@ module.exports =
 		'maxage', 'long'
 	),
 	resource.create(
-		'filePath', 'src/jion/proto.js',
+		'aliases', stringRay( [ 'jion-proto.js' ] ),
+		'coding', 'utf-8',
+		'data', jion.proto.src,
+		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),

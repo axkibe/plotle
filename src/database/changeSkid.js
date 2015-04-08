@@ -59,7 +59,7 @@ var
 	changeSkid,
 	jools;
 
-changeSkid = require( '../jion/this' )( module );
+changeSkid = require( 'jion' ).this( module );
 
 jools = require( '../jools/jools' );
 

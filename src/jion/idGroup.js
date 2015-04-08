@@ -30,7 +30,7 @@ var
 	jools;
 
 
-jion_idGroup = require( '../jion/this' )( module );
+jion_idGroup = require( 'jion' ).this( module );
 
 jion_id = require( './id' );
 

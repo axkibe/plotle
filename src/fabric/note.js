@@ -34,62 +34,61 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'fabric_note',
+	return{
+		id : 'fabric_note',
 		attributes :
+		{
+			doc :
 			{
-				doc :
-					{
-						comment : 'the notes document',
-						type : 'fabric_doc',
-						json : true
-					},
-				fontsize :
-					{
-						comment : 'the fontsize of the note',
-						type : 'number',
-						json : true
-					},
-				hover :
-					{
-						comment : 'node currently hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined',
-						assign : ''
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'fabric_item.concernsMark( mark, path )',
-						type : '->mark',
-						defaultValue : 'undefined'
-					},
-				path :
-					{
-						comment : 'the path of the note',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				scrolly :
-					{
-						comment : 'vertical scroll position',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					},
-				zone :
-					{
-						comment : 'the notes zone',
-						type : 'euclid_rect',
-						json : true
-					}
+				comment : 'the notes document',
+				type : 'fabric_doc',
+				json : true
 			},
+			fontsize :
+			{
+				comment : 'the fontsize of the note',
+				type : 'number',
+				json : true
+			},
+			hover :
+			{
+				comment : 'node currently hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				assign : ''
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'fabric_item.concernsMark( mark, path )',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the note',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			scrolly :
+			{
+				comment : 'vertical scroll position',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			},
+			zone :
+			{
+				comment : 'the notes zone',
+				type : 'euclid_rect',
+				json : true
+			}
+		},
 		init : [ 'inherit' ],
 		alike :
 			{
@@ -111,7 +110,7 @@ var
 */
 if( SERVER )
 {
-	fabric_note = require( '../jion/this' )( module );
+	fabric_note = require( 'jion' ).this( module );
 
 	fabric_note.prototype._init = function( ) { };
 

@@ -33,52 +33,52 @@ if( JION )
 	return {
 		id : 'fabric_label',
 		attributes :
+		{
+			doc :
 			{
-				doc :
-					{
-						comment : 'the labels document',
-						type : 'fabric_doc',
-						json : true
-					},
-				fontsize :
-					{
-						comment : 'the fontsize of the label',
-						type : 'number',
-						json : true
-					},
-				hover :
-					{
-						comment : 'node currently hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined',
-						assign : ''
-					},
-				path :
-					{
-						comment : 'the path of the doc',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				pnw :
-					{
-						comment : 'point in the north-west',
-						type : 'euclid_point',
-						json : true
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'fabric_item.concernsMark( mark, path )',
-						type : '->mark',
-						defaultValue : 'undefined'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					}
+				comment : 'the labels document',
+				type : 'fabric_doc',
+				json : true
 			},
+			fontsize :
+			{
+				comment : 'the fontsize of the label',
+				type : 'number',
+				json : true
+			},
+			hover :
+			{
+				comment : 'node currently hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				assign : ''
+			},
+			path :
+			{
+				comment : 'the path of the doc',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			pnw :
+			{
+				comment : 'point in the north-west',
+				type : 'euclid_point',
+				json : true
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'fabric_item.concernsMark( mark, path )',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			}
+		},
 		init : [ ]
 	};
 }
@@ -92,7 +92,7 @@ var
 */
 if( SERVER )
 {
-	fabric_label = require( '../jion/this' )( module );
+	fabric_label = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 

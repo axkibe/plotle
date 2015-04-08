@@ -44,7 +44,7 @@ var
 	ast_block,
 	ast_if;
 
-ast_if = require( '../jion/this' )( module );
+ast_if = require( 'jion' ).this( module );
 
 ast_block = require( './block' );
 

@@ -42,7 +42,7 @@ if( JION )
 var
 	ast_instanceof;
 
-ast_instanceof = require( '../jion/this' )( module );
+ast_instanceof = require( 'jion' ).this( module );
 
 /**/if( CHECK )
 /**/{

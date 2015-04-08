@@ -39,18 +39,18 @@ if( JION )
 			action :
 			{
 				comment : 'currently active action',
-				type : '->action',
+				type : require( '../typemaps/action' ),
 				defaultValue : 'undefined'
 			},
 			border :
 			{
 				comment : 'display border',
-				type : '->border'
+				type : require( '../typemaps/border' )
 			},
 			fill :
 			{
 				comment : 'display fill',
-				type : '->fill'
+				type : require( '../typemaps/fill' )
 			},
 			hover :
 			{
@@ -62,7 +62,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				defaultValue : 'undefined'
 			},
 			mode :
@@ -101,7 +101,7 @@ if( JION )
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
-		twig : '->formWidgets'
+		twig : require( '../typemaps/formWidgets' )
 	};
 }
 

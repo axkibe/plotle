@@ -25,60 +25,60 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'widget_checkbox',
 		attributes :
+		{
+			checked :
 			{
-				checked :
-					{
-						comment : 'true if the checkbox is checked',
-						type : 'boolean',
-						defaultValue : 'false'
-					},
-				designFrame :
-					{
-						comment : 'designed frame (using anchors)',
-						type : 'design_anchorRect'
-					},
-				facets :
-					{
-						comment : 'style facets',
-						type : 'design_facetRay'
-					},
-				hover :
-					{
-						comment : 'component hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined',
-						prepare : 'widget_widget.concernsHover( hover, path )'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						defaultValue : 'undefined',
-						prepare : 'widget_widget.concernsMark( mark, path )',
-						allowsNull : true // FIXME
-					},
-				path :
-					{
-						comment : 'the path of the widget',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				superFrame :
-					{
-						comment : 'the frame the widget resides in',
-						type : 'euclid_rect',
-						defaultValue : 'undefined'
-					},
-				visible :
-					{
-						comment : 'if false the button is hidden',
-						type : 'boolean',
-						defaultValue : 'true'
-					}
+				comment : 'true if the checkbox is checked',
+				type : 'boolean',
+				defaultValue : 'false'
 			},
+			designFrame :
+			{
+				comment : 'designed frame (using anchors)',
+				type : 'design_anchorRect'
+			},
+			facets :
+			{
+				comment : 'style facets',
+				type : 'design_facetRay'
+			},
+			hover :
+			{
+				comment : 'component hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				prepare : 'widget_widget.concernsHover( hover, path )'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined',
+				prepare : 'widget_widget.concernsMark( mark, path )',
+				allowsNull : true // FIXME
+			},
+			path :
+			{
+				comment : 'the path of the widget',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			superFrame :
+			{
+				comment : 'the frame the widget resides in',
+				type : 'euclid_rect',
+				defaultValue : 'undefined'
+			},
+			visible :
+			{
+				comment : 'if false the button is hidden',
+				type : 'boolean',
+				defaultValue : 'true'
+			}
+		},
 		init : [ ]
 	};
 }

@@ -27,13 +27,13 @@ if( JION )
 			border :
 			{
 				comment : 'border',
-				type : '->border',
+				type : require( '../typemaps/border' ),
 				defaultValue : 'undefined'
 			},
 			fill :
 			{
 				comment : 'fill',
-				type : '->fill',
+				type : require( '../typemaps/fill' ),
 				defaultValue : 'undefined'
 			}
 		},

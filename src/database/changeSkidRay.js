@@ -33,7 +33,7 @@ if( JION )
 }
 
 
-database_changeSkidRay = require( '../jion/this' )( module );
+database_changeSkidRay = require( 'jion' ).this( module );
 
 database_changeSkid = require( './changeSkid' );
 

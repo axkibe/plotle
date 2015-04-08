@@ -74,7 +74,7 @@ var
 
 if( SERVER )
 {
-	change_wrap = require( '../jion/this' )( module );
+	change_wrap = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 }

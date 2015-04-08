@@ -68,7 +68,7 @@ var
 */
 if( SERVER )
 {
-	change_remove = require( '../jion/this' )( module );
+	change_remove = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

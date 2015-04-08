@@ -43,7 +43,7 @@ var
 	ast_func;
 
 
-ast_func = require( '../jion/this' )( module );
+ast_func = require( 'jion' ).this( module );
 
 ast_funcArg = require( './funcArg' );
 

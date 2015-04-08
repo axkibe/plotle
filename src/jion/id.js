@@ -43,7 +43,7 @@ var
 	prototype,
 	shorthand;
 
-jion_id = require( '../jion/this' )( module );
+jion_id = require( 'jion' ).this( module );
 
 prototype = jion_id.prototype;
 

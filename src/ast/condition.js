@@ -52,7 +52,7 @@ var
 	ast_condition,
 	prototype;
 
-ast_condition = require( '../jion/this' )( module );
+ast_condition = require( 'jion' ).this( module );
 
 prototype = ast_condition.prototype;
 

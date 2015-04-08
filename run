@@ -1,6 +1,3 @@
 #!/bin/bash
 set -e
-node --harmony src/tools/genjion.js jion/listing-genjion.js
-node --harmony src/tools/genjion.js jion/listing-server.js
-#./jshint
 node --harmony src/server/root.js

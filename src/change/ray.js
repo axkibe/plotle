@@ -46,7 +46,7 @@ var
 
 if( SERVER )
 {
-	change_ray = require( '../jion/this' )( module );
+	change_ray = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

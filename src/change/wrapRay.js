@@ -36,7 +36,7 @@ var
 
 if( SERVER )
 {
-	change_wrapRay = require( '../jion/this' )( module );
+	change_wrapRay = require( 'jion' ).this( module );
 }
 
 

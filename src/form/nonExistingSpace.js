@@ -40,7 +40,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				prepare : 'form_form.concernsMark( mark, path )',
 				defaultValue : 'undefined'
 			},
@@ -79,7 +79,7 @@ if( JION )
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
-		twig : '->formWidgets'
+		twig : require( '../typemaps/formWidgets' )
 	};
 }
 

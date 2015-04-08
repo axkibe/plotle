@@ -55,7 +55,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				prepare : 'fabric_para.concernsMark( mark, path )',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				defaultValue : 'undefined',
 				allowsNull : true
 			},
@@ -99,7 +99,7 @@ var
 */
 if( SERVER )
 {
-	fabric_para = require( '../jion/this' )( module );
+	fabric_para = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 }

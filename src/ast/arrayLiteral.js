@@ -28,7 +28,7 @@ if( JION )
 }
 
 
-ast_arrayLiteral = require( '../jion/this' )( module );
+ast_arrayLiteral = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

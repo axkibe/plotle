@@ -27,7 +27,7 @@ if( JION )
 var
 	jion_stringRay;
 
-jion_stringRay = require( '../jion/this' )( module );
+jion_stringRay = require( 'jion' ).this( module );
 
 
 /*

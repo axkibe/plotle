@@ -36,7 +36,7 @@ var
 	ast_preIncrement;
 
 
-ast_preIncrement = require( '../jion/this' )( module );
+ast_preIncrement = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

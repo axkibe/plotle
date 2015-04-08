@@ -53,7 +53,7 @@ if( JION )
 
 if( SERVER )
 {
-	euclid_fixPoint = require( '../jion/this' )( module );
+	euclid_fixPoint = require( 'jion' ).this( module );
 }
 
 

@@ -43,7 +43,7 @@ var
 	ast_differs,
 	prototype;
 
-ast_differs = require( '../jion/this' )( module );
+ast_differs = require( 'jion' ).this( module );
 
 prototype = ast_differs.prototype;
 

@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_typeof;
 
-ast_typeof = require( '../jion/this' )( module );
+ast_typeof = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

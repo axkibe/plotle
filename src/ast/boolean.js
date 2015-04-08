@@ -37,7 +37,7 @@ var
 	ast_boolean,
 	prototype;
 
-ast_boolean = require( '../jion/this' )( module );
+ast_boolean = require( 'jion' ).this( module );
 
 prototype = ast_boolean.prototype;
 

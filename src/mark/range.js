@@ -59,7 +59,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	mark_range = require( '../jion/this' )( module );
+	mark_range = require( 'jion' ).this( module );
 }
 
 

@@ -70,7 +70,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	euclid_margin = require( '../jion/this' )( module );
+	euclid_margin = require( 'jion' ).this( module );
 }
 
 

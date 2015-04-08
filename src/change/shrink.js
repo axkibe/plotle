@@ -22,34 +22,32 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_shrink',
+	return{
+		id : 'change_shrink',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment : 'shrink at this path',
-						json : 'true',
-						type : 'jion_path'
-					},
-				prev :
-					{
-						comment : 'value tree had',
-						json : 'true',
-						type : '->spaceVal',
-						defaultValue : 'undefined'
-					},
-				rank :
-					{
-						comment : 'rank of new node',
-						json : 'true',
-						type : 'integer',
-						allowsUndefined : true
-					}
+				comment : 'shrink at this path',
+				json : 'true',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			prev :
+			{
+				comment : 'value tree had',
+				json : 'true',
+				type : require( '../typemaps/spaceVal' ),
+				defaultValue : 'undefined'
+			},
+			rank :
+			{
+				comment : 'rank of new node',
+				json : 'true',
+				type : 'integer',
+				allowsUndefined : true
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -63,7 +61,7 @@ var
 */
 if( SERVER )
 {
-	change_shrink = require( '../jion/this' )( module );
+	change_shrink = require( 'jion' ).this( module );
 
 	change_grow = require( './grow' );
 

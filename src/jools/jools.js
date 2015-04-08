@@ -35,7 +35,11 @@ else
 
 
 var
-	puffed;
+	puffed,
+	pushpad,
+	pushindent,
+	timestamp;
+
 
 puffed = config.debug.puffed;
 
@@ -508,7 +512,7 @@ jools.matches =
 /*
 | Pushes a 2-decimal number on an string-array.
 */
-var _pushpad =
+pushpad =
 	function(
 		a,   // the array
 		n,   // the number to push
@@ -520,8 +524,7 @@ var _pushpad =
 		a.push( '0' );
 	}
 
-	a.push( n );
-	a.push( s );
+	a.push( n, s );
 
 	return a;
 };
@@ -531,17 +534,23 @@ var _pushpad =
 | Creates a timestamp
 | which will be returned as joinable array.
 */
-var _timestamp =
+timestamp =
 	function( a )
 {
-	var now =
-		new Date( );
+	var
+		now;
+	
+	now = new Date( );
 
-	_pushpad( a, now.getMonth( ) + 1, '-' );
-	_pushpad( a, now.getDate( ),      ' ' );
-	_pushpad( a, now.getHours( ),     ':' );
-	_pushpad( a, now.getMinutes( ),   ':' );
-	_pushpad( a, now.getSeconds( ),   ' ' );
+	pushpad( a, now.getMonth( ) + 1, '-' );
+
+	pushpad( a, now.getDate( ), ' ' );
+
+	pushpad( a, now.getHours( ), ':' );
+
+	pushpad( a, now.getMinutes( ), ':' );
+
+	pushpad( a, now.getSeconds( ), ' ' );
 
 	return a;
 };
@@ -550,13 +559,16 @@ var _timestamp =
 /*
 | Pushes spaces into array for indentation.
 */
-var _pushindent =
+pushindent =
 	function(
 		indent,  // the amount of spaces to push on the array
 		a        // the array
 	)
 {
-	for( var i = 0; i < indent; i++ )
+	var
+		i;
+
+	for( i = 0; i < indent; i++ )
 	{
 		a.push( '  ' );
 	}
@@ -578,26 +590,29 @@ var _inspect =
 		circle
 	)
 {
+	var
+		a,
+		aZ,
+		to;
+
 	if( circle.indexOf( o ) !== -1 )
 	{
 		array.push('^circle^');
+
 		return;
 	}
 
 	circle = circle.slice( );
 	circle.push( o );
 
-	if( !indent )
-		{ indent = 0; }
+	if( !indent ) indent = 0;
 
-	if( o && o.toJSON )
-		{ o = o.toJSON(); }
+	if( o && o.toJSON ) o = o.toJSON();
 
-	var to = typeof( o );
+	to = typeof( o );
 
 	if( to === 'undefined' )
-	{
-	}
+	{ }
 	else if( o === null )
 	{
 		to = 'null';
@@ -606,13 +621,9 @@ var _inspect =
 	{
 		switch( o.constructor )
 		{
-			case String :
-				to = 'string';
-				break;
+			case String : to = 'string'; break;
 
-			case Array :
-				to = 'array';
-				break;
+			case Array : to = 'array'; break;
 		}
 	}
 
@@ -623,31 +634,39 @@ var _inspect =
 		case 'undefined' :
 
 			array.push( 'undefined' );
+
 			return;
 
 		case 'boolean' :
 
-			array.push(o ? 'true' : 'false');
+			array.push( o ? 'true' : 'false' );
+
 			return;
 
 		case 'function' :
 
-			array.push('function '); if (o.name) array.push(o.name);
+			array.push('function ');
+			
+			if( o.name ) array.push( o.name );
+
 			return;
 
 		case 'string' :
 
-			array.push('"', o, '"');
+			array.push( '"', o, '"' );
+
 			return;
 
 		case 'number' :
 
-			array.push(o);
+			array.push( o );
+
 			return;
 
 		case 'null' :
 
-			array.push('null');
+			array.push( 'null' );
+
 			return;
 
 		case 'array' :
@@ -659,25 +678,21 @@ var _inspect =
 				array.push( '\n' );
 			}
 
-			for( var a = 0, aZ = o.length; a < aZ; a++)
+			for( a = 0, aZ = o.length; a < aZ; a++ )
 			{
 				if( a > 0 )
 				{
 					array.push( ',' );
+
 					array.push( puffed ? '\n' : ' ' );
 				}
 
 				if( puffed )
 				{
-					_pushindent( indent + 1, array );
+					pushindent( indent + 1, array );
 				}
 
-				_inspect(
-					o[ a ],
-					array,
-					indent + 1,
-					circle
-				);
+				_inspect( o[ a ], array, indent + 1, circle );
 			}
 
 			first = true;
@@ -685,70 +700,84 @@ var _inspect =
 			for( k in o )
 			{
 				if(
-					typeof(k) === 'number' ||
-					parseInt(k, 10) == k ||
-					!o.hasOwnProperty(k)
+					typeof( k ) === 'number'
+					|| parseInt( k, 10 ) == k
+					|| !o.hasOwnProperty(k)
 				){
 					continue;
 				}
 
 				if( first )
 				{
-					array.push(puffed ? '\n' : ' ');
-					if (puffed) _pushindent(indent + 1, array);
-					array.push('|');
-					array.push(puffed ? '\n' : ' ');
+					array.push( puffed ? '\n' : ' ' );
+
+					if( puffed ) pushindent( indent + 1, array );
+
+					array.push( '|' );
+
+					array.push( puffed ? '\n' : ' ' );
+
 					first = false;
 				}
 				else
 				{
-					array.push(',');
-					array.push(puffed ? '\n' : ' ');
-					if (puffed) _pushindent(indent + 1, array);
+					array.push( ',' );
+
+					array.push( puffed ? '\n' : ' ' );
+
+					if( puffed ) pushindent( indent + 1, array );
 				}
-				array.push(k);
-				array.push(': ');
-				_inspect(o[k], array, indent + 1, circle);
-				array.push(puffed ? '\n' : ' ');
+
+				array.push( k );
+
+				array.push( ': ' );
+
+				_inspect( o[ k ], array, indent + 1, circle );
+
+				array.push( puffed ? '\n' : ' ' );
 			}
-			array.push(puffed ? '\n' : ' ');
+			array.push( puffed ? '\n' : ' ' );
 
 			if( puffed )
-				{ _pushindent( indent, array ); }
+			{
+				pushindent( indent, array );
+			}
 
 			array.push( ']' );
+
 			return;
 
 		case 'object' :
 
-			array.push(
-				'{',
-				puffed ? '\n' : ' '
-			);
+			array.push( '{', puffed ? '\n' : ' ' );
 
 			first = true;
 
 			for( k in o )
 			{
-				if( !o.hasOwnProperty(k) )
-					{ continue; }
-				if (!first) array.push(',', puffed ? '\n' : ' '); else first = false;
-				if (puffed) _pushindent(indent + 1, array);
-				array.push(k, ': ');
+				if( !o.hasOwnProperty( k ) ) continue;
 
-				_inspect(o[k], array, indent + 1, circle);
+				if (!first)
+				{
+					array.push(',', puffed ? '\n' : ' ');
+				}
+				else
+				{
+					first = false;
+				}
+
+				if( puffed ) pushindent(indent + 1, array);
+
+				array.push( k, ': ' );
+
+				_inspect( o[ k ], array, indent + 1, circle );
 			}
 
-			array.push(
-				puffed ? '\n' : ' '
-			);
+			array.push( puffed ? '\n' : ' ' );
 
 			if( puffed )
 			{
-				_pushindent(
-					indent,
-					array
-				);
+				pushindent( indent, array );
 			}
 
 			array.push( '}' );
@@ -757,8 +786,7 @@ var _inspect =
 
 		default :
 			array.push( '!!Unknown Type: ', to, '!!' );
-
-		}
+	}
 };
 
 
@@ -771,18 +799,20 @@ jools.log =
 		category
 	)
 {
+	var
+		a,
+		i;
+
 	if(
 		category !== true
-		&&
-		!config.log.all
-		&&
-		!config.log[ category ]
+		&& !config.log.all
+		&& !config.log[ category ]
 	)
 	{
 		return;
 	}
 
-	var a = _timestamp( [ ] );
+	a = timestamp( [ ] );
 
 	if( category !== true )
 	{
@@ -791,24 +821,17 @@ jools.log =
 		a.push( ') ' );
 	}
 
-	for( var i = 1; i < arguments.length; i++ )
+	for( i = 1; i < arguments.length; i++ )
 	{
 		if( i > 1 )
 		{
 			a.push(' ');
 		}
 
-		_inspect(
-			arguments[ i ],
-			a,
-			0,
-			[ ]
-		);
+		_inspect( arguments[ i ], a, 0, [ ] );
 	}
 
-	console.log(
-		a.join( '' )
-	);
+	console.log( a.join( '' ) );
 };
 
 
@@ -821,11 +844,7 @@ jools.logNew =
 		path
 	)
 {
-	if(
-		!config.log.all
-		&&
-		!config.log.news
-	)
+	if( !config.log.all && !config.log.news )
 	{
 		return;
 	}
@@ -847,7 +866,7 @@ jools.debug =
 		return;
 	}
 
-	a = _timestamp( [ ] );
+	a = timestamp( [ ] );
 
 	a.push( '(debug) ' );
 
@@ -871,7 +890,10 @@ jools.debug =
 jools.inspect =
 	function( o )
 {
-	var a = [ ];
+	var
+		a;
+
+	a = [ ];
 
 	_inspect( o, a, 0, [ ] );
 
@@ -895,7 +917,6 @@ jools.keyNonGrata =
 		key,
 		{
 			get : function( ) { throw new Error( ); },
-
 			set : function( ) { throw new Error( ); }
 		}
 	);

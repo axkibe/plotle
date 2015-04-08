@@ -42,7 +42,7 @@ var
 	tools;
 
 
-ast_var = require( '../jion/this' )( module );
+ast_var = require( 'jion' ).this( module );
 
 prototype = ast_var.prototype;
 

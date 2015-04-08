@@ -41,61 +41,61 @@ if( JION )
 	return{
 		id : 'fabric_space',
 		attributes :
+		{
+			action :
 			{
-				action :
-				{
-					comment : 'current action',
-					type : '->action',
-					defaultValue : 'undefined',
-					assign : '_action'
-				},
-				access :
-				{
-					comment : 'rights the current user has for this space',
-					type : 'string',
-					defaultValue : 'undefined'
-				},
-				hover :
-				{
-					comment : 'node currently hovered upon',
-					type : 'jion_path',
-					defaultValue : 'undefined'
-				},
-				mark :
-				{
-					comment : 'the users mark',
-					type : '->mark',
-					prepare : 'fabric_space.concernsMark( mark )',
-					defaultValue : 'undefined'
-				},
-				path :
-				{
-					comment : 'the path of the space',
-					type : 'jion_path',
-					defaultValue : 'undefined'
-				},
-				ref :
-				{
-					comment : 'reference to this space',
-					type : 'fabric_spaceRef',
-					defaultValue : 'undefined'
-				},
-				view :
-				{
-					comment : 'the current view',
-					type : 'euclid_view',
-					defaultValue : 'undefined'
-				}
+				comment : 'current action',
+				type : require( '../typemaps/action' ),
+				defaultValue : 'undefined',
+				assign : '_action'
 			},
+			access :
+			{
+				comment : 'rights the current user has for this space',
+				type : 'string',
+				defaultValue : 'undefined'
+			},
+			hover :
+			{
+				comment : 'node currently hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : require( '../typemaps/mark' ),
+				prepare : 'fabric_space.concernsMark( mark )',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the space',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			ref :
+			{
+				comment : 'reference to this space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'undefined'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			}
+		},
 		init : [ 'inherit', 'twigDup' ],
 		json : true,
 		twig :
-			[
-				'fabric_note',
-				'fabric_label',
-				'fabric_relation',
-				'fabric_portal'
-			]
+		[
+			'fabric_note',
+			'fabric_label',
+			'fabric_relation',
+			'fabric_portal'
+		]
 	};
 }
 
@@ -106,7 +106,7 @@ var
 
 if( SERVER )
 {
-	fabric_space = require( '../jion/this' )( module );
+	fabric_space = require( 'jion' ).this( module );
 
 	jion_path = require( '../jion/path' );
 

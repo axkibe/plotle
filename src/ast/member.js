@@ -45,7 +45,7 @@ var
 	prototype;
 
 
-ast_member = require( '../jion/this' )( module );
+ast_member = require( 'jion' ).this( module );
 
 prototype = ast_member.prototype;
 

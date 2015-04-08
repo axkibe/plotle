@@ -18,23 +18,23 @@ if( JION )
 	return {
 		id : 'action_itemDrag',
 		attributes :
+		{
+			origin :
 			{
-				origin :
-					{
-						comment : 'the item being dragged',
-						type : '->fabricItems'
-					},
-				start :
-					{
-						comment : 'mouse down point on drag creation',
-						type : 'euclid_point'
-					},
-				transItem :
-					{
-						comment : 'the transient item while it is dragged',
-						type : '->fabricItems'
-					}
+				comment : 'the item being dragged',
+				type : require( '../typemaps/fabricItems' )
+			},
+			start :
+			{
+				comment : 'mouse down point on drag creation',
+				type : 'euclid_point'
+			},
+			transItem :
+			{
+				comment : 'the transient item while it is dragged',
+				type : require( '../typemaps/fabricItems' )
 			}
+		}
 	};
 }
 

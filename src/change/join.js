@@ -63,7 +63,7 @@ var
 */
 if( SERVER )
 {
-	change_join = require( '../jion/this' )( module );
+	change_join = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

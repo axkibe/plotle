@@ -30,75 +30,75 @@ if( JION )
 	return {
 		id : 'disc_mainDisc',
 		attributes :
+		{
+			access :
 			{
-				access :
-				{
-					comment : 'users access to current space',
-					type : 'string',
-					defaultValue : 'undefined'
-				},
-				action :
-				{
-					comment : 'currently active action',
-					type : '->action',
-					defaultValue : 'undefined'
-				},
-				border :
-				{
-					comment : 'display border',
-					type : '->border'
-				},
-				fill :
-				{
-					comment : 'display fill',
-					type : '->fill'
-				},
-				hover :
-				{
-					comment : 'the widget hovered upon',
-					type : 'jion_path',
-					defaultValue : 'undefined',
-					prepare : 'disc_disc.concernsHover( hover, path )'
-				},
-				mark :
-				{
-					comment : 'the users mark',
-					type : '->mark',
-					defaultValue : 'undefined'
-				},
-				mode :
-				{
-					comment : 'current mode the UI is in',
-					type : 'string',
-					defaultValue : 'undefined'
-				},
-				path :
-				{
-					comment : 'path of the disc',
-					type : 'jion_path',
-					defaultValue : 'undefined'
-				},
-				spaceRef :
-				{
-					comment : 'reference to current space',
-					type : 'fabric_spaceRef',
-					defaultValue : 'undefined'
-				},
-				user :
-				{
-					comment : 'currently logged in user',
-					type : 'user_creds',
-					defaultValue : 'undefined'
-				},
-				view :
-				{
-					comment : 'the current view',
-					type : 'euclid_view',
-					// prepare : 'view && view.sizeOnly', FIXME
-					prepare : 'view ? view.sizeOnly : undefined',
-					defaultValue : 'undefined'
-				}
+				comment : 'users access to current space',
+				type : 'string',
+				defaultValue : 'undefined'
 			},
+			action :
+			{
+				comment : 'currently active action',
+				type : require( '../typemaps/action' ),
+				defaultValue : 'undefined'
+			},
+			border :
+			{
+				comment : 'display border',
+				type : require( '../typemaps/border' )
+			},
+			fill :
+			{
+				comment : 'display fill',
+				type : require( '../typemaps/fill' )
+			},
+			hover :
+			{
+				comment : 'the widget hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				prepare : 'disc_disc.concernsHover( hover, path )'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined'
+			},
+			mode :
+			{
+				comment : 'current mode the UI is in',
+				type : 'string',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'path of the disc',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			spaceRef :
+			{
+				comment : 'reference to current space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'undefined'
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'undefined'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				// prepare : 'view && view.sizeOnly', FIXME
+				prepare : 'view ? view.sizeOnly : undefined',
+				defaultValue : 'undefined'
+			}
+		},
 		init :
 			[ 'inherit', 'twigDup' ],
 		twig :

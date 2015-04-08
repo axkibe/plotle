@@ -19,36 +19,35 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'action_createGeneric',
+	return{
+		id : 'action_createGeneric',
 		attributes :
+		{
+			itemType :
 			{
-				itemType :
-				{
-					comment : 'item type to be created',
-					// FUTURE make list of possibilities
-					type : 'string'
-				},
-				transItem :
-				{
-					comment : 'the transient item in creation',
-					type : '->fabricItems',
-					defaultValue : 'undefined'
-				},
-				model :
-				{
-					comment : 'a transient item used as model',
-					type : '->fabricItems',
-					defaultValue : 'undefined'
-				},
-				start :
-				{
-					comment : 'mouse down point on drag creation',
-					type : 'euclid_point',
-					defaultValue : 'undefined'
-				}
+				comment : 'item type to be created',
+				// FUTURE make list of possibilities
+				type : 'string'
+			},
+			transItem :
+			{
+				comment : 'the transient item in creation',
+				type : require( '../typemaps/fabricItems' ),
+				defaultValue : 'undefined'
+			},
+			model :
+			{
+				comment : 'a transient item used as model',
+				type : require( '../typemaps/fabricItems' ),
+				defaultValue : 'undefined'
+			},
+			start :
+			{
+				comment : 'mouse down point on drag creation',
+				type : 'euclid_point',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 

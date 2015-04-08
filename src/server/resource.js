@@ -51,16 +51,16 @@ if( JION )
 				type : 'string',
 				defaultValue : 'undefined'
 			},
-			gzip :
-			{
-				comment : 'cached or auto generated zip data',
-				type : 'protean',
-				defaultValue : 'undefined'
-			},
 			filePath :
 			{
 				comment : 'path of the resources file',
 				type : 'string',
+				defaultValue : 'undefined'
+			},
+			gzip :
+			{
+				comment : 'cached or auto generated zip data',
+				type : 'protean',
 				defaultValue : 'undefined'
 			},
 			hasJion :
@@ -121,7 +121,7 @@ var
 	server_fileTypes,
 	resource;
 
-resource = require( '../jion/this' )( module );
+resource = require( 'jion' ).this( module );
 
 jion_stringRay = require( '../jion/stringRay' );
 
@@ -182,9 +182,8 @@ jools.lazyValue(
 				'aliases', undefined,
 				'jionSrcPath', this.filePath,
 				'filePath',
-					'jion/'
-					+ SHELLAPP
-					+ '/'
+					// FIXME let the jion module worry aabout this
+					'jioncode/'
 					+ this.filePath.replace( /\//g, '-' ),
 				'hasJion', false,
 				'isJion', true

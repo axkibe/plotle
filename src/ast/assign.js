@@ -43,7 +43,7 @@ var
 	ast_assign;
 
 
-ast_assign = require( '../jion/this' )( module );
+ast_assign = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

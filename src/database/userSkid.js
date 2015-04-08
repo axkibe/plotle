@@ -79,7 +79,7 @@ var
 	jools,
 	user_info;
 
-database_userSkid = require( '../jion/this' )( module );
+database_userSkid = require( 'jion' ).this( module );
 
 user_info = require( '../user/info' );
 

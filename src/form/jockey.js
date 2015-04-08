@@ -42,7 +42,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				allowsUndefined : true
 			},
 			path :

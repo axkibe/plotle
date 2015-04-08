@@ -204,7 +204,7 @@ for(
 
 		jion = vm.runInNewContext( input, global, file.inFilename );
 
-		ast = generator.generate( jion, false );
+		ast = generator.generate( jion );
 
 		output = format_formatter.format( ast );
 

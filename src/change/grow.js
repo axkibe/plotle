@@ -23,32 +23,30 @@ var
 if( JION )
 {
 	return {
-		id :
-			'change_grow',
+		id : 'change_grow',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment : 'grow at this path',
-						json : 'true',
-						type : 'jion_path'
-					},
-				val :
-					{
-						comment : 'value to grow',
-						json : 'true',
-						type : '->spaceVal',
-						allowsNull : true
-					},
-				rank :
-					{
-						comment : 'rank of new node',
-						json : 'true',
-						type : 'integer'
-					}
+				comment : 'grow at this path',
+				json : 'true',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			val :
+			{
+				comment : 'value to grow',
+				json : 'true',
+				type : require( '../typemaps/spaceVal' ),
+				allowsNull : true
+			},
+			rank :
+			{
+				comment : 'rank of new node',
+				json : 'true',
+				type : 'integer'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -62,7 +60,7 @@ var
 */
 if( SERVER )
 {
-	change_grow = require( '../jion/this' )( module );
+	change_grow = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

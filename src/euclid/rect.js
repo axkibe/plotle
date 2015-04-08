@@ -48,7 +48,7 @@ if( JION )
 */
 if( SERVER )
 {
-	euclid_rect = require( '../jion/this' )( module );
+	euclid_rect = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 

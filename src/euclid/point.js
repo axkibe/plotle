@@ -51,7 +51,7 @@ if( JION )
 
 if( SERVER )
 {
-	euclid_point = require( '../jion/this' )( module );
+	euclid_point = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 }

@@ -65,7 +65,7 @@ if( JION )
 			action :
 			{
 				comment : 'current action',
-				type : '->action',
+				type : require( '../typemaps/action' ),
 				defaultValue : 'undefined',
 				prepare : 'shell_root.prepareAction( action, space )'
 				// FIXME assign _action
@@ -106,7 +106,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				assign : '_mark',
 				defaultValue : 'undefined'
 			},

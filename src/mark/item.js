@@ -42,7 +42,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	mark_item = require( '../jion/this' )( module );
+	mark_item = require( 'jion' ).this( module );
 }
 
 

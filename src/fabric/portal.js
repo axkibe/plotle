@@ -43,55 +43,54 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'fabric_portal',
+	return{
+		id : 'fabric_portal',
 		attributes :
+		{
+			hover :
 			{
-				hover :
-					{
-						comment : 'node currently hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'fabric_item.concernsMark( mark, path )',
-						type : '->mark',
-						defaultValue : 'undefined'
-					},
-				path :
-					{
-						comment : 'the path of the doc',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				spaceUser :
-					{
-						comment : 'owner of the space the portal goes to',
-						type : 'string',
-						json : true
-					},
-				spaceTag :
-					{
-						comment : 'tag of the space the portal goes to',
-						type : 'string',
-						json : true
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					},
-				zone :
-					{
-						comment : 'the portals zone',
-						type : 'euclid_rect',
-						json : true
-					}
+				comment : 'node currently hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
 			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'fabric_item.concernsMark( mark, path )',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the doc',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			spaceUser :
+			{
+				comment : 'owner of the space the portal goes to',
+				type : 'string',
+				json : true
+			},
+			spaceTag :
+			{
+				comment : 'tag of the space the portal goes to',
+				type : 'string',
+				json : true
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			},
+			zone :
+			{
+				comment : 'the portals zone',
+				type : 'euclid_rect',
+				json : true
+			}
+		},
 		init : [ ]
 	};
 }
@@ -108,7 +107,7 @@ var
 */
 if( SERVER )
 {
-	fabric_portal = require( '../jion/this' )( module );
+	fabric_portal = require( 'jion' ).this( module );
 
 	fabric_portal.prototype._init = function( ) { };
 

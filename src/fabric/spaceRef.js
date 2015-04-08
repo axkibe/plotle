@@ -20,30 +20,23 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'fabric_spaceRef',
+	return{
+		id : 'fabric_spaceRef',
 		attributes :
+		{
+			username :
 			{
-				username :
-					{
-						comment :
-							'name of the user the space belongs to',
-						json :
-							true,
-						type :
-							'string'
-					},
-				tag :
-					{
-						comment :
-							'tag of the space',
-						json :
-							true,
-						type :
-							'string'
-					}
+				comment : 'name of the user the space belongs to',
+				json : true,
+				type : 'string'
+			},
+			tag :
+			{
+				comment : 'tag of the space',
+				json : true,
+				type : 'string'
 			}
+		}
 	};
 }
 
@@ -54,7 +47,7 @@ var
 
 if( SERVER )
 {
-	fabric_spaceRef = require( '../jion/this' )( module );
+	fabric_spaceRef = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 }

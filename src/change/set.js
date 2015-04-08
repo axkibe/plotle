@@ -21,30 +21,29 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_set',
+	return{
+		id : 'change_set',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment : 'set at this path',
-						json : 'true',
-						type : 'jion_path'
-					},
-				val :
-					{
-						comment : 'value to set',
-						json : 'true',
-						type : '->spaceVal'
-					},
-				prev :
-					{
-						comment : 'value tree had',
-						json : 'true',
-						type : '->spaceVal'
-					}
+				comment : 'set at this path',
+				json : 'true',
+				type : 'jion_path'
+			},
+			val :
+			{
+				comment : 'value to set',
+				json : 'true',
+				type : require( '../typemaps/spaceVal' )
+			},
+			prev :
+			{
+				comment : 'value tree had',
+				json : 'true',
+				type : require( '../typemaps/spaceVal' )
 			}
+		}
 	};
 }
 
@@ -58,7 +57,7 @@ var
 */
 if( SERVER )
 {
-	change_set = require( '../jion/this' )( module );
+	change_set = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

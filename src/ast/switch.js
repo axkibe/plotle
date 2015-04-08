@@ -44,7 +44,7 @@ var
 	tools;
 
 
-ast_switch = require( '../jion/this' )( module );
+ast_switch = require( 'jion' ).this( module );
 
 ast_block = require( './block' );
 

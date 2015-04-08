@@ -44,7 +44,7 @@ var
 	ast_plus,
 	prototype;
 
-ast_plus = require( '../jion/this' )( module );
+ast_plus = require( 'jion' ).this( module );
 
 prototype = ast_plus.prototype;
 

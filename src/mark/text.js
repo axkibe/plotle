@@ -45,7 +45,7 @@ var
 
 if( SERVER )
 {
-	mark_text = require( '../jion/this' )( module );
+	mark_text = require( 'jion' ).this( module );
 }
 
 

@@ -28,7 +28,7 @@ var
 	ast_null,
 	prototype;
 
-ast_null = require( '../jion/this' )( module );
+ast_null = require( 'jion' ).this( module );
 
 prototype = ast_null.prototype;
 

@@ -32,7 +32,7 @@ if( JION )
 }
 
 
-require( '../jion/this' )( module );
+require( 'jion' ).this( module );
 
 
 } )( );

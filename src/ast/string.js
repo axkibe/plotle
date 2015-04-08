@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_string;
 
-ast_string = require( '../jion/this' )( module );
+ast_string = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

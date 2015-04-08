@@ -29,7 +29,7 @@ var
 	tools;
 
 
-ast_objLiteral = require( '../jion/this' )( module );
+ast_objLiteral = require( 'jion' ).this( module );
 
 
 tools = require( './tools' );

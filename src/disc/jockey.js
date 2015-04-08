@@ -32,7 +32,7 @@ if( JION )
 			action :
 			{
 				comment : 'currently active action',
-				type : '->action',
+				type : require( '../typemaps/action' ),
 				defaultValue : 'undefined'
 			},
 			hover :
@@ -45,7 +45,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				prepare : 'disc_jockey.concernsMark( mark )',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				defaultValue : 'undefined'
 			},
 			mode :

@@ -39,72 +39,72 @@ if( JION )
 	return {
 		id : 'widget_input',
 		attributes :
+		{
+			designFrame :
 			{
-				designFrame :
-					{
-						comment : 'designed frame (using anchors',
-						type : 'design_anchorRect'
-					},
-				facets :
-					{
-						comment : 'style facets',
-						type : 'design_facetRay'
-					},
-				hover :
-					{
-						comment : 'component hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined',
-						prepare : 'widget_widget.concernsHover( hover, path )'
-					},
-				font :
-					{
-						comment : 'font of the text',
-						type : 'euclid_font'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'widget_widget.concernsMark( mark, path )',
-						type : '->mark',
-						defaultValue : 'undefined'
-					},
-				maxlen :
-					{
-						comment : 'maximum input length',
-						type : 'integer'
-					},
-				password :
-					{
-						comment : 'true for password input',
-						type : 'boolean',
-						defaultValue : 'false'
-					},
-				path :
-					{
-						comment : 'the path of the widget',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				superFrame :
-					{
-						comment : 'the frame the widget resides in',
-						type : 'euclid_rect',
-						defaultValue : 'undefined'
-					},
-				value :
-					{
-						comment : 'the value in the input box',
-						type : 'string',
-						defaultValue : '""'
-					},
-				visible :
-					{
-						comment : 'if false the button is hidden',
-						type : 'boolean',
-						defaultValue : 'true'
-					}
+				comment : 'designed frame (using anchors',
+				type : 'design_anchorRect'
 			},
+			facets :
+			{
+				comment : 'style facets',
+				type : 'design_facetRay'
+			},
+			hover :
+			{
+				comment : 'component hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				prepare : 'widget_widget.concernsHover( hover, path )'
+			},
+			font :
+			{
+				comment : 'font of the text',
+				type : 'euclid_font'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'widget_widget.concernsMark( mark, path )',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined'
+			},
+			maxlen :
+			{
+				comment : 'maximum input length',
+				type : 'integer'
+			},
+			password :
+			{
+				comment : 'true for password input',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			path :
+			{
+				comment : 'the path of the widget',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			superFrame :
+			{
+				comment : 'the frame the widget resides in',
+				type : 'euclid_rect',
+				defaultValue : 'undefined'
+			},
+			value :
+			{
+				comment : 'the value in the input box',
+				type : 'string',
+				defaultValue : '""'
+			},
+			visible :
+			{
+				comment : 'if false the button is hidden',
+				type : 'boolean',
+				defaultValue : 'true'
+			}
+		},
 		init : [ ]
 	};
 }

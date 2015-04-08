@@ -49,7 +49,7 @@ var
 	mongodb,
 	resume;
 
-database_repository = require( '../jion/this' )( module );
+database_repository = require( 'jion' ).this( module );
 
 jools = require( '../jools/jools' );
 

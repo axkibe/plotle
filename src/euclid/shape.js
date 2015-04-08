@@ -33,7 +33,7 @@ if( JION )
 				type : 'euclid_point'
 			}
 		},
-		ray : '->shapeSection'
+		ray : require( '../typemaps/shapeSection' )
 	};
 }
 

@@ -15,40 +15,31 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'action_itemResize',
+	return{
+		id : 'action_itemResize',
 		attributes :
+		{
+			align :
 			{
-				align :
-					{
-						comment :
-							'alignment ( compass ) of the resize action',
-						type :
-							'string'
-					},
-				transItem :
-					{
-						comment :
-							'the transient item while it is dragged',
-						type :
-							'->fabricItems'
-					},
-				origin :
-					{
-						comment :
-							'the item being resized',
-						type :
-							'->fabricItems'
-					},
-				start :
-					{
-						comment :
-							'mouseDown point on drag creation',
-						type :
-							'euclid_point'
-					}
+				comment : 'alignment ( compass ) of the resize action',
+				type : 'string'
+			},
+			transItem :
+			{
+				comment : 'the transient item while it is dragged',
+				type : require( '../typemaps/fabricItems' )
+			},
+			origin :
+			{
+				comment : 'the item being resized',
+				type : require( '../typemaps/fabricItems' )
+			},
+			start :
+			{
+				comment : 'mouseDown point on drag creation',
+				type : 'euclid_point'
 			}
+		}
 	};
 }
 

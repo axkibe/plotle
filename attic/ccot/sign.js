@@ -114,7 +114,7 @@ if( JION )
 */
 if( SERVER )
 {
-	ccot_sign = require( '../jion/this' )( module );
+	ccot_sign = require( 'jion' ).this( module );
 
 	jools = require( '../jools/jools' );
 

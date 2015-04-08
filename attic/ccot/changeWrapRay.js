@@ -34,7 +34,7 @@ if( JION )
 
 if( SERVER )
 {
-	ccot_changeWrapRay = require( '../jion/this' )( module );
+	ccot_changeWrapRay = require( 'jion' ).this( module );
 
 	result_changeTree = require( '../result/changeTree' );
 }

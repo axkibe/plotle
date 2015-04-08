@@ -71,7 +71,7 @@ var
 */
 if( SERVER )
 {
-	change_split = require( '../jion/this' )( module );
+	change_split = require( 'jion' ).this( module );
 
 	change_generic = require( './generic' );
 

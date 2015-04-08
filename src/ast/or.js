@@ -42,7 +42,7 @@ if( JION )
 var
 	ast_or;
 
-ast_or = require( '../jion/this' )( module );
+ast_or = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

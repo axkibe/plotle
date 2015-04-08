@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_delete;
 
-ast_delete = require( '../jion/this' )( module );
+ast_delete = require( 'jion' ).this( module );
 
 /**/if( CHECK )
 /**/{

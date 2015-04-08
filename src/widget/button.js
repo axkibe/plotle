@@ -60,13 +60,13 @@ if( JION )
 			icon :
 			{
 				comment : 'icon to display',
-				type : '->icon',
+				type : require( '../typemaps/icon' ),
 				defaultValue : 'undefined'
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : '->mark',
+				type : require( '../typemaps/mark' ),
 				prepare : 'widget_widget.concernsMark( mark, path )',
 				defaultValue : 'undefined'
 			},

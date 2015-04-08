@@ -43,7 +43,7 @@ var
 	ast_and,
 	prototype;
 
-ast_and = require( '../jion/this' )( module );
+ast_and = require( 'jion' ).this( module );
 
 prototype = ast_and.prototype;
 

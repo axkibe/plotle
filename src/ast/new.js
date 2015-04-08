@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_new;
 
-ast_new = require( '../jion/this' )( module );
+ast_new = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

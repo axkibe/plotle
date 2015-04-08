@@ -41,7 +41,7 @@ var
 	server_userNexus;
 
 
-server_userNexus = require( '../jion/this' )( module );
+server_userNexus = require( 'jion' ).this( module );
 
 prototype = server_userNexus.prototype;
 

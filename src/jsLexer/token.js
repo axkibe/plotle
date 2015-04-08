@@ -47,7 +47,7 @@ var
 	token,
 	tokenList;
 
-token = require( '../jion/this' )( module );
+token = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

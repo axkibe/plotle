@@ -25,23 +25,24 @@ server_generateJion =
 | Imports
 */
 var
+	a,
 	config,
-	format_formatter,
 	fs,
-	generator,
+	jion,
+	jionDef,
+	jionDefRequire,
 	jools,
+	myDir,
 	result_genjion,
+	resume,
 	sus,
 	vm;
 
+jion = require( 'jion' );
 
 config = require( '../../config' );
 
-format_formatter = require( '../format/formatter' );
-
 fs = require( 'fs' );
-
-generator = require( '../jion/generator' );
 
 jools = require( '../jools/jools' );
 
@@ -49,7 +50,31 @@ result_genjion = require( '../result/genjion' );
 
 sus = require( 'suspend' );
 
+resume = sus.resume;
+
 vm = require( 'vm' );
+
+myDir = module.filename;
+
+for( a = 0; a < 3; a++ )
+{
+	myDir = myDir.substr( 0, myDir.lastIndexOf( '/' ) );
+}
+
+myDir += '/';
+
+jionDefRequire =
+	function( inFilename, requireFilename )
+{
+	return(
+		require(
+			myDir
+			+ inFilename.substr( 0, inFilename.lastIndexOf( '/' ) )
+			+ '/'
+			+ requireFilename
+		)
+	);
+};
 
 /*
 | Runs a generate jion operation.
@@ -60,16 +85,16 @@ server_generateJion.run =
 	)
 {
 	var
-		ast,
+		at,
 		generate,
+		global,
 		hasJSON,
 		input,
 		inputFileStat,
 		joi,
-		jion,
 		output,
 		outputFileStat;
-
+	
 	fs.stat( resource.jionSrcPath, sus.fork( ) );
 
 	fs.stat( resource.filePath, sus.fork( ) );
@@ -89,7 +114,7 @@ server_generateJion.run =
 			undefined;
 	}
 
-	// true if the jion file needs to created
+	// true if the jioncode file needs to created
 	generate =
 		!inputFileStat
 		|| !outputFileStat
@@ -102,64 +127,46 @@ server_generateJion.run =
 			? 'generating '
 			: 'loading '
 		)
-		+ resource.aliases.get( 0 )
+		+ resource.filePath
 	);
 
-	input =
-		yield fs.readFile(
-			resource.jionSrcPath,
-			sus.resume( )
-		);
+	input = yield fs.readFile( resource.jionSrcPath, resume( ) );
 
-	jion =
-		vm.runInNewContext(
-			input,
-			{
-				JION : true
-			},
-			resource.jionSrcPath
-		);
+	global = { JION: true };
 
+	global.GLOBAL = global;
+
+	global.require = jionDefRequire.bind( undefined, resource.jionSrcPath );
+
+	jionDef = vm.runInNewContext( input, global, resource.jionSrcPath );
+		
 	if( generate )
 	{
-		ast = generator.generate( jion );
-
-		output = format_formatter.format( ast );
+		output = jion.makeJionCode( jionDef );
 
 		if( !config.noWrite )
 		{
-			yield fs.writeFile(
-				resource.filePath,
-				output,
-				sus.resume( )
-			);
+			yield fs.writeFile( resource.filePath, output, resume( ) );
 		}
 	}
 	else
 	{
-		// just read in the already generated Jion
-		output =
-			(
-				yield fs.readFile(
-					resource.filePath,
-					sus.resume( )
-				)
-			)
-			+
-			'';
+		// just reads in the already generated jioncode
+		output = ( yield fs.readFile( resource.filePath, resume( ) ) ) + '';
 	}
 
+	// FIXME is this needed?
 	hasJSON = false;
 
-	if( jion.json )
+	if( jionDef.json )
 	{
 		hasJSON = true;
 	}
-	else if( jion.attributes )
+	else if( jionDef.attributes )
 	{
-		for( var at in jion.attributes )
+		for( at in jionDef.attributes )
 		{
-			if( jion.attributes[ at ].json )
+			if( jionDef.attributes[ at ].json )
 			{
 				hasJSON = true;
 
@@ -170,7 +177,7 @@ server_generateJion.run =
 
 	return(
 		result_genjion.create(
-			'jionID', jion.id,
+			'jionID', jionDef.id,
 			'hasJSON', hasJSON,
 			'code', output
 		)

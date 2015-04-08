@@ -35,7 +35,7 @@ if( JION )
 var
 	ast_return;
 
-ast_return = require( '../jion/this' )( module );
+ast_return = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )

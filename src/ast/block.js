@@ -34,7 +34,7 @@ var
 	tools;
 
 
-ast_block = require( '../jion/this' )( module );
+ast_block = require( 'jion' ).this( module );
 
 ast_comment = require( './comment' );
 

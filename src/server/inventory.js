@@ -26,7 +26,7 @@ if( JION )
 var
 	inventory;
 
-inventory = require( '../jion/this' )( module );
+inventory = require( 'jion' ).this( module );
 
 
 /*

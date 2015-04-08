@@ -30,54 +30,53 @@ var
 if( JION )
 {
 	return {
-		id :
-			'fabric_doc',
+		id : 'fabric_doc',
 		attributes :
+		{
+			flowWidth :
 			{
-				flowWidth :
-					{
-						comment : 'width of the para its flow',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				fontsize :
-					{
-						comment : 'size of the font',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				innerMargin :
-					{
-						comment : 'inner margin of the doc',
-						type : 'euclid_margin',
-						defaultValue : 'undefined'
-					},
-				paraSep :
-					{
-						comment : 'vertical seperation of paragraphs',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				path :
-					{
-						comment : 'the path of the doc',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						defaultValue : 'undefined',
-						allowsNull : true
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					}
+				comment : 'width of the para its flow',
+				type : 'number',
+				defaultValue : 'undefined'
 			},
+			fontsize :
+			{
+				comment : 'size of the font',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			innerMargin :
+			{
+				comment : 'inner margin of the doc',
+				type : 'euclid_margin',
+				defaultValue : 'undefined'
+			},
+			paraSep :
+			{
+				comment : 'vertical seperation of paragraphs',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the doc',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : require( '../typemaps/mark' ),
+				defaultValue : 'undefined',
+				allowsNull : true
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			}
+		},
 		init : [ 'twigDup' ],
 		json : true,
 		twig : [ 'fabric_para' ]
@@ -96,7 +95,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	fabric_doc = require( '../jion/this' )( module );
+	fabric_doc = require( 'jion' ).this( module );
 }
 
 

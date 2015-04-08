@@ -38,7 +38,7 @@ if( JION )
 var
 	ast_varDec;
 
-ast_varDec = require( '../jion/this' )( module );
+ast_varDec = require( 'jion' ).this( module );
 
 
 /**/if( CHECK )
