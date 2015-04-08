@@ -1,5 +1,4 @@
 node_modules/
 report/*
-jion/server/*
-jion/shell/*
+jioncode/*
 .jshint.stamp
