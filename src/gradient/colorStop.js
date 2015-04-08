@@ -15,27 +15,28 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'gradient_colorStop',
+	return{
+		id : 'gradient_colorStop',
 		attributes :
+		{
+			offset :
 			{
-				offset :
-					{
-						comment :
-							'color stop offset (0-1)',
-						type :
-							'number'
-					},
-				color :
-					{
-						comment :
-							'color stop color',
-						type :
-							'euclid_color'
-					}
+				comment : 'color stop offset (0-1)',
+				type : 'number'
+			},
+			color :
+			{
+				comment : 'color stop color',
+				type : 'euclid_color'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
 }
 
 

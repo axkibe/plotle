@@ -20,50 +20,38 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_wrap',
+	return{
+		id : 'change_wrap',
 		attributes :
+		{
+			cid :
 			{
-				cid :
-					{
-						comment :
-							'change id',
-						json :
-							true,
-							// FIXME it accepted 'true',
-							// jion validator shouldn't
-						type :
-							'string'
-					},
-				changeRay :
-					{
-						comment :
-							'change or change ray',
-						json :
-							true,
-						type :
-							'change_ray',
-						allowsNull :
-							true
-							// in case of transformation the change
-							// can evaporate, the changeWrap needs to
-							// be kept alive though so the client
-							// can be notified of its change to
-							// have arrived, albeit it had no effect.
-					},
-				seq :
-					{
-						comment :
-							'sequence number',
-						json :
-							true,
-						type :
-							'number',
-						defaultValue :
-							'undefined'
-					}
+				comment : 'change id',
+				json : true,
+					// FIXME it accepted 'true',
+					// jion validator shouldn't
+				type : 'string'
+			},
+			changeRay :
+			{
+				comment : 'change or change ray',
+				json : true,
+				type : 'change_ray',
+				allowsNull : true
+				// in case of transformation the change
+				// can evaporate, the changeWrap needs to
+				// be kept alive though so the client
+				// can be notified of its change to
+				// have arrived, albeit it had no effect.
+			},
+			seq :
+			{
+				comment : 'sequence number',
+				json : true,
+				type : 'number',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 
@@ -74,7 +62,7 @@ var
 
 if( SERVER )
 {
-	change_wrap = require( 'jion' ).this( module );
+	change_wrap = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 }

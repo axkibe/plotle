@@ -68,7 +68,7 @@ var
 */
 if( SERVER )
 {
-	change_insert = require( 'jion' ).this( module );
+	change_insert = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

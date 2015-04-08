@@ -127,6 +127,7 @@ var
 	server_spaceNexus,
 	server_tools,
 	server_userNexus,
+	serverDir,
 	sha1,
 	startup,
 	sus,
@@ -187,11 +188,28 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 
 zlib = require( 'zlib' );
 
-
 server_root = require( 'jion' ).this( module );
 
-
 prototype = server_root.prototype;
+
+/*
+| Calculates the server root directory.
+*/
+( function( )
+{
+	var
+		a;
+
+	serverDir = module.filename;
+
+	for( a = 0; a < 3; a++ )
+	{	
+		serverDir = serverDir.substr( 0, serverDir.lastIndexOf( '/' ) );
+	}
+
+	serverDir += '/';
+}
+)( );
 
 
 /*
@@ -404,7 +422,8 @@ prototype.prepareInventory =
 		jionIDs,
 		resource,
 		sourceMap,
-		stream;
+		stream,
+		that;
 
 	jools.log( 'start', 'preparing inventory' );
 
@@ -437,6 +456,14 @@ prototype.prepareInventory =
 
 		if( resource.hasJion )
 		{
+			// XXX
+			that = require( serverDir + resource.filePath );
+
+			if( !that.source )
+			{
+				throw new Error( 'XXX AArgh: ' + resource.filePath );
+			}
+
 			root.create(
 				'inventory',
 					root.inventory.addResource( resource.asJion )
@@ -528,12 +555,7 @@ prototype.prepareInventory =
 			if( !resource.data )
 			{
 				code =
-					(
-						yield fs.readFile(
-							resource.filePath,
-							resume( )
-						)
-					)
+					yield fs.readFile( resource.filePath, resume( ) )
 					+ '';
 			}
 			else

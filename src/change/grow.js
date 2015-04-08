@@ -60,7 +60,7 @@ var
 */
 if( SERVER )
 {
-	change_grow = require( 'jion' ).this( module );
+	change_grow = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

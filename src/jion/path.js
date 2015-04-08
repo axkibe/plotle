@@ -20,11 +20,9 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'jion_path',
-		ray :
-			[ 'string' ]
+	return{
+		id : 'jion_path',
+		ray : [ 'string' ]
 	};
 }
 
@@ -34,7 +32,7 @@ if( JION )
 */
 if( SERVER )
 {
-	jion_path = require( 'jion' ).this( module );
+	jion_path = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 }

@@ -23,41 +23,30 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_split',
+	return{
+		id : 'change_split',
 		attributes :
 			{
 				path :
-					{
-						comment :
-							'split at this path',
-						json :
-							'true',
-						type :
-							'jion_path'
-					},
+				{
+					comment : 'split at this path',
+					json : 'true',
+					type : 'jion_path'
+				},
 				at1 :
-					{
-						comment :
-							'insert at this place begin',
-						json :
-							'true',
-						type :
-							'integer'
-					},
+				{
+					comment : 'insert at this place begin',
+					json : 'true',
+					type : 'integer'
+				},
 				path2 :
-					{
-						comment :
-							'split created this new/next path',
-						json :
-							'true',
-						type :
-							'jion_path'
-					}
+				{
+					comment : 'split created this new/next path',
+					json : 'true',
+					type : 'jion_path'
+				}
 			},
-		init :
-			[ ]
+		init : [ ]
 	};
 }
 
@@ -71,7 +60,7 @@ var
 */
 if( SERVER )
 {
-	change_split = require( 'jion' ).this( module );
+	change_split = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

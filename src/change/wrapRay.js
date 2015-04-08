@@ -19,13 +19,10 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_wrapRay',
-		json :
-			true,
-		ray :
-			[ 'change_wrap' ]
+	return{
+		id : 'change_wrapRay',
+		json : true,
+		ray : [ 'change_wrap' ]
 	};
 }
 
@@ -36,7 +33,7 @@ var
 
 if( SERVER )
 {
-	change_wrapRay = require( 'jion' ).this( module );
+	change_wrapRay = require( 'jion' ).this( module, 'source' );
 }
 
 

@@ -20,40 +20,33 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_fixPoint',
+	return{
+		id : 'euclid_fixPoint',
 		attributes :
+		{
+			x :
 			{
-				x :
-					{
-						comment :
-							'x distance to anchor',
-						type :
-							'number'
-					},
-				y :
-					{
-						comment :
-							'y distance to anchor',
-						type :
-							'number'
-					},
-				anchor :
-					{
-						comment :
-							'anchor',
-						type :
-							'euclid_point'
-					}
+				comment : 'x distance to anchor',
+				type : 'number'
+			},
+			y :
+			{
+				comment : 'y distance to anchor',
+				type : 'number'
+			},
+			anchor :
+			{
+				comment : 'anchor',
+				type : 'euclid_point'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	euclid_fixPoint = require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 

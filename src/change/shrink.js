@@ -61,7 +61,7 @@ var
 */
 if( SERVER )
 {
-	change_shrink = require( 'jion' ).this( module );
+	change_shrink = require( 'jion' ).this( module, 'source' );
 
 	change_grow = require( './grow' );
 

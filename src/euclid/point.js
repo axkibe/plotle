@@ -21,37 +21,30 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_point',
+	return{
+		id : 'euclid_point',
 		attributes :
+		{
+			x :
 			{
-				x :
-					{
-						comment :
-							'x coordinate',
-						json :
-							true,
-						type :
-							'number'
-					},
-				y :
-					{
-						comment :
-							'y coordinate',
-						json :
-							true,
-						type :
-							'number'
-					}
+				comment : 'x coordinate',
+				json : true,
+				type : 'number'
+			},
+			y :
+			{
+				comment : 'y coordinate',
+				json : true,
+				type : 'number'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	euclid_point = require( 'jion' ).this( module );
+	euclid_point = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 }

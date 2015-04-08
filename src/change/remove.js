@@ -23,38 +23,36 @@ var
 if( JION )
 {
 	return {
-		id :
-			'change_remove',
+		id : 'change_remove',
 		attributes :
-			{
-				path :
-					{
-						comment : 'insert at this path',
-						json : 'true',
-						type : 'jion_path'
-					},
-				val :
-					{
-						comment : 'source sign',
-						json : 'true',
-						type : 'string'
-					},
-				at1 :
-					{
-						comment : 'insert at this place begin',
-						json : 'true',
-						type : 'integer'
-					},
-				at2 :
-					{
-						comment : 'insert ends here',
-						// must be at1 + val.length
-						json : 'true',
-						type : 'integer'
-					}
-			},
-		init :
-			[ ]
+		{
+			path :
+				{
+					comment : 'insert at this path',
+					json : 'true',
+					type : 'jion_path'
+				},
+			val :
+				{
+					comment : 'source sign',
+					json : 'true',
+					type : 'string'
+				},
+			at1 :
+				{
+					comment : 'insert at this place begin',
+					json : 'true',
+					type : 'integer'
+				},
+			at2 :
+				{
+					comment : 'insert ends here',
+					// must be at1 + val.length
+					json : 'true',
+					type : 'integer'
+				}
+		},
+		init : [ ]
 	};
 }
 
@@ -68,7 +66,7 @@ var
 */
 if( SERVER )
 {
-	change_remove = require( 'jion' ).this( module );
+	change_remove = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

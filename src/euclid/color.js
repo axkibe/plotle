@@ -22,43 +22,41 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_color',
+	return{
+		id : 'euclid_color',
 		attributes :
+		{
+			alpha :
 			{
-				alpha :
-					{
-						comment :
-							'alpha value',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
-					},
-				red :
-					{
-						comment :
-							'red value',
-						type :
-							'integer'
-					},
-				green :
-					{
-						comment :
-							'green value',
-						type :
-							'integer'
-					},
-				blue :
-					{
-						comment :
-							'blue value',
-						type :
-							'integer'
-					}
+				comment : 'alpha value',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			red :
+			{
+				comment : 'red value',
+				type : 'integer'
+			},
+			green :
+			{
+				comment : 'green value',
+				type : 'integer'
+			},
+			blue :
+			{
+				comment : 'blue value',
+				type : 'integer'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

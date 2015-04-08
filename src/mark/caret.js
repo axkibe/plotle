@@ -4,7 +4,7 @@
 
 
 var
-	jools,
+	jion,
 	mark_caret,
 	mark_text;
 
@@ -59,9 +59,9 @@ var
 
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 
-	mark_caret = require( 'jion' ).this( module );
+	mark_caret = jion.this( module, 'source' );
 }
 
 
@@ -102,7 +102,7 @@ prototype.hasCaret = true;
 /*
 | The item's path.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
@@ -123,7 +123,7 @@ jools.lazyValue(
 /*
 | The widget's path.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
@@ -144,7 +144,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 | FIXME remove
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'caretPath',
 	function( )
@@ -160,7 +160,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 | FIXME remove
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'caretAt',
 	function( )
@@ -176,7 +176,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 | FIXME remove
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'caret',
 	function( )

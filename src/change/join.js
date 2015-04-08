@@ -22,34 +22,32 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'change_join',
+	return{
+		id : 'change_join',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment : 'join at this path',
-						json : 'true',
-						type : 'jion_path'
-					},
-				at1 :
-					{
-						comment : 'join at this place ',
-						// must be length of text
-						json : 'true',
-						type : 'integer'
-					},
-				path2 :
-					{
-						comment : 'join this',
-						// must be after path
-						json : 'true',
-						type : 'jion_path'
-					}
+				comment : 'join at this path',
+				json : 'true',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			at1 :
+			{
+				comment : 'join at this place ',
+				// must be length of text
+				json : 'true',
+				type : 'integer'
+			},
+			path2 :
+			{
+				comment : 'join this',
+				// must be after path
+				json : 'true',
+				type : 'jion_path'
+			}
+		},
+		init : [ ]
 	};
 }
 
@@ -63,7 +61,7 @@ var
 */
 if( SERVER )
 {
-	change_join = require( 'jion' ).this( module );
+	change_join = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

@@ -43,12 +43,9 @@ if( JION )
 }
 
 
-/*
-| Node includes.
-*/
 if( SERVER )
 {
-	euclid_rect = require( 'jion' ).this( module );
+	euclid_rect = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 

@@ -57,7 +57,7 @@ var
 */
 if( SERVER )
 {
-	change_set = require( 'jion' ).this( module );
+	change_set = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 

@@ -22,20 +22,18 @@ var
 if( JION )
 {
 	return {
-		id :
-			'change_ray',
-		json :
-			true,
+		id : 'change_ray',
+		json : true,
 		ray :
-			[
-				'change_grow',
-				'change_insert',
-				'change_join',
-				'change_remove',
-				'change_set',
-				'change_shrink',
-				'change_split'
-			]
+		[
+			'change_grow',
+			'change_insert',
+			'change_join',
+			'change_remove',
+			'change_set',
+			'change_shrink',
+			'change_split'
+		]
 	};
 }
 
@@ -46,7 +44,7 @@ var
 
 if( SERVER )
 {
-	change_ray = require( 'jion' ).this( module );
+	change_ray = require( 'jion' ).this( module, 'source' );
 
 	change_generic = require( './generic' );
 
