@@ -21,6 +21,7 @@
 		"FORCE_JION_LOADING" : true,
 		"FREEZE" : true,
 		"JION" : true,
+		"NODE" : true,
 		"SHELL" : true,
 		"SHELLAPP" : true,
 		"SERVER" : true,

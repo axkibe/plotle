@@ -18,7 +18,7 @@ GLOBAL.CHECK = true;
 
 // does load jion code if it is out of date.
 // as genjion is supposed to update it!
-GLOBAL.FORCE_JION_LOADING = true;
+GLOBAL.FORCE_JION_LOADING = true; // FIXME remove
 
 GLOBAL.JION = false;
 

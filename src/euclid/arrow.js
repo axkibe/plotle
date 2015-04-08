@@ -55,10 +55,22 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 var
 	arrowSize,
 	cos,
+	prototype,
 	sin;
+
+
+prototype = euclid_arrow.prototype;
 
 arrowSize = 12;
 
@@ -155,7 +167,7 @@ euclid_arrow.connect =
 | The line of the arrow.
 */
 jools.lazyValue(
-	euclid_arrow.prototype,
+	prototype,
 	'line',
 	function( )
 	{
@@ -173,7 +185,7 @@ jools.lazyValue(
 | The zone of the arrow.
 */
 jools.lazyValue(
-	euclid_arrow.prototype,
+	prototype,
 	'zone',
 	function( )
 	{
@@ -186,7 +198,7 @@ jools.lazyValue(
 | The point at center.
 */
 jools.lazyValue(
-	euclid_arrow.prototype,
+	prototype,
 	'pc',
 	function( )
 	{
@@ -199,7 +211,7 @@ jools.lazyValue(
 | Returns the shape of the arrow.
 */
 jools.lazyValue(
-	euclid_arrow.prototype,
+	prototype,
 	'_shape',
 	function( )
 	{
@@ -312,7 +324,7 @@ jools.lazyValue(
 /*
 | Displays the arrow.
 */
-euclid_arrow.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view,

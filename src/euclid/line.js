@@ -23,34 +23,43 @@ var
 if( JION )
 {
 	return {
-		id :
-			'euclid_line',
+		id : 'euclid_line',
 		attributes :
+		{
+			p1 :
 			{
-				p1 :
-					{
-						comment :
-							'first point',
-						type :
-							'euclid_point'
-					},
-				p2 :
-					{
-						comment :
-							'second point',
-						type :
-							'euclid_point'
-					}
+				comment : 'first point',
+				type : 'euclid_point'
+			},
+			p2 :
+			{
+				comment : 'second point',
+				type : 'euclid_point'
 			}
+		}
 	};
 }
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+	
+prototype = euclid_line.prototype;
 
 
 /*
 | The zone of the line.
 */
 jools.lazyValue(
-	euclid_line.prototype,
+	prototype,
 	'zone',
 	function( )
 	{
@@ -88,7 +97,7 @@ jools.lazyValue(
 | The point at center.
 */
 jools.lazyValue(
-	euclid_line.prototype,
+	prototype,
 	'pc',
 	function( )
 	{

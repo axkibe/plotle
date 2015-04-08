@@ -38,12 +38,26 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = euclid_shape.prototype;
+
+
 /*
 | Gets the source of a projection to p.
 |
 | FIXME Move the section logic into shapeSection_*
 */
-euclid_shape.prototype.getProjection =
+prototype.getProjection =
 	function(
 		p
 	)
@@ -299,7 +313,7 @@ euclid_shape.prototype.getProjection =
 /*
 | Returns true if point is within the shape.
 */
-euclid_shape.prototype.within =
+prototype.within =
 	function(
 		view,
 		p

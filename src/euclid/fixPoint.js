@@ -4,10 +4,6 @@
 */
 
 
-var
-	euclid_fixPoint;
-
-
 /*
 | Capsule
 */

@@ -20,19 +20,24 @@
 if( JION )
 {
 	return {
-		id :
-			'shapeSection_start',
+		id : 'shapeSection_start',
 		attributes :
 			{
 				p :
-					{
-						comment :
-							'start here',
-						type :
-							[ 'euclid_point', 'euclid_fixPoint' ]
-					}
+				{
+					comment : 'start here',
+					type : [ 'euclid_point', 'euclid_fixPoint' ]
+				}
 			}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

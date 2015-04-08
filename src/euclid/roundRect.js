@@ -39,52 +39,52 @@ var
 */
 if( JION )
 {
-	return {
-
-		id :
-			'euclid_roundRect',
+	return{
+		id : 'euclid_roundRect',
 		attributes :
+		{
+			pnw :
 			{
-				pnw :
-					{
-						comment :
-							'point in north west',
-						type :
-							'euclid_point'
-					},
-				pse :
-					{
-						comment :
-							'point in south east',
-						type :
-							'euclid_point'
-					},
-				a :
-					{
-						comment :
-							'horizontal rounding',
-						type :
-							'number'
-					},
-				b :
-					{
-						comment :
-							'vertical rounding',
-						type :
-							'number'
-					}
+				comment : 'point in north west',
+				type : 'euclid_point'
 			},
-
-		init :
-			[ 'pnw', 'pse', 'a', 'b' ]
+			pse :
+			{
+				comment : 'point in south east',
+				type : 'euclid_point'
+			},
+			a :
+			{
+				comment : 'horizontal rounding',
+				type : 'number'
+			},
+			b :
+			{
+				comment : 'vertical rounding',
+				type : 'number'
+			}
+		},
+		init : [ 'pnw', 'pse', 'a', 'b' ]
 	};
 }
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype = euclid_roundRect.prototype;
 
 
 /*
 | Initializes the round rect.
 */
-euclid_roundRect.prototype._init =
+prototype._init =
 	function(
 		pnw,
 		pse,
@@ -146,7 +146,7 @@ euclid_roundRect.prototype._init =
 | point in the center
 */
 jools.lazyValue(
-	euclid_roundRect.prototype,
+	prototype,
 	'pc',
 	function( )
 	{
@@ -164,7 +164,7 @@ jools.lazyValue(
 | Rectangle width.
 */
 jools.lazyValue(
-	euclid_roundRect.prototype,
+	prototype,
 	'width',
 	function( )
 	{
@@ -176,7 +176,7 @@ jools.lazyValue(
 | Rectangle height.
 */
 jools.lazyValue(
-	euclid_roundRect.prototype,
+	prototype,
 	'height',
 	function( )
 	{
@@ -188,7 +188,7 @@ jools.lazyValue(
 /*
 | Returns true if point is within the ellipse.
 */
-euclid_roundRect.prototype.within =
+prototype.within =
 	function
 	(
 		view,
@@ -220,7 +220,7 @@ euclid_roundRect.prototype.within =
 /*
 | Gets the source of a projection to p.
 */
-euclid_roundRect.prototype.getProjection =
+prototype.getProjection =
 	function
 	(
 		// ...
