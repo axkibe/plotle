@@ -25,52 +25,40 @@ var jools;
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_margin',
+	return{
+		id : 'euclid_margin',
 		attributes :
+		{
+			n :
 			{
-				n :
-					{
-						comment :
-							'n margin',
-						type :
-							'number'
-					},
-				e :
-					{
-						comment :
-							'e margin',
-						type :
-							'number'
-					},
-				s :
-					{
-						comment :
-							's margin',
-						type :
-							'number'
-					},
-				w :
-					{
-						comment :
-							'w margin',
-						type :
-							'number'
-					}
+				comment : 'n margin',
+				type : 'number'
+			},
+			e :
+			{
+				comment : 'e margin',
+				type : 'number'
+			},
+			s :
+			{
+				comment : 's margin',
+				type : 'number'
+			},
+			w :
+			{
+				comment : 'w margin',
+				type : 'number'
 			}
+		}
 	};
 }
 
 
-/*
-| Node includes.
-*/
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	euclid_margin = require( 'jion' ).this( module );
+	euclid_margin = require( 'jion' ).this( module, 'source' );
 }
 
 

@@ -15,16 +15,20 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'gradient_radial',
+	return{
+		id : 'gradient_radial',
 		attributes :
-			{
-				// FUTURE specify something
-			},
-		ray :
-			[ 'gradient_colorStop' ]
+		{
+			// FUTURE specify something
+		},
+		ray : [ 'gradient_colorStop' ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
 }
 
 

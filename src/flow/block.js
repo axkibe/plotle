@@ -15,29 +15,29 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'flow_block',
+	return{
+		id : 'flow_block',
 		attributes :
+		{
+			height :
 			{
-				height :
-					{
-						comment :
-							'height of the flow',
-						type :
-							'number'
-					},
-				width :
-					{
-						comment :
-							'width of the flow',
-						type :
-							'number'
-					}
+				comment : 'height of the flow',
+				type : 'number'
 			},
-		ray :
-			[ 'flow_line' ]
+			width :
+			{
+				comment : 'width of the flow',
+				type : 'number'
+			}
+		},
+		ray : [ 'flow_line' ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
 }
 
 

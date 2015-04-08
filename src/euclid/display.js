@@ -24,8 +24,7 @@ var
 if( JION )
 {
 	return {
-		id :
-			'euclid_display',
+		id : 'euclid_display',
 		attributes :
 			{
 				'height' :
@@ -55,6 +54,14 @@ if( JION )
 			},
 		init : [ ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

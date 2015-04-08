@@ -15,29 +15,29 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'flow_line',
+	return{
+		id : 'flow_line',
 		attributes :
+		{
+			offset :
 			{
-				offset :
-					{
-						comment :
-							'offset in text',
-						type :
-							'integer'
-					},
-				y :
-					{
-						comment :
-							'y position of line',
-						type :
-							'number'
-					}
+				comment : 'offset in text',
+				type : 'integer'
 			},
-		ray :
-			[ 'flow_token' ]
+			y :
+			{
+				comment : 'y position of line',
+				type : 'number'
+			}
+		},
+		ray : [ 'flow_token' ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
 }
 
 

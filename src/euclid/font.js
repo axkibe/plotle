@@ -20,38 +20,45 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_font',
+	return{
+		id : 'euclid_font',
 		attributes :
+		{
+			size :
 			{
-				size :
-					{
-						comment : 'font size',
-						type : 'number'
-					},
-				family :
-					{
-						comment : 'font family',
-						type : 'string'
-					},
-				align :
-					{
-						comment : 'horizonal alignment',
-						type : 'string'
-					},
-				fill :
-					{
-						comment : 'font color',
-						type : 'euclid_color'
-					},
-				base :
-					{
-						comment : 'vertical alignment',
-						type : 'string'
-					}
+				comment : 'font size',
+				type : 'number'
+			},
+			family :
+			{
+				comment : 'font family',
+				type : 'string'
+			},
+			align :
+			{
+				comment : 'horizonal alignment',
+				type : 'string'
+			},
+			fill :
+			{
+				comment : 'font color',
+				type : 'euclid_color'
+			},
+			base :
+			{
+				comment : 'vertical alignment',
+				type : 'string'
 			}
+		}
 	};
+}
+
+
+if( SERVER )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 
@@ -66,5 +73,6 @@ jools.lazyValue(
 		return this.size + 'px ' + this.family;
 	}
 );
+
 
 })( );
