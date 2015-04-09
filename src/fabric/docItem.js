@@ -5,8 +5,8 @@
 
 var
 	fabric_docItem,
-	jools,
 	mark_caret,
+	math_limit,
 	root;
 
 
@@ -22,8 +22,6 @@ var
 */
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
-
 	fabric_docItem = module.exports;
 }
 else
@@ -40,14 +38,10 @@ fabric_docItem.attentionCenter =
 {
 	return(
 		this.zone.pnw.y
-		+ jools.limit(
+		+ math_limit(
 			0,
 			this.doc.attentionCenter
-			- (
-				this.scrollbarY
-				?  this.scrollbarY.pos
-				: 0
-			),
+			- ( this.scrollbarY ?  this.scrollbarY.pos : 0 ),
 			this.zone.height
 		)
 	);

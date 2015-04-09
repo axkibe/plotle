@@ -11,8 +11,8 @@ var
 	euclid_roundRect,
 	euclid_view,
 	gruga_scrollbar,
-	jools,
 	math_half,
+	math_limit,
 	theme,
 	visual_scrollbar;
 
@@ -88,7 +88,7 @@ prototype._init =
 {
 	if( this.max - this.aperture > 0 )
 	{
-		this.pos = jools.limit( 0, this.pos, this.max - this.aperture );
+		this.pos = math_limit( 0, this.pos, this.max - this.aperture );
 	}
 	else
 	{

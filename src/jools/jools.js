@@ -45,38 +45,6 @@ puffed = config.debug.puffed;
 
 
 /*
-| Limits value to be between min and max
-*/
-jools.limit =
-	function(
-		min,
-		val,
-		max
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( min > max )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( val < min )
-	{
-		return min;
-	}
-
-	if( val > max )
-	{
-		return max;
-	}
-
-	return val;
-};
-
-
-/*
 | Hashes the password.
 */
 jools.passhash =

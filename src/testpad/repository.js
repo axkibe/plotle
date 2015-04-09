@@ -10,7 +10,7 @@ var
 	fabric_note,
 	fabric_para,
 	fabric_space,
-	jools,
+	math_limit,
 	root,
 	testpad_repository;
 
@@ -124,7 +124,7 @@ testpad_repository.prototype._init =
 		this._changeWrapRay = change_wrapRay.create( );
 	}
 
-	this.seq = jools.limit( 0, this.seq, this._changeWrapRay.length );
+	this.seq = math_limit( 0, this.seq, this._changeWrapRay.length );
 };
 
 

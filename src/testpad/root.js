@@ -14,6 +14,7 @@ var
 	change_wrap,
 	jion_path,
 	jools,
+	math_limit,
 	math_maxInteger,
 	root,
 	testpad_action,
@@ -223,11 +224,10 @@ testpad_root.prototype._init =
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	this.cursorLine =
-		jools.limit( 0, this.cursorLine, doc.ranks.length - 1 );
+	this.cursorLine = math_limit( 0, this.cursorLine, doc.ranks.length - 1 );
 
 	this.cursorAt =
-		jools.limit(
+		math_limit(
 			0,
 			this.cursorAt,
 			doc.atRank( this.cursorLine ).text.length
@@ -347,7 +347,7 @@ testpad_root.prototype.onMouseDown =
 	}
 
 	cLine =
-		jools.limit(
+		math_limit(
 			0,
 			Math.floor( y / measure.offsetHeight ),
 			doc.ranks.length - 1
@@ -356,10 +356,9 @@ testpad_root.prototype.onMouseDown =
 	cText = doc.twig[ doc.ranks[ cLine ] ].text;
 
 	root.create(
-		'cursorLine',
-			cLine,
+		'cursorLine', cLine,
 		'cursorAt',
-			jools.limit(
+			math_limit(
 				0,
 				Math.floor( x / measure.offsetWidth ),
 				cText.length

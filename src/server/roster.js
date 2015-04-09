@@ -64,6 +64,11 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/math/limit.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/math/maxInteger.js',
 		'inTestPad', true
 	),

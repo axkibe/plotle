@@ -13,6 +13,7 @@ var
 	euclid_display,
 	euclid_point,
 	jools,
+	math_limit,
 	root,
 	shell_root,
 	shell_system,
@@ -538,12 +539,7 @@ prototype._onAtweenTime =
 /**/{
 /**/	if( pointingState !== 'atween' )
 /**/	{
-/**/		jools.log(
-/**/			'warn',
-/**/			'dragTime() in wrong action mode'
-/**/		);
-/**/
-/**/		return;
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -1030,10 +1026,7 @@ prototype._onMouseWheel =
 	}
 	else
 	{
-		jools.log(
-			'warn',
-			'invalid wheel event'
-		);
+		jools.log( 'warn', 'invalid wheel event' );
 
 		return;
 	}
@@ -1365,7 +1358,7 @@ prototype._steerAttention =
 	}
 	else
 	{
-		ac = jools.limit( 0, ac, mainWindowHeight - 15 );
+		ac = math_limit( 0, ac, mainWindowHeight - 15 );
 
 		hiddenInput.style.top = ac + 'px';
 
