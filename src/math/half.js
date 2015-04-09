@@ -6,7 +6,7 @@
 
 
 var
-	half;
+	math_half;
 
 
 /*
@@ -16,7 +16,7 @@ var
 'use strict';
 
 
-half =
+math_half =
 	function( v )
 {
 	return Math.round( v / 2 );
@@ -25,7 +25,7 @@ half =
 
 if( NODE )
 {
-	GLOBAL.half = half;
+	module.exports = math_half;
 }
 
 

@@ -6,7 +6,7 @@
 var
 	design_anchorPoint,
 	euclid_point,
-	jools;
+	math_half;
 
 
 /*
@@ -137,7 +137,6 @@ prototype.compute =
 	)
 {
 	var
-		half,
 		pnw,
 		pse;
 
@@ -149,8 +148,6 @@ prototype.compute =
 /**/	}
 /**/}
 
-	half = jools.half;
-
 	pnw = frame.pnw;
 
 	pse = frame.pse;
@@ -161,8 +158,8 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', half( pnw.x + pse.x ) + this.x,
-					'y', half( pnw.y + pse.y ) + this.y
+					'x', math_half( pnw.x + pse.x ) + this.x,
+					'y', math_half( pnw.y + pse.y ) + this.y
 				)
 			);
 
@@ -170,7 +167,7 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', half( pnw.x + pse.x ) + this.x,
+					'x', math_half( pnw.x + pse.x ) + this.x,
 					'y', pnw.y + this.y
 				)
 			);
@@ -189,7 +186,7 @@ prototype.compute =
 			return(
 				euclid_point.create(
 					'x', pse.x + this.x,
-					'y', half( pnw.y + pse.y ) + this.y
+					'y', math_half( pnw.y + pse.y ) + this.y
 				)
 			);
 
@@ -201,7 +198,7 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', half( pnw.x + pse.x ) + this.x,
+					'x', math_half( pnw.x + pse.x ) + this.x,
 					'y', pse.y + this.y
 				)
 			);
@@ -220,7 +217,7 @@ prototype.compute =
 			return(
 				euclid_point.create(
 					'x', pnw.x + this.x,
-					'y', half( pnw.y + pse.y ) + this.y
+					'y', math_half( pnw.y + pse.y ) + this.y
 				)
 			);
 

@@ -11,7 +11,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
-	jools,
+	math_half,
 	theme;
 
 /*
@@ -55,7 +55,7 @@ disc_disc._init =
 
 	eh = style.ellipse.height,
 
-	ny = jools.half( this.view.height - height );
+	ny = math_half( this.view.height - height );
 
 	this.frame =
 		euclid_rect.create(
@@ -68,17 +68,17 @@ disc_disc._init =
 			'pnw',
 				euclid_point.create(
 					'x', width - 1 - ew,
-					'y', 0 - jools.half( eh - height )
+					'y', 0 - math_half( eh - height )
 				),
 			'pse',
 				euclid_point.create(
 					'x', width - 1,
-					'y', height + jools.half( eh - height )
+					'y', height + math_half( eh - height )
 				),
 			'gradientPC',
 				euclid_point.create(
 					'x', -600,
-					'y', jools.half( height )
+					'y', math_half( height )
 				),
 			'gradientR1', 650
 		);

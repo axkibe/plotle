@@ -7,7 +7,8 @@ var
 	euclid_line,
 	euclid_point,
 	euclid_rect,
-	jools;
+	jools,
+	math_half;
 
 
 /*
@@ -111,8 +112,8 @@ jools.lazyValue(
 
 		return(
 			euclid_point.create(
-				'x', jools.half( p1.x + p2.x ),
-				'y', jools.half( p1.y + p2.y )
+				'x', math_half( p1.x + p2.x ),
+				'y', math_half( p1.y + p2.y )
 			)
 		);
 	}

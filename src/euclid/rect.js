@@ -7,6 +7,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
+	math_half,
 	jools;
 
 
@@ -46,6 +47,8 @@ if( JION )
 if( SERVER )
 {
 	euclid_rect = require( 'jion' ).this( module, 'source' );
+
+	math_half = require( '../math/half' );
 
 	jools = require( '../jools/jools' );
 
@@ -371,8 +374,8 @@ jools.lazyValue(
 	{
 		return(
 			euclid_point.create(
-				'x', jools.half( this.pse.x + this.pnw.x ),
-				'y', jools.half( this.pse.y + this.pnw.y )
+				'x', math_half( this.pse.x + this.pnw.x ),
+				'y', math_half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -389,7 +392,7 @@ jools.lazyValue(
 	{
 		return(
 			euclid_point.create(
-				'x', jools.half( this.pse.x + this.pnw.x ),
+				'x', math_half( this.pse.x + this.pnw.x ),
 				'y', this.pnw.y
 			)
 		);
@@ -408,7 +411,7 @@ jools.lazyValue(
 		return(
 			euclid_point.create(
 				'x', this.pnw.x,
-				'y', jools.half( this.pse.y + this.pnw.y )
+				'y', math_half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -426,7 +429,7 @@ jools.lazyValue(
 		return(
 			euclid_point.create(
 				'x', this.pse.x,
-				'y', jools.half( this.pse.y + this.pnw.y )
+				'y', math_half( this.pse.y + this.pnw.y )
 			)
 		);
 	}

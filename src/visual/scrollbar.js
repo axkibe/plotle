@@ -12,6 +12,7 @@ var
 	euclid_view,
 	gruga_scrollbar,
 	jools,
+	math_half,
 	theme,
 	visual_scrollbar;
 
@@ -151,7 +152,7 @@ prototype.getArea =
 
 	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
 
-	s05 = jools.half( ths.strength );
+	s05 = math_half( ths.strength );
 
 	return(
 		euclid_roundRect.create(

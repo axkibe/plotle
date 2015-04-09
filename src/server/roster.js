@@ -59,6 +59,12 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/math/half.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		// FIXME remove
 		'filePath', 'src/jools/jools.js',
 		'inBundle', true,
 		'inTestPad', true

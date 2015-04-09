@@ -15,6 +15,7 @@ var
 	fabric_note,
 	gruga_note,
 	jools,
+	math_half,
 	root,
 	system,
 	theme,
@@ -192,7 +193,7 @@ prototype._init =
 			'fontsize', this.fontsize,
 			'innerMargin', theme.note.innerMargin,
 			'mark', this.mark,
-			'paraSep', jools.half( this.fontsize ),
+			'paraSep', math_half( this.fontsize ),
 			'path', this.path && this.path.append( 'doc' ),
 			'view', this.view.home
 		);

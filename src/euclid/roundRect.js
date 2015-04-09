@@ -22,6 +22,7 @@ var
 	euclid_roundRect,
 	euclid_shape,
 	jools,
+	math_half,
 	shapeSection_line,
 	shapeSection_round,
 	shapeSection_start;
@@ -152,8 +153,8 @@ jools.lazyValue(
 	{
 		return(
 			euclid_point.create(
-				'x', jools.half( this.pse.x + this.pnw.x ),
-				'y', jools.half( this.pse.y + this.pnw.y )
+				'x', math_half( this.pse.x + this.pnw.x ),
+				'y', math_half( this.pse.y + this.pnw.y )
 			)
 		);
 	}

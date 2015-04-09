@@ -6,9 +6,9 @@ var
 	icon_remove,
 	euclid_point,
 	euclid_shape,
+	math_half,
 	shapeSection_line,
-	shapeSection_start,
-	jools;
+	shapeSection_start;
 
 
 /*
@@ -96,8 +96,8 @@ prototype._init =
 	pc =
 		// FIXME make it an euclid middle call
 		euclid_point.create(
-			'x', jools.half( pnw.x + pse.x ),
-			'y', jools.half( pnw.y + pse.y )
+			'x', math_half( pnw.x + pse.x ),
+			'y', math_half( pnw.y + pse.y )
 		);
 
 	// arm with and height

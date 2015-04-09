@@ -10,6 +10,7 @@ var
 	euclid_view,
 	gruga_handles,
 	jools,
+	math_half,
 	root,
 	theme,
 	visual_handlesBezel;
@@ -169,9 +170,9 @@ jools.lazyValue(
 
 		sy = zone.pse.y;
 
-		mx = jools.half( wx + ex );
+		mx = math_half( wx + ex );
 
-		my = jools.half( ny + sy );
+		my = math_half( ny + sy );
 
 		dcx = theme.handle.cdistance;
 
@@ -199,14 +200,14 @@ jools.lazyValue(
 
 		if( dcx > a )
 		{
-			dex -= jools.half( dcx - a );
+			dex -= math_half( dcx - a );
 
 			dcx = a;
 		}
 
 		if( dcy > b )
 		{
-			dey -= jools.half( dcy - b );
+			dey -= math_half( dcy - b );
 
 			dcy = b;
 		}

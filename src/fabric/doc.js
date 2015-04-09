@@ -9,6 +9,7 @@ var
 	fabric_doc,
 	gruga_selection,
 	jools,
+	math_half,
 	root,
 	shapeSection_start,
 	shapeSection_flyLine,
@@ -320,8 +321,8 @@ prototype._getRangeShape =
 				'ray:init', sections,
 				'pc',
 					euclid_point.create(
-						'x', jools.half( fp.x + bp.x ),
-						'y', jools.half( fp.y + bp.y )
+						'x', math_half( fp.x + bp.x ),
+						'y', math_half( fp.y + bp.y )
 					)
 			)
 		);
@@ -383,16 +384,16 @@ prototype._getRangeShape =
 					'ray:init', sections,
 					'pc',
 						euclid_point.create(
-							'x', jools.half( fp.x + rx ),
-							'y', jools.half( 2 * fp.y - ascend + descend )
+							'x', math_half( fp.x + rx ),
+							'y', math_half( 2 * fp.y - ascend + descend )
 						)
 				),
 				euclid_shape.create(
 					'ray:init', sections2,
 					'pc',
 						euclid_point.create(
-							'x', jools.half( fp.x + rx ),
-							'y', jools.half( 2 * fp.y - ascend + descend )
+							'x', math_half( fp.x + rx ),
+							'y', math_half( 2 * fp.y - ascend + descend )
 						)
 				)
 			]
@@ -523,8 +524,8 @@ prototype._getRangeShape =
 					'ray:init', sections,
 					'pc',
 						euclid_point.create(
-							'x', jools.half( rx + lx ),
-							'y', jools.half( b2y + descend + f2y - ascend )
+							'x', math_half( rx + lx ),
+							'y', math_half( b2y + descend + f2y - ascend )
 						)
 				)
 			);
@@ -584,8 +585,8 @@ prototype._getRangeShape =
 					'ray:init', sections,
 					'pc',
 						euclid_point.create(
-							'x', jools.half( rx + lx ),
-							'y', jools.half( b2y + descend + f2y - ascend )
+							'x', math_half( rx + lx ),
+							'y', math_half( b2y + descend + f2y - ascend )
 						)
 				)
 			);

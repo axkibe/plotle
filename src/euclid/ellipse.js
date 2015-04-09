@@ -8,6 +8,7 @@ var
 	euclid_point,
 	euclid_shape,
 	jools,
+	math_half,
 	shapeSection_round,
 	shapeSection_start;
 
@@ -112,9 +113,9 @@ prototype._init =
 	sy = pse.y;
 
 	// middles of cardinal cords
-	my = jools.half( ny + sy );
+	my = math_half( ny + sy );
 
-	mx = jools.half(wx + ex);
+	mx = math_half(wx + ex);
 
 	// cardinal points
 	pw = euclid_point.create( 'x', wx, 'y', my );
@@ -182,8 +183,8 @@ jools.lazyValue(
 
 		return(
 			euclid_point.create(
-				'x', jools.half( this.pnw.x + this.pse.x ),
-				'y', jools.half( this.pnw.y + this.pse.y )
+				'x', math_half( this.pnw.x + this.pse.x ),
+				'y', math_half( this.pnw.y + this.pse.y )
 			)
 		);
 	}
@@ -257,8 +258,8 @@ jools.lazyValue(
 	{
 		return(
 			euclid_point.create(
-				'x', jools.half( this.pnw.x + this.pse.x ),
-				'y', jools.half( this.pnw.y + this.pse.y )
+				'x', math_half( this.pnw.x + this.pse.x ),
+				'y', math_half( this.pnw.y + this.pse.y )
 			)
 		);
 	}

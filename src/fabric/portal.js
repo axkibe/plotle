@@ -21,6 +21,7 @@ var
 	gruga_portalButtonFacets,
 	gruga_portalInputFacets,
 	jools,
+	math_half,
 	mark_caret,
 	mark_item,
 	result_hover,
@@ -1288,8 +1289,8 @@ jools.lazyValue(
 
 		pnw =
 			euclid_point.create(
-				'x', jools.half( zone.width - width ),
-				'y', jools.half( zone.height ) + 10
+				'x', math_half( zone.width - width ),
+				'y', math_half( zone.height ) + 10
 			),
 
 		pse = pnw.add( width, height );
@@ -1306,8 +1307,8 @@ jools.lazyValue(
 
 				textCenter :
 					euclid_point.create(
-						'x', jools.half( pnw.x + pse.x ),
-						'y', jools.half( pnw.y + pse.y )
+						'x', math_half( pnw.x + pse.x ),
+						'y', math_half( pnw.y + pse.y )
 					)
 			};
 
@@ -1358,12 +1359,12 @@ prototype._prepareField =
 	pnw =
 		basePNW
 		? euclid_point.create(
-			'x', jools.half( zone.width - width ),
+			'x', math_half( zone.width - width ),
 			'y', basePNW.y + 23
 		)
 		: euclid_point.create(
-			'x', jools.half( zone.width - width ),
-			'y', Math.round( jools.half( zone.height ) - 30 )
+			'x', math_half( zone.width - width ),
+			'y', Math.round( math_half( zone.height ) - 30 )
 		);
 
 	silhoutte =

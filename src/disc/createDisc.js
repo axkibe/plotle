@@ -11,6 +11,7 @@ var
 	euclid_display,
 	euclid_view,
 	jools,
+	math_half,
 	root;
 
 
@@ -293,7 +294,7 @@ prototype.draw =
 	display.drawImage(
 		'image', this._display,
 		'x', 0,
-		'y', jools.half( this.view.height - this.style.height )
+		'y', math_half( this.view.height - this.style.height )
 	);
 };
 

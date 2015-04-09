@@ -922,13 +922,5 @@ jools.keyNonGrata =
 	);
 };
 
-// divides by 2 and rounds up
-jools.half =
-	function( v )
-{
-	return Math.round( v / 2 );
-};
-
-
 
 } )( );
