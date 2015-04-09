@@ -97,7 +97,7 @@ if( NODE )
 
 
 var
-	protoype;
+	prototype;
 
 prototype = form_jockey.prototype;
 

@@ -420,6 +420,7 @@ prototype.prepareInventory =
 		gjr,
 		inv,
 		jionIDs,
+		jionCodeResource,
 		resource,
 		sourceMap,
 		stream,
@@ -457,6 +458,7 @@ prototype.prepareInventory =
 		if( resource.hasJion )
 		{
 			that = require( serverDir + resource.filePath );
+			// FIXME for shell_devel clear require cache
 
 			if( !that.source )
 			{
@@ -466,9 +468,26 @@ prototype.prepareInventory =
 				);
 			}
 
+			resource =
+				resource.create(
+					'data', that.source
+				);
+
+			jionCodeResource =
+				resource.create(
+					'aliases', undefined,
+					'data', that.jioncode,
+					'jionSrcPath', resource.filePath, // FIXME needed?
+					'filePath',
+						// FIXME let the jion module worry aabout this
+						'jioncode/'
+						+ resource.filePath.replace( /\//g, '-' ),
+					'hasJion', false,
+					'isJion', true
+				);
+
 			root.create(
-				'inventory',
-					root.inventory.addResource( resource.asJion )
+				'inventory', root.inventory.addResource( jionCodeResource )
 			);
 		}
 
