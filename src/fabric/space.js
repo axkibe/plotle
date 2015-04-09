@@ -22,6 +22,7 @@ var
 	mark_caret,
 	result_hover,
 	root,
+	session_uid,
 	shell_stubs,
 	theme;
 
@@ -811,7 +812,7 @@ prototype.dragStop =
 								)
 						);
 
-					key = jools.uid( );
+					key = session_uid( );
 
 					root.alter(
 						change_grow.create(
@@ -877,7 +878,7 @@ prototype.dragStop =
 								)
 						);
 
-					key = jools.uid( );
+					key = session_uid( );
 
 					// FIXME might take label right away!
 					val =
@@ -934,7 +935,7 @@ prototype.dragStop =
 							'spaceTag', 'home'
 						);
 
-					key = jools.uid( );
+					key = session_uid( );
 
 					root.alter(
 						change_grow.create(

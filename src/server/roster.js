@@ -77,6 +77,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/session/uid.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		// FIXME remove
 		'filePath', 'src/jools/jools.js',
 		'inBundle', true,

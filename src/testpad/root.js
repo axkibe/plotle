@@ -17,6 +17,7 @@ var
 	math_limit,
 	math_maxInteger,
 	root,
+	session_uid,
 	testpad_action,
 	testpad_root;
 
@@ -286,7 +287,7 @@ testpad_root.prototype.alter =
 
 	changeWrap =
 		change_wrap.create(
-			'cid', jools.uid( ),
+			'cid', session_uid( ),
 			'changeRay',
 				change_ray.create( 'ray:set', 0, change )
 		);
@@ -618,7 +619,7 @@ testpad_root.prototype.send =
 			root.alter(
 				change_split.create(
 					'path', path.chop,
-					'path2', path.set( -2, jools.uid( ) ).chop,
+					'path2', path.set( -2, session_uid( ) ).chop,
 					'at1', action.at
 				)
 			);

@@ -19,6 +19,7 @@ var
 	mark_range,
 	mark_text,
 	root,
+	session_uid,
 	shell_fontPool,
 	theme;
 
@@ -757,7 +758,7 @@ prototype.input =
 
 		if( rx[ 2 ] )
 		{
-			textPath2 = textPath.set( -2, jools.uid( ) );
+			textPath2 = textPath.set( -2, session_uid( ) );
 
 			changes.push(
 				change_split.create(
@@ -1113,7 +1114,7 @@ prototype._keyEnter =
 	root.alter(
 		change_split.create(
 			'path', tpc,
-			'path2', tpc.set( -2, jools.uid( ) ),
+			'path2', tpc.set( -2, session_uid( ) ),
 			'at1', at
 		)
 	);

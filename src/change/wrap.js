@@ -81,7 +81,7 @@ prototype.createInvert =
 {
 	return(
 		change_wrap.create(
-			'cid', jools.uid( ),
+			'cid', session_uid( ),
 			'changeRay', this.changeRay.invert
 		)
 	);

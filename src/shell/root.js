@@ -24,11 +24,11 @@ var
 	gruga_user,
 	gruga_welcome,
 	jion_path,
-	jools,
 	net_ajax,
 	net_channel,
 	net_link,
 	root,
+	session_uid,
 	shell_doTracker,
 	shell_root,
 	system,
@@ -346,11 +346,7 @@ shell_root.startup =
 
 	if( !user )
 	{
-		user =
-			user_creds.create(
-				'name', 'visitor',
-				'passhash', jools.uid( )
-			);
+		user = user_creds.createVisitor( );
 	}
 
 	djPath = jion_path.empty.append( 'disc' );
@@ -596,7 +592,7 @@ prototype.alter =
 
 	changeWrap =
 		change_wrap.create(
-			'cid', jools.uid( ),
+			'cid', session_uid( ),
 			'changeRay', changeRay
 		);
 

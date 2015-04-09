@@ -21,6 +21,7 @@ var
 	jools,
 	mark_caret,
 	root,
+	session_uid,
 	theme,
 	visual_handlesBezel;
 
@@ -180,7 +181,7 @@ fabric_relation.spawn =
 			'item2key', item2.path.get( -1 )
 		);
 
-	key = jools.uid( );
+	key = session_uid( );
 
 	root.alter(
 		change_grow.create(

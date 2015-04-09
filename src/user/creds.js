@@ -5,6 +5,7 @@
 
 var
 	jools,
+	session_uid,
 	user_creds;
 
 
@@ -110,7 +111,7 @@ user_creds.createVisitor =
 	return(
 		user_creds.create(
 			'name', 'visitor',
-			'passhash', jools.uid( )
+			'passhash', session_uid( )
 		)
 	);
 };
