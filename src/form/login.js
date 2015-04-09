@@ -9,7 +9,8 @@ var
 	form_login,
 	jools,
 	mark_caret,
-	user_creds;
+	user_creds,
+	user_passhash;
 
 
 /*
@@ -307,7 +308,7 @@ prototype.login =
 	root.link.auth(
 		user_creds.create(
 			'name', username,
-			'passhash', jools.passhash( pass )
+			'passhash', user_passhash( pass )
 		)
 	);
 };

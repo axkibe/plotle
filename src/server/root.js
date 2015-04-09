@@ -129,7 +129,7 @@ var
 	server_tools,
 	server_userNexus,
 	serverDir,
-	sha1,
+	hash_sha1,
 	startup,
 	sus,
 	uglify,
@@ -175,7 +175,7 @@ server_tools = require( './tools' );
 
 server_upSleepGroup = require( './upSleepGroup' );
 
-sha1 = require( '../jools/sha1' );
+hash_sha1 = require( '../hash/sha1' );
 
 sus = require( 'suspend' );
 
@@ -699,7 +699,7 @@ prototype.prepareInventory =
 		}
 
 		// calculates the hash for the bundle
-		bundleFilePath = 'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
+		bundleFilePath = 'ideoloom-' + hash_sha1( bundle ) + '.js';
 
 		root.create( 'bundleFilePath', bundleFilePath );
 

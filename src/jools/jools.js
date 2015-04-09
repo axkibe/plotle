@@ -5,8 +5,7 @@
 
 var
 	config,
-	jools,
-	sha1hex;
+	jools;
 
 
 /*
@@ -21,8 +20,6 @@ if( SERVER )
 	jools = module.exports;
 
 	config = require( '../../config' );
-
-	sha1hex = require( './sha1' ).sha1hex;
 
 	jools.devel = config.server_devel;
 }
@@ -42,16 +39,6 @@ var
 
 
 puffed = config.debug.puffed;
-
-
-/*
-| Hashes the password.
-*/
-jools.passhash =
-	function( pass )
-{
-	return sha1hex( pass + '-meshcraft-8833' );
-};
 
 
 /*
@@ -118,34 +105,6 @@ jools.randomPassword =
 
 	return ua.join( '' );
 };
-}
-
-
-/*
-| Legacy (for opera browser)
-*/
-if( !Object.defineProperty )
-{
-	console.log(
-		'Using legacy Object.defineProperty'
-	);
-
-	Object.defineProperty = function(obj, label, funcs) {
-		if (typeof(funcs.value) !== 'undefined') {
-			obj[label] = funcs.value;
-			return;
-		}
-		if (funcs.get) obj.__defineGetter__(label, funcs.get);
-		if (funcs.set) obj.__defineSetter__(label, funcs.set);
-	};
-}
-
-
-if( !Object.freeze )
-{
-	console.log( 'Using legacy Object.freeze' );
-
-	Object.freeze = function( ) { };
 }
 
 
@@ -770,24 +729,6 @@ jools.log =
 
 
 /*
-| Logs creation of new entities.
-*/
-jools.logNew =
-	function(
-		entity,
-		path
-	)
-{
-	if( !config.log.all && !config.log.news )
-	{
-		return;
-	}
-
-	jools.log( 'news', entity.reflect, path.string );
-};
-
-
-/*
 | Shortcut for log('debug', ...);
 */
 jools.debug =
@@ -832,28 +773,6 @@ jools.inspect =
 	_inspect( o, a, 0, [ ] );
 
 	return a.join( '' );
-};
-
-
-/*
-| Makes a key not to be accessed.
-|
-| Used for developing during changes
-*/
-jools.keyNonGrata =
-	function(
-		obj,
-		key
-	)
-{
-	Object.defineProperty(
-		obj,
-		key,
-		{
-			get : function( ) { throw new Error( ); },
-			set : function( ) { throw new Error( ); }
-		}
-	);
 };
 
 

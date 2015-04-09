@@ -17,7 +17,7 @@ authors: [Christopher Pitt, Enrique Erne]
 
 
 var
-	sha1hex;
+	hash_sha1;
 
 /*
 | Capsule
@@ -97,7 +97,7 @@ tohex =
 };
 
 
-sha1hex =
+hash_sha1 =
 	function( str )
 {
 	var
@@ -264,10 +264,7 @@ sha1hex =
 */
 if( SERVER )
 {
-	module.exports =
-	{
-		sha1hex : sha1hex
-	};
+	module.exports = hash_sha1;
 }
 
 } )( );

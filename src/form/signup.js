@@ -12,7 +12,8 @@ var
 	form_signUp,
 	jools,
 	mark_caret,
-	user_creds;
+	user_creds,
+	user_passhash;
 
 
 /*
@@ -456,7 +457,7 @@ prototype.signup =
 	root.link.register(
 		user_creds.create(
 			'name', username,
-			'passhash', jools.passhash( pass )
+			'passhash', user_passhash( pass )
 		),
 		email,
 		newsletter

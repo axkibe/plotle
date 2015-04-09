@@ -73,14 +73,14 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/hash/sha1.js',
+		'inBundle', true
+	),
+	resource.create(
 		// FIXME remove
 		'filePath', 'src/jools/jools.js',
 		'inBundle', true,
 		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/jools/sha1.js',
-		'inBundle', true
 	),
 	resource.create(
 		'filePath', 'src/jion/path.js',
@@ -768,6 +768,10 @@ module.exports =
 	resource.create(
 		'filePath', 'src/user/creds.js',
 		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/user/passhash.js',
 		'inBundle', true
 	),
 	resource.create(
