@@ -24,31 +24,32 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'net_channel',
+	return{
+		id : 'net_channel',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment :
-							'the channels path in data tree',
-						type :
-							'jion_path'
-					},
-				_fifo :
-					{
-						comment :
-							'the fifo of requests',
-						type :
-							'net_requestWrapRay',
-						defaultValue :
-							'net_requestWrapRay.create( )'
-					}
+				comment : 'the channels path in data tree',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			_fifo :
+			{
+				comment : 'the fifo of requests',
+				type : 'net_requestWrapRay',
+				defaultValue : 'net_requestWrapRay.create( )'
+			}
+		},
+		init : [ ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

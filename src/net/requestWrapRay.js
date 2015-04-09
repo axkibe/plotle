@@ -15,12 +15,18 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'net_requestWrapRay',
-		ray :
-			[ 'net_requestWrap' ]
+	return{
+		id : 'net_requestWrapRay',
+		ray : [ 'net_requestWrap' ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

@@ -1,18 +1,19 @@
 /*
-| The creation disc.
+| The disc panel.
 */
 
 
+/*
+| Export
+*/
 var
-	action_createGeneric,
-	action_createRelation,
-	disc_createDisc,
 	disc_disc,
+	disc_mainDisc,
+	change_shrink,
 	euclid_display,
 	euclid_view,
 	jools,
 	root;
-
 
 /*
 | Capsule
@@ -26,8 +27,8 @@ var
 */
 if( JION )
 {
-	return{
-		id : 'disc_createDisc',
+	return {
+		id : 'disc_mainDisc',
 		attributes :
 		{
 			access :
@@ -81,38 +82,52 @@ if( JION )
 			{
 				comment : 'reference to current space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'undefined',
-				assign : ''
+				defaultValue : 'undefined'
 			},
 			user :
 			{
 				comment : 'currently logged in user',
 				type : 'user_creds',
-				defaultValue : 'undefined',
-				assign : ''
+				defaultValue : 'undefined'
 			},
 			view :
 			{
 				comment : 'the current view',
 				type : 'euclid_view',
 				// prepare : 'view && view.sizeOnly', FIXME
-				prepare : 'view ? view.sizeOnly : view',
+				prepare : 'view ? view.sizeOnly : undefined',
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit', 'twigDup' ],
-		twig : require( '../typemaps/formWidgets' )
+		init :
+			[ 'inherit', 'twigDup' ],
+		twig :
+			[
+				'widget_button',
+				'widget_checkbox',
+				'widget_input',
+				'widget_label'
+			]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 
 var
 	prototype;
 
-prototype = disc_createDisc.prototype;
+prototype = disc_mainDisc. prototype;
+
 
 /*
-| Initializes the create disc.
+| Initializes the main disc.
 */
 prototype._init =
 	function(
@@ -123,11 +138,12 @@ prototype._init =
 	var
 		r,
 		rZ,
-		ranks,
+		text,
 		twig,
+		visible,
 		wname;
 
-	// FUTURE remove
+	// FIXME remove
 	if( !this.path )
 	{
 		return;
@@ -135,40 +151,111 @@ prototype._init =
 
 	disc_disc._init.call( this, inherit );
 
-	twig =
-		twigDup
-		? this.twig
-		: jools.copy( this.twig );
-
-	ranks = this.ranks;
+	if( !twigDup )
+	{
+		twig = jools.copy( this.twig );
+	}
 
 	for(
-		r = 0, rZ = ranks.length;
+		r = 0, rZ = this.length;
 		r < rZ;
 		r++
 	)
 	{
-		wname = ranks[ r ];
+		wname = this.getKey( r );
+
+		text = pass;
+
+		visible = pass;
+
+		switch( wname )
+		{
+			case 'login' :
+
+				visible = true;
+
+				text =
+					!this.user || this.user.isVisitor
+					? 'log\nin'
+					: 'log\nout';
+
+				break;
+
+			case 'remove' :
+
+				visible =
+					!!(
+						this.access === 'rw'
+						&& this.mark
+						&& this.mark.itemPath
+					);
+
+				break;
+
+			case 'create' :
+
+				visible =
+					this.access === 'rw'
+					&& !!this.spaceRef;
+
+				break;
+
+			case 'signUp' :
+
+				visible = this.user ? this.user.isVisitor : true;
+
+				break;
+
+			case 'space' :
+
+				if( this.spaceRef )
+				{
+					text = this.spaceRef.fullname;
+
+					visible = true;
+				}
+				else
+				{
+					visible = false;
+				}
+
+				break;
+
+			case 'user' :
+
+				text = this.user ? this.user.name : '';
+
+				visible = true;
+
+				break;
+
+			default :
+
+				visible = true;
+
+				break;
+		}
 
 		twig[ wname ] =
 			twig[ wname ].create(
-				'path',
-					 twig[ wname ].path
-					 ? pass
-					 : this.path.append( 'twig' ).append( wname ),
-				'superFrame', this.frame.zeropnw,
 				'hover', this.hover,
-				'down',
-					disc_createDisc._isActiveButton( this.action, wname )
+				'down', this.mode === wname,
+				'path',
+					twig[ wname ].path
+					? pass
+					: this.path.append( 'twig' ).append( wname ),
+				'superFrame', this.frame.zeropnw,
+				'text', text,
+				'visible', visible
 			);
 	}
-
-	this.twig = twig;
 
 /**/if( FREEZE )
 /**/{
 /**/	Object.freeze( twig );
 /**/}
+
+	this.twig = twig;
 };
 
 
@@ -181,9 +268,12 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			display;
+			display,
+			r,
+			rZ;
 
 		display =
+			// FIXME remove style
 			euclid_display.create(
 				'width', this.style.width,
 				'height', this.style.height
@@ -192,7 +282,7 @@ jools.lazyValue(
 		display.fill( this.fill, this.silhoutte, euclid_view.proper );
 
 		for(
-			var r = 0, rZ = this.ranks.length;
+			r = 0, rZ = this.length;
 			r < rZ;
 			r++
 		)
@@ -217,59 +307,50 @@ prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName,
+		discname;
+
+	discname = path.get( 2 );
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
+/**/	if( discname !== this.reflectName )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
-	switch( buttonName )
+	if(
+		buttonName === 'login'
+		&& this.user && !this.user.isVisitor
+	)
 	{
-		case 'createLabel' :
+		root.logout( );
 
-			root.create(
-				'action', action_createGeneric.create( 'itemType', 'label' )
-			);
-
-			return;
-
-		case 'createNote' :
-
-			root.create(
-				'action', action_createGeneric.create( 'itemType', 'note' )
-			);
-
-			return;
-
-		case 'createPortal' :
-
-			root.create(
-				'action', action_createGeneric.create( 'itemType', 'portal' )
-			);
-
-			return;
-
-		case 'createRelation' :
-
-			root.create(
-				'action',
-					action_createRelation.create( 'relationState', 'start' )
-			);
-
-			return;
-
-		default :
-
-			throw new Error( );
+		return;
 	}
 
+	if( buttonName === 'normal' )
+	{
+		root.showHome( );
+	}
+	else if( buttonName === 'remove' )
+	{
+		root.alter(
+			change_shrink.create(
+				'path', this.mark.itemPath.chop,
+				'prev', root.space.getPath( this.mark.itemPath.chop ),
+				'rank', root.space.rankOf( this.mark.itemPath.get( 2 ) )
+			)
+		);
+	}
+	else
+	{
+		root.create( 'mode', buttonName, 'action', undefined );
+	}
 };
 
 
@@ -283,8 +364,7 @@ prototype.draw =
 {
 	display.drawImage(
 		'image', this._display,
-		'x', 0,
-		'y', jools.half( this.view.height - this.style.height )
+		'pnw', this.frame.pnw
 	);
 };
 
@@ -302,7 +382,9 @@ prototype.pointingHover =
 	var
 		display,
 		pp,
-		reply;
+		r,
+		reply,
+		rZ;
 
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
@@ -310,19 +392,20 @@ prototype.pointingHover =
 		return;
 	}
 
-	display = this._display;
+	display = this._display,
 
 	pp = p.sub( this.frame.pnw );
 
-	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
+	if(
+		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
+	)
 	{
 		return;
 	}
 
-	// it's on the disc
+	// this is on the disc
 	for(
-		var r = 0, rZ = this.ranks.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
@@ -336,11 +419,13 @@ prototype.pointingHover =
 			return reply;
 		}
 	}
+
+	return;
 };
 
 
 /*
-| Checks if the user clicked something on the panel.
+| Checks if the user clicked something on the panel
 */
 prototype.click =
 	function(
@@ -352,7 +437,9 @@ prototype.click =
 	var
 		display,
 		pp,
-		reply;
+		r,
+		reply,
+		rZ;
 
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
@@ -360,26 +447,25 @@ prototype.click =
 		return;
 	}
 
-	display = this._display,
+	display = this._display;
 
 	pp = p.sub( this.frame.pnw );
 
-	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
+	if(
+		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
+	)
 	{
 		return;
 	}
 
 	// this is on the disc
 	for(
-		var r = 0, rZ = this.ranks.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		reply =
-			this.atRank( r )
-			.click( pp, shift, ctrl );
+		reply = this.atRank( r ).click( pp, shift, ctrl );
 
 		if( reply )
 		{
@@ -399,64 +485,7 @@ prototype.input =
 		// text
 	)
 {
-	return;
-};
-
-
-/*
-| Cycles the focus
-*/
-prototype.cycleFocus =
-	function(
-		// dir
-	)
-{
-	throw new Error( );
-};
-
-
-/*
-| User is pressing a special key.
-*/
-prototype.specialKey =
-	function(
-	//	key,
-	//	shift,
-	//	ctrl
-	)
-{
-	// not implemented
-};
-
-
-/*
-| Start of a dragging operation.
-*/
-disc_createDisc.prototype.dragStart =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
-
-	if(
-		!this._display.withinSketch(
-			this.silhoutte,
-			euclid_view.proper,
-			p.sub( this.frame.pnw )
-		)
-	)
-	{
-		return;
-	}
-
-	return true;
+	// nothing
 };
 
 
@@ -493,60 +522,47 @@ prototype.mousewheel =
 
 
 /*
-| Returns true if the button called 'wname'
-| should be highlighted for current 'action'
+| User is pressing a special key.
 */
-disc_createDisc._isActiveButton =
+prototype.specialKey =
 	function(
-		action,  // the action
-		wname    // the widget name
+		// key,
+		// shift,
+		// ctrl
 	)
 {
-	if( !action )
+	// nothing
+};
+
+
+/*
+| Start of a dragging operation.
+*/
+prototype.dragStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if( !this.frame.within( p ) )
 	{
-		return false;
+		return;
 	}
 
-	switch( action.reflect )
+	if(
+		!this._display.withinSketch(
+			this.silhoutte,
+			euclid_view.proper,
+			p.sub( this.frame.pnw )
+		)
+	)
 	{
-		case 'action_createGeneric' :
-
-			switch( action.itemType )
-			{
-				case 'note' :
-
-					return wname === 'createNote';
-
-				case 'label' :
-
-					return wname === 'createLabel';
-
-				case 'portal' :
-
-					return wname === 'createPortal';
-
-				default :
-
-					return false;
-			}
-
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'invalid execution point reached'
-/**/			);
-/**/		}
-
-			break;
-
-		case 'action_createRelation' :
-
-			return wname === 'createRelation';
-
-		default :
-
-			return false;
+		return;
 	}
+
+	return true;
 };
 
 

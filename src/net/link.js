@@ -31,51 +31,64 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'net_link',
+	return{
+		id : 'net_link',
 		attributes :
+		{
+			spaceRef :
 			{
-				spaceRef :
-					{
-						comment : 'reference to the current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'undefined'
-					},
-				user :
-					{
-						comment : 'currently logged in user',
-						type : 'user_creds',
-						defaultValue : 'undefined'
-					},
-				_outbox :
-					{
-						comment : 'changes to be send to the server',
-						type : 'change_wrapRay',
-						defaultValue : 'undefined'
-					},
-				_postbox :
-					{
-						comment : 'changes that are currently on the way',
-						type : 'change_wrapRay',
-						defaultValue : 'undefined'
-					},
-				_rSeq :
-					{
-						comment : 'the remote sequence number',
-						type : 'integer',
-						defaultValue : 'undefined'
-					}
+				comment : 'reference to the current space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'undefined'
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'undefined'
+			},
+			_outbox :
+			{
+				comment : 'changes to be send to the server',
+				type : 'change_wrapRay',
+				defaultValue : 'undefined'
+			},
+			_postbox :
+			{
+				comment : 'changes that are currently on the way',
+				type : 'change_wrapRay',
+				defaultValue : 'undefined'
+			},
+			_rSeq :
+			{
+				comment : 'the remote sequence number',
+				type : 'integer',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = net_link.prototype;
 
 
 /*
 | Aquires a space from the server
 | and starts receiving updates for it.
 */
-net_link.prototype.acquireSpace =
+prototype.acquireSpace =
 	function(
 		spaceRef,
 		createMissing
@@ -101,7 +114,7 @@ net_link.prototype.acquireSpace =
 /*
 | Alters the tree.
 */
-net_link.prototype.alter =
+prototype.alter =
 	function(
 		changeWrap // the changeWrap to apply to tree
 	)
@@ -136,7 +149,7 @@ net_link.prototype.alter =
 /*
 | Checks with server if user creds are valid.
 */
-net_link.prototype.auth =
+prototype.auth =
 	function(
 		user
 	)
@@ -151,7 +164,7 @@ net_link.prototype.auth =
 /*
 | Tries to registers a new user.
 */
-net_link.prototype.register =
+prototype.register =
 	function(
 		user,
 		mail,
@@ -172,7 +185,7 @@ net_link.prototype.register =
 /*
 | A space has been acquired.
 */
-net_link.prototype._onAcquireSpace =
+prototype._onAcquireSpace =
 	function(
 		request,
 		reply
@@ -232,7 +245,7 @@ net_link.prototype._onAcquireSpace =
 /*
 | Received an auth reply.
 */
-net_link.prototype._onAuth =
+prototype._onAuth =
 	function(
 		request,
 		reply
@@ -254,7 +267,7 @@ net_link.prototype._onAuth =
 /*
 | Received a register reply.
 */
-net_link.prototype._onRegister =
+prototype._onRegister =
 	function(
 		request,
 		reply
@@ -277,7 +290,7 @@ net_link.prototype._onRegister =
 /*
 | Sends the stored changes to server.
 */
-net_link.prototype._sendChanges =
+prototype._sendChanges =
 	function( )
 {
 	var
@@ -328,7 +341,7 @@ net_link.prototype._sendChanges =
 /*
 | Received a reply of a sendChanges request.
 */
-net_link.prototype._onSendChanges =
+prototype._onSendChanges =
 	function(
 		request,
 		reply
@@ -344,7 +357,7 @@ net_link.prototype._onSendChanges =
 /*
 | Received an update.
 */
-net_link.prototype._onUpdate =
+prototype._onUpdate =
 	function(
 		request,
 		reply
@@ -485,7 +498,7 @@ net_link.prototype._onUpdate =
 /*
 | Sends an update request to the server and computes its answer.
 */
-net_link.prototype._update =
+prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(

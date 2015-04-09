@@ -16,21 +16,25 @@
 if( JION )
 {
 	return {
-		id :
-			'net_ajax',
+		id : 'net_ajax',
 		attributes :
+		{
+			'path' :
 			{
-				'path' :
-				{
-					comment :
-						'the ajax path',
-					type :
-						'jion_path'
-				}
-			},
-		twig :
-			[ 'net_channel' ]
+				comment : 'the ajax path',
+				type : 'jion_path'
+			}
+		},
+		twig : [ 'net_channel' ]
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

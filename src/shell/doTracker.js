@@ -42,6 +42,20 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = shell_doTracker.prototype;
+
+
 /*
 | Flushes the stacks.
 */
@@ -64,7 +78,7 @@ shell_doTracker.flush =
 | Reporting the doTracker something has been altered.
 | It will track it on the undo stack.
 */
-shell_doTracker.prototype.track =
+prototype.track =
 	function(
 		changeWrap
 	)
@@ -99,7 +113,7 @@ shell_doTracker.prototype.track =
 | now enriched with sequence ids as well as genuine updates
 | from others.
 */
-shell_doTracker.prototype.update =
+prototype.update =
 	function(
 		changeWrapRay
 	)
@@ -185,7 +199,7 @@ shell_doTracker.prototype.update =
 /*
 | Reverts actions from the undo stack.
 */
-shell_doTracker.prototype.undo =
+prototype.undo =
 	function( )
 {
 	var
@@ -228,7 +242,7 @@ shell_doTracker.prototype.undo =
 /*
 | Reverts undos from the redo stack.
 */
-shell_doTracker.prototype.redo =
+prototype.redo =
 	function( )
 {
 	var

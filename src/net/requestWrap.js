@@ -56,12 +56,26 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = net_requestWrap.prototype;
+
+
 /*
 | Aborts the request if it is active.
 |
 | Returns true if the request has been aborted.
 */
-net_requestWrap.prototype.abort =
+prototype.abort =
 	function( )
 {
 	if( this._xhr )
@@ -138,7 +152,7 @@ onReply =
 /*
 | Sends the wrapped request.
 */
-net_requestWrap.prototype.send =
+prototype.send =
 	function( )
 {
 	var

@@ -459,12 +459,12 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/disc/createdisc.js',
+		'filePath', 'src/disc/createDisc.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/disc/maindisc.js',
+		'filePath', 'src/disc/mainDisc.js',
 		'hasJion', true,
 		'inBundle', true
 	),
