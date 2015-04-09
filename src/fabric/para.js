@@ -94,14 +94,13 @@ var
 	prototype;
 
 
-/*
-| Node includes.
-*/
-if( SERVER )
+if( NODE )
 {
-	fabric_para = require( 'jion' ).this( module );
+	fabric_para = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
+
+	// FIXME return?
 }
 
 

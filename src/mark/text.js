@@ -43,9 +43,9 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
-	mark_text = require( 'jion' ).this( module );
+	mark_text = require( 'jion' ).this( module, 'source' );
 }
 
 

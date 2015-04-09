@@ -112,11 +112,9 @@ var
 */
 if( SERVER )
 {
-	fabric_relation = require( 'jion' ).this( module );
+	fabric_relation = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
-
-	fabric_label = require( './label' );
 
 	fabric_relation.prototype._init = function( ) { };
 

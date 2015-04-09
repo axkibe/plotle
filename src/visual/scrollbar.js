@@ -28,57 +28,61 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'visual_scrollbar',
+	return{
+		id : 'visual_scrollbar',
 		attributes :
+		{
+			pos :
 			{
-				pos :
-					{
-						comment :
-							'position of the scrollbar',
-						type :
-							'number'
-					},
-				aperture :
-					{
-						comment :
-							'the size of the bar',
-						type :
-							'number'
-					},
-				max :
-					{
-						comment :
-							'maximum position',
-						type :
-							'number'
-					},
-				pnw :
-					{
-						comment :
-							'point in north west',
-						type :
-							'euclid_point'
-					},
-				size :
-					{
-						comment :
-							'size',
-						type :
-							'number'
-					}
+				comment : 'position of the scrollbar',
+				type : 'number'
 			},
-		init :
-			[ ]
+			aperture :
+			{
+				comment :
+					'the size of the bar',
+				type :
+					'number'
+			},
+			max :
+			{
+				comment : 'maximum position',
+				type : 'number'
+			},
+			pnw :
+			{
+				comment : 'point in north west',
+				type : 'euclid_point'
+			},
+			size :
+			{
+				comment : 'size',
+				type : 'number'
+			}
+		},
+		init : [ ]
 	};
 }
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = visual_scrollbar.prototype;
 
 
 /*
 | Initializer.
 */
-visual_scrollbar.prototype._init =
+prototype._init =
 	function( )
 {
 	if( this.max - this.aperture > 0 )
@@ -95,7 +99,7 @@ visual_scrollbar.prototype._init =
 /*
 | Draws the scrollbar.
 */
-visual_scrollbar.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view
@@ -115,7 +119,7 @@ visual_scrollbar.prototype.draw =
 |
 | FIXME use fixPoints
 */
-visual_scrollbar.prototype.getArea =
+prototype.getArea =
 	function(
 		view
 	)
@@ -163,7 +167,7 @@ visual_scrollbar.prototype.getArea =
 /*
 | Returns true if p is within the scrollbar.
 */
-visual_scrollbar.prototype.within =
+prototype.within =
 	function(
 		view,
 		p
@@ -192,7 +196,7 @@ visual_scrollbar.prototype.within =
 /*
 | Returns the value of pos change for d pixels in the current zone.
 */
-visual_scrollbar.prototype.scale =
+prototype.scale =
 	function(
 		d
 	)

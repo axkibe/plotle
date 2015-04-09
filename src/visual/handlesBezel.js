@@ -26,58 +26,60 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'visual_handlesBezel',
+	return{
+		id : 'visual_handlesBezel',
 		attributes :
+		{
+			handles :
 			{
-				handles :
-					{
-						comment :
-							'list of available handle directions',
-						type :
-							'protean' // FUTURE jionize
-					},
-				sbary :
-					{
-						comment :
-							'a possible y-scrollbar',
-						type :
-							'visual_scrollbar',
-						defaultValue :
-							'undefined'
-					},
-				silhoutte :
-					{
-						comment :
-							'a possible y-scrollbar',
-						type :
-							'protean' // FIXME ->silhoutte
-					},
-				view :
-					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view'
-					},
-				zone :
-					{
-						comment :
-							'the items zone',
-						type :
-							'euclid_rect'
-					}
+				comment : 'list of available handle directions',
+				type : 'protean' // FUTURE jionize
+			},
+			sbary :
+			{
+				comment : 'a possible y-scrollbar',
+				type : 'visual_scrollbar',
+				defaultValue : 'undefined'
+			},
+			silhoutte :
+			{
+				comment : 'a possible y-scrollbar',
+				type : 'protean' // FUTURE ->silhoutte
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view'
+			},
+			zone :
+			{
+				comment : 'the items zone',
+				type : 'euclid_rect'
 			}
+		}
 	};
 }
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = visual_handlesBezel.prototype;
 
 
 /*
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
 */
-visual_handlesBezel.prototype.checkHandles =
+prototype.checkHandles =
 	function(
 		p
 	)
@@ -132,7 +134,7 @@ visual_handlesBezel.prototype.checkHandles =
 | FUTURE use fixPoints (atually replace it with new bezels)
 */
 jools.lazyValue(
-	visual_handlesBezel.prototype,
+	prototype,
 	'_handles',
 	function( )
 	{
@@ -346,7 +348,7 @@ jools.lazyValue(
 /*
 | Draws the handles of an item ( resize, itemmenu )
 */
-visual_handlesBezel.prototype.drawHandles =
+prototype.drawHandles =
 	function(
 		display
 	)

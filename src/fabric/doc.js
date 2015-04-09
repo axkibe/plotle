@@ -84,10 +84,6 @@ if( JION )
 }
 
 
-var
-	prototype;
-
-
 /*
 | Node includes.
 */
@@ -95,9 +91,12 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	fabric_doc = require( 'jion' ).this( module );
+	fabric_doc = require( 'jion' ).this( module, 'source' );
 }
 
+
+var
+	prototype;
 
 prototype = fabric_doc.prototype;
 

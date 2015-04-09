@@ -38,7 +38,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	mark_widget = require( 'jion' ).this( module );
+	mark_widget = require( 'jion' ).this( module, 'source' );
 }
 
 
@@ -46,7 +46,6 @@ var
 	prototype;
 
 prototype = mark_widget.prototype;
-
 
 
 /*

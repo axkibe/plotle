@@ -457,14 +457,12 @@ prototype.prepareInventory =
 		if( resource.hasJion )
 		{
 			// XXX
-			/*
 			that = require( serverDir + resource.filePath );
 
 			if( !that.source )
 			{
 				throw new Error( 'XXX AArgh: ' + resource.filePath );
 			}
-			*/
 
 			root.create(
 				'inventory',

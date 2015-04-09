@@ -88,10 +88,24 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	protoype;
+
+prototype = form_jockey.prototype;
+
+
 /*
 | Initializer.
 */
-form_jockey.prototype._init =
+prototype._init =
 	function(
 		twigDup
 	)
@@ -172,7 +186,7 @@ form_jockey.concernsMark =
 /*
 | Returns the appropriate form.
 */
-form_jockey.prototype.get =
+prototype.get =
 	function(
 		name
 	)
@@ -184,7 +198,7 @@ form_jockey.prototype.get =
 /*
 | Cycles the focus in a form
 */
-form_jockey.prototype.cycleFocus =
+prototype.cycleFocus =
 	function(
 		formName,
 		dir
@@ -206,7 +220,7 @@ form_jockey.prototype.cycleFocus =
 /*
 | A button has been pushed.
 */
-form_jockey.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 	)

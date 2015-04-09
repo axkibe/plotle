@@ -75,6 +75,14 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 var
 	prototype;
 

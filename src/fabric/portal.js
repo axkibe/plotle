@@ -107,7 +107,7 @@ var
 */
 if( SERVER )
 {
-	fabric_portal = require( 'jion' ).this( module );
+	fabric_portal = require( 'jion' ).this( module, 'source' );
 
 	fabric_portal.prototype._init = function( ) { };
 

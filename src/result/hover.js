@@ -18,24 +18,31 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'result_hover',
+	return{
+		id : 'result_hover',
 		attributes :
+		{
+			cursor :
 			{
-				cursor :
-					{
-						comment : 'the cursor to display',
-						type : 'string'
-					},
-				path :
-					{
-						comment : 'the path to the thing being hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					}
+				comment : 'the cursor to display',
+				type : 'string'
+			},
+			path :
+			{
+				comment : 'the path to the thing being hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

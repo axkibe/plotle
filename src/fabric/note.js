@@ -110,7 +110,7 @@ var
 */
 if( SERVER )
 {
-	fabric_note = require( 'jion' ).this( module );
+	fabric_note = require( 'jion' ).this( module, 'source' );
 
 	fabric_note.prototype._init = function( ) { };
 

@@ -106,7 +106,7 @@ var
 
 if( SERVER )
 {
-	fabric_space = require( 'jion' ).this( module );
+	fabric_space = require( 'jion' ).this( module, 'source' );
 
 	jion_path = require( '../jion/path' );
 
@@ -141,7 +141,8 @@ fabric_space.concernsMark =
 };
 
 
-if( SERVER )
+// FIXME move upward?
+if( NODE )
 {
 	return;
 }

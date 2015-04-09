@@ -92,7 +92,7 @@ var
 */
 if( SERVER )
 {
-	fabric_label = require( 'jion' ).this( module );
+	fabric_label = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 
