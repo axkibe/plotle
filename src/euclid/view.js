@@ -69,7 +69,7 @@ if( JION )
 */
 if( SERVER )
 {
-	euclid_view = require( 'jion' ).this( module );
+	euclid_view = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 

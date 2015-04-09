@@ -91,10 +91,25 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = widget_label.prototype;
+
+
+
 /*
 | Initializes the widget.
 */
-widget_label.prototype._init =
+prototype._init =
 	function( )
 {
 	this.pos =
@@ -109,7 +124,7 @@ widget_label.prototype._init =
 |
 | FIXME use _display
 */
-widget_label.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -130,7 +145,7 @@ widget_label.prototype.draw =
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-widget_label.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		// p,
 		// shift,
@@ -144,7 +159,7 @@ widget_label.prototype.pointingHover =
 /*
 | User clicked.
 */
-widget_label.prototype.click =
+prototype.click =
 	function(
 		// p,
 		// shift,

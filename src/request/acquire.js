@@ -15,47 +15,36 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'request_acquire',
+	return{
+		id : 'request_acquire',
 		attributes :
+		{
+			createMissing :
 			{
-				createMissing :
-					{
-						comment :
-							'if true the space is to be created if missing',
-						json :
-							true,
-						type :
-							'boolean'
-					},
-				spaceRef :
-					{
-						comment :
-							'reference of the space to acquire',
-						json :
-							true,
-						type :
-							'fabric_spaceRef'
-					},
-				user :
-					{
-						comment :
-							'user requesting the space',
-						json :
-							true,
-						type :
-							'user_creds'
-					}
-
+				comment : 'if true the space is to be created if missing',
+				json : true,
+				type : 'boolean'
+			},
+			spaceRef :
+			{
+				comment : 'reference of the space to acquire',
+				json : true,
+				type : 'fabric_spaceRef'
+			},
+			user :
+			{
+				comment : 'user requesting the space',
+				json : true,
+				type : 'user_creds'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 

@@ -43,6 +43,20 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = icon_normal.prototype;
+
+
 /*
 | Sketches the normal button's icon.
 |
@@ -59,7 +73,7 @@ if( JION )
 |          **
 |           ED
 */
-icon_normal.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -93,7 +107,7 @@ icon_normal.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-icon_normal.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view

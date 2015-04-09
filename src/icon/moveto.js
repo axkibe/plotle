@@ -44,6 +44,20 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = icon_moveto.prototype;
+
+
 /*
 | The moveto button's icon.
 |
@@ -60,7 +74,7 @@ if( JION )
 |      H***I
 |      K***J
 */
-icon_moveto.prototype._init =
+prototype._init =
 	function( )
 {
 	var ap;
@@ -105,7 +119,7 @@ icon_moveto.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-icon_moveto.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view

@@ -47,7 +47,7 @@ var
 
 if( SERVER )
 {
-	fabric_spaceRef = require( 'jion' ).this( module );
+	fabric_spaceRef = require( 'jion' ).this( module, 'source' );
 
 	jools = require( '../jools/jools' );
 }

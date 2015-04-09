@@ -43,6 +43,20 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = icon_remove.prototype;
+
+
 /*
 |  Initializer.
 |
@@ -56,7 +70,7 @@ if( JION )
 |  M**L   J**SE
 |
 */
-icon_remove.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -122,7 +136,7 @@ icon_remove.prototype._init =
 /*
 | Displays the moveto button.
 */
-icon_remove.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view

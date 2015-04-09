@@ -24,24 +24,32 @@ if( JION )
 	return{
 		id : 'design_anchorPoint',
 		attributes :
+		{
+			anchor :
 			{
-				anchor :
-					{
-						comment : 'compass of the anchor',
-						type : 'string'
-					},
-				x :
-					{
-						comment : 'x-distance',
-						type : 'integer'
-					},
-				y :
-					{
-						comment : 'y-distance',
-						type : 'integer'
-					}
+				comment : 'compass of the anchor',
+				type : 'string'
+			},
+			x :
+			{
+				comment : 'x-distance',
+				type : 'integer'
+			},
+			y :
+			{
+				comment : 'y-distance',
+				type : 'integer'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

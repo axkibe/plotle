@@ -15,37 +15,30 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'reply_update',
+	return{
+		id : 'reply_update',
 		attributes :
+		{
+			seq :
 			{
-				seq :
-					{
-						comment :
-							'sequence the update starts at',
-						json :
-							true,
-						type :
-							'integer'
-					},
-				changeWrapRay :
-					{
-						comment :
-							'the changes',
-						json :
-							true,
-						type :
-							'change_wrapRay'
-					}
+				comment : 'sequence the update starts at',
+				json : true,
+				type : 'integer'
+			},
+			changeWrapRay :
+			{
+				comment : 'the changes',
+				json : true,
+				type : 'change_wrapRay'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 

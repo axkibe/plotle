@@ -16,29 +16,24 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'request_auth',
+	return{
+		id : 'request_auth',
 		attributes :
+		{
+			user :
 			{
-				user :
-					{
-						comment :
-							'user creds to be authenticated',
-						json :
-							true,
-						type :
-							'user_creds'
-					}
-
+				comment : 'user creds to be authenticated',
+				json : true,
+				type : 'user_creds'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 

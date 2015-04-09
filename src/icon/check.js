@@ -51,10 +51,24 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = icon_check.prototype;
+
+
 /*
 | Sketches the normal button's icon.
 */
-icon_check.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -80,7 +94,7 @@ icon_check.prototype._init =
 /*
 | Draws the check button on a display.
 */
-icon_check.prototype.draw =
+prototype.draw =
 	function(
 		display,
 		view

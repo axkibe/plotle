@@ -15,7 +15,7 @@
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'reply_register',
 		json : true
 	};
@@ -24,7 +24,7 @@ if( JION )
 
 if( SERVER )
 {
-	require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 

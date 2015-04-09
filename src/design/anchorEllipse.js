@@ -23,19 +23,27 @@ if( JION )
 	return {
 		id : 'design_anchorEllipse',
 		attributes :
+		{
+			pnw :
 			{
-				pnw :
-					{
-						comment : 'point in north-west',
-						type : 'design_anchorPoint'
-					},
-				pse :
-					{
-						comment : 'point in south-east',
-						type : 'design_anchorPoint'
-					}
+				comment : 'point in north-west',
+				type : 'design_anchorPoint'
+			},
+			pse :
+			{
+				comment : 'point in south-east',
+				type : 'design_anchorPoint'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

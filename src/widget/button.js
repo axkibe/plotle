@@ -124,10 +124,24 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = widget_button.prototype;
+
+
 /*
 | Initializes the widget.
 */
-widget_button.prototype._init =
+prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -152,14 +166,14 @@ widget_button.prototype._init =
 /*
 | Buttons are focusable.
 */
-widget_button.prototype.focusable = true;
+prototype.focusable = true;
 
 
 /*
 | The button's display.
 */
 jools.lazyValue(
-	widget_button.prototype,
+	prototype,
 	'_display',
 	function( )
 {
@@ -252,7 +266,7 @@ jools.lazyValue(
 /*
 | Mouse hover.
 */
-widget_button.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p
 	)
@@ -284,7 +298,7 @@ widget_button.prototype.pointingHover =
 /*
 | User clicked.
 */
-widget_button.prototype.click =
+prototype.click =
 	function(
 		p
 		// shift,
@@ -321,7 +335,7 @@ widget_button.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-widget_button.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		owner
@@ -355,7 +369,7 @@ widget_button.prototype.specialKey =
 /*
 | Any normal key for a button having focus triggers a push.
 */
-widget_button.prototype.input =
+prototype.input =
 	function(
 		// text
 	)
@@ -369,7 +383,7 @@ widget_button.prototype.input =
 /*
 | Draws the button.
 */
-widget_button.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -389,7 +403,7 @@ widget_button.prototype.draw =
 /*
 | Stops a ReButton action.
 */
-widget_button.prototype.dragStop =
+prototype.dragStop =
 	function( )
 {
 	root.create( 'action', undefined );

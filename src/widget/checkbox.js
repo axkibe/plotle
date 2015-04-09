@@ -84,10 +84,24 @@ if( JION )
 }
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
+var
+	prototype;
+
+prototype = widget_checkbox.prototype;
+
+
 /*
 | Initializes the widget.
 */
-widget_checkbox.prototype._init =
+prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -106,7 +120,7 @@ widget_checkbox.prototype._init =
 | The check icon of the check box
 */
 jools.lazyValue(
-	widget_checkbox.prototype,
+	prototype,
 	'checkIcon',
 	function( )
 	{
@@ -123,13 +137,13 @@ jools.lazyValue(
 /*
 | CheckBoxes are focusable.
 */
-widget_checkbox.prototype.focusable = true;
+prototype.focusable = true;
 
 
 /*
 | Mouse hover.
 */
-widget_checkbox.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p
 	)
@@ -151,7 +165,7 @@ widget_checkbox.prototype.pointingHover =
 /*
 | checkbox is being changed.
 */
-widget_checkbox.prototype.change =
+prototype.change =
 	function(
 		// shift,
 		// ctrl
@@ -164,7 +178,7 @@ widget_checkbox.prototype.change =
 /*
 | User clicked.
 */
-widget_checkbox.prototype.click =
+prototype.click =
 	function(
 		p
 		// shift,
@@ -192,7 +206,7 @@ widget_checkbox.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-widget_checkbox.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		owner
@@ -229,7 +243,7 @@ widget_checkbox.prototype.specialKey =
 /*
 | Any normal key for a checkbox triggers it to flip
 */
-widget_checkbox.prototype.input =
+prototype.input =
 	function(
 		// text
 	)
@@ -243,7 +257,7 @@ widget_checkbox.prototype.input =
 /*
 | Draws the checkbox.
 */
-widget_checkbox.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)

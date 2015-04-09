@@ -15,28 +15,24 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'reply_error',
+	return{
+		id : 'reply_error',
 		attributes :
+		{
+			message :
 			{
-				message :
-					{
-						comment :
-							'the error message',
-						json :
-							true,
-						type :
-							'string'
-					}
+				comment : 'the error message',
+				json : true,
+				type : 'string'
 			}
+		}
 	};
 }
 
 
 if( SERVER )
 {
-	require( 'jion' ).this( module );
+	require( 'jion' ).this( module, 'source' );
 }
 
 
