@@ -174,7 +174,7 @@ jools.lazyValue(
 	{
 		if( !this.hasJion )
 		{
-			return;
+			throw new Error( );
 		}
 
 		return(

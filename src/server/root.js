@@ -456,12 +456,14 @@ prototype.prepareInventory =
 
 		if( resource.hasJion )
 		{
-			// XXX
 			that = require( serverDir + resource.filePath );
 
 			if( !that.source )
 			{
-				throw new Error( 'XXX AArgh: ' + resource.filePath );
+				throw new Error(
+					'Jion source did not export its source: '
+					+ resource.filePath
+				);
 			}
 
 			root.create(
