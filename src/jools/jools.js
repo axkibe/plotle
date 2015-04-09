@@ -45,26 +45,6 @@ puffed = config.debug.puffed;
 
 
 /*
-| Largest integer value.
-*/
-jools.MAX_INTEGER = 9007199254740992;
-
-
-/*
-| Returns true if o is an integer number
-*/
-jools.isInteger =
-	function( o )
-{
-	return(
-		typeof( o ) === 'number'
-		&&
-		Math.floor( o ) === o
-	);
-};
-
-
-/*
 | Returns true if o is a String
 */
 jools.isString  =

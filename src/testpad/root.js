@@ -14,6 +14,7 @@ var
 	change_wrap,
 	jion_path,
 	jools,
+	math_maxInteger,
 	root,
 	testpad_action,
 	testpad_root;
@@ -657,7 +658,7 @@ testpad_root.prototype.send =
 	root.create(
 		'action', undefined,
 		'cursorAt', cursorAt,
-		'repository', root.repository.create( 'seq', jools.MAX_INTEGER )
+		'repository', root.repository.create( 'seq', math_maxInteger )
 	);
 };
 
@@ -1088,7 +1089,7 @@ testpad_root.prototype.onUpNowButton =
 {
 	root.create(
 		'repository',
-			root.repository.create( 'seq', jools.MAX_INTEGER )
+			root.repository.create( 'seq', math_maxInteger )
 	);
 
 	this.elements.input.focus( );
