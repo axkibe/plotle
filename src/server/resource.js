@@ -165,35 +165,6 @@ resource.prototype._init =
 
 
 /*
-| This resource as generated jion.
-*/
-jools.lazyValue(
-	resource.prototype,
-	'asJion',
-	function( )
-	{
-		if( !this.hasJion )
-		{
-			throw new Error( );
-		}
-
-		return(
-			this.create(
-				'aliases', undefined,
-				'jionSrcPath', this.filePath,
-				'filePath',
-					// FIXME let the jion module worry aabout this
-					'jioncode/'
-					+ this.filePath.replace( /\//g, '-' ),
-				'hasJion', false,
-				'isJion', true
-			)
-		);
-	}
-);
-
-
-/*
 | The file extension
 */
 jools.lazyValue(
