@@ -7,6 +7,7 @@ var
 	change_error,
 	change_split,
 	change_join,
+	jion,
 	jools;
 
 
@@ -61,7 +62,9 @@ var
 */
 if( SERVER )
 {
-	change_join = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	change_join = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
 
@@ -121,12 +124,12 @@ prototype.changeTree =
 
 	text2 = tree.getPath( path2 );
 
-	if( !jools.isString( text ) )
+	if( !jion.isString( text ) )
 	{
 		throw change_error( 'join.path signates no string' );
 	}
 
-	if( !jools.isString( text2 ) )
+	if( !jion.isString( text2 ) )
 	{
 		throw change_error( 'join.path2 signates no string' );
 	}

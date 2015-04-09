@@ -8,6 +8,7 @@ var
 	change_ray,
 	change_split,
 	change_join,
+	jion,
 	jools;
 
 
@@ -60,7 +61,9 @@ var
 */
 if( SERVER )
 {
-	change_split = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	change_split = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
 
@@ -118,7 +121,7 @@ prototype.changeTree =
 
 	text = tree.getPath( path );
 
-	if( !jools.isString( text ) )
+	if( !jion.isString( text ) )
 	{
 		throw change_error( 'split.path signates no string' );
 	}

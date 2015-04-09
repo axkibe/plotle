@@ -15,7 +15,7 @@ var DELAY_ALTER = 5000;
 var DELAY_ACQUIRE = 5000;
 DELAY_ALTER = false;
 DELAY_ACQUIRE = false;
-//Error.stackTraceLimit = 99999;
+Error.stackTraceLimit = 99999;
 
 /*
 | The jion definition.
@@ -110,6 +110,7 @@ var
 	fs,
 	http,
 	isString,
+	jion,
 	jools,
 	mongodb,
 	prototype,
@@ -136,6 +137,8 @@ var
 	util,
 	zlib;
 
+jion = require( 'jion' );
+
 jools = require( '../jools/jools' );
 
 fs = require( 'fs' );
@@ -144,7 +147,7 @@ server_generateJion = require( './generateJion' );
 
 http = require( 'http' );
 
-isString = jools.isString;
+isString = jion.isString;
 
 server_maxAge = require( './maxAge' );
 

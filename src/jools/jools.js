@@ -45,20 +45,6 @@ puffed = config.debug.puffed;
 
 
 /*
-| Returns true if o is a String
-*/
-jools.isString  =
-	function( o )
-{
-	return(
-		typeof( o ) === 'string'
-		||
-		( o instanceof String )
-	);
-};
-
-
-/*
 | Limits value to be between min and max
 */
 jools.limit =

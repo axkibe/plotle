@@ -7,6 +7,7 @@ var
 	change_error,
 	change_insert,
 	change_remove,
+	jion,
 	jools;
 
 
@@ -68,7 +69,9 @@ var
 */
 if( SERVER )
 {
-	change_insert = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	change_insert = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
 
@@ -117,7 +120,7 @@ prototype.changeTree =
 
 	text = tree.getPath( this.path );
 
-	if( !jools.isString( text ) )
+	if( !jion.isString( text ) )
 	{
 		throw change_error( 'insert.path signates no string' );
 	}
