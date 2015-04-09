@@ -92,6 +92,15 @@ var
 	isSpecialKey,
 	noteDocPath;
 
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 noteDocPath =
 	jion_path.empty
 	.append( 'space' ) // FIXME, this isn't needed

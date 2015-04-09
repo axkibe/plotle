@@ -112,6 +112,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
 	require( 'jion' ).this( module, 'source' );
@@ -119,9 +123,6 @@ if( NODE )
 	return;
 }
 
-
-var
-	prototype;
 
 prototype = disc_mainDisc. prototype;
 

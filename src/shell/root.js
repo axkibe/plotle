@@ -191,6 +191,14 @@ var
 	prototype;
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 /**/if( CHECK )
 /**/{
 /**/	modes =

@@ -15,34 +15,35 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'action_scrolly',
+	return{
+		id : 'action_scrolly',
 		attributes :
+		{
+			itemPath :
 			{
-				itemPath :
-					{
-						comment :
-							'path to the item being scrolled',
-						type :
-							'jion_path'
-					},
-				start :
-					{
-						comment :
-							'mouse down point on start of scrolling',
-						type :
-							'euclid_point'
-					},
-				startPos :
-					{
-						comment :
-							'position of the scrollbar on start of scrolling',
-						type :
-							'number'
-					}
+				comment : 'path to the item being scrolled',
+				type : 'jion_path'
+			},
+			start :
+			{
+				comment : 'mouse down point on start of scrolling',
+				type : 'euclid_point'
+			},
+			startPos :
+			{
+				comment : 'position of the scrollbar on start of scrolling',
+				type : 'number'
 			}
+		}
 	};
+}
+
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
 }
 
 

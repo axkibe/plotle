@@ -58,6 +58,15 @@ if( JION )
 var
 	nextcid;
 
+
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 nextcid = 1001;
 
 /*
