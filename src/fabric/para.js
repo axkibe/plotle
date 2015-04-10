@@ -14,7 +14,7 @@ var
 	flow_block,
 	flow_line,
 	flow_token,
-	jools,
+	jion,
 	mark_caret,
 	mark_range,
 	mark_text,
@@ -97,9 +97,9 @@ var
 
 if( NODE )
 {
-	fabric_para = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
 
-	jools = require( '../jools/jools' );
+	fabric_para = jion.this( module, 'source' );
 
 	// FIXME return?
 }
@@ -127,14 +127,14 @@ prototype._init =
 		&& inherit.view.zoom === this.view.zoom
 	)
 	{
-		if( jools.hasLazyValueSet( inherit, 'flow' ) )
+		if( jion.hasLazyValueSet( inherit, 'flow' ) )
 		{
-			jools.aheadValue( this, 'flow', inherit.flow );
+			jion.aheadValue( this, 'flow', inherit.flow );
 		}
 
-		if( jools.hasLazyValueSet( inherit, '_display' ) )
+		if( jion.hasLazyValueSet( inherit, '_display' ) )
 		{
-			jools.aheadValue( this, '_display', inherit._display );
+			jion.aheadValue( this, '_display', inherit._display );
 		}
 	}
 };
@@ -176,7 +176,7 @@ fabric_para.concernsMark =
 | Shortcut to the para's key.
 | It is the last path entry.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'key',
 	function( )
@@ -189,7 +189,7 @@ jools.lazyValue(
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
@@ -219,7 +219,7 @@ jools.lazyValue(
 /*
 | The para's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
@@ -350,7 +350,7 @@ prototype._drawCaret =
 /*
 | The font for this para.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'font',
 	function( )
@@ -363,7 +363,7 @@ jools.lazyValue(
 /*
 | The para's flow, the position of all chunks.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'flow',
 	function( )
@@ -491,7 +491,7 @@ jools.lazyValue(
 /*
 | The height of the para.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'height',
 	function( )
@@ -893,7 +893,7 @@ prototype.specialKey =
 /*
 | The path to the .text attribute
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'textPath',
 	function( )

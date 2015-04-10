@@ -4,7 +4,7 @@
 
 
 var
-	jools,
+	jion,
 	session_uid,
 	user_creds;
 
@@ -46,14 +46,14 @@ if( SERVER )
 {
 	user_creds = require( 'jion' ).this( module, 'source' );
 
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 }
 
 
 /*
 | Returns true if this user is a visitor
 */
-jools.lazyValue(
+jion.lazyValue(
 	user_creds.prototype,
 	'isVisitor',
 	function( )

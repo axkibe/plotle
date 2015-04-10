@@ -17,8 +17,8 @@ var
 	fabric_para,
 	fabric_space,
 	gruga_relation,
+	jion,
 	jion_path,
-	jools,
 	mark_caret,
 	result_hover,
 	root,
@@ -172,7 +172,7 @@ prototype._init =
 	twig =
 		twigDup
 		? this.twig
-		: jools.copy( this.twig );
+		: jion.copy( this.twig );
 
 	for( k in twig )
 	{
@@ -305,7 +305,7 @@ prototype.atRank =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )

@@ -12,7 +12,7 @@ var
 	fabric_item,
 	fabric_label,
 	gruga_label,
-	jools,
+	jion,
 	root,
 	theme,
 	visual_handlesBezel;
@@ -90,11 +90,11 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
-	fabric_label = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
 
-	jools = require( '../jools/jools' );
+	fabric_label = jion.this( module, 'source' );
 
 	fabric_label.prototype._init = function( ) { };
 
@@ -172,7 +172,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	fabric_docItem.attentionCenter
@@ -274,7 +274,7 @@ prototype.draw =
 /*
 | Returns a handles jion.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'handlesBezel',
 	function( )
@@ -344,7 +344,7 @@ prototype.positioning = 'pnw/fontsize';
 /*
 | The item's silhoutte.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
@@ -380,7 +380,7 @@ prototype.scrollPage = function( ){ };
 /*
 | The items silhoutte anchored at zero.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
@@ -408,7 +408,7 @@ jools.lazyValue(
 /*
 | The label's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

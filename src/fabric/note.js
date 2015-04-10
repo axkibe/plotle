@@ -14,7 +14,7 @@ var
 	fabric_item,
 	fabric_note,
 	gruga_note,
-	jools,
+	jion,
 	math_half,
 	root,
 	system,
@@ -230,10 +230,10 @@ prototype._init =
 		inherit
 		&& inherit.alikeIgnoringView( this )
 		&& inherit.view.zoom === this.view.zoom
-		&& jools.hasLazyValueSet( inherit, '_display' )
+		&& jion.hasLazyValueSet( inherit, '_display' )
 	)
 	{
-		jools.aheadValue( this, '_display', inherit._display );
+		jion.aheadValue( this, '_display', inherit._display );
 	}
 };
 
@@ -241,7 +241,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	fabric_docItem.attentionCenter
@@ -352,7 +352,7 @@ prototype.dragStop =
 /*
 | Returns a handles jion.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'handlesBezel',
 	function( )
@@ -519,7 +519,7 @@ prototype.scrollMarkIntoView =
 /*
 | The notes silhoutte.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
@@ -553,7 +553,7 @@ prototype.specialKey = fabric_docItem.specialKey;
 /*
 | The notes silhoutte anchored at zero.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
@@ -585,7 +585,7 @@ jools.lazyValue(
 /*
 | The notes display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

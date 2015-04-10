@@ -7,7 +7,7 @@ var
 	euclid_color,
 	euclid_view,
 	icon_check,
-	jools,
+	jion,
 	result_hover,
 	root,
 	widget_checkbox;
@@ -119,7 +119,7 @@ prototype._init =
 /*
 | The check icon of the check box
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'checkIcon',
 	function( )

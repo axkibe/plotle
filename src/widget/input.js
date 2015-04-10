@@ -16,7 +16,7 @@ var
 	euclid_point,
 	euclid_roundRect,
 	euclid_view,
-	jools,
+	jion,
 	mark_caret,
 	result_hover,
 	root,
@@ -264,7 +264,7 @@ prototype.maskKern =
 | Returns an array of ellipses
 | representing the password mask.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_passMask',
 	function( )
@@ -335,7 +335,7 @@ jools.lazyValue(
 /*
 | Returns the display for the input field.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
@@ -931,7 +931,7 @@ prototype.click =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )

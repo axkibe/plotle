@@ -8,7 +8,7 @@ var
 	euclid_shape,
 	fabric_doc,
 	gruga_selection,
-	jools,
+	jion,
 	math_half,
 	root,
 	shapeSection_start,
@@ -85,14 +85,11 @@ if( JION )
 }
 
 
-/*
-| Node includes.
-*/
-if( SERVER )
+if( NODE )
 {
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 
-	fabric_doc = require( 'jion' ).this( module, 'source' );
+	fabric_doc = jion.this( module, 'source' );
 }
 
 
@@ -129,7 +126,7 @@ prototype._init =
 	twig =
 		twigDup
 		? this.twig
-		: jools.copy( this.twig );
+		: jion.copy( this.twig );
 
 	twigPath = this.path && this.path.append( 'twig' );
 
@@ -159,7 +156,7 @@ prototype._init =
 /*
 | Returns the attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
@@ -700,7 +697,7 @@ prototype.draw =
 |
 | FIXME make this a twig.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'paraPNWs',
 	function( )
@@ -753,7 +750,7 @@ jools.lazyValue(
 /*
 | The height of the document.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'height',
 	function( )
@@ -814,7 +811,7 @@ prototype.getPNW =
 /*
 | The width actually used by the document.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'widthUsed',
 	function( )
@@ -847,7 +844,7 @@ jools.lazyValue(
 /*
 | The default font for the document.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'font',
 	function( )

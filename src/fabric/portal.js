@@ -20,7 +20,7 @@ var
 	gruga_portal,
 	gruga_portalButtonFacets,
 	gruga_portalInputFacets,
-	jools,
+	jion,
 	math_half,
 	mark_caret,
 	mark_item,
@@ -222,7 +222,7 @@ isSection =
 /*
 | Returns the attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
@@ -524,7 +524,7 @@ prototype.input =
 /*
 | Returns a handles jion.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'handlesBezel',
 	function( )
@@ -633,7 +633,7 @@ prototype.positioning = 'zone';
 /*
 | The portal's silhoutte.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
@@ -651,7 +651,7 @@ jools.lazyValue(
 /*
 | The portal's silhoutte at zero.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
@@ -725,7 +725,7 @@ prototype._locateOffset =
 |
 | FUTURE make this the primer data.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'spaceRef',
 	function( )
@@ -1262,7 +1262,7 @@ prototype._keyEnter =
 /*
 | Prepares the moveTo button.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_moveToButton',
 	function( )
@@ -1388,7 +1388,7 @@ prototype._prepareField =
 /*
 | Prepares the spaceUser field.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_fieldSpaceUser',
 	function( )
@@ -1401,7 +1401,7 @@ jools.lazyValue(
 /*
 | Prepares the spaceTag field.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_fieldSpaceTag',
 	function( )
@@ -1479,7 +1479,7 @@ prototype._getOffsetAt =
 /*
 | Creates the portal's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

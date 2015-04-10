@@ -17,8 +17,8 @@ var
 	fabric_relation,
 	gruga_label,
 	gruga_relation,
+	jion,
 	jion_path,
-	jools,
 	mark_caret,
 	root,
 	session_uid,
@@ -113,9 +113,9 @@ var
 */
 if( SERVER )
 {
-	fabric_relation = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
 
-	jools = require( '../jools/jools' );
+	fabric_relation = jion.this( module, 'source' );
 
 	fabric_relation.prototype._init = function( ) { };
 
@@ -216,11 +216,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
-	prototype,
-	'attentionCenter',
-	fabric_docItem.attentionCenter
-);
+jion.lazyValue( prototype, 'attentionCenter', fabric_docItem.attentionCenter );
 
 
 /*
@@ -300,7 +296,7 @@ prototype.draw =
 /*
 | Returns a handles jion.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'handlesBezel',
 	function( )
@@ -358,7 +354,7 @@ prototype.positioning = 'pnw/fontsize';
 /*
 | The item's silhoutte.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
@@ -395,7 +391,7 @@ prototype.scrollPage = function( ){ };
 /*
 | The items silhoutte anchored at zero.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
@@ -422,7 +418,7 @@ jools.lazyValue(
 /*
 | The relation's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
