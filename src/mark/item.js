@@ -40,9 +40,9 @@ var
 
 if( SERVER )
 {
-	jion = require( '../jion/jion' );
+	jion = require( 'jion' );
 
-	mark_item = require( 'jion' ).this( module, 'source' );
+	mark_item = jion.this( module, 'source' );
 }
 
 
