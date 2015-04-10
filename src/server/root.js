@@ -113,7 +113,9 @@ var
 	isString,
 	jion,
 	jools,
+	log_ajax,
 	log_start,
+	log_web,
 	mongodb,
 	prototype,
 	resume,
@@ -151,7 +153,11 @@ http = require( 'http' );
 
 isString = jion.isString;
 
+log_ajax = require( '../log/ajax' );
+
 log_start = require( '../log/start' );
+
+log_web = require( '../log/web' );
 
 server_maxAge = require( './maxAge' );
 
@@ -1199,7 +1205,7 @@ prototype.wake =
 
 		result = sleep.result;
 
-		jools.log( 'ajax', '->', asw );
+		log_ajax( '->', asw );
 
 		result.writeHead(
 			200,
@@ -1277,7 +1283,7 @@ prototype.webError =
 
 	message = code + ' ' + message;
 
-	jools.log( 'web', 'error', code, message );
+	log_web( 'error', code, message );
 
 	result.end( message );
 };
@@ -1303,14 +1309,13 @@ prototype.requestListener =
 
 	red = url.parse( request.url );
 
-	jools.log( 'web', request.connection.remoteAddress, red.href );
+	log_web( request.connection.remoteAddress, red.href );
 
 	if( config.whiteList )
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
 		{
-			jools.log(
-				'web',
+			log_web(
 				request.connection.remoteAddress,
 				'not in whitelist!'
 			);
@@ -1377,6 +1382,7 @@ prototype.requestListener =
 	}
 
 	// if the jion is requested generate that one from the file
+	// FIXME
 	if( resource.isJion )
 	{
 		try{
@@ -1507,7 +1513,7 @@ prototype.webAjax =
 
 		query = data.join( '' ),
 
-		jools.log( 'ajax', '<-', query );
+		log_ajax( '<-', query );
 
 		try
 		{
@@ -1547,7 +1553,7 @@ prototype.webAjax =
 			}
 			else
 			{
-				jools.log( 'web', 'not ok', err.message );
+				log_web( 'not ok', err.message );
 
 				// FIXME
 				asw = {
@@ -1559,7 +1565,7 @@ prototype.webAjax =
 
 		if( !asw ) return;
 
-		jools.log( 'ajax', '->', asw );
+		log_ajax( '->', asw );
 
 		result.writeHead( 200,
 			{
