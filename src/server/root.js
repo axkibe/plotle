@@ -104,6 +104,7 @@ GLOBAL.SERVER = true;
 // sets root as global variable
 GLOBAL.root = undefined;
 
+
 var
 	database_repository,
 	fabric_spaceRef,
@@ -112,6 +113,7 @@ var
 	isString,
 	jion,
 	jools,
+	log_start,
 	mongodb,
 	prototype,
 	resume,
@@ -148,6 +150,8 @@ server_generateJion = require( './generateJion' );
 http = require( 'http' );
 
 isString = jion.isString;
+
+log_start = require( '../log/start' );
 
 server_maxAge = require( './maxAge' );
 
@@ -253,8 +257,7 @@ startup =
 
 	yield* root.loadSpaces( );
 
-	jools.log(
-		'start',
+	log_start(
 		'starting server @ http://' +
 			( config.ip || '*' ) + '/:' + config.port
 	);
@@ -269,7 +272,7 @@ startup =
 		}
 	).listen( config.port, config.ip, resume( ) );
 
-	jools.log( 'start', 'server running' );
+	log_start( 'server running' );
 };
 
 
@@ -284,7 +287,7 @@ prototype.loadSpaces =
 		o,
 		spaceRef;
 
-	jools.log( 'start', 'loading and replaying all spaces' );
+	log_start( 'loading and replaying all spaces' );
 
 	cursor =
 		yield root.repository.spaces.find(
@@ -305,10 +308,7 @@ prototype.loadSpaces =
 				'tag', o.tag
 			);
 
-		jools.log(
-			'start',
-			'loading and replaying "' + spaceRef.fullname + '"'
-		);
+		log_start( 'loading and replaying "' + spaceRef.fullname + '"' );
 
 		root.create(
 			'spaces',
@@ -429,7 +429,7 @@ prototype.prepareInventory =
 		stream,
 		that;
 
-	jools.log( 'start', 'preparing inventory' );
+	log_start( 'preparing inventory' );
 
 	// autogenerates the shell config as resource
 	cconfig =
@@ -546,7 +546,7 @@ prototype.prepareInventory =
 		root.prependConfigFlags( );
 	}
 
-	jools.log( 'start', 'building bundle' );
+	log_start( 'building bundle' );
 
 	jionIDs = { };
 
@@ -593,7 +593,7 @@ prototype.prepareInventory =
 
 	if( !config.shell_noBundle )
 	{
-		jools.log( 'start', 'parsing bundle' );
+		log_start( 'parsing bundle' );
 
 		for(
 			a = 0, aZ = root.inventory.ranks.length;
@@ -639,7 +639,7 @@ prototype.prepareInventory =
 
 		if( config.uglify )
 		{
-			jools.log( 'start', 'uglifying bundle' );
+			log_start( 'uglifying bundle' );
 
 			ast.figure_out_scope( );
 
@@ -715,7 +715,7 @@ prototype.prepareInventory =
 				)
 		);
 
-		jools.log( 'start', 'bundle:', bundleFilePath );
+		log_start( 'bundle:', bundleFilePath );
 
 		// if uglify is turned on
 		// the flags are added after bundle
@@ -799,14 +799,12 @@ prototype.prepareInventory =
 
 	if( !config.shell_noBundle )
 	{
-		jools.log(
-			'start',
+		log_start(
 			'uncompressed bundle size is ',
 			root.inventory.twig[ bundleFilePath ].data.length
 		);
 
-		jools.log(
-			'start',
+		log_start(
 			'  compressed bundle size is ',
 			root.inventory.twig[ bundleFilePath ].gzip.length
 		);

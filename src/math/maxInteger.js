@@ -1,5 +1,5 @@
 /*
-| maximum integer variable.
+| Maximum integer variable.
 */
 
 

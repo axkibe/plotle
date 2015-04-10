@@ -9,7 +9,6 @@ var
 	euclid_point,
 	euclid_rect,
 	jion,
-	jools,
 	math_half;
 
 

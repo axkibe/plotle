@@ -1,11 +1,19 @@
 /*
-| Common Javascript Tools for ideoloom.
+| Inspects stuff.
+|
+| FUTURE:
+|   this has hughe overlap with node.util.inspect
+|   historically written since early browsers didn't
+|   have usuful inspections. Maybe be removed, but right
+|   now I want to keep it a little before scrapping it,
+|   in case browser inspect / node.util.inspect have
+|   troubles in some case.
 */
 
 
 var
 	config,
-	jools;
+	log_inspect;
 
 
 /*
@@ -15,23 +23,16 @@ var
 'use strict';
 
 
-if( SERVER )
+if( NODE )
 {
-	jools = module.exports;
-
 	config = require( '../../config' );
-}
-else
-{
-	jools = { };
 }
 
 
 var
 	puffed,
 	pushpad,
-	pushindent,
-	timestamp;
+	pushindent;
 
 
 puffed = config.debug.puffed;
@@ -58,31 +59,6 @@ pushpad =
 };
 
 
-/*
-| Creates a timestamp
-| which will be returned as joinable array.
-*/
-timestamp =
-	function( a )
-{
-	var
-		now;
-	
-	now = new Date( );
-
-	pushpad( a, now.getMonth( ) + 1, '-' );
-
-	pushpad( a, now.getDate( ), ' ' );
-
-	pushpad( a, now.getHours( ), ':' );
-
-	pushpad( a, now.getMinutes( ), ':' );
-
-	pushpad( a, now.getSeconds( ), ' ' );
-
-	return a;
-};
-
 
 /*
 | Pushes spaces into array for indentation.
@@ -104,23 +80,21 @@ pushindent =
 
 
 /*
-| Inspects an object and creates a descriptive string for it.
-|
-| Self-written instead of node.JS' since not available in browser.
-| Not using toJSON since that fails on circles.
-| This is the jools-internal version that pushes data directly on the array stack.
+| Inspects an object and pushes a descriptive string on array.
 */
-var _inspect =
+log_inspect =
 	function(
-		o,
-		array,
-		indent,
-		circle
+		o,       // object to inspect
+		array,   // arraw to push stuff to
+		indent,  // indentation
+		circle   // array of parents to detect circles
 	)
 {
 	var
 		a,
 		aZ,
+		k,
+		first,
 		to;
 
 	if( circle.indexOf( o ) !== -1 )
@@ -131,6 +105,7 @@ var _inspect =
 	}
 
 	circle = circle.slice( );
+
 	circle.push( o );
 
 	if( !indent ) indent = 0;
@@ -154,8 +129,6 @@ var _inspect =
 			case Array : to = 'array'; break;
 		}
 	}
-
-	var k, first;
 
 	switch( to )
 	{
@@ -220,7 +193,7 @@ var _inspect =
 					pushindent( indent + 1, array );
 				}
 
-				_inspect( o[ a ], array, indent + 1, circle );
+				log_inspect( o[ a ], array, indent + 1, circle );
 			}
 
 			first = true;
@@ -260,7 +233,7 @@ var _inspect =
 
 				array.push( ': ' );
 
-				_inspect( o[ k ], array, indent + 1, circle );
+				log_inspect( o[ k ], array, indent + 1, circle );
 
 				array.push( puffed ? '\n' : ' ' );
 			}
@@ -298,7 +271,7 @@ var _inspect =
 
 				array.push( k, ': ' );
 
-				_inspect( o[ k ], array, indent + 1, circle );
+				log_inspect( o[ k ], array, indent + 1, circle );
 			}
 
 			array.push( puffed ? '\n' : ' ' );
@@ -313,85 +286,16 @@ var _inspect =
 			return;
 
 		default :
+
 			array.push( '!!Unknown Type: ', to, '!!' );
 	}
 };
 
 
-/*
-| Logs a number of inspected argument
-| if category is configured to be logged.
-*/
-jools.log =
-	function(
-		category
-	)
+if( NODE )
 {
-	var
-		a,
-		i;
-
-	if(
-		category !== true
-		&& !config.log.all
-		&& !config.log[ category ]
-	)
-	{
-		return;
-	}
-
-	a = timestamp( [ ] );
-
-	if( category !== true )
-	{
-		a.push( '(' );
-		a.push( category );
-		a.push( ') ' );
-	}
-
-	for( i = 1; i < arguments.length; i++ )
-	{
-		if( i > 1 )
-		{
-			a.push(' ');
-		}
-
-		_inspect( arguments[ i ], a, 0, [ ] );
-	}
-
-	console.log( a.join( '' ) );
-};
-
-
-/*
-| Shortcut for log('debug', ...);
-*/
-jools.debug =
-	function( )
-{
-	var a;
-
-	if( !config.log.debug )
-	{
-		return;
-	}
-
-	a = timestamp( [ ] );
-
-	a.push( '(debug) ' );
-
-	for( var i = 0; i < arguments.length; i++ )
-	{
-		if (i > 0)
-		{
-			a.push(' ');
-		}
-
-		_inspect( arguments[ i ], a, 0, [ ] );
-	}
-
-	console.log( a.join( '' ) );
-};
+	module.exports = log_inspect;
+}
 
 
 } )( );
