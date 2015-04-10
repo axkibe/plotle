@@ -5,8 +5,7 @@
 
 var
 	euclid_fixPoint,
-	euclid_point,
-	jools;
+	euclid_point;
 
 
 /*
@@ -45,8 +44,6 @@ if( JION )
 if( SERVER )
 {
 	euclid_point = require( 'jion' ).this( module, 'source' );
-
-	jools = require( '../jools/jools' );
 }
 
 

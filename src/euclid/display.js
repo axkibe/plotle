@@ -312,7 +312,14 @@ euclid_display.prototype.drawImage =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	jools.ensureInt( x, y );
+/**/	if(
+/**/		x - Math.floor( x ) !== 0
+/**/		||
+/**/		y - Math.floor( y ) !== 0
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
 /**/}
 
 	if( composite !== undefined )

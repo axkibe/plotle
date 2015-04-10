@@ -42,75 +42,6 @@ puffed = config.debug.puffed;
 
 
 /*
-| Throws an error if any argument is not an integer.
-*/
-jools.ensureInt =
-	function(
-		// integers
-	)
-{
-	for( var a in arguments )
-	{
-		var arg = arguments[ a ];
-
-		if( Math.floor( arg ) - arg !== 0 )
-		{
-			throw new Error( );
-		}
-	}
-};
-
-
-/*
-| Sets an not enumerable value
-|
-| if writable is undefined, defaults to false
-*/
-jools.innumerable =
-	function(
-		obj,
-		key,
-		value,
-		writable
-	)
-{
-	Object.defineProperty(
-		obj,
-		key,
-		{
-			value : value,
-			writable : typeof( writable ) === 'undefined' ? false : writable
-		}
-	);
-
-	return value;
-};
-
-
-/*
-| Returns true if a node matches another node
-*/
-jools.matches =
-	function(
-		o1,
-		o2
-	)
-{
-	if( o1 === o2 )
-	{
-		return true;
-	}
-
-	if( !o1.equals || !o2.equals )
-	{
-		return false;
-	}
-
-	return o1.equals( o2 );
-};
-
-
-/*
 | Pushes a 2-decimal number on an string-array.
 */
 pushpad =
@@ -464,23 +395,6 @@ jools.debug =
 	}
 
 	console.log( a.join( '' ) );
-};
-
-
-/*
-| Returns a descriptive string for an object.
-*/
-jools.inspect =
-	function( o )
-{
-	var
-		a;
-
-	a = [ ];
-
-	_inspect( o, a, 0, [ ] );
-
-	return a.join( '' );
 };
 
 
