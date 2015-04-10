@@ -21,7 +21,7 @@ var
 
 jion = require( 'jion' );
 
-jion_stringRay = require( '../jion/stringRay' );
+jion_stringRay = require( '../stringRay' ); // FIXME
 
 resource = require( './resource' );
 
