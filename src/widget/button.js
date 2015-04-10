@@ -6,7 +6,7 @@
 var
 	euclid_display,
 	euclid_view,
-	jools,
+	jion,
 	result_hover,
 	root,
 	widget_button;
@@ -172,7 +172,7 @@ prototype.focusable = true;
 /*
 | The button's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

@@ -7,7 +7,7 @@
 
 var
 	euclid_color,
-	jools;
+	jion;
 
 
 /*
@@ -111,7 +111,7 @@ euclid_color.rgba =
 /*
 | Color text understood by browser.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'css',
 	function( )

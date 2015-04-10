@@ -12,8 +12,8 @@ var
 	change_ray,
 	change_split,
 	change_wrap,
+	jion,
 	jion_path,
-	jools,
 	math_limit,
 	math_maxInteger,
 	root,
@@ -1308,7 +1308,7 @@ testpad_root.prototype.makeScreen =
 /*
 | Generates the noDataScreen.
 */
-jools.lazyValue(
+jion.lazyValue(
 	testpad_root.prototype,
 	'noDataScreen',
 	function( )

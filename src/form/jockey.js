@@ -3,18 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	form_jockey;
-
-
-/*
-| Imports
-*/
-var
-	jools;
+	form_jockey,
+	jion;
 
 
 /*
@@ -119,7 +110,7 @@ prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig = jools.copy( this.twig );
+		this.twig = jion.copy( this.twig );
 	}
 
 	for(

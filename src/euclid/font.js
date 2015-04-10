@@ -5,7 +5,7 @@
 
 var
 	euclid_font,
-	jools;
+	jion;
 
 
 /*
@@ -54,7 +54,7 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
 	require( 'jion' ).this( module, 'source' );
 
@@ -65,7 +65,7 @@ if( SERVER )
 /*
 | The CSS-string for this font.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_font.prototype,
 	'css',
 	function( )

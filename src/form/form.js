@@ -7,7 +7,7 @@ var
 	form_form,
 	euclid_view,
 	gruga_formFacet,
-	jools,
+	jion,
 	mark_caret,
 	mark_widget,
 	result_hover;
@@ -50,7 +50,7 @@ form_form.init =
 
 	// all components of the form
 	// FIXME do not copy if this.twig !== inherit.twig
-	twig = jools.copy( this.twig );
+	twig = jion.copy( this.twig );
 
 	mark = this.mark;
 

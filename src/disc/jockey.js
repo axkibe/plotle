@@ -5,7 +5,7 @@
 
 var
 	disc_jockey,
-	jools;
+	jion;
 
 /*
 | Capsule
@@ -141,7 +141,7 @@ prototype._init =
 	ranks = this.ranks;
 
 	// FIXME do not copy when inherit.twig !== this.twig
-	twig = jools.copy( this.twig );
+	twig = jion.copy( this.twig );
 
 	for(
 		a = 0, aZ = ranks.length;

@@ -76,14 +76,14 @@ if( JION )
 
 var
 	database_userSkid,
-	jools,
+	jion,
 	user_info;
 
-database_userSkid = require( 'jion' ).this( module );
+jion = require( 'jion' );
+
+database_userSkid = jion.this( module );
 
 user_info = require( '../user/info' );
-
-jools = require( '../jools/jools' );
 
 
 /*
@@ -107,8 +107,7 @@ database_userSkid.createFromUser =
 };
 
 
-
-jools.lazyValue(
+jion.lazyValue(
 	database_userSkid.prototype,
 	'asUser',
 	function( )
