@@ -4,7 +4,7 @@
 
 
 var
-	jools,
+	jion,
 	mark_item;
 
 
@@ -40,7 +40,7 @@ var
 
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
+	jion = require( '../jion/jion' );
 
 	mark_item = require( 'jion' ).this( module, 'source' );
 }
@@ -61,7 +61,7 @@ prototype.hasCaret = false;
 /*
 | The item's path.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
@@ -76,7 +76,7 @@ jools.lazyValue(
 |
 | FIXME just set it undefined in prototype.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )

@@ -5,7 +5,7 @@
 
 var
 	fabric_spaceRef,
-	jools;
+	jion;
 
 
 /*
@@ -49,7 +49,7 @@ if( SERVER )
 {
 	fabric_spaceRef = require( 'jion' ).this( module, 'source' );
 
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 }
 
 
@@ -59,7 +59,7 @@ prototype = fabric_spaceRef.prototype;
 /*
 | Returns the space's full name.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'fullname',
 	function( )

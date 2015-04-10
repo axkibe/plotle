@@ -4,7 +4,7 @@
 
 
 var
-	jools,
+	jion,
 	mark_range;
 
 
@@ -55,11 +55,11 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 
-	mark_range = require( 'jion' ).this( module, 'source' );
+	mark_range = jion.this( module, 'source' );
 }
 
 
@@ -99,7 +99,7 @@ prototype._init =
 | The begin or end path,
 | dependening on which comes first in the doc.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'front',
 	function( )
@@ -115,7 +115,7 @@ jools.lazyValue(
 | The begin or end path,
 | dependening on which comes last in the doc.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'back',
 	function( )
@@ -142,7 +142,7 @@ prototype.hasCaret = true;
 |
 | This allows a common interface with text range.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'caretPath',
 	function( )
@@ -157,7 +157,7 @@ jools.lazyValue(
 |
 | This allows a common interface with text range.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'caretAt',
 	function( )
@@ -170,7 +170,7 @@ jools.lazyValue(
 /*
 | The item's path.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
@@ -218,7 +218,7 @@ prototype.containsPath =
 /*
 | The content the mark puts into the clipboard.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'clipboard',
 	function( )
@@ -286,7 +286,7 @@ jools.lazyValue(
 /*
 | True if begin equals end
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'empty',
 	function( )
@@ -318,15 +318,15 @@ prototype._normalize =
 	{
 		if( begin.at <= end.at )
 		{
-			jools.aheadValue( this, 'front', begin );
+			jion.aheadValue( this, 'front', begin );
 
-			jools.aheadValue( this, 'back', end );
+			jion.aheadValue( this, 'back', end );
 		}
 		else
 		{
-			jools.aheadValue( this, 'front', end );
+			jion.aheadValue( this, 'front', end );
 
-			jools.aheadValue( this, 'back', begin );
+			jion.aheadValue( this, 'back', begin );
 		}
 
 		return;
@@ -350,15 +350,15 @@ prototype._normalize =
 
 	if( br < er )
 	{
-		jools.aheadValue( this, 'front', begin );
+		jion.aheadValue( this, 'front', begin );
 
-		jools.aheadValue( this, 'back', end );
+		jion.aheadValue( this, 'back', end );
 	}
 	else
 	{
-		jools.aheadValue( this, 'front', end );
+		jion.aheadValue( this, 'front', end );
 
-		jools.aheadValue( this, 'back', begin );
+		jion.aheadValue( this, 'back', begin );
 	}
 };
 
