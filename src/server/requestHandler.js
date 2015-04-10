@@ -15,6 +15,7 @@ var
 	config,
 	database_userSkid,
 	fabric_spaceRef,
+	log_warn,
 	jools,
 	replyError,
 	reply_acquire,
@@ -80,6 +81,7 @@ server_upSleep = require( './upSleep' );
 
 user_info = require( '../user/info' );
 
+
 /*
 | Creates a reject error for all
 | serve* functions
@@ -95,7 +97,7 @@ replyError =
 		throw new Error( message );
 	}
 
-	jools.log( 'reject', 'reject', message );
+	log_warn( 'reject', message );
 
 	return reply_error.create( 'message', message );
 };

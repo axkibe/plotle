@@ -12,7 +12,6 @@ var
 	config,
 	euclid_display,
 	euclid_point,
-	jools,
 	math_limit,
 	root,
 	shell_root,
@@ -1026,7 +1025,7 @@ prototype._onMouseWheel =
 	}
 	else
 	{
-		jools.log( 'warn', 'invalid wheel event' );
+		console.log( 'invalid wheel event' );
 
 		return;
 	}
