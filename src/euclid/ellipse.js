@@ -7,7 +7,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_shape,
-	jools,
+	jion,
 	math_half,
 	shapeSection_round,
 	shapeSection_start;
@@ -171,7 +171,7 @@ prototype.getProjection =
 /*
 | Gradient's center point.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'gradientPC',
 	function( )
@@ -194,7 +194,7 @@ jools.lazyValue(
 /*
 | Gradient inner radius.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'gradientR1',
 	function( )
@@ -220,7 +220,7 @@ jools.lazyValue(
 /*
 | Gradient inner radius.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'gradientR0',
 	function( )
@@ -238,7 +238,7 @@ jools.lazyValue(
 /*
 | Ellipse height.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'height',
 	function( )
@@ -251,7 +251,7 @@ jools.lazyValue(
 /*
 | Center point of an ellipse.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
@@ -297,7 +297,7 @@ prototype.within =
 /*
 | Ellipse width.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'width',
 	function( )

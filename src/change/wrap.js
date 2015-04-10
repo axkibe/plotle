@@ -5,7 +5,8 @@
 
 var
 	change_wrap,
-	jools;
+	jion,
+	session_uid;
 
 
 /*
@@ -60,11 +61,11 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
-	change_wrap = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
 
-	jools = require( '../jools/jools' );
+	change_wrap = jion.this( module, 'source' );
 }
 
 

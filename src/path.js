@@ -34,7 +34,7 @@ var
 
 if( SERVER )
 {
-	jion_path = require( 'jion' ).this( module );
+	jion_path = require( 'jion' ).this( module, 'source' );
 
 	lazy = require( 'jion' );
 }

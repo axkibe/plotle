@@ -88,7 +88,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/jion/path.js',
+		'filePath', 'src/path.js',
 		'inBundle', true,
 		'hasJion', true,
 		'inTestPad', true

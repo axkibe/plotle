@@ -4,13 +4,8 @@
 
 
 var
-	euclid_margin;
-
-
-/*
-| Imports
-*/
-var jools;
+	euclid_margin,
+	jion;
 
 
 /*
@@ -54,11 +49,11 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 
-	euclid_margin = require( 'jion' ).this( module, 'source' );
+	euclid_margin = jion.this( module, 'source' );
 }
 
 
@@ -76,7 +71,7 @@ euclid_margin.zero =
 /*
 | east + west margin = x
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_margin.prototype,
 	'x',
 	function( )
@@ -89,7 +84,7 @@ jools.lazyValue(
 /*
 | north + south margin = y
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_margin.prototype,
 	'y',
 	function( )

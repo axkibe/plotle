@@ -109,7 +109,7 @@ if( SERVER )
 {
 	fabric_space = require( 'jion' ).this( module, 'source' );
 
-	jion_path = require( '../jion/path' );
+	jion_path = require( '../path' ); // FIXME
 
 	fabric_space.prototype._init = function( ){ };
 }

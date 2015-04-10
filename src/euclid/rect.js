@@ -8,7 +8,7 @@ var
 	euclid_point,
 	euclid_rect,
 	math_half,
-	jools;
+	jion;
 
 
 /*
@@ -46,11 +46,11 @@ if( JION )
 
 if( SERVER )
 {
-	euclid_rect = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	euclid_rect = jion.this( module, 'source' );
 
 	math_half = require( '../math/half' );
-
-	jools = require( '../jools/jools' );
 
 	euclid_point = require( './point' );
 }
@@ -118,7 +118,7 @@ euclid_rect.createArbitrary =
 /*
 | Rectangle width.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'width',
 	function( )
@@ -131,7 +131,7 @@ jools.lazyValue(
 /*
 | Rectangle height.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'height',
 	function( )
@@ -144,7 +144,7 @@ jools.lazyValue(
 /*
 | A rectangle of same size with pnw at 0/0
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'zeropnw',
 	function( )
@@ -367,7 +367,7 @@ euclid_rect.prototype.cardinalResize =
 /*
 | Point in the center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'pc',
 	function( )
@@ -385,7 +385,7 @@ jools.lazyValue(
 /*
 | Point in the north.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'pn',
 	function( )
@@ -403,7 +403,7 @@ jools.lazyValue(
 /*
 | West point.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'w',
 	function( )
@@ -421,7 +421,7 @@ jools.lazyValue(
 /*
 | East point.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_rect.prototype,
 	'e',
 	function( )
