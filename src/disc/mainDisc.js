@@ -12,7 +12,7 @@ var
 	change_shrink,
 	euclid_display,
 	euclid_view,
-	jools,
+	jion,
 	root;
 
 /*
@@ -154,7 +154,7 @@ prototype._init =
 
 	if( !twigDup )
 	{
-		twig = jools.copy( this.twig );
+		twig = jion.copy( this.twig );
 	}
 
 	for(
@@ -263,7 +263,7 @@ prototype._init =
 /*
 | The disc panel's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

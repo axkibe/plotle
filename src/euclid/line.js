@@ -7,7 +7,7 @@ var
 	euclid_line,
 	euclid_point,
 	euclid_rect,
-	jools,
+	jion,
 	math_half;
 
 
@@ -52,14 +52,14 @@ if( NODE )
 
 var
 	prototype;
-	
+
 prototype = euclid_line.prototype;
 
 
 /*
 | The zone of the line.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zone',
 	function( )
@@ -97,7 +97,7 @@ jools.lazyValue(
 /*
 | The point at center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'pc',
 	function( )

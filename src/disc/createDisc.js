@@ -10,7 +10,7 @@ var
 	disc_disc,
 	euclid_display,
 	euclid_view,
-	jools,
+	jion,
 	math_half,
 	root;
 
@@ -148,7 +148,7 @@ prototype._init =
 	twig =
 		twigDup
 		? this.twig
-		: jools.copy( this.twig );
+		: jion.copy( this.twig );
 
 	ranks = this.ranks;
 
@@ -185,7 +185,7 @@ prototype._init =
 /*
 | The disc panel's display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_display',
 	function( )

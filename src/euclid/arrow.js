@@ -11,7 +11,7 @@ var
 	shapeSection_flyLine,
 	shapeSection_line,
 	shapeSection_start,
-	jools;
+	jion;
 
 
 /*
@@ -166,7 +166,7 @@ euclid_arrow.connect =
 /*
 | The line of the arrow.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'line',
 	function( )
@@ -184,7 +184,7 @@ jools.lazyValue(
 /*
 | The zone of the arrow.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'zone',
 	function( )
@@ -197,7 +197,7 @@ jools.lazyValue(
 /*
 | The point at center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
@@ -210,7 +210,7 @@ jools.lazyValue(
 /*
 | Returns the shape of the arrow.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_shape',
 	function( )

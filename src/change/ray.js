@@ -6,7 +6,7 @@
 var
 	change_generic,
 	change_ray,
-	jools;
+	jion;
 
 
 /*
@@ -48,7 +48,7 @@ if( SERVER )
 
 	change_generic = require( './generic' );
 
-	jools = require( '../jools/jools'  );
+	jion = require( 'jion'  );
 }
 
 
@@ -58,7 +58,7 @@ prototype = change_ray.prototype;
 /*
 | Returns a change ray with inverted changes.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'invert',
 	function( )
@@ -82,7 +82,7 @@ jools.lazyValue(
 
 		result = change_ray.create( 'ray:init', iRay );
 
-		jools.aheadValue( result, 'invert', this );
+		jion.aheadValue( result, 'invert', this );
 
 		return result;
 	}

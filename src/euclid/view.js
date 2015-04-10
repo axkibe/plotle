@@ -9,7 +9,7 @@ var
 	euclid_rect,
 	euclid_view,
 	math_limit,
-	jools,
+	jion,
 	theme;
 
 
@@ -70,9 +70,9 @@ if( JION )
 */
 if( SERVER )
 {
-	euclid_view = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
 
-	jools = require( '../jools/jools' );
+	euclid_view = require( 'jion' ).this( module, 'source' );
 
 	euclid_point = require( './point' );
 
@@ -216,7 +216,7 @@ euclid_view.prototype.dey =
 |
 | FIXME remove?
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_view.prototype,
 	'home',
 	function( )
@@ -230,7 +230,7 @@ jools.lazyValue(
 /*
 | A view with pan zero and fact zero
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_view.prototype,
 	'sizeOnly',
 	function( )
@@ -424,7 +424,7 @@ euclid_view.prototype.review =
 /*
 | The zero based frame of this view.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_view.prototype,
 	'baseFrame',
 	function( )

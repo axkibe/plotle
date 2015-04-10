@@ -8,7 +8,7 @@
 var
 	form_form,
 	form_loading,
-	jools;
+	jion;
 
 
 /*
@@ -103,11 +103,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
-	prototype,
-	'attentionCenter',
-	form_form.getAttentionCenter
-);
+jion.lazyValue( prototype, 'attentionCenter', form_form.getAttentionCenter );
 
 
 /*
@@ -175,11 +171,7 @@ prototype.draw = form_form.draw;
 /*
 | The focused widget.
 */
-jools.lazyValue(
-	prototype,
-	'focusedWidget',
-	form_form.getFocusedWidget
-);
+jion.lazyValue( prototype, 'focusedWidget', form_form.getFocusedWidget );
 
 
 /*

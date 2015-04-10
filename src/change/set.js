@@ -6,7 +6,7 @@ var
 	change_generic,
 	change_error,
 	change_set,
-	jools;
+	jion;
 
 
 /*
@@ -52,18 +52,15 @@ var
 	prototype;
 
 
-/*
-| Node includes.
-*/
-if( SERVER )
+if( NODE )
 {
-	change_set = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	change_set = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
 
 	change_error = require( './error' );
-
-	jools = require( '../jools/jools' );
 }
 
 
@@ -110,7 +107,7 @@ prototype.changeTree =
 /*
 | Returns the inversion to this change.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'invert',
 	function( )
@@ -125,7 +122,7 @@ jools.lazyValue(
 				'prev', this.val
 			);
 
-		jools.aheadValue( inv, 'invert', this );
+		jion.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}

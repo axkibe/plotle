@@ -7,8 +7,7 @@ var
 	change_error,
 	change_insert,
 	change_remove,
-	jion,
-	jools;
+	jion;
 
 
 /*
@@ -78,8 +77,6 @@ if( SERVER )
 	change_error = require( './error' );
 
 	change_remove = require( './remove' );
-
-	jools = require( '../jools/jools' );
 }
 
 
@@ -146,7 +143,7 @@ prototype.changeTree =
 /*
 | Returns the inversion to this change.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'invert',
 	function( )
@@ -162,7 +159,7 @@ jools.lazyValue(
 				'at2', this.at2
 			);
 
-		jools.aheadValue( inv, 'invert', this );
+		jion.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}
