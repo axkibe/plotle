@@ -57,11 +57,11 @@ if( JION )
 var
 	change_wrap,
 	changeSkid,
-	jools;
+	jion;
 
-changeSkid = require( 'jion' ).this( module );
+jion = require( 'jion' );
 
-jools = require( '../jools/jools' );
+changeSkid = jion.this( module );
 
 change_wrap = require( '../change/wrap' );
 
@@ -95,7 +95,7 @@ changeSkid.createFromChangeWrap =
 };
 
 
-jools.lazyValue(
+jion.lazyValue(
 	changeSkid.prototype,
 	'asChangeWrap',
 	function( )

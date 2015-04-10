@@ -21,7 +21,7 @@ var
 	euclid_point,
 	euclid_roundRect,
 	euclid_shape,
-	jools,
+	jion,
 	math_half,
 	shapeSection_line,
 	shapeSection_round,
@@ -146,7 +146,7 @@ prototype._init =
 /*
 | point in the center
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
@@ -164,7 +164,7 @@ jools.lazyValue(
 /*
 | Rectangle width.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'width',
 	function( )
@@ -176,7 +176,7 @@ jools.lazyValue(
 /*
 | Rectangle height.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'height',
 	function( )

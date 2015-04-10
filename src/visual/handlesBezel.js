@@ -9,7 +9,7 @@ var
 	euclid_point,
 	euclid_view,
 	gruga_handles,
-	jools,
+	jion,
 	math_half,
 	root,
 	theme,
@@ -134,7 +134,7 @@ prototype.checkHandles =
 |
 | FUTURE use fixPoints (atually replace it with new bezels)
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'_handles',
 	function( )

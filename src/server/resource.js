@@ -113,19 +113,19 @@ if( JION )
 
 
 var
+	jion,
 	jion_stringRay,
-	jools,
 	prototype,
 	server_fileTypes,
 	resource;
 
-resource = require( 'jion' ).this( module );
+jion = require( 'jion' );
+
+resource = jion.this( module );
 
 prototype = resource.prototype;
 
 jion_stringRay = require( '../stringRay' ); // FIXME
-
-jools = require( '../jools/jools' );
 
 server_fileTypes = require( './fileTypes' );
 
@@ -167,7 +167,7 @@ prototype._init =
 /*
 | The file extension
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'fileExt',
 	function( )

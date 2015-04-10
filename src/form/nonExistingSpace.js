@@ -12,7 +12,7 @@
 var
 	form_form,
 	form_nonExistingSpace,
-	jools;
+	jion;
 
 
 /*
@@ -114,7 +114,7 @@ prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig = jools.copy( this.twig );
+		this.twig = jion.copy( this.twig );
 	}
 
 	this.twig.headline =
@@ -132,7 +132,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	form_form.getAttentionCenter
@@ -204,7 +204,7 @@ prototype.draw = form_form.draw;
 /*
 | The focused widget.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget

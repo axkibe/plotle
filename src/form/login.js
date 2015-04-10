@@ -7,7 +7,7 @@ var
 	fabric_spaceRef,
 	form_form,
 	form_login,
-	jools,
+	jion,
 	mark_caret,
 	user_creds,
 	user_passhash;
@@ -105,7 +105,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	form_form.getAttentionCenter
@@ -212,7 +212,7 @@ prototype.draw = form_form.draw;
 /*
 | The focused widget.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget

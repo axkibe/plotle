@@ -8,6 +8,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	jion,
 	jools,
 	math_half;
 
@@ -656,7 +657,7 @@ euclid_display.prototype.paintText =
 /*
 | The center point of the display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_display.prototype,
 	'pc',
 	function( )
@@ -677,7 +678,7 @@ jools.lazyValue(
 /*
 | Returns the silhoutte that entails the whole display.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_display.prototype,
 	'silhoutte',
 	function( )
@@ -950,7 +951,7 @@ euclid_display.prototype.pnw = euclid_point.zero;
 /*
 | Point in south east.
 */
-jools.lazyValue(
+jion.lazyValue(
 	euclid_display.prototype,
 	'pse',
 	function( )

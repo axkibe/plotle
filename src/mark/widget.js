@@ -4,7 +4,7 @@
 
 
 var
-	jools,
+	jion,
 	mark_widget;
 
 
@@ -34,11 +34,11 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
-	jools = require( '../jools/jools' );
+	jion = require( 'jion' );
 
-	mark_widget = require( 'jion' ).this( module, 'source' );
+	mark_widget = jion.this( module, 'source' );
 }
 
 
@@ -62,7 +62,7 @@ prototype.hasCaret = false;
 |
 | FIXME
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
@@ -75,7 +75,7 @@ jools.lazyValue(
 /*
 | The widget's path.
 */
-jools.lazyValue(
+jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
