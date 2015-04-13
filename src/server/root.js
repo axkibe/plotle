@@ -480,8 +480,6 @@ prototype.prepareInventory =
 					'jionId', that.jionId
 				);
 
-console.log( that.jionId, that.hasJson );
-
 			jionCodeResource =
 				resource.create(
 					'aliases', undefined,

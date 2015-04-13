@@ -597,7 +597,7 @@ server_requestHandler.serve =
 
 		default :
 
-			console.log( request );
+			log_warn( 'unknown command', request );
 
 			return replyError( 'unknown command' );
 	}
