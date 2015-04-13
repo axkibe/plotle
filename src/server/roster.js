@@ -53,7 +53,7 @@ module.exports =
 	resource.create(
 		'aliases', stringRay( [ 'jion-proto.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.proto.src,
+		'data', jion.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true

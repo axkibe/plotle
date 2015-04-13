@@ -45,11 +45,11 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
-	fabric_spaceRef = require( 'jion' ).this( module, 'source' );
-
 	jion = require( 'jion' );
+
+	fabric_spaceRef = jion.this( module, 'source' );
 }
 
 

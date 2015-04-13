@@ -1,3 +1,8 @@
+> readFileSync
+. source
+. proto
+. filename
+. this
 . getFacet
 . prepareAction
 . facets
@@ -5,7 +10,6 @@
 . _twig
 . _ranks
 > Label
-. MAX_INTEGER
 > Note
 > PI
 > Portal
@@ -308,7 +312,6 @@
 . emptyNote
 . emptyPortal
 > end
-. ensureInt
 . enter
 . equals
 . equalsJSON
@@ -385,7 +388,6 @@
 . groupSize
 . groupSortedKeys
 . hadSelect
-. half
 . handle
 . handles
 . handlesBezel
@@ -410,15 +412,12 @@
 > innerHeight
 . innerMargin
 > innerWidth
-. innumerable
 > input
 . insert
-. inspect
 . invert
 > isArray
 . isChange
 . isEmpty
-. isInteger
 > isPointInPath
 . isString
 . isVisitor
@@ -434,7 +433,6 @@
 . json
 . key
 > keyCode
-. keyNonGrata
 > keys
 > la
 . label
@@ -453,7 +451,6 @@
 > localStorage
 . locateOffset
 > log
-. logNew
 . login
 . loginButton
 . logout
@@ -468,7 +465,6 @@
 . mark
 . maskKern
 . maskWidth
-. matches
 > max
 . maxSize
 . maxUndo
@@ -492,7 +488,6 @@
 > n
 > name
 > ne
-. newUID
 . newline
 > news
 . newsletter2Label
@@ -585,7 +580,6 @@
 > px
 > ra
 > random
-. randomPassword
 . range
 > rank
 . rankOf
@@ -661,7 +655,6 @@
 . selection
 > send
 > seq
-. server_devel
 > set
 . setCapture
 . setDefaultFonts
@@ -673,10 +666,8 @@
 > setTimeout
 > setTimer
 > setTransform
-. sha1hex
 . shape
 . shell
-. shell_devel
 > shiftKey
 . shorten
 . showDisc
@@ -759,7 +750,6 @@
 . twigRankOf
 . twigSet
 > type
-. uid
 > undefined
 . undo
 . up

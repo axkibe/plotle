@@ -69,6 +69,12 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
+			hasJson :
+			{
+				comment : 'true if this has jion that has json',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
 			inBundle :
 			{
 				comment : 'true if this resource is in the bundle',
@@ -86,6 +92,12 @@ if( JION )
 				comment : 'true if this resource is a jion.',
 				type : 'boolean',
 				defaultValue : 'false'
+			},
+			jionId :
+			{
+				comment : 'if hasJion or isJion the jion id string',
+				type : 'string',
+				defaultValue : 'undefined'
 			},
 			maxage :
 			{

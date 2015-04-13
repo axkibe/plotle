@@ -38,7 +38,7 @@ if( JION )
 			request :
 			{
 				comment : 'the actual request',
-				type : require( '../typemaps/request' ),
+				type : require( '../typemaps/request' )
 			},
 			receiverFuncName :
 			{

@@ -120,7 +120,6 @@ var
 	prototype,
 	resume,
 	roster,
-	server_generateJion,
 	server_inventory,
 	server_maxAge,
 	server_postProcessor,
@@ -146,8 +145,6 @@ jion = require( 'jion' );
 jools = require( '../jools/jools' );
 
 fs = require( 'fs' );
-
-server_generateJion = require( './generateJion' );
 
 http = require( 'http' );
 
@@ -426,7 +423,6 @@ prototype.prepareInventory =
 		code,
 		codes,
 		compressor,
-		gjr,
 		inv,
 		jionIDs,
 		jionCodeResource,
@@ -479,14 +475,19 @@ prototype.prepareInventory =
 
 			resource =
 				resource.create(
-					'data', that.source
+					'data', that.source,
+					'hasJson', that.hasJson,
+					'jionId', that.jionId
 				);
+
+console.log( that.jionId, that.hasJson );
 
 			jionCodeResource =
 				resource.create(
 					'aliases', undefined,
 					'data', that.jioncode,
 					'jionSrcPath', resource.filePath, // FIXME needed?
+					'jionId', that.jionId,
 					'filePath',
 						// FIXME let the jion module worry aabout this
 						'jioncode/'
@@ -574,11 +575,9 @@ prototype.prepareInventory =
 
 		if( resource.isJion )
 		{
-			gjr = yield* server_generateJion.run( resource );
+			jionIDs[ resource.jionId ] = resource.hasJson;
 
-			jionIDs[ gjr.jionID ] = gjr.hasJSON;
-
-			code = gjr.code;
+			code = resource.data;
 		}
 		else
 		{
@@ -593,6 +592,8 @@ prototype.prepareInventory =
 				code = resource.data;
 			}
 		}
+
+		code += '';
 
 		codes[ a ] = code;
 	}
@@ -1302,7 +1303,6 @@ prototype.requestListener =
 		aenc,
 		data,
 		header,
-		gjr,
 		pathname,
 		resource,
 		red;
@@ -1381,28 +1381,8 @@ prototype.requestListener =
 		root.webError( result, 404, 'Bad Request' );
 	}
 
-	// if the jion is requested generate that one from the file
-	// FIXME
-	if( resource.isJion )
-	{
-		try{
-			gjr = yield* server_generateJion.run( resource );
-
-			data = gjr.code;
-		}
-		catch( e )
-		{
-			root.webError( result, 500, 'Internal Server Error' );
-
-			jools.log(
-				'fail',
-				'Error generating Jion: ' + e.toString( )
-			);
-
-			return;
-		}
-	}
-	else
+	// jion resources already loaded their source themselves
+	if( !resource.isJion && !resource.hasJion )
 	{
 		try {
 			data = yield fs.readFile( resource.filePath, resume( ) );

@@ -47,6 +47,8 @@ config = require( '../../config' );
 
 jools = require( '../jools/jools' );
 
+log_warn = require( '../log/warn' );
+
 change_wrapRay = require( '../change/wrapRay' );
 
 database_userSkid = require( '../database/userSkid' );
@@ -594,6 +596,8 @@ server_requestHandler.serve =
 			return serveUpdate( request, result );
 
 		default :
+
+			console.log( request );
 
 			return replyError( 'unknown command' );
 	}
