@@ -27,7 +27,7 @@ if( JION )
 			path :
 			{
 				comment : 'path of the item',
-				type : 'jion_path'
+				type : 'jion$path'
 			}
 		}
 	};

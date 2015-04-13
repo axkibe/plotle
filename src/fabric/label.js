@@ -49,14 +49,14 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				assign : ''
 			},
 			path :
 			{
 				comment : 'the path of the doc',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			pnw :

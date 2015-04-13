@@ -54,7 +54,7 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				assign : ''
 			},
@@ -68,7 +68,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the note',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			scrolly :

@@ -39,7 +39,7 @@ if( JION )
 			hover :
 			{
 				comment : 'component hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				assign : ''
 			},
@@ -65,7 +65,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the widget',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			superFrame :

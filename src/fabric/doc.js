@@ -61,7 +61,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the doc',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			mark :

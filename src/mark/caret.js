@@ -28,7 +28,7 @@ if( JION )
 			path :
 			{
 				comment : 'path of the caret',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			at :
 			{

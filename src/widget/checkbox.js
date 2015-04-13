@@ -48,7 +48,7 @@ if( JION )
 			hover :
 			{
 				comment : 'component hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
@@ -63,7 +63,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the widget',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			superFrame :

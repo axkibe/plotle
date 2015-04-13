@@ -30,7 +30,7 @@ if( JION )
 			{
 				comment : 'join at this path',
 				json : 'true',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			at1 :
 			{
@@ -44,7 +44,7 @@ if( JION )
 				comment : 'join this',
 				// must be after path
 				json : 'true',
-				type : 'jion_path'
+				type : 'jion$path'
 			}
 		},
 		init : [ ]

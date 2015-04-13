@@ -18,7 +18,7 @@ var
 	gruga_label,
 	gruga_relation,
 	jion,
-	jion_path,
+	jion$path,
 	mark_caret,
 	root,
 	session_uid,
@@ -57,7 +57,7 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				assign : ''
 			},
@@ -76,7 +76,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the doc',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			pnw :
@@ -186,7 +186,7 @@ fabric_relation.spawn =
 	root.alter(
 		change_grow.create(
 			'val', val,
-			'path', jion_path.empty.append( 'twig' ).append( key ),
+			'path', jion$path.empty.append( 'twig' ).append( key ),
 			'rank', 0
 		)
 	);

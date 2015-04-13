@@ -38,7 +38,7 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			mark :
@@ -56,7 +56,7 @@ if( JION )
 			path :
 			{
 				comment : 'path of the disc',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			spaceRef :
 			{

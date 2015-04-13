@@ -22,7 +22,7 @@ if( JION )
 			'path' :
 			{
 				comment : 'the ajax path',
-				type : 'jion_path'
+				type : 'jion$path'
 			}
 		},
 		twig : [ 'net_channel' ]

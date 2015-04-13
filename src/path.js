@@ -7,7 +7,7 @@
 
 var
 	jion,
-	jion_path;
+	jion$path;
 
 
 /*
@@ -23,7 +23,7 @@ var
 if( JION )
 {
 	return {
-		id : 'jion_path',
+		id : 'jion$path',
 		ray : [ 'string' ]
 	};
 }
@@ -34,7 +34,7 @@ var
 
 if( SERVER )
 {
-	jion_path = require( 'jion' ).this( module, 'source' );
+	jion$path = require( 'jion' ).this( module, 'source' );
 
 	lazy = require( 'jion' );
 }
@@ -50,7 +50,7 @@ else
 | Returns a path with key appended
 */
 lazy.lazyFunctionString(
-	jion_path.prototype,
+	jion$path.prototype,
 	'append',
 	function( key )
 	{
@@ -69,7 +69,7 @@ lazy.lazyFunctionString(
 /*
 | Same as append but without caching.
 */
-jion_path.prototype.appendNC =
+jion$path.prototype.appendNC =
 	function( key )
 {
 	var
@@ -87,7 +87,7 @@ jion_path.prototype.appendNC =
 | Returns a path with the first the entry chopped of.
 */
 lazy.lazyValue(
-	jion_path.prototype,
+	jion$path.prototype,
 	'chop',
 	function( )
 	{
@@ -119,7 +119,7 @@ lazy.lazyValue(
 | Returns a path with the last entry removed.
 */
 lazy.lazyValue(
-	jion_path.prototype,
+	jion$path.prototype,
 	'shorten',
 	function( )
 	{
@@ -148,7 +148,7 @@ lazy.lazyValue(
 |
 | FUTURE cache
 */
-jion_path.prototype.limit =
+jion$path.prototype.limit =
 	function(
 		n
 	)
@@ -178,7 +178,7 @@ jion_path.prototype.limit =
 | Returns a path with an entry prepended.
 */
 lazy.lazyFunctionString(
-	jion_path.prototype,
+	jion$path.prototype,
 	'prepend',
 	function( entry )
 	{
@@ -199,7 +199,7 @@ lazy.lazyFunctionString(
 |
 | FIXME: optimize by using local variables
 */
-jion_path.prototype.subPathOf =
+jion$path.prototype.subPathOf =
 	function(
 		o,     // the other path
 		len    // the length of this path to consider.
@@ -250,7 +250,7 @@ jion_path.prototype.subPathOf =
 | Turns the path to a string.
 */
 lazy.lazyValue(
-	jion_path.prototype,
+	jion$path.prototype,
 	'string',
 	function( )
 	{
@@ -286,7 +286,7 @@ lazy.lazyValue(
 /*
 | CreateFromJSON
 */
-jion_path.createFromJSON =
+jion$path.createFromJSON =
 	function( json )
 {
 	if( !Array.isArray( json ) )
@@ -294,14 +294,14 @@ jion_path.createFromJSON =
 		throw new Error( 'invalid json, path is no array' );
 	}
 
-	return jion_path.create( 'ray:init', json );
+	return jion$path.create( 'ray:init', json );
 };
 
 
 /*
 | Jsonfy.
 */
-jion_path.prototype.toJSON =
+jion$path.prototype.toJSON =
 	function( )
 {
 	return this.ray; // FIXME _ray
@@ -312,7 +312,7 @@ jion_path.prototype.toJSON =
 | Returns true is this path is empty.
 */
 lazy.lazyValue(
-	jion_path.prototype,
+	jion$path.prototype,
 	'isEmpty',
 	function( )
 	{
@@ -324,7 +324,7 @@ lazy.lazyValue(
 /*
 | An empty path.
 */
-jion_path.empty = jion_path.create( 'ray:init', [ ] );
+jion$path.empty = jion$path.create( 'ray:init', [ ] );
 
 
 } )( );

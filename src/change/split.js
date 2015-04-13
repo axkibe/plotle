@@ -31,7 +31,7 @@ if( JION )
 				{
 					comment : 'split at this path',
 					json : 'true',
-					type : 'jion_path'
+					type : 'jion$path'
 				},
 				at1 :
 				{
@@ -43,7 +43,7 @@ if( JION )
 				{
 					comment : 'split created this new/next path',
 					json : 'true',
-					type : 'jion_path'
+					type : 'jion$path'
 				}
 			},
 		init : [ ]

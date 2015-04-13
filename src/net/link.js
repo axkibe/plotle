@@ -4,7 +4,7 @@
 
 var
 	change_wrapRay,
-	jion_path,
+	jion$path,
 	net_link,
 	reply_auth,
 	reply_acquire,
@@ -215,7 +215,7 @@ prototype._onAcquireSpace =
 	root.create(
 		'space',
 			reply.space.create(
-				'path', jion_path.empty.append( 'space' )
+				'path', jion$path.empty.append( 'space' )
 			),
 		'link',
 			root.link.create(

@@ -22,7 +22,7 @@ if( JION )
 			fromItemPath :
 			{
 				comment : 'the item the relation goes from',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			pan :
@@ -34,7 +34,7 @@ if( JION )
 			toItemPath :
 			{
 				comment : 'the item the relation goes to',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			toPoint :

@@ -23,7 +23,7 @@ var
 	gruga_space,
 	gruga_user,
 	gruga_welcome,
-	jion_path,
+	jion$path,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -94,7 +94,7 @@ if( JION )
 			hover :
 			{
 				comment : 'current hovered item',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined',
 				assign : '_hover'
 			},
@@ -248,7 +248,7 @@ if( NODE )
 prototype = shell_root.prototype;
 
 loadingSpaceTextPath =
-	jion_path.empty
+	jion$path.empty
 	.append( 'form' )
 	.append( 'twig' )
 	.append( 'loading' )
@@ -340,7 +340,7 @@ shell_root.startup =
 
 	mode = 'loading';
 
-	ajaxPath = jion_path.empty.append( 'ajax' );
+	ajaxPath = jion$path.empty.append( 'ajax' );
 
 	user = user_creds.createFromLocalStorage( );
 
@@ -349,7 +349,7 @@ shell_root.startup =
 		user = user_creds.createVisitor( );
 	}
 
-	djPath = jion_path.empty.append( 'disc' );
+	djPath = jion$path.empty.append( 'disc' );
 
 	djTwPath = djPath.append( 'twig' );
 
@@ -387,8 +387,8 @@ shell_root.startup =
 		'_drawn', false,
 		'_formJockey',
 			form_jockey.create(
-				'hover', jion_path.empty,
-				'path', jion_path.empty.append( 'form' ),
+				'hover', jion$path.empty,
+				'path', jion$path.empty.append( 'form' ),
 				'view', view,
 				'twig:add', 'loading', gruga_loading,
 				'twig:add', 'login', gruga_login,
@@ -1218,8 +1218,8 @@ prototype.onAcquireSpace =
 		'space',
 			reply.space.create(
 				'access', access,
-				'hover', jion_path.empty,
-				'path', jion_path.empty.append( 'space' ),
+				'hover', jion$path.empty,
+				'path', jion$path.empty.append( 'space' ),
 				'ref', spaceRef
 			),
 		'view',

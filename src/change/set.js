@@ -29,7 +29,7 @@ if( JION )
 			{
 				comment : 'set at this path',
 				json : 'true',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			val :
 			{

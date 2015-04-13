@@ -63,7 +63,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the para',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			text :

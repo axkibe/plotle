@@ -28,7 +28,7 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			mark :
@@ -41,7 +41,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the form',
-				type : 'jion_path',
+				type : 'jion$path',
 				defaultValue : 'undefined'
 			},
 			spaceRef :

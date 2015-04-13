@@ -30,7 +30,7 @@ if( JION )
 			{
 				comment : 'grow at this path',
 				json : 'true',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			val :
 			{

@@ -13,7 +13,7 @@ var
 	change_split,
 	change_wrap,
 	jion,
-	jion_path,
+	jion$path,
 	math_limit,
 	math_maxInteger,
 	root,
@@ -105,7 +105,7 @@ if( NODE )
 
 
 noteDocPath =
-	jion_path.empty
+	jion$path.empty
 	.append( 'space' ) // FIXME, this isn't needed
 	.append( 'twig' )
 	.append( 'testnote' )

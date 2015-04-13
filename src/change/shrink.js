@@ -30,7 +30,7 @@ if( JION )
 			{
 				comment : 'shrink at this path',
 				json : 'true',
-				type : 'jion_path'
+				type : 'jion$path'
 			},
 			prev :
 			{

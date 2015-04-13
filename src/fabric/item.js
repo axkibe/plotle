@@ -9,7 +9,7 @@ var
 	action_scrolly,
 	fabric_item,
 	fabric_relation,
-	jion_path,
+	jion$path,
 	jools,
 	mark_item,
 	result_hover,
@@ -203,7 +203,7 @@ fabric_item.dragStart =
 			'action',
 				action_createRelation.create(
 					'fromItemPath', this.path,
-					'toItemPath', jion_path.empty,
+					'toItemPath', jion$path.empty,
 					'relationState', 'hadSelect',
 					'toPoint', p
 				)
