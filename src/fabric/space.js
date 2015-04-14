@@ -18,7 +18,6 @@ var
 	fabric_space,
 	gruga_relation,
 	jion,
-	jion$path,
 	mark_caret,
 	result_hover,
 	root,
@@ -109,8 +108,6 @@ if( SERVER )
 {
 	fabric_space = require( 'jion' ).this( module, 'source' );
 
-	jion$path = require( '../path' ); // FIXME
-
 	fabric_space.prototype._init = function( ){ };
 }
 
@@ -130,7 +127,7 @@ fabric_space.concernsMark =
 	// or the mark itself if it has a space path
 	if(
 		!mark
-		|| mark.containsPath( jion$path.empty.append( 'space' ) )
+		|| mark.containsPath( jion.path.empty.append( 'space' ) )
 	)
 	{
 		return mark;
@@ -644,7 +641,7 @@ prototype.dragStart =
 	{
 		transItem =
 			shell_stubs.emptyPortal.create(
-				'hover', jion$path.empty, // FIXME
+				'hover', jion.path.empty,
 				'view', view,
 				'zone',
 					euclid_rect.create(
@@ -818,7 +815,7 @@ prototype.dragStop =
 						change_grow.create(
 							'val', note,
 							'path',
-								jion$path.empty
+								jion.path.empty
 								.append( 'twig' )
 								.append( key ),
 							'rank', 0
@@ -896,7 +893,7 @@ prototype.dragStop =
 						change_grow.create(
 							'val', val,
 							'path',
-								jion$path.empty
+								jion.path.empty
 								.append( 'twig' )
 								.append( key ),
 							'rank', 0
@@ -940,7 +937,7 @@ prototype.dragStop =
 					root.alter(
 						change_grow.create(
 							'path',
-								jion$path.empty
+								jion.path.empty
 								.append( 'twig' )
 								.append( key ),
 							'val', portal,

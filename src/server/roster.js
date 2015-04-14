@@ -56,6 +56,22 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'aliases', stringRay( [ 'jioncode-path.js' ] ),
+		'coding', 'utf-8',
+		'data', jion.path.jioncode,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'aliases', stringRay( [ 'jion-path.js' ] ),
+		'coding', 'utf-8',
+		'data', jion.path.source,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/math/half.js',
 		'inBundle', true,
 		'inTestPad', true
@@ -82,12 +98,6 @@ module.exports =
 		// FIXME remove
 		'filePath', 'src/jools/jools.js',
 		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/path.js',
-		'inBundle', true,
-		'hasJion', true,
 		'inTestPad', true
 	),
 	resource.create(

@@ -44,11 +44,11 @@ var
 
 if( SERVER )
 {
-	change_ray = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	change_ray = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
-
-	jion = require( 'jion'  );
 }
 
 
