@@ -22,7 +22,7 @@ if( JION )
 			aliases :
 			{
 				comment : 'the list of aliases this is served under',
-				type : 'jion_stringRay',
+				type : 'jion$stringRay',
 				defaultValue : 'undefined'
 				// by default determined from filePath
 			},
@@ -126,7 +126,6 @@ if( JION )
 
 var
 	jion,
-	jion_stringRay,
 	prototype,
 	server_fileTypes,
 	resource;
@@ -136,8 +135,6 @@ jion = require( 'jion' );
 resource = jion.this( module );
 
 prototype = resource.prototype;
-
-jion_stringRay = require( '../stringRay' ); // FIXME
 
 server_fileTypes = require( './fileTypes' );
 
@@ -158,7 +155,7 @@ prototype._init =
 	if( !this.aliases )
 	{
 		this.aliases =
-			jion_stringRay.create(
+			jion.stringRay.create(
 				'ray:init',
 				[ filePath.replace( /\//g, '-' ) ]
 			);

@@ -14,18 +14,15 @@
 */
 var
 	jion,
-	jion_stringRay,
 	resource,
 	stringRay;
 
 
 jion = require( 'jion' );
 
-jion_stringRay = require( '../stringRay' ); // FIXME
-
 resource = require( './resource' );
 
-stringRay = jion_stringRay.stringRay;
+stringRay = jion.stringRay.stringRay; // FIXME
 
 module.exports =
 [
