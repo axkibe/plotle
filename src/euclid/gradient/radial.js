@@ -16,12 +16,12 @@
 if( JION )
 {
 	return{
-		id : 'gradient_radial',
+		id : 'euclid_gradient_radial',
 		attributes :
 		{
 			// FUTURE specify something
 		},
-		ray : [ 'gradient_colorStop' ]
+		ray : [ 'euclid_gradient_colorStop' ]
 	};
 }
 

@@ -4,6 +4,6 @@
 module.exports =
 [
 	'euclid_color',
-	'gradient_askew',
-	'gradient_radial'
+	'euclid_gradient_askew',
+	'euclid_gradient_radial'
 ];

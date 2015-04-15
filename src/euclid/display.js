@@ -844,7 +844,7 @@ euclid_display.prototype._colorStyle =
 
 			return style.css;
 
-		case 'gradient_askew' :
+		case 'euclid_gradient_askew' :
 
 /**/		if( CHECK )
 /**/		{
@@ -865,7 +865,7 @@ euclid_display.prototype._colorStyle =
 
 			break;
 
-		case 'gradient_radial' :
+		case 'euclid_gradient_radial' :
 
 			r0 = shape.gradientR0 || 0;
 

@@ -14,8 +14,8 @@ var
 	euclid_borderRay,
 	euclid_color,
 	euclid_point,
-	gradient_colorStop,
-	gradient_radial,
+	euclid_gradient_colorStop,
+	euclid_gradient_radial,
 	gruga_mainDisc,
 	icon_moveto,
 	icon_normal,
@@ -181,14 +181,14 @@ gruga_mainDisc =
 				)
 			),
 		'fill',
-			gradient_radial.create(
+			euclid_gradient_radial.create(
 				'ray:append',
-				gradient_colorStop.create(
+				euclid_gradient_colorStop.create(
 					'offset', 0,
 					'color', euclid_color.rgba( 255, 255,  20, 0.955 )
 				),
 				'ray:append',
-				gradient_colorStop.create(
+				euclid_gradient_colorStop.create(
 					'offset', 1,
 					'color', euclid_color.rgba( 255, 255, 180, 0.955 )
 				)

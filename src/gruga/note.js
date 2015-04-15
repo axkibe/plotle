@@ -9,8 +9,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	gradient_askew,
-	gradient_colorStop,
+	euclid_gradient_askew,
+	euclid_gradient_colorStop,
 	gruga_note;
 
 
@@ -27,14 +27,14 @@ gruga_note =
 		// default
 		design_facet.create(
 			'fill',
-				gradient_askew.create(
+				euclid_gradient_askew.create(
 					'ray:append',
-					gradient_colorStop.create(
+					euclid_gradient_colorStop.create(
 						'offset', 0,
 						'color', euclid_color.rgba( 255, 255, 248, 0.955 )
 					),
 					'ray:append',
-					gradient_colorStop.create(
+					euclid_gradient_colorStop.create(
 						'offset', 1,
 						'color', euclid_color.rgba( 255, 255, 160, 0.955 )
 					)

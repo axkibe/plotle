@@ -205,17 +205,17 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/gradient/colorStop.js',
+		'filePath', 'src/euclid/gradient/colorStop.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/gradient/askew.js',
+		'filePath', 'src/euclid/gradient/askew.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/gradient/radial.js',
+		'filePath', 'src/euclid/gradient/radial.js',
 		'hasJion', true,
 		'inBundle', true
 	),

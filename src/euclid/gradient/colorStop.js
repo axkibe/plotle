@@ -16,7 +16,7 @@
 if( JION )
 {
 	return{
-		id : 'gradient_colorStop',
+		id : 'euclid_gradient_colorStop',
 		attributes :
 		{
 			offset :

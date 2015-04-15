@@ -13,8 +13,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	gradient_colorStop,
-	gradient_radial,
+	euclid_gradient_colorStop,
+	euclid_gradient_radial,
 	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
@@ -117,14 +117,14 @@ gruga_createDisc =
 				)
 			),
 		'fill',
-			gradient_radial.create(
+			euclid_gradient_radial.create(
 				'ray:append',
-				gradient_colorStop.create(
+				euclid_gradient_colorStop.create(
 					'offset', 0,
 					'color', euclid_color.rgba( 255, 255,  20, 0.955 )
 				),
 				'ray:append',
-				gradient_colorStop.create(
+				euclid_gradient_colorStop.create(
 					'offset', 1,
 					'color', euclid_color.rgba( 255, 255, 205, 0.955 )
 				)
