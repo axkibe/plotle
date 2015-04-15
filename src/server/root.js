@@ -1489,13 +1489,13 @@ prototype.webAjax =
 			cmd,
 			query;
 
-		query = data.join( '' ),
-
-		log_ajax( '<-', query );
+		query = data.join( '' );
 
 		try
 		{
 			cmd = JSON.parse( query );
+
+			log_ajax( '<-', cmd );
 		}
 		catch( err )
 		{

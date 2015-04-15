@@ -163,19 +163,9 @@ config.whiteList = false;
 config.log  = {
 	all : false,
 	ajax : false,
-	change : false,
-	news : false,
 	debug : true,
 	fail : true,
-	genjion : true,
-	twig : false,
-	peer : false,
-	report : false,
-	reject : true,
 	start : true,
-	shell : true,
-	tfx : false,
-	tree : false,
 	web : true,
 	warn : true
 };

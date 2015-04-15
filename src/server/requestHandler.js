@@ -124,14 +124,15 @@ serveAlter =
 
 	if( !config.server_devel )
 	{
-		try
-		{
+// XXX FIXME
+//		try
+//		{
 			request = request_alter.createFromJSON( request );
-		}
-		catch( err )
-		{
-			return replyError( 'Command not valid jion' );
-		}
+//		}
+//		catch( err )
+//		{
+//			return replyError( 'Command not valid jion' );
+//		}
 	}
 	else
 	{
