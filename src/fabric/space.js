@@ -287,15 +287,13 @@ prototype.getVis =
 
 /*
 | Returns the item by a given tree-rank.
-|
-| FUTURE remove
 */
-prototype.atRank =
+prototype.atRankVis =
 	function(
 		rank
 	)
 {
-	return this.getVis( this.ranks[ rank ] );
+	return this.getVis( this.getKey( rank ) );
 };
 
 
@@ -351,7 +349,7 @@ prototype.draw =
 		r--
 	)
 	{
-		this.atRank( r ).draw( display );
+		this.atRankVis( r ).draw( display );
 	}
 
 	focus = this.focusedItem( );
@@ -454,7 +452,7 @@ prototype.mousewheel =
 		r++
 	)
 	{
-		item = this.atRank( r );
+		item = this.atRankVis( r );
 
 		if( item.mousewheel( view, p, dir, shift, ctrl ) )
 		{
@@ -514,7 +512,7 @@ prototype.pointingHover =
 		a++
 	)
 	{
-		item = this.atRank( a ),
+		item = this.atRankVis( a );
 
 		result = item.pointingHover( p );
 
@@ -669,7 +667,7 @@ prototype.dragStart =
 		a++
 	)
 	{
-		item = this.atRank( a );
+		item = this.atRankVis( a );
 
 		if( item.dragStart( p, shift, ctrl, access ) )
 		{
@@ -736,7 +734,7 @@ prototype.click =
 		a++
 	)
 	{
-		item = this.atRank( a );
+		item = this.atRankVis( a );
 
 		if( item.click( p, shift, ctrl, access ) )
 		{
@@ -1255,7 +1253,7 @@ prototype.dragMove =
 				r++
 			)
 			{
-				if( this.atRank( r ).dragMove( p ) )
+				if( this.atRankVis( r ).dragMove( p ) )
 				{
 					return 'pointer';
 				}
