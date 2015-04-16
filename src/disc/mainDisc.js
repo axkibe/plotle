@@ -27,8 +27,9 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'disc_mainDisc',
+		hasAbstract : true,
 		attributes :
 		{
 			access :

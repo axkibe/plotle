@@ -109,6 +109,10 @@ if( NODE )
 	fabric_space = require( 'jion' ).this( module, 'source' );
 
 	fabric_space.prototype._init = function( ){ };
+
+	fabric_space.concernsMark = function( o ){ return o; };
+
+	return;
 }
 
 
@@ -137,13 +141,6 @@ fabric_space.concernsMark =
 		return undefined;
 	}
 };
-
-
-// FIXME move upward?
-if( NODE )
-{
-	return;
-}
 
 
 /*

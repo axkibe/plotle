@@ -29,6 +29,7 @@ if( JION )
 {
 	return{
 		id : 'disc_createDisc',
+		hasAbstract : true,
 		attributes :
 		{
 			access :

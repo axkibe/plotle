@@ -26,6 +26,7 @@ if( JION )
 {
 	return{
 		id : 'widget_button',
+		hasAbstract : true,
 		attributes :
 		{
 			designFrame :
