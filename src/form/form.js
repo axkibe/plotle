@@ -32,6 +32,8 @@ form_form.init =
 	)
 {
 	var
+		a,
+		aZ,
 		mark,
 		name,
 		path,
@@ -54,13 +56,9 @@ form_form.init =
 
 	mark = this.mark;
 
-	ranks = this.ranks;
+	ranks = this._ranks;
 
-	for(
-		var a = 0, aZ = ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
 		name = ranks[ a ];
 
@@ -78,7 +76,13 @@ form_form.init =
 			);
 	}
 
-	this.twig = twig;
+	if( FREEZE )
+	{
+		Object.freeze( twig );
+	}
+
+	this._twig = twig;
+	this.twig = twig; // FIXME
 };
 
 
@@ -95,23 +99,13 @@ form_form.click =
 	var
 		r,
 		rZ,
-		ranks,
 		res;
 
-	ranks = this.ranks;
-
-	for(
-		r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		res = this.atRank( r ).click( p, shift, ctrl );
 
-		if( res )
-		{
-			return res;
-		}
+		if( res ) return res;
 	}
 
 	return false;
@@ -153,7 +147,6 @@ form_form.cycleFocus =
 		length,
 		path,
 		rank,
-		ranks,
 		rs,
 		ve;
 
@@ -165,8 +158,6 @@ form_form.cycleFocus =
 	{
 		return;
 	}
-
-	ranks = this.ranks,
 
 	rank = this.rankOf( path.get( 4 ) );
 

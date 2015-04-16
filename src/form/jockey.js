@@ -104,22 +104,22 @@ prototype._init =
 		aZ,
 		form,
 		name,
-		path;
+		path,
+		ranks,
+		twig;
 
-	if( !twigDup )
+	twig =
+		twigDup
+		? this._twig
+		: jion.copy( this._twig );
+
+	ranks = this._ranks;
+
+	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
-		this.twig = jion.copy( this.twig );
-	}
+		name = ranks[ a ];
 
-	for(
-		a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		name = this.ranks[ a ],
-
-		form = this.twig[ name ];
+		form = twig[ name ];
 
 		if( !form.path )
 		{
@@ -133,7 +133,7 @@ prototype._init =
 			path = pass;
 		}
 
-		this.twig[ name ] =
+		twig[ name ] =
 			form.create(
 				'hover', this.hover,
 				'mark', this.mark,
@@ -145,14 +145,20 @@ prototype._init =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( this.twig[ name ].reflectName !== name )
+/**/		if( twig[ name ].reflectName !== name )
 /**/		{
 /**/			throw new Error( );
 /**/		}
 /**/	}
 	}
 
-	// FIXME freeze twig
+	if( FREEZE )
+	{
+		Object.freeze( twig );
+	}
+
+	this.twig = twig; // FIXME
+	this._twig = twig;
 };
 
 
