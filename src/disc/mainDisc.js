@@ -406,11 +406,7 @@ prototype.pointingHover =
 	}
 
 	// this is on the disc
-	for(
-		r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		reply =
 			this.atRank( r )
@@ -461,11 +457,7 @@ prototype.click =
 	}
 
 	// this is on the disc
-	for(
-		r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		reply = this.atRank( r ).click( pp, shift, ctrl );
 

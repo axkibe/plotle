@@ -31,7 +31,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'fabric_doc',
 		attributes :
 		{
@@ -122,17 +122,17 @@ prototype._init =
 		return;
 	}
 
-	ranks = this.ranks;
+	ranks = this._ranks;
 
 	twig =
 		twigDup
-		? this.twig
-		: jion.copy( this.twig );
+		? this._twig
+		: jion.copy( this._twig );
 
 	twigPath = this.path && this.path.append( 'twig' );
 
 	for(
-		r = 0, rZ = this.ranks.length;
+		r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
@@ -149,7 +149,8 @@ prototype._init =
 			);
 	}
 
-	this.twig = twig;
+	this.twig = twig; // FIXME
+	this._twig = twig;
 };
 
 
@@ -613,7 +614,6 @@ prototype.draw =
 		pnws,
 		r,
 		rZ,
-		ranks,
 		rs;
 
 /**/if( CHECK )
@@ -675,10 +675,8 @@ prototype.draw =
 	// north-west points of paras
 	pnws = this.paraPnws;
 
-	ranks = this.ranks;
-
 	for(
-		r = 0, rZ = ranks.length;
+		r = 0, rZ = this.length;
 		r < rZ;
 		r++
 	)
@@ -755,21 +753,16 @@ jion.lazyValue(
 			height,
 			para,
 			paraSep,
-			ranks;
+			r,
+			rZ;
 
 		fs = this.fontsize;
 
 		paraSep = this.paraSep;
 
-		ranks = this.ranks;
-
 		height = 0;
 
-		for(
-			var r = 0, rZ = ranks.length;
-			r < rZ;
-			r++
-		)
+		for( r = 0, rZ = this.length; r < rZ; r++ )
 		{
 			para = this.atRank( r );
 
