@@ -7,6 +7,7 @@ var
 	euclid_point,
 	euclid_shape,
 	fabric_doc,
+	fabric_pointGroup,
 	gruga_selection,
 	jion,
 	math_half,
@@ -611,6 +612,8 @@ prototype.draw =
 		p,
 		pnw,
 		pnws,
+		r,
+		rZ,
 		ranks,
 		rs;
 
@@ -671,19 +674,19 @@ prototype.draw =
 	}
 
 	// north-west points of paras
-	pnws = this.paraPNWs;
+	pnws = this.paraPnws;
 
 	ranks = this.ranks;
 
 	for(
-		var r = 0, rZ = ranks.length;
+		r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
 	{
 		para = this.atRank( r );
 
-		pnw = pnws[ ranks[ r ] ];
+		pnw = pnws.get( this.getKey( r ) );
 
 		p = pnw.sub( 0, Math.round( scrollp.y ) );
 
@@ -694,21 +697,17 @@ prototype.draw =
 
 /*
 | The para pnws.
-|
-| FIXME make this a twig.
 */
 jion.lazyValue(
 	prototype,
-	'paraPNWs',
+	'paraPnws',
 	function( )
 	{
 		var
-			flow,
 			innerMargin,
 			para,
 			paraSep,
 			pnws,
-			ranks,
 			r,
 			rZ,
 			y;
@@ -721,28 +720,24 @@ jion.lazyValue(
 
 		y = innerMargin.n;
 
-		ranks = this.ranks;
-
 		for(
-			r = 0, rZ = ranks.length;
+			r = 0, rZ = this.length;
 			r < rZ;
 			r++
 		)
 		{
 			para = this.atRank( r );
 
-			flow = para.flow;
-
-			pnws[ ranks[ r ] ] =
+			pnws[ this.getKey( r ) ] =
 				euclid_point.create(
 					'x', innerMargin.w,
 					'y', Math.round( y )
 				);
 
-			y += flow.height + paraSep;
+			y += para.flow.height + paraSep;
 		}
 
-		return pnws;
+		return fabric_pointGroup.create( 'group:init', pnws );
 	}
 );
 
@@ -804,7 +799,7 @@ prototype.getPNW =
 		key
 	)
 {
-	return this.paraPNWs[ key ];
+	return this.paraPnws.get( key );
 };
 
 
@@ -876,11 +871,11 @@ prototype.getParaAtPoint =
 		return;
 	}
 
-	pnws = this.paraPNWs;
+	pnws = this.paraPnws;
 
-	ranks = this.ranks;
+	ranks = this.ranks; // FIXME
 
-	twig = this.twig;
+	twig = this.twig; // FIXME
 
 	for(
 		r = 0, rZ = ranks.length;
@@ -892,7 +887,7 @@ prototype.getParaAtPoint =
 
 		para = twig[ key ];
 
-		if( p.y < pnws[ key ].y + para.flow.height )
+		if( p.y < pnws.get( key ).y + para.flow.height )
 		{
 			return para;
 		}
