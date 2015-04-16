@@ -148,16 +148,12 @@ prototype._init =
 
 	twig =
 		twigDup
-		? this.twig
-		: jion.copy( this.twig );
+		? this._twig
+		: jion.copy( this._twig );
 
-	ranks = this.ranks;
+	ranks = this._ranks;
 
-	for(
-		r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
 		wname = ranks[ r ];
 
@@ -174,7 +170,8 @@ prototype._init =
 			);
 	}
 
-	this.twig = twig;
+	this.twig = twig; // FIXME
+	this._twig = twig;
 
 /**/if( FREEZE )
 /**/{
@@ -192,7 +189,9 @@ jion.lazyValue(
 	function( )
 	{
 		var
-			display;
+			display,
+			r,
+			rZ;
 
 		display =
 			euclid_display.create(
@@ -202,11 +201,7 @@ jion.lazyValue(
 
 		display.fill( this.fill, this.silhoutte, euclid_view.proper );
 
-		for(
-			var r = 0, rZ = this.ranks.length;
-			r < rZ;
-			r++
-		)
+		for( r = 0, rZ = this.length; r < rZ; r++ )
 		{
 			this.atRank( r ).draw( display );
 		}
@@ -313,7 +308,9 @@ prototype.pointingHover =
 	var
 		display,
 		pp,
-		reply;
+		r,
+		reply,
+		rZ;
 
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
@@ -332,20 +329,11 @@ prototype.pointingHover =
 	}
 
 	// it's on the disc
-	for(
-		var r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply =
-			this.atRank( r )
-			.pointingHover( pp, shift, ctrl );
+		reply = this.atRank( r ).pointingHover( pp, shift, ctrl );
 
-		if( reply )
-		{
-			return reply;
-		}
+		if( reply ) return reply;
 	}
 };
 
@@ -363,7 +351,9 @@ prototype.click =
 	var
 		display,
 		pp,
-		reply;
+		reply,
+		r,
+		rZ;
 
 	// shortcut if p is not near the panel
 	if( !this.frame.within( p ) )
@@ -382,20 +372,11 @@ prototype.click =
 	}
 
 	// this is on the disc
-	for(
-		var r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply =
-			this.atRank( r )
-			.click( pp, shift, ctrl );
+		reply = this.atRank( r ).click( pp, shift, ctrl );
 
-		if( reply )
-		{
-			return reply;
-		}
+		if( reply ) return reply;
 	}
 
 	return false;

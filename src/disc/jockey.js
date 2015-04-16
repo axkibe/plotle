@@ -138,10 +138,10 @@ prototype._init =
 /**/	}
 /**/}
 
-	ranks = this.ranks;
+	ranks = this._ranks;
 
 	// FIXME do not copy when inherit.twig !== this.twig
-	twig = jion.copy( this.twig );
+	twig = jion.copy( this._twig );
 
 	for(
 		a = 0, aZ = ranks.length;
@@ -166,7 +166,13 @@ prototype._init =
 			);
 	}
 
-	this.twig = twig;
+	if( FREEZE )
+	{
+		Object.freeze( twig );
+	}
+
+	this._twig = twig;
+	this.twig = twig; // FIXME
 };
 
 
