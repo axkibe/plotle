@@ -262,7 +262,7 @@ hash_sha1 =
 /*
 | Node export.
 */
-if( SERVER )
+if( NODE )
 {
 	module.exports = hash_sha1;
 }

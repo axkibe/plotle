@@ -184,7 +184,7 @@ jion.lazyValue(
 
 		return (
 			this.getPNW( key ).y
-			+ this.twig[ key ].attentionCenter // FIXME
+			+ this.get( key ).attentionCenter
 		);
 	}
 );
@@ -280,7 +280,7 @@ prototype._getRangeShape =
 
 	lx = innerMargin.w;
 
-	// FIXME do not create points
+	// FUTURE do not create points
 
 	fp = fp.add( frontPnw.x - scrollp.x, frontPnw.y - scrollp.y );
 

@@ -44,7 +44,7 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
 	jion = require( 'jion' );
 

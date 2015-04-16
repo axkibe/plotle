@@ -111,7 +111,7 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
 	jion = require( 'jion' );
 

@@ -109,7 +109,7 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
 	fabric_note = require( 'jion' ).this( module, 'source' );
 

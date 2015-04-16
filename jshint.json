@@ -15,16 +15,11 @@
 	"unused" : true,
 	"globals"  :
 	{
-		"APP" : true,
 		"CHECK" : true,
-		"CONVERT" : true,
-		"FORCE_JION_LOADING" : true,
 		"FREEZE" : true,
 		"JION" : true,
 		"NODE" : true,
 		"SHELL" : true,
-		"SHELLAPP" : true,
-		"SERVER" : true,
 		"pass" : true,
 		"root" : true
 	}

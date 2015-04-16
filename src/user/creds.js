@@ -42,7 +42,7 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
 	user_creds = require( 'jion' ).this( module, 'source' );
 

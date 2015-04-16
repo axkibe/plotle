@@ -98,8 +98,8 @@ GLOBAL.FREEZE = config.server_freeze;
 // this is not a jion creation
 GLOBAL.JION = false;
 
-// server is a server
-GLOBAL.SERVER = true;
+// this is node
+GLOBAL.NODE = true;
 
 // sets root as global variable
 GLOBAL.root = undefined;
@@ -660,8 +660,7 @@ prototype.prepareInventory =
 							'CHECK' : config.shell_check,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
-							'NODE' : false,
-							'SERVER' : false
+							'NODE' : false
 						}
 					}
 				);
@@ -839,7 +838,6 @@ prototype.prependConfigFlags =
 						'var JION = false;\n'
 						+ 'var CHECK = ' + config.shell_check + ';\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
-						+ 'var SERVER = false;\n'
 						+ 'var NODE = false;\n'
 						+ resource.data
 				)

@@ -31,7 +31,7 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
 	change_wrapRay = require( 'jion' ).this( module, 'source' );
 }

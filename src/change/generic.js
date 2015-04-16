@@ -16,7 +16,7 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
 	change_generic = module.exports;
 }

@@ -41,7 +41,7 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
 	euclid_point = require( 'jion' ).this( module, 'source' );
 }

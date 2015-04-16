@@ -33,7 +33,7 @@ change_error =
 };
 
 
-if( SERVER )
+if( NODE )
 {
 	module.exports = change_error;
 }

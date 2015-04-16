@@ -30,7 +30,7 @@ if( JION )
 }
 
 
-if( SERVER )
+if( NODE )
 {
 	require( 'jion' ).this( module, 'source' );
 }

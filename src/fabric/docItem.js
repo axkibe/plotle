@@ -20,7 +20,7 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
 	fabric_docItem = module.exports;
 }

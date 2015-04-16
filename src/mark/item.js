@@ -38,7 +38,7 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
 	jion = require( 'jion' );
 

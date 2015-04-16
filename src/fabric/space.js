@@ -104,7 +104,7 @@ var
 	prototype;
 
 
-if( SERVER )
+if( NODE )
 {
 	fabric_space = require( 'jion' ).this( module, 'source' );
 

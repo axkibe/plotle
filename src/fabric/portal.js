@@ -106,7 +106,7 @@ var
 /*
 | Node includes.
 */
-if( SERVER )
+if( NODE )
 {
 	fabric_portal = require( 'jion' ).this( module, 'source' );
 
