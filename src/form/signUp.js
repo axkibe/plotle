@@ -117,24 +117,21 @@ jion.lazyValue( prototype, 'attentionCenter', form_form.getAttentionCenter );
 prototype.clear =
 	function( )
 {
-	var
-		twig;
-
-	twig = this.twig;
-
 	// FIXME make this in one call, somehow
 
-	root.setPath( twig.userInput.path.append( 'value' ), '' );
+	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
 
-	root.setPath( twig.emailInput.path.append( 'value' ), '' );
+	root.setPath( this.get( 'emailInput' ).path.append( 'value' ), '' );
 
-	root.setPath( twig.passwordInput.path.append( 'value' ), '' );
+	root.setPath( this.get( 'passwordInput' ).path.append( 'value' ), '' );
 
-	root.setPath( twig.password2Input.path.append( 'value' ), '' );
+	root.setPath( this.get( 'password2Input' ).path.append( 'value' ), '' );
 
-	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
+	root.setPath(
+		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true
+	);
 
-	root.setPath( this.path.append( 'twig' ).append( 'errorLabel' ).append( 'text' ), '' );
+	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
 
 	root.create( 'mark', undefined );
 };
@@ -240,17 +237,12 @@ prototype.onRegister =
 	)
 {
 	var
-		twig;
-
-	twig = this.twig;
+		userInput;
 
 	if( !ok )
 	{
 		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
+			this.get( 'errorLabel' ).path.append( 'text' ),
 			message
 		);
 
@@ -259,8 +251,8 @@ prototype.onRegister =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', twig.userInput.path,
-						'at', twig.userInput.value.length
+						'path', userInput.path,
+						'at', userInput.value.length
 					)
 			);
 		}
@@ -268,10 +260,7 @@ prototype.onRegister =
 		return;
 	}
 
-	root.create(
-		'mode', 'welcome',
-		'user', user
-	);
+	root.create( 'mode', 'welcome', 'user', user );
 
 	this.clear( );
 
@@ -310,21 +299,11 @@ prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'signupButton' :
+		case 'signupButton' : this.signup( ); break;
 
-			this.signup( );
+		case 'closeButton' : root.showHome( ); break;
 
-			break;
-
-		case 'closeButton' :
-
-			root.showHome( );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -336,46 +315,51 @@ prototype.showDisc = true;
 
 
 /*
+| Sets the error message.
+*/
+prototype.setErrorMessage =
+	function(
+		message
+	)
+{
+	root.setPath(
+		this.get( 'errorLabel' ).path.append( 'text' ),
+		message
+	);
+};
+
+
+/*
 | Signs a new user up
 */
 prototype.signup =
 	function( )
 {
 	var
-		twig,
-		username,
 		email,
+		newsletter,
 		pass,
 		pass2,
-		newsletter;
+		username;
 
-	twig = this.twig;
+	username = this.get( 'userInput' ).value;
 
-	username = twig.userInput.value;
+	email = this.get( 'emailInput' ).value;
 
-	email = twig.emailInput.value;
+	pass = this.get( 'passwordInput' ).value;
 
-	pass = twig.passwordInput.value;
+	pass2 = this.get( 'password2Input' ).value;
 
-	pass2 = twig.password2Input.value;
-
-	newsletter = twig.newsletterCheckBox.checked;
-
+	newsletter = this.get( 'newsletterCheckBox' ).checked;
 
 	if( username.length < 4 )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Username too short, min. 4 characters'
-		);
+		this.setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.userInput.path,
+					'path', this.get( 'userInput' ).path,
 					'at', username.length
 				)
 		);
@@ -385,18 +369,12 @@ prototype.signup =
 
 	if( username.substr( 0, 5 ) === 'visit' )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Username must not start with "visit"'
-		);
+		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.userInput.path,
+					'path', this.get( 'userInput' ).path,
 					'at', 0
 				)
 		);
@@ -406,18 +384,12 @@ prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Password too short, min. 5 characters'
-		);
+		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.passwordInput.path,
+					'path', this.get( 'passwordInput' ).path,
 					'at', pass.length
 				)
 		);
@@ -427,18 +399,12 @@ prototype.signup =
 
 	if( pass !== pass2 )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Passwords do not match'
-		);
+		this.setErrorMessage( 'Passwords do not match' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.password2Input.path,
+					'path', this.get( 'password2Input' ).path,
 					'at', pass2.length
 				)
 		);

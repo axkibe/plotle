@@ -96,20 +96,28 @@ prototype._init =
 		twigDup
 	)
 {
-	if( !this.path )
-	{
-		return;
-	}
+	var
+		twig;
+
+	if( !this.path ) return;
 
 	if( !twigDup )
 	{
-		this.twig = jion.copy( this.twig );
+		twig =
+			twigDup
+			? this._twig
+			: jion.copy( this._twig );
 	}
 
-	this.twig.headline =
-		this.twig.headline.create(
+	twig.headline =
+		twig.headline.create(
 			'text', 'welcome ' + ( this.user ? this.user.name : '' ) + '!'
 		);
+
+	if( FREEZE ) Object.freeze( twig );
+
+	this.twig = twig; // FIXME
+	this._twig = twig;
 
 	form_form.init.call( this, inherit );
 };
@@ -118,11 +126,7 @@ prototype._init =
 /*
 | The attention center.
 */
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
-	form_form.getAttentionCenter
-);
+jion.lazyValue( prototype, 'attentionCenter', form_form.getAttentionCenter );
 
 
 /*
