@@ -59,7 +59,7 @@ prototype.createInvert =
 		a++
 	)
 	{
-		iRay[ a ] = this.ray[ aZ - 1 - a ].createInvert( );
+		iRay[ a ] = this.get( aZ - 1 - a ).createInvert( );
 	}
 
 	return change_wrapRay.create( 'ray:init', iRay );

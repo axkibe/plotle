@@ -71,13 +71,9 @@ jion.lazyValue(
 
 		iRay = [ ];
 
-		for(
-			a = 0, aZ = this.length;
-			a < aZ;
-			a++
-		)
+		for( a = 0, aZ = this.length; a < aZ; a++ )
 		{
-			iRay[ a ] = this.ray[ aZ - 1 - a ].invert;
+			iRay[ a ] = this.get( aZ - 1 - a ).invert;
 		}
 
 		result = change_ray.create( 'ray:init', iRay );
