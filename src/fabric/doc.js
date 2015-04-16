@@ -139,7 +139,6 @@ prototype._init =
 	{
 		key = ranks[ r ];
 
-
 		twig[ key ] =
 			twig[ key ].create(
 				'path', twigPath && twigPath.appendNC( key ),
@@ -185,7 +184,7 @@ jion.lazyValue(
 
 		return (
 			this.getPNW( key ).y
-			+ this.twig[ key ].attentionCenter
+			+ this.twig[ key ].attentionCenter // FIXME
 		);
 	}
 );
@@ -257,9 +256,9 @@ prototype._getRangeShape =
 
 	backPnw = this.getPNW( backKey );
 
-	frontPara = this.twig[ frontKey ];
+	frontPara = this.twig[ frontKey ]; // fixme
 
-	backPara = this.twig[ backKey ];
+	backPara = this.twig[ backKey ]; // fixme
 
 	fo = frontPara.locateOffset( front.at );
 
@@ -294,11 +293,11 @@ prototype._getRangeShape =
 	frontRank = this.rankOf( frontKey );
 
 	f2Key =
-		( frontRank + 1 < this.ranks.length )
-		? this.ranks[ frontRank + 1 ]
+		( frontRank + 1 < this.length )
+		? this.getKey( frontRank + 1 )
 		: undefined;
 
-	f2Para = f2Key && this.twig[ f2Key ];
+	f2Para = f2Key && this.twig[ f2Key ]; // fixme
 
 	if( frontKey === backKey && fo.line === bo.line )
 	{
@@ -439,9 +438,9 @@ prototype._getRangeShape =
 		{
 			backRank = this.rankOf( backKey );
 
-			b2Key = this.ranks[ backRank - 1 ];
+			b2Key = this.ranks[ backRank - 1 ]; // fixme
 
-			b2Para = this.twig[ b2Key ];
+			b2Para = this.twig[ b2Key ]; // fixme
 
 			b2y =
 				Math.round(
@@ -628,7 +627,7 @@ prototype.draw =
 /**/    // since it might be temporarily outOfOrder during update operation
 /**/	if( this.mark && this.mark.hasCaret )
 /**/	{
-/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] )
+/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] ) // fixme
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -812,23 +811,18 @@ jion.lazyValue(
 	function( )
 	{
 		var
+			a,
+			aZ,
 			max,
-			widthUsed,
-			twig;
+			widthUsed;
 
 		widthUsed = 0;
 
-		twig = this.twig;
-
 		max = Math.max;
 
-		for( var key in twig )
+		for( a = 0, aZ = this.length; a < aZ; a++ )
 		{
-			widthUsed =
-				max(
-					widthUsed,
-					twig[ key ].flow.width
-				);
+			widthUsed = max( widthUsed, this.atRank( a ).flow.width );
 		}
 
 		return widthUsed;
@@ -858,13 +852,10 @@ prototype.getParaAtPoint =
 	)
 {
 	var
-		key,
 		para,
 		pnws,
 		r,
-		ranks,
-		rZ,
-		twig;
+		rZ;
 
 	if( p.y < this.innerMargin.n )
 	{
@@ -873,21 +864,11 @@ prototype.getParaAtPoint =
 
 	pnws = this.paraPnws;
 
-	ranks = this.ranks; // FIXME
-
-	twig = this.twig; // FIXME
-
-	for(
-		r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		key = ranks[ r ];
+		para = this.atRank( r );
 
-		para = twig[ key ];
-
-		if( p.y < pnws.get( key ).y + para.flow.height )
+		if( p.y < pnws.get( this.getKey( r ) ).y + para.flow.height )
 		{
 			return para;
 		}
