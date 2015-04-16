@@ -63,7 +63,6 @@ if( JION )
 		init : [ 'twigDup' ],
 		twig :
 			[
-				/* FUTURE
 				'form_loading',
 				'form_login',
 				'form_moveTo',
@@ -73,7 +72,6 @@ if( JION )
 				'form_space',
 				'form_user',
 				'form_welcome'
-				*/
 			]
 	};
 }

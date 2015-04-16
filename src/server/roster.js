@@ -520,7 +520,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/form/signup.js',
+		'filePath', 'src/form/signUp.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -530,7 +530,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/form/moveto.js',
+		'filePath', 'src/form/moveTo.js',
 		'hasJion', true,
 		'inBundle', true
 	),
