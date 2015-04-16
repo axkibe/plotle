@@ -76,7 +76,7 @@ if( JION )
 				type : 'euclid_view'
 			}
 		},
-		init : [ ],
+		init : [ 'twigDup' ],
 		twig :
 		[
 			'disc_mainDisc',
@@ -120,13 +120,14 @@ disc_jockey.concernsMark =
 | Initializes the disc jockey.
 */
 prototype._init =
-	function( )
+	function(
+		twigDup
+	)
 {
 	var
 		a,
 		aZ,
-		name,
-		proto,
+		key,
 		ranks,
 		twig;
 
@@ -140,21 +141,14 @@ prototype._init =
 
 	ranks = this._ranks;
 
-	// FIXME do not copy when inherit.twig !== this.twig
-	twig = jion.copy( this._twig );
+	twig = twigDup ? this._twig : jion.copy( this._twig );
 
-	for(
-		a = 0, aZ = ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
-		name = ranks[ a ];
+		key = ranks[ a ];
 
-		proto = twig[ name ];
-
-		twig[ name ] =
-			proto.create(
+		twig[ key ] =
+			twig[ key ].create(
 				'access', this.access,
 				'action', this.action,
 				'hover', this.hover,
@@ -166,10 +160,7 @@ prototype._init =
 			);
 	}
 
-	if( FREEZE )
-	{
-		Object.freeze( twig );
-	}
+	if( FREEZE ) Object.freeze( twig );
 
 	this._twig = twig;
 	this.twig = twig; // FIXME
@@ -210,10 +201,7 @@ prototype.draw =
 		display
 	)
 {
-	if( this.mode === 'create' )
-	{
-		this.twig.createDisc.draw( display );
-	}
+	if( this.mode === 'create' ) this.twig.createDisc.draw( display );
 
 	this.twig.mainDisc.draw( display );
 };
@@ -261,10 +249,7 @@ prototype.pointingHover =
 
 	hover = this.twig.mainDisc.pointingHover( p, shift, ctrl );
 
-	if( hover )
-	{
-		return hover;
-	}
+	if( hover ) return hover;
 
 	if( this.mode === 'create' )
 	{
@@ -288,10 +273,7 @@ prototype.click =
 
 	start = this.twig.mainDisc.click( p, shift, ctrl );
 
-	if( start )
-	{
-		return start;
-	}
+	if( start ) return start;
 
 	if( this.mode === 'create' )
 	{
