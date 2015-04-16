@@ -165,8 +165,8 @@ prototype._init =
 
 	twig =
 		twigDup
-		? this.twig
-		: jion.copy( this.twig );
+		? this._twig
+		: jion.copy( this._twig );
 
 	for( k in twig )
 	{
@@ -196,7 +196,8 @@ prototype._init =
 /**/	Object.freeze( twig );
 /**/}
 
-	this.twig = twig;
+	this.twig = twig; // FIXME
+	this._twig = twig;
 };
 
 
@@ -278,7 +279,7 @@ prototype.getVis =
 			break;
 	}
 
-	return this.twig[ key ];
+	return this.get( key );
 };
 
 
@@ -347,19 +348,13 @@ prototype.draw =
 
 	focus = this.focusedItem( );
 
-	if( focus )
-	{
-		focus.handlesBezel.drawHandles( display );
-	}
+	if( focus ) focus.handlesBezel.drawHandles( display );
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.start )
-			{
-				action.transItem.draw( display );
-			}
+			if( action.start ) action.transItem.draw( display );
 
 			break;
 
@@ -443,18 +438,10 @@ prototype.mousewheel =
 	{
 		item = this.atRankVis( r );
 
-		if( item.mousewheel( view, p, dir, shift, ctrl ) )
-		{
-			return true;
-		}
+		if( item.mousewheel( view, p, dir, shift, ctrl ) ) return true;
 	}
 
-	root.create(
-		'view',
-			dir > 0
-			? view.review( 1, p )
-			: view.review( -1, p )
-	);
+	root.create( 'view', view.review( dir > 0 ? 1 : -1, p ) );
 
 	return true;
 };
@@ -481,7 +468,7 @@ prototype.pointingHover =
 		result,
 		view;
 
-	view = this.view,
+	view = this.view;
 
 	focus = this.focusedItem( );
 
@@ -1425,12 +1412,9 @@ prototype.input =
 
 	path = mark.caretPath;
 
-	item = this.twig[ path.get( 2 ) ];
+	item = this.get( path.get( 2 ) );
 
-	if( item )
-	{
-		item.input( text );
-	}
+	if( item ) item.input( text );
 };
 
 
@@ -1581,17 +1565,11 @@ prototype.specialKey =
 
 	mark = this.mark;
 
-	if( !mark || !mark.hasCaret )
-	{
-		return;
-	}
+	if( !mark || !mark.hasCaret ) return;
 
-	item = this.twig[ mark.caretPath.get( 2 ) ];
+	item = this.get( mark.caretPath.get( 2 ) );
 
-	if( item )
-	{
-		item.specialKey( key, shift, ctrl );
-	}
+	if( item ) item.specialKey( key, shift, ctrl );
 };
 
 
