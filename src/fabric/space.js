@@ -343,11 +343,7 @@ prototype.draw =
 
 	action = this._action;
 
-	for(
-		r = this.ranks.length - 1;
-		r >= 0;
-		r--
-	)
+	for( r = this.length - 1; r >= 0; r-- )
 	{
 		this.atRankVis( r ).draw( display );
 	}
@@ -446,11 +442,7 @@ prototype.mousewheel =
 
 	view = this.view;
 
-	for(
-		r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		item = this.atRankVis( r );
 
@@ -463,8 +455,8 @@ prototype.mousewheel =
 	root.create(
 		'view',
 			dir > 0
-			? this.view.review( 1, p )
-			: this.view.review( -1, p )
+			? view.review( 1, p )
+			: view.review( -1, p )
 	);
 
 	return true;
@@ -506,11 +498,7 @@ prototype.pointingHover =
 		}
 	}
 
-	for(
-		a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		item = this.atRankVis( a );
 
@@ -661,11 +649,7 @@ prototype.dragStart =
 	}
 
 	// see if one item was targeted
-	for(
-		a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		item = this.atRankVis( a );
 
@@ -728,11 +712,7 @@ prototype.click =
 	view = this.view;
 
 	// clicked some item?
-	for(
-		a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		item = this.atRankVis( a );
 
