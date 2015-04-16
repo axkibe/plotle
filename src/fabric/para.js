@@ -101,7 +101,11 @@ if( NODE )
 
 	fabric_para = jion.this( module, 'source' );
 
-	// FIXME return?
+	fabric_para.prototype._init = function( ) { };
+
+	fabric_para.concernsMark = function( o ) { return o; };
+
+	return;
 }
 
 
