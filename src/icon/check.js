@@ -31,8 +31,7 @@ if( JION )
 			{
 				comment : 'border',
 				type : 'euclid_border',
-				defaultValue : 'undefined',
-				allowsNull : true // FIXME
+				defaultValue : 'undefined'
 			},
 			fill :
 			{

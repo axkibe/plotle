@@ -94,7 +94,6 @@ prototype._init =
 	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
 
 	pc =
-		// FIXME make it an euclid middle call
 		euclid_point.create(
 			'x', math_half( pnw.x + pse.x ),
 			'y', math_half( pnw.y + pse.y )

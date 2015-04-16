@@ -95,12 +95,6 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		// FIXME remove
-		'filePath', 'src/jools/jools.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/change/error.js',
 		'inBundle', true,
 		'inTestPad', true
