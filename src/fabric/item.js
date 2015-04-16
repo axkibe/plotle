@@ -259,9 +259,7 @@ fabric_item.dragStop =
 			}
 
 			fabric_relation.spawn(
-				root.space.getItem(
-					action.fromItemPath.get( -1 )
-				),
+				root.space.get( action.fromItemPath.get( -1 ) ),
 				this
 			);
 

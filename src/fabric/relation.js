@@ -261,9 +261,9 @@ prototype.draw =
 
 	space = root.space;
 
-	item1 = space.getItem( this.item1key );
+	item1 = space.getVis( this.item1key );
 
-	item2 = space.getItem( this.item2key );
+	item2 = space.getVis( this.item2key );
 
 	zone = this.zone;
 

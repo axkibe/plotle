@@ -246,7 +246,7 @@ prototype.focusedItem =
 
 	if( path && path.length > 2 )
 	{
-		return this.getItem( path.get( 2 ) );
+		return this.getVis( path.get( 2 ) );
 	}
 	else
 	{
@@ -258,7 +258,7 @@ prototype.focusedItem =
 /*
 | Returns an item by its key.
 */
-prototype.getItem =
+prototype.getVis =
 	function(
 		key
 	)
@@ -295,7 +295,7 @@ prototype.atRank =
 		rank
 	)
 {
-	return this.getItem( this.ranks[ rank ] );
+	return this.getVis( this.ranks[ rank ] );
 };
 
 
@@ -376,13 +376,13 @@ prototype.draw =
 
 			if( action.fromItemPath )
 			{
-				fromItem = this.getItem( action.fromItemPath.get( -1 ) );
+				fromItem = this.getVis( action.fromItemPath.get( -1 ) );
 
 				fromItem.highlight( display );
 
 				if( action.toItemPath )
 				{
-					toItem = this.getItem( action.toItemPath.get( -1 ) );
+					toItem = this.getVis( action.toItemPath.get( -1 ) );
 
 					toItem.highlight( display );
 				}
@@ -419,7 +419,7 @@ prototype.draw =
 				if( this.hover )
 				{
 					this
-					.getItem( this.hover.get( 2 ) )
+					.getVis( this.hover.get( 2 ) )
 					.highlight( display );
 				}
 			}
@@ -990,7 +990,7 @@ prototype.dragStop =
 
 					if( action.toItemPath )
 					{
-						item = this.getItem( action.toItemPath.get( -1 ) );
+						item = this.getVis( action.toItemPath.get( -1 ) );
 
 						item.dragStop( p );
 					}
@@ -1115,7 +1115,7 @@ prototype.dragStop =
 
 		case 'action_scrolly' :
 
-			item = this.getItem( action.itemPath.get( -1 ));
+			item = this.getVis( action.itemPath.get( -1 ));
 
 			if( item )
 			{
@@ -1412,7 +1412,7 @@ prototype.dragMove =
 
 		case 'action_scrolly' :
 
-			item = this.getItem( action.itemPath.get( -1 ) );
+			item = this.getVis( action.itemPath.get( -1 ) );
 
 			if( item )
 			{
