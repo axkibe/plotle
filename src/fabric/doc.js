@@ -256,9 +256,9 @@ prototype._getRangeShape =
 
 	backPnw = this.getPNW( backKey );
 
-	frontPara = this.twig[ frontKey ]; // fixme
+	frontPara = this.get( frontKey );
 
-	backPara = this.twig[ backKey ]; // fixme
+	backPara = this.get( backKey );
 
 	fo = frontPara.locateOffset( front.at );
 
@@ -297,7 +297,7 @@ prototype._getRangeShape =
 		? this.getKey( frontRank + 1 )
 		: undefined;
 
-	f2Para = f2Key && this.twig[ f2Key ]; // fixme
+	f2Para = f2Key && this.get( f2Key );
 
 	if( frontKey === backKey && fo.line === bo.line )
 	{
@@ -438,9 +438,9 @@ prototype._getRangeShape =
 		{
 			backRank = this.rankOf( backKey );
 
-			b2Key = this.ranks[ backRank - 1 ]; // fixme
+			b2Key = this.getKey( backRank - 1 );
 
-			b2Para = this.twig[ b2Key ]; // fixme
+			b2Para = this.get( b2Key );
 
 			b2y =
 				Math.round(
@@ -627,7 +627,7 @@ prototype.draw =
 /**/    // since it might be temporarily outOfOrder during update operation
 /**/	if( this.mark && this.mark.hasCaret )
 /**/	{
-/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] ) // fixme
+/**/		if( !this.get( this.mark.caretPath.get( 5 ) ) )
 /**/		{
 /**/			throw new Error( );
 /**/		}
