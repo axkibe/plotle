@@ -10,7 +10,6 @@ var
 	fabric_item,
 	fabric_relation,
 	jion$path,
-	jools,
 	mark_item,
 	result_hover,
 	root;
@@ -29,8 +28,6 @@ var
 if( SERVER )
 {
 	fabric_item = module.exports;
-
-	jools = require( '../jools/jools' );
 }
 else
 {

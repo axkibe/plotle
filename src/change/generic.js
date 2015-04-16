@@ -3,8 +3,7 @@
 */
 
 var
-	change_generic,
-	jools;
+	change_generic;
 
 
 /*
@@ -20,8 +19,6 @@ var
 if( SERVER )
 {
 	change_generic = module.exports;
-
-	jools = require( '../jools/jools' );
 }
 else
 {

@@ -15,8 +15,8 @@ var
 	config,
 	database_userSkid,
 	fabric_spaceRef,
+	log_ajax,
 	log_warn,
-	jools,
 	replyError,
 	reply_acquire,
 	reply_alter,
@@ -45,7 +45,7 @@ module.exports =
 
 config = require( '../../config' );
 
-jools = require( '../jools/jools' );
+log_ajax = require( '../log/ajax' );
 
 log_warn = require( '../log/warn' );
 
@@ -546,7 +546,7 @@ server_requestHandler.expireUpdateSleep =
 
 	// FIXME this should be in the ajax/http part
 	//        of the server
-	jools.log( 'ajax', '->', asw );
+	log_ajax( '->', asw );
 
 	result = sleep.result;
 

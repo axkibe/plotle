@@ -112,8 +112,8 @@ var
 	http,
 	isString,
 	jion,
-	jools,
 	log_ajax,
+	log_fail,
 	log_start,
 	log_web,
 	mongodb,
@@ -142,8 +142,6 @@ var
 
 jion = require( 'jion' );
 
-jools = require( '../jools/jools' );
-
 fs = require( 'fs' );
 
 http = require( 'http' );
@@ -151,6 +149,8 @@ http = require( 'http' );
 isString = jion.isString;
 
 log_ajax = require( '../log/ajax' );
+
+log_fail = require( '../log/fail' );
 
 log_start = require( '../log/start' );
 
@@ -1389,10 +1389,7 @@ prototype.requestListener =
 		{
 			root.webError( result, 500, 'Internal Server Error' );
 
-			jools.log(
-				'fail',
-				'Missing file: ' + resource.filePath
-			);
+			log_fail( 'Missing file: ' + resource.filePath );
 
 			return;
 		}

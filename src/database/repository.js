@@ -45,13 +45,10 @@ var
 	database_repository,
 	fabric_spaceRef,
 	initRepository,
-	jools,
 	mongodb,
 	resume;
 
 database_repository = require( 'jion' ).this( module );
-
-jools = require( '../jools/jools' );
 
 mongodb = require( 'mongodb' );
 

@@ -32,12 +32,6 @@ GLOBAL.JION = false;
 
 GLOBAL.SERVER = true;
 
-
-/*
-| Preloads some common modules
-*/
-GLOBAL.jools = require( '../jools/jools' );
-
 // hackish needed due to circular requirements
 require( '../ast/shorthand' );
 
