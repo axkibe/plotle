@@ -133,10 +133,7 @@ prototype.changeTree =
 
 	pivot = tree.getPath( path.shorten.shorten.shorten );
 
-	if( !pivot.ranks )
-	{
-		throw change_error( 'join.pivot not ranked' );
-	}
+	if( !pivot.getKey ) throw change_error( 'join.pivot not ranked' );
 
 	if( at1 !== text.length )
 	{
@@ -152,9 +149,9 @@ prototype.changeTree =
 
 	key2 = path2.get( -2 );
 
-	para1 = pivot.twig[ key ];
+	para1 = pivot.get( key );
 
-	para2 = pivot.twig[ key2 ];
+	para2 = pivot.get( key2 );
 
 	rank1 = pivot.rankOf( key );
 

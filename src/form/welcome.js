@@ -107,7 +107,6 @@ prototype._init =
 			'text', 'welcome ' + ( this.user ? this.user.name : '' ) + '!'
 		);
 
-	this.twig = twig; // FIXME
 	this._twig = twig;
 
 	form_form.init.call( this, true );

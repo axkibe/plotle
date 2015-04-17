@@ -78,7 +78,6 @@ form_form.init =
 	if( FREEZE ) Object.freeze( twig );
 
 	this._twig = twig;
-	this.twig = twig; // FIXME
 };
 
 

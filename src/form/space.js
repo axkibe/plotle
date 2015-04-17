@@ -110,7 +110,6 @@ prototype._init =
 			);
 
 		this._twig = twig;
-		this.twig = twig; // FIXME
 	}
 
 	form_form.init.call( this, twigDup );

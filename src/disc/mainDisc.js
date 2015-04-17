@@ -248,7 +248,6 @@ prototype._init =
 
 	if( FREEZE ) Object.freeze( twig );
 
-	this.twig = twig; // FIXME
 	this._twig = twig;
 };
 

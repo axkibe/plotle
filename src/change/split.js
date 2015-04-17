@@ -125,7 +125,7 @@ prototype.changeTree =
 
 	pivot = tree.getPath( path.shorten.shorten.shorten );
 
-	if( !pivot.ranks )
+	if( !pivot.getKey )
 	{
 		throw change_error( 'split.pivot not ranked' );
 	}
@@ -144,12 +144,12 @@ prototype.changeTree =
 
 	key2 = path2.get( -2 );
 
-	if( pivot.twig[ key2 ] )
+	if( pivot.get( key2 ) )
 	{
 		throw change_error( 'split.path2 already exists' );
 	}
 
-	para1 = pivot.twig[ key ];
+	para1 = pivot.get( key );
 
 	rank1 = pivot.rankOf( key );
 

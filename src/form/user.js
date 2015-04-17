@@ -122,7 +122,6 @@ prototype._init =
 
 	twig.greeting3 = twig.greeting3.create( 'visible', !isVisitor );
 
-	this.twig = twig; // FIXME
 	this._twig = twig;
 
 	form_form.init.call( this, true );

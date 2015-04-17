@@ -109,7 +109,6 @@ prototype._init =
 			'text', this.user ? this.user.name + '\n' + 'home' : ''
 		);
 
-	this.twig = twig; // FIXME
 	this._twig = twig;
 
 	form_form.init.call( this, twigDup );

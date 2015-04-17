@@ -170,13 +170,9 @@ prototype._init =
 			);
 	}
 
-	this.twig = twig; // FIXME
-	this._twig = twig;
+	if( FREEZE ) Object.freeze( twig );
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( twig );
-/**/}
+	this._twig = twig;
 };
 
 

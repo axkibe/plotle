@@ -149,7 +149,6 @@ prototype._init =
 			);
 	}
 
-	this.twig = twig; // FIXME
 	this._twig = twig;
 };
 
