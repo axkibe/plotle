@@ -472,8 +472,8 @@ prototype.scrollMarkIntoView =
 
 	sy = this.scrollbarY ? this.scrollbarY.pos : 0;
 
-	// FIXME, more elegant path getting
-	para = this.doc.twig[ mark.caretPath.get( 5 )  ];
+	// FUTURE, more elegant path getting
+	para = this.doc.get( mark.caretPath.get( 5 ) );
 
 /**/if( CHECK )
 /**/{

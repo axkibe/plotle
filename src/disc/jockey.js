@@ -180,13 +180,13 @@ prototype.dragStart =
 	var
 		bubble;
 
-	bubble = this.twig.mainDisc.dragStart( p, shift, ctrl );
+	bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
 
 	if( bubble ) return bubble;
 
 	if( this.mode === 'create' )
 	{
-		return this.twig.createDisc.dragStart( p, shift, ctrl );
+		return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
 	}
 
 	return;
@@ -201,9 +201,9 @@ prototype.draw =
 		display
 	)
 {
-	if( this.mode === 'create' ) this.twig.createDisc.draw( display );
+	if( this.mode === 'create' ) this.get( 'createDisc' ).draw( display );
 
-	this.twig.mainDisc.draw( display );
+	this.get( 'mainDisc' ).draw( display );
 };
 
 
@@ -221,13 +221,13 @@ prototype.mousewheel =
 	var
 		bubble;
 
-	bubble = this.twig.mainDisc.mousewheel( p, dir, shift, ctrl );
+	bubble = this.get( 'mainDisc' ).mousewheel( p, dir, shift, ctrl );
 
 	if( bubble ) return bubble;
 
 	if( this.mode === 'create' )
 	{
-		return this.twig.createDisc.mousewheel( p, dir, shift, ctrl );
+		return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
 	}
 
 	return;
@@ -247,13 +247,13 @@ prototype.pointingHover =
 	var
 		hover;
 
-	hover = this.twig.mainDisc.pointingHover( p, shift, ctrl );
+	hover = this.get( 'mainDisc' ).pointingHover( p, shift, ctrl );
 
 	if( hover ) return hover;
 
 	if( this.mode === 'create' )
 	{
-		return this.twig.createDisc.pointingHover( p, shift, ctrl );
+		return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
 	}
 };
 
@@ -271,13 +271,13 @@ prototype.click =
 	var
 		start;
 
-	start = this.twig.mainDisc.click( p, shift, ctrl );
+	start = this.get( 'mainDisc' ).click( p, shift, ctrl );
 
 	if( start ) return start;
 
 	if( this.mode === 'create' )
 	{
-		return this.twig.createDisc.click( p, shift, ctrl );
+		return this.get( 'createDisc' ).click( p, shift, ctrl );
 	}
 };
 
@@ -296,11 +296,11 @@ prototype.pushButton =
 	{
 		case 'createDisc' :
 
-			return this.twig.createDisc.pushButton( path, shift, ctrl );
+			return this.get( 'createDisc' ).pushButton( path, shift, ctrl );
 
 		case 'mainDisc' :
 
-			return this.twig.mainDisc.pushButton( path, shift, ctrl );
+			return this.get( 'mainDisc' ).pushButton( path, shift, ctrl );
 
 		default :
 
