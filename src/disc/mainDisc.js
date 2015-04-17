@@ -145,18 +145,12 @@ prototype._init =
 		visible,
 		wname;
 
-	// FIXME remove
-	if( !this.path )
-	{
-		return;
-	}
+	// FUTURE remove
+	if( !this.path ) return;
 
 	disc_disc._init.call( this, inherit );
 
-	if( !twigDup )
-	{
-		twig = jion.copy( this.twig );
-	}
+	twig = twigDup ? this._twig : jion.copy( this._twig );
 
 	for(
 		r = 0, rZ = this.length;
@@ -252,12 +246,10 @@ prototype._init =
 			);
 	}
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( twig );
-/**/}
+	if( FREEZE ) Object.freeze( twig );
 
-	this.twig = twig;
+	this.twig = twig; // FIXME
+	this._twig = twig;
 };
 
 

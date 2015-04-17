@@ -73,7 +73,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'twigDup' ],
+		init : [ 'inherit' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
@@ -94,9 +94,15 @@ prototype = form_signUp.prototype;
 
 
 /*
-| Initializer.
+| The signup form.
 */
-prototype._init = form_form.init;
+prototype._init =
+	function(
+		inherit
+	)
+{
+	form_form.init.call( this, inherit );
+};
 
 
 /*

@@ -296,9 +296,8 @@ prototype.onAuth =
 {
 	var
 		message,
-		twig;
-
-	twig = this.twig;
+		passwordInput;
+		userInput;
 
 	if( reply.reflect !== 'reply_auth' )
 	{
@@ -308,21 +307,25 @@ prototype.onAuth =
 
 		if( message.search( /Username/ ) >= 0 )
 		{
+			userInput = this.get( 'userInput' );
+
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', twig.userInput.path,
-						'at', twig.userInput.value.length
+						'path', userInput.path,
+						'at', userInput.value.length
 					)
 			);
 		}
 		else
 		{
+			passwordInput = this.get( 'passwordInput' );
+
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', twig.passwordInput.path,
-						'at', twig.passwordInput.value.length
+						'path', passwordInput.path,
+						'at', passwordInput.value.length
 					)
 			);
 		}
@@ -330,10 +333,7 @@ prototype.onAuth =
 		return;
 	}
 
-	root.create(
-		'mode', 'normal',
-		'user', reply.user
-	);
+	root.create( 'mode', 'normal', 'user', reply.user );
 
 	this.clear( );
 
