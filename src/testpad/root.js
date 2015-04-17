@@ -225,7 +225,7 @@ testpad_root.prototype._init =
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	this.cursorLine = math_limit( 0, this.cursorLine, doc.ranks.length - 1 );
+	this.cursorLine = math_limit( 0, this.cursorLine, doc.length - 1 );
 
 	this.cursorAt =
 		math_limit(
@@ -351,7 +351,7 @@ testpad_root.prototype.onMouseDown =
 		math_limit(
 			0,
 			Math.floor( y / measure.offsetHeight ),
-			doc.ranks.length - 1
+			doc.length - 1
 		);
 
 	cText = doc.twig[ doc.ranks[ cLine ] ].text;
@@ -795,7 +795,8 @@ testpad_root.prototype.inputSpecialKey =
 		action,
 		cursorAt,
 		cursorLine,
-		doc;
+		doc,
+		text;
 
 	action = root.action;
 
@@ -1007,11 +1008,7 @@ testpad_root.prototype.inputSpecialKey =
 		case 40 :
 			// down
 
-			if(
-				!doc
-				||
-				cursorLine >= doc.ranks.length - 1
-			)
+			if( !doc || cursorLine >= doc.length - 1 )
 			{
 				this.beep( );
 
@@ -1032,9 +1029,7 @@ testpad_root.prototype.inputSpecialKey =
 				return;
 			}
 
-			var
-				text =
-					doc.twig[ doc.ranks[ cursorLine ] ].text;
+			text = doc.twig[ doc.ranks[ cursorLine ] ].text;
 
 			if( cursorAt >= text.length )
 			{

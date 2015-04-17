@@ -119,7 +119,7 @@ fabric_docItem.click =
 	}
 	else
 	{
-		para = doc.atRank( doc.ranks.length - 1 );
+		para = doc.atRank( doc.length - 1 );
 
 		root.create(
 			'mark',

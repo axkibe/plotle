@@ -194,7 +194,7 @@ fabric_relation.spawn =
 	root.create(
 		'mark',
 			mark_caret.create(
-				'path', root.space.twig[ key ].doc.atRank( 0 ).textPath,
+				'path', root.space.get( key ).doc.atRank( 0 ).textPath,
 				'at', 0
 			)
 	);

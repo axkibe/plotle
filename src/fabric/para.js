@@ -817,7 +817,7 @@ prototype.specialKey =
 
 				v0 = doc.atRank( 0 );
 
-				v1 = doc.atRank( doc.ranks.length - 1 );
+				v1 = doc.atRank( doc.length - 1 );
 
 				root.create(
 					'mark',
@@ -1017,7 +1017,7 @@ prototype._keyDel =
 
 	r = doc.rankOf( this.key );
 
-	if( r < doc.ranks.length - 1 )
+	if( r < doc.length - 1 )
 	{
 		root.alter(
 			change_join.create(
@@ -1071,7 +1071,7 @@ prototype._keyDown =
 	// goto next para
 	r = doc.rankOf( this.key );
 
-	if( r < doc.ranks.length - 1 )
+	if( r < doc.length - 1 )
 	{
 		ve = doc.atRank( r + 1 );
 
@@ -1208,7 +1208,7 @@ prototype._pageUpDown =
 
 	if( !tpara )
 	{
-		tpara = doc.atRank( dir > 0 ? doc.ranks.length - 1 : 0 );
+		tpara = doc.atRank( dir > 0 ? doc.length - 1 : 0 );
 	}
 
 	tpnw = doc.getPNW( tpara.key );
@@ -1292,7 +1292,7 @@ prototype._keyRight =
 
 	r = doc.rankOf( this.key );
 
-	if( r < doc.ranks.length - 1 )
+	if( r < doc.length - 1 )
 	{
 		ve = doc.atRank( r + 1 );
 
