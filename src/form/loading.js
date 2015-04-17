@@ -68,7 +68,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit' ],
+		init : [ 'twigDup' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
@@ -93,10 +93,10 @@ prototype = form_loading.prototype;
 */
 prototype._init =
 	function(
-		inherit
+		twigDup
 	)
 {
-	form_form.init.call( this, inherit );
+	form_form.init.call( this, twigDup );
 };
 
 

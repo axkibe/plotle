@@ -68,7 +68,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit' ],
+		init : [ 'twigDup' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }

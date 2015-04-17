@@ -28,7 +28,7 @@ form_form = { };
 */
 form_form.init =
 	function(
-		// inherit
+		twigDup
 	)
 {
 	var
@@ -51,8 +51,7 @@ form_form.init =
 	this.frame = this.view.baseFrame;
 
 	// all components of the form
-	// FIXME do not copy if this.twig !== inherit.twig
-	twig = jion.copy( this.twig );
+	twig = twigDup ? this._twig :  jion.copy( this._twig );
 
 	mark = this.mark;
 
@@ -76,10 +75,7 @@ form_form.init =
 			);
 	}
 
-	if( FREEZE )
-	{
-		Object.freeze( twig );
-	}
+	if( FREEZE ) Object.freeze( twig );
 
 	this._twig = twig;
 	this.twig = twig; // FIXME

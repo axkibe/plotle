@@ -70,7 +70,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit' ],
+		init : [ 'twigDup' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
@@ -95,10 +95,10 @@ prototype = form_login.prototype;
 */
 prototype._init =
 	function(
-		inherit
+		twigDup
 	)
 {
-	form_form.init.call( this, inherit );
+	form_form.init.call( this, twigDup );
 };
 
 
@@ -119,29 +119,11 @@ prototype.clear =
 	function( )
 {
 	// FIXME combine calls
-	root.setPath(
-		this.path
-		.append( 'twig' )
-		.append( 'userInput' )
-		.append( 'value' ),
-		''
-	);
+	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
 
-	root.setPath(
-		this.path
-		.append( 'twig' )
-		.append( 'passwordInput' )
-		.append( 'value' ),
-		''
-	);
+	root.setPath( this.get( 'passwordInput' ).path.append( 'value' ), '' );
 
-	root.setPath(
-		this.path
-		.append( 'twig' )
-		.append( 'errorLabel' )
-		.append( 'text' ),
-		''
-	);
+	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
 
 	root.create( 'mark', undefined );
 };
@@ -232,30 +214,21 @@ prototype.login =
 	function( )
 {
 	var
-		twig,
 		username,
 		pass;
 
-	twig = this.twig;
+	username = this.get( 'userInput' ).value;
 
-	username = twig.userInput.value;
-
-	pass = twig.passwordInput.value;
+	pass = this.get( 'passwordInput' ).value;
 
 	if( username.length < 4 )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Username too short, min. 4 characters'
-		);
+		this.setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.userInput.path,
+					'path', this.get( 'userInput' ).path,
 					'at', username.length
 				)
 		);
@@ -265,18 +238,12 @@ prototype.login =
 
 	if( username.substr( 0, 5 ) === 'visit' )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Username must not start with "visit"'
-		);
+		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.userInput.path,
+					'path', this.get( 'userInput' ).path,
 					'at', 0
 				)
 		);
@@ -286,18 +253,12 @@ prototype.login =
 
 	if( pass.length < 5 )
 	{
-		root.setPath(
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			'Password too short, min. 5 characters'
-		);
+		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', twig.passwordInput.path,
+					'path', this.get( 'passwordInput' ).path,
 					'at', pass.length
 				)
 		);
@@ -348,14 +309,7 @@ prototype.onAuth =
 	{
 		message = reply.message;
 
-		root.setPath(
-			// FIXME why not make here and else a _errorLabelTextPath
-			this.path
-			.append( 'twig' )
-			.append( 'errorLabel' )
-			.append( 'text' ),
-			message
-		);
+		this.setErrorMessage( message );
 
 		if( message.search( /Username/ ) >= 0 )
 		{
@@ -441,6 +395,20 @@ prototype.pushButton =
 	}
 };
 
+
+/*
+| Sets the error message.
+*/
+prototype.setErrorMessage =
+	function(
+		message
+	)
+{
+	root.setPath(
+		this.get( 'errorLabel' ).path.append( 'text' ),
+		message
+	);
+};
 
 
 /*

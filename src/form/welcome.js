@@ -67,7 +67,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit', 'twigDup' ],
+		init : [ 'twigDup' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
@@ -92,7 +92,6 @@ prototype = form_welcome.prototype;
 */
 prototype._init =
 	function(
-		inherit,
 		twigDup
 	)
 {
@@ -114,12 +113,10 @@ prototype._init =
 			'text', 'welcome ' + ( this.user ? this.user.name : '' ) + '!'
 		);
 
-	if( FREEZE ) Object.freeze( twig );
-
 	this.twig = twig; // FIXME
 	this._twig = twig;
 
-	form_form.init.call( this, inherit );
+	form_form.init.call( this, twigDup );
 };
 
 
