@@ -152,10 +152,7 @@ prototype._init =
 /**/	}
 	}
 
-	if( FREEZE )
-	{
-		Object.freeze( twig );
-	}
+	if( FREEZE ) Object.freeze( twig );
 
 	this.twig = twig; // FIXME
 	this._twig = twig;
@@ -179,18 +176,6 @@ form_jockey.concernsMark =
 
 
 /*
-| Returns the appropriate form.
-*/
-prototype.get =
-	function(
-		name
-	)
-{
-	return this.twig[ name ];
-};
-
-
-/*
 | Cycles the focus in a form
 */
 prototype.cycleFocus =
@@ -199,16 +184,17 @@ prototype.cycleFocus =
 		dir
 	)
 {
+	var
+		form;
+
+	form = this.get( formName );
 
 /**/if( CHECK )
 /**/{
-/**/	if( !this.twig[ formName ] )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( !form ) throw new Error( );
 /**/}
 
-	return this.twig[ formName ].cycleFocus( dir );
+	return form.cycleFocus( dir );
 };
 
 
@@ -227,17 +213,17 @@ prototype.pushButton =
 /**/		path.length < 3
 /**/		|| path.get( 0 ) !== 'form'
 /**/		|| path.get( 1 ) !== 'twig'
-/**/		|| !this.twig[ path.get( 2 ) ]
+/**/		|| !this.get( path.get( 2 ) )
 /**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return (
-		this.twig[ path.get( 2 ) ].pushButton(
+	return(
+		this.get( path.get( 2 ) ).pushButton(
 			path,
-			false, // FIXME honor shift / ctrl states
+			false, // FUTURE honor shift / ctrl states
 			false
 		)
 	);

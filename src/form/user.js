@@ -101,10 +101,7 @@ prototype._init =
 
 	isVisitor = this.user ? this.user.isVisitor : true;
 
-	twig =
-		twigDup ?
-		this._twig
-		: jion.copy( this._twig );
+	twig = twigDup ?  this._twig : jion.copy( this._twig );
 
 	twig.headline =
 		twig.headline.create(

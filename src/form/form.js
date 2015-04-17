@@ -237,7 +237,7 @@ form_form.getAttentionCenter =
 /*
 | Returns the focused widget.
 |
-| To be used as lazyValue getter.
+| FIXME To be used as lazyValue getter.
 */
 form_form.getFocusedWidget =
 	function( )
@@ -268,7 +268,7 @@ form_form.getFocusedWidget =
 /**/	}
 /**/}
 
-	return this.twig[ path.get( 4 ) ];
+	return this.get( path.get( 4 ) );
 };
 
 

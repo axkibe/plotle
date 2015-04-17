@@ -87,19 +87,14 @@ if( NODE )
 var
 	prototype;
 
+
 prototype = form_login.prototype;
 
 
 /*
-| The login form.
+| Initializer.
 */
-prototype._init =
-	function(
-		twigDup
-	)
-{
-	form_form.init.call( this, twigDup );
-};
+prototype._init = form_form.init;
 
 
 /*

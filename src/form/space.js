@@ -100,17 +100,14 @@ prototype._init =
 
 	if( this.spaceRef )
 	{
-		twig =
-			twigDup
-			? this._twig
-			: jion.copy( this._twig );
+		twig = twigDup ? this._twig : jion.copy( this._twig );
+
+		twigDup = true;
 
 		twig.headline =
 			twig.headline.create(
 				'text', this.spaceRef.fullname
 			);
-
-		if( FREEZE ) Object.freeze( twig );
 
 		this._twig = twig;
 		this.twig = twig; // FIXME

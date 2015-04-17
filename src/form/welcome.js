@@ -100,13 +100,7 @@ prototype._init =
 
 	if( !this.path ) return;
 
-	if( !twigDup )
-	{
-		twig =
-			twigDup
-			? this._twig
-			: jion.copy( this._twig );
-	}
+	twig = twigDup ? this._twig : jion.copy( this._twig );
 
 	twig.headline =
 		twig.headline.create(
@@ -116,7 +110,7 @@ prototype._init =
 	this.twig = twig; // FIXME
 	this._twig = twig;
 
-	form_form.init.call( this, twigDup );
+	form_form.init.call( this, true );
 };
 
 

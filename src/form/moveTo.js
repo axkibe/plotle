@@ -89,30 +89,33 @@ prototype = form_moveTo.prototype;
 
 
 /*
-| The moveto form.
+| Initializer.
 */
 prototype._init =
 	function(
 		twigDup
 	)
 {
+	var
+		twig;
+
 	if( this.path )
 	{
-		if( !twigDup )
-		{
-			this.twig = jion.copy( this.twig );
+		twig = twigDup ? this._twig : jion.copy( this.twig );
 
-			twigDup = true;
-		}
+		twigDup = true;
 
-		this.twig.userHomeButton =
-			this.twig.userHomeButton.create(
+		twig.userHomeButton =
+			twig.userHomeButton.create(
 				'visible', this.user ? !this.user.isVisitor : false,
 				'text', this.user ? this.user.name + '\n' + 'home' : ''
 			);
+
+		this._twig = twig;
+		this.twig = twig; // FIXME
 	}
 
-	form_form.init.call( twigDup );
+	form_form.init.call( this, twigDup );
 };
 
 

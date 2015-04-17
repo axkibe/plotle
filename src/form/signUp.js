@@ -94,15 +94,9 @@ prototype = form_signUp.prototype;
 
 
 /*
-| The signup form.
+| Initializer.
 */
-prototype._init =
-	function(
-		twigDup
-	)
-{
-	form_form.init.call( this, twigDup );
-};
+prototype._init = form_form.init;
 
 
 /*

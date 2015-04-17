@@ -106,25 +106,25 @@ prototype._init =
 		twigDup
 	)
 {
-	if( !this.path )
-	{
-		return;
-	}
+	var
+		twig;
 
-	if( !twigDup )
-	{
-		this.twig = jion.copy( this.twig );
-	}
+	if( !this.path ) return;
 
-	this.twig.headline =
-		this.twig.headline.create(
+	twig = twigDup ? this._twig : jion.copy( this._twig );
+
+	twig.headline =
+		twig.headline.create(
 			'text',
 				this.nonSpaceRef
 				? this.nonSpaceRef.fullname + ' does not exist.'
 				: ''
 		);
 
-	form_form.init.call( this, twigDup );
+	this.twig = twig; // FIXME
+	this._twig = twig;
+
+	form_form.init.call( this, true );
 };
 
 
