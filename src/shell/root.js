@@ -1170,7 +1170,7 @@ prototype.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.setPath(
-				root._formJockey.twig.nonExistingSpace.path
+				root._formJockey.get( 'nonExistingSpace' ).path
 					.append( 'nonSpaceRef' ),
 				spaceRef
 			);

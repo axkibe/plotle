@@ -507,11 +507,7 @@ prototype.prepareInventory =
 	// Reads in all files to be cached
 	inv = root.inventory;
 
-	for(
-		a = 0, aZ = inv.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = inv.length; a < aZ; a++ )
 	{
 		resource = inv.atRank( a );
 
@@ -558,11 +554,7 @@ prototype.prepareInventory =
 	codes = [ ];
 
 	// loads the files to be bundled
-	for(
-		a = 0, aZ = root.inventory.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = root.inventory.length; a < aZ; a++ )
 	{
 		resource = root.inventory.atRank( a );
 
@@ -600,11 +592,7 @@ prototype.prepareInventory =
 	{
 		log_start( 'parsing bundle' );
 
-		for(
-			a = 0, aZ = root.inventory.ranks.length;
-			a < aZ;
-			a++
-		)
+		for( a = 0, aZ = root.inventory.length; a < aZ; a++ )
 		{
 			resource = root.inventory.atRank( a );
 
@@ -733,11 +721,7 @@ prototype.prepareInventory =
 	// post processing
 	inv = root.inventory;
 
-	for(
-		a = 0, aZ = inv.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = inv.length; a < aZ; a++ )
 	{
 		resource = inv.atRank( a );
 
@@ -776,11 +760,7 @@ prototype.prepareInventory =
 	inv = root.inventory;
 
 	// prepares the zipped versions
-	for(
-		a = 0, aZ = inv.ranks.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = inv.length; a < aZ; a++ )
 	{
 		resource = inv.atRank( a );
 
@@ -805,12 +785,12 @@ prototype.prepareInventory =
 	{
 		log_start(
 			'uncompressed bundle size is ',
-			root.inventory.twig[ bundleFilePath ].data.length
+			root.inventory.get( bundleFilePath ).data.length
 		);
 
 		log_start(
 			'  compressed bundle size is ',
-			root.inventory.twig[ bundleFilePath ].gzip.length
+			root.inventory.get( bundleFilePath ).gzip.length
 		);
 	}
 };
@@ -827,7 +807,7 @@ prototype.prependConfigFlags =
 	var
 		resource;
 
-	resource = root.inventory.twig[ 'config.js' ];
+	resource = root.inventory.get( 'config.js' );
 
 	root.create(
 		'inventory',
@@ -1329,7 +1309,7 @@ prototype.requestListener =
 		return root.webAjax( request, red, result );
 	}
 
-	resource = root.inventory.twig[ pathname ];
+	resource = root.inventory.get( pathname );
 
 	if( !resource )
 	{

@@ -116,26 +116,16 @@ prototype._init =
 		ranks,
 		rZ;
 
-	if( !this.view )
-	{
-		// if abstract nothing is initialized
-		return;
-	}
+	// if abstract nothing is initialized
+	if( !this.view ) return;
 
 	ranks = this._ranks;
 
-	twig =
-		twigDup
-		? this._twig
-		: jion.copy( this._twig );
+	twig = twigDup ? this._twig : jion.copy( this._twig );
 
 	twigPath = this.path && this.path.append( 'twig' );
 
-	for(
-		r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
 		key = ranks[ r ];
 
@@ -906,7 +896,7 @@ prototype.input =
 
 	return(
 		this
-		.twig[ path.get( 5 ) ]
+		.get( path.get( 5 ) )
 		.input( text )
 	);
 };
@@ -959,7 +949,7 @@ prototype.specialKey =
 
 	return(
 		this
-		.twig[ mark.caretPath.get( 5 ) ]
+		.get( mark.caretPath.get( 5 ) )
 		.specialKey( key, item, shift, ctrl )
 	);
 };

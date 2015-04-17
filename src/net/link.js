@@ -95,12 +95,12 @@ prototype.acquireSpace =
 	)
 {
 	// aborts the current running update.
-	root.ajax.twig.update.abortAll( );
+	root.ajax.get( 'update' ).abortAll( );
 
 	// aborts any previous acquireSpace requests.
-	root.ajax.twig.command.abortAll( '_onAcquireSpace' );
+	root.ajax.get( 'command' ).abortAll( '_onAcquireSpace' );
 
-	root.ajax.twig.command.request(
+	root.ajax.get( 'command' ).request(
 		request_acquire.create(
 			'createMissing', createMissing,
 			'spaceRef', spaceRef,
@@ -154,7 +154,7 @@ prototype.auth =
 		user
 	)
 {
-	root.ajax.twig.command.request(
+	root.ajax.get( 'command' ).request(
 		request_auth.create( 'user', user ),
 		'_onAuth'
 	);
@@ -171,7 +171,7 @@ prototype.register =
 		news
 	)
 {
-	root.ajax.twig.command.request(
+	root.ajax.get( 'command' ).request(
 		request_register.create(
 			'user', user,
 			'mail', mail,
@@ -326,7 +326,7 @@ prototype._sendChanges =
 			)
 	);
 
-	root.ajax.twig.command.request(
+	root.ajax.get( 'command' ).request(
 		request_alter.create(
 			'changeWrapRay', outbox,
 			'seq', root.link._rSeq,
@@ -501,7 +501,7 @@ prototype._onUpdate =
 prototype._update =
 	function( )
 {
-	root.ajax.twig.update.request(
+	root.ajax.get( 'update' ).request(
 		request_update.create(
 			'spaceRef', this.spaceRef,
 			'seq',
