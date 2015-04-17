@@ -68,7 +68,7 @@ if( JION )
 				defaultValue : 'undefined'
 			}
 		},
-		init : [ 'inherit', 'twigDup' ],
+		init : [ 'twigDup' ],
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
@@ -93,25 +93,26 @@ prototype = form_moveTo.prototype;
 */
 prototype._init =
 	function(
-		inherit,
 		twigDup
 	)
 {
-	if( this.path )
-	{
-		if( !twigDup )
-		{
-			this.twig = jion.copy( this.twig );
-		}
+	var
+		twig;
 
-		this.twig.userHomeButton =
-			this.twig.userHomeButton.create(
-				'visible', this.user ? !this.user.isVisitor : false,
-				'text', this.user ? this.user.name + '\n' + 'home' : ''
-			);
-	}
+	if( !this.path ) return;
 
-	form_form.init.call( this, inherit );
+	twig = twigDup ? this._twig : jion.copy( this._twig );
+
+	twig.userHomeButton =
+		twig.userHomeButton.create(
+			'visible', this.user ? !this.user.isVisitor : false,
+			'text', this.user ? this.user.name + '\n' + 'home' : ''
+		);
+
+	this.twig = twig; // FIXME
+	this._twig = twig;
+
+	form_form.init.call( this, twigDup );
 };
 
 

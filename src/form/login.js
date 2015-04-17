@@ -296,7 +296,7 @@ prototype.onAuth =
 {
 	var
 		message,
-		passwordInput;
+		passwordInput,
 		userInput;
 
 	if( reply.reflect !== 'reply_auth' )
