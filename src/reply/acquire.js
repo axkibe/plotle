@@ -29,22 +29,19 @@ if( JION )
 			{
 				comment : 'access level, readonly(r) or read-write(rw)',
 				json : true,
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			seq :
 			{
 				comment : 'sequence the space is at',
 				json : true,
-				type : 'integer',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'integer' ]
 			},
 			space :
 			{
 				comment : 'the space',
 				json : true,
-				type : 'fabric_space',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_space' ]
 			}
 		}
 	};

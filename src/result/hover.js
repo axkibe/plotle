@@ -30,8 +30,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path to the thing being hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			}
 		}
 	};
