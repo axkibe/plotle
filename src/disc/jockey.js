@@ -26,27 +26,27 @@ if( JION )
 			access :
 			{
 				comment : 'users access to current space',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			action :
 			{
 				comment : 'currently active action',
-				type : require( '../typemaps/action' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] )
 			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			mark :
 			{
 				comment : 'the users mark',
 				prepare : 'disc_jockey.concernsMark( mark )',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			mode :
 			{
@@ -61,14 +61,12 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'currently loaded space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			user :
 			{
 				comment : 'currently logged in user',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			},
 			view :
 			{

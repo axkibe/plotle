@@ -32,20 +32,21 @@ if( JION )
 			transItem :
 			{
 				comment : 'the transient item in creation',
-				type : require( '../typemaps/fabricItems' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/fabricItems' )
+					.concat( [ 'undefined' ] )
 			},
 			model :
 			{
 				comment : 'a transient item used as model',
-				type : require( '../typemaps/fabricItems' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/fabricItems' )
+					.concat( [ 'undefined' ] )
 			},
 			start :
 			{
 				comment : 'mouse down point on drag creation',
-				type : 'euclid_point',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_point' ]
 			}
 		}
 	};

@@ -35,14 +35,14 @@ if( JION )
 			access :
 			{
 				comment : 'users access to current space',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			action :
 			{
 				comment : 'currently active action',
-				type : require( '../typemaps/action' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] )
 			},
 			border :
 			{
@@ -57,47 +57,42 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				prepare : 'disc_disc.concernsHover( hover, path )'
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			mode :
 			{
 				comment : 'current mode the UI is in',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			path :
 			{
 				comment : 'path of the disc',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			spaceRef :
 			{
 				comment : 'reference to current space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			user :
 			{
 				comment : 'currently logged in user',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
+				type : [ 'undefined', 'euclid_view' ],
 				// prepare : 'view && view.sizeOnly', FIXME
 				prepare : 'view ? view.sizeOnly : undefined',
-				defaultValue : 'undefined'
 			}
 		},
 		init :

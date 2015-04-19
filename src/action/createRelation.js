@@ -22,26 +22,22 @@ if( JION )
 			fromItemPath :
 			{
 				comment : 'the item the relation goes from',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			pan :
 			{
 				comment : 'starting pan when panning during creation',
-				type : 'euclid_point',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_point' ]
 			},
 			toItemPath :
 			{
 				comment : 'the item the relation goes to',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			toPoint :
 			{
 				comment : 'the arrow destination while its floating',
-				type : 'euclid_point',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_point' ]
 			},
 			// FUTURE make a defined state list
 			relationState :
@@ -52,8 +48,7 @@ if( JION )
 			start :
 			{
 				comment : 'mouse down point on drag creation',
-				type : 'euclid_point',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_point' ]
 			}
 		}
 	};
