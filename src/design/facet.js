@@ -27,14 +27,16 @@ if( JION )
 			border :
 			{
 				comment : 'border',
-				type : require( '../typemaps/border' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/border' )
+					.concat( [ 'undefined' ] )
 			},
 			fill :
 			{
 				comment : 'fill',
-				type : require( '../typemaps/fill' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/fill' )
+					.concat( [ 'undefined' ] )
 			}
 		},
 		group : [ 'boolean' ]
