@@ -43,28 +43,25 @@ if( JION )
 			flowWidth :
 			{
 				comment : 'width of the para flow',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			fontsize :
 			{
 				comment : 'size of the font',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			mark :
 			{
 				comment : 'the users mark',
 				prepare : 'fabric_para.concernsMark( mark, path )',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined',
-				allowsNull : true
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			path :
 			{
 				comment : 'the path of the para',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			text :
 			{
@@ -75,16 +72,15 @@ if( JION )
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		alike :
 		{
 			alikeIgnoringView :
-				{
-					ignores : { 'view' : true }
-				}
+			{
+				ignores : { 'view' : true }
+			}
 		},
 		init : [ 'inherit' ]
 	};
