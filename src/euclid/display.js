@@ -43,14 +43,12 @@ if( JION )
 				'_cv' :
 					{
 						comment : 'the html canvas',
-						type : 'protean',
-						defaultValue : 'undefined'
+						type : [ 'undefined', 'protean' ]
 					},
 				'_cx' :
 					{
 						comment : 'the html canvas context',
-						type : 'protean',
-						defaultValue : 'undefined'
+						type : [ 'undefined', 'protean' ]
 					}
 			},
 		init : [ ]

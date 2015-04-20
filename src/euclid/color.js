@@ -29,8 +29,7 @@ if( JION )
 			alpha :
 			{
 				comment : 'alpha value',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			red :
 			{

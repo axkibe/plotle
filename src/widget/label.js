@@ -27,8 +27,7 @@ if( JION )
 			focusAccent :
 			{
 				comment : 'true if the widget got focus',
-				type : 'boolean',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'boolean' ],
 				assign : ''
 			},
 			designPos :
@@ -39,40 +38,36 @@ if( JION )
 			hover :
 			{
 				comment : 'component hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				assign : ''
 			},
 			font :
 			{
 				comment : 'font of the text',
-				type : 'euclid_font',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_font' ],
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined',
+				type :
+					require( '../typemaps/mark' )
+					.concat( ['undefined' ] ),
 				assign : ''
 			},
 			newline :
 			{
 				comment : 'vertical distance of newline',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			path :
 			{
 				comment : 'the path of the widget',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			superFrame :
 			{
 				comment : 'the frame the widget resides in',
-				type : 'euclid_rect',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_rect' ]
 			},
 			text :
 			{

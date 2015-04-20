@@ -53,8 +53,7 @@ if( JION )
 			hover :
 			{
 				comment : 'component hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
 			font :
@@ -66,8 +65,9 @@ if( JION )
 			{
 				comment : 'the users mark',
 				prepare : 'widget_widget.concernsMark( mark, path )',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			maxlen :
 			{
@@ -83,14 +83,12 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the widget',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			superFrame :
 			{
 				comment : 'the frame the widget resides in',
-				type : 'euclid_rect',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_rect' ]
 			},
 			value :
 			{
