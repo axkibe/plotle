@@ -57,8 +57,7 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				assign : ''
 			},
 			item1key :
@@ -76,8 +75,7 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the doc',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			pnw :
 			{
@@ -89,14 +87,14 @@ if( JION )
 			{
 				comment : 'the users mark',
 				prepare : 'fabric_item.concernsMark( mark, path )',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		init : [ 'inherit' ]

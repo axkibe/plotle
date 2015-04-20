@@ -54,34 +54,31 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				assign : ''
 			},
 			mark :
 			{
 				comment : 'the users mark',
 				prepare : 'fabric_item.concernsMark( mark, path )',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			path :
 			{
 				comment : 'the path of the note',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			scrolly :
 			{
 				comment : 'vertical scroll position',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_view' ]
 			},
 			zone :
 			{
@@ -198,10 +195,7 @@ prototype._init =
 			'view', this.view.home
 		);
 
-	if( this.scrolly === undefined )
-	{
-		this.scrolly = 0;
-	}
+	if( this.scrolly === undefined ) this.scrolly = 0;
 
 	aperture = zone.height - theme.note.innerMargin.y;
 

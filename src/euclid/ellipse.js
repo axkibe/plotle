@@ -42,22 +42,19 @@ if( JION )
 			gradientPC :
 			{
 				comment : 'center for gradient',
-				type : 'euclid_point',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'euclid_point' ],
 				assign : '_gradientPC'
 			},
 			gradientR0 :
 			{
 				comment : 'inner radius for circle gradients',
-				type : 'number',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'number' ],
 				assign : '_gradientR0'
 			},
 			gradientR1 :
 			{
 				comment : 'outer radius for circle gradients',
-				type : 'number',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'number' ],
 				assign : '_gradientR1'
 			}
 		},

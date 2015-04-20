@@ -22,22 +22,19 @@ if( JION )
 			aliases :
 			{
 				comment : 'the list of aliases this is served under',
-				type : 'jion$stringRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$stringRay' ]
 				// by default determined from filePath
 			},
 			coding :
 			{
 				comment : '"binary" or "utf-8"',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 				// by default determined from file extension
 			},
 			data :
 			{
 				comment : 'cached or auto generated data',
-				type : 'protean',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'protean' ]
 			},
 			devel :
 			{
@@ -48,20 +45,17 @@ if( JION )
 			jionSrcPath :
 			{
 				comment : 'source file of a jion',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			filePath :
 			{
 				comment : 'path of the resources file',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			gzip :
 			{
 				comment : 'cached or auto generated zip data',
-				type : 'protean',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'protean' ]
 			},
 			hasJion :
 			{
@@ -96,8 +90,7 @@ if( JION )
 			jionId :
 			{
 				comment : 'if hasJion or isJion the jion id string',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			maxage :
 			{
@@ -108,15 +101,13 @@ if( JION )
 			mime :
 			{
 				comment : 'mime type',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 				// by default determined from file extension
 			},
 			postProcessor :
 			{
 				comment : 'post processor replacing stuff',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			}
 		},
 		init : [ ]

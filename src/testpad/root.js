@@ -41,14 +41,12 @@ if( JION )
 			action :
 			{
 				comment : 'the action the user is preparing',
-				type : 'testpad_action',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'testpad_action' ]
 			},
 			beepTimer :
 			{
 				comment : 'removes the beep',
-				type : 'protean',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'protean' ]
 			},
 			cursorAt :
 			{
@@ -65,8 +63,7 @@ if( JION )
 			elements :
 			{
 				comment : 'DOM elements',
-				type : 'protean',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'protean' ]
 			},
 			haveFocus :
 			{

@@ -38,8 +38,7 @@ if( JION )
 			retainx :
 			{
 				comment : 'x-position of the caret kept',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			focus :
 			{

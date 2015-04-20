@@ -32,20 +32,17 @@ if( JION )
 			at :
 			{
 				comment : 'action affects offset',
-				type : 'integer',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'integer' ]
 			},
 			at2 :
 			{
 				comment : 'action affects offset (span end)',
-				type : 'integer',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'integer' ]
 			},
 			value :
 			{
 				comment : 'action carries value',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			}
 		}
 	};

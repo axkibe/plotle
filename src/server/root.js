@@ -29,8 +29,7 @@ if( GLOBAL.JION )
 			bundleFilePath :
 			{
 				comment : 'file path of the bundle',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			inventory :
 			{

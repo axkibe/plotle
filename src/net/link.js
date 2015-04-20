@@ -38,32 +38,27 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'reference to the current space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			user :
 			{
 				comment : 'currently logged in user',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			},
 			_outbox :
 			{
 				comment : 'changes to be send to the server',
-				type : 'change_wrapRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'change_wrapRay' ]
 			},
 			_postbox :
 			{
 				comment : 'changes that are currently on the way',
-				type : 'change_wrapRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'change_wrapRay' ]
 			},
 			_rSeq :
 			{
 				comment : 'the remote sequence number',
-				type : 'integer',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'integer' ]
 			}
 		}
 	};

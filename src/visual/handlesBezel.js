@@ -39,8 +39,7 @@ if( JION )
 			sbary :
 			{
 				comment : 'a possible y-scrollbar',
-				type : 'visual_scrollbar',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'visual_scrollbar' ]
 			},
 			silhoutte :
 			{

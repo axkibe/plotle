@@ -48,8 +48,7 @@ if( JION )
 			_xhr :
 			{
 				comment : 'the underlaying "XMLHttpRequest"',
-				type : 'protean',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'protean' ]
 			}
 		}
 	};

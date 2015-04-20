@@ -40,14 +40,12 @@ if( JION )
 			_changeWrapRay :
 			{
 				comment : 'history of all changes',
-				type : 'change_wrapRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'change_wrapRay' ]
 			},
 			_space :
 			{
 				comment : 'the action the user is preparing',
-				type : 'fabric_space',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_space' ]
 			}
 		},
 		init : [ ]

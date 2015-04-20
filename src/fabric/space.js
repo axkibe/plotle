@@ -71,20 +71,17 @@ if( JION )
 			path :
 			{
 				comment : 'the path of the space',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			ref :
 			{
 				comment : 'reference to this space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],

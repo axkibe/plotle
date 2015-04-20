@@ -42,8 +42,7 @@ if( JION )
 			retainx :
 			{
 				comment : 'x-position of the caret kept',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			}
 		},
 		init : [ ]
@@ -75,7 +74,6 @@ prototype._init =
 	var
 		bP,
 		bZ,
-		end,
 		eP,
 		eZ,
 		p;

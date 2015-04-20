@@ -38,45 +38,39 @@ if( JION )
 			flowWidth :
 			{
 				comment : 'width of the para its flow',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			fontsize :
 			{
 				comment : 'size of the font',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			innerMargin :
 			{
 				comment : 'inner margin of the doc',
-				type : 'euclid_margin',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_margin' ]
 			},
 			paraSep :
 			{
 				comment : 'vertical seperation of paragraphs',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			path :
 			{
 				comment : 'the path of the doc',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
-				defaultValue : 'undefined',
-				allowsNull : true
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		init : [ 'twigDup' ],
