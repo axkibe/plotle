@@ -27,8 +27,7 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			mark :
 			{
@@ -44,14 +43,12 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'the reference of current space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			user :
 			{
 				comment : 'currently logged in user',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			},
 			view :
 			{

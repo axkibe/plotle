@@ -49,8 +49,7 @@ if( JION )
 			{
 				comment : 'sequence number',
 				json : true,
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			}
 		}
 	};

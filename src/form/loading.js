@@ -30,42 +30,38 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] ),
 				prepare : 'form_form.concernsMark( mark, path )',
-				defaultValue : 'undefined'
 			},
 			path :
 			{
 				comment : 'the path of the form',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			spaceRef :
 			{
 				comment : 'the reference to the current space',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'fabric_spaceRef' ],
 				assign : ''
 			},
 			user :
 			{
 				comment : 'currently logged in user',
-				type : 'user_creds',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'user_creds' ],
 				assign : ''
 			},
 			view :
 			{
 				comment : 'the current view',
-				type : 'euclid_view',
+				type : [ 'undefined', 'euclid_view' ],
 				prepare : 'view ? view.sizeOnly : view',
-				defaultValue : 'undefined'
 			}
 		},
 		init : [ 'twigDup' ],

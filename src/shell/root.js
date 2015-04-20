@@ -58,15 +58,15 @@ if( JION )
 			access :
 			{
 				comment : 'access level to current space',
-				type : 'string',
+				type : [ 'undefined', 'string' ],
 				assign : '_access',
-				defaultValue : 'undefined'
 			},
 			action :
 			{
 				comment : 'current action',
-				type : require( '../typemaps/action' ),
-				defaultValue : 'undefined',
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] ),
 				prepare : 'shell_root.prepareAction( action, space )'
 				// FIXME assign _action
 			},
@@ -88,14 +88,12 @@ if( JION )
 			fallbackSpaceRef :
 			{
 				comment : 'fallback to this space if loading another failed.',
-				type : 'fabric_spaceRef',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			hover :
 			{
 				comment : 'current hovered item',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				assign : '_hover'
 			},
 			link :
@@ -106,9 +104,10 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] ),
 				assign : '_mark',
-				defaultValue : 'undefined'
 			},
 			mode :
 			{
@@ -125,14 +124,12 @@ if( JION )
 			space :
 			{
 				comment : 'current space',
-				type : 'fabric_space',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'fabric_space' ]
 			},
 			user :
 			{
 				comment : 'current user',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			},
 			view :
 			{
@@ -162,8 +159,7 @@ if( JION )
 					// passhash so when logging out from a real user
 					// the previous visitor id is regained.
 					'last acquired visitor credentials',
-				type : 'user_creds',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'user_creds' ]
 			}
 		},
 		init : [ 'inherit' ],

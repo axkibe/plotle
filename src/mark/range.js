@@ -73,25 +73,29 @@ prototype._init =
 	function( )
 {
 	var
-		p,
+		bP,
 		bZ,
-		eZ;
+		end,
+		eP,
+		eZ,
+		p;
+
+	bP = this.begin.path;
+
+	eP = this.end.path;
 
 	for(
-		p = 0, bZ = this.begin.path.length, eZ = this.end.path.length;
+		p = 0, bZ = bP.length, eZ = eP.length;
 		p < bZ && p < eZ;
 		p++
 	);
 
 /**/if( CHECK )
 /**/{
-/**/	if( p === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( p === 0 ) throw new Error( );
 /**/}
 
-	this.path = this.begin.path.limit( p );
+	this.path = bP.limit( p );
 };
 
 
@@ -247,14 +251,14 @@ jion.lazyValue(
 
 		if( front.path.equals( back.path ) )
 		{
-			text = doc.twig[ frontKey ].text;
+			text = doc.get( frontKey ).text;
 
 			return text.substring( front.at, back.at );
 		}
 
-		frontText = doc.twig[ frontKey ].text;
+		frontText = doc.get( frontKey ).text;
 
-		backText = doc.twig[ backKey ].text;
+		backText = doc.get( backKey ).text;
 
 		buf =
 			[
@@ -267,16 +271,10 @@ jion.lazyValue(
 			r++
 		)
 		{
-			buf.push(
-				'\n',
-				doc.twig[ doc.ranks[ r ] ].text
-			);
+			buf.push( '\n', doc.atRank( r ).text );
 		}
 
-		buf.push(
-			'\n',
-			backText.substring( 0, back.at )
-		);
+		buf.push( '\n', backText.substring( 0, back.at ) );
 
 		return buf.join( '' );
 	}

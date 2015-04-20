@@ -21,6 +21,8 @@ var
 
 /*
 | The jion definition.
+|
+| FIXME width/height should be never be undefined?
 */
 if( JION )
 {
@@ -31,14 +33,12 @@ if( JION )
 				'height' :
 					{
 						comment : 'height of the display',
-						type : 'number',
-						defaultValue : 'undefined'
+						type : [ 'undefined', 'number' ],
 					},
 				'width' :
 					{
 						comment : 'width of the display',
-						type : 'number',
-						defaultValue : 'undefined'
+						type : [ 'undefined', 'number' ],
 					},
 				'_cv' :
 					{

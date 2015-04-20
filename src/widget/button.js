@@ -48,34 +48,34 @@ if( JION )
 			font :
 			{
 				comment : 'font of the text',
-				type : 'euclid_font',
-				defaultValue : 'undefined'  // FIXME why?
+				// FIXME why undefined?
+				type : [ 'undefined', 'euclid_font' ],
 			},
 			hover :
 			{
 				comment : 'component hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined',
+				type : [ 'undefined', 'jion$path' ],
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
 			icon :
 			{
 				comment : 'icon to display',
-				type : require( '../typemaps/icon' ),
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/icon' )
+					.concat( [ 'undefined' ] )
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] ),
 				prepare : 'widget_widget.concernsMark( mark, path )',
-				defaultValue : 'undefined'
 			},
 			path :
 			{
 				comment : 'the path of the widget',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			shape :
 			{
@@ -86,8 +86,7 @@ if( JION )
 			superFrame :
 			{
 				comment : 'the frame the widget resides in',
-				type : 'euclid_rect',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'euclid_rect' ]
 			},
 			text :
 			{
@@ -98,20 +97,17 @@ if( JION )
 			textDesignPos :
 			{
 				comment : 'designed position of the text',
-				type : 'design_anchorPoint',
-				defaultValue : 'undefined' // FIXME why?
+				type : [ 'undefined', 'design_anchorPoint' ]
 			},
 			textNewline :
 			{
 				comment : 'vertical distance of newline',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			textRotation :
 			{
 				comment : 'rotation of the text',
-				type : 'number',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'number' ]
 			},
 			visible :
 			{

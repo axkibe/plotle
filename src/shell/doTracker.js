@@ -28,14 +28,12 @@ if( JION )
 			_undo :
 			{
 				comment : 'the undo stack',
-				type : 'change_wrapRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'change_wrapRay' ]
 			},
 			_redo :
 			{
 				comment : 'the redo stack',
-				type : 'change_wrapRay',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'change_wrapRay' ]
 			}
 		}
 	};
