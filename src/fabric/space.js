@@ -45,28 +45,28 @@ if( JION )
 			action :
 			{
 				comment : 'current action',
-				type : require( '../typemaps/action' ),
-				defaultValue : 'undefined',
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] ),
 				assign : '_action'
 			},
 			access :
 			{
 				comment : 'rights the current user has for this space',
-				type : 'string',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'string' ]
 			},
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : 'jion$path',
-				defaultValue : 'undefined'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
-				prepare : 'fabric_space.concernsMark( mark )',
-				defaultValue : 'undefined'
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] ),
+				prepare : 'fabric_space.concernsMark( mark )'
 			},
 			path :
 			{
@@ -101,7 +101,8 @@ if( JION )
 
 
 var
-	prototype;
+	prototype,
+	spacePath;
 
 
 if( NODE )
@@ -118,6 +119,7 @@ if( NODE )
 
 prototype = fabric_space.prototype;
 
+spacePath = jion.path.empty.append( 'space' );
 
 /*
 | Returns the mark if the form jockey concerns a mark.
@@ -129,17 +131,12 @@ fabric_space.concernsMark =
 {
 	// returns an undefined mark if it was undefined
 	// or the mark itself if it has a space path
-	if(
-		!mark
-		|| mark.containsPath( jion.path.empty.append( 'space' ) )
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return undefined;
-	}
+
+	return(
+		( mark && mark.containsPath( spacePath ) )
+		? mark
+		: undefined
+	);
 };
 
 
