@@ -24,14 +24,12 @@ if( JION )
 				p :
 				{
 					comment : 'connect to',
-					type : [ 'euclid_point', 'euclid_fixPoint' ],
-					allowsUndefined : true
+					type : [ 'undefined', 'euclid_point', 'euclid_fixPoint' ]
 				},
 				close :
 				{
 					comment : 'true if this closes the shape',
-					type : 'boolean',
-					allowsUndefined : true
+					type : [ 'undefined', 'boolean' ]
 				}
 			}
 	};

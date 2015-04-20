@@ -32,8 +32,9 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				type : require( '../typemaps/mark' ),
-				allowsUndefined : true
+				type :
+					require( '../typemaps/mark' )
+					.concat( [ 'undefined' ] )
 			},
 			path :
 			{

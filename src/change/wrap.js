@@ -37,13 +37,7 @@ if( JION )
 			{
 				comment : 'change or change ray',
 				json : true,
-				type : 'change_ray',
-				allowsNull : true
-				// in case of transformation the change
-				// can evaporate, the changeWrap needs to
-				// be kept alive though so the client
-				// can be notified of its change to
-				// have arrived, albeit it had no effect.
+				type : 'change_ray'
 			},
 			seq :
 			{

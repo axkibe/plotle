@@ -36,8 +36,7 @@ if( JION )
 			{
 				comment : 'value to grow',
 				json : 'true',
-				type : require( '../typemaps/spaceVal' ),
-				allowsNull : true
+				type : require( '../typemaps/spaceVal' )
 			},
 			rank :
 			{
