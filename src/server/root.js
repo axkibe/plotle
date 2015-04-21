@@ -71,6 +71,19 @@ if( GLOBAL.JION )
 	};
 }
 
+Buffer.prototype.equals =
+	function( o )
+	{
+		try
+		{
+			return this.equals( o );
+		}
+		catch( e )
+		{
+			return false;
+		}
+	};
+
 
 var config = require( '../../config' );
 

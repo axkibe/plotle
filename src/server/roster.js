@@ -39,7 +39,7 @@ module.exports =
 		'postProcessor', 'develHtml'
 	),
 	resource.create(
-		'aliases', stringRay( [ 'favicon.ico' ] ),
+		'aliases', stringRay( [ 'favicon.ico', 'media-favicon.ico' ] ),
 		'filePath', 'media/favicon.ico',
 		'maxage', 'long'
 	),
