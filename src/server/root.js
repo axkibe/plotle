@@ -84,8 +84,11 @@ Buffer.prototype.equals =
 		}
 	};
 
+var
+	config;
 
-var config = require( '../../config' );
+
+config = require( '../../config' );
 
 config.database_version = 12;
 
@@ -353,10 +356,8 @@ prototype.buildShellConfig =
 
 	cconfig.push(
 		'var config = {\n',
-		'\tdevel   : ',
-			config.shell_devel, ',\n',
-		'\tmaxUndo : ',
-			config.maxUndo, ',\n',
+		'\tdevel   : ', config.shell_devel, ',\n',
+		'\tmaxUndo : ', config.maxUndo, ',\n',
 		'\tdebug   : {\n'
 	);
 
@@ -403,10 +404,7 @@ prototype.buildShellConfig =
 			first = false;
 		}
 
-		cconfig.push(
-			'\t\t', k, ' : ',
-			config.log[k]
-		);
+		cconfig.push( '\t\t', k, ' : ', config.log[ k ] );
 	}
 
 	cconfig.push(
@@ -454,9 +452,7 @@ prototype.prepareInventory =
 			'inTestPad', true
 		);
 
-	root.create(
-		'inventory', root.inventory.addResource( cconfig )
-	);
+	root.create( 'inventory', root.inventory.addResource( cconfig ) );
 
 	// takes resource from the the roster
 	for(
@@ -467,10 +463,7 @@ prototype.prepareInventory =
 	{
 		resource = roster[ a ];
 
-		if( resource.devel && !config.shell_devel )
-		{
-			continue;
-		}
+		if( resource.devel && !config.shell_devel ) continue;
 
 		if( resource.hasJion )
 		{
@@ -586,7 +579,7 @@ prototype.prepareInventory =
 			if( !resource.data )
 			{
 				code =
-					yield fs.readFile( resource.filePath, resume( ) )
+					( yield fs.readFile( resource.filePath, resume( ) ) )
 					+ '';
 			}
 			else
