@@ -297,7 +297,8 @@ prototype.pushButton =
 {
 	var
 		buttonName,
-		discname;
+		discname,
+		mip;
 
 	discname = path.get( 2 );
 
@@ -327,11 +328,13 @@ prototype.pushButton =
 	}
 	else if( buttonName === 'remove' )
 	{
+		mip = this.mark.itemPath;
+
 		root.alter(
 			change_shrink.create(
-				'path', this.mark.itemPath.chop,
-				'prev', root.space.getPath( this.mark.itemPath.chop ),
-				'rank', root.space.rankOf( this.mark.itemPath.get( 2 ) )
+				'path', mip.chop,
+				'prev', root.spaceFabric.getPath( mip.chop ),
+				'rank', root.spaceFabric.rankOf( mip.get( 2 ) )
 			)
 		);
 	}

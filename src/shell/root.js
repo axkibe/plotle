@@ -3,8 +3,10 @@
 */
 
 var
-	change_wrap,
+	change_join,
 	change_ray,
+	change_remove,
+	change_wrap,
 	disc_jockey,
 	euclid_display,
 	euclid_measure,
@@ -33,7 +35,8 @@ var
 	shell_root,
 	system,
 	swatch,
-	user_creds;
+	user_creds,
+	visual_space;
 
 root = undefined;
 
@@ -67,7 +70,7 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'shell_root.prepareAction( action, space )'
+				prepare : 'shell_root.prepareAction( action, spaceFabric )'
 				// FIXME assign _action
 			},
 			ajax :
@@ -115,16 +118,26 @@ if( JION )
 				type : 'string',
 				assign : '_mode'
 			},
+			spaceFabric :
+			{
+				comment : 'current space data',
+				type : [ 'undefined', 'fabric_space' ]
+			},
+			spaceRef :
+			{
+				comment : 'reference to current space',
+				type : [ 'undefined', 'fabric_spaceRef' ]
+			},
+			spaceVisual :
+			{
+				comment : 'current space visualisation',
+				type : [ 'undefined', 'visual_space' ]
+			},
 			systemFocus :
 			{
 				comment : 'shell has system focus',
 				type : 'boolean',
 				assign : '_systemFocus'
-			},
-			space :
-			{
-				comment : 'current space',
-				type : [ 'undefined', 'fabric_space' ]
 			},
 			user :
 			{
@@ -440,7 +453,7 @@ prototype._init =
 
 	mode = this._mode;
 
-	spaceRef = this.space && this.space.ref;
+	spaceRef = this.spaceRef;
 
 /**/if( CHECK )
 /**/{
@@ -456,7 +469,7 @@ prototype._init =
 /**/
 /**/	if(
 /**/		( mode === 'normal' || mode === 'create' )
-/**/		&& !this.space
+/**/		&& !this.spaceFabric
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -479,7 +492,10 @@ prototype._init =
 		}
 		else
 		{
-			if( root.space && root.space.ref.username !== 'ideoloom' )
+			if(
+				root.spaceFabric
+				&& root.spaceFabric.ref.username !== 'ideoloom'
+			)
 			{
 				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 			}
@@ -495,6 +511,11 @@ prototype._init =
 		mark = mark.create( 'focus', this._systemFocus );
 	}
 
+	if( !this.spaceFabric )
+	{
+		this.spaceVisual = undefined;
+	}
+
 	// skips recreating children when no need
 	if(
 		!inherit
@@ -507,11 +528,14 @@ prototype._init =
 		|| view !== inherit.view
 	)
 	{
-		if( this.space )
+		if( this.spaceFabric )
 		{
-			this.space =
-				this.space.create(
+			this.spaceVisual =
+				( this.spaceVisual || visual_space )
+				.create(
+					'access', access,
 					'action', action,
+					'fabric', this.spaceFabric,
 					'hover',
 						// FIXME let it prepare
 						hover && hover.get( 0 ) === 'space'
@@ -801,9 +825,9 @@ prototype.input =
 	{
 		screen.input( text );
 
-		if( root.space )
+		if( root.spaceVisual )
 		{
-			focusItem = root.space.focusedItem( );
+			focusItem = root.spaceVisual.focusedItem( );
 
 			if( focusItem && focusItem.scrollMarkIntoView )
 			{
@@ -881,12 +905,13 @@ prototype.moveToSpace =
 	mode = root._mode;
 
 	root.create(
-		'fallbackSpaceRef', root.space ? root.space.ref : undefined,
+		'fallbackSpaceRef',
+			root.spaceFabric ? root.spaceFabric.ref : undefined,
 		'mode',
 			mode === 'normal' || mode === 'create'
 			? 'loading'
 			: pass,
-		'space', undefined
+		'spaceFabric', undefined
 	);
 
 	// FIXME move setPath into creator
@@ -987,7 +1012,7 @@ prototype.showHome =
 {
 	root.create(
 		'action', undefined,
-		'mode', root.space ? 'normal' : 'loading'
+		'mode', root.spaceVisual ? 'normal' : 'loading'
 	);
 };
 
@@ -1019,7 +1044,10 @@ prototype.setPath =
 
 		case 'space' :
 
-			root.create( 'space', root.space.setPath( path, value, 1 ) );
+			root.create(
+				'spaceFabric',
+				root.spaceFabric.setPath( path, value, 1 )
+			);
 
 			break;
 
@@ -1051,9 +1079,9 @@ prototype.specialKey =
 		screen.specialKey( key, shift, ctrl );
 	}
 
-	if( root.space )
+	if( root.spaceVisual )
 	{
-		focusItem = root.space.focusedItem( );
+		focusItem = root.spaceVisual.focusedItem( );
 
 		if( focusItem && focusItem.scrollMarkIntoView )
 		{
@@ -1113,7 +1141,10 @@ prototype.update =
 						mark =
 							mark.create(
 								'doc',
-								root.getPath( mark.itemPath.append( 'doc' ) )
+								root.spaceFabric
+								.getPath(
+									mark.itemPath.chop.append( 'doc' )
+								)
 							);
 					}
 				}
@@ -1183,10 +1214,7 @@ prototype.onAcquireSpace =
 		case 'no access' :
 
 			// FIXME set spaceRef of noAccesstoSpace
-			root.create(
-				'mode', 'noAccessToSpace'
-//				'_formJockey', root._formJockey.create( 'spaceRef', spaceRef )
-			);
+			root.create( 'mode', 'noAccessToSpace' );
 
 			if( root.fallbackSpaceRef )
 			{
@@ -1211,13 +1239,8 @@ prototype.onAcquireSpace =
 			root._mode === 'loading'
 			? 'normal'
 			: pass,
-		'space',
-			reply.space.create(
-				'access', access,
-				'hover', jion$path.empty,
-				'path', jion$path.empty.append( 'space' ),
-				'ref', spaceRef
-			),
+		'spaceFabric', reply.space,
+		'spaceRef', spaceRef,
 		'view',
 			euclid_view.create(
 				'fact', 0,
@@ -1304,6 +1327,109 @@ prototype.onRegister =
 
 
 /*
+| Removes a text spawning over several entities.
+*/
+prototype.removeRange =
+	function(
+		front,
+		back
+	)
+{
+	var
+		changes,
+		k1,
+		k2,
+		pivot,
+		r,
+		r1,
+		r2,
+		text,
+		ve;
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		front.path.get( -1 ) !== 'text'
+/**/		|| back.path.get( -1 ) !== 'text'
+/**/		|| front.path.get( 0 ) !== 'space'
+/**/		|| back.path.get( 0 ) !== 'space'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if ( front.path.equals( back.path ) )
+	{
+		root.alter(
+			change_remove.create(
+				'path', front.path.chop,
+				'at1', front.at,
+				'at2', back.at,
+				'val',
+					root.spaceFabric.getPath( front.path.chop )
+					.substring( front.at, back.at )
+			)
+		);
+
+		return;
+	}
+
+	changes = [ ];
+
+	k1 = front.path.get( -2 );
+
+	k2 = back.path.get( -2 );
+
+	pivot = root.spaceFabric.getPath( front.path.chop.shorten.shorten.shorten );
+
+	r1 = pivot.rankOf( k1 );
+
+	r2 = pivot.rankOf( k2 );
+
+	text = root.spaceFabric.getPath( front.path.chop );
+
+	for(
+		r = r1;
+		r < r2;
+		r++
+	)
+	{
+		ve = pivot.atRank( r + 1 );
+
+		changes.push(
+			change_join.create(
+				'path', front.path.chop,
+				'path2', ve.textPath.chop,
+				'at1', text.length
+			)
+		);
+
+		text += ve.text;
+	}
+
+	text =
+		text.substring(
+			front.at,
+			text.length - ve.text.length + back.at
+		);
+
+	changes.push(
+		change_remove.create(
+			'path', front.path.chop,
+			'at1', front.at,
+			'at2', front.at + text.length,
+			'val', text
+		)
+	);
+
+	root.alter( changes );
+};
+
+
+
+
+/*
 | Returns current screen
 |
 | FIXME make this a lazyValue
@@ -1323,7 +1449,7 @@ prototype._currentScreen =
 		case 'create' :
 		case 'normal' :
 
-			return root.space;
+			return root.spaceVisual;
 
 		case 'login' :
 		case 'loading' :

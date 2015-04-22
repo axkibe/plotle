@@ -125,14 +125,14 @@ prototype.alter =
 /**/	}
 /**/}
 
-	space = changeWrap.changeTree( root.space );
+	space = changeWrap.changeTree( root.spaceFabric );
 
 	root.create(
 		'link',
 			root.link.create(
 				'_outbox', root.link._outbox.append( changeWrap )
 			),
-		'space', space
+		'spaceFabric', space
 	);
 
 	root.link._sendChanges( );
@@ -208,7 +208,7 @@ prototype._onAcquireSpace =
 	}
 
 	root.create(
-		'space',
+		'spaceFabric',
 			reply.space.create(
 				'path', jion$path.empty.append( 'space' )
 			),
@@ -395,7 +395,7 @@ prototype._onUpdate =
 
 	seq = reply.seq;
 
-	space = root.space;
+	space = root.spaceFabric;
 
 	// if this wasn't an empty timeout
 	if( changeWrapRay && changeWrapRay.length > 0 )
@@ -467,7 +467,7 @@ prototype._onUpdate =
 				'_postbox', postbox || change_wrapRay.create( ),
 				'_rSeq', reply.seq + changeWrapRay.length
 			),
-		'space', space
+		'spaceFabric', space
 	);
 
 	// FIXME move to "markJockey"

@@ -713,6 +713,12 @@ module.exports =
 		'inBundle', true,
 		'inTestPad', true
 	),
+	// XXX
+	resource.create(
+		'filePath', 'src/visual/space.js',
+		'hasJion', true,
+		'inBundle', true
+	),
 	resource.create(
 		'filePath', 'src/shell/stubs.js',
 		'inBundle', true

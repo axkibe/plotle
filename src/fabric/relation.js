@@ -192,7 +192,7 @@ fabric_relation.spawn =
 	root.create(
 		'mark',
 			mark_caret.create(
-				'path', root.space.get( key ).doc.atRank( 0 ).textPath,
+				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
 				'at', 0
 			)
 	);
@@ -257,7 +257,7 @@ prototype.draw =
 		space,
 		zone;
 
-	space = root.space;
+	space = root.spaceVisual;
 
 	item1 = space.getVis( this.item1key );
 

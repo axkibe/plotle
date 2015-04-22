@@ -213,10 +213,10 @@ fabric_item.dragStart =
 	if( access == 'rw' )
 	{
 		// take focus
-		if( root.space.focusedItem( ) !== this )
-		{
+//		if( root.space.focusedItem( ) !== this )
+//		{
 			root.create( 'mark', mark_item.create( 'path', this.path ) );
-		}
+//		}
 
 		root.create(
 			'action',
@@ -259,7 +259,7 @@ fabric_item.dragStop =
 			}
 
 			fabric_relation.spawn(
-				root.space.get( action.fromItemPath.get( -1 ) ),
+				root.spaceFabric.get( action.fromItemPath.get( -1 ) ),
 				this
 			);
 
