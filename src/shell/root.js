@@ -905,8 +905,7 @@ prototype.moveToSpace =
 	mode = root._mode;
 
 	root.create(
-		'fallbackSpaceRef',
-			root.spaceFabric ? root.spaceFabric.ref : undefined,
+		'fallbackSpaceRef', this.spaceRef,
 		'mode',
 			mode === 'normal' || mode === 'create'
 			? 'loading'

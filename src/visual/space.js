@@ -21,6 +21,7 @@ var
 	session_uid,
 	shell_stubs,
 	theme,
+	visual_portal,
 	visual_space;
 
 
@@ -88,7 +89,7 @@ if( JION )
 			'fabric_note',
 			'fabric_label',
 			'fabric_relation',
-			'fabric_portal'
+			'visual_portal'
 		]
 	};
 }
@@ -137,7 +138,7 @@ visual_space.concernsMark =
 */
 prototype._init =
 	function(
-		// inherit
+		inherit
 	)
 {
 	var
@@ -174,6 +175,24 @@ prototype._init =
 			path = spacePath.append( 'twig' ).appendNC( k );
 		}
 
+		switch( item.reflect )
+		{
+		case 'fabric_portal' :
+
+		twig[ k ] =
+			( inherit && inherit._twig[ k ] || visual_portal )
+			.create(
+				'hover', this.hover,
+				'fabric', item,
+				'mark', this.mark,
+				'path', path,
+				'view', this.view
+			);
+
+		break;
+
+		default :
+		// FIXME XXX remove
 		twig[ k ] =
 			item.create(
 				'hover', this.hover,
@@ -181,6 +200,7 @@ prototype._init =
 				'path', path,
 				'view', this.view
 			);
+		}
 	}
 
 	if( FREEZE )

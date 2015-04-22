@@ -713,9 +713,13 @@ module.exports =
 		'inBundle', true,
 		'inTestPad', true
 	),
-	// XXX
 	resource.create(
 		'filePath', 'src/visual/space.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/visual/portal.js',
 		'hasJion', true,
 		'inBundle', true
 	),
