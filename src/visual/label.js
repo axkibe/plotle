@@ -13,6 +13,7 @@ var
 	jion,
 	root,
 	theme,
+	visual_doc,
 	visual_handlesBezel,
 	visual_item,
 	visual_label;
@@ -64,7 +65,7 @@ if( JION )
 				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
-		init : [ ]
+		init : [ 'inherit' ]
 	};
 }
 
@@ -112,7 +113,9 @@ if( FREEZE )
 | Initializer.
 */
 prototype._init =
-	function( )
+	function(
+		inherit
+	)
 {
 	var
 		doc,
@@ -124,7 +127,8 @@ prototype._init =
 
 	doc =
 	this.doc =
-		fabric.doc.create(
+		( inherit && inherit.doc || visual_doc ).create(
+			'fabric', fabric.doc,
 			'flowWidth', 0,
 			'fontsize', this.fontsize,
 			'innerMargin', theme.label.innerMargin,
@@ -134,14 +138,13 @@ prototype._init =
 			'view', this.view.home
 		);
 
-	height = doc.height,
+	height = doc.height;
 
 	pnw = this.pnw;
 
 	this.zone =
 		euclid_rect.create(
-			'pnw',
-				pnw,
+			'pnw', pnw,
 			'pse',
 				pnw.add(
 					Math.round( Math.max( doc.widthUsed + 4, height / 4 ) ),

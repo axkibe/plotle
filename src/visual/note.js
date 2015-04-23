@@ -16,6 +16,7 @@ var
 	root,
 	system,
 	theme,
+	visual_doc,
 	visual_handlesBezel,
 	visual_item,
 	visual_note,
@@ -109,16 +110,16 @@ prototype = visual_note.prototype;
 | Resize handles to show on notes.
 */
 visual_note.handles =
-	{
-		n : true,
-		ne : true,
-		e : true,
-		se : true,
-		s : true,
-		sw : true,
-		w : true,
-		nw : true
-	};
+{
+	n : true,
+	ne : true,
+	e : true,
+	se : true,
+	s : true,
+	sw : true,
+	w : true,
+	nw : true
+};
 
 
 if( FREEZE )
@@ -145,7 +146,8 @@ prototype._init =
 	zone = this.zone;
 
 	this.doc =
-		( this.doc || fabric.doc ).create(
+		( inherit && inherit.doc || visual_doc ).create(
+			'fabric', fabric.doc,
 			'flowWidth', zone.width - theme.note.innerMargin.x,
 			'fontsize', this.fontsize,
 			'innerMargin', theme.note.innerMargin,

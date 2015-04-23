@@ -801,7 +801,7 @@ prototype.specialKey =
 		v0,
 		v1;
 
-	doc = item.doc,
+	doc = item.doc;
 
 	mark = this.mark;
 

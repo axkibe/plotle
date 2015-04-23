@@ -151,7 +151,7 @@ prototype._init =
 		item,
 		k,
 		path,
-		//iTwig,
+		//iTwig,  FIXME
 		ranks,
 		twig;
 
@@ -167,7 +167,7 @@ prototype._init =
 	{
 		k = fabric.getKey( a );
 
-		ranks.push( k );
+		ranks.push( k );  // FIXME array set instead of push
 
 		item = fabric.get( k );
 
@@ -175,6 +175,7 @@ prototype._init =
 
 		if( !path )
 		{
+			// FIXME use or in previous set
 			path = spacePath.append( 'twig' ).appendNC( k );
 		}
 
@@ -256,8 +257,9 @@ prototype._init =
 		Object.freeze( twig );
 	}
 
-	this._twig = twig;
 	this._ranks = ranks;
+
+	this._twig = twig;
 };
 
 
@@ -1410,22 +1412,26 @@ prototype.dragMove =
 								origin.fabric.create( 'fontsize', fs )
 						);
 
+					// FIXME nicer create
 					transItem =
 						resized.create(
-							'pnw',
-								resized.pnw.add(
-									( align === 'sw' || align === 'nw' )
-									?  Math.round(
-										origin.zone.width -
-										resized.zone.width
-									)
-									: 0,
-									( align === 'ne' || align === 'nw' )
-									?  Math.round(
-										origin.zone.height -
-										resized.zone.height
-									)
-									: 0
+							'fabric',
+								resized.fabric.create(
+									'pnw',
+										resized.pnw.add(
+											( align === 'sw' || align === 'nw' )
+											?  Math.round(
+												origin.zone.width -
+												resized.zone.width
+											)
+											: 0,
+											( align === 'ne' || align === 'nw' )
+											?  Math.round(
+												origin.zone.height -
+												resized.zone.height
+											)
+											: 0
+										)
 								)
 						);
 
