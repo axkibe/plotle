@@ -459,10 +459,7 @@ prototype.scrollMarkIntoView =
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflect !== 'fabric_para' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( para.reflect !== 'visual_para' ) throw new Error( );
 /**/}
 
 	zone = this.zone;

@@ -16,7 +16,8 @@ var
 	shapeSection_line,
 	shell_fontPool,
 	theme,
-	visual_doc;
+	visual_doc,
+	visual_para;
 
 
 /*
@@ -81,7 +82,7 @@ if( JION )
 			}
 		},
 		init : [ 'inherit' ],
-		twig : [ 'fabric_para' ]
+		twig : [ 'visual_para' ]
 	};
 }
 
@@ -105,7 +106,7 @@ prototype = visual_doc.prototype;
 */
 prototype._init =
 	function(
-		// inherit
+		inherit
 	)
 {
 	var
@@ -125,6 +126,8 @@ prototype._init =
 
 	twigPath = this.path && this.path.append( 'twig' );
 
+	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( ); // XXX
+
 	for( a = 0, aZ = fabric.length; a < aZ; a++ )
 	{
 		key = fabric.getKey( a );
@@ -132,10 +135,10 @@ prototype._init =
 		ranks[ a ] = key;
 
 		twig[ key ] =
-			// ( inherit && inherit._twig[ key ] || visual_para ).create( FIXME
-			fabric.get( key ).create(
-				'path', twigPath && twigPath.appendNC( key ),
+			( inherit && inherit._twig[ key ] || visual_para ).create(
+				'fabric', fabric.get( key ),
 				'fontsize', this.fontsize,
+				'path', twigPath && twigPath.appendNC( key ),
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
 				'view', this.view

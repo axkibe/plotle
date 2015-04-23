@@ -117,7 +117,7 @@ if( NODE )
 
 prototype = visual_space.prototype;
 
-spacePath = jion.path.empty.append( 'space' );
+spacePath = jion.path.empty.append( 'spaceVisual' );
 
 
 /*
@@ -149,9 +149,9 @@ prototype._init =
 		aZ,
 		fabric,
 		item,
+		iItem,
 		k,
 		path,
-		//iTwig,  FIXME
 		ranks,
 		twig;
 
@@ -171,83 +171,34 @@ prototype._init =
 
 		item = fabric.get( k );
 
-		path = item.path;
+		iItem = inherit && inherit._twig[ k ];
 
-		if( !path )
+		if( !iItem )
 		{
-			// FIXME use or in previous set
+			switch( item.reflect )
+			{
+				case 'fabric_label' : iItem = visual_label; break;
+				case 'fabric_note' : iItem = visual_note; break;
+				case 'fabric_portal' : iItem = visual_portal; break;
+				case 'fabric_relation' : iItem = visual_relation; break;
+				default : throw new Error( );
+			}
+
 			path = spacePath.append( 'twig' ).appendNC( k );
 		}
-
-		switch( item.reflect )
+		else
 		{
-			case 'fabric_label' :
-
-				twig[ k ] =
-					( inherit && inherit._twig[ k ] || visual_label )
-					.create(
-						'hover', this.hover,
-						'fabric', item,
-						'mark', this.mark,
-						'path', path,
-						'view', this.view
-					);
-
-				break;
-
-			case 'fabric_relation' :
-
-				twig[ k ] =
-					( inherit && inherit._twig[ k ] || visual_relation )
-					.create(
-						'hover', this.hover,
-						'fabric', item,
-						'mark', this.mark,
-						'path', path,
-						'view', this.view
-					);
-
-				break;
-
-			case 'fabric_note' :
-
-				twig[ k ] =
-					( inherit && inherit._twig[ k ] || visual_note )
-					.create(
-						'hover', this.hover,
-						'fabric', item,
-						'mark', this.mark,
-						'path', path,
-						'view', this.view
-					);
-
-				break;
-
-			case 'fabric_portal' :
-
-				twig[ k ] =
-					( inherit && inherit._twig[ k ] || visual_portal )
-					.create(
-						'hover', this.hover,
-						'fabric', item,
-						'mark', this.mark,
-						'path', path,
-						'view', this.view
-					);
-
-				break;
-
-			default :
-
-				// FIXME XXX remove
-				twig[ k ] =
-					item.create(
-						'hover', this.hover,
-						'mark', this.mark,
-						'path', path,
-						'view', this.view
-					);
+			path = pass;
 		}
+
+		twig[ k ] =
+			iItem.create(
+				'hover', this.hover,
+				'fabric', item,
+				'mark', this.mark,
+				'path', path,
+				'view', this.view
+			);
 	}
 
 	if( FREEZE )
@@ -673,7 +624,6 @@ prototype.dragStart =
 	{
 		transItem =
 			shell_stubs.emptyPortal.create(
-				'hover', jion.path.empty,
 				'view', view,
 				'zone',
 					euclid_rect.create(
@@ -699,10 +649,7 @@ prototype.dragStart =
 	{
 		item = this.atRankVis( a );
 
-		if( item.dragStart( p, shift, ctrl, access ) )
-		{
-			return;
-		}
+		if( item.dragStart( p, shift, ctrl, access ) ) return;
 	}
 
 	// starts a panning operation instead

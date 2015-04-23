@@ -35,18 +35,7 @@ visual_item.concernsMark =
 	)
 {
 
-/**/if( CHECK )
-/**/{
-/**/	if( path && path.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( !path || !mark )
-	{
-		return undefined;
-	}
+	if( !path || !mark ) return undefined;
 
 	return(
 		mark.containsPath( path )

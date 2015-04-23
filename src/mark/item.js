@@ -29,7 +29,8 @@ if( JION )
 				comment : 'path of the item',
 				type : 'jion$path'
 			}
-		}
+		},
+		init : [ ]
 	};
 }
 
@@ -42,12 +43,17 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
+
 	mark_item = jion.this( module, 'source' );
 }
 
 
 prototype = mark_item.prototype;
 
+
+prototype._init = function( ) {
+	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( ); // FIXME XXX
+};
 
 /*
 | A caret mark has a caret.

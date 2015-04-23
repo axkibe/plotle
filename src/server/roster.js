@@ -709,6 +709,11 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/visual/para.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/visual/doc.js',
 		'hasJion', true,
 		'inBundle', true
