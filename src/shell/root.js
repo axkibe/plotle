@@ -3,15 +3,20 @@
 */
 
 var
+	change_grow,
 	change_join,
 	change_ray,
 	change_remove,
 	change_wrap,
 	disc_jockey,
+	euclid_arrow,
 	euclid_display,
 	euclid_measure,
 	euclid_point,
 	euclid_view,
+	fabric_doc,
+	fabric_para,
+	fabric_relation,
 	fabric_spaceRef,
 	form_jockey,
 	gruga_createDisc,
@@ -26,6 +31,7 @@ var
 	gruga_user,
 	gruga_welcome,
 	jion$path,
+	mark_caret,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -35,6 +41,7 @@ var
 	shell_root,
 	system,
 	swatch,
+	theme,
 	user_creds,
 	visual_space;
 
@@ -1423,6 +1430,62 @@ prototype.removeRange =
 	);
 
 	root.alter( changes );
+};
+
+
+/*
+| Creates a new relation by specifing its relates.
+*/
+prototype.spawnRelation =
+	function(
+		item1,
+		item2
+	)
+{
+	var
+		arrow,
+		key,
+		pnw,
+		val;
+
+	arrow =
+		euclid_arrow.connect(
+			item1.silhoutte, 'normal',
+			item2.silhoutte, 'normal'
+		);
+
+	pnw = arrow.pc.sub( theme.relation.spawnOffset );
+
+	val =
+		fabric_relation.create(
+			'pnw', pnw,
+			'doc',
+				fabric_doc.create(
+					'twig:add', '1',
+					fabric_para.create( 'text', 'relates to' )
+				),
+			'fontsize', 20,
+			'item1key', item1.path.get( -1 ),
+			'item2key', item2.path.get( -1 )
+		);
+
+	key = session_uid( );
+
+	root.alter(
+		change_grow.create(
+			'val', val,
+			'path', jion$path.empty.append( 'twig' ).append( key ),
+			'rank', 0
+		)
+	);
+
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
+				'at', 0
+			)
+	);
 };
 
 

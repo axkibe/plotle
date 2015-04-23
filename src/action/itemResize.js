@@ -27,12 +27,12 @@ if( JION )
 			transItem :
 			{
 				comment : 'the transient item while it is dragged',
-				type : require( '../typemaps/fabricItems' )
+				type : require( '../typemaps/visualItems' )
 			},
 			origin :
 			{
 				comment : 'the item being resized',
-				type : require( '../typemaps/fabricItems' )
+				type : require( '../typemaps/visualItems' )
 			},
 			start :
 			{

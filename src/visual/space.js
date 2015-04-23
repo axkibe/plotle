@@ -21,7 +21,10 @@ var
 	session_uid,
 	shell_stubs,
 	theme,
+	visual_label,
+	visual_note,
 	visual_portal,
+	visual_relation,
 	visual_space;
 
 
@@ -85,11 +88,11 @@ if( JION )
 		},
 		init : [ 'inherit' ],
 		twig :
-		[	// FIXME have visuals
-			'fabric_note',
-			'fabric_label',
-			'fabric_relation',
-			'visual_portal'
+		[
+			'visual_label',
+			'visual_note',
+			'visual_portal',
+			'visual_relation'
 		]
 	};
 }
@@ -177,29 +180,72 @@ prototype._init =
 
 		switch( item.reflect )
 		{
-		case 'fabric_portal' :
+			case 'fabric_label' :
 
-		twig[ k ] =
-			( inherit && inherit._twig[ k ] || visual_portal )
-			.create(
-				'hover', this.hover,
-				'fabric', item,
-				'mark', this.mark,
-				'path', path,
-				'view', this.view
-			);
+				twig[ k ] =
+					( inherit && inherit._twig[ k ] || visual_label )
+					.create(
+						'hover', this.hover,
+						'fabric', item,
+						'mark', this.mark,
+						'path', path,
+						'view', this.view
+					);
 
-		break;
+				break;
 
-		default :
-		// FIXME XXX remove
-		twig[ k ] =
-			item.create(
-				'hover', this.hover,
-				'mark', this.mark,
-				'path', path,
-				'view', this.view
-			);
+			case 'fabric_relation' :
+
+				twig[ k ] =
+					( inherit && inherit._twig[ k ] || visual_relation )
+					.create(
+						'hover', this.hover,
+						'fabric', item,
+						'mark', this.mark,
+						'path', path,
+						'view', this.view
+					);
+
+				break;
+
+			case 'fabric_note' :
+
+				twig[ k ] =
+					( inherit && inherit._twig[ k ] || visual_note )
+					.create(
+						'hover', this.hover,
+						'fabric', item,
+						'mark', this.mark,
+						'path', path,
+						'view', this.view
+					);
+
+				break;
+
+			case 'fabric_portal' :
+
+				twig[ k ] =
+					( inherit && inherit._twig[ k ] || visual_portal )
+					.create(
+						'hover', this.hover,
+						'fabric', item,
+						'mark', this.mark,
+						'path', path,
+						'view', this.view
+					);
+
+				break;
+
+			default :
+
+				// FIXME XXX remove
+				twig[ k ] =
+					item.create(
+						'hover', this.hover,
+						'mark', this.mark,
+						'path', path,
+						'view', this.view
+					);
 		}
 	}
 
@@ -1264,11 +1310,15 @@ prototype.dragMove =
 				case 'zone' :
 
 					transItem =
+						// make a createWithZone to visual items.
 						origin.create(
-							'zone',
-								origin.zone.add(
-									view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y
+							'fabric',
+								origin.fabric.create(
+									'zone',
+										origin.zone.add(
+											view.dex( p.x ) - action.start.x,
+											view.dey( p.y ) - action.start.y
+										)
 								)
 						);
 
@@ -1277,11 +1327,15 @@ prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					transItem =
+						// make a createWithPnw to visual items.
 						origin.create(
-							'pnw',
-								origin.pnw.add(
-									view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y
+							'fabric',
+								origin.fabric.create(
+									'pnw',
+										origin.pnw.add(
+											view.dex( p.x ) - action.start.x,
+											view.dey( p.y ) - action.start.y
+										)
 								)
 						);
 			}
@@ -1349,7 +1403,12 @@ prototype.dragMove =
 							theme.label.minSize
 						);
 
-					resized = origin.create( 'fontsize', fs );
+					// FIXME createWithFontsize
+					resized =
+						origin.create(
+							'fabric',
+								origin.fabric.create( 'fontsize', fs )
+						);
 
 					transItem =
 						resized.create(

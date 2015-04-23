@@ -22,7 +22,7 @@ if( JION )
 			origin :
 			{
 				comment : 'the item being dragged',
-				type : require( '../typemaps/fabricItems' )
+				type : require( '../typemaps/visualItems' )
 			},
 			start :
 			{
@@ -32,7 +32,7 @@ if( JION )
 			transItem :
 			{
 				comment : 'the transient item while it is dragged',
-				type : require( '../typemaps/fabricItems' )
+				type : require( '../typemaps/visualItems' )
 			}
 		}
 	};

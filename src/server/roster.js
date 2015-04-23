@@ -677,11 +677,6 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/fabric/item.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/fabric/docItem.js',
 		'inBundle', true,
 		'inTestPad', true
@@ -714,12 +709,32 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/visual/item.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/visual/space.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/visual/label.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/visual/note.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/visual/portal.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/visual/relation.js',
 		'hasJion', true,
 		'inBundle', true
 	),

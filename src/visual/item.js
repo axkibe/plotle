@@ -7,12 +7,11 @@ var
 	action_createRelation,
 	action_itemDrag,
 	action_scrolly,
-	fabric_item,
-	fabric_relation,
 	jion$path,
 	mark_item,
 	result_hover,
-	root;
+	root,
+	visual_item;
 
 
 /*
@@ -22,24 +21,14 @@ var
 'use strict';
 
 
-/*
-| Node includes.
-*/
-if( NODE )
-{
-	fabric_item = module.exports;
-}
-else
-{
-	fabric_item = { };
-}
+visual_item = NODE ? module.exports : { };
 
 
 /*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-fabric_item.concernsMark =
+visual_item.concernsMark =
 	function(
 		mark,
 		path
@@ -70,7 +59,7 @@ fabric_item.concernsMark =
 /*
 | A move during an action.
 */
-fabric_item.dragMove =
+visual_item.dragMove =
 	function(
 		p
 		// shift,
@@ -134,7 +123,7 @@ fabric_item.dragMove =
 /*
 | Handles a potential dragStart event for this item.
 */
-fabric_item.dragStart =
+visual_item.dragStart =
 	function(
 		p,
 		shift,
@@ -239,7 +228,7 @@ fabric_item.dragStart =
 /*
 | A draggin action regarding this item stopped.
 */
-fabric_item.dragStop =
+visual_item.dragStop =
 	function(
 		p
 	)
@@ -258,8 +247,8 @@ fabric_item.dragStop =
 				return false;
 			}
 
-			fabric_relation.spawn(
-				root.spaceFabric.get( action.fromItemPath.get( -1 ) ),
+			root.spawnRelation(
+				root.spaceVisual.get( action.fromItemPath.get( -1 ) ),
 				this
 			);
 
@@ -275,7 +264,7 @@ fabric_item.dragStop =
 /*
 | User is hovering their pointing device over something.
 */
-fabric_item.pointingHover =
+visual_item.pointingHover =
 	function(
 		p
 	)

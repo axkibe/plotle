@@ -13,7 +13,6 @@ var
 	euclid_point,
 	euclid_roundRect,
 	euclid_view,
-	fabric_item,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,
@@ -27,6 +26,7 @@ var
 	shell_fontPool,
 	theme,
 	visual_handlesBezel,
+	visual_item,
 	visual_portal;
 
 
@@ -62,7 +62,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				prepare : 'fabric_item.concernsMark( mark, path )',
+				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
 					require( '../typemaps/mark' )
 					.concat( [ 'undefined' ] )
@@ -315,13 +315,13 @@ prototype.click =
 /*
 | A move during an action.
 */
-prototype.dragMove = fabric_item.dragMove;
+prototype.dragMove = visual_item.dragMove;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-prototype.dragStart = fabric_item.dragStart;
+prototype.dragStart = visual_item.dragStart;
 
 
 /*
@@ -373,7 +373,7 @@ prototype.dragStop =
 
 		default :
 
-			return fabric_item.dragStop.call( this, p );
+			return visual_item.dragStop.call( this, p );
 	}
 };
 

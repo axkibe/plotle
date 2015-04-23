@@ -110,9 +110,6 @@ prototype._init =
 		ranks,
 		rZ;
 
-	// if abstract nothing is initialized
-	if( !this.view ) return;
-
 	ranks = this._ranks;
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
