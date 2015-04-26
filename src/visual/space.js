@@ -71,7 +71,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'visual_space.concernsMark( mark )'
 			},
@@ -573,11 +573,11 @@ prototype.dragStart =
 	)
 	{
 		transItem =
-			shell_stubs.emptyNote.create(
-				'zone',
-					euclid_rect.create(
-						'pnw', p,  // FIXME why no depoint?
-						'pse', p
+			visual_note.create(
+				'fabric',
+					shell_stubs.emptyNote.create(
+						// FIXME why no depoint?
+						'zone', euclid_rect.create( 'pnw', p, 'pse', p )
 					),
 				'view', view
 			);
@@ -623,12 +623,11 @@ prototype.dragStart =
 	)
 	{
 		transItem =
-			shell_stubs.emptyPortal.create(
-				'view', view,
-				'zone',
-					euclid_rect.create(
-						'pnw', p, //FIXME depoint?
-						'pse', p
+			visual_portal.create(
+				'fabric',
+					shell_stubs.emptyPortal.create(
+					 //FIXME depoint?
+	 					'zone', euclid_rect.create( 'pnw', p, 'pse', p )
 					)
 			);
 
@@ -772,7 +771,7 @@ prototype.dragStop =
 					// ( and all others creators )
 
 					note =
-						action.transItem.create(
+						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
 									view.depoint( action.start ),
@@ -805,10 +804,7 @@ prototype.dragStop =
 							)
 					);
 
-					if( !ctrl )
-					{
-						root.create( 'action', undefined );
-					}
+					if( !ctrl ) root.create( 'action', undefined );
 
 					break;
 
@@ -1152,7 +1148,7 @@ prototype.dragMove =
 			{
 				case 'zone' :
 
-					transItem = model.create( 'zone', zone );
+					transItem = model.createWithZone( zone );
 
 					break;
 
@@ -1259,16 +1255,11 @@ prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						// make a createWithZone to visual items.
-						origin.create(
-							'fabric',
-								origin.fabric.create(
-									'zone',
-										origin.zone.add(
-											view.dex( p.x ) - action.start.x,
-											view.dey( p.y ) - action.start.y
-										)
-								)
+						origin.createWithZone(
+							origin.zone.add(
+								view.dex( p.x ) - action.start.x,
+								view.dey( p.y ) - action.start.y
+							)
 						);
 
 					break;
@@ -1276,7 +1267,7 @@ prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					transItem =
-						// make a createWithPnw to visual items.
+						// FIXME make a createWithPnw to visual items.
 						origin.create(
 							'fabric',
 								origin.fabric.create(
@@ -1307,15 +1298,14 @@ prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						origin.create(
-							'zone',
-								origin.zone.cardinalResize(
-									align,
-									view.dex( p.x ) - action.start.x,
-										view.dey( p.y ) - action.start.y,
-									origin.minHeight,
-									origin.minWidth
-								)
+						origin.createWithZone(
+							origin.zone.cardinalResize(
+								align,
+								view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y,
+								origin.minHeight,
+								origin.minWidth
+							)
 						);
 
 					break;

@@ -28,6 +28,8 @@ else
 
 /*
 | Returns true when 'o' is a change.
+|
+| FIXME use a table.
 */
 change_generic.isChange =
 	function(
@@ -68,10 +70,7 @@ change_generic.transformChangeRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cRay.reflect !== 'change_ray' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( cRay.reflect !== 'change_ray' ) throw new Error( );
 /**/}
 
 	tRay = [ ];
@@ -120,34 +119,13 @@ change_generic.transformChangeWrapRay =
 
 	tRay = [ ];
 
-	for(
-		r = 0, rZ = cwRay.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = cwRay.length; r < rZ; r++ )
 	{
 		tRay[ r ] = this._transformChangeWrap( cwRay.get( r ) );
 	}
 
 
 	return cwRay.create( 'ray:init', tRay );
-};
-
-
-/*
-| Transforms a range mark by this change.
-*/
-change_generic.transformRangeMark =
-	function(
-		mark
-	)
-{
-	return(
-		mark.create(
-			'begin', this._transformTextMark( mark.begin ),
-			'end', this._transformTextMark( mark.end )
-		)
-	);
 };
 
 

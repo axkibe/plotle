@@ -1,11 +1,11 @@
 /*
-| A single widget marked ( without caret or range )
+| A single item marked ( without caret or range )
 */
 
 
 var
 	jion,
-	mark_widget;
+	visual_mark_item;
 
 
 /*
@@ -21,7 +21,7 @@ var
 if( JION )
 {
 	return{
-		id : 'mark_widget',
+		id : 'visual_mark_item',
 		attributes :
 		{
 			path :
@@ -29,23 +29,25 @@ if( JION )
 				comment : 'path of the item',
 				type : 'jion$path'
 			}
-		}
+		},
+		init : [ ]
 	};
-}
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	mark_widget = jion.this( module, 'source' );
 }
 
 
 var
 	prototype;
 
-prototype = mark_widget.prototype;
+
+if( NODE )
+{
+	jion = require( 'jion' );
+
+	visual_mark_item = jion.this( module, 'source' );
+}
+
+
+prototype = visual_mark_item.prototype;
 
 
 /*
@@ -59,25 +61,10 @@ prototype.hasCaret = false;
 
 /*
 | The item's path.
-|
-| FIXME
 */
 jion.lazyValue(
 	prototype,
 	'itemPath',
-	function( )
-	{
-		return;
-	}
-);
-
-
-/*
-| The widget's path.
-*/
-jion.lazyValue(
-	prototype,
-	'widgetPath',
 	function( )
 	{
 		return this.path;
@@ -86,7 +73,25 @@ jion.lazyValue(
 
 
 /*
+| The widget's path.
+|
+| FIXME just set it undefined in prototype.
+*/
+jion.lazyValue(
+	prototype,
+	'widgetPath',
+	function( )
+	{
+		return;
+	}
+);
+
+
+
+/*
 | The content the mark puts into the clipboard.
+|
+| FUTURE write something
 */
 prototype.clipboard = '';
 

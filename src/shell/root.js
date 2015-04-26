@@ -115,7 +115,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
 				assign : '_mark',
 			},
@@ -1120,43 +1120,18 @@ prototype.update =
 	var
 		mark;
 
-	mark = this._mark;
+	mark = this._mark.createTransformed( changes );
 
-	if( mark )
+	if( mark.reflect === 'visual_mark_range' )
 	{
-		switch( mark.reflect )
-		{
-			case 'mark_caret' :
-			case 'mark_item' :
-
-				if( mark.path.get( 0 ) === 'space' )
-				{
-					mark = changes.transform( mark );
-				}
-
-				break;
-
-			case 'mark_range' :
-
-				if( mark.path.get( 0 ) === 'space' )
-				{
-					mark = changes.transform( mark );
-
-					if( mark )
-					{
-						mark =
-							mark.create(
-								'doc',
-								root.spaceFabric
-								.getPath(
-									mark.itemPath.chop.append( 'doc' )
-								)
-							);
-					}
-				}
-
-				break;
-		}
+		// FUTURE remove doc from range
+		mark =
+			mark.create(
+				'doc',
+					root.spaceFabric.getPath(
+						mark.itemPath.chop.append( 'doc' )
+					)
+			);
 	}
 
 	root.create( 'mark', mark );

@@ -147,10 +147,8 @@ prototype.transform =
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
-		case 'mark_caret' :
-		case 'mark_item' :
-		case 'mark_range' :
-		case 'mark_widget' :
+		case 'change_mark_text' :
+		case 'change_mark_node' :
 
 			return cx;
 

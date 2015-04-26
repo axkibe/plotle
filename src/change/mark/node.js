@@ -1,10 +1,10 @@
 /*
-| A poition in a text.
+| A node mark.
 */
 
 
 var
-	mark_text;
+	change_mark_node;
 
 
 /*
@@ -20,18 +20,13 @@ var
 if( JION )
 {
 	return{
-		id : 'mark_text',
+		id : 'change_mark_node',
 		attributes :
 		{
 			path :
 			{
-				comment : 'path of the caret',
+				comment : 'path of the mark',
 				type : 'jion$path'
-			},
-			at :
-			{
-				comment : 'offset of the caret',
-				type : 'integer'
 			}
 		},
 		init : [ ]
@@ -45,11 +40,11 @@ var
 
 if( NODE )
 {
-	mark_text = require( 'jion' ).this( module, 'source' );
+	change_mark_node = require( 'jion' ).this( module, 'source' );
 }
 
 
-prototype = mark_text.prototype;
+prototype = change_mark_node.prototype;
 
 
 /*
@@ -62,11 +57,6 @@ prototype._init =
 /**/if( CHECK )
 /**/{
 /**/	if( this.path.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( this.at < 0 )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -183,15 +183,10 @@ prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
-		case 'mark_range' :
-		case 'mark_item' :
+		case 'change_mark_text' :
+		case 'change_mark_node' :
 
 			return this._transformMark( cx );
-
-		case 'mark_widget' :
-
-			return cx;
 
 		case 'change_grow' :
 		case 'change_shrink' :
@@ -252,7 +247,7 @@ prototype._transformMark =
 		mark
 	)
 {
-	if( !this.path.subPathOf( mark.path.chop ) )
+	if( !this.path.subPathOf( mark.path ) )
 	{
 		return mark;
 	}

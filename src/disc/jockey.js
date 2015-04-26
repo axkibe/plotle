@@ -45,7 +45,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'disc_jockey.concernsMark( mark )',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			mode :

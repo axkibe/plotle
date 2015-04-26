@@ -56,7 +56,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			view :

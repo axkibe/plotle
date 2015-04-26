@@ -179,20 +179,15 @@ prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
+		case 'change_mark_text' :
 
 			return this._transformTextMark( cx );
-
-		case 'mark_range' :
-
-			return this._transformRangeMark( cx );
 
 		case 'change_grow' :
 		case 'change_shrink' :
 		case 'change_split' :
 		case 'change_set' :
-		case 'mark_item' :
-		case 'mark_widget' :
+		case 'change_mark_node' :
 
 			return cx;
 
@@ -304,24 +299,14 @@ prototype._transformTextMark =
 		mark
 	)
 {
-	var
-		len;
-
-	if( !this.path.equals( mark.path.chop ) )
-	{
-		return mark;
-	}
-
-	if( mark.at < this.at1 )
-	{
-		return mark;
-	}
-	else
-	{
-		len = this.val.length;
-
-		return mark.create( 'at', mark.at + len );
-	}
+	return(
+		(
+			!this.path.equals( mark.path )
+			|| mark.at < this.at1
+		)
+		? mark
+		: mark.create( 'at', mark.at + this.val.length )
+	);
 };
 
 

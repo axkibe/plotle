@@ -68,7 +68,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'widget_widget.concernsMark( mark, path )',
 			},

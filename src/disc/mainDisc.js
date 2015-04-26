@@ -64,7 +64,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			mode :
@@ -147,11 +147,7 @@ prototype._init =
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
-	for(
-		r = 0, rZ = this.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		wname = this.getKey( r );
 

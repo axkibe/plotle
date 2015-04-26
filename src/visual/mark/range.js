@@ -5,7 +5,7 @@
 
 var
 	jion,
-	mark_range;
+	visual_mark_range;
 
 
 /*
@@ -20,14 +20,14 @@ var
 */
 if( JION )
 {
-	return {
-		id : 'mark_range',
+	return{
+		id : 'visual_mark_range',
 		attributes :
 		{
 			begin :
 			{
 				comment : 'begin of the range',
-				type : 'mark_text'
+				type : 'change_mark_text'
 			},
 			doc :
 			{
@@ -37,7 +37,7 @@ if( JION )
 			end :
 			{
 				comment : 'end of the range',
-				type : 'mark_text'
+				type : 'change_mark_text'
 			},
 			retainx :
 			{
@@ -58,11 +58,11 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	mark_range = jion.this( module, 'source' );
+	visual_mark_range = jion.this( module, 'source' );
 }
 
 
-prototype = mark_range.prototype;
+prototype = visual_mark_range.prototype;
 
 
 /*

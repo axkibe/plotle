@@ -100,6 +100,18 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/change/mark/text.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/mark/node.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/change/generic.js',
 		'inBundle', true,
 		'inTestPad', true
@@ -757,27 +769,27 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/mark/text.js',
+		'filePath', 'src/visual/mark/text.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/mark/caret.js',
+		'filePath', 'src/visual/mark/caret.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/mark/item.js',
+		'filePath', 'src/visual/mark/item.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/mark/range.js',
+		'filePath', 'src/visual/mark/range.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/mark/widget.js',
+		'filePath', 'src/visual/mark/widget.js',
 		'hasJion', true,
 		'inBundle', true
 	),

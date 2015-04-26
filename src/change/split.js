@@ -212,13 +212,9 @@ prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
+		case 'change_mark_text' :
 
 			return this._transformTextMark( cx );
-
-		case 'mark_range' :
-
-			return this._transformRangeMark( cx );
 
 		case 'change_grow' :
 		case 'change_shrink' :
@@ -228,8 +224,7 @@ prototype.transform =
 			return cx;
 
 		case 'change_set' :
-		case 'mark_item' :
-		case 'mark_widget' :
+		case 'change_mark_node' :
 
 			return cx;
 
@@ -379,30 +374,17 @@ prototype._transformTextMark =
 		mark
 	)
 {
-	if( !this.path.equals( mark.path.chop ) )
-	{
-		return mark;
-	}
+	if( !this.path.equals( mark.path ) ) return mark;
 
-	if( mark.at < this.at1 )
-	{
-		return mark;
-	}
+	if( mark.at < this.at1 ) return mark;
 
 	return(
 		mark.create(
-			'path', this.path2.prepend( mark.path.get( 0 ) ),
+			'path', this.path2,
 			'at', mark.at - this.at1
 		)
 	);
 };
-
-
-/*
-| Transforms a range mark by this split.
-*/
-prototype._transformRangeMark =
-	change_generic.transformRangeMark;
 
 
 /*

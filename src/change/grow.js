@@ -80,7 +80,7 @@ prototype._init =
 {
 	if( this.rank !== undefined && this.rank < 0 )
 	{
-		throw change_error( 'grow.rank negative' );
+		throw change_error( 'grow.rank invalid' );
 	}
 };
 
@@ -167,10 +167,8 @@ prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
-		case 'mark_range' :
-		case 'mark_item' :
-		case 'mark_widget' :
+		case 'change_mark_text' :
+		case 'change_mark_node' :
 
 			return cx;
 

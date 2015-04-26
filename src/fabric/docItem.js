@@ -5,7 +5,7 @@
 
 var
 	fabric_docItem,
-	mark_caret,
+	visual_mark_caret,
 	math_limit,
 	root;
 
@@ -111,7 +111,7 @@ fabric_docItem.click =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', para.textPath,
 					'at', at
 				)
@@ -123,7 +123,7 @@ fabric_docItem.click =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', para.textPath,
 					'at', para.text.length
 				)

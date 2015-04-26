@@ -33,14 +33,16 @@ if( JION )
 			{
 				comment : 'the transient item in creation',
 				type :
-					require( '../typemaps/fabricItems' )
+					require( '../typemaps/visualItems' )
 					.concat( [ 'undefined' ] )
 			},
+			// FIXME difference between transItem and model
+			//       is still wonky.
 			model :
 			{
 				comment : 'a transient item used as model',
 				type :
-					require( '../typemaps/fabricItems' )
+					require( '../typemaps/visualItems' )
 					.concat( [ 'undefined' ] )
 			},
 			start :

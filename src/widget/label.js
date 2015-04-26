@@ -50,7 +50,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( ['undefined' ] ),
 				assign : ''
 			},

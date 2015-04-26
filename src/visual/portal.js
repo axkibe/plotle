@@ -19,8 +19,8 @@ var
 	gruga_portalInputFacets,
 	jion,
 	math_half,
-	mark_caret,
-	mark_item,
+	visual_mark_caret,
+	visual_mark_item,
 	result_hover,
 	root,
 	shell_fontPool,
@@ -64,7 +64,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
@@ -287,7 +287,7 @@ prototype.click =
 		if( sf.silhoutte.within( euclid_view.proper, pp ) )
 		{
 			setMark =
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.path.append( field ),
 					'at', this._getOffsetAt( field, pp.x )
 				);
@@ -300,7 +300,7 @@ prototype.click =
 	// just focus the portal itself
 	if( !setMark && !this.mark )
 	{
-		setMark = mark_item.create( 'path', this.path );
+		setMark = visual_mark_item.create( 'path', this.path );
 	}
 
 	if( setMark )
@@ -830,7 +830,7 @@ prototype._keyDown =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'spaceTag' ),
 						'at',
 							this._getOffsetAt(
@@ -846,7 +846,7 @@ prototype._keyDown =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'moveToButton' ),
 						'at', 0
 					)
@@ -858,7 +858,7 @@ prototype._keyDown =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'spaceUser' ),
 						'at', 0
 					)
@@ -915,7 +915,7 @@ prototype._keyLeft =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.path.append( cycle ),
 					'at',
 						cycle === 'moveToButton'
@@ -929,7 +929,7 @@ prototype._keyLeft =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', mark.caretAt - 1
 			)
@@ -971,7 +971,7 @@ prototype._keyTab =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath.set( -1, cycle ),
 				'at', 0
 			)
@@ -1004,7 +1004,7 @@ prototype._keyUp =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'moveToButton' ),
 						'at', 0
 					)
@@ -1022,7 +1022,7 @@ prototype._keyUp =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'spaceUser' ),
 						'at',
 							this._getOffsetAt(
@@ -1038,7 +1038,7 @@ prototype._keyUp =
 
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', this.path.append( 'spaceTag' ),
 						'at', 0
 					)
@@ -1087,7 +1087,7 @@ prototype._keyRight =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.path.append( cycle ),
 					'at', 0
 				)
@@ -1098,7 +1098,7 @@ prototype._keyRight =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', mark.caretAt + 1
 			)
@@ -1187,7 +1187,7 @@ prototype._keyEnd =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', value.length
 			)
@@ -1226,7 +1226,7 @@ prototype._keyEnter =
 	{
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', mark.caretPath.set( -1, cycle ),
 					'at', 0
 				)
@@ -1581,7 +1581,7 @@ jion.lazyValue(
 
 			if(
 				mark
-				&& mark.reflect === 'mark_caret'
+				&& mark.reflect === 'visual_mark_caret'
 				&& mark.focus
 			)
 			{

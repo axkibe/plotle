@@ -55,7 +55,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
@@ -208,6 +208,19 @@ jion.lazyValue(
 | Checks if the item is being clicked and reacts.
 */
 prototype.click = fabric_docItem.click;
+
+
+/*
+| A shorthand to (re)create this note
+| with a different zone.
+*/
+prototype.createWithZone =
+	function(
+		zone
+	)
+{
+	return this.create( 'fabric', this.fabric.create( 'zone', zone ) );
+};
 
 
 /*

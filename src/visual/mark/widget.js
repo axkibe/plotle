@@ -1,11 +1,11 @@
 /*
-| A single item marked ( without caret or range )
+| A single widget marked ( without caret or range )
 */
 
 
 var
 	jion,
-	mark_item;
+	visual_mark_widget;
 
 
 /*
@@ -21,7 +21,7 @@ var
 if( JION )
 {
 	return{
-		id : 'mark_item',
+		id : 'visual_mark_widget',
 		attributes :
 		{
 			path :
@@ -29,47 +29,52 @@ if( JION )
 				comment : 'path of the item',
 				type : 'jion$path'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
-
-
-var
-	prototype;
 
 
 if( NODE )
 {
 	jion = require( 'jion' );
 
-
-	mark_item = jion.this( module, 'source' );
+	visual_mark_widget = jion.this( module, 'source' );
 }
 
 
-prototype = mark_item.prototype;
+var
+	prototype;
 
+prototype = visual_mark_widget.prototype;
 
-prototype._init = function( ) {
-	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( ); // FIXME XXX
-};
 
 /*
-| A caret mark has a caret.
-|
-| (the text range is the other mark
-|  which has this too )
+| Widget marks have no carets.
 */
 prototype.hasCaret = false;
 
 
 /*
 | The item's path.
+|
+| FIXME
 */
 jion.lazyValue(
 	prototype,
 	'itemPath',
+	function( )
+	{
+		return;
+	}
+);
+
+
+/*
+| The widget's path.
+*/
+jion.lazyValue(
+	prototype,
+	'widgetPath',
 	function( )
 	{
 		return this.path;
@@ -78,25 +83,7 @@ jion.lazyValue(
 
 
 /*
-| The widget's path.
-|
-| FIXME just set it undefined in prototype.
-*/
-jion.lazyValue(
-	prototype,
-	'widgetPath',
-	function( )
-	{
-		return;
-	}
-);
-
-
-
-/*
 | The content the mark puts into the clipboard.
-|
-| FUTURE write something
 */
 prototype.clipboard = '';
 

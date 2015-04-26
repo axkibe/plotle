@@ -72,7 +72,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			view :
@@ -125,8 +125,6 @@ prototype._init =
 	ranks = [ ];
 
 	twigPath = this.path && this.path.append( 'twig' );
-
-	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( ); // XXX
 
 	for( a = 0, aZ = fabric.length; a < aZ; a++ )
 	{

@@ -224,15 +224,11 @@ prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
+		case 'change_mark_text' :
 
 			return this._transformTextMark( cx );
 
-		case 'mark_range' :
-
-			return this._transformRangeMark( cx );
-
-		case 'change_set' :
+		case 'change_mark_node' : // FUTURE might be para
 		case 'mark_item' :
 		case 'mark_widget' :
 
@@ -372,14 +368,11 @@ prototype._transformTextMark =
 		mark
 	)
 {
-	if( !this.path2.equals( mark.path.chop ) )
-	{
-		return mark;
-	}
+	if( !this.path2.equals( mark.path ) ) return mark;
 
 	return(
 		mark.create(
-			'path', this.path.prepend( mark.path.get( 0 ) ),
+			'path', this.path,
 			'at', mark.at + this.at1
 		)
 	);

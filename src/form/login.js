@@ -39,7 +39,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'form_form.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/mark' )
+					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
