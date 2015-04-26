@@ -1048,11 +1048,20 @@ prototype.setPath =
 
 			break;
 
-		case 'space' :
+		case 'spaceFabric' :
 
 			root.create(
 				'spaceFabric',
 				root.spaceFabric.setPath( path, value, 1 )
+			);
+
+			break;
+
+		case 'spaceVisual' :
+
+			root.create(
+				'spaceVisual',
+				root.spaceVisual.setPath( path, value, 1 )
 			);
 
 			break;
@@ -1309,6 +1318,8 @@ prototype.onRegister =
 
 /*
 | Removes a text spawning over several entities.
+|
+| FIXME give it a range mark
 */
 prototype.removeRange =
 	function(
@@ -1332,8 +1343,8 @@ prototype.removeRange =
 /**/	if(
 /**/		front.path.get( -1 ) !== 'text'
 /**/		|| back.path.get( -1 ) !== 'text'
-/**/		|| front.path.get( 0 ) !== 'space'
-/**/		|| back.path.get( 0 ) !== 'space'
+/**/		|| front.path.get( 0 ) !== 'spaceVisual'
+/**/		|| back.path.get( 0 ) !== 'spaceVisual'
 /**/	)
 /**/	{
 /**/		throw new Error( );

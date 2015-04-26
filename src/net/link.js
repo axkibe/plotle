@@ -210,7 +210,7 @@ prototype._onAcquireSpace =
 	root.create(
 		'spaceFabric',
 			reply.space.create(
-				'path', jion$path.empty.append( 'space' )
+				'path', jion$path.empty.append( 'spaceFabric' )
 			),
 		'link',
 			root.link.create(

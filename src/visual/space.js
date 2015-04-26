@@ -171,7 +171,7 @@ prototype._init =
 
 		item = fabric.get( k );
 
-		iItem = inherit && inherit._twig[ k ];
+		iItem = this._twig[ k ];
 
 		if( !iItem )
 		{
