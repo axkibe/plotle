@@ -86,7 +86,7 @@ if( JION )
 				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
-		init : [ 'inherit' ],
+		init : [ ],
 		twig :
 		[
 			'visual_label',
@@ -140,9 +140,7 @@ visual_space.concernsMark =
 | Initializer.
 */
 prototype._init =
-	function(
-		inherit
-	)
+	function( )
 {
 	var
 		a,
