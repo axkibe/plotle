@@ -44,7 +44,7 @@ if( JION )
 			font :
 			{
 				comment : 'font of the text',
-				type : [ 'undefined', 'euclid_font' ],
+				type : [ 'undefined', 'euclid_font' ]
 			},
 			mark :
 			{

@@ -49,7 +49,7 @@ if( JION )
 			{
 				comment : 'font of the text',
 				// FIXME why undefined?
-				type : [ 'undefined', 'euclid_font' ],
+				type : [ 'undefined', 'euclid_font' ]
 			},
 			hover :
 			{
@@ -70,7 +70,7 @@ if( JION )
 				type :
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'widget_widget.concernsMark( mark, path )',
+				prepare : 'widget_widget.concernsMark( mark, path )'
 			},
 			path :
 			{

@@ -437,39 +437,6 @@ prototype.prepareInventory =
 		yield* this.prepareResource( resource );
 	}
 
-	// Reads in all files to be cached
-	// FIXME move into prepareResource
-	inv = root.inventory;
-
-	for( a = 0, aZ = inv.length; a < aZ; a++ )
-	{
-		resource = inv.atRank( a );
-
-		if(
-			resource.data
-			|| resource.inBundle
-			|| resource.devel
-			|| resource.isJion
-		)
-		{
-			continue;
-		}
-
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					resource,
-					resource.create(
-						'data',
-							( yield fs.readFile(
-								resource.filePath,
-								resume( )
-							) )
-					)
-				)
-		);
-	}
-
 	// the bundle itself
 	bundle = [ ];
 
@@ -781,6 +748,19 @@ prototype.prepareResource =
 		root.create(
 			'inventory', root.inventory.addResource( jionCodeResource )
 		);
+	}
+
+	if(
+		!resource.data
+		&& !resource.inBundle
+		&& !resource.devel
+		&& !resource.isJion // FIXME needed?
+	)
+	{
+		resource =
+			resource.create(
+				'data', yield fs.readFile( resource.filePath, resume( ) )
+			);
 	}
 
 	root.create(

@@ -42,7 +42,7 @@ if( JION )
 				comment : 'currently active action',
 				type :
 					require( '../typemaps/action' )
-					.concat( [ 'undefined' ] ),
+					.concat( [ 'undefined' ] )
 			},
 			border :
 			{
@@ -94,7 +94,7 @@ if( JION )
 				comment : 'the current view',
 				type : [ 'undefined', 'euclid_view' ],
 				// prepare : 'view && view.sizeOnly', FIXME
-				prepare : 'view ? view.sizeOnly : view',
+				prepare : 'view ? view.sizeOnly : view'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],

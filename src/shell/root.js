@@ -69,7 +69,7 @@ if( JION )
 			{
 				comment : 'access level to current space',
 				type : [ 'undefined', 'string' ],
-				assign : '_access',
+				assign : '_access'
 			},
 			action :
 			{
@@ -117,7 +117,7 @@ if( JION )
 				type :
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
-				assign : '_mark',
+				assign : '_mark'
 			},
 			mode :
 			{

@@ -46,7 +46,7 @@ if( JION )
 				comment : 'point in the north-west',
 				type : 'euclid_point',
 				json : true
-			},
+			}
 		},
 		init : [ ]
 	};

@@ -42,7 +42,7 @@ if( JION )
 			fabric :
 			{
 				comment : 'the notes fabric',
-				type : 'fabric_note',
+				type : 'fabric_note'
 			},
 			hover :
 			{
@@ -76,12 +76,12 @@ if( JION )
 		},
 		init : [ 'inherit' ],
 		alike :
+		{
+			alikeIgnoringView :
 			{
-				alikeIgnoringView :
-					{
-						ignores : { 'view' : true }
-					}
+				ignores : { 'view' : true }
 			}
+		}
 	};
 }
 

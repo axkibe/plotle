@@ -36,7 +36,7 @@ if( JION )
 				type :
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'form_form.concernsMark( mark, path )',
+				prepare : 'form_form.concernsMark( mark, path )'
 			},
 			path :
 			{
@@ -58,7 +58,7 @@ if( JION )
 			{
 				comment : 'the current view',
 				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'view ? view.sizeOnly : view',
+				prepare : 'view ? view.sizeOnly : view'
 			}
 		},
 		init : [ 'twigDup' ],

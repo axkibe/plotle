@@ -38,7 +38,7 @@ if( JION )
 			fabric :
 			{
 				comment : 'the relations fabric',
-				type : 'fabric_relation',
+				type : 'fabric_relation'
 			},
 			hover :
 			{

@@ -146,8 +146,6 @@
 . alike
 . alikeIgnoringView
 . all
-. allowsNull
-. allowsUndefined
 . alpha
 > alter
 . anchor
@@ -204,6 +202,7 @@
 . caretable
 . cdistance
 > change
+. changeMarkText
 > changeRay
 . changeTree
 > changeWrapRay
@@ -219,9 +218,9 @@
 . chop
 > cid
 . clear
-. clearCaretRetainX
 . clearLocalStorage
 > clearRect
+. clearRetainX
 > clearTimeout
 . click
 > clip
@@ -260,7 +259,9 @@
 . createPortal
 > createRadialGradient
 . createRelation
+. createTransformed
 . createVisitor
+. createWithZone
 . css
 > ctrlKey
 > cursor
@@ -313,6 +314,7 @@
 . errorLabel
 > exec
 . exports
+. fabric
 . facets
 . fact
 . fail
@@ -649,6 +651,7 @@
 > set
 . setCapture
 . setDefaultFonts
+. setErrorMessage
 . setInput
 > setItem
 . setPath
@@ -674,11 +677,13 @@
 > sort
 . source
 > space
+. spaceFabric
 > spaceRef
 > spaceTag
 > spaceUser
-. spawn
+. spaceVisual
 . spawnOffset
+. spawnRelation
 . specialKey
 > splice
 > split
@@ -710,6 +715,7 @@
 . textCenter
 > textContent
 . textDesignPos
+. textMark
 . textNewline
 . textPath
 . textRotation

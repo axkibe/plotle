@@ -42,7 +42,7 @@ if( JION )
 				type :
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'form_form.concernsMark( mark, path )',
+				prepare : 'form_form.concernsMark( mark, path )'
 			},
 			nonSpaceRef :
 			{

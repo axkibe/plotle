@@ -351,7 +351,7 @@ testpad_root.prototype.onMouseDown =
 			doc.length - 1
 		);
 
-	cText = doc.twig[ doc.ranks[ cLine ] ].text;
+	cText = doc.atRank( cLine ).text;
 
 	root.create(
 		'cursorLine', cLine,
@@ -926,8 +926,7 @@ testpad_root.prototype.inputSpecialKey =
 			}
 
 			root.create(
-				'cursorAt',
-					doc.twig[ doc.ranks[ cursorLine ] ].text.length
+				'cursorAt', doc.atRank( cursorLine ).text.length
 			);
 
 			return;
@@ -1026,7 +1025,7 @@ testpad_root.prototype.inputSpecialKey =
 				return;
 			}
 
-			text = doc.twig[ doc.ranks[ cursorLine ] ].text;
+			text = doc.atRank( cursorLine ).text;
 
 			if( cursorAt >= text.length )
 			{
@@ -1137,44 +1136,26 @@ testpad_root.prototype.makeScreen =
 		cLine,
 		cText,
 		line,
-		lines,
-		ranks,
-		twig;
+		lines;
 
 	action = this.action;
 
 	lines = [ ];
 
-	ranks = doc.ranks;
-
-	twig = doc.twig;
-
 	// splits up the doc into
 	// an array of lines which are
 	// an array of chars
-	for(
-		a = 0, aZ = doc.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = doc.length; a < aZ; a++ )
 	{
 		lines.push( doc.atRank( a ).text.split( '' ) );
 	}
 
 	// replaces HTML entities
-	for(
-		a = 0, aZ = lines.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = lines.length; a < aZ; a++ )
 	{
 		line = lines[ a ];
 
-		for(
-			b = 0, bZ = line.length;
-			b < bZ;
-			b++
-		)
+		for( b = 0, bZ = line.length; b < bZ; b++ )
 		{
 			switch( line[ b ] )
 			{

@@ -29,28 +29,28 @@ if( JION )
 	return {
 		id : 'euclid_display',
 		attributes :
+		{
+			'height' :
 			{
-				'height' :
-					{
-						comment : 'height of the display',
-						type : [ 'undefined', 'number' ],
-					},
-				'width' :
-					{
-						comment : 'width of the display',
-						type : [ 'undefined', 'number' ],
-					},
-				'_cv' :
-					{
-						comment : 'the html canvas',
-						type : [ 'undefined', 'protean' ]
-					},
-				'_cx' :
-					{
-						comment : 'the html canvas context',
-						type : [ 'undefined', 'protean' ]
-					}
+				comment : 'height of the display',
+				type : [ 'undefined', 'number' ]
 			},
+			'width' :
+			{
+				comment : 'width of the display',
+				type : [ 'undefined', 'number' ]
+			},
+			'_cv' :
+			{
+				comment : 'the html canvas',
+				type : [ 'undefined', 'protean' ]
+			},
+			'_cx' :
+			{
+				comment : 'the html canvas context',
+				type : [ 'undefined', 'protean' ]
+			}
+		},
 		init : [ ]
 	};
 }
