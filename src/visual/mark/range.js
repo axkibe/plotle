@@ -1,5 +1,7 @@
 /*
 | A text range.
+|
+| FIXME rename begin/end to beginMark/endMark
 */
 
 
@@ -27,7 +29,7 @@ if( JION )
 			begin :
 			{
 				comment : 'begin of the range',
-				type : 'change_mark_text'
+				type : 'visual_mark_text'
 			},
 			doc :
 			{
@@ -37,7 +39,7 @@ if( JION )
 			end :
 			{
 				comment : 'end of the range',
-				type : 'change_mark_text'
+				type : 'visual_mark_text'
 			},
 			retainx :
 			{
@@ -188,36 +190,6 @@ jion.lazyValue(
 
 
 /*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-prototype.containsPath =
-	function(
-		path
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( path.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	// FIXME, shouldn't this also
-	// check paths of stuff inbetween?
-
-	return(
-		path.subPathOf( this.begin.path )
-		||
-		path.subPathOf( this.end.path )
-	);
-};
-
-
-
-/*
 | The content the mark puts into the clipboard.
 */
 jion.lazyValue(
@@ -277,6 +249,58 @@ jion.lazyValue(
 		return buf.join( '' );
 	}
 );
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+prototype.containsPath =
+	function(
+		path
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	// FIXME, shouldn't this also
+	// check paths of stuff inbetween?
+
+	return(
+		path.subPathOf( this.begin.path )
+		||
+		path.subPathOf( this.end.path )
+	);
+};
+
+
+/*
+| Recreates this mark with a transformation
+| applied.
+|
+| FIXME take the transformed doc here
+*/
+prototype.createTransformed =
+	function(
+		changes
+	)
+{
+	if( this.begin.path.get( 0 ) !== 'spaceVisual' ) return this;
+
+	return(
+		this.create(
+			'begin', this.begin.createTransformed( changes ),
+			'end', this.end.createTransformed( changes )
+		)
+	);
+};
+
 
 
 /*

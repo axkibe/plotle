@@ -215,7 +215,7 @@ prototype = server_root.prototype;
 	serverDir = module.filename;
 
 	for( a = 0; a < 3; a++ )
-	{	
+	{
 		serverDir = serverDir.substr( 0, serverDir.lastIndexOf( '/' ) );
 	}
 
@@ -426,7 +426,9 @@ prototype.prepareInventory =
 		resource,
 		sourceMap,
 		stream,
-		that;
+		that,
+		thatRealpath,
+		thatStat;
 
 	log_start( 'preparing inventory' );
 
@@ -454,7 +456,15 @@ prototype.prepareInventory =
 
 		if( resource.hasJion )
 		{
-			that = require( serverDir + resource.filePath );
+			thatRealpath =
+				yield fs.realpath( serverDir + resource.filePath, resume( ) );
+
+			thatStat =
+				config.shell_devel
+				? ( yield fs.stat( thatRealpath, resume( ) ) )
+				: undefined;
+
+			that = require( thatRealpath );
 			// FIXME for shell_devel clear require cache
 
 			if( !that.source )
@@ -469,7 +479,9 @@ prototype.prepareInventory =
 				resource.create(
 					'data', that.source,
 					'hasJson', that.hasJson,
-					'jionId', that.jionId
+					'jionId', that.jionId,
+					'timestamp', thatStat && thatStat.mtime,
+					'realpath', thatRealpath
 				);
 
 			jionCodeResource =

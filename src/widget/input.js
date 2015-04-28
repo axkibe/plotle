@@ -17,10 +17,10 @@ var
 	euclid_roundRect,
 	euclid_view,
 	jion,
-	mark_caret,
 	result_hover,
 	root,
 	theme,
+	visual_mark_caret,
 	widget_input;
 
 
@@ -399,7 +399,7 @@ jion.lazyValue(
 
 		if(
 			mark
-			&& mark.reflect === 'mark_caret'
+			&& mark.reflect === 'visual_mark_caret'
 			&& mark.focus
 		)
 		{
@@ -556,7 +556,7 @@ prototype.input =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', at + text.length
 			)
@@ -591,7 +591,7 @@ prototype._keyBackspace =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', at - 1
 			)
@@ -667,7 +667,7 @@ prototype._keyEnd =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', this.value.length
 			)
@@ -693,7 +693,7 @@ prototype._keyLeft =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', mark.caretAt - 1
 			)
@@ -719,7 +719,7 @@ prototype._keyPos1 =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', 0
 			)
@@ -745,7 +745,7 @@ prototype._keyRight =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', mark.caretPath,
 				'at', mark.caretAt + 1
 			)
@@ -916,7 +916,7 @@ prototype.click =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', this.path,
 				'at', this.getOffsetAt( pp )
 			)

@@ -98,6 +98,7 @@ if( NODE )
 
 	visual_para = jion.this( module, 'source' );
 
+	// FIXME node shouldnt need this
 	visual_para.prototype._init = function( ) { };
 
 	visual_para.concernsMark = function( o ) { return o; };
@@ -146,12 +147,9 @@ visual_para.concernsMark =
 		path
 	)
 {
-	if( !mark )
-	{
-		return mark;
-	}
+	if( !mark ) return mark;
 
-	if( mark.reflect === 'mark_range' )
+	if( mark.reflect === 'visual_mark_range' )
 	{
 		return(
 			mark.itemPath.subPathOf( path )
@@ -785,7 +783,7 @@ prototype.input =
 
 	root.alter( changes );
 
-	root.clearCaretRetainX( );
+	root.clearRetainX( );
 };
 
 
@@ -863,14 +861,11 @@ prototype.specialKey =
 
 			retainx = mark.retainx;
 
-			if( shift )
-			{
-				begin = mark.caret;
-			}
+			if( shift ) begin = mark.textMark;
 
 			break;
 
-		case 'mark_range' :
+		case 'visual_mark_range' :
 
 /**/		if( CHECK )
 /**/		{
@@ -884,10 +879,7 @@ prototype.specialKey =
 
 			retainx = mark.retainx;
 
-			if( shift )
-			{
-				begin = mark.begin;
-			}
+			if( shift ) begin = mark.begin;
 
 			break;
 	}
@@ -935,10 +927,7 @@ _keyMap =
 		'up' : '_keyUp'
 	};
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( _keyMap );
-/**/}
+if( FREEZE ) Object.freeze( _keyMap );
 
 /*
 | Backspace pressed.
@@ -967,23 +956,26 @@ prototype._keyBackspace =
 			)
 		);
 
+		root.clearRetainX( );
+
 		return;
 	}
 
 	r = doc.rankOf( this.key );
 
-	if( r > 0 )
-	{
-		ve = doc.atRank( r - 1 );
+	if( r === 0 ) return;
 
-		root.alter(
-			change_join.create(
-				'path', ve.textPath.chop,
-				'path2', this.textPath.chop,
-				'at1', ve.text.length
-			)
-		);
-	}
+	ve = doc.atRank( r - 1 );
+
+	root.alter(
+		change_join.create(
+			'path', ve.textPath.chop,
+			'path2', this.textPath.chop,
+			'at1', ve.text.length
+		)
+	);
+
+	root.clearRetainX( );
 };
 
 
@@ -1013,21 +1005,24 @@ prototype._keyDel =
 			)
 		);
 
+		root.clearRetainX( );
+
 		return;
 	}
 
 	r = doc.rankOf( this.key );
 
-	if( r < doc.length - 1 )
-	{
-		root.alter(
-			change_join.create(
-				'path', this.textPath.chop,
-				'path2', doc.atRank( r + 1).textPath.chop,
-				'at1', this.text.length
-			)
-		);
-	}
+	if( r >= doc.length - 1 ) return;
+
+	root.alter(
+		change_join.create(
+			'path', this.textPath.chop,
+			'path2', doc.atRank( r + 1).textPath.chop,
+			'at1', this.text.length
+		)
+	);
+
+	root.clearRetainX( );
 };
 
 
@@ -1359,6 +1354,8 @@ prototype._setMark =
 		doc      // range mark need this
 	)
 {
+	console.log( 'sm', begin );
+
 	root.create(
 		'mark',
 			!begin

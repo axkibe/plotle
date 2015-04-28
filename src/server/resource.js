@@ -108,6 +108,16 @@ if( JION )
 			{
 				comment : 'post processor replacing stuff',
 				type : [ 'undefined', 'string' ]
+			},
+			realpath :
+			{
+				comment : 'realpath of the resource base',
+				type : [ 'undefined', 'string' ]
+			},
+			timestamp :
+			{
+				comment : 'on devel mode timestamp when resource cached',
+				type : [ 'undefined', 'date' ]
 			}
 		},
 		init : [ ]

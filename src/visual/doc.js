@@ -241,10 +241,7 @@ prototype._getRangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflect !== 'mark_range' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( mark.reflect !== 'visual_mark_range' ) throw new Error( );
 /**/}
 
 	front = mark.front;
@@ -640,7 +637,7 @@ prototype.draw =
 
 	if(
 		mark
-		&& mark.reflect === 'mark_range'
+		&& mark.reflect === 'visual_mark_range'
 		&& mark.itemPath.subPathOf( this.path )
 	)
 	{
@@ -894,7 +891,7 @@ prototype.input =
 	path = this.mark.caretPath;
 
 	if(
-		mark.reflect === 'mark_range'
+		mark.reflect === 'visual_mark_range'
 		&& !mark.empty
 	)
 	{
@@ -937,7 +934,7 @@ prototype.specialKey =
 	}
 
 	if(
-		mark.reflect === 'mark_range'
+		mark.reflect === 'visual_mark_range'
 		&& !mark.empty
 	)
 	{

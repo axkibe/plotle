@@ -513,7 +513,7 @@ prototype._init =
 		}
 	}
 
-	if( mark && mark.reflect === 'mark_caret' )
+	if( mark && mark.reflect === 'visual_mark_caret' )
 	{
 		mark = mark.create( 'focus', this._systemFocus );
 	}
@@ -705,18 +705,22 @@ Object.defineProperty(
 
 /*
 | Clears the carets retainx info.
-|
-| FIXME remove
 */
-prototype.clearCaretRetainX =
+prototype.clearRetainX =
 	function( )
 {
+	var
+		mark;
+
+	mark = this._mark;
+
+	// FIXME also clearRetainX for ranges
 	if(
-		this._mark.reflect === 'mark_caret'
-		&& this._mark.retainx !== undefined
+		mark.reflect === 'visual_mark_caret'
+		&& mark.retainx !== undefined
 	)
 	{
-		this.create( 'mark', this._mark.create( 'retainx', undefined ) );
+		this.create( 'mark', mark.create( 'retainx', undefined ) );
 	}
 };
 
