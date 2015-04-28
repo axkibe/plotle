@@ -1354,8 +1354,6 @@ prototype._setMark =
 		doc      // range mark need this
 	)
 {
-	console.log( 'sm', begin );
-
 	root.create(
 		'mark',
 			!begin

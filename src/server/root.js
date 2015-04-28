@@ -354,14 +354,8 @@ prototype.buildShellConfig =
 	{
 		val = config.debug[ k ];
 
-		if( !first )
-		{
-			cconfig.push( ',\n' );
-		}
-		else
-		{
-			first = false;
-		}
+		if( !first ) cconfig.push( ',\n' );
+		else first = false;
 
 		cconfig.push(
 			'\t\t',
@@ -382,14 +376,8 @@ prototype.buildShellConfig =
 
 	for( k in config.log )
 	{
-		if( !first )
-		{
-			cconfig.push( ',\n' );
-		}
-		else
-		{
-			first = false;
-		}
+		if( !first ) cconfig.push( ',\n' );
+		else first = false;
 
 		cconfig.push( '\t\t', k, ' : ', config.log[ k ] );
 	}
@@ -422,13 +410,9 @@ prototype.prepareInventory =
 		compressor,
 		inv,
 		jionIDs,
-		jionCodeResource,
 		resource,
 		sourceMap,
-		stream,
-		that,
-		thatRealpath,
-		thatStat;
+		stream;
 
 	log_start( 'preparing inventory' );
 
@@ -444,71 +428,17 @@ prototype.prepareInventory =
 	root.create( 'inventory', root.inventory.addResource( cconfig ) );
 
 	// takes resource from the the roster
-	for(
-		a = 0, aZ = roster.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = roster.length; a < aZ; a++ )
 	{
 		resource = roster[ a ];
 
 		if( resource.devel && !config.shell_devel ) continue;
 
-		if( resource.hasJion )
-		{
-			thatRealpath =
-				yield fs.realpath( serverDir + resource.filePath, resume( ) );
-
-			thatStat =
-				config.shell_devel
-				? ( yield fs.stat( thatRealpath, resume( ) ) )
-				: undefined;
-
-			that = require( thatRealpath );
-			// FIXME for shell_devel clear require cache
-
-			if( !that.source )
-			{
-				throw new Error(
-					'Jion source did not export its source: '
-					+ resource.filePath
-				);
-			}
-
-			resource =
-				resource.create(
-					'data', that.source,
-					'hasJson', that.hasJson,
-					'jionId', that.jionId,
-					'timestamp', thatStat && thatStat.mtime,
-					'realpath', thatRealpath
-				);
-
-			jionCodeResource =
-				resource.create(
-					'aliases', undefined,
-					'data', that.jioncode,
-					'jionSrcPath', resource.filePath, // FIXME needed?
-					'jionId', that.jionId,
-					'filePath',
-						// FIXME let the jion module worry aabout this
-						'jioncode/'
-						+ resource.filePath.replace( /\//g, '-' ),
-					'hasJion', false,
-					'isJion', true
-				);
-
-			root.create(
-				'inventory', root.inventory.addResource( jionCodeResource )
-			);
-		}
-
-		root.create(
-			'inventory', root.inventory.addResource( resource )
-		);
+		yield* this.prepareResource( resource );
 	}
 
 	// Reads in all files to be cached
+	// FIXME move into prepareResource
 	inv = root.inventory;
 
 	for( a = 0, aZ = inv.length; a < aZ; a++ )
@@ -562,10 +492,7 @@ prototype.prepareInventory =
 	{
 		resource = root.inventory.atRank( a );
 
-		if( !resource.inBundle )
-		{
-			continue;
-		}
+		if( !resource.inBundle ) continue;
 
 		if( resource.isJion )
 		{
@@ -577,9 +504,7 @@ prototype.prepareInventory =
 		{
 			if( !resource.data )
 			{
-				code =
-					( yield fs.readFile( resource.filePath, resume( ) ) )
-					+ '';
+				code = yield fs.readFile( resource.filePath, resume( ) );
 			}
 			else
 			{
@@ -600,10 +525,7 @@ prototype.prepareInventory =
 		{
 			resource = root.inventory.atRank( a );
 
-			if( !resource.inBundle )
-			{
-				continue;
-			}
+			if( !resource.inBundle ) continue;
 
 			try{
 				ast =
@@ -729,11 +651,7 @@ prototype.prepareInventory =
 	{
 		resource = inv.atRank( a );
 
-		if(
-			!resource.postProcessor
-			||
-			!resource.data
-		)
+		if( !resource.postProcessor || !resource.data )
 		{
 			continue;
 		}
@@ -797,6 +715,77 @@ prototype.prepareInventory =
 			root.inventory.get( bundleFilePath ).gzip.length
 		);
 	}
+};
+
+
+/*
+| Prepends the flags to cconfig
+|
+| Used by development.
+*/
+prototype.prepareResource =
+	function*(
+		resource
+	)
+{
+	var
+		jionCodeResource,
+		thatRealpath,
+		thatStat,
+		that;
+
+	if( resource.hasJion )
+	{
+		thatRealpath =
+			yield fs.realpath( serverDir + resource.filePath, resume( ) );
+
+		thatStat =
+			config.shell_devel
+			? ( yield fs.stat( thatRealpath, resume( ) ) )
+			: undefined;
+
+		that = require( thatRealpath );
+		// FIXME for shell_devel clear require cache
+
+		if( !that.source )
+		{
+			throw new Error(
+				'Jion source did not export its source: '
+				+ resource.filePath
+			);
+		}
+
+		resource =
+			resource.create(
+				'data', that.source,
+				'hasJson', that.hasJson,
+				'jionId', that.jionId,
+				'timestamp', thatStat && thatStat.mtime,
+				'realpath', thatRealpath
+			);
+
+		jionCodeResource =
+			resource.create(
+				'aliases', undefined,
+				'data', that.jioncode,
+				'jionSrcPath', resource.filePath, // FIXME needed?
+				'jionId', that.jionId,
+				'filePath',
+					// FIXME let the jion module worry aabout this
+					'jioncode/'
+					+ resource.filePath.replace( /\//g, '-' ),
+				'hasJion', false,
+				'isJion', true
+			);
+
+		root.create(
+			'inventory', root.inventory.addResource( jionCodeResource )
+		);
+	}
+
+	root.create(
+		'inventory', root.inventory.addResource( resource )
+	);
 };
 
 
