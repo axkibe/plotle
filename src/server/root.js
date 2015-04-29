@@ -425,7 +425,7 @@ prototype.prepareInventory =
 			'inTestPad', true
 		);
 
-	root.create( 'inventory', root.inventory.addResource( cconfig ) );
+	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
 
 	// takes resource from the the roster
 	for( a = 0, aZ = roster.length; a < aZ; a++ )
@@ -591,7 +591,7 @@ prototype.prepareInventory =
 		// registers the bundle as resource
 		root.create(
 			'inventory',
-				root.inventory.addResource(
+				root.inventory.updateResource(
 					server_resource.create(
 						'filePath', bundleFilePath,
 						'maxage', 'long',
@@ -633,7 +633,6 @@ prototype.prepareInventory =
 		root.create(
 			'inventory',
 				root.inventory.updateResource(
-					resource,
 					resource.create(
 						'data',
 							server_postProcessor[ resource.postProcessor ](
@@ -661,7 +660,6 @@ prototype.prepareInventory =
 		root.create(
 			'inventory',
 				root.inventory.updateResource(
-					resource,
 					resource.create(
 						'gzip',
 							yield zlib.gzip( resource.data, resume( ) )
@@ -686,9 +684,7 @@ prototype.prepareInventory =
 
 
 /*
-| Prepends the flags to cconfig
-|
-| Used by development.
+| Prepares a resource.
 */
 prototype.prepareResource =
 	function*(
@@ -706,10 +702,12 @@ prototype.prepareResource =
 		thatRealpath =
 			yield fs.realpath( serverDir + resource.filePath, resume( ) );
 
-		thatStat =
-			config.shell_devel
-			? ( yield fs.stat( thatRealpath, resume( ) ) )
-			: undefined;
+		if( config.shell_devel )
+		{
+			thatStat = yield fs.stat( thatRealpath, resume( ) );
+
+			delete require.cache[ thatRealpath ];
+		}
 
 		that = require( thatRealpath );
 		// FIXME for shell_devel clear require cache
@@ -746,16 +744,10 @@ prototype.prepareResource =
 			);
 
 		root.create(
-			'inventory', root.inventory.addResource( jionCodeResource )
+			'inventory', root.inventory.updateResource( jionCodeResource )
 		);
 	}
-
-	if(
-		!resource.data
-		&& !resource.inBundle
-		&& !resource.devel
-		&& !resource.isJion // FIXME needed?
-	)
+	else if( !resource.data )
 	{
 		resource =
 			resource.create(
@@ -764,8 +756,10 @@ prototype.prepareResource =
 	}
 
 	root.create(
-		'inventory', root.inventory.addResource( resource )
+		'inventory', root.inventory.updateResource( resource )
 	);
+
+	return resource;
 };
 
 
@@ -785,7 +779,6 @@ prototype.prependConfigFlags =
 	root.create(
 		'inventory',
 			root.inventory.updateResource(
-				resource,
 				resource.create(
 					'data',
 						'var JION = false;\n'
@@ -1130,11 +1123,7 @@ prototype.wake =
 	modified = false;
 
 	// FIXME cache change lists to answer the same to multiple clients.
-	for(
-		a = 0, aZ = sleepKeys.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = sleepKeys.length; a < aZ; a++ )
 	{
 		key = sleepKeys[ a ];
 
@@ -1254,7 +1243,8 @@ prototype.requestListener =
 		header,
 		pathname,
 		resource,
-		red;
+		red,
+		stat;
 
 	red = url.parse( request.url );
 
@@ -1291,99 +1281,94 @@ prototype.requestListener =
 		return;
 	}
 
-	if( resource.data )
+	if( !resource.data ) throw new Error( 'resource misses data' );
+
+	if( resource.inBundle && !config.shell_devel )
 	{
-		aenc =
-			resource.gzip
-			&&
-			request.headers[ 'accept-encoding' ],
-
-		header =
-			{
-				'Content-Type' : resource.mime,
-				'Cache-Control' : server_maxAge.map( resource.maxage ),
-				'Date' : new Date().toUTCString()
-			};
-
-		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
-		{
-			// delivers compressed
-			header[ 'Content-Encoding' ] = 'gzip';
-
-			result.writeHead( 200, header );
-
-			result.end( resource.gzip, 'binary' );
-		}
-		else
-		{
-			// delivers uncompressed
-			result.writeHead( 200, header );
-
-			result.end( resource.data, resource.coding );
-		}
+		root.webError( result, 404, 'Bad Request' );
 
 		return;
 	}
 
-	if( !config.shell_devel )
+	// if in shell devel mode, check if the resource cache
+	// has been invalidated
+	if( config.shell_devel && !resource.isJion )
 	{
-		root.webError( result, 404, 'Bad Request' );
-	}
+		if( resource.postProcessor )
+		{
+			if( !server_postProcessor[ resource.postProcessor ] )
+			{
+				throw new Error( 'invalid postProcessor' );
+			}
 
-	// jion resources already loaded their source themselves
-	if( !resource.isJion && !resource.hasJion )
-	{
-		try {
-			data = yield fs.readFile( resource.filePath, resume( ) );
+			data =
+				server_postProcessor[ resource.postProcessor ](
+					data,
+					root.inventory,
+					root.bundleFilePath
+				);
+		}
+
+		try
+		{
+			stat = yield fs.stat( resource.filePath, resume( ) );
 		}
 		catch( e )
 		{
-			root.webError( result, 500, 'Internal Server Error' );
-
-			log_fail( 'Missing file: ' + resource.filePath );
-
-			return;
+			stat = undefined;
 		}
-	}
 
-	if( resource.postProcessor )
-	{
-		if( !server_postProcessor[ resource.postProcessor ] )
+		if( stat && stat.mtime > resource.timestamp )
 		{
-			throw new Error(
-				'invalid postProcessor: '
-				+ resource.postProcessor
-			);
+			resource = yield* root.prepareResource( resource );
 		}
-
-		data =
-			server_postProcessor[ resource.postProcessor ](
-				data,
-				root.inventory,
-				root.bundleFilePath
-			);
 	}
 
-	result.writeHead(
-		200,
-		{
-			'Content-Type' : resource.mime,
-			'Cache-Control' : 'no-cache',
-			'Date' : new Date().toUTCString()
-		}
-	);
+	// delivers the resource
 
-	// weinre can't cope with strict mode
-	// so its disabled when weinre is enabled
-	if( config.debug.weinre )
+	if( !config.shell_devel && resource.gzip )
 	{
-		data =
-			( '' + data )
-			.replace( /'use strict'/, "'not strict'" )
-			.replace( /"use strict"/, '"not strict"' );
+		aenc = request.headers[ 'accept-encoding' ];
 	}
 
-	result.end( data, resource.coding );
+	header =
+	{
+		'Content-Type' : resource.mime,
+		'Cache-Control' :
+			!config.shell_devel
+			? server_maxAge.map( resource.maxage )
+			: 'no-cache',
+		'Date' : new Date().toUTCString()
+	};
+
+	if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
+	{
+		// delivers compressed
+		header[ 'Content-Encoding' ] = 'gzip';
+
+		result.writeHead( 200, header );
+
+		result.end( resource.gzip, 'binary' );
+	}
+	else
+	{
+		// delivers uncompressed
+		result.writeHead( 200, header );
+
+		data = resource.data;
+
+		// weinre can't cope with strict mode
+		// so its disabled when weinre is enabled
+		if( config.debug.weinre )
+		{
+			data =
+				( '' + data )
+				.replace( /'use strict'/, "'not strict'" )
+				.replace( /"use strict"/, '"not strict"' );
+		}
+
+		result.end( data, resource.coding );
+	}
 };
 
 
@@ -1493,7 +1478,8 @@ prototype.webAjax =
 
 		log_ajax( '->', asw );
 
-		result.writeHead( 200,
+		result.writeHead(
+			200,
 			{
 				'Content-Type' : 'application/json',
 				'Cache-Control' : 'no-cache',

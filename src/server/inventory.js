@@ -29,41 +29,13 @@ var
 inventory = require( 'jion' ).this( module );
 
 
-/*
-| Returns an inventory with a resource appended.
-*/
-inventory.prototype.addResource =
-	function(
-		res
-	)
-{
-	var
-		a,
-		aZ,
-		inv;
-
-	inv = this;
-
-	for(
-		a = 0, aZ = res.aliases.length;
-		a < aZ;
-		a++
-	)
-	{
-		inv = inv.create( 'twig:add', res.aliases.get( a ), res );
-	}
-
-	return inv;
-};
-
 
 /*
-| Returns an inventory with a resource updated.
+| Returns an inventory with a resource added/updated.
 */
 inventory.prototype.updateResource =
 	function(
-		oldRed,
-		newRes
+		res
 	)
 {
 	var
@@ -74,19 +46,15 @@ inventory.prototype.updateResource =
 
 	inv = this;
 
-	for(
-		a = 0, aZ = newRes.aliases.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = res.aliases.length; a < aZ; a++ )
 	{
-		alias = newRes.aliases.get( a );
+		alias = res.aliases.get( a );
 
 		inv =
 			inv.create(
-				'twig:set',
+				inv.get( alias ) ? 'twig:set' : 'twig:add',
 				alias,
-				newRes
+				res
 			);
 	}
 
