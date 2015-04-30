@@ -82,15 +82,9 @@ prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.path.isEmpty ) throw new Error( );
 /**/
-/**/	if( this.at < 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.at < 0 ) throw new Error( );
 /**/}
 
 };

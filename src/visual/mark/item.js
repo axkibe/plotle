@@ -4,6 +4,7 @@
 
 
 var
+	change_mark_node,
 	jion,
 	visual_mark_item;
 
@@ -24,13 +25,18 @@ if( JION )
 		id : 'visual_mark_item',
 		attributes :
 		{
+			changeMarkNode :
+			{
+				comment : 'change engine mark',
+				type : [ 'undefined', 'change_mark_node' ],
+				assign : ''
+			},
 			path :
 			{
 				comment : 'path of the item',
 				type : 'jion$path'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -48,6 +54,73 @@ if( NODE )
 
 
 prototype = visual_mark_item.prototype;
+
+
+/*
+| Initializer.
+*/
+prototype._init =
+	function(
+		changeMarkNode  // mark for the change engine
+	)
+{
+
+	if( changeMarkNode )
+	{
+		this.path = changeMarkNode.path.prepend( 'spaceVisual' );
+
+		// FIXME aheadValue changeMarkNode
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.path.isEmpty ) throw new Error( );
+/**/}
+
+};
+
+
+/*
+| Recreates this mark with a transformation
+| applied.
+*/
+prototype.createTransformed =
+	function(
+		changes
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/}
+
+	return(
+		this.create(
+			'changeMarkNode', this.changeMarkNode.createTransformed( changes )
+		)
+	);
+};
+
+
+/*
+| The change engine's nodemark.
+*/
+jion.lazyValue(
+	prototype,
+	'changeMarkNode',
+	function( )
+	{
+		return(
+			change_mark_node.create(
+				'at', this.at,
+				'path', this.path.chop
+			)
+		);
+	}
+);
+
+
 
 
 /*
