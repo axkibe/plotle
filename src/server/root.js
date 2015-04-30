@@ -693,24 +693,30 @@ prototype.prepareResource =
 {
 	var
 		jionCodeResource,
-		thatRealpath,
-		thatStat,
+		mtime,
+		realpath,
 		that;
+
+	if( resource.filePath )
+	{
+		realpath =
+			resource.realpath
+			? resource.realpath
+			: (
+				yield fs.realpath( serverDir + resource.filePath, resume( ) )
+			);
+	}
+
+	if( config.shell_devel && realpath )
+	{
+		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
+	}
 
 	if( resource.hasJion )
 	{
-		thatRealpath =
-			yield fs.realpath( serverDir + resource.filePath, resume( ) );
+		if( config.shell_devel ) delete require.cache[ realpath ];
 
-		if( config.shell_devel )
-		{
-			thatStat = yield fs.stat( thatRealpath, resume( ) );
-
-			delete require.cache[ thatRealpath ];
-		}
-
-		that = require( thatRealpath );
-		// FIXME for shell_devel clear require cache
+		that = require( realpath );
 
 		if( !that.source )
 		{
@@ -725,8 +731,8 @@ prototype.prepareResource =
 				'data', that.source,
 				'hasJson', that.hasJson,
 				'jionId', that.jionId,
-				'timestamp', thatStat && thatStat.mtime,
-				'realpath', thatRealpath
+				'timestamp', mtime,
+				'realpath', realpath
 			);
 
 		jionCodeResource =
@@ -747,11 +753,13 @@ prototype.prepareResource =
 			'inventory', root.inventory.updateResource( jionCodeResource )
 		);
 	}
-	else if( !resource.data )
+	else if( resource.filePath )
 	{
 		resource =
 			resource.create(
-				'data', yield fs.readFile( resource.filePath, resume( ) )
+				'data', yield fs.readFile( resource.filePath, resume( ) ),
+				'timestamp', mtime,
+				'realpath', realpath
 			);
 	}
 
@@ -1281,8 +1289,6 @@ prototype.requestListener =
 		return;
 	}
 
-	if( !resource.data ) throw new Error( 'resource misses data' );
-
 	if( resource.inBundle && !config.shell_devel )
 	{
 		root.webError( result, 404, 'Bad Request' );
@@ -1290,10 +1296,27 @@ prototype.requestListener =
 		return;
 	}
 
+	// this should not happen
+	if( !resource.data ) throw new Error( 'resource misses data' );
+
 	// if in shell devel mode, check if the resource cache
 	// has been invalidated
 	if( config.shell_devel && !resource.isJion )
 	{
+		try
+		{
+			stat = yield fs.stat( resource.realpath, resume( ) );
+		}
+		catch( e )
+		{
+			stat = undefined;
+		}
+
+		if( stat && stat.mtime > resource.timestamp )
+		{
+			resource = yield* root.prepareResource( resource );
+		}
+
 		if( resource.postProcessor )
 		{
 			if( !server_postProcessor[ resource.postProcessor ] )
@@ -1307,20 +1330,6 @@ prototype.requestListener =
 					root.inventory,
 					root.bundleFilePath
 				);
-		}
-
-		try
-		{
-			stat = yield fs.stat( resource.filePath, resume( ) );
-		}
-		catch( e )
-		{
-			stat = undefined;
-		}
-
-		if( stat && stat.mtime > resource.timestamp )
-		{
-			resource = yield* root.prepareResource( resource );
 		}
 	}
 

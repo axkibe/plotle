@@ -8,10 +8,10 @@ var
 	action_itemDrag,
 	action_scrolly,
 	jion$path,
-	mark_item,
 	result_hover,
 	root,
-	visual_item;
+	visual_item,
+	visual_mark_item;
 
 
 /*
@@ -173,7 +173,6 @@ visual_item.dragStart =
 	if( ctrl && access == 'rw' )
 	{
 		// relation binding
-
 		root.create(
 			'action',
 				action_createRelation.create(
@@ -190,19 +189,15 @@ visual_item.dragStart =
 	// scrolling or dragging
 	if( access == 'rw' )
 	{
-		// take focus
-//		if( root.space.focusedItem( ) !== this )
-//		{
-			root.create( 'mark', mark_item.create( 'path', this.path ) );
-//		}
-
+		// also takes focus
 		root.create(
 			'action',
 				action_itemDrag.create(
 					'start', view.depoint( p ),
 					'transItem', this,
 					'origin', this
-				)
+				),
+			'mark', visual_mark_item.create( 'path', this.path )
 		);
 
 		return true;
@@ -288,6 +283,5 @@ visual_item.pointingHover =
 		)
 	);
 };
-
 
 } )( );
