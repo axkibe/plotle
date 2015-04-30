@@ -313,6 +313,19 @@ prototype.click =
 
 
 /*
+| A shorthand to (re)create this note
+| with a different zone.
+*/
+prototype.createWithZone =
+	function(
+		zone
+	)
+{
+	return this.create( 'fabric', this.fabric.create( 'zone', zone ) );
+};
+
+
+/*
 | A move during an action.
 */
 prototype.dragMove = visual_item.dragMove;

@@ -89,17 +89,17 @@ prototype.createTransformed =
 		changes
 	)
 {
+	var
+		tm;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
 /**/}
 
-	return(
-		this.create(
-			'changeMarkNode', this.changeMarkNode.createTransformed( changes )
-		)
-	);
+	tm = changes.transform( this.changeMarkNode );
+
+	return this.create( 'changeMarkNode', tm );
 };
 
 
@@ -111,12 +111,7 @@ jion.lazyValue(
 	'changeMarkNode',
 	function( )
 	{
-		return(
-			change_mark_node.create(
-				'at', this.at,
-				'path', this.path.chop
-			)
-		);
+		return change_mark_node.create( 'path', this.path.chop );
 	}
 );
 

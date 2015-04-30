@@ -15,13 +15,13 @@ var
 	fabric_para,
 	gruga_relation,
 	jion,
-	mark_caret,
 	result_hover,
 	root,
 	session_uid,
 	shell_stubs,
 	theme,
 	visual_label,
+	visual_mark_caret,
 	visual_note,
 	visual_portal,
 	visual_relation,
@@ -598,8 +598,11 @@ prototype.dragStart =
 	)
 	{
 		transItem =
-			shell_stubs.emptyLabel.create(
-				'pnw', view.depoint( p ),
+			visual_label.create(
+				'fabric',
+					shell_stubs.emptyLabel.create(
+						'pnw', view.depoint( p )
+					),
 				'view', view
 			);
 
@@ -624,9 +627,10 @@ prototype.dragStart =
 			visual_portal.create(
 				'fabric',
 					shell_stubs.emptyPortal.create(
-					 //FIXME depoint?
+						 //FIXME depoint?
 	 					'zone', euclid_rect.create( 'pnw', p, 'pse', p )
-					)
+					),
+				'view', view
 			);
 
 		root.create(
@@ -669,11 +673,7 @@ prototype.dragStart =
 
 	// otherwise panning is initiated
 	root.create(
-		'action',
-			action_pan.create(
-				'start', p,
-				'pan', view.pan
-			)
+		'action', action_pan.create( 'start', p, 'pan', view.pan )
 	);
 
 	return;
@@ -706,10 +706,7 @@ prototype.click =
 	{
 		item = this.atRankVis( a );
 
-		if( item.click( p, shift, ctrl, access ) )
-		{
-			return true;
-		}
+		if( item.click( p, shift, ctrl, access ) ) return true;
 	}
 
 	// otherwise ...
@@ -752,10 +749,7 @@ prototype.dragStop =
 
 	view = this.view;
 
-	if( !action )
-	{
-		return;
-	}
+	if( !action ) return;
 
 	switch( action.reflect )
 	{
@@ -792,7 +786,7 @@ prototype.dragStop =
 
 					root.create(
 						'mark',
-							mark_caret.create(
+							visual_mark_caret.create(
 								'path',
 									root
 									.spaceVisual.get( key )
@@ -827,24 +821,23 @@ prototype.dragStop =
 							theme.label.minSize
 						);
 
-					resized = action.transItem.create( 'fontsize', fs );
+					resized = action.transItem.createWithFontsize( fs );
 
 					label =
-						resized.create(
-							'pnw',
-								( p.x > action.start.x )
-								?  zone.pnw
-								: euclid_point.create(
-									'x', zone.pse.x - resized.zone.width,
-									'y', zone.pnw.y
-								)
+						resized.createWithPnw(
+							( p.x > action.start.x )
+							? zone.pnw
+							: euclid_point.create(
+								'x', zone.pse.x - resized.zone.width,
+								'y', zone.pnw.y
+							)
 						);
 
 					key = session_uid( );
 
 					// FIXME might take label right away!
 					val =
-						fabric_label.create(
+						fabric_label.fabric.create(
 							'fontsize', label.doc.fontsize,
 							'pnw', label.pnw,
 							'doc',
@@ -867,7 +860,7 @@ prototype.dragStop =
 
 					root.create(
 						'mark',
-							mark_caret.create(
+							visual_mark_caret.create(
 								'path',
 									root.spaceVisual
 									.get( key )
@@ -877,17 +870,14 @@ prototype.dragStop =
 							)
 					);
 
-					if( !ctrl )
-					{
-						root.create( 'action', undefined );
-					}
+					if( !ctrl ) root.create( 'action', undefined );
 
 					break;
 
 				case 'portal' :
 
 					portal =
-						action.transItem.create(
+						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
 									view.depoint( action.start ),
@@ -912,7 +902,7 @@ prototype.dragStop =
 
 					root.create(
 						'mark',
-							mark_caret.create(
+							visual_mark_caret.create(
 								'path',
 									root.spaceVisual.get( key ).path
 									.append( 'spaceUser' ),
@@ -1160,17 +1150,16 @@ prototype.dragMove =
 							theme.label.minSize
 						);
 
-					resized = model.create( 'fontsize', fs );
+					resized = model.createWithFontsize( fs );
 
 					transItem =
-						resized.create(
-							'pnw',
-								( p.x > action.start.x )
-								?  zone.pnw
-								: euclid_point.create(
-									'x', zone.pse.x - resized.zone.width,
-									'y', zone.pnw.y
-								)
+						resized.createWithPnw(
+							( p.x > action.start.x )
+							?  zone.pnw
+							: euclid_point.create(
+								'x', zone.pse.x - resized.zone.width,
+								'y', zone.pnw.y
+							)
 						);
 
 					break;

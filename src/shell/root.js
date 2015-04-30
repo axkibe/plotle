@@ -31,7 +31,6 @@ var
 	gruga_user,
 	gruga_welcome,
 	jion$path,
-	mark_caret,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -43,6 +42,7 @@ var
 	swatch,
 	theme,
 	user_creds,
+	visual_mark_caret,
 	visual_space;
 
 root = undefined;
@@ -1133,6 +1133,8 @@ prototype.update =
 	var
 		mark;
 
+	if( !this._mark ) return;
+
 	mark = this._mark.createTransformed( changes );
 
 	if( mark.reflect === 'visual_mark_range' )
@@ -1471,7 +1473,7 @@ prototype.spawnRelation =
 
 	root.create(
 		'mark',
-			mark_caret.create(
+			visual_mark_caret.create(
 				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
 				'at', 0
 			)
