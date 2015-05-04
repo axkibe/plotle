@@ -11,9 +11,9 @@ var
 	form_form,
 	form_signUp,
 	jion,
-	mark_caret,
 	user_creds,
-	user_passhash;
+	user_passhash,
+	visual_mark_caret;
 
 
 /*
@@ -240,7 +240,7 @@ prototype.onRegister =
 		{
 			root.create(
 				'mark',
-					mark_caret.create(
+					visual_mark_caret.create(
 						'path', userInput.path,
 						'at', userInput.value.length
 					)
@@ -348,7 +348,7 @@ prototype.signup =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.get( 'userInput' ).path,
 					'at', username.length
 				)
@@ -363,7 +363,7 @@ prototype.signup =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.get( 'userInput' ).path,
 					'at', 0
 				)
@@ -378,7 +378,7 @@ prototype.signup =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.get( 'passwordInput' ).path,
 					'at', pass.length
 				)
@@ -393,7 +393,7 @@ prototype.signup =
 
 		root.create(
 			'mark',
-				mark_caret.create(
+				visual_mark_caret.create(
 					'path', this.get( 'password2Input' ).path,
 					'at', pass2.length
 				)

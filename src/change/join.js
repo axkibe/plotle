@@ -229,8 +229,6 @@ prototype.transform =
 			return this._transformTextMark( cx );
 
 		case 'change_mark_node' : // FUTURE might be para
-		case 'mark_item' :
-		case 'mark_widget' :
 
 			return cx;
 

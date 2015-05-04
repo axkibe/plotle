@@ -8,9 +8,9 @@ var
 	euclid_view,
 	gruga_formFacet,
 	jion,
-	mark_caret,
-	mark_widget,
-	result_hover;
+	result_hover,
+	visual_mark_caret,
+	visual_mark_widget;
 
 
 /*
@@ -41,12 +41,10 @@ form_form.init =
 		twig,
 		widgetProto;
 
-	if( !this.path )
-	{
-		// this is an abstract
-		// design mode form
-		return;
-	}
+	// this is an abstract
+	// design mode form
+	// FUTURE use abstract( )
+	if( !this.path ) return;
 
 	this.frame = this.view.baseFrame;
 
@@ -174,8 +172,8 @@ form_form.cycleFocus =
 			root.create(
 				'mark',
 					ve.caretable
-					? mark_caret.create( 'path', ve.path, 'at', 0 )
-					: mark_widget.create( 'path', ve.path )
+					? visual_mark_caret.create( 'path', ve.path, 'at', 0 )
+					: visual_mark_widget.create( 'path', ve.path )
 			);
 
 			break;
@@ -195,17 +193,9 @@ form_form.draw =
 	var
 		r;
 
-	display.fill(
-		gruga_formFacet.fill,
-		display.silhoutte,
-		euclid_view.proper
-	);
+	display.fill( gruga_formFacet.fill, display.silhoutte, euclid_view.proper );
 
-	for(
-		r = this.length - 1;
-		r >= 0;
-		r--
-	)
+	for( r = this.length - 1; r >= 0; r-- )
 	{
 		this.atRank( r ).draw( display );
 	}
