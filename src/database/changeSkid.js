@@ -76,22 +76,23 @@ changeSkid.createFromChangeWrap =
 		seq         // if undefined assign this seq to changeWrap.
 	)
 {
-	// FIXME aheadValue changeWrap asChangeWrap
+	var
+		cs;
 
-	if( !changeWrap.changeRay )
-	{
-		return;
-	}
+	if( !changeWrap.changeRay ) return;
 
-	return(
+	cs =
 		changeSkid.create(
 			'_id', seq === undefined ? changeWrap.seq : seq,
 			'cid', changeWrap.cid,
 			'changeRay', changeWrap.changeRay,
 			'user', user,
 			'date', Date.now( )
-		)
-	);
+		);
+
+	jion.aheadValue( cs, 'asChangeWrap', changeWrap );
+
+	return cs;
 };
 
 

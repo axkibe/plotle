@@ -1,7 +1,6 @@
 /*
 | Meshcraft default theme.
 |
-| FIXME call shell_settings
 | FIXME remove and put it all to gruga
 */
 
@@ -138,14 +137,6 @@ theme =
 				height : 1700
 			}
 		}
-	},
-
-
-	/*
-	| Selection
-	*/
-	selection :
-	{
 	},
 
 
