@@ -540,11 +540,7 @@ prototype._init =
 					'access', access,
 					'action', action,
 					'fabric', this.spaceFabric,
-					'hover',
-						// FIXME let it prepare
-						hover && hover.get( 0 ) === 'space'
-						? hover
-						: undefined,
+					'hover', hover,
 					'mark', mark,
 					'view', view
 				);

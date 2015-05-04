@@ -65,7 +65,8 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ]
+				type : [ 'undefined', 'jion$path' ],
+				prepare : 'visual_space.concernsHover( hover )'
 			},
 			mark :
 			{
@@ -131,6 +132,22 @@ visual_space.concernsMark =
 	return(
 		( mark && mark.containsPath( spacePath ) )
 		? mark
+		: undefined
+	);
+};
+
+
+/*
+| Returns the hover path if the space concerns about a hover.
+*/
+visual_space.concernsHover =
+	function(
+		hover
+	)
+{
+	return(
+		hover && hover.get( 0 ) === 'spaceVisual'
+		? hover
 		: undefined
 	);
 };
