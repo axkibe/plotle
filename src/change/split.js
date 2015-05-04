@@ -30,19 +30,19 @@ if( JION )
 				path :
 				{
 					comment : 'split at this path',
-					json : 'true',
+					json : true,
 					type : 'jion$path'
 				},
 				at1 :
 				{
 					comment : 'insert at this place begin',
-					json : 'true',
+					json : true,
 					type : 'integer'
 				},
 				path2 :
 				{
 					comment : 'split created this new/next path',
-					json : 'true',
+					json : true,
 					type : 'jion$path'
 				}
 			},

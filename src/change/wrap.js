@@ -29,8 +29,6 @@ if( JION )
 			{
 				comment : 'change id',
 				json : true,
-					// FIXME it accepted 'true',
-					// jion validator shouldn't
 				type : 'string'
 			},
 			changeRay :

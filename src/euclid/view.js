@@ -25,42 +25,32 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_view',
+	return{
+		id : 'euclid_view',
 		attributes :
+		{
+			fact :
 			{
-				fact :
-					{
-						comment :
-							'zooming factor of view',
-						type :
-							'number'
-					},
-				height :
-					{
-						comment :
-							'current height of screen',
-						type :
-							'integer'
-					},
-				pan :
-					{
-						comment :
-							'point in north west (equals panning)',
-						type :
-							'euclid_point'
-					},
-				width :
-					{
-						comment :
-							'current width of screen',
-						type :
-							'integer'
-					}
+				comment : 'zooming factor of view',
+				type : 'number'
 			},
-		init :
-			[ ]
+			height :
+			{
+				comment : 'current height of screen',
+				type : 'integer'
+			},
+			pan :
+			{
+				comment : 'point in north west (equals panning)',
+				type : 'euclid_point'
+			},
+			width :
+			{
+				comment : 'current width of screen',
+				type : 'integer'
+			}
+		},
+		init : [ ]
 	};
 }
 

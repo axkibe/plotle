@@ -29,19 +29,19 @@ if( JION )
 			path :
 			{
 				comment : 'grow at this path',
-				json : 'true',
+				json : true,
 				type : 'jion$path'
 			},
 			val :
 			{
 				comment : 'value to grow',
-				json : 'true',
+				json : true,
 				type : require( '../typemaps/spaceVal' )
 			},
 			rank :
 			{
 				comment : 'rank of new node',
-				json : 'true',
+				json : true,
 				type : 'integer'
 			}
 		},

@@ -30,13 +30,13 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				json : 'true',
+				json : true,
 				type : 'euclid_point'
 			},
 			pse :
 			{
 				comment : 'point in south east',
-				json : 'true',
+				json : true,
 				type : 'euclid_point'
 			}
 		}

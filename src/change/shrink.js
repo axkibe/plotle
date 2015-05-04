@@ -29,13 +29,13 @@ if( JION )
 			path :
 			{
 				comment : 'shrink at this path',
-				json : 'true',
+				json : true,
 				type : 'jion$path'
 			},
 			prev :
 			{
 				comment : 'value tree had',
-				json : 'true',
+				json : true,
 				// FIXME can this ever be undefined?
 				type :
 					require( '../typemaps/spaceVal' )
@@ -44,7 +44,7 @@ if( JION )
 			rank :
 			{
 				comment : 'rank of new node',
-				json : 'true',
+				json : true,
 				// FIXME can this ever be undefined?
 				type : [ 'undefined', 'integer' ]
 			}

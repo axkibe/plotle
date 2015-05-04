@@ -27,30 +27,31 @@ if( JION )
 		attributes :
 		{
 			path :
-				{
-					comment : 'insert at this path',
-					json : 'true',
-					type : 'jion$path'
-				},
+			{
+				comment : 'insert at this path',
+				json : true,
+				type : 'jion$path'
+			},
 			val :
-				{
-					comment : 'source sign',
-					json : 'true',
-					type : 'string'
-				},
+			{
+				comment : 'source sign',
+				json : true,
+				type : 'string'
+			},
 			at1 :
-				{
-					comment : 'insert at this place begin',
-					json : 'true',
-					type : 'integer'
-				},
+			{
+				comment : 'insert at this place begin',
+				json : true,
+				type : 'integer'
+			},
 			at2 :
-				{
-					comment : 'insert ends here',
-					// must be at1 + val.length
-					json : 'true',
-					type : 'integer'
-				}
+			{
+				comment : 'insert ends here',
+				// must be at1 + val.length
+				// FUTURE have it lazyEval
+				json : true,
+				type : 'integer'
+			}
 		},
 		init : [ ]
 	};

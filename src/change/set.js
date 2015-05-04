@@ -28,19 +28,19 @@ if( JION )
 			path :
 			{
 				comment : 'set at this path',
-				json : 'true',
+				json : true,
 				type : 'jion$path'
 			},
 			val :
 			{
 				comment : 'value to set',
-				json : 'true',
+				json : true,
 				type : require( '../typemaps/spaceVal' )
 			},
 			prev :
 			{
 				comment : 'value tree had',
-				json : 'true',
+				json : true,
 				type : require( '../typemaps/spaceVal' )
 			}
 		}
