@@ -31,6 +31,7 @@ var
 	request_update,
 	resume,
 	server_requestHandler,
+	server_spaceNexus,
 	server_upSleep,
 	serveAcquire,
 	serveAlter,
@@ -78,6 +79,8 @@ request_update = require( '../request/update' );
 resume = require( 'suspend' ).resume;
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
+
+server_spaceNexus = require( './spaceNexus' );
 
 server_upSleep = require( './upSleep' );
 
@@ -151,7 +154,7 @@ serveAlter =
 		return replyError( 'Invalid creds' );
 	}
 
-	if( root.testAccess( user.name, spaceRef ) !== 'rw' )
+	if( server_spaceNexus.testAccess( user, spaceRef ) !== 'rw' )
 	{
 		return replyError( 'no access' );
 	}
@@ -428,7 +431,7 @@ serveAcquire =
 		return replyError( 'Invalid creds' );
 	}
 
-	access = root.testAccess( user.name, request.spaceRef );
+	access = server_spaceNexus.testAccess( user, request.spaceRef );
 
 	if( access === 'no' )
 	{

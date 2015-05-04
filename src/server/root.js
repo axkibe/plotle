@@ -1164,42 +1164,6 @@ prototype.wake =
 
 
 /*
-| Tests if the user has access to a space.
-*/
-prototype.testAccess =
-	function(
-		username,  // FIXME give user_creds
-		spaceRef
-	)
-{
-	if( spaceRef.username == 'ideoloom' )
-	{
-		switch( spaceRef.tag )
-		{
-			case 'sandbox' : return 'rw';
-
-			case 'home' : return username === config.admin ? 'rw' : 'ro';
-
-			default : return 'no';
-		}
-	}
-
-	// FIXME isVisitor
-	if( username.substring( 0, 7 ) === 'visitor' )
-	{
-		return 'no';
-	}
-
-	if( username === spaceRef.username )
-	{
-		return 'rw';
-	}
-
-	return 'no';
-};
-
-
-/*
 | Logs and returns a web error
 */
 prototype.webError =

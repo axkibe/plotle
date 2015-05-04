@@ -500,8 +500,8 @@ prototype._init =
 		else
 		{
 			if(
-				root.spaceFabric
-				&& root.spaceFabric.ref.username !== 'ideoloom'
+				root.spaceRef
+				&& root.spaceRef.username !== 'ideoloom'
 			)
 			{
 				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
@@ -518,10 +518,7 @@ prototype._init =
 		mark = mark.create( 'focus', this._systemFocus );
 	}
 
-	if( !this.spaceFabric )
-	{
-		this.spaceVisual = undefined;
-	}
+	if( !this.spaceFabric ) this.spaceVisual = undefined;
 
 	// skips recreating children when no need
 	if(

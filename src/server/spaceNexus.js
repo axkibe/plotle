@@ -3,6 +3,9 @@
 */
 
 
+var
+	server_spaceNexus;
+
 /*
 | Capsule.
 */
@@ -15,16 +18,52 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'server_spaceNexus',
-		group :
-			[ 'server_spaceBox' ]
+	return{
+		id : 'server_spaceNexus',
+		group : [ 'server_spaceBox' ]
 	};
 }
 
 
-require( 'jion' ).this( module );
+var
+	config;
+
+server_spaceNexus = require( 'jion' ).this( module );
+
+config = require( '../../config' );
+
+
+/*
+| Tests if the user has access to a space.
+*/
+server_spaceNexus.testAccess =
+	function(
+		user,
+		spaceRef
+	)
+{
+	if( spaceRef.username == 'ideoloom' )
+	{
+		switch( spaceRef.tag )
+		{
+			case 'sandbox' : return 'rw';
+
+			case 'home' : return user.name === config.admin ? 'rw' : 'ro';
+
+			default : return 'no';
+		}
+	}
+
+	// FIXME isVisitor
+	if( user.name.substring( 0, 7 ) === 'visitor' )
+	{
+		return 'no';
+	}
+
+	if( user.name === spaceRef.username ) return 'rw';
+
+	return 'no';
+};
 
 
 } )( );
