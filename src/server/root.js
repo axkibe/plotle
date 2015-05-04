@@ -461,7 +461,7 @@ prototype.prepareInventory =
 
 		if( !resource.inBundle ) continue;
 
-		if( resource.isJion )
+		if( resource.jionHolder )
 		{
 			jionIDs[ resource.jionId ] = resource.hasJson;
 
@@ -739,14 +739,12 @@ prototype.prepareResource =
 			resource.create(
 				'aliases', undefined,
 				'data', that.jioncode,
-				'jionSrcPath', resource.filePath, // FIXME needed?
-				'jionId', that.jionId,
 				'filePath',
 					// FIXME let the jion module worry aabout this
 					'jioncode/'
 					+ resource.filePath.replace( /\//g, '-' ),
 				'hasJion', false,
-				'isJion', true
+				'jionHolder', resource
 			);
 
 		root.create(
@@ -766,8 +764,6 @@ prototype.prepareResource =
 	root.create(
 		'inventory', root.inventory.updateResource( resource )
 	);
-
-	return resource;
 };
 
 
@@ -922,8 +918,7 @@ prototype.extraMangle =
 		if(
 			// only mangle those not used in json
 			jionIDs[ jionID ] === false
-			&&
-			!noMangle[ jionID ]
+			&& !noMangle[ jionID ]
 		)
 		{
 			mangle[ jionID ] = true;
@@ -1173,7 +1168,7 @@ prototype.wake =
 */
 prototype.testAccess =
 	function(
-		username,
+		username,  // FIXME give user_creds
 		spaceRef
 	)
 {
@@ -1181,20 +1176,15 @@ prototype.testAccess =
 	{
 		switch( spaceRef.tag )
 		{
-			case 'sandbox' :
+			case 'sandbox' : return 'rw';
 
-				return 'rw';
+			case 'home' : return username === config.admin ? 'rw' : 'ro';
 
-			case 'home' :
-
-				return username === config.admin ? 'rw' : 'ro';
-
-			default :
-
-				return 'no';
+			default : return 'no';
 		}
 	}
 
+	// FIXME isVisitor
 	if( username.substring( 0, 7 ) === 'visitor' )
 	{
 		return 'no';
@@ -1301,7 +1291,7 @@ prototype.requestListener =
 
 	// if in shell devel mode, check if the resource cache
 	// has been invalidated
-	if( config.shell_devel && !resource.isJion )
+	if( config.shell_devel )
 	{
 		try
 		{
@@ -1314,7 +1304,12 @@ prototype.requestListener =
 
 		if( stat && stat.mtime > resource.timestamp )
 		{
-			resource = yield* root.prepareResource( resource );
+			// when this is a jion its holder is prepared instead.
+			yield* root.prepareResource(
+				resource.jionHolder || resource
+			);
+
+			resource = root.inventory.get( pathname );
 		}
 
 		if( resource.postProcessor )

@@ -42,10 +42,10 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
-			jionSrcPath :
+			jionHolder :
 			{
-				comment : 'source file of a jion',
-				type : [ 'undefined', 'string' ]
+				comment : 'the resource a jion is genereated from',
+				type : [ 'undefined', 'server_resource' ]
 			},
 			filePath :
 			{
@@ -78,12 +78,6 @@ if( JION )
 			inTestPad :
 			{
 				comment : 'true if this resource is in the testpad',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			isJion :
-			{
-				comment : 'true if this resource is a jion.',
 				type : 'boolean',
 				defaultValue : 'false'
 			},
