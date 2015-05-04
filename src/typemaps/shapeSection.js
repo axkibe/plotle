@@ -3,8 +3,8 @@
 */
 module.exports =
 [
-	'shapeSection_flyLine',
-	'shapeSection_line',
-	'shapeSection_round',
-	'shapeSection_start'
+	'euclid_shape_flyLine',
+	'euclid_shape_line',
+	'euclid_shape_round',
+	'euclid_shape_start'
 ];

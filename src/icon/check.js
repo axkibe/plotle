@@ -6,9 +6,9 @@
 
 var
 	euclid_shape,
-	icon_check,
-	shapeSection_line,
-	shapeSection_start;
+	euclid_shape_line,
+	euclid_shape_start,
+	icon_check;
 
 
 /*
@@ -77,11 +77,11 @@ prototype._init =
 		euclid_shape.create(
 			'ray:init',
 			[
-				shapeSection_start.create( 'p', pc.add( -5,  -3 ) ),
-				shapeSection_line.create( 'p', pc.add(  2,   5 ) ),
-				shapeSection_line.create( 'p', pc.add( 14, -12 ) ),
-				shapeSection_line.create( 'p', pc.add(  2,  -1 ) ),
-				shapeSection_line.create( 'close', true )
+				euclid_shape_start.create( 'p', pc.add( -5,  -3 ) ),
+				euclid_shape_line.create( 'p', pc.add(  2,   5 ) ),
+				euclid_shape_line.create( 'p', pc.add( 14, -12 ) ),
+				euclid_shape_line.create( 'p', pc.add(  2,  -1 ) ),
+				euclid_shape_line.create( 'close', true )
 			],
 			'pc', pc
 		);

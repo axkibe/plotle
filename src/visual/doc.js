@@ -6,14 +6,14 @@
 var
 	euclid_point,
 	euclid_shape,
+	euclid_shape_start,
+	euclid_shape_flyLine,
+	euclid_shape_line,
 	fabric_pointGroup,
 	gruga_selection,
 	jion,
 	math_half,
 	root,
-	shapeSection_start,
-	shapeSection_flyLine,
-	shapeSection_line,
 	shell_fontPool,
 	theme,
 	visual_doc,
@@ -306,11 +306,11 @@ prototype._getRangeShape =
 
 		sections =
 		[
-			shapeSection_start.create( 'p', fp.add( 0, descend ) ),
-			shapeSection_line.create( 'p', fp.add( 0, -ascend ) ),
-			shapeSection_line.create( 'p', bp.add( 0, -ascend ) ),
-			shapeSection_line.create( 'p', bp.add( 0, descend ) ),
-			shapeSection_line.create( 'close', true )
+			euclid_shape_start.create( 'p', fp.add( 0, descend ) ),
+			euclid_shape_line.create( 'p', fp.add( 0, -ascend ) ),
+			euclid_shape_line.create( 'p', bp.add( 0, -ascend ) ),
+			euclid_shape_line.create( 'p', bp.add( 0, descend ) ),
+			euclid_shape_line.create( 'close', true )
 		];
 
 		return(
@@ -343,36 +343,36 @@ prototype._getRangeShape =
 
 		sections =
 		[
-			shapeSection_start.create(
+			euclid_shape_start.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y - ascend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', fp.x, 'y', fp.y - ascend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', fp.x, 'y', fp.y + descend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
 			),
-			shapeSection_flyLine.create( 'close', true )
+			euclid_shape_flyLine.create( 'close', true )
 		];
 
 		sections2 =
 		[
-			shapeSection_start.create(
+			euclid_shape_start.create(
 				'p', euclid_point.create( 'x', lx, 'y', bp.y - ascend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', bp.x, 'y', bp.y - ascend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', bp.x, 'y', bp.y + descend )
 			),
-			shapeSection_line.create(
+			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
 			),
-			shapeSection_flyLine.create( 'close', true )
+			euclid_shape_flyLine.create( 'close', true )
 		];
 
 		return(
@@ -455,63 +455,63 @@ prototype._getRangeShape =
 		{
 			sections =
 			[
-				shapeSection_start.create( // 1
+				euclid_shape_start.create( // 1
 					'p',
 					euclid_point.create(
 						'x', rx,
 						'y', b2y + descend
 					)
 				),
-				shapeSection_line.create( // 2
+				euclid_shape_line.create( // 2
 					'p',
 					euclid_point.create(
 						'x', bp.x,
 						'y', b2y + descend
 					)
 				),
-				shapeSection_line.create( // 3
+				euclid_shape_line.create( // 3
 					'p',
 					euclid_point.create(
 						'x', bp.x,
 						'y', bp.y + descend
 					)
 				),
-				shapeSection_line.create( // 4
+				euclid_shape_line.create( // 4
 					'p',
 					euclid_point.create(
 						'x', lx,
 						'y', bp.y + descend
 					)
 				),
-				shapeSection_flyLine.create( // 5
+				euclid_shape_flyLine.create( // 5
 					'p',
 					euclid_point.create(
 						'x', lx,
 						'y', f2y - ascend
 					)
 				),
-				shapeSection_line.create( // 6
+				euclid_shape_line.create( // 6
 					'p',
 					euclid_point.create(
 						'x', fp.x,
 						'y', f2y - ascend
 					)
 				),
-				shapeSection_line.create( // 7
+				euclid_shape_line.create( // 7
 					'p',
 					euclid_point.create(
 						'x', fp.x,
 						'y', fp.y - ascend
 					)
 				),
-				shapeSection_line.create( // 8
+				euclid_shape_line.create( // 8
 					'p',
 					euclid_point.create(
 						'x', rx,
 						'y', fp.y - ascend
 					)
 				),
-				shapeSection_flyLine.create(
+				euclid_shape_flyLine.create(
 					'close', true
 				)
 			];
@@ -531,49 +531,49 @@ prototype._getRangeShape =
 		{
 				sections =
 				[
-					shapeSection_start.create( // 1
+					euclid_shape_start.create( // 1
 						'p',
 						euclid_point.create(
 							'x', rx,
 							'y', b2y + descend
 						)
 					),
-					shapeSection_line.create( // 2
+					euclid_shape_line.create( // 2
 						'p',
 						euclid_point.create(
 							'x', bp.x,
 							'y', b2y + descend
 						)
 					),
-					shapeSection_line.create( // 3
+					euclid_shape_line.create( // 3
 						'p',
 						euclid_point.create(
 							'x', bp.x,
 							'y', bp.y + descend
 						)
 					),
-					shapeSection_line.create( // 4
+					euclid_shape_line.create( // 4
 						'p',
 						euclid_point.create(
 							'x', lx,
 							'y', bp.y + descend
 						)
 					),
-					shapeSection_flyLine.create( // 7
+					euclid_shape_flyLine.create( // 7
 						'p',
 						euclid_point.create(
 							'x', lx,
 							'y', fp.y - ascend
 						)
 					),
-					shapeSection_line.create( // 8
+					euclid_shape_line.create( // 8
 						'p',
 						euclid_point.create(
 							'x', rx,
 							'y', fp.y - ascend
 						)
 					),
-					shapeSection_flyLine.create(
+					euclid_shape_flyLine.create(
 						'close', true
 					)
 				];

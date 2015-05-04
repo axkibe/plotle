@@ -98,7 +98,7 @@ prototype.getProjection =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.get( 0 ).reflect !== 'shapeSection_start' )
+/**/	if( this.get( 0 ).reflect !== 'euclid_shape_start' )
 /**/	{
 /**/		// must have start at [0]
 /**/		throw new Error( );
@@ -139,8 +139,8 @@ prototype.getProjection =
 
 		switch( section.reflect )
 		{
-			case 'shapeSection_line' :
-			case 'shapeSection_flyLine' :
+			case 'euclid_shape_line' :
+			case 'euclid_shape_flyLine' :
 
 				la1 = p.y - pc.y;
 
@@ -180,7 +180,7 @@ prototype.getProjection =
 
 				break;
 
-			case 'shapeSection_round' :
+			case 'euclid_shape_round' :
 
 				dx = pn.x - pp.x;
 

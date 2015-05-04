@@ -1,8 +1,6 @@
 /*
 | Start section of a shape.
 |
-| FIXME move all of shapeSection to euclid/shapeSection.
-|
 | Used by shape.
 */
 
@@ -20,15 +18,15 @@
 if( JION )
 {
 	return {
-		id : 'shapeSection_start',
+		id : 'euclid_shape_start',
 		attributes :
+		{
+			p :
 			{
-				p :
-				{
-					comment : 'start here',
-					type : [ 'euclid_point', 'euclid_fixPoint' ]
-				}
+				comment : 'start here',
+				type : [ 'euclid_point', 'euclid_fixPoint' ]
 			}
+		}
 	};
 }
 

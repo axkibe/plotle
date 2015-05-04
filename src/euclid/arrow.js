@@ -7,10 +7,10 @@ var
 	euclid_arrow,
 	euclid_line,
 	euclid_shape,
+	euclid_shape_flyLine,
+	euclid_shape_line,
+	euclid_shape_start,
 	euclid_view,
-	shapeSection_flyLine,
-	shapeSection_line,
-	shapeSection_start,
 	jion;
 
 
@@ -237,7 +237,7 @@ jion.lazyValue(
 			case 'normal':
 
 				sections.push(
-					shapeSection_start.create( 'p', p1 )
+					euclid_shape_start.create( 'p', p1 )
 				);
 
 				break;
@@ -253,7 +253,7 @@ jion.lazyValue(
 			case 'normal' :
 
 				sections.push(
-					shapeSection_line.create( 'p', p2 )
+					euclid_shape_line.create( 'p', p2 )
 				);
 
 				break;
@@ -279,23 +279,23 @@ jion.lazyValue(
 					);
 
 				sections.push(
-					shapeSection_line.create( 'p', arrowBase ),
-					shapeSection_line.create(
+					euclid_shape_line.create( 'p', arrowBase ),
+					euclid_shape_line.create(
 						'p',
 							p2.fixPoint(
 								-round( arrowSize * cos( d - ad ) ),
 								-round( arrowSize * sin( d - ad ) )
 							)
 					),
-					shapeSection_line.create( 'p', p2 ),
-					shapeSection_line.create(
+					euclid_shape_line.create( 'p', p2 ),
+					euclid_shape_line.create(
 						'p',
 							p2.fixPoint(
 								-round( arrowSize * cos( d + ad ) ),
 								-round( arrowSize * sin( d + ad ) )
 							)
 					),
-					shapeSection_line.create( 'p', arrowBase )
+					euclid_shape_line.create( 'p', arrowBase )
 				);
 
 
@@ -308,7 +308,7 @@ jion.lazyValue(
 		}
 
 		sections.push(
-			shapeSection_flyLine.create( 'close', true )
+			euclid_shape_flyLine.create( 'close', true )
 		);
 
 		return(

@@ -23,9 +23,9 @@ var
 	euclid_shape,
 	jion,
 	math_half,
-	shapeSection_line,
-	shapeSection_round,
-	shapeSection_start;
+	euclid_shape_line,
+	euclid_shape_round,
+	euclid_shape_start;
 
 
 /*
@@ -105,40 +105,39 @@ prototype._init =
 		euclid_shape.create(
 			'ray:init',
 				[
-					shapeSection_start.create(
+					euclid_shape_start.create(
 						'p', pnw.add( 0 , b )
 					),
-					shapeSection_round.create(
+					euclid_shape_round.create(
 						'p', pnw.add( a , 0 ),
 						'rotation', 'clockwise'
 					),
-					shapeSection_line.create(
+					euclid_shape_line.create(
 						'p', pne.sub( a , 0 )
 					),
-					shapeSection_round.create(
+					euclid_shape_round.create(
 						'p', pne.add( 0 , b ),
 						'rotation', 'clockwise'
 					),
-					shapeSection_line.create(
+					euclid_shape_line.create(
 						'p', pse.sub( 0 , b )
 					),
-					shapeSection_round.create(
+					euclid_shape_round.create(
 						'p', pse.sub( a , 0 ),
 						'rotation', 'clockwise'
 					),
-					shapeSection_line.create(
+					euclid_shape_line.create(
 						'p', psw.add( a , 0 )
 					),
-					shapeSection_round.create(
+					euclid_shape_round.create(
 						'p', psw.sub( 0 , b ),
 						'rotation', 'clockwise'
 					),
-					shapeSection_line.create(
+					euclid_shape_line.create(
 						'close', true
 					)
 				],
-			'pc',
-				this.pc
+			'pc', this.pc
 		);
 };
 

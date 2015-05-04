@@ -7,10 +7,10 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_shape,
+	euclid_shape_round,
+	euclid_shape_start,
 	jion,
-	math_half,
-	shapeSection_round,
-	shapeSection_start;
+	math_half;
 
 
 /*
@@ -127,22 +127,20 @@ prototype._init =
 		euclid_shape.create(
 			'ray:init',
 			[
-				shapeSection_start.create(
-					'p', pw
-				),
-				shapeSection_round.create(
+				euclid_shape_start.create( 'p', pw ),
+				euclid_shape_round.create(
 					'rotation', 'clockwise',
 					'p', pn
 				),
-				shapeSection_round.create(
+				euclid_shape_round.create(
 					'rotation', 'clockwise',
 					'p', pe
 				),
-				shapeSection_round.create(
+				euclid_shape_round.create(
 					'rotation', 'clockwise',
 					'p', ps
 				),
-				shapeSection_round.create(
+				euclid_shape_round.create(
 					'rotation', 'clockwise',
 					'close', true
 				)

@@ -1104,7 +1104,7 @@ euclid_display.prototype._sketchShape =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( shape.get( 0 ).reflect !== 'shapeSection_start' )
+/**/	if( shape.get( 0 ).reflect !== 'euclid_shape_start' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1177,13 +1177,13 @@ euclid_display.prototype._sketchShape =
 		switch( section.reflect )
 		{
 
-			case 'shapeSection_line' :
+			case 'euclid_shape_line' :
 
 				cx.lineTo( pn.x + twist, pn.y + twist );
 
 				break;
 
-			case 'shapeSection_flyLine' :
+			case 'euclid_shape_flyLine' :
 
 				if( twist )
 				{
@@ -1196,7 +1196,7 @@ euclid_display.prototype._sketchShape =
 
 				break;
 
-			case 'shapeSection_round' :
+			case 'euclid_shape_round' :
 
 				dx = pn.x - pp.x;
 

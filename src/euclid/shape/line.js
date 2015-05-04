@@ -1,7 +1,5 @@
 /*
-| An invisible line section of a shape.
-|
-| Makes a fill but not an border.
+| A line section of a shape.
 |
 | Used by shape.
 */
@@ -20,7 +18,7 @@
 if( JION )
 {
 	return{
-		id : 'shapeSection_flyLine',
+		id : 'euclid_shape_line',
 		attributes :
 		{
 			p :

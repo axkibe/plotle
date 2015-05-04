@@ -7,9 +7,9 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_shape,
-	icon_moveto,
-	shapeSection_start,
-	shapeSection_line;
+	euclid_shape_start,
+	euclid_shape_line,
+	icon_moveto;
 
 
 /*
@@ -29,15 +29,15 @@ if( JION )
 		attributes :
 		{
 			border :
-				{
-					comment : 'border',
-					type : 'euclid_border'
-				},
+			{
+				comment : 'border',
+				type : 'euclid_border'
+			},
 			fill :
-				{
-					comment : 'fill',
-					type : 'euclid_color'
-				}
+			{
+				comment : 'fill',
+				type : 'euclid_color'
+			}
 		},
 		init : [ ]
 	};
@@ -89,14 +89,14 @@ prototype._init =
 		euclid_shape.create(
 			'ray:init',
 				[
-					shapeSection_start.create( 'p', ap ), // A
-					shapeSection_line.create( 'p', ap.add(  6,  8 ) ), // B
-					shapeSection_line.create( 'p', ap.add(  2,  8 ) ), // C
-					shapeSection_line.create( 'p', ap.add(  2, 14 ) ), // D
-					shapeSection_line.create( 'p', ap.add( -2, 14 ) ), // E
-					shapeSection_line.create( 'p', ap.add( -2,  8 ) ), // F,
-					shapeSection_line.create( 'p', ap.add( -6,  8 ) ), // G,
-					shapeSection_line.create( 'close', true )
+					euclid_shape_start.create( 'p', ap ), // A
+					euclid_shape_line.create( 'p', ap.add(  6,  8 ) ), // B
+					euclid_shape_line.create( 'p', ap.add(  2,  8 ) ), // C
+					euclid_shape_line.create( 'p', ap.add(  2, 14 ) ), // D
+					euclid_shape_line.create( 'p', ap.add( -2, 14 ) ), // E
+					euclid_shape_line.create( 'p', ap.add( -2,  8 ) ), // F,
+					euclid_shape_line.create( 'p', ap.add( -6,  8 ) ), // G,
+					euclid_shape_line.create( 'close', true )
 				],
 			'pc', ap.add( 0, 7 )
 		);
