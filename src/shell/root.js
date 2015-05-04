@@ -403,7 +403,7 @@ shell_root.startup =
 		'_drawn', false,
 		'_formJockey',
 			form_jockey.create(
-				'hover', jion$path.empty,
+				'hover', undefined,
 				'path', jion$path.empty.append( 'form' ),
 				'view', view,
 				'twig:add', 'loading', gruga_loading,
@@ -548,11 +548,7 @@ prototype._init =
 
 		this._formJockey =
 			this._formJockey.create(
-				'hover',
-					// FIXME let it prepare
-					hover && hover.get( 0 ) === 'form'
-					? hover
-					: undefined,
+				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
 				'user', user,

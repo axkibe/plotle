@@ -27,7 +27,8 @@ if( JION )
 			hover :
 			{
 				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ]
+				type : [ 'undefined', 'jion$path' ],
+				prepare : 'form_jockey.concernsHover( hover )'
 			},
 			mark :
 			{
@@ -106,6 +107,14 @@ prototype._init =
 		ranks,
 		twig;
 
+/**/if( CHECK )
+/**/{
+/**/	if( this.hover && this.hover.isEmpty )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	twig =
 		twigDup
 		? this._twig
@@ -167,6 +176,22 @@ form_jockey.concernsMark =
 	return(
 		mark.containsPath( form_jockey.path )
 		? mark
+		: undefined
+	);
+};
+
+
+/*
+| Returns the hover path if the form jockey concerns about it.
+*/
+form_jockey.concernsHover =
+	function(
+		hover
+	)
+{
+	return(
+		hover && hover.get( 0 ) === 'form'
+		? hover
 		: undefined
 	);
 };
