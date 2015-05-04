@@ -75,16 +75,20 @@ database_userSkid.createFromUser =
 		user
 	)
 {
-	// FIXME aheadValue user_info, asUser
+	var
+		dus;
 
-	return(
+	dus =
 		database_userSkid.create(
 			'_id', user.name,
 			'passhash', user.passhash,
 			'mail', user.mail,
 			'news', user.news
-		)
-	);
+		);
+
+	jion.aheadValue( dus, 'asUser', user );
+
+	return dus;
 };
 
 

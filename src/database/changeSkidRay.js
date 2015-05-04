@@ -40,8 +40,6 @@ database_changeSkid = require( './changeSkid' );
 
 /*
 | Creates a changeSkid from a changeWrap.
-|
-| FIXME aheadValue changeWrap asChangeWrap
 */
 database_changeSkidRay.createFromChangeWrapRay =
 	function(
@@ -60,11 +58,7 @@ database_changeSkidRay.createFromChangeWrapRay =
 
 	ray = [ ];
 
-	for(
-		a = 0, aZ = changeWrapRay.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = changeWrapRay.length; a < aZ; a++ )
 	{
 		cw = changeWrapRay.get( a );
 

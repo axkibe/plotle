@@ -229,6 +229,7 @@ prototype.transform =
 			return this._transformTextMark( cx );
 
 		case 'change_mark_node' : // FUTURE might be para
+		case 'change_set' :
 
 			return cx;
 
@@ -238,7 +239,6 @@ prototype.transform =
 			// FIXME change ranks
 			// but right now this never happens
 			return cx;
-
 
 		case 'change_join' :
 		case 'change_split' :

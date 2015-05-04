@@ -203,8 +203,6 @@ euclid_view.prototype.dey =
 
 /*
 | A view with pan zero, but same fact level
-|
-| FIXME remove?
 */
 jion.lazyValue(
 	euclid_view.prototype,

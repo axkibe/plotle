@@ -27,33 +27,6 @@ else
 
 
 /*
-| Returns true when 'o' is a change.
-|
-| FIXME use a table.
-*/
-change_generic.isChange =
-	function(
-		o
-	)
-{
-	switch( o.reflect )
-	{
-		case 'change_insert' :
-		case 'change_join' :
-		case 'change_remove' :
-		case 'change_set' :
-		case 'change_split' :
-
-			return true;
-
-		default :
-
-			return false;
-	}
-};
-
-
-/*
 | Returns a change ray transformed by this change.
 */
 change_generic.transformChangeRay =

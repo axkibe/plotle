@@ -116,7 +116,7 @@ database_repository.connect =
 /*
 | Returns a collection.
 |
-| FIXME let it return a jion.
+| FUTURE let it return a jion.
 */
 database_repository.prototype.collection =
 	function*(
