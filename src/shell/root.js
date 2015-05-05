@@ -85,6 +85,12 @@ if( JION )
 				comment : 'the ajax communication',
 				type : 'net_ajax'
 			},
+			disc :
+			{
+				comment : 'the master of discs',
+				type : 'disc_jockey',
+				assign : '_disc'
+			},
 			display :
 			{
 				comment : 'the display within everything happens',
@@ -99,6 +105,12 @@ if( JION )
 			{
 				comment : 'fallback to this space if loading another failed.',
 				type : [ 'undefined', 'fabric_spaceRef' ]
+			},
+			form :
+			{
+				comment : 'the master of forms',
+				type : 'form_jockey',
+				assign : '_form'
 			},
 			hover :
 			{
@@ -157,20 +169,10 @@ if( JION )
 				type : 'euclid_view'
 				// FIXME assign _view
 			},
-			_disc :
-			{
-				comment : 'the master of discs',
-				type : 'disc_jockey'
-			},
 			_drawn :
 			{
 				comment : 'this root has been drawn on display',
 				type : 'boolean'
-			},
-			_form :
-			{
-				comment : 'the master of forms',
-				type : 'form_jockey'
 			},
 			_visitor :
 			{
@@ -399,9 +401,8 @@ shell_root.startup =
 		'mode', mode,
 		'systemFocus', true,
 		'view', view,
-		'_disc', dj,
-		'_drawn', false,
-		'_form',
+		'disc', dj,
+		'form',
 			form_jockey.create(
 				'hover', undefined,
 				'path', jion$path.empty.append( 'form' ),
@@ -415,7 +416,8 @@ shell_root.startup =
 				'twig:add', 'space', gruga_space,
 				'twig:add', 'user', gruga_user,
 				'twig:add', 'welcome', gruga_welcome
-			)
+			),
+		'_drawn', false
 	);
 
 	root.link.auth( user );
@@ -1030,7 +1032,7 @@ prototype.setPath =
 		case 'form' :
 
 			root.create(
-				'_form', root._form.setPath( path, value, 1 )
+				'form', root._form.setPath( path, value, 1 )
 			);
 
 			break;
