@@ -895,7 +895,7 @@ prototype.input =
 		&& !mark.empty
 	)
 	{
-		root.removeRange( mark.front, mark.back );
+		root.removeRange( mark );
 
 		// FIXME this is an akward workaround
 
@@ -943,13 +943,13 @@ prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
-				root.removeRange( mark.front, mark.back );
+				root.removeRange( mark );
 
 				return true;
 
 			case 'enter' :
 
-				root.removeRange( mark.front, mark.back );
+				root.removeRange( mark );
 
 				root.specialKey( key, shift, ctrl );
 

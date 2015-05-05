@@ -88,8 +88,7 @@ if( JION )
 			disc :
 			{
 				comment : 'the master of discs',
-				type : 'disc_jockey',
-				assign : '_disc'
+				type : 'disc_jockey'
 			},
 			display :
 			{
@@ -109,8 +108,7 @@ if( JION )
 			form :
 			{
 				comment : 'the master of forms',
-				type : 'form_jockey',
-				assign : '_form'
+				type : 'form_jockey'
 			},
 			hover :
 			{
@@ -548,8 +546,8 @@ prototype._init =
 				);
 		}
 
-		this._form =
-			this._form.create(
+		this.form =
+			this.form.create(
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
@@ -557,8 +555,8 @@ prototype._init =
 				'view', view
 			);
 
-		this._disc =
-			this._disc.create(
+		this.disc =
+			this.disc.create(
 				'access', access,
 				'action', action,
 				'hover', hover,
@@ -660,12 +658,9 @@ prototype.click =
 
 	screen = root._currentScreen( );
 
-	result = root._disc.click( p, shift, ctrl );
+	result = root.disc.click( p, shift, ctrl );
 
-	if( !result && screen )
-	{
-		screen.click( p, shift, ctrl );
-	}
+	if( !result && screen ) screen.click( p, shift, ctrl );
 };
 
 
@@ -721,7 +716,7 @@ prototype.cycleFormFocus =
 		dir
 	)
 {
-	root._form.cycleFocus( name, dir );
+	root.form.cycleFocus( name, dir );
 };
 
 
@@ -771,7 +766,7 @@ prototype.dragStart =
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root._disc.dragStart( p, shift, ctrl );
+		bubble = root.disc.dragStart( p, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -874,7 +869,7 @@ prototype.mousewheel =
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root._disc.mousewheel( p, dir, shift, ctrl );
+		bubble = root.disc.mousewheel( p, dir, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -936,7 +931,7 @@ prototype.pointingHover =
 
 	if( screen && screen.showDisc )
 	{
-		result = root._disc.pointingHover( p, shift, ctrl );
+		result = root.disc.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
@@ -985,11 +980,11 @@ prototype.pushButton =
 	{
 		case 'disc' :
 
-			return root._disc.pushButton( path, false, false );
+			return root.disc.pushButton( path, false, false );
 
 		case 'form' :
 
-			return root._form.pushButton( path, false, false );
+			return root.form.pushButton( path, false, false );
 
 		default :
 
@@ -1015,54 +1010,6 @@ prototype.showHome =
 
 
 /*
-| Sets the trait(s) of item(s).
-|
-| FIXME rename this.disc and this.form jockey so this works again.
-*/
-prototype.setPath =
-	function(
-		path,
-		value
-	)
-{
-	switch( path.get( 0 ) )
-	{
-		case 'disc' : throw new Error( 'FIXME' );
-
-		case 'form' :
-
-			root.create(
-				'form', root._form.setPath( path, value, 1 )
-			);
-
-			break;
-
-		case 'spaceFabric' :
-
-			root.create(
-				'spaceFabric',
-				root.spaceFabric.setPath( path, value, 1 )
-			);
-
-			break;
-
-		case 'spaceVisual' :
-
-			root.create(
-				'spaceVisual',
-				root.spaceVisual.setPath( path, value, 1 )
-			);
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
-};
-
-
-/*
 | User is pressing a special key.
 */
 prototype.specialKey =
@@ -1078,10 +1025,7 @@ prototype.specialKey =
 
 	screen = root._currentScreen( );
 
-	if( screen )
-	{
-		screen.specialKey( key, shift, ctrl );
-	}
+	if( screen ) screen.specialKey( key, shift, ctrl );
 
 	if( root.spaceVisual )
 	{
@@ -1178,7 +1122,7 @@ prototype.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.setPath(
-				root._form.get( 'nonExistingSpace' ).path
+				root.form.get( 'nonExistingSpace' ).path
 					.append( 'nonSpaceRef' ),
 				spaceRef
 			);
@@ -1194,7 +1138,6 @@ prototype.onAcquireSpace =
 
 		case 'no access' :
 
-			// FIXME set spaceRef of noAccesstoSpace
 			root.create( 'mode', 'noAccessToSpace' );
 
 			if( root.fallbackSpaceRef )
@@ -1246,7 +1189,7 @@ prototype.onAuth =
 
 	if( root._mode === 'login' )
 	{
-		root._form.get( 'login' ).onAuth( request, reply );
+		root.form.get( 'login' ).onAuth( request, reply );
 
 		return;
 	}
@@ -1301,7 +1244,7 @@ prototype.onRegister =
 		return;
 	}
 
-	root._form.get( 'signUp' ).onRegister( ok, user, message );
+	root.form.get( 'signUp' ).onRegister( ok, user, message );
 
 	return;
 };
@@ -1309,17 +1252,16 @@ prototype.onRegister =
 
 /*
 | Removes a text spawning over several entities.
-|
-| FIXME give it a range mark
 */
 prototype.removeRange =
 	function(
-		front,
-		back
+		range
 	)
 {
 	var
+		back,
 		changes,
+		front,
 		k1,
 		k2,
 		pivot,
@@ -1328,6 +1270,10 @@ prototype.removeRange =
 		r2,
 		text,
 		ve;
+
+	front = range.front;
+
+	back = range.back;
 
 /**/if( CHECK )
 /**/{
@@ -1500,7 +1446,7 @@ prototype._currentScreen =
 		case 'user' :
 		case 'welcome' :
 
-			return root._form.get( name );
+			return root.form.get( name );
 
 		default :
 
@@ -1540,10 +1486,7 @@ prototype.draw =
 
 	screen.draw( display );
 
-	if( screen.showDisc )
-	{
-		root._disc.draw( display );
-	}
+	if( screen.showDisc ) root.disc.draw( display );
 
 	root = root.create( '_drawn', true );
 };
