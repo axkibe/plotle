@@ -157,7 +157,7 @@ if( JION )
 				type : 'euclid_view'
 				// FIXME assign _view
 			},
-			_discJockey :
+			_disc :
 			{
 				comment : 'the master of discs',
 				type : 'disc_jockey'
@@ -167,7 +167,7 @@ if( JION )
 				comment : 'this root has been drawn on display',
 				type : 'boolean'
 			},
-			_formJockey :
+			_form :
 			{
 				comment : 'the master of forms',
 				type : 'form_jockey'
@@ -399,9 +399,9 @@ shell_root.startup =
 		'mode', mode,
 		'systemFocus', true,
 		'view', view,
-		'_discJockey', dj,
+		'_disc', dj,
 		'_drawn', false,
-		'_formJockey',
+		'_form',
 			form_jockey.create(
 				'hover', undefined,
 				'path', jion$path.empty.append( 'form' ),
@@ -546,8 +546,8 @@ prototype._init =
 				);
 		}
 
-		this._formJockey =
-			this._formJockey.create(
+		this._form =
+			this._form.create(
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
@@ -555,15 +555,11 @@ prototype._init =
 				'view', view
 			);
 
-		this._discJockey =
-			this._discJockey.create(
+		this._disc =
+			this._disc.create(
 				'access', access,
 				'action', action,
-				'hover',
-					// FIXME let it prepare
-					hover && hover.get( 0 ) === 'disc'
-					? hover
-					: undefined,
+				'hover', hover,
 				'mark', mark,
 				'mode', mode,
 				'spaceRef', spaceRef,
@@ -662,7 +658,7 @@ prototype.click =
 
 	screen = root._currentScreen( );
 
-	result = root._discJockey.click( p, shift, ctrl );
+	result = root._disc.click( p, shift, ctrl );
 
 	if( !result && screen )
 	{
@@ -723,7 +719,7 @@ prototype.cycleFormFocus =
 		dir
 	)
 {
-	root._formJockey.cycleFocus( name, dir );
+	root._form.cycleFocus( name, dir );
 };
 
 
@@ -773,7 +769,7 @@ prototype.dragStart =
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root._discJockey.dragStart( p, shift, ctrl );
+		bubble = root._disc.dragStart( p, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -876,7 +872,7 @@ prototype.mousewheel =
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root._discJockey.mousewheel( p, dir, shift, ctrl );
+		bubble = root._disc.mousewheel( p, dir, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -913,7 +909,7 @@ prototype.moveToSpace =
 		'spaceFabric', undefined
 	);
 
-	// FIXME move setPath into creator
+	// FUTURE move setPath into creator
 	root.setPath( loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
@@ -938,7 +934,7 @@ prototype.pointingHover =
 
 	if( screen && screen.showDisc )
 	{
-		result = root._discJockey.pointingHover( p, shift, ctrl );
+		result = root._disc.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
@@ -987,11 +983,11 @@ prototype.pushButton =
 	{
 		case 'disc' :
 
-			return root._discJockey.pushButton( path, false, false );
+			return root._disc.pushButton( path, false, false );
 
 		case 'form' :
 
-			return root._formJockey.pushButton( path, false, false );
+			return root._form.pushButton( path, false, false );
 
 		default :
 
@@ -1029,14 +1025,12 @@ prototype.setPath =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' :
-
-			throw new Error( 'FIXME' );
+		case 'disc' : throw new Error( 'FIXME' );
 
 		case 'form' :
 
 			root.create(
-				'_formJockey', root._formJockey.setPath( path, value, 1 )
+				'_form', root._form.setPath( path, value, 1 )
 			);
 
 			break;
@@ -1182,7 +1176,7 @@ prototype.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.setPath(
-				root._formJockey.get( 'nonExistingSpace' ).path
+				root._form.get( 'nonExistingSpace' ).path
 					.append( 'nonSpaceRef' ),
 				spaceRef
 			);
@@ -1250,7 +1244,7 @@ prototype.onAuth =
 
 	if( root._mode === 'login' )
 	{
-		root._formJockey.get( 'login' ).onAuth( request, reply );
+		root._form.get( 'login' ).onAuth( request, reply );
 
 		return;
 	}
@@ -1305,7 +1299,7 @@ prototype.onRegister =
 		return;
 	}
 
-	root._formJockey.get( 'signUp' ).onRegister( ok, user, message );
+	root._form.get( 'signUp' ).onRegister( ok, user, message );
 
 	return;
 };
@@ -1504,7 +1498,7 @@ prototype._currentScreen =
 		case 'user' :
 		case 'welcome' :
 
-			return root._formJockey.get( name );
+			return root._form.get( name );
 
 		default :
 
@@ -1546,7 +1540,7 @@ prototype.draw =
 
 	if( screen.showDisc )
 	{
-		root._discJockey.draw( display );
+		root._disc.draw( display );
 	}
 
 	root = root.create( '_drawn', true );

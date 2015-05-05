@@ -115,6 +115,22 @@ disc_jockey.concernsMark =
 
 
 /*
+| Returns the hover path if the disc jockey concerns about it.
+*/
+disc_jockey.concernsHover =
+	function(
+		hover
+	)
+{
+	return(
+		hover && hover.get( 0 ) === 'disc'
+		? hover
+		: undefined
+	);
+};
+
+
+/*
 | Initializes the disc jockey.
 */
 prototype._init =
