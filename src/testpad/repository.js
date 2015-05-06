@@ -9,7 +9,6 @@ var
 	fabric_doc,
 	fabric_note,
 	fabric_para,
-	fabric_space,
 	math_limit,
 	root,
 	testpad_repository;
@@ -27,7 +26,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'testpad_repository',
 		attributes :
 		{
@@ -42,10 +41,10 @@ if( JION )
 				comment : 'history of all changes',
 				type : [ 'undefined', 'change_wrapRay' ]
 			},
-			_space :
+			_note :
 			{
-				comment : 'the action the user is preparing',
-				type : [ 'undefined', 'fabric_space' ]
+				comment : 'the note',
+				type : [ 'undefined', 'fabric_note' ]
 			}
 		},
 		init : [ ]
@@ -73,48 +72,44 @@ nextcid = 1001;
 testpad_repository.prototype._init =
 	function( )
 {
-	// the current space;
-	if( !this._space )
+	// the current note;
+	if( !this._note )
 	{
-		this._space  =
-			fabric_space.create(
-				'twig:add',
-				'testnote',
-				fabric_note.create(
-					'doc',
-						/*
-						fabric_doc.create(
-							'twig:add', '1',
-								fabric_para.create(
-									'text', 'Why would I want to know that?'
-								),
-							'twig:add', '2',
-								fabric_para.create(
-									'text', 'Can we have Bender Burgers again?'
-								),
-							'twig:add', '3',
-								fabric_para.create(
-									'text', 'And so we say goodbye to '
-									+ 'our beloved pet, Nibbler.'
-								)
-						),
-						*/
-						fabric_doc.create(
-							'twig:add', '1',
-								fabric_para.create( 'text', 'Ameno' ),
-							'twig:add', '2',
-								fabric_para.create( 'text', 'Latire' ),
-							'twig:add', '3',
-								fabric_para.create( 'text', 'Dorime' )
-						),
-					'zone',
-						euclid_rect.create(
-							'pnw', euclid_point.create( 'x', 0, 'y', 0 ),
-							'pse', euclid_point.create( 'x', 100, 'y', 100 )
-						),
-					'fontsize', 13
-			)
-		);
+		this._note =
+			fabric_note.create(
+				'doc',
+					/*
+					fabric_doc.create(
+						'twig:add', '1',
+							fabric_para.create(
+								'text', 'Why would I want to know that?'
+							),
+						'twig:add', '2',
+							fabric_para.create(
+								'text', 'Can we have Bender Burgers again?'
+							),
+						'twig:add', '3',
+							fabric_para.create(
+								'text', 'And so we say goodbye to '
+								+ 'our beloved pet, Nibbler.'
+							)
+					),
+					*/
+					fabric_doc.create(
+						'twig:add', '1',
+							fabric_para.create( 'text', 'Ameno' ),
+						'twig:add', '2',
+							fabric_para.create( 'text', 'Latire' ),
+						'twig:add', '3',
+							fabric_para.create( 'text', 'Dorime' )
+					),
+				'zone',
+					euclid_rect.create(
+						'pnw', euclid_point.create( 'x', 0, 'y', 0 ),
+						'pse', euclid_point.create( 'x', 100, 'y', 100 )
+					),
+				'fontsize', 13
+			);
 	}
 
 	if( !this._changeWrapRay )
@@ -140,8 +135,8 @@ testpad_repository.prototype.get =
 		cwRay,
 		changeRay,
 		cZ,
-		seq,
-		space;
+		note,
+		seq;
 
 	cwRay = this._changeWrapRay;
 
@@ -149,7 +144,7 @@ testpad_repository.prototype.get =
 
 	seq = this.seq;
 
-	space = this._space;
+	note = this._note;
 
 	if( seq < 0 || seq > cZ )
 	{
@@ -162,11 +157,11 @@ testpad_repository.prototype.get =
 	{
 		changeRay = cwRay.get( a ).changeRay;
 
-		space = changeRay.invert.changeTree( space );
+		note = changeRay.invert.changeTree( note );
 	}
 
 	// returns the path requested
-	return space.getPath( path, len );
+	return note.getPath( path, len );
 };
 
 
@@ -201,7 +196,7 @@ testpad_repository.prototype.alter =
 		'repository',
 			this.create(
 				'_changeWrapRay', cwRay.append( cw ),
-				'_space', cw.changeTree( this._space )
+				'_note', cw.changeTree( this._note )
 			)
 	);
 };

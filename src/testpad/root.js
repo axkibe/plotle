@@ -101,12 +101,7 @@ if( NODE )
 }
 
 
-noteDocPath =
-	jion$path.empty
-	.append( 'space' ) // FIXME, this isn't needed
-	.append( 'twig' )
-	.append( 'testnote' )
-	.append( 'doc' );
+noteDocPath = jion$path.empty.append( 'note' ).append( 'doc' );
 
 
 /*
@@ -420,10 +415,7 @@ testpad_root.prototype.onMouseUp =
 		event
 	)
 {
-	if( event.button !==  0)
-	{
-		return;
-	}
+	if( event.button !==  0) return;
 
 	event.preventDefault( );
 
