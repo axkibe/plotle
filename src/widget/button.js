@@ -5,7 +5,6 @@
 
 var
 	euclid_display,
-	euclid_view,
 	jion,
 	result_hover,
 	root,
@@ -31,7 +30,7 @@ if( JION )
 		{
 			designFrame :
 			{
-				comment : 'designed frame (using anchors',
+				comment : 'designed frame ( using anchors )',
 				type : 'design_anchorRect'
 			},
 			down :
@@ -173,17 +172,14 @@ prototype.pointingHover =
 		p
 	)
 {
-	var
-		pp;
-
-	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
-	{
-		return undefined;
-	}
-
-	pp = p.sub( this.frame.pnw );
-
-	if( !this._display.withinSketch( this._shape, euclid_view.proper, pp ) )
+	if(
+		!this.visible
+		|| !this.frame.within( p )
+		|| !this._display.withinSketch(
+			this._shape,
+			p.sub( this.frame.pnw )
+		)
+	)
 	{
 		return undefined;
 	}
@@ -207,22 +203,13 @@ prototype.click =
 		// ctrl
 	)
 {
-	var
-		pp;
-
 	if(
-		!this.visible
-		||
-		!this.frame.within( euclid_view.proper, p )
-	)
-	{
-		return undefined;
-	}
-
-	pp = p.sub( this.frame.pnw );
-
-	if(
-		!this._display.withinSketch( this._shape, euclid_view.proper, pp )
+		!this.visible ||
+		!this.frame.within( p ) ||
+		!this._display.withinSketch(
+			this._shape,
+			p.sub( this.frame.pnw )
+		)
 	)
 	{
 		return undefined;
@@ -230,7 +217,7 @@ prototype.click =
 
 	root.pushButton( this.path );
 
-	return this.repeating ? 'drag' : false;
+	return false;
 };
 
 
@@ -341,12 +328,7 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	display.paint(
-		facet.fill,
-		facet.border,
-		this._shape,
-		euclid_view.proper
-	);
+	display.paint( facet.fill, facet.border, this._shape );
 
 	if( this.text )
 	{
@@ -386,7 +368,7 @@ jion.lazyValue(
 		}
 	}
 
-	if( this.icon ) this.icon.draw( display, euclid_view.proper );
+	if( this.icon ) this.icon.draw( display );
 
 	return display;
 }

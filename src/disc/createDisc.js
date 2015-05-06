@@ -9,7 +9,6 @@ var
 	disc_createDisc,
 	disc_disc,
 	euclid_display,
-	euclid_view,
 	jion,
 	math_half,
 	root;
@@ -190,14 +189,14 @@ jion.lazyValue(
 				'height', this.style.height
 			);
 
-		display.fill( this.fill, this.silhoutte, euclid_view.proper );
+		display.fill( this.fill, this.silhoutte );
 
 		for( r = 0, rZ = this.length; r < rZ; r++ )
 		{
 			this.atRank( r ).draw( display );
 		}
 
-		display.border( this.border, this.silhoutte, euclid_view.proper );
+		display.border( this.border, this.silhoutte );
 
 		return display;
 	}
@@ -314,10 +313,7 @@ prototype.pointingHover =
 	pp = p.sub( this.frame.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
-	{
-		return;
-	}
+	if( !display.withinSketch( this.silhoutte, pp ) ) return;
 
 	// it's on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -357,10 +353,7 @@ prototype.click =
 	pp = p.sub( this.frame.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
-	{
-		return;
-	}
+	if( !display.withinSketch( this.silhoutte, pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -431,7 +424,6 @@ disc_createDisc.prototype.dragStart =
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)
@@ -463,7 +455,6 @@ prototype.mousewheel =
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)

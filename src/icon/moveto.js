@@ -121,15 +121,14 @@ prototype._init =
 */
 prototype.draw =
 	function(
-		display,
-		view
+		display
 	)
 {
-	display.paint( this.fill, this.border, this._arrow, view );
+	display.paint( this.fill, this.border, this._arrow );
 
-	display.paint( this.fill, this.border, this._base1, view );
+	display.paint( this.fill, this.border, this._base1 );
 
-	display.paint( this.fill, this.border, this._base2, view );
+	display.paint( this.fill, this.border, this._base2 );
 };
 
 

@@ -236,6 +236,8 @@ prototype.onRegister =
 			message
 		);
 
+		userInput = this.get( 'userInput' );
+
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.create(

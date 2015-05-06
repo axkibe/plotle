@@ -191,29 +191,36 @@ jion.lazyValue(
 prototype.within =
 	function
 	(
-		view,
+		view, // FIXME
 		p
 	)
 {
 	var
 		pp;
 
-	pp = view.depoint( p );
+	if( arguments.length === 2 )
+	{
+		pp = view.depoint( p );
+	}
+	else
+	{
+		p = pp = view;
+	}
 
 	if(
 		pp.x < this.pnw.x
-		||
-		pp.y < this.pnw.y
-		||
-		pp.x > this.pse.x
-		||
-		pp.y > this.pse.y
+		|| pp.y < this.pnw.y
+		|| pp.x > this.pse.x
+		|| pp.y > this.pse.y
 	)
 	{
 		return false;
 	}
 
-	return this.shape.within( view, p );
+	if( arguments.length === 2 )
+		return this.shape.within( view, p );
+	else
+		return this.shape.within( p );
 };
 
 

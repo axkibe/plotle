@@ -13,7 +13,6 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
-	euclid_view,
 	jion,
 	result_hover,
 	root,
@@ -274,14 +273,11 @@ jion.lazyValue(
 			pm,
 			size,
 			value,
-			view,
 			w,
 			x,
 			y;
 
 		value = this.value;
-
-		view = euclid_view.proper;
 
 		size = this.font.size;
 
@@ -289,12 +285,9 @@ jion.lazyValue(
 
 		pitch = this._pitch;
 
-		x = view.x( pitch.x ),
+		x = pitch.x;
 
-		y =
-			view.y( pitch.y )
-			+
-			Math.round( size * 0.7 );
+		y =	pitch.y + Math.round( size * 0.7 );
 
 		h = Math.round( size * 0.32 ),
 
@@ -370,7 +363,7 @@ jion.lazyValue(
 
 		font = this.font;
 
-		display.fill( facet.fill, shape, euclid_view.proper );
+		display.fill( facet.fill, shape );
 
 		if( this.password )
 		{
@@ -382,7 +375,7 @@ jion.lazyValue(
 				a++
 			)
 			{
-				display.fill( euclid_color.black, pm[ a ], euclid_view.proper );
+				display.fill( euclid_color.black, pm[ a ] );
 			}
 		}
 		else
@@ -404,7 +397,7 @@ jion.lazyValue(
 			this._drawCaret( display );
 		}
 
-		display.border( facet.border, shape, euclid_view.proper );
+		display.border( facet.border, shape );
 
 		return display;
 	}
@@ -816,18 +809,10 @@ prototype.pointingHover =
 		// ctrl
 	)
 {
-	var
-		pp;
-
-	if( !this.frame.within( euclid_view.proper, p )
+	if(
+		!this.frame.within( p )
+		|| !this._shape.within( p.sub( this.frame.pnw ) )
 	)
-	{
-		return undefined;
-	}
-
-	pp = p.sub( this.frame.pnw );
-
-	if( !this._shape.within( euclid_view.proper, pp ) )
 	{
 		return undefined;
 	}
@@ -854,22 +839,11 @@ prototype.click =
 	var
 		pp;
 
-	if( !p || !this.frame.within( euclid_view.proper, p ) )
-	{
-		return undefined;
-	}
+	if( !p || !this.frame.within( p ) ) return undefined;
 
 	pp = p.sub( this.frame.pnw );
 
-	if(
-		!this._shape.within(
-			euclid_view.proper,
-			pp
-		)
-	)
-	{
-		return undefined;
-	}
+	if( !this._shape.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',

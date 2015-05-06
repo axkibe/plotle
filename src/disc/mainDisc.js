@@ -11,7 +11,6 @@ var
 	disc_mainDisc,
 	change_shrink,
 	euclid_display,
-	euclid_view,
 	jion,
 	root;
 
@@ -262,7 +261,7 @@ jion.lazyValue(
 				'height', this.style.height
 			);
 
-		display.fill( this.fill, this.silhoutte, euclid_view.proper );
+		display.fill( this.fill, this.silhoutte );
 
 		for(
 			r = 0, rZ = this.length;
@@ -273,7 +272,7 @@ jion.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.border( this.border, this.silhoutte, euclid_view.proper );
+		display.border( this.border, this.silhoutte );
 
 		return display;
 	}

@@ -137,11 +137,10 @@ prototype._init =
 */
 prototype.draw =
 	function(
-		display,
-		view
+		display
 	)
 {
-	display.paint( this.fill, this.border, this._x, view );
+	display.paint( this.fill, this.border, this._x );
 };
 
 

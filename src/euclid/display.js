@@ -360,6 +360,11 @@ euclid_display.prototype.border =
 		a,
 		aZ;
 
+	if( arguments.length === 2 )
+	{
+		view = euclid_view.proper;
+	}
+
 	if( border.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = border.length; a < aZ; a++ )
@@ -387,13 +392,10 @@ euclid_display.prototype.fill =
 	var
 		cx;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	if( arguments.length === 2 )
+	{
+		view = euclid_view.proper;
+	}
 
 	cx = this._cx;
 
@@ -474,6 +476,8 @@ euclid_display.prototype.paint =
 		a,
 		aZ,
 		cx;
+
+	if( arguments.length === 3 ) view = euclid_view.proper;
 
 	cx = this._cx;
 
@@ -922,9 +926,9 @@ euclid_display.prototype._border =
 	var
 		cx;
 
-	if( border.reflect !== 'euclid_border' )
+	if( arguments.length === 2 )
 	{
-		throw new Error( );
+		view = euclid_view.proper;
 	}
 
 	cx = this._cx;

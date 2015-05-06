@@ -93,11 +93,10 @@ prototype._init =
 */
 prototype.draw =
 	function(
-		display,
-		view
+		display
 	)
 {
-	display.paint( this.fill, this.border, this._check, view );
+	display.paint( this.fill, this.border, this._check );
 };
 
 
