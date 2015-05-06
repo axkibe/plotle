@@ -1,7 +1,5 @@
 /*
 | A testing pad for the CC/OT engine.
-|
-| FIXME remove space from path an all the chopping
 */
 
 

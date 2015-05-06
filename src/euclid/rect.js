@@ -594,10 +594,12 @@ euclid_rect.prototype.equals =
 
 /*
 | Returns true if point is within this rect.
+|
+| FIXME remove view here
 */
 euclid_rect.prototype.within =
 	function(
-		view,
+		view, // OR just p
 		p
 	)
 {

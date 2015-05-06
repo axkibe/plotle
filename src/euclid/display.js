@@ -8,6 +8,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	euclid_view,
 	jion,
 	math_half;
 
@@ -145,7 +146,7 @@ euclid_display.prototype.clear =
 euclid_display.prototype.clip =
 	function(
 		shape,
-		view,
+		view,  // FIXME remove
 		border
 	)
 {
@@ -350,9 +351,9 @@ euclid_display.prototype.drawImage =
 */
 euclid_display.prototype.border =
 	function(
-		border,  // the border
+		border, // the border
 		shape,  // an object which has sketch defined
-		view
+		view    // FIXME remove
 	)
 {
 	var
@@ -380,7 +381,7 @@ euclid_display.prototype.fill =
 	function(
 		fill,   // the fill
 		shape,  // an object which has sketch defined
-		view
+		view    // FIXME remove
 	)
 {
 	var
@@ -466,7 +467,7 @@ euclid_display.prototype.paint =
 		fill,
 		border,
 		shape,
-		view
+		view  // FIXME remove
 	)
 {
 	var
@@ -708,7 +709,7 @@ jion.lazyValue(
 euclid_display.prototype.reverseClip =
 	function(
 		shape,
-		view,
+		view,  // FIXME remove
 		border
 	)
 {
@@ -782,7 +783,7 @@ euclid_display.prototype.scale =
 euclid_display.prototype.withinSketch =
 	function(
 		shape,
-		view,
+		view,   // FIXME remove
 		p
 	)
 {
@@ -791,20 +792,15 @@ euclid_display.prototype.withinSketch =
 
 	cx = this._cx;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( p.reflect !== 'euclid_point' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	cx.beginPath( );
+
+	if( arguments.length === 2 )
+	{
+		// FIXME remove
+		p = view;
+
+		view = euclid_view.proper;
+	}
 
 	this._sketch( shape, 0, 0.5, view );
 
@@ -824,7 +820,7 @@ euclid_display.prototype._colorStyle =
 	function(
 		style,
 		shape,
-		view
+		view   // FIXME
 	)
 {
 	var
@@ -918,9 +914,9 @@ euclid_display.prototype._colorStyle =
 */
 euclid_display.prototype._border =
 	function(
-		border,  // the euclid_border
+		border, // the euclid_border
 		shape,  // an object which has sketch defined
-		view
+		view    // FIXME
 	)
 {
 	var
@@ -1001,7 +997,7 @@ euclid_display.prototype._sketch =
 		euclid, // the euclidian object to sketch
 		border, // additional border
 		twist,  // 0.5 offset in case of borders vs. fills
-		view    // the view
+		view    // the view FIXME
 	)
 {
 	switch( euclid.reflect )
@@ -1034,7 +1030,7 @@ euclid_display.prototype._sketchRect =
 		rect,
 		border,
 		twist,
-		view
+		view   // FIXME
 	)
 {
 	var
@@ -1074,7 +1070,7 @@ euclid_display.prototype._sketchShape =
 		shape,
 		border,
 		twist,
-		view
+		view   // FIXME
 	)
 {
 	var

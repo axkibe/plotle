@@ -26,26 +26,26 @@ if( JION )
 	return{
 		id : 'change_split',
 		attributes :
+		{
+			path :
 			{
-				path :
-				{
-					comment : 'split at this path',
-					json : true,
-					type : 'jion$path'
-				},
-				at1 :
-				{
-					comment : 'insert at this place begin',
-					json : true,
-					type : 'integer'
-				},
-				path2 :
-				{
-					comment : 'split created this new/next path',
-					json : true,
-					type : 'jion$path'
-				}
+				comment : 'split at this path',
+				json : true,
+				type : 'jion$path'
 			},
+			at1 :
+			{
+				comment : 'insert at this place begin',
+				json : true,
+				type : 'integer'
+			},
+			path2 :
+			{
+				comment : 'split created this new/next path',
+				json : true,
+				type : 'jion$path'
+			}
+		},
 		init : [ ]
 	};
 }

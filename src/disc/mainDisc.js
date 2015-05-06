@@ -366,28 +366,17 @@ prototype.pointingHover =
 	)
 {
 	var
-		display,
 		pp,
 		r,
 		reply,
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
-
-	display = this._display,
+	if( !this.frame.within( p ) ) return;
 
 	pp = p.sub( this.frame.pnw );
 
-	if(
-		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
-	)
-	{
-		return;
-	}
+	if( !this._display.withinSketch( this.silhoutte, pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -433,22 +422,14 @@ prototype.click =
 
 	pp = p.sub( this.frame.pnw );
 
-	if(
-		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
-	)
-	{
-		return;
-	}
+	if( !display.withinSketch( this.silhoutte, pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		reply = this.atRank( r ).click( pp, shift, ctrl );
 
-		if( reply )
-		{
-			return reply;
-		}
+		if( reply ) return reply;
 	}
 
 	return false;
@@ -479,15 +460,11 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.frame.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)
@@ -524,15 +501,11 @@ prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.frame.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)
