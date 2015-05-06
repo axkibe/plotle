@@ -48,7 +48,6 @@ if( JION )
 			font :
 			{
 				comment : 'font of the text',
-				// FIXME why undefined?
 				type : [ 'undefined', 'euclid_font' ]
 			},
 			hover :
@@ -181,7 +180,6 @@ jion.lazyValue(
 		font,
 		newline,
 		text,
-		textPos,
 		tZ,
 		x,
 		y;
@@ -212,26 +210,20 @@ jion.lazyValue(
 
 		font = this.font;
 
-		// FIXME put into _init
-		textPos =
-			this.textDesignPos.compute(
-				this.frame.zeropnw
-			);
-
 		if( newline === undefined )
 		{
 			display.paintText(
 				'text', this.text,
-				'p', textPos,
+				'p', this.textPos,
 				'font', font,
 				'rotate', this.textRotation
 			);
 		}
 		else
 		{
-			x = textPos.x;
+			x = this.textPos.x;
 
-			y = textPos.y;
+			y = this.textPos.y;
 
 			text = this.text.split( '\n' );
 
@@ -405,6 +397,19 @@ prototype.dragStop =
 {
 	root.create( 'action', undefined );
 };
+
+
+/*
+| The computed position of the button text.
+*/
+jion.lazyValue(
+	prototype,
+	'textPos',
+	function( )
+{
+	return this.textDesignPos.compute( this.frame.zeropnw );
+}
+);
 
 
 } )( );
