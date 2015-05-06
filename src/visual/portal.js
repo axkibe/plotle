@@ -256,27 +256,18 @@ prototype.click =
 
 	moveToButton = this._moveToButton;
 
-	pp =
-		view
-		.depoint( p )
-		.sub( zone.pnw );
+	pp = view.depoint( p ).sub( zone.pnw );
 
-	if( moveToButton.shape.within( euclid_view.proper, pp ) )
+	if( moveToButton.shape.within( pp ) )
 	{
 		this._moveTo( );
 
 		return true;
 	}
 
-	if( access != 'rw' )
-	{
-		return false;
-	}
+	if( access != 'rw' ) return false;
 
-	pp =
-		view
-		.depoint( p )
-		.sub( zone.pnw );
+	pp = view.depoint( p ).sub( zone.pnw );
 
 	for( field in spaceFields )
 	{
@@ -284,7 +275,7 @@ prototype.click =
 
 		sf = this[ fieldLazyName ];
 
-		if( sf.silhoutte.within( euclid_view.proper, pp ) )
+		if( sf.silhoutte.within( pp ) )
 		{
 			setMark =
 				visual_mark_caret.create(
@@ -556,7 +547,7 @@ prototype.pointingHover =
 	pp = view.depoint( p ).sub( zone.pnw );
 
 	if(
-		moveToButton.shape.within( euclid_view.proper, pp )
+		moveToButton.shape.within( pp )
 	)
 	{
 		return(

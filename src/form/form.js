@@ -189,7 +189,7 @@ form_form.draw =
 	var
 		r;
 
-	display.fill( gruga_formFacet.fill, display.silhoutte, euclid_view.proper );
+	display.fill( gruga_formFacet.fill, display.silhoutte );
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{

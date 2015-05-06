@@ -109,8 +109,7 @@ prototype.draw =
 	display.paint(
 		gruga_scrollbar.fill,
 		gruga_scrollbar.border,
-		this.getArea( view ),
-		euclid_view.proper
+		this.getArea( view )
 	);
 };
 

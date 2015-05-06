@@ -130,7 +130,7 @@ euclid_arrow.connect =
 	{
 		p1 = shape1;
 	}
-	else if( shape1.within( euclid_view.proper, pc2 ) )
+	else if( shape1.within( pc2 ) )
 	{
 		p1 = pc1;
 	}
@@ -143,7 +143,7 @@ euclid_arrow.connect =
 	{
 		p2 = shape2;
 	}
-	else if( shape2.within( euclid_view.proper, pc1 ) )
+	else if( shape2.within( pc1 ) )
 	{
 		p2 = pc2;
 	}

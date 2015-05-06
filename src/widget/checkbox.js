@@ -145,7 +145,7 @@ prototype.pointingHover =
 		p
 	)
 {
-	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
+	if( !this.visible || !this.frame.within( p ) )
 	{
 		return undefined;
 	}
@@ -182,12 +182,9 @@ prototype.click =
 		// ctrl
 	)
 {
-	if( !this.visible )
-	{
-		return undefined;
-	}
+	if( !this.visible ) return undefined;
 
-	if( this.frame.within( euclid_view.proper, p ) )
+	if( this.frame.within( p ) )
 	{
 		root.setPath( this.path.append( 'checked' ), !this.checked );
 
@@ -272,12 +269,9 @@ prototype.draw =
 			'focus', !!this.mark
 		);
 
-	display.paint( facet.fill, facet.border, this.frame, euclid_view.proper );
+	display.paint( facet.fill, facet.border, this.frame );
 
-	if( this.checked )
-	{
-		this.checkIcon.draw( display, euclid_view.proper );
-	}
+	if( this.checked ) this.checkIcon.draw( display );
 };
 
 

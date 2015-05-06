@@ -611,7 +611,6 @@ euclid_rect.prototype.within =
 
 	if( arguments.length === 2 )
 	{
-		// FIXME require view to be set
 		x = view ? view.dex( p.x ) : p.x;
 
 		y = view ? view.dey( p.y ) : p.y;
