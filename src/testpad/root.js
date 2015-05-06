@@ -560,7 +560,7 @@ testpad_root.prototype.send =
 			path =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line ] )
+				.append( doc.getKey( action.line ) )
 				.append( 'text' );
 
 			root.alter(
@@ -581,7 +581,7 @@ testpad_root.prototype.send =
 			path =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line ] )
+				.append( doc.getKey( action.line ) )
 				.append( 'text' );
 
 			root.alter(
@@ -610,7 +610,7 @@ testpad_root.prototype.send =
 			path =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line ] )
+				.append( doc.getKey( action.line ) )
 				.append( 'text' );
 
 			root.alter(
@@ -628,13 +628,13 @@ testpad_root.prototype.send =
 			path =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line - 1 ] )
+				.append( doc.getKey( action.line - 1 ) )
 				.append( 'text' );
 
 			path2 =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line ] )
+				.append( doc.getKey( action.line ) )
 				.append( 'text' );
 
 			root.alter(

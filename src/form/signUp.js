@@ -107,7 +107,7 @@ jion.lazyValue( prototype, 'attentionCenter', form_form.getAttentionCenter );
 prototype.clear =
 	function( )
 {
-	// FIXME make this in one call, somehow
+	// FUTURE make this in one call, somehow
 
 	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
 
