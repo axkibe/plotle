@@ -1,7 +1,5 @@
 /*
 | An input field.
-|
-| FIXME remove all 'owner' referenced (including other widgets).
 */
 
 
@@ -638,11 +636,9 @@ prototype._keyEnter =
 | User pressed down key.
 */
 prototype._keyDown =
-	function(
-		owner
-	)
+	function( )
 {
-	owner.cycleFocus( 1 );
+	root.cycleFormFocus( this.path.get( 2 ), 1 );
 };
 
 
@@ -757,11 +753,9 @@ prototype._keyRight =
 | User pressed up key.
 */
 prototype._keyUp =
-	function(
-		owner
-	)
+	function( )
 {
-	owner.cycleFocus( -1 );
+	root.cycleFormFocus( this.path.get( 2 ), -1 );
 
 	return;
 };
@@ -772,67 +766,30 @@ prototype._keyUp =
 */
 prototype.specialKey =
 	function(
-		key,
-		owner
+		key
 		// shift
 		// ctrl
 	)
 {
 	switch( key )
 	{
-		case 'backspace' :
+		case 'backspace' : this._keyBackspace( ); break;
 
-			this._keyBackspace( owner );
+		case 'del' : this._keyDel( ); break;
 
-			break;
+		case 'down' : this._keyDown( ); break;
 
-		case 'del' :
+		case 'end' : this._keyEnd( ); break;
 
-			this._keyDel( owner );
+		case 'enter' : this._keyEnter( ); break;
 
-			break;
+		case 'left' : this._keyLeft( ); break;
 
-		case 'down' :
+		case 'pos1' : this._keyPos1( ); break;
 
-			this._keyDown( owner );
+		case 'right' : this._keyRight( ); break;
 
-			break;
-
-		case 'end' :
-
-			this._keyEnd( owner );
-
-			break;
-
-		case 'enter' :
-
-			this._keyEnter( owner );
-
-			break;
-
-		case 'left' :
-
-			this._keyLeft( owner );
-
-			break;
-
-		case 'pos1' :
-
-			this._keyPos1( owner );
-
-			break;
-
-		case 'right' :
-
-			this._keyRight( owner );
-
-			break;
-
-		case 'up' :
-
-			this._keyUp( owner );
-
-			break;
+		case 'up' : this._keyUp( ); break;
 	}
 };
 

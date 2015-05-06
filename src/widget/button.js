@@ -166,6 +166,150 @@ prototype.focusable = true;
 
 
 /*
+| Mouse hover.
+*/
+prototype.pointingHover =
+	function(
+		p
+	)
+{
+	var
+		pp;
+
+	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
+	{
+		return undefined;
+	}
+
+	pp = p.sub( this.frame.pnw );
+
+	if( !this._display.withinSketch( this._shape, euclid_view.proper, pp ) )
+	{
+		return undefined;
+	}
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'pointer'
+		)
+	);
+};
+
+
+/*
+| User clicked.
+*/
+prototype.click =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	var
+		pp;
+
+	if(
+		!this.visible
+		||
+		!this.frame.within( euclid_view.proper, p )
+	)
+	{
+		return undefined;
+	}
+
+	pp = p.sub( this.frame.pnw );
+
+	if(
+		!this._display.withinSketch( this._shape, euclid_view.proper, pp )
+	)
+	{
+		return undefined;
+	}
+
+	root.pushButton( this.path );
+
+	return this.repeating ? 'drag' : false;
+};
+
+
+/*
+| Any normal key for a button having focus triggers a push.
+*/
+prototype.input =
+	function(
+		// text
+	)
+{
+	root.pushButton( this.path );
+
+	return true;
+};
+
+
+/*
+| Draws the button.
+*/
+prototype.draw =
+	function(
+		display
+	)
+{
+	if( !this.visible ) return;
+
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.frame.pnw
+	);
+};
+
+
+/*
+| Stops a ReButton action.
+*/
+prototype.dragStop =
+	function( )
+{
+	root.create( 'action', undefined );
+};
+
+
+/*
+| Special keys for buttons having focus
+*/
+prototype.specialKey =
+	function(
+		key
+		// shift
+		// ctrl
+	)
+{
+	switch( key )
+	{
+		case 'down' : root.cycleFormFocus( this.path.get( 2 ), 1 ); return;
+
+		case 'up' : root.cycleFormFocus( this.path.get( 2 ), -1 ); return;
+
+		case 'enter' : root.pushButton( this.path ); return;
+	}
+};
+
+
+/*
+| The computed position of the button text.
+*/
+jion.lazyValue(
+	prototype,
+	'textPos',
+	function( )
+{
+	return this.textDesignPos.compute( this.frame.zeropnw );
+}
+);
+
+
+/*
 | The button's display.
 */
 jion.lazyValue(
@@ -242,174 +386,12 @@ jion.lazyValue(
 		}
 	}
 
-	if( this.icon )
-	{
-		this.icon.draw( display, euclid_view.proper );
-	}
+	if( this.icon ) this.icon.draw( display, euclid_view.proper );
 
 	return display;
 }
 );
 
-
-/*
-| Mouse hover.
-*/
-prototype.pointingHover =
-	function(
-		p
-	)
-{
-	var
-		pp;
-
-	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
-	{
-		return undefined;
-	}
-
-	pp = p.sub( this.frame.pnw );
-
-	if( !this._display.withinSketch( this._shape, euclid_view.proper, pp ) )
-	{
-		return undefined;
-	}
-
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'pointer'
-		)
-	);
-};
-
-
-/*
-| User clicked.
-*/
-prototype.click =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	var
-		pp;
-
-	if(
-		!this.visible
-		||
-		!this.frame.within( euclid_view.proper, p )
-	)
-	{
-		return undefined;
-	}
-
-	pp = p.sub( this.frame.pnw );
-
-	if(
-		!this._display.withinSketch( this._shape, euclid_view.proper, pp )
-	)
-	{
-		return undefined;
-	}
-
-	root.pushButton( this.path );
-
-	return this.repeating ? 'drag' : false;
-};
-
-
-/*
-| Special keys for buttons having focus
-*/
-prototype.specialKey =
-	function(
-		key,
-		owner
-		// shift
-		// ctrl
-	)
-{
-	switch( key )
-	{
-		case 'down' :
-
-			owner.cycleFocus( 1 );
-
-			return;
-
-		case 'up' :
-
-			owner.cycleFocus( -1 );
-
-			return;
-
-		case 'enter' :
-
-			root.pushButton( this.path );
-
-			return;
-	}
-};
-
-
-/*
-| Any normal key for a button having focus triggers a push.
-*/
-prototype.input =
-	function(
-		// text
-	)
-{
-	root.pushButton( this.path );
-
-	return true;
-};
-
-
-/*
-| Draws the button.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	if( !this.visible )
-	{
-		return;
-	}
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.frame.pnw
-	);
-};
-
-
-/*
-| Stops a ReButton action.
-*/
-prototype.dragStop =
-	function( )
-{
-	root.create( 'action', undefined );
-};
-
-
-/*
-| The computed position of the button text.
-*/
-jion.lazyValue(
-	prototype,
-	'textPos',
-	function( )
-{
-	return this.textDesignPos.compute( this.frame.zeropnw );
-}
-);
 
 
 } )( );

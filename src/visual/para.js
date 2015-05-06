@@ -99,9 +99,9 @@ if( NODE )
 	visual_para = jion.this( module, 'source' );
 
 	// FIXME node shouldnt need this
-	visual_para.prototype._init = function( ) { };
+	//visual_para.prototype._init = function( ) { };
 
-	visual_para.concernsMark = function( o ) { return o; };
+	//visual_para.concernsMark = function( o ) { return o; };
 
 	return;
 }

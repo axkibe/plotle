@@ -124,10 +124,7 @@ prototype.draw =
 		display
 	)
 {
-	if( !this.visible )
-	{
-		return;
-	}
+	if( !this.visible ) return;
 
 	display.paintText(
 		'text', this.text,

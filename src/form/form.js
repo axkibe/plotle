@@ -149,10 +149,7 @@ form_form.cycleFocus =
 
 	path = this.mark.widgetPath;
 
-	if( path.isEmpty )
-	{
-		return;
-	}
+	if( path.isEmpty ) return;
 
 	rank = this.rankOf( path.get( 4 ) );
 
@@ -162,10 +159,7 @@ form_form.cycleFocus =
 	{
 		rank = ( rank + dir + length ) % length;
 
-		if( rank === rs )
-		{
-			break;
-		}
+		if( rank === rs ) break;
 
 		ve = this.atRank( rank );
 
@@ -276,10 +270,7 @@ form_form.input =
 
 	widget = this.focusedWidget;
 
-	if( widget )
-	{
-		widget.input( text );
-	}
+	if( widget ) widget.input( text );
 };
 
 
@@ -298,18 +289,11 @@ form_form.pointingHover =
 		rZ,
 		res;
 
-	for(
-		r = 0, rZ = this.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		res = this.atRank( r ).pointingHover( p, shift, ctrl );
 
-		if( res )
-		{
-			return res;
-		}
+		if( res ) return res;
 	}
 
 	return result_hover.create( 'cursor', 'default' );
@@ -343,7 +327,7 @@ form_form.specialKey =
 		return;
 	}
 
-	widget.specialKey( key, this, shift, ctrl );
+	widget.specialKey( key, shift, ctrl );
 };
 
 

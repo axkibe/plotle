@@ -205,8 +205,7 @@ prototype.click =
 */
 prototype.specialKey =
 	function(
-		key,
-		owner
+		key
 		// shift
 		// ctrl
 	)
@@ -215,13 +214,13 @@ prototype.specialKey =
 	{
 		case 'down' :
 
-			owner.cycleFocus( +1 );
+			root.cycleFormFocus( this.path.get( 2 ), 1 );
 
 			return;
 
 		case 'up' :
 
-			owner.cycleFocus( -1 );
+			root.cycleFormFocus( this.path.get( 2 ), -1 );
 
 			return;
 
