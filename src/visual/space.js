@@ -854,7 +854,7 @@ prototype.dragStop =
 
 					// FIXME might take label right away!
 					val =
-						fabric_label.fabric.create(
+						fabric_label.create(
 							'fontsize', label.doc.fontsize,
 							'pnw', label.pnw,
 							'doc',

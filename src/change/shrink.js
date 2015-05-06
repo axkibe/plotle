@@ -36,17 +36,13 @@ if( JION )
 			{
 				comment : 'value tree had',
 				json : true,
-				// FIXME can this ever be undefined?
-				type :
-					require( '../typemaps/spaceVal' )
-					.concat( [ 'undefined' ] )
+				type : require( '../typemaps/spaceVal' )
 			},
 			rank :
 			{
 				comment : 'rank of new node',
 				json : true,
-				// FIXME can this ever be undefined?
-				type : [ 'undefined', 'integer' ]
+				type : 'integer'
 			}
 		},
 		init : [ ]
