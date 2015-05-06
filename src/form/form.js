@@ -62,7 +62,9 @@ form_form.init =
 		widgetProto = twig[ name ];
 
 		// FIXME only when not having widgetProto
-		path = this.path.append( 'twig' ).append( name );
+		path =
+			widgetProto.path
+			|| this.path.append( 'twig' ).append( name );
 
 		twig[ name ] =
 			widgetProto.create(

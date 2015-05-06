@@ -39,8 +39,8 @@ if( JION )
 			color :
 			{
 				comment : 'color',
-				type : 'euclid_color'
-				// FIXME default to black
+				type : 'euclid_color',
+				defaultValue : 'euclid_color.black'
 			}
 		}
 	};

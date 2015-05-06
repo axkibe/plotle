@@ -36,11 +36,9 @@ if( JION )
 					require( '../typemaps/visualItems' )
 					.concat( [ 'undefined' ] )
 			},
-			// FIXME difference between transItem and model
-			//       is still wonky.
 			model :
 			{
-				comment : 'a transient item used as model',
+				comment : 'a transient item used as original model',
 				type :
 					require( '../typemaps/visualItems' )
 					.concat( [ 'undefined' ] )
