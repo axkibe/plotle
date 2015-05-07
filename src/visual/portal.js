@@ -245,10 +245,7 @@ prototype.click =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.silhoutte.within( view, p ) )
-	{
-		return false;
-	}
+	if( !this.vSilhoutte.within( p ) ) return false;
 
 	moveToButton = this._moveToButton;
 
@@ -503,7 +500,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	return this.silhoutte.within( view, p );
+	return this.vSilhoutte.within( p );
 };
 
 
@@ -528,7 +525,7 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.silhoutte.within( view, p  ) )
+	if( !this.vSilhoutte.within( p ) )
 	{
 		return;
 	}
@@ -538,9 +535,7 @@ prototype.pointingHover =
 
 	pp = view.depoint( p ).sub( zone.pnw );
 
-	if(
-		moveToButton.shape.within( pp )
-	)
+	if( moveToButton.shape.within( pp ) )
 	{
 		return(
 			result_hover.create(
