@@ -8,6 +8,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	euclid_view,
 	fabric_docItem,
 	gruga_label,
 	jion,
@@ -118,14 +119,10 @@ prototype._init =
 	)
 {
 	var
-		doc,
-		fabric,
-		height,
-		pnw;
+		fabric;
 
 	fabric = this.fabric;
 
-	doc =
 	this.doc =
 		( inherit && inherit.doc || visual_doc ).create(
 			'fabric', fabric.doc,
@@ -136,20 +133,6 @@ prototype._init =
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),
 			'view', this.view.home
-		);
-
-	height = doc.height;
-
-	pnw = this.pnw;
-
-	this.zone =
-		euclid_rect.create(
-			'pnw', pnw,
-			'pse',
-				pnw.add(
-					Math.round( Math.max( doc.widthUsed + 4, height / 4 ) ),
-					Math.round( height + 2)
-				)
 		);
 };
 
@@ -299,20 +282,6 @@ function( )
 
 
 /*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'pnw',
-function( )
-{
-	return this.fabric.pnw;
-}
-);
-
-
-
-/*
 | Returns a handles jion.
 */
 jion.lazyValue(
@@ -323,9 +292,9 @@ jion.lazyValue(
 	return(
 		visual_handlesBezel.create(
 			'handles', visual_label.handles,
-			'silhoutte', this.silhoutte,
-			'view', this.view,
-			'zone', this.zone
+			'silhoutte', this.vSilhoutte,
+			'view', euclid_view.proper,
+			'zone', this.vZone
 		)
 	);
 }
@@ -371,6 +340,19 @@ prototype.mousewheel =
 
 
 /*
+| Forwards fabric settings.
+*/
+jion.lazyValue(
+	prototype,
+	'pnw',
+function( )
+{
+	return this.fabric.pnw;
+}
+);
+
+
+/*
 | User is hovering their pointing device over something.
 */
 prototype.pointingHover = visual_item.pointingHover;
@@ -384,6 +366,8 @@ prototype.positioning = 'pnw/fontsize';
 
 /*
 | The item's silhoutte.
+|
+| FUTURE remove in favor of vSilhoutte
 */
 jion.lazyValue(
 	prototype,
@@ -419,6 +403,46 @@ prototype.scrollPage = function( ){ };
 
 
 /*
+| Pnw in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vPnw',
+function( )
+{
+	return this.view.point( this.fabric.pnw );
+}
+);
+
+
+/*
+| The item's silhoutte in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vSilhoutte',
+	function( )
+	{
+		return this.view.rect( this.silhoutte );
+	}
+);
+
+
+
+/*
+| Zone in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZone',
+function( )
+{
+	return this.view.rect( this.zone );
+}
+);
+
+
+/*
 | The items silhoutte anchored at zero.
 */
 jion.lazyValue(
@@ -444,6 +468,40 @@ jion.lazyValue(
 	}
 );
 
+
+/*
+| Calculates the labels zone, FUTURE vZone only
+*/
+visual_label.zone =
+	function( )
+{
+	var
+		doc,
+		pnw;
+
+	pnw = this.fabric.pnw;
+
+	doc = this.doc;
+
+	return(
+		euclid_rect.create(
+			'pnw', pnw,
+			'pse',
+				pnw.add(
+					Math.round(
+						Math.max( doc.widthUsed + 4, doc.height / 4 )
+					),
+					Math.round( doc.height + 2 )
+			)
+		)
+	);
+};
+
+
+/*
+| Calculates the labels zone, FUTURE vZone only
+*/
+jion.lazyValue( prototype, 'zone', visual_label.zone );
 
 
 /*

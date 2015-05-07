@@ -376,6 +376,12 @@ jion.lazyValue(
 
 
 /*
+| Calculates the labels zone, FUTURE vZone only
+*/
+jion.lazyValue( prototype, 'zone', visual_label.zone );
+
+
+/*
 | The relation's display.
 */
 jion.lazyValue(
