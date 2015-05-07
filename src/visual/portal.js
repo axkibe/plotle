@@ -12,7 +12,6 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
-	euclid_view,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,
@@ -473,7 +472,6 @@ jion.lazyValue(
 			visual_handlesBezel.create(
 				'handles', visual_portal.handles,
 				'silhoutte', this.vSilhoutte,
-				'view', euclid_view.proper,
 				'zone', this.vZone
 			)
 		);

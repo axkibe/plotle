@@ -225,9 +225,8 @@ jion.lazyValue(
 		return(
 			visual_handlesBezel.create(
 				'handles', visual_relation.handles,
-				'silhoutte', this.silhoutte,
-				'view', this.view,
-				'zone', this.zone
+				'silhoutte', this.vSilhoutte,
+				'zone', this.vZone
 			)
 		);
 	}
@@ -376,7 +375,19 @@ jion.lazyValue(
 
 
 /*
-| Calculates the labels zone, FUTURE vZone only
+| Calculates the relations silhoutte for current view.
+*/
+jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte );
+
+
+/*
+| Calculates the relations zone for current view.
+*/
+jion.lazyValue( prototype, 'vZone', visual_label.vZone );
+
+
+/*
+| Calculates the relations zone, FUTURE vZone only
 */
 jion.lazyValue( prototype, 'zone', visual_label.zone );
 

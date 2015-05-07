@@ -9,7 +9,6 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_roundRect,
-	euclid_view,
 	fabric_docItem,
 	gruga_note,
 	jion,
@@ -338,7 +337,6 @@ jion.lazyValue(
 			visual_handlesBezel.create(
 				'handles', visual_note.handles,
 				'silhoutte', this.vSilhoutte,
-				'view', euclid_view.proper, // FIXME
 				'zone', this.vZone
 			)
 		);

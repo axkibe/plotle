@@ -8,7 +8,6 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
-	euclid_view,
 	fabric_docItem,
 	gruga_label,
 	jion,
@@ -293,7 +292,6 @@ jion.lazyValue(
 		visual_handlesBezel.create(
 			'handles', visual_label.handles,
 			'silhoutte', this.vSilhoutte,
-			'view', euclid_view.proper,
 			'zone', this.vZone
 		)
 	);
@@ -418,28 +416,30 @@ function( )
 /*
 | The item's silhoutte in current view.
 */
-jion.lazyValue(
-	prototype,
-	'vSilhoutte',
+visual_label.vSilhoutte =
 	function( )
-	{
-		return this.view.rect( this.silhoutte );
-	}
-);
+{
+	return this.view.rect( this.silhoutte );
+};
 
+
+/*
+| The item's silhoutte in current view.
+*/
+jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte);
 
 
 /*
 | Zone in current view.
 */
-jion.lazyValue(
-	prototype,
-	'vZone',
-function( )
+visual_label.vZone =
+	function( )
 {
 	return this.view.rect( this.zone );
-}
-);
+};
+
+
+jion.lazyValue( prototype, 'vZone', visual_label.vZone );
 
 
 /*
@@ -498,9 +498,6 @@ visual_label.zone =
 };
 
 
-/*
-| Calculates the labels zone, FUTURE vZone only
-*/
 jion.lazyValue( prototype, 'zone', visual_label.zone );
 
 

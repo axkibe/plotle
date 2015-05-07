@@ -46,11 +46,6 @@ if( JION )
 				comment : 'a possible y-scrollbar',
 				type : 'protean' // FUTURE ->silhoutte
 			},
-			view :
-			{
-				comment : 'the current view',
-				type : 'euclid_view'
-			},
 			zone :
 			{
 				comment : 'the items zone',
@@ -97,7 +92,7 @@ prototype.checkHandles =
 
 	handles = this._handles;
 
-	view = this.view;
+	view = euclid_view.proper; // FIXME
 
 	f = root.display;
 
@@ -113,17 +108,11 @@ prototype.checkHandles =
 
 		h = handles[ d ];
 
-		if( !h )
-		{
-			continue;
-		}
+		if( !h ) continue;
 
 		fixView = view.review( 0, view.point( h.pc ) );
 
-		if( h.within( fixView, p ) )
-		{
-			return d;
-		}
+		if( h.within( fixView, p ) ) return d;
 	}
 };
 
@@ -370,7 +359,7 @@ prototype.drawHandles =
 
 	sbary = this.scrollbarY;
 
-	view = this.view;
+	view = euclid_view.proper; // FIXME
 
 	if( sbary )
 	{
