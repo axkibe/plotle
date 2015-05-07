@@ -1086,7 +1086,7 @@ euclid_display.prototype._sketchShape =
 		pStart,
 		section;
 
-	if( !view ) view = euclid_view.proper // FIXME
+	if( !view ) view = euclid_view.proper; // FIXME
 
 	cx = this._cx;
 
