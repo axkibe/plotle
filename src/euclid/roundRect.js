@@ -151,8 +151,10 @@ prototype.add =
 	)
 {
 	return(
-		this.create( 'pnw', this.pnw.add( p ) ),
-		this.create( 'pse', this.pse.add( p ) )
+		this.create(
+			'pnw', this.pnw.add( p ),
+			'pse', this.pse.add( p )
+		)
 	);
 };
 

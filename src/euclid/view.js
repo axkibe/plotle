@@ -1,10 +1,13 @@
 /*
 | A view on a space determines the current
 | pan, zooming and viewport (size of screen)
+|
+| FIXME move the rect/rountRect/point/ellipse stuff to these objects.
 */
 
 
 var
+	euclid_ellipse,
 	euclid_point,
 	euclid_roundRect,
 	euclid_rect,
@@ -56,6 +59,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -73,10 +80,13 @@ if( NODE )
 }
 
 
+prototype = euclid_view.prototype;
+
+
 /*
 | Initializer.
 */
-euclid_view.prototype._init =
+prototype._init =
 	function( )
 {
 	this.fact = math_limit( theme.zoom.min, this.fact, theme.zoom.max );
@@ -88,7 +98,7 @@ euclid_view.prototype._init =
 /*
 | Returns the scaled distance of d
 */
-euclid_view.prototype.scale =
+prototype.scale =
 	function(
 		d
 	)
@@ -100,7 +110,7 @@ euclid_view.prototype.scale =
 /*
 | Returns the x value for a point for this view.
 */
-euclid_view.prototype.x =
+prototype.x =
 	function(
 		x
 	)
@@ -126,7 +136,7 @@ euclid_view.prototype.x =
 /*
 | Returns the original x value for a point in this view.
 */
-euclid_view.prototype.dex =
+prototype.dex =
 	function(
 		x
 	)
@@ -151,7 +161,7 @@ euclid_view.prototype.dex =
 /*
 | Returns the y value for a point for this view.
 */
-euclid_view.prototype.y =
+prototype.y =
 	function(
 		y
 	)
@@ -178,7 +188,7 @@ euclid_view.prototype.y =
 /*
 | Returns the original y value for a point in this view.
 */
-euclid_view.prototype.dey =
+prototype.dey =
 	function(
 		y
 	)
@@ -206,7 +216,7 @@ euclid_view.prototype.dey =
 | A view with pan zero, but same fact level
 */
 jion.lazyValue(
-	euclid_view.prototype,
+	prototype,
 	'home',
 	function( )
 	{
@@ -220,7 +230,7 @@ jion.lazyValue(
 | A view with pan zero and fact zero
 */
 jion.lazyValue(
-	euclid_view.prototype,
+	prototype,
 	'sizeOnly',
 	function( )
 	{
@@ -237,7 +247,7 @@ jion.lazyValue(
 /*
 | Returns a point repositioned to the current view.
 */
-euclid_view.prototype.point =
+prototype.point =
 	function(
 		p
 	)
@@ -278,7 +288,7 @@ euclid_view.prototype.point =
 /*
 | Returns the original position of repositioned point.
 */
-euclid_view.prototype.depoint =
+prototype.depoint =
 	function(
 		p
 	)
@@ -302,9 +312,36 @@ euclid_view.prototype.depoint =
 
 
 /*
+| Returns a ellipse for the current view.
+*/
+prototype.ellipse =
+	function(
+		ellipse
+	)
+{
+	if( this.zoom === 1 )
+	{
+		return(
+			( this.pan.x === 0 && this.pan.y === 0 )
+			? ellipse
+			: ellipse.add( this.pan )
+		);
+	}
+
+	return(
+		euclid_ellipse.create(
+			'pnw', this.point( ellipse.pnw ),
+			'pse', this.point( ellipse.pse )
+			// FIXME gradients
+		)
+	);
+};
+
+
+/*
 | Returns a roundRect for the current view.
 */
-euclid_view.prototype.roundRect =
+prototype.roundRect =
 	function(
 		roundRect
 	)
@@ -328,10 +365,11 @@ euclid_view.prototype.roundRect =
 	);
 };
 
+
 /*
 | Returns a rect repositioned and resized to the current view.
 */
-euclid_view.prototype.rect =
+prototype.rect =
 	function(
 		a1,
 		a2
@@ -402,7 +440,7 @@ euclid_view.prototype.rect =
 |
 | -> k1 = p *(1 / z1 - 1 / z0) + k0
 */
-euclid_view.prototype.review =
+prototype.review =
 	function(
 		df,
 		p
@@ -446,7 +484,7 @@ euclid_view.prototype.review =
 | The zero based frame of this view.
 */
 jion.lazyValue(
-	euclid_view.prototype,
+	prototype,
 	'baseFrame',
 	function( )
 	{

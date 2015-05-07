@@ -152,6 +152,24 @@ prototype._init =
 
 
 /*
+| Returns an ellipse moved by a point.
+*/
+prototype.add =
+	function(
+		p
+	)
+{
+	return(
+		this.create(
+			'pnw', this.pnw.add( p ),
+			'pse', this.pse.add( p )
+		)
+	);
+};
+
+
+
+/*
 | Gets the source of a projection to p.
 */
 prototype.getProjection =

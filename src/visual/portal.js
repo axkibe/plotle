@@ -12,6 +12,7 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
+	euclid_view,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,
@@ -193,10 +194,7 @@ jion.lazyValue(
 
 		section = mark.caretPath.get( -1 );
 
-		if( !isSection( section ) )
-		{
-			return ac;
-		}
+		if( !isSection( section ) ) return ac;
 
 		if( section === 'moveToButton' )
 		{
@@ -436,10 +434,7 @@ prototype.input =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return false;
-	}
+	if( !isSection( section ) ) return false;
 
 	if( section === 'moveToButton' )
 	{
@@ -477,9 +472,9 @@ jion.lazyValue(
 		return(
 			visual_handlesBezel.create(
 				'handles', visual_portal.handles,
-				'silhoutte', this.silhoutte,
-				'view', this.view,
-				'zone', this.zone
+				'silhoutte', this.vSilhoutte,
+				'view', euclid_view.proper,
+				'zone', this.vZone
 			)
 		);
 	}
@@ -767,6 +762,35 @@ prototype.specialKey =
 
 
 /*
+| Silhoutte in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vSilhoutte',
+function( )
+{
+	return this.view.ellipse( this.silhoutte );
+}
+);
+
+
+/*
+| Zone in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZone',
+function( )
+{
+	return this.view.rect( this.fabric.zone );
+}
+);
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/*
 | User pressed backspace.
 */
 prototype._keyBackspace =
@@ -781,17 +805,11 @@ prototype._keyBackspace =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	at = mark.caretAt;
 
-	if( at <= 0 )
-	{
-		return;
-	}
+	if( at <= 0 ) return;
 
 	root.alter(
 		change_remove.create(
@@ -820,10 +838,7 @@ prototype._keyDown =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	switch( section )
 	{
@@ -888,10 +903,7 @@ prototype._keyLeft =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	if( mark.caretAt === 0 )
 	{
@@ -958,10 +970,7 @@ prototype._keyTab =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	switch( section )
 	{
@@ -996,10 +1005,7 @@ prototype._keyUp =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	switch( section )
 	{
@@ -1067,10 +1073,7 @@ prototype._keyRight =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return false;
-	}
+	if( !isSection( section ) ) return false;
 
 	value = this[ section ];
 
@@ -1129,13 +1132,7 @@ prototype._keyDel =
 
 	value = this[ section ];
 
-	if(
-		!isSection( section ) ||
-		section === 'moveToButton'
-	)
-	{
-		return;
-	}
+	if( !isSection( section ) || section === 'moveToButton' ) return;
 
 	at = mark.caretAt;
 
@@ -1213,10 +1210,7 @@ prototype._keyEnter =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !isSection( section ) )
-	{
-		return;
-	}
+	if( !isSection( section ) ) return;
 
 	switch( section )
 	{
@@ -1629,10 +1623,7 @@ prototype._drawCaret =
 
 	section = mark.caretPath.get( -1 );
 
-	if(
-		!isSection( section )
-		|| section === 'moveToButton'
-	)
+	if( !isSection( section ) || section === 'moveToButton' )
 	{
 		return;
 	}
