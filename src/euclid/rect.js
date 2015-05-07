@@ -44,6 +44,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
 	jion = require( 'jion' );
@@ -54,6 +58,26 @@ if( NODE )
 
 	euclid_point = require( './point' );
 }
+
+
+prototype = euclid_rect.prototype;
+
+
+/*
+| Computes an ellipse modelled relative to this rect.
+*/
+prototype.computeEllipse =
+	function(
+		model
+	)
+{
+	return(
+		euclid_ellipse.create(
+			'pnw', model.pnw.compute( this ),
+			'pse', model.pse.compute( this )
+		)
+	);
+};
 
 
 /*
@@ -116,23 +140,10 @@ euclid_rect.createArbitrary =
 
 
 /*
-| Rectangle width.
-*/
-jion.lazyValue(
-	euclid_rect.prototype,
-	'width',
-	function( )
-	{
-		return this.pse.x - this.pnw.x;
-	}
-);
-
-
-/*
 | Rectangle height.
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'height',
 	function( )
 	{
@@ -142,10 +153,24 @@ jion.lazyValue(
 
 
 /*
+| Rectangle width.
+*/
+jion.lazyValue(
+	prototype,
+	'width',
+	function( )
+	{
+		return this.pse.x - this.pnw.x;
+	}
+);
+
+
+
+/*
 | A rectangle of same size with pnw at 0/0
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'zeropnw',
 	function( )
 	{
@@ -171,26 +196,9 @@ jion.lazyValue(
 
 
 /*
-| Computes an ellipse modelled relative to this rect.
-*/
-euclid_rect.prototype.computeEllipse =
-	function(
-		model
-	)
-{
-	return(
-		euclid_ellipse.create(
-			'pnw', model.pnw.compute( this ),
-			'pse', model.pse.compute( this )
-		)
-	);
-};
-
-
-/*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-euclid_rect.prototype.reduce =
+prototype.reduce =
 	function(
 		margin
 	)
@@ -230,7 +238,7 @@ euclid_rect.prototype.reduce =
 /*
 | Returns a resized rect with cardinal limits.
 */
-euclid_rect.prototype.cardinalResize =
+prototype.cardinalResize =
 	function(
 		cardinal,  // 'n', 'ne', 'e', etc.
 		dx,        // x-difference
@@ -368,7 +376,7 @@ euclid_rect.prototype.cardinalResize =
 | Point in the center.
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'pc',
 	function( )
 	{
@@ -386,7 +394,7 @@ jion.lazyValue(
 | Point in the north.
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'pn',
 	function( )
 	{
@@ -404,7 +412,7 @@ jion.lazyValue(
 | West point.
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'w',
 	function( )
 	{
@@ -422,7 +430,7 @@ jion.lazyValue(
 | East point.
 */
 jion.lazyValue(
-	euclid_rect.prototype,
+	prototype,
 	'e',
 	function( )
 	{
@@ -439,10 +447,12 @@ jion.lazyValue(
 /*
 | returns a rect moved by a point or x/y
 |
+| FIXME allow only point
+|
 | add( point )   -or-
 | add( x, y  )
 */
-euclid_rect.prototype.add =
+prototype.add =
 	function(
 		a1,
 		a2
@@ -558,7 +568,7 @@ euclid_rect.renew =
 | sub(point)   -or-
 | sub(x, y)
 */
-euclid_rect.prototype.sub =
+prototype.sub =
 	function(
 		a1,
 		a2
@@ -576,7 +586,7 @@ euclid_rect.prototype.sub =
 /*
 | Returns true if this rectangle is the same as another
 */
-euclid_rect.prototype.equals =
+prototype.equals =
 	function(
 		r
 	)
@@ -597,7 +607,7 @@ euclid_rect.prototype.equals =
 |
 | FIXME remove view here
 */
-euclid_rect.prototype.within =
+prototype.within =
 	function(
 		view, // OR just p
 		p
@@ -640,7 +650,7 @@ euclid_rect.prototype.within =
 | Returns the point where a ray going from
 | center of the rect (pc) to p intersects with the rect.
 */
-euclid_rect.prototype.getProjection =
+prototype.getProjection =
 	function(
 		p
 	)

@@ -5,7 +5,6 @@
 
 var
 	euclid_color,
-	euclid_view,
 	icon_check,
 	jion,
 	result_hover,

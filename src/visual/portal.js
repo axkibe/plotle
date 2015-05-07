@@ -12,7 +12,6 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
-	euclid_view,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,

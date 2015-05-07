@@ -143,6 +143,34 @@ prototype._init =
 
 
 /*
+| Returns a round rect moved by a point.
+*/
+prototype.add =
+	function(
+		p
+	)
+{
+	return(
+		this.create( 'pnw', this.pnw.add( p ) ),
+		this.create( 'pse', this.pse.add( p ) )
+	);
+};
+
+
+/*
+| Rectangle height.
+*/
+jion.lazyValue(
+	prototype,
+	'height',
+	function( )
+	{
+		return this.pse.y - this.pnw.y;
+	}
+);
+
+
+/*
 | point in the center
 */
 jion.lazyValue(
@@ -169,18 +197,6 @@ jion.lazyValue(
 	function( )
 	{
 		return this.pse.x - this.pnw.x;
-	}
-);
-
-/*
-| Rectangle height.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-	{
-		return this.pse.y - this.pnw.y;
 	}
 );
 

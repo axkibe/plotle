@@ -6,6 +6,7 @@
 
 var
 	euclid_point,
+	euclid_roundRect,
 	euclid_rect,
 	euclid_view,
 	math_limit,
@@ -301,6 +302,33 @@ euclid_view.prototype.depoint =
 
 
 /*
+| Returns a roundRect for the current view.
+*/
+euclid_view.prototype.roundRect =
+	function(
+		roundRect
+	)
+{
+	if( this.zoom === 1 )
+	{
+		return(
+			( this.pan.x === 0 && this.pan.y === 0 )
+			? roundRect
+			: roundRect.add( this.pan )
+		);
+	}
+
+	return(
+		euclid_roundRect.create(
+			'pnw', this.point( roundRect.pnw ),
+			'pse', this.point( roundRect.pse ),
+			'a', this.scale( roundRect.a ),
+			'b', this.scale( roundRect.b )
+		)
+	);
+};
+
+/*
 | Returns a rect repositioned and resized to the current view.
 */
 euclid_view.prototype.rect =
@@ -313,6 +341,11 @@ euclid_view.prototype.rect =
 		pnw,
 		pse,
 		r;
+
+	if( arguments.length !== 1 )
+	{
+		throw new Error( 'FIXME' );
+	}
 
 	if( this.zoom === 1 )
 	{

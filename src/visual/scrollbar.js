@@ -9,7 +9,6 @@
 
 var
 	euclid_roundRect,
-	euclid_view,
 	gruga_scrollbar,
 	math_half,
 	math_limit,

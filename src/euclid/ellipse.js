@@ -9,6 +9,7 @@ var
 	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
+	euclid_view,
 	jion,
 	math_half;
 
@@ -266,12 +267,19 @@ jion.lazyValue(
 */
 prototype.within =
 	function(
-		view,
+		view,  // FIXME
 		p
 	)
 {
 	var
 		pp;
+
+	if( arguments.length === 1 )
+	{
+		p = view;
+
+		view = euclid_view.proper;
+	}
 
 	pp = view.depoint( p );
 

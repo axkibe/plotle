@@ -9,6 +9,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_roundRect,
+	euclid_view,
 	fabric_docItem,
 	gruga_note,
 	jion,
@@ -244,22 +245,16 @@ prototype.draw =
 	)
 {
 	var
-		zone,
 		sbary;
-
-	zone = this.zone;
 
 	sbary = this.scrollbarY;
 
 	display.drawImage(
 		'image', this._display,
-		'pnw', this.view.point( zone.pnw )
+		'pnw', this.vZone.pnw
 	);
 
-	if( sbary )
-	{
-		sbary.draw( display, this.view );
-	}
+	if( sbary ) sbary.draw( display, this.view );
 };
 
 
@@ -332,19 +327,6 @@ function( )
 
 
 /*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'zone',
-function( )
-{
-	return this.fabric.zone;
-}
-);
-
-
-/*
 | Returns a handles jion.
 */
 jion.lazyValue(
@@ -355,9 +337,9 @@ jion.lazyValue(
 		return(
 			visual_handlesBezel.create(
 				'handles', visual_note.handles,
-				'silhoutte', this.silhoutte,
-				'view', this.view,
-				'zone', this.zone
+				'silhoutte', this.vSilhoutte,
+				'view', euclid_view.proper, // FIXME
+				'zone', this.vZone
 			)
 		);
 	}
@@ -510,6 +492,8 @@ prototype.scrollMarkIntoView =
 
 /*
 | The notes silhoutte.
+|
+| FUTURE move to vSilhoutte
 */
 jion.lazyValue(
 	prototype,
@@ -540,6 +524,47 @@ jion.lazyValue(
 | Handles a special key.
 */
 prototype.specialKey = fabric_docItem.specialKey;
+
+
+/*
+| Silhoutte in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vSilhoutte',
+function( )
+{
+	return this.view.roundRect( this.silhoutte );
+}
+);
+
+
+/*
+| Zone in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZone',
+function( )
+{
+	return this.view.rect( this.fabric.zone );
+}
+);
+
+
+/*
+| Forwards fabric settings.
+|
+| FUTURE remove.
+*/
+jion.lazyValue(
+	prototype,
+	'zone',
+function( )
+{
+	return this.fabric.zone;
+}
+);
 
 
 /*
@@ -588,16 +613,16 @@ jion.lazyValue(
 			facet,
 			hview,
 			sbary,
-			vzone;
+			vZone;
 
-		vzone = this.view.rect( this.zone );
+		vZone = this.vZone;
 
 		hview = this.view.home;
 
 		d =
 			euclid_display.create(
-				'width', vzone.width + 2,
-				'height', vzone.height + 2
+				'width', vZone.width + 2,
+				'height', vZone.height + 2
 			);
 
 		doc = this.doc;

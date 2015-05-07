@@ -5,7 +5,6 @@
 
 var
 	form_form,
-	euclid_view,
 	gruga_formFacet,
 	jion,
 	result_hover,
