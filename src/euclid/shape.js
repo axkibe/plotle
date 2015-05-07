@@ -315,16 +315,10 @@ prototype.getProjection =
 */
 prototype.within =
 	function(
-		view,  // FIXME remove
 		p
 	)
 {
-	if( arguments.length === 1 )
-	{
-		return swatch.withinSketch( this, view );
-	}
-
-	return swatch.withinSketch( this, view, p );
+	return swatch.withinSketch( this, p );
 };
 
 

@@ -762,14 +762,10 @@ euclid_display.prototype.scale =
 
 /*
 | Returns true if a point is in a sketch.
-|
-| euclid_point -or-
-| x / y
 */
 euclid_display.prototype.withinSketch =
 	function(
 		shape,
-		view,   // FIXME remove
 		p
 	)
 {
@@ -780,15 +776,9 @@ euclid_display.prototype.withinSketch =
 
 	cx.beginPath( );
 
-	if( arguments.length === 2 )
-	{
-		// FIXME remove
-		p = view;
+	if( arguments.length !== 2 ) throw new Error( );
 
-		view = euclid_view.proper;
-	}
-
-	this._sketch( shape, 0, 0.5, view );
+	this._sketch( shape, 0, 0.5 );
 
 	return cx.isPointInPath( p.x, p.y );
 };
