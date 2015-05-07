@@ -9,7 +9,6 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_roundRect,
-	fabric_docItem,
 	gruga_note,
 	jion,
 	math_half,
@@ -17,6 +16,7 @@ var
 	system,
 	theme,
 	visual_doc,
+	visual_docItem,
 	visual_handlesBezel,
 	visual_item,
 	visual_note,
@@ -176,14 +176,14 @@ prototype._init =
 jion.lazyValue(
 	prototype,
 	'attentionCenter',
-	fabric_docItem.attentionCenter
+	visual_docItem.attentionCenter
 );
 
 
 /*
 | Checks if the item is being clicked and reacts.
 */
-prototype.click = fabric_docItem.click;
+prototype.click = visual_docItem.click;
 
 
 /*
@@ -341,7 +341,7 @@ prototype.highlight =
 /*
 | A text has been inputed.
 */
-prototype.input = fabric_docItem.input;
+prototype.input = visual_docItem.input;
 
 
 /*
@@ -530,7 +530,7 @@ jion.lazyValue(
 /*
 | Handles a special key.
 */
-prototype.specialKey = fabric_docItem.specialKey;
+prototype.specialKey = visual_docItem.specialKey;
 
 
 /*

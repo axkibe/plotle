@@ -689,11 +689,6 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/fabric/docItem.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/fabric/note.js',
 		'hasJion', true,
 		'inBundle', true,
@@ -732,6 +727,11 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/visual/item.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/visual/docItem.js',
 		'inBundle', true,
 		'inTestPad', true
 	),

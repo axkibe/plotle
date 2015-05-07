@@ -4,10 +4,10 @@
 
 
 var
-	fabric_docItem,
-	visual_mark_caret,
 	math_limit,
-	root;
+	root,
+	visual_docItem,
+	visual_mark_caret;
 
 
 /*
@@ -17,23 +17,13 @@ var
 'use strict';
 
 
-/*
-| Node includes.
-*/
-if( NODE )
-{
-	fabric_docItem = module.exports;
-}
-else
-{
-	fabric_docItem = { };
-}
+visual_docItem = NODE ? module.exports : { };
 
 
 /*
 | The attention center.
 */
-fabric_docItem.attentionCenter =
+visual_docItem.attentionCenter =
 	function( )
 {
 	return(
@@ -51,7 +41,7 @@ fabric_docItem.attentionCenter =
 /*
 | Checks if the item is being clicked and reacts.
 */
-fabric_docItem.click =
+visual_docItem.click =
 	function(
 		p,
 		shift,
@@ -137,7 +127,7 @@ fabric_docItem.click =
 /*
 | A text has been inputed.
 */
-fabric_docItem.input =
+visual_docItem.input =
 	function(
 		text
 	)
@@ -149,7 +139,7 @@ fabric_docItem.input =
 /*
 | Handles a special key.
 */
-fabric_docItem.specialKey =
+visual_docItem.specialKey =
 	function(
 		key,
 		shift,
