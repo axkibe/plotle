@@ -71,10 +71,7 @@ visual_item.dragMove =
 	{
 		case 'action_createRelation' :
 
-			if( !this.zone.within( view, p ) )
-			{
-				return false;
-			}
+			if( !this.vZone.within( p ) ) return false;
 
 			root.create(
 				'action', action.create( 'toItemPath', this.path )
@@ -134,7 +131,7 @@ visual_item.dragStart =
 	if(
 		!action
 		&& sbary
-		&& sbary.within( view, p )
+		&& sbary.within( view, p ) // FIXME
 	)
 	{
 		root.create(
@@ -149,7 +146,7 @@ visual_item.dragStart =
 		return true;
 	}
 
-	if( !this.silhoutte.within( view, p ) )
+	if( !this.vSilhoutte.within( p ) )
 	{
 		return false;
 	}
@@ -226,7 +223,7 @@ visual_item.dragStop =
 	{
 		case 'action_createRelation' :
 
-			if( !this.zone.within( this.view, p ) )
+			if( !this.vZone.within( p ) )
 			{
 				return false;
 			}
@@ -261,7 +258,7 @@ visual_item.pointingHover =
 
 	view = this.view;
 
-	if( sbary && sbary.within( view, p ) )
+	if( sbary && sbary.within( view, p ) ) // FIXME
 	{
 		return(
 			result_hover.create(
@@ -271,10 +268,7 @@ visual_item.pointingHover =
 		);
 	}
 
-	if( !this.zone.within( view, p ) )
-	{
-		return;
-	}
+	if( !this.vZone.within( p ) ) return;
 
 	return(
 		result_hover.create(

@@ -398,10 +398,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.zone .within( view, p ) )
-	{
-		return false;
-	}
+	if( !this.vZone.within( p ) ) return false;
 
 	root.setPath(
 		this.path.append( 'scrolly' ),

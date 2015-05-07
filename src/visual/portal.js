@@ -12,7 +12,6 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
-	euclid_view,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,
@@ -1521,7 +1520,7 @@ jion.lazyValue(
 
 		if( this.path )
 		{
-			display.clip( this.vZeroSilhoutte, euclid_view.proper, 0 ); // FIXME
+			display.clip( this.vZeroSilhoutte, 0 );
 
 			fieldSpaceUser = this._fieldSpaceUser;
 

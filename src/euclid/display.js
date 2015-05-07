@@ -146,20 +146,11 @@ euclid_display.prototype.clear =
 euclid_display.prototype.clip =
 	function(
 		shape,
-		view,  // FIXME remove
 		border
 	)
 {
 	var
 		cx;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
 
 	cx = this._cx;
 
@@ -172,7 +163,7 @@ euclid_display.prototype.clip =
 
 	cx.beginPath( );
 
-	this._sketch( shape, border, 0.5, view );
+	this._sketch( shape, border, 0.5 );
 
 	cx.clip( );
 };
