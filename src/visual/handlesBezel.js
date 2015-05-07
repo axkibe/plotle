@@ -84,15 +84,11 @@ prototype.checkHandles =
 		aZ,
 		d,
 		f,
-		fixView,
 		h,
 		handles,
-		d8cwcf,
-		view;
+		d8cwcf;
 
 	handles = this._handles;
-
-	view = euclid_view.proper; // FIXME
 
 	f = root.display;
 
@@ -110,9 +106,7 @@ prototype.checkHandles =
 
 		if( !h ) continue;
 
-		fixView = view.review( 0, view.point( h.pc ) );
-
-		if( h.within( fixView, p ) ) return d;
+		if( h.within( p ) ) return d;
 	}
 };
 
@@ -347,11 +341,9 @@ prototype.drawHandles =
 		area,
 		d,
 		d8cwcf,
-		fixView,
 		h,
 		handles,
-		sbary,
-		view;
+		sbary;
 
 	d8cwcf = euclid_compass.dir8CWCF;
 
@@ -359,37 +351,26 @@ prototype.drawHandles =
 
 	sbary = this.scrollbarY;
 
-	view = euclid_view.proper; // FIXME
-
 	if( sbary )
 	{
-		area = sbary.getArea( view );
+		area = sbary.getArea( euclid_view.proper ); // FIXME
 
 		display.reverseClip( area, euclid_view.proper, -1 );
 	}
 
-	display.reverseClip( this.silhoutte, view, -1 );
+	display.reverseClip( this.silhoutte, euclid_view.proper, -1 ); // FIXME
 
 	// draws the resize handles
 
-	for(
-		a = d8cwcf.length - 1;
-		a >= 0;
-		a--
-	)
+	for( a = d8cwcf.length - 1; a >= 0; a-- )
 	{
 		d = d8cwcf[ a ];
 
 		h = handles[ d ];
 
-		if( !h )
-		{
-			continue;
-		}
+		if( !h ) continue;
 
-		fixView = view.review( 0, view.point( h.pc ) );
-
-		display.paint( gruga_handles.fill, gruga_handles.border, h, fixView );
+		display.paint( gruga_handles.fill, gruga_handles.border, h );
 	}
 
 	display.deClip( );
