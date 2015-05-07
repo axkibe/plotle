@@ -713,7 +713,6 @@ jion.lazyValue(
 euclid_display.prototype.reverseClip =
 	function(
 		shape,
-		view,  // FIXME remove
 		border
 	)
 {
@@ -722,14 +721,6 @@ euclid_display.prototype.reverseClip =
 		cx,
 		h,
 		w;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
 
 	cx = this._cx;
 
@@ -758,7 +749,7 @@ euclid_display.prototype.reverseClip =
 
 	cx.lineTo( 0, 0 );
 
-	this._sketch( shape, border, 0.5, view );
+	this._sketch( shape, border, 0.5 );
 
 	cx.clip( );
 };
@@ -1044,6 +1035,8 @@ euclid_display.prototype._sketchRect =
 		ex,
 		sy;
 
+	if( !view ) view = euclid_view.proper; // FIXME
+
 	cx = this._cx;
 
 	wx = view.x( rect.pnw.x ) + border + twist;
@@ -1092,6 +1085,8 @@ euclid_display.prototype._sketchShape =
 		pn,
 		pStart,
 		section;
+
+	if( !view ) view = euclid_view.proper // FIXME
 
 	cx = this._cx;
 

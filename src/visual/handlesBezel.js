@@ -353,12 +353,12 @@ prototype.drawHandles =
 
 	if( sbary )
 	{
-		area = sbary.getArea( euclid_view.proper ); // FIXME
+		area = sbary.getArea( euclid_view.proper );
 
-		display.reverseClip( area, euclid_view.proper, -1 );
+		display.reverseClip( area, -1 );
 	}
 
-	display.reverseClip( this.silhoutte, euclid_view.proper, -1 ); // FIXME
+	display.reverseClip( this.silhoutte, -1 );
 
 	// draws the resize handles
 
