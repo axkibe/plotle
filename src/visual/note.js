@@ -137,7 +137,6 @@ prototype._init =
 	)
 {
 	var
-		aperture,
 		fabric,
 		zone;
 
@@ -158,29 +157,6 @@ prototype._init =
 		);
 
 	if( this.scrolly === undefined ) this.scrolly = 0;
-
-	aperture = zone.height - theme.note.innerMargin.y;
-
-	// FIXME lazyvalue sbary
-	if( this.doc.height > aperture )
-	{
-		this.scrollbarY =
-			visual_scrollbar.create(
-				'aperture', aperture,
-				'max', this.doc.height,
-				'pnw',
-					euclid_point.create(
-						'x', zone.pse.x,
-						'y', zone.pnw.y + theme.scrollbar.vdis
-					),
-				'pos', this.scrolly,
-				'size', zone.height - theme.scrollbar.vdis * 2
-			);
-	}
-	else
-	{
-		this.scrollbarY = undefined;
-	}
 
 	if(
 		inherit
@@ -375,6 +351,12 @@ prototype.pointingHover = visual_item.pointingHover;
 
 
 /*
+| Notes use zone for positioning
+*/
+prototype.positioning = 'zone';
+
+
+/*
 | Minimum height.
 */
 prototype.minHeight = theme.note.minHeight;
@@ -411,9 +393,39 @@ prototype.mousewheel =
 
 
 /*
-| Notes use zone for positioning
+| The potential scrollbar.
 */
-prototype.positioning = 'zone';
+jion.lazyValue(
+	prototype,
+	'scrollbarY',
+	function( )
+{
+	var
+		aperture,
+		zone;
+
+	zone = this.zone;
+
+	aperture = this.zone.height - theme.note.innerMargin.y;
+
+	if( this.doc.height <= aperture ) return undefined;
+
+	return(
+		visual_scrollbar.create(
+			'aperture', aperture,
+			'max', this.doc.height,
+			'pnw',
+				euclid_point.create(
+					'x', zone.pse.x,
+					'y', zone.pnw.y + theme.scrollbar.vdis
+				),
+			'pos', this.scrolly,
+			'size', zone.height - theme.scrollbar.vdis * 2,
+			'view', this.view
+		)
+	);
+}
+);
 
 
 /*

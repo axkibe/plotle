@@ -119,19 +119,16 @@ visual_item.dragStart =
 {
 	var
 		action,
-		sbary,
-		view;
+		sbary;
 
 	action = root.action;
 
 	sbary = this.scrollbarY;
 
-	view = this.view;
-
 	if(
 		!action
 		&& sbary
-		&& sbary.within( view, p ) // FIXME
+		&& sbary.within( p )
 	)
 	{
 		root.create(
@@ -190,7 +187,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_itemDrag.create(
-					'start', view.depoint( p ),
+					'start', this.view.depoint( p ),
 					'transItem', this,
 					'origin', this
 				),
@@ -251,14 +248,11 @@ visual_item.pointingHover =
 	)
 {
 	var
-		sbary,
-		view;
+		sbary;
 
 	sbary = this.scrollbarY;
 
-	view = this.view;
-
-	if( sbary && sbary.within( view, p ) ) // FIXME
+	if( sbary && sbary.within( p ) )
 	{
 		return(
 			result_hover.create(

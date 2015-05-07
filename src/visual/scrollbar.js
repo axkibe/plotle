@@ -58,6 +58,11 @@ if( JION )
 			{
 				comment : 'size',
 				type : 'number'
+			},
+			view :
+			{
+				comment : 'view',
+				type : 'euclid_view'
 			}
 		},
 		init : [ ]
@@ -168,7 +173,6 @@ prototype.getArea =
 */
 prototype.within =
 	function(
-		view,
 		p
 	)
 {
@@ -179,9 +183,10 @@ prototype.within =
 
 	pnw = this.pnw;
 
-	dex = view.dex( p.x );
+	// FIXME make a vPNW and vSize
+	dex = this.view.dex( p.x );
 
-	dey = view.dey( p.y );
+	dey = this.view.dey( p.y );
 
 	return(
 		dex >= pnw.x &&
