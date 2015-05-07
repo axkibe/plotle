@@ -68,12 +68,7 @@ visual_docItem.click =
 
 	vp = view.depoint( p );
 
-	// FUTURE rework views
-	if( !this.zone.within( view, p ) )
-	{
-		return false;
-	}
-
+	if( !this.vZone.within( p ) ) return false;
 
 	pnw = this.zone.pnw;
 

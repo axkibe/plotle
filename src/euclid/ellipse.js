@@ -188,20 +188,17 @@ prototype.getProjection =
 jion.lazyValue(
 	prototype,
 	'gradientPC',
-	function( )
-	{
-		if( this._gradientPC )
-		{
-			return this._gradientPC;
-		}
+function( )
+{
+	if( this._gradientPC ) return this._gradientPC;
 
-		return(
-			euclid_point.create(
-				'x', math_half( this.pnw.x + this.pse.x ),
-				'y', math_half( this.pnw.y + this.pse.y )
-			)
-		);
-	}
+	return(
+		euclid_point.create(
+			'x', math_half( this.pnw.x + this.pse.x ),
+			'y', math_half( this.pnw.y + this.pse.y )
+		)
+	);
+}
 );
 
 
@@ -212,22 +209,19 @@ jion.lazyValue(
 	prototype,
 	'gradientR1',
 	function( )
-	{
-		var
-			dx,
-			dy;
+{
+	var
+		dx,
+		dy;
 
-		if( this._gradientR1 )
-		{
-			return this._gradientR1;
-		}
+	if( this._gradientR1 ) { return this._gradientR1; }
 
-		dx = this.pse.x - this.pnw.x;
+	dx = this.pse.x - this.pnw.x;
 
-		dy = this.pse.y - this.pnw.y;
+	dy = this.pse.y - this.pnw.y;
 
-		return Math.max( dx, dy );
-	}
+	return Math.max( dx, dy );
+}
 );
 
 
@@ -238,14 +232,11 @@ jion.lazyValue(
 	prototype,
 	'gradientR0',
 	function( )
-	{
-		if( this._gradientR0 )
-		{
-			return this._gradientR0;
-		}
+{
+	if( this._gradientR0 ) return this._gradientR0;
 
-		return 0;
-	}
+	return 0;
+}
 );
 
 
@@ -256,9 +247,9 @@ jion.lazyValue(
 	prototype,
 	'height',
 	function( )
-	{
-		return this.pse.y - this.pnw.y;
-	}
+{
+	return this.pse.y - this.pnw.y;
+}
 );
 
 
@@ -285,33 +276,19 @@ jion.lazyValue(
 */
 prototype.within =
 	function(
-		view,  // FIXME
 		p
 	)
 {
-	var
-		pp;
-
-	if( arguments.length === 1 )
-	{
-		p = view;
-
-		view = euclid_view.proper;
-	}
-
-	pp = view.depoint( p );
-
-	if(
-		pp.x < this.pnw.x
-		|| pp.y < this.pnw.y
-		|| pp.x > this.pse.x
-		|| pp.y > this.pse.y
+	if( p.x < this.pnw.x
+		|| p.y < this.pnw.y
+		|| p.x > this.pse.x
+		|| p.y > this.pse.y
 	)
 	{
 		return false;
 	}
 
-	return this.shape.within( view, p);
+	return this.shape.within( p );
 };
 
 
@@ -321,10 +298,10 @@ prototype.within =
 jion.lazyValue(
 	prototype,
 	'width',
-	function( )
-	{
-		return this.pse.x - this.pnw.x;
-	}
+function( )
+{
+	return this.pse.x - this.pnw.x;
+}
 );
 
 
