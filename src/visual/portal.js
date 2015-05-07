@@ -12,6 +12,7 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_roundRect,
+	euclid_view,
 	fabric_spaceRef,
 	gruga_portal,
 	gruga_portalButtonFacets,
@@ -773,6 +774,19 @@ function( )
 
 
 /*
+| The portals silhoutte at zero for current zoom.
+*/
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.view.home.ellipse( this.zeroSilhoutte );
+}
+);
+
+
+/*
 | Zone in current view.
 */
 jion.lazyValue(
@@ -1507,7 +1521,7 @@ jion.lazyValue(
 
 		if( this.path )
 		{
-			display.clip( this.zeroSilhoutte, hview, 0 );
+			display.clip( this.vZeroSilhoutte, euclid_view.proper, 0 ); // FIXME
 
 			fieldSpaceUser = this._fieldSpaceUser;
 
