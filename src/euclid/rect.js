@@ -217,18 +217,14 @@ prototype.reduce =
 	return(
 		euclid_rect.create(
 			'pnw',
-				euclid_point.renew(
-					this.pnw.x + margin.e,
-					this.pnw.y + margin.n,
-					this.pnw,
-					this.pse
+				this.pnw.create(
+					'x', this.pnw.x + margin.e,
+					'y', this.pnw.y + margin.n
 				),
 			'pse',
-				euclid_point.renew(
-					this.pse.x - margin.w,
-					this.pse.y - margin.s,
-					this.pnw,
-					this.pse
+				this.pse.create(
+					'x', this.pse.x - margin.w,
+					'y', this.pse.y - margin.s
 				)
 		)
 	);
@@ -464,101 +460,6 @@ prototype.add =
 			'pse', this.pse.add( a1, a2 )
 		)
 	);
-};
-
-
-/*
-| Creates a new rect.
-*/
-euclid_rect.renew =
-	function(
-		wx,
-		ny,
-		ex,
-		sy
-		//, ...  a list of additional rects to look for objects to be reused
-	)
-{
-	// FIXMe
-	var
-		a,
-		aZ,
-		pnw,
-		pse,
-		r;
-
-	for(
-		a = 4, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		r = arguments[ a ];
-
-		if ( !r )
-		{
-			continue;
-		}
-
-		if( r.pnw.x === wx && r.pnw.y === ny )
-		{
-			if( r.pse.x === ex && r.pse.y === sy )
-			{
-				return r;
-			}
-
-			pnw = r.pnw;
-
-			break;
-		}
-
-		if ( r.pse.x === wx && r.pse.y === ny )
-		{
-			pnw = r.pse;
-
-			break;
-		}
-	}
-
-	for(
-		a = 4, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		r = arguments[ a ];
-
-		if( !r )
-		{
-			continue;
-		}
-
-		if( r.pnw.x === ex && r.pnw.y === sy )
-		{
-			pse = r.pnw;
-
-			break;
-		}
-
-		if( r.pse.x === ex && r.pse.y === sy )
-		{
-			pse = r.pse;
-
-			break;
-		}
-	}
-
-	if( !pnw )
-	{
-		pnw = euclid_point.create( 'x', wx, 'y', ny );
-	}
-
-	if( !pse )
-	{
-		pse = euclid_point.create( 'x', ex, 'y', sy );
-	}
-
-	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 

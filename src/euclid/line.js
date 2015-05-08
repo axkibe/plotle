@@ -75,18 +75,14 @@ jion.lazyValue(
 		return(
 			euclid_rect.create(
 				'pnw',
-					euclid_point.renew(
+					p1.create(
 						Math.min( p1.x, p2.x ),
-						Math.min( p1.y, p2.y ),
-						p1,
-						p2
+						Math.min( p1.y, p2.y )
 					),
 				'pse',
-					euclid_point.renew(
+					p2.create(
 						Math.max( p1.x, p2.x ),
-						Math.max( p1.y, p2.y ),
-						p1,
-						p2
+						Math.max( p1.y, p2.y )
 					)
 			)
 		);

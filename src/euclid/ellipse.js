@@ -9,7 +9,6 @@ var
 	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
-	euclid_view,
 	jion,
 	math_half;
 

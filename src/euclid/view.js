@@ -260,10 +260,9 @@ prototype.point =
 		case 'euclid_point' :
 
 			return(
-				euclid_point.renew(
-					this.x( p.x ),
-					this.y( p.y ),
-					p
+				p.create(
+					'x', this.x( p.x ),
+					'y', this.y( p.y )
 				)
 			);
 
