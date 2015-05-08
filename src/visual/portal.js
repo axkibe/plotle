@@ -403,8 +403,7 @@ prototype.highlight =
 {
 	display.border(
 		gruga_portal.getFacet( 'highlight', true ).border,
-		this.silhoutte,
-		this.view
+		this.vSilhoutte
 	);
 };
 
@@ -1486,14 +1485,14 @@ jion.lazyValue(
 			section,
 			fieldSpaceUser,
 			fieldSpaceTag,
-			vzone;
+			vZone;
 
-		vzone = this.view.rect( this.zone );
+		vZone = this.vZone;
 
 		display =
 			euclid_display.create(
-				'width', vzone.width + 2,
-				'height', vzone.height + 2
+				'width', vZone.width + 2,
+				'height', vZone.height + 2
 			),
 
 		hview = this.view.home;
@@ -1507,11 +1506,7 @@ jion.lazyValue(
 
 		facet = gruga_portal.getFacet( );
 
-		display.fill(
-			facet.fill,
-			this.zeroSilhoutte,
-			hview
-		);
+		display.fill( facet.fill, this.vZeroSilhoutte );
 
 		if( this.path )
 		{
@@ -1599,7 +1594,7 @@ jion.lazyValue(
 		// redraws the border on the end to top
 		// everything else
 
-		display.border( facet.border, this.zeroSilhoutte, hview );
+		display.border( facet.border, this.vZeroSilhoutte );
 
 		return display;
 	}

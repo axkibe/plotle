@@ -232,11 +232,7 @@ euclid_display.prototype.drawImage =
 
 		switch( arg )
 		{
-			case 'image' :
-
-				image = arguments[ a++ ];
-
-				continue;
+			case 'image' : image = arguments[ a++ ]; continue;
 
 			case 'pnw' :
 
@@ -246,45 +242,22 @@ euclid_display.prototype.drawImage =
 
 				continue;
 
-			case 'x' :
+			case 'x' : x = arguments[ a++ ]; continue;
 
-				x = arguments[ a++ ];
+			case 'y' : y = arguments[ a++ ]; continue;
 
-				continue;
+			case 'composite' : composite = arguments[ a++ ]; continue;
 
-			case 'y' :
+			case 'alpha' : alpha = arguments[ a++ ]; continue;
 
-				y = arguments[ a++ ];
-
-				continue;
-
-			case 'composite' :
-
-				composite = arguments[ a++ ];
-
-				continue;
-
-			case 'alpha' :
-
-				alpha = arguments[ a++ ];
-
-				continue;
-
-			default :
-
-				// unknown argument
-				throw new Error( );
+			// unknown argument
+			default : throw new Error( );
 		}
 	}
 
 	if( image.reflect === 'euclid_display' )
 	{
-		if(
-			!( image.width > 0 && image.height > 0 )
-		)
-		{
-			return;
-		}
+		if( !( image.width > 0 && image.height > 0 ) ) return;
 
 		image = image._cv;
 	}
@@ -330,10 +303,7 @@ euclid_display.prototype.drawImage =
 		this._cx.globalCompositeOperation = 'source-over';
 	}
 
-	if( alpha !== undefined )
-	{
-		this._cx.globalAlpha = saveAlpha;
-	}
+	if( alpha !== undefined ) this._cx.globalAlpha = saveAlpha;
 };
 
 
@@ -343,29 +313,23 @@ euclid_display.prototype.drawImage =
 euclid_display.prototype.border =
 	function(
 		border, // the border
-		shape,  // an object which has sketch defined
-		view    // FIXME remove
+		shape   // an object which has sketch defined
 	)
 {
 	var
 		a,
 		aZ;
 
-	if( arguments.length === 2 )
-	{
-		view = euclid_view.proper;
-	}
-
 	if( border.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = border.length; a < aZ; a++ )
 		{
-			this._border( border.get( a ), shape, view );
+			this._border( border.get( a ), shape );
 		}
 	}
 	else
 	{
-		this._border( border, shape, view );
+		this._border( border, shape );
 	}
 };
 
@@ -468,7 +432,9 @@ euclid_display.prototype.paint =
 		aZ,
 		cx;
 
-	if( arguments.length === 3 ) view = euclid_view.proper;
+//	if( arguments.length !== 3 ) throw new Error( 'XXX' );
+
+//	view = euclid_view.proper,
 
 	cx = this._cx;
 

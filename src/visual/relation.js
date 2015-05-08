@@ -349,30 +349,42 @@ prototype.scrollPage = function( ){ };
 
 /*
 | The items silhoutte anchored at zero.
+| FIXME isn't that identical to label?
 */
 jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
-	{
-		var
-			zone;
+{
+	var
+		zone;
 
-		zone = this.zone;
+	zone = this.zone;
 
-		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', Math.max( zone.width  - 1, 0 ),
-						'y', Math.max( zone.height - 1, 0 )
-					)
-			)
-		);
-	}
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', Math.max( zone.width  - 1, 0 ),
+					'y', Math.max( zone.height - 1, 0 )
+				)
+		)
+	);
+}
 );
 
+/*
+| The items silhoutte anchored at zero for current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.view.home.rect( this.zeroSilhoutte );
+}
+);
 
 /*
 | Calculates the relations silhoutte for current view.
@@ -426,11 +438,7 @@ jion.lazyValue(
 		facet = gruga_label.getFacet( );
 
 		// displays the border
-		display.border(
-			facet.border,
-			this.zeroSilhoutte,
-			this.view.home
-		);
+		display.border( facet.border, this.vZeroSilhoutte );
 
 		return display;
 	}

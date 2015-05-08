@@ -88,6 +88,22 @@ prototype.add =
 	}
 };
 
+/*
+| Returns the point repositioned to a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	return(
+		this.create(
+			'x', view.x( this.x ),
+			'y', view.y( this.y )
+		)
+	);
+};
+
 
 /*
 | Subtracts a points (or x/y from this), returns new point

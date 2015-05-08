@@ -311,8 +311,7 @@ prototype.highlight =
 {
 	display.border(
 		gruga_label.getFacet( 'highlight', true ).border,
-		this.silhoutte,
-		this.view
+		this.vSilhoutte
 	);
 };
 
@@ -443,6 +442,20 @@ jion.lazyValue( prototype, 'vZone', visual_label.vZone );
 
 
 /*
+| The items silhoutte anchoret at zero for current view.
+*/
+
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.view.home.rect( this.zeroSilhoutte );
+}
+);
+
+
+/*
 | The items silhoutte anchored at zero.
 */
 jion.lazyValue(
@@ -535,7 +548,7 @@ jion.lazyValue(
 		facet = gruga_label.getFacet( );
 
 		// displays the border
-		display.border( facet.border, this.zeroSilhoutte, this.view.home );
+		display.border( facet.border, this.vZeroSilhoutte );
 
 		return display;
 	}

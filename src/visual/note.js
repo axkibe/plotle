@@ -332,8 +332,7 @@ prototype.highlight =
 {
 	display.border(
 		gruga_note.getFacet( 'highlight', true ).border,
-		this.silhoutte,
-		this.view
+		this.vSilhoutte
 	);
 };
 
@@ -607,6 +606,19 @@ jion.lazyValue(
 
 
 /*
+| The notes silhoutte anchored at zero.
+*/
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.view.home.roundRect( this.zeroSilhoutte );
+}
+);
+
+
+/*
 | The notes display.
 */
 jion.lazyValue(
@@ -618,13 +630,10 @@ jion.lazyValue(
 			d,
 			doc,
 			facet,
-			hview,
 			sbary,
 			vZone;
 
 		vZone = this.vZone;
-
-		hview = this.view.home;
 
 		d =
 			euclid_display.create(
@@ -638,7 +647,7 @@ jion.lazyValue(
 
 		sbary = this.scrollbarY;
 
-		d.fill( facet.fill, this.zeroSilhoutte, hview );
+		d.fill( facet.fill, this.vZeroSilhoutte );
 
 		// draws selection and text
 		doc.draw(
@@ -651,7 +660,7 @@ jion.lazyValue(
 		);
 
 		// draws the border
-		d.border( facet.border, this.zeroSilhoutte, hview );
+		d.border( facet.border, this.vZeroSilhoutte );
 
 		return d;
 	}
