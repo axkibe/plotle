@@ -686,7 +686,7 @@ prototype.draw =
 
 		p = pnw.sub( 0, Math.round( scrollp.y ) );
 
-		para.draw( display, this.view.point( p ) );
+		para.draw( display, p.inView( this.view ) );
 	}
 };
 

@@ -159,8 +159,8 @@ prototype.getArea =
 
 	return(
 		euclid_roundRect.create(
-			'pnw', view.point( pnw.add( 0, sy ) ).add( -s05, 0 ),
-			'pse', view.point( pnw.add( 0, sy + map ) ).add( s05, 0 ),
+			'pnw', pnw.add( 0, sy ).inView( view ).add( -s05, 0 ),
+			'pse', pnw.add( 0, sy + map ).inView( view ).add( s05, 0 ),
 			'a', ths.ellipseA,
 			'b', ths.ellipseB
 		)
