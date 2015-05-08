@@ -260,9 +260,10 @@ prototype.draw =
 		display
 	)
 {
+	console.log( this, this.vPnw );
 	display.drawImage(
 		'image', this._display,
-		'pnw', this.view.point( this.zone.pnw )
+		'pnw', this.vPnw
 	);
 };
 
@@ -402,14 +403,14 @@ prototype.scrollPage = function( ){ };
 /*
 | Pnw in current view.
 */
-jion.lazyValue(
-	prototype,
-	'vPnw',
-function( )
+visual_label.vPnw =
+	function( )
 {
-	return this.view.point( this.fabric.pnw );
-}
-);
+	return this.fabric.pnw.inView( this.view );
+};
+
+
+jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
 
 
 /*

@@ -386,6 +386,13 @@ jion.lazyValue(
 }
 );
 
+
+/*
+| Pnw in current view.
+*/
+jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
+
+
 /*
 | Calculates the relations silhoutte for current view.
 */
