@@ -252,6 +252,8 @@ prototype.point =
 		p
 	)
 {
+	throw new Error( 'XXX' );
+	/*
 	var
 		anchor;
 
@@ -281,6 +283,7 @@ prototype.point =
 
 			throw new Error( );
 	}
+	*/
 };
 
 
@@ -329,8 +332,8 @@ prototype.ellipse =
 
 	return(
 		euclid_ellipse.create(
-			'pnw', this.point( ellipse.pnw ),
-			'pse', this.point( ellipse.pse )
+			'pnw', ellipse.pnw.inView( this ),
+			'pse', ellipse.pse.inView( this )
 			// FIXME gradients
 		)
 	);
@@ -356,8 +359,8 @@ prototype.roundRect =
 
 	return(
 		euclid_roundRect.create(
-			'pnw', this.point( roundRect.pnw ),
-			'pse', this.point( roundRect.pse ),
+			'pnw', roundRect.pnw.inView( this ),
+			'pse', roundRect.pse.inView( this ),
 			'a', this.scale( roundRect.a ),
 			'b', this.scale( roundRect.b )
 		)
@@ -416,8 +419,8 @@ prototype.rect =
 
 	return(
 		euclid_rect.create(
-			'pnw', this.point( pnw ),
-			'pse', this.point( pse )
+			'pnw', pnw.inView( this ),
+			'pse', pse.inView( this )
 		)
 	);
 };

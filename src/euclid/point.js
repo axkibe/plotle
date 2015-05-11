@@ -88,6 +88,26 @@ prototype.add =
 	}
 };
 
+
+/*
+| Creates a fix point anchored to this point.
+*/
+prototype.fixPoint =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		euclid_fixPoint.create(
+			'anchor', this,
+			'x', x,
+			'y', y
+		)
+	);
+};
+
+
 /*
 | Returns the point repositioned to a view.
 */
@@ -138,25 +158,6 @@ prototype.sub =
 			'y', this.y - a2
 		);
 	}
-};
-
-
-/*
-| Creates a fix point anchored to this point.
-*/
-prototype.fixPoint =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		euclid_fixPoint.create(
-			'anchor', this,
-			'x', x,
-			'y', y
-		)
-	);
 };
 
 

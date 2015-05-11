@@ -386,7 +386,7 @@ prototype.draw =
 {
 	display.drawImage(
 		'image', this._display,
-		'pnw', this.view.point( this.zone.pnw )
+		'pnw', this.zone.pnw.inView( this.view )
 	);
 };
 

@@ -1052,9 +1052,9 @@ euclid_display.prototype._sketchShape =
 /**/	}
 /**/}
 
-	pStart = view.point( shape.get( 0 ).p );
+	pStart = shape.get( 0 ).p.inView( view );
 
-	pc = view.point( shape.pc );
+	pc = shape.pc.inView( view );
 
 	pStart =
 		pStart.add(
@@ -1100,7 +1100,7 @@ euclid_display.prototype._sketchShape =
 		}
 		else
 		{
-			pn = view.point( section.p );
+			pn = section.p.inView( view );
 
 			if( border !== 0 )
 			{

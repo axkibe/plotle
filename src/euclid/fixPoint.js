@@ -4,6 +4,11 @@
 */
 
 
+var
+	euclid_fixPoint,
+	euclid_point;
+
+
 /*
 | Capsule
 */
@@ -40,10 +45,41 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	euclid_fixPoint = require( 'jion' ).this( module, 'source' );
 }
+
+
+prototype = euclid_fixPoint.prototype;
+
+
+/*
+| Returns the point repositioned to this fixPoint in a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	var
+		anchor;
+
+	anchor = this.anchor;
+
+	return(
+		euclid_point.create(
+			'x', view.x( anchor.x ) + this.x,
+			'y', view.y( anchor.y ) + this.y
+		)
+	);
+};
+
+
 
 
 } )( );
