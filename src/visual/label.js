@@ -418,7 +418,7 @@ jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
 visual_label.vSilhoutte =
 	function( )
 {
-	return this.view.rect( this.silhoutte );
+	return this.silhoutte.inView( this.view );
 };
 
 
@@ -434,7 +434,7 @@ jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte);
 visual_label.vZone =
 	function( )
 {
-	return this.view.rect( this.zone );
+	return this.zone.inView( this.view );
 };
 
 
@@ -526,14 +526,14 @@ jion.lazyValue(
 			doc,
 			display,
 			facet,
-			vzone;
+			vZone; // FIXME use lazyVal
 
-		vzone = this.view.rect( this.zone );
+		vZone = this.zone.inView( this.view );
 
 		display =
 			euclid_display.create(
-				'width', vzone.width,
-				'height', vzone.height + 1
+				'width', vZone.width,
+				'height', vZone.height + 1
 			);
 
 		doc = this.doc;

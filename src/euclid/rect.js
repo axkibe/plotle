@@ -153,6 +153,32 @@ jion.lazyValue(
 
 
 /*
+| Returns this rect repositioned and resized to a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	if( view.zoom === 1 )
+	{
+		return(
+			( view.pan.x === 0 && view.pan.y === 0 )
+			? this
+			: this.add( view.pan )
+		);
+	}
+
+	return(
+		this.create(
+			'pnw', this.pnw.inView( view ),
+			'pse', this.pse.inView( view )
+		)
+	);
+};
+
+
+/*
 | Rectangle width.
 */
 jion.lazyValue(
@@ -489,15 +515,15 @@ prototype.sub =
 */
 prototype.equals =
 	function(
-		r
+		rect
 	)
 {
 	return(
-		this === r
+		this === rect
 		||
 		(
-			this.pnw.equals( r.pnw ) &&
-			this.pse.equals( r.pse )
+			this.pnw.equals( rect.pnw ) &&
+			this.pse.equals( rect.pse )
 		)
 	);
 };
