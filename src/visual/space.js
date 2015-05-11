@@ -784,7 +784,7 @@ prototype.dragStop =
 							'zone',
 								euclid_rect.createArbitrary(
 									action.start.fromView( view ),
-									p.fromView( p )
+									p.fromView( view )
 								)
 						);
 

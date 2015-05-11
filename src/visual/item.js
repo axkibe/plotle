@@ -187,7 +187,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_itemDrag.create(
-					'start', this.view.depoint( p ),
+					'start', p.fromView( this.view ),
 					'transItem', this,
 					'origin', this
 				),

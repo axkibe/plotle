@@ -66,7 +66,7 @@ visual_docItem.click =
 		return false;
 	}
 
-	vp = view.depoint( p );
+	vp = p.fromView( view );
 
 	if( !this.vZone.within( p ) ) return false;
 

@@ -245,32 +245,6 @@ jion.lazyValue(
 
 
 /*
-| Returns the original position of repositioned point.
-*/
-prototype.depoint =
-	function(
-		p
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( p.reflect !== 'euclid_point' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		euclid_point.create(
-			'x', this.dex( p.x ),
-			'y', this.dey( p.y )
-		)
-	);
-};
-
-
-/*
 | Returns a ellipse for the current view.
 */
 prototype.ellipse =
