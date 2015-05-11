@@ -8,7 +8,6 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
-	euclid_view,
 	jion,
 	math_half;
 
@@ -842,23 +841,17 @@ euclid_display.prototype._colorStyle =
 euclid_display.prototype._border =
 	function(
 		border, // the euclid_border
-		shape,  // an object which has sketch defined
-		view    // FIXME
+		shape   // an object which has sketch defined
 	)
 {
 	var
 		cx;
 
-	if( arguments.length === 2 )
-	{
-		view = euclid_view.proper;
-	}
-
 	cx = this._cx;
 
 	cx.beginPath( );
 
-	this._sketch( shape, border.distance, 0.5, view );
+	this._sketch( shape, border.distance, 0.5 );
 
 	cx.strokeStyle = this._colorStyle( border.color, shape );
 
@@ -923,8 +916,7 @@ euclid_display.prototype._sketch =
 	function(
 		euclid, // the euclidian object to sketch
 		border, // additional border
-		twist,  // 0.5 offset in case of borders vs. fills
-		view    // the view FIXME
+		twist   // 0.5 offset in case of borders vs. fills
 	)
 {
 	switch( euclid.reflect )
@@ -932,15 +924,15 @@ euclid_display.prototype._sketch =
 		case 'euclid_ellipse' :
 		case 'euclid_roundRect' :
 
-			return this._sketchShape( euclid.shape, border, twist, view );
+			return this._sketchShape( euclid.shape, border, twist );
 
 		case 'euclid_rect' :
 
-			return this._sketchRect( euclid, border, twist, view );
+			return this._sketchRect( euclid, border, twist );
 
 		case 'euclid_shape' :
 
-			return this._sketchShape( euclid, border, twist, view );
+			return this._sketchShape( euclid, border, twist );
 
 		default :
 
@@ -956,8 +948,7 @@ euclid_display.prototype._sketchRect =
 	function(
 		rect,
 		border,
-		twist,
-		view   // FIXME
+		twist
 	)
 {
 	var
@@ -967,17 +958,15 @@ euclid_display.prototype._sketchRect =
 		ex,
 		sy;
 
-	if( !view ) view = euclid_view.proper; // FIXME
-
 	cx = this._cx;
 
-	wx = view.x( rect.pnw.x ) + border + twist;
+	wx = rect.pnw.x + border + twist;
 
-	ny = view.y( rect.pnw.y ) + border + twist;
+	ny = rect.pnw.y + border + twist;
 
-	ex = view.x( rect.pse.x ) - border + twist;
+	ex = rect.pse.x - border + twist;
 
-	sy = view.y( rect.pse.y ) - border + twist;
+	sy = rect.pse.y - border + twist;
 
 	cx.moveTo( wx, ny );
 
@@ -998,8 +987,7 @@ euclid_display.prototype._sketchShape =
 	function(
 		shape,
 		border,
-		twist,
-		view   // FIXME
+		twist
 	)
 {
 	var
@@ -1018,8 +1006,6 @@ euclid_display.prototype._sketchShape =
 		pStart,
 		section;
 
-	if( !view ) view = euclid_view.proper; // FIXME
-
 	cx = this._cx;
 
 	magic = euclid_constants.magic;
@@ -1037,9 +1023,9 @@ euclid_display.prototype._sketchShape =
 /**/	}
 /**/}
 
-	pStart = shape.get( 0 ).p.inView( view );
+	pStart = shape.get( 0 ).p;
 
-	pc = shape.pc.inView( view );
+	pc = shape.pc;
 
 	pStart =
 		pStart.add(
@@ -1085,7 +1071,7 @@ euclid_display.prototype._sketchShape =
 		}
 		else
 		{
-			pn = section.p.inView( view );
+			pn = section.p;
 
 			if( border !== 0 )
 			{
