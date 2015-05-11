@@ -260,7 +260,6 @@ prototype.draw =
 		display
 	)
 {
-	console.log( this, this.vPnw );
 	display.drawImage(
 		'image', this._display,
 		'pnw', this.vPnw

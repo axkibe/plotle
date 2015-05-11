@@ -304,30 +304,11 @@ prototype.roundRect =
 */
 prototype.rect =
 	function(
-		a1,
-		a2
+		r
 	)
 {
-	var
-		pnw,
-		pse,
-		r;
-
-	if( arguments.length !== 1 )
-	{
-		throw new Error( 'FIXME' );
-	}
-
 	if( this.zoom === 1 )
 	{
-		r =
-			( a1.reflect === 'euclid_rect' )
-			? a1
-			: euclid_rect.create(
-				'pnw', a1,
-				'pse', a2
-			);
-
 		return(
 			( this.pan.x === 0 && this.pan.y === 0 )
 			? r
@@ -335,23 +316,10 @@ prototype.rect =
 		);
 	}
 
-	if( a1.reflect === 'euclid_rect' )
-	{
-		pnw = a1.pnw;
-
-		pse = a1.pse;
-	}
-	else
-	{
-		pnw = a1;
-
-		pse = a2;
-	}
-
 	return(
-		euclid_rect.create(
-			'pnw', pnw.inView( this ),
-			'pse', pse.inView( this )
+		r.create(
+			'pnw', r.pnw.inView( this ),
+			'pse', r.pse.inView( this )
 		)
 	);
 };
