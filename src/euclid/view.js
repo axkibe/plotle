@@ -127,9 +127,7 @@ prototype.x =
 /**/	}
 /**/}
 
-	return Math.round(
-		( x + this.pan.x ) * this.zoom
-	);
+	return Math.round( ( x + this.pan.x ) * this.zoom );
 };
 
 
@@ -144,11 +142,7 @@ prototype.dex =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		typeof( x ) !== 'number'
-/**/		||
-/**/		arguments.length !== 1
-/**/	)
+/**/	if( typeof( x ) !== 'number' || arguments.length !== 1 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -196,19 +190,13 @@ prototype.dey =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		typeof( y ) !== 'number'
-/**/		||
-/**/		arguments.length !== 1
-/**/	)
+/**/	if( typeof( y ) !== 'number' || arguments.length !== 1 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return Math.round(
-		y / this.zoom - this.pan.y
-	);
+	return Math.round( y / this.zoom - this.pan.y );
 };
 
 
@@ -294,32 +282,6 @@ prototype.roundRect =
 			'pse', roundRect.pse.inView( this ),
 			'a', this.scale( roundRect.a ),
 			'b', this.scale( roundRect.b )
-		)
-	);
-};
-
-
-/*
-| Returns a rect repositioned and resized to the current view.
-*/
-prototype.rect =
-	function(
-		r
-	)
-{
-	if( this.zoom === 1 )
-	{
-		return(
-			( this.pan.x === 0 && this.pan.y === 0 )
-			? r
-			: r.add( this.pan )
-		);
-	}
-
-	return(
-		r.create(
-			'pnw', r.pnw.inView( this ),
-			'pse', r.pse.inView( this )
 		)
 	);
 };

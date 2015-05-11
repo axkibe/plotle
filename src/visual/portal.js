@@ -787,7 +787,7 @@ jion.lazyValue(
 	'vZone',
 function( )
 {
-	return this.view.rect( this.fabric.zone );
+	return this.fabric.zone.inView( this.view );
 }
 );
 

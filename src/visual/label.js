@@ -450,7 +450,7 @@ jion.lazyValue(
 	'vZeroSilhoutte',
 	function( )
 {
-	return this.view.home.rect( this.zeroSilhoutte );
+	return this.zeroSilhoutte.inView( this.view.home );
 }
 );
 

@@ -382,7 +382,7 @@ jion.lazyValue(
 	'vZeroSilhoutte',
 	function( )
 {
-	return this.view.home.rect( this.zeroSilhoutte );
+	return this.zeroSilhoutte.inView( this.view.home );
 }
 );
 
@@ -425,7 +425,7 @@ jion.lazyValue(
 			facet,
 			vzone;
 
-		vzone = this.view.rect( this.zone );
+		vzone = this.zone.inView( this.view ); // FIXME lazyval
 
 		display =
 			euclid_display.create(
