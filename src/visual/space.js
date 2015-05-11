@@ -414,7 +414,7 @@ prototype.draw =
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte = view.depoint( action.toPoint );
+					toSilhoutte = action.toPoint.fromView( view );
 				}
 
 				if( toSilhoutte )
@@ -562,7 +562,7 @@ prototype.dragStart =
 		if( com )
 		{
 			// resizing
-			dp = view.depoint( p );
+			dp = p.fromView( view );
 
 			root.create(
 				'action',
@@ -591,7 +591,7 @@ prototype.dragStart =
 			visual_note.create(
 				'fabric',
 					shell_stubs.emptyNote.create(
-						// FIXME why no depoint?
+						// FIXME why no fromView?
 						'zone', euclid_rect.create( 'pnw', p, 'pse', p )
 					),
 				'view', view
@@ -618,7 +618,7 @@ prototype.dragStart =
 			visual_label.create(
 				'fabric',
 					shell_stubs.emptyLabel.create(
-						'pnw', view.depoint( p )
+						'pnw', p.fromView( view )
 					),
 				'view', view
 			);
@@ -644,7 +644,7 @@ prototype.dragStart =
 			visual_portal.create(
 				'fabric',
 					shell_stubs.emptyPortal.create(
-						 //FIXME depoint?
+						 //FIXME fromView?
 	 					'zone', euclid_rect.create( 'pnw', p, 'pse', p )
 					),
 				'view', view
@@ -783,8 +783,8 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									view.depoint( action.start ),
-									view.depoint( p )
+									action.start.fromView( view ),
+									p.fromView( p )
 								)
 						);
 
@@ -823,8 +823,8 @@ prototype.dragStop =
 
 					zone =
 						euclid_rect.createArbitrary(
-							view.depoint( action.start ),
-							view.depoint( p )
+							action.start.fromView( view ),
+							p.fromView( view )
 						);
 
 					oheight = model.zone.height;
@@ -897,8 +897,8 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									view.depoint( action.start ),
-									view.depoint( p )
+									action.start.fromView( view ),
+									p.fromView( view )
 								),
 							'spaceUser', root.user.name,
 							'spaceTag', 'home'
@@ -1145,8 +1145,8 @@ prototype.dragMove =
 
 			zone =
 				euclid_rect.createArbitrary(
-					view.depoint( action.start ),
-					view.depoint( p )
+					action.start.fromView( view ),
+					p.fromView( view )
 				);
 
 			switch( model.positioning )
@@ -1491,21 +1491,17 @@ prototype.specialKey =
 
 /*
 | Changes the zoom factor ( around center )
-|
-| FIXME remove
 */
-/*
 prototype._changeZoom =
 	function( df )
 {
 	var
 		pm;
 
-	pm = this.view.depoint( this.view.baseFrame.pc );
+	pm = this.view.baseFrame.pc.fromView( this.view );
 
 	root.create( 'view', this.view.review( df, pm ) );
 };
-*/
 
 
 } )( );

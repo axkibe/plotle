@@ -245,49 +245,6 @@ jion.lazyValue(
 
 
 /*
-| Returns a point repositioned to the current view.
-*/
-prototype.point =
-	function(
-		p
-	)
-{
-	throw new Error( 'XXX' );
-	/*
-	var
-		anchor;
-
-	switch( p.reflect )
-	{
-		case 'euclid_point' :
-
-			return(
-				p.create(
-					'x', this.x( p.x ),
-					'y', this.y( p.y )
-				)
-			);
-
-		case 'euclid_fixPoint' :
-
-			anchor = p.anchor;
-
-			return(
-				euclid_point.create(
-					'x', this.x( anchor.x ) + p.x,
-					'y', this.y( anchor.y ) + p.y
-				)
-			);
-
-		default :
-
-			throw new Error( );
-	}
-	*/
-};
-
-
-/*
 | Returns the original position of repositioned point.
 */
 prototype.depoint =

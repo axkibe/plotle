@@ -249,7 +249,7 @@ prototype.click =
 
 	moveToButton = this._moveToButton;
 
-	pp = view.depoint( p ).sub( zone.pnw );
+	pp = p.fromView( view ).sub( zone.pnw );
 
 	if( moveToButton.shape.within( pp ) )
 	{
@@ -260,7 +260,7 @@ prototype.click =
 
 	if( access != 'rw' ) return false;
 
-	pp = view.depoint( p ).sub( zone.pnw );
+	pp = p.fromView( view ).sub( zone.pnw );
 
 	for( field in spaceFields )
 	{
@@ -532,7 +532,7 @@ prototype.pointingHover =
 	moveToButton = this._moveToButton;
 
 
-	pp = view.depoint( p ).sub( zone.pnw );
+	pp = p.fromView( view ).sub( zone.pnw );
 
 	if( moveToButton.shape.within( pp ) )
 	{

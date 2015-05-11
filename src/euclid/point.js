@@ -109,6 +109,23 @@ prototype.fixPoint =
 
 
 /*
+| Returns the original position of repositioned point.
+*/
+prototype.fromView =
+	function(
+		view
+	)
+{
+	return(
+		this.create(
+			'x', view.dex( this.x ),
+			'y', view.dey( this.y )
+		)
+	);
+};
+
+
+/*
 | Returns the point repositioned to a view.
 */
 prototype.inView =
