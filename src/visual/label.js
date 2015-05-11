@@ -523,12 +523,11 @@ jion.lazyValue(
 	function( )
 	{
 		var
-			doc,
 			display,
 			facet,
-			vZone; // FIXME use lazyVal
+			vZone;
 
-		vZone = this.zone.inView( this.view );
+		vZone = this.vZone;
 
 		display =
 			euclid_display.create(
@@ -536,18 +535,12 @@ jion.lazyValue(
 				'height', vZone.height + 1
 			);
 
-		doc = this.doc;
-
 		// displays selection and text
-		doc.draw(
-			display,
-			this.zone.width,
-			euclid_point.zero
-		);
-
-		facet = gruga_label.getFacet( );
+		this.doc.draw( display, this.zone.width, euclid_point.zero );
 
 		// displays the border
+		facet = gruga_label.getFacet( );
+
 		display.border( facet.border, this.vZeroSilhoutte );
 
 		return display;

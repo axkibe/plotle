@@ -420,23 +420,20 @@ jion.lazyValue(
 	function( )
 	{
 		var
-			doc,
 			display,
 			facet,
-			vzone;
+			vZone;
 
-		vzone = this.zone.inView( this.view ); // FIXME lazyval
+		vZone = this.vZone;
 
 		display =
 			euclid_display.create(
-				'width', vzone.width,
-				'height', vzone.height
+				'width', vZone.width,
+				'height', vZone.height + 1
 			);
 
-		doc = this.doc;
-
 		// displays selection and text
-		doc.draw(
+		this.doc.draw(
 			display,
 			this.zone.width,
 			euclid_point.zero
