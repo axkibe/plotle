@@ -7,6 +7,10 @@
 */
 
 
+var
+	euclid_shape_flyLine;
+
+
 /*
 | Capsule
 */
@@ -38,12 +42,37 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	euclid_shape_flyLine = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
+
+
+prototype = euclid_shape_flyLine.prototype;
+
+
+/*
+| Returns the shape section repositioned to a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	return(
+		this.p !== undefined
+		? this.create( 'p', this.p.inView( view ) )
+		: this
+	);
+};
+
+
 
 
 })( );

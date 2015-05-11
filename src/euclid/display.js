@@ -338,25 +338,19 @@ euclid_display.prototype.border =
 euclid_display.prototype.fill =
 	function(
 		fill,   // the fill
-		shape,  // an object which has sketch defined
-		view    // FIXME remove
+		shape  // an object which has sketch defined
 	)
 {
 	var
 		cx;
 
-	if( arguments.length === 2 )
-	{
-		view = euclid_view.proper;
-	}
-
 	cx = this._cx;
 
 	cx.beginPath( );
 
-	this._sketch( shape, 0, 0, view );
+	this._sketch( shape, 0, 0 );
 
-	cx.fillStyle = this._colorStyle( fill, shape, view );
+	cx.fillStyle = this._colorStyle( fill, shape );
 
 	cx.fill( );
 };
@@ -432,7 +426,7 @@ euclid_display.prototype.paint =
 
 //	if( arguments.length !== 3 ) throw new Error( 'XXX' );
 
-//	view = euclid_view.proper,
+	if( !view ) view = euclid_view.proper;  // FIXME
 
 	cx = this._cx;
 
@@ -771,6 +765,8 @@ euclid_display.prototype._colorStyle =
 		pc,
 		r0,
 		r1;
+
+	if( !view ) view = euclid_view.proper; // FIXME
 
 	switch( style.reflect )
 	{

@@ -1538,22 +1538,19 @@ jion.lazyValue(
 			display.paint(
 				buttonFacet.fill,
 				buttonFacet.border,
-				moveToButton.shape,
-				hview
+				moveToButton.shape.inView( hview )
 			);
 
 			display.paint(
 				inputFacet.fill,
 				inputFacet.border,
-				fieldSpaceUser.silhoutte,
-				hview
+				fieldSpaceUser.silhoutte.inView( hview )
 			);
 
 			display.paint(
 				inputFacet.fill,
 				inputFacet.border,
-				fieldSpaceTag.silhoutte,
-				hview
+				fieldSpaceTag.silhoutte.inView( hview )
 			);
 
 			display.scale( hview.zoom );

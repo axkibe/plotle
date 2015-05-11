@@ -55,7 +55,7 @@ prototype = euclid_shape.prototype;
 /*
 | Gets the source of a projection to p.
 |
-| FIXME Move the section logic into shapeSection_*
+| FIXME Move the section logic into shape sections
 */
 prototype.getProjection =
 	function(
@@ -307,6 +307,28 @@ prototype.getProjection =
 
 	// no section created a projection.
 	//throw new Error( );
+};
+
+/*
+| Returns the shape repositioned for 'view'.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	var
+		a, aZ,
+		ray;
+
+	ray = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		ray[ a ] = this.get( a ).inView( view );
+	}
+
+	return this.create( 'ray:init', ray );
 };
 
 

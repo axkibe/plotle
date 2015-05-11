@@ -326,11 +326,11 @@ jion.lazyValue(
 prototype.draw =
 	function(
 		display,
-		view,
+		view,    // FIXME caller should do this.
 		facet
 	)
 {
-	display.paint( facet.fill, facet.border, this._shape, view );
+	display.paint( facet.fill, facet.border, this._shape.inView( view ) );
 };
 
 
