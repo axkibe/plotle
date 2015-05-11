@@ -4,13 +4,11 @@
 
 
 var
-	change_set,
 	euclid_display,
 	euclid_point,
 	euclid_rect,
 	gruga_label,
 	jion,
-	root,
 	theme,
 	visual_doc,
 	visual_docItem,
@@ -153,6 +151,12 @@ prototype.click = visual_docItem.click;
 
 
 /*
+| A create relation action ended on this item.
+*/
+prototype.createRelation = visual_item.createRelation;
+
+
+/*
 | A shorthand to (re)create this note
 | with a different fontsize.
 */
@@ -197,6 +201,7 @@ prototype.dragStart = visual_item.dragStart;
 /*
 | Sets the items position and size after an action.
 */
+/* FIXME
 prototype.dragStop =
 	function( p )
 {
@@ -250,6 +255,7 @@ prototype.dragStop =
 			return visual_item.dragStop.call( this, p );
 	}
 };
+*/
 
 
 /*

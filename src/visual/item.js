@@ -206,7 +206,7 @@ visual_item.dragStart =
 /*
 | A draggin action regarding this item stopped.
 */
-visual_item.dragStop =
+visual_item.createRelation =
 	function(
 		p
 	)
@@ -216,26 +216,25 @@ visual_item.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect )
+/**/if( CHECK )
+/**/{
+/**/	if( action.reflect !== 'action_createRelation' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.vZone.within( p ) )
 	{
-		case 'action_createRelation' :
-
-			if( !this.vZone.within( p ) )
-			{
-				return false;
-			}
-
-			root.spawnRelation(
-				root.spaceVisual.get( action.fromItemPath.get( -1 ) ),
-				this
-			);
-
-			return true;
-
-		default :
-
-			return false;
+		return false;
 	}
+
+	root.spawnRelation(
+		root.spaceVisual.get( action.fromItemPath.get( -1 ) ),
+		this
+	);
+
+	return true;
 };
 
 

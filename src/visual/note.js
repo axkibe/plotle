@@ -5,7 +5,6 @@
 */
 
 var
-	change_set,
 	euclid_display,
 	euclid_point,
 	euclid_roundRect,
@@ -187,6 +186,12 @@ prototype.click = visual_docItem.click;
 
 
 /*
+| A create relation action ended on this item.
+*/
+prototype.createRelation = visual_item.createRelation;
+
+
+/*
 | A shorthand to (re)create this note
 | with a different zone.
 */
@@ -230,61 +235,6 @@ prototype.draw =
 	);
 
 	if( sbary ) sbary.draw( display, this.view );
-};
-
-
-/*
-| Sets the items position and size after an action.
-|
-| FIXME this has duplicate code with portal.
-*/
-prototype.dragStop =
-	function(
-		p
-	)
-{
-	var
-		action,
-		zone;
-
-	action = root.action;
-
-	switch( action.reflect )
-	{
-		case 'action_itemResize' :
-
-			zone = this.zone;
-
-/**/		if( CHECK )
-/**/		{
-/**/			if(
-/**/				zone.width  < theme.note.minWidth ||
-/**/				zone.height < theme.note.minHeight
-/**/			)
-/**/			{
-/**/				throw new Error( );
-/**/			}
-/**/		}
-
-			if( this.zone.equals( zone ) )
-			{
-				return;
-			}
-
-			root.alter(
-				change_set.create(
-					'path', this.path.chop.append( 'zone' ),
-					'val', zone,
-					'prev', this.zone
-				)
-			);
-
-			return true;
-
-		default :
-
-			return visual_item.dragStop.call( this, p );
-	}
 };
 
 

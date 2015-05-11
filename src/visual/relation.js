@@ -133,6 +133,12 @@ prototype.click = visual_docItem.click;
 
 
 /*
+| A create relation action ended on this item.
+*/
+prototype.createRelation = visual_item.createRelation;
+
+
+/*
 | A move during an action.
 */
 prototype.dragMove = visual_item.dragMove;
@@ -142,12 +148,6 @@ prototype.dragMove = visual_item.dragMove;
 | Handles a potential dragStart event for this item.
 */
 prototype.dragStart = visual_item.dragStart;
-
-
-/*
-| Sets the items position and size after an action.
-*/
-prototype.dragStop = visual_label.prototype.dragStop;
 
 
 /*

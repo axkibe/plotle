@@ -961,7 +961,7 @@ prototype.dragStop =
 					{
 						item = this.getVis( action.toItemPath.get( -1 ) );
 
-						item.dragStop( p );
+						item.createRelation( p );
 					}
 
 					root.create( 'action', undefined );
@@ -1083,13 +1083,6 @@ prototype.dragStop =
 			break;
 
 		case 'action_scrolly' :
-
-			item = this.getVis( action.itemPath.get( -1 ));
-
-			if( item )
-			{
-				item.dragStop( p, shift, ctrl );
-			}
 
 			root.create( 'action', undefined );
 
