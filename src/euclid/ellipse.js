@@ -253,6 +253,33 @@ jion.lazyValue(
 
 
 /*
+| Returns the ellipse in a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	if( view.zoom === 1 )
+	{
+		return(
+			( view.pan.x === 0 && view.pan.y === 0 )
+			? this
+			: this.add( view.pan )
+		);
+	}
+
+	return(
+		this.create(
+			'pnw', this.pnw.inView( view ),
+			'pse', this.pse.inView( view )
+			// FIXME gradients
+		)
+	);
+};
+
+
+/*
 | Center point of an ellipse.
 */
 jion.lazyValue(

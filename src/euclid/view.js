@@ -1,13 +1,10 @@
 /*
 | A view on a space determines the current
 | pan, zooming and viewport (size of screen)
-|
-| FIXME move the rect/rountRect/point/ellipse stuff to these objects.
 */
 
 
 var
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -229,33 +226,6 @@ jion.lazyValue(
 		);
 	}
 );
-
-
-/*
-| Returns a ellipse for the current view.
-*/
-prototype.ellipse =
-	function(
-		ellipse
-	)
-{
-	if( this.zoom === 1 )
-	{
-		return(
-			( this.pan.x === 0 && this.pan.y === 0 )
-			? ellipse
-			: ellipse.add( this.pan )
-		);
-	}
-
-	return(
-		euclid_ellipse.create(
-			'pnw', ellipse.pnw.inView( this ),
-			'pse', ellipse.pse.inView( this )
-			// FIXME gradients
-		)
-	);
-};
 
 
 /*

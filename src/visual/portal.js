@@ -761,7 +761,7 @@ jion.lazyValue(
 	'vSilhoutte',
 function( )
 {
-	return this.view.ellipse( this.silhoutte );
+	return this.silhoutte.inView( this.view );
 }
 );
 
@@ -774,7 +774,7 @@ jion.lazyValue(
 	'vZeroSilhoutte',
 	function( )
 {
-	return this.view.home.ellipse( this.zeroSilhoutte );
+	return this.zeroSilhoutte.inView( this.view.home );
 }
 );
 
