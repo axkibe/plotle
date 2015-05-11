@@ -415,8 +415,7 @@ euclid_display.prototype.paint =
 	function(
 		fill,
 		border,
-		shape,
-		view  // FIXME remove
+		shape
 	)
 {
 	var
@@ -424,19 +423,15 @@ euclid_display.prototype.paint =
 		aZ,
 		cx;
 
-//	if( arguments.length !== 3 ) throw new Error( 'XXX' );
-
-	if( !view ) view = euclid_view.proper;  // FIXME
-
 	cx = this._cx;
 
 	cx.beginPath( );
 
-	this._sketch( shape, 0, 0, view );
+	this._sketch( shape, 0, 0 );
 
 	if( fill )
 	{
-		cx.fillStyle = this._colorStyle( fill, shape, view );
+		cx.fillStyle = this._colorStyle( fill, shape );
 
 		cx.fill( );
 	}
@@ -449,14 +444,14 @@ euclid_display.prototype.paint =
 
 				for( a = 0, aZ = border.length; a < aZ; a++ )
 				{
-					this._border( border.get( a ), shape, view );
+					this._border( border.get( a ), shape );
 				}
 
 				break;
 
 			case 'euclid_border' :
 
-				this._border( border, shape, view );
+				this._border( border, shape );
 
 				break;
 
@@ -753,8 +748,7 @@ euclid_display.prototype.withinSketch =
 euclid_display.prototype._colorStyle =
 	function(
 		style,
-		shape,
-		view   // FIXME
+		shape
 	)
 {
 	var
@@ -765,8 +759,6 @@ euclid_display.prototype._colorStyle =
 		pc,
 		r0,
 		r1;
-
-	if( !view ) view = euclid_view.proper; // FIXME
 
 	switch( style.reflect )
 	{
@@ -786,11 +778,10 @@ euclid_display.prototype._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					view.x( shape.pnw.x ),
-					view.y( shape.pnw.y ),
-					view.x( shape.pnw.x )
-					+ view.scale( shape.width / 10 ),
-					view.y( shape.pse.y )
+					shape.pnw.x,
+					shape.pnw.y,
+					shape.pnw.x + shape.width / 10,
+					shape.pse.y
 				);
 
 			break;
@@ -869,7 +860,7 @@ euclid_display.prototype._border =
 
 	this._sketch( shape, border.distance, 0.5, view );
 
-	cx.strokeStyle = this._colorStyle( border.color, shape, view );
+	cx.strokeStyle = this._colorStyle( border.color, shape );
 
 	cx.lineWidth = border.width;
 

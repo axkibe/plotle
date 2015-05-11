@@ -649,8 +649,7 @@ prototype.draw =
 			display.paint(
 				gruga_selection.fill,
 				gruga_selection.border,
-				rs,
-				this.view
+				rs.inView( this.view )
 			);
 		}
 		else
@@ -664,8 +663,7 @@ prototype.draw =
 				display.paint(
 					gruga_selection.fill,
 					gruga_selection.border,
-					rs[ a ],
-					this.view
+					rs[ a ].inView( this.view )
 				);
 			}
 		}
@@ -674,11 +672,7 @@ prototype.draw =
 	// north-west points of paras
 	pnws = this.paraPnws;
 
-	for(
-		r = 0, rZ = this.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		para = this.atRank( r );
 
