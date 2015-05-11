@@ -9,7 +9,6 @@
 var
 	euclid_ellipse,
 	euclid_point,
-	euclid_roundRect,
 	euclid_rect,
 	euclid_view,
 	math_limit,
@@ -254,34 +253,6 @@ prototype.ellipse =
 			'pnw', ellipse.pnw.inView( this ),
 			'pse', ellipse.pse.inView( this )
 			// FIXME gradients
-		)
-	);
-};
-
-
-/*
-| Returns a roundRect for the current view.
-*/
-prototype.roundRect =
-	function(
-		roundRect
-	)
-{
-	if( this.zoom === 1 )
-	{
-		return(
-			( this.pan.x === 0 && this.pan.y === 0 )
-			? roundRect
-			: roundRect.add( this.pan )
-		);
-	}
-
-	return(
-		euclid_roundRect.create(
-			'pnw', roundRect.pnw.inView( this ),
-			'pse', roundRect.pse.inView( this ),
-			'a', this.scale( roundRect.a ),
-			'b', this.scale( roundRect.b )
 		)
 	);
 };

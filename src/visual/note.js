@@ -540,7 +540,7 @@ jion.lazyValue(
 	'vSilhoutte',
 function( )
 {
-	return this.view.roundRect( this.silhoutte );
+	return this.silhoutte.inView( this.view );
 }
 );
 
@@ -613,7 +613,7 @@ jion.lazyValue(
 	'vZeroSilhoutte',
 	function( )
 {
-	return this.view.home.roundRect( this.zeroSilhoutte );
+	return this.zeroSilhoutte.inView( this.view.home );
 }
 );
 

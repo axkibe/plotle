@@ -203,6 +203,50 @@ jion.lazyValue(
 );
 
 
+
+
+/*
+| Gets the source of a projection to p.
+*/
+prototype.getProjection =
+	function
+	(
+		// ...
+	)
+{
+	return this.shape.getProjection.apply(
+		this.shape,
+		arguments
+	);
+};
+
+/*
+| Returns a roundRect for the current view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	if( view.zoom === 1 )
+	{
+		return(
+			( view.pan.x === 0 && view.pan.y === 0 )
+			? this
+			: this.add( view.pan )
+		);
+	}
+
+	return(
+		this.create(
+			'pnw', this.pnw.inView( view ),
+			'pse', this.pse.inView( view ),
+			'a', view.scale( this.a ),
+			'b', view.scale( this.b )
+		)
+	);
+};
+
 /*
 | Returns true if point is within the ellipse.
 */
@@ -223,22 +267,6 @@ prototype.within =
 	}
 
 	return this.shape.within( p );
-};
-
-
-/*
-| Gets the source of a projection to p.
-*/
-prototype.getProjection =
-	function
-	(
-		// ...
-	)
-{
-	return this.shape.getProjection.apply(
-		this.shape,
-		arguments
-	);
 };
 
 
