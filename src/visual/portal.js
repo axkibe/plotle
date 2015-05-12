@@ -38,8 +38,6 @@ var
 
 /*
 | The jion definition.
-|
-| FIXME recheck undefines
 */
 if( JION )
 {
@@ -553,37 +551,6 @@ jion.lazyValue(
 );
 
 
-
-/*
-| Forwards fabric data.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'spaceTag',
-	function( )
-{
-	return this.fabric.spaceTag;
-}
-);
-
-
-/*
-| Forwards fabric data.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'spaceUser',
-	function( )
-{
-	return this.fabric.spaceUser;
-}
-);
-
-
 /*
 | The portals zone
 |
@@ -633,7 +600,7 @@ prototype._locateOffset =
 	// FUTURE cache position
 	font = this._fonts[ section ];
 
-	text = this[ section ];
+	text = this.fabric[ section ];
 
 	return euclid_point.create(
 		'x',
@@ -771,7 +738,7 @@ prototype._keyBackspace =
 			'path', this.path.append( section ).chop,
 			'at1', at - 1,
 			'at2', at,
-			'val', this[ section ].substring( at - 1, at )
+			'val', this.fabric[ section ].substring( at - 1, at )
 		)
 	);
 };
@@ -1030,7 +997,7 @@ prototype._keyRight =
 
 	if( !isSection( section ) ) return false;
 
-	value = this[ section ];
+	value = this.fabric[ section ];
 
 	if(
 		section === 'moveToButton'
@@ -1085,7 +1052,7 @@ prototype._keyDel =
 
 	section = mark.caretPath.get( -1 );
 
-	value = this[ section ];
+	value = this.fabric[ section ];
 
 	if( !isSection( section ) || section === 'moveToButton' ) return;
 
@@ -1101,7 +1068,7 @@ prototype._keyDel =
 			'path', this.path.append( section ).chop,
 			'at1', at,
 			'at2', at + 1,
-			'val', this[ section ].substring( at, at + 1 )
+			'val', this.fabric[ section ].substring( at, at + 1 )
 		)
 	);
 };
@@ -1133,12 +1100,9 @@ prototype._keyEnd =
 
 	at = mark.caretAt,
 
-	value = this[ section ];
+	value = this.fabric[ section ];
 
-	if( at >= value.length )
-	{
-		return;
-	}
+	if( at >= value.length ) return;
 
 	root.create(
 		'mark',
@@ -1286,13 +1250,9 @@ prototype._prepareField =
 
 	rounding = theme.portal.input.rounding;
 
-	text = this[ section ];
+	text = this.fabric[ section ];
 
-	width =
-		euclid_measure.width(
-			this._fonts[ section ],
-			text
-		);
+	width = euclid_measure.width( this._fonts[ section ], text );
 
 	height = this._fonts[ section ].size + 2;
 
@@ -1350,6 +1310,7 @@ jion.lazyValue(
 	}
 );
 
+
 /*
 | User pressed pos1 key,
 */
@@ -1380,7 +1341,7 @@ prototype._getOffsetAt =
 
 	dx = x - this[ spaceFields[ section ] ].pnw.x;
 
-	value = this[ section ];
+	value = this.fabric[ section ];
 
 	x1 = 0;
 
