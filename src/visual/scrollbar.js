@@ -8,8 +8,10 @@
 
 
 var
+	euclid_rect,
 	euclid_roundRect,
 	gruga_scrollbar,
+	jion,
 	math_half,
 	math_limit,
 	theme,
@@ -169,35 +171,6 @@ prototype.getArea =
 
 
 /*
-| Returns true if p is within the scrollbar.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	var
-		pnw,
-		dex,
-		dey;
-
-	pnw = this.pnw;
-
-	// FIXME make a vPNW and vSize
-	dex = this.view.dex( p.x );
-
-	dey = this.view.dey( p.y );
-
-	return(
-		dex >= pnw.x &&
-		dey >= pnw.y &&
-		dex <= pnw.x + theme.scrollbar.strength &&
-		dey <= pnw.y + this.size
-	);
-};
-
-
-/*
 | Returns the value of pos change for d pixels in the current zone.
 */
 prototype.scale =
@@ -206,6 +179,59 @@ prototype.scale =
 	)
 {
 	return d * this.max / this.size;
+};
+
+
+
+/*
+| Pnw in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vPnw',
+	function( )
+{
+	return this.pnw.inView( this.view );
+}
+);
+
+
+/*
+| Zone in current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZone',
+	function( )
+{
+	var
+		vPnw;
+
+	vPnw = this.vPnw;
+
+	return(
+		euclid_rect.create(
+			'pnw', vPnw,
+			'pse',
+				vPnw.add(
+					theme.scrollbar.strength,
+					this.view.scale( this.size )
+				)
+		)
+	);
+}
+); 
+
+
+/*
+| Returns true if p is within the scrollbar.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+	return this.vZone.within( p );
 };
 
 
