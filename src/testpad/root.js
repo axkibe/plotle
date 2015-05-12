@@ -272,8 +272,7 @@ testpad_root.prototype.alter =
 	)
 {
 	var
-		changeWrap,
-		result;
+		changeWrap;
 
 	changeWrap =
 		change_wrap.create(
@@ -282,10 +281,7 @@ testpad_root.prototype.alter =
 				change_ray.create( 'ray:set', 0, change )
 		);
 
-	result = root.repository.alter( changeWrap );
-
-	// FIXME return nothing!
-	return result;
+	root.repository.alter( changeWrap );
 };
 
 
@@ -527,8 +523,7 @@ testpad_root.prototype.send =
 		action,
 		cursorAt,
 		doc,
-		path,
-		path2;
+		linePath;
 
 	action = this.action;
 
@@ -541,22 +536,22 @@ testpad_root.prototype.send =
 		return;
 	}
 
+	linePath =
+		noteDocPath
+		.append( 'twig' )
+		.append( doc.getKey( action.line ) )
+		.append( 'text' );
+
 	switch( action.command )
 	{
 		case 'insert' :
 
 			// FIXME path is set in all cases equally, so
 			//       move it up
-			path =
-				noteDocPath
-				.append( 'twig' )
-				.append( doc.getKey( action.line ) )
-				.append( 'text' );
-
 			root.alter(
 				change_insert.create(
 					'val', action.value,
-					'path', path.chop,
+					'path', linePath.chop,
 					'at1', action.at,
 					'at2', action.at + action.value.length
 				)
@@ -568,18 +563,12 @@ testpad_root.prototype.send =
 
 		case 'remove' :
 
-			path =
-				noteDocPath
-				.append( 'twig' )
-				.append( doc.getKey( action.line ) )
-				.append( 'text' );
-
 			root.alter(
 				change_remove.create(
 					'val',
 						doc.atRank( action.line ).text
 						.substring( action.at2, action.at ),
-					'path', path.chop,
+					'path', linePath.chop,
 					'at1', action.at,
 					'at2', action.at2
 				)
@@ -597,16 +586,10 @@ testpad_root.prototype.send =
 
 		case 'split' :
 
-			path =
-				noteDocPath
-				.append( 'twig' )
-				.append( doc.getKey( action.line ) )
-				.append( 'text' );
-
 			root.alter(
 				change_split.create(
-					'path', path.chop,
-					'path2', path.set( -2, session_uid( ) ).chop,
+					'path', linePath.chop,
+					'path2', linePath.set( -2, session_uid( ) ).chop,
 					'at1', action.at
 				)
 			);
@@ -615,31 +598,22 @@ testpad_root.prototype.send =
 
 		case 'join' :
 
-			path =
-				noteDocPath
-				.append( 'twig' )
-				.append( doc.getKey( action.line - 1 ) )
-				.append( 'text' );
-
-			path2 =
-				noteDocPath
-				.append( 'twig' )
-				.append( doc.getKey( action.line ) )
-				.append( 'text' );
-
 			root.alter(
 				change_join.create(
-					'path', path.chop,
-					'path2', path2.chop,
+					'path',
+						noteDocPath
+						.append( 'twig' )
+						.append( doc.getKey( action.line - 1 ) )
+						.append( 'text' )
+						.chop,
+					'path2', linePath.chop,
 					'at1', doc.atRank( action.line - 1 ).text.length
 				)
 			);
 
 			break;
 
-		default :
-
-			throw new Error( 'invalid action.command' );
+		default : throw new Error( );
 	}
 
 	root.create(

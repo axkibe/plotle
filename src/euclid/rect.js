@@ -469,8 +469,6 @@ jion.lazyValue(
 /*
 | returns a rect moved by a point or x/y
 |
-| FIXME allow only point
-|
 | add( point )   -or-
 | add( x, y  )
 */
@@ -531,12 +529,9 @@ prototype.equals =
 
 /*
 | Returns true if point is within this rect.
-|
-| FIXME remove view here
 */
 prototype.within =
 	function(
-		view, // OR just p
 		p
 	)
 {
@@ -546,19 +541,9 @@ prototype.within =
 		pnw,
 		pse;
 
-	if( arguments.length === 2 )
-	{
-		x = view ? view.dex( p.x ) : p.x;
+	x = p.x;
 
-		y = view ? view.dey( p.y ) : p.y;
-	}
-	else
-	{
-		x = view.x;
-
-		y = view.y;
-	}
-
+	y = p.y;
 
 	pnw = this.pnw;
 
