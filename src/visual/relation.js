@@ -182,7 +182,9 @@ prototype.draw =
 				zone, 'normal'
 			);
 
-		arrow1.draw( display, this.view, gruga_relation );
+		arrow1 = arrow1.inView( this.view );
+
+		arrow1.draw( display, gruga_relation );
 	}
 
 	if( item2 )
@@ -193,7 +195,9 @@ prototype.draw =
 				item2.silhoutte, 'arrow'
 			);
 
-		arrow2.draw( display, this.view, gruga_relation );
+		arrow2 = arrow2.inView( this.view );
+
+		arrow2.draw( display, gruga_relation );
 	}
 
 	visual_label.prototype.draw.call( this, display );

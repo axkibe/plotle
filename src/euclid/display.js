@@ -1037,6 +1037,11 @@ euclid_display.prototype._sketchShape =
 				: ( pStart.y < pc.y ? border : 0 )
 		);
 
+	if( pStart.reflect === 'euclid_fixPoint' )
+	{
+		pStart = pStart.inView( euclid_view.proper );
+	}
+
 	pp = pStart;
 
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
@@ -1072,6 +1077,11 @@ euclid_display.prototype._sketchShape =
 		else
 		{
 			pn = section.p;
+
+			if( pn.reflect === 'euclid_fixPoint' )
+			{
+				pn = pn.inView( euclid_view.proper );
+			}
 
 			if( border !== 0 )
 			{

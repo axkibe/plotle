@@ -25,7 +25,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'euclid_arrow',
 		attributes :
 		{
@@ -163,6 +163,36 @@ euclid_arrow.connect =
 
 
 /*
+| Displays the arrow.
+*/
+prototype.draw =
+	function(
+		display,
+		facet
+	)
+{
+	display.paint( facet.fill, facet.border, this._shape );
+};
+
+
+/*
+| Returns the arrow repositioned and resized to a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	return(
+		this.create(
+			'p1', this.p1.inView( view ),
+			'p2', this.p2.inView( view )
+		)
+	);
+};
+
+
+/*
 | The line of the arrow.
 */
 jion.lazyValue(
@@ -181,19 +211,6 @@ jion.lazyValue(
 
 
 /*
-| The zone of the arrow.
-*/
-jion.lazyValue(
-	prototype,
-	'zone',
-	function( )
-	{
-		return this.line.zone;
-	}
-);
-
-
-/*
 | The point at center.
 */
 jion.lazyValue(
@@ -202,6 +219,19 @@ jion.lazyValue(
 	function( )
 	{
 		return this.line.pc;
+	}
+);
+
+
+/*
+| The zone of the arrow.
+*/
+jion.lazyValue(
+	prototype,
+	'zone',
+	function( )
+	{
+		return this.line.zone;
 	}
 );
 
@@ -300,10 +330,8 @@ jion.lazyValue(
 
 				break;
 
-			default :
-
-				// unknown arrow end
-				throw new Error( );
+			// unknown arrow end
+			default : throw new Error( );
 		}
 
 		sections.push(
@@ -320,18 +348,6 @@ jion.lazyValue(
 );
 
 
-/*
-| Displays the arrow.
-*/
-prototype.draw =
-	function(
-		display,
-		view,    // FIXME caller should do this.
-		facet
-	)
-{
-	display.paint( facet.fill, facet.border, this._shape.inView( view ) );
-};
 
 
 } )( );
