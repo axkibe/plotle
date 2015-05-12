@@ -158,6 +158,43 @@ isSection =
 };
 
 
+/*
+| Gets the previous section in a cycle.
+*/
+visual_portal.antiCycle =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' : return 'moveToButton';
+
+		case 'spaceTag' : return 'spaceUser';
+
+		case 'moveToButton' : return 'spaceTag';
+	}
+};
+
+
+/*
+| Gets the next section in a cycle.
+*/
+visual_portal.cycle =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' : return 'spaceTag';
+
+		case 'spaceTag' : return 'moveToButton';
+
+		case 'moveToButton' : return 'spaceUser';
+	}
+};
+
 
 /*
 | Returns the attention center.
@@ -554,7 +591,7 @@ jion.lazyValue(
 /*
 | The portals zone
 |
-| FIXME this should be the visual corrected zone
+| FUTURE this should be the visual corrected zone
 */
 jion.lazyValue(
 	prototype,
@@ -640,32 +677,32 @@ jion.lazyValue(
 */
 prototype.specialKey =
 	function(
-		key
-		// shift
+		key,
+		shift
 		// ctrl
 	)
 {
 	switch( key )
 	{
-		case 'backspace' : this._keyBackspace( ); break;
+		case 'backspace' : this._keyBackspace( shift ); break;
 
-		case 'del' : this._keyDel( ); break;
+		case 'del' : this._keyDel( shift ); break;
 
-		case 'down' : this._keyDown( ); break;
+		case 'down' : this._keyDown( shift ); break;
 
-		case 'end' : this._keyEnd( ); break;
+		case 'end' : this._keyEnd( shift ); break;
 
-		case 'enter' : this._keyEnter( ); break;
+		case 'enter' : this._keyEnter( shift ); break;
 
-		case 'left' : this._keyLeft( ); break;
+		case 'left' : this._keyLeft( shift ); break;
 
-		case 'pos1' : this._keyPos1( ); break;
+		case 'pos1' : this._keyPos1( shift ); break;
 
-		case 'right' : this._keyRight( ); break;
+		case 'right' : this._keyRight( shift ); break;
 
-		case 'tab' : this._keyTab( ); break;
+		case 'tab' : this._keyTab( shift ); break;
 
-		case 'up' : this._keyUp( ); break;
+		case 'up' : this._keyUp( shift ); break;
 	}
 };
 
@@ -829,26 +866,7 @@ prototype._keyLeft =
 
 	if( mark.caretAt === 0 )
 	{
-		switch( section )
-		{
-			case 'spaceUser' :
-
-				cycle = 'moveToButton';
-
-				break;
-
-			case 'spaceTag' :
-
-				cycle = 'spaceUser';
-
-				break;
-
-			case 'moveToButton' :
-
-				cycle = 'spaceTag';
-
-				break;
-		}
+		cycle = visual_portal.cycle( section );
 
 		root.create(
 			'mark',
@@ -856,8 +874,8 @@ prototype._keyLeft =
 					'path', this.path.append( cycle ),
 					'at',
 						cycle === 'moveToButton'
-						?  0
-						: this[ cycle ].length
+						? 0
+						: this.fabric[ cycle ].length
 				)
 		);
 
@@ -877,11 +895,11 @@ prototype._keyLeft =
 
 /*
 | User pressed down key.
-|
-| FIXME take care of shift.
 */
 prototype._keyTab =
-	function( )
+	function(
+		shift
+	)
 {
 	var
 		cycle,
@@ -894,14 +912,10 @@ prototype._keyTab =
 
 	if( !isSection( section ) ) return;
 
-	switch( section )
-	{
-		case 'spaceUser' : cycle = 'spaceTag'; break;
-
-		case 'spaceTag' : cycle = 'moveToButton'; break;
-
-		case 'moveToButton' : cycle = 'spaceUser'; break;
-	}
+	cycle =
+		shift
+		? visual_portal.antiCycle( section )
+		: visual_portal.cycle( section );
 
 	root.create(
 		'mark',
@@ -1004,14 +1018,7 @@ prototype._keyRight =
 		|| ( value && mark.caretAt >= value.length )
 	)
 	{
-		switch( section )
-		{
-			case 'spaceUser' : cycle = 'spaceTag'; break;
-
-			case 'spaceTag' : cycle = 'moveToButton'; break;
-
-			case 'moveToButton' : cycle = 'spaceUser'; break;
-		}
+		cycle = visual_portal.cycle( section );
 
 		root.create(
 			'mark',
@@ -1150,13 +1157,10 @@ prototype._keyEnter =
 	}
 	else
 	{
-		if( CHECK )
-		{
-			if( section !== 'moveToButton' )
-			{
-				throw new Error( );
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( section !== 'moveToButton' ) throw new Error( );
+/**/	}
 
 		this._moveTo( );
 	}
