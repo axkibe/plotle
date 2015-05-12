@@ -8,6 +8,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	euclid_view,
 	jion,
 	math_half;
 

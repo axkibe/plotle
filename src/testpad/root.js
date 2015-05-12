@@ -546,8 +546,6 @@ testpad_root.prototype.send =
 	{
 		case 'insert' :
 
-			// FIXME path is set in all cases equally, so
-			//       move it up
 			root.alter(
 				change_insert.create(
 					'val', action.value,
