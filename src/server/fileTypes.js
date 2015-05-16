@@ -103,9 +103,7 @@ server_fileTypes.coding =
 
 	if( !coding )
 	{
-		throw new Error(
-			'unknown file extension: .' + ext
-		);
+		throw new Error( 'unknown file extension: .' + ext );
 	}
 
 	return coding;
@@ -127,9 +125,7 @@ server_fileTypes.mime =
 
 	if( !mime )
 	{
-		throw new Error(
-			'unknown file extension: ' + ext
-		);
+		throw new Error( 'unknown file extension: ' + ext );
 	}
 
 	return mime;

@@ -181,10 +181,7 @@ jion.lazyValue(
 
 		fp = this.filePath;
 
-		if( !fp )
-		{
-			return;
-		}
+		if( !fp ) return;
 
 		return fp.split( '.' )[ 1 ];
 	}
