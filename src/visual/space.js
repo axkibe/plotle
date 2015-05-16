@@ -153,6 +153,21 @@ visual_space.concernsHover =
 };
 
 
+jion.lazyStaticValue(
+	visual_space,
+	'visualMap',
+	function( )
+{
+	return {
+		'fabric_label' : visual_label,
+		'fabric_note' : visual_note,
+		'fabric_portal' : visual_portal,
+		'fabric_relation' : visual_relation
+	};
+}
+);
+
+
 /*
 | Initializer.
 */
@@ -161,18 +176,28 @@ prototype._init =
 {
 	var
 		a,
+		action,
 		aZ,
 		fabric,
+		hover,
 		item,
 		iItem,
 		k,
+		mark,
 		path,
 		ranks,
-		twig;
+		twig,
+		view;
+
+	action = this._action;
 
 	fabric = this.fabric;
 
-	//iTwig = inherit._twig;
+	hover = this.hover;
+
+	mark = this.mark;
+
+	view = this.view;
 
 	twig = { };
 
@@ -182,7 +207,7 @@ prototype._init =
 	{
 		k = fabric.getKey( a );
 
-		ranks.push( k );  // FIXME array set instead of push
+		ranks[ a ] = k;
 
 		item = fabric.get( k );
 
@@ -190,14 +215,12 @@ prototype._init =
 
 		if( !iItem )
 		{
-			switch( item.reflect )
-			{
-				case 'fabric_label' : iItem = visual_label; break;
-				case 'fabric_note' : iItem = visual_note; break;
-				case 'fabric_portal' : iItem = visual_portal; break;
-				case 'fabric_relation' : iItem = visual_relation; break;
-				default : throw new Error( );
-			}
+			iItem = visual_space.visualMap[ item.reflect ];
+
+/**/		if( CHECK )
+/**/		{
+/**/			if( !iItem ) throw new Error( );
+/**/		}
 
 			path = spacePath.append( 'twig' ).appendNC( k );
 		}
@@ -208,11 +231,12 @@ prototype._init =
 
 		twig[ k ] =
 			iItem.create(
-				'hover', this.hover,
+				'action', action,
+				'hover', hover,
 				'fabric', item,
-				'mark', this.mark,
+				'mark', mark,
 				'path', path,
-				'view', this.view
+				'view', view
 			);
 	}
 

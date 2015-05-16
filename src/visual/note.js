@@ -38,6 +38,14 @@ if( JION )
 		id : 'visual_note',
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] ),
+				assign : '_action'
+			},
 			fabric :
 			{
 				comment : 'the notes fabric',

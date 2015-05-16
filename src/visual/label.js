@@ -33,6 +33,14 @@ if( JION )
 		id : 'visual_label',
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] ),
+				assign : '_action'
+			},
 			fabric :
 			{
 				comment : 'the labels fabric',
@@ -44,11 +52,6 @@ if( JION )
 				type : [ 'undefined', 'jion$path' ],
 				assign : ''
 			},
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			},
 			mark :
 			{
 				comment : 'the users mark',
@@ -56,6 +59,11 @@ if( JION )
 				type :
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
+			},
+			path :
+			{
+				comment : 'the path of the doc',
+				type : [ 'undefined', 'jion$path' ]
 			},
 			view :
 			{

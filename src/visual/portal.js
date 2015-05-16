@@ -45,6 +45,14 @@ if( JION )
 		id : 'visual_portal',
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../typemaps/action' )
+					.concat( [ 'undefined' ] ),
+				assign : '_action'
+			},
 			fabric :
 			{
 				comment : 'portal fabric data',
@@ -866,7 +874,7 @@ prototype._keyLeft =
 
 	if( mark.caretAt === 0 )
 	{
-		cycle = visual_portal.cycle( section );
+		cycle = visual_portal.antiCycle( section );
 
 		root.create(
 			'mark',
