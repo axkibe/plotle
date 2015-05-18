@@ -3,6 +3,10 @@
 */
 
 
+var
+	action_itemResize;
+
+
 /*
 | Capsule
 */
@@ -44,12 +48,31 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	action_itemResize = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
+
+
+prototype = action_itemResize.prototype;
+
+
+/*
+| Returns true if an entity with path is affected by this action.
+*/
+prototype.affects =
+	function(
+		// path
+	)
+{
+	return false;
+};
 
 
 } )( );

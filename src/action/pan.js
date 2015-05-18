@@ -3,6 +3,10 @@
 */
 
 
+var
+	action_pan;
+
+
 /*
 | Capsule
 */
@@ -34,12 +38,31 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	action_pan = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
+
+
+prototype = action_pan.prototype;
+
+
+/*
+| Returns true if an entity with path is affected by this action.
+*/
+prototype.affects =
+	function(
+		// path
+	)
+{
+	return false;
+};
 
 
 } )( );

@@ -44,7 +44,8 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action'
+				assign : '_action',
+				prepare : 'visual_item.concernsAction( action, path )',
 			},
 			fabric :
 			{
@@ -519,7 +520,7 @@ function( )
 /*
 | Forwards fabric settings.
 |
-| FUTURE remove.
+| XXX
 */
 jion.lazyValue(
 	prototype,

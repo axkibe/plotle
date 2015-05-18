@@ -46,6 +46,22 @@ visual_item.concernsMark =
 
 
 /*
+| Returns the action if an item with 'path' concerns about
+| the action.
+*/
+visual_item.concernsAction =
+	function(
+		action,
+		path
+	)
+{
+	if( !path || !action ) return undefined;
+
+	return action.affects( path ) ? action : undefined;
+};
+
+
+/*
 | A move during an action.
 */
 visual_item.dragMove =

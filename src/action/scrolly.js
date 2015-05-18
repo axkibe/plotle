@@ -3,6 +3,10 @@
 */
 
 
+var
+	action_scrolly;
+
+
 /*
 | Capsule
 */
@@ -39,12 +43,31 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	action_scrolly = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
+
+
+prototype = action_scrolly.prototype;
+
+
+/*
+| Returns true if an entity with path is affected by this action.
+*/
+prototype.affects =
+	function(
+		// path
+	)
+{
+	return false;
+};
 
 
 } )( );

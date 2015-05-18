@@ -3,6 +3,10 @@
 */
 
 
+var
+	action_itemDrag;
+
+
 /*
 | Capsule
 */
@@ -39,12 +43,31 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	action_itemDrag = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
+
+
+prototype = action_itemDrag.prototype;
+
+
+/*
+| Returns true if an entity with path is affected by this action.
+*/
+prototype.affects =
+	function(
+		path
+	)
+{
+	return this.origin.path.equals( path );
+};
 
 
 } )( );
