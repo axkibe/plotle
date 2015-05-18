@@ -278,22 +278,6 @@ prototype.focusedItem =
 
 	path = mark ? mark.itemPath : undefined;
 
-	if( action )
-	{
-		switch( action.reflect )
-		{
-//			case 'action_itemDrag' : XXX
-			case 'action_itemResize' :
-
-				if( action.transItem.path.subPathOf( path ) )
-				{
-					return action.transItem;
-				}
-
-				break;
-		}
-	}
-
 	if( path && path.length > 2 )
 	{
 		return this.getVis( path.get( 2 ) );
@@ -307,30 +291,14 @@ prototype.focusedItem =
 
 /*
 | Returns an item by its key.
+|
+| FIXME remove
 */
 prototype.getVis =
 	function(
 		key
 	)
 {
-	var
-		action;
-
-	action = this._action;
-
-	switch( action && action.reflect )
-	{
-//		case 'action_itemDrag' :
-		case 'action_itemResize' :
-
-			if( action.transItem.path.get( -1 ) === key )
-			{
-				return action.transItem;
-			}
-
-			break;
-	}
-
 	return this.get( key );
 };
 

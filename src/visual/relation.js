@@ -214,17 +214,9 @@ prototype.draw =
 
 
 /*
-| Forwards fabric settings.
+| Fontsize of the relations label.
 */
-jion.lazyValue(
-	prototype,
-	'fontsize',
-	function( )
-{
-	return this.fabric.fontsize;
-}
-);
-
+jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 
 
 /*

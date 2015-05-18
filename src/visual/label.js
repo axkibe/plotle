@@ -223,16 +223,26 @@ prototype.draw =
 
 
 /*
-| Forwards fabric settings.
+| The fontsize of the label.
 */
-jion.lazyValue(
-	prototype,
-	'fontsize',
-function( )
+visual_label.fontsize =
+	function( )
 {
-	return this.fabric.fontsize;
-}
-);
+	var
+		action;
+	
+	action = this._action;
+
+	switch( action && action.reflect )
+	{
+		case 'action_itemResize' : return action.transItem.fabric.fontsize;
+
+		default : return this.fabric.fontsize;
+	}
+};
+
+
+jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 
 
 /*
@@ -304,7 +314,10 @@ visual_label.pnw =
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' : return action.transItem.fabric.pnw;
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
+		
+			return action.transItem.fabric.pnw;
 
 		default : return this.fabric.pnw;
 	}

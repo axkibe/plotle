@@ -68,10 +68,10 @@ prototype = action_itemResize.prototype;
 */
 prototype.affects =
 	function(
-		// path
+		path
 	)
 {
-	return false;
+	return this.origin.path.equals( path );
 };
 
 

@@ -612,7 +612,10 @@ function( )
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' : return action.transItem.fabric.zone;
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
+		
+			return action.transItem.fabric.zone;
 
 		default : return this.fabric.zone;
 	}
