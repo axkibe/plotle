@@ -389,9 +389,10 @@ prototype.draw =
 						euclid_arrow.connect(
 							fromSilhoutte, 'normal',
 							toSilhoutte, 'arrow'
-						);
+						).
+						inView( view );
 
-					arrow.draw( display, view, gruga_relation );
+					arrow.draw( display, gruga_relation );
 				}
 			}
 			else
