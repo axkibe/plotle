@@ -280,26 +280,12 @@ prototype.focusedItem =
 
 	if( path && path.length > 2 )
 	{
-		return this.getVis( path.get( 2 ) );
+		return this.get( path.get( 2 ) );
 	}
 	else
 	{
 		return undefined;
 	}
-};
-
-
-/*
-| Returns an item by its key.
-|
-| FIXME remove
-*/
-prototype.getVis =
-	function(
-		key
-	)
-{
-	return this.get( key );
 };
 
 
@@ -370,13 +356,13 @@ prototype.draw =
 
 			if( action.fromItemPath )
 			{
-				fromItem = this.getVis( action.fromItemPath.get( -1 ) );
+				fromItem = this.get( action.fromItemPath.get( -1 ) );
 
 				fromItem.highlight( display );
 
 				if( action.toItemPath )
 				{
-					toItem = this.getVis( action.toItemPath.get( -1 ) );
+					toItem = this.get( action.toItemPath.get( -1 ) );
 
 					toItem.highlight( display );
 				}
@@ -413,7 +399,7 @@ prototype.draw =
 				if( this.hover )
 				{
 					this
-					.getVis( this.hover.get( 2 ) )
+					.get( this.hover.get( 2 ) )
 					.highlight( display );
 				}
 			}
@@ -939,7 +925,7 @@ prototype.dragStop =
 
 					if( action.toItemPath )
 					{
-						item = this.getVis( action.toItemPath.get( -1 ) );
+						item = this.get( action.toItemPath.get( -1 ) );
 
 						item.createRelation( p );
 					}
@@ -1364,7 +1350,7 @@ prototype.dragMove =
 
 		case 'action_scrolly' :
 
-			item = this.getVis( action.itemPath.get( -1 ) );
+			item = this.get( action.itemPath.get( -1 ) );
 
 			if( item ) item.dragMove( p );
 

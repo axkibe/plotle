@@ -177,9 +177,9 @@ prototype.draw =
 
 	space = root.spaceVisual;
 
-	item1 = space.getVis( this.item1key );
+	item1 = space.get( this.item1key );
 
-	item2 = space.getVis( this.item2key );
+	item2 = space.get( this.item2key );
 
 	zone = this.zone;
 
