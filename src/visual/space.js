@@ -304,18 +304,6 @@ prototype.getVis =
 
 
 /*
-| Returns the item by a given tree-rank.
-*/
-prototype.atRankVis =
-	function(
-		rank
-	)
-{
-	return this.getVis( this.getKey( rank ) );
-};
-
-
-/*
 | The attention center.
 */
 jion.lazyValue(
@@ -363,7 +351,7 @@ prototype.draw =
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
-		this.atRankVis( r ).draw( display );
+		this.atRank( r ).draw( display );
 	}
 
 	focus = this.focusedItem( );
@@ -456,7 +444,7 @@ prototype.mousewheel =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		item = this.atRankVis( r );
+		item = this.atRank( r );
 
 		if( item.mousewheel( view, p, dir, shift, ctrl ) ) return true;
 	}
@@ -504,7 +492,7 @@ prototype.pointingHover =
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRankVis( a );
+		item = this.atRank( a );
 
 		result = item.pointingHover( p );
 
@@ -657,7 +645,7 @@ prototype.dragStart =
 	// see if one item was targeted
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRankVis( a );
+		item = this.atRank( a );
 
 		if( item.dragStart( p, shift, ctrl, access ) ) return;
 	}
@@ -713,7 +701,7 @@ prototype.click =
 	// clicked some item?
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRankVis( a );
+		item = this.atRank( a );
 
 		if( item.click( p, shift, ctrl, access ) ) return true;
 	}
@@ -1208,7 +1196,7 @@ prototype.dragMove =
 				r++
 			)
 			{
-				if( this.atRankVis( r ).dragMove( p ) )
+				if( this.atRank( r ).dragMove( p ) )
 				{
 					return 'pointer';
 				}
