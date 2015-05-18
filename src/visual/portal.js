@@ -51,7 +51,8 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action'
+				assign : '_action',
+				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
 			{
@@ -597,16 +598,24 @@ jion.lazyValue(
 
 
 /*
-| The portals zone
-|
-| FUTURE this should be the visual corrected zone
+| The items zone possibly altered by action.
 */
 jion.lazyValue(
 	prototype,
 	'zone',
-	function( )
+function( )
 {
-	return this.fabric.zone;
+	var
+		action;
+
+	action = this._action;
+
+	switch( action && action.reflect )
+	{
+		case 'action_itemDrag' : return action.transItem.fabric.zone;
+
+		default : return this.fabric.zone;
+	}
 }
 );
 
@@ -749,7 +758,7 @@ jion.lazyValue(
 	'vZone',
 function( )
 {
-	return this.fabric.zone.inView( this.view );
+	return this.zone.inView( this.view );
 }
 );
 

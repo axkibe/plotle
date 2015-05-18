@@ -41,7 +41,8 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action'
+				assign : '_action',
+				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
 			{
@@ -298,16 +299,9 @@ prototype.mousewheel =
 
 
 /*
-| Forwards fabric settings.
+| The labels 'pnw', possibly altered by 'action'.
 */
-jion.lazyValue(
-	prototype,
-	'pnw',
-	function( )
-{
-	return this.fabric.pnw;
-}
-);
+jion.lazyValue( prototype, 'pnw', visual_label.pnw );
 
 
 /*

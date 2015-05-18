@@ -282,7 +282,7 @@ prototype.focusedItem =
 	{
 		switch( action.reflect )
 		{
-			case 'action_itemDrag' :
+//			case 'action_itemDrag' : XXX
 			case 'action_itemResize' :
 
 				if( action.transItem.path.subPathOf( path ) )
@@ -320,7 +320,7 @@ prototype.getVis =
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' :
+//		case 'action_itemDrag' :
 		case 'action_itemResize' :
 
 			if( action.transItem.path.get( -1 ) === key )
@@ -1410,10 +1410,7 @@ prototype.dragMove =
 
 			item = this.getVis( action.itemPath.get( -1 ) );
 
-			if( item )
-			{
-				item.dragMove( p );
-			}
+			if( item ) item.dragMove( p );
 
 			return 'move';
 

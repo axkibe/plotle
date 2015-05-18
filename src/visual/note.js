@@ -45,7 +45,7 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
 				assign : '_action',
-				prepare : 'visual_item.concernsAction( action, path )',
+				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
 			{
@@ -505,6 +505,19 @@ function( )
 
 
 /*
+| The notes silhoutte anchored at zero.
+*/
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.zeroSilhoutte.inView( this.view.home );
+}
+);
+
+
+/*
 | Zone in current view.
 */
 jion.lazyValue(
@@ -512,22 +525,30 @@ jion.lazyValue(
 	'vZone',
 function( )
 {
-	return this.fabric.zone.inView( this.view );
+	return this.zone.inView( this.view );
 }
 );
 
 
 /*
-| Forwards fabric settings.
-|
-| XXX
+| The items zone possibly altered by action.
 */
 jion.lazyValue(
 	prototype,
 	'zone',
 function( )
 {
-	return this.fabric.zone;
+	var
+		action;
+
+	action = this._action;
+
+	switch( action && action.reflect )
+	{
+		case 'action_itemDrag' : return action.transItem.fabric.zone;
+
+		default : return this.fabric.zone;
+	}
 }
 );
 
@@ -563,18 +584,6 @@ jion.lazyValue(
 	}
 );
 
-
-/*
-| The notes silhoutte anchored at zero.
-*/
-jion.lazyValue(
-	prototype,
-	'vZeroSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.inView( this.view.home );
-}
-);
 
 
 /*

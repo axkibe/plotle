@@ -39,7 +39,8 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action'
+				assign : '_action',
+				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
 			{
@@ -207,66 +208,6 @@ prototype.dragStart = visual_item.dragStart;
 
 
 /*
-| Sets the items position and size after an action.
-*/
-/* FIXME
-prototype.dragStop =
-	function( p )
-{
-	var
-		action,
-		changes,
-		fontsize,
-		zone;
-
-	action = root.action;
-
-	switch( action.reflect )
-	{
-		case 'action_itemDrag' :
-		case 'action_itemResize' :
-
-			zone = this.zone,
-
-			fontsize = this.doc.font.size;
-
-			changes = [ ];
-
-			if( !this.pnw.equals( zone.pnw ) )
-			{
-				changes.push(
-					change_set.create(
-						'path', this.path.chop.append( 'pnw' ),
-						'val', zone.pnw,
-						'prev', this.pnw
-					)
-				);
-			}
-
-			if( fontsize !== this.fontsize )
-			{
-				changes.push(
-					change_set.create(
-						'path', this.path.chop.append( 'fontsize' ),
-						'val', fontsize,
-						'prev', this.fontsize
-					)
-				);
-			}
-
-			root.alter( changes );
-
-			break;
-
-		default :
-
-			return visual_item.dragStop.call( this, p );
-	}
-};
-*/
-
-
-/*
 | Draws the label.
 */
 prototype.draw =
@@ -353,14 +294,27 @@ prototype.mousewheel =
 /*
 | Forwards fabric settings.
 */
-jion.lazyValue(
-	prototype,
-	'pnw',
-function( )
+visual_label.pnw =
+	function( )
 {
-	return this.fabric.pnw;
-}
-);
+	var
+		action;
+
+	action = this._action;
+
+	switch( action && action.reflect )
+	{
+		case 'action_itemDrag' : return action.transItem.fabric.pnw;
+
+		default : return this.fabric.pnw;
+	}
+};
+
+
+/*
+| The labels 'pnw', possibly altered by 'action'.
+*/
+jion.lazyValue( prototype, 'pnw', visual_label.pnw );
 
 
 /*
@@ -419,7 +373,7 @@ prototype.scrollPage = function( ){ };
 visual_label.vPnw =
 	function( )
 {
-	return this.fabric.pnw.inView( this.view );
+	return this.pnw.inView( this.view );
 };
 
 
@@ -443,6 +397,20 @@ jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte);
 
 
 /*
+| The items silhoutte anchoret at zero for current view.
+*/
+jion.lazyValue(
+	prototype,
+	'vZeroSilhoutte',
+	function( )
+{
+	return this.zeroSilhoutte.inView( this.view.home );
+}
+);
+
+
+
+/*
 | Zone in current view.
 */
 visual_label.vZone =
@@ -453,20 +421,6 @@ visual_label.vZone =
 
 
 jion.lazyValue( prototype, 'vZone', visual_label.vZone );
-
-
-/*
-| The items silhoutte anchoret at zero for current view.
-*/
-
-jion.lazyValue(
-	prototype,
-	'vZeroSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.inView( this.view.home );
-}
-);
 
 
 /*
@@ -497,18 +451,22 @@ jion.lazyValue(
 
 
 /*
-| Calculates the labels zone, FUTURE vZone only
+| Calculates the labels zone,
+| possibly altered by action.
 */
 visual_label.zone =
 	function( )
 {
 	var
+		action,
 		doc,
 		pnw;
 
-	pnw = this.fabric.pnw;
+	pnw = this.pnw;
 
 	doc = this.doc;
+
+	action = this._action;
 
 	return(
 		euclid_rect.create(
