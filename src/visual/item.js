@@ -204,8 +204,7 @@ visual_item.dragStart =
 			'action',
 				action_itemDrag.create(
 					'start', p.fromView( this.view ),
-					'transItem', this,
-					'origin', this
+					'itemPath', this.path
 				),
 			'mark', visual_mark_item.create( 'path', this.path )
 		);
@@ -216,6 +215,68 @@ visual_item.dragStart =
 	{
 		return false;
 	}
+};
+
+
+
+/*
+| A itemDrag action stopped.
+*/
+visual_item.itemDrag =
+	function( )
+{
+	var
+		action;
+
+	action = this._action;
+
+	if( action.toPnw.equals( this.fabric.pnw ) )
+	{
+		root.create( 'action', undefined );
+
+		return;
+	}
+
+	switch( this.positioning )
+	{
+		case 'zone' :
+
+			root.alter(
+				change_set.create(
+					'path', this.path.chop.append( 'zone' ),
+					'val',
+						euclid_rect.create(
+							'pnw', action.toPnw,
+							'pse',
+								action.toPnw.add(
+									this.fabric.zone.width,
+									this.fabric.zone.height
+								)
+						),
+					'prev', this.fabric.zone
+				)
+			);
+
+			break;
+
+		case 'pnw/fontsize' :
+
+			root.alter(
+				change_set.create(
+					'path', this.path.chop.append( 'pnw' ),
+					'val', action.toPnw,
+					'prev', this.fabric.pnw
+				)
+			);
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
+	root.create( 'action', undefined );
 };
 
 

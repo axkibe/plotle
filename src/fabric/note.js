@@ -120,4 +120,17 @@ prototype._init =
 };
 
 
+/*
+| Forwards zone pnw.
+*/
+jion.lazyValue(
+	prototype,
+	'pnw',
+	function( )
+{
+	return this.zone.pnw;
+}
+);
+
+
 } )( );

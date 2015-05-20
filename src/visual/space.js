@@ -358,13 +358,9 @@ prototype.draw =
 			{
 				fromItem = this.get( action.fromItemPath.get( -1 ) );
 
-				fromItem.highlight( display );
-
 				if( action.toItemPath )
 				{
 					toItem = this.get( action.toItemPath.get( -1 ) );
-
-					toItem.highlight( display );
 				}
 
 				fromSilhoutte = fromItem.silhoutte;
@@ -393,15 +389,6 @@ prototype.draw =
 						inView( view );
 
 					arrow.draw( display, gruga_relation );
-				}
-			}
-			else
-			{
-				if( this.hover )
-				{
-					this
-					.get( this.hover.get( 2 ) )
-					.highlight( display );
 				}
 			}
 
@@ -456,12 +443,15 @@ prototype.pointingHover =
 {
 	var
 		a,
+		action,
 		aZ,
 		com,
 		item,
 		focus,
 		result,
 		view;
+
+	action = this._action;
 
 	view = this.view;
 
@@ -477,16 +467,50 @@ prototype.pointingHover =
 		}
 	}
 
+	if(
+		action
+		&& action.reflect === 'action_createRelation'
+		&& action.relationState === 'start'
+	)
+	{
+		for( a = 0, aZ = this.length; a < aZ; a++ )
+		{
+			item = this.atRank( a );
+
+			if( item.vZone.within( p ) )
+			{
+				root.create(
+					'action', action.create( 'fromItemPath', item.path )
+				);
+
+				return(
+					result_hover.create(
+						'path', undefined,
+						'cursor', 'default'
+					)
+				);
+			}
+		}
+
+		root.create(
+			'action', action.create( 'fromItemPath', undefined )
+		);
+
+		return(
+			result_hover.create(
+				'path', undefined,
+				'cursor', 'default'
+			)
+		);
+	}
+
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		item = this.atRank( a );
 
 		result = item.pointingHover( p );
 
-		if( result )
-		{
-			return result;
-		}
+		if( result ) return result;
 	}
 
 	return result_hover.create( 'cursor', 'pointer' );
@@ -953,45 +977,9 @@ prototype.dragStop =
 
 		case 'action_itemDrag' :
 
-			if( !action.transItem.zone.equals( action.origin.zone ) )
-			{
-				switch( action.transItem.positioning )
-				{
-					case 'zone' :
+			item = root.getPath( action.itemPath );
 
-						root.alter(
-							change_set.create(
-								'path',
-									action.transItem.path
-									.chop.append( 'zone' ),
-								'val', action.transItem.zone,
-								'prev', action.origin.zone
-							)
-						);
-
-						break;
-
-					case 'pnw/fontsize' :
-
-						root.alter(
-							change_set.create(
-								'path',
-									action.transItem.path
-									.chop.append( 'pnw' ),
-								'val', action.transItem.zone.pnw,
-								'prev', action.origin.zone.pnw
-							)
-						);
-
-						break;
-
-					default :
-
-						throw new Error( );
-				}
-			}
-
-			root.create( 'action', undefined );
+			item.itemDrag( p, shift, ctrl );
 
 			break;
 
@@ -1212,44 +1200,20 @@ prototype.dragMove =
 
 		case 'action_itemDrag' :
 
-			origin = action.origin;
-
-			switch( origin.positioning )
-			{
-				case 'zone' :
-
-					transItem =
-						origin.createWithZone(
-							origin.zone.add(
-								view.dex( p.x ) - action.start.x,
-								view.dey( p.y ) - action.start.y
-							)
-						);
-
-					break;
-
-				case 'pnw/fontsize' :
-
-					transItem =
-						// FIXME make a createWithPnw to visual items.
-						origin.create(
-							'fabric',
-								origin.fabric.create(
-									'pnw',
-										origin.pnw.add(
-											view.dex( p.x ) - action.start.x,
-											view.dey( p.y ) - action.start.y
-										)
-								)
-						);
-			}
+			item = root.getPath( action.itemPath );
 
 			root.create(
-				'action', action.create( 'transItem', transItem )
+				'action',
+					action.create(
+						'toPnw',
+							item.fabric.pnw.add(
+								view.dex( p.x ) - action.start.x,
+								view.dey( p.y ) - action.start.y
+						)
+					)
 			);
 
 			return true;
-
 
 		case 'action_itemResize' :
 

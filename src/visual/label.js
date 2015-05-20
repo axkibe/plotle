@@ -215,10 +215,23 @@ prototype.draw =
 		display
 	)
 {
+	var
+		action;
+
+	action = this._action;
+
 	display.drawImage(
 		'image', this._display,
 		'pnw', this.vPnw
 	);
+
+	if( action && action.reflect === 'action_createRelation' )
+	{
+		display.border(
+			gruga_label.getFacet( 'highlight', true ).border,
+			this.vSilhoutte
+		);
+	}
 };
 
 
@@ -230,7 +243,7 @@ visual_label.fontsize =
 {
 	var
 		action;
-	
+
 	action = this._action;
 
 	switch( action && action.reflect )
@@ -265,20 +278,9 @@ jion.lazyValue(
 
 
 /*
-| Highlights the label.
-|
-| FIXME jionize
+| An itemDrag action stopped.
 */
-prototype.highlight =
-	function(
-		display
-	)
-{
-	display.border(
-		gruga_label.getFacet( 'highlight', true ).border,
-		this.vSilhoutte
-	);
-};
+prototype.itemDrag = visual_item.itemDrag;
 
 
 /*
@@ -315,8 +317,11 @@ visual_label.pnw =
 	switch( action && action.reflect )
 	{
 		case 'action_itemDrag' :
+
+			return action.toPnw;
+
 		case 'action_itemResize' :
-		
+
 			return action.transItem.fabric.pnw;
 
 		default : return this.fabric.pnw;

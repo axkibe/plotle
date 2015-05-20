@@ -239,12 +239,6 @@ jion.lazyValue(
 
 
 /*
-| Highlights the item.
-*/
-prototype.highlight = visual_label.prototype.highlight;
-
-
-/*
 | A text has been inputed.
 */
 prototype.input = visual_docItem.input;
@@ -274,6 +268,12 @@ jion.lazyValue(
 	return this.fabric.item2key;
 }
 );
+
+
+/*
+| An itemDrag action stopped.
+*/
+prototype.itemDrag = visual_item.itemDrag;
 
 
 /*

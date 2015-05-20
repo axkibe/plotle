@@ -10,6 +10,7 @@ var
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
+	euclid_rect,
 	euclid_roundRect,
 	fabric_spaceRef,
 	gruga_portal,
@@ -378,27 +379,23 @@ prototype.draw =
 		display
 	)
 {
+	var
+		action;
+
+	action = this._action;
+
 	display.drawImage(
 		'image', this._display,
 		'pnw', this.zone.pnw.inView( this.view )
 	);
-};
 
-
-/*
-| Highlights the portal.
-|
-| FIXME jionize
-*/
-prototype.highlight =
-	function(
-		display
-	)
-{
-	display.border(
-		gruga_portal.getFacet( 'highlight', true ).border,
-		this.vSilhoutte
-	);
+	if( action && action.reflect === 'action_createRelation' )
+	{
+		display.border(
+			gruga_portal.getFacet( 'highlight', true ).border,
+			this.vSilhoutte
+		);
+	}
 };
 
 
@@ -448,6 +445,11 @@ prototype.input =
 	}
 };
 
+
+/*
+| An itemDrag action stopped.
+*/
+prototype.itemDrag = visual_item.itemDrag;
 
 
 /*
@@ -613,8 +615,20 @@ function( )
 	switch( action && action.reflect )
 	{
 		case 'action_itemDrag' :
+
+			return(
+				euclid_rect.create(
+					'pnw', action.toPnw,
+					'pse',
+						action.toPnw.add(
+							this.fabric.zone.width,
+							this.fabric.zone.height
+						)
+				)
+			);
+
 		case 'action_itemResize' :
-		
+
 			return action.transItem.fabric.zone;
 
 		default : return this.fabric.zone;

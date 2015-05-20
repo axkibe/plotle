@@ -23,21 +23,21 @@ if( JION )
 		id : 'action_itemDrag',
 		attributes :
 		{
-			origin :
-			{
-				comment : 'the item being dragged',
-				type : require( '../typemaps/visualItems' )
-			},
 			start :
 			{
 				comment : 'mouse down point on drag creation',
 				type : 'euclid_point'
 			},
-			transItem :
+			itemPath:
 			{
-				comment : 'the transient item while it is dragged',
-				type : require( '../typemaps/visualItems' )
-			}
+				comment : 'drag the item to this pnw',
+				type : [ 'undefined', 'jion$path' ]
+			},
+			toPnw:
+			{
+				comment : 'drag the item to this pnw',
+				type : [ 'undefined', 'euclid_point' ]
+			},
 		}
 	};
 }
@@ -66,7 +66,7 @@ prototype.affects =
 		path
 	)
 {
-	return this.origin.path.equals( path );
+	return this.itemPath.equals( path );
 };
 
 

@@ -86,4 +86,19 @@ prototype.affects =
 };
 
 
+/*
+| Returns true if an entity with path is affected by this action.
+*/
+prototype.affects =
+	function(
+		path
+	)
+{
+	return(
+		path.equals( this.fromItemPath )
+		|| path.equals( this.toItemPath )
+	);
+};
+
+
 } )( );

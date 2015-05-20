@@ -7,6 +7,7 @@
 var
 	euclid_display,
 	euclid_point,
+	euclid_rect,
 	euclid_roundRect,
 	gruga_note,
 	jion,
@@ -234,7 +235,10 @@ prototype.draw =
 	)
 {
 	var
+		action,
 		sbary;
+
+	action = this._action;
 
 	sbary = this.scrollbarY;
 
@@ -244,6 +248,14 @@ prototype.draw =
 	);
 
 	if( sbary ) sbary.draw( display, this.view );
+
+	if( action && action.reflect === 'action_createRelation' )
+	{
+		display.border(
+			gruga_note.getFacet( 'highlight', true ).border,
+			this.vSilhoutte
+		);
+	}
 };
 
 
@@ -280,26 +292,15 @@ jion.lazyValue(
 
 
 /*
-| Highlights the note.
-|
-| FIXME this should be jion variable
-*/
-prototype.highlight =
-	function(
-		display
-	)
-{
-	display.border(
-		gruga_note.getFacet( 'highlight', true ).border,
-		this.vSilhoutte
-	);
-};
-
-
-/*
 | A text has been inputed.
 */
 prototype.input = visual_docItem.input;
+
+
+/*
+| An itemDrag action stopped.
+*/
+prototype.itemDrag = visual_item.itemDrag;
 
 
 /*
@@ -546,8 +547,22 @@ function( )
 	switch( action && action.reflect )
 	{
 		case 'action_itemDrag' :
+
+			return(
+				action.toPnw
+				?  euclid_rect.create(
+					'pnw', action.toPnw,
+					'pse',
+						action.toPnw.add(
+							this.fabric.zone.width,
+							this.fabric.zone.height
+						)
+				)
+				: this.fabric.zone
+			);
+
 		case 'action_itemResize' :
-		
+
 			return action.transItem.fabric.zone;
 
 		default : return this.fabric.zone;

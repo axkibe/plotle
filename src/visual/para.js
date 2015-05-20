@@ -33,8 +33,6 @@ var
 
 /*
 | The jion definition.
-|
-| FIXME recheck undefines
 */
 if( JION )
 {
