@@ -7,6 +7,7 @@
 var
 	euclid_rect,
 	fabric_note,
+	jion,
 	theme;
 
 

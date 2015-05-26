@@ -28,20 +28,38 @@ if( JION )
 				comment : 'alignment ( compass ) of the resize action',
 				type : 'string'
 			},
-			transItem :
+			itemPath :
 			{
-				comment : 'the transient item while it is dragged',
-				type : require( '../typemaps/visualItems' )
+				comment : 'the resized items path',
+				type : 'jion$path'
 			},
-			origin :
-			{
-				comment : 'the item being resized',
-				type : require( '../typemaps/visualItems' )
-			},
+			// FIXME rename startPoint
 			start :
 			{
 				comment : 'mouseDown point on drag creation',
 				type : 'euclid_point'
+			},
+			startZone :
+			{
+				comment : 'zone of the item at start of action',
+				type : [ 'undefined', 'euclid_rect' ]
+			},
+			toFontsize :
+			{
+				comment : 'resize changes the items fontsize to this',
+				// applicatable to label items only
+				type : [ 'undefined', 'number' ]
+			},
+			toPnw :
+			{
+				comment : 'resize moves the items pnw to this',
+				type : [ 'undefined', 'euclid_point' ]
+			},
+			toPse :
+			{
+				comment : 'resize moves the items pse to this',
+				// applicatable to zone defined items only
+				type : [ 'undefined', 'euclid_point' ]
 			}
 		}
 	};
@@ -71,7 +89,7 @@ prototype.affects =
 		path
 	)
 {
-	return this.origin.path.equals( path );
+	return this.itemPath.equals( path );
 };
 
 

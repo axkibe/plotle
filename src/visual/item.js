@@ -7,6 +7,8 @@ var
 	action_createRelation,
 	action_itemDrag,
 	action_scrolly,
+	change_set,
+	euclid_rect,
 	jion$path,
 	result_hover,
 	root,
@@ -218,11 +220,10 @@ visual_item.dragStart =
 };
 
 
-
 /*
-| A itemDrag action stopped.
+| An itemDrag action stopped.
 */
-visual_item.itemDrag =
+visual_item.itemDragForZonePositioning =
 	function( )
 {
 	var
@@ -237,6 +238,68 @@ visual_item.itemDrag =
 		return;
 	}
 
+	root.alter(
+		change_set.create(
+			'path', this.path.chop.append( 'zone' ),
+			'val',
+				euclid_rect.create(
+					'pnw', action.toPnw,
+					'pse',
+						action.toPnw.add(
+							this.fabric.zone.width,
+							this.fabric.zone.height
+						)
+				),
+			'prev', this.fabric.zone
+		)
+	);
+
+	root.create( 'action', undefined );
+};
+
+
+/*
+| An itemDrag action stopped.
+*/
+visual_item.itemDragForFontsizePositioning =
+	function( )
+{
+	var
+		action;
+
+	action = this._action;
+
+	if( action.toPnw.equals( this.fabric.pnw ) )
+	{
+		root.create( 'action', undefined );
+
+		return;
+	}
+
+	root.alter(
+		change_set.create(
+			'path', this.path.chop.append( 'pnw' ),
+			'val', action.toPnw,
+			'prev', this.fabric.pnw
+		)
+	);
+
+	root.create( 'action', undefined );
+};
+
+
+/*
+| An itemResize action stopped.
+*/
+visual_item.itemResize =
+	function( )
+{
+	var
+		action;
+
+	action = this._action;
+
+	// FIXME differentiate in function assignment
 	switch( this.positioning )
 	{
 		case 'zone' :
@@ -247,11 +310,7 @@ visual_item.itemDrag =
 					'val',
 						euclid_rect.create(
 							'pnw', action.toPnw,
-							'pse',
-								action.toPnw.add(
-									this.fabric.zone.width,
-									this.fabric.zone.height
-								)
+							'pse', action.toPse
 						),
 					'prev', this.fabric.zone
 				)
@@ -266,6 +325,11 @@ visual_item.itemDrag =
 					'path', this.path.chop.append( 'pnw' ),
 					'val', action.toPnw,
 					'prev', this.fabric.pnw
+				),
+				change_set.create(
+					'path', this.path.chop.append( 'fontsize' ),
+					'val', action.toFontsize,
+					'prev', this.fabric.fontsize
 				)
 			);
 

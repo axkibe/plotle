@@ -293,17 +293,10 @@ shell_root.prepareAction =
 	switch( action.reflect )
 	{
 		case 'action_itemDrag' :
-
-			return(
-				root.getPath( action.itemPath )
-				? action
-				: undefined
-			);
-
 		case 'action_itemResize' :
 
 			return(
-				space.get( action.origin.path.get( -1 ) )
+				root.getPath( action.itemPath )
 				? action
 				: undefined
 			);

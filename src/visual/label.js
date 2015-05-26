@@ -248,7 +248,7 @@ visual_label.fontsize =
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemResize' : return action.transItem.fabric.fontsize;
+		case 'action_itemResize' : return action.toFontsize;
 
 		default : return this.fabric.fontsize;
 	}
@@ -280,7 +280,13 @@ jion.lazyValue(
 /*
 | An itemDrag action stopped.
 */
-prototype.itemDrag = visual_item.itemDrag;
+prototype.itemDrag = visual_item.itemDragForFontsizePositioning;
+
+
+/*
+| An itemResize action stopped.
+*/
+prototype.itemResize = visual_item.itemResize;
 
 
 /*
@@ -317,14 +323,13 @@ visual_label.pnw =
 	switch( action && action.reflect )
 	{
 		case 'action_itemDrag' :
+		case 'action_itemResize' :
 
 			return action.toPnw;
 
-		case 'action_itemResize' :
+		default :
 
-			return action.transItem.fabric.pnw;
-
-		default : return this.fabric.pnw;
+			return this.fabric.pnw;
 	}
 };
 
@@ -485,6 +490,8 @@ visual_label.zone =
 	doc = this.doc;
 
 	action = this._action;
+
+	// FIXME remove rounds?
 
 	return(
 		euclid_rect.create(

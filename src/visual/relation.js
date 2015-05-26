@@ -273,7 +273,13 @@ jion.lazyValue(
 /*
 | An itemDrag action stopped.
 */
-prototype.itemDrag = visual_item.itemDrag;
+prototype.itemDrag = visual_item.itemDragForFontsizePositioning;
+
+
+/*
+| An itemResize action stopped.
+*/
+prototype.itemResize = visual_item.itemResize;
 
 
 /*

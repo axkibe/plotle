@@ -300,7 +300,13 @@ prototype.input = visual_docItem.input;
 /*
 | An itemDrag action stopped.
 */
-prototype.itemDrag = visual_item.itemDrag;
+prototype.itemDrag = visual_item.itemDragForZonePositioning;
+
+
+/*
+| An itemResize action stopped.
+*/
+prototype.itemResize = visual_item.itemResize;
 
 
 /*
@@ -550,7 +556,7 @@ function( )
 
 			return(
 				action.toPnw
-				?  euclid_rect.create(
+				? euclid_rect.create(
 					'pnw', action.toPnw,
 					'pse',
 						action.toPnw.add(
@@ -563,9 +569,18 @@ function( )
 
 		case 'action_itemResize' :
 
-			return action.transItem.fabric.zone;
+			return(
+				action.toPnw
+				?  euclid_rect.create(
+					'pnw', action.toPnw,
+					'pse', action.toPse
+				)
+				: this.fabric.zone
+			);
 
-		default : return this.fabric.zone;
+		default :
+
+			return this.fabric.zone;
 	}
 }
 );

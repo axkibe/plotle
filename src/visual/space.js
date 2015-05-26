@@ -6,7 +6,6 @@ var
 	action_itemResize,
 	action_pan,
 	change_grow,
-	change_set,
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
@@ -558,10 +557,11 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action_itemResize.create(
+						'align', com,
+						'itemPath', focus.path,
 						'start', dp,
-						'transItem', focus,
-						'origin', focus,
-						'align', com
+						'startZone', focus.zone,
+						'toFontsize', focus.fontsize
 					)
 			);
 
@@ -979,61 +979,15 @@ prototype.dragStop =
 
 			item = root.getPath( action.itemPath );
 
-			item.itemDrag( p, shift, ctrl );
+			item.itemDrag( );
 
 			break;
 
 		case 'action_itemResize' :
 
-			if( !action.transItem.zone.equals( action.origin.zone ) )
-			{
+			item = root.getPath( action.itemPath );
 
-				switch( action.transItem.positioning )
-				{
-					case 'zone' :
-
-						root.alter(
-							change_set.create(
-								'path',
-									action.transItem.path
-									.chop.append( 'zone' ),
-								'val', action.transItem.zone,
-								'prev', action.origin.zone
-							)
-						);
-
-						break;
-
-					case 'pnw/fontsize' :
-
-						root.alter(
-							change_set.create(
-								'path',
-									action.transItem.path
-									.chop.append( 'pnw' ),
-								'val', action.transItem.zone.pnw,
-								'prev', action.origin.zone.pnw
-							),
-							change_set.create(
-								'path',
-									action.transItem.path
-									.chop.append( 'fontsize' ),
-								'val',
-									// FIXME why doc?
-									action.transItem.doc.fontsize,
-								'prev', action.origin.fontsize
-							)
-						);
-
-						break;
-
-					default :
-
-						throw new Error( );
-				}
-			}
-
-			root.create( 'action', undefined );
+			item.itemResize( );
 
 			break;
 
@@ -1054,6 +1008,8 @@ prototype.dragStop =
 
 /*
 | Moving during an operation with the mouse button held down.
+|
+| FIXME split this up
 */
 prototype.dragMove =
 	function(
@@ -1069,7 +1025,6 @@ prototype.dragMove =
 		fs,
 		model,
 		item,
-		origin,
 		oheight,
 		pd,
 		r,
@@ -1217,30 +1172,36 @@ prototype.dragMove =
 
 		case 'action_itemResize' :
 
-			origin = action.origin;
+			item = root.getPath( action.itemPath );
 
 			align = action.align;
 
-			switch( origin.positioning )
+			switch( item.positioning )
 			{
+
 				case 'zone' :
 
-					transItem =
-						origin.createWithZone(
-							origin.zone.cardinalResize(
-								align,
-								view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y,
-								origin.minHeight,
-								origin.minWidth
-							)
+					zone =
+						item.fabric.zone.cardinalResize(
+							align,
+							view.dex( p.x ) - action.start.x,
+							view.dey( p.y ) - action.start.y,
+							item.minHeight,
+							item.minWidth
 						);
 
-					break;
+
+					root.create(
+						'action',
+							action.create(
+								'toPnw', zone.pnw,
+								'toPse', zone.pse
+							)
+					);
+
+					return true;
 
 				case 'pnw/fontsize' :
-
-					oheight = origin.zone.height;
 
 					switch( action.align )
 					{
@@ -1262,56 +1223,51 @@ prototype.dragMove =
 
 							throw new Error( );
 					}
-
+					
 					fs =
 						Math.max(
-							origin.doc.fontsize *
-								( oheight + dy ) / oheight,
+							item.fabric.fontsize
+							* ( action.startZone.height + dy )
+							/ action.startZone.height,
 							theme.label.minSize
 						);
 
-					// FIXME createWithFontsize
 					resized =
-						origin.create(
-							'fabric',
-								origin.fabric.create( 'fontsize', fs )
+						item.create(
+							'path', undefined,
+							'fabric', item.fabric.create( 'fontsize', fs )
 						);
 
-					// FIXME nicer create
-					transItem =
-						resized.create(
-							'fabric',
-								resized.fabric.create(
-									'pnw',
-										resized.pnw.add(
-											( align === 'sw' || align === 'nw' )
-											?  Math.round(
-												origin.zone.width -
-												resized.zone.width
-											)
-											: 0,
-											( align === 'ne' || align === 'nw' )
-											?  Math.round(
-												origin.zone.height -
-												resized.zone.height
-											)
-											: 0
-										)
+					action =
+						action.create(
+							'toFontsize', fs,
+							'toPnw',
+								item.fabric.pnw.add(
+									( align === 'sw' || align === 'nw' )
+									? (
+										action.startZone.width -
+										resized.zone.width
+									)
+									: 0,
+									( align === 'ne' || align === 'nw' )
+									? (
+										action.startZone.height -
+										resized.zone.height
+									)
+									: 0
 								)
 						);
 
-					break;
+						root.create( 'action', action );
+
+					return true;
 
 				default :
 
 					throw new Error( );
 			}
 
-			root.create(
-				'action', action.create( 'transItem', transItem )
-			);
-
-			return true;
+			break;
 
 		case 'action_scrolly' :
 

@@ -6,6 +6,7 @@
 var
 	euclid_rect,
 	fabric_portal,
+	jion,
 	theme;
 
 
