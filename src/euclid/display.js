@@ -999,8 +999,7 @@ euclid_display.prototype._sketchShape =
 		a,
 		aZ,
 		magic,
-		posx,
-		posy,
+		pos,
 		pc,
 		pp,
 		pn,
@@ -1047,9 +1046,8 @@ euclid_display.prototype._sketchShape =
 
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
 
-	// FIXME why not store the point?
-	posx = pStart.x;
-	posy = pStart.y;
+	// FIXME pos === pp?
+	pos = pStart;
 
 	for(
 		a = 1, aZ = shape.length;
@@ -1133,8 +1131,8 @@ euclid_display.prototype._sketchShape =
 					case 'clockwise' :
 
 						cx.bezierCurveTo(
-							posx + twist + ( dxy > 0 ? magic * dx : 0 ),
-							posy + twist + ( dxy < 0 ? magic * dy : 0 ),
+							pos.x + twist + ( dxy > 0 ? magic * dx : 0 ),
+							pos.y + twist + ( dxy < 0 ? magic * dy : 0 ),
 							pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
 							pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
 							pn.x + twist,
@@ -1157,11 +1155,7 @@ euclid_display.prototype._sketchShape =
 				throw new Error( );
 		}
 
-		posx = pn.x;
-
-		posy = pn.y;
-
-		pp = pn;
+		pos = pp = pn;
 	}
 
 /**/if( CHECK )
