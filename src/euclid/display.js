@@ -1001,7 +1001,6 @@ euclid_display.prototype._sketchShape =
 		magic,
 		pos,
 		pc,
-		pp,
 		pn,
 		pStart,
 		section;
@@ -1042,12 +1041,9 @@ euclid_display.prototype._sketchShape =
 		pStart = pStart.inView( euclid_view.proper );
 	}
 
-	pp = pStart;
+	pos = pStart;
 
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
-
-	// FIXME pos === pp?
-	pos = pStart;
 
 	for(
 		a = 1, aZ = shape.length;
@@ -1120,9 +1116,9 @@ euclid_display.prototype._sketchShape =
 
 			case 'euclid_shape_round' :
 
-				dx = pn.x - pp.x;
+				dx = pn.x - pos.x;
 
-				dy = pn.y - pp.y;
+				dy = pn.y - pos.y;
 
 				dxy = dx * dy;
 
@@ -1155,7 +1151,7 @@ euclid_display.prototype._sketchShape =
 				throw new Error( );
 		}
 
-		pos = pp = pn;
+		pos = pn;
 	}
 
 /**/if( CHECK )

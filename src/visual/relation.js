@@ -443,7 +443,7 @@ jion.lazyValue(
 			euclid_point.zero
 		);
 
-		facet = gruga_label.getFacet( );
+		facet = gruga_label.facets.getFacet( );
 
 		// displays the border
 		display.border( facet.border, this.vZeroSilhoutte );

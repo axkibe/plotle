@@ -228,7 +228,7 @@ prototype.draw =
 	if( action && action.reflect === 'action_createRelation' )
 	{
 		display.border(
-			gruga_label.getFacet( 'highlight', true ).border,
+			gruga_label.facets.getFacet( 'highlight', true ).border,
 			this.vSilhoutte
 		);
 	}
@@ -536,7 +536,7 @@ jion.lazyValue(
 		this.doc.draw( display, this.zone.width, euclid_point.zero );
 
 		// displays the border
-		facet = gruga_label.getFacet( );
+		facet = gruga_label.facets.getFacet( );
 
 		display.border( facet.border, this.vZeroSilhoutte );
 

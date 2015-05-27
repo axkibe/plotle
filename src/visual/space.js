@@ -824,8 +824,8 @@ prototype.dragStop =
 
 					fs =
 						Math.max(
-							model.doc.fontsize *
-								( oheight + dy ) / oheight,
+							model.doc.fontsize
+							* ( oheight + dy ) / oheight,
 							theme.label.minSize
 						);
 
@@ -1066,7 +1066,8 @@ prototype.dragMove =
 
 					fs =
 						Math.max(
-							model.doc.fontsize * zone.height / oheight,
+							model.doc.fontsize
+							* zone.height / oheight,
 							theme.label.minSize
 						);
 
@@ -1084,9 +1085,7 @@ prototype.dragMove =
 
 					break;
 
-				default :
-
-					throw new Error( );
+				default : throw new Error( );
 			}
 
 			root.create(

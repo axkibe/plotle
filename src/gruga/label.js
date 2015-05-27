@@ -1,5 +1,7 @@
 /*
 | Default label.
+|
+| FIXME jionize
 */
 
 
@@ -18,7 +20,10 @@ var
 'use strict';
 
 
-gruga_label =
+gruga_label = { };
+
+
+gruga_label.facets =
 	design_facetRay.create(
 		'ray:append',
 		// default
@@ -39,6 +44,9 @@ gruga_label =
 				)
 		)
 	);
+
+
+gruga_label.defaultFontsize = 13;
 
 
 } )( );

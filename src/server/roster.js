@@ -765,6 +765,10 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/shell/models.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/shell/system.js',
 		'inBundle', true
 	),
