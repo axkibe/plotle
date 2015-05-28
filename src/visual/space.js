@@ -17,7 +17,8 @@ var
 	result_hover,
 	root,
 	session_uid,
-	shell_stubs,
+	shell_models,
+	shell_stubs, // FIXME remove
 	theme,
 	visual_label,
 	visual_mark_caret,
@@ -534,6 +535,7 @@ prototype.dragStart =
 		com,
 		dp,
 		focus,
+		model,
 		item,
 		transItem,
 		view;
@@ -605,10 +607,12 @@ prototype.dragStart =
 		&& action.itemType === 'label'
 	)
 	{
+		model = shell_models.label;
+
 		transItem =
-			visual_label.create(
+			model.create(
 				'fabric',
-					shell_stubs.emptyLabel.create(
+					model.fabric.create(
 						'pnw', p.fromView( view )
 					),
 				'view', view
@@ -740,13 +744,11 @@ prototype.dragStop =
 	var
 		action,
 		fs,
-		dy,
 		item,
 		key,
 		label,
 		model,
 		note,
-		oheight,
 		portal,
 		resized,
 		val,
@@ -762,6 +764,12 @@ prototype.dragStop =
 	switch( action.reflect )
 	{
 		case 'action_createGeneric' :
+
+			zone =
+				euclid_rect.createArbitrary(
+					action.start.fromView( view ),
+					p.fromView( view )
+				);
 
 			switch( action.itemType )
 			{
@@ -810,26 +818,17 @@ prototype.dragStop =
 
 				case 'label' :
 
-					model = action.model;
-
-					zone =
-						euclid_rect.createArbitrary(
-							action.start.fromView( view ),
-							p.fromView( view )
-						);
-
-					oheight = model.zone.height;
-
-					dy = zone.height - oheight;
+					model = shell_models.label;
 
 					fs =
 						Math.max(
 							model.doc.fontsize
-							* ( oheight + dy ) / oheight,
+							* zone.height
+							/ model.zone.height,
 							theme.label.minSize
 						);
 
-					resized = action.transItem.createWithFontsize( fs );
+					resized = model.createWithFontsize( fs );
 
 					label =
 						resized.createWithPnw(
@@ -1023,10 +1022,10 @@ prototype.dragMove =
 		align,
 		dy,
 		fs,
-		model,
 		item,
-		oheight,
+		model,
 		pd,
+		pnw,
 		r,
 		resized,
 		rZ,
@@ -1044,43 +1043,47 @@ prototype.dragMove =
 	{
 		case 'action_createGeneric' :
 
-			model = action.model;
-
 			zone =
 				euclid_rect.createArbitrary(
 					action.start.fromView( view ),
 					p.fromView( view )
 				);
 
-			switch( model.positioning )
+			switch( action.itemType )
 			{
-				case 'zone' :
+				case 'note' :
+				case 'portal' :
 
-					transItem = model.createWithZone( zone );
+					transItem = shell_models.note.createWithZone( zone );
 
 					break;
 
-				case 'pnw/fontsize' :
+				case 'label' :
 
-					oheight = model.zone.height;
+					model = shell_models.label;
 
 					fs =
 						Math.max(
 							model.doc.fontsize
-							* zone.height / oheight,
+							* zone.height
+							/ model.zone.height,
 							theme.label.minSize
 						);
 
 					resized = model.createWithFontsize( fs );
 
+					pnw =
+						( p.x > action.start.x )
+						? zone.pnw
+						: euclid_point.create(
+							'x', zone.pse.x - resized.zone.width,
+							'y', zone.pnw.y
+						);
+
 					transItem =
-						resized.createWithPnw(
-							( p.x > action.start.x )
-							?  zone.pnw
-							: euclid_point.create(
-								'x', zone.pse.x - resized.zone.width,
-								'y', zone.pnw.y
-							)
+						resized.create(
+							'fabric', resized.fabric.create( 'pnw', pnw ),
+							'view', view
 						);
 
 					break;
