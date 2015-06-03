@@ -739,6 +739,7 @@ prototype.dragStop =
 		model,
 		note,
 		portal,
+		pnw,
 		resized,
 		val,
 		view,
@@ -817,16 +818,22 @@ prototype.dragStop =
 							theme.label.minSize
 						);
 
-					resized = model.createWithFontsize( fs );
+					resized =
+						model.create(
+							'fabric', model.fabric.create( 'fontsize', fs )
+						);
+
+					pnw =
+						( p.x > action.start.x )
+						? zone.pnw
+						: euclid_point.create(
+							'x', zone.pse.x - resized.zone.width,
+							'y', zone.pnw.y
+						);
 
 					label =
-						resized.createWithPnw(
-							( p.x > action.start.x )
-							? zone.pnw
-							: euclid_point.create(
-								'x', zone.pse.x - resized.zone.width,
-								'y', zone.pnw.y
-							)
+						resized.create(
+							'fabric', resized.fabric.create( 'pnw', pnw )
 						);
 
 					key = session_uid( );
@@ -1076,7 +1083,10 @@ prototype.dragMove =
 							theme.label.minSize
 						);
 
-					resized = model.createWithFontsize( fs );
+					resized =
+						model.create(
+							'fabric', model.fabric.create( 'fontsize', fs )
+						);
 
 					pnw =
 						( p.x > action.start.x )
