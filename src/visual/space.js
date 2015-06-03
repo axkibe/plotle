@@ -594,7 +594,6 @@ prototype.dragStart =
 			'action',
 				action.create(
 					'start', p,
-					'model', transItem,
 					'transItem', transItem
 				)
 		);
@@ -619,12 +618,7 @@ prototype.dragStart =
 			);
 
 		root.create(
-			'action',
-				action.create(
-					'start', p,
-					'model', transItem,
-					'transItem', transItem
-				)
+			'action', action.create( 'start', p, 'transItem', transItem )
 		);
 
 		return;
@@ -646,12 +640,7 @@ prototype.dragStart =
 			);
 
 		root.create(
-			'action',
-				action.create(
-					'start', p,
-					'model', transItem,
-					'transItem', transItem
-				)
+			'action', action.create( 'start', p, 'transItem', transItem )
 		);
 
 		return;
@@ -1052,9 +1041,26 @@ prototype.dragMove =
 			switch( action.itemType )
 			{
 				case 'note' :
+
+					transItem =
+						shell_models.note.create(
+							'fabric',
+								shell_models.note.fabric
+								.create( 'zone', zone ),
+							'view', view
+						);
+
+					break;
+
 				case 'portal' :
 
-					transItem = shell_models.note.createWithZone( zone );
+					transItem =
+						shell_models.portal.create(
+							'fabric',
+								shell_models.portal.fabric
+								.create( 'zone', zone ),
+							'view', view
+						);
 
 					break;
 
@@ -1225,7 +1231,7 @@ prototype.dragMove =
 
 							throw new Error( );
 					}
-					
+
 					fs =
 						Math.max(
 							item.fabric.fontsize

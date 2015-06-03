@@ -11,12 +11,14 @@ var
 	fabric_label,
 	fabric_note,
 	fabric_para,
+	fabric_portal,
 	gruga_label,
 	jion,
 	shell_models,
 	theme, // FIXME
 	visual_label,
-	visual_note;
+	visual_note,
+	visual_portal;
 
 
 /*
@@ -82,6 +84,33 @@ jion.lazyStaticValue(
 						fabric_doc.create(
 							'twig:add', '1', fabric_para.create( 'text', '' )
 						)
+				),
+			'view', euclid_view.proper
+		)
+	);
+}
+);
+
+
+/*
+| The portal model.
+*/
+jion.lazyStaticValue(
+	shell_models,
+	'portal',
+	function( )
+{
+	return(
+		visual_portal.create(
+			'fabric',
+				fabric_portal.create(
+					'zone',
+						euclid_rect.create(
+							'pnw', euclid_point.zero,
+							'pse', euclid_point.zero
+						),
+					'spaceUser', '',
+					'spaceTag', ''
 				),
 			'view', euclid_view.proper
 		)
