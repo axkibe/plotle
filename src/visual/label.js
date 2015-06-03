@@ -166,36 +166,6 @@ prototype.createRelation = visual_item.createRelation;
 
 
 /*
-| A shorthand to (re)create this note
-| with a different fontsize.
-*/
-prototype.createWithFontsize =
-	function(
-		fontsize
-	)
-{
-	return(
-		this.create( 'fabric', this.fabric.create( 'fontsize', fontsize ) )
-	);
-};
-
-
-/*
-| A shorthand to (re)create this note
-| with a different pnw.
-*/
-prototype.createWithPnw =
-	function(
-		pnw
-	)
-{
-	return(
-		this.create( 'fabric', this.fabric.create( 'pnw', pnw ) )
-	);
-};
-
-
-/*
 | A move during an action.
 */
 prototype.dragMove = visual_item.dragMove;
