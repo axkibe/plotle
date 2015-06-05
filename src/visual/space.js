@@ -545,6 +545,9 @@ prototype.dragStart =
 	view = this.view;
 
 	focus = this.focusedItem( );
+			
+	// resizing
+	dp = p.fromView( view );
 
 	// see if the handles were targeted
 	if( access == 'rw' && focus )
@@ -553,9 +556,6 @@ prototype.dragStart =
 
 		if( com )
 		{
-			// resizing
-			dp = p.fromView( view );
-
 			root.create(
 				'action',
 					action_itemResize.create(
@@ -581,11 +581,10 @@ prototype.dragStart =
 	)
 	{
 		transItem =
-			visual_note.create(
+			shell_models.note.create(
 				'fabric',
-					shell_stubs.emptyNote.create(
-						// FIXME why no fromView?
-						'zone', euclid_rect.create( 'pnw', p, 'pse', p )
+					shell_models.note.fabric.create(
+						'zone', euclid_rect.create( 'pnw', dp, 'pse', dp )
 					),
 				'view', view
 			);
@@ -593,37 +592,38 @@ prototype.dragStart =
 		root.create(
 			'action',
 				action.create(
-					'start', p,
+					'start', dp,
 					'transItem', transItem
 				)
 		);
 
 		return;
 	}
-	else if(
+
+	if(
 		action
 		&& action.reflect === 'action_createGeneric'
 		&& action.itemType === 'label'
 	)
 	{
+		console.log( 'XX' );
+
 		model = shell_models.label;
 
 		transItem =
 			model.create(
-				'fabric',
-					model.fabric.create(
-						'pnw', p.fromView( view )
-					),
+				'fabric', model.fabric.create( 'pnw', dp ),
 				'view', view
 			);
 
 		root.create(
-			'action', action.create( 'start', p, 'transItem', transItem )
+			'action', action.create( 'start', dp, 'transItem', transItem )
 		);
 
 		return;
 	}
-	else if(
+
+	if(
 		action &&
 		action.reflect === 'action_createGeneric' &&
 		action.itemType === 'portal'
@@ -633,14 +633,13 @@ prototype.dragStart =
 			visual_portal.create(
 				'fabric',
 					shell_stubs.emptyPortal.create(
-						 //FIXME fromView?
-	 					'zone', euclid_rect.create( 'pnw', p, 'pse', p )
+	 					'zone', euclid_rect.create( 'pnw', dp, 'pse', dp )
 					),
 				'view', view
 			);
 
 		root.create(
-			'action', action.create( 'start', p, 'transItem', transItem )
+			'action', action.create( 'start', dp, 'transItem', transItem )
 		);
 
 		return;
@@ -665,7 +664,7 @@ prototype.dragStart =
 					action.create(
 						'pan', view.pan,
 						'relationState', 'pan',
-						'start', p
+						'start', p  // FIXME dp?
 					)
 			);
 
@@ -673,6 +672,8 @@ prototype.dragStart =
 	}
 
 	// otherwise panning is initiated
+
+	// FIXME dp?
 	root.create(
 		'action', action_pan.create( 'start', p, 'pan', view.pan )
 	);
@@ -757,7 +758,7 @@ prototype.dragStop =
 
 			zone =
 				euclid_rect.createArbitrary(
-					action.start.fromView( view ),
+					action.start,
 					p.fromView( view )
 				);
 
@@ -772,7 +773,7 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									action.start.fromView( view ),
+									action.start,
 									p.fromView( view )
 								)
 						);
@@ -883,7 +884,7 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									action.start.fromView( view ),
+									action.start,
 									p.fromView( view )
 								),
 							'spaceUser', root.user.name,
@@ -1041,7 +1042,7 @@ prototype.dragMove =
 
 			zone =
 				euclid_rect.createArbitrary(
-					action.start.fromView( view ),
+					action.start,
 					p.fromView( view )
 				);
 

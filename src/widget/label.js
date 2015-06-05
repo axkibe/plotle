@@ -23,13 +23,6 @@ if( JION )
 		id : 'widget_label',
 		attributes :
 		{
-			// FIXME deduce from mark
-			focusAccent :
-			{
-				comment : 'true if the widget got focus',
-				type : [ 'undefined', 'boolean' ],
-				assign : ''
-			},
 			designPos :
 			{
 				comment : 'designed position of the text',
@@ -117,7 +110,7 @@ prototype._init =
 /*
 | Displays the label.
 |
-| FIXME use _display
+| FUTURE use _display
 */
 prototype.draw =
 	function(

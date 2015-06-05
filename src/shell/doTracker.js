@@ -74,6 +74,7 @@ shell_doTracker.flush =
 
 /*
 | Reporting the doTracker something has been altered.
+|
 | It will track it on the undo stack.
 */
 prototype.track =
@@ -93,7 +94,6 @@ prototype.track =
 		undo = undo.remove( 0 );
 	}
 
-	// FIXME
 	root.create(
 		'doTracker',
 			this.create(

@@ -7,7 +7,6 @@ var
 	euclid_point,
 	euclid_rect,
 	fabric_doc,
-	fabric_label,
 	fabric_note,
 	fabric_para,
 	fabric_portal,
@@ -28,20 +27,6 @@ var
 */
 shell_stubs = { };
 
-
-shell_stubs.emptyLabel =
-	fabric_label.create(
-		'pnw', euclid_point.zero,
-		'fontsize', theme.note.fontsize, // FIXME
-		'doc',
-			fabric_doc.create(
-				'twig:add',
-				'1',
-				fabric_para.create(
-					'text', 'Label'
-				)
-			)
-	);
 
 
 shell_stubs.emptyNote =
