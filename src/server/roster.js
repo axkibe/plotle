@@ -761,10 +761,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/stubs.js',
-		'inBundle', true
-	),
-	resource.create(
 		'filePath', 'src/shell/models.js',
 		'inBundle', true
 	),
