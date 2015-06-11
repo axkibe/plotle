@@ -18,7 +18,6 @@ var
 	root,
 	session_uid,
 	shell_models,
-	shell_stubs, // FIXME remove
 	theme,
 	visual_label,
 	visual_mark_caret,
@@ -627,10 +626,12 @@ prototype.dragStart =
 		action.itemType === 'portal'
 	)
 	{
+		model = shell_models.portal;
+
 		transItem =
-			visual_portal.create(
+			model.create(
 				'fabric',
-					shell_stubs.emptyPortal.create(
+					model.fabric.create(
 	 					'zone', euclid_rect.create( 'pnw', dp, 'pse', dp )
 					),
 				'view', view
@@ -1133,8 +1134,6 @@ prototype.dragMove =
 
 				return 'pointer';
 			}
-
-// XXX FIXMEroot.create( 'action', action = action.create( 'toPoint', p ) );
 
 			// Looks if the action is dragging to an item
 			for(
