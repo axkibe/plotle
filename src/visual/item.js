@@ -65,6 +65,8 @@ visual_item.concernsAction =
 
 /*
 | A move during an action.
+|
+| FIXME remove
 */
 visual_item.dragMove =
 	function(
@@ -81,22 +83,14 @@ visual_item.dragMove =
 		start,
 		view;
 
-	action = root.action;
+	action = this._action;
+
+	if( !action ) return false;
 
 	view = this.view;
 
 	switch( action.reflect )
 	{
-		case 'action_createRelation' :
-
-			if( !this.vZone.within( p ) ) return false;
-
-			root.create(
-				'action', action.create( 'toItemPath', this.path )
-			);
-
-			return true;
-
 		case 'action_scrolly' :
 
 			start = action.start,
@@ -139,7 +133,7 @@ visual_item.dragStart =
 		action,
 		sbary;
 
-	action = root.action;
+	action = this._action;
 
 	sbary = this.scrollbarY;
 
@@ -345,9 +339,28 @@ visual_item.itemResize =
 
 
 /*
-| A draggin action regarding this item stopped.
+| A createRelation action stops.
 */
-visual_item.createRelation =
+visual_item.createRelationMove =
+	function(
+		p,
+		action
+	)
+{
+	if( !this.vZone.within( p ) ) return false;
+
+	root.create(
+		'action', action.create( 'toItemPath', this.path )
+	);
+
+	return true;
+};
+
+
+/*
+| A createRelation action stops.
+*/
+visual_item.createRelationStop =
 	function(
 		p
 	)
@@ -355,7 +368,7 @@ visual_item.createRelation =
 	var
 		action;
 
-	action = root.action;
+	action = this._action;
 
 /**/if( CHECK )
 /**/{
@@ -365,10 +378,7 @@ visual_item.createRelation =
 /**/	}
 /**/}
 
-	if( !this.vZone.within( p ) )
-	{
-		return false;
-	}
+	if( !this.vZone.within( p ) ) return false;
 
 	root.spawnRelation(
 		root.spaceVisual.get( action.fromItemPath.get( -1 ) ),

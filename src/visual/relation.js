@@ -142,9 +142,15 @@ prototype.click = visual_docItem.click;
 
 
 /*
-| A create relation action ended on this item.
+| A create relation action moves.
 */
-prototype.createRelation = visual_item.createRelation;
+prototype.createRelationMove = visual_item.createRelationMove;
+
+
+/*
+| A create relation action stops.
+*/
+prototype.createRelationStop = visual_item.createRelationStop;
 
 
 /*

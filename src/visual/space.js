@@ -606,8 +606,6 @@ prototype.dragStart =
 		&& action.itemType === 'label'
 	)
 	{
-		console.log( 'XX' );
-
 		model = shell_models.label;
 
 		transItem =
@@ -948,7 +946,7 @@ prototype.dragStop =
 					{
 						item = this.get( action.toItemPath.get( -1 ) );
 
-						item.createRelation( p );
+						item.createRelationStop( p );
 					}
 
 					root.create( 'action', undefined );
@@ -1136,7 +1134,7 @@ prototype.dragMove =
 				return 'pointer';
 			}
 
-			root.create( 'action', action = action.create( 'toPoint', p ) );
+// XXX FIXMEroot.create( 'action', action = action.create( 'toPoint', p ) );
 
 			// Looks if the action is dragging to an item
 			for(
@@ -1145,13 +1143,19 @@ prototype.dragMove =
 				r++
 			)
 			{
-				if( this.atRank( r ).dragMove( p ) )
+				if( this.atRank( r ).createRelationMove( p, action ) )
 				{
 					return 'pointer';
 				}
 			}
 
-			root.create( 'action', action.create( 'toItemPath', undefined ) );
+			root.create(
+				'action',
+					action.create(
+						'toItemPath', undefined,
+						'toPoint', p
+					)
+			);
 
 			return 'pointer';
 
