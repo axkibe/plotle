@@ -1327,6 +1327,22 @@ prototype.input =
 
 
 /*
+| Tries to scrolls the focused item to move
+| the mark into view.
+*/
+prototype.scrollMarkIntoView =
+	function( )
+{
+	var
+		focus;
+
+	focus =  this.focus;
+
+	if( focus && focus.scrollMarkIntoView ) focus.scrollMarkIntoView( );
+};
+
+
+/*
 | User pressed a special key.
 */
 prototype.specialKey =

@@ -809,7 +809,6 @@ prototype.input =
 	)
 {
 	var
-		focus,
 		screen;
 
 	screen = root._currentScreen( );
@@ -818,16 +817,7 @@ prototype.input =
 	{
 		screen.input( text );
 
-		// FIXME make a spaceVisual scrollMarkIntoView
-		if( root.spaceVisual )
-		{
-			focus = root.spaceVisual.focus;
-
-			if( focus && focus.scrollMarkIntoView )
-			{
-				focus.scrollMarkIntoView( );
-			}
-		}
+		if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
 	}
 };
 
@@ -1021,22 +1011,13 @@ prototype.specialKey =
 	)
 {
 	var
-		focus,
 		screen;
 
 	screen = root._currentScreen( );
 
 	if( screen ) screen.specialKey( key, shift, ctrl );
 
-	if( root.spaceVisual )
-	{	// FIXME make a spaceVisual.scrollMarkIntoView( )
-		focus = root.spaceVisual.focus;
-
-		if( focus && focus.scrollMarkIntoView )
-		{
-			focus.scrollMarkIntoView( );
-		}
-	}
+	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
 };
 
 
