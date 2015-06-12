@@ -655,7 +655,7 @@ prototype.dragStart =
 					action.create(
 						'pan', view.pan,
 						'relationState', 'pan',
-						'start', p  // FIXME dp?
+						'start', p
 					)
 			);
 
@@ -664,7 +664,6 @@ prototype.dragStart =
 
 	// otherwise panning is initiated
 
-	// FIXME dp?
 	root.create(
 		'action', action_pan.create( 'start', p, 'pan', view.pan )
 	);

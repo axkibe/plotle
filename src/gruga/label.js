@@ -1,7 +1,5 @@
 /*
 | Default label.
-|
-| FIXME jionize
 */
 
 
