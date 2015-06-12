@@ -263,15 +263,14 @@ prototype.showDisc = true;
 |
 | FIXME handle this more gracefully
 */
-prototype.focusedItem =
+jion.lazyValue(
+	prototype,
+	'focus',
 	function( )
 {
 	var
-		action,
 		mark,
 		path;
-
-	action = this._action;
 
 	mark = this.mark;
 
@@ -285,7 +284,8 @@ prototype.focusedItem =
 	{
 		return undefined;
 	}
-};
+}
+);
 
 
 /*
@@ -299,12 +299,9 @@ jion.lazyValue(
 		var
 			focus;
 
-		focus = this.focusedItem( );
+		focus = this.focus;
 
-		if( !focus )
-		{
-			return undefined;
-		}
+		if( !focus ) return undefined;
 
 		return this.view.y( focus.attentionCenter );
 	}
@@ -339,7 +336,7 @@ prototype.draw =
 		this.atRank( r ).draw( display );
 	}
 
-	focus = this.focusedItem( );
+	focus = this.focus;
 
 	if( focus ) focus.handlesBezel.drawHandles( display );
 
@@ -454,7 +451,7 @@ prototype.pointingHover =
 
 	view = this.view;
 
-	focus = this.focusedItem( );
+	focus = this.focus;
 
 	if( focus )
 	{
@@ -543,7 +540,7 @@ prototype.dragStart =
 
 	view = this.view;
 
-	focus = this.focusedItem( );
+	focus = this.focus;
 			
 	// resizing
 	dp = p.fromView( view );
