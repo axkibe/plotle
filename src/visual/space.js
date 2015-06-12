@@ -260,8 +260,6 @@ prototype.showDisc = true;
 
 /*
 | Returns the focused item.
-|
-| FIXME handle this more gracefully
 */
 jion.lazyValue(
 	prototype,
@@ -274,16 +272,13 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	path = mark ? mark.itemPath : undefined;
+	if( !mark ) return undefined;
 
-	if( path && path.length > 2 )
-	{
-		return this.get( path.get( 2 ) );
-	}
-	else
-	{
-		return undefined;
-	}
+	path = mark.itemPath;
+	
+	if( !path || path.length <= 2 ) return undefined;
+
+	return this.get( path.get( 2 ) );
 }
 );
 
