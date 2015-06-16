@@ -25,7 +25,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'form_login',
 		attributes :
 		{

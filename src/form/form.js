@@ -60,7 +60,6 @@ form_form.init =
 
 		widgetProto = twig[ name ];
 
-		// FIXME only when not having widgetProto
 		path =
 			widgetProto.path
 			|| this.path.append( 'twig' ).append( name );
@@ -220,8 +219,6 @@ form_form.getAttentionCenter =
 
 /*
 | Returns the focused widget.
-|
-| FIXME To be used as lazyValue getter.
 */
 form_form.getFocusedWidget =
 	function( )
@@ -239,13 +236,10 @@ form_form.getFocusedWidget =
 
 	path = mark.widgetPath;
 
-	if( path.length === 0 ) // FIXME
-	{
-		return undefined;
-	}
-
 /**/if( CHECK )
 /**/{
+/**/	if( path.length === 0 ) throw new Error( );
+/**/
 /**/	if( path.get( 2 ) !== this.reflectName )
 /**/	{
 /**/		throw new Error( );
