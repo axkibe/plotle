@@ -419,12 +419,13 @@ prototype.draw =
 /*
 | Returns the point of a given offset.
 */
-prototype.locateOffset =
+jion.lazyFunctionInteger(
+	prototype,
+	'locateOffset',
 	function(
 		offset // the offset to get the point from.
 	)
 {
-	// FIXME cache position
 	var
 		font,
 		pitch,
@@ -438,36 +439,36 @@ prototype.locateOffset =
 
 	if( this.password )
 	{
-		return (
+		return(
 			euclid_point.create(
 				'x',
 					pitch.x
 					+ (
 						this.maskWidth( font.size ) +
 						this.maskKern( font.size )
-					) * offset
+					)
+					* offset
 					- 1,
 				'y', Math.round( pitch.y + font.size )
 			)
 		);
 	}
-	else
-	{
-		return (
-			euclid_point.create(
-				'x',
-					Math.round(
-						pitch.x +
-						euclid_measure.width(
-							font,
-							value.substring( 0, offset )
-						)
-					),
-				'y', Math.round( pitch.y + font.size )
-			)
-		);
-	}
-};
+
+	return(
+		euclid_point.create(
+			'x',
+				Math.round(
+					pitch.x
+					+ euclid_measure.width(
+						font,
+						value.substring( 0, offset )
+					)
+				),
+			'y', Math.round( pitch.y + font.size )
+		)
+	);
+}
+);
 
 
 /*
