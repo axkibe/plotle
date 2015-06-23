@@ -77,8 +77,8 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'shell_root.prepareAction( action, spaceFabric )'
-				// FIXME assign _action
+				prepare : 'shell_root.prepareAction( action, spaceFabric )',
+				assign : '_action'
 			},
 			ajax :
 			{
@@ -448,7 +448,7 @@ prototype._init =
 
 	access = this._access;
 
-	action = this.action;
+	action = this._action;
 
 	mark = this._mark;
 
@@ -524,7 +524,7 @@ prototype._init =
 	if(
 		!inherit
 		|| access !== inherit._access
-		|| action !== inherit.action
+		|| action !== inherit._action
 		|| hover !== inherit._hover
 		|| mark !== inherit._mark
 		|| mode !== inherit.mode
