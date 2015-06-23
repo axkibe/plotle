@@ -614,21 +614,11 @@ prototype._keyDel =
 };
 
 
-// FIXME two times different cycles?
-
 /*
 | User pressed return key.
-*/
-prototype._keyEnter =
-	function( )
-{
-	root.cycleFormFocus( this.path.get( 2 ), 1 );
-};
-
-
-/*
 | User pressed down key.
 */
+prototype._keyEnter =
 prototype._keyDown =
 	function( )
 {
@@ -650,10 +640,7 @@ prototype._keyEnd =
 
 	at = mark.caretAt;
 
-	if( at >= this.value.length )
-	{
-		return;
-	}
+	if( at >= this.value.length ) return;
 
 	root.create(
 		'mark',
@@ -676,10 +663,7 @@ prototype._keyLeft =
 
 	mark = this.mark;
 
-	if( mark.caretAt <= 0 )
-	{
-		return;
-	}
+	if( mark.caretAt <= 0 ) return;
 
 	root.create(
 		'mark',
@@ -702,10 +686,7 @@ prototype._keyPos1 =
 
 	mark = this.mark;
 
-	if( mark.at <= 0 )
-	{
-		return;
-	}
+	if( mark.at <= 0 ) return;
 
 	root.create(
 		'mark',
@@ -728,10 +709,7 @@ prototype._keyRight =
 
 	mark = this.mark;
 
-	if( mark.caretAt >= this.value.length )
-	{
-		return;
-	}
+	if( mark.caretAt >= this.value.length ) return;
 
 	root.create(
 		'mark',
