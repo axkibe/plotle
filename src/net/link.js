@@ -59,6 +59,11 @@ if( JION )
 			{
 				comment : 'the remote sequence number',
 				type : [ 'undefined', 'integer' ]
+			},
+			_startTimer :
+			{
+				comment : 'the timer on startup',
+				type : [ 'undefined', 'integer' ]
 			}
 		}
 	};
@@ -89,6 +94,15 @@ prototype.acquireSpace =
 		createMissing
 	)
 {
+	if( root.link._startTimer !== undefined )
+	{
+		system.cancelTimer( root.link._startTimer );
+
+		root.create(
+			'link', root.link.create( '_startTimer', undefined )
+		);
+	}
+
 	// aborts the current running update.
 	root.ajax.get( 'update' ).abortAll( );
 
@@ -99,7 +113,7 @@ prototype.acquireSpace =
 		request_acquire.create(
 			'createMissing', createMissing,
 			'spaceRef', spaceRef,
-			'user', this.user
+			'user', root.link.user
 		),
 		'_onAcquireSpace'
 	);
@@ -186,6 +200,9 @@ prototype._onAcquireSpace =
 		reply
 	)
 {
+	var
+		startTimer;
+
 	shell_doTracker.flush( );
 
 	if( reply.type === 'reply_error' )
@@ -207,6 +224,21 @@ prototype._onAcquireSpace =
 			return;
 	}
 
+	// waits a second before going into update cycle, so safari
+	// stops its wheely thing.
+	startTimer =
+		system.setTimer(
+			1000,
+			function( )
+			{
+				root.create(
+					'link', root.link.create( '_startTimer', undefined )
+				);
+
+				root.link._update( );
+			}
+		);
+
 	root.create(
 		'spaceFabric',
 			reply.space.create(
@@ -218,23 +250,12 @@ prototype._onAcquireSpace =
 				'spaceRef', request.spaceRef,
 				'_outbox', change_wrapRay.create( ),
 				'_postbox', change_wrapRay.create( ),
-				'_rSeq', reply.seq
+				'_rSeq', reply.seq,
+				'_startTimer', startTimer
 			)
 	);
 
 	root.onAcquireSpace( request.spaceRef, reply );
-
-	// waits a second before going into update cycle, so safari
-	// stops its wheely thing.
-
-	// FIXME in case of aborting updates this needs to be aborted.
-	system.setTimer(
-		1000,
-		function( )
-		{
-			root.link._update( );
-		}
-	);
 };
 
 
