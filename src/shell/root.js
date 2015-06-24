@@ -164,8 +164,8 @@ if( JION )
 			view :
 			{
 				comment : 'current view',
-				type : 'euclid_view'
-				// FIXME assign _view
+				type : 'euclid_view',
+				assign : '_view'
 			},
 			_drawn :
 			{
@@ -452,7 +452,7 @@ prototype._init =
 
 	mark = this._mark;
 
-	view = this.view;
+	view = this._view;
 
 	hover = this._hover;
 
@@ -529,7 +529,7 @@ prototype._init =
 		|| mark !== inherit._mark
 		|| mode !== inherit.mode
 		|| user !== inherit.user
-		|| view !== inherit.view
+		|| view !== inherit._view
 	)
 	{
 		if( this.spaceFabric )
@@ -1075,7 +1075,7 @@ prototype.resize =
 	root.create(
 		'display', display,
 		'view',
-			root.view.create(
+			root._view.create(
 				'height', display.height,
 				'width', display.width
 			)

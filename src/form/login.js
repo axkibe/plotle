@@ -109,7 +109,7 @@ jion.lazyValue(
 prototype.clear =
 	function( )
 {
-	// FIXME combine calls
+	// FUTURE combine calls
 	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
 
 	root.setPath( this.get( 'passwordInput' ).path.append( 'value' ), '' );
