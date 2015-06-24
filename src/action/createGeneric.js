@@ -40,7 +40,7 @@ if( JION )
 					require( '../typemaps/visualItems' )
 					.concat( [ 'undefined' ] )
 			},
-			start :
+			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
 				type : [ 'undefined', 'euclid_point' ]

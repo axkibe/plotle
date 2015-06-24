@@ -339,7 +339,7 @@ prototype.draw =
 	{
 		case 'action_createGeneric' :
 
-			if( action.start ) action.transItem.draw( display );
+			if( action.startPoint ) action.transItem.draw( display );
 
 			break;
 
@@ -552,7 +552,7 @@ prototype.dragStart =
 					action_itemResize.create(
 						'align', com,
 						'itemPath', focus.path,
-						'start', dp,
+						'startPoint', dp,
 						'startZone', focus.zone,
 						'toFontsize', focus.fontsize
 					)
@@ -583,7 +583,7 @@ prototype.dragStart =
 		root.create(
 			'action',
 				action.create(
-					'start', dp,
+					'startPoint', dp,
 					'transItem', transItem
 				)
 		);
@@ -606,7 +606,7 @@ prototype.dragStart =
 			);
 
 		root.create(
-			'action', action.create( 'start', dp, 'transItem', transItem )
+			'action', action.create( 'startPoint', dp, 'transItem', transItem )
 		);
 
 		return;
@@ -630,7 +630,7 @@ prototype.dragStart =
 			);
 
 		root.create(
-			'action', action.create( 'start', dp, 'transItem', transItem )
+			'action', action.create( 'startPoint', dp, 'transItem', transItem )
 		);
 
 		return;
@@ -646,29 +646,29 @@ prototype.dragStart =
 
 	// starts a panning operation instead
 
-	switch( action && action.reflect )
+	if( action && action.reflect === 'action_createRelation' )
 	{
-		case 'action_createRelation' :
+		root.create(
+			'action',
+				action.create(
+					'pan', view.pan,
+					'relationState', 'pan',
+					'startPoint', p
+				)
+		);
 
-			root.create(
-				'action',
-					action.create(
-						'pan', view.pan,
-						'relationState', 'pan',
-						'start', p
-					)
-			);
-
-			return;
+		return;
 	}
 
 	// otherwise panning is initiated
 
 	root.create(
-		'action', action_pan.create( 'start', p, 'pan', view.pan )
+		'action',
+			action_pan.create(
+				'startPoint', p,
+				'pan', view.pan
+			)
 	);
-
-	return;
 };
 
 
@@ -748,7 +748,7 @@ prototype.dragStop =
 
 			zone =
 				euclid_rect.createArbitrary(
-					action.start,
+					action.startPoint,
 					p.fromView( view )
 				);
 
@@ -763,7 +763,7 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									action.start,
+									action.startPoint,
 									p.fromView( view )
 								)
 						);
@@ -815,7 +815,7 @@ prototype.dragStop =
 						);
 
 					pnw =
-						( p.x > action.start.x )
+						( p.x > action.startPoint.x )
 						? zone.pnw
 						: euclid_point.create(
 							'x', zone.pse.x - resized.zone.width,
@@ -874,7 +874,7 @@ prototype.dragStop =
 						action.transItem.fabric.create(
 							'zone',
 								euclid_rect.createArbitrary(
-									action.start,
+									action.startPoint,
 									p.fromView( view )
 								),
 							'spaceUser', root.user.name,
@@ -1032,7 +1032,7 @@ prototype.dragMove =
 
 			zone =
 				euclid_rect.createArbitrary(
-					action.start,
+					action.startPoint,
 					p.fromView( view )
 				);
 
@@ -1080,7 +1080,7 @@ prototype.dragMove =
 						);
 
 					pnw =
-						( p.x > action.start.x )
+						( p.x > action.startPoint.x )
 						? zone.pnw
 						: euclid_point.create(
 							'x', zone.pse.x - resized.zone.width,
@@ -1110,7 +1110,7 @@ prototype.dragMove =
 			{
 				// panning while creating a relation
 
-				pd = p.sub( action.start );
+				pd = p.sub( action.startPoint );
 
 				root.create(
 					'view',
@@ -1151,7 +1151,7 @@ prototype.dragMove =
 
 		case 'action_pan' :
 
-			pd = p.sub( action.start );
+			pd = p.sub( action.startPoint );
 
 			root.create(
 				'view',
@@ -1175,8 +1175,8 @@ prototype.dragMove =
 					action.create(
 						'toPnw',
 							item.fabric.pnw.add(
-								view.dex( p.x ) - action.start.x,
-								view.dey( p.y ) - action.start.y
+								view.dex( p.x ) - action.startPoint.x,
+								view.dey( p.y ) - action.startPoint.y
 						)
 					)
 			);
@@ -1197,8 +1197,8 @@ prototype.dragMove =
 					zone =
 						item.fabric.zone.cardinalResize(
 							align,
-							view.dex( p.x ) - action.start.x,
-							view.dey( p.y ) - action.start.y,
+							view.dex( p.x ) - action.startPoint.x,
+							view.dey( p.y ) - action.startPoint.y,
 							item.minHeight,
 							item.minWidth
 						);
@@ -1221,14 +1221,14 @@ prototype.dragMove =
 						case 'ne' :
 						case 'nw' :
 
-							dy = action.start.y - view.dey( p.y );
+							dy = action.startPoint.y - view.dey( p.y );
 
 							break;
 
 						case 'se' :
 						case 'sw' :
 
-							dy = view.dey( p.y ) - action.start.y;
+							dy = view.dey( p.y ) - action.startPoint.y;
 
 							break;
 

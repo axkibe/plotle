@@ -28,7 +28,7 @@ if( JION )
 				comment : 'path to the item being scrolled',
 				type : 'jion$path'
 			},
-			start :
+			startPoint :
 			{
 				comment : 'mouse down point on start of scrolling',
 				type : 'euclid_point'

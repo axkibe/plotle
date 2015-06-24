@@ -80,7 +80,6 @@ visual_item.dragMove =
 		dy,
 		sbary,
 		spos,
-		start,
 		view;
 
 	action = this._action;
@@ -93,9 +92,7 @@ visual_item.dragMove =
 	{
 		case 'action_scrolly' :
 
-			start = action.start,
-
-			dy = ( p.y - start.y ) / view.zoom,
+			dy = ( p.y - action.startPoint.y ) / view.zoom,
 
 			sbary = this.scrollbarY,
 
@@ -147,7 +144,7 @@ visual_item.dragStart =
 			'action',
 				action_scrolly.create(
 					'itemPath', this.path,
-					'start', p,
+					'startPoint', p,
 					'startPos', sbary.pos
 				)
 		);
@@ -199,7 +196,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_itemDrag.create(
-					'start', p.fromView( this.view ),
+					'startPoint', p.fromView( this.view ),
 					'itemPath', this.path
 				),
 			'mark', visual_mark_item.create( 'path', this.path )

@@ -33,8 +33,7 @@ if( JION )
 				comment : 'the resized items path',
 				type : 'jion$path'
 			},
-			// FIXME rename startPoint
-			start :
+			startPoint :
 			{
 				comment : 'mouseDown point on drag creation',
 				type : 'euclid_point'

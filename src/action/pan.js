@@ -23,7 +23,7 @@ if( JION )
 		id : 'action_pan',
 		attributes :
 		{
-			start :
+			startPoint :
 			{
 				comment : 'mouse down point on start of scrolling',
 				type : 'euclid_point'

@@ -23,7 +23,7 @@ if( JION )
 		id : 'action_itemDrag',
 		attributes :
 		{
-			start :
+			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
 				type : 'euclid_point'

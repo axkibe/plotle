@@ -49,7 +49,7 @@ if( JION )
 				comment : 'the state of the relation creation',
 				type : 'string'
 			},
-			start :
+			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
 				type : [ 'undefined', 'euclid_point' ]
