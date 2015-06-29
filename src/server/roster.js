@@ -274,12 +274,12 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/euclid/shape/flyLine.js',
+		'filePath', 'src/euclid/shape/line.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/euclid/shape/line.js',
+		'filePath', 'src/euclid/shape/flyLine.js',
 		'hasJion', true,
 		'inBundle', true
 	),

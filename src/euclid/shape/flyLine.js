@@ -8,6 +8,7 @@
 
 
 var
+	euclid_shape_line,
 	euclid_shape_flyLine;
 
 
@@ -73,6 +74,14 @@ prototype.inView =
 };
 
 
+/*
+| Gets the source of a projection to p.
+|
+| Returns the projection intersection in
+| case it intersects with this sectioin
+| or undefined otherwise
+*/
+prototype.getProjection = euclid_shape_line.getProjection;
 
 
 })( );

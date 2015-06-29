@@ -68,20 +68,12 @@ prototype.getProjection =
 		cx,
 		cy,
 		d,
-		det,
 		dx,
 		dy,
 		dxy,
 		k,
-		la1,
-		lb1,
-		lc1,
-		la2,
-		lb2,
-		lc2,
 		pc,
-		pix,
-		piy,
+		pi,
 		pn,
 		pp,
 		pstart,
@@ -142,41 +134,9 @@ prototype.getProjection =
 			case 'euclid_shape_line' :
 			case 'euclid_shape_flyLine' :
 
-				la1 = p.y - pc.y;
+				pi = section.getProjection( p, pn, pp, pc );
 
-				lb1 = pc.x -  p.x;
-
-				lc1 = la1 * pc.x + lb1 * pc.y;
-
-				la2 = pn.y - pp.y;
-
-				lb2 = pp.x - pn.x;
-
-				lc2 = la2 * pp.x + lb2 * pp.y;
-
-				det = la1 * lb2 - la2 * lb1;
-
-				if( det !== 0 )
-				{
-					pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
-
-					piy = ( la1 * lc2 - la2 * lc1 ) / det;
-
-					if(
-						Math.min( pp.x, pn.x ) <= pix &&
-						Math.max( pp.x, pn.x ) >= pix &&
-						Math.min( pp.y, pn.y ) <= piy &&
-						Math.max( pp.y, pn.y ) >= piy &&
-
-						Math.min( pc.x, p.x  ) <= pix &&
-						Math.max( pc.x, p.x  ) >= pix &&
-						Math.min( pc.y, p.y  ) <= piy &&
-						Math.max( pc.y, p.y  ) >= piy
-					)
-					{
-						return euclid_point.create( 'x', pix, 'y', piy );
-					}
-				}
+				if( pi ) return pi;
 
 				break;
 
