@@ -3,9 +3,6 @@
 */
 
 
-/*
-| Export
-*/
 var
 	server_postProcessor;
 
@@ -29,7 +26,7 @@ config = require( '../../config' );
 
 
 /*
-| postProcessor for devel.html
+| PostProcessor for devel.html
 */
 server_postProcessor.develHtml =
 	function(
@@ -39,6 +36,8 @@ server_postProcessor.develHtml =
 	)
 {
 	var
+		a,
+		aZ,
 		devels,
 		resource;
 
@@ -46,11 +45,7 @@ server_postProcessor.develHtml =
 
 	data = data + '';
 
-	for(
-		var a = 0, aZ = inventory.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = inventory.length; a < aZ; a++ )
 	{
 		resource = inventory.atRank( a );
 

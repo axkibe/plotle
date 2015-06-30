@@ -33,7 +33,7 @@ if( GLOBAL.JION )
 			},
 			inventory :
 			{
-				comment : 'the servers inventory of ressources',
+				comment : 'the servers inventory of resources',
 				type : 'server_inventory'
 			},
 			nextSleepID :
@@ -82,28 +82,30 @@ config.database_version = 12;
 /*
 | Globals.
 */
-GLOBAL.APP = 'server';
 
-// does not load jion code if out of date.
-GLOBAL.FORCE_JION_LOADING = false;
-
-// the name the runtime created jions are stored
-// under
-GLOBAL.SHELLAPP = 'shell';
-
-// server checking
+/*
+| Server checking.
+*/
 GLOBAL.CHECK = config.server_check;
 
-// server object freezing
+/*
+| Server object freezing.
+*/
 GLOBAL.FREEZE = config.server_freeze;
 
-// this is not a jion creation
+/*
+| This is not a jion creation call.
+*/
 GLOBAL.JION = false;
 
-// this is node
+/*
+| This is node.
+*/
 GLOBAL.NODE = true;
 
-// sets root as global variable
+/*
+| Sets root as global variable.
+*/
 GLOBAL.root = undefined;
 
 
@@ -121,7 +123,6 @@ var
 	mongodb,
 	prototype,
 	resume,
-	roster,
 	server_inventory,
 	server_maxAge,
 	server_postProcessor,
@@ -129,6 +130,7 @@ var
 	server_resource,
 	server_root,
 	server_upSleepGroup,
+	server_roster,
 	server_spaceBox,
 	server_spaceNexus,
 	server_tools,
@@ -168,7 +170,7 @@ database_repository = require( '../database/repository' );
 
 server_requestHandler = require( './requestHandler' );
 
-roster = require( './roster' );
+server_roster = require( './roster' );
 
 server_inventory = require( './inventory' );
 
@@ -227,7 +229,7 @@ prototype = server_root.prototype;
 /*
 | Initializer.
 */
-server_root.prototype._init =
+prototype._init =
 	function( )
 {
 	root = this;
@@ -241,22 +243,21 @@ startup =
 	function*( )
 {
 
-	root =
-		server_root.create(
-			'inventory', server_inventory.create( ),
+	server_root.create(
+		'inventory', server_inventory.create( ),
 
-			'nextSleepID', 1,
+		'nextSleepID', 1,
 
-			'repository', yield* database_repository.connect( config ),
+		'repository', yield* database_repository.connect( config ),
 
-			'spaces', server_spaceNexus.create( ),
+		'spaces', server_spaceNexus.create( ),
 
-			'upSleeps', server_upSleepGroup.create( ),
+		'upSleeps', server_upSleepGroup.create( ),
 
-			'nextVisitor', 1000,
+		'nextVisitor', 1000,
 
-			'userNexus', server_userNexus.create( )
-		);
+		'userNexus', server_userNexus.create( )
+	);
 
 	yield* root.prepareInventory( );
 
@@ -328,9 +329,9 @@ prototype.loadSpaces =
 
 
 /*
-| Builds the shells config.js file.
+| Create the shell's config.js resource.
 */
-prototype.buildShellConfig =
+prototype.createShellConfig =
 	function( )
 {
 	var
@@ -387,13 +388,20 @@ prototype.buildShellConfig =
 		'};\n'
 	);
 
-	return cconfig.join( '' );
+	return(
+		server_resource.create(
+			'data', cconfig.join( '' ),
+			'filePath', 'config.js',
+			'inBundle', true,
+			'inTestPad', true
+		)
+	);
 };
 
 
 /*
 | Registers and prepares the inventory.
-| also builds the bundle.
+| Also builds the bundle.
 */
 prototype.prepareInventory =
 	function*( )
@@ -417,20 +425,14 @@ prototype.prepareInventory =
 	log_start( 'preparing inventory' );
 
 	// autogenerates the shell config as resource
-	cconfig =
-		server_resource.create(
-			'data', root.buildShellConfig( ),
-			'filePath', 'config.js',
-			'inBundle', true,
-			'inTestPad', true
-		);
+	cconfig = root.createShellConfig( );
 
 	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
 
 	// takes resource from the the roster
-	for( a = 0, aZ = roster.length; a < aZ; a++ )
+	for( a = 0, aZ = server_roster.length; a < aZ; a++ )
 	{
-		resource = roster[ a ];
+		resource = server_roster[ a ];
 
 		if( resource.devel && !config.shell_devel ) continue;
 
@@ -443,10 +445,7 @@ prototype.prepareInventory =
 	// if uglify is turned off
 	// the flags are added before bundle
 	// creation, otherwise afterwards
-	if( !config.uglify )
-	{
-		root.prependConfigFlags( );
-	}
+	if( !config.uglify ) root.prependConfigFlags( );
 
 	log_start( 'building bundle' );
 
@@ -605,10 +604,7 @@ prototype.prepareInventory =
 		// if uglify is turned on
 		// the flags are added after bundle
 		// creation, otherwise before
-		if( config.uglify )
-		{
-			root.prependConfigFlags( );
-		}
+		if( config.uglify ) root.prependConfigFlags( );
 	}
 
 	// post processing
@@ -618,10 +614,7 @@ prototype.prepareInventory =
 	{
 		resource = inv.atRank( a );
 
-		if( !resource.postProcessor || !resource.data )
-		{
-			continue;
-		}
+		if( !resource.postProcessor || !resource.data ) continue;
 
 		if( !server_postProcessor[ resource.postProcessor ] )
 		{
@@ -637,7 +630,7 @@ prototype.prepareInventory =
 						'data',
 							server_postProcessor[ resource.postProcessor ](
 								resource.data,
-								root.inventory,
+								root.inventory, // FIXME this isn't necessary
 								bundleFilePath
 							)
 					)
@@ -685,6 +678,8 @@ prototype.prepareInventory =
 
 /*
 | Prepares a resource.
+|
+| FIXME move to inventory
 */
 prototype.prepareResource =
 	function*(

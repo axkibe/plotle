@@ -6,7 +6,6 @@
 
 
 var
-	euclid_point,
 	euclid_shape,
 	swatch;
 
@@ -63,28 +62,14 @@ prototype.getProjection =
 	)
 {
 	var
-		a,
-		b,
-		cx,
-		cy,
-		d,
-		dx,
-		dy,
-		dxy,
-		k,
 		pc,
 		pi,
 		pn,
 		pp,
 		pstart,
-		qa,
-		qb,
-		qc,
 		r,
 		rZ,
-		section,
-		x,
-		y;
+		section;
 
 	pc = this.pc;
 
@@ -101,11 +86,7 @@ prototype.getProjection =
 
 	pp = pstart;
 
-	for(
-		r = 1, rZ = this.length;
-		r < rZ;
-		r++
-	)
+	for( r = 1, rZ = this.length; r < rZ; r++ )
 	{
 /**/	if( CHECK )
 /**/	{
@@ -129,134 +110,9 @@ prototype.getProjection =
 			pn = section.p;
 		}
 
-		switch( section.reflect )
-		{
-			case 'euclid_shape_line' :
-			case 'euclid_shape_flyLine' :
+		pi = section.getProjection( p, pn, pp, pc );
 
-				pi = section.getProjection( p, pn, pp, pc );
-
-				if( pi ) return pi;
-
-				break;
-
-			case 'euclid_shape_round' :
-
-				dx = pn.x - pp.x;
-
-				dy = pn.y - pp.y;
-
-				dxy = dx * dy;
-
-				if( dxy > 0 )
-				{
-					cx = pp.x;
-
-					cy = pn.y;
-
-					a  = Math.abs( pn.x - cx );
-
-					b  = Math.abs( pp.y - cy );
-				}
-				else
-				{
-					cx = pn.x;
-
-					cy = pp.y;
-
-					a = Math.abs( pp.x - cx );
-
-					b = Math.abs( pn.y - cy );
-				}
-
-				if(
-					( p.x < cx || dy <= 0 ) && ( p.x > cx || dy >= 0 )
-					||
-					( p.y < cy || dx >= 0 ) && ( p.y > cy || dx <= 0 )
-				)
-				{
-					break;
-				}
-
-				if( p.x === pc.x )
-				{
-					if( p.y > cy )
-					{
-						return euclid_point.create( 'x', cx, 'y', cy + b );
-					}
-					else if( p.y < cy )
-					{
-						return euclid_point.create( 'x', cx, 'y', cy - b );
-					}
-					else if( p.y === cy )
-					{
-						return euclid_point.create( 'x', cx, 'y', cy );
-					}
-				}
-				else
-				{
-					k = ( p.y - pc.y ) / ( p.x - pc.x );
-
-					d = (pc.y - cy) - k * (pc.x - cx);
-
-					// x^2 / a^2 + y^2 / b^2 = 1
-					// y = k * x + d
-					// x^2 / a^2 + ( k * x + d )^2 / b^2 = 1
-					// x^2 / a^2 + k^2 * x^2 / b^2 + 2 * k * x * d / b^2 + d^2 / b^2 = 1
-					// x^2 ( 1 / a^2 + k^2 / b^2 ) + x ( 2 * k * d / b^2 ) + d^2 / b^2 - 1 = 0
-
-					qa = 1 / (a * a) + k * k / ( b * b );
-
-					qb = 2 * k * d / ( b * b );
-
-					qc = d * d / ( b * b ) - 1;
-
-					if ( p.x > cx )
-					{
-						x =
-							( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) )
-							/
-							( 2 * qa );
-					}
-					else
-					{
-						x =
-							( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) )
-							/
-							( 2 * qa );
-					}
-					// x =
-					//      Math.sqrt(
-					//         1 / ( 1 / ( a * a ) + k * k / ( b * b ) )
-					//      );
-
-					y = k * x + d;
-
-					x += cx;
-
-					y += cy;
-
-					if(
-						(
-							( y >= cy && p.y >= cy ) || ( y <= cy && p.y <= cy )
-						)
-						&&
-						(
-							( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx )
-						)
-					)
-					{
-						return euclid_point.create( 'x', x, 'y', y );
-					}
-				}
-
-				break;
-
-			default :
-
-				// unknown section.
-				throw new Error( );
-		}
+		if( pi ) return pi;
 
 		pp = pn;
 	}

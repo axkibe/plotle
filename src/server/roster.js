@@ -1,5 +1,7 @@
 /*
 | The roster of all resources.
+|
+| FIXME make a jionRay.
 */
 
 /*

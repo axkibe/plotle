@@ -96,8 +96,7 @@ prototype.getProjection =
 		lb2,
 		lc2,
 		pix,
-		piy,
-		pn;
+		piy;
 
 	la1 = p.y - pc.y;
 
