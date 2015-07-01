@@ -1088,12 +1088,19 @@ prototype.resize =
 */
 prototype.onAcquireSpace =
 	function(
-		spaceRef,
+		request,
 		reply
 	)
 {
 	var
 		access;
+
+	if( reply.reflect === 'reply_error' )
+	{
+		system.failScreen( 'Error on acquire space: ' + reply.message );
+
+		return;
+	}
 
 	switch( reply.status )
 	{
@@ -1106,7 +1113,7 @@ prototype.onAcquireSpace =
 			root.setPath(
 				root.form.get( 'nonExistingSpace' ).path
 					.append( 'nonSpaceRef' ),
-				spaceRef
+				request.spaceRef
 			);
 
 			if( root.fallbackSpaceRef )
@@ -1146,7 +1153,7 @@ prototype.onAcquireSpace =
 			? 'normal'
 			: pass,
 		'spaceFabric', reply.space,
-		'spaceRef', spaceRef,
+		'spaceRef', request.spaceRef,
 		'view',
 			euclid_view.create(
 				'fact', 0,
@@ -1207,9 +1214,8 @@ prototype.onAuth =
 */
 prototype.onRegister =
 	function(
-		ok,
-		user,
-		message
+		request,
+		reply
 	)
 {
 	// if in login mode this is a tempted login
@@ -1226,9 +1232,7 @@ prototype.onRegister =
 		return;
 	}
 
-	root.form.get( 'signUp' ).onRegister( ok, user, message );
-
-	return;
+	root.form.get( 'signUp' ).onRegister( request, reply );
 };
 
 

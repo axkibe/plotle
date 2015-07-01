@@ -282,7 +282,7 @@ prototype.mousewheel =
 
 
 /*
-| an auth ( login ) operation completed.
+| An auth ( login ) operation completed.
 */
 prototype.onAuth =
 	function(

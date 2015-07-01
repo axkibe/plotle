@@ -8,6 +8,8 @@ var
 	net_link,
 	reply_auth,
 	reply_acquire,
+	reply_error,
+	reply_register,
 	reply_update,
 	request_acquire,
 	request_alter,
@@ -205,21 +207,31 @@ prototype._onAcquireSpace =
 
 	shell_doTracker.flush( );
 
-	if( reply.type === 'reply_error' )
+	switch( reply.type )
 	{
-		root.onAcquireSpace( request.spaceRef, reply );
+		case 'reply_error' :
 
-		return;
+			reply = reply_error.createFromJSON( reply );
+
+			root.onAcquireSpace( request, reply );
+
+			return;
+
+		case 'reply_acquire' :
+
+			reply = reply_acquire.createFromJSON( reply );
+
+			break;
+
+		default : throw new Error( );
 	}
-
-	reply = reply_acquire.createFromJSON( reply );
 
 	switch( reply.status )
 	{
 		case 'nonexistent' :
 		case 'no access' :
 
-			root.onAcquireSpace( request.spaceRef, reply );
+			root.onAcquireSpace( request, reply );
 
 			return;
 	}
@@ -255,7 +267,7 @@ prototype._onAcquireSpace =
 			)
 	);
 
-	root.onAcquireSpace( request.spaceRef, reply );
+	root.onAcquireSpace( request, reply );
 };
 
 
@@ -268,14 +280,22 @@ prototype._onAuth =
 		reply
 	)
 {
-	if( reply.type === 'reply_error' )
+	switch( reply.type )
 	{
-		root.onAuth( request, reply );
+		case 'reply_error' :
 
-		return;
+			reply = reply_error.createFromJSON( reply );
+
+			break;
+
+		case 'reply_auth' :
+
+			reply = reply_auth.createFromJSON( reply );
+
+			break;
+
+		default : throw new Error( );
 	}
-
-	reply = reply_auth.createFromJSON( reply );
 
 	root.onAuth( request, reply );
 };
@@ -290,17 +310,24 @@ prototype._onRegister =
 		reply
 	)
 {
-	var
-		ok;
+	switch( reply.type )
+	{
+		case 'reply_error' :
 
-	ok = reply.type === 'reply_register';
+			reply = reply_error.createFromJSON( reply );
 
-	// FIXME pass request / reply
-	root.onRegister(
-		ok,
-		ok ? request.user : undefined,
-		ok ? undefined : reply.message
-	);
+			break;
+
+		case 'reply_register' :
+
+			reply = reply_register.createFromJSON( reply );
+
+			break;
+
+		default : throw new Error( );
+	}
+
+	root.onRegister( request, reply );
 };
 
 

@@ -221,16 +221,18 @@ prototype.mousewheel =
 */
 prototype.onRegister =
 	function(
-		ok,
-		user,
-		message
+		request,
+		reply
 	)
 {
 	var
+		message,
 		userInput;
 
-	if( !ok )
+	if( reply.reflect === 'reply_error' )
 	{
+		message = reply.message;
+
 		root.setPath(
 			this.get( 'errorLabel' ).path.append( 'text' ),
 			message
@@ -252,7 +254,7 @@ prototype.onRegister =
 		return;
 	}
 
-	root.create( 'mode', 'welcome', 'user', user );
+	root.create( 'mode', 'welcome', 'user', request.user );
 
 	this.clear( );
 
