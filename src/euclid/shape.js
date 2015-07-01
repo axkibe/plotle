@@ -53,8 +53,6 @@ prototype = euclid_shape.prototype;
 
 /*
 | Gets the source of a projection to p.
-|
-| FIXME Move the section logic into shape sections
 */
 prototype.getProjection =
 	function(
