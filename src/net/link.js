@@ -456,12 +456,12 @@ prototype._onUpdate =
 
 		outbox = this._outbox;
 
-		// FIXME instead of createInvert( ) convert
+		// FIXME instead of createReverse( ) convert
 		// the changeWrapRays to changeRays and invert
 		// them.
-		space = outbox.createInvert( ).changeTree( space );
+		space = outbox.createReverse( ).changeTree( space );
 
-		space = postbox.createInvert( ).changeTree( space );
+		space = postbox.createReverse( ).changeTree( space );
 
 		for(
 			a = 0, aZ = changeWrapRay.length;

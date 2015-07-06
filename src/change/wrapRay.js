@@ -43,7 +43,7 @@ prototype = change_wrapRay.prototype;
 /*
 | Creates an invertes changeWrapRay
 */
-prototype.createInvert =
+prototype.createReverse =
 	function( )
 {
 	var
@@ -53,13 +53,9 @@ prototype.createInvert =
 
 	iRay = [ ];
 
-	for(
-		a = 0, aZ = this.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		iRay[ a ] = this.get( aZ - 1 - a ).createInvert( );
+		iRay[ a ] = this.get( aZ - 1 - a ).createReverse( );
 	}
 
 	return change_wrapRay.create( 'ray:init', iRay );
@@ -75,16 +71,33 @@ prototype.changeTree =
 	)
 {
 	var
-		a, aZ;
+		a,
+		aZ;
 
 	// iterates through the change ray
-	for(
-		a = 0, aZ = this.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		tree = this.get( a ).changeTree( tree );
+	}
+
+	return tree;
+};
+
+/*
+| Performes the reversion of the
+| wraped-change-(rays) on a tree.
+*/
+prototype.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	var
+		a;
+
+	for( a = this.length - 1; a >= 0; a-- )
+	{
+		tree = this.get( a ).changeTreeReverse( tree );
 	}
 
 	return tree;
@@ -105,11 +118,7 @@ prototype.transform =
 		r,
 		rZ;
 
-	for(
-		r = 0, rZ = this.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		cx = this.get( r ).transform( cx );
 	}

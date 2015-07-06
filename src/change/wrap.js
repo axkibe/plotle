@@ -64,11 +64,11 @@ prototype = change_wrap.prototype;
 
 
 /*
-| Creates an inverted changeWrap.
+| Creates a reversed changeWrap.
 |
 | This one has a distinct change id and no sequence id yet
 */
-prototype.createInvert =
+prototype.createReverse =
 	function( )
 {
 	return(

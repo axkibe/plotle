@@ -223,7 +223,7 @@ prototype.undo =
 
 	undo = undo.remove( undo.length - 1 );
 
-	changeWrap = changeWrap.createInvert( );
+	changeWrap = changeWrap.createReverse( );
 
 	root.create(
 		'doTracker',
@@ -264,7 +264,7 @@ prototype.redo =
 
 	changeWrap = redo.get( redo.length - 1 );
 
-	changeWrap = changeWrap.createInvert( );
+	changeWrap = changeWrap.createReverse( );
 
 	redo = redo.remove( redo.length - 1 );
 
