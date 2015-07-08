@@ -457,7 +457,7 @@ prototype._onUpdate =
 		outbox = this._outbox;
 
 		// FIXME instead of createReverse( ) convert
-		// the changeWrapRays to changeRays and invert
+		// the changeWrapRays to changeRays and reverse
 		// them.
 		space = outbox.createReverse( ).changeTree( space );
 

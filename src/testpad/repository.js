@@ -157,7 +157,8 @@ testpad_repository.prototype.get =
 	{
 		changeRay = cwRay.get( a ).changeRay;
 
-		note = changeRay.invert.changeTree( note );
+		// FIXME use changeTreeReverse
+		note = changeRay.reverse.changeTree( note );
 	}
 
 	// returns the path requested

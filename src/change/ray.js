@@ -21,7 +21,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'change_ray',
 		json : true,
 		ray :
@@ -56,11 +56,11 @@ prototype = change_ray.prototype;
 
 
 /*
-| Returns a change ray with inverted changes.
+| Returns a change ray with reversed changes.
 */
 jion.lazyValue(
 	prototype,
-	'invert',
+	'reverse',
 	function( )
 	{
 		var
@@ -73,12 +73,12 @@ jion.lazyValue(
 
 		for( a = 0, aZ = this.length; a < aZ; a++ )
 		{
-			iRay[ a ] = this.get( aZ - 1 - a ).invert;
+			iRay[ a ] = this.get( aZ - 1 - a ).reverse;
 		}
 
 		result = change_ray.create( 'ray:init', iRay );
 
-		jion.aheadValue( result, 'invert', this );
+		jion.aheadValue( result, 'reverse', this );
 
 		return result;
 	}

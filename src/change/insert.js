@@ -144,7 +144,7 @@ prototype.changeTree =
 */
 jion.lazyValue(
 	prototype,
-	'invert',
+	'reverse',
 	function( )
 	{
 		var
@@ -158,7 +158,7 @@ jion.lazyValue(
 				'at2', this.at2
 			);
 
-		jion.aheadValue( inv, 'invert', this );
+		jion.aheadValue( inv, 'reverse', this );
 
 		return inv;
 	}

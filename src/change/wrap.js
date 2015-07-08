@@ -74,7 +74,7 @@ prototype.createReverse =
 	return(
 		change_wrap.create(
 			'cid', session_uid( ),
-			'changeRay', this.changeRay.invert
+			'changeRay', this.changeRay.reverse
 		)
 	);
 };
@@ -96,7 +96,7 @@ prototype.transform =
 
 
 /*
-| Performes the wrapped change on a tree.
+| Performes the wrapped changeRay on a tree.
 */
 prototype.changeTree =
 	function(
@@ -106,6 +106,17 @@ prototype.changeTree =
 	return this.changeRay.changeTree( tree );
 };
 
+
+/*
+| Reversevily performes the wrapped changeRay on a tree.
+*/
+prototype.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	return this.changeRay.changeTreeReverse( tree );
+};
 
 
 }( ) );
