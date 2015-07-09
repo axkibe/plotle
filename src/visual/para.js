@@ -823,7 +823,7 @@ prototype.specialKey =
 				root.create(
 					'mark',
 						visual_mark_range.create(
-							'doc', doc,
+							'doc', doc.fabric,
 							'begin',
 								visual_mark_text.create(
 									'path', v0.textPath,

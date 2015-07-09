@@ -108,7 +108,7 @@ prototype.changeTree =
 
 
 /*
-| Reversevily performes the wrapped changeRay on a tree.
+| Reversevly performes the wrapped changeRay on a tree.
 */
 prototype.changeTreeReverse =
 	function(

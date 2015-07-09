@@ -229,17 +229,34 @@ prototype.changeTree =
 {
 	// the ray with the changes applied
 	var
-		a, aZ;
+		a,
+		aZ;
 
 	// iterates through the change ray
-	for(
-		a = 0, aZ = this.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		// the tree returned by op-handler is the new tree
 		tree = this.get( a ).changeTree( tree );
+	}
+
+	return tree;
+};
+
+
+/*
+| Reversevly performes this change-ray on a tree.
+*/
+prototype.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	var
+		a;
+
+	for( a = this.length - 1; a >= 0; a-- )
+	{
+		tree = this.get( a ).changeTreeReverse( tree );
 	}
 
 	return tree;

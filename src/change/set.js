@@ -103,6 +103,11 @@ prototype.changeTree =
 };
 
 
+/*
+| Reversivly performs this change on a tree.
+*/
+prototype.changeTreeReverse = change_generic.changeTreeReverse;
+
 
 /*
 | Returns the inversion to this change.

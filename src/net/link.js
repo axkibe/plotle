@@ -456,18 +456,11 @@ prototype._onUpdate =
 
 		outbox = this._outbox;
 
-		// FIXME instead of createReverse( ) convert
-		// the changeWrapRays to changeRays and reverse
-		// them.
-		space = outbox.createReverse( ).changeTree( space );
+		space = outbox.changeTreeReverse( space );
 
-		space = postbox.createReverse( ).changeTree( space );
+		space = postbox.changeTreeReverse( space );
 
-		for(
-			a = 0, aZ = changeWrapRay.length;
-			a < aZ;
-			a++
-		)
+		for( a = 0, aZ = changeWrapRay.length; a < aZ; a++ )
 		{
 			changeWrap = changeWrapRay.get( a );
 
@@ -492,7 +485,7 @@ prototype._onUpdate =
 			report = report.append( changeWrap );
 		}
 
-		// FIXME why is it once changeWrapRay then report??
+		// FUTURE why is it once changeWrapRay then report??
 
 		// transforms the postbox by the updated stuff
 		postbox = changeWrapRay.transform( postbox );
@@ -510,8 +503,8 @@ prototype._onUpdate =
 	root.create(
 		'link',
 			root.link.create(
-				// FIXME check why this gets zero
-				//       in case of timeout
+				// FUTURE
+				// check why this gets zero in case of timeout
 				'_outbox', outbox || change_wrapRay.create( ),
 				'_postbox', postbox || change_wrapRay.create( ),
 				'_rSeq', reply.seq + changeWrapRay.length
@@ -519,11 +512,8 @@ prototype._onUpdate =
 		'spaceFabric', space
 	);
 
-	// FIXME move to "markJockey"
-	if( report.length > 0 )
-	{
-		root.update( report );
-	}
+	// FUTURE move to "markJockey"
+	if( report.length > 0 ) root.update( report );
 
 	root.create( 'doTracker', root.doTracker.update( report ) );
 

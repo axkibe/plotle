@@ -27,6 +27,18 @@ else
 
 
 /*
+| Reversivly performs this change on a tree.
+*/
+change_generic.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	return this.reverse.changeTree( tree );
+};
+
+
+/*
 | Returns a change ray transformed by this change.
 */
 change_generic.transformChangeRay =
