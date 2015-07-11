@@ -215,13 +215,13 @@ prototype._getRangeShape =
 		backPara,
 		backPnw,
 		backRank,
-		bo,
+		bLine,
 		bp,
 		descend,
 		f2y,
 		f2Key,
 		f2Para,
-		fo,
+		fLine,
 		fontsize,
 		fp,
 		front,
@@ -260,13 +260,13 @@ prototype._getRangeShape =
 
 	backPara = this.get( backKey );
 
-	fo = frontPara.locateOffset( front.at );
+	fp = frontPara.locateOffsetPoint( front.at );
 
-	bo = backPara.locateOffset( back.at );
+	bp = backPara.locateOffsetPoint( back.at );
 
-	fp = fo.p;
+	fLine = frontPara.locateOffsetLine( front.at );
 
-	bp = bo.p;
+	bLine = backPara.locateOffsetLine( back.at );
 
 	fontsize = this.fontsize;
 
@@ -299,7 +299,7 @@ prototype._getRangeShape =
 
 	f2Para = f2Key && this.get( f2Key );
 
-	if( frontKey === backKey && fo.line === bo.line )
+	if( frontKey === backKey && fLine === bLine )
 	{
 		// fp o******o bp
 		// FIXME return a rect-ray
@@ -328,12 +328,12 @@ prototype._getRangeShape =
 		bp.x < fp.x
 		&&
 		(
-			frontKey === backKey && fo.line + 1 === bo.line
+			frontKey === backKey && fLine + 1 === bLine
 			||
 			(
 				f2Key === backKey
-				&& fo.line + 1 >= frontFlow.length
-				&& bo.line === 0
+				&& fLine + 1 >= frontFlow.length
+				&& bLine === 0
 			)
 		)
 	)
@@ -406,11 +406,11 @@ prototype._getRangeShape =
 		//      +-----------o bp   1
 		//      4          2/3
 
-		if( fo.line + 1 < frontFlow.length )
+		if( fLine + 1 < frontFlow.length )
 		{
 			f2y =
 				Math.round(
-					frontFlow.get( fo.line + 1 ).y
+					frontFlow.get( fLine + 1 ).y
 					+ frontPnw.y
 					- scrollp.y
 				);
@@ -425,11 +425,11 @@ prototype._getRangeShape =
 				);
 		}
 
-		if( bo.line > 0 )
+		if( bLine > 0 )
 		{
 			b2y =
 				Math.round(
-					backFlow.get( bo.line - 1 ).y
+					backFlow.get( bLine - 1 ).y
 					+ backPnw.y
 					- scrollp.y
 				);

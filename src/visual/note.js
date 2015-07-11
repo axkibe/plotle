@@ -430,7 +430,7 @@ prototype.scrollMarkIntoView =
 
 	descend = fs * theme.bottombox;
 
-	p = para.locateOffset( mark.caretAt).p;
+	p = para.locateOffsetPoint( mark.caretAt );
 
 	pnw = this.doc.getPNW( para.key );
 

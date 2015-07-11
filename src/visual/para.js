@@ -96,11 +96,6 @@ if( NODE )
 
 	visual_para = jion.this( module, 'source' );
 
-	// FIXME node shouldnt need this
-	//visual_para.prototype._init = function( ) { };
-
-	//visual_para.concernsMark = function( o ) { return o; };
-
 	return;
 }
 
@@ -210,7 +205,7 @@ jion.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		p = this.locateOffset( this.mark.caretAt).p;
+		p = this.locateOffsetPoint( this.mark.caretAt );
 
 		s = Math.round( p.y + descend );
 
@@ -335,7 +330,7 @@ prototype._drawCaret =
 
 	descend = this.fontsize * theme.bottombox;
 
-	p = this.locateOffset( this.mark.caretAt ).p;
+	p = this.locateOffsetPoint( this.mark.caretAt );
 
 	s = Math.round( p.y + descend );
 
@@ -598,100 +593,6 @@ prototype.getOffsetAt =
 
 
 /*
-| Returns the point of a given offset.
-|
-| FIXME: Use lazy value and use two functions
-|         for p and line which aheadValue each other.
-*/
-prototype.locateOffset =
-	function(
-		offset    // the offset to get the point from.
-	)
-{
-	var
-		aZ,
-		flow,
-		font,
-		line,
-		lineN,
-		p,
-		result,
-		text,
-		token,
-		tokenN;
-
-	font = this.font;
-
-	text = this.text;
-
-	flow = this.flow;
-
-	// determines which line this offset belongs to
-	for(
-		lineN = 0, aZ = flow.length - 1;
-		lineN < aZ;
-		lineN++
-	)
-	{
-		if( flow.get( lineN + 1 ).offset > offset )
-		{
-			break;
-		}
-	}
-
-	line = flow.get( lineN );
-
-	for(
-		tokenN = 0, aZ = line.length - 1;
-		tokenN < aZ;
-		tokenN++
-	)
-	{
-		if( line.get( tokenN + 1 ).offset > offset )
-		{
-			break;
-		}
-	}
-
-	if( tokenN < line.length )
-	{
-		token = line.get( tokenN );
-
-		p =
-			euclid_point.create(
-				'x',
-					Math.round(
-						token.x
-						+ euclid_measure.width(
-							font,
-							text.substring( token.offset, offset )
-						)
-					),
-				'y', line.y
-			);
-	}
-	else
-	{
-		p = euclid_point.create( 'x', 0, 'y', line.y );
-	}
-
-	// FIXME make it a jion result
-	result =
-	{
-		p : p,
-		line : lineN
-	};
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( result );
-/**/}
-
-	return result;
-};
-
-
-/*
 | Returns the offset closest to a point.
 */
 prototype.getPointOffset =
@@ -783,6 +684,46 @@ prototype.input =
 
 	root.clearRetainX( );
 };
+
+
+/*
+| Locates the line number of a given offset.
+*/
+jion.lazyFunctionInteger(
+	prototype,
+	'locateOffsetLine',
+	function(
+		offset
+	)
+	{
+		this._locateOffset( offset );
+
+		// this is not recursive, it returns
+		// the aheaded value set by _locateOffset
+
+		return this.locateOffsetLine( offset );
+	}
+);
+
+
+/*
+| Locates the line number of a given offset.
+*/
+jion.lazyFunctionInteger(
+	prototype,
+	'locateOffsetPoint',
+	function(
+		offset
+	)
+	{
+		this._locateOffset( offset );
+
+		// this is not recursive, it returns
+		// the aheaded value set by _locateOffset
+
+		return this.locateOffsetPoint( offset );
+	}
+);
 
 
 /*
@@ -1037,7 +978,8 @@ prototype._keyDown =
 	)
 {
 	var
-		cpos,
+		cPosLine,
+		cPosP,
 		flow,
 		r,
 		ve,
@@ -1045,15 +987,17 @@ prototype._keyDown =
 
 	flow = this.flow;
 
-	cpos = this.locateOffset( at );
+	cPosLine = this.locateOffsetLine( at );
 
-	x = retainx !== undefined ? retainx : cpos.p.x;
+	cPosP = this.locateOffsetPoint( at );
 
-	if( cpos.line < flow.length - 1 )
+	x = retainx !== undefined ? retainx : cPosP.x;
+
+	if( cPosLine < flow.length - 1 )
 	{
 		// stays within this para
 		this._setMark(
-			this.getOffsetAt( cpos.line + 1, x ),
+			this.getOffsetAt( cPosLine + 1, x ),
 			x,
 			begin,
 			doc
@@ -1190,7 +1134,7 @@ prototype._pageUpDown =
 /**/	}
 /**/}
 
-	p = this.locateOffset( at ).p,
+	p = this.locateOffsetPoint( at );
 
 	zone = item.zone;
 
@@ -1308,19 +1252,22 @@ prototype._keyUp =
 	)
 {
 	var
-		cpos,
+		cPosLine,
+		cPosP,
 		r,
 		ve,
 		x;
 
-	cpos = this.locateOffset( at );
+	cPosLine = this.locateOffsetLine( at );
 
-	x = retainx !== undefined ? retainx : cpos.p.x;
+	cPosP = this.locateOffsetPoint( at );
 
-	if( cpos.line > 0 )
+	x = retainx !== undefined ? retainx : cPosP.x;
+
+	if( cPosLine > 0 )
 	{
 		// stay within this para
-		at = this.getOffsetAt( cpos.line - 1, x );
+		at = this.getOffsetAt( cPosLine - 1, x );
 
 		this._setMark( at, x, begin, doc );
 
@@ -1338,6 +1285,93 @@ prototype._keyUp =
 
 		ve._setMark( at, x, begin, doc );
 	}
+};
+
+
+/*
+| Sets the aheadValues for point and line of a given offset.
+*/
+prototype._locateOffset =
+	function(
+		offset    // the offset to get the point from.
+	)
+{
+	var
+		aZ,
+		flow,
+		font,
+		line,
+		lineN,
+		p,
+		text,
+		token,
+		tokenN;
+
+	font = this.font;
+
+	text = this.text;
+
+	flow = this.flow;
+
+	// determines which line this offset belongs to
+	for(
+		lineN = 0, aZ = flow.length - 1;
+		lineN < aZ;
+		lineN++
+	)
+	{
+		if( flow.get( lineN + 1 ).offset > offset )
+		{
+			break;
+		}
+	}
+
+	line = flow.get( lineN );
+
+	for(
+		tokenN = 0, aZ = line.length - 1;
+		tokenN < aZ;
+		tokenN++
+	)
+	{
+		if( line.get( tokenN + 1 ).offset > offset ) break;
+	}
+
+	if( tokenN < line.length )
+	{
+		token = line.get( tokenN );
+
+		p =
+			euclid_point.create(
+				'x',
+					Math.round(
+						token.x
+						+ euclid_measure.width(
+							font,
+							text.substring( token.offset, offset )
+						)
+					),
+				'y', line.y
+			);
+	}
+	else
+	{
+		p = euclid_point.create( 'x', 0, 'y', line.y );
+	}
+
+	jion.aheadFunctionInteger(
+		this,
+		'locateOffsetLine',
+		offset,
+		lineN
+	);
+
+	jion.aheadFunctionInteger(
+		this,
+		'locateOffsetPoint',
+		offset,
+		p
+	);
 };
 
 

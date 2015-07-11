@@ -421,7 +421,7 @@ prototype.draw =
 */
 jion.lazyFunctionInteger(
 	prototype,
-	'locateOffset',
+	'locateOffsetPoint',
 	function(
 		offset // the offset to get the point from.
 	)
@@ -491,7 +491,7 @@ prototype._drawCaret =
 
 	descend = fs * theme.bottombox;
 
-	p = this.locateOffset( this.mark.caretAt );
+	p = this.locateOffsetPoint( this.mark.caretAt );
 
 	s = Math.round( p.y + descend + 1 );
 
@@ -854,7 +854,7 @@ jion.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		p = this.locateOffset( this.mark.caretAt );
+		p = this.locateOffsetPoint( this.mark.caretAt );
 
 		s = Math.round( p.y + descend + 1 );
 
