@@ -92,8 +92,7 @@ if( JION )
 			{
 				comment : 'the current view',
 				type : [ 'undefined', 'euclid_view' ],
-				// prepare : 'view && view.sizeOnly', FIXME
-				prepare : 'view ? view.sizeOnly : view'
+				prepare : 'view && view.sizeOnly',
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],

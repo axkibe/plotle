@@ -417,9 +417,9 @@ prototype.failScreen =
 
 	butReload.onclick =
 		function( )
-		{
-			location.reload( );
-		};
+	{
+		location.reload( );
+	};
 };
 
 

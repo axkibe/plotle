@@ -653,14 +653,17 @@ prototype.click =
 	)
 {
 	var
-		result,
+		bubble,
 		screen;
 
 	screen = root._currentScreen( );
 
-	result = root.disc.click( p, shift, ctrl );
+	bubble = root.disc.click( p, shift, ctrl );
 
-	if( !result && screen ) screen.click( p, shift, ctrl );
+	// if bubble === false do not bubble
+	if( bubble !== undefined ) return bubble;
+
+	return screen.click( p, shift, ctrl );
 };
 
 
@@ -673,14 +676,14 @@ Object.defineProperty(
 	{
 		get :
 			function( )
-			{
-				var
-					mark;
+		{
+			var
+				mark;
 
-				mark = this._mark;
+			mark = this._mark;
 
-				return mark ? mark.clipboard : '';
-			}
+			return mark ? mark.clipboard : '';
+		}
 	}
 );
 
@@ -735,10 +738,7 @@ prototype.dragMove =
 
 	screen = root._currentScreen( );
 
-	if( screen )
-	{
-		return screen.dragMove( p, shift, ctrl );
-	}
+	if( screen ) return screen.dragMove( p, shift, ctrl );
 
 	return;
 };
@@ -768,13 +768,10 @@ prototype.dragStart =
 	{
 		bubble = root.disc.dragStart( p, shift, ctrl );
 
-		if( bubble ) return bubble;
+		if( bubble !== undefined ) return bubble;
 	}
 
-	if( screen )
-	{
-		return screen.dragStart( p, shift, ctrl );
-	}
+	if( screen ) return screen.dragStart( p, shift, ctrl );
 };
 
 

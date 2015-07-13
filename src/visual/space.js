@@ -606,7 +606,11 @@ prototype.dragStart =
 			);
 
 		root.create(
-			'action', action.create( 'startPoint', dp, 'transItem', transItem )
+			'action',
+				action.create(
+					'startPoint', dp,
+					'transItem', transItem
+				)
 		);
 
 		return;
@@ -723,6 +727,7 @@ prototype.dragStop =
 {
 	var
 		action,
+		dp,
 		fs,
 		item,
 		key,
@@ -746,11 +751,9 @@ prototype.dragStop =
 	{
 		case 'action_createGeneric' :
 
-			zone =
-				euclid_rect.createArbitrary(
-					action.startPoint,
-					p.fromView( view )
-				);
+			dp = p.fromView( view );
+
+			zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
 			switch( action.itemType )
 			{
@@ -759,14 +762,7 @@ prototype.dragStop =
 					// FIXME move to note
 					// ( and all others creators )
 
-					note =
-						action.transItem.fabric.create(
-							'zone',
-								euclid_rect.createArbitrary(
-									action.startPoint,
-									p.fromView( view )
-								)
-						);
+					note = action.transItem.fabric.create( 'zone', zone );
 
 					key = session_uid( );
 
@@ -815,7 +811,7 @@ prototype.dragStop =
 						);
 
 					pnw =
-						( p.x > action.startPoint.x )
+						( dp.x > action.startPoint.x )
 						? zone.pnw
 						: euclid_point.create(
 							'x', zone.pse.x - resized.zone.width,
@@ -872,11 +868,7 @@ prototype.dragStop =
 
 					portal =
 						action.transItem.fabric.create(
-							'zone',
-								euclid_rect.createArbitrary(
-									action.startPoint,
-									p.fromView( view )
-								),
+							'zone', zone,
 							'spaceUser', root.user.name,
 							'spaceTag', 'home'
 						);
@@ -1008,6 +1000,7 @@ prototype.dragMove =
 		action,
 		align,
 		dy,
+		dp,
 		fs,
 		item,
 		model,
@@ -1026,37 +1019,35 @@ prototype.dragMove =
 
 	if( !action ) return 'pointer';
 
+	dp = p.fromView( view );
+
 	switch( action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			zone =
-				euclid_rect.createArbitrary(
-					action.startPoint,
-					p.fromView( view )
-				);
+			zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
 			switch( action.itemType )
 			{
 				case 'note' :
 
+					model = shell_models.note;
+
 					transItem =
-						shell_models.note.create(
-							'fabric',
-								shell_models.note.fabric
-								.create( 'zone', zone ),
+						model.create(
+							'fabric', model.fabric.create( 'zone', zone ),
 							'view', view
 						);
 
 					break;
 
 				case 'portal' :
+					
+					model = shell_models.portal;
 
 					transItem =
-						shell_models.portal.create(
-							'fabric',
-								shell_models.portal.fabric
-								.create( 'zone', zone ),
+						model.create(
+							'fabric', model.fabric.create( 'zone', zone ),
 							'view', view
 						);
 
@@ -1080,7 +1071,7 @@ prototype.dragMove =
 						);
 
 					pnw =
-						( p.x > action.startPoint.x )
+						( dp.x > action.startPoint.x )
 						? zone.pnw
 						: euclid_point.create(
 							'x', zone.pse.x - resized.zone.width,
@@ -1127,11 +1118,7 @@ prototype.dragMove =
 			}
 
 			// Looks if the action is dragging to an item
-			for(
-				r = 0, rZ = this.length;
-				r < rZ;
-				r++
-			)
+			for( r = 0, rZ = this.length; r < rZ; r++ )
 			{
 				if( this.atRank( r ).createRelationMove( p, action ) )
 				{
