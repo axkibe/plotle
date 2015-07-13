@@ -46,22 +46,22 @@ if( JION )
 			flowWidth :
 			{
 				comment : 'width of the para its flow',
-				type : [ 'undefined', 'number' ]
+				type : 'number'
 			},
 			fontsize :
 			{
 				comment : 'size of the font',
-				type : [ 'undefined', 'number' ]
+				type : 'number'
 			},
 			innerMargin :
 			{
 				comment : 'inner margin of the doc',
-				type : [ 'undefined', 'euclid_margin' ]
+				type : 'euclid_margin'
 			},
 			paraSep :
 			{
 				comment : 'vertical seperation of paragraphs',
-				type : [ 'undefined', 'number' ]
+				type : 'number'
 			},
 			path :
 			{
@@ -78,7 +78,7 @@ if( JION )
 			view :
 			{
 				comment : 'the current view',
-				type : [ 'undefined', 'euclid_view' ]
+				type : 'euclid_view'
 			}
 		},
 		init : [ 'inherit' ],
