@@ -1,7 +1,5 @@
 /*
 | A text range.
-|
-| FIXME rename begin/end to beginMark/endMark
 */
 
 
@@ -26,7 +24,7 @@ if( JION )
 		id : 'visual_mark_range',
 		attributes :
 		{
-			begin :
+			beginMark :
 			{
 				comment : 'begin of the range',
 				type : 'visual_mark_text'
@@ -36,7 +34,7 @@ if( JION )
 				comment : 'the document the range belongs to',
 				type : 'fabric_doc'
 			},
-			end :
+			endMark :
 			{
 				comment : 'end of the range',
 				type : 'visual_mark_text'
@@ -80,9 +78,9 @@ prototype._init =
 		eZ,
 		p;
 
-	bP = this.begin.path;
+	bP = this.beginMark.path;
 
-	eP = this.end.path;
+	eP = this.endMark.path;
 
 	for(
 		p = 0, bZ = bP.length, eZ = eP.length;
@@ -100,36 +98,35 @@ prototype._init =
 
 
 /*
-| The begin or end path,
+| The beginMark or endMark
 | dependening on which comes first in the doc.
 */
 jion.lazyValue(
 	prototype,
-	'front',
+	'frontMark',
 	function( )
 	{
 		this._normalize( );
 
-		return this.front;
+		return this.frontMark;
 	}
 );
 
 
 /*
-| The begin or end path,
+| The beginMark or endMark
 | dependening on which comes last in the doc.
 */
 jion.lazyValue(
 	prototype,
-	'back',
+	'backMark',
 	function( )
 	{
 		this._normalize( );
 
-		return this.back;
+		return this.backMark;
 	}
 );
-
 
 
 /*
@@ -151,7 +148,7 @@ jion.lazyValue(
 	'caretPath',
 	function( )
 	{
-		return this.end.path;
+		return this.endMark.path;
 	}
 );
 
@@ -166,7 +163,7 @@ jion.lazyValue(
 	'caretAt',
 	function( )
 	{
-		return this.end.at;
+		return this.endMark.at;
 	}
 );
 
@@ -179,12 +176,9 @@ jion.lazyValue(
 	'itemPath',
 	function( )
 	{
-		if( this.begin.path.length < 3 )
-		{
-			return;
-		}
+		if( this.beginMark.path.length < 3 ) return;
 
-		return this.begin.path.limit( 3 );
+		return this.beginMark.path.limit( 3 );
 	}
 );
 
@@ -198,32 +192,34 @@ jion.lazyValue(
 	function( )
 	{
 		var
-			back,
 			backKey,
+			backMark,
 			backText,
 			buf,
 			doc,
-			front,
 			frontKey,
+			frontMark,
 			frontText,
 			r, rZ,
 			text;
 
-		front = this.front;
+		frontMark = this.frontMark;
 
-		back = this.back;
+		backMark = this.backMark;
 
 		doc = this.doc;
 
-		frontKey = front.path.get( -2 );
+		frontKey = frontMark.path.get( -2 );
 
-		backKey = back.path.get( -2 );
+		backKey = backMark.path.get( -2 );
 
-		if( front.path.equals( back.path ) )
+		if( frontMark.path.equals( backMark.path ) )
 		{
 			text = doc.get( frontKey ).text;
 
-			return text.substring( front.at, back.at );
+			return(
+				text.substring( frontMark.at, backMark.at )
+			);
 		}
 
 		frontText = doc.get( frontKey ).text;
@@ -232,7 +228,9 @@ jion.lazyValue(
 
 		buf =
 			[
-				frontText.substring( front.at, frontText.length )
+				frontText.substring(
+					frontMark.at, frontText.length
+				)
 			];
 
 		for(
@@ -244,7 +242,7 @@ jion.lazyValue(
 			buf.push( '\n', doc.atRank( r ).text );
 		}
 
-		buf.push( '\n', backText.substring( 0, back.at ) );
+		buf.push( '\n', backText.substring( 0, backMark.at ) );
 
 		return buf.join( '' );
 	}
@@ -273,9 +271,8 @@ prototype.containsPath =
 	// check paths of stuff inbetween?
 
 	return(
-		path.subPathOf( this.begin.path )
-		||
-		path.subPathOf( this.end.path )
+		path.subPathOf( this.beginMark.path )
+		|| path.subPathOf( this.endMark.path )
 	);
 };
 
@@ -291,12 +288,12 @@ prototype.createTransformed =
 		changes
 	)
 {
-	if( this.begin.path.get( 0 ) !== 'spaceVisual' ) return this;
+	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
 	return(
 		this.create(
-			'begin', this.begin.createTransformed( changes ),
-			'end', this.end.createTransformed( changes )
+			'beginMark', this.beginMark.createTransformed( changes ),
+			'endMark', this.endMark.createTransformed( changes )
 		)
 	);
 };
@@ -304,57 +301,57 @@ prototype.createTransformed =
 
 
 /*
-| True if begin equals end
+| True if beginMark equals endMark
 */
 jion.lazyValue(
 	prototype,
 	'empty',
 	function( )
 	{
-		return this.begin.equals( this.end );
+		return this.beginMark.equals( this.endMark );
 	}
 );
 
 
 /*
-| Sets front/back so front is before back.
+| Sets frontMark/backMark so frontMark is before backMark.
 */
 prototype._normalize =
 	function( )
 {
 	var
-		begin,
+		beginMark,
 		bk,
 		br,
-		end,
+		endMark,
 		ek,
 		er;
 
-	begin = this.begin;
+	beginMark = this.beginMark;
 
-	end = this.end;
+	endMark = this.endMark;
 
-	if( begin.path.equals( end.path ) )
+	if( beginMark.path.equals( endMark.path ) )
 	{
-		if( begin.at <= end.at )
+		if( beginMark.at <= endMark.at )
 		{
-			jion.aheadValue( this, 'front', begin );
+			jion.aheadValue( this, 'frontMark', beginMark );
 
-			jion.aheadValue( this, 'back', end );
+			jion.aheadValue( this, 'backMark', endMark );
 		}
 		else
 		{
-			jion.aheadValue( this, 'front', end );
+			jion.aheadValue( this, 'frontMark', endMark );
 
-			jion.aheadValue( this, 'back', begin );
+			jion.aheadValue( this, 'backMark', beginMark );
 		}
 
 		return;
 	}
 
-	bk = begin.path.get( -2 );
+	bk = beginMark.path.get( -2 );
 
-	ek = end.path.get( -2 );
+	ek = endMark.path.get( -2 );
 
 /**/if( CHECK )
 /**/{
@@ -370,15 +367,15 @@ prototype._normalize =
 
 	if( br < er )
 	{
-		jion.aheadValue( this, 'front', begin );
+		jion.aheadValue( this, 'frontMark', beginMark );
 
-		jion.aheadValue( this, 'back', end );
+		jion.aheadValue( this, 'backMark', endMark );
 	}
 	else
 	{
-		jion.aheadValue( this, 'front', end );
+		jion.aheadValue( this, 'frontMark', endMark );
 
-		jion.aheadValue( this, 'back', begin );
+		jion.aheadValue( this, 'backMark', beginMark );
 	}
 };
 

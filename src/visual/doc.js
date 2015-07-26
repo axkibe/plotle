@@ -209,9 +209,9 @@ prototype._getRangeShape =
 		b2Key,
 		b2Para,
 		b2y,
-		back,
 		backFlow,
 		backKey,
+		backMark,
 		backPara,
 		backPnw,
 		backRank,
@@ -224,9 +224,9 @@ prototype._getRangeShape =
 		fLine,
 		fontsize,
 		fp,
-		front,
 		frontFlow,
 		frontKey,
+		frontMark,
 		frontPara,
 		frontPnw,
 		frontRank,
@@ -244,13 +244,13 @@ prototype._getRangeShape =
 /**/	if( mark.reflect !== 'visual_mark_range' ) throw new Error( );
 /**/}
 
-	front = mark.front;
+	frontMark = mark.frontMark;
 
-	back = mark.back;
+	backMark = mark.backMark;
 
-	frontKey = front.path.get( -2 );
+	frontKey = frontMark.path.get( -2 );
 
-	backKey = back.path.get( -2 );
+	backKey = backMark.path.get( -2 );
 
 	frontPnw = this.getPNW( frontKey );
 
@@ -260,13 +260,13 @@ prototype._getRangeShape =
 
 	backPara = this.get( backKey );
 
-	fp = frontPara.locateOffsetPoint( front.at );
+	fp = frontPara.locateOffsetPoint( frontMark.at );
 
-	bp = backPara.locateOffsetPoint( back.at );
+	bp = backPara.locateOffsetPoint( backMark.at );
 
-	fLine = frontPara.locateOffsetLine( front.at );
+	fLine = frontPara.locateOffsetLine( frontMark.at );
 
-	bLine = backPara.locateOffsetLine( back.at );
+	bLine = backPara.locateOffsetLine( backMark.at );
 
 	fontsize = this.fontsize;
 
@@ -451,7 +451,7 @@ prototype._getRangeShape =
 		}
 
 
-		if( front.at > 0 )
+		if( frontMark.at > 0 )
 		{
 			sections =
 			[

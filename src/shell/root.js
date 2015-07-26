@@ -1242,9 +1242,9 @@ prototype.removeRange =
 	)
 {
 	var
-		back,
+		backMark,
 		changes,
-		front,
+		frontMark,
 		k1,
 		k2,
 		pivot,
@@ -1254,33 +1254,33 @@ prototype.removeRange =
 		text,
 		ve;
 
-	front = range.front;
+	frontMark = range.frontMark;
 
-	back = range.back;
+	backMark = range.backMark;
 
 /**/if( CHECK )
 /**/{
 /**/	if(
-/**/		front.path.get( -1 ) !== 'text'
-/**/		|| back.path.get( -1 ) !== 'text'
-/**/		|| front.path.get( 0 ) !== 'spaceVisual'
-/**/		|| back.path.get( 0 ) !== 'spaceVisual'
+/**/		frontMark.path.get( -1 ) !== 'text'
+/**/		|| backMark.path.get( -1 ) !== 'text'
+/**/		|| frontMark.path.get( 0 ) !== 'spaceVisual'
+/**/		|| backMark.path.get( 0 ) !== 'spaceVisual'
 /**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if ( front.path.equals( back.path ) )
+	if ( frontMark.path.equals( backMark.path ) )
 	{
 		root.alter(
 			change_remove.create(
-				'path', front.path.chop,
-				'at1', front.at,
-				'at2', back.at,
+				'path', frontMark.path.chop,
+				'at1', frontMark.at,
+				'at2', backMark.at,
 				'val',
-					root.spaceFabric.getPath( front.path.chop )
-					.substring( front.at, back.at )
+					root.spaceFabric.getPath( frontMark.path.chop )
+					.substring( frontMark.at, backMark.at )
 			)
 		);
 
@@ -1289,17 +1289,23 @@ prototype.removeRange =
 
 	changes = [ ];
 
-	k1 = front.path.get( -2 );
+	k1 = frontMark.path.get( -2 );
 
-	k2 = back.path.get( -2 );
+	k2 = backMark.path.get( -2 );
 
-	pivot = root.spaceFabric.getPath( front.path.chop.shorten.shorten.shorten );
+	pivot =
+		root.spaceFabric.getPath(
+			frontMark.path.chop.shorten.shorten.shorten
+		);
 
 	r1 = pivot.rankOf( k1 );
 
 	r2 = pivot.rankOf( k2 );
 
-	text = root.spaceFabric.getPath( front.path.chop );
+	text =
+		root.spaceFabric.getPath(
+			frontMark.path.chop
+		);
 
 	for(
 		r = r1;
@@ -1311,7 +1317,7 @@ prototype.removeRange =
 
 		changes.push(
 			change_join.create(
-				'path', front.path.chop,
+				'path', frontMark.path.chop,
 				'path2', ve.textPath.chop,
 				'at1', text.length
 			)
@@ -1322,15 +1328,15 @@ prototype.removeRange =
 
 	text =
 		text.substring(
-			front.at,
-			text.length - ve.text.length + back.at
+			frontMark.at,
+			text.length - ve.text.length + backMark.at
 		);
 
 	changes.push(
 		change_remove.create(
-			'path', front.path.chop,
-			'at1', front.at,
-			'at2', front.at + text.length,
+			'path', frontMark.path.chop,
+			'at1', frontMark.at,
+			'at2', frontMark.at + text.length,
 			'val', text
 		)
 	);

@@ -739,7 +739,7 @@ prototype.specialKey =
 {
 	var
 		at,
-		begin,
+		beginMark,
 		doc,
 		keyHandler,
 		mark,
@@ -765,12 +765,12 @@ prototype.specialKey =
 					'mark',
 						visual_mark_range.create(
 							'doc', doc.fabric,
-							'begin',
+							'beginMark',
 								visual_mark_text.create(
 									'path', v0.textPath,
 									'at', 0
 								),
-							'end',
+							'endMark',
 								visual_mark_text.create(
 									'path', v1.textPath,
 									'at', v1.text.length
@@ -800,7 +800,7 @@ prototype.specialKey =
 
 			retainx = mark.retainx;
 
-			if( shift ) begin = mark.textMark;
+			if( shift ) beginMark = mark.textMark;
 
 			break;
 
@@ -818,14 +818,14 @@ prototype.specialKey =
 
 			retainx = mark.retainx;
 
-			if( shift ) begin = mark.begin;
+			if( shift ) beginMark = mark.beginMark;
 
 			break;
 	}
 
 	if( keyHandler )
 	{
-		this[ keyHandler ]( item, doc, at, retainx, begin );
+		this[ keyHandler ]( item, doc, at, retainx, beginMark );
 	}
 };
 
@@ -877,7 +877,7 @@ prototype._keyBackspace =
 		doc,
 		at
 		// retainx,
-		// begin
+		// beginMark
 	)
 {
 	var
@@ -927,7 +927,7 @@ prototype._keyDel =
 		doc,
 		at
 		// retainx,
-		// begin
+		// beginMark
 	)
 {
 	var
@@ -974,7 +974,7 @@ prototype._keyDown =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
 	var
@@ -999,7 +999,7 @@ prototype._keyDown =
 		this._setMark(
 			this.getOffsetAt( cPosLine + 1, x ),
 			x,
-			begin,
+			beginMark,
 			doc
 		);
 
@@ -1015,7 +1015,7 @@ prototype._keyDown =
 
 		at = ve.getOffsetAt( 0, x );
 
-		ve._setMark( at, x, begin, doc );
+		ve._setMark( at, x, beginMark, doc );
 	}
 };
 
@@ -1029,10 +1029,10 @@ prototype._keyEnd =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
-	this._setMark( this.text.length, undefined, begin, doc );
+	this._setMark( this.text.length, undefined, beginMark, doc );
 };
 
 
@@ -1045,7 +1045,7 @@ prototype._keyEnter =
 		doc,
 		at
 		// retainx,
-		// begin
+		// beginMark
 	)
 {
 	var
@@ -1072,7 +1072,7 @@ prototype._keyLeft =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
 	var
@@ -1081,7 +1081,7 @@ prototype._keyLeft =
 
 	if( at > 0 )
 	{
-		this._setMark( at - 1, undefined, begin, doc );
+		this._setMark( at - 1, undefined, beginMark, doc );
 
 		return;
 	}
@@ -1092,13 +1092,13 @@ prototype._keyLeft =
 	{
 		ve = doc.atRank( r - 1 );
 
-		ve._setMark( ve.text.length, undefined, begin, doc );
+		ve._setMark( ve.text.length, undefined, beginMark, doc );
 
 		return;
 	}
 	else
 	{
-		this._setMark( at, undefined, begin, doc );
+		this._setMark( at, undefined, beginMark, doc );
 	}
 };
 
@@ -1115,7 +1115,7 @@ prototype._pageUpDown =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
 	var
@@ -1153,7 +1153,7 @@ prototype._pageUpDown =
 
 	at = tpara.getPointOffset( item, tp.sub( tpnw ) );
 
-	tpara._setMark( at, retainx, begin, doc );
+	tpara._setMark( at, retainx, beginMark, doc );
 };
 
 
@@ -1166,10 +1166,10 @@ prototype._keyPageDown =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
-	this._pageUpDown( +1, item, doc, at, retainx, begin );
+	this._pageUpDown( +1, item, doc, at, retainx, beginMark );
 };
 
 
@@ -1182,10 +1182,10 @@ prototype._keyPageUp =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
-	this._pageUpDown( -1, item, doc, at, retainx, begin );
+	this._pageUpDown( -1, item, doc, at, retainx, beginMark );
 };
 
 
@@ -1198,10 +1198,10 @@ prototype._keyPos1 =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
-	this._setMark( 0, undefined, begin, doc );
+	this._setMark( 0, undefined, beginMark, doc );
 };
 
 
@@ -1214,7 +1214,7 @@ prototype._keyRight =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
 	var
@@ -1223,7 +1223,7 @@ prototype._keyRight =
 
 	if( at < this.text.length )
 	{
-		this._setMark( at + 1, undefined, begin, doc );
+		this._setMark( at + 1, undefined, beginMark, doc );
 
 		return;
 	}
@@ -1234,7 +1234,7 @@ prototype._keyRight =
 	{
 		ve = doc.atRank( r + 1 );
 
-		ve._setMark( 0, undefined, begin, doc );
+		ve._setMark( 0, undefined, beginMark, doc );
 	}
 };
 
@@ -1248,7 +1248,7 @@ prototype._keyUp =
 		doc,
 		at,
 		retainx,
-		begin
+		beginMark
 	)
 {
 	var
@@ -1269,7 +1269,7 @@ prototype._keyUp =
 		// stay within this para
 		at = this.getOffsetAt( cPosLine - 1, x );
 
-		this._setMark( at, x, begin, doc );
+		this._setMark( at, x, beginMark, doc );
 
 		return;
 	}
@@ -1283,7 +1283,7 @@ prototype._keyUp =
 
 		at = ve.getOffsetAt( ve.flow.length - 1, x );
 
-		ve._setMark( at, x, begin, doc );
+		ve._setMark( at, x, beginMark, doc );
 	}
 };
 
@@ -1380,15 +1380,15 @@ prototype._locateOffset =
 */
 prototype._setMark =
 	function(
-		at,      // position to mark caret (or end of range)
-		retainx, // retains this x position when moving up/down
-		begin,   // begin when marking a range
-		doc      // range mark need this
+		at,        // position to mark caret (or endMark of range)
+		retainx,   // retains this x position when moving up/down
+		beginMark, // beginMark when marking a range
+		doc        // range mark need this
 	)
 {
 	root.create(
 		'mark',
-			!begin
+			!beginMark
 			? visual_mark_caret.create(
 				'path', this.textPath,
 				'at', at,
@@ -1396,8 +1396,8 @@ prototype._setMark =
 			)
 			: visual_mark_range.create(
 				'doc', doc.fabric,
-				'begin', begin,
-				'end',
+				'beginMark', beginMark,
+				'endMark',
 					visual_mark_text.create(
 						'path', this.textPath,
 						'at', at

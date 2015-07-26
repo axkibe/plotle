@@ -56,8 +56,6 @@ prototype.hasCaret = false;
 
 /*
 | The item's path.
-|
-| FIXME
 */
 jion.lazyValue(
 	prototype,
