@@ -407,15 +407,12 @@ prototype.scrollMarkIntoView =
 
 	mark = this.mark;
 
-	if( !mark || !mark.hasCaret )
-	{
-		return;
-	}
+	if( !mark || !mark.hasCaret ) return;
 
 	sy = this.scrollbarY ? this.scrollbarY.pos : 0;
 
 	// FUTURE, more elegant path getting
-	para = this.doc.get( mark.caretPath.get( 5 ) );
+	para = this.doc.get( mark.caret.path.get( 5 ) );
 
 /**/if( CHECK )
 /**/{
@@ -430,7 +427,7 @@ prototype.scrollMarkIntoView =
 
 	descend = fs * theme.bottombox;
 
-	p = para.locateOffsetPoint( mark.caretAt );
+	p = para.locateOffsetPoint( mark.caret.at );
 
 	pnw = this.doc.getPNW( para.key );
 

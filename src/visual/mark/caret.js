@@ -96,46 +96,14 @@ prototype._init =
 
 
 /*
-| The forwars the offset.
+| The textMark where the caret is.
 */
 jion.lazyValue(
 	prototype,
-	'at',
+	'caret',
 	function( )
 	{
-		return this.textMark.at;
-	}
-);
-
-
-/*
-| The caret's offset.
-|
-| This allows a common interface with text range.
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'caretAt',
-	function( )
-	{
-		return this.at;
-	}
-);
-
-
-/*
-| The caret's path.
-|
-| This allows a common interface with text range.
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'caretPath',
-	function( )
-	{
-		return this.path;
+		return this.textMark;
 	}
 );
 
@@ -149,7 +117,7 @@ prototype.createTransformed =
 		changes
 	)
 {
-	if( this.path.get( 0 ) !== 'spaceVisual' ) return this;
+	if( this.textMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
 	return(
 		this.create(
@@ -176,15 +144,14 @@ jion.lazyValue(
 	'itemPath',
 	function( )
 	{
-		if(
-			this.path.length < 3
-			|| this.path.get( 0 ) !== 'spaceVisual'
-		)
-		{
-			return;
-		}
+		var
+			path;
 
-		return this.path.limit( 3 );
+		path = this.textMark.path;
+
+		if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
+
+		return path.limit( 3 );
 	}
 );
 
@@ -213,21 +180,8 @@ prototype.containsPath =
 /**/	}
 /**/}
 
-	return path.subPathOf( this.path );
+	return path.subPathOf( this.textMark.path );
 };
-
-
-/*
-| The forwars the path.
-*/
-jion.lazyValue(
-	prototype,
-	'path',
-	function( )
-	{
-		return this.textMark.path;
-	}
-);
 
 
 /*
@@ -238,10 +192,12 @@ jion.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		if( this.path.length < 5 || this.path.get( 0 ) !== 'form' )
-		{
-			return;
-		}
+		var
+			path;
+
+		path = this.textMark.path;
+
+		if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
 
 		return this.path.limit( 5 );
 	}

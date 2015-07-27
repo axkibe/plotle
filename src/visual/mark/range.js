@@ -132,38 +132,20 @@ jion.lazyValue(
 /*
 | Ranges also have caret capabilities.
 |
-| The caretPath and caretAt are identical to
-| end.path and end.at
+| The caretMark is identical to endMark.
 */
 prototype.hasCaret = true;
 
 
 /*
-| The caret's path.
-|
-| This allows a common interface with text range.
+| Returns the mark where the caret should show up.
 */
 jion.lazyValue(
 	prototype,
-	'caretPath',
+	'caret',
 	function( )
 	{
-		return this.endMark.path;
-	}
-);
-
-
-/*
-| The caret's offset.
-|
-| This allows a common interface with text range.
-*/
-jion.lazyValue(
-	prototype,
-	'caretAt',
-	function( )
-	{
-		return this.endMark.at;
+		return this.endMark;
 	}
 );
 

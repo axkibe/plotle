@@ -1304,7 +1304,7 @@ prototype.input =
 		return false;
 	}
 
-	path = mark.caretPath;
+	path = mark.caret.path;
 
 	item = this.get( path.get( 2 ) );
 
@@ -1376,7 +1376,7 @@ prototype.specialKey =
 
 	if( !mark || !mark.hasCaret ) return;
 
-	item = this.get( mark.caretPath.get( 2 ) );
+	item = this.get( mark.caret.path.get( 2 ) );
 
 	if( item ) item.specialKey( key, shift, ctrl );
 };

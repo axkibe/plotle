@@ -491,7 +491,7 @@ prototype._drawCaret =
 
 	descend = fs * theme.bottombox;
 
-	p = this.locateOffsetPoint( this.mark.caretAt );
+	p = this.locateOffsetPoint( this.mark.caret.at );
 
 	s = Math.round( p.y + descend + 1 );
 
@@ -525,7 +525,7 @@ prototype.input =
 
 	value = this.value;
 
-	at = mark.caretAt;
+	at = mark.caret.at;
 
 	maxlen = this.maxlen;
 
@@ -549,7 +549,7 @@ prototype.input =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
+				'path', mark.caret.path,
 				'at', at + text.length
 			)
 	);
@@ -584,7 +584,7 @@ prototype._keyBackspace =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
+				'path', mark.caret.path,
 				'at', at - 1
 			)
 	);
@@ -598,13 +598,11 @@ prototype._keyDel =
 	function( )
 {
 	var
-		at =
-			this.mark.caretAt;
+		at;
+	
+	at = this.mark.caret.at;
 
-	if( at >= this.value.length )
-	{
-		return;
-	}
+	if( at >= this.value.length ) return;
 
 	root.setPath(
 		this.path.append( 'value' ),
@@ -638,14 +636,14 @@ prototype._keyEnd =
 
 	mark = this.mark;
 
-	at = mark.caretAt;
+	at = mark.caret.at;
 
 	if( at >= this.value.length ) return;
 
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
+				'path', mark.caret.path,
 				'at', this.value.length
 			)
 	);
@@ -663,13 +661,13 @@ prototype._keyLeft =
 
 	mark = this.mark;
 
-	if( mark.caretAt <= 0 ) return;
+	if( mark.caret.at <= 0 ) return;
 
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
-				'at', mark.caretAt - 1
+				'path', mark.caret.path,
+				'at', mark.caret.at - 1
 			)
 	);
 };
@@ -691,7 +689,7 @@ prototype._keyPos1 =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
+				'path', mark.caret.path,
 				'at', 0
 			)
 	);
@@ -709,13 +707,13 @@ prototype._keyRight =
 
 	mark = this.mark;
 
-	if( mark.caretAt >= this.value.length ) return;
+	if( mark.caret.at >= this.value.length ) return;
 
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
-				'at', mark.caretAt + 1
+				'path', mark.caret.path,
+				'at', mark.caret.at + 1
 			)
 	);
 };
@@ -854,11 +852,11 @@ jion.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		p = this.locateOffsetPoint( this.mark.caretAt );
+		p = this.locateOffsetPoint( this.mark.caret.at );
 
 		s = Math.round( p.y + descend + 1 );
 
-		return (
+		return(
 			this.frame.pnw.y + s - Math.round( fs + descend )
 		);
 	}

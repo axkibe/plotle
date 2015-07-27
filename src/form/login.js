@@ -418,18 +418,22 @@ prototype.specialKey =
 		ctrl
 	)
 {
+	var
+		cPath;
+
 	// a return in the password field is made
 	// to be a login command right away
 
-	if(
-		key === 'enter'
-		&& this.mark.caretPath
-		&& this.mark.caretPath.get( 4 ) === 'passwordInput'
-	)
+	if( key === 'enter' )
 	{
-		this.login( );
+		cPath = this.mark.caret.path;
 
-		return;
+		if( cPath && cPath.get( 4 ) === 'passwordInput' )
+		{
+			this.login( );
+
+			return;
+		}
 	}
 
 	return form_form.specialKey.call( this, key, shift, ctrl );

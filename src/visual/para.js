@@ -205,7 +205,7 @@ jion.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		p = this.locateOffsetPoint( this.mark.caretAt );
+		p = this.locateOffsetPoint( this.mark.caret.at );
 
 		s = Math.round( p.y + descend );
 
@@ -330,7 +330,7 @@ prototype._drawCaret =
 
 	descend = this.fontsize * theme.bottombox;
 
-	p = this.locateOffsetPoint( this.mark.caretAt );
+	p = this.locateOffsetPoint( this.mark.caret.at );
 
 	s = Math.round( p.y + descend );
 
@@ -633,7 +633,7 @@ prototype.input =
 	)
 {
 	var
-		caretAt,
+		at,
 		changes,
 		line,
 		textPath,
@@ -647,7 +647,7 @@ prototype.input =
 
 	textPath = this.textPath;
 
-	caretAt = this.mark.caretAt;
+	at = this.mark.caret.at;
 
 	for( rx = reg.exec( text ); rx; rx = reg.exec( text ) )
 	{
@@ -657,8 +657,8 @@ prototype.input =
 			change_insert.create(
 				'val', line,
 				'path', textPath.chop,
-				'at1', caretAt,
-				'at2', caretAt + line.length
+				'at1', at,
+				'at2', at + line.length
 			)
 		);
 
@@ -670,13 +670,13 @@ prototype.input =
 				change_split.create(
 					'path', textPath.chop,
 					'path2', textPath2.chop,
-					'at1', caretAt + line.length
+					'at1', at + line.length
 				)
 			);
 
 			textPath = textPath2;
 
-			caretAt = 0;
+			at = 0;
 		}
 	}
 
@@ -790,13 +790,13 @@ prototype.specialKey =
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !this.path.subPathOf( mark.caretPath ) )
+/**/			if( !this.path.subPathOf( mark.caret.path ) )
 /**/			{
 /**/				throw new Error( );
 /**/			}
 /**/		}
 
-			at = mark.caretAt;
+			at = mark.caret.at;
 
 			retainx = mark.retainx;
 
@@ -808,13 +808,13 @@ prototype.specialKey =
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !this.path.subPathOf( mark.caretPath ) )
+/**/			if( !this.path.subPathOf( mark.caret.path ) )
 /**/			{
 /**/				throw new Error( );
 /**/			}
 /**/		}
 
-			at = mark.caretAt;
+			at = mark.caret.at;
 
 			retainx = mark.retainx;
 

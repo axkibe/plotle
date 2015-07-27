@@ -235,7 +235,7 @@ jion.lazyValue(
 			return ac;
 		}
 
-		section = mark.caretPath.get( -1 );
+		section = mark.caret.path.get( -1 );
 
 		if( !isSection( section ) ) return ac;
 
@@ -252,7 +252,7 @@ jion.lazyValue(
 
 		fieldPNW = this[ spaceFields[ section ] ].pnw;
 
-		p = this._locateOffset( section, mark.caretAt );
+		p = this._locateOffset( section, mark.caret.at );
 
 		s = Math.round( p.y + descend ) + fieldPNW.y;
 
@@ -411,7 +411,7 @@ prototype.input =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return false;
 
@@ -431,8 +431,8 @@ prototype.input =
 			change_insert.create(
 				'val', line,
 				'path', this.path.append( section ).chop,
-				'at1', mark.caretAt,
-				'at2', mark.caretAt + line.length
+				'at1', mark.caret.at,
+				'at2', mark.caret.at + line.length
 			)
 		);
 	}
@@ -800,11 +800,11 @@ prototype._keyBackspace =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
-	at = mark.caretAt;
+	at = mark.caret.at;
 
 	if( at <= 0 ) return;
 
@@ -833,7 +833,7 @@ prototype._keyDown =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
@@ -841,7 +841,7 @@ prototype._keyDown =
 	{
 		case 'spaceUser' :
 
-			cpos = this._locateOffset( section, mark.caretAt );
+			cpos = this._locateOffset( section, mark.caret.at );
 
 			root.create(
 				'mark',
@@ -898,11 +898,11 @@ prototype._keyLeft =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
-	if( mark.caretAt === 0 )
+	if( mark.caret.at === 0 )
 	{
 		cycle = visual_portal.antiCycle( section );
 
@@ -923,8 +923,8 @@ prototype._keyLeft =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
-				'at', mark.caretAt - 1
+				'path', mark.caret.path,
+				'at', mark.caret.at - 1
 			)
 	);
 
@@ -946,7 +946,7 @@ prototype._keyTab =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
@@ -958,7 +958,7 @@ prototype._keyTab =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath.set( -1, cycle ),
+				'path', mark.caret.path.set( -1, cycle ),
 				'at', 0
 			)
 	);
@@ -977,7 +977,7 @@ prototype._keyUp =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
@@ -1000,7 +1000,7 @@ prototype._keyUp =
 			cpos =
 				this._locateOffset(
 					section,
-					mark.caretAt
+					mark.caret.at
 				);
 
 			root.create(
@@ -1045,7 +1045,7 @@ prototype._keyRight =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return false;
 
@@ -1053,7 +1053,7 @@ prototype._keyRight =
 
 	if(
 		section === 'moveToButton'
-		|| ( value && mark.caretAt >= value.length )
+		|| ( value && mark.caret.at >= value.length )
 	)
 	{
 		cycle = visual_portal.cycle( section );
@@ -1072,8 +1072,8 @@ prototype._keyRight =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
-				'at', mark.caretAt + 1
+				'path', mark.caret.path,
+				'at', mark.caret.at + 1
 			)
 	);
 
@@ -1095,13 +1095,13 @@ prototype._keyDel =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	value = this.fabric[ section ];
 
 	if( !isSection( section ) || section === 'moveToButton' ) return;
 
-	at = mark.caretAt;
+	at = mark.caret.at;
 
 	if( at >= value.length )
 	{
@@ -1133,7 +1133,7 @@ prototype._keyEnd =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if(
 		!isSection( section )
@@ -1143,7 +1143,7 @@ prototype._keyEnd =
 		return;
 	}
 
-	at = mark.caretAt,
+	at = mark.caret.at,
 
 	value = this.fabric[ section ];
 
@@ -1152,7 +1152,7 @@ prototype._keyEnd =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path', mark.caretPath,
+				'path', mark.caret.path,
 				'at', value.length
 			)
 	);
@@ -1172,7 +1172,7 @@ prototype._keyEnter =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) ) return;
 
@@ -1188,7 +1188,7 @@ prototype._keyEnter =
 		root.create(
 			'mark',
 				visual_mark_caret.create(
-					'path', mark.caretPath.set( -1, cycle ),
+					'path', mark.caret.path.set( -1, cycle ),
 					'at', 0
 				)
 		);
@@ -1455,7 +1455,7 @@ jion.lazyValue(
 		section =
 			mark
 			&& mark.hasCaret
-			&& mark.caretPath.get( -1 );
+			&& mark.caret.path.get( -1 );
 
 		facet = gruga_portal.getFacet( );
 
@@ -1572,7 +1572,7 @@ prototype._drawCaret =
 
 	mark = this.mark;
 
-	section = mark.caretPath.get( -1 );
+	section = mark.caret.path.get( -1 );
 
 	if( !isSection( section ) || section === 'moveToButton' )
 	{
@@ -1587,7 +1587,7 @@ prototype._drawCaret =
 
 	fieldPNW = this[ spaceFields[ section ] ].pnw;
 
-	p = this._locateOffset( section, mark.caretAt );
+	p = this._locateOffset( section, mark.caret.at );
 
 	s = Math.round( p.y + descend ) + fieldPNW.y;
 

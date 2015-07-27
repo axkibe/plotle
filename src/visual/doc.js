@@ -173,7 +173,7 @@ jion.lazyValue(
 			return 0;
 		}
 
-		path = this.mark.caretPath;
+		path = this.mark.caret.path;
 
 		key = path.get( 5 ); // FUTURE
 
@@ -185,7 +185,7 @@ jion.lazyValue(
 /**/		}
 /**/	}
 
-		return (
+		return(
 			this.getPNW( key ).y
 			+ this.get( key ).attentionCenter
 		);
@@ -626,7 +626,7 @@ prototype.draw =
 /**/    // since it might be temporarily outOfOrder during update operation
 /**/	if( this.mark && this.mark.hasCaret )
 /**/	{
-/**/		if( !this.get( this.mark.caretPath.get( 5 ) ) )
+/**/		if( !this.get( this.mark.caret.path.get( 5 ) ) )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -710,11 +710,7 @@ jion.lazyValue(
 
 		y = innerMargin.n;
 
-		for(
-			r = 0, rZ = this.length;
-			r < rZ;
-			r++
-		)
+		for( r = 0, rZ = this.length; r < rZ; r++ )
 		{
 			para = this.atRank( r );
 
@@ -882,7 +878,7 @@ prototype.input =
 		return false;
 	}
 
-	path = this.mark.caretPath;
+	path = this.mark.caret.path;
 
 	if(
 		mark.reflect === 'visual_mark_range'
@@ -953,7 +949,7 @@ prototype.specialKey =
 
 	return(
 		this
-		.get( mark.caretPath.get( 5 ) )
+		.get( mark.caret.path.get( 5 ) )
 		.specialKey( key, item, shift, ctrl )
 	);
 };
