@@ -92,7 +92,7 @@ visual_docItem.click =
 	{
 		ppnw = doc.getPNW( para.key );
 
-		at = para.getPointOffset( this, pi.sub( ppnw ) );
+		at = para.getPointOffset( pi.sub( ppnw ) );
 
 		root.create(
 			'mark',

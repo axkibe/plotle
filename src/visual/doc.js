@@ -29,8 +29,6 @@ var
 
 /*
 | The jion definition.
-|
-| FIXME rework undefineds
 */
 if( JION )
 {

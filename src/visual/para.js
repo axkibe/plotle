@@ -597,7 +597,6 @@ prototype.getOffsetAt =
 */
 prototype.getPointOffset =
 	function(
-		item,
 		point     // the point to look for
 	)
 {
@@ -615,10 +614,7 @@ prototype.getPointOffset =
 		}
 	}
 
-	if( line >= flow.length )
-	{
-		line--;
-	}
+	if( line >= flow.length ) line--;
 
 	return this.getOffsetAt( line, point.x );
 };
@@ -1140,7 +1136,11 @@ prototype._pageUpDown =
 
 	pnw = doc.getPNW( this.key );
 
-	tp = p.add( pnw.x, pnw.y + zone.height * dir );
+	tp =
+		pnw.add(
+			retainx !== undefined ? retainx : p.x,
+			p.y + zone.height * dir
+		);
 
 	tpara = doc.getParaAtPoint( tp );
 
@@ -1151,7 +1151,7 @@ prototype._pageUpDown =
 
 	tpnw = doc.getPNW( tpara.key );
 
-	at = tpara.getPointOffset( item, tp.sub( tpnw ) );
+	at = tpara.getPointOffset( tp.sub( tpnw ) );
 
 	tpara._setMark( at, retainx, beginMark, doc );
 };
