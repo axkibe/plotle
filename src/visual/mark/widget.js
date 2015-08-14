@@ -61,9 +61,9 @@ jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
-	{
-		return;
-	}
+{
+	return;
+}
 );
 
 

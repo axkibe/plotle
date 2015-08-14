@@ -301,6 +301,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/euclid/shapeRay.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/euclid/roundRect.js',
 		'hasJion', true,
 		'inBundle', true

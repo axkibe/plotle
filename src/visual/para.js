@@ -47,7 +47,7 @@ if( JION )
 			},
 			flowWidth :
 			{
-				comment : 'width of the para flow',
+				comment : 'width the flow can fill',
 				type : [ 'undefined', 'number' ]
 			},
 			fontsize :
@@ -367,124 +367,124 @@ jion.lazyValue(
 	prototype,
 	'flow',
 	function( )
-	{
-		var
-			ca,
-			currentLineOffset,
-			currentLineRay,
-			lines,
-			flowWidth,
-			font,
-			reg,
-			space,
-			widthUsed,
-			text,
-			tokenText,
-			w,
-			x,
-			y;
+{
+	var
+		ca,
+		currentLineOffset,
+		currentLineRay,
+		lines,
+		flowWidth,
+		font,
+		reg,
+		space,
+		widthUsed,
+		text,
+		tokenText,
+		w,
+		x,
+		y;
 
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( !this.fontsize )
 /**/	{
-/**/		if( !this.fontsize )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
+/**/}
 
-		// width the flow can fill
-		// 0 means infinite
-		flowWidth = this.flowWidth;
+	// width the flow can fill
+	// 0 means infinite
+	flowWidth = this.flowWidth;
 
-		font = this.font;
+	font = this.font;
 
-		// FUTURE go into subnodes
-		text = this.text;
+	// FUTURE go into subnodes
+	text = this.text;
 
-		// width really used.
-		widthUsed = 0;
+	// width really used.
+	widthUsed = 0;
 
-		// current x positon, and current x including last tokens width
-		x = 0;
+	// current x positon, and current x including last tokens width
+	x = 0;
 
-		y = Math.round( font.size );
+	y = Math.round( font.size );
 
-		space = euclid_measure.width( font, ' ' );
+	space = euclid_measure.width( font, ' ' );
 
-		lines = [ ];
+	lines = [ ];
 
-		currentLineOffset = 0;
+	currentLineOffset = 0;
 
-		currentLineRay = [ ];
+	currentLineRay = [ ];
 
-		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
-		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
+	reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
+	// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
-		for( ca = reg.exec( text ); ca; ca = reg.exec( text ) )
+	for( ca = reg.exec( text ); ca; ca = reg.exec( text ) )
+	{
+		// a token is a word plus following hard spaces
+		tokenText = ca[ 1 ] + ca[ 3 ];
+
+		w = euclid_measure.width( font, tokenText );
+
+		if( flowWidth > 0 && x + w > flowWidth )
 		{
-			// a token is a word plus following hard spaces
-			tokenText = ca[ 1 ] + ca[ 3 ];
-
-			w = euclid_measure.width( font, tokenText );
-
-			if( flowWidth > 0 && x + w > flowWidth )
+			if( x > 0 )
 			{
-				if( x > 0 )
-				{
-					// soft break
-					lines.push(
-						flow_line.create(
-							'ray:init', currentLineRay,
-							'y', y,
-							'offset', currentLineOffset
-						)
-					);
+				// soft break
+				lines.push(
+					flow_line.create(
+						'ray:init', currentLineRay,
+						'y', y,
+						'offset', currentLineOffset
+					)
+				);
 
-					x = 0;
+				x = 0;
 
-					currentLineRay = [ ];
+				currentLineRay = [ ];
 
-					y += Math.round( font.size * ( 1 + theme.bottombox ) );
+				y += Math.round( font.size * ( 1 + theme.bottombox ) );
 
-					currentLineOffset = ca.index;
-				}
-				else
-				{
-					// horizontal overflow
-					// ('HORIZONTAL OVERFLOW'); // FUTURE
-				}
+				currentLineOffset = ca.index;
 			}
-
-			currentLineRay.push(
-				flow_token.create(
-					'x', x,
-					'width', w,
-					'offset', ca.index,
-					'text', tokenText
-				)
-			);
-
-			if( widthUsed < x + w ) { widthUsed = x + w; }
-
-			x = x + w + space;
+			else
+			{
+				// horizontal overflow
+				// ('HORIZONTAL OVERFLOW'); // FUTURE
+			}
 		}
 
-		lines.push(
-			flow_line.create(
-				'ray:init', currentLineRay,
-				'offset', currentLineOffset,
-				'y', y
+		currentLineRay.push(
+			flow_token.create(
+				'x', x,
+				'width', w,
+				'offset', ca.index,
+				'text', tokenText
 			)
 		);
 
-		return(
-			flow_block.create(
-				'ray:init', lines,
-				'height', y,
-				'width', widthUsed
-			)
-		);
+		if( widthUsed < x + w ) { widthUsed = x + w; }
+
+		x = x + w + space;
 	}
+
+	lines.push(
+		flow_line.create(
+			'ray:init', currentLineRay,
+			'offset', currentLineOffset,
+			'y', y
+		)
+	);
+
+	return(
+		flow_block.create(
+			'ray:init', lines,
+			'height', y,
+			'width', widthUsed
+		)
+	);
+}
 );
 
 
@@ -608,10 +608,7 @@ prototype.getPointOffset =
 
 	for( line = 0; line < flow.length; line++ )
 	{
-		if( point.y <= flow.get( line ).y )
-		{
-			break;
-		}
+		if( point.y <= flow.get( line ).y ) break;
 	}
 
 	if( line >= flow.length ) line--;

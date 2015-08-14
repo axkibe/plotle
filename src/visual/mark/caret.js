@@ -199,7 +199,7 @@ jion.lazyValue(
 
 		if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
 
-		return this.path.limit( 5 );
+		return path.limit( 5 );
 	}
 );
 

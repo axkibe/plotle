@@ -147,9 +147,12 @@ prototype._init =
 {
 	var
 		fabric,
+		path,
 		zone;
 
 	fabric = this.fabric;
+
+	path = this.path;
 
 	zone = this.zone;
 
@@ -161,7 +164,7 @@ prototype._init =
 			'innerMargin', theme.note.innerMargin,
 			'mark', this.mark,
 			'paraSep', math_half( this.fontsize ),
-			'path', this.path && this.path.append( 'doc' ),
+			'path', path && path.append( 'doc' ),
 			'view', this.view.home
 		);
 

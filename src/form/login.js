@@ -419,16 +419,16 @@ prototype.specialKey =
 	)
 {
 	var
-		cPath;
+		caret;
 
 	// a return in the password field is made
 	// to be a login command right away
 
 	if( key === 'enter' )
 	{
-		cPath = this.mark.caret.path;
+		caret = this.mark.caret;
 
-		if( cPath && cPath.get( 4 ) === 'passwordInput' )
+		if( caret && caret.path.get( 4 ) === 'passwordInput' )
 		{
 			this.login( );
 

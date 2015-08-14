@@ -429,23 +429,23 @@ jion.lazyValue(
 	prototype,
 	'zeroSilhoutte',
 	function( )
-	{
-		var
-			zone;
+{
+	var
+		zone;
 
-		zone = this.zone;
+	zone = this.zone;
 
-		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', Math.max( zone.width  - 1, 0 ),
-						'y', Math.max( zone.height - 1, 0 )
-					)
-			)
-		);
-	}
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', Math.max( zone.width  - 1, 0 ),
+					'y', Math.max( zone.height - 1, 0 )
+				)
+		)
+	);
+}
 );
 
 
@@ -494,30 +494,30 @@ jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
-	{
-		var
-			display,
-			facet,
-			vZone;
+{
+	var
+		display,
+		facet,
+		vZone;
 
-		vZone = this.vZone;
+	vZone = this.vZone;
 
-		display =
-			euclid_display.create(
-				'width', vZone.width,
-				'height', vZone.height + 1
-			);
+	display =
+		euclid_display.create(
+			'width', vZone.width,
+			'height', vZone.height + 1
+		);
 
-		// displays selection and text
-		this.doc.draw( display, this.zone.width, euclid_point.zero );
+	// displays selection and text
+	this.doc.draw( display, this.zone.width, euclid_point.zero );
 
-		// displays the border
-		facet = gruga_label.facets.getFacet( );
+	// displays the border
+	facet = gruga_label.facets.getFacet( );
 
-		display.border( facet.border, this.vZeroSilhoutte );
+	display.border( facet.border, this.vZeroSilhoutte );
 
-		return display;
-	}
+	return display;
+}
 );
 
 

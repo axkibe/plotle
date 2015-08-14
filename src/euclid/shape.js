@@ -1,7 +1,5 @@
 /*
-| A geometric shape.
-|
-| Used by ellipse, roundRect
+| A generic geometric shape.
 */
 
 
@@ -22,7 +20,7 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'euclid_shape',
 		attributes :
 		{

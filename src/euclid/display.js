@@ -318,6 +318,16 @@ euclid_display.prototype.border =
 		a,
 		aZ;
 
+	if( shape.reflect === 'euclid_shapeRay' )
+	{
+		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			this.border( border, shape.get( a ) );
+		}
+
+		return;
+	}
+
 	if( border.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = border.length; a < aZ; a++ )
@@ -342,7 +352,19 @@ euclid_display.prototype.fill =
 	)
 {
 	var
+		a,
+		aZ,
 		cx;
+
+	if( shape.reflect === 'euclid_shapeRay' )
+	{
+		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			this.fill( fill, shape.get( a ) );
+		}
+
+		return;
+	}
 
 	cx = this._cx;
 
@@ -422,6 +444,16 @@ euclid_display.prototype.paint =
 		a,
 		aZ,
 		cx;
+
+	if( shape.reflect === 'euclid_shapeRay' )
+	{
+		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			this.paint( fill, border, shape.get( a ) );
+		}
+
+		return;
+	}
 
 	cx = this._cx;
 

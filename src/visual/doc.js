@@ -6,6 +6,7 @@
 var
 	euclid_point,
 	euclid_shape,
+	euclid_shapeRay,
 	euclid_shape_start,
 	euclid_shape_flyLine,
 	euclid_shape_line,
@@ -43,7 +44,7 @@ if( JION )
 			},
 			flowWidth :
 			{
-				comment : 'width of the para its flow',
+				comment : 'width the flow can fill',
 				type : 'number'
 			},
 			fontsize :
@@ -161,33 +162,30 @@ jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
+{
+	var
+		path,
+		key;
+
+	if( !this.mark || !this.mark.hasCaret )
 	{
-		var
-			path,
-			key;
-
-		if( !this.mark || !this.mark.hasCaret )
-		{
-			return 0;
-		}
-
-		path = this.mark.caret.path;
-
-		key = path.get( 5 ); // FUTURE
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !this.getPNW( key ) )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		return(
-			this.getPNW( key ).y
-			+ this.get( key ).attentionCenter
-		);
+		return 0;
 	}
+
+	path = this.mark.caret.path;
+
+	key = path.get( 5 ); // FUTURE
+
+/**/if( CHECK )
+/**/{
+/**/	if( !this.getPNW( key ) ) throw new Error( );
+/**/}
+
+	return(
+		this.getPNW( key ).y
+		+ this.get( key ).attentionCenter
+	);
+}
 );
 
 
@@ -232,6 +230,7 @@ prototype._getRangeShape =
 		lx,
 		mark,
 		rx,
+		shapes,
 		sections,
 		sections2;
 
@@ -373,26 +372,27 @@ prototype._getRangeShape =
 			euclid_shape_flyLine.create( 'close', true )
 		];
 
-		return(
-			[
-				euclid_shape.create(
-					'ray:init', sections,
-					'pc',
-						euclid_point.create(
-							'x', math_half( fp.x + rx ),
-							'y', math_half( 2 * fp.y - ascend + descend )
-						)
-				),
-				euclid_shape.create(
-					'ray:init', sections2,
-					'pc',
-						euclid_point.create(
-							'x', math_half( fp.x + rx ),
-							'y', math_half( 2 * fp.y - ascend + descend )
-						)
-				)
-			]
-		);
+		shapes =
+		[
+			euclid_shape.create(
+				'ray:init', sections,
+				'pc',
+					euclid_point.create(
+						'x', math_half( fp.x + rx ),
+						'y', math_half( 2 * fp.y - ascend + descend )
+					)
+			),
+			euclid_shape.create(
+				'ray:init', sections2,
+				'pc',
+					euclid_point.create(
+						'x', math_half( fp.x + rx ),
+						'y', math_half( 2 * fp.y - ascend + descend )
+					)
+			)
+		];
+
+		return euclid_shapeRay.create( 'ray:init', shapes );
 	}
 	else
 	{
@@ -575,6 +575,7 @@ prototype._getRangeShape =
 						'close', true
 					)
 				];
+
 			return(
 				euclid_shape.create(
 					'ray:init', sections,
@@ -585,7 +586,6 @@ prototype._getRangeShape =
 						)
 				)
 			);
-
 		}
 	}
 };
@@ -602,8 +602,6 @@ prototype.draw =
 	)
 {
 	var
-		a,
-		aZ,
 		mark,
 		para,
 		p,
@@ -641,30 +639,11 @@ prototype.draw =
 	{
 		rs = this._getRangeShape( width, scrollp );
 
-		// FIXME have shapeRays handled more elegantly
-		if( !Array.isArray( rs ) )
-		{
-			display.paint(
-				gruga_selection.fill,
-				gruga_selection.border,
-				rs.inView( this.view )
-			);
-		}
-		else
-		{
-			for(
-				a = 0, aZ = rs.length;
-				a < aZ;
-				a++
-			)
-			{
-				display.paint(
-					gruga_selection.fill,
-					gruga_selection.border,
-					rs[ a ].inView( this.view )
-				);
-			}
-		}
+		display.paint(
+			gruga_selection.fill,
+			gruga_selection.border,
+			rs.inView( this.view )
+		);
 	}
 
 	// north-west points of paras
@@ -837,10 +816,7 @@ prototype.getParaAtPoint =
 		r,
 		rZ;
 
-	if( p.y < this.innerMargin.n )
-	{
-		return;
-	}
+	if( p.y < this.innerMargin.n ) return;
 
 	pnws = this.paraPnws;
 
