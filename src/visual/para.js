@@ -1121,10 +1121,7 @@ prototype._pageUpDown =
 
 /**/if( CHECK )
 /**/{
-/**/	if( dir !== 1 && dir !== -1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( dir !== 1 && dir !== -1 ) throw new Error( );
 /**/}
 
 	p = this.locateOffsetPoint( at );

@@ -299,7 +299,6 @@ prototype._getRangeShape =
 	if( frontKey === backKey && fLine === bLine )
 	{
 		// fp o******o bp
-		// FIXME return a rect-ray
 
 		sections =
 		[
@@ -861,7 +860,7 @@ prototype.input =
 	{
 		root.removeRange( mark );
 
-		// FIXME this is an akward workaround
+		// FUTURE this is an akward workaround
 
 		root.input( text );
 
