@@ -5,6 +5,7 @@
 
 var
 	euclid_point,
+	euclid_rect,
 	euclid_shape,
 	euclid_shapeRay,
 	euclid_shape_start,
@@ -705,50 +706,6 @@ jion.lazyValue(
 
 
 /*
-| The height of the document.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-	{
-		var
-			flow,
-			fs,
-			height,
-			para,
-			paraSep,
-			r,
-			rZ;
-
-		fs = this.fontsize;
-
-		paraSep = this.paraSep;
-
-		height = 0;
-
-		for( r = 0, rZ = this.length; r < rZ; r++ )
-		{
-			para = this.atRank( r );
-
-			flow = para.flow;
-
-			if( r > 0 )
-			{
-				height += paraSep;
-			}
-
-			height += flow.height;
-		}
-
-		height += Math.round( fs * theme.bottombox );
-
-		return height;
-	}
-);
-
-
-/*
 | returns the north-west point of the paragraph with the key 'key'.
 */
 prototype.getPNW =
@@ -761,30 +718,62 @@ prototype.getPNW =
 
 
 /*
-| The width actually used by the document.
+| Full size of the doc.
+|
+| Disregards clipping in notes.
 */
 jion.lazyValue(
 	prototype,
-	'widthUsed',
+	'fullsize',
 	function( )
+{
+	var
+		a,
+		aZ,
+		flow,
+		fs,
+		height,
+		para,
+		paraSep,
+		max,
+		width;
+
+	height = 0;
+
+	width = 0;
+
+	max = Math.max;
+
+	fs = this.fontsize;
+
+	paraSep = this.paraSep;
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		var
-			a,
-			aZ,
-			max,
-			widthUsed;
+		para = this.atRank( a );
 
-		widthUsed = 0;
+		flow = para.flow;
 
-		max = Math.max;
+		width = max( width, flow.width );
 
-		for( a = 0, aZ = this.length; a < aZ; a++ )
-		{
-			widthUsed = max( widthUsed, this.atRank( a ).flow.width );
-		}
+		if( a > 0 ) height += paraSep;
 
-		return widthUsed;
+		height += flow.height;
 	}
+
+	height += Math.round( fs * theme.bottombox );
+
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', width,
+					'y', height
+				)
+		)
+	);
+}
 );
 
 

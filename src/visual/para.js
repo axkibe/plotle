@@ -377,7 +377,7 @@ jion.lazyValue(
 		font,
 		reg,
 		space,
-		widthUsed,
+		width,
 		text,
 		tokenText,
 		w,
@@ -402,7 +402,7 @@ jion.lazyValue(
 	text = this.text;
 
 	// width really used.
-	widthUsed = 0;
+	width = 0;
 
 	// current x positon, and current x including last tokens width
 	x = 0;
@@ -464,7 +464,7 @@ jion.lazyValue(
 			)
 		);
 
-		if( widthUsed < x + w ) { widthUsed = x + w; }
+		if( width < x + w ) { width = x + w; }
 
 		x = x + w + space;
 	}
@@ -481,7 +481,7 @@ jion.lazyValue(
 		flow_block.create(
 			'ray:init', lines,
 			'height', y,
-			'width', widthUsed
+			'width', width
 		)
 	);
 }

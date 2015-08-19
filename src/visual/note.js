@@ -363,18 +363,21 @@ jion.lazyValue(
 {
 	var
 		aperture,
+		dHeight,
 		zone;
 
 	zone = this.zone;
 
+	dHeight = this.doc.fullsize.height;
+
 	aperture = this.zone.height - theme.note.innerMargin.y;
 
-	if( this.doc.height <= aperture ) return undefined;
+	if( dHeight <= aperture ) return undefined;
 
 	return(
 		visual_scrollbar.create(
 			'aperture', aperture,
-			'max', this.doc.height,
+			'max', dHeight,
 			'pnw',
 				euclid_point.create(
 					'x', zone.pse.x,

@@ -146,9 +146,9 @@ jion.lazyValue(
 	prototype,
 	'height',
 	function( )
-	{
-		return this.pse.y - this.pnw.y;
-	}
+{
+	return this.pse.y - this.pnw.y;
+}
 );
 
 
@@ -185,9 +185,9 @@ jion.lazyValue(
 	prototype,
 	'width',
 	function( )
-	{
-		return this.pse.x - this.pnw.x;
-	}
+{
+	return this.pse.x - this.pnw.x;
+}
 );
 
 
@@ -199,25 +199,21 @@ jion.lazyValue(
 	prototype,
 	'zeropnw',
 	function( )
+{
+	if( this.pnw.x === 0 && this.pnw.y === 0 )
 	{
-		if (
-			this.pnw.x === 0
-			&&
-			this.pnw.y === 0
-		)
-		{
-			return this;
-		}
-		else
-		{
-			return(
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse', this.pse.sub( this.pnw )
-				)
-			);
-		}
+		return this;
 	}
+	else
+	{
+		return(
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse', this.pse.sub( this.pnw )
+			)
+		);
+	}
+}
 );
 
 
@@ -232,10 +228,7 @@ prototype.reduce =
 
 /**/if( CHECK )
 /**/{
-/**/	if( margin.reflect !== 'euclid_margin' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( margin.reflect !== 'euclid_margin' ) throw new Error( );
 /**/}
 
 	// allows margins to reduce the rect to zero size without erroring.
@@ -401,14 +394,14 @@ jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', math_half( this.pse.x + this.pnw.x ),
-				'y', math_half( this.pse.y + this.pnw.y )
-			)
-		);
-	}
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pse.x + this.pnw.x ),
+			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
 );
 
 
@@ -419,14 +412,14 @@ jion.lazyValue(
 	prototype,
 	'pn',
 	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', math_half( this.pse.x + this.pnw.x ),
-				'y', this.pnw.y
-			)
-		);
-	}
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pse.x + this.pnw.x ),
+			'y', this.pnw.y
+		)
+	);
+}
 );
 
 
@@ -437,14 +430,14 @@ jion.lazyValue(
 	prototype,
 	'w',
 	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', this.pnw.x,
-				'y', math_half( this.pse.y + this.pnw.y )
-			)
-		);
-	}
+{
+	return(
+		euclid_point.create(
+			'x', this.pnw.x,
+			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
 );
 
 
@@ -455,14 +448,14 @@ jion.lazyValue(
 	prototype,
 	'e',
 	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', this.pse.x,
-				'y', math_half( this.pse.y + this.pnw.y )
-			)
-		);
-	}
+{
+	return(
+		euclid_point.create(
+			'x', this.pse.x,
+			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
 );
 
 

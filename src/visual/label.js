@@ -457,15 +457,18 @@ visual_label.zone =
 	function( )
 {
 	var
-		action,
 		doc,
+		dHeight,
+		dWidth,
 		pnw;
 
 	pnw = this.pnw;
 
 	doc = this.doc;
 
-	action = this._action;
+	dHeight = doc.fullsize.height;
+
+	dWidth = doc.fullsize.width;
 
 	// FIXME remove rounds?
 
@@ -475,9 +478,9 @@ visual_label.zone =
 			'pse',
 				pnw.add(
 					Math.round(
-						Math.max( doc.widthUsed + 4, doc.height / 4 )
+						Math.max( dWidth + 4, dHeight / 4 )
 					),
-					Math.round( doc.height + 2 )
+					Math.round( dHeight + 2 )
 			)
 		)
 	);
