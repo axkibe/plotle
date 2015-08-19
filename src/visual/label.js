@@ -477,10 +477,8 @@ visual_label.zone =
 			'pnw', pnw,
 			'pse',
 				pnw.add(
-					Math.round(
-						Math.max( dWidth + 4, dHeight / 4 )
-					),
-					Math.round( dHeight + 2 )
+					Math.max( dWidth + 4, dHeight / 4 ),
+					dHeight + 2
 			)
 		)
 	);
