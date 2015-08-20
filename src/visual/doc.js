@@ -58,6 +58,13 @@ if( JION )
 				comment : 'inner margin of the doc',
 				type : 'euclid_margin'
 			},
+			mark :
+			{
+				comment : 'the users mark',
+				type :
+					require( '../typemaps/visualMark' )
+					.concat( [ 'undefined' ] )
+			},
 			paraSep :
 			{
 				comment : 'vertical seperation of paragraphs',
@@ -67,13 +74,6 @@ if( JION )
 			{
 				comment : 'the path of the doc',
 				type : [ 'undefined', 'jion$path' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../typemaps/visualMark' )
-					.concat( [ 'undefined' ] )
 			},
 			view :
 			{
@@ -188,6 +188,330 @@ jion.lazyValue(
 	);
 }
 );
+
+
+/*
+| Displays the document.
+*/
+prototype.draw =
+	function(
+		display,     // to display within
+		width,       // the width to draw the document with
+		scrollp      // scroll position
+	)
+{
+	var
+		mark,
+		para,
+		p,
+		pnw,
+		pnws,
+		r,
+		rZ,
+		rs;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	// mark sanity check cannot be done in _init
+/**/    // since it might be temporarily outOfOrder during update operation
+/**/	if( this.mark && this.mark.hasCaret )
+/**/	{
+/**/		if( !this.get( this.mark.caret.path.get( 5 ) ) )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	mark = this.mark;
+
+	if(
+		mark
+		&& mark.reflect === 'visual_mark_range'
+		&& mark.itemPath.subPathOf( this.path )
+	)
+	{
+		rs = this._getRangeShape( width, scrollp );
+
+		display.paint(
+			gruga_selection.fill,
+			gruga_selection.border,
+			rs.inView( this.view )
+		);
+	}
+
+	// north-west points of paras
+	pnws = this.paraPnws;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		para = this.atRank( r );
+
+		pnw = pnws.get( this.getKey( r ) );
+
+		p = pnw.sub( 0, Math.round( scrollp.y ) );
+
+		para.draw( display, p.inView( this.view ) );
+	}
+};
+
+
+/*
+| The default font for the document.
+*/
+jion.lazyValue(
+	prototype,
+	'font',
+	function( )
+{
+	return shell_fontPool.get( this.fontsize, 'la' );
+}
+);
+
+
+/*
+| Full size of the doc.
+|
+| Disregards clipping in notes.
+*/
+jion.lazyValue(
+	prototype,
+	'fullsize',
+	function( )
+{
+	var
+		a,
+		aZ,
+		flow,
+		fs,
+		height,
+		para,
+		paraSep,
+		max,
+		width;
+
+	height = 0;
+
+	width = 0;
+
+	max = Math.max;
+
+	fs = this.fontsize;
+
+	paraSep = this.paraSep;
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		para = this.atRank( a );
+
+		flow = para.flow;
+
+		width = max( width, flow.width );
+
+		if( a > 0 ) height += paraSep;
+
+		height += flow.height;
+	}
+
+	height += Math.round( fs * theme.bottombox );
+
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', width,
+					'y', height
+				)
+		)
+	);
+}
+);
+
+
+/*
+| Returns the paragraph at point
+*/
+prototype.getParaAtPoint =
+	function(
+		p
+	)
+{
+	var
+		para,
+		pnws,
+		r,
+		rZ;
+
+	if( p.y < this.innerMargin.n ) return;
+
+	pnws = this.paraPnws;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		para = this.atRank( r );
+
+		if( p.y < pnws.get( this.getKey( r ) ).y + para.flow.height )
+		{
+			return para;
+		}
+	}
+
+	return;
+};
+
+
+/*
+| returns the north-west point of the paragraph with the key 'key'.
+*/
+prototype.getPNW =
+	function(
+		key
+	)
+{
+	return this.paraPnws.get( key );
+};
+
+
+/*
+| A text has been inputed.
+*/
+prototype.input =
+	function(
+		text  // text inputed
+	)
+{
+	var
+		mark,
+		path;
+
+	mark = this.mark;
+
+	if( !this.mark.hasCaret )
+	{
+		return false;
+	}
+
+	path = this.mark.caret.path;
+
+	if(
+		mark.reflect === 'visual_mark_range'
+		&& !mark.empty
+	)
+	{
+		root.removeRange( mark );
+
+		// FUTURE this is an akward workaround
+
+		root.input( text );
+
+		return true;
+	}
+
+	return(
+		this
+		.get( path.get( 5 ) )
+		.input( text )
+	);
+};
+
+
+/*
+| The para pnws.
+*/
+jion.lazyValue(
+	prototype,
+	'paraPnws',
+	function( )
+{
+	var
+		innerMargin,
+		para,
+		paraSep,
+		pnws,
+		r,
+		rZ,
+		y;
+
+	pnws = { };
+
+	paraSep = this.paraSep;
+
+	innerMargin = this.innerMargin;
+
+	y = innerMargin.n;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		para = this.atRank( r );
+
+		pnws[ this.getKey( r ) ] =
+			euclid_point.create(
+				'x', innerMargin.w,
+				'y', Math.round( y )
+			);
+
+		y += para.flow.height + paraSep;
+	}
+
+	return fabric_pointGroup.create( 'group:init', pnws );
+}
+);
+
+
+/*
+| Handles a special key.
+*/
+prototype.specialKey =
+	function(
+		key,
+		item, // FIXME remove
+		shift,
+		ctrl
+	)
+{
+	var
+		mark;
+
+	mark = this.mark;
+
+	if( !mark.hasCaret ) return false;
+
+	if(
+		mark.reflect === 'visual_mark_range'
+		&& !mark.empty
+	)
+	{
+		switch( key )
+		{
+			case 'backspace' :
+			case 'del' :
+
+				root.removeRange( mark );
+
+				return true;
+
+			case 'enter' :
+
+				root.removeRange( mark );
+
+				root.specialKey( key, shift, ctrl );
+
+				return true;
+		}
+	}
+
+	return(
+		this
+		.get( mark.caret.path.get( 5 ) )
+		.specialKey( key, item, shift, ctrl )
+	);
+};
 
 
 /*
@@ -588,332 +912,6 @@ prototype._getRangeShape =
 			);
 		}
 	}
-};
-
-
-/*
-| Displays the document.
-*/
-prototype.draw =
-	function(
-		display,     // to display within
-		width,       // the width to draw the document with
-		scrollp      // scroll position
-	)
-{
-	var
-		mark,
-		para,
-		p,
-		pnw,
-		pnws,
-		r,
-		rZ,
-		rs;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	// mark sanity check cannot be done in _init
-/**/    // since it might be temporarily outOfOrder during update operation
-/**/	if( this.mark && this.mark.hasCaret )
-/**/	{
-/**/		if( !this.get( this.mark.caret.path.get( 5 ) ) )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/}
-
-	mark = this.mark;
-
-	if(
-		mark
-		&& mark.reflect === 'visual_mark_range'
-		&& mark.itemPath.subPathOf( this.path )
-	)
-	{
-		rs = this._getRangeShape( width, scrollp );
-
-		display.paint(
-			gruga_selection.fill,
-			gruga_selection.border,
-			rs.inView( this.view )
-		);
-	}
-
-	// north-west points of paras
-	pnws = this.paraPnws;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		para = this.atRank( r );
-
-		pnw = pnws.get( this.getKey( r ) );
-
-		p = pnw.sub( 0, Math.round( scrollp.y ) );
-
-		para.draw( display, p.inView( this.view ) );
-	}
-};
-
-
-/*
-| The para pnws.
-*/
-jion.lazyValue(
-	prototype,
-	'paraPnws',
-	function( )
-	{
-		var
-			innerMargin,
-			para,
-			paraSep,
-			pnws,
-			r,
-			rZ,
-			y;
-
-		pnws = { };
-
-		paraSep = this.paraSep;
-
-		innerMargin = this.innerMargin;
-
-		y = innerMargin.n;
-
-		for( r = 0, rZ = this.length; r < rZ; r++ )
-		{
-			para = this.atRank( r );
-
-			pnws[ this.getKey( r ) ] =
-				euclid_point.create(
-					'x', innerMargin.w,
-					'y', Math.round( y )
-				);
-
-			y += para.flow.height + paraSep;
-		}
-
-		return fabric_pointGroup.create( 'group:init', pnws );
-	}
-);
-
-
-/*
-| returns the north-west point of the paragraph with the key 'key'.
-*/
-prototype.getPNW =
-	function(
-		key
-	)
-{
-	return this.paraPnws.get( key );
-};
-
-
-/*
-| Full size of the doc.
-|
-| Disregards clipping in notes.
-*/
-jion.lazyValue(
-	prototype,
-	'fullsize',
-	function( )
-{
-	var
-		a,
-		aZ,
-		flow,
-		fs,
-		height,
-		para,
-		paraSep,
-		max,
-		width;
-
-	height = 0;
-
-	width = 0;
-
-	max = Math.max;
-
-	fs = this.fontsize;
-
-	paraSep = this.paraSep;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		para = this.atRank( a );
-
-		flow = para.flow;
-
-		width = max( width, flow.width );
-
-		if( a > 0 ) height += paraSep;
-
-		height += flow.height;
-	}
-
-	height += Math.round( fs * theme.bottombox );
-
-	return(
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
-			'pse',
-				euclid_point.create(
-					'x', width,
-					'y', height
-				)
-		)
-	);
-}
-);
-
-
-/*
-| The default font for the document.
-*/
-jion.lazyValue(
-	prototype,
-	'font',
-	function( )
-	{
-		return shell_fontPool.get( this.fontsize, 'la' );
-	}
-);
-
-
-/*
-| Returns the paragraph at point
-*/
-prototype.getParaAtPoint =
-	function(
-		p
-	)
-{
-	var
-		para,
-		pnws,
-		r,
-		rZ;
-
-	if( p.y < this.innerMargin.n ) return;
-
-	pnws = this.paraPnws;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		para = this.atRank( r );
-
-		if( p.y < pnws.get( this.getKey( r ) ).y + para.flow.height )
-		{
-			return para;
-		}
-	}
-
-	return;
-};
-
-/*
-| A text has been inputed.
-*/
-prototype.input =
-	function(
-		text  // text inputed
-	)
-{
-	var
-		mark,
-		path;
-
-	mark = this.mark;
-
-	if( !this.mark.hasCaret )
-	{
-		return false;
-	}
-
-	path = this.mark.caret.path;
-
-	if(
-		mark.reflect === 'visual_mark_range'
-		&& !mark.empty
-	)
-	{
-		root.removeRange( mark );
-
-		// FUTURE this is an akward workaround
-
-		root.input( text );
-
-		return true;
-	}
-
-	return(
-		this
-		.get( path.get( 5 ) )
-		.input( text )
-	);
-};
-
-
-/*
-| Handles a special key.
-*/
-prototype.specialKey =
-	function(
-		key,
-		item, // FIXME remove
-		shift,
-		ctrl
-	)
-{
-	var
-		mark;
-
-	mark = this.mark;
-
-	if( !mark.hasCaret )
-	{
-		return false;
-	}
-
-	if(
-		mark.reflect === 'visual_mark_range'
-		&& !mark.empty
-	)
-	{
-		switch( key )
-		{
-			case 'backspace' :
-			case 'del' :
-
-				root.removeRange( mark );
-
-				return true;
-
-			case 'enter' :
-
-				root.removeRange( mark );
-
-				root.specialKey( key, shift, ctrl );
-
-				return true;
-		}
-	}
-
-	return(
-		this
-		.get( mark.caret.path.get( 5 ) )
-		.specialKey( key, item, shift, ctrl )
-	);
 };
 
 

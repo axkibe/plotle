@@ -470,8 +470,6 @@ visual_label.zone =
 
 	dWidth = doc.fullsize.width;
 
-	// FIXME remove rounds?
-
 	return(
 		euclid_rect.create(
 			'pnw', pnw,
