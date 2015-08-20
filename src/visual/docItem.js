@@ -141,7 +141,7 @@ visual_docItem.specialKey =
 		ctrl
 	)
 {
-	return this.doc.specialKey( key, this, shift, ctrl );
+	return this.doc.specialKey( key, shift, ctrl );
 };
 
 

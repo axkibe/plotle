@@ -38,6 +38,14 @@ if( JION )
 		id : 'visual_doc',
 		attributes :
 		{
+			clipsize :
+			{
+				comment : 'the visible size of the doc',
+				// if created with undefined,
+				// it is set to equal to fullsize
+				type : [ 'undefined', 'euclid_rect' ],
+				assign : '_clipsize'
+			},
 			fabric :
 			{
 				comment : 'the doc fabric',
@@ -45,7 +53,7 @@ if( JION )
 			},
 			flowWidth :
 			{
-				comment : 'width the flow can fill',
+				comment : 'width the flow seeks to fill',
 				type : 'number'
 			},
 			fontsize :
@@ -186,6 +194,22 @@ jion.lazyValue(
 		this.getPNW( key ).y
 		+ this.get( key ).attentionCenter
 	);
+}
+);
+
+
+/*
+| The visible size of the doc.
+|
+| If created with undefined,
+| it is set to equal to fullsize
+*/
+jion.lazyValue(
+	prototype,
+	'clipsize',
+	function( )
+{
+	return this._clipsize || this.fullsize;
 }
 );
 
@@ -470,7 +494,6 @@ jion.lazyValue(
 prototype.specialKey =
 	function(
 		key,
-		item, // FIXME remove
 		shift,
 		ctrl
 	)
@@ -500,6 +523,8 @@ prototype.specialKey =
 
 				root.removeRange( mark );
 
+				// FUTURE this is a bit akward
+
 				root.specialKey( key, shift, ctrl );
 
 				return true;
@@ -509,7 +534,7 @@ prototype.specialKey =
 	return(
 		this
 		.get( mark.caret.path.get( 5 ) )
-		.specialKey( key, item, shift, ctrl )
+		.specialKey( key, this, shift, ctrl )
 	);
 };
 

@@ -157,7 +157,9 @@ prototype._init =
 	zone = this.zone;
 
 	this.doc =
-		( inherit && inherit.doc || visual_doc ).create(
+		( inherit && inherit.doc || visual_doc )
+		.create(
+			'clipsize', zone.zeropnw,
 			'fabric', fabric.doc,
 			'flowWidth', zone.width - theme.note.innerMargin.x,
 			'fontsize', this.fontsize,

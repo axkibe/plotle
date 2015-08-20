@@ -725,7 +725,7 @@ jion.lazyFunctionInteger(
 prototype.specialKey =
 	function(
 		key,
-		item,
+		doc,
 		shift,
 		ctrl
 	)
@@ -733,14 +733,11 @@ prototype.specialKey =
 	var
 		at,
 		beginMark,
-		doc,
 		keyHandler,
 		mark,
 		retainx,
 		v0,
 		v1;
-
-	doc = item.doc;
 
 	mark = this.mark;
 
@@ -818,7 +815,7 @@ prototype.specialKey =
 
 	if( keyHandler )
 	{
-		this[ keyHandler ]( item, doc, at, retainx, beginMark );
+		this[ keyHandler ]( doc, at, retainx, beginMark );
 	}
 };
 
@@ -866,7 +863,6 @@ if( FREEZE ) Object.freeze( _keyMap );
 */
 prototype._keyBackspace =
 	function(
-		item,
 		doc,
 		at
 		// retainx,
@@ -916,7 +912,6 @@ prototype._keyBackspace =
 */
 prototype._keyDel =
 	function(
-		item,
 		doc,
 		at
 		// retainx,
@@ -963,7 +958,6 @@ prototype._keyDel =
 */
 prototype._keyDown =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
@@ -1018,7 +1012,6 @@ prototype._keyDown =
 */
 prototype._keyEnd =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
@@ -1034,7 +1027,6 @@ prototype._keyEnd =
 */
 prototype._keyEnter =
 	function(
-		item,
 		doc,
 		at
 		// retainx,
@@ -1061,7 +1053,6 @@ prototype._keyEnter =
 */
 prototype._keyLeft =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
@@ -1099,12 +1090,11 @@ prototype._keyLeft =
 /*
 | User pressed page up or down
 |
-| FIXME maintain relative scroll pos
+| FUTURE maintain relative scroll pos
 */
 prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
-		item,
 		doc,
 		at,
 		retainx,
@@ -1114,10 +1104,10 @@ prototype._pageUpDown =
 	var
 		p,
 		pnw,
+		size,
 		tp,
 		tpara,
-		tpnw,
-		zone;
+		tpnw;
 
 /**/if( CHECK )
 /**/{
@@ -1126,14 +1116,14 @@ prototype._pageUpDown =
 
 	p = this.locateOffsetPoint( at );
 
-	zone = item.zone;
+	size = doc.clipsize;
 
 	pnw = doc.getPNW( this.key );
 
 	tp =
 		pnw.add(
 			retainx !== undefined ? retainx : p.x,
-			p.y + zone.height * dir
+			p.y + size.height * dir
 		);
 
 	tpara = doc.getParaAtPoint( tp );
@@ -1156,14 +1146,13 @@ prototype._pageUpDown =
 */
 prototype._keyPageDown =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
 		beginMark
 	)
 {
-	this._pageUpDown( +1, item, doc, at, retainx, beginMark );
+	this._pageUpDown( +1, doc, at, retainx, beginMark );
 };
 
 
@@ -1172,14 +1161,13 @@ prototype._keyPageDown =
 */
 prototype._keyPageUp =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
 		beginMark
 	)
 {
-	this._pageUpDown( -1, item, doc, at, retainx, beginMark );
+	this._pageUpDown( -1, doc, at, retainx, beginMark );
 };
 
 
@@ -1188,7 +1176,6 @@ prototype._keyPageUp =
 */
 prototype._keyPos1 =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
@@ -1204,7 +1191,6 @@ prototype._keyPos1 =
 */
 prototype._keyRight =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
@@ -1238,7 +1224,6 @@ prototype._keyRight =
 */
 prototype._keyUp =
 	function(
-		item,
 		doc,
 		at,
 		retainx,
