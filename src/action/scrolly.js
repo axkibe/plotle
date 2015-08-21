@@ -63,10 +63,10 @@ prototype = action_scrolly.prototype;
 */
 prototype.affects =
 	function(
-		// path
+		path
 	)
 {
-	return false;
+	return this.itemPath.equals( path );
 };
 
 

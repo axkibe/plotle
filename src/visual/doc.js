@@ -236,8 +236,7 @@ prototype.draw =
 		pnw,
 		pnws,
 		r,
-		rZ,
-		rs;
+		rZ;
 
 /**/if( CHECK )
 /**/{
@@ -265,12 +264,10 @@ prototype.draw =
 		&& mark.itemPath.subPathOf( this.path )
 	)
 	{
-		rs = this._getRangeShape( scrollp );
-
 		display.paint(
 			gruga_selection.fill,
 			gruga_selection.border,
-			rs.inView( this.view )
+			this._rangeShape.inView( this.view )
 		);
 	}
 
@@ -546,13 +543,11 @@ prototype.specialKey =
 
 /*
 | Returns the shape for a selection range
-|
-| FIXME, remove parameters and make lazy
 */
-prototype._getRangeShape =
-	function(
-		scrollp      // scroll position of the doc
-	)
+jion.lazyValue(
+	prototype,
+	'_rangeShape',
+	function( )
 {
 	var
 		ascend,
@@ -586,7 +581,8 @@ prototype._getRangeShape =
 		rx,
 		shapes,
 		sections,
-		sections2;
+		sections2,
+		sp;
 
 	mark = this.mark;
 
@@ -602,6 +598,8 @@ prototype._getRangeShape =
 	frontKey = frontMark.path.get( -2 );
 
 	backKey = backMark.path.get( -2 );
+
+	sp = this.scrollPos;
 
 	frontPnw = this.getPNW( frontKey );
 
@@ -633,9 +631,17 @@ prototype._getRangeShape =
 
 	// FUTURE do not create points
 
-	fp = fp.add( frontPnw.x - scrollp.x, frontPnw.y - scrollp.y );
+	fp =
+		fp.add(
+			frontPnw.x - sp.x,
+			frontPnw.y - sp.y
+		);
 
-	bp = bp.add( backPnw.x - scrollp.x, backPnw.y - scrollp.y );
+	bp =
+		bp.add(
+			backPnw.x - sp.x,
+			backPnw.y - sp.y
+		);
 
 	frontFlow = frontPara.flow;
 
@@ -763,7 +769,7 @@ prototype._getRangeShape =
 				Math.round(
 					frontFlow.get( fLine + 1 ).y
 					+ frontPnw.y
-					- scrollp.y
+					- sp.y
 				);
 		}
 		else
@@ -772,7 +778,7 @@ prototype._getRangeShape =
 				Math.round(
 					f2Para.flow.get( 0 ).y
 					+ this.getPNW( f2Key ).y
-					- scrollp.y
+					- sp.y
 				);
 		}
 
@@ -782,7 +788,7 @@ prototype._getRangeShape =
 				Math.round(
 					backFlow.get( bLine - 1 ).y
 					+ backPnw.y
-					- scrollp.y
+					- sp.y
 				);
 		}
 		else
@@ -797,7 +803,7 @@ prototype._getRangeShape =
 				Math.round(
 					b2Para.flow.get( b2Para.flow.length - 1 ).y
 					+ this.getPNW( b2Key ).y
-					- scrollp.y
+					- sp.y
 				);
 		}
 
@@ -941,7 +947,8 @@ prototype._getRangeShape =
 			);
 		}
 	}
-};
+}
+);
 
 
 } )( );

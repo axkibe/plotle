@@ -92,9 +92,9 @@ visual_item.dragMove =
 	{
 		case 'action_scrolly' :
 
-			dy = ( p.y - action.startPoint.y ) / view.zoom,
+			dy = ( p.y - action.startPoint.y ) / view.zoom;
 
-			sbary = this.scrollbarY,
+			sbary = this.scrollbarY;
 
 			spos = action.startPos + sbary.scale( dy );
 
@@ -152,10 +152,7 @@ visual_item.dragStart =
 		return true;
 	}
 
-	if( !this.vSilhoutte.within( p ) )
-	{
-		return false;
-	}
+	if( !this.vSilhoutte.within( p ) ) return false;
 
 	switch( action && action.reflect )
 	{

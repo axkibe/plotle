@@ -147,6 +147,9 @@ prototype._init =
 	)
 {
 	var
+		aperture,
+		doc,
+		dHeight,
 		fabric,
 		path,
 		zone;
@@ -159,6 +162,9 @@ prototype._init =
 
 	if( this.scrolly === undefined ) this.scrolly = 0;
 
+	if( this.scrolly < 0 ) this.scrolly = 0;
+
+	doc =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
@@ -177,6 +183,42 @@ prototype._init =
 				),
 			'view', this.view.home
 		);
+
+	dHeight = doc.fullsize.height;
+
+	aperture = this.zone.height - theme.note.innerMargin.y;
+
+	if( dHeight > aperture )
+	{
+		if( this.scrolly > dHeight - aperture )
+		{
+			this.scrolly = dHeight - aperture;
+
+			doc =
+			this.doc =
+				doc.create(
+					'scrollPos',
+						euclid_point.create(
+							'x', 0,
+							'y', this.scrolly
+						)
+				);
+		}
+
+		this.scrollbarY =
+			visual_scrollbar.create(
+				'aperture', aperture,
+				'max', dHeight,
+				'pnw',
+					euclid_point.create(
+						'x', zone.pse.x,
+						'y', zone.pnw.y + theme.scrollbar.vdis
+					),
+				'pos', this.scrolly,
+				'size', zone.height - theme.scrollbar.vdis * 2,
+				'view', this.view
+			);
+	}
 
 	if(
 		inherit
@@ -362,45 +404,6 @@ prototype.mousewheel =
 
 
 /*
-| The potential scrollbar.
-*/
-jion.lazyValue(
-	prototype,
-	'scrollbarY',
-	function( )
-{
-	var
-		aperture,
-		dHeight,
-		zone;
-
-	zone = this.zone;
-
-	dHeight = this.doc.fullsize.height;
-
-	aperture = this.zone.height - theme.note.innerMargin.y;
-
-	if( dHeight <= aperture ) return undefined;
-
-	return(
-		visual_scrollbar.create(
-			'aperture', aperture,
-			'max', dHeight,
-			'pnw',
-				euclid_point.create(
-					'x', zone.pse.x,
-					'y', zone.pnw.y + theme.scrollbar.vdis
-				),
-			'pos', this.scrolly,
-			'size', zone.height - theme.scrollbar.vdis * 2,
-			'view', this.view
-		)
-	);
-}
-);
-
-
-/*
 | Scrolls the note so the caret comes into view.
 */
 prototype.scrollMarkIntoView =
@@ -475,24 +478,24 @@ jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
-	{
-		var
-			zone,
-			cr;
+{
+	var
+		zone,
+		cr;
 
-		zone = this.zone;
+	zone = this.zone;
 
-		cr = theme.note.cornerRadius;
+	cr = theme.note.cornerRadius;
 
-		return(
-			euclid_roundRect.create(
-				'pnw', zone.pnw,
-				'pse', zone.pse,
-				'a', cr,
-				'b', cr
-			)
-		);
-	}
+	return(
+		euclid_roundRect.create(
+			'pnw', zone.pnw,
+			'pse', zone.pse,
+			'a', cr,
+			'b', cr
+		)
+	);
+}
 );
 
 

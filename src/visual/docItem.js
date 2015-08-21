@@ -61,10 +61,7 @@ visual_docItem.click =
 
 	view = this.view;
 
-	if( access != 'rw' )
-	{
-		return false;
-	}
+	if( access != 'rw' ) return false;
 
 	vp = p.fromView( view );
 

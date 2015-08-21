@@ -13,7 +13,6 @@ var
 	gruga_scrollbar,
 	jion,
 	math_half,
-	math_limit,
 	theme,
 	visual_scrollbar;
 
@@ -41,10 +40,8 @@ if( JION )
 			},
 			aperture :
 			{
-				comment :
-					'the size of the bar',
-				type :
-					'number'
+				comment : 'the size of the bar',
+				type : 'number'
 			},
 			max :
 			{
@@ -66,8 +63,7 @@ if( JION )
 				comment : 'view',
 				type : 'euclid_view'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -84,23 +80,6 @@ var
 	prototype;
 
 prototype = visual_scrollbar.prototype;
-
-
-/*
-| Initializer.
-*/
-prototype._init =
-	function( )
-{
-	if( this.max - this.aperture > 0 )
-	{
-		this.pos = math_limit( 0, this.pos, this.max - this.aperture );
-	}
-	else
-	{
-		this.pos = 0;
-	}
-};
 
 
 /*
@@ -220,7 +199,7 @@ jion.lazyValue(
 		)
 	);
 }
-); 
+);
 
 
 /*
