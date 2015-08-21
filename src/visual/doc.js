@@ -260,7 +260,7 @@ prototype.draw =
 		&& mark.itemPath.subPathOf( this.path )
 	)
 	{
-		rs = this._getRangeShape( width, scrollp );
+		rs = this._getRangeShape( scrollp );
 
 		display.paint(
 			gruga_selection.fill,
@@ -546,7 +546,6 @@ prototype.specialKey =
 */
 prototype._getRangeShape =
 	function(
-		width,       // width the doc is drawn
 		scrollp      // scroll position of the doc
 	)
 {
@@ -623,7 +622,7 @@ prototype._getRangeShape =
 
 	innerMargin = this.innerMargin;
 
-	rx = width - innerMargin.e;
+	rx = this.clipsize.width - innerMargin.e;
 
 	lx = innerMargin.w;
 
