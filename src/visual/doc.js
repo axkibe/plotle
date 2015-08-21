@@ -83,6 +83,11 @@ if( JION )
 				comment : 'the path of the doc',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			scrollPos :
+			{
+				comment : 'scroll position of the doc',
+				type : 'euclid_point'
+			},
 			view :
 			{
 				comment : 'the current view',

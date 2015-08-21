@@ -138,6 +138,7 @@ prototype._init =
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),
+			'scrollPos', euclid_point.zero,
 			'view', this.view.home
 		);
 };

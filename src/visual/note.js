@@ -72,6 +72,7 @@ if( JION )
 				comment : 'the path of the note',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			// FIXME change to scrollPos
 			scrolly :
 			{
 				comment : 'vertical scroll position',
@@ -156,6 +157,8 @@ prototype._init =
 
 	zone = this.zone;
 
+	if( this.scrolly === undefined ) this.scrolly = 0;
+
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
@@ -167,10 +170,13 @@ prototype._init =
 			'mark', this.mark,
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
+			'scrollPos',
+				euclid_point.create(
+					'x', 0,
+					'y', this.scrolly
+				),
 			'view', this.view.home
 		);
-
-	if( this.scrolly === undefined ) this.scrolly = 0;
 
 	if(
 		inherit
