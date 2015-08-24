@@ -84,7 +84,7 @@ visual_docItem.click =
 
 	para = doc.getParaAtPoint( pi );
 
-	// FIXME move into para
+	// FUTURE move into para
 	if( para )
 	{
 		ppnw = doc.getPNW( para.key );
