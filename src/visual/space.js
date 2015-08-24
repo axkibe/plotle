@@ -526,9 +526,7 @@ prototype.dragStart =
 		com,
 		dp,
 		focus,
-		model,
 		item,
-		transItem,
 		view;
 
 	access = this.access;
@@ -536,7 +534,7 @@ prototype.dragStart =
 	view = this.view;
 
 	focus = this.focus;
-			
+
 	// resizing
 	dp = p.fromView( view );
 
@@ -565,77 +563,9 @@ prototype.dragStart =
 	action = this._action;
 
 	// FIXME simplify
-	if(
-		action
-		&& action.reflect === 'action_createGeneric'
-		&& action.itemType === 'note'
-	)
+	if( action && action.reflect === 'action_createGeneric' )
 	{
-		transItem =
-			shell_models.note.create(
-				'fabric',
-					shell_models.note.fabric.create(
-						'zone', euclid_rect.create( 'pnw', dp, 'pse', dp )
-					),
-				'view', view
-			);
-
-		root.create(
-			'action',
-				action.create(
-					'startPoint', dp,
-					'transItem', transItem
-				)
-		);
-
-		return;
-	}
-
-	if(
-		action
-		&& action.reflect === 'action_createGeneric'
-		&& action.itemType === 'label'
-	)
-	{
-		model = shell_models.label;
-
-		transItem =
-			model.create(
-				'fabric', model.fabric.create( 'pnw', dp ),
-				'view', view
-			);
-
-		root.create(
-			'action',
-				action.create(
-					'startPoint', dp,
-					'transItem', transItem
-				)
-		);
-
-		return;
-	}
-
-	if(
-		action &&
-		action.reflect === 'action_createGeneric' &&
-		action.itemType === 'portal'
-	)
-	{
-		model = shell_models.portal;
-
-		transItem =
-			model.create(
-				'fabric',
-					model.fabric.create(
-	 					'zone', euclid_rect.create( 'pnw', dp, 'pse', dp )
-					),
-				'view', view
-			);
-
-		root.create(
-			'action', action.create( 'startPoint', dp, 'transItem', transItem )
-		);
+		this._startCreateGeneric( dp );
 
 		return;
 	}
@@ -648,8 +578,7 @@ prototype.dragStart =
 		if( item.dragStart( p, shift, ctrl, access ) ) return;
 	}
 
-	// starts a panning operation instead
-
+	// starts panning while creating a relation
 	if( action && action.reflect === 'action_createRelation' )
 	{
 		root.create(
@@ -665,7 +594,6 @@ prototype.dragStart =
 	}
 
 	// otherwise panning is initiated
-
 	root.create(
 		'action',
 			action_pan.create(
@@ -1042,7 +970,7 @@ prototype.dragMove =
 					break;
 
 				case 'portal' :
-					
+
 					model = shell_models.portal;
 
 					transItem =
@@ -1395,6 +1323,94 @@ prototype._changeZoom =
 
 	root.create( 'view', this.view.review( df, pm ) );
 };
+
+
+/*
+| Starts creating a generic item.
+*/
+prototype._startCreateGeneric =
+	function(
+		dp   // depoint, non-viewbased point of start
+	)
+{
+	var
+		action,
+		mode,
+		model,
+		transItem;
+
+	action = this._action;
+
+	switch( action.itemType )
+	{
+		case 'note' :
+
+			model = shell_models.note;
+
+			mode = 'rect';
+
+			break;
+
+
+		case 'label' :
+
+			model = shell_models.label;
+
+			mode = 'pnw';
+
+			break;
+
+		case 'portal' :
+
+			model = shell_models.portal;
+
+			mode = 'rect';
+
+			break;
+
+		default : throw new Error( );
+	}
+
+	switch( mode )
+	{
+		case 'rect' :
+
+			transItem =
+				model.create(
+					'fabric',
+						model.fabric.create(
+							'zone',
+								euclid_rect.create( 'pnw', dp, 'pse', dp )
+						),
+					'view', this.view
+				);
+
+			break;
+
+		case 'pnw' :
+
+			transItem =
+				model.create(
+					'fabric', model.fabric.create( 'pnw', dp ),
+					'view', this.view
+				);
+
+			break;
+
+		default : throw new Error( );
+
+	}
+
+	root.create(
+		'action',
+			action.create(
+				'startPoint', dp,
+				'transItem', transItem
+			)
+	);
+};
+
+
 
 
 } )( );
