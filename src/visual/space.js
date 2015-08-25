@@ -393,10 +393,10 @@ prototype.draw =
 */
 prototype.mousewheel =
 	function(
-		p,
-		dir,
-		shift,
-		ctrl
+		p,     // cursor point ( in view )
+		dir,   // wheel direction, >0 for down, <0 for up
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -427,9 +427,9 @@ prototype.mousewheel =
 */
 prototype.pointingHover =
 	function(
-		p
-		// shift,
-		// ctrl
+		p         // cursor point ( in view )
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -513,9 +513,9 @@ prototype.pointingHover =
 */
 prototype.dragStart =
 	function(
-		p,
-		shift,
-		ctrl
+		p,     // cursor point ( in view )
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -562,7 +562,6 @@ prototype.dragStart =
 
 	action = this._action;
 
-	// FIXME simplify
 	if( action && action.reflect === 'action_createGeneric' )
 	{
 		this._startCreateGeneric( dp );
@@ -609,9 +608,9 @@ prototype.dragStart =
 */
 prototype.click =
 	function(
-		p,
-		shift,
-		ctrl
+		p,     // cursor point ( in view )
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -648,26 +647,15 @@ prototype.click =
 */
 prototype.dragStop =
 	function(
-		p,
-		shift,
-		ctrl
+		p,     // cursor point ( in view )
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
 		action,
-		dp,
-		fs,
 		item,
-		key,
-		label,
-		model,
-		note,
-		portal,
-		pnw,
-		resized,
-		val,
-		view,
-		zone;
+		view;
 
 	action = this._action;
 
@@ -679,159 +667,7 @@ prototype.dragStop =
 	{
 		case 'action_createGeneric' :
 
-			dp = p.fromView( view );
-
-			zone = euclid_rect.createArbitrary( action.startPoint, dp );
-
-			switch( action.itemType )
-			{
-				case 'note' :
-
-					// FIXME move to note
-					// ( and all others creators )
-
-					note = action.transItem.fabric.create( 'zone', zone );
-
-					key = session_uid( );
-
-					root.alter(
-						change_grow.create(
-							'val', note,
-							'path',
-								jion.path.empty
-								.append( 'twig' )
-								.append( key ),
-							'rank', 0
-						)
-					);
-
-					root.create(
-						'mark',
-							visual_mark_caret.create(
-								'path',
-									root
-									.spaceVisual.get( key )
-									.doc
-									.atRank( 0 ).textPath,
-								'at', 0
-							)
-					);
-
-					if( !ctrl ) root.create( 'action', undefined );
-
-					break;
-
-				case 'label' :
-
-					model = shell_models.label;
-
-					fs =
-						Math.max(
-							model.doc.fontsize
-							* zone.height
-							/ model.zone.height,
-							theme.label.minSize
-						);
-
-					resized =
-						model.create(
-							'fabric', model.fabric.create( 'fontsize', fs )
-						);
-
-					pnw =
-						( dp.x > action.startPoint.x )
-						? zone.pnw
-						: euclid_point.create(
-							'x', zone.pse.x - resized.zone.width,
-							'y', zone.pnw.y
-						);
-
-					label =
-						resized.create(
-							'fabric', resized.fabric.create( 'pnw', pnw )
-						);
-
-					key = session_uid( );
-
-					// FIXME might take label right away!
-					val =
-						fabric_label.create(
-							'fontsize', label.doc.fontsize,
-							'pnw', label.pnw,
-							'doc',
-								fabric_doc.create(
-									'twig:add', '1',
-									fabric_para.create( 'text', 'Label' )
-								)
-							);
-
-					root.alter(
-						change_grow.create(
-							'val', val,
-							'path',
-								jion.path.empty
-								.append( 'twig' )
-								.append( key ),
-							'rank', 0
-						)
-					);
-
-					root.create(
-						'mark',
-							visual_mark_caret.create(
-								'path',
-									root.spaceVisual
-									.get( key )
-									.doc.atRank( 0 )
-									.textPath,
-								'at', 0
-							)
-					);
-
-					if( !ctrl ) root.create( 'action', undefined );
-
-					break;
-
-				case 'portal' :
-
-					portal =
-						action.transItem.fabric.create(
-							'zone', zone,
-							'spaceUser', root.user.name,
-							'spaceTag', 'home'
-						);
-
-					key = session_uid( );
-
-					root.alter(
-						change_grow.create(
-							'path',
-								jion.path.empty
-								.append( 'twig' )
-								.append( key ),
-							'val', portal,
-							'rank', 0
-						)
-					);
-
-					root.create(
-						'mark',
-							visual_mark_caret.create(
-								'path',
-									root.spaceVisual.get( key ).path
-									.append( 'spaceUser' ),
-								'at', 0
-							)
-					);
-
-					if( !ctrl ) root.create( 'action', undefined );
-
-					break;
-
-				default :
-
-					throw new Error( );
-			}
+			this._stopCreateGeneric( p, shift, ctrl );
 
 			break;
 
@@ -919,9 +755,9 @@ prototype.dragStop =
 */
 prototype.dragMove =
 	function(
-		p
-		// shift,
-		// ctrl
+		p         // cursor point ( in view )
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -1261,9 +1097,9 @@ prototype.scrollMarkIntoView =
 */
 prototype.specialKey =
 	function(
-		key,
-		shift,
-		ctrl
+		key,   // key being pressed
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
@@ -1410,6 +1246,187 @@ prototype._startCreateGeneric =
 	);
 };
 
+
+/*
+| Stops creating a generic item.
+*/
+prototype._stopCreateGeneric =
+	function(
+		p,     // point, viewbased point of stop
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		dp,
+		fs,
+		key,
+		label,
+		model,
+		note,
+		pnw,
+		portal,
+		resized,
+		val,
+		zone;
+
+	action = this._action;
+
+	dp = p.fromView( this.view );
+
+	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+
+	switch( action.itemType )
+	{
+		case 'note' :
+
+			// FIXME move to note
+			// ( and all others creators )
+
+			note = action.transItem.fabric.create( 'zone', zone );
+
+			key = session_uid( );
+
+			root.alter(
+				change_grow.create(
+					'val', note,
+					'path',
+						jion.path.empty
+						.append( 'twig' )
+						.append( key ),
+					'rank', 0
+				)
+			);
+
+			root.create(
+				'mark',
+					visual_mark_caret.create(
+						'path',
+							root
+							.spaceVisual.get( key )
+							.doc
+							.atRank( 0 ).textPath,
+						'at', 0
+					)
+			);
+
+			if( !ctrl ) root.create( 'action', undefined );
+
+			break;
+
+		case 'label' :
+
+			model = shell_models.label;
+
+			fs =
+				Math.max(
+					model.doc.fontsize
+					* zone.height
+					/ model.zone.height,
+					theme.label.minSize
+				);
+
+			resized =
+				model.create(
+					'fabric', model.fabric.create( 'fontsize', fs )
+				);
+
+			pnw =
+				( dp.x > action.startPoint.x )
+				? zone.pnw
+				: euclid_point.create(
+					'x', zone.pse.x - resized.zone.width,
+					'y', zone.pnw.y
+				);
+
+			label =
+				resized.create(
+					'fabric', resized.fabric.create( 'pnw', pnw )
+				);
+
+			key = session_uid( );
+
+			// FIXME might take label right away!
+			val =
+				fabric_label.create(
+					'fontsize', label.doc.fontsize,
+					'pnw', label.pnw,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1',
+							fabric_para.create( 'text', 'Label' )
+						)
+					);
+
+			root.alter(
+				change_grow.create(
+					'val', val,
+					'path',
+						jion.path.empty
+						.append( 'twig' )
+						.append( key ),
+					'rank', 0
+				)
+			);
+
+			root.create(
+				'mark',
+					visual_mark_caret.create(
+						'path',
+							root.spaceVisual
+							.get( key )
+							.doc.atRank( 0 )
+							.textPath,
+						'at', 0
+					)
+			);
+
+			if( !ctrl ) root.create( 'action', undefined );
+
+			break;
+
+		case 'portal' :
+
+			portal =
+				action.transItem.fabric.create(
+					'zone', zone,
+					'spaceUser', root.user.name,
+					'spaceTag', 'home'
+				);
+
+			key = session_uid( );
+
+			root.alter(
+				change_grow.create(
+					'path',
+						jion.path.empty
+						.append( 'twig' )
+						.append( key ),
+					'val', portal,
+					'rank', 0
+				)
+			);
+
+			root.create(
+				'mark',
+					visual_mark_caret.create(
+						'path',
+							root.spaceVisual.get( key ).path
+							.append( 'spaceUser' ),
+						'at', 0
+					)
+			);
+
+			if( !ctrl ) root.create( 'action', undefined );
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+};
 
 
 
