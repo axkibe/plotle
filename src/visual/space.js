@@ -9,9 +9,6 @@ var
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
-	fabric_doc,
-	fabric_label,
-	fabric_para,
 	gruga_relation,
 	jion,
 	result_hover,
@@ -1268,7 +1265,6 @@ prototype._stopCreateGeneric =
 		pnw,
 		portal,
 		resized,
-		val,
 		zone;
 
 	action = this._action;
@@ -1347,21 +1343,22 @@ prototype._stopCreateGeneric =
 
 			key = session_uid( );
 
-			// FIXME might take label right away!
-			val =
-				fabric_label.create(
-					'fontsize', label.doc.fontsize,
-					'pnw', label.pnw,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1',
-							fabric_para.create( 'text', 'Label' )
-						)
-					);
+/**/		if( CHECK )
+/**/		{
+/**/			if( label.fabric.fontsize !== label.doc.fontsize )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/
+/**/			if( label.fabric.pnw !== label.pnw )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/		}
 
 			root.alter(
 				change_grow.create(
-					'val', val,
+					'val', label.fabric,
 					'path',
 						jion.path.empty
 						.append( 'twig' )
