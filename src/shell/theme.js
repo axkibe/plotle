@@ -94,15 +94,6 @@ theme =
 
 
 	/*
-	| A label in space.
-	*/
-	label :
-	{
-		minSize : 8,
-	},
-
-
-	/*
 	| The disc menues.
 	*/
 	disc :

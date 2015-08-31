@@ -9,13 +9,13 @@ var
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
+	gruga_label,
 	gruga_relation,
 	jion,
 	result_hover,
 	root,
 	session_uid,
 	shell_models,
-	theme,
 	visual_label,
 	visual_mark_caret,
 	visual_note,
@@ -823,7 +823,7 @@ prototype.dragMove =
 							model.doc.fontsize
 							* zone.height
 							/ model.zone.height,
-							theme.label.minSize
+							gruga_label.minSize
 						);
 
 					resized =
@@ -990,7 +990,7 @@ prototype.dragMove =
 							item.fabric.fontsize
 							* ( action.startZone.height + dy )
 							/ action.startZone.height,
-							theme.label.minSize
+							gruga_label.minSize
 						);
 
 					resized =
@@ -1320,7 +1320,7 @@ prototype._stopCreateGeneric =
 					model.doc.fontsize
 					* zone.height
 					/ model.zone.height,
-					theme.label.minSize
+					gruga_label.minSize
 				);
 
 			resized =
