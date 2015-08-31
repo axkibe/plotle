@@ -49,7 +49,7 @@ gruga_label.defaultFontsize = 13;
 
 
 gruga_label.innerMargin =
-	euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
+	euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 );
 
 
 } )( );

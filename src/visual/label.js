@@ -9,7 +9,6 @@ var
 	euclid_rect,
 	gruga_label,
 	jion,
-	theme,
 	visual_doc,
 	visual_docItem,
 	visual_handlesBezel,
