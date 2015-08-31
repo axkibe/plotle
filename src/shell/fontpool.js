@@ -18,12 +18,13 @@ var
 
 
 var
-	_pool,
-	_settedDefaultFonts;
+	pool,
+	settedDefaultFonts;
 
-_pool = { };
+pool = { };
 
-_settedDefaultFonts = false;
+settedDefaultFonts = false;
+
 
 /*
 | Constructor.
@@ -32,7 +33,7 @@ shell_fontPool = { };
 
 
 var
-_styles =
+styles =
 {
 	ca         :
 	{
@@ -103,16 +104,16 @@ shell_fontPool.setDefaultFonts =
 		a,
 		s;
 
-	if( _settedDefaultFonts )
+	if( settedDefaultFonts )
 	{
 		throw new Error( );
 	}
 
-	_settedDefaultFonts = true;
+	settedDefaultFonts = true;
 
-	for( a in _styles )
+	for( a in styles )
 	{
-		s = _styles[ a ];
+		s = styles[ a ];
 
 		switch( s.family )
 		{
@@ -152,13 +153,13 @@ shell_fontPool.get =
 
 /**/if( CHECK )
 /**/{
-/**/	if( !_settedDefaultFonts )
+/**/	if( !settedDefaultFonts )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	style = _styles[ code ];
+	style = styles[ code ];
 
 /**/if( CHECK )
 /**/{
@@ -168,19 +169,13 @@ shell_fontPool.get =
 /**/	}
 /**/}
 
-	c = _pool[ code ];
+	c = pool[ code ];
 
-	if( !c )
-	{
-		c = _pool[ code ] = { };
-	}
+	if( !c ) c = pool[ code ] = { };
 
 	f = c[ size ];
 
-	if( f )
-	{
-		return f;
-	}
+	if( f ) return f;
 
 	f =
 	c[ size ] =

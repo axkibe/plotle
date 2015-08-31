@@ -134,7 +134,7 @@ prototype._init =
 			'fabric', fabric.doc,
 			'flowWidth', 0,
 			'fontsize', this.fontsize,
-			'innerMargin', theme.label.innerMargin,
+			'innerMargin', gruga_label.innerMargin,
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),

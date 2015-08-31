@@ -8,6 +8,7 @@ var
 	design_facetRay,
 	euclid_border,
 	euclid_color,
+	euclid_margin,
 	gruga_label;
 
 
@@ -45,6 +46,10 @@ gruga_label.facets =
 
 
 gruga_label.defaultFontsize = 13;
+
+
+gruga_label.innerMargin =
+	euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
 
 
 } )( );

@@ -29,6 +29,7 @@ shell_fontPool.setDefaultFonts(
 	'DejaVuSansBold,sans-serif'
 );
 
+
 /*
 | The whole theme
 */
@@ -98,7 +99,6 @@ theme =
 	label :
 	{
 		minSize : 8,
-		innerMargin  : euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
 	},
 
 

@@ -1,5 +1,6 @@
 /*
 | Loads the web fonts Meshcraft uses.
+|
 | Starts the browser system when finished.
 */
 
@@ -20,23 +21,19 @@ window.onload =
 	function( )
 {
 	WebFont.load(
+	{
+		custom:
 		{
-			custom:
-			{
-				families:
-					[
-						'DejaVuSans',
-						'DejaVuSansBold'
-					]
-				//urls: [ '/fonts/dejavu.css' ], already in CSS
-			},
+			families:
+			[
+				'DejaVuSans',
+				'DejaVuSansBold'
+			]
+			//urls: [ '/fonts/dejavu.css' ], already in CSS
+		},
 
-			active:
-			function()
-			{
-				startup( );
-			}
-		}
+		active: function() { startup( ); }
+	}
 	);
 };
 
