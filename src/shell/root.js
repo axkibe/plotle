@@ -26,6 +26,7 @@ var
 	gruga_moveTo,
 	gruga_noAccessToSpace,
 	gruga_nonExistingSpace,
+	gruga_relation,
 	gruga_signUp,
 	gruga_space,
 	gruga_user,
@@ -40,7 +41,6 @@ var
 	shell_root,
 	system,
 	swatch,
-	theme,
 	user_creds,
 	visual_mark_caret,
 	visual_space;
@@ -1366,7 +1366,7 @@ prototype.spawnRelation =
 			item2.silhoutte, 'normal'
 		);
 
-	pnw = arrow.pc.sub( theme.relation.spawnOffset );
+	pnw = arrow.pc.sub( gruga_relation.spawnOffset );
 
 	val =
 		fabric_relation.create(

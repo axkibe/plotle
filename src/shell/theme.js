@@ -167,15 +167,6 @@ theme =
 	*/
 	relation :
 	{
-		innerMargin :
-			euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 ),
-
-		// offset for creation // FUTURE calculate dynamically
-		spawnOffset :
-		{
-			x : 44,
-			y : 12
-		}
 	}
 };
 

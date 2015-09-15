@@ -199,7 +199,7 @@ prototype.draw =
 
 		arrow1 = arrow1.inView( this.view );
 
-		arrow1.draw( display, gruga_relation );
+		arrow1.draw( display, gruga_relation.facet );
 	}
 
 	if( item2 )
@@ -212,7 +212,7 @@ prototype.draw =
 
 		arrow2 = arrow2.inView( this.view );
 
-		arrow2.draw( display, gruga_relation );
+		arrow2.draw( display, gruga_relation.facet );
 	}
 
 	visual_label.prototype.draw.call( this, display );

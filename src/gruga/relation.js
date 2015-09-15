@@ -1,5 +1,5 @@
 /*
-| Default relation arrows facet.
+| Default relation.
 */
 
 
@@ -8,6 +8,7 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_point,
 	gruga_relation;
 
 
@@ -17,8 +18,13 @@ var
 ( function( ) {
 'use strict';
 
+gruga_relation = { };
 
-gruga_relation =
+
+/*
+| Default relation arrows facet.
+*/
+gruga_relation.facet =
 	design_facet.create(
 		'fill',
 			euclid_color.rgba( 255, 225, 40, 0.5 ),
@@ -35,6 +41,15 @@ gruga_relation =
 				)
 			)
 	);
+
+
+/*
+| Offset for creation.
+|
+| FUTURE calculate dynamically
+*/
+gruga_relation.spawnOffset =
+	euclid_point.create( 'x', 44, 'y', 12 );
 
 
 } )( );

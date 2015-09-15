@@ -5,6 +5,7 @@
 */
 
 var
+	change_grow,
 	euclid_display,
 	euclid_point,
 	euclid_rect,
@@ -13,12 +14,14 @@ var
 	jion,
 	math_half,
 	root,
+	session_uid,
 	system,
 	theme,
 	visual_doc,
 	visual_docItem,
 	visual_handlesBezel,
 	visual_item,
+	visual_mark_caret,
 	visual_note,
 	visual_scrollbar;
 
@@ -132,10 +135,52 @@ visual_note.handles =
 };
 
 
-if( FREEZE )
+if( FREEZE ) Object.freeze( visual_note.handles );
+
+
+/*
+| User wants to create a new note.
+*/
+visual_note.createGeneric =
+	function(
+		transItem, // the transient item by the action
+		zone       // the zone to create the new item at
+	)
 {
-	Object.freeze( visual_note.handles );
-}
+	var
+		key,
+		note;
+
+	// FIXME move to note
+	// ( and all others creators )
+
+	note = transItem.fabric.create( 'zone', zone );
+
+	key = session_uid( );
+
+	root.alter(
+		change_grow.create(
+			'val', note,
+			'path',
+				jion.path.empty
+				.append( 'twig' )
+				.append( key ),
+			'rank', 0
+		)
+	);
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path',
+					root
+					.spaceVisual.get( key )
+					.doc
+					.atRank( 0 ).textPath,
+				'at', 0
+			)
+	);
+};
 
 
 /*

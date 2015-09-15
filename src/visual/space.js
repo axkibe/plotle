@@ -376,7 +376,7 @@ prototype.draw =
 						).
 						inView( view );
 
-					arrow.draw( display, gruga_relation );
+					arrow.draw( display, gruga_relation.facet );
 				}
 			}
 
@@ -639,8 +639,6 @@ prototype.click =
 
 /*
 | Stops an operation with the mouse button held down.
-|
-| FIXME split this up
 */
 prototype.dragStop =
 	function(
@@ -1261,7 +1259,6 @@ prototype._stopCreateGeneric =
 		key,
 		label,
 		model,
-		note,
 		pnw,
 		portal,
 		resized,
@@ -1277,35 +1274,7 @@ prototype._stopCreateGeneric =
 	{
 		case 'note' :
 
-			// FIXME move to note
-			// ( and all others creators )
-
-			note = action.transItem.fabric.create( 'zone', zone );
-
-			key = session_uid( );
-
-			root.alter(
-				change_grow.create(
-					'val', note,
-					'path',
-						jion.path.empty
-						.append( 'twig' )
-						.append( key ),
-					'rank', 0
-				)
-			);
-
-			root.create(
-				'mark',
-					visual_mark_caret.create(
-						'path',
-							root
-							.spaceVisual.get( key )
-							.doc
-							.atRank( 0 ).textPath,
-						'at', 0
-					)
-			);
+			visual_note.createGeneric( action.transItem, zone );
 
 			if( !ctrl ) root.create( 'action', undefined );
 
