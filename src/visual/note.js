@@ -143,18 +143,19 @@ if( FREEZE ) Object.freeze( visual_note.handles );
 */
 visual_note.createGeneric =
 	function(
-		transItem, // the transient item by the action
-		zone       // the zone to create the new item at
+		action, // the create action
+		dp      // the deviewed point the createGeneric
+		//      // stoped at.
 	)
 {
 	var
 		key,
-		note;
+		note,
+		zone;
 
-	// FIXME move to note
-	// ( and all others creators )
+	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
-	note = transItem.fabric.create( 'zone', zone );
+	note = action.transItem.fabric.create( 'zone', zone );
 
 	key = session_uid( );
 

@@ -1271,9 +1271,7 @@ prototype._stopCreateGeneric =
 
 			// FIXME creteGeneric for others
 
-			// FIXME give action instead of transitem
-			// FIXME give dp instead of zone
-			visual_note.createGeneric( action.transItem, zone );
+			visual_note.createGeneric( action, dp );
 
 			if( !ctrl ) root.create( 'action', undefined );
 
