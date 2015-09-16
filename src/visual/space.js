@@ -1274,6 +1274,8 @@ prototype._stopCreateGeneric =
 	{
 		case 'note' :
 
+			// FIXME creteGeneric for others
+
 			visual_note.createGeneric( action.transItem, zone );
 
 			if( !ctrl ) root.create( 'action', undefined );
