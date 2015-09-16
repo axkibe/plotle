@@ -4,16 +4,20 @@
 
 
 var
+	change_grow,
 	euclid_display,
 	euclid_point,
 	euclid_rect,
 	gruga_label,
 	jion,
+	session_uid,
+	shell_models,
 	visual_doc,
 	visual_docItem,
 	visual_handlesBezel,
 	visual_item,
-	visual_label;
+	visual_label,
+	visual_mark_caret;
 
 
 /*
@@ -109,10 +113,96 @@ visual_label.handles =
 };
 
 
-if( FREEZE )
+if( FREEZE ) Object.freeze( visual_label.handles );
+
+
+/*
+| User wants to create a new label.
+*/
+visual_label.createGeneric =
+	function(
+		action, // the create action
+		dp      // the deviewed point the createGeneric
+		//      // stoped at.
+	)
 {
-	Object.freeze( visual_label.handles );
-}
+	var
+		fs,
+		key,
+		label,
+		model,
+		pnw,
+		resized,
+		zone;
+
+	model = shell_models.label;
+
+	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+
+	fs =
+		Math.max(
+			model.doc.fontsize
+			* zone.height
+			/ model.zone.height,
+			gruga_label.minSize
+		);
+
+	resized =
+		model.create(
+			'fabric', model.fabric.create( 'fontsize', fs )
+		);
+
+	pnw =
+		( dp.x > action.startPoint.x )
+		? zone.pnw
+		: euclid_point.create(
+			'x', zone.pse.x - resized.zone.width,
+			'y', zone.pnw.y
+		);
+
+	label =
+		resized.create(
+			'fabric', resized.fabric.create( 'pnw', pnw )
+		);
+
+	key = session_uid( );
+
+/**/if( CHECK )
+/**/{
+/**/	if( label.fabric.fontsize !== label.doc.fontsize )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( label.fabric.pnw !== label.pnw )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	root.alter(
+		change_grow.create(
+			'val', label.fabric,
+			'path',
+				jion.path.empty
+				.append( 'twig' )
+				.append( key ),
+			'rank', 0
+		)
+	);
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path',
+					root.spaceVisual
+					.get( key )
+					.doc.atRank( 0 )
+					.textPath,
+				'at', 0
+			)
+	);
+};
 
 
 /*

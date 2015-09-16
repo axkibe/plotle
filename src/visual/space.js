@@ -1255,13 +1255,8 @@ prototype._stopCreateGeneric =
 	var
 		action,
 		dp,
-		fs,
 		key,
-		label,
-		model,
-		pnw,
 		portal,
-		resized,
 		zone;
 
 	action = this._action;
@@ -1276,6 +1271,8 @@ prototype._stopCreateGeneric =
 
 			// FIXME creteGeneric for others
 
+			// FIXME give action instead of transitem
+			// FIXME give dp instead of zone
 			visual_note.createGeneric( action.transItem, zone );
 
 			if( !ctrl ) root.create( 'action', undefined );
@@ -1284,71 +1281,7 @@ prototype._stopCreateGeneric =
 
 		case 'label' :
 
-			model = shell_models.label;
-
-			fs =
-				Math.max(
-					model.doc.fontsize
-					* zone.height
-					/ model.zone.height,
-					gruga_label.minSize
-				);
-
-			resized =
-				model.create(
-					'fabric', model.fabric.create( 'fontsize', fs )
-				);
-
-			pnw =
-				( dp.x > action.startPoint.x )
-				? zone.pnw
-				: euclid_point.create(
-					'x', zone.pse.x - resized.zone.width,
-					'y', zone.pnw.y
-				);
-
-			label =
-				resized.create(
-					'fabric', resized.fabric.create( 'pnw', pnw )
-				);
-
-			key = session_uid( );
-
-/**/		if( CHECK )
-/**/		{
-/**/			if( label.fabric.fontsize !== label.doc.fontsize )
-/**/			{
-/**/				throw new Error( );
-/**/			}
-/**/
-/**/			if( label.fabric.pnw !== label.pnw )
-/**/			{
-/**/				throw new Error( );
-/**/			}
-/**/		}
-
-			root.alter(
-				change_grow.create(
-					'val', label.fabric,
-					'path',
-						jion.path.empty
-						.append( 'twig' )
-						.append( key ),
-					'rank', 0
-				)
-			);
-
-			root.create(
-				'mark',
-					visual_mark_caret.create(
-						'path',
-							root.spaceVisual
-							.get( key )
-							.doc.atRank( 0 )
-							.textPath,
-						'at', 0
-					)
-			);
+			visual_label.createGeneric( action, dp );
 
 			if( !ctrl ) root.create( 'action', undefined );
 
