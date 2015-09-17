@@ -4,6 +4,7 @@
 
 
 var
+	change_grow,
 	change_insert,
 	change_remove,
 	euclid_display,
@@ -22,6 +23,7 @@ var
 	visual_mark_item,
 	result_hover,
 	root,
+	session_uid,
 	shell_fontPool,
 	theme,
 	visual_handlesBezel,
@@ -139,10 +141,56 @@ visual_portal.handles =
 	nw : true
 };
 
-if( FREEZE )
+if( FREEZE ) Object.freeze( visual_portal.handles );
+
+
+/*
+| User wants to create a new portal.
+*/
+visual_portal.createGeneric =
+	function(
+		action, // the create action
+		dp      // the deviewed point the createGeneric
+		//      // stoped at.
+	)
 {
-	Object.freeze( visual_portal.handles );
-}
+	var
+		portal,
+		key,
+		zone;
+
+	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+
+	portal =
+		action.transItem.fabric.create(
+			'zone', zone,
+			'spaceUser', root.user.name,
+			'spaceTag', 'home'
+		);
+
+	key = session_uid( );
+
+	root.alter(
+		change_grow.create(
+			'path',
+				jion.path.empty
+				.append( 'twig' )
+				.append( key ),
+			'val', portal,
+			'rank', 0
+		)
+	);
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path',
+					root.spaceVisual.get( key ).path
+					.append( 'spaceUser' ),
+				'at', 0
+			)
+	);
+};
 
 
 /*

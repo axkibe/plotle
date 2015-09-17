@@ -5,7 +5,6 @@
 var
 	action_itemResize,
 	action_pan,
-	change_grow,
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
@@ -14,10 +13,8 @@ var
 	jion,
 	result_hover,
 	root,
-	session_uid,
 	shell_models,
 	visual_label,
-	visual_mark_caret,
 	visual_note,
 	visual_portal,
 	visual_relation,
@@ -1254,22 +1251,15 @@ prototype._stopCreateGeneric =
 {
 	var
 		action,
-		dp,
-		key,
-		portal,
-		zone;
+		dp;
 
 	action = this._action;
 
 	dp = p.fromView( this.view );
 
-	zone = euclid_rect.createArbitrary( action.startPoint, dp );
-
 	switch( action.itemType )
 	{
 		case 'note' :
-
-			// FIXME creteGeneric for others
 
 			visual_note.createGeneric( action, dp );
 
@@ -1287,35 +1277,7 @@ prototype._stopCreateGeneric =
 
 		case 'portal' :
 
-			portal =
-				action.transItem.fabric.create(
-					'zone', zone,
-					'spaceUser', root.user.name,
-					'spaceTag', 'home'
-				);
-
-			key = session_uid( );
-
-			root.alter(
-				change_grow.create(
-					'path',
-						jion.path.empty
-						.append( 'twig' )
-						.append( key ),
-					'val', portal,
-					'rank', 0
-				)
-			);
-
-			root.create(
-				'mark',
-					visual_mark_caret.create(
-						'path',
-							root.spaceVisual.get( key ).path
-							.append( 'spaceUser' ),
-						'at', 0
-					)
-			);
+			visual_portal.createGeneric( action, dp );
 
 			if( !ctrl ) root.create( 'action', undefined );
 
