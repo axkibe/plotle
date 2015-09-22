@@ -30,8 +30,12 @@ if( JION )
 			itemType :
 			{
 				comment : 'item type to be created',
-				// FUTURE make list of possibilities
-				type : 'string'
+				type :
+				[
+					'visual_note:static',
+					'visual_label:static',
+					'visual_portal:static',
+				]
 			},
 			transItem :
 			{

@@ -97,6 +97,7 @@ if( NODE )
 	return;
 }
 
+visual_label.reflect = 'visual_note:static';
 
 prototype = visual_label.prototype;
 

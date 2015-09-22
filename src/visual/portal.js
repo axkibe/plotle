@@ -106,6 +106,7 @@ if( NODE )
 	return;
 }
 
+visual_portal.reflect = 'visual_label:static';
 
 prototype = visual_portal.prototype;
 

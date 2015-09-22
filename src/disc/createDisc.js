@@ -11,7 +11,10 @@ var
 	euclid_display,
 	jion,
 	math_half,
-	root;
+	root,
+	visual_label,
+	visual_note,
+	visual_portal;
 
 
 /*
@@ -230,7 +233,10 @@ prototype.pushButton =
 		case 'createLabel' :
 
 			root.create(
-				'action', action_createGeneric.create( 'itemType', 'label' )
+				'action',
+					action_createGeneric.create(
+						'itemType', visual_label
+					)
 			);
 
 			return;
@@ -238,7 +244,10 @@ prototype.pushButton =
 		case 'createNote' :
 
 			root.create(
-				'action', action_createGeneric.create( 'itemType', 'note' )
+				'action',
+					action_createGeneric.create(
+						'itemType', visual_note
+					)
 			);
 
 			return;
@@ -246,7 +255,10 @@ prototype.pushButton =
 		case 'createPortal' :
 
 			root.create(
-				'action', action_createGeneric.create( 'itemType', 'portal' )
+				'action',
+					action_createGeneric.create(
+						'itemType', visual_portal
+					)
 			);
 
 			return;
@@ -255,7 +267,9 @@ prototype.pushButton =
 
 			root.create(
 				'action',
-					action_createRelation.create( 'relationState', 'start' )
+					action_createRelation.create(
+						'relationState', 'start'
+					)
 			);
 
 			return;
@@ -486,21 +500,13 @@ disc_createDisc._isActiveButton =
 
 			switch( action.itemType )
 			{
-				case 'note' :
+				case visual_note   : return wname === 'createNote';
 
-					return wname === 'createNote';
+				case visual_label  : return wname === 'createLabel';
 
-				case 'label' :
+				case visual_portal : return wname === 'createPortal';
 
-					return wname === 'createLabel';
-
-				case 'portal' :
-
-					return wname === 'createPortal';
-
-				default :
-
-					return false;
+				default : return false;
 			}
 
 /**/		if( CHECK )

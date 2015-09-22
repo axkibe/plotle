@@ -115,6 +115,7 @@ if( NODE )
 	return;
 }
 
+visual_note.reflect = 'visual_note:static';
 
 prototype = visual_note.prototype;
 

@@ -785,7 +785,7 @@ prototype.dragMove =
 
 			switch( action.itemType )
 			{
-				case 'note' :
+				case visual_note :
 
 					model = shell_models.note;
 
@@ -797,7 +797,7 @@ prototype.dragMove =
 
 					break;
 
-				case 'portal' :
+				case visual_portal :
 
 					model = shell_models.portal;
 
@@ -809,7 +809,7 @@ prototype.dragMove =
 
 					break;
 
-				case 'label' :
+				case visual_label :
 
 					model = shell_models.label;
 
@@ -1169,9 +1169,11 @@ prototype._startCreateGeneric =
 
 	action = this._action;
 
+
+	// FIXME get model/mode from jion
 	switch( action.itemType )
 	{
-		case 'note' :
+		case visual_note :
 
 			model = shell_models.note;
 
@@ -1180,7 +1182,7 @@ prototype._startCreateGeneric =
 			break;
 
 
-		case 'label' :
+		case visual_label :
 
 			model = shell_models.label;
 
@@ -1188,7 +1190,7 @@ prototype._startCreateGeneric =
 
 			break;
 
-		case 'portal' :
+		case visual_portal :
 
 			model = shell_models.portal;
 
@@ -1257,9 +1259,10 @@ prototype._stopCreateGeneric =
 
 	dp = p.fromView( this.view );
 
+	// FIXME use itemType directly
 	switch( action.itemType )
 	{
-		case 'note' :
+		case visual_note :
 
 			visual_note.createGeneric( action, dp );
 
@@ -1267,7 +1270,7 @@ prototype._stopCreateGeneric =
 
 			break;
 
-		case 'label' :
+		case visual_label :
 
 			visual_label.createGeneric( action, dp );
 
@@ -1275,7 +1278,7 @@ prototype._stopCreateGeneric =
 
 			break;
 
-		case 'portal' :
+		case visual_portal :
 
 			visual_portal.createGeneric( action, dp );
 
