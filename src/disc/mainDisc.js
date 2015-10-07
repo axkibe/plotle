@@ -254,10 +254,9 @@ jion.lazyValue(
 			rZ;
 
 		display =
-			// FIXME remove style
 			euclid_display.create(
-				'width', this.style.width,
-				'height', this.style.height
+				'width', this.frame.width,
+				'height', this.frame.height
 			);
 
 		display.fill( this.fill, this.silhoutte );
