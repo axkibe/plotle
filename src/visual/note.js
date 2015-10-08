@@ -75,11 +75,10 @@ if( JION )
 				comment : 'the path of the note',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			// FIXME change to scrollPos
-			scrolly :
+			scrollPos :
 			{
-				comment : 'vertical scroll position',
-				type : [ 'undefined', 'number' ]
+				comment : 'scroll position',
+				type : [ 'undefined', 'euclid_point' ]
 			},
 			view :
 			{
@@ -207,9 +206,18 @@ prototype._init =
 
 	zone = this.zone;
 
-	if( this.scrolly === undefined ) this.scrolly = 0;
-
-	if( this.scrolly < 0 ) this.scrolly = 0;
+	if( this.scrollPos === undefined )
+	{
+		this.scrollPos = euclid_point.zero;
+	}
+	else if( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
+	{
+		this.scrollPos =
+			this.scrollPos.create(
+				'x', Math.max( 0, this.scrollPos.x ),
+				'y', Math.max( 0, this.scrollPos.y )
+			);
+	}
 
 	doc =
 	this.doc =
@@ -223,11 +231,7 @@ prototype._init =
 			'mark', this.mark,
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
-			'scrollPos',
-				euclid_point.create(
-					'x', 0,
-					'y', this.scrolly
-				),
+			'scrollPos', this.scrollPos,
 			'view', this.view.home
 		);
 
@@ -237,19 +241,16 @@ prototype._init =
 
 	if( dHeight > aperture )
 	{
-		if( this.scrolly > dHeight - aperture )
+		if( this.scrollPos.y > dHeight - aperture )
 		{
-			this.scrolly = dHeight - aperture;
+			this.scrollPos =
+				this.scrollPos.create(
+					'y', dHeight - aperture
+				);
 
 			doc =
 			this.doc =
-				doc.create(
-					'scrollPos',
-						euclid_point.create(
-							'x', 0,
-							'y', this.scrolly
-						)
-				);
+				doc.create( 'scrollPos', this.scrollPos );
 		}
 
 		this.scrollbarY =
@@ -261,7 +262,7 @@ prototype._init =
 						'x', zone.pse.x,
 						'y', zone.pnw.y + theme.scrollbar.vdis
 					),
-				'pos', this.scrolly,
+				'pos', this.scrollPos.y,
 				'size', zone.height - theme.scrollbar.vdis * 2,
 				'view', this.view
 			);
@@ -441,9 +442,12 @@ prototype.mousewheel =
 	if( !this.vZone.within( p ) ) return false;
 
 	root.setPath(
-		this.path.append( 'scrolly' ),
-		( this.scrollbarY ? this.scrollbarY.pos : 0 )
-		- dir * system.textWheelSpeed
+		this.path.append( 'scrollPos' ),
+		this.scrollPos.create(
+			'y',
+				( this.scrollbarY ? this.scrollbarY.pos : 0 )
+				- dir * system.textWheelSpeed
+		)
 	);
 
 	return true;
@@ -502,15 +506,19 @@ prototype.scrollMarkIntoView =
 	if( n + pnw.y - imargin.n < sy )
 	{
 		root.setPath(
-			this.path.append( 'scrolly' ),
-			n + pnw.y - imargin.n
+			this.path.append( 'scrollPos' ),
+			this.scrollPos.create(
+				'y', n + pnw.y - imargin.n
+			)
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		root.setPath(
-			this.path.append( 'scrolly' ),
-			s + pnw.y - zone.height + imargin.s
+			this.path.append( 'scrollPos' ),
+			this.scrollPos.create(
+				'y', s + pnw.y - zone.height + imargin.s
+			)
 		);
 	}
 };

@@ -99,8 +99,10 @@ visual_item.dragMove =
 			spos = action.startPos + sbary.scale( dy );
 
 			root.setPath(
-				this.path.append( 'scrolly' ),
-				spos
+				this.path.append( 'scrollPos' ),
+				this.scrollPos.create(
+					'y', spos
+				)
 			);
 
 			return true;
