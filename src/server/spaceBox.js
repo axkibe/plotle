@@ -43,9 +43,14 @@ if( JION )
 			},
 			'_changeSkids' :
 			{
-				// FIXME this should not be zero based
 				comment : 'changeSkids cached in RAM',
 				type : 'database_changeSkidRay'
+			},
+			'_changesOffset' :
+			{
+				comment : 'the offset of the stored changeSkids',
+				// one server load the past isn't kept in memory
+				type : 'integer'
 			}
 		}
 	};
@@ -79,14 +84,11 @@ server_spaceBox.loadSpace =
 {
 	var
 		changeSkid,
-		changeSkids,
 		changesDB,
 		cursor,
 		o,
 		seqZ,
 		space;
-
-	changeSkids = database_changeSkidRay.create( 'ray:init', [ undefined ] );
 
 	seqZ = 1;
 
@@ -115,9 +117,7 @@ server_spaceBox.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		// FIXME there is no need to load the past into memory
-		changeSkids =
-			changeSkids.create( 'ray:set', seqZ++, changeSkid );
+		seqZ++;
 
 		space = changeSkid.changeTree( space );
 	}
@@ -128,7 +128,8 @@ server_spaceBox.loadSpace =
 			'spaceRef', spaceRef,
 			'seqZ', seqZ,
 			'_changesDB', changesDB,
-			'_changeSkids', changeSkids
+			'_changeSkids', database_changeSkidRay.create( 'ray:init', [ ] ),
+			'_changesOffset', seqZ
 		)
 	);
 };
@@ -167,7 +168,8 @@ server_spaceBox.createSpace =
 					'changes:' + spaceRef.fullname
 				),
 			'_changeSkids',
-				database_changeSkidRay.create( 'ray:init', [ undefined ] )
+				database_changeSkidRay.create( 'ray:init', [ ] ),
+			'_changesOffset', 1
 		)
 	);
 
@@ -236,7 +238,7 @@ server_spaceBox.prototype.getChangeSkid =
 		seq
 	)
 {
-	return this._changeSkids.get( seq );
+	return this._changeSkids.get( seq - this._changesOffset );
 };
 
 
