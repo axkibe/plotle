@@ -37,7 +37,7 @@ if( JION )
 			{
 				comment : 'drag the item to this pnw',
 				type : [ 'undefined', 'euclid_point' ]
-			},
+			}
 		}
 	};
 }

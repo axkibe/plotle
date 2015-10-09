@@ -34,7 +34,7 @@ if( JION )
 				[
 					'visual_note:static',
 					'visual_label:static',
-					'visual_portal:static',
+					'visual_portal:static'
 				]
 			},
 			transItem :
