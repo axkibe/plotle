@@ -1181,7 +1181,6 @@ prototype._startCreateGeneric =
 
 			break;
 
-
 		case visual_label :
 
 			model = shell_models.label;
