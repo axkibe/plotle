@@ -146,7 +146,10 @@ server_spaceBox.createSpace =
 
 /**/if( CHECK )
 /**/{
-/**/	// FIXME see if root.repository has this space already.
+/**/	if( root.repository.space.get( spaceRef.fullname ) )
+/**/	{
+/**/		throw new Error( );
+/**/	}
 /**/}
 
 	yield root.repository.spaces.insert(
