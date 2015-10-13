@@ -96,6 +96,9 @@ changeSkid.createFromChangeWrap =
 };
 
 
+/*
+| Transforms the change skid to a change wrap.
+*/
 jion.lazyValue(
 	changeSkid.prototype,
 	'asChangeWrap',

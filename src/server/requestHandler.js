@@ -176,10 +176,11 @@ serveAlter =
 	try
 	{
 		// translates the changes if not most recent
+		// FIXME have spaceBox deliver a changeWrapRay
 		for( a = seq; a < seqZ; a++ )
 		{
 			changeWrapRay =
-				spaceBox.getChangeSkid( a ).transform( changeWrapRay );
+				spaceBox.getChangeWrap( a ).transform( changeWrapRay );
 		}
 
 		// this does not yield, its write and forget.
@@ -497,7 +498,7 @@ server_requestHandler.conveyUpdate =
 
 	for( c = seq; c < seqZ; c++ )
 	{
-		chgA.push( spaceBox.getChangeSkid( c ).asChangeWrap );
+		chgA.push( spaceBox.getChangeWrap( c ) );
 	}
 
 	return(

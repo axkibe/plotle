@@ -33,7 +33,15 @@ if( JION )
 }
 
 
-database_changeSkidRay = require( 'jion' ).this( module );
+var
+	change_wrapRay,
+	jion;
+
+jion = require( 'jion' );
+
+change_wrapRay = require( '../change/wrapRay' );
+
+database_changeSkidRay = jion.this( module );
 
 database_changeSkid = require( './changeSkid' );
 
@@ -73,6 +81,31 @@ database_changeSkidRay.createFromChangeWrapRay =
 
 	return database_changeSkidRay.create( 'ray:init', ray );
 };
+
+
+/*
+| Transforms the change skid ray to a change wrap ray.
+*/
+jion.lazyValue(
+	database_changeSkidRay.prototype,
+	'asChangeWrapRay',
+	function( )
+{
+	var
+		a,
+		aZ,
+		ray;
+
+	ray = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		ray[ a ] = this.get( a ).asChangeWrap;
+	}
+
+	return change_wrapRay.create( 'ray:init', ray );
+}
+);
 
 
 }( ) );

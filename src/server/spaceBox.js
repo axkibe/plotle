@@ -41,14 +41,14 @@ if( JION )
 				comment : 'changes database collection',
 				type : 'protean'
 			},
-			'_changeSkids' :
+			'_changeWraps' :
 			{
-				comment : 'changeSkids cached in RAM',
-				type : 'database_changeSkidRay'
+				comment : 'changeWraps cached in RAM',
+				type : 'change_wrapRay'
 			},
 			'_changesOffset' :
 			{
-				comment : 'the offset of the stored changeSkids',
+				comment : 'the offset of the stored changeWraps',
 				// one server load the past isn't kept in memory
 				type : 'integer'
 			}
@@ -56,7 +56,9 @@ if( JION )
 	};
 }
 
+
 var
+	change_wrapRay,
 	database_changeSkid,
 	database_changeSkidRay,
 	resume,
@@ -64,6 +66,8 @@ var
 	fabric_space;
 
 server_spaceBox = require( 'jion' ).this( module );
+
+change_wrapRay = require( '../change/wrapRay' );
 
 database_changeSkid = require( '../database/changeSkid' );
 
@@ -128,7 +132,7 @@ server_spaceBox.loadSpace =
 			'spaceRef', spaceRef,
 			'seqZ', seqZ,
 			'_changesDB', changesDB,
-			'_changeSkids', database_changeSkidRay.create( 'ray:init', [ ] ),
+			'_changeWraps', change_wrapRay.create( 'ray:init', [ ] ),
 			'_changesOffset', seqZ
 		)
 	);
@@ -170,8 +174,8 @@ server_spaceBox.createSpace =
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'_changeSkids',
-				database_changeSkidRay.create( 'ray:init', [ ] ),
+			'_changeWraps',
+				change_wrapRay.create( 'ray:init', [ ] ),
 			'_changesOffset', 1
 		)
 	);
@@ -227,7 +231,9 @@ server_spaceBox.prototype.appendChanges =
 		this.create(
 			'seqZ', this.seqZ + changeSkidRay.length,
 			'space', tree,
-			'_changeSkids', this._changeSkids.appendRay( changeSkidRay )
+			'_changeWraps',
+				this._changeWraps
+				.appendRay( changeSkidRay.asChangeWrapRay )
 		)
 	);
 };
@@ -236,12 +242,12 @@ server_spaceBox.prototype.appendChanges =
 /*
 | Returns the change skid by its sequence.
 */
-server_spaceBox.prototype.getChangeSkid =
+server_spaceBox.prototype.getChangeWrap =
 	function(
 		seq
 	)
 {
-	return this._changeSkids.get( seq - this._changesOffset );
+	return this._changeWraps.get( seq - this._changesOffset );
 };
 
 
