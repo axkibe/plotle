@@ -630,7 +630,6 @@ prototype.prepareInventory =
 						'data',
 							server_postProcessor[ resource.postProcessor ](
 								resource.data,
-								root.inventory, // FIXME this isn't necessary
 								bundleFilePath
 							)
 					)

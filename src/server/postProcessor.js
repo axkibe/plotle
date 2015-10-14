@@ -30,8 +30,7 @@ config = require( '../../config' );
 */
 server_postProcessor.develHtml =
 	function(
-		data,        // the data
-		inventory    // the server inventory
+		data         // the data
 		// bundleRes // the resource of the bundle
 	)
 {
@@ -39,11 +38,14 @@ server_postProcessor.develHtml =
 		a,
 		aZ,
 		devels,
+		inventory,
 		resource;
 
 	devels = [ ];
 
 	data = data + '';
+
+	inventory = root.inventory;
 
 	for( a = 0, aZ = inventory.length; a < aZ; a++ )
 	{
@@ -85,24 +87,24 @@ server_postProcessor.develHtml =
 */
 server_postProcessor.testPadHtml =
 	function(
-		data,        // the data
-		inventory    // the server inventory
+		data         // the data
 		// bundleRes // the resource of the bundle
 	)
 {
 	var
+		a,
+		aZ,
 		devels,
+		inventory,
 		resource;
 
 	devels = [ ];
 
 	data = data + '';
 
-	for(
-		var a = 0, aZ = inventory.length;
-		a < aZ;
-		a++
-	)
+	inventory = root.inventory;
+
+	for( a = 0, aZ = inventory.length; a < aZ; a++ )
 	{
 		resource = inventory.atRank( a );
 
@@ -144,7 +146,6 @@ server_postProcessor.testPadHtml =
 server_postProcessor.indexHtml =
 	function(
 		data,          // the data
-		inventory,     // the server inventory
 		bundleFilePath // the file path of the bundle resource
 	)
 {
