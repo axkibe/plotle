@@ -5,6 +5,7 @@
 
 var
 	net_requestWrap,
+	reply_error,
 	root,
 	transmitter;
 
@@ -118,10 +119,7 @@ onReply =
 	{
 		channel.onReply(
 			wrap,
-			{
-				ok : false,
-				message : 'Lost server connection'
-			}
+			reply_error.create( 'message', 'Lost server connection' )
 		);
 
 		return;
@@ -135,10 +133,7 @@ onReply =
 	{
 		channel.onReply(
 			wrap,
-			{
-				ok : false,
-				message : 'Server answered no JSON!'
-			}
+			reply_error.create( 'message', 'Server answered no JSON!' )
 		);
 
 		return;

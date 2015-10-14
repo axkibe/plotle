@@ -1400,42 +1400,22 @@ prototype.webAjax =
 			return;
 		}
 
-		try
+		// FUTURE REMOVE
+		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
-			// FUTURE REMOVE
-			if( DELAY_ALTER && cmd.type === 'request_alter' )
-			{
-				console.log( 'DELAYING ALTER');
+			console.log( 'DELAYING ALTER');
 
-				yield setTimeout( resume( ), DELAY_ALTER );
-			}
-
-			if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
-			{
-				console.log( 'DELAYING ACQUIRE');
-
-				yield setTimeout( resume( ), DELAY_ACQUIRE );
-			}
-
-			asw = yield* server_requestHandler.serve( cmd, result );
+			yield setTimeout( resume( ), DELAY_ALTER );
 		}
-		catch( err )
+
+		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
-			if( err.ok !== false )
-			{
-				throw err;
-			}
-			else
-			{
-				log_web( 'not ok', err.message );
+			console.log( 'DELAYING ACQUIRE');
 
-				// FIXME
-				asw = {
-					ok : false,
-					message : err.message
-				};
-			}
+			yield setTimeout( resume( ), DELAY_ACQUIRE );
 		}
+
+		asw = yield* server_requestHandler.serve( cmd, result );
 
 		if( !asw ) return;
 
