@@ -176,7 +176,6 @@ serveAlter =
 	try
 	{
 		// translates the changes if not most recent
-		// FIXME have spaceBox deliver a changeWrapRay
 		for( a = seq; a < seqZ; a++ )
 		{
 			changeWrapRay =
@@ -493,7 +492,6 @@ server_requestHandler.conveyUpdate =
 
 	seqZ = spaceBox.seqZ;
 
-	// FIXME have the spaceBox deliver a changeWrapRay
 	chgA = [ ];
 
 	for( c = seq; c < seqZ; c++ )
@@ -548,8 +546,6 @@ server_requestHandler.expireUpdateSleep =
 			'changeWrapRay', change_wrapRay.create( )
 		);
 
-	// FIXME this should be in the ajax/http part
-	//        of the server
 	log_ajax( '->', asw );
 
 	result = sleep.result;
