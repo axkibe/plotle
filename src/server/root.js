@@ -432,7 +432,7 @@ prototype.prepareInventory =
 	// takes resource from the the roster
 	for( a = 0, aZ = server_roster.length; a < aZ; a++ )
 	{
-		resource = server_roster[ a ];
+		resource = server_roster.get( a );
 
 		if( resource.devel && !config.shell_devel ) continue;
 
