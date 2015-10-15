@@ -671,41 +671,7 @@ prototype.dragStop =
 
 		case 'action_createRelation' :
 
-			switch( action.relationState )
-			{
-
-				case 'start' :
-
-					root.create( 'action', undefined );
-
-					break;
-
-				case 'hadSelect' :
-
-					if( action.toItemPath )
-					{
-						item = this.get( action.toItemPath.get( -1 ) );
-
-						item.createRelationStop( p );
-					}
-
-					root.create( 'action', undefined );
-
-					break;
-
-				case 'pan' :
-
-					root.create(
-						'action',
-							action.create( 'relationState', 'start' )
-					);
-
-					break;
-
-				default :
-
-					throw new Error( );
-			}
+			this._stopCreateRelation( p, shift, ctrl );
 
 			break;
 
@@ -1102,29 +1068,13 @@ prototype.specialKey =
 	{
 		switch( key )
 		{
-			case 'z' :
+			case 'z' : root.doTracker.undo( ); return;
 
-				root.doTracker.undo( );
+			case 'y' : root.doTracker.redo( ); return;
 
-				return;
+			case ',' : this._changeZoom(  1 ); return;
 
-			case 'y' :
-
-				root.doTracker.redo( );
-
-				return;
-
-			case ',' :
-
-				this._changeZoom(  1 );
-
-				return;
-
-			case '.' :
-
-				this._changeZoom( -1 );
-
-				return;
+			case '.' : this._changeZoom( -1 ); return;
 		}
 	}
 
@@ -1291,6 +1241,53 @@ prototype._stopCreateGeneric =
 	}
 };
 
+
+/*
+| Stops creating a relation.
+*/
+prototype._stopCreateRelation =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		item;
+
+	action = this._action;
+
+	switch( action.relationState )
+	{
+
+		case 'start' : root.create( 'action', undefined ); return;
+
+		case 'hadSelect' :
+
+			if( action.toItemPath )
+			{
+				item = this.get( action.toItemPath.get( -1 ) );
+
+				item.createRelationStop( p );
+			}
+
+			root.create( 'action', undefined );
+
+			return;
+
+		case 'pan' :
+
+			root.create(
+				'action',
+					action.create( 'relationState', 'start' )
+			);
+
+			return;
+
+		default : throw new Error( );
+	}
+};
 
 
 } )( );
