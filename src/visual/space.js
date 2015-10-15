@@ -713,25 +713,21 @@ prototype.dragStop =
 */
 prototype.dragMove =
 	function(
-		p         // cursor point ( in view )
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,     // cursor point ( in view )
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	var
 		action,
 		align,
 		dy,
-		dp,
 		fs,
 		item,
-		model,
 		pd,
-		pnw,
 		r,
 		resized,
 		rZ,
-		transItem,
 		view,
 		zone;
 
@@ -741,81 +737,11 @@ prototype.dragMove =
 
 	if( !action ) return 'pointer';
 
-	dp = p.fromView( view );
-
 	switch( action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			zone = euclid_rect.createArbitrary( action.startPoint, dp );
-
-			switch( action.itemType )
-			{
-				case visual_note :
-
-					model = shell_models.note;
-
-					transItem =
-						model.create(
-							'fabric', model.fabric.create( 'zone', zone ),
-							'view', view
-						);
-
-					break;
-
-				case visual_portal :
-
-					model = shell_models.portal;
-
-					transItem =
-						model.create(
-							'fabric', model.fabric.create( 'zone', zone ),
-							'view', view
-						);
-
-					break;
-
-				case visual_label :
-
-					model = shell_models.label;
-
-					fs =
-						Math.max(
-							model.doc.fontsize
-							* zone.height
-							/ model.zone.height,
-							gruga_label.minSize
-						);
-
-					resized =
-						model.create(
-							'fabric', model.fabric.create( 'fontsize', fs )
-						);
-
-					pnw =
-						( dp.x > action.startPoint.x )
-						? zone.pnw
-						: euclid_point.create(
-							'x', zone.pse.x - resized.zone.width,
-							'y', zone.pnw.y
-						);
-
-					transItem =
-						resized.create(
-							'fabric', resized.fabric.create( 'pnw', pnw ),
-							'view', view
-						);
-
-					break;
-
-				default : throw new Error( );
-			}
-
-			root.create(
-				'action', action.create( 'transItem', transItem )
-			);
-
-			return 'pointer';
+			return this._moveCreateGeneric( p, shift, ctrl );
 
 		case 'action_createRelation' :
 
@@ -1100,6 +1026,105 @@ prototype._changeZoom =
 	pm = this.view.baseFrame.pc.fromView( this.view );
 
 	root.create( 'view', this.view.review( df, pm ) );
+};
+
+
+/*
+| Moves during creating a generic item.
+*/
+prototype._moveCreateGeneric =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		dp,
+		fs,
+		model,
+		pnw,
+		resized,
+		transItem,
+		view,
+		zone;
+
+	action = this._action;
+
+	view = this.view;
+
+	dp = p.fromView( view );
+
+	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+
+	switch( action.itemType )
+	{
+		case visual_note :
+
+			model = shell_models.note;
+
+			transItem =
+				model.create(
+					'fabric', model.fabric.create( 'zone', zone ),
+					'view', view
+				);
+
+			break;
+
+		case visual_portal :
+
+			model = shell_models.portal;
+
+			transItem =
+				model.create(
+					'fabric', model.fabric.create( 'zone', zone ),
+					'view', view
+				);
+
+			break;
+
+		case visual_label :
+
+			model = shell_models.label;
+
+			fs =
+				Math.max(
+					model.doc.fontsize
+					* zone.height
+					/ model.zone.height,
+					gruga_label.minSize
+				);
+
+			resized =
+				model.create(
+					'fabric', model.fabric.create( 'fontsize', fs )
+				);
+
+			pnw =
+				( dp.x > action.startPoint.x )
+				? zone.pnw
+				: euclid_point.create(
+					'x', zone.pse.x - resized.zone.width,
+					'y', zone.pnw.y
+				);
+
+			transItem =
+				resized.create(
+					'fabric', resized.fabric.create( 'pnw', pnw ),
+					'view', view
+				);
+
+			break;
+
+		default : throw new Error( );
+	}
+
+	root.create(
+		'action', action.create( 'transItem', transItem )
+	);
+
+	return 'pointer';
 };
 
 
