@@ -14,28 +14,36 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'server_inventory',
-		twig :
-			[ 'server_resource' ]
+	return{
+		id : 'server_inventory',
+		twig : [ 'server_resource' ]
 	};
 }
 
 
 var
-	inventory;
+	config,
+	fs,
+	prototype,
+	server_inventory,
+	resume;
 
-inventory = require( 'jion' ).this( module );
+config = require( '../../config' );
 
+server_inventory = require( 'jion' ).this( module );
 
+prototype = server_inventory.prototype;
+
+fs = require( 'fs' );
+
+resume = require( 'suspend' ).resume;
 
 /*
 | Returns an inventory with a resource added/updated.
 */
-inventory.prototype.updateResource =
+prototype.updateResource =
 	function(
-		res
+		resource
 	)
 {
 	var
@@ -46,15 +54,15 @@ inventory.prototype.updateResource =
 
 	inv = this;
 
-	for( a = 0, aZ = res.aliases.length; a < aZ; a++ )
+	for( a = 0, aZ = resource.aliases.length; a < aZ; a++ )
 	{
-		alias = res.aliases.get( a );
+		alias = resource.aliases.get( a );
 
 		inv =
 			inv.create(
 				inv.get( alias ) ? 'twig:set' : 'twig:add',
 				alias,
-				res
+				resource
 			);
 	}
 
@@ -65,9 +73,9 @@ inventory.prototype.updateResource =
 /*
 | Returns an inventory with a resource removed.
 */
-inventory.prototype.removeResource =
+prototype.removeResource =
 	function(
-		res
+		resource
 	)
 {
 	var
@@ -77,21 +85,104 @@ inventory.prototype.removeResource =
 
 	inv = this;
 
-	for(
-		a = 0, aZ = res.aliases.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = resource.aliases.length; a < aZ; a++ )
 	{
 		inv =
 			inv.create(
 				'twig:remove',
-				res.aliases.get( a ),
-				res
+				resource.aliases.get( a ),
+				resource
 			);
 	}
 
 	return inv;
+};
+
+
+/*
+| Prepares a resource.
+*/
+prototype.prepareResource =
+	function*(
+		resource
+	)
+{
+	var
+		jionCodeResource,
+		mtime,
+		realpath,
+		that;
+
+	if( resource.filePath )
+	{
+		realpath =
+			resource.realpath
+			? resource.realpath
+			: (
+				yield fs.realpath(
+					root.serverDir + resource.filePath,
+					resume( )
+				)
+			);
+	}
+
+	if( config.shell_devel && realpath )
+	{
+		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
+	}
+
+	if( resource.hasJion )
+	{
+		if( config.shell_devel ) delete require.cache[ realpath ];
+
+		that = require( realpath );
+
+		if( !that.source )
+		{
+			throw new Error(
+				'Jion source did not export its source: '
+				+ resource.filePath
+			);
+		}
+
+		resource =
+			resource.create(
+				'data', that.source,
+				'hasJson', that.hasJson,
+				'jionId', that.jionId,
+				'timestamp', mtime,
+				'realpath', realpath
+			);
+
+		jionCodeResource =
+			resource.create(
+				'aliases', undefined,
+				'data', that.jioncode,
+				'filePath',
+					// FIXME let the jion module worry about this
+					'jioncode/'
+					+ resource.filePath.replace( /\//g, '-' ),
+				'hasJion', false,
+				'jionHolder', resource
+			);
+
+		root.create(
+			'inventory', root.inventory.updateResource( jionCodeResource )
+		);
+	}
+	else if( resource.filePath )
+	{
+		resource =
+			resource.create(
+				'data', yield fs.readFile( resource.filePath, resume( ) ),
+				'timestamp', mtime,
+				'realpath', realpath
+			);
+	}
+
+	root.create(
+		'inventory', root.inventory.updateResource( resource )
+	);
 };
 
 

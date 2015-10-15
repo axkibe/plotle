@@ -1,7 +1,5 @@
 /*
 | Holds a space.
-|
-| FIXME this should not have skids.
 */
 
 

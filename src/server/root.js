@@ -51,6 +51,11 @@ if( GLOBAL.JION )
 				comment : 'the database backend',
 				type : 'database_repository'
 			},
+			serverDir :
+			{
+				comment : 'server directory',
+				type : 'string'
+			},
 			spaces :
 			{
 				comment : 'all spaces',
@@ -138,7 +143,7 @@ var
 	serverDir,
 	hash_sha1,
 	startup,
-	sus,
+	suspend,
 	uglify,
 	url,
 	util,
@@ -188,9 +193,9 @@ server_upSleepGroup = require( './upSleepGroup' );
 
 hash_sha1 = require( '../hash/sha1' );
 
-sus = require( 'suspend' );
+suspend = require( 'suspend' );
 
-resume = sus.resume;
+resume = suspend.resume;
 
 uglify = require( 'uglify-js' );
 
@@ -245,18 +250,13 @@ startup =
 
 	server_root.create(
 		'inventory', server_inventory.create( ),
-
 		'nextSleepID', 1,
-
 		'repository', yield* database_repository.connect( config ),
-
 		'spaces', server_spaceNexus.create( ),
-
 		'upSleeps', server_upSleepGroup.create( ),
-
 		'nextVisitor', 1000,
-
-		'userNexus', server_userNexus.create( )
+		'userNexus', server_userNexus.create( ),
+		'serverDir', serverDir
 	);
 
 	yield* root.prepareInventory( );
@@ -274,7 +274,7 @@ startup =
 			result
 		)
 		{
-			sus( root.requestListener ).call( root, request, result );
+			suspend( root.requestListener ).call( root, request, result );
 		}
 	).listen( config.port, config.ip, resume( ) );
 
@@ -436,7 +436,7 @@ prototype.prepareInventory =
 
 		if( resource.devel && !config.shell_devel ) continue;
 
-		yield* this.prepareResource( resource );
+		yield* root.inventory.prepareResource( resource );
 	}
 
 	// the bundle itself
@@ -672,92 +672,6 @@ prototype.prepareInventory =
 			root.inventory.get( bundleFilePath ).gzip.length
 		);
 	}
-};
-
-
-/*
-| Prepares a resource.
-|
-| FIXME move to inventory
-*/
-prototype.prepareResource =
-	function*(
-		resource
-	)
-{
-	var
-		jionCodeResource,
-		mtime,
-		realpath,
-		that;
-
-	if( resource.filePath )
-	{
-		realpath =
-			resource.realpath
-			? resource.realpath
-			: (
-				yield fs.realpath( serverDir + resource.filePath, resume( ) )
-			);
-	}
-
-	if( config.shell_devel && realpath )
-	{
-		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
-	}
-
-	if( resource.hasJion )
-	{
-		if( config.shell_devel ) delete require.cache[ realpath ];
-
-		that = require( realpath );
-
-		if( !that.source )
-		{
-			throw new Error(
-				'Jion source did not export its source: '
-				+ resource.filePath
-			);
-		}
-
-		resource =
-			resource.create(
-				'data', that.source,
-				'hasJson', that.hasJson,
-				'jionId', that.jionId,
-				'timestamp', mtime,
-				'realpath', realpath
-			);
-
-		jionCodeResource =
-			resource.create(
-				'aliases', undefined,
-				'data', that.jioncode,
-				'filePath',
-					// FIXME let the jion module worry aabout this
-					'jioncode/'
-					+ resource.filePath.replace( /\//g, '-' ),
-				'hasJion', false,
-				'jionHolder', resource
-			);
-
-		root.create(
-			'inventory', root.inventory.updateResource( jionCodeResource )
-		);
-	}
-	else if( resource.filePath )
-	{
-		resource =
-			resource.create(
-				'data', yield fs.readFile( resource.filePath, resume( ) ),
-				'timestamp', mtime,
-				'realpath', realpath
-			);
-	}
-
-	root.create(
-		'inventory', root.inventory.updateResource( resource )
-	);
 };
 
 
@@ -1263,7 +1177,7 @@ prototype.requestListener =
 		if( stat && stat.mtime > resource.timestamp )
 		{
 			// when this is a jion its holder is prepared instead.
-			yield* root.prepareResource(
+			yield* root.inventory.prepareResource(
 				resource.jionHolder || resource
 			);
 
@@ -1436,13 +1350,13 @@ prototype.webAjax =
 		'end',
 		function( )
 		{
-			sus( handler )( );
+			suspend( handler )( );
 		}
 	);
 };
 
 
-sus(
+suspend(
 	function*( )
 {
 	yield* startup( );
