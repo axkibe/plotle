@@ -725,9 +725,7 @@ prototype.dragMove =
 		fs,
 		item,
 		pd,
-		r,
 		resized,
-		rZ,
 		view,
 		zone;
 
@@ -745,44 +743,8 @@ prototype.dragMove =
 
 		case 'action_createRelation' :
 
-			if( action.relationState === 'pan' )
-			{
-				// panning while creating a relation
+			return this._moveCreateRelation( p, shift, ctrl );
 
-				pd = p.sub( action.startPoint );
-
-				root.create(
-					'view',
-						view.create(
-							'pan',
-								action.pan.add(
-									pd.x / view.zoom,
-									pd.y / view.zoom
-								)
-						)
-				);
-
-				return 'pointer';
-			}
-
-			// Looks if the action is dragging to an item
-			for( r = 0, rZ = this.length; r < rZ; r++ )
-			{
-				if( this.atRank( r ).createRelationMove( p, action ) )
-				{
-					return 'pointer';
-				}
-			}
-
-			root.create(
-				'action',
-					action.create(
-						'toItemPath', undefined,
-						'toPoint', p
-					)
-			);
-
-			return 'pointer';
 
 		case 'action_pan' :
 
@@ -1122,6 +1084,68 @@ prototype._moveCreateGeneric =
 
 	root.create(
 		'action', action.create( 'transItem', transItem )
+	);
+
+	return 'pointer';
+};
+
+
+/*
+| Moves during creating a relation.
+*/
+prototype._moveCreateRelation =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		pd,
+		r,
+		rZ,
+		view;
+
+	action = this._action;
+
+	view = this.view;
+
+	if( action.relationState === 'pan' )
+	{
+		// panning while creating a relation
+
+		pd = p.sub( action.startPoint );
+
+		root.create(
+			'view',
+				view.create(
+					'pan',
+						action.pan.add(
+							pd.x / view.zoom,
+							pd.y / view.zoom
+						)
+				)
+		);
+
+		return 'pointer';
+	}
+
+	// Looks if the action is dragging to an item
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		if( this.atRank( r ).createRelationMove( p, action ) )
+		{
+			return 'pointer';
+		}
+	}
+
+	root.create(
+		'action',
+			action.create(
+				'toItemPath', undefined,
+				'toPoint', p
+			)
 	);
 
 	return 'pointer';
