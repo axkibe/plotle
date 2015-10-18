@@ -724,7 +724,6 @@ prototype.dragMove =
 		dy,
 		fs,
 		item,
-		pd,
 		resized,
 		view,
 		zone;
@@ -745,40 +744,13 @@ prototype.dragMove =
 
 			return this._moveCreateRelation( p, shift, ctrl );
 
-
 		case 'action_pan' :
 
-			pd = p.sub( action.startPoint );
-
-			root.create(
-				'view',
-					view.create(
-						'pan',
-							action.pan.add(
-								Math.round( pd.x / view.zoom ),
-								Math.round( pd.y / view.zoom )
-							)
-					)
-			);
-
-			return 'pointer';
+			return this._movePan( p, shift, ctrl );
 
 		case 'action_itemDrag' :
 
-			item = root.getPath( action.itemPath );
-
-			root.create(
-				'action',
-					action.create(
-						'toPnw',
-							item.fabric.pnw.add(
-								view.dex( p.x ) - action.startPoint.x,
-								view.dey( p.y ) - action.startPoint.y
-						)
-					)
-			);
-
-			return true;
+			return this._moveItemDrag( p, shift, ctrl );
 
 		case 'action_itemResize' :
 
@@ -1145,6 +1117,78 @@ prototype._moveCreateRelation =
 			action.create(
 				'toItemPath', undefined,
 				'toPoint', p
+			)
+	);
+
+	return 'pointer';
+};
+
+
+/*
+| Moves during item dragging.
+*/
+prototype._moveItemDrag =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		item,
+		view;
+
+	action = this._action;
+
+	item = root.getPath( action.itemPath );
+
+	view = this.view;
+
+	root.create(
+		'action',
+			action.create(
+				'toPnw',
+					item.fabric.pnw.add(
+						view.dex( p.x ) - action.startPoint.x,
+						view.dey( p.y ) - action.startPoint.y
+				)
+			)
+	);
+
+	return true;
+};
+
+
+/*
+| Moves during panning.
+*/
+prototype._movePan =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		pd,
+		view;
+
+	action = this._action;
+
+	view = this.view;
+
+	pd = p.sub( action.startPoint );
+
+	root.create(
+		'view',
+			view.create(
+				'pan',
+					action.pan.add(
+						Math.round( pd.x / view.zoom ),
+						Math.round( pd.y / view.zoom )
+					)
 			)
 	);
 
