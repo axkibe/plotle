@@ -708,8 +708,6 @@ prototype.dragStop =
 
 /*
 | Moving during an operation with the mouse button held down.
-|
-| FIXME split this up
 */
 prototype.dragMove =
 	function(
@@ -719,13 +717,9 @@ prototype.dragMove =
 	)
 {
 	var
-		action,
-		item,
-		view;
+		action;
 
 	action = this._action;
-
-	view = this.view;
 
 	if( !action ) return 'pointer';
 
@@ -754,11 +748,7 @@ prototype.dragMove =
 
 		case 'action_scrolly' :
 
-			item = this.get( action.itemPath.get( -1 ) );
-
-			if( item ) item.dragMove( p );
-
-			return 'move';
+			return this._moveScrollY( p, shift, ctrl );
 
 		default :
 
@@ -1215,6 +1205,27 @@ prototype._movePan =
 	);
 
 	return 'pointer';
+};
+
+
+/*
+| Moves during scrolling.
+*/
+prototype._moveScrollY =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		item;
+
+	item = this.get( this._action.itemPath.get( -1 ) );
+
+	if( item ) item.dragMove( p );
+
+	return 'move';
 };
 
 
