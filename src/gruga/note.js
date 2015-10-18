@@ -21,7 +21,10 @@ var
 'use strict';
 
 
-gruga_note =
+gruga_note = { };
+
+
+gruga_note.facets =
 	design_facetRay.create(
 		'ray:append',
 		// default
@@ -61,6 +64,12 @@ gruga_note =
 				)
 		)
 	);
+
+
+gruga_note.minWidth = 30;
+
+
+gruga_note.minHeight = 30;
 
 
 } )( );

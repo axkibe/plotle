@@ -64,186 +64,21 @@ prototype = euclid_rect.prototype;
 
 
 /*
-| Computes an ellipse modelled relative to this rect.
+| returns a rect moved by a point or x/y
+|
+| add( point )   -or-
+| add( x, y  )
 */
-prototype.computeEllipse =
+prototype.add =
 	function(
-		model
+		a1,
+		a2
 	)
 {
-	return(
-		euclid_ellipse.create(
-			'pnw', model.pnw.compute( this ),
-			'pse', model.pse.compute( this )
-		)
-	);
-};
-
-
-/*
-| Creates a rect by two arbitrary corner points
-*/
-euclid_rect.createArbitrary =
-	function(
-		p1,
-		p2
-	)
-{
-	var
-		pnw,
-		pse;
-
-	if(
-		p2.x >= p1.x
-		&&
-		p2.y >= p1.y
-	)
-	{
-		pnw = p1;
-
-		pse = p2;
-	}
-	else if(
-		p1.x >= p2.x &&
-		p1.y >= p2.y
-	)
-	{
-		pnw = p2;
-
-		pse = p1;
-	}
-	else if(
-		p2.x >= p1.x &&
-		p1.y >= p2.y
-	)
-	{
-		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
-
-		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
-	}
-	else if(
-		p1.x >= p2.x &&
-		p2.y >= p1.y
-	)
-	{
-		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
-
-		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
-	}
-	else
-	{
-		throw new Error( );
-	}
-
-	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
-};
-
-
-/*
-| Rectangle height.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-{
-	return this.pse.y - this.pnw.y;
-}
-);
-
-
-/*
-| Returns this rect repositioned and resized to a view.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	if( view.zoom === 1 )
-	{
-		return(
-			( view.pan.x === 0 && view.pan.y === 0 )
-			? this
-			: this.add( view.pan )
-		);
-	}
-
-	return(
-		this.create(
-			'pnw', this.pnw.inView( view ),
-			'pse', this.pse.inView( view )
-		)
-	);
-};
-
-
-/*
-| Rectangle width.
-*/
-jion.lazyValue(
-	prototype,
-	'width',
-	function( )
-{
-	return this.pse.x - this.pnw.x;
-}
-);
-
-
-/*
-| A rectangle of same size with pnw at 0/0
-*/
-jion.lazyValue(
-	prototype,
-	'zeropnw',
-	function( )
-{
-	if( this.pnw.x === 0 && this.pnw.y === 0 )
-	{
-		return this;
-	}
-	else
-	{
-		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse', this.pse.sub( this.pnw )
-			)
-		);
-	}
-}
-);
-
-
-/*
-| Returns a rectangle thats reduced on every side by a margin object
-*/
-prototype.reduce =
-	function(
-		margin
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( margin.reflect !== 'euclid_margin' ) throw new Error( );
-/**/}
-
-	// allows margins to reduce the rect to zero size without erroring.
-
 	return(
 		euclid_rect.create(
-			'pnw',
-				this.pnw.create(
-					'x', this.pnw.x + margin.e,
-					'y', this.pnw.y + margin.n
-				),
-			'pse',
-				this.pse.create(
-					'x', this.pse.x - margin.w,
-					'y', this.pse.y - margin.s
-				)
+			'pnw', this.pnw.add( a1, a2 ),
+			'pse', this.pse.add( a1, a2 )
 		)
 	);
 };
@@ -387,57 +222,79 @@ prototype.cardinalResize =
 
 
 /*
-| Point in the center.
+| Computes an ellipse modelled relative to this rect.
 */
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
+prototype.computeEllipse =
+	function(
+		model
+	)
 {
 	return(
-		euclid_point.create(
-			'x', math_half( this.pse.x + this.pnw.x ),
-			'y', math_half( this.pse.y + this.pnw.y )
+		euclid_ellipse.create(
+			'pnw', model.pnw.compute( this ),
+			'pse', model.pse.compute( this )
 		)
 	);
-}
-);
+};
 
 
 /*
-| Point in the north.
+| Creates a rect by two arbitrary corner points
 */
-jion.lazyValue(
-	prototype,
-	'pn',
-	function( )
+euclid_rect.createArbitrary =
+	function(
+		p1,
+		p2
+	)
 {
-	return(
-		euclid_point.create(
-			'x', math_half( this.pse.x + this.pnw.x ),
-			'y', this.pnw.y
-		)
-	);
-}
-);
+	var
+		pnw,
+		pse;
 
+	if(
+		p2.x >= p1.x
+		&&
+		p2.y >= p1.y
+	)
+	{
+		pnw = p1;
 
-/*
-| West point.
-*/
-jion.lazyValue(
-	prototype,
-	'w',
-	function( )
-{
-	return(
-		euclid_point.create(
-			'x', this.pnw.x,
-			'y', math_half( this.pse.y + this.pnw.y )
-		)
-	);
-}
-);
+		pse = p2;
+	}
+	else if(
+		p1.x >= p2.x &&
+		p1.y >= p2.y
+	)
+	{
+		pnw = p2;
+
+		pse = p1;
+	}
+	else if(
+		p2.x >= p1.x &&
+		p1.y >= p2.y
+	)
+	{
+		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
+
+		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
+	}
+	else if(
+		p1.x >= p2.x &&
+		p2.y >= p1.y
+	)
+	{
+		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
+
+		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
+	}
+	else
+	{
+		throw new Error( );
+	}
+
+	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
+};
 
 
 /*
@@ -459,95 +316,137 @@ jion.lazyValue(
 
 
 /*
-| returns a rect moved by a point or x/y
-|
-| add( point )   -or-
-| add( x, y  )
+| Returns a rect which has at least
+| minHeight / minWidth
 */
-prototype.add =
+prototype.ensureMinSize =
 	function(
-		a1,
-		a2
+		minHeight,
+		minWidth
 	)
 {
+	if( this.width >= minWidth && this.height >= minHeight ) return this;
+
+	return(
+		this.create(
+			'pse',
+				this.pse.create(
+					'x', Math.max( this.pse.x, this.pnw.x + minWidth ),
+					'y', Math.max( this.pse.y, this.pnw.y + minHeight )
+				)
+		)
+	);
+};
+
+
+/*
+| Rectangle height.
+*/
+jion.lazyValue(
+	prototype,
+	'height',
+	function( )
+{
+	return this.pse.y - this.pnw.y;
+}
+);
+
+
+/*
+| Returns this rect repositioned and resized to a view.
+*/
+prototype.inView =
+	function(
+		view
+	)
+{
+	if( view.zoom === 1 )
+	{
+		return(
+			( view.pan.x === 0 && view.pan.y === 0 )
+			? this
+			: this.add( view.pan )
+		);
+	}
+
+	return(
+		this.create(
+			'pnw', this.pnw.inView( view ),
+			'pse', this.pse.inView( view )
+		)
+	);
+};
+
+
+/*
+| Returns a rectangle thats reduced on every side by a margin object
+*/
+prototype.reduce =
+	function(
+		margin
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( margin.reflect !== 'euclid_margin' ) throw new Error( );
+/**/}
+
+	// allows margins to reduce the rect to zero size without erroring.
+
 	return(
 		euclid_rect.create(
-			'pnw', this.pnw.add( a1, a2 ),
-			'pse', this.pse.add( a1, a2 )
+			'pnw',
+				this.pnw.create(
+					'x', this.pnw.x + margin.e,
+					'y', this.pnw.y + margin.n
+				),
+			'pse',
+				this.pse.create(
+					'x', this.pse.x - margin.w,
+					'y', this.pse.y - margin.s
+				)
 		)
 	);
 };
 
 
 /*
-| Returns a rect moved by -point or -x/-y.
-|
-| sub(point)   -or-
-| sub(x, y)
+| Rectangle width.
 */
-prototype.sub =
-	function(
-		a1,
-		a2
-	)
+jion.lazyValue(
+	prototype,
+	'width',
+	function( )
 {
-	return(
-		euclid_rect.create(
-			'pnw', this.pnw.sub( a1, a2 ),
-			'pse', this.pse.sub( a1, a2 )
-		)
-	);
-};
+	return this.pse.x - this.pnw.x;
+}
+);
 
 
 /*
-| Returns true if this rectangle is the same as another
+| A rectangle of same size with pnw at 0/0
 */
-prototype.equals =
-	function(
-		rect
-	)
+jion.lazyValue(
+	prototype,
+	'zeropnw',
+	function( )
 {
-	return(
-		this === rect
-		||
-		(
-			this.pnw.equals( rect.pnw ) &&
-			this.pse.equals( rect.pse )
-		)
-	);
-};
-
-
-/*
-| Returns true if point is within this rect.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	var
-		x,
-		y,
-		pnw,
-		pse;
-
-	x = p.x;
-
-	y = p.y;
-
-	pnw = this.pnw;
-
-	pse = this.pse;
-
-	return(
-		x >= pnw.x
-		&& y >= pnw.y
-		&& x <= pse.x
-		&& y <= pse.y
-	);
-};
+	if( this.pnw.x === 0 && this.pnw.y === 0 )
+	{
+		return this;
+	}
+	else
+	{
+		return(
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse', this.pse.sub( this.pnw )
+			)
+		);
+	}
+}
+);
 
 
 /*
@@ -626,6 +525,134 @@ prototype.getProjection =
 
 	return pc;
 };
+
+
+/*
+| Point in the center.
+*/
+jion.lazyValue(
+	prototype,
+	'pc',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pse.x + this.pnw.x ),
+			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
+);
+
+
+/*
+| Point in the north.
+*/
+jion.lazyValue(
+	prototype,
+	'pn',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pse.x + this.pnw.x ),
+			'y', this.pnw.y
+		)
+	);
+}
+);
+
+
+/*
+| West point.
+*/
+jion.lazyValue(
+	prototype,
+	'w',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', this.pnw.x,
+			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
+);
+
+
+/*
+| Returns a rect moved by -point or -x/-y.
+|
+| sub(point)   -or-
+| sub(x, y)
+*/
+prototype.sub =
+	function(
+		a1,
+		a2
+	)
+{
+	return(
+		euclid_rect.create(
+			'pnw', this.pnw.sub( a1, a2 ),
+			'pse', this.pse.sub( a1, a2 )
+		)
+	);
+};
+
+
+/*
+| Returns true if this rectangle is the same as another
+|
+| FIXME jion should handle this.
+*/
+prototype.equals =
+	function(
+		rect
+	)
+{
+	return(
+		this === rect
+		||
+		(
+			this.pnw.equals( rect.pnw ) &&
+			this.pse.equals( rect.pse )
+		)
+	);
+};
+
+
+/*
+| Returns true if point is within this rect.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+	var
+		x,
+		y,
+		pnw,
+		pse;
+
+	x = p.x;
+
+	y = p.y;
+
+	pnw = this.pnw;
+
+	pse = this.pse;
+
+	return(
+		x >= pnw.x
+		&& y >= pnw.y
+		&& x <= pse.x
+		&& y <= pse.y
+	);
+};
+
 
 
 } )( );

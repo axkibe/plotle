@@ -889,6 +889,8 @@ prototype._moveCreateGeneric =
 
 			model = shell_models.note;
 
+			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
+
 			transItem =
 				model.create(
 					'fabric', model.fabric.create( 'zone', zone ),
@@ -900,6 +902,8 @@ prototype._moveCreateGeneric =
 		case visual_portal :
 
 			model = shell_models.portal;
+
+			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
 			transItem =
 				model.create(
@@ -1093,7 +1097,6 @@ prototype._moveItemResize =
 					item.minWidth
 				);
 
-
 			root.create(
 				'action',
 					action.create(
@@ -1285,7 +1288,14 @@ prototype._startCreateGeneric =
 					'fabric',
 						model.fabric.create(
 							'zone',
-								euclid_rect.create( 'pnw', dp, 'pse', dp )
+								euclid_rect.create(
+									'pnw', dp,
+									'pse',
+										dp.add(
+											model.minWidth,
+											model.minHeight
+										)
+								)
 						),
 					'view', this.view
 				);

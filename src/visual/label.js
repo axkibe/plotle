@@ -103,6 +103,16 @@ prototype = visual_label.prototype;
 
 
 /*
+| Hack to fix visual_note:static references
+*/
+visual_label.equals =
+	function( o )
+{
+	return o === this;
+};
+
+
+/*
 | Resize handles to show on labels
 */
 visual_label.handles =

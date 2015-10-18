@@ -55,8 +55,6 @@ theme =
 	*/
 	note :
 	{
-		minWidth : 30,
-		minHeight : 30,
 		innerMargin  :
 			euclid_margin.create( 'n', 4, 'e', 5, 's', 4, 'w', 5 ),
 		cornerRadius : 8,

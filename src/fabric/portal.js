@@ -88,6 +88,8 @@ prototype._init =
 
 	zone = this.zone;
 
+	// FIXME do not modify zone data here
+
 	minWidth = theme.portal.minWidth;
 
 	minHeight = theme.portal.minHeight;

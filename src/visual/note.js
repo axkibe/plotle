@@ -120,6 +120,16 @@ prototype = visual_note.prototype;
 
 
 /*
+| Hack to fix visual_note:static references
+*/
+visual_note.equals =
+	function( o )
+{
+	return o === this;
+};
+
+
+/*
 | Resize handles to show on notes.
 */
 visual_note.handles =
@@ -346,7 +356,7 @@ prototype.draw =
 	if( action && action.reflect === 'action_createRelation' )
 	{
 		display.border(
-			gruga_note.getFacet( 'highlight', true ).border,
+			gruga_note.facets.getFacet( 'highlight', true ).border,
 			this.vSilhoutte
 		);
 	}
@@ -418,13 +428,13 @@ prototype.positioning = 'zone';
 /*
 | Minimum height.
 */
-prototype.minHeight = theme.note.minHeight;
+prototype.minHeight = gruga_note.minHeight;
 
 
 /*
 | Minimum width.
 */
-prototype.minWidth = theme.note.minWidth;
+prototype.minWidth = gruga_note.minWidth;
 
 
 /*
@@ -706,7 +716,7 @@ jion.lazyValue(
 
 		doc = this.doc;
 
-		facet = gruga_note.getFacet( );
+		facet = gruga_note.facets.getFacet( );
 
 		sbary = this.scrollbarY;
 

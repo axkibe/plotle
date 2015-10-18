@@ -5,10 +5,8 @@
 */
 
 var
-	euclid_rect,
 	fabric_note,
-	jion,
-	theme;
+	jion;
 
 
 /*
@@ -82,38 +80,6 @@ prototype = fabric_note.prototype;
 prototype._init =
 	function( )
 {
-	var
-		minHeight,
-		minWidth,
-		zone;
-
-	zone = this.zone;
-
-	minWidth = theme.note.minWidth;
-
-	minHeight = theme.note.minHeight;
-
-	// FIXME modifying the zone here is not
-	//       nice since it could destroy change data.
-
-	if(
-		zone.width  < minWidth ||
-		zone.height < minHeight
-	)
-	{
-		zone =
-		this.zone =
-			euclid_rect.create(
-				'pnw',
-					zone.pnw,
-				'pse',
-					zone.pnw.add(
-						Math.max( minWidth, zone.width ),
-						Math.max( minHeight, zone.height )
-					)
-			);
-	}
-
 	this.doc =
 		this.doc.create(
 			'path', this.path && this.path.append( 'doc' )

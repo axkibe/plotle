@@ -108,7 +108,18 @@ if( NODE )
 
 visual_portal.reflect = 'visual_label:static';
 
+
 prototype = visual_portal.prototype;
+
+
+/*
+| Hack to fix visual_note:static references
+*/
+visual_portal.equals =
+	function( o )
+{
+	return o === this;
+};
 
 
 /*
@@ -517,18 +528,6 @@ jion.lazyValue(
 		);
 	}
 );
-
-
-/*
-| Minimum height.
-*/
-prototype.minHeight = theme.portal.minHeight;
-
-
-/*
-| Minimum width.
-*/
-prototype.minWidth = theme.portal.minWidth;
 
 
 /*
