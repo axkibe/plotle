@@ -720,13 +720,8 @@ prototype.dragMove =
 {
 	var
 		action,
-		align,
-		dy,
-		fs,
 		item,
-		resized,
-		view,
-		zone;
+		view;
 
 	action = this._action;
 
@@ -754,102 +749,8 @@ prototype.dragMove =
 
 		case 'action_itemResize' :
 
-			item = root.getPath( action.itemPath );
+			return this._moveItemResize( p, shift, ctrl );
 
-			align = action.align;
-
-			switch( item.positioning )
-			{
-
-				case 'zone' :
-
-					zone =
-						item.fabric.zone.cardinalResize(
-							align,
-							view.dex( p.x ) - action.startPoint.x,
-							view.dey( p.y ) - action.startPoint.y,
-							item.minHeight,
-							item.minWidth
-						);
-
-
-					root.create(
-						'action',
-							action.create(
-								'toPnw', zone.pnw,
-								'toPse', zone.pse
-							)
-					);
-
-					return true;
-
-				case 'pnw/fontsize' :
-
-					switch( action.align )
-					{
-						case 'ne' :
-						case 'nw' :
-
-							dy = action.startPoint.y - view.dey( p.y );
-
-							break;
-
-						case 'se' :
-						case 'sw' :
-
-							dy = view.dey( p.y ) - action.startPoint.y;
-
-							break;
-
-						default :
-
-							throw new Error( );
-					}
-
-					fs =
-						Math.max(
-							item.fabric.fontsize
-							* ( action.startZone.height + dy )
-							/ action.startZone.height,
-							gruga_label.minSize
-						);
-
-					resized =
-						item.create(
-							'path', undefined,
-							'fabric', item.fabric.create( 'fontsize', fs )
-						);
-
-					action =
-						action.create(
-							'toFontsize', fs,
-							'toPnw',
-								item.fabric.pnw.add(
-									( align === 'sw' || align === 'nw' )
-									? (
-										action.startZone.width -
-										resized.zone.width
-									)
-									: 0,
-									( align === 'ne' || align === 'nw' )
-									? (
-										action.startZone.height -
-										resized.zone.height
-									)
-									: 0
-								)
-						);
-
-						root.create( 'action', action );
-
-					return true;
-
-				default :
-
-					throw new Error( );
-			}
-
-			break;
 
 		case 'action_scrolly' :
 
@@ -1157,6 +1058,127 @@ prototype._moveItemDrag =
 	);
 
 	return true;
+};
+
+
+/*
+| Moves during item resizing.
+*/
+prototype._moveItemResize =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		align,
+		dy,
+		fs,
+		item,
+		resized,
+		view,
+		zone;
+
+	action = this._action;
+
+	align = action.align;
+
+	item = root.getPath( action.itemPath );
+
+	view = this.view;
+
+	switch( item.positioning )
+	{
+
+		case 'zone' :
+
+			zone =
+				item.fabric.zone.cardinalResize(
+					align,
+					view.dex( p.x ) - action.startPoint.x,
+					view.dey( p.y ) - action.startPoint.y,
+					item.minHeight,
+					item.minWidth
+				);
+
+
+			root.create(
+				'action',
+					action.create(
+						'toPnw', zone.pnw,
+						'toPse', zone.pse
+					)
+			);
+
+			return true;
+
+		case 'pnw/fontsize' :
+
+			switch( action.align )
+			{
+				case 'ne' :
+				case 'nw' :
+
+					dy = action.startPoint.y - view.dey( p.y );
+
+					break;
+
+				case 'se' :
+				case 'sw' :
+
+					dy = view.dey( p.y ) - action.startPoint.y;
+
+					break;
+
+				default :
+
+					throw new Error( );
+			}
+
+			fs =
+				Math.max(
+					item.fabric.fontsize
+					* ( action.startZone.height + dy )
+					/ action.startZone.height,
+					gruga_label.minSize
+				);
+
+			resized =
+				item.create(
+					'path', undefined,
+					'fabric', item.fabric.create( 'fontsize', fs )
+				);
+
+			action =
+				action.create(
+					'toFontsize', fs,
+					'toPnw',
+						item.fabric.pnw.add(
+							( align === 'sw' || align === 'nw' )
+							? (
+								action.startZone.width -
+								resized.zone.width
+							)
+							: 0,
+							( align === 'ne' || align === 'nw' )
+							? (
+								action.startZone.height -
+								resized.zone.height
+							)
+							: 0
+						)
+				);
+
+				root.create( 'action', action );
+
+			return true;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
