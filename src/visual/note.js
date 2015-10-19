@@ -236,9 +236,9 @@ prototype._init =
 		.create(
 			'clipsize', zone.zeropnw,
 			'fabric', fabric.doc,
-			'flowWidth', zone.width - theme.note.innerMargin.x,
+			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
-			'innerMargin', theme.note.innerMargin,
+			'innerMargin', gruga_note.innerMargin,
 			'mark', this.mark,
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
@@ -248,7 +248,7 @@ prototype._init =
 
 	dHeight = doc.fullsize.height;
 
-	aperture = this.zone.height - theme.note.innerMargin.y;
+	aperture = this.zone.height - gruga_note.innerMargin.y;
 
 	if( dHeight > aperture )
 	{
@@ -551,7 +551,7 @@ jion.lazyValue(
 
 	zone = this.zone;
 
-	cr = theme.note.cornerRadius;
+	cr = gruga_note.cornerRadius;
 
 	return(
 		euclid_roundRect.create(
@@ -673,7 +673,7 @@ jion.lazyValue(
 
 		zone = this.zone;
 
-		cr = theme.note.cornerRadius;
+		cr = gruga_note.cornerRadius;
 
 		return (
 			euclid_roundRect.create(

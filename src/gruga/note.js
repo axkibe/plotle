@@ -66,10 +66,30 @@ gruga_note.facets =
 	);
 
 
+/*
+| Inner distance of note to doc.
+*/
+gruga_note.innerMargin =
+	euclid_margin.create(
+		'n', 4,
+		'e', 5,
+		's', 4,
+		'w', 5
+	);
+
+
+/*
+| Minimum note size.
+*/
 gruga_note.minWidth = 30;
 
-
 gruga_note.minHeight = 30;
+
+
+/*
+| Radius of the corners.
+*/
+gruga_note.cornerRadius = 8;
 
 
 } )( );
