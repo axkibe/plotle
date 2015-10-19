@@ -67,14 +67,6 @@ theme =
 	*/
 	portal :
 	{
-		/*
-		| input fields on the portal
-		*/
-		input :
-		{
-			rounding : 3,
-			pitch : 5
-		},
 
 		/*
 		| moveto button on the portal
@@ -155,14 +147,6 @@ theme =
 		cdistance : 12,
 		edistance : 12
 	},
-
-
-	/*
-	| Relation
-	*/
-	relation :
-	{
-	}
 };
 
 } )( );

@@ -1347,9 +1347,9 @@ prototype._prepareField =
 
 	zone = this.zone;
 
-	pitch = theme.portal.input.pitch;
+	pitch = gruga_portal.inputPitch;
 
-	rounding = theme.portal.input.rounding;
+	rounding = gruga_portal.inputRounding;
 
 	text = this.fabric[ section ];
 

@@ -138,6 +138,10 @@ gruga_portal.inputFacets =
 	);
 
 
+gruga_portal.inputRounding = 3;
+
+gruga_portal.inputPitch = 5;
+
 
 gruga_portal.minWidth = 40;
 
