@@ -67,9 +67,6 @@ theme =
 	*/
 	portal :
 	{
-		minWidth : 40,
-		minHeight : 40,
-
 		/*
 		| input fields on the portal
 		*/

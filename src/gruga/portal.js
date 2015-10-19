@@ -21,7 +21,9 @@ var
 'use strict';
 
 
-gruga_portal =
+gruga_portal = { };
+
+gruga_portal.facets =
 	design_facetRay.create(
 		'ray:append',
 		// default
@@ -62,6 +64,85 @@ gruga_portal =
 				)
 		)
 	);
+
+
+/*
+| Facet design of buttons for the moveto form
+| and on the portal.
+*/
+gruga_portal.buttonFacets =
+	design_facetRay.create(
+		'ray:init',
+		[
+			// default state.
+			design_facet.create(
+				'group:init', { },
+				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 255, 141, 66 )
+					)
+			),
+			// hover
+			design_facet.create(
+				'group:init', { 'hover' : true },
+				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'border',
+					euclid_border.create(
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 141, 66 )
+					)
+			),
+			// focus
+			design_facet.create(
+				'group:init', { 'focus' : true },
+				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'border',
+					euclid_border.create(
+						'distance', 1,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					)
+			),
+			// focus and hover
+			design_facet.create(
+				'group:init', { 'focus' : true, 'hover' : true },
+				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'border',
+					euclid_border.create(
+						'distance', 1,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					)
+			)
+		]
+	);
+
+
+/*
+| Facet design of input fields on the portal.
+*/
+gruga_portal.inputFacets =
+	design_facetRay.create(
+		'ray:init',
+		[
+			// default state.
+			design_facet.create(
+				'fill', euclid_color.white,
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 255, 219, 165 )
+					)
+			)
+		]
+	);
+
+
+
+gruga_portal.minWidth = 40;
+
+
+gruga_portal.minHeight = 40;
 
 
 } )( );

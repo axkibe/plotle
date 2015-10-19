@@ -593,14 +593,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/portalButtonFacets.js',
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/gruga/portalInputFacets.js',
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/gruga/formFacet.js',
 		'inBundle', true
 	),

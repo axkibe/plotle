@@ -15,8 +15,6 @@ var
 	euclid_roundRect,
 	fabric_spaceRef,
 	gruga_portal,
-	gruga_portalButtonFacets,
-	gruga_portalInputFacets,
 	jion,
 	math_half,
 	visual_mark_caret,
@@ -445,7 +443,7 @@ prototype.draw =
 	if( action && action.reflect === 'action_createRelation' )
 	{
 		display.border(
-			gruga_portal.getFacet( 'highlight', true ).border,
+			gruga_portal.facets.getFacet( 'highlight', true ).border,
 			this.vSilhoutte
 		);
 	}
@@ -528,6 +526,19 @@ jion.lazyValue(
 		);
 	}
 );
+
+
+
+/*
+| Minimum height.
+*/
+prototype.minHeight = gruga_portal.minHeight;
+
+
+/*
+| Minimum width.
+*/
+prototype.minWidth = gruga_portal.minWidth;
 
 
 /*
@@ -1505,7 +1516,7 @@ jion.lazyValue(
 			&& mark.hasCaret
 			&& mark.caret.path.get( -1 );
 
-		facet = gruga_portal.getFacet( );
+		facet = gruga_portal.facets.getFacet( );
 
 		display.fill( facet.fill, this.vZeroSilhoutte );
 
@@ -1520,7 +1531,7 @@ jion.lazyValue(
 			moveToButton = this._moveToButton;
 
 			buttonFacet =
-				gruga_portalButtonFacets.getFacet(
+				gruga_portal.buttonFacets.getFacet(
 					'hover',
 						this.hover
 						?  this.hover.equals(
@@ -1531,7 +1542,7 @@ jion.lazyValue(
 				);
 
 			inputFacet =
-				gruga_portalInputFacets.getFacet(
+				gruga_portal.inputFacets.getFacet(
 					'hover', false,
 					'focus', false
 				);

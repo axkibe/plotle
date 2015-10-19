@@ -49,8 +49,7 @@ if( JION )
 				type : 'euclid_rect',
 				json : true
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -73,41 +72,6 @@ if( NODE )
 
 
 prototype = fabric_portal.prototype;
-
-
-/*
-| Initializer.
-*/
-prototype._init =
-	function( )
-{
-	var
-		minHeight,
-		minWidth,
-		zone;
-
-	zone = this.zone;
-
-	// FIXME do not modify zone data here
-
-	minWidth = theme.portal.minWidth;
-
-	minHeight = theme.portal.minHeight;
-
-	if( zone.width  < minWidth || zone.height < minHeight )
-	{
-		zone =
-		this.zone =
-			euclid_rect.create(
-				'pnw', zone.pnw,
-				'pse',
-					zone.pnw.add(
-						Math.max( minWidth, zone.width ),
-						Math.max( minHeight, zone.height )
-					)
-			);
-	}
-};
 
 
 /*
