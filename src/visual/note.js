@@ -15,6 +15,7 @@ var
 	math_half,
 	root,
 	session_uid,
+	shell_settings,
 	system,
 	theme,
 	visual_doc,
@@ -503,7 +504,7 @@ prototype.scrollMarkIntoView =
 
 	fs = this.doc.font.size;
 
-	descend = fs * theme.bottombox;
+	descend = fs * shell_settings.bottombox;
 
 	p = para.locateOffsetPoint( mark.caret.at );
 

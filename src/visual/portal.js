@@ -23,6 +23,7 @@ var
 	root,
 	session_uid,
 	shell_fontPool,
+	shell_settings,
 	theme,
 	visual_handlesBezel,
 	visual_item,
@@ -306,7 +307,7 @@ jion.lazyValue(
 
 		fs = font.size;
 
-		descend = fs * theme.bottombox;
+		descend = fs * shell_settings.bottombox;
 
 		fieldPNW = this[ spaceFields[ section ] ].pnw;
 
@@ -1642,7 +1643,7 @@ prototype._drawCaret =
 
 	fs = font.size;
 
-	descend = fs * theme.bottombox;
+	descend = fs * shell_settings.bottombox;
 
 	fieldPNW = this[ spaceFields[ section ] ].pnw;
 

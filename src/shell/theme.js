@@ -36,11 +36,6 @@ shell_fontPool.setDefaultFonts(
 theme =
 {
 	/*
-	| Factor to add to the bottom of font height
-	*/
-	bottombox : 0.25,
-
-	/*
 	| Zooming settings.
 	*/
 	zoom :

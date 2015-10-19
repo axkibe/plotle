@@ -359,6 +359,10 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
+		'filePath', 'src/shell/settings.js',
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/euclid/view.js',
 		'hasJion', true,
 		'inBundle', true

@@ -19,7 +19,7 @@ var
 	root,
 	session_uid,
 	shell_fontPool,
-	theme,
+	shell_settings,
 	visual_mark_text,
 	visual_para;
 
@@ -203,7 +203,7 @@ jion.lazyValue(
 
 		fs = this.fontsize;
 
-		descend = fs * theme.bottombox;
+		descend = fs * shell_settings.bottombox;
 
 		p = this.locateOffsetPoint( this.mark.caret.at );
 
@@ -328,7 +328,7 @@ prototype._drawCaret =
 
 	view = this.view;
 
-	descend = this.fontsize * theme.bottombox;
+	descend = this.fontsize * shell_settings.bottombox;
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
@@ -444,7 +444,10 @@ jion.lazyValue(
 
 				currentLineRay = [ ];
 
-				y += Math.round( font.size * ( 1 + theme.bottombox ) );
+				y +=
+					Math.round(
+						font.size * ( 1 + shell_settings.bottombox )
+					);
 
 				currentLineOffset = ca.index;
 			}
@@ -498,7 +501,7 @@ jion.lazyValue(
 	{
 		return(
 			this.flow.height
-			+ Math.round( this.fontsize * theme.bottombox )
+			+ Math.round( this.fontsize * shell_settings.bottombox )
 		);
 	}
 );

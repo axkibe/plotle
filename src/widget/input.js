@@ -16,7 +16,7 @@ var
 	jion,
 	result_hover,
 	root,
-	theme,
+	shell_settings,
 	visual_mark_caret,
 	widget_input;
 
@@ -177,7 +177,7 @@ jion.lazyValue(
 
 	fs = this.font.size;
 
-	descend = fs * theme.bottombox;
+	descend = fs * shell_settings.bottombox;
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
@@ -531,7 +531,7 @@ prototype._drawCaret =
 
 	fs = this.font.size;
 
-	descend = fs * theme.bottombox;
+	descend = fs * shell_settings.bottombox;
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 

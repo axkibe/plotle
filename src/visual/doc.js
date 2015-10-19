@@ -17,7 +17,7 @@ var
 	math_half,
 	root,
 	shell_fontPool,
-	theme,
+	shell_settings,
 	visual_doc,
 	visual_para;
 
@@ -344,7 +344,7 @@ jion.lazyValue(
 		height += flow.height;
 	}
 
-	height += Math.round( fs * theme.bottombox );
+	height += Math.round( fs * shell_settings.bottombox );
 
 	return(
 		euclid_rect.create(
@@ -619,7 +619,7 @@ jion.lazyValue(
 
 	fontsize = this.fontsize;
 
-	descend = Math.round( fontsize * theme.bottombox );
+	descend = Math.round( fontsize * shell_settings.bottombox );
 
 	ascend = Math.round( fontsize );
 
