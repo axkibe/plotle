@@ -8,9 +8,9 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_view,
-	math_limit,
 	jion,
-	theme;
+	math_limit,
+	shell_settings;
 
 
 /*
@@ -85,9 +85,14 @@ prototype = euclid_view.prototype;
 prototype._init =
 	function( )
 {
-	this.fact = math_limit( theme.zoom.min, this.fact, theme.zoom.max );
+	this.fact =
+		math_limit(
+			shell_settings.zoomMin,
+			this.fact,
+			shell_settings.zoomMax
+		);
 
-	this.zoom = Math.pow( theme.zoom.base, this.fact );
+	this.zoom = Math.pow( shell_settings.zoomBase, this.fact );
 };
 
 
@@ -264,7 +269,12 @@ prototype.review =
 	}
 	else
 	{
-		f1 = math_limit( theme.zoom.min, this.fact + df, theme.zoom.max );
+		f1 =
+			math_limit(
+				shell_settings.zoomMin,
+				this.fact + df,
+				shell_settings.zoomMax
+			);
 	}
 
 	z1 = Math.pow( 1.1, f1 );

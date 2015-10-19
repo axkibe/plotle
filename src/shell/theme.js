@@ -36,16 +36,6 @@ shell_fontPool.setDefaultFonts(
 theme =
 {
 	/*
-	| Zooming settings.
-	*/
-	zoom :
-	{
-		base : 1.1,
-		min : -15,
-		max : 15
-	},
-
-	/*
 	| Standard note in space.
 	*/
 	note :
