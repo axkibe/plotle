@@ -53,6 +53,11 @@ if( JION )
 				comment : 'display fill',
 				type : require( '../typemaps/fill' )
 			},
+			designFrame :
+			{
+				comment : 'designed frame (using anchors)',
+				type : 'design_anchorRect'
+			},
 			hover :
 			{
 				comment : 'the widget hovered upon',

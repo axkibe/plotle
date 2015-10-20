@@ -44,10 +44,6 @@ theme =
 		*/
 		mainDisc :
 		{
-			width : 100,
-
-			height : 800,
-
 			ellipse :
 			{
 				width : 1600,
@@ -60,9 +56,6 @@ theme =
 		*/
 		createDisc :
 		{
-
-			width : 176,
-			height : 1010,
 			ellipse :
 			{
 				width : 1700,

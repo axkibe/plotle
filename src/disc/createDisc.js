@@ -51,6 +51,11 @@ if( JION )
 				comment : 'display border',
 				type : require( '../typemaps/border' )
 			},
+			designFrame :
+			{
+				comment : 'designed frame (using anchors)',
+				type : 'design_anchorRect'
+			},
 			fill :
 			{
 				comment : 'display fill',
@@ -181,8 +186,8 @@ jion.lazyValue(
 
 		display =
 			euclid_display.create(
-				'width', this.style.width,
-				'height', this.style.height
+				'width', this.frame.width,
+				'height', this.frame.height
 			);
 
 		display.fill( this.fill, this.silhoutte );
@@ -287,7 +292,7 @@ prototype.draw =
 	display.drawImage(
 		'image', this._display,
 		'x', 0,
-		'y', math_half( this.view.height - this.style.height )
+		'y', math_half( this.view.height - this.frame.height )
 	);
 };
 

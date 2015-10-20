@@ -99,6 +99,8 @@ prototype.createTransformed =
 
 	tm = changes.transform( this.changeMarkNode );
 
+	if( !tm ) return undefined;
+
 	return this.create( 'changeMarkNode', tm );
 };
 
@@ -114,8 +116,6 @@ jion.lazyValue(
 		return change_mark_node.create( 'path', this.path.chop );
 	}
 );
-
-
 
 
 /*
@@ -134,9 +134,9 @@ jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
-	{
-		return this.path;
-	}
+{
+	return this.path;
+}
 );
 
 
@@ -149,9 +149,9 @@ jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
-	{
-		return;
-	}
+{
+	return;
+}
 );
 
 

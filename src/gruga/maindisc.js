@@ -180,6 +180,13 @@ gruga_mainDisc =
 					'color', euclid_color.rgb( 94, 94, 0 )
 				)
 			),
+		'designFrame',
+			design_anchorRect.create(
+				'pnw',
+					design_anchorPoint.w.create( 'x', 0, 'y', -400 ),
+				'pse',
+					design_anchorPoint.w.create( 'x', 100, 'y', 400 )
+			),
 		'fill',
 			euclid_gradient_radial.create(
 				'ray:append',

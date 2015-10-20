@@ -1059,8 +1059,6 @@ prototype.update =
 			);
 	}
 
-	console.log( 'set mark', mark );  // FIXME
-
 	root.create( 'mark', mark );
 };
 

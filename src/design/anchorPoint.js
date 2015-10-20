@@ -102,6 +102,17 @@ design_anchorPoint.seMin1 =
 
 
 /*
+| Point in west.
+*/
+design_anchorPoint.w =
+	design_anchorPoint.create(
+		'anchor', 'w',
+		'x', 0,
+		'y', 0
+	);
+
+
+/*
 | Adds this point by another.
 */
 prototype.add =

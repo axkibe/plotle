@@ -10,7 +10,6 @@ var
 	disc_disc,
 	euclid_ellipse,
 	euclid_point,
-	euclid_rect,
 	math_half,
 	theme;
 
@@ -36,32 +35,28 @@ disc_disc._init =
 	)
 {
 	var
+		frame,
+		height,
 		style,
 		width,
-		height,
 		ew,
-		eh,
-		ny;
+		eh;
 
 	style =
 	this.style =
-		theme.disc[ this.reflectName ],
-
-	width = style.width;
-
-	height = style.height;
+		theme.disc[ this.reflectName ];
 
 	ew = style.ellipse.width;
 
 	eh = style.ellipse.height;
 
-	ny = math_half( this.view.height - height );
-
+	frame =
 	this.frame =
-		euclid_rect.create(
-			'pnw', euclid_point.create( 'x', 0, 'y', ny ),
-			'pse', euclid_point.create( 'x', width, 'y', ny + height )
-		);
+		this.designFrame.compute( this.view.baseFrame );
+
+	width = frame.width;
+
+	height = frame.height;
 
 	this.silhoutte =
 		euclid_ellipse.create(
