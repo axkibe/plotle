@@ -10,7 +10,6 @@
 
 */
 var
-	theme,
 	shell_fontPool;
 
 /*
@@ -27,61 +26,6 @@ shell_fontPool.setDefaultFonts(
 	'DejaVuSans,sans-serif',
 	'DejaVuSansBold,sans-serif'
 );
-
-
-/*
-| The whole theme
-*/
-theme =
-{
-	/*
-	| The disc menues.
-	*/
-	disc :
-	{
-		/*
-		| The main disc.
-		*/
-		mainDisc :
-		{
-			ellipse :
-			{
-				width : 1600,
-				height : 1600
-			}
-		},
-
-		/*
-		| The creation disc.
-		*/
-		createDisc :
-		{
-			ellipse :
-			{
-				width : 1700,
-				height : 1700
-			}
-		}
-	},
-
-
-	/*
-	| Scrollbar
-	*/
-	scrollbar :
-	{
-		// width
-		strength : 8,
-		// ellipse cap
-		ellipseA : 4,
-		ellipseB : 3,
-		// minimum height
-		minSize : 12,
-		// vertical distance from border of note
-		vdis : 5
-	}
-
-};
 
 
 } )( );

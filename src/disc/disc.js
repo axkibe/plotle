@@ -7,8 +7,8 @@
 | Export
 */
 var
-	disc_disc,
-	theme;
+	disc_disc;
+
 
 /*
 | Capsule

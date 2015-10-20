@@ -99,5 +99,16 @@ gruga_note.cornerRadius = 8;
 gruga_note.defaultFontsize = 13;
 
 
+/*
+| Vertical distance of scrollbar from border.
+*/
+gruga_note.vScrollbarDis = 5;
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_note );
+}
+
 
 } )( );

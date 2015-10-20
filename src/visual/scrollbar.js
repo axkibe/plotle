@@ -13,7 +13,6 @@ var
 	gruga_scrollbar,
 	jion,
 	math_half,
-	theme,
 	visual_scrollbar;
 
 
@@ -92,8 +91,8 @@ prototype.draw =
 	)
 {
 	display.paint(
-		gruga_scrollbar.fill,
-		gruga_scrollbar.border,
+		gruga_scrollbar.facet.fill,
+		gruga_scrollbar.facet.border,
 		this.getArea( view )
 	);
 };
@@ -110,7 +109,6 @@ prototype.getArea =
 	)
 {
 	var
-		ths,
 		pnw,
 		size,
 		pos,
@@ -119,8 +117,6 @@ prototype.getArea =
 		map,
 		sy,
 		s05;
-
-	ths = theme.scrollbar;
 
 	pnw = this.pnw;
 
@@ -132,18 +128,18 @@ prototype.getArea =
 
 	ap = Math.round( this.aperture * size / max );
 
-	map = Math.max( ap, ths.minSize );
+	map = Math.max( ap, gruga_scrollbar.minHeight );
 
 	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
 
-	s05 = math_half( ths.strength );
+	s05 = math_half( gruga_scrollbar.strength );
 
 	return(
 		euclid_roundRect.create(
 			'pnw', pnw.add( 0, sy ).inView( view ).add( -s05, 0 ),
 			'pse', pnw.add( 0, sy + map ).inView( view ).add( s05, 0 ),
-			'a', ths.ellipseA,
-			'b', ths.ellipseB
+			'a', gruga_scrollbar.ellipseA,
+			'b', gruga_scrollbar.ellipseB
 		)
 	);
 };
@@ -193,7 +189,7 @@ jion.lazyValue(
 			'pnw', vPnw,
 			'pse',
 				vPnw.add(
-					theme.scrollbar.strength,
+					gruga_scrollbar.strength,
 					this.view.scale( this.size )
 				)
 		)

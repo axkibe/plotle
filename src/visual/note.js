@@ -17,7 +17,6 @@ var
 	session_uid,
 	shell_settings,
 	system,
-	theme,
 	visual_doc,
 	visual_docItem,
 	visual_handlesBezel,
@@ -271,10 +270,10 @@ prototype._init =
 				'pnw',
 					euclid_point.create(
 						'x', zone.pse.x,
-						'y', zone.pnw.y + theme.scrollbar.vdis
+						'y', zone.pnw.y + gruga_note.vScrollbarDis
 					),
 				'pos', this.scrollPos.y,
-				'size', zone.height - theme.scrollbar.vdis * 2,
+				'size', zone.height - gruga_note.vScrollbarDis * 2,
 				'view', this.view
 			);
 	}

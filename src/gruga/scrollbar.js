@@ -17,7 +17,13 @@ var
 'use strict';
 
 
-gruga_scrollbar =
+gruga_scrollbar = { };
+
+
+/*
+| The scrollbar facet.
+*/
+gruga_scrollbar.facet =
 	design_facet.create(
 		'fill', euclid_color.rgb( 255, 188, 87 ),
 		'border',
@@ -25,5 +31,28 @@ gruga_scrollbar =
 				'color', euclid_color.rgb( 221, 154, 52 )
 			)
 	);
+
+/*
+| Width of the scrollbar
+*/
+gruga_scrollbar.strength = 8;
+
+/*
+| Ellipse cap.
+*/
+gruga_scrollbar.ellipseA = 4;
+
+gruga_scrollbar.ellipseB = 4;
+
+/*
+| Minimum height.
+*/
+gruga_scrollbar.minHeight = 12;
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_scrollbar );
+}
 
 } )( );
