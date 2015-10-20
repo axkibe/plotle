@@ -81,6 +81,11 @@ if( JION )
 				comment : 'path of the disc',
 				type : 'jion$path'
 			},
+			shape :
+			{
+				comment : 'shape of the disc',
+				type : 'design_anchorEllipse'
+			},
 			spaceRef :
 			{
 				comment : 'reference to current space',

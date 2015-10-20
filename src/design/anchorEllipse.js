@@ -33,6 +33,16 @@ if( JION )
 			{
 				comment : 'point in south-east',
 				type : 'design_anchorPoint'
+			},
+			gradientPC :
+			{
+				comment : 'center of gradient',
+				type : [ 'undefined', 'design_anchorPoint' ]
+			},
+			gradientR1 :
+			{
+				comment : 'radius of radial gradient',
+				type : [ 'undefined', 'number' ]
 			}
 		}
 	};
@@ -72,10 +82,17 @@ prototype.compute =
 		frame
 	)
 {
+	var
+		gpc;
+
+	gpc = this.gradientPC;
+
 	return(
 		euclid_ellipse.create(
 			'pnw', this.pnw.compute( frame ),
-			'pse', this.pse.compute( frame )
+			'pse', this.pse.compute( frame ),
+			'gradientPC', gpc && gpc.compute( frame ),
+			'gradientR1', this.gradientR1
 		)
 	);
 };

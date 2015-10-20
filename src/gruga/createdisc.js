@@ -123,6 +123,25 @@ gruga_createDisc =
 				'pse',
 					design_anchorPoint.w.create( 'x', 176, 'y', 505 )
 			),
+		'shape',
+			design_anchorEllipse.create(
+				'pnw',
+					design_anchorPoint.e.create(
+						'x', -1651,
+						'y', -850
+					),
+				'pse',
+					design_anchorPoint.e.create(
+						'x', -1,
+						'y', 850
+					),
+				'gradientPC',
+					design_anchorPoint.e.create(
+						'x', -600,
+						'y', 0
+					),
+				'gradientR1', 650
+			),
 		'fill',
 			euclid_gradient_radial.create(
 				'ray:append',

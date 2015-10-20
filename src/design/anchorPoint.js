@@ -1,5 +1,7 @@
 /*
 | A point anchored within a frame.
+|
+| FIXME just call it design_point
 */
 
 
@@ -100,6 +102,16 @@ design_anchorPoint.seMin1 =
 		'y', -1
 	);
 
+
+/*
+| Point in east.
+*/
+design_anchorPoint.e =
+	design_anchorPoint.create(
+		'anchor', 'e',
+		'x', 0,
+		'y', 0
+	);
 
 /*
 | Point in west.
