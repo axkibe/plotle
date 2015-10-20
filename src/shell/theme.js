@@ -86,15 +86,8 @@ theme =
 		minSize : 12,
 		// vertical distance from border of note
 		vdis : 5
-	},
+	}
 
-
-	/*
-	| Size of resize handles
-	*/
-	handle :
-	{
-	},
 };
 
 
