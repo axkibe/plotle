@@ -208,9 +208,9 @@ jion.lazyValue(
 	prototype,
 	'home',
 	function( )
-	{
-		return this.create( 'pan', euclid_point.zero );
-	}
+{
+	return this.create( 'pan', euclid_point.zero );
+}
 );
 
 
@@ -222,14 +222,14 @@ jion.lazyValue(
 	prototype,
 	'sizeOnly',
 	function( )
-	{
-		return(
-			this.create(
-				'pan', euclid_point.zero,
-				'fact', 0
-			)
-		);
-	}
+{
+	return(
+		this.create(
+			'pan', euclid_point.zero,
+			'fact', 0
+		)
+	);
+}
 );
 
 
@@ -301,18 +301,18 @@ jion.lazyValue(
 	prototype,
 	'baseFrame',
 	function( )
-	{
-		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', this.width,
-						'y', this.height
-					)
-			)
-		);
-	}
+{
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', this.width,
+					'y', this.height
+				)
+		)
+	);
+}
 );
 
 
