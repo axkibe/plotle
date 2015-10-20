@@ -354,11 +354,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/shell/theme.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	server_resource.create(
 		'filePath', 'src/shell/settings.js',
 		'inBundle', true
 	),
