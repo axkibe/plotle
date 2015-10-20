@@ -77,7 +77,7 @@ if( JION )
 			path :
 			{
 				comment : 'path of the disc',
-				type : [ 'undefined', 'jion$path' ]
+				type : 'jion$path'
 			},
 			spaceRef :
 			{
@@ -133,12 +133,6 @@ prototype._init =
 		ranks,
 		twig,
 		wname;
-
-	// FUTURE remove
-	if( !this.path )
-	{
-		return;
-	}
 
 	disc_disc._init.call( this, inherit );
 
