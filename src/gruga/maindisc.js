@@ -200,7 +200,7 @@ gruga_mainDisc =
 						'y', 800
 					),
 				'gradientPC',
-					design_anchorPoint.e.create(
+					design_anchorPoint.w.create(
 						'x', -600,
 						'y', 0
 					),

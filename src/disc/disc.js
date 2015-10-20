@@ -8,9 +8,6 @@
 */
 var
 	disc_disc,
-	euclid_ellipse,
-	euclid_point,
-	math_half,
 	theme;
 
 /*
@@ -35,48 +32,13 @@ disc_disc._init =
 	)
 {
 	var
-		frame,
-		height,
-		style,
-		width,
-		ew,
-		eh;
-
-	style =
-	this.style =
-		theme.disc[ this.reflectName ];
-
-	ew = style.ellipse.width;
-
-	eh = style.ellipse.height;
+		frame;
 
 	frame =
 	this.frame =
 		this.designFrame.compute( this.view.baseFrame );
 
-	width = frame.width;
-
-	height = frame.height;
-
-	this.silhoutte =
-		euclid_ellipse.create(
-			'pnw',
-				euclid_point.create(
-					'x', width - 1 - ew,
-					'y', 0 - math_half( eh - height )
-				),
-			'pse',
-				euclid_point.create(
-					'x', width - 1,
-					'y', height + math_half( eh - height )
-				),
-			'gradientPC',
-				euclid_point.create(
-					'x', -600,
-					'y', math_half( height )
-				),
-			'gradientR1', 650
-		);
+	this.silhoutte = this.shape.compute( frame.zeropnw );
 };
 
 
