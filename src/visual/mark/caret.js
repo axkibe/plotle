@@ -117,13 +117,16 @@ prototype.createTransformed =
 		changes
 	)
 {
+	var
+		tm;
+
 	if( this.textMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
-	return(
-		this.create(
-			'textMark', this.textMark.createTransformed( changes )
-		)
-	);
+	tm = this.textMark.createTransformed( changes );
+
+	if( !tm ) return undefined;
+
+	return this.create( 'textMark', tm );
 };
 
 

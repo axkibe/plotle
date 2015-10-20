@@ -47,8 +47,6 @@ var
 
 root = undefined;
 
-
-
 /*
 | Capsule
 */
@@ -436,6 +434,7 @@ prototype._init =
 		hover,
 		mark,
 		mode,
+		spaceFabric,
 		spaceRef,
 		user,
 		view;
@@ -462,6 +461,8 @@ prototype._init =
 
 	spaceRef = this.spaceRef;
 
+	spaceFabric = this.spaceFabric;
+
 /**/if( CHECK )
 /**/{
 /**/	if( !modes[ mode ] )
@@ -476,7 +477,7 @@ prototype._init =
 /**/
 /**/	if(
 /**/		( mode === 'normal' || mode === 'create' )
-/**/		&& !this.spaceFabric
+/**/		&& !spaceFabric
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -518,7 +519,7 @@ prototype._init =
 		mark = mark.create( 'focus', this._systemFocus );
 	}
 
-	if( !this.spaceFabric ) this.spaceVisual = undefined;
+	if( !spaceFabric ) this.spaceVisual = undefined;
 
 	// skips recreating children when no need
 	if(
@@ -530,16 +531,17 @@ prototype._init =
 		|| mode !== inherit.mode
 		|| user !== inherit.user
 		|| view !== inherit._view
+		|| spaceFabric !== inherit.spaceFabric
 	)
 	{
-		if( this.spaceFabric )
+		if( spaceFabric )
 		{
 			this.spaceVisual =
 				( this.spaceVisual || visual_space )
 				.create(
 					'access', access,
 					'action', action,
-					'fabric', this.spaceFabric,
+					'fabric', spaceFabric,
 					'hover', hover,
 					'mark', mark,
 					'view', view
@@ -1045,7 +1047,7 @@ prototype.update =
 
 	mark = this._mark.createTransformed( changes );
 
-	if( mark.reflect === 'visual_mark_range' )
+	if( mark && mark.reflect === 'visual_mark_range' )
 	{
 		// FUTURE remove doc from range
 		mark =
@@ -1056,6 +1058,8 @@ prototype.update =
 					)
 			);
 	}
+
+	console.log( 'set mark', mark );  // FIXME
 
 	root.create( 'mark', mark );
 };

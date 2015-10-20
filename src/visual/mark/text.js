@@ -106,6 +106,8 @@ prototype.createTransformed =
 
 	tm = changes.transform( this.changeMarkText );
 
+	if( !tm ) return undefined;
+
 	return this.create( 'changeMarkText', tm );
 };
 

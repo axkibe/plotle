@@ -13,9 +13,9 @@ var
 	fabric_para,
 	fabric_portal,
 	gruga_label,
+	gruga_note,
 	jion,
 	shell_models,
-	theme, // FIXME
 	visual_label,
 	visual_note,
 	visual_portal;
@@ -74,7 +74,7 @@ jion.lazyStaticValue(
 		visual_note.create(
 			'fabric',
 				fabric_note.create(
-					'fontsize', theme.note.fontsize, // FIXME
+					'fontsize', gruga_note.defaultFontsize,
 					'zone',
 						euclid_rect.create(
 							'pnw', euclid_point.zero,

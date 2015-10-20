@@ -11,6 +11,7 @@ var
 	euclid_color,
 	euclid_gradient_askew,
 	euclid_gradient_colorStop,
+	euclid_margin,
 	gruga_note;
 
 
@@ -90,6 +91,13 @@ gruga_note.minHeight = 30;
 | Radius of the corners.
 */
 gruga_note.cornerRadius = 8;
+
+
+/*
+| Default fontsize.
+*/
+gruga_note.defaultFontsize = 13;
+
 
 
 } )( );

@@ -11,7 +11,6 @@
 */
 var
 	theme,
-	euclid_margin,
 	shell_fontPool;
 
 /*
@@ -35,15 +34,6 @@ shell_fontPool.setDefaultFonts(
 */
 theme =
 {
-	/*
-	| Standard note in space.
-	*/
-	note :
-	{
-		// default fontsize
-		fontsize : 13
-	},
-
 	/*
 	| Portal to another space.
 	*/
@@ -130,5 +120,6 @@ theme =
 		edistance : 12
 	},
 };
+
 
 } )( );
