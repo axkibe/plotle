@@ -19,13 +19,4 @@ var
 "use strict";
 
 
-/*
-| The default fonts
-*/
-shell_fontPool.setDefaultFonts(
-	'DejaVuSans,sans-serif',
-	'DejaVuSansBold,sans-serif'
-);
-
-
 } )( );
