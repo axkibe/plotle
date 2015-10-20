@@ -143,10 +143,22 @@ gruga_portal.inputRounding = 3;
 gruga_portal.inputPitch = 5;
 
 
+/*
+| Minimum size of the portal.
+*/
 gruga_portal.minWidth = 40;
 
-
 gruga_portal.minHeight = 40;
+
+
+/*
+| MoveTo button on the portal
+*/
+gruga_portal.moveToWidth = 80;
+
+gruga_portal.moveToHeight = 22;
+
+gruga_portal.moveToRounding = 11;
 
 
 } )( );

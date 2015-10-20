@@ -35,24 +35,6 @@ shell_fontPool.setDefaultFonts(
 theme =
 {
 	/*
-	| Portal to another space.
-	*/
-	portal :
-	{
-
-		/*
-		| moveto button on the portal
-		*/
-		moveTo :
-		{
-			width : 80,
-			height : 22,
-			rounding : 11
-		}
-	},
-
-
-	/*
 	| The disc menues.
 	*/
 	disc :

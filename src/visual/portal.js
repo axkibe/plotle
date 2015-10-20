@@ -24,7 +24,6 @@ var
 	session_uid,
 	shell_fontPool,
 	shell_settings,
-	theme,
 	visual_handlesBezel,
 	visual_item,
 	visual_portal;
@@ -1275,7 +1274,6 @@ jion.lazyValue(
 	{
 		var
 			height,
-			pmtTheme,
 			pnw,
 			pse,
 			result,
@@ -1283,15 +1281,13 @@ jion.lazyValue(
 			width,
 			zone;
 
-		pmtTheme = theme.portal.moveTo;
-
 		zone = this.zone;
 
-		width = pmtTheme.width;
+		width = gruga_portal.moveToWidth;
 
-		height = pmtTheme.height;
+		height = gruga_portal.moveToHeight;
 
-		rounding = pmtTheme.rounding;
+		rounding = gruga_portal.moveToRounding;
 
 		pnw =
 			euclid_point.create(
