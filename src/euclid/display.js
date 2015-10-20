@@ -432,6 +432,8 @@ euclid_display.prototype.globalAlpha =
 
 /*
 | Fills an aera and draws its borders.
+|
+| FIXME take a facet.
 */
 euclid_display.prototype.paint =
 	function(

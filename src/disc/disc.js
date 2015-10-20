@@ -47,13 +47,13 @@ disc_disc._init =
 	this.style =
 		theme.disc[ this.reflectName ],
 
-	width = style.width,
+	width = style.width;
 
-	height = style.height,
+	height = style.height;
 
-	ew = style.ellipse.width,
+	ew = style.ellipse.width;
 
-	eh = style.ellipse.height,
+	eh = style.ellipse.height;
 
 	ny = math_half( this.view.height - height );
 

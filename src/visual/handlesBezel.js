@@ -12,7 +12,6 @@ var
 	jion,
 	math_half,
 	root,
-	theme,
 	visual_handlesBezel;
 
 /*
@@ -156,27 +155,27 @@ jion.lazyValue(
 
 		my = math_half( ny + sy );
 
-		dcx = theme.handle.cdistance;
+		dcx = gruga_handles.cDistance;
 
-		dcy = theme.handle.cdistance;
+		dcy = gruga_handles.cDistance;
 
-		dex = theme.handle.edistance;
+		dex = gruga_handles.eDistance;
 
-		dey = theme.handle.edistance;
+		dey = gruga_handles.eDistance;
 
 		a =
 			Math.min(
 				Math.round( ( zone.width  + 2 * dcx ) / 6 ),
-				theme.handle.maxSize
-			),
+				gruga_handles.maxSize
+			);
 
 		b =
 			Math.min(
 				Math.round( ( zone.height + 2 * dcy ) / 6 ),
-				theme.handle.maxSize
-			),
+				gruga_handles.maxSize
+			);
 
-		a2 = 2 * a,
+		a2 = 2 * a;
 
 		b2 = 2 * b;
 
@@ -370,7 +369,11 @@ prototype.drawHandles =
 
 		if( !h ) continue;
 
-		display.paint( gruga_handles.fill, gruga_handles.border, h );
+		display.paint(
+			gruga_handles.facet.fill,
+			gruga_handles.facet.border,
+			h
+		);
 	}
 
 	display.deClip( );

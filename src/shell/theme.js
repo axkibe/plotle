@@ -77,9 +77,6 @@ theme =
 	*/
 	scrollbar :
 	{
-		style :
-		{
-		},
 		// width
 		strength : 8,
 		// ellipse cap
@@ -97,9 +94,6 @@ theme =
 	*/
 	handle :
 	{
-		maxSize : 12,
-		cdistance : 12,
-		edistance : 12
 	},
 };
 
