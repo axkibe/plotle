@@ -4,9 +4,9 @@
 
 
 var
-	design_anchorEllipse,
+	design_ellipse,
 	design_point,
-	design_anchorRect,
+	design_rect,
 	design_facet,
 	design_facetRay,
 	euclid_border,
@@ -122,7 +122,7 @@ gruga_moveTo =
 			widget_button.create(
 				'facets', portalButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -149,14 +149,14 @@ gruga_moveTo =
 						'x', 0,
 						'y', 0
 					),
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
 			widget_button.create(
 				'facets', portalButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -183,14 +183,14 @@ gruga_moveTo =
 						'x', 0,
 						'y', 0
 					),
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'userHomeButton',
 			widget_button.create(
 				'facets', portalButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -213,7 +213,7 @@ gruga_moveTo =
 						'x', 0,
 						'y', 0
 					),
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			)
 	);
 

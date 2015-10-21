@@ -4,9 +4,9 @@
 
 
 var
-	design_anchorEllipse,
+	design_ellipse,
 	design_point,
-	design_anchorRect,
+	design_rect,
 	form_login,
 	gruga_genericButtonFacets,
 	gruga_genericInputFacets,
@@ -104,7 +104,7 @@ gruga_login =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -127,7 +127,7 @@ gruga_login =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -147,7 +147,7 @@ gruga_login =
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -164,14 +164,14 @@ gruga_login =
 				'text', 'log in',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_point.c,
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -188,7 +188,7 @@ gruga_login =
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_point.c,
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			)
 	);
 

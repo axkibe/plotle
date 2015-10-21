@@ -40,7 +40,7 @@ if( JION )
 			designFrame :
 			{
 				comment : 'designed frame (using anchors',
-				type : 'design_anchorRect'
+				type : 'design_rect'
 			},
 			facets :
 			{

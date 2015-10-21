@@ -4,9 +4,9 @@
 
 
 var
-	design_anchorEllipse,
+	design_ellipse,
 	design_point,
-	design_anchorRect,
+	design_rect,
 	shell_fontPool,
 	form_signUp,
 	gruga_genericButtonFacets,
@@ -144,7 +144,7 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -166,7 +166,7 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -189,7 +189,7 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -212,7 +212,7 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -233,7 +233,7 @@ gruga_signUp =
 				'facets', gruga_genericCheckboxFacets,
 				'checked', true,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -278,7 +278,7 @@ gruga_signUp =
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -295,14 +295,14 @@ gruga_signUp =
 				'text', 'sign up',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_point.c,
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw',
 							design_point.create(
 								'anchor', 'c',
@@ -319,7 +319,7 @@ gruga_signUp =
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_point.c,
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			)
 	);
 

@@ -4,9 +4,9 @@
 
 
 var
-	design_anchorEllipse,
+	design_ellipse,
 	design_point,
-	design_anchorRect,
+	design_rect,
 	design_facet,
 	design_facetRay,
 	disc_mainDisc,
@@ -140,7 +140,7 @@ buttonFacets =
 buttonModel =
 	widget_button.abstract(
 		'facets', buttonFacets,
-		'shape', design_anchorEllipse.fullSkewNW
+		'shape', design_ellipse.fullSkewNW
 	);
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
@@ -181,14 +181,14 @@ gruga_mainDisc =
 				)
 			),
 		'designFrame',
-			design_anchorRect.create(
+			design_rect.create(
 				'pnw',
 					design_point.w.create( 'x', 0, 'y', -400 ),
 				'pse',
 					design_point.w.create( 'x', 100, 'y', 400 )
 			),
 		'shape',
-			design_anchorEllipse.create(
+			design_ellipse.create(
 				'pnw',
 					design_point.e.create(
 						'x', -1601,
@@ -223,7 +223,7 @@ gruga_mainDisc =
 			buttonModel.create(
 				'icon', iconNormal,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
 					)
@@ -235,7 +235,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_point.c,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', createButtonPnw,
 						'pse', createButtonPnw.add( buttonSize )
 					)
@@ -245,7 +245,7 @@ gruga_mainDisc =
 				'icon', iconRemove,
 				'visible', false,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', removeButtonPnw,
 						'pse', removeButtonPnw.add( buttonSize )
 					)
@@ -255,7 +255,7 @@ gruga_mainDisc =
 				'icon', iconMoveTo,
 				'visible', false,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
 					)
@@ -263,7 +263,7 @@ gruga_mainDisc =
 		'twig:add', 'space',
 			buttonModel.create(
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', spaceButtonPnw,
 						'pse', spaceButtonPnw.add( spaceButtonSize )
 					),
@@ -271,7 +271,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'textDesignPos', design_point.c,
 				'shape',
-					design_anchorEllipse.create(
+					design_ellipse.create(
 						'pnw', design_point.nw.create( 'x', -60, 'y', 0 ),
 						'pse', design_point.seMin1
 					),
@@ -280,7 +280,7 @@ gruga_mainDisc =
 		'twig:add', 'user',
 			buttonModel.create(
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', userButtonPnw,
 						'pse', userButtonPnw.add( userButtonSize )
 					),
@@ -288,7 +288,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'textDesignPos', design_point.c,
 				'shape',
-					design_anchorEllipse.create(
+					design_ellipse.create(
 						'pnw', design_point.nw.create( 'x', -70, 'y', 0 ),
 						'pse', design_point.seMin1
 					),
@@ -302,7 +302,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', design_point.c,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', loginButtonPnw,
 						'pse', loginButtonPnw.add( buttonSize )
 					)
@@ -315,7 +315,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', design_point.c,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', signupButtonPnw,
 						'pse', signupButtonPnw.add( buttonSize )
 					)

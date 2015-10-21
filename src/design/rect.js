@@ -4,7 +4,7 @@
 
 
 var
-	design_anchorRect,
+	design_rect,
 	euclid_rect;
 
 /*
@@ -20,21 +20,20 @@ var
 if( JION )
 {
 	return {
-		id : 'design_anchorRect',
+		id : 'design_rect',
 		attributes :
+		{
+			pnw :
 			{
-				pnw :
-					{
-						comment : 'point in north-west',
-						type : 'design_point'
-					},
-
-				pse :
-					{
-						comment : 'point in south-east',
-						type : 'design_point'
-					}
+				comment : 'point in north-west',
+				type : 'design_point'
+			},
+			pse :
+			{
+				comment : 'point in south-east',
+				type : 'design_point'
 			}
+		}
 	};
 }
 
@@ -50,7 +49,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_anchorRect.prototype;
+prototype = design_rect.prototype;
 
 
 /*

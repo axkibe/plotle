@@ -334,12 +334,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/anchorRect.js',
+		'filePath', 'src/design/rect.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/anchorEllipse.js',
+		'filePath', 'src/design/ellipse.js',
 		'hasJion', true,
 		'inBundle', true
 	),

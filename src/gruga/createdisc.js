@@ -4,9 +4,9 @@
 
 
 var
-	design_anchorEllipse,
+	design_ellipse,
 	design_point,
-	design_anchorRect,
+	design_rect,
 	design_facet,
 	design_facetRay,
 	disc_createDisc,
@@ -97,7 +97,7 @@ genericButtonModel =
 	widget_button.abstract(
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
-		'shape', design_anchorEllipse.fullSkewNW,
+		'shape', design_ellipse.fullSkewNW,
 		'textDesignPos', design_point.c
 	);
 
@@ -117,14 +117,14 @@ gruga_createDisc =
 				)
 			),
 		'designFrame',
-			design_anchorRect.create(
+			design_rect.create(
 				'pnw',
 					design_point.w.create( 'x', 0, 'y', -505 ),
 				'pse',
 					design_point.w.create( 'x', 176, 'y', 505 )
 			),
 		'shape',
-			design_anchorEllipse.create(
+			design_ellipse.create(
 				'pnw',
 					design_point.e.create(
 						'x', -1651,
@@ -160,7 +160,7 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Note',
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
 					)
@@ -170,11 +170,11 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Label',
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
 					),
-				'shape', design_anchorEllipse.fullSkewNW
+				'shape', design_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'createRelation',
@@ -182,7 +182,7 @@ gruga_createDisc =
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
 					)
@@ -192,7 +192,7 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Portal',
 				'designFrame',
-					design_anchorRect.create(
+					design_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )
 					)

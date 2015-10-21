@@ -54,7 +54,7 @@ if( JION )
 			designFrame :
 			{
 				comment : 'designed frame (using anchors)',
-				type : 'design_anchorRect'
+				type : 'design_rect'
 			},
 			fill :
 			{
@@ -87,7 +87,7 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the disc',
-				type : 'design_anchorEllipse'
+				type : 'design_ellipse'
 			},
 			spaceRef :
 			{
