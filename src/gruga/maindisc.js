@@ -5,7 +5,7 @@
 
 var
 	design_anchorEllipse,
-	design_anchorPoint,
+	design_point,
 	design_anchorRect,
 	design_facet,
 	design_facetRay,
@@ -53,7 +53,7 @@ var
 	userButtonPnw,
 	userButtonSize;
 
-dnw = design_anchorPoint.nw;
+dnw = design_point.nw;
 
 
 iconMoveTo =
@@ -183,24 +183,24 @@ gruga_mainDisc =
 		'designFrame',
 			design_anchorRect.create(
 				'pnw',
-					design_anchorPoint.w.create( 'x', 0, 'y', -400 ),
+					design_point.w.create( 'x', 0, 'y', -400 ),
 				'pse',
-					design_anchorPoint.w.create( 'x', 100, 'y', 400 )
+					design_point.w.create( 'x', 100, 'y', 400 )
 			),
 		'shape',
 			design_anchorEllipse.create(
 				'pnw',
-					design_anchorPoint.e.create(
+					design_point.e.create(
 						'x', -1601,
 						'y', -800
 					),
 				'pse',
-					design_anchorPoint.e.create(
+					design_point.e.create(
 						'x', -1,
 						'y', 800
 					),
 				'gradientPC',
-					design_anchorPoint.w.create(
+					design_point.w.create(
 						'x', -600,
 						'y', 0
 					),
@@ -233,7 +233,7 @@ gruga_mainDisc =
 				'visible', false,
 				'text', 'new',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', createButtonPnw,
@@ -269,11 +269,11 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape',
 					design_anchorEllipse.create(
-						'pnw', design_anchorPoint.nw.create( 'x', -60, 'y', 0 ),
-						'pse', design_anchorPoint.seMin1
+						'pnw', design_point.nw.create( 'x', -60, 'y', 0 ),
+						'pse', design_point.seMin1
 					),
 				'textRotation', - Math.PI / 2
 			),
@@ -286,11 +286,11 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape',
 					design_anchorEllipse.create(
-						'pnw', design_anchorPoint.nw.create( 'x', -70, 'y', 0 ),
-						'pse', design_anchorPoint.seMin1
+						'pnw', design_point.nw.create( 'x', -70, 'y', 0 ),
+						'pse', design_point.seMin1
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),
@@ -300,7 +300,7 @@ gruga_mainDisc =
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', loginButtonPnw,
@@ -313,7 +313,7 @@ gruga_mainDisc =
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', signupButtonPnw,

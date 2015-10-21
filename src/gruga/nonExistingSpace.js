@@ -5,7 +5,7 @@
 
 var
 	design_anchorEllipse,
-	design_anchorPoint,
+	design_point,
 	design_anchorRect,
 	form_nonExistingSpace,
 	gruga_genericButtonFacets,
@@ -52,7 +52,7 @@ gruga_nonExistingSpace =
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -120
@@ -66,7 +66,7 @@ gruga_nonExistingSpace =
 				'font',
 					shell_fontPool.get( 16, 'ca' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -50
@@ -79,13 +79,13 @@ gruga_nonExistingSpace =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', noButton.w,
 								'y', noButton.n
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', noButton.w + noButton.width,
 								'y', noButton.n + noButton.height
@@ -93,7 +93,7 @@ gruga_nonExistingSpace =
 					),
 				'text', 'No',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
@@ -103,13 +103,13 @@ gruga_nonExistingSpace =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', yesButton.w,
 								'y', yesButton.n
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', yesButton.w + yesButton.width,
 								'y', yesButton.n + yesButton.height
@@ -117,7 +117,7 @@ gruga_nonExistingSpace =
 					),
 				'text', 'Yes',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);

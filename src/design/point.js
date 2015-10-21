@@ -1,12 +1,12 @@
 /*
 | A point anchored within a frame.
 |
-| FIXME just call it design_point
+| FIXME remot all "anchor" names.
 */
 
 
 var
-	design_anchorPoint,
+	design_point,
 	euclid_point,
 	math_half;
 
@@ -24,7 +24,7 @@ var
 if( JION )
 {
 	return{
-		id : 'design_anchorPoint',
+		id : 'design_point',
 		attributes :
 		{
 			anchor :
@@ -58,14 +58,14 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_anchorPoint.prototype;
+prototype = design_point.prototype;
 
 
 /*
 | Point in center.
 */
-design_anchorPoint.c =
-	design_anchorPoint.create(
+design_point.c =
+	design_point.create(
 		'anchor', 'c',
 		'x', 0,
 		'y', 0
@@ -75,8 +75,8 @@ design_anchorPoint.c =
 /*
 | Point in north west.
 */
-design_anchorPoint.nw =
-	design_anchorPoint.create(
+design_point.nw =
+	design_point.create(
 		'anchor', 'nw',
 		'x', 0,
 		'y', 0
@@ -85,8 +85,8 @@ design_anchorPoint.nw =
 /*
 | Point in south east.
 */
-design_anchorPoint.se =
-	design_anchorPoint.create(
+design_point.se =
+	design_point.create(
 		'anchor', 'se',
 		'x', 0,
 		'y', 0
@@ -95,8 +95,8 @@ design_anchorPoint.se =
 /*
 | Point in south east minus 1.
 */
-design_anchorPoint.seMin1 =
-	design_anchorPoint.create(
+design_point.seMin1 =
+	design_point.create(
 		'anchor', 'se',
 		'x', -1,
 		'y', -1
@@ -106,8 +106,8 @@ design_anchorPoint.seMin1 =
 /*
 | Point in east.
 */
-design_anchorPoint.e =
-	design_anchorPoint.create(
+design_point.e =
+	design_point.create(
 		'anchor', 'e',
 		'x', 0,
 		'y', 0
@@ -116,8 +116,8 @@ design_anchorPoint.e =
 /*
 | Point in west.
 */
-design_anchorPoint.w =
-	design_anchorPoint.create(
+design_point.w =
+	design_point.create(
 		'anchor', 'w',
 		'x', 0,
 		'y', 0
@@ -152,7 +152,7 @@ prototype.add =
 
 
 /*
-| Computes the anchorPoint to an euclid one.
+| Computes the point to an euclid one.
 */
 prototype.compute =
 	function(

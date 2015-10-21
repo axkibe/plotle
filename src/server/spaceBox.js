@@ -145,15 +145,6 @@ server_spaceBox.createSpace =
 		spaceRef
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.repository.space.get( spaceRef.fullname ) )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	yield root.repository.spaces.insert(
 		{
 			_id : spaceRef.fullname,

@@ -5,7 +5,7 @@
 
 var
 	design_anchorEllipse,
-	design_anchorPoint,
+	design_point,
 	design_anchorRect,
 	design_facet,
 	design_facetRay,
@@ -38,7 +38,7 @@ var
 	relationButtonPnw;
 
 
-dnw = design_anchorPoint.nw;
+dnw = design_point.nw;
 
 noteButtonPnw = dnw.create( 'x', 62, 'y', 216 );
 
@@ -98,7 +98,7 @@ genericButtonModel =
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
 		'shape', design_anchorEllipse.fullSkewNW,
-		'textDesignPos', design_anchorPoint.c
+		'textDesignPos', design_point.c
 	);
 
 
@@ -119,24 +119,24 @@ gruga_createDisc =
 		'designFrame',
 			design_anchorRect.create(
 				'pnw',
-					design_anchorPoint.w.create( 'x', 0, 'y', -505 ),
+					design_point.w.create( 'x', 0, 'y', -505 ),
 				'pse',
-					design_anchorPoint.w.create( 'x', 176, 'y', 505 )
+					design_point.w.create( 'x', 176, 'y', 505 )
 			),
 		'shape',
 			design_anchorEllipse.create(
 				'pnw',
-					design_anchorPoint.e.create(
+					design_point.e.create(
 						'x', -1651,
 						'y', -850
 					),
 				'pse',
-					design_anchorPoint.e.create(
+					design_point.e.create(
 						'x', -1,
 						'y', 850
 					),
 				'gradientPC',
-					design_anchorPoint.e.create(
+					design_point.e.create(
 						'x', -600,
 						'y', 0
 					),

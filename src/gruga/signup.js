@@ -5,7 +5,7 @@
 
 var
 	design_anchorEllipse,
-	design_anchorPoint,
+	design_point,
 	design_anchorRect,
 	shell_fontPool,
 	form_signUp,
@@ -59,7 +59,7 @@ gruga_signUp =
 				'text', 'Sign Up',
 				'font', shell_fontPool.get( 22, 'la' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -245,
 						'y', -165
@@ -71,7 +71,7 @@ gruga_signUp =
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -98,
 						'y', -102
@@ -83,7 +83,7 @@ gruga_signUp =
 				'text', 'email',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -98,
 						'y', -62
@@ -95,7 +95,7 @@ gruga_signUp =
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -98,
 						'y', -22
@@ -107,7 +107,7 @@ gruga_signUp =
 				'text', 'repeat password',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -98,
 						'y', 18
@@ -119,7 +119,7 @@ gruga_signUp =
 				'text', 'newsletter',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -98,
 						'y', 58
@@ -131,7 +131,7 @@ gruga_signUp =
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -20,
 						'y', -136
@@ -146,13 +146,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -80,
 								'y', -120
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', 130,
 								'y', -95
@@ -168,13 +168,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -80,
 								'y', -80
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', 130,
 								'y', -55
@@ -191,13 +191,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -80,
 								'y', -40
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', 130,
 								'y', -15
@@ -214,13 +214,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -80,
 								'y', 0
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', 130,
 								'y', 25
@@ -235,13 +235,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -75,
 								'y', 45
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', -59,
 								'y', 60
@@ -254,7 +254,7 @@ gruga_signUp =
 				'text', 'Updates and News',
 				'font', shell_fontPool.get( 12, 'la' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -45,
 						'y', 57
@@ -267,7 +267,7 @@ gruga_signUp =
 					'Never going to be more than an email a month. For sure!',
 				'font', shell_fontPool.get( 12, 'la' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', -45,
 						'y', 77
@@ -280,13 +280,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', signupButton.w,
 								'y', signupButton.n
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', signupButton.w + signupButton.width,
 								'y', signupButton.n + signupButton.height
@@ -294,7 +294,7 @@ gruga_signUp =
 					),
 				'text', 'sign up',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
@@ -304,13 +304,13 @@ gruga_signUp =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', closeButton.w,
 								'y', closeButton.n
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', closeButton.w + closeButton.width,
 								'y', closeButton.n + closeButton.height
@@ -318,7 +318,7 @@ gruga_signUp =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);

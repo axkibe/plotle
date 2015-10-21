@@ -329,7 +329,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/anchorPoint.js',
+		'filePath', 'src/design/point.js',
 		'hasJion', true,
 		'inBundle', true
 	),

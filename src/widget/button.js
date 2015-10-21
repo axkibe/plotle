@@ -95,7 +95,7 @@ if( JION )
 			textDesignPos :
 			{
 				comment : 'designed position of the text',
-				type : [ 'undefined', 'design_anchorPoint' ]
+				type : [ 'undefined', 'design_point' ]
 			},
 			textNewline :
 			{

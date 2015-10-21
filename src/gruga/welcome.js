@@ -5,7 +5,7 @@
 
 var
 	design_anchorEllipse,
-	design_anchorPoint,
+	design_point,
 	design_anchorRect,
 	shell_fontPool,
 	form_welcome,
@@ -45,7 +45,7 @@ gruga_welcome =
 				'text', 'welcome',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -120
@@ -56,7 +56,7 @@ gruga_welcome =
 				'text', 'Your registration was successful :-)',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
-					design_anchorPoint.create(
+					design_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -50
@@ -68,13 +68,13 @@ gruga_welcome =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', closeButton.w,
 								'y', closeButton.n
 							),
 						'pse',
-							design_anchorPoint.create(
+							design_point.create(
 								'anchor', 'c',
 								'x', closeButton.w + closeButton.width,
 								'y', closeButton.n + closeButton.height
@@ -82,7 +82,7 @@ gruga_welcome =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.c,
+				'textDesignPos', design_point.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
