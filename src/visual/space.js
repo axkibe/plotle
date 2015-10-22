@@ -882,27 +882,12 @@ prototype._moveCreateGeneric =
 
 	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
-	// FIXME take model from action.itemType
+	model = action.itemType.model;
 
 	switch( action.itemType )
 	{
 		case visual_note :
-
-			model = visual_note.model;
-
-			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
-
-			transItem =
-				model.create(
-					'fabric', model.fabric.create( 'zone', zone ),
-					'view', view
-				);
-
-			break;
-
 		case visual_portal :
-
-			model = visual_portal.model;
 
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
@@ -915,8 +900,6 @@ prototype._moveCreateGeneric =
 			break;
 
 		case visual_label :
-
-			model = visual_label.model;
 
 			fs =
 				Math.max(
@@ -1251,29 +1234,7 @@ prototype._startCreateGeneric =
 
 	itemType = action.itemType;
 
-	// FIXME get model/mode from jion
-	switch( itemType )
-	{
-		case visual_note :
-
-			model = visual_note.model;
-
-			break;
-
-		case visual_label :
-
-			model = visual_label.model;
-
-			break;
-
-		case visual_portal :
-
-			model = visual_portal.model;
-
-			break;
-
-		default : throw new Error( );
-	}
+	model = itemType.model;
 
 	switch( itemType.positioning )
 	{
