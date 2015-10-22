@@ -8,10 +8,13 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	euclid_view,
+	fabric_doc,
+	fabric_label,
+	fabric_para,
 	gruga_label,
 	jion,
 	session_uid,
-	shell_models,
 	visual_doc,
 	visual_docItem,
 	visual_handlesBezel,
@@ -146,7 +149,7 @@ visual_label.createGeneric =
 		resized,
 		zone;
 
-	model = shell_models.label;
+	model = visual_label.model;
 
 	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
@@ -214,6 +217,33 @@ visual_label.createGeneric =
 			)
 	);
 };
+
+
+/*
+| The label model.
+*/
+jion.lazyStaticValue(
+	visual_label,
+	'model',
+	function( )
+{
+	return(
+		visual_label.create(
+			'fabric',
+				fabric_label.create(
+					'pnw', euclid_point.zero,
+					'fontsize', gruga_label.defaultFontsize,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1',
+							fabric_para.create( 'text', 'Label' )
+						)
+				),
+			'view', euclid_view.proper
+		)
+	);
+}
+);
 
 
 /*

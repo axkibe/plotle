@@ -13,7 +13,6 @@ var
 	jion,
 	result_hover,
 	root,
-	shell_models,
 	visual_label,
 	visual_note,
 	visual_portal,
@@ -903,7 +902,7 @@ prototype._moveCreateGeneric =
 
 		case visual_portal :
 
-			model = shell_models.portal;
+			model = visual_portal.model;
 
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
@@ -917,7 +916,7 @@ prototype._moveCreateGeneric =
 
 		case visual_label :
 
-			model = shell_models.label;
+			model = visual_label.model;
 
 			fs =
 				Math.max(
@@ -1263,13 +1262,13 @@ prototype._startCreateGeneric =
 
 		case visual_label :
 
-			model = shell_models.label;
+			model = visual_label.model;
 
 			break;
 
 		case visual_portal :
 
-			model = shell_models.portal;
+			model = visual_portal.model;
 
 			break;
 

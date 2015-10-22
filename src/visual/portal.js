@@ -13,6 +13,8 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	euclid_view,
+	fabric_portal,
 	fabric_spaceRef,
 	gruga_portal,
 	jion,
@@ -262,6 +264,33 @@ visual_portal.cycle =
 		case 'moveToButton' : return 'spaceUser';
 	}
 };
+
+
+/*
+| The portal model.
+*/
+jion.lazyStaticValue(
+	visual_portal,
+	'model',
+	function( )
+{
+	return(
+		visual_portal.create(
+			'fabric',
+				fabric_portal.create(
+					'zone',
+						euclid_rect.create(
+							'pnw', euclid_point.zero,
+							'pse', euclid_point.zero
+						),
+					'spaceUser', '',
+					'spaceTag', ''
+				),
+			'view', euclid_view.proper
+		)
+	);
+}
+);
 
 
 /*
