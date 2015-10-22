@@ -760,10 +760,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/shell/models.js',
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/shell/system.js',
 		'inBundle', true
 	),
