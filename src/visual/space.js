@@ -1206,11 +1206,29 @@ prototype._moveScrollY =
 	)
 {
 	var
-		item;
+		action,
+		dy,
+		item,
+		sbary,
+		spos,
+		view;
 
-	item = this.get( this._action.itemPath.get( -1 ) );
+	action = this._action;
 
-	if( item ) item.dragMove( p );
+	item = this.get( action.itemPath.get( -1 ) );
+
+	view = this.view;
+
+	dy = ( p.y - action.startPoint.y ) / view.zoom;
+
+	sbary = item.scrollbarY;
+
+	spos = action.startPos + sbary.scale( dy );
+
+	root.setPath(
+		item.path.append( 'scrollPos' ),
+		item.scrollPos.create( 'y', spos )
+	);
 
 	return 'move';
 };
