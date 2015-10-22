@@ -38,7 +38,7 @@ disc_disc._init =
 	this.frame =
 		this.designFrame.compute( this.view.baseFrame );
 
-	this.silhoutte = this.shape.compute( frame.zeropnw );
+	this.silhoutte = this.shape.compute( frame.zeroPnw );
 };
 
 

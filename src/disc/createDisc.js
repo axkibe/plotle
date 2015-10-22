@@ -163,7 +163,7 @@ prototype._init =
 					 twig[ wname ].path
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
-				'superFrame', this.frame.zeropnw,
+				'superFrame', this.frame.zeroPnw,
 				'hover', this.hover,
 				'down',
 					disc_createDisc._isActiveButton( this.action, wname )

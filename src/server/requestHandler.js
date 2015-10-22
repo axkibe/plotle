@@ -234,7 +234,7 @@ serveAuth =
 
 	user = request.user;
 
-	if( user.name === 'visitor' )
+	if( user.isVisitor )
 	{
 		user = root.userNexus.createVisitor( user );
 

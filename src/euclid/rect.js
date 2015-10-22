@@ -426,12 +426,10 @@ jion.lazyValue(
 
 /*
 | A rectangle of same size with pnw at 0/0
-|
-| FIXME call zeroPnw
 */
 jion.lazyValue(
 	prototype,
-	'zeropnw',
+	'zeroPnw',
 	function( )
 {
 	if( this.pnw.x === 0 && this.pnw.y === 0 )

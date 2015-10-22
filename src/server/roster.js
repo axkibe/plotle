@@ -1,7 +1,5 @@
 /*
 | The roster of all resources.
-|
-| FIXME make a jionRay.
 */
 
 /*
@@ -27,7 +25,7 @@ server_resource = require( './resource' );
 
 server_resourceRay = require( './resourceRay' );
 
-stringRay = jion.stringRay.stringRay; // FIXME
+stringRay = jion.stringRay.stringRay; // FUTURE
 
 module.exports =
 server_resourceRay.create( 'ray:init', [

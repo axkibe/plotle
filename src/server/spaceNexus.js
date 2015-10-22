@@ -54,11 +54,7 @@ server_spaceNexus.testAccess =
 		}
 	}
 
-	// FIXME isVisitor
-	if( user.name.substring( 0, 7 ) === 'visitor' )
-	{
-		return 'no';
-	}
+	if( user.isVisitor ) return 'no';
 
 	if( user.name === spaceRef.username ) return 'rw';
 

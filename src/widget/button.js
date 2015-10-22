@@ -143,7 +143,7 @@ prototype._init =
 	{
 		this.frame = this.designFrame.compute( this.superFrame );
 
-		this._shape = this.shape.compute( this.frame.zeropnw );
+		this._shape = this.shape.compute( this.frame.zeroPnw );
 	}
 	else
 	{
@@ -291,7 +291,7 @@ jion.lazyValue(
 	'textPos',
 	function( )
 {
-	return this.textDesignPos.compute( this.frame.zeropnw );
+	return this.textDesignPos.compute( this.frame.zeroPnw );
 }
 );
 

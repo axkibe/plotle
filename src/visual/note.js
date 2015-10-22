@@ -233,7 +233,7 @@ prototype._init =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
-			'clipsize', zone.zeropnw,
+			'clipsize', zone.zeroPnw,
 			'fabric', fabric.doc,
 			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
