@@ -883,11 +883,13 @@ prototype._moveCreateGeneric =
 
 	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
+	// FIXME take model from action.itemType
+
 	switch( action.itemType )
 	{
 		case visual_note :
 
-			model = shell_models.note;
+			model = visual_note.model;
 
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
@@ -1255,7 +1257,7 @@ prototype._startCreateGeneric =
 	{
 		case visual_note :
 
-			model = shell_models.note;
+			model = visual_note.model;
 
 			break;
 

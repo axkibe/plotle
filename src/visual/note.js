@@ -10,6 +10,10 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	euclid_view,
+	fabric_doc,
+	fabric_note,
+	fabric_para,
 	gruga_note,
 	jion,
 	math_half,
@@ -192,6 +196,38 @@ visual_note.createGeneric =
 			)
 	);
 };
+
+
+/*
+| The note model.
+*/
+jion.lazyStaticValue(
+	visual_note,
+	'model',
+	function( )
+{
+	return(
+		visual_note.create(
+			'fabric',
+				fabric_note.create(
+					'fontsize', gruga_note.defaultFontsize,
+					'zone',
+						euclid_rect.create(
+							'pnw', euclid_point.zero,
+							'pse', euclid_point.zero
+						),
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1', fabric_para.create( 'text', '' )
+						)
+				),
+			'view', euclid_view.proper
+		)
+	);
+}
+);
+
+
 
 
 /*
