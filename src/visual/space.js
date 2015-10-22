@@ -1242,21 +1242,20 @@ prototype._startCreateGeneric =
 {
 	var
 		action,
-		mode,
+		itemType,
 		model,
 		transItem;
 
 	action = this._action;
 
+	itemType = action.itemType;
 
 	// FIXME get model/mode from jion
-	switch( action.itemType )
+	switch( itemType )
 	{
 		case visual_note :
 
 			model = shell_models.note;
-
-			mode = 'rect';
 
 			break;
 
@@ -1264,24 +1263,20 @@ prototype._startCreateGeneric =
 
 			model = shell_models.label;
 
-			mode = 'pnw';
-
 			break;
 
 		case visual_portal :
 
 			model = shell_models.portal;
 
-			mode = 'rect';
-
 			break;
 
 		default : throw new Error( );
 	}
 
-	switch( mode )
+	switch( itemType.positioning )
 	{
-		case 'rect' :
+		case 'zone' :
 
 			transItem =
 				model.create(
@@ -1302,7 +1297,7 @@ prototype._startCreateGeneric =
 
 			break;
 
-		case 'pnw' :
+		case 'pnw/fontsize' :
 
 			transItem =
 				model.create(
@@ -1337,44 +1332,13 @@ prototype._stopCreateGeneric =
 	)
 {
 	var
-		action,
-		dp;
+		action;
 
 	action = this._action;
 
-	dp = p.fromView( this.view );
+	action.itemType.createGeneric( action, p.fromView( this.view ) );
 
-	// FIXME use itemType directly
-	switch( action.itemType )
-	{
-		case visual_note :
-
-			visual_note.createGeneric( action, dp );
-
-			if( !ctrl ) root.create( 'action', undefined );
-
-			break;
-
-		case visual_label :
-
-			visual_label.createGeneric( action, dp );
-
-			if( !ctrl ) root.create( 'action', undefined );
-
-			break;
-
-		case visual_portal :
-
-			visual_portal.createGeneric( action, dp );
-
-			if( !ctrl ) root.create( 'action', undefined );
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
+	if( !ctrl ) root.create( 'action', undefined );
 };
 
 

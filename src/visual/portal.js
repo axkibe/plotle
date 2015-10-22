@@ -613,7 +613,9 @@ prototype.pointingHover =
 /*
 | Portals are positioned by their zone.
 */
-prototype.positioning = 'zone';
+visual_portal.positioning =
+prototype.positioning =
+	'zone';
 
 
 /*

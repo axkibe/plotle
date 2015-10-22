@@ -426,7 +426,9 @@ prototype.pointingHover = visual_item.pointingHover;
 /*
 | Labels use pnw/fontsize for positioning
 */
-prototype.positioning = 'pnw/fontsize';
+visual_label.positioning =
+prototype.positioning =
+	'pnw/fontsize';
 
 
 /*

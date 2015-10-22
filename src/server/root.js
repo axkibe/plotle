@@ -1033,7 +1033,8 @@ prototype.wake =
 
 	modified = false;
 
-	// FIXME cache change lists to answer the same to multiple clients.
+	// FUTURE cache change lists
+	// to answer the same to multiple clients.
 	for( a = 0, aZ = sleepKeys.length; a < aZ; a++ )
 	{
 		key = sleepKeys[ a ];

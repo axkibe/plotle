@@ -383,15 +383,15 @@ jion.lazyValue(
 	prototype,
 	'handlesBezel',
 	function( )
-	{
-		return(
-			visual_handlesBezel.create(
-				'handles', visual_note.handles,
-				'silhoutte', this.vSilhoutte,
-				'zone', this.vZone
-			)
-		);
-	}
+{
+	return(
+		visual_handlesBezel.create(
+			'handles', visual_note.handles,
+			'silhoutte', this.vSilhoutte,
+			'zone', this.vZone
+		)
+	);
+}
 );
 
 
@@ -422,7 +422,9 @@ prototype.pointingHover = visual_item.pointingHover;
 /*
 | Notes use zone for positioning
 */
-prototype.positioning = 'zone';
+visual_note.positioning =
+prototype.positioning =
+	'zone';
 
 
 /*
