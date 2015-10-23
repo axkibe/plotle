@@ -209,11 +209,11 @@ jion.lazyValue(
 		backText = doc.get( backKey ).text;
 
 		buf =
-			[
-				frontText.substring(
-					frontMark.at, frontText.length
-				)
-			];
+		[
+			frontText.substring(
+				frontMark.at, frontText.length
+			)
+		];
 
 		for(
 			r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
