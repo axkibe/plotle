@@ -272,8 +272,19 @@ prototype.inView =
 	return(
 		this.create(
 			'pnw', this.pnw.inView( view ),
-			'pse', this.pse.inView( view )
-			// FIXME gradients
+			'pse', this.pse.inView( view ),
+			'gradientPC',
+				this.gradientPC !== undefined
+				? this.gradientPC.inView( view )
+				: pass,
+			'gradientR0',
+				this.gradientR0 !== undefined
+				? view.scale( this.gradientR0 )
+				: pass,
+			'gradientR1',
+				this.gradientR1 !== undefined
+				? view.scale( this.gradientR1 )
+				: pass
 		)
 	);
 };
