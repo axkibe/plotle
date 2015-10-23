@@ -440,12 +440,6 @@ prototype.createRelationStop = visual_item.createRelationStop;
 
 
 /*
-| A move during an action.
-*/
-prototype.dragMove = visual_item.dragMove;
-
-
-/*
 | Handles a potential dragStart event for this item.
 */
 prototype.dragStart = visual_item.dragStart;

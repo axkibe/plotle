@@ -64,60 +64,6 @@ visual_item.concernsAction =
 
 
 /*
-| A move during an action.
-|
-| FIXME remove
-*/
-visual_item.dragMove =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	var
-		action,
-		dy,
-		sbary,
-		spos,
-		view;
-
-	action = this._action;
-
-	if( !action ) return false;
-
-	view = this.view;
-
-	switch( action.reflect )
-	{
-		case 'action_scrolly' :
-
-			dy = ( p.y - action.startPoint.y ) / view.zoom;
-
-			sbary = this.scrollbarY;
-
-			spos = action.startPos + sbary.scale( dy );
-
-			root.setPath(
-				this.path.append( 'scrollPos' ),
-				this.scrollPos.create(
-					'y', spos
-				)
-			);
-
-			return true;
-
-		default :
-
-			throw new Error( );
-	}
-
-	return true;
-};
-
-
-
-/*
 | Handles a potential dragStart event for this item.
 */
 visual_item.dragStart =
