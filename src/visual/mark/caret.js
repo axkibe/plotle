@@ -102,9 +102,9 @@ jion.lazyValue(
 	prototype,
 	'caret',
 	function( )
-	{
-		return this.textMark;
-	}
+{
+	return this.textMark;
+}
 );
 
 
@@ -146,16 +146,16 @@ jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
-	{
-		var
-			path;
+{
+	var
+		path;
 
-		path = this.textMark.path;
+	path = this.textMark.path;
 
-		if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
+	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
 
-		return path.limit( 3 );
-	}
+	return path.limit( 3 );
+}
 );
 
 
@@ -194,16 +194,16 @@ jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
-	{
-		var
-			path;
+{
+	var
+		path;
 
-		path = this.textMark.path;
+	path = this.textMark.path;
 
-		if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
+	if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
 
-		return path.limit( 5 );
-	}
+	return path.limit( 5 );
+}
 );
 
 

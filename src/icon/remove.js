@@ -140,7 +140,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this.fill, this.border, this._x );
+	display.paint( this, this._x );
 };
 
 

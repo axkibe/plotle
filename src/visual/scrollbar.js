@@ -91,8 +91,7 @@ prototype.draw =
 	)
 {
 	display.paint(
-		gruga_scrollbar.facet.fill,
-		gruga_scrollbar.facet.border,
+		gruga_scrollbar.facet,
 		this.getArea( view )
 	);
 };

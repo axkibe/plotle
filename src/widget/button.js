@@ -328,7 +328,7 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	display.paint( facet.fill, facet.border, this._shape );
+	display.paint( facet, this._shape );
 
 	if( this.text )
 	{

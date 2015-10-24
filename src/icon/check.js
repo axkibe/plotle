@@ -96,7 +96,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this.fill, this.border, this._check );
+	display.paint( this, this._check );
 };
 
 

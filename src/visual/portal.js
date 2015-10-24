@@ -1569,21 +1569,15 @@ jion.lazyValue(
 					'focus', false
 				);
 
-			display.paint(
-				buttonFacet.fill,
-				buttonFacet.border,
-				moveToButton.shape.inView( hview )
-			);
+			display.paint( buttonFacet, moveToButton.shape.inView( hview ) );
 
 			display.paint(
-				inputFacet.fill,
-				inputFacet.border,
+				inputFacet,
 				fieldSpaceUser.silhoutte.inView( hview )
 			);
 
 			display.paint(
-				inputFacet.fill,
-				inputFacet.border,
+				inputFacet,
 				fieldSpaceTag.silhoutte.inView( hview )
 			);
 

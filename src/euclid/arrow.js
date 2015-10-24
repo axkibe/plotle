@@ -163,7 +163,7 @@ euclid_arrow.connect =
 
 
 /*
-| Displays the arrow.
+| Draws the arrow.
 */
 prototype.draw =
 	function(
@@ -171,7 +171,7 @@ prototype.draw =
 		facet
 	)
 {
-	display.paint( facet.fill, facet.border, this._shape );
+	display.paint( facet, this._shape );
 };
 
 

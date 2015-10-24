@@ -265,8 +265,7 @@ prototype.draw =
 	)
 	{
 		display.paint(
-			gruga_selection.fill,
-			gruga_selection.border,
+			gruga_selection,
 			this._rangeShape.inView( this.view )
 		);
 	}

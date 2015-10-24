@@ -268,7 +268,7 @@ prototype.draw =
 			'focus', !!this.mark
 		);
 
-	display.paint( facet.fill, facet.border, this.frame );
+	display.paint( facet, this.frame );
 
 	if( this.checked ) this.checkIcon.draw( display );
 };

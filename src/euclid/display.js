@@ -432,30 +432,38 @@ euclid_display.prototype.globalAlpha =
 
 /*
 | Fills an aera and draws its borders.
-|
-| FIXME take a facet.
 */
 euclid_display.prototype.paint =
 	function(
-		fill,
-		border,
+		facet,
 		shape
 	)
 {
 	var
 		a,
 		aZ,
-		cx;
+		border,
+		cx,
+		fill;
 
 	if( shape.reflect === 'euclid_shapeRay' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
-			this.paint( fill, border, shape.get( a ) );
+			this.paint( facet, shape.get( a ) );
 		}
 
 		return;
 	}
+
+/**/if( CHECK && false ) // FIXME
+/**/{
+/**/	if( facet.reflect !== 'design_facet' ) throw new Error( );
+/**/}
+
+	border = facet.border;
+
+	fill = facet.fill;
 
 	cx = this._cx;
 

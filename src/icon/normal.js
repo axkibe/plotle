@@ -19,24 +19,24 @@ var
 
 
 /*
-| The jion definition
+| The jion definition.
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'icon_normal',
 		attributes :
 		{
 			border :
-				{
-					comment : 'border',
-					type : 'euclid_border'
-				},
+			{
+				comment : 'border',
+				type : 'euclid_border'
+			},
 			fill :
-				{
-					comment : 'fill',
-					type : 'euclid_color'
-				}
+			{
+				comment : 'fill',
+				type : 'euclid_color'
+			}
 		},
 		init : [ ]
 	};
@@ -112,7 +112,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this.fill, this.border, this._arrow );
+	display.paint( this, this._arrow );
 };
 
 

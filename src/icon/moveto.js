@@ -24,10 +24,11 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id : 'icon_moveto',
 		attributes :
 		{
+			// FIXME make it a facet
 			border :
 			{
 				comment : 'border',
@@ -124,11 +125,11 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this.fill, this.border, this._arrow );
+	display.paint( this, this._arrow );
 
-	display.paint( this.fill, this.border, this._base1 );
+	display.paint( this, this._base1 );
 
-	display.paint( this.fill, this.border, this._base2 );
+	display.paint( this, this._base2 );
 };
 
 

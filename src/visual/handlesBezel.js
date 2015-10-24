@@ -369,11 +369,7 @@ prototype.drawHandles =
 
 		if( !h ) continue;
 
-		display.paint(
-			gruga_handles.facet.fill,
-			gruga_handles.facet.border,
-			h
-		);
+		display.paint( gruga_handles.facet, h );
 	}
 
 	display.deClip( );

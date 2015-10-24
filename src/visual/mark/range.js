@@ -44,8 +44,7 @@ if( JION )
 				comment : 'x-position of the caret kept',
 				type : [ 'undefined', 'number' ]
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -289,9 +288,9 @@ jion.lazyValue(
 	prototype,
 	'empty',
 	function( )
-	{
-		return this.beginMark.equals( this.endMark );
-	}
+{
+	return this.beginMark.equals( this.endMark );
+}
 );
 
 
