@@ -104,11 +104,11 @@ jion.lazyValue(
 	prototype,
 	'frontMark',
 	function( )
-	{
-		this._normalize( );
+{
+	this._normalize( );
 
-		return this.frontMark;
-	}
+	return this.frontMark;
+}
 );
 
 
@@ -120,11 +120,11 @@ jion.lazyValue(
 	prototype,
 	'backMark',
 	function( )
-	{
-		this._normalize( );
+{
+	this._normalize( );
 
-		return this.backMark;
-	}
+	return this.backMark;
+}
 );
 
 
@@ -143,10 +143,37 @@ jion.lazyValue(
 	prototype,
 	'caret',
 	function( )
-	{
-		return this.endMark;
-	}
+{
+	return this.endMark;
+}
 );
+
+
+/*
+| The doc path.
+*/
+jion.lazyValue(
+	prototype,
+	'docPath',
+	function( )
+{
+	var
+		beginPath;
+
+	beginPath = this.beginMark.path;
+
+	if(
+		beginPath.length < 5
+		|| beginPath.get( 0 ) !== 'spaceVisual'
+	)
+	{
+		return;
+	}
+
+	return beginPath.limit( 5 );
+}
+);
+
 
 
 /*
@@ -156,11 +183,22 @@ jion.lazyValue(
 	prototype,
 	'itemPath',
 	function( )
-	{
-		if( this.beginMark.path.length < 3 ) return;
+{
+	var
+		beginPath;
 
-		return this.beginMark.path.limit( 3 );
+	beginPath = this.beginMark.path;
+
+	if(
+		beginPath.length < 3
+		|| beginPath.get( 0 ) !== 'spaceVisual'
+	)
+	{
+		return;
 	}
+
+	return beginPath.limit( 3 );
+}
 );
 
 
@@ -171,62 +209,62 @@ jion.lazyValue(
 	prototype,
 	'clipboard',
 	function( )
+{
+	var
+		backKey,
+		backMark,
+		backText,
+		buf,
+		doc,
+		frontKey,
+		frontMark,
+		frontText,
+		r, rZ,
+		text;
+
+	frontMark = this.frontMark;
+
+	backMark = this.backMark;
+
+	doc = this.doc;
+
+	frontKey = frontMark.path.get( -2 );
+
+	backKey = backMark.path.get( -2 );
+
+	if( frontMark.path.equals( backMark.path ) )
 	{
-		var
-			backKey,
-			backMark,
-			backText,
-			buf,
-			doc,
-			frontKey,
-			frontMark,
-			frontText,
-			r, rZ,
-			text;
+		text = doc.get( frontKey ).text;
 
-		frontMark = this.frontMark;
-
-		backMark = this.backMark;
-
-		doc = this.doc;
-
-		frontKey = frontMark.path.get( -2 );
-
-		backKey = backMark.path.get( -2 );
-
-		if( frontMark.path.equals( backMark.path ) )
-		{
-			text = doc.get( frontKey ).text;
-
-			return(
-				text.substring( frontMark.at, backMark.at )
-			);
-		}
-
-		frontText = doc.get( frontKey ).text;
-
-		backText = doc.get( backKey ).text;
-
-		buf =
-		[
-			frontText.substring(
-				frontMark.at, frontText.length
-			)
-		];
-
-		for(
-			r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
-			r < rZ;
-			r++
-		)
-		{
-			buf.push( '\n', doc.atRank( r ).text );
-		}
-
-		buf.push( '\n', backText.substring( 0, backMark.at ) );
-
-		return buf.join( '' );
+		return(
+			text.substring( frontMark.at, backMark.at )
+		);
 	}
+
+	frontText = doc.get( frontKey ).text;
+
+	backText = doc.get( backKey ).text;
+
+	buf =
+	[
+		frontText.substring(
+			frontMark.at, frontText.length
+		)
+	];
+
+	for(
+		r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
+		r < rZ;
+		r++
+	)
+	{
+		buf.push( '\n', doc.atRank( r ).text );
+	}
+
+	buf.push( '\n', backText.substring( 0, backMark.at ) );
+
+	return buf.join( '' );
+}
 );
 
 
@@ -270,6 +308,8 @@ prototype.createTransformed =
 	)
 {
 	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
+
+	console.log( changes );
 
 	return(
 		this.create(
