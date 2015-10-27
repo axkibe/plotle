@@ -163,14 +163,19 @@ jion.lazyValue(
 	beginPath = this.beginMark.path;
 
 	if(
-		beginPath.length < 5
+		beginPath.length < 4
 		|| beginPath.get( 0 ) !== 'spaceVisual'
 	)
 	{
 		return;
 	}
 
-	return beginPath.limit( 5 );
+/**/if( CHECK )
+/**/{
+/**/	if( beginPath.get( 4 ) !== 'doc' ) throw new Error( );
+/**/}
+
+	return beginPath.limit( 4 );
 }
 );
 
@@ -299,22 +304,26 @@ prototype.containsPath =
 /*
 | Recreates this mark with a transformation
 | applied.
-|
-| FIXME take the transformed doc here
 */
 prototype.createTransformed =
 	function(
-		changes
+		changes,
+		doc
 	)
 {
-	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
-	console.log( changes );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
+
+	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
 	return(
 		this.create(
 			'beginMark', this.beginMark.createTransformed( changes ),
-			'endMark', this.endMark.createTransformed( changes )
+			'endMark', this.endMark.createTransformed( changes ),
+			'doc', doc
 		)
 	);
 };

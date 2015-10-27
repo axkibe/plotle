@@ -62,26 +62,26 @@ jion.lazyValue(
 	prototype,
 	'reverse',
 	function( )
+{
+	var
+		a,
+		aZ,
+		iRay,
+		result;
+
+	iRay = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		var
-			a,
-			aZ,
-			iRay,
-			result;
-
-		iRay = [ ];
-
-		for( a = 0, aZ = this.length; a < aZ; a++ )
-		{
-			iRay[ a ] = this.get( aZ - 1 - a ).reverse;
-		}
-
-		result = change_ray.create( 'ray:init', iRay );
-
-		jion.aheadValue( result, 'reverse', this );
-
-		return result;
+		iRay[ a ] = this.get( aZ - 1 - a ).reverse;
 	}
+
+	result = change_ray.create( 'ray:init', iRay );
+
+	jion.aheadValue( result, 'reverse', this );
+
+	return result;
+}
 );
 
 

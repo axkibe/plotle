@@ -1043,20 +1043,30 @@ prototype.update =
 	var
 		mark;
 
-	if( !this._mark ) return;
+	mark = this._mark;
 
-	mark = this._mark.createTransformed( changes );
+	if( !mark ) return;
 
-	if( mark && mark.reflect === 'visual_mark_range' )
+	switch( mark.reflect )
 	{
-		// FUTURE remove doc from range
-		mark =
-			mark.create(
-				'doc',
-					root.spaceFabric.getPath(
-						mark.itemPath.chop.append( 'doc' )
-					)
+		case 'visual_mark_range' :
+
+			mark = mark.createTransformed(
+				changes,
+				root.spaceFabric.getPath(
+					mark.itemPath.chop.append( 'doc' )
+					// FIXME use docPath
+				)
 			);
+
+			break;
+
+
+		default :
+
+			mark = mark.createTransformed( changes );
+
+			break;
 	}
 
 	root.create( 'mark', mark );

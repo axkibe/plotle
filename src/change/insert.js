@@ -151,22 +151,22 @@ jion.lazyValue(
 	prototype,
 	'reverse',
 	function( )
-	{
-		var
-			inv;
+{
+	var
+		inv;
 
-		inv =
-			change_remove.create(
-				'path', this.path,
-				'val', this.val,
-				'at1', this.at1,
-				'at2', this.at2
-			);
+	inv =
+		change_remove.create(
+			'path', this.path,
+			'val', this.val,
+			'at1', this.at1,
+			'at2', this.at2
+		);
 
-		jion.aheadValue( inv, 'reverse', this );
+	jion.aheadValue( inv, 'reverse', this );
 
-		return inv;
-	}
+	return inv;
+}
 );
 
 
