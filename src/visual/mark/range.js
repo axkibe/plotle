@@ -172,7 +172,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( beginPath.get( 4 ) !== 'doc' ) throw new Error( );
+/**/	if( beginPath.get( 3 ) !== 'doc' ) throw new Error( );
 /**/}
 
 	return beginPath.limit( 4 );

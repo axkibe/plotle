@@ -703,7 +703,10 @@ prototype.clearRetainX =
 
 	// FIXME also clearRetainX for ranges
 	if(
-		mark.reflect === 'visual_mark_caret'
+		(
+			mark.reflect === 'visual_mark_caret'
+			|| mark.reflect === 'visual_mark_range'
+		)
 		&& mark.retainx !== undefined
 	)
 	{
@@ -1053,10 +1056,7 @@ prototype.update =
 
 			mark = mark.createTransformed(
 				changes,
-				root.spaceFabric.getPath(
-					mark.itemPath.chop.append( 'doc' )
-					// FIXME use docPath
-				)
+				root.spaceFabric.getPath( mark.docPath.chop )
 			);
 
 			break;
