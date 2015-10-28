@@ -701,14 +701,7 @@ prototype.clearRetainX =
 
 	mark = this._mark;
 
-	// FIXME also clearRetainX for ranges
-	if(
-		(
-			mark.reflect === 'visual_mark_caret'
-			|| mark.reflect === 'visual_mark_range'
-		)
-		&& mark.retainx !== undefined
-	)
+	if( mark.retainx !== undefined )
 	{
 		this.create( 'mark', mark.create( 'retainx', undefined ) );
 	}

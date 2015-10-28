@@ -61,7 +61,7 @@ server_resourceRay.create( 'ray:init', [
 	server_resource.create(
 		'aliases', stringRay( [ 'jioncode-path.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.path.jioncode,
+		'data', jion.path.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true

@@ -157,11 +157,8 @@ prototype.prepareResource =
 		jionCodeResource =
 			resource.create(
 				'aliases', undefined,
-				'data', that.jioncode,
-				'filePath',
-					// FIXME let the jion module worry about this
-					'jioncode/'
-					+ resource.filePath.replace( /\//g, '-' ),
+				'data', that.jionCode,
+				'filePath', that.jionCodeFilename,
 				'hasJion', false,
 				'jionHolder', resource
 			);
