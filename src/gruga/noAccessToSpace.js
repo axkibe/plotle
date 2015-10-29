@@ -5,8 +5,8 @@
 
 var
 	design_ellipse,
-	design_point,
 	design_rect,
+	euclid_anchor_point,
 	form_noAccessToSpace,
 	gruga_genericButtonFacets,
 	gruga_noAccessToSpace,
@@ -44,7 +44,7 @@ gruga_noAccessToSpace =
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -120
@@ -55,7 +55,7 @@ gruga_noAccessToSpace =
 				'text', 'Sorry, you cannot port to this space or create it.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -50
@@ -67,13 +67,13 @@ gruga_noAccessToSpace =
 				'designFrame',
 					design_rect.create(
 						'pnw',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', okButton.w,
 								'y', okButton.n
 							),
 						'pse',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', okButton.w + okButton.width,
 								'y', okButton.n + okButton.height
@@ -81,7 +81,7 @@ gruga_noAccessToSpace =
 					),
 				'text', 'ok',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'shape', design_ellipse.fullSkewNW
 			)
 	);

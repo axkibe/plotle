@@ -5,7 +5,7 @@
 
 var
 	design_ellipse,
-	design_point,
+	euclid_anchor_point,
 	euclid_ellipse;
 
 /*
@@ -27,17 +27,17 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north-west',
-				type : 'design_point'
+				type : 'euclid_anchor_point'
 			},
 			pse :
 			{
 				comment : 'point in south-east',
-				type : 'design_point'
+				type : 'euclid_anchor_point'
 			},
 			gradientPC :
 			{
 				comment : 'center of gradient',
-				type : [ 'undefined', 'design_point' ]
+				type : [ 'undefined', 'euclid_anchor_point' ]
 			},
 			gradientR1 :
 			{
@@ -69,8 +69,8 @@ prototype = design_ellipse.prototype;
 */
 design_ellipse.fullSkewNW =
 	design_ellipse.create(
-		'pnw', design_point.nw,
-		'pse', design_point.seMin1
+		'pnw', euclid_anchor_point.nw,
+		'pse', euclid_anchor_point.seMin1
 	);
 
 

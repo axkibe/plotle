@@ -5,7 +5,7 @@
 
 var
 	design_ellipse,
-	design_point,
+	euclid_anchor_point,
 	design_rect,
 	disc_mainDisc,
 	euclid_border,
@@ -53,7 +53,7 @@ var
 	userButtonPnw,
 	userButtonSize;
 
-dnw = design_point.nw;
+dnw = euclid_anchor_point.nw;
 
 
 iconMoveTo =
@@ -183,24 +183,24 @@ gruga_mainDisc =
 		'designFrame',
 			design_rect.create(
 				'pnw',
-					design_point.w.create( 'x', 0, 'y', -400 ),
+					euclid_anchor_point.w.create( 'x', 0, 'y', -400 ),
 				'pse',
-					design_point.w.create( 'x', 100, 'y', 400 )
+					euclid_anchor_point.w.create( 'x', 100, 'y', 400 )
 			),
 		'shape',
 			design_ellipse.create(
 				'pnw',
-					design_point.e.create(
+					euclid_anchor_point.e.create(
 						'x', -1601,
 						'y', -800
 					),
 				'pse',
-					design_point.e.create(
+					euclid_anchor_point.e.create(
 						'x', -1,
 						'y', 800
 					),
 				'gradientPC',
-					design_point.w.create(
+					euclid_anchor_point.w.create(
 						'x', -600,
 						'y', 0
 					),
@@ -233,7 +233,7 @@ gruga_mainDisc =
 				'visible', false,
 				'text', 'new',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'designFrame',
 					design_rect.create(
 						'pnw', createButtonPnw,
@@ -269,11 +269,11 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'shape',
 					design_ellipse.create(
-						'pnw', design_point.nw.create( 'x', -60, 'y', 0 ),
-						'pse', design_point.seMin1
+						'pnw', euclid_anchor_point.nw.create( 'x', -60, 'y', 0 ),
+						'pse', euclid_anchor_point.seMin1
 					),
 				'textRotation', - Math.PI / 2
 			),
@@ -286,11 +286,11 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'shape',
 					design_ellipse.create(
-						'pnw', design_point.nw.create( 'x', -70, 'y', 0 ),
-						'pse', design_point.seMin1
+						'pnw', euclid_anchor_point.nw.create( 'x', -70, 'y', 0 ),
+						'pse', euclid_anchor_point.seMin1
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),
@@ -300,7 +300,7 @@ gruga_mainDisc =
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'designFrame',
 					design_rect.create(
 						'pnw', loginButtonPnw,
@@ -313,7 +313,7 @@ gruga_mainDisc =
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'designFrame',
 					design_rect.create(
 						'pnw', signupButtonPnw,

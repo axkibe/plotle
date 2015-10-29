@@ -26,7 +26,7 @@ if( JION )
 			designPos :
 			{
 				comment : 'designed position of the text',
-				type : 'design_point'
+				type : 'euclid_anchor_point'
 			},
 			hover :
 			{
