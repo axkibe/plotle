@@ -5,9 +5,9 @@
 
 var
 	design_ellipse,
-	design_point,
 	design_rect,
 	disc_createDisc,
+	euclid_anchor_point,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
@@ -38,7 +38,7 @@ var
 	relationButtonPnw;
 
 
-dnw = design_point.nw;
+dnw = euclid_anchor_point.nw;
 
 noteButtonPnw = dnw.create( 'x', 62, 'y', 216 );
 
@@ -98,7 +98,7 @@ genericButtonModel =
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
 		'shape', design_ellipse.fullSkewNW,
-		'textDesignPos', design_point.c
+		'textDesignPos', euclid_anchor_point.c
 	);
 
 
@@ -119,24 +119,24 @@ gruga_createDisc =
 		'designFrame',
 			design_rect.create(
 				'pnw',
-					design_point.w.create( 'x', 0, 'y', -505 ),
+					euclid_anchor_point.w.create( 'x', 0, 'y', -505 ),
 				'pse',
-					design_point.w.create( 'x', 176, 'y', 505 )
+					euclid_anchor_point.w.create( 'x', 176, 'y', 505 )
 			),
 		'shape',
 			design_ellipse.create(
 				'pnw',
-					design_point.e.create(
+					euclid_anchor_point.e.create(
 						'x', -1651,
 						'y', -850
 					),
 				'pse',
-					design_point.e.create(
+					euclid_anchor_point.e.create(
 						'x', -1,
 						'y', 850
 					),
 				'gradientPC',
-					design_point.e.create(
+					euclid_anchor_point.e.create(
 						'x', -600,
 						'y', 0
 					),

@@ -4,7 +4,7 @@
 
 
 var
-	design_point,
+	euclid_anchor_point,
 	shell_fontPool,
 	form_loading,
 	gruga_loading,
@@ -28,7 +28,7 @@ gruga_loading =
 				'text', 'loading',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -56
@@ -39,7 +39,7 @@ gruga_loading =
 				'text', 'ideoloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0

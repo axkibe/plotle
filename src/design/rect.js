@@ -26,12 +26,12 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north-west',
-				type : 'design_point'
+				type : 'euclid_anchor_point'
 			},
 			pse :
 			{
 				comment : 'point in south-east',
-				type : 'design_point'
+				type : 'euclid_anchor_point'
 			}
 		}
 	};

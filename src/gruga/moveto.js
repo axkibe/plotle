@@ -5,7 +5,7 @@
 
 var
 	design_ellipse,
-	design_point,
+	euclid_anchor_point,
 	design_rect,
 	euclid_facet,
 	euclid_facetRay,
@@ -111,7 +111,7 @@ gruga_moveTo =
 				'text', 'move to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -150
@@ -124,13 +124,13 @@ gruga_moveTo =
 				'designFrame',
 					design_rect.create(
 						'pnw',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', ideoloomHomeButton.w,
 								'y', ideoloomHomeButton.n
 							),
 						'pse',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x',
 									ideoloomHomeButton.w
@@ -144,7 +144,7 @@ gruga_moveTo =
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0
@@ -158,13 +158,13 @@ gruga_moveTo =
 				'designFrame',
 					design_rect.create(
 						'pnw',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', ideoloomSandboxButton.w,
 								'y', ideoloomSandboxButton.n
 							),
 						'pse',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x',
 									ideoloomSandboxButton.w +
@@ -178,7 +178,7 @@ gruga_moveTo =
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0
@@ -192,13 +192,13 @@ gruga_moveTo =
 				'designFrame',
 					design_rect.create(
 						'pnw',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', userHomeButton.w,
 								'y', userHomeButton.n
 							),
 						'pse',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', userHomeButton.w + userHomeButton.width,
 								'y', userHomeButton.n + userHomeButton.height
@@ -208,7 +208,7 @@ gruga_moveTo =
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0

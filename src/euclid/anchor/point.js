@@ -4,7 +4,7 @@
 
 
 var
-	design_point,
+	euclid_anchor_point,
 	euclid_point,
 	math_half;
 
@@ -22,7 +22,7 @@ var
 if( JION )
 {
 	return{
-		id : 'design_point',
+		id : 'euclid_anchor_point',
 		attributes :
 		{
 			anchor :
@@ -56,14 +56,14 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_point.prototype;
+prototype = euclid_anchor_point.prototype;
 
 
 /*
 | Point in center.
 */
-design_point.c =
-	design_point.create(
+euclid_anchor_point.c =
+	euclid_anchor_point.create(
 		'anchor', 'c',
 		'x', 0,
 		'y', 0
@@ -73,8 +73,8 @@ design_point.c =
 /*
 | Point in north west.
 */
-design_point.nw =
-	design_point.create(
+euclid_anchor_point.nw =
+	euclid_anchor_point.create(
 		'anchor', 'nw',
 		'x', 0,
 		'y', 0
@@ -83,8 +83,8 @@ design_point.nw =
 /*
 | Point in south east.
 */
-design_point.se =
-	design_point.create(
+euclid_anchor_point.se =
+	euclid_anchor_point.create(
 		'anchor', 'se',
 		'x', 0,
 		'y', 0
@@ -93,8 +93,8 @@ design_point.se =
 /*
 | Point in south east minus 1.
 */
-design_point.seMin1 =
-	design_point.create(
+euclid_anchor_point.seMin1 =
+	euclid_anchor_point.create(
 		'anchor', 'se',
 		'x', -1,
 		'y', -1
@@ -104,8 +104,8 @@ design_point.seMin1 =
 /*
 | Point in east.
 */
-design_point.e =
-	design_point.create(
+euclid_anchor_point.e =
+	euclid_anchor_point.create(
 		'anchor', 'e',
 		'x', 0,
 		'y', 0
@@ -114,8 +114,8 @@ design_point.e =
 /*
 | Point in west.
 */
-design_point.w =
-	design_point.create(
+euclid_anchor_point.w =
+	euclid_anchor_point.create(
 		'anchor', 'w',
 		'x', 0,
 		'y', 0

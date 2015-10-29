@@ -5,8 +5,8 @@
 
 var
 	design_ellipse,
-	design_point,
 	design_rect,
+	euclid_anchor_point,
 	form_space,
 	gruga_genericButtonFacets,
 	gruga_space,
@@ -44,7 +44,7 @@ gruga_space =
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -120
@@ -55,7 +55,7 @@ gruga_space =
 				'text', 'In future space settings can be altered here.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
-					design_point.create(
+					euclid_anchor_point.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', -50
@@ -67,13 +67,13 @@ gruga_space =
 				'designFrame',
 					design_rect.create(
 						'pnw',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', closeButton.w,
 								'y', closeButton.n
 							),
 						'pse',
-							design_point.create(
+							euclid_anchor_point.create(
 								'anchor', 'c',
 								'x', closeButton.w + closeButton.width,
 								'y', closeButton.n + closeButton.height
@@ -81,7 +81,7 @@ gruga_space =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_point.c,
+				'textDesignPos', euclid_anchor_point.c,
 				'shape', design_ellipse.fullSkewNW
 			)
 	);
