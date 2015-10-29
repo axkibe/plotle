@@ -7,12 +7,12 @@ var
 	design_ellipse,
 	design_point,
 	design_rect,
-	design_facet,
-	design_facetRay,
 	disc_createDisc,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
 	euclid_point,
@@ -51,13 +51,13 @@ relationButtonPnw = dnw.create( 'x', 94, 'y', 354 );
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
 genericButtonFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create( ),
+			euclid_facet.create( ),
 			// hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'hover' : true },
 				'fill',
@@ -68,7 +68,7 @@ genericButtonFacets =
 					)
 			),
 			// down
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'down' : true },
 				'fill',
@@ -79,7 +79,7 @@ genericButtonFacets =
 					)
 			),
 			// down and hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'down' : true, 'hover' : true },
 				'fill',

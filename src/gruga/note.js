@@ -4,11 +4,11 @@
 
 
 var
-	design_facet,
-	design_facetRay,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_gradient_askew,
 	euclid_gradient_colorStop,
 	euclid_margin,
@@ -26,10 +26,10 @@ gruga_note = { };
 
 
 gruga_note.facets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:append',
 		// default
-		design_facet.create(
+		euclid_facet.create(
 			'fill',
 				euclid_gradient_askew.create(
 					'ray:append',
@@ -56,7 +56,7 @@ gruga_note.facets =
 		),
 		'ray:append',
 		// highlight
-		design_facet.create(
+		euclid_facet.create(
 			'group:init', { highlight : true },
 			'border',
 				euclid_border.create(

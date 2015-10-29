@@ -42,7 +42,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'design_facetRay'
+				type : 'euclid_facetRay'
 			},
 			font :
 			{

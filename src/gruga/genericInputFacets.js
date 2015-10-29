@@ -4,11 +4,11 @@
 
 
 var
-	design_facet,
-	design_facetRay,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_facet,
+	euclid_facetRay,
 	gruga_genericInputFacets;
 
 
@@ -20,11 +20,11 @@ var
 
 
 gruga_genericInputFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create(
+			euclid_facet.create(
 				'fill', euclid_color.white,
 				'border',
 					euclid_borderRay.create(
@@ -39,7 +39,7 @@ gruga_genericInputFacets =
 					)
 			),
 			// focus
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', euclid_color.white,
 				'border',

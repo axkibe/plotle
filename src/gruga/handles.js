@@ -4,9 +4,9 @@
 
 
 var
-	design_facet,
 	euclid_border,
 	euclid_color,
+	euclid_facet,
 	gruga_handles;
 
 
@@ -20,7 +20,7 @@ var
 gruga_handles = { };
 
 gruga_handles.facet =
-	design_facet.create(
+	euclid_facet.create(
 		'fill',
 			euclid_color.rgba( 255, 240, 150, 0.9 ),
 		'border',

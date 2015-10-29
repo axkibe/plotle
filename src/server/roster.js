@@ -342,12 +342,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/facet.js',
+		'filePath', 'src/euclid/facet.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/facetRay.js',
+		'filePath', 'src/euclid/facetRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),

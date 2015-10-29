@@ -4,11 +4,11 @@
 
 
 var
-	design_facet,
-	design_facetRay,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_gradient_radial,
 	euclid_gradient_colorStop,
 	gruga_portal;
@@ -24,10 +24,10 @@ var
 gruga_portal = { };
 
 gruga_portal.facets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:append',
 		// default
-		design_facet.create(
+		euclid_facet.create(
 			'fill',
 				euclid_gradient_radial.create(
 					'ray:append',
@@ -55,7 +55,7 @@ gruga_portal.facets =
 		),
 		'ray:append',
 		// highlight
-		design_facet.create(
+		euclid_facet.create(
 			'group:init', { highlight : true },
 			'border',
 				euclid_border.create(
@@ -71,11 +71,11 @@ gruga_portal.facets =
 | and on the portal.
 */
 gruga_portal.buttonFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { },
 				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -84,7 +84,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
@@ -94,7 +94,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// focus
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -105,7 +105,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// focus and hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
@@ -123,11 +123,11 @@ gruga_portal.buttonFacets =
 | Facet design of input fields on the portal.
 */
 gruga_portal.inputFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create(
+			euclid_facet.create(
 				'fill', euclid_color.white,
 				'border',
 					euclid_border.create(

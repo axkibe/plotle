@@ -4,10 +4,10 @@
 
 
 var
-	design_facet,
-	design_facetRay,
 	euclid_border,
 	euclid_color,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_margin,
 	gruga_label;
 
@@ -23,10 +23,10 @@ gruga_label = { };
 
 
 gruga_label.facets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:append',
 		// default
-		design_facet.create(
+		euclid_facet.create(
 			'border',
 				euclid_border.create(
 					'color', euclid_color.rgba( 100, 100, 0, 0.1 )
@@ -34,7 +34,7 @@ gruga_label.facets =
 		),
 		'ray:append',
 		// highlight
-		design_facet.create(
+		euclid_facet.create(
 			'group:init', { highlight : true },
 			'border',
 				euclid_border.create(

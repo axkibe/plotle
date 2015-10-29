@@ -458,7 +458,7 @@ euclid_display.prototype.paint =
 
 /**/if( CHECK && false ) // FIXME
 /**/{
-/**/	if( facet.reflect !== 'design_facet' ) throw new Error( );
+/**/	if( facet.reflect !== 'euclid_facet' ) throw new Error( );
 /**/}
 
 	border = facet.border;

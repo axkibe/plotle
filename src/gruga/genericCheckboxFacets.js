@@ -4,8 +4,8 @@
 
 
 var
-	design_facet,
-	design_facetRay,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
@@ -20,11 +20,11 @@ var
 
 
 gruga_genericCheckboxFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create(
+			euclid_facet.create(
 				'fill', euclid_color.white,
 				'border',
 					euclid_borderRay.create(
@@ -39,7 +39,7 @@ gruga_genericCheckboxFacets =
 					)
 			),
 			// hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', euclid_color.white,
 				'border',
@@ -57,7 +57,7 @@ gruga_genericCheckboxFacets =
 					)
 			),
 			// focus
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', euclid_color.white,
 				'border',
@@ -73,7 +73,7 @@ gruga_genericCheckboxFacets =
 					)
 			),
 			// hover+focus
-			design_facet.create(
+			euclid_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', euclid_color.white,
 				'border', euclid_color.simpleBlack

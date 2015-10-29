@@ -6,7 +6,7 @@
 
 
 var
-	design_facetRay;
+	euclid_facetRay;
 
 /*
 | Capsule
@@ -21,8 +21,8 @@ var
 if( JION )
 {
 	return{
-		id : 'design_facetRay',
-		ray : [ 'design_facet' ]
+		id : 'euclid_facetRay',
+		ray : [ 'euclid_facet' ]
 	};
 }
 
@@ -38,7 +38,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_facetRay.prototype;
+prototype = euclid_facetRay.prototype;
 
 
 /*

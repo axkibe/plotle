@@ -4,10 +4,10 @@
 
 
 var
-	design_facet,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	euclid_facet,
 	euclid_point,
 	gruga_relation;
 
@@ -25,7 +25,7 @@ gruga_relation = { };
 | Default relation arrows facet.
 */
 gruga_relation.facet =
-	design_facet.create(
+	euclid_facet.create(
 		'fill',
 			euclid_color.rgba( 255, 225, 40, 0.5 ),
 		'border',

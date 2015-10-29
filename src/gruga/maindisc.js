@@ -7,15 +7,15 @@ var
 	design_ellipse,
 	design_point,
 	design_rect,
-	design_facet,
-	design_facetRay,
 	disc_mainDisc,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	euclid_point,
+	euclid_facet,
+	euclid_facetRay,
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
+	euclid_point,
 	gruga_mainDisc,
 	icon_moveto,
 	icon_normal,
@@ -87,11 +87,11 @@ iconRemove =
 
 
 buttonFacets =
-	design_facetRay.create(
+	euclid_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ },
 				'fill',
@@ -102,7 +102,7 @@ buttonFacets =
 					)
 			),
 			// hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'hover' : true },
 				'fill',
@@ -113,7 +113,7 @@ buttonFacets =
 					)
 			),
 			// down
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'down' : true },
 				'fill',
@@ -124,7 +124,7 @@ buttonFacets =
 					)
 			),
 			// down and hover
-			design_facet.create(
+			euclid_facet.create(
 				'group:init',
 					{ 'down' : true, 'hover' : true },
 				'fill',

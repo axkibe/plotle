@@ -6,7 +6,7 @@
 
 
 var
-	design_facet;
+	euclid_facet;
 
 /*
 | Capsule
@@ -21,7 +21,7 @@ var
 if( JION )
 {
 	return{
-		id : 'design_facet',
+		id : 'euclid_facet',
 		attributes :
 		{
 			border :
@@ -55,7 +55,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_facet.prototype;
+prototype = euclid_facet.prototype;
 
 
 })( );

@@ -4,9 +4,9 @@
 
 
 var
-	design_facet,
 	euclid_border,
 	euclid_color,
+	euclid_facet,
 	gruga_scrollbar;
 
 
@@ -24,7 +24,7 @@ gruga_scrollbar = { };
 | The scrollbar facet.
 */
 gruga_scrollbar.facet =
-	design_facet.create(
+	euclid_facet.create(
 		'fill', euclid_color.rgb( 255, 188, 87 ),
 		'border',
 			euclid_border.create(
