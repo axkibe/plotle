@@ -225,9 +225,11 @@ visual_item.itemDragForFontsizePositioning =
 
 
 /*
-| An itemResize action stopped.
+| An itemResize action stopped
+| for an item which size is defined
+| by zone.
 */
-visual_item.itemResize =
+visual_item.stopItemResizeZone =
 	function( )
 {
 	var
@@ -235,50 +237,60 @@ visual_item.itemResize =
 
 	action = this._action;
 
-	// FIXME differentiate in function assignment
-	switch( this.positioning )
-	{
-		case 'zone' :
+/**/if( CHECK )
+/**/{
+/**/	if( this.positioning !== 'zone' ) throw new Error( );
+/**/}
 
-			root.alter(
-				change_set.create(
-					'path', this.path.chop.append( 'zone' ),
-					'val',
-						euclid_rect.create(
-							'pnw', action.toPnw,
-							'pse', action.toPse
-						),
-					'prev', this.fabric.zone
-				)
-			);
-
-			break;
-
-		case 'pnw/fontsize' :
-
-			root.alter(
-				change_set.create(
-					'path', this.path.chop.append( 'pnw' ),
-					'val', action.toPnw,
-					'prev', this.fabric.pnw
+	root.alter(
+		change_set.create(
+			'path', this.path.chop.append( 'zone' ),
+			'val',
+				euclid_rect.create(
+					'pnw', action.toPnw,
+					'pse', action.toPse
 				),
-				change_set.create(
-					'path', this.path.chop.append( 'fontsize' ),
-					'val', action.toFontsize,
-					'prev', this.fabric.fontsize
-				)
-			);
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
+			'prev', this.fabric.zone
+		)
+	);
 
 	root.create( 'action', undefined );
 };
 
+
+/*
+| An itemResize action stopped
+| for an item which size is defined
+| by pnw/fontsize
+*/
+visual_item.stopItemResizePnwFs =
+	function( )
+{
+	var
+		action;
+
+	action = this._action;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.positioning !== 'pnw/fontsize' ) throw new Error( );
+/**/}
+
+	root.alter(
+		change_set.create(
+			'path', this.path.chop.append( 'pnw' ),
+			'val', action.toPnw,
+			'prev', this.fabric.pnw
+		),
+		change_set.create(
+			'path', this.path.chop.append( 'fontsize' ),
+			'val', action.toFontsize,
+			'prev', this.fabric.fontsize
+		)
+	);
+
+	root.create( 'action', undefined );
+};
 
 /*
 | A createRelation action stops.

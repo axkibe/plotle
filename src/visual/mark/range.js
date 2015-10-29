@@ -65,38 +65,6 @@ prototype = visual_mark_range.prototype;
 
 
 /*
-| Initializer
-*/
-prototype._init =
-	function( )
-{
-	var
-		bP,
-		bZ,
-		eP,
-		eZ,
-		p;
-
-	bP = this.beginMark.path;
-
-	eP = this.endMark.path;
-
-	for(
-		p = 0, bZ = bP.length, eZ = eP.length;
-		p < bZ && p < eZ;
-		p++
-	);
-
-/**/if( CHECK )
-/**/{
-/**/	if( p === 0 ) throw new Error( );
-/**/}
-
-	this.path = bP.limit( p );
-};
-
-
-/*
 | The beginMark or endMark
 | dependening on which comes first in the doc.
 */
@@ -179,6 +147,42 @@ jion.lazyValue(
 }
 );
 
+
+/*
+| The common path this is the part that begin
+| and share in common
+*/
+jion.lazyValue(
+	prototype,
+	'commonPath',
+	function( )
+{
+	var
+		a,
+		bP,
+		bZ,
+		eP,
+		eZ,
+		mZ;
+
+	bP = this.beginMark.path;
+
+	eP = this.endMark.path;
+
+	bZ = bP.length;
+
+	eZ = eP.length;
+
+	mZ = Math.min( bZ, eZ );
+
+	for( a = 0; a < mZ; a++ )
+	{
+		if( bP.get( a ) !== eP.get( a ) ) break;
+	}
+
+	return bP.limit( a );
+}
+);
 
 
 /*
@@ -285,19 +289,20 @@ prototype.containsPath =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
 	// FIXME, shouldn't this also
 	// check paths of stuff inbetween?
 
-	return(
+	if(
 		path.subPathOf( this.beginMark.path )
 		|| path.subPathOf( this.endMark.path )
-	);
+	) return true;
+
+	// FIXME
+
+	return false;
 };
 
 

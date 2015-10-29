@@ -440,7 +440,7 @@ prototype.itemDrag = visual_item.itemDragForZonePositioning;
 /*
 | An itemResize action stopped.
 */
-prototype.itemResize = visual_item.itemResize;
+prototype.stopItemResize = visual_item.stopItemResizeZone;
 
 
 /*

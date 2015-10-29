@@ -686,7 +686,7 @@ prototype.dragStop =
 
 			item = root.getPath( action.itemPath );
 
-			item.itemResize( );
+			item.stopItemResize( );
 
 			break;
 
