@@ -4,8 +4,8 @@
 
 
 var
-	design_ellipse,
-	design_rect,
+	euclid_anchor_ellipse,
+	euclid_anchor_rect,
 	euclid_anchor_point,
 	shell_fontPool,
 	form_welcome,
@@ -66,7 +66,7 @@ gruga_welcome =
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
 								'anchor', 'c',
@@ -83,7 +83,7 @@ gruga_welcome =
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'shape', design_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW
 			)
 	);
 

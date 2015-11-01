@@ -4,7 +4,7 @@
 
 
 var
-	design_rect,
+	euclid_anchor_rect,
 	euclid_rect;
 
 /*
@@ -20,7 +20,7 @@ var
 if( JION )
 {
 	return {
-		id : 'design_rect',
+		id : 'euclid_anchor_rect',
 		attributes :
 		{
 			pnw :
@@ -49,7 +49,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_rect.prototype;
+prototype = euclid_anchor_rect.prototype;
 
 
 /*

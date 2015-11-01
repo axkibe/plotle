@@ -4,9 +4,9 @@
 
 
 var
-	design_ellipse,
-	design_rect,
+	euclid_anchor_ellipse,
 	euclid_anchor_point,
+	euclid_anchor_rect,
 	form_nonExistingSpace,
 	gruga_genericButtonFacets,
 	gruga_nonExistingSpace,
@@ -77,7 +77,7 @@ gruga_nonExistingSpace =
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
 								'anchor', 'c',
@@ -94,14 +94,14 @@ gruga_nonExistingSpace =
 				'text', 'No',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'shape', design_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'yesButton',
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
 								'anchor', 'c',
@@ -118,7 +118,7 @@ gruga_nonExistingSpace =
 				'text', 'Yes',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'shape', design_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW
 			)
 	);
 

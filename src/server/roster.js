@@ -332,12 +332,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/rect.js',
+		'filePath', 'src/euclid/anchor/rect.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/design/ellipse.js',
+		'filePath', 'src/euclid/anchor/ellipse.js',
 		'hasJion', true,
 		'inBundle', true
 	),

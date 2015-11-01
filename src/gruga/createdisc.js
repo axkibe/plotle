@@ -4,10 +4,10 @@
 
 
 var
-	design_ellipse,
-	design_rect,
 	disc_createDisc,
+	euclid_anchor_ellipse,
 	euclid_anchor_point,
+	euclid_anchor_rect,
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
@@ -97,7 +97,7 @@ genericButtonModel =
 	widget_button.abstract(
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
-		'shape', design_ellipse.fullSkewNW,
+		'shape', euclid_anchor_ellipse.fullSkewNW,
 		'textDesignPos', euclid_anchor_point.c
 	);
 
@@ -117,14 +117,14 @@ gruga_createDisc =
 				)
 			),
 		'designFrame',
-			design_rect.create(
+			euclid_anchor_rect.create(
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -505 ),
 				'pse',
 					euclid_anchor_point.w.create( 'x', 176, 'y', 505 )
 			),
 		'shape',
-			design_ellipse.create(
+			euclid_anchor_ellipse.create(
 				'pnw',
 					euclid_anchor_point.e.create(
 						'x', -1651,
@@ -160,7 +160,7 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Note',
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
 					)
@@ -170,11 +170,11 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Label',
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
 					),
-				'shape', design_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'createRelation',
@@ -182,7 +182,7 @@ gruga_createDisc =
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
 					)
@@ -192,7 +192,7 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Portal',
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )
 					)

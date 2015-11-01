@@ -4,7 +4,7 @@
 
 
 var
-	design_ellipse,
+	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_ellipse;
 
@@ -21,7 +21,7 @@ var
 if( JION )
 {
 	return {
-		id : 'design_ellipse',
+		id : 'euclid_anchor_ellipse',
 		attributes :
 		{
 			pnw :
@@ -60,15 +60,15 @@ if( NODE )
 var
 	prototype;
 
-prototype = design_ellipse.prototype;
+prototype = euclid_anchor_ellipse.prototype;
 
 
 /*
 | ellipse filling the full frame
 | skewed a little to north west
 */
-design_ellipse.fullSkewNW =
-	design_ellipse.create(
+euclid_anchor_ellipse.fullSkewNW =
+	euclid_anchor_ellipse.create(
 		'pnw', euclid_anchor_point.nw,
 		'pse', euclid_anchor_point.seMin1
 	);

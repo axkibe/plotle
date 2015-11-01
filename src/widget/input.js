@@ -40,7 +40,7 @@ if( JION )
 			designFrame :
 			{
 				comment : 'designed frame (using anchors',
-				type : 'design_rect'
+				type : 'euclid_anchor_rect'
 			},
 			facets :
 			{

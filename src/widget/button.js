@@ -31,7 +31,7 @@ if( JION )
 			designFrame :
 			{
 				comment : 'designed frame ( using anchors )',
-				type : 'design_rect'
+				type : 'euclid_anchor_rect'
 			},
 			down :
 			{
@@ -79,7 +79,7 @@ if( JION )
 			{
 				comment : 'shape of the button',
 				// FUTURE allow other types
-				type : 'design_ellipse'
+				type : 'euclid_anchor_ellipse'
 			},
 			superFrame :
 			{

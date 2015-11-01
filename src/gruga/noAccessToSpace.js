@@ -4,9 +4,9 @@
 
 
 var
-	design_ellipse,
-	design_rect,
+	euclid_anchor_ellipse,
 	euclid_anchor_point,
+	euclid_anchor_rect,
 	form_noAccessToSpace,
 	gruga_genericButtonFacets,
 	gruga_noAccessToSpace,
@@ -65,7 +65,7 @@ gruga_noAccessToSpace =
 			widget_button.create(
 				'facets', gruga_genericButtonFacets,
 				'designFrame',
-					design_rect.create(
+					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
 								'anchor', 'c',
@@ -82,7 +82,7 @@ gruga_noAccessToSpace =
 				'text', 'ok',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'shape', design_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW
 			)
 	);
 
