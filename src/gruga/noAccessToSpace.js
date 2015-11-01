@@ -4,9 +4,15 @@
 
 
 var
+<<<<<<< HEAD
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
+=======
+	design_ellipse,
+	design_rect,
+	euclid_anchor_point,
+>>>>>>> 6832d631c3ece815944b6ef2754ad99c8386f317
 	form_noAccessToSpace,
 	gruga_genericButtonFacets,
 	gruga_noAccessToSpace,
@@ -82,7 +88,11 @@ gruga_noAccessToSpace =
 				'text', 'ok',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
+<<<<<<< HEAD
 				'shape', euclid_anchor_ellipse.fullSkewNW
+=======
+				'shape', design_ellipse.fullSkewNW
+>>>>>>> 6832d631c3ece815944b6ef2754ad99c8386f317
 			)
 	);
 

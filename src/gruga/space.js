@@ -5,8 +5,8 @@
 
 var
 	euclid_anchor_ellipse,
-	euclid_anchor_rect,
 	euclid_anchor_point,
+	euclid_anchor_rect,
 	form_space,
 	gruga_genericButtonFacets,
 	gruga_space,
