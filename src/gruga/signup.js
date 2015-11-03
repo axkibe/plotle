@@ -9,7 +9,7 @@ var
 	euclid_anchor_rect,
 	shell_fontPool,
 	form_signUp,
-	gruga_genericButtonFacets,
+	gruga_genericButton,
 	gruga_genericCheckbox,
 	gruga_genericInputFacets,
 	gruga_signUp,
@@ -276,7 +276,7 @@ gruga_signUp =
 		'twig:add',
 		'signupButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',
@@ -300,7 +300,7 @@ gruga_signUp =
 		'twig:add',
 		'closeButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',

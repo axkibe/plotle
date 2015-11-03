@@ -8,7 +8,7 @@ var
 	euclid_anchor_point,
 	euclid_anchor_rect,
 	form_user,
-	gruga_genericButtonFacets,
+	gruga_genericButton,
 	gruga_user,
 	shell_fontPool,
 	widget_button,
@@ -136,7 +136,7 @@ gruga_user =
 		'twig:add',
 		'closeButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',

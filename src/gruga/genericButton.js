@@ -9,7 +9,7 @@ var
 	euclid_color,
 	euclid_facet,
 	euclid_facetRay,
-	gruga_genericButtonFacets;
+	gruga_genericButton;
 
 
 /*
@@ -19,7 +19,10 @@ var
 'use strict';
 
 
-gruga_genericButtonFacets =
+gruga_genericButton = { };
+
+
+gruga_genericButton.facets =
 	euclid_facetRay.create(
 		'ray:init',
 		[
@@ -86,6 +89,12 @@ gruga_genericButtonFacets =
 			)
 		]
 	);
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_genericButton );
+}
 
 
 } )( );

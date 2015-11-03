@@ -8,7 +8,7 @@ var
 	euclid_anchor_point,
 	euclid_anchor_rect,
 	form_nonExistingSpace,
-	gruga_genericButtonFacets,
+	gruga_genericButton,
 	gruga_nonExistingSpace,
 	shell_fontPool,
 	widget_button,
@@ -75,7 +75,7 @@ gruga_nonExistingSpace =
 		'twig:add',
 		'noButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',
@@ -99,7 +99,7 @@ gruga_nonExistingSpace =
 		'twig:add',
 		'yesButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',

@@ -8,7 +8,7 @@ var
 	euclid_anchor_point,
 	euclid_anchor_rect,
 	form_noAccessToSpace,
-	gruga_genericButtonFacets,
+	gruga_genericButton,
 	gruga_noAccessToSpace,
 	shell_fontPool,
 	widget_button,
@@ -63,7 +63,7 @@ gruga_noAccessToSpace =
 			),
 		'twig:add', 'okButton',
 			widget_button.create(
-				'facets', gruga_genericButtonFacets,
+				'facets', gruga_genericButton.facets,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw',

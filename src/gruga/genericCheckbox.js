@@ -90,4 +90,5 @@ if( FREEZE )
 	Object.freeze( gruga_genericCheckbox );
 }
 
+
 })( );
