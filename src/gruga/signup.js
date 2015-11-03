@@ -11,7 +11,7 @@ var
 	form_signUp,
 	gruga_genericButton,
 	gruga_genericCheckbox,
-	gruga_genericInputFacets,
+	gruga_genericInput,
 	gruga_signUp,
 	widget_button,
 	widget_checkbox,
@@ -140,7 +140,7 @@ gruga_signUp =
 		'twig:add',
 		'userInput',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
@@ -162,7 +162,7 @@ gruga_signUp =
 		'twig:add',
 		'emailInput',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
@@ -184,7 +184,7 @@ gruga_signUp =
 		'twig:add',
 		'passwordInput',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
@@ -207,7 +207,7 @@ gruga_signUp =
 		'twig:add',
 		'password2Input',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,

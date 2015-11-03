@@ -9,7 +9,7 @@ var
 	euclid_anchor_rect,
 	form_login,
 	gruga_genericButton,
-	gruga_genericInputFacets,
+	gruga_genericInput,
 	gruga_login,
 	shell_fontPool,
 	widget_button,
@@ -100,7 +100,7 @@ gruga_login =
 		'twig:add',
 		'userInput',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
@@ -122,7 +122,7 @@ gruga_login =
 		'twig:add',
 		'passwordInput',
 			widget_input.create(
-				'facets', gruga_genericInputFacets,
+				'facets', gruga_genericInput.facets,
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,

@@ -9,7 +9,7 @@ var
 	euclid_color,
 	euclid_facet,
 	euclid_facetRay,
-	gruga_genericInputFacets;
+	gruga_genericInput;
 
 
 /*
@@ -19,7 +19,10 @@ var
 'use strict';
 
 
-gruga_genericInputFacets =
+gruga_genericInput = { };
+
+
+gruga_genericInput.facets =
 	euclid_facetRay.create(
 		'ray:init',
 		[
@@ -56,6 +59,12 @@ gruga_genericInputFacets =
 			)
 		]
 	);
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_genericInput );
+}
 
 
 })( );

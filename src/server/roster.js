@@ -586,7 +586,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/genericInputFacets.js', // FIXME
+		'filePath', 'src/gruga/genericInput.js',
 		'inBundle', true
 	),
 	server_resource.create(
