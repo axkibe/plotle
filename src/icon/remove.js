@@ -27,15 +27,10 @@ if( JION )
 		id : 'icon_remove',
 		attributes :
 		{
-			border :
+			facet :
 			{
-				comment : 'border',
-				type : 'euclid_border'
-			},
-			fill :
-			{
-				comment : 'fill',
-				type : 'euclid_color'
+				comment : 'the icon facet',
+				type : 'euclid_facet'
 			}
 		},
 		init : [ ]
@@ -140,7 +135,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this, this._x );
+	display.paint( this.facet, this._x );
 };
 
 

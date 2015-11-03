@@ -27,15 +27,10 @@ if( JION )
 		id : 'icon_normal',
 		attributes :
 		{
-			border :
+			facet :
 			{
-				comment : 'border',
-				type : 'euclid_border'
-			},
-			fill :
-			{
-				comment : 'fill',
-				type : 'euclid_color'
+				comment : 'the icon facet',
+				type : 'euclid_facet'
 			}
 		},
 		init : [ ]
@@ -112,7 +107,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this, this._arrow );
+	display.paint( this.facet, this._arrow );
 };
 
 

@@ -58,19 +58,25 @@ dnw = euclid_anchor_point.nw;
 
 iconMoveTo =
 	icon_moveto.create(
-		'fill', euclid_color.rgb( 107, 91, 73 ),
-		'border',
-			euclid_border.create(
-				'color', euclid_color.rgb( 128, 0, 0 )
+		'facet',
+			euclid_facet.create(
+				'fill', euclid_color.rgb( 107, 91, 73 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 128, 0, 0 )
+					)
 			)
 	);
 
 iconNormal =
 	icon_normal.create(
-		'fill', euclid_color.black,
-		'border',
-			euclid_border.create(
-				'color', euclid_color.rgb( 128, 0, 0 )
+		'facet',
+			euclid_facet.create(
+				'fill', euclid_color.black,
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 128, 0, 0 )
+					)
 			)
 	);
 
@@ -78,10 +84,13 @@ iconNormal =
 // The red criss-cross for the remove button
 iconRemove =
 	icon_remove.create(
-		'fill', euclid_color.rgb( 255, 0, 0 ),
-		'border',
-			euclid_border.create(
-				'color', euclid_color.rgb( 128, 0, 0 )
+		'facet',
+			euclid_facet.create(
+				'fill', euclid_color.rgb( 255, 0, 0 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 128, 0, 0 )
+					)
 			)
 	);
 

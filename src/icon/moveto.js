@@ -28,16 +28,10 @@ if( JION )
 		id : 'icon_moveto',
 		attributes :
 		{
-			// FIXME make it a facet
-			border :
+			facet :
 			{
-				comment : 'border',
-				type : 'euclid_border'
-			},
-			fill :
-			{
-				comment : 'fill',
-				type : 'euclid_color'
+				comment : 'the icon facet',
+				type : 'euclid_facet'
 			}
 		},
 		init : [ ]
@@ -125,11 +119,11 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this, this._arrow );
+	display.paint( this.facet, this._arrow );
 
-	display.paint( this, this._base1 );
+	display.paint( this.facet, this._base1 );
 
-	display.paint( this, this._base2 );
+	display.paint( this.facet, this._base2 );
 };
 
 
