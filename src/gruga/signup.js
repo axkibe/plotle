@@ -10,7 +10,7 @@ var
 	shell_fontPool,
 	form_signUp,
 	gruga_genericButtonFacets,
-	gruga_genericCheckboxFacets,
+	gruga_genericCheckbox,
 	gruga_genericInputFacets,
 	gruga_signUp,
 	widget_button,
@@ -230,7 +230,7 @@ gruga_signUp =
 		'twig:add',
 		'newsletterCheckBox',
 			widget_checkbox.create(
-				'facets', gruga_genericCheckboxFacets,
+				'facets', gruga_genericCheckbox.facets,
 				'checked', true,
 				'designFrame',
 					euclid_anchor_rect.create(

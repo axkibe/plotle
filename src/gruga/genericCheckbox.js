@@ -9,7 +9,7 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	gruga_genericCheckboxFacets;
+	gruga_genericCheckbox;
 
 
 /*
@@ -19,7 +19,10 @@ var
 'use strict';
 
 
-gruga_genericCheckboxFacets =
+gruga_genericCheckbox = { };
+
+
+gruga_genericCheckbox.facets =
 	euclid_facetRay.create(
 		'ray:init',
 		[
@@ -80,5 +83,11 @@ gruga_genericCheckboxFacets =
 			)
 		]
 	);
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_genericCheckbox );
+}
 
 })( );

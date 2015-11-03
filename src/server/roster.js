@@ -578,15 +578,15 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/genericButtonFacets.js',
+		'filePath', 'src/gruga/genericButtonFacets.js', // FIXME
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/genericCheckboxFacets.js',
+		'filePath', 'src/gruga/genericCheckbox.js',
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/genericInputFacets.js',
+		'filePath', 'src/gruga/genericInputFacets.js', // FIXME
 		'inBundle', true
 	),
 	server_resource.create(
