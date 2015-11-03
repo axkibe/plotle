@@ -4,7 +4,7 @@
 
 
 var
-	euclid_color,
+	gruga_genericCheckbox,
 	icon_check,
 	jion,
 	result_hover,
@@ -119,14 +119,14 @@ jion.lazyValue(
 	prototype,
 	'checkIcon',
 	function( )
-	{
-		return(
-			icon_check.create(
-				'fill', euclid_color.black,
-				'pc', this.frame.pc
-			)
-		);
-	}
+{
+	return(
+		icon_check.create(
+			'facet', gruga_genericCheckbox.checkIconFacet,
+			'pc', this.frame.pc
+		)
+	);
+}
 );
 
 

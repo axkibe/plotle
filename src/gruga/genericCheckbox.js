@@ -83,6 +83,15 @@ gruga_genericCheckbox.facets =
 			)
 		]
 	);
+			
+
+/*
+| The facet of the check icon.
+*/
+gruga_genericCheckbox.checkIconFacet =
+	euclid_facet.create(	
+		'fill', euclid_color.black
+	);
 
 
 if( FREEZE )

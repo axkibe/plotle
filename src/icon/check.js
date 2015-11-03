@@ -27,15 +27,10 @@ if( JION )
 		id : 'icon_check',
 		attributes :
 		{
-			border :
+			facet :
 			{
-				comment : 'border',
-				type : [ 'undefined', 'euclid_border' ]
-			},
-			fill :
-			{
-				comment : 'fill',
-				type : 'euclid_color'
+				comment : 'the icon facet',
+				type : 'euclid_facet'
 			},
 			pc :
 			{
@@ -96,7 +91,7 @@ prototype.draw =
 		display
 	)
 {
-	display.paint( this, this._check );
+	display.paint( this.facet, this._check );
 };
 
 
