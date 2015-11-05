@@ -456,7 +456,7 @@ euclid_display.prototype.paint =
 		return;
 	}
 
-/**/if( CHECK && false ) // FIXME
+/**/if( CHECK )
 /**/{
 /**/	if( facet.reflect !== 'euclid_facet' ) throw new Error( );
 /**/}
