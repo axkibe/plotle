@@ -31,6 +31,7 @@ var
 	gruga_space,
 	gruga_user,
 	gruga_welcome,
+	jion,
 	jion$path,
 	net_ajax,
 	net_channel,
@@ -207,7 +208,9 @@ var
 
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	jion.this( module, 'source' );
 
 	return;
 }
@@ -636,7 +639,7 @@ Object.defineProperty(
 				var
 					screen;
 
-				screen = root._currentScreen( );
+				screen = root._currentScreen;
 
 				return screen && screen.attentionCenter;
 			}
@@ -658,7 +661,7 @@ prototype.click =
 		bubble,
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	bubble = root.disc.click( p, shift, ctrl );
 
@@ -734,7 +737,7 @@ prototype.dragMove =
 	var
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen ) return screen.dragMove( p, shift, ctrl );
 
@@ -760,7 +763,7 @@ prototype.dragStart =
 		bubble,
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
@@ -786,12 +789,9 @@ prototype.dragStop =
 	var
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
-	if( screen )
-	{
-		screen.dragStop( p, shift, ctrl );
-	}
+	if( screen ) screen.dragStop( p, shift, ctrl );
 };
 
 
@@ -806,7 +806,7 @@ prototype.input =
 	var
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen )
 	{
@@ -851,7 +851,7 @@ prototype.mousewheel =
 		bubble,
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
@@ -860,10 +860,7 @@ prototype.mousewheel =
 		if( bubble ) return bubble;
 	}
 
-	if( screen )
-	{
-		screen.mousewheel( p, dir, shift, ctrl );
-	}
+	if( screen ) screen.mousewheel( p, dir, shift, ctrl );
 };
 
 
@@ -913,7 +910,7 @@ prototype.pointingHover =
 		result,
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
@@ -1008,7 +1005,7 @@ prototype.specialKey =
 	var
 		screen;
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	if( screen ) screen.specialKey( key, shift, ctrl );
 
@@ -1411,11 +1408,11 @@ prototype.spawnRelation =
 /*
 | Returns current screen
 |
-| FIXME make this a lazyValue
-|
 | This is either a fabric space or a form
 */
-prototype._currentScreen =
+jion.lazyValue(
+	prototype,
+	'_currentScreen',
 	function( )
 {
 	var
@@ -1446,7 +1443,9 @@ prototype._currentScreen =
 
 			throw new Error( 'unknown mode: ' + name );
 	}
-};
+
+}
+);
 
 
 /*
@@ -1476,7 +1475,7 @@ prototype.draw =
 
 	display.clear( );
 
-	screen = root._currentScreen( );
+	screen = root._currentScreen;
 
 	screen.draw( display );
 

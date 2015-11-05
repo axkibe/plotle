@@ -101,15 +101,16 @@ prototype = disc_jockey.prototype;
 
 
 /*
-| Returns the mark if the form jockey concerns a mark.
-|
-| FIXME go into markItemPath
+| Returns the mark if the disc jockey concerns a mark.
 */
 disc_jockey.concernsMark =
 	function(
 		mark
 	)
 {
+	// discs concerns about all, since they provide
+	// additional information.
+
 	return mark;
 };
 
