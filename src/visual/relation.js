@@ -353,30 +353,9 @@ prototype.scrollPage = function( ){ };
 
 /*
 | The items silhoutte anchored at zero.
-| FIXME isn't that identical to label?
 */
-jion.lazyValue(
-	prototype,
-	'zeroSilhoutte',
-	function( )
-{
-	var
-		zone;
+jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
 
-	zone = this.zone;
-
-	return(
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
-			'pse',
-				euclid_point.create(
-					'x', Math.max( zone.width  - 1, 0 ),
-					'y', Math.max( zone.height - 1, 0 )
-				)
-		)
-	);
-}
-);
 
 /*
 | The items silhoutte anchored at zero for current view.

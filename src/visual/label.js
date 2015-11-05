@@ -552,9 +552,7 @@ jion.lazyValue( prototype, 'vZone', visual_label.vZone );
 /*
 | The items silhoutte anchored at zero.
 */
-jion.lazyValue(
-	prototype,
-	'zeroSilhoutte',
+visual_label.zeroSilhoutte =
 	function( )
 {
 	var
@@ -572,8 +570,11 @@ jion.lazyValue(
 				)
 		)
 	);
-}
-);
+};
+
+
+jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
+
 
 
 /*
