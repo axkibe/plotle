@@ -603,27 +603,6 @@ prototype.sub =
 
 
 /*
-| Returns true if this rectangle is the same as another
-|
-| FIXME jion should handle this.
-*/
-prototype.equals =
-	function(
-		rect
-	)
-{
-	return(
-		this === rect
-		||
-		(
-			this.pnw.equals( rect.pnw ) &&
-			this.pse.equals( rect.pse )
-		)
-	);
-};
-
-
-/*
 | Returns true if point is within this rect.
 */
 prototype.within =
