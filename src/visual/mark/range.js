@@ -289,6 +289,7 @@ prototype.containsPath =
 	var
 		bp,
 		br,
+		doc,
 		dp,
 		fp,
 		fr,
@@ -315,9 +316,11 @@ prototype.containsPath =
 
 	bp = this.backMark.path;
 
-	fr = this.doc.rankOf( fp.get( -2 ) );
+	doc = this.doc;
+
+	fr = doc.rankOf( fp.get( -2 ) );
 	
-	br = this.doc.rankOf( bp.get( -2 ) );
+	br = doc.rankOf( bp.get( -2 ) );
 
 	// NOTE: this code is untested.
 
