@@ -100,7 +100,7 @@ prototype.draw =
 /*
 | Returns the (2d) area of the scrollbar.
 |
-| FIXME use fixPoints
+| FUTURE use fixPoints
 */
 prototype.getArea =
 	function(

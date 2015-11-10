@@ -69,7 +69,7 @@ prototype._init =
 	{
 		this.path = changeMarkNode.path.prepend( 'spaceVisual' );
 
-		// FIXME aheadValue changeMarkNode
+		jion.aheadValue( this, 'changeMarkNode', changeMarkNode );
 	}
 
 /**/if( CHECK )
@@ -112,9 +112,9 @@ jion.lazyValue(
 	prototype,
 	'changeMarkNode',
 	function( )
-	{
-		return change_mark_node.create( 'path', this.path.chop );
-	}
+{
+	return change_mark_node.create( 'path', this.path.chop );
+}
 );
 
 
@@ -142,18 +142,8 @@ jion.lazyValue(
 
 /*
 | The widget's path.
-|
-| FIXME just set it undefined in prototype.
 */
-jion.lazyValue(
-	prototype,
-	'widgetPath',
-	function( )
-{
-	return;
-}
-);
-
+prototype.widgetPath = undefined;
 
 
 /*

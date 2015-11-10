@@ -286,21 +286,48 @@ prototype.containsPath =
 		path
 	)
 {
+	var
+		bp,
+		br,
+		dp,
+		fp,
+		fr,
+		r;
 
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
-	// FIXME, shouldn't this also
-	// check paths of stuff inbetween?
+	dp = this.docPath;
+
+	if( path.length <= dp.length )
+	{
+		return path.subPathOf( dp );
+	}
 
 	if(
 		path.subPathOf( this.beginMark.path )
 		|| path.subPathOf( this.endMark.path )
 	) return true;
 
-	// FIXME
+	fp = this.frontMark.path;
+
+	bp = this.backMark.path;
+
+	fr = this.doc.rankOf( fp.get( -2 ) );
+	
+	br = this.doc.rankOf( bp.get( -2 ) );
+
+	// NOTE: this code is untested.
+
+	for( r = fr + 1; r < br; r++ )
+	{
+		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) )
+		{
+			return true;
+		}
+	}
 
 	return false;
 };
