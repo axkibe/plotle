@@ -77,7 +77,7 @@ prototype._init =
 
 		this.at = changeMarkText.at;
 
-		// FIXME aheadValue changeMarkText
+		jion.aheadValue( this, 'changeMarkText', changeMarkText ); 
 	}
 
 /**/if( CHECK )
@@ -120,16 +120,16 @@ jion.lazyValue(
 	prototype,
 	'changeMarkText',
 	function( )
-	{
-		if( this.path.get( 0 ) !== 'spaceVisual' ) return;
+{
+	if( this.path.get( 0 ) !== 'spaceVisual' ) return;
 
-		return(
-			change_mark_text.create(
-				'at', this.at,
-				'path', this.path.chop
-			)
-		);
-	}
+	return(
+		change_mark_text.create(
+			'at', this.at,
+			'path', this.path.chop
+		)
+	);
+}
 );
 
 
