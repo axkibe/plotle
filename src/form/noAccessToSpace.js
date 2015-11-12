@@ -1,7 +1,5 @@
 /*
 | User has no access to a space s/he tried to port to.
-|
-| FIXME it doesn't anymore show the headline what wasnt possible.
 */
 
 
@@ -39,6 +37,11 @@ if( JION )
 					require( '../typemaps/visualMark' )
 					.concat( 'undefined' ),
 				prepare : 'form_form.concernsMark( mark, path )'
+			},
+			nonSpaceRef :
+			{
+				comment : 'the deniead space',
+				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
 			path :
 			{
@@ -87,7 +90,30 @@ prototype = form_noAccessToSpace.prototype;
 /*
 | Initializer.
 */
-prototype._init = form_form.init;
+prototype._init =
+	function(
+		twigDup
+	)
+{
+	var
+		twig;
+
+	if( !this.path ) return;
+
+	twig = twigDup ? this._twig : jion.copy( this._twig );
+
+	twig.headline =
+		twig.headline.create(
+			'text',
+				this.nonSpaceRef
+				? 'No access to ' + this.nonSpaceRef.fullname
+				: ''
+		);
+
+	this._twig = twig;
+
+	form_form.init.call( this, true );
+};
 
 
 /*

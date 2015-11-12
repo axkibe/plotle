@@ -1126,12 +1126,18 @@ prototype.onAcquireSpace =
 
 		case 'no access' :
 
-			root.create( 'mode', 'noAccessToSpace' );
+			root.setPath(
+				root.form.get( 'noAccessToSpace' ).path
+					.append( 'nonSpaceRef' ),
+				request.spaceRef
+			);
 
 			if( root.fallbackSpaceRef )
 			{
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
+
+			root.create( 'mode', 'noAccessToSpace' );
 
 			return;
 
