@@ -242,8 +242,10 @@ prototype.transform =
 		case 'change_grow' :
 		case 'change_shrink' :
 
-			// FIXME change ranks
-			// but right now this never happens
+			// FUTURE change ranks
+			// but right now this can never happen
+			// since for text split/join is excl. used
+			// and grow/shrink excl. for items
 			return cx;
 
 		case 'change_join' :

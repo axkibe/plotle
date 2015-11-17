@@ -47,6 +47,8 @@ change_generic.transformChangeRay =
 	)
 {
 	var
+		a,
+		aZ,
 		c,
 		r,
 		rZ,
@@ -66,11 +68,22 @@ change_generic.transformChangeRay =
 		r++
 	)
 	{
-		// FIXME in case this returns a change_ray this fails
 		c = this.transform( cRay.get( r ) );
 
 		// changes that transformed away are sliced out.
-		if( c ) tRay[ tZ++ ] = c;
+		if( !c ) continue;
+
+		if( c.reflect === 'change_ray' )
+		{
+			for( a = 0, aZ = c.length; a < aZ; a++ )
+			{
+				tRay[ tZ++ ] = c.get( a );
+			}
+		}
+		else
+		{
+			tRay[ tZ++ ] = c;
+		}
 	}
 
 	return cRay.create( 'ray:init', tRay );

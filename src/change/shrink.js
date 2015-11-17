@@ -192,7 +192,7 @@ prototype.transform =
 		case 'change_grow' :
 		case 'change_shrink' :
 
-			// FIXME fix rank
+			// FUTURE fix rank
 			return cx;
 
 		case 'change_join' :

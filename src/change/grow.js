@@ -181,6 +181,7 @@ prototype.transform =
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
+		case 'change_set' :
 
 			return cx;
 
@@ -188,11 +189,6 @@ prototype.transform =
 		case 'change_shrink' :
 
 			// FUTURE fix ranks
-			return cx;
-
-		case 'change_set' :
-
-			// FIXME change prev val of change_set
 			return cx;
 
 		case 'change_ray' :

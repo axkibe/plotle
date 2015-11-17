@@ -191,7 +191,6 @@ prototype.transform =
 
 		case 'change_grow' :
 		case 'change_shrink' :
-		case 'change_split' :
 		case 'change_set' :
 		case 'change_mark_node' :
 
@@ -432,6 +431,8 @@ prototype._transformJoinSplit =
 {
 	var
 		len;
+
+	// console.log( 'transform join/split by remove' );
 
 /**/if( CHECK )
 /**/{
