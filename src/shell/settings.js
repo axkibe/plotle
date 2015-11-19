@@ -4,7 +4,6 @@
 
 
 var
-	shell_fontPool,
 	shell_settings;
 
 /*
@@ -12,14 +11,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-/*
-| The default fonts
-*/
-shell_fontPool.setDefaultFonts(
-	'DejaVuSans,sans-serif',
-	'DejaVuSansBold,sans-serif'
-);
 
 
 shell_settings =

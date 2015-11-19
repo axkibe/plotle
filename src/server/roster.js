@@ -244,7 +244,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/shell/fontpool.js',
+		'filePath', 'src/shell/fontPool.js',
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -575,6 +575,10 @@ server_resourceRay.create( 'ray:init', [
 	server_resource.create(
 		'filePath', 'src/form/jockey.js',
 		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/fonts.js',
 		'inBundle', true
 	),
 	server_resource.create(

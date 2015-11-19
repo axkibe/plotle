@@ -22,6 +22,7 @@ if( JION )
 {
 	return{
 		id : 'euclid_font',
+		hasAbstract : true,
 		attributes :
 		{
 			size :
@@ -69,9 +70,9 @@ jion.lazyValue(
 	euclid_font.prototype,
 	'css',
 	function( )
-	{
-		return this.size + 'px ' + this.family;
-	}
+{
+	return this.size + 'px ' + this.family;
+}
 );
 
 
