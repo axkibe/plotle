@@ -3,6 +3,26 @@
 */
 
 
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'icon_moveto',
+		attributes :
+		{
+			facet :
+			{
+				comment : 'the icon facet',
+				type : 'euclid_facet'
+			}
+		},
+		init : [ ]
+	};
+}
+
+
 var
 	euclid_point,
 	euclid_rect,
@@ -17,26 +37,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return{
-		id : 'icon_moveto',
-		attributes :
-		{
-			facet :
-			{
-				comment : 'the icon facet',
-				type : 'euclid_facet'
-			}
-		},
-		init : [ ]
-	};
-}
 
 
 if( NODE )

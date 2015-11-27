@@ -2,27 +2,13 @@
 | A text insertion change.
 */
 
-var
-	change_generic,
-	change_error,
-	change_insert,
-	change_remove,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_insert',
 		attributes :
 		{
@@ -56,6 +42,21 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_generic,
+	change_error,
+	change_insert,
+	change_remove,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

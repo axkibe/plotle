@@ -4,24 +4,12 @@
 */
 
 
-var
-	euclid_fixPoint,
-	euclid_point;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_fixPoint',
 		attributes :
 		{
@@ -43,6 +31,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_fixPoint,
+	euclid_point;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

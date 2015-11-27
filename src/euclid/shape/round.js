@@ -5,24 +5,12 @@
 */
 
 
-var
-	euclid_point,
-	euclid_shape_round;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_shape_round',
 		attributes :
 		{
@@ -44,6 +32,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_point,
+	euclid_shape_round;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

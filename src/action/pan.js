@@ -3,23 +3,12 @@
 */
 
 
-var
-	action_pan;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'action_pan',
 		attributes :
 		{
@@ -36,6 +25,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	action_pan;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

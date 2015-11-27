@@ -3,23 +3,12 @@
 */
 
 
-var
-	change_mark_node;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_mark_node',
 		attributes :
 		{
@@ -32,6 +21,17 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_mark_node;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 var

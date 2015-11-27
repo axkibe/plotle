@@ -3,28 +3,12 @@
 */
 
 
-var
-	gruga_genericCheckbox,
-	icon_check,
-	jion,
-	result_hover,
-	root,
-	widget_checkbox;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'widget_checkbox',
 		attributes :
 		{
@@ -78,6 +62,22 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	gruga_genericCheckbox,
+	icon_check,
+	jion,
+	result_hover,
+	root,
+	widget_checkbox;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

@@ -7,24 +7,12 @@
 */
 
 
-var
-	euclid_shape_line,
-	euclid_shape_flyLine;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_shape_flyLine',
 		attributes :
 		{
@@ -41,6 +29,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_shape_line,
+	euclid_shape_flyLine;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

@@ -4,18 +4,11 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_gradient_askew',
 		attributes :
 		{
@@ -24,6 +17,13 @@ if( JION )
 		ray : [ 'euclid_gradient_colorStop' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

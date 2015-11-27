@@ -4,22 +4,22 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'euclid_borderRay',
 		ray : [ 'euclid_border' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

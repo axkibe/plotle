@@ -3,6 +3,19 @@
 */
 
 
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'change_wrapRay',
+		json : true,
+		ray : [ 'change_wrap' ]
+	};
+}
+
+
 var
 	change_wrapRay;
 
@@ -12,19 +25,6 @@ var
 */
 ( function( ) {
 "use strict";
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return{
-		id : 'change_wrapRay',
-		json : true,
-		ray : [ 'change_wrap' ]
-	};
-}
 
 
 var

@@ -4,24 +4,13 @@
 | Has potentionaly a scrollbar.
 */
 
-var
-	fabric_note,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'fabric_note',
 		attributes :
 		{
@@ -52,6 +41,18 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	fabric_note,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

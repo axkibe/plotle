@@ -3,25 +3,12 @@
 */
 
 
-var
-	change_wrapRay,
-	config,
-	root,
-	shell_doTracker;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'shell_doTracker',
 		attributes :
 		{
@@ -38,6 +25,20 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_wrapRay,
+	config,
+	root,
+	shell_doTracker;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

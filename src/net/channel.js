@@ -6,25 +6,12 @@
 */
 
 
-var
-	net_channel,
-	net_requestWrap,
-	net_requestWrapRay,
-	root;
-
-/*
-| Capsule.
-*/
-(function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'net_channel',
 		attributes :
 		{
@@ -43,6 +30,19 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	net_channel,
+	net_requestWrap,
+	net_requestWrapRay,
+	root;
+
+/*
+| Capsule.
+*/
+(function( ) {
+'use strict';
 
 
 if( NODE )

@@ -2,38 +2,13 @@
 | The link talks asynchronously with the server.
 */
 
-var
-	change_wrapRay,
-	jion$path,
-	net_link,
-	reply_auth,
-	reply_acquire,
-	reply_error,
-	reply_register,
-	reply_update,
-	request_acquire,
-	request_alter,
-	request_auth,
-	request_register,
-	request_update,
-	root,
-	shell_doTracker,
-	system;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'net_link',
 		attributes :
 		{
@@ -70,6 +45,32 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_wrapRay,
+	jion$path,
+	net_link,
+	reply_auth,
+	reply_acquire,
+	reply_error,
+	reply_register,
+	reply_update,
+	request_acquire,
+	request_alter,
+	request_auth,
+	request_register,
+	request_update,
+	root,
+	shell_doTracker,
+	system;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

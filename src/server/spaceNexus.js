@@ -3,16 +3,6 @@
 */
 
 
-var
-	server_spaceNexus;
-
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
@@ -23,6 +13,16 @@ if( JION )
 		group : [ 'server_spaceBox' ]
 	};
 }
+
+
+var
+	server_spaceNexus;
+
+/*
+| Capsule.
+*/
+( function( ) {
+'use strict';
 
 
 var

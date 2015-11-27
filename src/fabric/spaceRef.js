@@ -3,24 +3,12 @@
 */
 
 
-var
-	fabric_spaceRef,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'fabric_spaceRef',
 		attributes :
 		{
@@ -39,6 +27,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	fabric_spaceRef,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

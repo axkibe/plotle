@@ -3,23 +3,12 @@
 */
 
 
-var
-	change_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_mark_text',
 		attributes :
 		{
@@ -37,6 +26,17 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_mark_text;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 var

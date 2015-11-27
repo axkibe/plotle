@@ -3,24 +3,12 @@
 */
 
 
-var
-	jion,
-	visual_mark_range;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_mark_range',
 		attributes :
 		{
@@ -47,6 +35,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	jion,
+	visual_mark_range;
+
+
+/*
+| Capsule
+*/
+(function( ) {
+'use strict';
 
 
 var

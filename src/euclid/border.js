@@ -3,24 +3,12 @@
 */
 
 
-var
-	euclid_color,
-	euclid_border;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_border',
 		attributes :
 		{
@@ -45,6 +33,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_color,
+	euclid_border;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

@@ -5,18 +5,11 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'request_auth',
 		attributes :
 		{
@@ -29,6 +22,13 @@ if( JION )
 		}
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

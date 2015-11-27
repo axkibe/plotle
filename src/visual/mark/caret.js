@@ -3,25 +3,12 @@
 */
 
 
-var
-	jion,
-	visual_mark_caret,
-	visual_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_mark_caret',
 		attributes :
 		{
@@ -57,6 +44,19 @@ if( JION )
 		init : [ 'path', 'at' ]
 	};
 }
+
+
+var
+	jion,
+	visual_mark_caret,
+	visual_mark_text;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 var

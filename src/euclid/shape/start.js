@@ -5,22 +5,12 @@
 */
 
 
-var
-	euclid_shape_start;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'euclid_shape_start',
 		attributes :
 		{
@@ -32,6 +22,16 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_shape_start;
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

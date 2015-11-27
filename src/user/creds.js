@@ -3,25 +3,12 @@
 */
 
 
-var
-	jion,
-	session_uid,
-	user_creds;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'user_creds',
 		attributes :
 		{
@@ -40,6 +27,19 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	jion,
+	session_uid,
+	user_creds;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 if( NODE )

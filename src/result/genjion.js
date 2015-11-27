@@ -4,18 +4,11 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'result_genjion',
 		attributes :
 		{
@@ -37,6 +30,13 @@ if( JION )
 		}
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 require( 'jion' ).this( module );

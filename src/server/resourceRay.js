@@ -4,13 +4,6 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-/*
 | The jion definition.
 */
 if( JION )
@@ -20,6 +13,13 @@ if( JION )
 		ray : [ 'server_resource' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

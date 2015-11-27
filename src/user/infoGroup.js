@@ -4,24 +4,22 @@
 
 
 /*
-| Capsule.
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return {
-		id :
-			'user_infoGroup',
-		group :
-			[ 'user_info' ]
+	throw{
+		id : 'user_infoGroup',
+		group : [ 'user_info' ]
 	};
 }
+
+
+/*
+| Capsule.
+*/
+( function( ) {
+'use strict';
 
 
 require( 'jion' ).this( module );

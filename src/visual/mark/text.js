@@ -3,25 +3,12 @@
 */
 
 
-var
-	jion,
-	visual_mark_text,
-	change_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_mark_text',
 		attributes :
 		{
@@ -45,6 +32,19 @@ if( JION )
 		init : [ 'changeMarkText' ]
 	};
 }
+
+
+var
+	jion,
+	visual_mark_text,
+	change_mark_text;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 var

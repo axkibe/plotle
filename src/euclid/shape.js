@@ -3,24 +3,12 @@
 */
 
 
-var
-	euclid_shape,
-	swatch;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_shape',
 		attributes :
 		{
@@ -33,6 +21,18 @@ if( JION )
 		ray : require( '../typemaps/shapeSection' )
 	};
 }
+
+
+var
+	euclid_shape,
+	swatch;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

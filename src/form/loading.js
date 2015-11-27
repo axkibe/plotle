@@ -5,25 +5,12 @@
 */
 
 
-var
-	form_form,
-	form_loading,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'form_loading',
 		attributes :
 		{
@@ -68,6 +55,19 @@ if( JION )
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
+
+
+var
+	form_form,
+	form_loading,
+	jion;
+
+
+/*
+| Capsule
+*/
+(function( ) {
+'use strict';
 
 
 if( NODE )

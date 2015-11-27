@@ -3,48 +3,12 @@
 */
 
 
-var
-	change_grow,
-	change_insert,
-	change_remove,
-	euclid_display,
-	euclid_ellipse,
-	euclid_measure,
-	euclid_point,
-	euclid_rect,
-	euclid_roundRect,
-	euclid_view,
-	fabric_portal,
-	fabric_spaceRef,
-	gruga_portal,
-	jion,
-	math_half,
-	visual_mark_caret,
-	visual_mark_item,
-	result_hover,
-	root,
-	session_uid,
-	shell_fontPool,
-	shell_settings,
-	visual_handlesBezel,
-	visual_item,
-	visual_portal;
-
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_portal',
 		attributes :
 		{
@@ -88,6 +52,42 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_grow,
+	change_insert,
+	change_remove,
+	euclid_display,
+	euclid_ellipse,
+	euclid_measure,
+	euclid_point,
+	euclid_rect,
+	euclid_roundRect,
+	euclid_view,
+	fabric_portal,
+	fabric_spaceRef,
+	gruga_portal,
+	jion,
+	math_half,
+	visual_mark_caret,
+	visual_mark_item,
+	result_hover,
+	root,
+	session_uid,
+	shell_fontPool,
+	shell_settings,
+	visual_handlesBezel,
+	visual_item,
+	visual_portal;
+
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

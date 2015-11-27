@@ -4,6 +4,18 @@
 
 
 /*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'fabric_pointGroup',
+		group : [ 'euclid_point' ]
+	};
+}
+
+
+/*
 | Capsule
 */
 ( function( ) {
@@ -12,17 +24,6 @@
 
 var
 	jion;
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return {
-		id : 'fabric_pointGroup',
-		group : [ 'euclid_point' ]
-	};
-}
 
 
 if( NODE )

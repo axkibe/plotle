@@ -4,28 +4,12 @@
 */
 
 
-var
-	euclid_point,
-	euclid_rect,
-	euclid_view,
-	jion,
-	math_limit,
-	shell_settings;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_view',
 		attributes :
 		{
@@ -53,6 +37,22 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	euclid_point,
+	euclid_rect,
+	euclid_view,
+	jion,
+	math_limit,
+	shell_settings;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

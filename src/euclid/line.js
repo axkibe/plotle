@@ -3,27 +3,12 @@
 */
 
 
-var
-	euclid_line,
-	euclid_point,
-	euclid_rect,
-	jion,
-	math_half;
-
-
-/*
-| Capsule
-*/
-(function(){
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'euclid_line',
 		attributes :
 		{
@@ -40,6 +25,21 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_line,
+	euclid_point,
+	euclid_rect,
+	jion,
+	math_half;
+
+
+/*
+| Capsule
+*/
+(function(){
+'use strict';
 
 
 if( NODE )

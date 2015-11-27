@@ -2,27 +2,13 @@
 | A text ( para ) is joined.
 */
 
-var
-	change_generic,
-	change_error,
-	change_split,
-	change_join,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_join',
 		attributes :
 		{
@@ -50,6 +36,21 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_generic,
+	change_error,
+	change_split,
+	change_join,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

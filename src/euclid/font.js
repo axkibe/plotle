@@ -3,24 +3,12 @@
 */
 
 
-var
-	euclid_font,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_font',
 		hasAbstract : true,
 		attributes :
@@ -53,6 +41,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_font,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

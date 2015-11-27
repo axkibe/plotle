@@ -4,45 +4,13 @@
 | Has potentionaly a scrollbar.
 */
 
-var
-	change_grow,
-	euclid_display,
-	euclid_point,
-	euclid_rect,
-	euclid_roundRect,
-	euclid_view,
-	fabric_doc,
-	fabric_note,
-	fabric_para,
-	gruga_note,
-	jion,
-	math_half,
-	root,
-	session_uid,
-	shell_settings,
-	system,
-	visual_doc,
-	visual_docItem,
-	visual_handlesBezel,
-	visual_item,
-	visual_mark_caret,
-	visual_note,
-	visual_scrollbar;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_note',
 		attributes :
 		{
@@ -100,6 +68,39 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_grow,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
+	euclid_roundRect,
+	euclid_view,
+	fabric_doc,
+	fabric_note,
+	fabric_para,
+	gruga_note,
+	jion,
+	math_half,
+	root,
+	session_uid,
+	shell_settings,
+	system,
+	visual_doc,
+	visual_docItem,
+	visual_handlesBezel,
+	visual_item,
+	visual_mark_caret,
+	visual_note,
+	visual_scrollbar;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

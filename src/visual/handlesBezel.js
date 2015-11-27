@@ -3,30 +3,12 @@
 */
 
 
-var
-	euclid_compass,
-	euclid_ellipse,
-	euclid_point,
-	euclid_view,
-	gruga_handles,
-	jion,
-	math_half,
-	root,
-	visual_handlesBezel;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_handlesBezel',
 		attributes :
 		{
@@ -53,6 +35,24 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_compass,
+	euclid_ellipse,
+	euclid_point,
+	euclid_view,
+	gruga_handles,
+	jion,
+	math_half,
+	root,
+	visual_handlesBezel;
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

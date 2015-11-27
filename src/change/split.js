@@ -2,28 +2,13 @@
 | A text ( para ) is splited.
 */
 
-var
-	change_generic,
-	change_error,
-	change_ray,
-	change_split,
-	change_join,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_split',
 		attributes :
 		{
@@ -49,6 +34,22 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_generic,
+	change_error,
+	change_ray,
+	change_split,
+	change_join,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

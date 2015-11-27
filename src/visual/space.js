@@ -2,37 +2,13 @@
 | A space visualisation.
 */
 
-var
-	action_itemResize,
-	action_pan,
-	euclid_arrow,
-	euclid_point,
-	euclid_rect,
-	gruga_label,
-	gruga_relation,
-	jion,
-	result_hover,
-	root,
-	visual_label,
-	visual_note,
-	visual_portal,
-	visual_relation,
-	visual_space;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_space',
 		attributes :
 		{
@@ -89,6 +65,31 @@ if( JION )
 		]
 	};
 }
+
+
+var
+	action_itemResize,
+	action_pan,
+	euclid_arrow,
+	euclid_point,
+	euclid_rect,
+	gruga_label,
+	gruga_relation,
+	jion,
+	result_hover,
+	root,
+	visual_label,
+	visual_note,
+	visual_portal,
+	visual_relation,
+	visual_space;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

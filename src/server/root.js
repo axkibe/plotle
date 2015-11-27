@@ -4,25 +4,17 @@
 
 
 /*
-| Capsule.
+| Running node normally, JION is false.
 */
-( function( ) {
-'use strict';
+GLOBAL.JION = false;
 
-
-// FUTURE remove
-var DELAY_ALTER = 5000;
-var DELAY_ACQUIRE = 5000;
-DELAY_ALTER = false;
-DELAY_ACQUIRE = false;
-//Error.stackTraceLimit = 99999;
 
 /*
 | The jion definition.
 */
-if( GLOBAL.JION )
+if( JION )
 {
-	return {
+	throw{
 		id : 'server_root',
 		attributes :
 		{
@@ -76,6 +68,20 @@ if( GLOBAL.JION )
 	};
 }
 
+
+/*
+| Capsule.
+*/
+( function( ) {
+'use strict';
+
+
+// FUTURE remove
+var DELAY_ALTER = 5000;
+var DELAY_ACQUIRE = 5000;
+DELAY_ALTER = false;
+DELAY_ACQUIRE = false;
+//Error.stackTraceLimit = 99999;
 
 var
 	config;
@@ -493,12 +499,15 @@ prototype.prepareInventory =
 
 			if( !resource.inBundle ) continue;
 
+
 			try{
 				ast =
 					uglify.parse(
 						codes[ a ],
 						{
-							filename : resource.filePath,
+							filename :
+								resource.filePath
+								|| resource.aliases.get( 0 ),
 							strict : true,
 							toplevel : ast
 						}

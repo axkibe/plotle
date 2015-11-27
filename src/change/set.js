@@ -2,26 +2,13 @@
 | Sets a tree node.
 */
 
-var
-	change_generic,
-	change_error,
-	change_set,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_set',
 		attributes :
 		{
@@ -46,6 +33,20 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_generic,
+	change_error,
+	change_set,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

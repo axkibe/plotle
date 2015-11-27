@@ -17,30 +17,12 @@
 */
 
 
-var
-	euclid_point,
-	euclid_roundRect,
-	euclid_shape,
-	jion,
-	math_half,
-	euclid_shape_line,
-	euclid_shape_round,
-	euclid_shape_start;
-
-
-/*
-| Capsule
-*/
-( function() {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_roundRect',
 		attributes :
 		{
@@ -68,6 +50,24 @@ if( JION )
 		init : [ 'pnw', 'pse', 'a', 'b' ]
 	};
 }
+
+
+var
+	euclid_point,
+	euclid_roundRect,
+	euclid_shape,
+	jion,
+	math_half,
+	euclid_shape_line,
+	euclid_shape_round,
+	euclid_shape_start;
+
+
+/*
+| Capsule
+*/
+( function() {
+'use strict';
 
 
 if( NODE )

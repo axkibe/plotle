@@ -3,25 +3,12 @@
 */
 
 
-var
-	change_generic,
-	change_ray,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_ray',
 		json : true,
 		ray :
@@ -36,6 +23,19 @@ if( JION )
 		]
 	};
 }
+
+
+var
+	change_generic,
+	change_ray,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

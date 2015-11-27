@@ -5,6 +5,18 @@
 */
 
 
+/*
+| The jion definition
+*/
+if( JION )
+{
+	throw{
+		id : 'euclid_facetRay',
+		ray : [ 'euclid_facet' ]
+	};
+}
+
+
 var
 	euclid_facetRay;
 
@@ -13,18 +25,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	return{
-		id : 'euclid_facetRay',
-		ray : [ 'euclid_facet' ]
-	};
-}
 
 
 if( NODE )

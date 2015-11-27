@@ -3,24 +3,12 @@
 */
 
 
-var
-	jion,
-	visual_mark_widget;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_mark_widget',
 		attributes :
 		{
@@ -32,6 +20,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	jion,
+	visual_mark_widget;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 if( NODE )

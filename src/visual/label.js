@@ -3,39 +3,12 @@
 */
 
 
-var
-	change_grow,
-	euclid_display,
-	euclid_point,
-	euclid_rect,
-	euclid_view,
-	fabric_doc,
-	fabric_label,
-	fabric_para,
-	gruga_label,
-	jion,
-	session_uid,
-	visual_doc,
-	visual_docItem,
-	visual_handlesBezel,
-	visual_item,
-	visual_label,
-	visual_mark_caret;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_label',
 		attributes :
 		{
@@ -81,6 +54,33 @@ if( JION )
 		init : [ 'inherit' ]
 	};
 }
+
+
+var
+	change_grow,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
+	euclid_view,
+	fabric_doc,
+	fabric_label,
+	fabric_para,
+	gruga_label,
+	jion,
+	session_uid,
+	visual_doc,
+	visual_docItem,
+	visual_handlesBezel,
+	visual_item,
+	visual_label,
+	visual_mark_caret;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

@@ -3,25 +3,12 @@
 */
 
 
-var
-	change_wrap,
-	jion,
-	session_uid;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'change_wrap',
 		attributes :
 		{
@@ -46,6 +33,19 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_wrap,
+	jion,
+	session_uid;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

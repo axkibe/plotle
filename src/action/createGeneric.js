@@ -7,23 +7,12 @@
 */
 
 
-var
-	action_createGeneric;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'action_createGeneric',
 		attributes :
 		{
@@ -52,6 +41,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	action_createGeneric;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

@@ -3,29 +3,12 @@
 */
 
 
-var
-	euclid_arrow,
-	euclid_line,
-	euclid_shape,
-	euclid_shape_flyLine,
-	euclid_shape_line,
-	euclid_shape_start,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function(){
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_arrow',
 		attributes :
 		{
@@ -52,6 +35,23 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_arrow,
+	euclid_line,
+	euclid_shape,
+	euclid_shape_flyLine,
+	euclid_shape_line,
+	euclid_shape_start,
+	jion;
+
+
+/*
+| Capsule
+*/
+(function(){
+'use strict';
 
 
 if( NODE )

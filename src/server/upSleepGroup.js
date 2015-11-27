@@ -1,13 +1,6 @@
 /*
-| A client's update set to sleep.
+| A group of update sleeps.
 */
-
-
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
 
 
 /*
@@ -15,13 +8,18 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'server_upSleepGroup',
-		group :
-			[ 'server_upSleep' ]
+	return{
+		id : 'server_upSleepGroup',
+		group : [ 'server_upSleep' ]
 	};
 }
+
+
+/*
+| Capsule.
+*/
+( function( ) {
+'use strict';
 
 
 require( 'jion' ).this( module );

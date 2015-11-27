@@ -3,33 +3,12 @@
 */
 
 
-var
-	action_createGeneric,
-	action_createRelation,
-	disc_createDisc,
-	disc_disc,
-	euclid_display,
-	jion,
-	math_half,
-	root,
-	visual_label,
-	visual_note,
-	visual_portal;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'disc_createDisc',
 		hasAbstract : true,
 		attributes :
@@ -112,6 +91,27 @@ if( JION )
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
+
+
+var
+	action_createGeneric,
+	action_createRelation,
+	disc_createDisc,
+	disc_disc,
+	euclid_display,
+	jion,
+	math_half,
+	root,
+	visual_label,
+	visual_note,
+	visual_portal;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

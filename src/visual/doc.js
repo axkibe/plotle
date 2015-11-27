@@ -3,38 +3,12 @@
 */
 
 
-var
-	euclid_point,
-	euclid_rect,
-	euclid_shape,
-	euclid_shapeRay,
-	euclid_shape_start,
-	euclid_shape_flyLine,
-	euclid_shape_line,
-	fabric_pointGroup,
-	gruga_selection,
-	jion,
-	math_half,
-	root,
-	shell_fontPool,
-	shell_settings,
-	visual_doc,
-	visual_para;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_doc',
 		attributes :
 		{
@@ -98,6 +72,32 @@ if( JION )
 		twig : [ 'visual_para' ]
 	};
 }
+
+
+var
+	euclid_point,
+	euclid_rect,
+	euclid_shape,
+	euclid_shapeRay,
+	euclid_shape_start,
+	euclid_shape_flyLine,
+	euclid_shape_line,
+	fabric_pointGroup,
+	gruga_selection,
+	jion,
+	math_half,
+	root,
+	shell_fontPool,
+	shell_settings,
+	visual_doc,
+	visual_para;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

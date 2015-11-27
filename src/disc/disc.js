@@ -3,9 +3,6 @@
 */
 
 
-/*
-| Export
-*/
 var
 	disc_disc;
 

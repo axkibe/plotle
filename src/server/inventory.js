@@ -2,12 +2,6 @@
 | The resource inventory of the server.
 */
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
@@ -19,6 +13,13 @@ if( JION )
 		twig : [ 'server_resource' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var
@@ -37,6 +38,7 @@ prototype = server_inventory.prototype;
 fs = require( 'fs' );
 
 resume = require( 'suspend' ).resume;
+
 
 /*
 | Returns an inventory with a resource added/updated.

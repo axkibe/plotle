@@ -4,26 +4,12 @@
 */
 
 
-var
-	euclid_shape,
-	euclid_shape_line,
-	euclid_shape_start,
-	icon_check;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'icon_check',
 		attributes :
 		{
@@ -41,6 +27,20 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	euclid_shape,
+	euclid_shape_line,
+	euclid_shape_start,
+	icon_check;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

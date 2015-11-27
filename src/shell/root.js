@@ -2,65 +2,13 @@
 | The root of the user shell.
 */
 
-var
-	change_grow,
-	change_join,
-	change_ray,
-	change_remove,
-	change_wrap,
-	disc_jockey,
-	euclid_arrow,
-	euclid_display,
-	euclid_measure,
-	euclid_point,
-	euclid_view,
-	fabric_doc,
-	fabric_para,
-	fabric_relation,
-	fabric_spaceRef,
-	form_jockey,
-	gruga_createDisc,
-	gruga_loading,
-	gruga_login,
-	gruga_mainDisc,
-	gruga_moveTo,
-	gruga_noAccessToSpace,
-	gruga_nonExistingSpace,
-	gruga_relation,
-	gruga_signUp,
-	gruga_space,
-	gruga_user,
-	gruga_welcome,
-	jion,
-	jion$path,
-	net_ajax,
-	net_channel,
-	net_link,
-	root,
-	session_uid,
-	shell_doTracker,
-	shell_root,
-	system,
-	swatch,
-	user_creds,
-	visual_mark_caret,
-	visual_space;
-
-root = undefined;
-
-/*
-| Capsule
-*/
-( function() {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'shell_root',
 		attributes :
 		{
@@ -196,6 +144,61 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	change_grow,
+	change_join,
+	change_ray,
+	change_remove,
+	change_wrap,
+	disc_jockey,
+	euclid_arrow,
+	euclid_display,
+	euclid_measure,
+	euclid_point,
+	euclid_view,
+	fabric_doc,
+	fabric_para,
+	fabric_relation,
+	fabric_spaceRef,
+	form_jockey,
+	gruga_createDisc,
+	gruga_loading,
+	gruga_login,
+	gruga_mainDisc,
+	gruga_moveTo,
+	gruga_noAccessToSpace,
+	gruga_nonExistingSpace,
+	gruga_relation,
+	gruga_signUp,
+	gruga_space,
+	gruga_user,
+	gruga_welcome,
+	jion,
+	jion$path,
+	net_ajax,
+	net_channel,
+	net_link,
+	root,
+	session_uid,
+	shell_doTracker,
+	shell_root,
+	system,
+	swatch,
+	user_creds,
+	visual_mark_caret,
+	visual_space;
+
+root = undefined;
+
+
+/*
+| Capsule
+*/
+( function() {
+'use strict';
+
 
 /*
 | Valid modes

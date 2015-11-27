@@ -4,36 +4,11 @@
 
 
 /*
-| Imports
-*/
-var
-	euclid_color,
-	euclid_display,
-	euclid_ellipse,
-	euclid_measure,
-	euclid_point,
-	euclid_roundRect,
-	jion,
-	result_hover,
-	root,
-	shell_settings,
-	visual_mark_caret,
-	widget_input;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'widget_input',
 		attributes :
 		{
@@ -103,6 +78,28 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	euclid_color,
+	euclid_display,
+	euclid_ellipse,
+	euclid_measure,
+	euclid_point,
+	euclid_roundRect,
+	jion,
+	result_hover,
+	root,
+	shell_settings,
+	visual_mark_caret,
+	widget_input;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

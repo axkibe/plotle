@@ -3,24 +3,12 @@
 */
 
 
-var
-	fabric_doc,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'fabric_doc',
 		attributes :
 		{
@@ -35,6 +23,18 @@ if( JION )
 		twig : [ 'fabric_para' ]
 	};
 }
+
+
+var
+	fabric_doc,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

@@ -3,24 +3,12 @@
 */
 
 
-var
-	euclid_fixPoint,
-	euclid_point;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'euclid_point',
 		attributes :
 		{
@@ -41,6 +29,18 @@ if( JION )
 }
 
 
+var
+	euclid_fixPoint,
+	euclid_point;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
+
+
 var prototype;
 
 
@@ -48,7 +48,6 @@ if( NODE )
 {
 	euclid_point = require( 'jion' ).this( module, 'source' );
 }
-
 
 prototype = euclid_point.prototype;
 

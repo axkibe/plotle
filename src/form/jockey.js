@@ -3,24 +3,12 @@
 */
 
 
-var
-	form_jockey,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'form_jockey',
 		attributes :
 		{
@@ -74,6 +62,18 @@ if( JION )
 			]
 	};
 }
+
+
+var
+	form_jockey,
+	jion;
+
+
+/*
+| Capsule
+*/
+(function( ) {
+'use strict';
 
 
 if( NODE )

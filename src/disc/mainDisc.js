@@ -4,29 +4,11 @@
 
 
 /*
-| Export
-*/
-var
-	disc_disc,
-	disc_mainDisc,
-	change_shrink,
-	euclid_display,
-	jion,
-	root;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'disc_mainDisc',
 		hasAbstract : true,
 		attributes :
@@ -113,6 +95,21 @@ if( JION )
 		]
 	};
 }
+
+
+var
+	disc_disc,
+	disc_mainDisc,
+	change_shrink,
+	euclid_display,
+	jion,
+	root;
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

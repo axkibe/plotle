@@ -15,12 +15,12 @@ var
 
 
 euclid_constants =
-	{
-		/*
-		|'magic' number to approximate ellipses with beziers.
-		*/
-		magic : 0.551784
-	};
+{
+	/*
+	|'magic' number to approximate ellipses with beziers.
+	*/
+	magic : 0.551784
+};
 
 
 } )( );

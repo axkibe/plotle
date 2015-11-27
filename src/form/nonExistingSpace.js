@@ -4,27 +4,11 @@
 
 
 /*
-| Imports
-*/
-var
-	form_form,
-	form_nonExistingSpace,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'form_nonExistingSpace',
 		attributes :
 		{
@@ -74,6 +58,19 @@ if( JION )
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
+
+
+var
+	form_form,
+	form_nonExistingSpace,
+	jion;
+
+
+/*
+| Capsule
+*/
+(function( ) {
+'use strict';
 
 
 if( NODE )

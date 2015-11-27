@@ -3,23 +3,12 @@
 */
 
 
-var
-	euclid_anchor_rect,
-	euclid_rect;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'euclid_anchor_rect',
 		attributes :
 		{
@@ -36,6 +25,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_anchor_rect,
+	euclid_rect;
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

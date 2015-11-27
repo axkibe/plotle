@@ -4,22 +4,22 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'net_requestWrapRay',
 		ray : [ 'net_requestWrap' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 if( NODE )

@@ -4,18 +4,11 @@
 
 
 /*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | Jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'testpad_action',
 		attributes :
 		{
@@ -47,6 +40,13 @@ if( JION )
 		}
 	};
 }
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

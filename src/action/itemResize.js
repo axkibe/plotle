@@ -3,23 +3,12 @@
 */
 
 
-var
-	action_itemResize;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'action_itemResize',
 		attributes :
 		{
@@ -63,6 +52,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	action_itemResize;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

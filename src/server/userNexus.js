@@ -6,13 +6,6 @@
 
 
 /*
-| Capsule.
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
@@ -30,6 +23,13 @@ if( JION )
 		}
 	};
 }
+
+
+/*
+| Capsule.
+*/
+( function( ) {
+'use strict';
 
 
 var

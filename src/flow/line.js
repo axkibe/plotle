@@ -4,18 +4,11 @@
 
 
 /*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'flow_line',
 		attributes :
 		{
@@ -33,6 +26,13 @@ if( JION )
 		ray : [ 'flow_token' ]
 	};
 }
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
 
 
 if( NODE )

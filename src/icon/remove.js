@@ -2,6 +2,27 @@
 | Sketches of the icons on the discs.
 */
 
+
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'icon_remove',
+		attributes :
+		{
+			facet :
+			{
+				comment : 'the icon facet',
+				type : 'euclid_facet'
+			}
+		},
+		init : [ ]
+	};
+}
+
+
 var
 	icon_remove,
 	euclid_point,
@@ -16,26 +37,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return {
-		id : 'icon_remove',
-		attributes :
-		{
-			facet :
-			{
-				comment : 'the icon facet',
-				type : 'euclid_facet'
-			}
-		},
-		init : [ ]
-	};
-}
 
 
 if( NODE )

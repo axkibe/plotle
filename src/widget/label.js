@@ -3,23 +3,12 @@
 */
 
 
-var
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'widget_label',
 		attributes :
 		{
@@ -77,6 +66,17 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	widget_label;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

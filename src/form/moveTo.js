@@ -3,26 +3,12 @@
 */
 
 
-var
-	fabric_spaceRef,
-	form_form,
-	form_moveTo,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'form_moveTo',
 		attributes :
 		{
@@ -66,6 +52,20 @@ if( JION )
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
+
+
+var
+	fabric_spaceRef,
+	form_form,
+	form_moveTo,
+	jion;
+
+
+/*
+| Capsule
+*/
+(function( ) {
+'use strict';
 
 
 if( NODE )

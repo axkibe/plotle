@@ -3,30 +3,12 @@
 */
 
 
-var
-	net_requestWrap,
-	root,
-	transmitter;
-
-
-/*
-| Capsule.
-*/
-(function( ) {
-'use strict';
-
-
-var
-	onReply,
-	onReplyTransmitter;
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'net_requestWrap',
 		attributes :
 		{
@@ -53,6 +35,24 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	net_requestWrap,
+	root,
+	transmitter;
+
+
+/*
+| Capsule.
+*/
+(function( ) {
+'use strict';
+
+
+var
+	onReply,
+	onReplyTransmitter;
 
 
 if( NODE )

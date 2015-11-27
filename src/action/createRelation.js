@@ -3,23 +3,12 @@
 */
 
 
-var
-	action_createRelation;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'action_createRelation',
 		attributes :
 		{
@@ -57,6 +46,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	action_createRelation;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

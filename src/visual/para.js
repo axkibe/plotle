@@ -2,41 +2,13 @@
 | A paragraph.
 */
 
-var
-	change_insert,
-	change_join,
-	change_remove,
-	change_split,
-	euclid_display,
-	euclid_measure,
-	euclid_point,
-	flow_block,
-	flow_line,
-	flow_token,
-	jion,
-	visual_mark_caret,
-	visual_mark_range,
-	root,
-	session_uid,
-	shell_fontPool,
-	shell_settings,
-	visual_mark_text,
-	visual_para;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'visual_para',
 		attributes :
 		{
@@ -84,6 +56,35 @@ if( JION )
 		init : [ 'inherit' ]
 	};
 }
+
+
+var
+	change_insert,
+	change_join,
+	change_remove,
+	change_split,
+	euclid_display,
+	euclid_measure,
+	euclid_point,
+	flow_block,
+	flow_line,
+	flow_token,
+	jion,
+	visual_mark_caret,
+	visual_mark_range,
+	root,
+	session_uid,
+	shell_fontPool,
+	shell_settings,
+	visual_mark_text,
+	visual_para;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

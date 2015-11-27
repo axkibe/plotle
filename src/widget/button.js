@@ -3,27 +3,12 @@
 */
 
 
-var
-	euclid_display,
-	jion,
-	result_hover,
-	root,
-	widget_button;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'widget_button',
 		hasAbstract : true,
 		attributes :
@@ -117,6 +102,21 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	euclid_display,
+	jion,
+	result_hover,
+	root,
+	widget_button;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

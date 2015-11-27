@@ -7,28 +7,12 @@
 */
 
 
-var
-	euclid_rect,
-	euclid_roundRect,
-	gruga_scrollbar,
-	jion,
-	math_half,
-	visual_scrollbar;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_scrollbar',
 		attributes :
 		{
@@ -65,6 +49,22 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	euclid_rect,
+	euclid_roundRect,
+	gruga_scrollbar,
+	jion,
+	math_half,
+	visual_scrollbar;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

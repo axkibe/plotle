@@ -3,24 +3,12 @@
 */
 
 
-var
-	fabric_label,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'fabric_label',
 		attributes :
 		{
@@ -51,6 +39,18 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	fabric_label,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

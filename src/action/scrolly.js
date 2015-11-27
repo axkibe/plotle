@@ -3,23 +3,12 @@
 */
 
 
-var
-	action_scrolly;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'action_scrolly',
 		attributes :
 		{
@@ -41,6 +30,17 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	action_scrolly;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

@@ -4,13 +4,6 @@
 
 
 /*
-| Capsule.
-*/
-(function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
@@ -117,6 +110,13 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+/*
+| Capsule.
+*/
+(function( ) {
+'use strict';
 
 
 var

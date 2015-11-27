@@ -3,36 +3,12 @@
 */
 
 
-var
-	change_insert,
-	change_join,
-	change_remove,
-	change_ray,
-	change_split,
-	change_wrap,
-	jion,
-	jion$path,
-	math_limit,
-	math_maxInteger,
-	root,
-	session_uid,
-	testpad_action,
-	testpad_root;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'testpad_root',
 		attributes :
 		{
@@ -85,6 +61,31 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_insert,
+	change_join,
+	change_remove,
+	change_ray,
+	change_split,
+	change_wrap,
+	jion,
+	jion$path,
+	math_limit,
+	math_maxInteger,
+	root,
+	session_uid,
+	testpad_action,
+	testpad_root;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
+
 
 var
 	isSpecialKey,

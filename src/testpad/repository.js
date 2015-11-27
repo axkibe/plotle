@@ -2,31 +2,13 @@
 | The repository simulator does not talk to a server.
 */
 
-var
-	change_wrapRay,
-	euclid_point,
-	euclid_rect,
-	fabric_doc,
-	fabric_note,
-	fabric_para,
-	math_limit,
-	root,
-	testpad_repository;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'testpad_repository',
 		attributes :
 		{
@@ -50,6 +32,25 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	change_wrapRay,
+	euclid_point,
+	euclid_rect,
+	fabric_doc,
+	fabric_note,
+	fabric_para,
+	math_limit,
+	root,
+	testpad_repository;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+"use strict";
 
 
 var

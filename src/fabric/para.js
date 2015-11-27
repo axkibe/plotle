@@ -2,24 +2,13 @@
 | A paragraph.
 */
 
-var
-	fabric_para,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
 
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return {
+	throw{
 		id : 'fabric_para',
 		attributes :
 		{
@@ -37,6 +26,18 @@ if( JION )
 		}
 	};
 }
+
+
+var
+	fabric_para,
+	jion;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

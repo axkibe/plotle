@@ -4,31 +4,11 @@
 
 
 /*
-| Imports
-*/
-var
-	fabric_spaceRef,
-	form_form,
-	form_signUp,
-	jion,
-	user_creds,
-	user_passhash,
-	visual_mark_caret;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-/*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'form_signUp',
 		attributes :
 		{
@@ -73,6 +53,23 @@ if( JION )
 		twig : require( '../typemaps/formWidgets' )
 	};
 }
+
+
+var
+	fabric_spaceRef,
+	form_form,
+	form_signUp,
+	jion,
+	user_creds,
+	user_passhash,
+	visual_mark_caret;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 if( NODE )

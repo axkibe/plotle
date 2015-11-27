@@ -3,6 +3,26 @@
 */
 
 
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'icon_normal',
+		attributes :
+		{
+			facet :
+			{
+				comment : 'the icon facet',
+				type : 'euclid_facet'
+			}
+		},
+		init : [ ]
+	};
+}
+
+
 var
 	icon_normal,
 	euclid_point,
@@ -16,26 +36,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return{
-		id : 'icon_normal',
-		attributes :
-		{
-			facet :
-			{
-				comment : 'the icon facet',
-				type : 'euclid_facet'
-			}
-		},
-		init : [ ]
-	};
-}
 
 
 if( NODE )

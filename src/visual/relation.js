@@ -3,35 +3,12 @@
 */
 
 
-var
-	euclid_arrow,
-	euclid_display,
-	euclid_point,
-	euclid_rect,
-	gruga_label,
-	gruga_relation,
-	jion,
-	root,
-	visual_docItem,
-	visual_handlesBezel,
-	visual_item,
-	visual_label,
-	visual_relation;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 /*
 | The jion definition.
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'visual_relation',
 		attributes :
 		{
@@ -77,6 +54,29 @@ if( JION )
 		init : [ ]
 	};
 }
+
+
+var
+	euclid_arrow,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
+	gruga_label,
+	gruga_relation,
+	jion,
+	root,
+	visual_docItem,
+	visual_handlesBezel,
+	visual_item,
+	visual_label,
+	visual_relation;
+
+
+/*
+| Capsule
+*/
+( function( ) {
+'use strict';
 
 
 var

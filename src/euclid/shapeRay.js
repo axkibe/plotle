@@ -3,6 +3,18 @@
 */
 
 
+/*
+| The jion definition
+*/
+if( JION )
+{
+	throw{
+		id : 'euclid_shapeRay',
+		ray : require( '../typemaps/shape' )
+	};
+}
+
+
 var
 	euclid_shapeRay;
 
@@ -12,18 +24,6 @@ var
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	return {
-		id : 'euclid_shapeRay',
-		ray : require( '../typemaps/shape' )
-	};
-}
 
 
 if( NODE )
