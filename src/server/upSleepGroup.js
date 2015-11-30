@@ -8,21 +8,12 @@
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'server_upSleepGroup',
 		group : [ 'server_upSleep' ]
 	};
 }
 
 
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
-
-
 require( 'jion' ).this( module );
 
-
-} )( );

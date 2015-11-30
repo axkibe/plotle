@@ -30,6 +30,11 @@ if( JION )
 				comment : 'display border',
 				type : require( '../typemaps/border' )
 			},
+			controlView :
+			{
+				comment : 'the current view of controls',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 			designFrame :
 			{
 				comment : 'designed frame (using anchors)',
@@ -74,17 +79,17 @@ if( JION )
 				type : [ 'undefined', 'fabric_spaceRef' ],
 				assign : ''
 			},
+			spaceView :
+			{
+				comment : 'the current view of space',
+				type : [ 'undefined', 'euclid_view' ],
+				prepare : 'spaceView && spaceView.sizeOnly'
+			},
 			user :
 			{
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ],
 				assign : ''
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'view && view.sizeOnly'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
@@ -297,7 +302,7 @@ prototype.draw =
 	display.drawImage(
 		'image', this._display,
 		'x', 0,
-		'y', math_half( this.view.height - this.frame.height )
+		'y', math_half( this.controlView.height - this.frame.height )
 	);
 };
 

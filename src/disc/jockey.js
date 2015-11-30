@@ -24,6 +24,11 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
+			controlView :
+			{
+				comment : 'the current view of controls',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
@@ -52,15 +57,15 @@ if( JION )
 				comment : 'currently loaded space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
+			spaceView :
+			{
+				comment : 'the current view',
+				type : 'euclid_view'
+			},
 			user :
 			{
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : 'euclid_view'
 			}
 		},
 		init : [ 'twigDup' ],
@@ -166,11 +171,12 @@ prototype._init =
 			twig[ key ].create(
 				'access', this.access,
 				'action', this.action,
+				'controlView', this.controlView,
 				'hover', this.hover,
 				'mark', this.mark,
 				'mode', this.mode,
-				'view', this.view,
 				'spaceRef', this.spaceRef,
+				'spaceView', this.spaceView,
 				'user', this.user
 			);
 	}

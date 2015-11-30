@@ -8,7 +8,7 @@
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'server_upSleep',
 		attributes :
 		{
@@ -37,15 +37,5 @@ if( JION )
 }
 
 
-
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
-
-
 require( 'jion' ).this( module );
 
-
-} )( );

@@ -8,6 +8,19 @@
 */
 
 
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'database_changeSkidRay',
+		ray : [ 'database_changeSkid', 'undefined' ],
+		json : true,
+	};
+}
+
+
 var
 	database_changeSkid,
 	database_changeSkidRay;
@@ -18,19 +31,6 @@ var
 */
 ( function( ) {
 "use strict";
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	return {
-		id : 'database_changeSkidRay',
-		ray : [ 'database_changeSkid', 'undefined' ],
-		json : true,
-	};
-}
 
 
 var

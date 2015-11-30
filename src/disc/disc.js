@@ -33,7 +33,7 @@ disc_disc._init =
 
 	frame =
 	this.frame =
-		this.designFrame.compute( this.view.baseFrame );
+		this.designFrame.compute( this.controlView.baseFrame );
 
 	this.silhoutte = this.shape.compute( frame.zeroPnw );
 };

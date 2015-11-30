@@ -375,9 +375,10 @@ shell_root.startup =
 
 	dj =
 		disc_jockey.create(
+			'controlView', view,
 			'mode', mode,
 			'path', djPath,
-			'view', view,
+			'spaceView', view,
 			'twig:add', 'mainDisc',
 				gruga_mainDisc.abstract(
 					'path', djTwPath.append( 'mainDisc' )
@@ -567,12 +568,14 @@ prototype._init =
 			this.disc.create(
 				'access', access,
 				'action', action,
+				'controlView',
+					view.create( 'fact', this.disc.controlView.fact ),
 				'hover', hover,
 				'mark', mark,
 				'mode', mode,
 				'spaceRef', spaceRef,
-				'user', user,
-				'view', view
+				'spaceView', view,
+				'user', user
 			);
 	}
 

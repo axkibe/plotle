@@ -30,6 +30,11 @@ if( JION )
 				comment : 'display border',
 				type : require( '../typemaps/border' )
 			},
+			controlView :
+			{
+				comment : 'the current view of controls',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 			fill :
 			{
 				comment : 'display fill',
@@ -73,16 +78,16 @@ if( JION )
 				comment : 'reference to current space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
+			spaceView :
+			{
+				comment : 'the current view for space',
+				type : [ 'undefined', 'euclid_view' ],
+				prepare : 'spaceView && spaceView.sizeOnly'
+			},
 			user :
 			{
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'view && view.sizeOnly'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],

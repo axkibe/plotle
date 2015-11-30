@@ -8,7 +8,7 @@
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'server_spaceBox',
 		attributes :
 		{

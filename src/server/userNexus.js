@@ -10,7 +10,7 @@
 */
 if( JION )
 {
-	return{
+	throw{
 		id : 'server_userNexus',
 		attributes :
 		{
