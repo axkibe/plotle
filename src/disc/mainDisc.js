@@ -103,7 +103,6 @@ if( JION )
 
 
 var
-	disc_disc,
 	disc_mainDisc,
 	change_shrink,
 	euclid_display,
@@ -142,6 +141,7 @@ prototype._init =
 	)
 {
 	var
+		frame,
 		r,
 		rZ,
 		text,
@@ -149,7 +149,11 @@ prototype._init =
 		visible,
 		wname;
 
-	disc_disc._init.call( this, inherit );
+	frame =
+	this.frame =
+		this.designFrame.compute( this.controlView.baseFrame );
+
+	this.silhoutte = this.shape.compute( frame.zeroPnw );
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 

@@ -222,23 +222,6 @@ prototype.cardinalResize =
 
 
 /*
-| Computes an ellipse modelled relative to this rect.
-*/
-prototype.computeEllipse =
-	function(
-		model
-	)
-{
-	return(
-		euclid_ellipse.create(
-			'pnw', model.pnw.compute( this ),
-			'pse', model.pse.compute( this )
-		)
-	);
-};
-
-
-/*
 | Creates a rect by two arbitrary corner points
 */
 euclid_rect.createArbitrary =
@@ -251,38 +234,25 @@ euclid_rect.createArbitrary =
 		pnw,
 		pse;
 
-	if(
-		p2.x >= p1.x
-		&&
-		p2.y >= p1.y
-	)
+	if( p2.x >= p1.x && p2.y >= p1.y )
 	{
 		pnw = p1;
 
 		pse = p2;
 	}
-	else if(
-		p1.x >= p2.x &&
-		p1.y >= p2.y
-	)
+	else if( p1.x >= p2.x && p1.y >= p2.y )
 	{
 		pnw = p2;
 
 		pse = p1;
 	}
-	else if(
-		p2.x >= p1.x &&
-		p1.y >= p2.y
-	)
+	else if( p2.x >= p1.x && p1.y >= p2.y )
 	{
 		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
 
 		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
 	}
-	else if(
-		p1.x >= p2.x &&
-		p2.y >= p1.y
-	)
+	else if( p1.x >= p2.x && p2.y >= p1.y )
 	{
 		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
 

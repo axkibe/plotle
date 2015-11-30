@@ -21,25 +21,6 @@ disc_disc = { };
 
 
 /*
-| Common initializer.
-*/
-disc_disc._init =
-	function(
-		// inherit
-	)
-{
-	var
-		frame;
-
-	frame =
-	this.frame =
-		this.designFrame.compute( this.controlView.baseFrame );
-
-	this.silhoutte = this.shape.compute( frame.zeroPnw );
-};
-
-
-/*
 | Returns the hover path when a disc
 | is concerned about it.
 */

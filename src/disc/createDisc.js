@@ -102,7 +102,6 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
-	disc_disc,
 	euclid_display,
 	jion,
 	math_half,
@@ -143,13 +142,19 @@ prototype._init =
 	)
 {
 	var
+		frame,
 		r,
-		rZ,
 		ranks,
+		rZ,
 		twig,
 		wname;
 
-	disc_disc._init.call( this, inherit );
+	frame =
+	this.frame =
+		this.designFrame.compute( this.controlView.baseFrame );
+
+	this.silhoutte = this.shape.compute( frame.zeroPnw );
+
 
 	twig =
 		twigDup

@@ -569,7 +569,10 @@ prototype._init =
 				'access', access,
 				'action', action,
 				'controlView',
-					view.create( 'fact', this.disc.controlView.fact ),
+					view.create(
+//						'fact', this.disc.controlView.fact,
+						'pan', euclid_point.zero
+					),
 				'hover', hover,
 				'mark', mark,
 				'mode', mode,
