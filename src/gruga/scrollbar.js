@@ -50,9 +50,7 @@ gruga_scrollbar.ellipseB = 4;
 gruga_scrollbar.minHeight = 12;
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_scrollbar );
-}
+if( FREEZE ) Object.freeze( gruga_scrollbar );
+
 
 } )( );

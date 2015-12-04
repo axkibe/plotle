@@ -163,6 +163,7 @@ var
 	fabric_relation,
 	fabric_spaceRef,
 	form_jockey,
+	gruga_controls,
 	gruga_createDisc,
 	gruga_loading,
 	gruga_login,
@@ -570,7 +571,9 @@ prototype._init =
 				'action', action,
 				'controlView',
 					view.create(
-//						'fact', this.disc.controlView.fact,
+						'zoom',
+							view.height
+							/ gruga_controls.designSize.height,
 						'pan', euclid_point.zero
 					),
 				'hover', hover,

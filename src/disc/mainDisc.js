@@ -141,6 +141,7 @@ prototype._init =
 	)
 {
 	var
+		cv,
 		frame,
 		r,
 		rZ,
@@ -149,11 +150,14 @@ prototype._init =
 		visible,
 		wname;
 
+	cv = this.controlView;
+
 	frame =
 	this.frame =
-		this.designFrame.compute( this.controlView.baseFrame );
+		this.designFrame.compute( cv.baseFrame, cv );
 
-	this.silhoutte = this.shape.compute( frame.zeroPnw );
+	this.silhoutte =
+		this.shape.compute( frame.zeroPnw, cv );
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
@@ -243,7 +247,8 @@ prototype._init =
 					: this.path.append( 'twig' ).append( wname ),
 				'superFrame', this.frame.zeroPnw,
 				'text', text,
-				'visible', visible
+				'visible', visible,
+				'view', cv
 			);
 	}
 

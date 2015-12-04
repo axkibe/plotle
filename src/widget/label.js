@@ -56,6 +56,11 @@ if( JION )
 				comment : 'the label text',
 				type : 'string'
 			},
+			view :
+			{
+				comment : 'the view for the widget',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 			visible :
 			{
 				comment : 'if false the button is hidden',

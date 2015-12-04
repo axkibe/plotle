@@ -32,9 +32,14 @@ if( JION )
 			{
 				comment : 'current width of screen',
 				type : 'integer'
+			},
+			zoom :
+			{
+				comment : 'set the zoom factor directly',
+				type : [ 'undefined', 'number' ]
 			}
 		},
-		init : [ ]
+		init : [ 'zoom' ]
 	};
 }
 
@@ -83,16 +88,21 @@ prototype = euclid_view.prototype;
 | Initializer.
 */
 prototype._init =
-	function( )
+	function(
+		zoom
+	)
 {
-	this.fact =
-		math_limit(
-			shell_settings.zoomMin,
-			this.fact,
-			shell_settings.zoomMax
-		);
+	if( zoom === undefined )
+	{
+		this.fact =
+			math_limit(
+				shell_settings.zoomMin,
+				this.fact,
+				shell_settings.zoomMax
+			);
 
-	this.zoom = Math.pow( shell_settings.zoomBase, this.fact );
+		this.zoom = Math.pow( shell_settings.zoomBase, this.fact );
+	}
 };
 
 

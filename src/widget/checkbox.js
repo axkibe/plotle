@@ -57,7 +57,12 @@ if( JION )
 				comment : 'if false the button is hidden',
 				type : 'boolean',
 				defaultValue : 'true'
-			}
+			},
+			view :
+			{
+				comment : 'the view for the widget',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 		},
 		init : [ ]
 	};
@@ -65,8 +70,7 @@ if( JION )
 
 
 var
-	gruga_genericCheckbox,
-	icon_check,
+	gruga_iconCheck,
 	jion,
 	result_hover,
 	root,
@@ -113,19 +117,14 @@ prototype._init =
 
 
 /*
-| The check icon of the check box
+| The check icon of the check box.
 */
 jion.lazyValue(
 	prototype,
 	'checkIcon',
 	function( )
 {
-	return(
-		icon_check.create(
-			'facet', gruga_genericCheckbox.checkIconFacet,
-			'pc', this.frame.pc
-		)
-	);
+	return gruga_iconCheck.shape.compute( this.frame, this.view );
 }
 );
 
@@ -270,7 +269,7 @@ prototype.draw =
 
 	display.paint( facet, this.frame );
 
-	if( this.checked ) this.checkIcon.draw( display );
+	if( this.checked ) display.paint( gruga_iconCheck.facet, this.checkIcon );
 };
 
 

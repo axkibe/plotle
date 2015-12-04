@@ -127,24 +127,37 @@ euclid_anchor_point.w =
 */
 prototype.add =
 	function(
-		p
+		a1,  // point or x
+		a2   // ----- or y
 	)
 {
+	switch( arguments.length )
+	{
+		case 1 :
 
-/**/if( CHECK )
-/**/{
-/**/	if( p.reflect !== 'euclid_point' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+/**/		if( CHECK )
+/**/		{
+/**/			if( a1.reflect !== 'euclid_point' ) throw new Error( );
+/**/		}
 
-	return(
-		this.create(
-			'x', this.x + p.x,
-			'y', this.y + p.y
-		)
-	);
+			return(
+				this.create(
+					'x', this.x + a1.x,
+					'y', this.y + a1.y
+				)
+			);
+	
+		case 2 :
+
+			return(
+				this.create(
+					'x', this.x + a1,
+					'y', this.y + a2
+				)
+			);
+	
+		default : throw new Error( );
+	}
 };
 
 
@@ -154,16 +167,24 @@ prototype.add =
 */
 prototype.compute =
 	function(
-		frame
+		frame,
+		view
 	)
 {
 	var
 		pnw,
-		pse;
+		pse,
+		x,
+		y;
 
 /**/if( CHECK )
 /**/{
 /**/	if( frame.reflect !== 'euclid_rect' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( view && view.reflect !== 'euclid_view' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -173,14 +194,25 @@ prototype.compute =
 
 	pse = frame.pse;
 
+	x = this.x;
+
+	y = this.y;
+
+	if( view )
+	{
+		x = view.x( x );
+
+		y = view.y( y );
+	}
+
 	switch( this.anchor )
 	{
 		case 'c'  :
 
 			return(
 				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + this.x,
-					'y', math_half( pnw.y + pse.y ) + this.y
+					'x', math_half( pnw.x + pse.x ) + x,
+					'y', math_half( pnw.y + pse.y ) + y
 				)
 			);
 
@@ -188,8 +220,8 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + this.x,
-					'y', pnw.y + this.y
+					'x', math_half( pnw.x + pse.x ) + x,
+					'y', pnw.y + y
 				)
 			);
 
@@ -197,8 +229,8 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', pse.x + this.x,
-					'y', pnw.y + this.y
+					'x', pse.x + x,
+					'y', pnw.y + y
 				)
 			);
 
@@ -206,21 +238,21 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', pse.x + this.x,
-					'y', math_half( pnw.y + pse.y ) + this.y
+					'x', pse.x + x,
+					'y', math_half( pnw.y + pse.y ) + y
 				)
 			);
 
 		case 'se' :
 
-			return pse.add( this.x, this.y );
+			return pse.add( x, y );
 
 		case 's'  :
 
 			return(
 				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + this.x,
-					'y', pse.y + this.y
+					'x', math_half( pnw.x + pse.x ) + x,
+					'y', pse.y + y
 				)
 			);
 
@@ -228,8 +260,8 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', pnw.x + this.x,
-					'y', pse.y + this.y
+					'x', pnw.x + x,
+					'y', pse.y + y
 				)
 			);
 
@@ -237,14 +269,14 @@ prototype.compute =
 
 			return(
 				euclid_point.create(
-					'x', pnw.x + this.x,
-					'y', math_half( pnw.y + pse.y ) + this.y
+					'x', pnw.x + x,
+					'y', math_half( pnw.y + pse.y ) + y
 				)
 			);
 
 		case 'nw' :
 
-			return pnw.add( this.x, this.y );
+			return pnw.add( x, y );
 
 		default :
 
@@ -254,3 +286,4 @@ prototype.compute =
 
 
 })( );
+

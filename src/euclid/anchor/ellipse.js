@@ -79,20 +79,27 @@ euclid_anchor_ellipse.fullSkewNW =
 */
 prototype.compute =
 	function(
-		frame
+		frame,
+		view
 	)
 {
 	var
-		gpc;
+		gpc,
+		gr1;
 
 	gpc = this.gradientPC;
 
+	gr1 = this.gradientR1;
+
 	return(
 		euclid_ellipse.create(
-			'pnw', this.pnw.compute( frame ),
-			'pse', this.pse.compute( frame ),
-			'gradientPC', gpc && gpc.compute( frame ),
-			'gradientR1', this.gradientR1
+			'pnw', this.pnw.compute( frame, view ),
+			'pse', this.pse.compute( frame, view ),
+			'gradientPC', gpc && gpc.compute( frame, view ),
+			'gradientR1',
+				view
+				? ( gr1 ? view.scale( gr1 ) : undefined )
+				: gr1
 		)
 	);
 };

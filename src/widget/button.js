@@ -40,12 +40,17 @@ if( JION )
 				type : [ 'undefined', 'jion$path' ],
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
-			icon :
+			iconAnchorShape :
 			{
-				comment : 'icon to display',
+				comment : 'icon anchor shape',
 				type :
-					require( '../typemaps/icon' )
+					require( '../typemaps/anchorShape' )
 					.concat( [ 'undefined' ] )
+			},
+			iconFacet :
+			{
+				comment : 'icon facet',
+				type : [ 'undefined', 'euclid_facet' ]
 			},
 			mark :
 			{
@@ -91,6 +96,11 @@ if( JION )
 			{
 				comment : 'rotation of the text',
 				type : [ 'undefined', 'number' ]
+			},
+			view :
+			{
+				comment : 'the view for the widget',
+				type : [ 'undefined', 'euclid_view' ]
 			},
 			visible :
 			{
@@ -139,11 +149,27 @@ prototype = widget_button.prototype;
 prototype._init =
 	function( )
 {
+	var
+		font,
+		frame,
+		fs,
+		view;
+
+	view = this.view;
+
 	if( this.superFrame )
 	{
-		this.frame = this.designFrame.compute( this.superFrame );
+		frame =
+		this.frame =
+			this.designFrame.compute( this.superFrame, view );
 
-		this._shape = this.shape.compute( this.frame.zeroPnw );
+		this._shape = this.shape.compute( frame.zeroPnw, view );
+
+		if( this.iconAnchorShape )
+		{
+			this._iconShape =
+				this.iconAnchorShape.compute( frame.zeroPnw, view );
+		}
 	}
 	else
 	{
@@ -152,9 +178,24 @@ prototype._init =
 		this._shape = undefined;
 	}
 
-	// if true repeats the push action if held down
-	// FUTURE
-	this.repeating = false;
+	font = this.font;
+
+	if( font )
+	{
+		if( view ) // FIXME make view required
+		{
+			fs = view.scale( font.size );
+
+			if( !this._font || this._font.size !== fs )
+			{
+				this._font = font.create( 'size', fs );
+			}
+		}
+		else
+		{
+			this._font = font;
+		}
+	}
 };
 
 
@@ -291,7 +332,7 @@ jion.lazyValue(
 	'textPos',
 	function( )
 {
-	return this.textDesignPos.compute( this.frame.zeroPnw );
+	return this.textDesignPos.compute( this.frame.zeroPnw, this.view );
 }
 );
 
@@ -334,7 +375,7 @@ jion.lazyValue(
 	{
 		newline = this.textNewline;
 
-		font = this.font;
+		font = this._font;
 
 		if( newline === undefined )
 		{
@@ -347,6 +388,8 @@ jion.lazyValue(
 		}
 		else
 		{
+			newline = this.view.scale( newline );
+
 			x = this.textPos.x;
 
 			y = this.textPos.y;
@@ -368,7 +411,7 @@ jion.lazyValue(
 		}
 	}
 
-	if( this.icon ) this.icon.draw( display );
+	if( this._iconShape ) display.paint( this.iconFacet, this._iconShape );
 
 	return display;
 }

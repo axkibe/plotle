@@ -30,7 +30,6 @@ if( JION )
 
 
 var
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	math_half,

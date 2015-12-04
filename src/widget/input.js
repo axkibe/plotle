@@ -68,6 +68,11 @@ if( JION )
 				type : 'string',
 				defaultValue : '""'
 			},
+			view :
+			{
+				comment : 'the view for the widget',
+				type : [ 'undefined', 'euclid_view' ]
+			},
 			visible :
 			{
 				comment : 'if false the button is hidden',

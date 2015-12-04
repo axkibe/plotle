@@ -53,16 +53,19 @@ prototype = euclid_anchor_rect.prototype;
 
 
 /*
-| Computes a rect modelled relative to this rect.
+| Computes to an unanchored rect for a frame/view:
 */
 prototype.compute =
 	function(
-		frame
+		frame,
+		view
 	)
 {
-	return euclid_rect.create(
-		'pnw', this.pnw.compute( frame ),
-		'pse', this.pse.compute( frame )
+	return(
+		euclid_rect.create(
+			'pnw', this.pnw.compute( frame, view ),
+			'pse', this.pse.compute( frame, view )
+		)
 	);
 };
 

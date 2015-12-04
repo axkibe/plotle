@@ -337,7 +337,37 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/euclid/anchor/shape/line.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/shape/flyLine.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/shape/round.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/shape/start.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/euclid/anchor/ellipse.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/shape.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/shapeRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -480,26 +510,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/icon/normal.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/icon/moveto.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/icon/remove.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/icon/check.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/disc/disc.js',
 		'inBundle', true
 	),
@@ -579,6 +589,26 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/fonts.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/controls.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconCheck.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconMoveTo.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconNormal.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconRemove.js',
 		'inBundle', true
 	),
 	server_resource.create(

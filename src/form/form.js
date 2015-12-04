@@ -69,7 +69,8 @@ form_form.init =
 				'path', path,
 				'superFrame', this.frame,
 				'hover', this.hover,
-				'mark', this.mark
+				'mark', this.mark,
+				'view', this.view
 			);
 	}
 

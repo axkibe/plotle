@@ -16,10 +16,10 @@ var
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
 	euclid_point,
+	gruga_iconMoveTo,
+	gruga_iconNormal,
+	gruga_iconRemove,
 	gruga_mainDisc,
-	icon_moveto,
-	icon_normal,
-	icon_remove,
 	shell_fontPool,
 	widget_button;
 
@@ -40,9 +40,6 @@ var
 	buttonModel,
 	buttonSize,
 	createButtonPnw,
-	iconMoveTo,
-	iconNormal,
-	iconRemove,
 	loginButtonPnw,
 	movetoButtonPnw,
 	normalButtonPnw,
@@ -54,45 +51,6 @@ var
 	userButtonSize;
 
 dnw = euclid_anchor_point.nw;
-
-
-iconMoveTo =
-	icon_moveto.create(
-		'facet',
-			euclid_facet.create(
-				'fill', euclid_color.rgb( 107, 91, 73 ),
-				'border',
-					euclid_border.create(
-						'color', euclid_color.rgb( 128, 0, 0 )
-					)
-			)
-	);
-
-iconNormal =
-	icon_normal.create(
-		'facet',
-			euclid_facet.create(
-				'fill', euclid_color.black,
-				'border',
-					euclid_border.create(
-						'color', euclid_color.rgb( 128, 0, 0 )
-					)
-			)
-	);
-
-
-// The red criss-cross for the remove button
-iconRemove =
-	icon_remove.create(
-		'facet',
-			euclid_facet.create(
-				'fill', euclid_color.rgb( 255, 0, 0 ),
-				'border',
-					euclid_border.create(
-						'color', euclid_color.rgb( 128, 0, 0 )
-					)
-			)
-	);
 
 
 buttonFacets =
@@ -194,7 +152,7 @@ gruga_mainDisc =
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -400 ),
 				'pse',
-					euclid_anchor_point.w.create( 'x', 100, 'y', 400 )
+					euclid_anchor_point.w.create( 'x', 120, 'y', 400 )
 			),
 		'shape',
 			euclid_anchor_ellipse.create(
@@ -230,7 +188,8 @@ gruga_mainDisc =
 			),
 		'twig:add', 'normal',
 			buttonModel.create(
-				'icon', iconNormal,
+				'iconAnchorShape', gruga_iconNormal.shape,
+				'iconFacet', gruga_iconNormal.facet,
 				'designFrame',
 					euclid_anchor_rect.create(
 						'pnw', normalButtonPnw,
@@ -251,7 +210,8 @@ gruga_mainDisc =
 			),
 		'twig:add', 'remove',
 			buttonModel.create(
-				'icon', iconRemove,
+				'iconAnchorShape', gruga_iconRemove.shape,
+				'iconFacet', gruga_iconRemove.facet,
 				'visible', false,
 				'designFrame',
 					euclid_anchor_rect.create(
@@ -261,7 +221,8 @@ gruga_mainDisc =
 			),
 		'twig:add', 'moveTo',
 			buttonModel.create(
-				'icon', iconMoveTo,
+				'iconAnchorShape', gruga_iconMoveTo.shape,
+				'iconFacet', gruga_iconMoveTo.facet,
 				'visible', false,
 				'designFrame',
 					euclid_anchor_rect.create(

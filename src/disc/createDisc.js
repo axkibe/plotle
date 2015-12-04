@@ -142,6 +142,7 @@ prototype._init =
 	)
 {
 	var
+		cv,
 		frame,
 		r,
 		ranks,
@@ -149,12 +150,14 @@ prototype._init =
 		twig,
 		wname;
 
+	cv = this.controlView;
+
 	frame =
 	this.frame =
-		this.designFrame.compute( this.controlView.baseFrame );
+		this.designFrame.compute( cv.baseFrame, cv );
 
-	this.silhoutte = this.shape.compute( frame.zeroPnw );
-
+	this.silhoutte =
+		this.shape.compute( frame.zeroPnw, cv );
 
 	twig =
 		twigDup
@@ -176,7 +179,8 @@ prototype._init =
 				'superFrame', this.frame.zeroPnw,
 				'hover', this.hover,
 				'down',
-					disc_createDisc._isActiveButton( this.action, wname )
+					disc_createDisc._isActiveButton( this.action, wname ),
+				'view', cv
 			);
 	}
 
