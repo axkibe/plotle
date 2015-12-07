@@ -40,13 +40,13 @@ var
 
 dnw = euclid_anchor_point.nw;
 
-noteButtonPnw = dnw.create( 'x', 62, 'y', 216 );
+noteButtonPnw = dnw.create( 'x', 65, 'y', 180 );
 
-labelButtonPnw = dnw.create( 'x', 81, 'y', 284 );
+labelButtonPnw = dnw.create( 'x', 81, 'y', 251 );
 
-portalButtonPnw = dnw.create( 'x', 101, 'y', 425 );
+relationButtonPnw = dnw.create( 'x', 92, 'y', 322 );
 
-relationButtonPnw = dnw.create( 'x', 94, 'y', 354 );
+portalButtonPnw = dnw.create( 'x', 99, 'y', 393 );
 
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
@@ -127,13 +127,13 @@ gruga_createDisc =
 			euclid_anchor_ellipse.create(
 				'pnw',
 					euclid_anchor_point.e.create(
-						'x', -1651,
-						'y', -850
+						'x', -2351,
+						'y', -1175
 					),
 				'pse',
 					euclid_anchor_point.e.create(
 						'x', -1,
-						'y', 850
+						'y', 1175
 					),
 				'gradientPC',
 					euclid_anchor_point.e.create(

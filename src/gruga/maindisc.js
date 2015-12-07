@@ -112,17 +112,17 @@ buttonModel =
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
-createButtonPnw = dnw.create( 'x', 20, 'y', 169 );
+createButtonPnw = dnw.create( 'x', 19, 'y', 130 );
 
-loginButtonPnw = dnw.create( 'x', 30, 'y', 535 );
+loginButtonPnw = dnw.create( 'x', 30, 'y', 555 );
 
-movetoButtonPnw = dnw.create( 'x', 47, 'y', 326 );
+movetoButtonPnw = dnw.create( 'x', 46, 'y', 326 );
 
-normalButtonPnw = dnw.create( 'x', 4, 'y', 120 );
+normalButtonPnw = dnw.create( 'x', 5, 'y', 76 );
 
-removeButtonPnw = dnw.create( 'x', 32, 'y', 218 );
+removeButtonPnw = dnw.create( 'x', 31, 'y', 186 );
 
-signupButtonPnw = dnw.create( 'x', 19, 'y', 585 );
+signupButtonPnw = dnw.create( 'x', 17, 'y', 610 );
 
 spaceButtonPnw = dnw.create( 'x', 0, 'y', 170 );
 
@@ -152,19 +152,19 @@ gruga_mainDisc =
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -400 ),
 				'pse',
-					euclid_anchor_point.w.create( 'x', 120, 'y', 400 )
+					euclid_anchor_point.w.create( 'x', 100, 'y', 400 )
 			),
 		'shape',
 			euclid_anchor_ellipse.create(
 				'pnw',
 					euclid_anchor_point.e.create(
-						'x', -1601,
-						'y', -800
+						'x', -2201,
+						'y', -1100
 					),
 				'pse',
 					euclid_anchor_point.e.create(
 						'x', -1,
-						'y', 800
+						'y', 1100
 					),
 				'gradientPC',
 					euclid_anchor_point.w.create(

@@ -36,7 +36,8 @@ if( JION )
 			zoom :
 			{
 				comment : 'set the zoom factor directly',
-				type : [ 'undefined', 'number' ]
+				type : [ 'undefined', 'number' ],
+				assign : ''
 			}
 		},
 		init : [ 'zoom' ]
@@ -102,6 +103,10 @@ prototype._init =
 			);
 
 		this.zoom = Math.pow( shell_settings.zoomBase, this.fact );
+	}
+	else
+	{
+		this.zoom = zoom;
 	}
 };
 
