@@ -64,7 +64,7 @@ prototype = euclid_anchor_ellipse.prototype;
 
 
 /*
-| ellipse filling the full frame
+| ellipse filling the full area
 | skewed a little to north west
 */
 euclid_anchor_ellipse.fullSkewNW =
@@ -79,7 +79,7 @@ euclid_anchor_ellipse.fullSkewNW =
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
@@ -93,9 +93,9 @@ prototype.compute =
 
 	return(
 		euclid_ellipse.create(
-			'pnw', this.pnw.compute( frame, view ),
-			'pse', this.pse.compute( frame, view ),
-			'gradientPC', gpc && gpc.compute( frame, view ),
+			'pnw', this.pnw.compute( area, view ),
+			'pse', this.pse.compute( area, view ),
+			'gradientPC', gpc && gpc.compute( area, view ),
 			'gradientR1',
 				view
 				? ( gr1 ? view.scale( gr1 ) : undefined )

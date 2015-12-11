@@ -143,7 +143,7 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -165,7 +165,7 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -188,7 +188,7 @@ gruga_signUp =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -211,7 +211,7 @@ gruga_signUp =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -232,7 +232,7 @@ gruga_signUp =
 			widget_checkbox.create(
 				'facets', gruga_genericCheckbox.facets,
 				'checked', true,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -277,7 +277,7 @@ gruga_signUp =
 		'signupButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -301,7 +301,7 @@ gruga_signUp =
 		'closeButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(

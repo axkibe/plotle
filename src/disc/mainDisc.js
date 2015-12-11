@@ -40,9 +40,9 @@ if( JION )
 				comment : 'display fill',
 				type : require( '../typemaps/fill' )
 			},
-			designFrame :
+			designArea :
 			{
-				comment : 'designed frame (using anchors)',
+				comment : 'designed aera (using anchors)',
 				type : 'euclid_anchor_rect'
 			},
 			hover :
@@ -142,7 +142,7 @@ prototype._init =
 {
 	var
 		cv,
-		frame,
+		area,
 		r,
 		rZ,
 		text,
@@ -152,12 +152,12 @@ prototype._init =
 
 	cv = this.controlView;
 
-	frame =
-	this.frame =
-		this.designFrame.compute( cv.baseFrame, cv );
+	area =
+	this.area =
+		this.designArea.compute( cv.baseArea, cv );
 
 	this.silhoutte =
-		this.shape.compute( frame.zeroPnw, cv );
+		this.shape.compute( area.zeroPnw, cv );
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
@@ -245,7 +245,7 @@ prototype._init =
 					twig[ wname ].path
 					? pass
 					: this.path.append( 'twig' ).append( wname ),
-				'superFrame', this.frame.zeroPnw,
+				'superArea', this.area.zeroPnw,
 				'text', text,
 				'visible', visible,
 				'view', cv
@@ -273,8 +273,8 @@ jion.lazyValue(
 
 		display =
 			euclid_display.create(
-				'width', this.frame.width,
-				'height', this.frame.height
+				'width', this.area.width,
+				'height', this.area.height
 			);
 
 		display.fill( this.fill, this.silhoutte );
@@ -365,7 +365,7 @@ prototype.draw =
 {
 	display.drawImage(
 		'image', this._display,
-		'pnw', this.frame.pnw
+		'pnw', this.area.pnw
 	);
 };
 
@@ -387,9 +387,9 @@ prototype.pointingHover =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) ) return;
+	if( !this.area.within( p ) ) return;
 
-	pp = p.sub( this.frame.pnw );
+	pp = p.sub( this.area.pnw );
 
 	if( !this._display.withinSketch( this.silhoutte, pp ) ) return;
 
@@ -428,14 +428,11 @@ prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.area.within( p ) ) return;
 
 	display = this._display;
 
-	pp = p.sub( this.frame.pnw );
+	pp = p.sub( this.area.pnw );
 
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
 
@@ -475,12 +472,12 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) ) return;
+	if( !this.area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{
@@ -516,12 +513,12 @@ prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) ) return;
+	if( !this.area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{

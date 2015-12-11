@@ -12,9 +12,9 @@ if( JION )
 		id : 'widget_input',
 		attributes :
 		{
-			designFrame :
+			designArea :
 			{
-				comment : 'designed frame (using anchors',
+				comment : 'designed area (using anchors',
 				type : 'euclid_anchor_rect'
 			},
 			facets :
@@ -57,9 +57,9 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			superFrame :
+			superArea :
 			{
-				comment : 'the frame the widget resides in',
+				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
 			},
 			value :
@@ -128,26 +128,26 @@ prototype._init =
 	function( )
 {
 	var
-		frame;
+		area;
 
-	if( this.superFrame )
+	if( this.superArea )
 	{
-		frame =
-		this.frame =
-			this.designFrame.compute( this.superFrame );
+		area =
+		this.area =
+			this.designArea.compute( this.superArea );
 
 		this._shape =
 			euclid_roundRect.create(
 				'pnw', euclid_point.zero,
-				'pse', frame.pse.sub( frame.pnw ),
+				'pse', area.pse.sub( area.pnw ),
 				'a', 7,
 				'b', 3
 			);
 	}
 	else
 	{
-		frame =
-		this.frame =
+		area =
+		this.area =
 		this._shape =
 			undefined;
 	}
@@ -186,7 +186,7 @@ jion.lazyValue(
 	s = Math.round( p.y + descend + 1 );
 
 	return(
-		this.frame.pnw.y + s - Math.round( fs + descend )
+		this.area.pnw.y + s - Math.round( fs + descend )
 	);
 }
 );
@@ -217,9 +217,9 @@ prototype.click =
 	var
 		pp;
 
-	if( !p || !this.frame.within( p ) ) return undefined;
+	if( !p || !this.area.within( p ) ) return undefined;
 
-	pp = p.sub( this.frame.pnw );
+	pp = p.sub( this.area.pnw );
 
 	if( !this._shape.within( pp ) ) return undefined;
 
@@ -244,7 +244,7 @@ prototype.draw =
 		display
 	)
 {
-	display.drawImage( 'image', this._display, 'pnw', this.frame.pnw );
+	display.drawImage( 'image', this._display, 'pnw', this.area.pnw );
 };
 
 
@@ -387,8 +387,8 @@ prototype.pointingHover =
 	)
 {
 	if(
-		!this.frame.within( p )
-		|| !this._shape.within( p.sub( this.frame.pnw ) )
+		!this.area.within( p )
+		|| !this._shape.within( p.sub( this.area.pnw ) )
 	)
 	{
 		return undefined;

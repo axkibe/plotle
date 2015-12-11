@@ -13,9 +13,9 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			designFrame :
+			designArea :
 			{
-				comment : 'designed frame ( using anchors )',
+				comment : 'designed area ( using anchors )',
 				type : 'euclid_anchor_rect'
 			},
 			down :
@@ -71,9 +71,9 @@ if( JION )
 				// FUTURE allow other types
 				type : 'euclid_anchor_ellipse'
 			},
-			superFrame :
+			superArea :
 			{
-				comment : 'the frame the widget resides in',
+				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
 			},
 			text :
@@ -150,30 +150,30 @@ prototype._init =
 	function( )
 {
 	var
+		area,
 		font,
-		frame,
 		fs,
 		view;
 
 	view = this.view;
 
-	if( this.superFrame )
+	if( this.superArea )
 	{
-		frame =
-		this.frame =
-			this.designFrame.compute( this.superFrame, view );
+		area =
+		this.area =
+			this.designArea.compute( this.superArea, view );
 
-		this._shape = this.shape.compute( frame.zeroPnw, view );
+		this._shape = this.shape.compute( area.zeroPnw, view );
 
 		if( this.iconAnchorShape )
 		{
 			this._iconShape =
-				this.iconAnchorShape.compute( frame.zeroPnw, view );
+				this.iconAnchorShape.compute( area.zeroPnw, view );
 		}
 	}
 	else
 	{
-		this.frame = undefined;
+		this.area = undefined;
 
 		this._shape = undefined;
 	}
@@ -215,10 +215,10 @@ prototype.pointingHover =
 {
 	if(
 		!this.visible
-		|| !this.frame.within( p )
+		|| !this.area.within( p )
 		|| !this._display.withinSketch(
 			this._shape,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{
@@ -246,10 +246,10 @@ prototype.click =
 {
 	if(
 		!this.visible ||
-		!this.frame.within( p ) ||
+		!this.area.within( p ) ||
 		!this._display.withinSketch(
 			this._shape,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{
@@ -288,7 +288,7 @@ prototype.draw =
 
 	display.drawImage(
 		'image', this._display,
-		'pnw', this.frame.pnw
+		'pnw', this.area.pnw
 	);
 };
 
@@ -332,7 +332,7 @@ jion.lazyValue(
 	'textPos',
 	function( )
 {
-	return this.textDesignPos.compute( this.frame.zeroPnw, this.view );
+	return this.textDesignPos.compute( this.area.zeroPnw, this.view );
 }
 );
 
@@ -358,8 +358,8 @@ jion.lazyValue(
 
 	display =
 		euclid_display.create(
-			'width', this.frame.width,
-			'height', this.frame.height
+			'width', this.area.width,
+			'height', this.area.height
 		);
 
 	facet =

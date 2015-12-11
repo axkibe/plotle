@@ -121,7 +121,7 @@ gruga_moveTo =
 		'ideoloomHomeButton',
 			widget_button.create(
 				'facets', portalButtonFacets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -155,7 +155,7 @@ gruga_moveTo =
 		'ideoloomSandboxButton',
 			widget_button.create(
 				'facets', portalButtonFacets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -189,7 +189,7 @@ gruga_moveTo =
 		'userHomeButton',
 			widget_button.create(
 				'facets', portalButtonFacets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(

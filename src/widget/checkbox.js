@@ -18,9 +18,9 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
-			designFrame :
+			designArea :
 			{
-				comment : 'designed frame (using anchors)',
+				comment : 'designed area (using anchors)',
 				type : 'euclid_anchor_rect'
 			},
 			facets :
@@ -47,9 +47,9 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			superFrame :
+			superArea :
 			{
-				comment : 'the frame the widget resides in',
+				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
 			},
 			visible :
@@ -104,13 +104,13 @@ prototype = widget_checkbox.prototype;
 prototype._init =
 	function( )
 {
-	if( this.superFrame )
+	if( this.superArea )
 	{
-		this.frame = this.designFrame.compute( this.superFrame );
+		this.area = this.designArea.compute( this.superArea );
 	}
 	else
 	{
-		this.frame = undefined;
+		this.area = undefined;
 	}
 
 };
@@ -124,7 +124,7 @@ jion.lazyValue(
 	'checkIcon',
 	function( )
 {
-	return gruga_iconCheck.shape.compute( this.frame, this.view );
+	return gruga_iconCheck.shape.compute( this.area, this.view );
 }
 );
 
@@ -143,10 +143,7 @@ prototype.pointingHover =
 		p
 	)
 {
-	if( !this.visible || !this.frame.within( p ) )
-	{
-		return undefined;
-	}
+	if( !this.visible || !this.area.within( p ) ) return undefined;
 
 	return(
 		result_hover.create(
@@ -182,7 +179,7 @@ prototype.click =
 {
 	if( !this.visible ) return undefined;
 
-	if( this.frame.within( p ) )
+	if( this.area.within( p ) )
 	{
 		root.setPath( this.path.append( 'checked' ), !this.checked );
 
@@ -267,7 +264,7 @@ prototype.draw =
 			'focus', !!this.mark
 		);
 
-	display.paint( facet, this.frame );
+	display.paint( facet, this.area );
 
 	if( this.checked ) display.paint( gruga_iconCheck.facet, this.checkIcon );
 };

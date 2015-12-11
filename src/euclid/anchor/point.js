@@ -1,5 +1,5 @@
 /*
-| A point anchored within a frame.
+| A point anchored within a area.
 */
 
 
@@ -155,7 +155,7 @@ prototype.add =
 					'y', this.y + a2
 				)
 			);
-	
+
 		default : throw new Error( );
 	}
 };
@@ -167,7 +167,7 @@ prototype.add =
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
@@ -179,20 +179,14 @@ prototype.compute =
 
 /**/if( CHECK )
 /**/{
-/**/	if( frame.reflect !== 'euclid_rect' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( area.reflect !== 'euclid_rect' ) throw new Error( );
 /**/
-/**/	if( view && view.reflect !== 'euclid_view' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( view && view.reflect !== 'euclid_view' ) throw new Error( );
 /**/}
 
-	pnw = frame.pnw;
+	pnw = area.pnw;
 
-	pse = frame.pse;
+	pse = area.pse;
 
 	x = this.x;
 

@@ -45,7 +45,7 @@ form_form.init =
 	// FUTURE use abstract( )
 	if( !this.path ) return;
 
-	this.frame = this.view.baseFrame;
+	this.area = this.view.baseArea;
 
 	// all components of the form
 	twig = twigDup ? this._twig :  jion.copy( this._twig );
@@ -67,7 +67,7 @@ form_form.init =
 		twig[ name ] =
 			widgetProto.create(
 				'path', path,
-				'superFrame', this.frame,
+				'superArea', this.area,
 				'hover', this.hover,
 				'mark', this.mark,
 				'view', this.view

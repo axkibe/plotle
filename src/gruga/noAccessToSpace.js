@@ -64,7 +64,7 @@ gruga_noAccessToSpace =
 		'twig:add', 'okButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(

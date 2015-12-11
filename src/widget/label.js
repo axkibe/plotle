@@ -46,9 +46,9 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			superFrame :
+			superArea :
 			{
-				comment : 'the frame the widget resides in',
+				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
 			},
 			text :
@@ -106,8 +106,8 @@ prototype._init =
 	function( )
 {
 	this.pos =
-		this.superFrame
-		? this.designPos.compute( this.superFrame )
+		this.superArea
+		? this.designPos.compute( this.superArea )
 		: undefined;
 };
 

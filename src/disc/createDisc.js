@@ -35,9 +35,9 @@ if( JION )
 				comment : 'the current view of controls',
 				type : [ 'undefined', 'euclid_view' ]
 			},
-			designFrame :
+			designArea :
 			{
-				comment : 'designed frame (using anchors)',
+				comment : 'designed area (using anchors)',
 				type : 'euclid_anchor_rect'
 			},
 			fill :
@@ -143,7 +143,7 @@ prototype._init =
 {
 	var
 		cv,
-		frame,
+		area,
 		r,
 		ranks,
 		rZ,
@@ -152,12 +152,12 @@ prototype._init =
 
 	cv = this.controlView;
 
-	frame =
-	this.frame =
-		this.designFrame.compute( cv.baseFrame, cv );
+	area =
+	this.area =
+		this.designArea.compute( cv.baseArea, cv );
 
 	this.silhoutte =
-		this.shape.compute( frame.zeroPnw, cv );
+		this.shape.compute( area.zeroPnw, cv );
 
 	twig =
 		twigDup
@@ -176,7 +176,7 @@ prototype._init =
 					 twig[ wname ].path
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
-				'superFrame', this.frame.zeroPnw,
+				'superArea', this.area.zeroPnw,
 				'hover', this.hover,
 				'down',
 					disc_createDisc._isActiveButton( this.action, wname ),
@@ -205,8 +205,8 @@ jion.lazyValue(
 
 		display =
 			euclid_display.create(
-				'width', this.frame.width,
-				'height', this.frame.height
+				'width', this.area.width,
+				'height', this.area.height
 			);
 
 		display.fill( this.fill, this.silhoutte );
@@ -311,7 +311,7 @@ prototype.draw =
 	display.drawImage(
 		'image', this._display,
 		'x', 0,
-		'y', math_half( this.controlView.height - this.frame.height )
+		'y', math_half( this.controlView.height - this.area.height )
 	);
 };
 
@@ -334,14 +334,11 @@ prototype.pointingHover =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.area.within( p ) ) return;
 
 	display = this._display;
 
-	pp = p.sub( this.frame.pnw );
+	pp = p.sub( this.area.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
@@ -374,14 +371,11 @@ prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.area.within( p ) ) return;
 
 	display = this._display,
 
-	pp = p.sub( this.frame.pnw );
+	pp = p.sub( this.area.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
@@ -447,15 +441,12 @@ disc_createDisc.prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
-	{
-		return;
-	}
+	if( !this.area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{
@@ -478,7 +469,7 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.frame.within( p ) )
+	if( !this.area.within( p ) )
 	{
 		return;
 	}
@@ -486,7 +477,7 @@ prototype.mousewheel =
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.frame.pnw )
+			p.sub( this.area.pnw )
 		)
 	)
 	{

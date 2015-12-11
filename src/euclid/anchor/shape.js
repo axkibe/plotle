@@ -50,11 +50,11 @@ prototype = euclid_anchor_shape.prototype;
 
 
 /*
-| Computes to an unanchored shape for a frame/view.
+| Computes to an unanchored shape for a area/view.
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
@@ -67,12 +67,12 @@ prototype.compute =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( frame, view );
+		ray[ r ] = this.get( r ).compute( area, view );
 	}
 
 	return(
 		euclid_shape.create(
-			'pc', this.pc.compute( frame, view ),
+			'pc', this.pc.compute( area, view ),
 			'ray:init', ray
 		)
 	);

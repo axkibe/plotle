@@ -1,5 +1,5 @@
 /*
-| A rectangle (or a frame)
+| A rectangle (or a areae)
 */
 
 
@@ -53,18 +53,18 @@ prototype = euclid_anchor_rect.prototype;
 
 
 /*
-| Computes to an unanchored rect for a frame/view:
+| Computes to an unanchored rect for a area/view:
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
 	return(
 		euclid_rect.create(
-			'pnw', this.pnw.compute( frame, view ),
-			'pse', this.pse.compute( frame, view )
+			'pnw', this.pnw.compute( area, view ),
+			'pse', this.pse.compute( area, view )
 		)
 	);
 };

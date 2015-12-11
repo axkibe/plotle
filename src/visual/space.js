@@ -848,7 +848,7 @@ prototype._changeZoom =
 	var
 		pm;
 
-	pm = this.view.baseFrame.pc.fromView( this.view );
+	pm = this.view.baseArea.pc.fromView( this.view );
 
 	root.create( 'view', this.view.review( df, pm ) );
 };

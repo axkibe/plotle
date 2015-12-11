@@ -42,11 +42,11 @@ prototype = euclid_anchor_shapeRay.prototype;
 
 
 /*
-| Computes to an unanchored shapeRay for a frame/view.
+| Computes to an unanchored shapeRay for a area/view.
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
@@ -59,7 +59,7 @@ prototype.compute =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( frame, view );
+		ray[ r ] = this.get( r ).compute( area, view );
 	}
 	
 	return(

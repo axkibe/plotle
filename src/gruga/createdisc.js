@@ -116,7 +116,7 @@ gruga_createDisc =
 					'color', euclid_color.rgb( 94, 94, 0 )
 				)
 			),
-		'designFrame',
+		'designArea',
 			euclid_anchor_rect.create(
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -505 ),
@@ -159,7 +159,7 @@ gruga_createDisc =
 		'createNote',
 			genericButtonModel.create(
 				'text', 'Note',
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
@@ -169,7 +169,7 @@ gruga_createDisc =
 		'createLabel',
 			genericButtonModel.create(
 				'text', 'Label',
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
@@ -181,7 +181,7 @@ gruga_createDisc =
 			genericButtonModel.create(
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
@@ -191,7 +191,7 @@ gruga_createDisc =
 		'createPortal',
 			genericButtonModel.create(
 				'text', 'Portal',
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )

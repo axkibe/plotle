@@ -76,7 +76,7 @@ gruga_nonExistingSpace =
 		'noButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -100,7 +100,7 @@ gruga_nonExistingSpace =
 		'yesButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(

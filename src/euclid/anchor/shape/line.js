@@ -56,17 +56,17 @@ prototype = euclid_anchor_shape_line.prototype;
 
 
 /*
-| Computes to an unanchored line for a frame/view.
+| Computes to an unanchored line for a area/view.
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
 	return(
 		euclid_shape_line.create(
-			'p', this.p && this.p.compute( frame, view ),
+			'p', this.p && this.p.compute( area, view ),
 			'close', this.close
 		)
 	);

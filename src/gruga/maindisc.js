@@ -147,7 +147,7 @@ gruga_mainDisc =
 					'color', euclid_color.rgb( 94, 94, 0 )
 				)
 			),
-		'designFrame',
+		'designArea',
 			euclid_anchor_rect.create(
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -400 ),
@@ -190,7 +190,7 @@ gruga_mainDisc =
 			buttonModel.create(
 				'iconAnchorShape', gruga_iconNormal.shape,
 				'iconFacet', gruga_iconNormal.facet,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
@@ -202,7 +202,7 @@ gruga_mainDisc =
 				'text', 'new',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', createButtonPnw,
 						'pse', createButtonPnw.add( buttonSize )
@@ -213,7 +213,7 @@ gruga_mainDisc =
 				'iconAnchorShape', gruga_iconRemove.shape,
 				'iconFacet', gruga_iconRemove.facet,
 				'visible', false,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', removeButtonPnw,
 						'pse', removeButtonPnw.add( buttonSize )
@@ -224,7 +224,7 @@ gruga_mainDisc =
 				'iconAnchorShape', gruga_iconMoveTo.shape,
 				'iconFacet', gruga_iconMoveTo.facet,
 				'visible', false,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
@@ -232,7 +232,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'space',
 			buttonModel.create(
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', spaceButtonPnw,
 						'pse', spaceButtonPnw.add( spaceButtonSize )
@@ -249,7 +249,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'user',
 			buttonModel.create(
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', userButtonPnw,
 						'pse', userButtonPnw.add( userButtonSize )
@@ -271,7 +271,7 @@ gruga_mainDisc =
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', loginButtonPnw,
 						'pse', loginButtonPnw.add( buttonSize )
@@ -284,7 +284,7 @@ gruga_mainDisc =
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', signupButtonPnw,
 						'pse', signupButtonPnw.add( buttonSize )

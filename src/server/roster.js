@@ -711,6 +711,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/visual/frame.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/visual/scrollbar.js',
 		'hasJion', true,
 		'inBundle', true

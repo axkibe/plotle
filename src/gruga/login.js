@@ -103,7 +103,7 @@ gruga_login =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -126,7 +126,7 @@ gruga_login =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -146,7 +146,7 @@ gruga_login =
 		'loginButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(
@@ -170,7 +170,7 @@ gruga_login =
 		'closeButton',
 			widget_button.create(
 				'facets', gruga_genericButton.facets,
-				'designFrame',
+				'designArea',
 					euclid_anchor_rect.create(
 						'pnw',
 							euclid_anchor_point.create(

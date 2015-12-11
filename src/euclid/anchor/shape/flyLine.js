@@ -58,17 +58,17 @@ prototype = euclid_anchor_shape_flyLine.prototype;
 
 
 /*
-| Computes to an unanchored flyLine for a frame/view.
+| Computes to an unanchored flyLine for a area/view.
 */
 prototype.compute =
 	function(
-		frame,
+		area,
 		view
 	)
 {
 	return(
 		euclid_shape_flyLine.create(
-			'p', this.p && this.p.compute( frame, view ),
+			'p', this.p && this.p.compute( area, view ),
 			'close', this.close
 		)
 	);

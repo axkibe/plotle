@@ -310,11 +310,11 @@ prototype.review =
 
 
 /*
-| The zero based frame of this view.
+| The zero based area of this view.
 */
 jion.lazyValue(
 	prototype,
-	'baseFrame',
+	'baseArea',
 	function( )
 {
 	return(
