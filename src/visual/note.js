@@ -371,11 +371,14 @@ prototype.draw =
 {
 	var
 		action,
+		mark,
 		sbary;
 
 	action = this._action;
 
 	sbary = this.scrollbarY;
+
+	mark = this.mark;
 
 	display.drawImage(
 		'image', this._display,
@@ -384,7 +387,11 @@ prototype.draw =
 
 	if( sbary ) sbary.draw( display, this.view );
 
-	if( action && action.reflect === 'action_createRelation' )
+	if(
+		action && action.reflect === 'action_createRelation'
+		||
+		mark
+	)
 	{
 		display.border(
 			gruga_note.facets.getFacet( 'highlight', true ).border,

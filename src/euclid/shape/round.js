@@ -52,7 +52,7 @@ var
 
 if( NODE )
 {
-	euclid_shape_round = require( 'jion' ).this( module, 'source' );
+	require( 'jion' ).this( module, 'source' );
 
 	return;
 }

@@ -58,10 +58,8 @@ genericButtonFacets =
 			euclid_facet.create( ),
 			// hover
 			euclid_facet.create(
-				'group:init',
-					{ 'hover' : true },
-				'fill',
-					euclid_color.rgba( 255, 235, 210, 0.7 ),
+				'group:init', { 'hover' : true },
+				'fill', euclid_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
@@ -69,10 +67,8 @@ genericButtonFacets =
 			),
 			// down
 			euclid_facet.create(
-				'group:init',
-					{ 'down' : true },
-				'fill',
-					euclid_color.rgb( 255, 188, 88 ),
+				'group:init', { 'down' : true },
+				'fill', euclid_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
@@ -80,10 +76,8 @@ genericButtonFacets =
 			),
 			// down and hover
 			euclid_facet.create(
-				'group:init',
-					{ 'down' : true, 'hover' : true },
-				'fill',
-					euclid_color.rgb( 255, 188, 88 ),
+				'group:init', { 'down' : true, 'hover' : true },
+				'fill', euclid_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )

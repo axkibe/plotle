@@ -47,7 +47,7 @@ var
 
 if( NODE )
 {
-	euclid_shape_line = require( 'jion' ).this( module, 'source' );
+	require( 'jion' ).this( module, 'source' );
 
 	return;
 }

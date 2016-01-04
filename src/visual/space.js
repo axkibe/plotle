@@ -55,7 +55,7 @@ if( JION )
 				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
-		init : [ ],
+		init : [ 'inherit' ],
 		twig :
 		[
 			'visual_label',
@@ -78,6 +78,7 @@ var
 	jion,
 	result_hover,
 	root,
+	visual_frame,
 	visual_label,
 	visual_note,
 	visual_portal,
@@ -163,9 +164,13 @@ jion.lazyStaticValue(
 
 /*
 | Initializer.
+|
+| FIXME inherit optimizations.
 */
 prototype._init =
-	function( )
+	function(
+		inherit
+	)
 {
 	var
 		a,
@@ -243,6 +248,11 @@ prototype._init =
 	this._ranks = ranks;
 
 	this._twig = twig;
+
+	if( inherit && jion.hasLazyValueSet( inherit, 'frame' ) )
+	{
+		this._inheritFrame = inherit.frame;
+	}
 };
 
 
@@ -253,7 +263,7 @@ prototype.showDisc = true;
 
 
 /*
-| Returns the focused item.
+| Determines the focused item.
 */
 jion.lazyValue(
 	prototype,
@@ -273,6 +283,36 @@ jion.lazyValue(
 	if( !path || path.length <= 2 ) return undefined;
 
 	return this.get( path.get( 2 ) );
+}
+);
+
+
+/*
+| Determines the current alteration frame.
+*/
+jion.lazyValue(
+	prototype,
+	'frame',
+	function( )
+{
+	var
+		mark,
+		view;
+
+	mark = this.mark;
+	
+	view = this.view;
+
+	if( mark && mark.itemPath )
+	{
+		return(
+			( this._inheritFrame || visual_frame)
+			.create(
+				'view', view,
+				'zone', this.get( mark.itemPath.get( 2 ) ).zone
+			)
+		);
+	}
 }
 );
 
@@ -327,7 +367,9 @@ prototype.draw =
 
 	focus = this.focus;
 
-	if( focus ) focus.handlesBezel.drawHandles( display );
+	//if( focus ) focus.handlesBezel.drawHandles( display ); FIXME
+
+	if( this.frame ) this.frame.draw( display );
 
 	switch( action && action.reflect )
 	{

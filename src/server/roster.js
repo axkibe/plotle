@@ -277,6 +277,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/euclid/shape/fly.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/euclid/shape/line.js',
 		'hasJion', true,
 		'inBundle', true
@@ -637,6 +642,10 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/selection.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/frame.js',
 		'inBundle', true
 	),
 	server_resource.create(

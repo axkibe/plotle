@@ -73,8 +73,7 @@ gruga_iconNormal.shape =
 			euclid_anchor_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
 			euclid_anchor_shape_line.create( 'close', true )
 		],
-		'pc',
-			ap.add( 5, 9 )
+		'pc', ap.add( 5, 9 )
 	);
 
 

@@ -957,29 +957,27 @@ euclid_display.prototype._setFont =
 */
 euclid_display.prototype._sketch =
 	function(
-		euclid, // the euclidian object to sketch
+		obj,    // object to sketch
 		border, // additional border
 		twist   // 0.5 offset in case of borders vs. fills
 	)
 {
-	switch( euclid.reflect )
+	switch( obj.reflect )
 	{
 		case 'euclid_ellipse' :
 		case 'euclid_roundRect' :
 
-			return this._sketchShape( euclid.shape, border, twist );
+			return this._sketchShape( obj.shape, border, twist );
 
 		case 'euclid_rect' :
 
-			return this._sketchRect( euclid, border, twist );
+			return this._sketchRect( obj, border, twist );
 
 		case 'euclid_shape' :
 
-			return this._sketchShape( euclid, border, twist );
+			return this._sketchShape( obj, border, twist );
 
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -1136,10 +1134,9 @@ euclid_display.prototype._sketchShape =
 
 		switch( section.reflect )
 		{
+			case 'euclid_shape_fly' :
 
-			case 'euclid_shape_line' :
-
-				cx.lineTo( pn.x + twist, pn.y + twist );
+				cx.moveTo( pn.x + twist, pn.y + twist );
 
 				break;
 
@@ -1153,6 +1150,12 @@ euclid_display.prototype._sketchShape =
 				{
 					cx.lineTo( pn.x + twist, pn.y + twist );
 				}
+
+				break;
+			
+			case 'euclid_shape_line' :
+
+				cx.lineTo( pn.x + twist, pn.y + twist );
 
 				break;
 
@@ -1195,15 +1198,6 @@ euclid_display.prototype._sketchShape =
 
 		pos = pn;
 	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( pStart )
-/**/	{
-/**/		// hull did not close
-/**/		throw new Error( );
-/**/	}
-/**/}
 };
 
 

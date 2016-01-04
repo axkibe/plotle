@@ -3,6 +3,7 @@
 */
 module.exports =
 [
+	'euclid_shape_fly',
 	'euclid_shape_flyLine',
 	'euclid_shape_line',
 	'euclid_shape_round',

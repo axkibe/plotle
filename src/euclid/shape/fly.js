@@ -1,7 +1,7 @@
 /*
-| An invisible line section of a shape.
+| Flies to a new position.
 |
-| Makes a fill but not an border.
+| Makes neither a fill nor a border.
 |
 | Used by shape.
 */
@@ -13,12 +13,12 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shape_flyLine',
+		id : 'euclid_shape_fly',
 		attributes :
 		{
 			p :
 			{
-				comment : 'connect to',
+				comment : 'fly to',
 				type : [ 'undefined', 'euclid_point', 'euclid_fixPoint' ]
 			},
 			close :
@@ -32,8 +32,7 @@ if( JION )
 
 
 var
-	euclid_shape_line,
-	euclid_shape_flyLine;
+	euclid_shape_fly;
 
 
 /*
@@ -55,7 +54,7 @@ if( NODE )
 }
 
 
-prototype = euclid_shape_flyLine.prototype;
+prototype = euclid_shape_fly.prototype;
 
 
 /*
@@ -81,7 +80,7 @@ prototype.inView =
 | case it intersects with this sectioin
 | or undefined otherwise
 */
-prototype.getProjection = euclid_shape_line.getProjection;
+prototype.getProjection = undefined;
 
 
 })( );

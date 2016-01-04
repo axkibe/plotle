@@ -1,5 +1,7 @@
 /*
 | Default design for the maindisc.
+|
+| FIXME rename mainDisc
 */
 
 
@@ -59,10 +61,8 @@ buttonFacets =
 		[
 			// default state.
 			euclid_facet.create(
-				'group:init',
-					{ },
-				'fill',
-					euclid_color.rgba( 255, 255, 240, 0.7 ),
+				'group:init', { },
+				'fill', euclid_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
@@ -70,8 +70,7 @@ buttonFacets =
 			),
 			// hover
 			euclid_facet.create(
-				'group:init',
-					{ 'hover' : true },
+				'group:init', { 'hover' : true },
 				'fill',
 					euclid_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
@@ -81,10 +80,8 @@ buttonFacets =
 			),
 			// down
 			euclid_facet.create(
-				'group:init',
-					{ 'down' : true },
-				'fill',
-					euclid_color.rgb( 255, 188, 88 ),
+				'group:init', { 'down' : true },
+				'fill', euclid_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
@@ -92,10 +89,8 @@ buttonFacets =
 			),
 			// down and hover
 			euclid_facet.create(
-				'group:init',
-					{ 'down' : true, 'hover' : true },
-				'fill',
-					euclid_color.rgb( 255, 188, 88 ),
+				'group:init', { 'down' : true, 'hover' : true },
+				'fill', euclid_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
