@@ -80,7 +80,6 @@ var
 	euclid_shape,
 	euclid_shapeRay,
 	euclid_shape_start,
-	euclid_shape_flyLine,
 	euclid_shape_line,
 	fabric_pointGroup,
 	gruga_selection,
@@ -710,7 +709,7 @@ jion.lazyValue(
 			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
 			),
-			euclid_shape_flyLine.create( 'close', true )
+			euclid_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		sections2 =
@@ -727,7 +726,7 @@ jion.lazyValue(
 			euclid_shape_line.create(
 				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
 			),
-			euclid_shape_flyLine.create( 'close', true )
+			euclid_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		shapes =
@@ -839,12 +838,13 @@ jion.lazyValue(
 						'y', bp.y + descend
 					)
 				),
-				euclid_shape_flyLine.create( // 5
+				euclid_shape_line.create( // 5
 					'p',
 					euclid_point.create(
 						'x', lx,
 						'y', f2y - ascend
-					)
+					),
+					'fly', true
 				),
 				euclid_shape_line.create( // 6
 					'p',
@@ -867,8 +867,9 @@ jion.lazyValue(
 						'y', fp.y - ascend
 					)
 				),
-				euclid_shape_flyLine.create(
-					'close', true
+				euclid_shape_line.create(
+					'close', true,
+					'fly', true
 				)
 			];
 
@@ -915,12 +916,13 @@ jion.lazyValue(
 							'y', bp.y + descend
 						)
 					),
-					euclid_shape_flyLine.create( // 7
+					euclid_shape_line.create( // 7
 						'p',
 						euclid_point.create(
 							'x', lx,
 							'y', fp.y - ascend
-						)
+						),
+						'fly', true
 					),
 					euclid_shape_line.create( // 8
 						'p',
@@ -929,8 +931,9 @@ jion.lazyValue(
 							'y', fp.y - ascend
 						)
 					),
-					euclid_shape_flyLine.create(
-						'close', true
+					euclid_shape_line.create(
+						'close', true,
+						'fly', true
 					)
 				];
 

@@ -23,6 +23,11 @@ if( JION )
 			{
 				comment : 'true if this closes the shape',
 				type : [ 'undefined', 'boolean' ]
+			},
+			fly :
+			{
+				comment : 'true if this does not draw a border',
+				type : [ 'undefined', 'boolean' ]
 			}
 		}
 	};
@@ -67,7 +72,8 @@ prototype.compute =
 	return(
 		euclid_shape_line.create(
 			'p', this.p && this.p.compute( area, view ),
-			'close', this.close
+			'close', this.close,
+			'fly', this.fly
 		)
 	);
 };

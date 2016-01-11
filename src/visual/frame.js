@@ -12,6 +12,11 @@ if( JION )
 		id : 'visual_frame',
 		attributes :
 		{
+			resizeHandles :
+			{
+				comment : '"arbitrary" or "zoom"',
+				type : 'string'
+			},
 			view :
 			{
 				comment : 'the view',
@@ -29,10 +34,12 @@ if( JION )
 
 
 var
+	euclid_ellipse,
 	euclid_point,
+	euclid_rect,
 	euclid_shape,
-	euclid_shape_fly,
 	euclid_shape_line,
+	euclid_shape_round,
 	euclid_shape_start,
 	gruga_frame,
 	math_half,
@@ -67,63 +74,219 @@ prototype._init =
 	function( )
 {
 	var
-		iDis,
-		iPne,
-		iPnw,
-		iPse,
-		iPsw,
+		load,
+		h,
+		hne,
+		hnw,
+		hse,
+		hsw,
+		hsx,
+		hsx2,
+		hsy,
+		hsy2,
 		oDis,
+		oPe,
+		oPn,
 		oPne,
 		oPnw,
+		oPs,
 		oPse,
 		oPsw,
-		vZone;
+		oPw,
+		oZone,
+		vZone,
+		w,
+		ws;
 
-	iDis = gruga_frame.distance;
+	hsx = gruga_frame.handleSize;
 
-	oDis = iDis + gruga_frame.width;
+	hsy = gruga_frame.handleSize;
+	
+	ws = gruga_frame.handleWristSize;
+
+	oDis = gruga_frame.width;
 
 	vZone = this.vZone;
-
+	
 	oPnw = vZone.pnw.add( -oDis, -oDis );
 
 	oPse = vZone.pse.add( +oDis, +oDis );
 
-	oPne = euclid_point.create( 'x', oPse.x, 'y', oPnw.y );
+	switch( this.resizeHandles )
+	{
+		case 'arbitrary' : load = 3.5; break;
 
-	oPsw = euclid_point.create( 'x', oPnw.x, 'y', oPse.y );
+		case 'zoom' : load = 2.5; break;
 
-	iPnw = vZone.pnw.add( -iDis, -iDis );
+		default : throw new Error( );
+	}
+	
+	w = oPse.x - oPnw.x;
+	
+	h = oPse.y - oPnw.y;
 
-	iPse = vZone.pse.add( +iDis, +iDis );
+	if( load * hsx > w )
+	{
+		oPnw = oPnw.add( -math_half( load * hsx - w ), 0 );
 
-	iPne = euclid_point.create( 'x', iPse.x, 'y', iPnw.y );
+		oPse = oPse.add( math_half( load * hsx - w ), 0 );
+	}
 
-	iPsw = euclid_point.create( 'x', iPnw.x, 'y', iPse.y );
+	if( load * hsy > h )
+	{
+		oPnw = oPnw.add( 0, -math_half( load * hsy - h ) );
+
+		oPse = oPse.add( 0, math_half( load * hsy - h ) );
+	}
+
+	oZone =
+	this.oZone =
+		euclid_rect.create(
+			'pnw', oPnw,
+			'pse', oPse
+		);
+
+	if( load * hsy > oZone.height )
+	{
+		hsy = Math.round( oZone.height / load );
+	}
+
+	oPne = oZone.pne;
+
+	oPsw = oZone.psw;
+
+	hnw =
+	this._handleNw =
+		euclid_ellipse.create(
+			'pnw', oPnw,
+			'pse', oPnw.add( hsx, hsy )
+		);
+	
+	hne =
+	this._handleNe =
+		euclid_ellipse.create(
+			'pnw', oPne.add( -hsx, 0 ),
+			'pse', oPne.add( 0, hsy )
+		);
+
+	hse =
+	this._handleSe =
+		euclid_ellipse.create(
+			'pnw', oPse.add( -hsx, -hsy ),
+			'pse', oPse
+		);
+	
+	hsw =
+	this._handleSw =
+		euclid_ellipse.create(
+			'pnw', oPsw.add(  0, -hsy ),
+			'pse', oPsw.add(  hsx , 0 ) 
+		);
+
+	if( this.resizeHandles === 'arbitrary' )
+	{
+		oPn = oZone.pn;
+
+		oPe = oZone.pe;
+	
+		oPs = oZone.ps;
+
+		oPw = oZone.pw;
+
+		hsx2 = math_half( hsx );
+
+		hsy2 = math_half( hsy );
+
+		this._handleN =
+			euclid_ellipse.create(
+				'pnw', oPn.add( -hsx2, 0 ),
+				'pse', oPn.add( hsx2, hsy )
+			);
+
+		this._handleE =
+			euclid_ellipse.create(
+				'pnw', oPe.add( -hsx, -hsy2 ),
+				'pse', oPe.add( 0, hsy2 )
+			);
+
+		this._handleS =
+			euclid_ellipse.create(
+				'pnw', oPs.add( -hsx2, -hsy ),
+				'pse', oPs.add( hsx2, 0 )
+			);
+
+		this._handleW =
+			euclid_ellipse.create(
+				'pnw', oPw.add( 0, -hsy2 ),
+				'pse', oPw.add( hsx, hsy2 )
+			);
+	}
 
 	this._shape =
 		euclid_shape.create(
 		'ray:init',
 		[
-			euclid_shape_start.create( 'p', oPnw ),
-			euclid_shape_line.create( 'p', oPne ),
-			euclid_shape_line.create( 'p', oPse ),
-			euclid_shape_line.create( 'p', oPsw ),
-			euclid_shape_line.create( 'p', oPnw ),
+			euclid_shape_start.create( 'p', hnw.pw ),
+			euclid_shape_round.create( 'p', hnw.pn ),
 
-			euclid_shape_fly.create( 'p', iPnw ),
-			euclid_shape_line.create( 'p', iPsw ),
-			euclid_shape_line.create( 'p', iPse ),
-			euclid_shape_line.create( 'p', iPne ),
-			euclid_shape_line.create( 'p', iPnw )
+			euclid_shape_line.create( 'p', hne.pn ),
+			euclid_shape_round.create( 'p', hne.pe ),
+
+			euclid_shape_line.create( 'p', hse.pe ),
+			euclid_shape_round.create( 'p', hse.ps ),
+
+			euclid_shape_line.create( 'p', hsw.ps ),
+			euclid_shape_round.create( 'p', hsw.pw ),
+
+			euclid_shape_line.create( 'close', true ),
 		],
 		'pc',
 			euclid_point.create(
 				'x', math_half( oPse.x + oPnw.x ) ,
 				'y', math_half( oPse.y + oPnw.y )
+			),
+		'gradientR1',
+			Math.max(
+				oPse.x - oPnw.x,
+				oPse.y - oPnw.y
 			)
 		);
 };
+
+
+/*
+| Returns the compass direction of the handle
+| if p is on a resizer handle.
+*/
+prototype.checkHandles =
+	function(
+		p
+	)
+{
+	if( !this.oZone.within( p ) ) return;
+	
+	if( this.vZone.within( p ) ) return;
+
+	if( this._handleNw.within( p ) ) return 'nw';
+
+	if( this._handleNe.within( p ) ) return 'ne';
+
+	if( this._handleSe.within( p ) ) return 'se';
+
+	if( this._handleSw.within( p ) ) return 'sw';
+	
+	if( this.resizeHandles === 'arbitrary' )
+	{
+		if( this._handleN.within( p ) ) return 'n';
+	
+		if( this._handleE.within( p ) ) return 'e';
+
+		if( this._handleS.within( p ) ) return 's';
+	
+		if( this._handleW.within( p ) ) return 'w';
+	}
+};
+
 
 
 /*
@@ -135,6 +298,25 @@ prototype.draw =
 	)
 {
 	display.paint( gruga_frame.facet, this._shape );
+
+	display.paint( gruga_frame.handleFacet, this._handleNw );
+
+	display.paint( gruga_frame.handleFacet, this._handleNe );
+
+	display.paint( gruga_frame.handleFacet, this._handleSe );
+
+	display.paint( gruga_frame.handleFacet, this._handleSw );
+
+	if( this.resizeHandles === 'arbitrary' )
+	{
+		display.paint( gruga_frame.handleFacet, this._handleN );
+
+		display.paint( gruga_frame.handleFacet, this._handleE );
+
+		display.paint( gruga_frame.handleFacet, this._handleS );
+
+		display.paint( gruga_frame.handleFacet, this._handleW );
+	}
 };
 
 

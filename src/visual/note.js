@@ -89,7 +89,6 @@ var
 	system,
 	visual_doc,
 	visual_docItem,
-	visual_handlesBezel,
 	visual_item,
 	visual_mark_caret,
 	visual_note,
@@ -137,20 +136,7 @@ visual_note.equals =
 /*
 | Resize handles to show on notes.
 */
-visual_note.handles =
-{
-	n : true,
-	ne : true,
-	e : true,
-	se : true,
-	s : true,
-	sw : true,
-	w : true,
-	nw : true
-};
-
-
-if( FREEZE ) Object.freeze( visual_note.handles );
+visual_note.prototype.resizeHandles = 'arbitrary';
 
 
 /*
@@ -385,12 +371,11 @@ prototype.draw =
 		'pnw', this.vZone.pnw
 	);
 
-	if( sbary ) sbary.draw( display, this.view );
+	if( sbary ) sbary.draw( display );
 
 	if(
 		action && action.reflect === 'action_createRelation'
-		||
-		mark
+		|| mark
 	)
 	{
 		display.border(
@@ -410,25 +395,6 @@ jion.lazyValue(
 function( )
 {
 	return this.fabric.fontsize;
-}
-);
-
-
-/*
-| Returns a handles jion.
-*/
-jion.lazyValue(
-	prototype,
-	'handlesBezel',
-	function( )
-{
-	return(
-		visual_handlesBezel.create(
-			'handles', visual_note.handles,
-			'silhoutte', this.vSilhoutte,
-			'zone', this.vZone
-		)
-	);
 }
 );
 

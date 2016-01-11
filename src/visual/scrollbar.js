@@ -85,15 +85,9 @@ prototype = visual_scrollbar.prototype;
 | Draws the scrollbar.
 */
 prototype.draw =
-	function(
-		display,
-		view
-	)
+	function( display )
 {
-	display.paint(
-		gruga_scrollbar.facet,
-		this.getArea( view )
-	);
+	display.paint( gruga_scrollbar.facet, this.area );
 };
 
 
@@ -102,10 +96,10 @@ prototype.draw =
 |
 | FUTURE use fixPoints
 */
-prototype.getArea =
-	function(
-		view
-	)
+jion.lazyValue(
+	prototype,
+	'area',
+	function( )
 {
 	var
 		pnw,
@@ -115,7 +109,8 @@ prototype.getArea =
 		ap,
 		map,
 		sy,
-		s05;
+		s05,
+		view;
 
 	pnw = this.pnw;
 
@@ -133,6 +128,8 @@ prototype.getArea =
 
 	s05 = math_half( gruga_scrollbar.strength );
 
+	view = this.view;
+
 	return(
 		euclid_roundRect.create(
 			'pnw', pnw.add( 0, sy ).inView( view ).add( -s05, 0 ),
@@ -141,7 +138,8 @@ prototype.getArea =
 			'b', gruga_scrollbar.ellipseB
 		)
 	);
-};
+}
+);
 
 
 /*

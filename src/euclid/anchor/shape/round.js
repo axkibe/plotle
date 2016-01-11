@@ -19,10 +19,10 @@ if( JION )
 				comment : 'connect to',
 				type : [ 'undefined', 'euclid_anchor_point' ]
 			},
-			rotation :
+			ccw :
 			{
-				comment : '"clockwise" or "anticlockwise"',
-				type : 'string'
+				comment : 'if true do it counter-clockwise',
+				type : [ 'undefined', 'boolean' ]
 			},
 			close :
 			{
@@ -72,7 +72,7 @@ prototype.compute =
 	return(
 		euclid_shape_round.create(
 			'p', this.p && this.p.compute( area, view ),
-			'rotation', this.rotation,
+			'ccw', this.ccw,
 			'close', this.close
 		)
 	);

@@ -267,17 +267,89 @@ euclid_rect.createArbitrary =
 
 
 /*
+| North point.
+*/
+jion.lazyValue(
+	prototype,
+	'pn',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pnw.x + this.pse.x ),
+			'y', this.pnw.y
+		)
+	);
+}
+);
+
+
+/*
+| South point.
+*/
+jion.lazyValue(
+	prototype,
+	'ps',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pnw.x + this.pse.x ),
+			'y', this.pse.y
+		)
+	);
+}
+);
+
+
+/*
 | East point.
 */
 jion.lazyValue(
 	prototype,
-	'e',
+	'pe',
 	function( )
 {
 	return(
 		euclid_point.create(
 			'x', this.pse.x,
 			'y', math_half( this.pse.y + this.pnw.y )
+		)
+	);
+}
+);
+
+
+/*
+| North east point.
+*/
+jion.lazyValue(
+	prototype,
+	'pne',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', this.pse.x,
+			'y', this.pnw.y
+		)
+	);
+}
+);
+
+
+/*
+| South west point.
+*/
+jion.lazyValue(
+	prototype,
+	'psw',
+	function( )
+{
+	return(
+		euclid_point.create(
+			'x', this.pnw.x,
+			'y', this.pse.y
 		)
 	);
 }
@@ -515,29 +587,11 @@ jion.lazyValue(
 
 
 /*
-| Point in the north.
-*/
-jion.lazyValue(
-	prototype,
-	'pn',
-	function( )
-{
-	return(
-		euclid_point.create(
-			'x', math_half( this.pse.x + this.pnw.x ),
-			'y', this.pnw.y
-		)
-	);
-}
-);
-
-
-/*
 | West point.
 */
 jion.lazyValue(
 	prototype,
-	'w',
+	'pw',
 	function( )
 {
 	return(

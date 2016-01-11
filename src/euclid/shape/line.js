@@ -23,6 +23,11 @@ if( JION )
 			{
 				comment : 'true if this closes the shape',
 				type : [ 'undefined', 'boolean' ]
+			},
+			fly :
+			{
+				comment : 'true if this line does not draw a border',
+				type : [ 'undefined', 'boolean' ]
 			}
 		}
 	};

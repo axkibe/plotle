@@ -264,6 +264,8 @@ prototype.showDisc = true;
 
 /*
 | Determines the focused item.
+|
+| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -296,6 +298,7 @@ jion.lazyValue(
 	function( )
 {
 	var
+		content,
 		mark,
 		view;
 
@@ -305,11 +308,14 @@ jion.lazyValue(
 
 	if( mark && mark.itemPath )
 	{
+		content = this.get( mark.itemPath.get( 2 ) );
+
 		return(
 			( this._inheritFrame || visual_frame)
 			.create(
+				'resizeHandles', content.resizeHandles,
 				'view', view,
-				'zone', this.get( mark.itemPath.get( 2 ) ).zone
+				'zone', content.zone
 			)
 		);
 	}
@@ -352,6 +358,7 @@ prototype.draw =
 		fromItem,
 		fromSilhoutte,
 		r,
+		sbary,
 		toItem,
 		toSilhoutte,
 		view;
@@ -367,9 +374,21 @@ prototype.draw =
 
 	focus = this.focus;
 
-	//if( focus ) focus.handlesBezel.drawHandles( display ); FIXME
+	if( this.frame )
+	{
+		sbary = focus.scrollbarY;
 
-	if( this.frame ) this.frame.draw( display );
+		display.reverseClip( this.focus.vSilhoutte, -1 );
+		
+		if( sbary )
+		{
+			display.reverseClip( sbary && sbary.area, -0.5 );
+		}
+
+		this.frame.draw( display );
+
+		display.deClip( );
+	}
 
 	switch( action && action.reflect )
 	{
@@ -475,6 +494,7 @@ prototype.pointingHover =
 		com,
 		item,
 		focus,
+		frame,
 		result,
 		view;
 
@@ -483,10 +503,12 @@ prototype.pointingHover =
 	view = this.view;
 
 	focus = this.focus;
+	
+	frame = this.frame;
 
-	if( focus )
+	if( frame )
 	{
-		com = focus.handlesBezel.checkHandles( p );
+		com = frame.checkHandles( p );
 
 		if( com )
 		{
@@ -562,6 +584,7 @@ prototype.dragStart =
 		com,
 		dp,
 		focus,
+		frame,
 		item,
 		view;
 
@@ -571,13 +594,15 @@ prototype.dragStart =
 
 	focus = this.focus;
 
+	frame = this.frame;
+
 	// resizing
 	dp = p.fromView( view );
 
 	// see if the handles were targeted
-	if( access == 'rw' && focus )
+	if( access == 'rw' && frame )
 	{
-		com = focus.handlesBezel.checkHandles( p );
+		com = frame.checkHandles( p );
 
 		if( com )
 		{

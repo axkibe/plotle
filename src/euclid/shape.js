@@ -16,6 +16,11 @@ if( JION )
 			{
 				comment : 'center point',
 				type : 'euclid_point'
+			},
+			gradientR1 :
+			{
+				comment : 'radial gradient radius',
+				type : [ 'undefined', 'number' ]
 			}
 		},
 		ray : require( '../typemaps/shapeSection' )

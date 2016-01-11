@@ -77,7 +77,6 @@ var
 	session_uid,
 	shell_fontPool,
 	shell_settings,
-	visual_handlesBezel,
 	visual_item,
 	visual_portal;
 
@@ -141,19 +140,7 @@ spaceFields =
 /*
 | Resize handles to show on portals.
 */
-visual_portal.handles =
-{
-	n : true,
-	ne : true,
-	e : true,
-	se : true,
-	s : true,
-	sw : true,
-	w : true,
-	nw : true
-};
-
-if( FREEZE ) Object.freeze( visual_portal.handles );
+visual_portal.prototype.resizeHandles = 'arbitrary';
 
 
 /*
@@ -530,26 +517,6 @@ prototype.itemDrag = visual_item.itemDragForZonePositioning;
 | An itemResize action stopped.
 */
 prototype.stopItemResize = visual_item.stopItemResizeZone;
-
-
-/*
-| Returns a handles jion.
-*/
-jion.lazyValue(
-	prototype,
-	'handlesBezel',
-	function( )
-	{
-		return(
-			visual_handlesBezel.create(
-				'handles', visual_portal.handles,
-				'silhoutte', this.vSilhoutte,
-				'zone', this.vZone
-			)
-		);
-	}
-);
-
 
 
 /*

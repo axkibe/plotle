@@ -41,7 +41,6 @@ var
 	euclid_arrow,
 	euclid_line,
 	euclid_shape,
-	euclid_shape_flyLine,
 	euclid_shape_line,
 	euclid_shape_start,
 	jion;
@@ -335,7 +334,10 @@ jion.lazyValue(
 		}
 
 		sections.push(
-			euclid_shape_flyLine.create( 'close', true )
+			euclid_shape_line.create(
+				'close', true,
+				'fly', true
+			)
 		);
 
 		return(

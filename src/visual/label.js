@@ -70,7 +70,6 @@ var
 	session_uid,
 	visual_doc,
 	visual_docItem,
-	visual_handlesBezel,
 	visual_item,
 	visual_label,
 	visual_mark_caret;
@@ -118,16 +117,7 @@ visual_label.equals =
 /*
 | Resize handles to show on labels
 */
-visual_label.handles =
-{
-	ne : true,
-	se : true,
-	sw : true,
-	nw : true
-};
-
-
-if( FREEZE ) Object.freeze( visual_label.handles );
+visual_label.prototype.resizeHandles = 'zoom';
 
 
 /*
@@ -357,25 +347,6 @@ visual_label.fontsize =
 
 
 jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
-
-
-/*
-| Returns a handles jion.
-*/
-jion.lazyValue(
-	prototype,
-	'handlesBezel',
-	function( )
-{
-	return(
-		visual_handlesBezel.create(
-			'handles', visual_label.handles,
-			'silhoutte', this.vSilhoutte,
-			'zone', this.vZone
-		)
-	);
-}
-);
 
 
 /*

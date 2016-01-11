@@ -287,11 +287,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shape/flyLine.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/euclid/shape/round.js',
 		'hasJion', true,
 		'inBundle', true
@@ -343,11 +338,6 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/euclid/anchor/shape/line.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/anchor/shape/flyLine.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -713,11 +703,6 @@ server_resourceRay.create( 'ray:init', [
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
-	),
-	server_resource.create(
-		'filePath', 'src/visual/handlesBezel.js',
-		'hasJion', true,
-		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/frame.js',

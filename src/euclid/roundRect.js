@@ -109,29 +109,25 @@ prototype._init =
 						'p', pnw.add( 0 , b )
 					),
 					euclid_shape_round.create(
-						'p', pnw.add( a , 0 ),
-						'rotation', 'clockwise'
+						'p', pnw.add( a , 0 )
 					),
 					euclid_shape_line.create(
 						'p', pne.sub( a , 0 )
 					),
 					euclid_shape_round.create(
-						'p', pne.add( 0 , b ),
-						'rotation', 'clockwise'
+						'p', pne.add( 0 , b )
 					),
 					euclid_shape_line.create(
 						'p', pse.sub( 0 , b )
 					),
 					euclid_shape_round.create(
-						'p', pse.sub( a , 0 ),
-						'rotation', 'clockwise'
+						'p', pse.sub( a , 0 )
 					),
 					euclid_shape_line.create(
 						'p', psw.add( a , 0 )
 					),
 					euclid_shape_round.create(
-						'p', psw.sub( 0 , b ),
-						'rotation', 'clockwise'
+						'p', psw.sub( 0 , b )
 					),
 					euclid_shape_line.create(
 						'close', true

@@ -19,10 +19,10 @@ if( JION )
 				comment : 'connect to',
 				type : [ 'undefined', 'euclid_point', 'euclid_fixPoint' ]
 			},
-			rotation :
+			ccw :
 			{
-				comment : 'currently only "clockwise" supported',
-				type : 'string'
+				comment : 'if true do it counter-clockwise',
+				type : [ 'undefined', 'boolean' ]
 			},
 			close :
 			{

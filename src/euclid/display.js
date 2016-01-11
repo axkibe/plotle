@@ -834,7 +834,7 @@ euclid_display.prototype._colorStyle =
 
 			r1 = shape.gradientR1;
 
-			pc = shape.gradientPC;
+			pc = shape.gradientPC || shape.pc;
 
 /**/		if( CHECK )
 /**/		{
@@ -1085,11 +1085,7 @@ euclid_display.prototype._sketchShape =
 
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
 
-	for(
-		a = 1, aZ = shape.length;
-		a < aZ;
-		a++
-	)
+	for( a = 1, aZ = shape.length; a < aZ; a++ )
 	{
 
 /**/	if( CHECK )
@@ -1139,23 +1135,17 @@ euclid_display.prototype._sketchShape =
 				cx.moveTo( pn.x + twist, pn.y + twist );
 
 				break;
-
-			case 'euclid_shape_flyLine' :
-
-				if( twist )
-				{
-					cx.moveTo( pn.x + twist, pn.y + twist );
-				}
-				else
-				{
-					cx.lineTo( pn.x + twist, pn.y + twist );
-				}
-
-				break;
 			
 			case 'euclid_shape_line' :
 
-				cx.lineTo( pn.x + twist, pn.y + twist );
+				if( !section.fly || !twist )
+				{
+					cx.lineTo( pn.x + twist, pn.y + twist );
+				}
+				else
+				{
+					cx.moveTo( pn.x + twist, pn.y + twist );
+				}
 
 				break;
 
@@ -1167,25 +1157,27 @@ euclid_display.prototype._sketchShape =
 
 				dxy = dx * dy;
 
-				switch( section.rotation )
+				if( !section.ccw )
 				{
-					case 'clockwise' :
-
-						cx.bezierCurveTo(
-							pos.x + twist + ( dxy > 0 ? magic * dx : 0 ),
-							pos.y + twist + ( dxy < 0 ? magic * dy : 0 ),
-							pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
-							pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
-							pn.x + twist,
-							pn.y + twist
-						);
-
-						break;
-
-					default :
-
-						// unknown rotation
-						throw new Error( );
+					cx.bezierCurveTo(
+						pos.x + twist + ( dxy > 0 ? magic * dx : 0 ),
+						pos.y + twist + ( dxy < 0 ? magic * dy : 0 ),
+						pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
+						pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
+						pn.x + twist,
+						pn.y + twist
+					);
+				}
+				else
+				{
+					cx.bezierCurveTo(
+						pos.x + twist + ( dxy < 0 ? magic * dx : 0 ),
+						pos.y + twist + ( dxy > 0 ? magic * dy : 0 ),
+						pn.x + twist - ( dxy > 0 ? magic * dx : 0 ),
+						pn.y + twist - ( dxy < 0 ? magic * dy : 0 ),
+						pn.x + twist,
+						pn.y + twist
+					);
 				}
 
 				break;

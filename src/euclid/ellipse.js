@@ -115,35 +115,31 @@ prototype._init =
 	mx = math_half(wx + ex);
 
 	// cardinal points
-	pw = euclid_point.create( 'x', wx, 'y', my );
+	pw =
+	this.pw =
+		euclid_point.create( 'x', wx, 'y', my );
 
-	pn = euclid_point.create( 'x', mx, 'y', ny );
+	pn =
+	this.pn =
+		euclid_point.create( 'x', mx, 'y', ny );
 
-	pe = euclid_point.create( 'x', ex, 'y', my );
+	pe =
+	this.pe =
+		euclid_point.create( 'x', ex, 'y', my );
 
-	ps = euclid_point.create( 'x', mx, 'y', sy );
+	ps =
+	this.ps =
+		euclid_point.create( 'x', mx, 'y', sy );
 
 	this.shape =
 		euclid_shape.create(
 			'ray:init',
 			[
 				euclid_shape_start.create( 'p', pw ),
-				euclid_shape_round.create(
-					'rotation', 'clockwise',
-					'p', pn
-				),
-				euclid_shape_round.create(
-					'rotation', 'clockwise',
-					'p', pe
-				),
-				euclid_shape_round.create(
-					'rotation', 'clockwise',
-					'p', ps
-				),
-				euclid_shape_round.create(
-					'rotation', 'clockwise',
-					'close', true
-				)
+				euclid_shape_round.create( 'p', pn ),
+				euclid_shape_round.create( 'p', pe ),
+				euclid_shape_round.create( 'p', ps ),
+				euclid_shape_round.create( 'close', true )
 			],
 			'pc', this.pc
 		);
