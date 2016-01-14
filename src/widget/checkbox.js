@@ -62,7 +62,7 @@ if( JION )
 			{
 				comment : 'the view for the widget',
 				type : [ 'undefined', 'euclid_view' ]
-			},
+			}
 		},
 		init : [ ]
 	};

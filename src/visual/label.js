@@ -26,6 +26,11 @@ if( JION )
 				comment : 'the labels fabric',
 				type : 'fabric_label'
 			},
+			highlight :
+			{
+				comment : 'the item is highlighted',
+				type : 'boolean'
+			},
 			hover :
 			{
 				comment : 'node currently hovered upon',

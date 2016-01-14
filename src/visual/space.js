@@ -224,12 +224,26 @@ prototype._init =
 		}
 		else
 		{
-			path = pass;
+			path = iItem.path;
 		}
+
+		highlight = false;
+
+		highlight =
+			(
+				action
+				&& action.reflect === 'action_createRelation'
+				&& action.affects( path )
+			)
+			|| (
+				mark
+				&& mark.containsPath( path )
+			);
 
 		twig[ k ] =
 			iItem.create(
 				'action', action,
+				'highlight', highlight,
 				'hover', hover,
 				'fabric', item,
 				'mark', mark,
@@ -378,7 +392,7 @@ prototype.draw =
 	{
 		sbary = focus.scrollbarY;
 
-		display.reverseClip( this.focus.vSilhoutte, -1 );
+		display.reverseClip( this.focus.vSilhoutte, -2 );
 		
 		if( sbary )
 		{

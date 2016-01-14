@@ -26,6 +26,11 @@ if( JION )
 				comment : 'the relations fabric',
 				type : 'fabric_relation'
 			},
+			highlight :
+			{
+				comment : 'the item is highlighted',
+				type : 'boolean'
+			},
 			hover :
 			{
 				comment : 'node currently hovered upon',

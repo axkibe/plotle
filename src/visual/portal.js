@@ -26,6 +26,11 @@ if( JION )
 				comment : 'portal fabric data',
 				type : 'fabric_portal'
 			},
+			highlight :
+			{
+				comment : 'the item is highlighted',
+				type : 'boolean'
+			},
 			hover :
 			{
 				comment : 'node currently hovered upon',

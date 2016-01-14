@@ -28,6 +28,11 @@ if( JION )
 				comment : 'the notes fabric',
 				type : 'fabric_note'
 			},
+			highlight :
+			{
+				comment : 'the item is highlighted',
+				type : 'boolean'
+			},
 			hover :
 			{
 				comment : 'node currently hovered upon',
@@ -372,17 +377,6 @@ prototype.draw =
 	);
 
 	if( sbary ) sbary.draw( display );
-
-	if(
-		action && action.reflect === 'action_createRelation'
-		|| mark
-	)
-	{
-		display.border(
-			gruga_note.facets.getFacet( 'highlight', true ).border,
-			this.vSilhoutte
-		);
-	}
 };
 
 

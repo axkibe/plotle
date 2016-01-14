@@ -20,7 +20,7 @@ if( JION )
 			view :
 			{
 				comment : 'the view',
-				type : 'euclid_view',
+				type : 'euclid_view'
 			},
 			zone :
 			{
@@ -95,14 +95,11 @@ prototype._init =
 		oPw,
 		oZone,
 		vZone,
-		w,
-		ws;
+		w;
 
-	hsx = gruga_frame.handleSize;
-
-	hsy = gruga_frame.handleSize;
-	
-	ws = gruga_frame.handleWristSize;
+	hsx =
+	hsy =
+		gruga_frame.handleSize;
 
 	oDis = gruga_frame.width;
 
@@ -238,7 +235,7 @@ prototype._init =
 			euclid_shape_line.create( 'p', hsw.ps ),
 			euclid_shape_round.create( 'p', hsw.pw ),
 
-			euclid_shape_line.create( 'close', true ),
+			euclid_shape_line.create( 'close', true )
 		],
 		'pc',
 			euclid_point.create(
