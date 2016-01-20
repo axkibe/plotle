@@ -177,6 +177,7 @@ prototype._init =
 		action,
 		aZ,
 		fabric,
+		highlight,
 		hover,
 		item,
 		iItem,
@@ -227,8 +228,6 @@ prototype._init =
 			path = iItem.path;
 		}
 
-		highlight = false;
-
 		highlight =
 			(
 				action
@@ -243,7 +242,7 @@ prototype._init =
 		twig[ k ] =
 			iItem.create(
 				'action', action,
-				'highlight', highlight,
+				'highlight', !!highlight,
 				'hover', hover,
 				'fabric', item,
 				'mark', mark,

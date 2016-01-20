@@ -455,7 +455,7 @@ prototype.draw =
 		'pnw', this.zone.pnw.inView( this.view )
 	);
 
-	if( action && action.reflect === 'action_createRelation' )
+	if( this.highlight )
 	{
 		display.border(
 			gruga_portal.facets.getFacet( 'highlight', true ).border,

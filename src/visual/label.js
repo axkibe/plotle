@@ -321,7 +321,7 @@ prototype.draw =
 		'pnw', this.vPnw
 	);
 
-	if( action && action.reflect === 'action_createRelation' )
+	if( this.highlight )
 	{
 		display.border(
 			gruga_label.facets.getFacet( 'highlight', true ).border,

@@ -88,7 +88,7 @@ euclid_display.createAroundHTMLCanvas =
 	return(
 		euclid_display.create(
 			'_cv', canvas,
-			'_cx', canvas.getContext( '2d' ),
+			'_cx', cx,
 			'width', canvas.width,
 			'height', canvas.height
 		)

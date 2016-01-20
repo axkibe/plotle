@@ -376,6 +376,14 @@ prototype.draw =
 		'pnw', this.vZone.pnw
 	);
 
+	if( this.highlight )
+	{
+		display.border(
+			gruga_note.facets.getFacet( 'highlight', true ).border,
+			this.vSilhoutte
+		);
+	}
+
 	if( sbary ) sbary.draw( display );
 };
 

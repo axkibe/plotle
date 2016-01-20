@@ -50,6 +50,14 @@ server_resourceRay.create( 'ray:init', [
 		'filePath', 'webfont/webfont.js',
 		'maxage', 'long'
 	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.js',
+//		'maxage', 'long'
+//	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.js.map',
+//		'maxage', 'long'
+//	),
 	server_resource.create(
 		'aliases', stringRay( [ 'jion-proto.js' ] ),
 		'coding', 'utf-8',
@@ -272,6 +280,11 @@ server_resourceRay.create( 'ray:init', [
 		'hasJion', true,
 		'inBundle', true
 	),
+//	server_resource.create(
+//		'filePath', 'src/euclid/pixi.js',
+//		'hasJion', true,
+//		'inBundle', true
+//	),
 	server_resource.create(
 		'filePath', 'src/euclid/measure.js',
 		'inBundle', true
@@ -588,6 +601,10 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/controls.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/highlight.js',
 		'inBundle', true
 	),
 	server_resource.create(

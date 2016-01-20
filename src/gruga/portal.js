@@ -11,6 +11,7 @@ var
 	euclid_facetRay,
 	euclid_gradient_radial,
 	euclid_gradient_colorStop,
+	gruga_highlight,
 	gruga_portal;
 
 
@@ -53,16 +54,7 @@ gruga_portal.facets =
 					euclid_border.simpleBlack
 				)
 		),
-		'ray:append',
-		// highlight
-		euclid_facet.create(
-			'group:init', { highlight : true },
-			'border',
-				euclid_border.create(
-					'width', 3,
-					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
-				)
-		)
+		'ray:append', gruga_highlight
 	);
 
 

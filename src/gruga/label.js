@@ -9,6 +9,7 @@ var
 	euclid_facet,
 	euclid_facetRay,
 	euclid_margin,
+	gruga_highlight,
 	gruga_label;
 
 
@@ -32,16 +33,7 @@ gruga_label.facets =
 					'color', euclid_color.rgba( 100, 100, 0, 0.1 )
 				)
 		),
-		'ray:append',
-		// highlight
-		euclid_facet.create(
-			'group:init', { highlight : true },
-			'border',
-				euclid_border.create(
-					'width', 3,
-					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
-				)
-		)
+		'ray:append', gruga_highlight
 	);
 
 
