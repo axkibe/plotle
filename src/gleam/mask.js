@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_mask',
+		id : 'gleam_mask',
 		shape : [ 'euclid_shape', 'euclid_shapeRay' ],
 		reverse : [ 'undefined', 'boolean' ]
 	};
@@ -17,7 +17,7 @@ if( JION )
 
 
 //var
-//	euclid_mask;
+//	gleam_mask;
 
 
 /*
@@ -39,7 +39,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_mask.prototype;
+prototype = gleam_mask.prototype;
 */
 
 
