@@ -370,7 +370,6 @@ prototype.draw =
 		fromItem,
 		fromSilhoutte,
 		r,
-		sbary,
 		toItem,
 		toSilhoutte,
 		view;
@@ -388,18 +387,7 @@ prototype.draw =
 
 	if( this.frame )
 	{
-		sbary = focus.scrollbarY;
-
-		display.reverseClip( this.focus.vSilhoutte, -2 );
-		
-		if( sbary )
-		{
-			display.reverseClip( sbary && sbary.area, -0.5 );
-		}
-
 		this.frame.draw( display );
-
-		display.deClip( );
 	}
 
 	switch( action && action.reflect )

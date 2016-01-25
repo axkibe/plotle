@@ -99,7 +99,7 @@ prototype._init =
 	oDis = gruga_frame.width;
 
 	vZone = this.vZone;
-	
+
 	oPnw = vZone.pnw.add( -oDis, -oDis );
 
 	oPse = vZone.pse.add( +oDis, +oDis );
@@ -112,9 +112,9 @@ prototype._init =
 
 		default : throw new Error( );
 	}
-	
+
 	w = oPse.x - oPnw.x;
-	
+
 	h = oPse.y - oPnw.y;
 
 	if( load * hsx > w )
@@ -153,7 +153,7 @@ prototype._init =
 			'pnw', oPnw,
 			'pse', oPnw.add( hsx, hsy )
 		);
-	
+
 	hne =
 	this._handleNe =
 		euclid_ellipse.create(
@@ -167,12 +167,12 @@ prototype._init =
 			'pnw', oPse.add( -hsx, -hsy ),
 			'pse', oPse
 		);
-	
+
 	hsw =
 	this._handleSw =
 		euclid_ellipse.create(
 			'pnw', oPsw.add(  0, -hsy ),
-			'pse', oPsw.add(  hsx , 0 ) 
+			'pse', oPsw.add(  hsx , 0 )
 		);
 
 	if( this.resizeHandles === 'arbitrary' )
@@ -180,7 +180,7 @@ prototype._init =
 		oPn = oZone.pn;
 
 		oPe = oZone.pe;
-	
+
 		oPs = oZone.ps;
 
 		oPw = oZone.pw;
@@ -256,7 +256,7 @@ prototype.checkHandles =
 	)
 {
 	if( !this.oZone.within( p ) ) return;
-	
+
 	if( this.vZone.within( p ) ) return;
 
 	if( this._handleNw.within( p ) ) return 'nw';
@@ -266,15 +266,15 @@ prototype.checkHandles =
 	if( this._handleSe.within( p ) ) return 'se';
 
 	if( this._handleSw.within( p ) ) return 'sw';
-	
+
 	if( this.resizeHandles === 'arbitrary' )
 	{
 		if( this._handleN.within( p ) ) return 'n';
-	
+
 		if( this._handleE.within( p ) ) return 'e';
 
 		if( this._handleS.within( p ) ) return 's';
-	
+
 		if( this._handleW.within( p ) ) return 'w';
 	}
 };
@@ -289,6 +289,21 @@ prototype.draw =
 		display
 	)
 {
+	var
+		content,
+		sbary;
+
+	content = this.content;
+
+	sbary = content.scrollbarY;
+
+	display.reverseClip( content.vSilhoutte, -2 );
+
+	if( sbary )
+	{
+		display.reverseClip( sbary.area, -0.5 );
+	}
+
 	display.paint( gruga_frame.facet, this._shape );
 
 	display.paint( gruga_frame.handleFacet, this._handleNw );
@@ -309,6 +324,8 @@ prototype.draw =
 
 		display.paint( gruga_frame.handleFacet, this._handleW );
 	}
+
+	display.deClip( );
 };
 
 
@@ -336,7 +353,7 @@ function( )
 	return this.content.zone;
 }
 );
-			
+
 
 /*
 | '"arbitrary" or "zoom"',
