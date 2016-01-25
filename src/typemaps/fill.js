@@ -3,7 +3,7 @@
 */
 module.exports =
 [
-	'euclid_color',
+	'gleam_color',
 	'euclid_gradient_askew',
 	'euclid_gradient_radial'
 ];

@@ -10,7 +10,7 @@ var
 	euclid_facet,
 	euclid_facetRay,
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	form_moveTo,
 	gruga_moveTo,
 	portalButtonFacets,
@@ -58,42 +58,42 @@ portalButtonFacets =
 			// default state.
 			euclid_facet.create(
 				'group:init', { },
-				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
 					euclid_border.create(
-						'color', euclid_color.rgb( 255, 141, 66 )
+						'color', gleam_color.rgb( 255, 141, 66 )
 					)
 			),
 			// hover
 			euclid_facet.create(
 				'group:init', { 'hover' : true },
-				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
 					euclid_border.create(
 						'width', 1.5,
-						'color', euclid_color.rgb( 255, 141, 66 )
+						'color', gleam_color.rgb( 255, 141, 66 )
 					)
 			),
 			// focus
 			euclid_facet.create(
 				'group:init', { 'focus' : true },
-				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
 					euclid_border.create(
 						'distance', 1,
 						'width', 1.5,
-						'color', euclid_color.rgb( 255, 99, 188 )
+						'color', gleam_color.rgb( 255, 99, 188 )
 					)
 			),
 			// focus and hover
 			euclid_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
-				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
 					euclid_border.create(
 						'distance', 1,
 						'width', 1.5,
-						'color', euclid_color.rgb( 255, 99, 188 )
+						'color', gleam_color.rgb( 255, 99, 188 )
 					)
 			)
 		]

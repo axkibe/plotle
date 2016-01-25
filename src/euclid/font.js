@@ -31,7 +31,7 @@ if( JION )
 			fill :
 			{
 				comment : 'font color',
-				type : 'euclid_color'
+				type : 'gleam_color'
 			},
 			base :
 			{

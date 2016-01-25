@@ -86,7 +86,7 @@ if( JION )
 
 
 var
-	euclid_color,
+	gleam_color,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -486,7 +486,7 @@ jion.lazyValue(
 
 		for( a = 0, aZ = pm.length; a < aZ; a++ )
 		{
-			display.fill( euclid_color.black, pm[ a ] );
+			display.fill( gleam_color.black, pm[ a ] );
 		}
 	}
 	else

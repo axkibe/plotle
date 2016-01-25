@@ -10,7 +10,7 @@ var
 	euclid_anchor_rect,
 	euclid_border,
 	euclid_borderRay,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	euclid_facetRay,
 	euclid_gradient_colorStop,
@@ -59,28 +59,28 @@ genericButtonFacets =
 			// hover
 			euclid_facet.create(
 				'group:init', { 'hover' : true },
-				'fill', euclid_color.rgba( 255, 235, 210, 0.7 ),
+				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
 					euclid_border.create(
-						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
 			// down
 			euclid_facet.create(
 				'group:init', { 'down' : true },
-				'fill', euclid_color.rgb( 255, 188, 88 ),
+				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
-						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
 			// down and hover
 			euclid_facet.create(
 				'group:init', { 'down' : true, 'hover' : true },
-				'fill', euclid_color.rgb( 255, 188, 88 ),
+				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
 					euclid_border.create(
-						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			)
 		]
@@ -103,11 +103,11 @@ gruga_createDisc =
 				'ray:append',
 				euclid_border.create(
 					'distance', 1,
-					'color', euclid_color.rgb( 255, 94, 44 )
+					'color', gleam_color.rgb( 255, 94, 44 )
 				),
 				'ray:append',
 				euclid_border.create(
-					'color', euclid_color.rgb( 94, 94, 0 )
+					'color', gleam_color.rgb( 94, 94, 0 )
 				)
 			),
 		'designArea',
@@ -141,12 +141,12 @@ gruga_createDisc =
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 0,
-					'color', euclid_color.rgba( 255, 255,  20, 0.955 )
+					'color', gleam_color.rgba( 255, 255,  20, 0.955 )
 				),
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 1,
-					'color', euclid_color.rgba( 255, 255, 205, 0.955 )
+					'color', gleam_color.rgba( 255, 255, 205, 0.955 )
 				)
 			),
 		'twig:add',

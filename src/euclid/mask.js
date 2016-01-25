@@ -16,8 +16,8 @@ if( JION )
 }
 
 
-var
-	euclid_mask;
+//var
+//	euclid_mask;
 
 
 /*

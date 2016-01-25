@@ -189,7 +189,7 @@ server_resourceRay.create( 'ray:init', [
 	),
 
 	server_resource.create(
-		'filePath', 'src/euclid/color.js',
+		'filePath', 'src/gleam/color.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true

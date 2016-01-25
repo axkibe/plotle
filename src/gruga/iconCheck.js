@@ -19,7 +19,7 @@ var
 	euclid_anchor_shape,
 	euclid_anchor_shape_start,
 	euclid_anchor_shape_line,
-	euclid_color,
+	gleam_color,
 	euclid_facet;
 
 
@@ -42,7 +42,7 @@ gruga_iconCheck = { };
 
 gruga_iconCheck.facet =
 	euclid_facet.create(
-		'fill', euclid_color.black
+		'fill', gleam_color.black
 	);
 
 

@@ -5,7 +5,7 @@
 
 var
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	euclid_facetRay,
 	euclid_margin,
@@ -30,7 +30,7 @@ gruga_label.facets =
 		euclid_facet.create(
 			'border',
 				euclid_border.create(
-					'color', euclid_color.rgba( 100, 100, 0, 0.1 )
+					'color', gleam_color.rgba( 100, 100, 0, 0.1 )
 				)
 		),
 		'ray:append', gruga_highlight

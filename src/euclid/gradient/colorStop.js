@@ -20,7 +20,7 @@ if( JION )
 			color :
 			{
 				comment : 'color stop color',
-				type : 'euclid_color'
+				type : 'gleam_color'
 			}
 		}
 	};

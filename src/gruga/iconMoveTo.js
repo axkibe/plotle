@@ -28,7 +28,7 @@ var
 	euclid_anchor_shape_line,
 	euclid_anchor_shapeRay,
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	euclid_facet;
 
 
@@ -56,10 +56,10 @@ gruga_iconMoveTo = { };
 
 gruga_iconMoveTo.facet =
 	euclid_facet.create(
-		'fill', euclid_color.rgb( 107, 91, 73 ),
+		'fill', gleam_color.rgb( 107, 91, 73 ),
 		'border',
 			euclid_border.create(
-				'color', euclid_color.rgb( 128, 0, 0 )
+				'color', gleam_color.rgb( 128, 0, 0 )
 			)
 	);
 

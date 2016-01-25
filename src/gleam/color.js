@@ -11,7 +11,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_color',
+		id : 'gleam_color',
 		attributes :
 		{
 			alpha :
@@ -40,7 +40,7 @@ if( JION )
 
 
 var
-	euclid_color,
+	gleam_color,
 	jion;
 
 
@@ -62,13 +62,13 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_color.prototype;
+prototype = gleam_color.prototype;
 
 
 /*
 | Shortcut creator.
 */
-euclid_color.rgb =
+gleam_color.rgb =
 	function(
 		red,
 		green,
@@ -76,7 +76,7 @@ euclid_color.rgb =
 	)
 {
 	return(
-		euclid_color.create(
+		gleam_color.create(
 			'red', red,
 			'green', green,
 			'blue', blue
@@ -88,7 +88,7 @@ euclid_color.rgb =
 /*
 | Shortcut creator.
 */
-euclid_color.rgba =
+gleam_color.rgba =
 	function(
 		red,
 		green,
@@ -97,7 +97,7 @@ euclid_color.rgba =
 	)
 {
 	return(
-		euclid_color.create(
+		gleam_color.create(
 			'red', red,
 			'green', green,
 			'blue', blue,
@@ -147,8 +147,8 @@ jion.lazyValue(
 /*
 | Black.
 */
-euclid_color.black =
-	euclid_color.create(
+gleam_color.black =
+	gleam_color.create(
 		'red', 0,
 		'green', 0,
 		'blue', 0
@@ -158,8 +158,8 @@ euclid_color.black =
 /*
 | Red.
 */
-euclid_color.red =
-	euclid_color.create(
+gleam_color.red =
+	gleam_color.create(
 		'red', 255,
 		'green', 0,
 		'blue', 0
@@ -168,8 +168,8 @@ euclid_color.red =
 /*
 | White.
 */
-euclid_color.white =
-	euclid_color.create(
+gleam_color.white =
+	gleam_color.create(
 		'red', 255,
 		'green', 255,
 		'blue', 255

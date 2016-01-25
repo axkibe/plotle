@@ -5,7 +5,7 @@
 
 var
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	gruga_scrollbar;
 
@@ -25,10 +25,10 @@ gruga_scrollbar = { };
 */
 gruga_scrollbar.facet =
 	euclid_facet.create(
-		'fill', euclid_color.rgb( 255, 188, 87 ),
+		'fill', gleam_color.rgb( 255, 188, 87 ),
 		'border',
 			euclid_border.create(
-				'color', euclid_color.rgb( 221, 154, 52 )
+				'color', gleam_color.rgb( 221, 154, 52 )
 			)
 	);
 

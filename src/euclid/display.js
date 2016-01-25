@@ -763,7 +763,7 @@ euclid_display.prototype._colorStyle =
 
 	switch( style.reflect )
 	{
-		case 'euclid_color' :
+		case 'gleam_color' :
 
 			return style.css;
 

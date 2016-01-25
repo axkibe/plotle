@@ -5,7 +5,7 @@
 
 var
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
@@ -32,17 +32,17 @@ gruga_frame.facet =
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 0,
-					'color', euclid_color.rgba( 255, 255, 255, 0.5 )
+					'color', gleam_color.rgba( 255, 255, 255, 0.5 )
 				),
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 1,
-					'color', euclid_color.rgba( 255, 255, 200, 0.7 )
+					'color', gleam_color.rgba( 255, 255, 200, 0.7 )
 				)
 			),
 		'border',
 			euclid_border.create(
-				'color', euclid_color.rgba( 255, 230, 167, 0.8 )
+				'color', gleam_color.rgba( 255, 230, 167, 0.8 )
 			)
 	);
 
@@ -52,10 +52,10 @@ gruga_frame.facet =
 */
 gruga_frame.handleFacet =
 	euclid_facet.create(
-		'fill', euclid_color.rgba( 255, 230, 167, 0.955 ),
+		'fill', gleam_color.rgba( 255, 230, 167, 0.955 ),
 		'border',
 			euclid_border.create(
-				'color', euclid_color.rgba( 255, 180, 110, 0.9 )
+				'color', gleam_color.rgba( 255, 180, 110, 0.9 )
 			)
 	);
 

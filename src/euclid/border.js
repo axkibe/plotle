@@ -27,8 +27,8 @@ if( JION )
 			color :
 			{
 				comment : 'color',
-				type : 'euclid_color',
-				defaultValue : 'euclid_color.black'
+				type : 'gleam_color',
+				defaultValue : 'gleam_color.black'
 			}
 		}
 	};
@@ -36,7 +36,7 @@ if( JION )
 
 
 var
-	euclid_color,
+	gleam_color,
 	euclid_border;
 
 
@@ -71,7 +71,7 @@ prototype = euclid_border.prototype;
 */
 euclid_border.simpleBlack =
 	euclid_border.create(
-		'color', euclid_color.black
+		'color', gleam_color.black
 	);
 
 

@@ -4,7 +4,7 @@
 
 
 var
-	euclid_color,
+	gleam_color,
 	euclid_font,
 	gruga_fonts;
 
@@ -29,7 +29,7 @@ gruga_fonts = { };
 gruga_fonts.ca =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.black,
+		'fill', gleam_color.black,
 		'align', 'center',
 		'base', 'alphabetic'
 	);
@@ -38,7 +38,7 @@ gruga_fonts.ca =
 gruga_fonts.car =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.red,
+		'fill', gleam_color.red,
 		'align', 'center',
 		'base', 'alphabetic'
 	);
@@ -47,7 +47,7 @@ gruga_fonts.car =
 gruga_fonts.cm =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.black,
+		'fill', gleam_color.black,
 		'align', 'center',
 		'base', 'middle'
 	);
@@ -56,7 +56,7 @@ gruga_fonts.cm =
 gruga_fonts.la =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.black,
+		'fill', gleam_color.black,
 		'align', 'start',
 		'base', 'alphabetic'
 	);
@@ -65,7 +65,7 @@ gruga_fonts.la =
 gruga_fonts.lm =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.black,
+		'fill', gleam_color.black,
 		'align', 'start',
 		'base', 'middle'
 	);
@@ -74,7 +74,7 @@ gruga_fonts.lm =
 gruga_fonts.ra =
 	euclid_font.abstract(
 		'family', defaultFamily,
-		'fill', euclid_color.black,
+		'fill', gleam_color.black,
 		'align', 'end',
 		'base', 'alphabetic'
 	);

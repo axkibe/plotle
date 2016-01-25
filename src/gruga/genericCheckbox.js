@@ -8,7 +8,7 @@ var
 	euclid_facetRay,
 	euclid_border,
 	euclid_borderRay,
-	euclid_color,
+	gleam_color,
 	gruga_genericCheckbox;
 
 
@@ -28,14 +28,14 @@ gruga_genericCheckbox.facets =
 		[
 			// default state.
 			euclid_facet.create(
-				'fill', euclid_color.white,
+				'fill', gleam_color.white,
 				'border',
 					euclid_borderRay.create(
 						'ray:append',
 						euclid_border.create(
 							'distance', 1,
 							'width', 1.5,
-							'color', euclid_color.rgb( 255, 188, 87 )
+							'color', gleam_color.rgb( 255, 188, 87 )
 						),
 						'ray:append',
 						euclid_border.simpleBlack
@@ -44,32 +44,32 @@ gruga_genericCheckbox.facets =
 			// hover
 			euclid_facet.create(
 				'group:init', { 'hover' : true },
-				'fill', euclid_color.white,
+				'fill', gleam_color.white,
 				'border',
 					euclid_borderRay.create(
 						'ray:append',
 						euclid_border.create(
 							'distance', 1,
 							'width', 2,
-							'color', euclid_color.rgb( 255, 188, 87 )
+							'color', gleam_color.rgb( 255, 188, 87 )
 						),
 						'ray:append',
 						euclid_border.create(
-							'color', euclid_color.rgb( 128, 128, 0 )
+							'color', gleam_color.rgb( 128, 128, 0 )
 						)
 					)
 			),
 			// focus
 			euclid_facet.create(
 				'group:init', { 'focus' : true },
-				'fill', euclid_color.white,
+				'fill', gleam_color.white,
 				'border',
 					euclid_borderRay.create(
 						'ray:append',
 						euclid_border.create(
 							'distance', 1,
 							'width', 2,
-							'color', euclid_color.rgb( 255, 99, 188 )
+							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'ray:append',
 						euclid_border.simpleBlack
@@ -78,8 +78,8 @@ gruga_genericCheckbox.facets =
 			// hover+focus
 			euclid_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
-				'fill', euclid_color.white,
-				'border', euclid_color.simpleBlack
+				'fill', gleam_color.white,
+				'border', gleam_color.simpleBlack
 			)
 		]
 	);

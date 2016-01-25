@@ -4,7 +4,7 @@
 
 
 var
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	euclid_gradient_askew,
 	euclid_gradient_colorStop,
@@ -25,12 +25,12 @@ gruga_formFacet =
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 0,
-					'color', euclid_color.rgb( 255, 255, 248 )
+					'color', gleam_color.rgb( 255, 255, 248 )
 				),
 				'ray:append',
 				euclid_gradient_colorStop.create(
 					'offset', 1,
-					'color', euclid_color.rgb( 255, 255, 210 )
+					'color', gleam_color.rgb( 255, 255, 210 )
 				)
 			)
 	);

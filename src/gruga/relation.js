@@ -6,7 +6,7 @@
 var
 	euclid_border,
 	euclid_borderRay,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	euclid_point,
 	gruga_relation;
@@ -27,17 +27,17 @@ gruga_relation = { };
 gruga_relation.facet =
 	euclid_facet.create(
 		'fill',
-			euclid_color.rgba( 255, 225, 40, 0.5 ),
+			gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
 			euclid_borderRay.create(
 				'ray:append',
 				euclid_border.create(
 					'width', 3,
-					'color', euclid_color.rgba( 255, 225, 80, 0.4 )
+					'color', gleam_color.rgba( 255, 225, 80, 0.4 )
 				),
 				'ray:append',
 				euclid_border.create(
-					'color', euclid_color.rgba( 200, 100, 0,  0.8 )
+					'color', gleam_color.rgba( 200, 100, 0,  0.8 )
 				)
 			)
 	);

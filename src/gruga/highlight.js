@@ -5,7 +5,7 @@
 
 var
 	euclid_border,
-	euclid_color,
+	gleam_color,
 	euclid_facet,
 	gruga_highlight;
 
@@ -24,7 +24,7 @@ gruga_highlight =
 		'border',
 			euclid_border.create(
 				'width', 2,
-				'color', euclid_color.rgba( 255, 183, 15, 0.5 ),
+				'color', gleam_color.rgba( 255, 183, 15, 0.5 ),
 				'distance', -2
 			)
 	);
