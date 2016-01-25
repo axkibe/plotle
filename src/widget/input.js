@@ -31,7 +31,7 @@ if( JION )
 			font :
 			{
 				comment : 'font of the text',
-				type : 'euclid_font'
+				type : 'gleam_font'
 			},
 			mark :
 			{

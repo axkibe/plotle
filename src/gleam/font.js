@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_font',
+		id : 'gleam_font',
 		hasAbstract : true,
 		attributes :
 		{
@@ -44,7 +44,7 @@ if( JION )
 
 
 var
-	euclid_font,
+	gleam_font,
 	jion;
 
 
@@ -67,7 +67,7 @@ if( NODE )
 | The CSS-string for this font.
 */
 jion.lazyValue(
-	euclid_font.prototype,
+	gleam_font.prototype,
 	'css',
 	function( )
 {

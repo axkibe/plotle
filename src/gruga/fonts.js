@@ -5,7 +5,7 @@
 
 var
 	gleam_color,
-	euclid_font,
+	gleam_font,
 	gruga_fonts;
 
 /*
@@ -27,7 +27,7 @@ gruga_fonts = { };
 
 
 gruga_fonts.ca =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
 		'align', 'center',
@@ -36,7 +36,7 @@ gruga_fonts.ca =
 
 
 gruga_fonts.car =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.red,
 		'align', 'center',
@@ -45,7 +45,7 @@ gruga_fonts.car =
 
 
 gruga_fonts.cm =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
 		'align', 'center',
@@ -54,7 +54,7 @@ gruga_fonts.cm =
 
 
 gruga_fonts.la =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
 		'align', 'start',
@@ -63,7 +63,7 @@ gruga_fonts.la =
 
 
 gruga_fonts.lm =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
 		'align', 'start',
@@ -72,7 +72,7 @@ gruga_fonts.lm =
 
 
 gruga_fonts.ra =
-	euclid_font.abstract(
+	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
 		'align', 'end',

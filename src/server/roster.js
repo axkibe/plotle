@@ -271,7 +271,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/font.js',
+		'filePath', 'src/gleam/font.js',
 		'hasJion', true,
 		'inBundle', true
 	),
