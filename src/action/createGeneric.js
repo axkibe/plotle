@@ -30,7 +30,7 @@ if( JION )
 			{
 				comment : 'the transient item in creation',
 				type :
-					require( '../typemaps/visualItems' )
+					require( '../typemaps/visualItem' )
 					.concat( [ 'undefined' ] )
 			},
 			startPoint :

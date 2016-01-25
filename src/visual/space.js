@@ -326,9 +326,8 @@ jion.lazyValue(
 		return(
 			( this._inheritFrame || visual_frame)
 			.create(
-				'resizeHandles', content.resizeHandles,
-				'view', view,
-				'zone', content.zone
+				'content', content,
+				'view', view
 			)
 		);
 	}

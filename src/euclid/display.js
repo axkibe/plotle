@@ -200,9 +200,6 @@ euclid_display.prototype.deClip =
 |    'point'
 |    'x'
 |    'y'
-|    'composite'
-|    'alpha'
-|
 */
 euclid_display.prototype.drawImage =
 	function(
@@ -215,10 +212,7 @@ euclid_display.prototype.drawImage =
 		arg,
 		image,
 		x,
-		y,
-		composite,
-		alpha,
-		saveAlpha;
+		y;
 
 	a = 0;
 
@@ -243,10 +237,6 @@ euclid_display.prototype.drawImage =
 			case 'x' : x = arguments[ a++ ]; continue;
 
 			case 'y' : y = arguments[ a++ ]; continue;
-
-			case 'composite' : composite = arguments[ a++ ]; continue;
-
-			case 'alpha' : alpha = arguments[ a++ ]; continue;
 
 			// unknown argument
 			default : throw new Error( );
@@ -282,26 +272,7 @@ euclid_display.prototype.drawImage =
 /**/	}
 /**/}
 
-	if( composite !== undefined )
-	{
-		this._cx.globalCompositeOperation = composite;
-	}
-
-	if( alpha !== undefined )
-	{
-		saveAlpha = this._cx.globalAlpha;
-
-		this._cx.globalAlpha = alpha;
-	}
-
 	this._cx.drawImage( image, x, y );
-
-	if( composite !== undefined )
-	{
-		this._cx.globalCompositeOperation = 'source-over';
-	}
-
-	if( alpha !== undefined ) this._cx.globalAlpha = saveAlpha;
 };
 
 
@@ -415,18 +386,6 @@ euclid_display.prototype.fillRect =
 	}
 
 	return this._cx.fillRect( a1, a2, a3, a4 );
-};
-
-
-/*
-| Sets the global alpha.
-|
-| FUTURE remove
-*/
-euclid_display.prototype.globalAlpha =
-	function( a )
-{
-	this._cx.globalAlpha = a;
 };
 
 

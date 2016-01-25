@@ -12,20 +12,15 @@ if( JION )
 		id : 'visual_frame',
 		attributes :
 		{
-			resizeHandles :
+			content :
 			{
-				comment : '"arbitrary" or "zoom"',
-				type : 'string'
+				comment : 'content of the frame',
+				type : require( '../typemaps/visualItem' )
 			},
 			view :
 			{
 				comment : 'the view',
 				type : 'euclid_view'
-			},
-			zone :
-			{
-				comment : 'the zone the frame encompases',
-				type : 'euclid_rect'
 			}
 		},
 		init : [ ]
@@ -329,5 +324,30 @@ function( )
 }
 );
 
+
+/*
+| Zone.
+*/
+jion.lazyValue(
+	prototype,
+	'zone',
+function( )
+{
+	return this.content.zone;
+}
+);
+			
+
+/*
+| '"arbitrary" or "zoom"',
+*/
+jion.lazyValue(
+	prototype,
+	'resizeHandles',
+function( )
+{
+	return this.content.resizeHandles;
+}
+);
 
 } )( );
