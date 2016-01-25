@@ -7,8 +7,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	gleam_color,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	euclid_gradient_askew,
 	euclid_gradient_colorStop,
 	euclid_margin,
@@ -27,10 +27,10 @@ gruga_note = { };
 
 
 gruga_note.facets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:append',
 		// default
-		euclid_facet.create(
+		gleam_facet.create(
 			'fill',
 				euclid_gradient_askew.create(
 					'ray:append',

@@ -7,8 +7,8 @@ var
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	euclid_border,
 	gleam_color,
 	form_moveTo,
@@ -52,11 +52,11 @@ var
 
 
 portalButtonFacets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -65,7 +65,7 @@ portalButtonFacets =
 					)
 			),
 			// hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
@@ -75,7 +75,7 @@ portalButtonFacets =
 					)
 			),
 			// focus
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -86,7 +86,7 @@ portalButtonFacets =
 					)
 			),
 			// focus and hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',

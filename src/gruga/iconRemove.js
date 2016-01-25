@@ -20,7 +20,7 @@ var
 	euclid_anchor_shape_line,
 	euclid_border,
 	gleam_color,
-	euclid_facet;
+	gleam_facet;
 
 
 /*
@@ -65,7 +65,7 @@ gruga_iconRemove = { };
 
 
 gruga_iconRemove.facet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill', gleam_color.rgb( 255, 0, 0 ),
 		'border',
 			euclid_border.create(

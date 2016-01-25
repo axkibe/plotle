@@ -6,8 +6,8 @@
 var
 	euclid_border,
 	gleam_color,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	euclid_margin,
 	gruga_highlight,
 	gruga_label;
@@ -24,10 +24,10 @@ gruga_label = { };
 
 
 gruga_label.facets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:append',
 		// default
-		euclid_facet.create(
+		gleam_facet.create(
 			'border',
 				euclid_border.create(
 					'color', gleam_color.rgba( 100, 100, 0, 0.1 )

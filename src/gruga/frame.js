@@ -6,7 +6,7 @@
 var
 	euclid_border,
 	gleam_color,
-	euclid_facet,
+	gleam_facet,
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
 	gruga_frame;
@@ -26,7 +26,7 @@ gruga_frame = { };
 | The frame main facet.
 */
 gruga_frame.facet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill',
 			euclid_gradient_radial.create(
 				'ray:append',
@@ -51,7 +51,7 @@ gruga_frame.facet =
 | The frame handle facet.
 */
 gruga_frame.handleFacet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill', gleam_color.rgba( 255, 230, 167, 0.955 ),
 		'border',
 			euclid_border.create(

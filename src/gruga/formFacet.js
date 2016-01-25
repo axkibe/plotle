@@ -5,7 +5,7 @@
 
 var
 	gleam_color,
-	euclid_facet,
+	gleam_facet,
 	euclid_gradient_askew,
 	euclid_gradient_colorStop,
 	gruga_formFacet;
@@ -19,7 +19,7 @@ var
 
 
 gruga_formFacet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill',
 			euclid_gradient_askew.create(
 				'ray:append',

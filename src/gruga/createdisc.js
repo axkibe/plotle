@@ -11,8 +11,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	gleam_color,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	euclid_gradient_colorStop,
 	euclid_gradient_radial,
 	euclid_point,
@@ -51,13 +51,13 @@ portalButtonPnw = dnw.create( 'x', 99, 'y', 393 );
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
 genericButtonFacets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			euclid_facet.create( ),
+			gleam_facet.create( ),
 			// hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
@@ -66,7 +66,7 @@ genericButtonFacets =
 					)
 			),
 			// down
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'down' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
@@ -75,7 +75,7 @@ genericButtonFacets =
 					)
 			),
 			// down and hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'down' : true, 'hover' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',

@@ -7,8 +7,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	gleam_color,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	euclid_gradient_radial,
 	euclid_gradient_colorStop,
 	gruga_highlight,
@@ -25,10 +25,10 @@ var
 gruga_portal = { };
 
 gruga_portal.facets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:append',
 		// default
-		euclid_facet.create(
+		gleam_facet.create(
 			'fill',
 				euclid_gradient_radial.create(
 					'ray:append',
@@ -63,11 +63,11 @@ gruga_portal.facets =
 | and on the portal.
 */
 gruga_portal.buttonFacets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -76,7 +76,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
@@ -86,7 +86,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// focus
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
@@ -97,7 +97,7 @@ gruga_portal.buttonFacets =
 					)
 			),
 			// focus and hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
@@ -115,11 +115,11 @@ gruga_portal.buttonFacets =
 | Facet design of input fields on the portal.
 */
 gruga_portal.inputFacets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			euclid_facet.create(
+			gleam_facet.create(
 				'fill', gleam_color.white,
 				'border',
 					euclid_border.create(

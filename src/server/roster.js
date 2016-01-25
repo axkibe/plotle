@@ -380,12 +380,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/facet.js',
+		'filePath', 'src/gleam/facet.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/facetRay.js',
+		'filePath', 'src/gleam/facetRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),

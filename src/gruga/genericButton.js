@@ -7,8 +7,8 @@ var
 	euclid_border,
 	euclid_borderRay,
 	gleam_color,
-	euclid_facet,
-	euclid_facetRay,
+	gleam_facet,
+	gleam_facetRay,
 	gruga_genericButton;
 
 
@@ -23,11 +23,11 @@ gruga_genericButton = { };
 
 
 gruga_genericButton.facets =
-	euclid_facetRay.create(
+	gleam_facetRay.create(
 		'ray:init',
 		[
 			// default state.
-			euclid_facet.create(
+			gleam_facet.create(
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
 					euclid_border.create(
@@ -37,7 +37,7 @@ gruga_genericButton.facets =
 					)
 			),
 			// hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
@@ -48,7 +48,7 @@ gruga_genericButton.facets =
 					)
 			),
 			// focus
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
@@ -68,7 +68,7 @@ gruga_genericButton.facets =
 				)
 			),
 			// focus and hover
-			euclid_facet.create(
+			gleam_facet.create(
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',

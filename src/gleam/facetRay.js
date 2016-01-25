@@ -11,14 +11,14 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_facetRay',
-		ray : [ 'euclid_facet' ]
+		id : 'gleam_facetRay',
+		ray : [ 'gleam_facet' ]
 	};
 }
 
 
 var
-	euclid_facetRay;
+	gleam_facetRay;
 
 /*
 | Capsule
@@ -38,7 +38,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_facetRay.prototype;
+prototype = gleam_facetRay.prototype;
 
 
 /*

@@ -11,7 +11,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_facet',
+		id : 'gleam_facet',
 		attributes :
 		{
 			border :
@@ -35,7 +35,7 @@ if( JION )
 
 
 var
-	euclid_facet;
+	gleam_facet;
 
 
 /*
@@ -56,7 +56,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_facet.prototype;
+prototype = gleam_facet.prototype;
 
 
 })( );

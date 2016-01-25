@@ -20,7 +20,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'euclid_facetRay'
+				type : 'gleam_facetRay'
 			},
 			hover :
 			{

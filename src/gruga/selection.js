@@ -6,7 +6,7 @@
 var
 	euclid_border,
 	gleam_color,
-	euclid_facet,
+	gleam_facet,
 	gruga_selection;
 
 
@@ -18,7 +18,7 @@ var
 
 
 gruga_selection =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill', gleam_color.rgba( 243, 203, 255, 0.9 ),
 		'border', euclid_border.simpleBlack
 	);

@@ -27,7 +27,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'euclid_facetRay'
+				type : 'gleam_facetRay'
 			},
 			font :
 			{
@@ -50,7 +50,7 @@ if( JION )
 			iconFacet :
 			{
 				comment : 'icon facet',
-				type : [ 'undefined', 'euclid_facet' ]
+				type : [ 'undefined', 'gleam_facet' ]
 			},
 			mark :
 			{

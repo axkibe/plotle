@@ -417,7 +417,7 @@ euclid_display.prototype.paint =
 
 /**/if( CHECK )
 /**/{
-/**/	if( facet.reflect !== 'euclid_facet' ) throw new Error( );
+/**/	if( facet.reflect !== 'gleam_facet' ) throw new Error( );
 /**/}
 
 	border = facet.border;

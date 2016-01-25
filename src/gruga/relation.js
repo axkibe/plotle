@@ -7,7 +7,7 @@ var
 	euclid_border,
 	euclid_borderRay,
 	gleam_color,
-	euclid_facet,
+	gleam_facet,
 	euclid_point,
 	gruga_relation;
 
@@ -25,7 +25,7 @@ gruga_relation = { };
 | Default relation arrows facet.
 */
 gruga_relation.facet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill',
 			gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',

@@ -25,7 +25,7 @@ var
 	euclid_anchor_shape_line,
 	euclid_border,
 	gleam_color,
-	euclid_facet;
+	gleam_facet;
 
 
 /*
@@ -51,7 +51,7 @@ gruga_iconNormal = { };
 
 
 gruga_iconNormal.facet =
-	euclid_facet.create(
+	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
 			euclid_border.create(
