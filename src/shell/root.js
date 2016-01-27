@@ -40,7 +40,7 @@ if( JION )
 			display :
 			{
 				comment : 'the display within everything happens',
-				type : 'euclid_display'
+				type : 'gleam_window'
 			},
 			doTracker :
 			{
@@ -154,7 +154,7 @@ var
 	change_wrap,
 	disc_jockey,
 	euclid_arrow,
-	euclid_display,
+	gleam_window,
 	euclid_measure,
 	euclid_point,
 	euclid_view,
@@ -340,7 +340,7 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = euclid_display.createAroundHTMLCanvas( canvas );
+	swatch = gleam_window.createAroundHTMLCanvas( canvas );
 
 	euclid_measure.init( canvas );
 

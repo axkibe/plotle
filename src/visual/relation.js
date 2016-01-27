@@ -63,7 +63,7 @@ if( JION )
 
 var
 	euclid_arrow,
-	euclid_display,
+	gleam_window,
 	euclid_point,
 	euclid_rect,
 	gruga_label,
@@ -383,7 +383,7 @@ jion.lazyValue(
 		vZone = this.vZone;
 
 		display =
-			euclid_display.create(
+			gleam_window.create(
 				'width', vZone.width,
 				'height', vZone.height + 1
 			);

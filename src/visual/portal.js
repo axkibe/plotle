@@ -63,7 +63,7 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	euclid_display,
+	gleam_window,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -1496,7 +1496,7 @@ jion.lazyValue(
 		vZone = this.vZone;
 
 		display =
-			euclid_display.create(
+			gleam_window.create(
 				'width', vZone.width + 2,
 				'height', vZone.height + 2
 			),

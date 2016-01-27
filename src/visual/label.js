@@ -63,7 +63,7 @@ if( JION )
 
 var
 	change_grow,
-	euclid_display,
+	gleam_window,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -606,7 +606,7 @@ jion.lazyValue(
 	vZone = this.vZone;
 
 	display =
-		euclid_display.create(
+		gleam_window.create(
 			'width', vZone.width,
 			'height', vZone.height + 1
 		);

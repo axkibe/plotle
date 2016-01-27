@@ -87,7 +87,7 @@ if( JION )
 
 var
 	gleam_color,
-	euclid_display,
+	gleam_window,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -465,7 +465,7 @@ jion.lazyValue(
 	mark = this.mark;
 
 	display =
-		euclid_display.create(
+		gleam_window.create(
 			'width', shape.width + 1,
 			'height', shape.height + 1
 		);

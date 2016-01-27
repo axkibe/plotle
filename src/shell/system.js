@@ -10,7 +10,7 @@
 */
 var
 	config,
-	euclid_display,
+	gleam_window,
 	euclid_point,
 	math_limit,
 	root,
@@ -285,7 +285,7 @@ shell_system =
 	canvas.height =
 		window.innerHeight - 1;
 
-	this._display = euclid_display.createAroundHTMLCanvas( canvas );
+	this._display = gleam_window.createAroundHTMLCanvas( canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around

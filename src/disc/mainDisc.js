@@ -105,7 +105,7 @@ if( JION )
 var
 	disc_mainDisc,
 	change_shrink,
-	euclid_display,
+	gleam_window,
 	jion,
 	root;
 
@@ -272,7 +272,7 @@ jion.lazyValue(
 			rZ;
 
 		display =
-			euclid_display.create(
+			gleam_window.create(
 				'width', this.area.width,
 				'height', this.area.height
 			);

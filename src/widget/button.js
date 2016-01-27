@@ -115,7 +115,7 @@ if( JION )
 
 
 var
-	euclid_display,
+	gleam_window,
 	jion,
 	result_hover,
 	root,
@@ -357,7 +357,7 @@ jion.lazyValue(
 		y;
 
 	display =
-		euclid_display.create(
+		gleam_window.create(
 			'width', this.area.width,
 			'height', this.area.height
 		);

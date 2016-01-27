@@ -50,20 +50,13 @@ server_resourceRay.create( 'ray:init', [
 		'filePath', 'webfont/webfont.js',
 		'maxage', 'long'
 	),
-//	server_resource.create(
-//		'filePath', 'pixi/pixi-309.js',
-//		'maxage', 'long'
-//	),
-//	server_resource.create(
-//		'filePath', 'pixi/pixi-309.js.map',
-//		'maxage', 'long'
-//	),
 	server_resource.create(
 		'aliases', stringRay( [ 'jion-proto.js' ] ),
 		'coding', 'utf-8',
 		'data', jion.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -72,6 +65,7 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.path.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -80,20 +74,24 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.path.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/math/half.js',
 		'inBundle', true,
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/math/limit.js',
 		'inBundle', true,
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/math/maxInteger.js',
+		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -276,15 +274,10 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/display.js',
+		'filePath', 'src/gleam/window.js',
 		'hasJion', true,
 		'inBundle', true
 	),
-//	server_resource.create(
-//		'filePath', 'src/euclid/pixi.js',
-//		'hasJion', true,
-//		'inBundle', true
-//	),
 	server_resource.create(
 		'filePath', 'src/euclid/measure.js',
 		'inBundle', true
@@ -979,6 +972,20 @@ server_resourceRay.create( 'ray:init', [
 		'devel', true,
 		'hasJion', true,
 		'inTestPad', true
+	),
+
+	// --- TestGleam ---
+	server_resource.create(
+		'aliases', stringRay( [ 'testgleam.html' ] ),
+		'filePath', 'media/testgleam.html',
+		'devel', true,
+		'postProcessor', 'testGleamHtml'
+	),
+	server_resource.create(
+		'filePath', 'src/testgleam/root.js',
+		'devel', true,
+		'hasJion', true,
+		'inTestGleam', true
 	)
 ] );
 
