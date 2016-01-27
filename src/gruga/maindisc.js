@@ -10,13 +10,13 @@ var
 	euclid_anchor_point,
 	euclid_anchor_rect,
 	disc_mainDisc,
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
-	euclid_gradient_colorStop,
-	euclid_gradient_radial,
+	gleam_gradient_colorStop,
+	gleam_gradient_radial,
 	euclid_point,
 	gruga_iconMoveTo,
 	gruga_iconNormal,
@@ -64,7 +64,7 @@ buttonFacets =
 				'group:init', { },
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
@@ -74,7 +74,7 @@ buttonFacets =
 				'fill',
 					gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
@@ -83,7 +83,7 @@ buttonFacets =
 				'group:init', { 'down' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
@@ -92,7 +92,7 @@ buttonFacets =
 				'group:init', { 'down' : true, 'hover' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			)
@@ -131,14 +131,14 @@ userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 gruga_mainDisc =
 	disc_mainDisc.abstract(
 		'border',
-			euclid_borderRay.create(
+			gleam_borderRay.create(
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'distance', 1,
 					'color', gleam_color.rgb( 255, 94, 44 )
 				),
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'color', gleam_color.rgb( 94, 94, 0 )
 				)
 			),
@@ -169,14 +169,14 @@ gruga_mainDisc =
 				'gradientR1', 650
 			),
 		'fill',
-			euclid_gradient_radial.create(
+			gleam_gradient_radial.create(
 				'ray:append',
-				euclid_gradient_colorStop.create(
+				gleam_gradient_colorStop.create(
 					'offset', 0,
 					'color', gleam_color.rgba( 255, 255,  20, 0.955 )
 				),
 				'ray:append',
-				euclid_gradient_colorStop.create(
+				gleam_gradient_colorStop.create(
 					'offset', 1,
 					'color', gleam_color.rgba( 255, 255, 180, 0.955 )
 				)

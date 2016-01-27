@@ -4,8 +4,8 @@
 
 
 var
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	euclid_point,
@@ -29,14 +29,14 @@ gruga_relation.facet =
 		'fill',
 			gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
-			euclid_borderRay.create(
+			gleam_borderRay.create(
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'width', 3,
 					'color', gleam_color.rgba( 255, 225, 80, 0.4 )
 				),
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'color', gleam_color.rgba( 200, 100, 0,  0.8 )
 				)
 			)

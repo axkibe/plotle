@@ -9,8 +9,8 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_borderRay',
-		ray : [ 'euclid_border' ]
+		id : 'gleam_borderRay',
+		ray : [ 'gleam_border' ]
 	};
 }
 

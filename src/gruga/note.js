@@ -4,13 +4,13 @@
 
 
 var
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
-	euclid_gradient_askew,
-	euclid_gradient_colorStop,
+	gleam_gradient_askew,
+	gleam_gradient_colorStop,
 	euclid_margin,
 	gruga_highlight,
 	gruga_note;
@@ -32,27 +32,27 @@ gruga_note.facets =
 		// default
 		gleam_facet.create(
 			'fill',
-				euclid_gradient_askew.create(
+				gleam_gradient_askew.create(
 					'ray:append',
-					euclid_gradient_colorStop.create(
+					gleam_gradient_colorStop.create(
 						'offset', 0,
 						'color', gleam_color.rgba( 255, 255, 248, 0.955 )
 					),
 					'ray:append',
-					euclid_gradient_colorStop.create(
+					gleam_gradient_colorStop.create(
 						'offset', 1,
 						'color', gleam_color.rgba( 255, 255, 160, 0.955 )
 					)
 				),
 			'border',
-				euclid_borderRay.create(
+				gleam_borderRay.create(
 					'ray:append',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'color', gleam_color.rgb( 255, 188, 87 )
 					),
 					'ray:append',
-					euclid_border.simpleBlack
+					gleam_border.simpleBlack
 				)
 		),
 		'ray:append', gruga_highlight

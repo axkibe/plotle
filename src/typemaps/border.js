@@ -3,6 +3,6 @@
 */
 module.exports =
 [
-	'euclid_border',
-	'euclid_borderRay'
+	'gleam_border',
+	'gleam_borderRay'
 ];

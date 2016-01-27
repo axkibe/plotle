@@ -4,13 +4,13 @@
 
 
 var
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
-	euclid_gradient_radial,
-	euclid_gradient_colorStop,
+	gleam_gradient_radial,
+	gleam_gradient_colorStop,
 	gruga_highlight,
 	gruga_portal;
 
@@ -30,28 +30,28 @@ gruga_portal.facets =
 		// default
 		gleam_facet.create(
 			'fill',
-				euclid_gradient_radial.create(
+				gleam_gradient_radial.create(
 					'ray:append',
-					euclid_gradient_colorStop.create(
+					gleam_gradient_colorStop.create(
 						'offset', 0,
 						'color', gleam_color.rgba( 255, 255, 248, 0.955 )
 					),
 					'ray:append',
-					euclid_gradient_colorStop.create(
+					gleam_gradient_colorStop.create(
 						'offset', 1,
 						'color', gleam_color.rgba( 255, 255, 160, 0.955 )
 					)
 				),
 			'border',
-				euclid_borderRay.create(
+				gleam_borderRay.create(
 					'ray:append',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 3,
 						'width', 6,
 						'color', gleam_color.rgb( 255, 220, 128 )
 					),
 					'ray:append',
-					euclid_border.simpleBlack
+					gleam_border.simpleBlack
 				)
 		),
 		'ray:append', gruga_highlight
@@ -71,7 +71,7 @@ gruga_portal.buttonFacets =
 				'group:init', { },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgb( 255, 141, 66 )
 					)
 			),
@@ -80,7 +80,7 @@ gruga_portal.buttonFacets =
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 141, 66 )
 					)
@@ -90,7 +90,7 @@ gruga_portal.buttonFacets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 99, 188 )
@@ -101,7 +101,7 @@ gruga_portal.buttonFacets =
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 99, 188 )
@@ -122,7 +122,7 @@ gruga_portal.inputFacets =
 			gleam_facet.create(
 				'fill', gleam_color.white,
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgb( 255, 219, 165 )
 					)
 			)

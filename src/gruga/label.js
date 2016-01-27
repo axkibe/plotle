@@ -4,7 +4,7 @@
 
 
 var
-	euclid_border,
+	gleam_border,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -29,7 +29,7 @@ gruga_label.facets =
 		// default
 		gleam_facet.create(
 			'border',
-				euclid_border.create(
+				gleam_border.create(
 					'color', gleam_color.rgba( 100, 100, 0, 0.1 )
 				)
 		),

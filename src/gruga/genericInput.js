@@ -4,8 +4,8 @@
 
 
 var
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -30,15 +30,15 @@ gruga_genericInput.facets =
 			gleam_facet.create(
 				'fill', gleam_color.white,
 				'border',
-					euclid_borderRay.create(
+					gleam_borderRay.create(
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 1,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 188, 87 )
 						),
 						'ray:append',
-						euclid_border.simpleBlack
+						gleam_border.simpleBlack
 					)
 			),
 			// focus
@@ -46,15 +46,15 @@ gruga_genericInput.facets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.white,
 				'border',
-					euclid_borderRay.create(
+					gleam_borderRay.create(
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 1,
 							'width', 2,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'ray:append',
-						euclid_border.simpleBlack
+						gleam_border.simpleBlack
 					)
 			)
 		]

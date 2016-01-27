@@ -299,7 +299,7 @@ euclid_display.prototype.border =
 		return;
 	}
 
-	if( border.reflect === 'euclid_borderRay' )
+	if( border.reflect === 'gleam_borderRay' )
 	{
 		for( a = 0, aZ = border.length; a < aZ; a++ )
 		{
@@ -441,7 +441,7 @@ euclid_display.prototype.paint =
 	{
 		switch( border.reflect )
 		{
-			case 'euclid_borderRay' :
+			case 'gleam_borderRay' :
 
 				for( a = 0, aZ = border.length; a < aZ; a++ )
 				{
@@ -450,7 +450,7 @@ euclid_display.prototype.paint =
 
 				break;
 
-			case 'euclid_border' :
+			case 'gleam_border' :
 
 				this._border( border, shape );
 
@@ -767,7 +767,7 @@ euclid_display.prototype._colorStyle =
 
 			return style.css;
 
-		case 'euclid_gradient_askew' :
+		case 'gleam_gradient_askew' :
 
 /**/		if( CHECK )
 /**/		{
@@ -787,7 +787,7 @@ euclid_display.prototype._colorStyle =
 
 			break;
 
-		case 'euclid_gradient_radial' :
+		case 'gleam_gradient_radial' :
 
 			r0 = shape.gradientR0 || 0;
 
@@ -842,7 +842,7 @@ euclid_display.prototype._colorStyle =
 */
 euclid_display.prototype._border =
 	function(
-		border, // the euclid_border
+		border, // the gleam_border
 		shape   // an object which has sketch defined
 	)
 {

@@ -9,12 +9,12 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_gradient_radial',
+		id : 'gleam_gradient_radial',
 		attributes :
 		{
 			// FUTURE specify something
 		},
-		ray : [ 'euclid_gradient_colorStop' ]
+		ray : [ 'gleam_gradient_colorStop' ]
 	};
 }
 

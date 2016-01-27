@@ -4,7 +4,7 @@
 
 
 var
-	euclid_border,
+	gleam_border,
 	gleam_color,
 	gleam_facet,
 	gruga_highlight;
@@ -22,7 +22,7 @@ gruga_highlight =
 	gleam_facet.create(
 		'group:init', { highlight : true },
 		'border',
-			euclid_border.create(
+			gleam_border.create(
 				'width', 2,
 				'color', gleam_color.rgba( 255, 183, 15, 0.5 ),
 				'distance', -2

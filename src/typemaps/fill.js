@@ -4,6 +4,6 @@
 module.exports =
 [
 	'gleam_color',
-	'euclid_gradient_askew',
-	'euclid_gradient_radial'
+	'gleam_gradient_askew',
+	'gleam_gradient_radial'
 ];

@@ -9,7 +9,7 @@ var
 	euclid_anchor_rect,
 	gleam_facet,
 	gleam_facetRay,
-	euclid_border,
+	gleam_border,
 	gleam_color,
 	form_moveTo,
 	gruga_moveTo,
@@ -60,7 +60,7 @@ portalButtonFacets =
 				'group:init', { },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgb( 255, 141, 66 )
 					)
 			),
@@ -69,7 +69,7 @@ portalButtonFacets =
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 141, 66 )
 					)
@@ -79,7 +79,7 @@ portalButtonFacets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 237, 210, 0.5 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 99, 188 )
@@ -90,7 +90,7 @@ portalButtonFacets =
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 188, 88, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 1.5,
 						'color', gleam_color.rgb( 255, 99, 188 )

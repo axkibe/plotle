@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_gradient_colorStop',
+		id : 'gleam_gradient_colorStop',
 		attributes :
 		{
 			offset :

@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_border',
+		id : 'gleam_border',
 		attributes :
 		{
 			distance :
@@ -37,7 +37,7 @@ if( JION )
 
 var
 	gleam_color,
-	euclid_border;
+	gleam_border;
 
 
 /*
@@ -58,7 +58,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_border.prototype;
+prototype = gleam_border.prototype;
 
 
 /*::::::::::::::::
@@ -69,8 +69,8 @@ prototype = euclid_border.prototype;
 /*
 | A simple black border
 */
-euclid_border.simpleBlack =
-	euclid_border.create(
+gleam_border.simpleBlack =
+	gleam_border.create(
 		'color', gleam_color.black
 	);
 

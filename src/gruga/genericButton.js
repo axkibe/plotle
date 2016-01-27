@@ -4,8 +4,8 @@
 
 
 var
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -30,7 +30,7 @@ gruga_genericButton.facets =
 			gleam_facet.create(
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 2,
 						'color', gleam_color.rgba( 196, 94, 44, 0.7 )
@@ -41,7 +41,7 @@ gruga_genericButton.facets =
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'distance', 1,
 						'width', 2,
 						'color', gleam_color.rgba( 196, 94, 44, 0.7 )
@@ -52,15 +52,15 @@ gruga_genericButton.facets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
-					euclid_borderRay.create(
+					gleam_borderRay.create(
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 1,
 							'width', 2,
 							'color', gleam_color.rgba( 196, 94, 44, 0.7 )
@@ -72,15 +72,15 @@ gruga_genericButton.facets =
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
-					euclid_borderRay.create(
+					gleam_borderRay.create(
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'ray:append',
-						euclid_border.create(
+						gleam_border.create(
 							'distance', 1,
 							'width', 2,
 							'color', gleam_color.rgba( 196, 94, 44, 0.7 )

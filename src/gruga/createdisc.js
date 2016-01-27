@@ -8,13 +8,13 @@ var
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
-	euclid_border,
-	euclid_borderRay,
+	gleam_border,
+	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
-	euclid_gradient_colorStop,
-	euclid_gradient_radial,
+	gleam_gradient_colorStop,
+	gleam_gradient_radial,
 	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
@@ -61,7 +61,7 @@ genericButtonFacets =
 				'group:init', { 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
@@ -70,7 +70,7 @@ genericButtonFacets =
 				'group:init', { 'down' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
@@ -79,7 +79,7 @@ genericButtonFacets =
 				'group:init', { 'down' : true, 'hover' : true },
 				'fill', gleam_color.rgb( 255, 188, 88 ),
 				'border',
-					euclid_border.create(
+					gleam_border.create(
 						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
 					)
 			)
@@ -99,14 +99,14 @@ genericButtonModel =
 gruga_createDisc =
 	disc_createDisc.abstract(
 		'border',
-			euclid_borderRay.create(
+			gleam_borderRay.create(
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'distance', 1,
 					'color', gleam_color.rgb( 255, 94, 44 )
 				),
 				'ray:append',
-				euclid_border.create(
+				gleam_border.create(
 					'color', gleam_color.rgb( 94, 94, 0 )
 				)
 			),
@@ -137,14 +137,14 @@ gruga_createDisc =
 				'gradientR1', 650
 			),
 		'fill',
-			euclid_gradient_radial.create(
+			gleam_gradient_radial.create(
 				'ray:append',
-				euclid_gradient_colorStop.create(
+				gleam_gradient_colorStop.create(
 					'offset', 0,
 					'color', gleam_color.rgba( 255, 255,  20, 0.955 )
 				),
 				'ray:append',
-				euclid_gradient_colorStop.create(
+				gleam_gradient_colorStop.create(
 					'offset', 1,
 					'color', gleam_color.rgba( 255, 255, 205, 0.955 )
 				)

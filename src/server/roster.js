@@ -195,12 +195,12 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/border.js',
+		'filePath', 'src/gleam/border.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/borderRay.js',
+		'filePath', 'src/gleam/borderRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -222,17 +222,17 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/gradient/colorStop.js',
+		'filePath', 'src/gleam/gradient/colorStop.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/gradient/askew.js',
+		'filePath', 'src/gleam/gradient/askew.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/gradient/radial.js',
+		'filePath', 'src/gleam/gradient/radial.js',
 		'hasJion', true,
 		'inBundle', true
 	),
