@@ -105,7 +105,8 @@ if( JION )
 var
 	disc_mainDisc,
 	change_shrink,
-	gleam_window,
+	gleam_canvas,
+	gleam_container_window,
 	jion,
 	root;
 
@@ -272,7 +273,7 @@ jion.lazyValue(
 			rZ;
 
 		display =
-			gleam_window.create(
+			gleam_canvas.create(
 				'width', this.area.width,
 				'height', this.area.height
 			);
@@ -293,6 +294,24 @@ jion.lazyValue(
 		return display;
 	}
 );
+
+/*
+| Beams the item onto a gleam container.
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		gw;
+
+	gw = this._gleamWindow;
+
+	return(
+		container.create( 'twig:set+', 'mainDisc', gw )
+	);
+};
 
 
 /*
@@ -527,6 +546,25 @@ prototype.dragStart =
 
 	return true;
 };
+
+
+/*
+| The notes gleam window.
+*/
+jion.lazyValue(
+	prototype,
+	'_gleamWindow',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_container_window.create(
+			'display', this._display,
+			'p', this.area.pnw
+		)
+	);
+}
+);
 
 
 } )( );

@@ -63,7 +63,8 @@ if( JION )
 
 var
 	euclid_arrow,
-	gleam_window,
+	gleam_canvas,
+	gleam_container_window,
 	euclid_point,
 	euclid_rect,
 	gruga_label,
@@ -125,6 +126,63 @@ prototype._init =
 | The attention center.
 */
 jion.lazyValue( prototype, 'attentionCenter', visual_docItem.attentionCenter );
+
+
+/*
+| Beams the item onto a gleam container.
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		gw;
+	/*
+	var
+		item1,
+		item2,
+		arrow1,
+		arrow2,
+		space,
+		zone;
+	*/
+
+	gw = this._gleamWindow;
+
+	/*
+	space = root.spaceVisual;
+
+	item1 = space.get( this.item1key );
+
+	item2 = space.get( this.item2key );
+
+	zone = this.zone;
+
+	if( item1 )
+	{
+		arrow1 =
+			euclid_arrow.connect(
+				item1.silhoutte, 'normal',
+				zone, 'normal'
+			);
+
+		arrow1 = arrow1.inView( this.view );
+
+		arrow1.draw( display, gruga_relation.facet );
+	}
+	*/
+
+	return(
+		container.create(
+			container.get( gw.id )
+			? 'twig:set'
+			: 'twig:add',
+			gw.id,
+			gw
+		)
+	);
+};
 
 
 /*
@@ -383,7 +441,7 @@ jion.lazyValue(
 		vZone = this.vZone;
 
 		display =
-			gleam_window.create(
+			gleam_canvas.create(
 				'width', vZone.width,
 				'height', vZone.height + 1
 			);
@@ -402,6 +460,25 @@ jion.lazyValue(
 
 		return display;
 	}
+);
+
+
+/*
+| The item's gleam window.
+*/
+jion.lazyValue(
+	prototype,
+	'_gleamWindow',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_container_window.create(
+			'display', this._display,
+			'p', this.vZone.pnw
+		)
+	);
+}
 );
 
 

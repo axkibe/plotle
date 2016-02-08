@@ -102,7 +102,7 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
-	gleam_window,
+	gleam_canvas,
 	jion,
 	math_half,
 	root,
@@ -204,7 +204,7 @@ jion.lazyValue(
 			rZ;
 
 		display =
-			gleam_window.create(
+			gleam_canvas.create(
 				'width', this.area.width,
 				'height', this.area.height
 			);

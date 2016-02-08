@@ -10,7 +10,8 @@
 */
 var
 	config,
-	gleam_window,
+	gleam_canvas,
+	gleam_display_canvas,
 	euclid_point,
 	math_limit,
 	root,
@@ -285,7 +286,8 @@ shell_system =
 	canvas.height =
 		window.innerHeight - 1;
 
-	this._display = gleam_window.createAroundHTMLCanvas( canvas );
+	this._display = gleam_display_canvas.createAroundHTMLCanvas( canvas );
+	this._display = gleam_canvas.createAroundHTMLCanvas( canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -601,21 +603,12 @@ prototype._onResize =
 		// event
 	)
 {
-	var
-		display;
-
-	mainWindowHeight = window.innerHeight - 1;
-
-	display =
-	this._display =
-		this._display.create(
-			'width', window.innerWidth - 1,
-			'height', mainWindowHeight
-		);
-
 	if( root )
 	{
-		root.resize( display );
+		root.resize(
+			window.innerWidth - 1,
+			window.innerHeight - 1
+		);
 	}
 };
 

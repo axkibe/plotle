@@ -115,7 +115,7 @@ if( JION )
 
 
 var
-	gleam_window,
+	gleam_canvas,
 	jion,
 	result_hover,
 	root,
@@ -357,7 +357,7 @@ jion.lazyValue(
 		y;
 
 	display =
-		gleam_window.create(
+		gleam_canvas.create(
 			'width', this.area.width,
 			'height', this.area.height
 		);

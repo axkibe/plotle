@@ -39,8 +39,9 @@ if( JION )
 			},
 			display :
 			{
+				// REMOVE classic support
 				comment : 'the display within everything happens',
-				type : 'gleam_window'
+				type : [ 'gleam_canvas', 'gleam_display_canvas' ]
 			},
 			doTracker :
 			{
@@ -154,7 +155,7 @@ var
 	change_wrap,
 	disc_jockey,
 	euclid_arrow,
-	gleam_window,
+	gleam_canvas,
 	euclid_measure,
 	euclid_point,
 	euclid_view,
@@ -340,7 +341,7 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = gleam_window.createAroundHTMLCanvas( canvas );
+	swatch = gleam_canvas.createAroundHTMLCanvas( canvas );
 
 	euclid_measure.init( canvas );
 
@@ -1080,15 +1081,20 @@ prototype.update =
 */
 prototype.resize =
 	function(
-		display
+		width,
+		height
 	)
 {
 	root.create(
-		'display', display,
+		'display',
+			this.display.create(
+				'width', width,
+				'height', height
+			),
 		'view',
 			root._view.create(
-				'height', display.height,
-				'width', display.width
+				'width', width,
+				'height', height
 			)
 	);
 };
@@ -1468,8 +1474,10 @@ jion.lazyValue(
 
 /*
 | Draws everything.
+|
+| TODO remove
 */
-prototype.draw =
+prototype.classicDraw =
 	function( )
 {
 	var
@@ -1484,10 +1492,7 @@ prototype.draw =
 /**/	}
 /**/}
 
-	if( root._drawn )
-	{
-		return;
-	}
+	if( root._drawn ) return;
 
 	display = root.display;
 
@@ -1500,6 +1505,84 @@ prototype.draw =
 	if( screen.showDisc ) root.disc.draw( display );
 
 	root = root.create( '_drawn', true );
+};
+
+
+
+/*
+| Draws everything.
+*/
+prototype.draw =
+	function( )
+{
+	var
+		container,
+		containerDisc,
+		containerScreen,
+		display,
+		screen;
+
+	// TODO remove
+	if( root.display.reflect === 'gleam_canvas' )
+	{
+		return this.classicDraw( );
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( this !== root )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( root._drawn ) return;
+
+	display = root.display;
+
+	container = display.container;
+
+	containerScreen = container.get( 'screen' );
+
+	containerDisc = container.get( 'disc' );
+
+	screen = root._currentScreen;
+
+	containerScreen = screen.beam( containerScreen );
+
+	container =
+		container.create(
+			'twig:set+',
+			'screen',
+			containerScreen
+		);
+
+	if( screen.showDisc )
+	{
+		containerDisc = root.disc.beam( containerDisc );
+
+		container =
+			container.create( 'twig:set+', 'disc', containerDisc );
+	}
+	else
+	{
+		if( containerDisc )
+		{
+			containerDisc = undefined;
+
+			container = container.create( 'twig:remove', 'disc' );
+		}
+	}
+
+	display = display.create( 'container', container );
+
+	display.render( );
+
+	root =
+		root.create(
+			'display', display,
+			'_drawn', true
+		);
 };
 
 

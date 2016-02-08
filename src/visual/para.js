@@ -63,7 +63,7 @@ var
 	change_join,
 	change_remove,
 	change_split,
-	gleam_window,
+	gleam_canvas,
 	euclid_measure,
 	euclid_point,
 	flow_block,
@@ -251,7 +251,7 @@ jion.lazyValue(
 
 		// adds to width so the caret gets visible.
 		f =
-			gleam_window.create(
+			gleam_canvas.create(
 				'width', Math.round( flow.width * zoom + 5 ),
 				'height', Math.round( this.height * zoom + 1 )
 			);

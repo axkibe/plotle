@@ -170,7 +170,7 @@ prototype.draw =
 		facet
 	)
 {
-	display.paint( facet, this._shape );
+	display.paint( facet, this.shape );
 };
 
 
@@ -198,14 +198,14 @@ jion.lazyValue(
 	prototype,
 	'line',
 	function( )
-	{
-		return(
-			euclid_line.create(
-				'p1', this.p1,
-				'p2', this.p2
-			)
-		);
-	}
+{
+	return(
+		euclid_line.create(
+			'p1', this.p1,
+			'p2', this.p2
+		)
+	);
+}
 );
 
 
@@ -216,9 +216,9 @@ jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
-	{
-		return this.line.pc;
-	}
+{
+	return this.line.pc;
+}
 );
 
 
@@ -229,9 +229,9 @@ jion.lazyValue(
 	prototype,
 	'zone',
 	function( )
-	{
-		return this.line.zone;
-	}
+{
+	return this.line.zone;
+}
 );
 
 
@@ -240,116 +240,114 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_shape',
+	'shape',
 	function( )
+{
+	var
+		ad,
+		arrowBase,
+		d,
+		p1,
+		p2,
+		ms,
+		round,
+		sections;
+
+	p1 = this.p1;
+
+	p2 = this.p2;
+
+	sections = [ ];
+
+	// FUTURE, allow arrows on p1.
+	switch( this.p1end )
 	{
-		var
-			ad,
-			arrowBase,
-			d,
-			p1,
-			p2,
-			ms,
-			round,
-			sections;
+		case 'normal':
 
-		p1 = this.p1;
+			sections.push(
+				euclid_shape_start.create( 'p', p1 )
+			);
 
-		p2 = this.p2;
+			break;
 
-		sections = [ ];
-
-		// FUTURE, allow arrows on p1.
-		switch( this.p1end )
-		{
-			case 'normal':
-
-				sections.push(
-					euclid_shape_start.create( 'p', p1 )
-				);
-
-				break;
-
-			default :
-
-				// unknown arrow end
-				throw new Error( );
-		}
-
-		switch( this.p2end )
-		{
-			case 'normal' :
-
-				sections.push(
-					euclid_shape_line.create( 'p', p2 )
-				);
-
-				break;
-
-			case 'arrow' :
-
-				round = Math.round;
-
-				// degree of arrow tail
-				d = Math.atan2( p2.y - p1.y, p2.x - p1.x );
-
-				// degree of arrow head
-				ad = Math.PI / 12;
-
-				// arrow span
-				// the arrow is formed as hexagon piece
-				ms = 2 / Math.sqrt(3) * arrowSize;
-
-				arrowBase =
-					p2.fixPoint(
-						-round( ms * cos( d ) ),
-						-round( ms * sin( d ) )
-					);
-
-				sections.push(
-					euclid_shape_line.create( 'p', arrowBase ),
-					euclid_shape_line.create(
-						'p',
-							p2.fixPoint(
-								-round( arrowSize * cos( d - ad ) ),
-								-round( arrowSize * sin( d - ad ) )
-							)
-					),
-					euclid_shape_line.create( 'p', p2 ),
-					euclid_shape_line.create(
-						'p',
-							p2.fixPoint(
-								-round( arrowSize * cos( d + ad ) ),
-								-round( arrowSize * sin( d + ad ) )
-							)
-					),
-					euclid_shape_line.create( 'p', arrowBase )
-				);
-
-
-				break;
+		default :
 
 			// unknown arrow end
-			default : throw new Error( );
-		}
-
-		sections.push(
-			euclid_shape_line.create(
-				'close', true,
-				'fly', true
-			)
-		);
-
-		return(
-			euclid_shape.create(
-				'ray:init', sections,
-				'pc', this.pc
-			)
-		);
+			throw new Error( );
 	}
+
+	switch( this.p2end )
+	{
+		case 'normal' :
+
+			sections.push(
+				euclid_shape_line.create( 'p', p2 )
+			);
+
+			break;
+
+		case 'arrow' :
+
+			round = Math.round;
+
+			// degree of arrow tail
+			d = Math.atan2( p2.y - p1.y, p2.x - p1.x );
+
+			// degree of arrow head
+			ad = Math.PI / 12;
+
+			// arrow span
+			// the arrow is formed as hexagon piece
+			ms = 2 / Math.sqrt(3) * arrowSize;
+
+			arrowBase =
+				p2.fixPoint(
+					-round( ms * cos( d ) ),
+					-round( ms * sin( d ) )
+				);
+
+			sections.push(
+				euclid_shape_line.create( 'p', arrowBase ),
+				euclid_shape_line.create(
+					'p',
+						p2.fixPoint(
+							-round( arrowSize * cos( d - ad ) ),
+							-round( arrowSize * sin( d - ad ) )
+						)
+				),
+				euclid_shape_line.create( 'p', p2 ),
+				euclid_shape_line.create(
+					'p',
+						p2.fixPoint(
+							-round( arrowSize * cos( d + ad ) ),
+							-round( arrowSize * sin( d + ad ) )
+						)
+				),
+				euclid_shape_line.create( 'p', arrowBase )
+			);
+
+
+			break;
+
+		// unknown arrow end
+		default : throw new Error( );
+	}
+
+	sections.push(
+		euclid_shape_line.create(
+			'close', true,
+			'fly', true
+		)
+	);
+
+	return(
+		euclid_shape.create(
+			'ray:init', sections,
+			'pc', this.pc
+		)
+	);
+}
 );
-
-
 
 
 } )( );

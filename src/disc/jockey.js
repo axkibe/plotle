@@ -82,6 +82,7 @@ if( JION )
 
 var
 	disc_jockey,
+	gleam_container,
 	jion;
 
 /*
@@ -103,6 +104,63 @@ var
 	prototype;
 
 prototype = disc_jockey.prototype;
+
+
+/*
+| Updates the gleam container
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		createContainer,
+		mainContainer;
+
+	if( container )
+	{
+		mainContainer = container.get( 'mainDisc' );
+
+		createContainer = container.get( 'createDisc' );
+	}
+	else
+	{
+		mainContainer = gleam_container.create( );
+
+		createContainer = gleam_container.create( );
+
+		container =
+			gleam_container.create(
+				'twig:add', 'mainDisc', mainContainer
+//				'twig:add', 'createDisc', createContainer
+			);
+	}
+
+	/*
+	if( this.mode === 'create' )
+	{
+		container =
+			container.create(
+				'twig:set'
+
+		this.get( 'createDisc' ).draw( display );
+	}
+	else
+	{
+	}
+	*/
+
+	container =
+		container.create(
+			'twig:set',
+			'mainDisc',
+				this.get( 'mainDisc' ).beam( mainContainer )
+		);
+
+	return container;
+};
+
 
 
 /*

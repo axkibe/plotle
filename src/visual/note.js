@@ -77,7 +77,8 @@ if( JION )
 
 var
 	change_grow,
-	gleam_window,
+	gleam_canvas,
+	gleam_container_window,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
@@ -220,8 +221,6 @@ jion.lazyStaticValue(
 );
 
 
-
-
 /*
 | Initializer.
 */
@@ -361,15 +360,9 @@ prototype.draw =
 	)
 {
 	var
-		action,
-		mark,
 		sbary;
 
-	action = this._action;
-
 	sbary = this.scrollbarY;
-
-	mark = this.mark;
 
 	display.drawImage(
 		'image', this._display,
@@ -385,6 +378,31 @@ prototype.draw =
 	}
 
 	if( sbary ) sbary.draw( display );
+};
+
+
+/*
+| Beams the item onto a gleam container.
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		gw;
+
+	gw = this._gleamWindow;
+
+	return(
+		container.create(
+			container.get( gw.id )
+			? 'twig:set'
+			: 'twig:add',
+			gw.id,
+			gw
+		)
+	);
 };
 
 
@@ -706,45 +724,64 @@ jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
-	{
-		var
-			d,
-			doc,
-			facet,
-			sbary,
-			vZone;
+{
+	var
+		d,
+		doc,
+		facet,
+		sbary,
+		vZone;
 
-		vZone = this.vZone;
+	vZone = this.vZone;
 
-		d =
-			gleam_window.create(
-				'width', vZone.width + 2,
-				'height', vZone.height + 2
-			);
-
-		doc = this.doc;
-
-		facet = gruga_note.facets.getFacet( );
-
-		sbary = this.scrollbarY;
-
-		d.fill( facet.fill, this.vZeroSilhoutte );
-
-		// draws selection and text
-		doc.draw(
-			d,
-			this.zone.width,
-			euclid_point.create(
-				'x', 0,
-				'y', sbary ? sbary.pos : 0
-			)
+	d =
+		gleam_canvas.create(
+			'width', vZone.width + 2,
+			'height', vZone.height + 2
 		);
 
-		// draws the border
-		d.border( facet.border, this.vZeroSilhoutte );
+	doc = this.doc;
 
-		return d;
-	}
+	facet = gruga_note.facets.getFacet( );
+
+	sbary = this.scrollbarY;
+
+	d.fill( facet.fill, this.vZeroSilhoutte );
+
+	// draws selection and text
+	doc.draw(
+		d,
+		this.zone.width,
+		euclid_point.create(
+			'x', 0,
+			'y', sbary ? sbary.pos : 0
+		)
+	);
+
+	// draws the border
+	d.border( facet.border, this.vZeroSilhoutte );
+
+	return d;
+}
+);
+
+
+/*
+| The notes gleam window.
+*/
+jion.lazyValue(
+	prototype,
+	'_gleamWindow',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_container_window.create(
+			'display', this._display,
+			'p', this.vZone.pnw
+		)
+	);
+}
 );
 
 

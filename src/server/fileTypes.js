@@ -34,6 +34,9 @@ _codings =
 		// hypertext
 		'html' : 'utf-8',
 
+		// map
+		'map' : 'utf-8',
+
 		// icon
 		'ico' : 'binary',
 
@@ -69,6 +72,9 @@ _mimes =
 
 		// icon
 		'ico' : 'image/x-icon',
+
+		// map
+		'map' : 'application/json',
 
 		// javascript
 		'js' : 'text/javascript',

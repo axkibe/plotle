@@ -274,7 +274,27 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/window.js',
+		'filePath', 'src/gleam/canvas.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/display/canvas.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/display/pixi.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/container/window.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/container.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -878,6 +898,22 @@ server_resourceRay.create( 'ray:init', [
 	server_resource.create(
 		'filePath', 'src/shell/fontloader.js',
 		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'pixi/pixi-309.js',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'pixi/pixi-309.js.map',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'pixi/pixi-309.min.js',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'pixi/pixi-309.min.js.map',
+		'maxage', 'long'
 	),
 	server_resource.create(
 		'filePath', 'media/dejavusans/style.css',

@@ -56,14 +56,22 @@ if( JION )
 				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
-		init : [ 'inherit' ]
+		init : [ 'inherit' ],
+		alike :
+		{
+			alikeIgnoringView :
+			{
+				ignores : { 'view' : true }
+			}
+		}
 	};
 }
 
 
 var
 	change_grow,
-	gleam_window,
+	gleam_canvas,
+	gleam_container_window,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -266,6 +274,16 @@ prototype._init =
 			'scrollPos', euclid_point.zero,
 			'view', this.view.home
 		);
+
+	if(
+		inherit
+		&& inherit.alikeIgnoringView( this )
+		&& inherit.view.zoom === this.view.zoom
+		&& jion.hasLazyValueSet( inherit, '_display' )
+	)
+	{
+		jion.aheadValue( this, '_display', inherit._display );
+	}
 };
 
 
@@ -328,6 +346,31 @@ prototype.draw =
 			this.vSilhoutte
 		);
 	}
+};
+
+
+/*
+| Beams the label onto a gleam container.
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		gw;
+
+	gw = this._gleamWindow;
+
+	return(
+		container.create(
+			container.get( gw.id )
+			? 'twig:set'
+			: 'twig:add',
+			gw.id,
+			gw
+		)
+	);
 };
 
 
@@ -606,7 +649,7 @@ jion.lazyValue(
 	vZone = this.vZone;
 
 	display =
-		gleam_window.create(
+		gleam_canvas.create(
 			'width', vZone.width,
 			'height', vZone.height + 1
 		);
@@ -623,5 +666,23 @@ jion.lazyValue(
 }
 );
 
+
+/*
+| The items gleam window.
+*/
+jion.lazyValue(
+	prototype,
+	'_gleamWindow',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_container_window.create(
+			'display', this._display,
+			'p', this.vPnw
+		)
+	);
+}
+);
 
 } )( );

@@ -73,6 +73,7 @@ var
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
+	gleam_container,
 	gruga_label,
 	gruga_relation,
 	jion,
@@ -316,7 +317,7 @@ jion.lazyValue(
 		view;
 
 	mark = this.mark;
-	
+
 	view = this.view;
 
 	if( mark && mark.itemPath )
@@ -353,6 +354,92 @@ jion.lazyValue(
 		return this.view.y( focus.attentionCenter );
 	}
 );
+
+
+/*
+| Updates the gleam container
+*/
+prototype.beam =
+	function(
+		// container
+	)
+{
+	var
+		c,
+		r,
+		s;
+
+	c = gleam_container.create( );
+
+	for( r = this.length - 1; r >= 0; r-- )
+	{
+		s = this.atRank( r );
+
+		c = s.beam( c );
+	}
+
+	return c;
+
+	/*
+	focus = this.focus;
+
+	if( this.frame )
+	{
+		this.frame.draw( display );
+	}
+
+	switch( action && action.reflect )
+	{
+		case 'action_createGeneric' :
+
+			if( action.startPoint ) action.transItem.draw( display );
+
+			break;
+
+		case 'action_createRelation' :
+
+			if( action.fromItemPath )
+			{
+				fromItem = this.get( action.fromItemPath.get( -1 ) );
+
+				if( action.toItemPath )
+				{
+					toItem = this.get( action.toItemPath.get( -1 ) );
+				}
+
+				fromSilhoutte = fromItem.silhoutte;
+
+				if(
+					action.toItemPath
+					&& !action.toItemPath.equals( action.fromItemPath )
+				)
+				{
+					// arrow connects two items
+					toSilhoutte = toItem.silhoutte;
+				}
+				else if ( action.relationState === 'hadSelect' )
+				{
+					// arrow points into nowhere
+					toSilhoutte = action.toPoint.fromView( view );
+				}
+
+				if( toSilhoutte )
+				{
+					arrow =
+						euclid_arrow.connect(
+							fromSilhoutte, 'normal',
+							toSilhoutte, 'arrow'
+						).
+						inView( view );
+
+					arrow.draw( display, gruga_relation.facet );
+				}
+			}
+
+			break;
+	}
+	*/
+};
 
 
 /*
@@ -503,7 +590,7 @@ prototype.pointingHover =
 	view = this.view;
 
 	focus = this.focus;
-	
+
 	frame = this.frame;
 
 	if( frame )

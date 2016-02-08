@@ -177,6 +177,7 @@ prototype.dragStop =
 /*
 | Draws a form.
 */
+prototype.beam = form_form.beam;
 prototype.draw = form_form.draw;
 
 

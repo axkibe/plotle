@@ -5,6 +5,7 @@
 
 var
 	form_form,
+	gleam_container,
 	gruga_formFacet,
 	jion,
 	result_hover,
@@ -77,6 +78,23 @@ form_form.init =
 	if( FREEZE ) Object.freeze( twig );
 
 	this._twig = twig;
+};
+
+
+/*
+| Beams a form.
+*/
+form_form.beam =
+	function(
+		container
+	)
+{
+	if( container )
+	{
+		return container;
+	}
+
+	return gleam_container.create( );
 };
 
 

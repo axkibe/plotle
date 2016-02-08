@@ -189,7 +189,7 @@ jion.lazyValue(
 
 		if( !fp ) return;
 
-		return fp.split( '.' )[ 1 ];
+		return fp.substr( fp.lastIndexOf( '.' ) + 1 );
 	}
 );
 

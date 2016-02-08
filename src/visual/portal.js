@@ -54,6 +54,14 @@ if( JION )
 				comment : 'the current view',
 				type : [ 'euclid_view' ]
 			}
+		},
+		init : [ 'inherit' ],
+		alike :
+		{
+			alikeIgnoringView :
+			{
+				ignores : { 'view' : true }
+			}
 		}
 	};
 }
@@ -63,7 +71,8 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	gleam_window,
+	gleam_canvas,
+	gleam_container_window,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -117,16 +126,6 @@ prototype = visual_portal.prototype;
 
 
 /*
-| Hack to fix visual_note:static references
-*/
-visual_portal.equals =
-	function( o )
-{
-	return o === this;
-};
-
-
-/*
 | List of all space fields of the portal
 */
 spaceFields =
@@ -145,7 +144,28 @@ spaceFields =
 /*
 | Resize handles to show on portals.
 */
-visual_portal.prototype.resizeHandles = 'arbitrary';
+prototype.resizeHandles = 'arbitrary';
+
+
+/*
+| Initializer.
+*/
+prototype._init =
+	function(
+		inherit
+	)
+{
+	if(
+		inherit
+		&& inherit.alikeIgnoringView( this )
+		&& inherit.view.zoom === this.view.zoom
+		&& jion.hasLazyValueSet( inherit, '_display' )
+	)
+	{
+		jion.aheadValue( this, '_display', inherit._display );
+	}
+};
+
 
 
 /*
@@ -340,6 +360,31 @@ jion.lazyValue(
 		return ac + n;
 	}
 );
+
+
+/*
+| Beams the item onto a gleam container.
+*/
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		gw;
+
+	gw = this._gleamWindow;
+
+	return(
+		container.create(
+			container.get( gw.id )
+			? 'twig:set'
+			: 'twig:add',
+			gw.id,
+			gw
+		)
+	);
+};
 
 
 /*
@@ -708,6 +753,7 @@ prototype._fonts =
 
 	moveTo : shell_fontPool.get( 13, 'cm' )
 };
+
 
 if( FREEZE )
 {
@@ -1496,7 +1542,7 @@ jion.lazyValue(
 		vZone = this.vZone;
 
 		display =
-			gleam_window.create(
+			gleam_canvas.create(
 				'width', vZone.width + 2,
 				'height', vZone.height + 2
 			),
@@ -1643,6 +1689,25 @@ prototype._drawCaret =
 	// displays the caret
 	display.fillRect( 'black', p.x + fieldPNW.x, n, 1, s - n );
 };
+
+
+/*
+| The notes gleam window.
+*/
+jion.lazyValue(
+	prototype,
+	'_gleamWindow',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_container_window.create(
+			'display', this._display,
+			'p', this.vZone.pnw
+		)
+	);
+}
+);
 
 
 /*

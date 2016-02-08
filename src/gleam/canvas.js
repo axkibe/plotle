@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_window',
+		id : 'gleam_canvas',
 		attributes :
 		{
 			'height' :
@@ -40,7 +40,7 @@ if( JION )
 
 var
 	euclid_constants,
-	gleam_window,
+	gleam_canvas,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -66,7 +66,7 @@ if( NODE )
 /*
 | Creates a display around an existing HTML canvas.
 */
-gleam_window.createAroundHTMLCanvas =
+gleam_canvas.createAroundHTMLCanvas =
 	function(
 		canvas
 	)
@@ -86,7 +86,7 @@ gleam_window.createAroundHTMLCanvas =
 /**/}
 
 	return(
-		gleam_window.create(
+		gleam_canvas.create(
 			'_cv', canvas,
 			'_cx', cx,
 			'width', canvas.width,
@@ -99,7 +99,7 @@ gleam_window.createAroundHTMLCanvas =
 /*
 | Initializer.
 */
-gleam_window.prototype._init =
+gleam_canvas.prototype._init =
 	function( )
 {
 	var
@@ -131,7 +131,7 @@ gleam_window.prototype._init =
 /*
 | The display is cleared.
 */
-gleam_window.prototype.clear =
+gleam_canvas.prototype.clear =
 	function( )
 {
 	this._cx.clearRect( 0, 0, this.width, this.height );
@@ -141,7 +141,7 @@ gleam_window.prototype.clear =
 /*
 | Clips the display into a shape.
 */
-gleam_window.prototype.clip =
+gleam_canvas.prototype.clip =
 	function(
 		shape,
 		border
@@ -170,7 +170,7 @@ gleam_window.prototype.clip =
 /*
 | Removes the clipping
 */
-gleam_window.prototype.deClip =
+gleam_canvas.prototype.deClip =
 	function( )
 {
 	var
@@ -201,7 +201,7 @@ gleam_window.prototype.deClip =
 |    'x'
 |    'y'
 */
-gleam_window.prototype.drawImage =
+gleam_canvas.prototype.drawImage =
 	function(
 		// free strings
 	)
@@ -243,7 +243,7 @@ gleam_window.prototype.drawImage =
 		}
 	}
 
-	if( image.reflect === 'gleam_window' )
+	if( image.reflect === 'gleam_canvas' )
 	{
 		if( !( image.width > 0 && image.height > 0 ) ) return;
 
@@ -279,7 +279,7 @@ gleam_window.prototype.drawImage =
 /*
 | Draws a border.
 */
-gleam_window.prototype.border =
+gleam_canvas.prototype.border =
 	function(
 		border, // the border
 		shape   // an object which has sketch defined
@@ -316,7 +316,7 @@ gleam_window.prototype.border =
 /*
 | Draws a filled area.
 */
-gleam_window.prototype.fill =
+gleam_canvas.prototype.fill =
 	function(
 		fill,   // the fill
 		shape  // an object which has sketch defined
@@ -354,7 +354,7 @@ gleam_window.prototype.fill =
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
 */
-gleam_window.prototype.fillRect =
+gleam_canvas.prototype.fillRect =
 	function(
 		style,
 		a1,
@@ -392,7 +392,7 @@ gleam_window.prototype.fillRect =
 /*
 | Fills an aera and draws its borders.
 */
-gleam_window.prototype.paint =
+gleam_canvas.prototype.paint =
 	function(
 		facet,
 		shape
@@ -479,7 +479,7 @@ gleam_window.prototype.paint =
 | 'rotate' ( degree )
 |      text is rotated by degree
 */
-gleam_window.prototype.paintText =
+gleam_canvas.prototype.paintText =
 	function(
 		// free strings
 	)
@@ -612,7 +612,7 @@ gleam_window.prototype.paintText =
 | The center point of the display.
 */
 jion.lazyValue(
-	gleam_window.prototype,
+	gleam_canvas.prototype,
 	'pc',
 	function( )
 	{
@@ -633,7 +633,7 @@ jion.lazyValue(
 | Returns the silhoutte that entails the whole display.
 */
 jion.lazyValue(
-	gleam_window.prototype,
+	gleam_canvas.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -655,7 +655,7 @@ jion.lazyValue(
 /*
 | Clips the display so that the shape is left out.
 */
-gleam_window.prototype.reverseClip =
+gleam_canvas.prototype.reverseClip =
 	function(
 		shape,
 		border
@@ -705,7 +705,7 @@ gleam_window.prototype.reverseClip =
 |
 | FUTURE remove
 */
-gleam_window.prototype.scale =
+gleam_canvas.prototype.scale =
 	function(
 		s
 	)
@@ -717,7 +717,7 @@ gleam_window.prototype.scale =
 /*
 | Returns true if a point is in a sketch.
 */
-gleam_window.prototype.withinSketch =
+gleam_canvas.prototype.withinSketch =
 	function(
 		shape,
 		p
@@ -746,7 +746,7 @@ gleam_window.prototype.withinSketch =
 /*
 | Returns a HTML5 color style
 */
-gleam_window.prototype._colorStyle =
+gleam_canvas.prototype._colorStyle =
 	function(
 		style,
 		shape
@@ -840,7 +840,7 @@ gleam_window.prototype._colorStyle =
 /*
 | Draws a single border.
 */
-gleam_window.prototype._border =
+gleam_canvas.prototype._border =
 	function(
 		border, // the gleam_border
 		shape   // an object which has sketch defined
@@ -867,14 +867,14 @@ gleam_window.prototype._border =
 | point in north-west
 | is always considered zero.
 */
-gleam_window.prototype.pnw = euclid_point.zero;
+gleam_canvas.prototype.pnw = euclid_point.zero;
 
 
 /*
 | Point in south east.
 */
 jion.lazyValue(
-	gleam_window.prototype,
+	gleam_canvas.prototype,
 	'pse',
 	function( )
 	{
@@ -891,7 +891,7 @@ jion.lazyValue(
 /*
 | Sets the font.
 */
-gleam_window.prototype._setFont =
+gleam_canvas.prototype._setFont =
 	function(
 		font
 	)
@@ -914,7 +914,7 @@ gleam_window.prototype._setFont =
 /*
 | Sketches an euclidian object.
 */
-gleam_window.prototype._sketch =
+gleam_canvas.prototype._sketch =
 	function(
 		obj,    // object to sketch
 		border, // additional border
@@ -944,7 +944,7 @@ gleam_window.prototype._sketch =
 /*
 | Draws the rectangle.
 */
-gleam_window.prototype._sketchRect =
+gleam_canvas.prototype._sketchRect =
 	function(
 		rect,
 		border,
@@ -983,7 +983,7 @@ gleam_window.prototype._sketchRect =
 /*
 | Sketches a generic shape.
 */
-gleam_window.prototype._sketchShape =
+gleam_canvas.prototype._sketchShape =
 	function(
 		shape,
 		border,
