@@ -68,9 +68,9 @@ if( JION )
 
 
 var
-	action_itemResize,
 	action_pan,
 	euclid_arrow,
+	euclid_connect,
 	euclid_point,
 	euclid_rect,
 	gleam_container,
@@ -295,7 +295,7 @@ jion.lazyValue(
 	if( !mark ) return undefined;
 
 	path = mark.itemPath;
-	
+
 	if( !path || path.length <= 2 ) return undefined;
 
 	return this.get( path.get( 2 ) );
@@ -343,16 +343,16 @@ jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
-	{
-		var
-			focus;
+{
+	var
+		focus;
 
-		focus = this.focus;
+	focus = this.focus;
 
-		if( !focus ) return undefined;
+	if( !focus ) return undefined;
 
-		return this.view.y( focus.attentionCenter );
-	}
+	return this.view.y( focus.attentionCenter );
+}
 );
 
 
@@ -378,67 +378,12 @@ prototype.beam =
 		c = s.beam( c );
 	}
 
-	return c;
-
-	/*
-	focus = this.focus;
-
 	if( this.frame )
 	{
-		this.frame.draw( display );
+		c = this.frame.beam( c );
 	}
 
-	switch( action && action.reflect )
-	{
-		case 'action_createGeneric' :
-
-			if( action.startPoint ) action.transItem.draw( display );
-
-			break;
-
-		case 'action_createRelation' :
-
-			if( action.fromItemPath )
-			{
-				fromItem = this.get( action.fromItemPath.get( -1 ) );
-
-				if( action.toItemPath )
-				{
-					toItem = this.get( action.toItemPath.get( -1 ) );
-				}
-
-				fromSilhoutte = fromItem.silhoutte;
-
-				if(
-					action.toItemPath
-					&& !action.toItemPath.equals( action.fromItemPath )
-				)
-				{
-					// arrow connects two items
-					toSilhoutte = toItem.silhoutte;
-				}
-				else if ( action.relationState === 'hadSelect' )
-				{
-					// arrow points into nowhere
-					toSilhoutte = action.toPoint.fromView( view );
-				}
-
-				if( toSilhoutte )
-				{
-					arrow =
-						euclid_arrow.connect(
-							fromSilhoutte, 'normal',
-							toSilhoutte, 'arrow'
-						).
-						inView( view );
-
-					arrow.draw( display, gruga_relation.facet );
-				}
-			}
-
-			break;
-	}
-	*/
+	return c;
 };
 
 
@@ -515,13 +460,17 @@ prototype.draw =
 				if( toSilhoutte )
 				{
 					arrow =
-						euclid_arrow.connect(
-							fromSilhoutte, 'normal',
-							toSilhoutte, 'arrow'
-						).
-						inView( view );
+						euclid_arrow.shape(
+								euclid_connect.line(
+									fromSilhoutte,
+									toSilhoutte
+								),
+								'normal',
+								'arrow'
+						)
+						.inView( view );
 
-					arrow.draw( display, gruga_relation.facet );
+					display.paint( gruga_relation.facet, arrow );
 				}
 			}
 
@@ -578,7 +527,6 @@ prototype.pointingHover =
 		a,
 		action,
 		aZ,
-		com,
 		item,
 		focus,
 		frame,
@@ -595,12 +543,9 @@ prototype.pointingHover =
 
 	if( frame )
 	{
-		com = frame.checkHandles( p );
+		result = frame.pointingHover( p );
 
-		if( com )
-		{
-			return result_hover.create( 'cursor', com + '-resize' );
-		}
+		if( result ) return result;
 	}
 
 	if(
@@ -649,12 +594,12 @@ prototype.pointingHover =
 		if( result ) return result;
 	}
 
-	return result_hover.create( 'cursor', 'pointer' );
+	return result_hover.create( 'cursor', 'default' );
 };
 
 
 /*
-| Starts an operation with the mouse button held down.
+| Starts an operation with the pointing device held down.
 */
 prototype.dragStart =
 	function(
@@ -668,10 +613,10 @@ prototype.dragStart =
 		access,
 		aZ,
 		action,
-		com,
 		dp,
 		focus,
 		frame,
+		result,
 		item,
 		view;
 
@@ -689,23 +634,9 @@ prototype.dragStart =
 	// see if the handles were targeted
 	if( access == 'rw' && frame )
 	{
-		com = frame.checkHandles( p );
+		result = frame.dragStart( p, shift, ctrl, access );
 
-		if( com )
-		{
-			root.create(
-				'action',
-					action_itemResize.create(
-						'align', com,
-						'itemPath', focus.path,
-						'startPoint', dp,
-						'startZone', focus.zone,
-						'toFontsize', focus.fontsize
-					)
-			);
-
-			return;
-		}
+		if( result !== undefined ) return result;
 	}
 
 	action = this._action;
@@ -752,7 +683,7 @@ prototype.dragStart =
 
 
 /*
-| A mouse click.
+| A click.
 */
 prototype.click =
 	function(
@@ -766,9 +697,12 @@ prototype.click =
 		aZ,
 		access,
 		item,
+		mark,
 		view;
 
 	access = this.access;
+
+	mark = this.mark;
 
 	view = this.view;
 
@@ -776,6 +710,10 @@ prototype.click =
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		item = this.atRank( a );
+
+		if( !item.vSilhoutte.within( p ) ) continue;
+
+		if( visual_item.click.call( item, p, shift, ctrl, access, mark ) ) return true;
 
 		if( item.click( p, shift, ctrl, access ) ) return true;
 	}
@@ -789,7 +727,7 @@ prototype.click =
 
 
 /*
-| Stops an operation with the mouse button held down.
+| Stops an operation with the poiting device button held down.
 */
 prototype.dragStop =
 	function(
@@ -861,7 +799,7 @@ prototype.dragStop =
 
 
 /*
-| Moving during an operation with the mouse button held down.
+| Moving during an operation with the pointing device button held down.
 */
 prototype.dragMove =
 	function(

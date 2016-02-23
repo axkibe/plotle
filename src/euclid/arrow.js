@@ -3,47 +3,11 @@
 */
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'euclid_arrow',
-		attributes :
-		{
-			p1 :
-			{
-				comment : 'first point',
-				type : 'euclid_point'
-			},
-			p1end :
-			{
-				comment : 'end style of first point',
-				type : 'string'
-			},
-			p2 :
-			{
-				comment : 'second point',
-				type : 'euclid_point'
-			},
-			p2end :
-			{
-				comment : 'end style of second point',
-				type : 'string'
-			}
-		}
-	};
-}
-
-
 var
 	euclid_arrow,
-	euclid_line,
 	euclid_shape,
 	euclid_shape_line,
-	euclid_shape_start,
-	jion;
+	euclid_shape_start;
 
 
 /*
@@ -53,22 +17,12 @@ var
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
 var
 	arrowSize,
 	cos,
-	prototype,
 	sin;
 
-
-prototype = euclid_arrow.prototype;
+euclid_arrow = { };
 
 arrowSize = 12;
 
@@ -78,170 +32,14 @@ sin = Math.sin;
 
 
 /*
-| Returns the arrow connecting shape1 to shape2
+| Returns an arrow shape for a line.
 */
-euclid_arrow.connect =
+euclid_arrow.shape =
 	function(
-		shape1,  // a rect or point
+		line,    // the line
 		end1,    // 'normal' or 'arrow'
-		shape2,  // shape2: a rect or point
 		end2     // 'normal' or 'arrow'
 	)
-{
-	var
-		// the projection points
-		p1,
-		p2,
-		// the center points
-		pc1,
-		pc2;
-
-
-/**/if( CHECK )
-/**/{
-/**/	if( !shape1 || !shape2 )
-/**/	{
-/**/		// line.connect() missing shape1 or shape2
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( shape1.reflect === 'euclid_point' )
-	{
-		pc1 = shape1;
-	}
-	else
-	{
-		pc1 = shape1.pc;
-	}
-
-	if( shape2.reflect === 'euclid_point' )
-	{
-		pc2 = shape2;
-	}
-	else
-	{
-		pc2 = shape2.pc;
-	}
-
-	if( shape1.reflect === 'euclid_point' )
-	{
-		p1 = shape1;
-	}
-	else if( shape1.within( pc2 ) )
-	{
-		p1 = pc1;
-	}
-	else
-	{
-		p1 = shape1.getProjection( pc2 );
-	}
-
-	if( shape2.reflect === 'euclid_point' )
-	{
-		p2 = shape2;
-	}
-	else if( shape2.within( pc1 ) )
-	{
-		p2 = pc2;
-	}
-	else
-	{
-		p2 = shape2.getProjection( pc1 );
-	}
-
-	return(
-		euclid_arrow.create(
-			'p1', p1,
-			'p1end', end1,
-			'p2', p2,
-			'p2end', end2
-		)
-	);
-};
-
-
-/*
-| Draws the arrow.
-*/
-prototype.draw =
-	function(
-		display,
-		facet
-	)
-{
-	display.paint( facet, this.shape );
-};
-
-
-/*
-| Returns the arrow repositioned and resized to a view.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	return(
-		this.create(
-			'p1', this.p1.inView( view ),
-			'p2', this.p2.inView( view )
-		)
-	);
-};
-
-
-/*
-| The line of the arrow.
-*/
-jion.lazyValue(
-	prototype,
-	'line',
-	function( )
-{
-	return(
-		euclid_line.create(
-			'p1', this.p1,
-			'p2', this.p2
-		)
-	);
-}
-);
-
-
-/*
-| The point at center.
-*/
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
-{
-	return this.line.pc;
-}
-);
-
-
-/*
-| The zone of the arrow.
-*/
-jion.lazyValue(
-	prototype,
-	'zone',
-	function( )
-{
-	return this.line.zone;
-}
-);
-
-
-/*
-| Returns the shape of the arrow.
-*/
-jion.lazyValue(
-	prototype,
-	'shape',
-	function( )
 {
 	var
 		ad,
@@ -253,14 +51,14 @@ jion.lazyValue(
 		round,
 		sections;
 
-	p1 = this.p1;
+	p1 = line.p1;
 
-	p2 = this.p2;
+	p2 = line.p2;
 
 	sections = [ ];
 
 	// FUTURE, allow arrows on p1.
-	switch( this.p1end )
+	switch( end1 )
 	{
 		case 'normal':
 
@@ -276,7 +74,7 @@ jion.lazyValue(
 			throw new Error( );
 	}
 
-	switch( this.p2end )
+	switch( end2 )
 	{
 		case 'normal' :
 
@@ -343,11 +141,16 @@ jion.lazyValue(
 	return(
 		euclid_shape.create(
 			'ray:init', sections,
-			'pc', this.pc
+			'pc', line.pc
 		)
 	);
-}
-);
+};
+
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( euclid_arrow );
+/**/}
 
 
 } )( );

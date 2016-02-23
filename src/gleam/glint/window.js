@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_container_window',
+		id : 'gleam_glint_window',
 		attributes :
 		{
 			display :
@@ -28,13 +28,13 @@ if( JION )
 				type : [ 'undefined', 'string' ]
 			}
 		},
-		init : [ ]
+		init : [ 'inherit' ]
 	};
 }
 
 
 var
-	gleam_container_window,
+	gleam_glint_window,
 	jion,
 	PIXI,
 	session_uid;
@@ -58,31 +58,75 @@ if( NODE )
 var
 	prototype;
 
-prototype = gleam_container_window.prototype;
+prototype = gleam_glint_window.prototype;
 
 
 /*
 | Initialization.
 */
 prototype._init =
-	function( )
+	function(
+		inherit
+	)
 {
 	if( !this.id )
 	{
 		this.id = session_uid( );
 	}
+
+	if( inherit )
+	{
+		if( jion.hasLazyValueSet( inherit, 'sprite' ) )
+		{
+			this._inheritedSprite = inherit.sprite;
+		}
+		else
+		{
+			this._inheritedSprite = inherit._inheritedSprite;
+		}
+
+		if( this.display === inherit.display )
+		{
+			this._inheritedDisplayEqual = true;
+		}
+	}
 };
 
 
+/*
+| TODO
+*/
 jion.lazyValue(
 	prototype,
 	'sprite',
 	function( )
+{
+	var
+		p,
+		sprite;
+
+	p = this.p;
+
+	if( this._inheritedDisplayEqual )
+	{
+		sprite = this._inheritedSprite;
+	}
+	else
 	{
 		// FIXME private access
 		// move sprite to display
-		return new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
+		sprite =
+			new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
 	}
+
+	sprite.x = this.p.x;
+
+	sprite.y = this.p.y;
+
+	sprite.id = this.id;
+
+	return sprite;
+}
 );
 
 

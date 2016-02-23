@@ -59,13 +59,11 @@ visual_docItem.click =
 		vp,
 		view;
 
-	view = this.view;
-
 	if( access != 'rw' ) return false;
 
-	vp = p.fromView( view );
+	view = this.view;
 
-	if( !this.vZone.within( p ) ) return false;
+	vp = p.fromView( view );
 
 	pnw = this.zone.pnw;
 
@@ -84,33 +82,26 @@ visual_docItem.click =
 
 	para = doc.getParaAtPoint( pi );
 
-	// FUTURE move into para
 	if( para )
 	{
 		ppnw = doc.getPNW( para.key );
 
 		at = para.getPointOffset( pi.sub( ppnw ) );
-
-		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', para.textPath,
-					'at', at
-				)
-		);
 	}
 	else
 	{
 		para = doc.atRank( doc.length - 1 );
 
-		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', para.textPath,
-					'at', para.text.length
-				)
-		);
+		at = para.text.length;
 	}
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path', para.textPath,
+				'at', at
+			)
+	);
 
 	return true;
 };

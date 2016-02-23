@@ -10,10 +10,11 @@ var
 	change_set,
 	euclid_rect,
 	jion$path,
+	jion$pathRay,
 	result_hover,
 	root,
 	visual_item,
-	visual_mark_item;
+	visual_mark_items;
 
 
 /*
@@ -144,7 +145,14 @@ visual_item.dragStart =
 					'startPoint', p.fromView( this.view ),
 					'itemPath', this.path
 				),
-			'mark', visual_mark_item.create( 'path', this.path )
+			'mark',
+				visual_mark_items.create(
+					'paths',
+						jion$pathRay.create(
+							'ray:init',
+							[ this.path ]
+						)
+				)
 		);
 
 		return true;
@@ -292,8 +300,9 @@ visual_item.stopItemResizePnwFs =
 	root.create( 'action', undefined );
 };
 
+
 /*
-| A createRelation action stops.
+| A createRelation action moves.
 */
 visual_item.createRelationMove =
 	function(
@@ -308,6 +317,39 @@ visual_item.createRelationMove =
 	);
 
 	return true;
+};
+
+
+/*
+| Generic click handler.
+|
+| Takes care about mutli-selecting item groups by ctrl+click.
+|
+| Returns true if it handled the click event.
+*/
+visual_item.click =
+	function(
+		p,      // the point clicked
+		shift,  // true if shift key was pressed
+		ctrl,   // true if ctrl key was pressed
+		access, // 'r' or 'rw'
+		mark    // the mark of the space
+	)
+{
+	if( !ctrl || access !== 'rw' ) return false;
+
+	if( !mark )
+	{
+		root.create(
+			'mark',
+				visual_mark_items.create(
+					'paths',
+						jion$pathRay.create( 'ray:init', [ this.path ] )
+				)
+		);
+
+		return true;
+	}
 };
 
 

@@ -1,7 +1,5 @@
 /*
 | Default design for the maindisc.
-|
-| FIXME rename mainDisc
 */
 
 
@@ -37,7 +35,7 @@ var
 | All important design variables for convenience.
 */
 var
-	dnw,
+	dw,
 	buttonFacets,
 	buttonModel,
 	buttonSize,
@@ -52,7 +50,7 @@ var
 	userButtonPnw,
 	userButtonSize;
 
-dnw = euclid_anchor_point.nw;
+dw = euclid_anchor_point.w;
 
 
 buttonFacets =
@@ -107,23 +105,23 @@ buttonModel =
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
-createButtonPnw = dnw.create( 'x', 19, 'y', 130 );
+createButtonPnw = dw.create( 'x', 19, 'y', -270 );
 
-loginButtonPnw = dnw.create( 'x', 30, 'y', 555 );
+loginButtonPnw = dw.create( 'x', 30, 'y', 155 );
 
-movetoButtonPnw = dnw.create( 'x', 46, 'y', 326 );
+movetoButtonPnw = dw.create( 'x', 46, 'y', -74 );
 
-normalButtonPnw = dnw.create( 'x', 5, 'y', 76 );
+normalButtonPnw = dw.create( 'x', 5, 'y', -324 );
 
-removeButtonPnw = dnw.create( 'x', 31, 'y', 186 );
+removeButtonPnw = dw.create( 'x', 31, 'y', -214 );
 
-signupButtonPnw = dnw.create( 'x', 17, 'y', 610 );
+signupButtonPnw = dw.create( 'x', 17, 'y', 210 );
 
-spaceButtonPnw = dnw.create( 'x', 0, 'y', 170 );
+spaceButtonPnw = dw.create( 'x', 0, 'y', -230 );
 
 spaceButtonSize = euclid_point.create( 'x', 28, 'y', 290 );
 
-userButtonPnw = dnw.create( 'x', 0, 'y', 440 );
+userButtonPnw = dw.create( 'x', 0, 'y', 40 );
 
 userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
@@ -145,9 +143,9 @@ gruga_mainDisc =
 		'designArea',
 			euclid_anchor_rect.create(
 				'pnw',
-					euclid_anchor_point.w.create( 'x', 0, 'y', -400 ),
+					euclid_anchor_point.w.create( 'x', 0, 'y', -500 ),
 				'pse',
-					euclid_anchor_point.w.create( 'x', 100, 'y', 400 )
+					euclid_anchor_point.w.create( 'x', 100, 'y', 500 )
 			),
 		'shape',
 			euclid_anchor_ellipse.create(

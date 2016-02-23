@@ -71,7 +71,7 @@ if( JION )
 var
 	change_grow,
 	gleam_canvas,
-	gleam_container_window,
+	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -242,6 +242,7 @@ jion.lazyStaticValue(
 							fabric_para.create( 'text', 'Label' )
 						)
 				),
+			'highlight', false,
 			'view', euclid_view.proper
 		)
 	);
@@ -358,18 +359,12 @@ prototype.beam =
 	)
 {
 	var
-		gw;
+		wg;
 
-	gw = this._gleamWindow;
+	wg = this._windowGlint;
 
 	return(
-		container.create(
-			container.get( gw.id )
-			? 'twig:set'
-			: 'twig:add',
-			gw.id,
-			gw
-		)
+		container.create( 'twig:set+', wg.id, wg )
 	);
 };
 
@@ -668,16 +663,16 @@ jion.lazyValue(
 
 
 /*
-| The items gleam window.
+| The items window glint.
 */
 jion.lazyValue(
 	prototype,
-	'_gleamWindow',
+	'_windowGlint',
 	function( )
 {
 	// TODO inherit
 	return(
-		gleam_container_window.create(
+		gleam_glint_window.create(
 			'display', this._display,
 			'p', this.vPnw
 		)

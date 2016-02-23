@@ -103,6 +103,7 @@ var
 	action_createRelation,
 	disc_createDisc,
 	gleam_canvas,
+	gleam_glint_window,
 	jion,
 	math_half,
 	root,
@@ -190,37 +191,25 @@ prototype._init =
 };
 
 
+
 /*
-| The disc panel's display.
+| Beams the item onto a gleam container.
 */
-jion.lazyValue(
-	prototype,
-	'_display',
-	function( )
-	{
-		var
-			display,
-			r,
-			rZ;
+prototype.beam =
+	function(
+		container
+	)
+{
+	var
+		wg;
 
-		display =
-			gleam_canvas.create(
-				'width', this.area.width,
-				'height', this.area.height
-			);
+	wg = this._windowGlint;
 
-		display.fill( this.fill, this.silhoutte );
+	return(
+		container.create( 'twig:set+', 'mainDisc', wg )
+	);
+};
 
-		for( r = 0, rZ = this.length; r < rZ; r++ )
-		{
-			this.atRank( r ).draw( display );
-		}
-
-		display.border( this.border, this.silhoutte );
-
-		return display;
-	}
-);
 
 
 /*
@@ -433,7 +422,7 @@ prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-disc_createDisc.prototype.dragStart =
+prototype.dragStart =
 	function(
 		p
 		// shift,
@@ -536,6 +525,58 @@ disc_createDisc._isActiveButton =
 			return false;
 	}
 };
+
+
+/*
+| The disc panel's display.
+*/
+jion.lazyValue(
+	prototype,
+	'_display',
+	function( )
+{
+	var
+		display,
+		r,
+		rZ;
+
+	display =
+		gleam_canvas.create(
+			'width', this.area.width,
+			'height', this.area.height
+		);
+
+	display.fill( this.fill, this.silhoutte );
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		this.atRank( r ).draw( display );
+	}
+
+	display.border( this.border, this.silhoutte );
+
+	return display;
+}
+);
+
+
+/*
+| The discs window glint.
+*/
+jion.lazyValue(
+	prototype,
+	'_windowGlint',
+	function( )
+{
+	// TODO inherit
+	return(
+		gleam_glint_window.create(
+			'display', this._display,
+			'p', this.area.pnw
+		)
+	);
+}
+);
 
 
 } )( );

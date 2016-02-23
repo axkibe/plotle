@@ -27,6 +27,11 @@ if( JION )
 				comment : 'width of the display',
 				type : [ 'number' ]
 			},
+			'_cv' :
+			{
+				comment : 'the html canvas',
+				type : [ 'undefined', 'protean' ]
+			},
 			'_pc' :
 			{
 				comment : 'the pixi container',
@@ -44,6 +49,7 @@ if( JION )
 
 
 var
+	gleam_container,
 	gleam_display_pixi,
 	jion,
 	PIXI;
@@ -82,14 +88,29 @@ gleam_display_pixi.createAroundHTMLCanvas =
 		pc,
 		pr;
 
-	pr = new PIXI.WebGLRenderer( 0, 0, { view: canvas } );
+	pr =
+		new PIXI.WebGLRenderer(
+//		new PIXI.CanvasRenderer(
+			canvas.width,
+			canvas.height,
+			{
+				antialias : false,
+				view: canvas
+			}
+		);
 
-	pc = new PIXI.Container();
+	pr.backgroundColor = 0xeeeeee;
+
+	pr.autoResize = true;
+
+	pc = new PIXI.Container( );
 
 	return(
 		gleam_display_pixi.create(
+			'_cv', canvas,
 			'_pr', pr,
 			'_pc', pc,
+			'container', gleam_container.create( ),
 			'width', canvas.width,
 			'height', canvas.height
 		)
@@ -103,15 +124,47 @@ gleam_display_pixi.createAroundHTMLCanvas =
 prototype._init =
 	function( inherit )
 {
+	var
+		cv;
+
 /**/if( CHECK )
 /**/{
-/**/	if( jion.hasLazyValueSet( inherit, 'expired' ) )
-/**/    {
-/**/        throw new Error( );
-/**/    }
+/**/	if( inherit )
+/**/	{
+/**/		if( jion.hasLazyValueSet( inherit, 'expired' ) )
+/**/	    {
+/**/    	    throw new Error( );
+/**/    	}
 /**/
-/**/    inherit.expired;
+/**/    	inherit.expired;
+/**/	}
 /**/}
+
+	cv = this._cv;
+
+	if( inherit )
+	{
+		if( jion.hasLazyValueSet( inherit, '_renderedContainer' ) )
+		{
+			this._inheritedRenderedContainer =
+				inherit._renderedContainer;
+		}
+		else
+		{
+			this._inheritedRenderedContainer =
+				inherit._inheritedRenderedContainer;
+		}
+	}
+
+	if( cv.width !== this.width )
+	{
+		cv.width = this.width;
+	}
+
+	if( cv.height !== this.height )
+	{
+		cv.height = this.height;
+	}
 };
 
 
@@ -128,12 +181,53 @@ prototype._init =
 /**/}
 
 
+
+jion.lazyValue(
+	prototype,
+	'_renderedContainer',
+function( )
+{
+	return this.container;
+}
+);
+
+
 /*
 | Draws the display.
 */
 gleam_display_pixi.prototype.render =
 	function( )
 {
+	var
+		a,
+		aZ,
+		g,
+		cs,
+		pc,
+		pcl;
+
+	this._renderedContainer;
+
+	cs = this.container.get( 'screen' );
+
+	pc = this._pc;
+
+	pcl = pc.children.length;
+
+//		pc.removeChildren( 0, pcl - 1 );
+
+	for( a = 0, aZ = cs.length; a < aZ; a++ )
+	{
+		g = cs.atRank( a );
+		g.sprite;
+		if( g.reflect === 'gleam_glint_window' )
+		{
+			if( pcl === 0 )
+			pc.addChild( g.sprite );
+		}
+	}
+
+	this._pr.render( pc );
 };
 
 

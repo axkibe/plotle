@@ -41,7 +41,12 @@ if( JION )
 			{
 				// REMOVE classic support
 				comment : 'the display within everything happens',
-				type : [ 'gleam_canvas', 'gleam_display_canvas' ]
+				type :
+					[
+						'gleam_canvas',
+						'gleam_display_canvas',
+						'gleam_display_pixi'
+					]
 			},
 			doTracker :
 			{
@@ -154,8 +159,9 @@ var
 	change_remove,
 	change_wrap,
 	disc_jockey,
-	euclid_arrow,
+	euclid_connect,
 	gleam_canvas,
+	gleam_container,
 	euclid_measure,
 	euclid_point,
 	euclid_view,
@@ -573,8 +579,10 @@ prototype._init =
 				'controlView',
 					view.create(
 						'zoom',
-							view.height
-							/ gruga_controls.designSize.height,
+							Math.min(
+							  view.height / gruga_controls.designSize.height,
+							  1
+							),
 						'pan', euclid_point.zero
 					),
 				'hover', hover,
@@ -1381,18 +1389,18 @@ prototype.spawnRelation =
 	)
 {
 	var
-		arrow,
+		line,
 		key,
 		pnw,
 		val;
 
-	arrow =
-		euclid_arrow.connect(
-			item1.silhoutte, 'normal',
-			item2.silhoutte, 'normal'
+	line =
+		euclid_connect.line(
+			item1.silhoutte,
+			item2.silhoutte
 		);
 
-	pnw = arrow.pc.sub( gruga_relation.spawnOffset );
+	pnw = line.pc.sub( gruga_relation.spawnOffset );
 
 	val =
 		fabric_relation.create(
@@ -1542,9 +1550,13 @@ prototype.draw =
 
 	container = display.container;
 
-	containerScreen = container.get( 'screen' );
+	containerScreen =
+		container.get( 'screen' )
+		|| gleam_container.create( );
 
-	containerDisc = container.get( 'disc' );
+	containerDisc =
+		container.get( 'disc' )
+		|| gleam_container.create( );
 
 	screen = root._currentScreen;
 

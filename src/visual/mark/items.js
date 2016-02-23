@@ -1,0 +1,227 @@
+/*
+| One or several items marked ( without caret or range )
+*/
+
+
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'visual_mark_items',
+		attributes :
+		{
+			paths :
+			{
+				comment : 'paths of the items',
+				type : 'jion$pathRay'
+			}
+		}
+	};
+}
+
+
+var
+	change_mark_node,
+	jion,
+	visual_mark_items;
+
+
+/*
+| Capsule
+*/
+(function() {
+'use strict';
+
+
+var
+	prototype;
+
+
+if( NODE )
+{
+	jion = require( 'jion' );
+
+	visual_mark_items = jion.this( module, 'source' );
+}
+
+
+prototype = visual_mark_items.prototype;
+
+
+/*
+| Initializer.
+*/
+prototype._init =
+	function( )
+{
+
+/**/if( CHECK )
+/**/{
+/**/	var c, cZ, paths;
+/**/
+/**/	paths = this.paths;
+/**/
+/**/	if( paths.length !== 1 ) throw new Error( ); // TODO
+/**/
+/**/	for( c = 0, cZ = paths.length; c < cZ; c++ )
+/**/	{
+/**/		if( paths.get( c ).isEmpty ) throw new Error( );
+/**/
+/**/		if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/	}
+/**/}
+};
+
+
+/*
+| Recreates this mark with a change set applied.
+*/
+prototype.createTransformed =
+	function(
+		changes
+	)
+{
+	var
+		a,
+		arr,
+		arrZ,
+		aZ,
+		path,
+		paths,
+		tm;
+
+	paths = this.paths;
+
+	arr = [ ];
+
+	arrZ = 0;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		path = paths.get( a );
+
+		tm = changes.transform( this._changeMarkNode( a ) );
+
+		if( tm )
+		{
+			arr[ arrZ++ ] = tm.path.prepend( 'spaceVisual' );
+		}
+	}
+
+	if( arrZ === 0 ) return undefined;
+
+	return(
+		this.create(
+			'paths', this.paths.create( 'ray:init', arr )
+		)
+	);
+};
+
+
+/*
+| The change engine's nodemark.
+*/
+jion.lazyFunctionInteger(
+	prototype,
+	'_changeMarkNode',
+	function( i )
+{
+	return change_mark_node.create( 'path', this.paths.get( i ).chop );
+}
+);
+
+
+/*
+| Item marks do not have a caret.
+*/
+prototype.hasCaret = false;
+
+
+// XXX TODO
+jion.lazyValue(
+	prototype,
+	'path',
+	function( )
+{
+	var
+		paths;
+
+	paths = this.paths;
+
+	return(
+		paths.length === 1
+		? paths.get( 0 )
+		: undefined
+	);
+}
+);
+
+/*
+| The item's path.
+*/
+jion.lazyValue(
+	prototype,
+	'itemPath',
+	function( )
+{
+	var
+		paths;
+
+	paths = this.paths;
+
+	return(
+		paths.length === 1
+		? paths.get( 0 )
+		: undefined
+	);
+}
+);
+
+
+/*
+| The widget's path.
+*/
+prototype.widgetPath = undefined;
+
+
+/*
+| The content the mark puts into the clipboard.
+|
+| FUTURE write something
+*/
+prototype.clipboard = '';
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+prototype.containsPath =
+	function(
+		path
+	)
+{
+	var
+		a,
+		aZ,
+		paths;
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )	throw new Error( );
+/**/}
+
+	paths = this.paths;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		if( path.subPathOf( paths.get( a ) ) ) return true;
+	}
+
+	return false;
+};
+
+
+} )( );

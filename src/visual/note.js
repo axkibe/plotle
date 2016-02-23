@@ -78,7 +78,7 @@ if( JION )
 var
 	change_grow,
 	gleam_canvas,
-	gleam_container_window,
+	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
@@ -214,6 +214,7 @@ jion.lazyStaticValue(
 							'twig:add', '1', fabric_para.create( 'text', '' )
 						)
 				),
+			'highlight', false,
 			'view', euclid_view.proper
 		)
 	);
@@ -305,14 +306,24 @@ prototype._init =
 			);
 	}
 
-	if(
-		inherit
-		&& inherit.alikeIgnoringView( this )
-		&& inherit.view.zoom === this.view.zoom
-		&& jion.hasLazyValueSet( inherit, '_display' )
-	)
+	if( inherit )
 	{
-		jion.aheadValue( this, '_display', inherit._display );
+		if( inherit.alikeIgnoringView( this )
+			&& inherit.view.zoom === this.view.zoom
+			&& jion.hasLazyValueSet( inherit, '_display' )
+		)
+		{
+			jion.aheadValue( this, '_display', inherit._display );
+		}
+
+		if( jion.hasLazyValueSet( inherit, '_windowGlint' ) )
+		{
+			this._inheritedWindowGlint = inherit._windowGlint;
+		}
+		else
+		{
+			this._inheritedWindowGlint = inherit._inheritedWindowGlint;
+		}
 	}
 };
 
@@ -390,18 +401,12 @@ prototype.beam =
 	)
 {
 	var
-		gw;
+		wg;
 
-	gw = this._gleamWindow;
+	wg = this._windowGlint;
 
 	return(
-		container.create(
-			container.get( gw.id )
-			? 'twig:set'
-			: 'twig:add',
-			gw.id,
-			gw
-		)
+		container.create( 'twig:set+', wg.id, wg )
 	);
 };
 
@@ -767,16 +772,16 @@ jion.lazyValue(
 
 
 /*
-| The notes gleam window.
+| The items window glint.
 */
 jion.lazyValue(
 	prototype,
-	'_gleamWindow',
+	'_windowGlint',
 	function( )
 {
-	// TODO inherit
 	return(
-		gleam_container_window.create(
+		( this._inheritedWindowGlint || gleam_glint_window )
+		.create(
 			'display', this._display,
 			'p', this.vZone.pnw
 		)

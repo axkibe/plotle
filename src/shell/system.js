@@ -11,7 +11,8 @@
 var
 	config,
 	gleam_canvas,
-	gleam_display_canvas,
+//	gleam_display_canvas,
+//	gleam_display_pixi,
 	euclid_point,
 	math_limit,
 	root,
@@ -60,10 +61,7 @@ transmitter =
 				system._steerAttention( );
 			}
 
-			if( root )
-			{
-				root.draw( );
-			}
+			if( root ) root.draw();
 
 			return;
 		}
@@ -79,10 +77,7 @@ transmitter =
 				system._steerAttention( );
 			}
 
-			if( root )
-			{
-				root.draw( );
-			}
+			if( root ) root.draw();
 		}
 		catch( e )
 		{
@@ -286,8 +281,9 @@ shell_system =
 	canvas.height =
 		window.innerHeight - 1;
 
-	this._display = gleam_display_canvas.createAroundHTMLCanvas( canvas );
 	this._display = gleam_canvas.createAroundHTMLCanvas( canvas );
+//	this._display = gleam_display_canvas.createAroundHTMLCanvas( canvas );
+//	this._display = gleam_display_pixi.createAroundHTMLCanvas( canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around

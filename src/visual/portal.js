@@ -72,7 +72,7 @@ var
 	change_insert,
 	change_remove,
 	gleam_canvas,
-	gleam_container_window,
+	gleam_glint_window,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -85,7 +85,7 @@ var
 	jion,
 	math_half,
 	visual_mark_caret,
-	visual_mark_item,
+	visual_mark_items,
 	result_hover,
 	root,
 	session_uid,
@@ -298,6 +298,7 @@ jion.lazyStaticValue(
 					'spaceUser', '',
 					'spaceTag', ''
 				),
+			'highlight', false,
 			'view', euclid_view.proper
 		)
 	);
@@ -371,18 +372,12 @@ prototype.beam =
 	)
 {
 	var
-		gw;
+		wg;
 
-	gw = this._gleamWindow;
+	wg = this._windowGlint;
 
 	return(
-		container.create(
-			container.get( gw.id )
-			? 'twig:set'
-			: 'twig:add',
-			gw.id,
-			gw
-		)
+		container.create( 'twig:set+', wg.id, wg )
 	);
 };
 
@@ -411,9 +406,6 @@ prototype.click =
 	view = this.view;
 
 	zone = this.zone;
-
-	// not clicked on the portal?
-	if( !this.vSilhoutte.within( p ) ) return false;
 
 	moveToButton = this._moveToButton;
 
@@ -452,7 +444,13 @@ prototype.click =
 	// just focus the portal itself
 	if( !setMark && !this.mark )
 	{
-		setMark = visual_mark_item.create( 'path', this.path );
+		setMark =
+			visual_mark_items.create(
+				'paths',
+					jion.pathRay.create(
+						'ray:init', [ this.path ]
+					)
+			);
 	}
 
 	if( setMark )
@@ -1696,12 +1694,12 @@ prototype._drawCaret =
 */
 jion.lazyValue(
 	prototype,
-	'_gleamWindow',
+	'_windowGlint',
 	function( )
 {
 	// TODO inherit
 	return(
-		gleam_container_window.create(
+		gleam_glint_window.create(
 			'display', this._display,
 			'p', this.vZone.pnw
 		)

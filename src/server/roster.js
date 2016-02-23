@@ -78,6 +78,24 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
+		'aliases', stringRay( [ 'jioncode-pathRay.js' ] ),
+		'coding', 'utf-8',
+		'data', jion.pathRay.jionCode,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestGleam', true,
+		'inTestPad', true
+	),
+	server_resource.create(
+		'aliases', stringRay( [ 'jion-pathRay.js' ] ),
+		'coding', 'utf-8',
+		'data', jion.pathRay.source,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestGleam', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'filePath', 'src/math/half.js',
 		'inBundle', true,
 		'inTestGleam', true,
@@ -289,7 +307,17 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/container/window.js',
+		'filePath', 'src/gleam/glint/paint.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/glint/window.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/glint/mask.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -348,8 +376,16 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/arrow.js',
+		'filePath', 'src/euclid/scale.js',
 		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/connect.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/arrow.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -653,11 +689,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/maindisc.js',
+		'filePath', 'src/gruga/mainDisc.js',
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/createdisc.js',
+		'filePath', 'src/gruga/createDisc.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -837,7 +873,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/visual/mark/item.js',
+		'filePath', 'src/visual/mark/items.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -899,22 +935,22 @@ server_resourceRay.create( 'ray:init', [
 		'filePath', 'src/shell/fontloader.js',
 		'inBundle', true
 	),
-	server_resource.create(
-		'filePath', 'pixi/pixi-309.js',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'pixi/pixi-309.js.map',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'pixi/pixi-309.min.js',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'pixi/pixi-309.min.js.map',
-		'maxage', 'long'
-	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.js',
+//		'maxage', 'long'
+//	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.js.map',
+//		'maxage', 'long'
+//	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.min.js',
+//		'maxage', 'long'
+//	),
+//	server_resource.create(
+//		'filePath', 'pixi/pixi-309.min.js.map',
+//		'maxage', 'long'
+//	),
 	server_resource.create(
 		'filePath', 'media/dejavusans/style.css',
 		'maxage', 'long'

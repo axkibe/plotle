@@ -116,46 +116,70 @@ prototype.beam =
 {
 	var
 		createContainer,
-		mainContainer;
+		createDisc,
+		mainContainer,
+		mainDisc;
 
-	if( container )
-	{
-		mainContainer = container.get( 'mainDisc' );
+	// ++ create disc ++
 
-		createContainer = container.get( 'createDisc' );
-	}
-	else
-	{
-		mainContainer = gleam_container.create( );
+	createContainer = container.get( 'createDisc' );
 
-		createContainer = gleam_container.create( );
+	createDisc = this.get( 'createDisc' );
 
-		container =
-			gleam_container.create(
-				'twig:add', 'mainDisc', mainContainer
-//				'twig:add', 'createDisc', createContainer
-			);
-	}
+	mainDisc = this.get( 'mainDisc' );
 
-	/*
 	if( this.mode === 'create' )
 	{
-		container =
-			container.create(
-				'twig:set'
+		if( !createContainer )
+		{
+			createContainer = gleam_container.create( );
 
-		this.get( 'createDisc' ).draw( display );
+			createContainer = createDisc.beam( createContainer );
+
+			container =
+				container.create(
+					'twig:insert',
+					'createDisc', 0,
+					createContainer
+				);
+		}
+		else
+		{
+			createContainer = createDisc.beam( createContainer );
+
+			container =
+				container.create(
+					'twig:set',
+					'createDisc',
+					createContainer
+				);
+		}
 	}
 	else
 	{
+		if( createContainer )
+		{
+			container =
+				container.create( 'twig:remove', 'createDisc' );
+		}
 	}
-	*/
+
+	// ++ main disc ++
+
+	mainContainer = container.get( 'mainDisc' );
+
+	mainDisc = this.get( 'mainDisc' );
+
+	if( !mainContainer )
+	{
+		mainContainer = gleam_container.create( );
+	}
 
 	container =
 		container.create(
-			'twig:set',
+			'twig:set+',
 			'mainDisc',
-				this.get( 'mainDisc' ).beam( mainContainer )
+				mainDisc.beam( mainContainer )
 		);
 
 	return container;

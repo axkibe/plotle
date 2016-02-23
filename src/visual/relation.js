@@ -63,10 +63,13 @@ if( JION )
 
 var
 	euclid_arrow,
+	euclid_connect,
 	gleam_canvas,
-	gleam_container_window,
+	gleam_glint_paint,
+	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
+	gleam_glint_paint,
 	gruga_label,
 	gruga_relation,
 	jion,
@@ -137,51 +140,29 @@ prototype.beam =
 	)
 {
 	var
-		gw;
-	/*
-	var
-		item1,
-		item2,
 		arrow1,
 		arrow2,
-		space,
-		zone;
-	*/
+		wg;
 
-	gw = this._gleamWindow;
+	wg = this._windowGlint;
 
-	/*
-	space = root.spaceVisual;
+	arrow1 = this._arrow1Glint( );
 
-	item1 = space.get( this.item1key );
+	arrow2 = this._arrow2Glint( );
 
-	item2 = space.get( this.item2key );
+	container = container.create( 'twig:set+', wg.id, wg );
 
-	zone = this.zone;
-
-	if( item1 )
+	if( arrow1 )
 	{
-		arrow1 =
-			euclid_arrow.connect(
-				item1.silhoutte, 'normal',
-				zone, 'normal'
-			);
-
-		arrow1 = arrow1.inView( this.view );
-
-		arrow1.draw( display, gruga_relation.facet );
+		container = container.create( 'twig:set+', arrow1.id, arrow1 );
 	}
-	*/
 
-	return(
-		container.create(
-			container.get( gw.id )
-			? 'twig:set'
-			: 'twig:add',
-			gw.id,
-			gw
-		)
-	);
+	if( arrow2 )
+	{
+		container = container.create( 'twig:set+', arrow2.id, arrow2 );
+	}
+
+	return container;
 };
 
 
@@ -236,27 +217,35 @@ prototype.draw =
 	if( item1 )
 	{
 		arrow1 =
-			euclid_arrow.connect(
-				item1.silhoutte, 'normal',
-				zone, 'normal'
+			euclid_arrow.shape(
+				euclid_connect.line(
+					item1.silhoutte,
+					zone
+				),
+				'normal',
+				'normal'
 			);
 
 		arrow1 = arrow1.inView( this.view );
 
-		arrow1.draw( display, gruga_relation.facet );
+		display.paint( gruga_relation.facet, arrow1 );
 	}
 
 	if( item2 )
 	{
 		arrow2 =
-			euclid_arrow.connect(
-				zone, 'normal',
-				item2.silhoutte, 'arrow'
+			euclid_arrow.shape(
+				euclid_connect.line(
+					zone,
+					item2.silhoutte
+				),
+				'normal',
+				'arrow'
 			);
 
 		arrow2 = arrow2.inView( this.view );
 
-		arrow2.draw( display, gruga_relation.facet );
+		display.paint( gruga_relation.facet, arrow2 );
 	}
 
 	visual_label.prototype.draw.call( this, display );
@@ -464,16 +453,84 @@ jion.lazyValue(
 
 
 /*
-| The item's gleam window.
+| The item's arrow 1 glint.
+*/
+prototype._arrow1Glint =
+	function( )
+{
+	var
+		arrow1,
+		item1;
+
+	item1 = root.spaceVisual.get( this.item1key );
+
+	if( !item1 ) return undefined;
+
+	arrow1 =
+		euclid_arrow.shape(
+			euclid_connect.line(
+				item1.silhoutte,
+				this.zone
+			),
+			'normal',
+			'normal'
+		).
+		inView( this.view );
+
+	return(
+		gleam_glint_paint.create(
+			'facet', gruga_relation.facet,
+			'shape', arrow1
+		)
+	);
+};
+
+
+/*
+| The item's gleam arrow 2.
+*/
+prototype._arrow2Glint =
+	function( )
+{
+	var
+		arrow2,
+		item2;
+
+	item2 = root.spaceVisual.get( this.item2key );
+
+	if( !item2 ) return undefined;
+
+	arrow2 =
+		euclid_arrow.shape(
+			euclid_connect.line(
+				this.zone,
+				item2.silhoutte
+			),
+			'normal',
+			'arrow'
+		).
+		inView( this.view );
+
+	return(
+		gleam_glint_paint.create(
+			'facet', gruga_relation.facet,
+			'shape', arrow2
+		)
+	);
+};
+
+
+/*
+| The item's window gling
 */
 jion.lazyValue(
 	prototype,
-	'_gleamWindow',
+	'_windowGlint',
 	function( )
 {
 	// TODO inherit
 	return(
-		gleam_container_window.create(
+		gleam_glint_window.create(
 			'display', this._display,
 			'p', this.vZone.pnw
 		)

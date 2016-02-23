@@ -12,6 +12,12 @@ if( JION )
 		id : 'gleam_canvas',
 		attributes :
 		{
+			'background' :
+			{
+				comment : 'if set the canvas is opaque and has background',
+				type : [ 'undefined', 'string' ]
+
+			},
 			'height' :
 			{
 				comment : 'height of the display',
@@ -40,6 +46,7 @@ if( JION )
 
 var
 	euclid_constants,
+	get2dContext,
 	gleam_canvas,
 	euclid_point,
 	euclid_rect,
@@ -62,6 +69,38 @@ if( NODE )
 	return;
 }
 
+/*
+| Internal function to get a 2d context.
+|
+| This turns on performance vs. quality settings.
+*/
+get2dContext =
+	function(
+		canvas,
+		opaque
+	)
+{
+	var
+		cx;
+
+	if( opaque )
+	{
+		cx = canvas.getContext( '2d', { alpha: false } );
+	}
+	else
+	{
+		cx = canvas.getContext( '2d' );
+	}
+
+	cx.imageSmoothingEnabled = false;
+	cx.mozImageSmoothingEnabled = false;
+	cx.oImageSmoothingEnabled = false;
+	cx.msImageSmoothingEnabled = false;
+
+	return cx;
+};
+
+
 
 /*
 | Creates a display around an existing HTML canvas.
@@ -74,7 +113,7 @@ gleam_canvas.createAroundHTMLCanvas =
 	var
 		cx;
 
-	cx = canvas.getContext( '2d' );
+	cx = get2dContext( canvas, true );
 
 /**/if( CHECK )
 /**/{
@@ -89,6 +128,7 @@ gleam_canvas.createAroundHTMLCanvas =
 		gleam_canvas.create(
 			'_cv', canvas,
 			'_cx', cx,
+			'background', 'rgb(251, 251, 251)',
 			'width', canvas.width,
 			'height', canvas.height
 		)
@@ -113,7 +153,7 @@ gleam_canvas.prototype._init =
 		this._cv =
 			document.createElement( 'canvas' );
 
-		this._cx = cv.getContext( '2d' );
+		this._cx = get2dContext( cv );
 	}
 
 	if( cv.width !== this.width )
@@ -134,7 +174,21 @@ gleam_canvas.prototype._init =
 gleam_canvas.prototype.clear =
 	function( )
 {
-	this._cx.clearRect( 0, 0, this.width, this.height );
+	var
+		cx;
+
+	cx = this._cx;
+
+	if( this.background )
+	{
+		this._cx.fillStyle = this.background;
+
+		this._cx.fillRect( 0, 0, this.width, this.height );
+	}
+	else
+	{
+		this._cx.clearRect( 0, 0, this.width, this.height );
+	}
 };
 
 
@@ -264,8 +318,7 @@ gleam_canvas.prototype.drawImage =
 /**/
 /**/	if(
 /**/		x - Math.floor( x ) !== 0
-/**/		||
-/**/		y - Math.floor( y ) !== 0
+/**/		|| y - Math.floor( y ) !== 0
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -1094,7 +1147,7 @@ gleam_canvas.prototype._sketchShape =
 				cx.moveTo( pn.x + twist, pn.y + twist );
 
 				break;
-			
+
 			case 'euclid_shape_line' :
 
 				if( !section.fly || !twist )

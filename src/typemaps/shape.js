@@ -5,5 +5,6 @@ module.exports =
 [
 	'euclid_ellipse',
 	'euclid_rect',
+	'euclid_roundRect',
 	'euclid_shape'
 ];

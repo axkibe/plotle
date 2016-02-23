@@ -13,7 +13,9 @@ if( JION )
 		twig :
 		[
 			'gleam_container',
-			'gleam_container_window'
+			'gleam_glint_mask',
+			'gleam_glint_paint',
+			'gleam_glint_window'
 		]
 	};
 }
