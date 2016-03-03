@@ -58,11 +58,6 @@ if( JION )
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
-			mode :
-			{
-				comment : 'current mode the UI is in',
-				type : [ 'undefined', 'string' ]
-			},
 			path :
 			{
 				comment : 'path of the disc',
@@ -103,6 +98,9 @@ if( JION )
 
 
 var
+	action_create,
+	action_form,
+	action_select,
 	disc_mainDisc,
 	change_shrink,
 	gleam_canvas,
@@ -143,7 +141,9 @@ prototype._init =
 {
 	var
 		cv,
+		action,
 		area,
+		down,
 		r,
 		rZ,
 		text,
@@ -162,6 +162,8 @@ prototype._init =
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
+	action = this.action;
+
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		wname = this.getKey( r );
@@ -172,6 +174,14 @@ prototype._init =
 
 		switch( wname )
 		{
+			case 'create' :
+
+				visible = this.access === 'rw' && this.spaceRef !== undefined;
+
+				down = action && action.isCreate;
+
+				break;
+
 			case 'login' :
 
 				visible = true;
@@ -180,6 +190,30 @@ prototype._init =
 					!this.user || this.user.isVisitor
 					? 'log\nin'
 					: 'log\nout';
+
+				down =
+					action
+					&& action.reflect === 'action_form'
+					&& action.formName === 'login';
+
+				break;
+
+			case 'moveTo' :
+
+				visible = true;
+
+				down =
+					action
+					&& action.reflect === 'action_form'
+					&& action.formName === 'moveTo';
+
+				break;
+
+			case 'normal' :
+
+				visible = this.spaceRef !== undefined;
+
+				down = action === undefined || action.isHand;
 
 				break;
 
@@ -192,19 +226,26 @@ prototype._init =
 						&& this.mark.itemPath
 					);
 
+				down = false;
+
 				break;
 
-			case 'create' :
+			case 'select' :
 
-				visible =
-					this.access === 'rw'
-					&& !!this.spaceRef;
+				visible = this.spaceRef !== undefined;
+
+				down = action && action.reflect === 'action_select';
 
 				break;
 
 			case 'signUp' :
 
 				visible = this.user ? this.user.isVisitor : true;
+
+				down =
+					action
+					&& action.reflect === 'action_form'
+					&& action.formName === 'signUp';
 
 				break;
 
@@ -221,6 +262,11 @@ prototype._init =
 					visible = false;
 				}
 
+				down =
+					action
+					&& action.reflect === 'action_form'
+					&& action.formName === 'space';
+
 				break;
 
 			case 'user' :
@@ -229,11 +275,18 @@ prototype._init =
 
 				visible = true;
 
+				down =
+					action
+					&& action.reflect === 'action_form'
+					&& action.formName === 'user';
+
 				break;
 
 			default :
 
 				visible = true;
+
+				down = false;
 
 				break;
 		}
@@ -241,7 +294,7 @@ prototype._init =
 		twig[ wname ] =
 			twig[ wname ].create(
 				'hover', this.hover,
-				'down', this.mode === wname,
+				'down', down,
 				'path',
 					twig[ wname ].path
 					? pass
@@ -352,25 +405,51 @@ prototype.pushButton =
 		return;
 	}
 
-	if( buttonName === 'normal' )
+	switch( buttonName )
 	{
-		root.showHome( );
-	}
-	else if( buttonName === 'remove' )
-	{
-		mip = this.mark.itemPath;
+		case 'normal' :
 
-		root.alter(
-			change_shrink.create(
-				'path', mip.chop,
-				'prev', root.spaceFabric.getPath( mip.chop ),
-				'rank', root.spaceFabric.rankOf( mip.get( 2 ) )
-			)
-		);
-	}
-	else
-	{
-		root.create( 'mode', buttonName, 'action', undefined );
+			root.showHome( );
+
+			break;
+
+		case 'remove' :
+
+			mip = this.mark.itemPath;
+
+			root.alter(
+				change_shrink.create(
+					'path', mip.chop,
+					'prev', root.spaceFabric.getPath( mip.chop ),
+					'rank', root.spaceFabric.rankOf( mip.get( 2 ) )
+				)
+			);
+
+			break;
+
+		case 'select' :
+
+			root.create( 'action', action_select.create( ) );
+
+			break;
+
+		case 'create' :
+
+			root.create( 'action', action_create.create( ) );
+
+			break;
+
+		case 'login' :
+		case 'moveTo' :
+		case 'signUp' :
+		case 'space' :
+		case 'user' :
+
+			root.create( 'action', action_form[ buttonName ] );
+
+			break;
+
+		default : throw new Error( );
 	}
 };
 

@@ -192,6 +192,8 @@ keyCodeNames =
 		8 : 'backspace',
 		9 : 'tab',
 		13 : 'enter',
+		16 : 'shift',
+		17 : 'ctrl',
 		27 : 'esc',
 		33 : 'pageup',
 		34 : 'pagedown',
@@ -206,6 +208,8 @@ keyCodeNames =
 
 keyCodeNamesCtrl =
 	{
+		16 : 'shift',
+		17 : 'ctrl',
 		65 : 'a',
 		89 : 'y',
 		90 : 'z',
@@ -497,10 +501,7 @@ prototype.textWheelSpeed = 12 * 5;
 prototype._blink =
 	function( )
 {
-	if( failScreen )
-	{
-		return;
-	}
+	if( failScreen ) return;
 
 	// also looks into the hidden input field,
 	// maybe the user pasted something using the browser menu
@@ -706,6 +707,12 @@ prototype._onKeyUp =
 	function( )
 {
 	this._testInput( );
+
+	this._releaseSpecialKey(
+		event.keyCode,
+		event.shiftKey,
+		event.ctrlKey || event.metaKey
+	);
 
 	return true;
 };
@@ -1282,10 +1289,7 @@ prototype._specialKey =
 		key = keyCodeNames[ keyCode ];
 	}
 
-	if( !key )
-	{
-		return true;
-	}
+	if( !key ) return true;
 
 	root.specialKey( key, shift, ctrl );
 
@@ -1293,6 +1297,35 @@ prototype._specialKey =
 
 	return false;
 };
+
+
+/*
+| A special key is being released.
+*/
+prototype._releaseSpecialKey =
+	function(
+		keyCode,
+		shift,
+		ctrl
+	)
+{
+	var
+		key;
+
+	if( ctrl )
+	{
+		key = keyCodeNamesCtrl[ keyCode ];
+	}
+	else
+	{
+		key = keyCodeNames[ keyCode ];
+	}
+
+	if( !key ) return;
+
+	root.releaseSpecialKey( key, shift, ctrl );
+};
+
 
 
 /*

@@ -9,45 +9,49 @@
 if( JION )
 {
 	throw{
-		id : 'action_itemResize',
+		id : 'action_resizeItems',
 		attributes :
 		{
-			align :
+			paths:
 			{
-				comment : 'alignment ( compass ) of the resize action',
-				type : 'string'
-			},
-			itemPath :
-			{
-				comment : 'the resized items path',
-				type : 'jion$path'
+				comment : 'the paths of the items to drag',
+				type : [ 'undefined', 'jion$pathRay' ]
 			},
 			startPoint :
 			{
 				comment : 'mouseDown point on drag creation',
 				type : 'euclid_point'
 			},
-			startZone :
+			pBase :
 			{
-				comment : 'zone of the item at start of action',
-				type : [ 'undefined', 'euclid_rect' ]
+				comment : 'base the resize to this point',
+				type : [ 'undefined', 'euclid_point' ]
 			},
-			toFontsize :
+			proportional :
 			{
-				comment : 'resize changes the items fontsize to this',
-				// applicatable to label items only
+				comment : 'if true resize proportinal',
+				// scaleX must be === scaleY
+				type : [ 'undefined', 'boolean' ]
+			},
+			resizeDir :
+			{
+				comment : 'resize to this direction',
+				type : [ 'undefined', 'string' ]
+			},
+			scaleX :
+			{
+				comment : 'scale x by this factor',
 				type : [ 'undefined', 'number' ]
 			},
-			toPnw :
+			scaleY :
 			{
-				comment : 'resize moves the items pnw to this',
-				type : [ 'undefined', 'euclid_point' ]
+				comment : 'scale y by this factor',
+				type : [ 'undefined', 'number' ]
 			},
-			toPse :
+			startZones :
 			{
-				comment : 'resize moves the items pse to this',
-				// applicatable to zone defined items only
-				type : [ 'undefined', 'euclid_point' ]
+				comment : 'the zones as the resize started',
+				type : [ 'undefined', 'euclid_rectGroup' ]
 			}
 		}
 	};
@@ -55,7 +59,7 @@ if( JION )
 
 
 var
-	action_itemResize;
+	action_resizeItems;
 
 
 /*
@@ -71,13 +75,13 @@ var
 
 if( NODE )
 {
-	action_itemResize = require( 'jion' ).this( module, 'source' );
+	action_resizeItems = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
 
 
-prototype = action_itemResize.prototype;
+prototype = action_resizeItems.prototype;
 
 
 /*
@@ -88,8 +92,29 @@ prototype.affects =
 		path
 	)
 {
-	return this.itemPath.equals( path );
+	var
+		a,
+		pa,
+		paths,
+		pLen;
+
+	paths = this.paths;
+
+	for( a = 0, pLen = paths.length; a < pLen; a++ )
+	{
+		pa = paths.get( a );
+
+		if( pa.equals( path ) ) return true;
+	}
+
+	return false;
 };
+
+
+/*
+| This is a hand action.
+*/
+prototype.isHand = true;
 
 
 } )( );

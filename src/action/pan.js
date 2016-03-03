@@ -65,4 +65,10 @@ prototype.affects =
 };
 
 
+/*
+| This is a hand action.
+*/
+prototype.isHand = true;
+
+
 } )( );

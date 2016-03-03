@@ -19,7 +19,12 @@ euclid_constants =
 	/*
 	|'magic' number to approximate ellipses with beziers.
 	*/
-	magic : 0.551784
+	magic : 0.551784,
+
+	/*
+	| Used to compare fractionals.
+	*/
+	epsilon : 0.0000000001
 };
 
 

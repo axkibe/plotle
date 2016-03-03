@@ -9,23 +9,23 @@
 if( JION )
 {
 	throw{
-		id : 'action_itemDrag',
+		id : 'action_dragItems',
 		attributes :
 		{
+			moveBy:
+			{
+				comment : 'drag the item to this pnw',
+				type : [ 'undefined', 'euclid_point' ]
+			},
+			paths:
+			{
+				comment : 'the paths of the items to drag',
+				type : [ 'undefined', 'jion$pathRay' ]
+			},
 			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
 				type : 'euclid_point'
-			},
-			itemPath:
-			{
-				comment : 'drag the item to this pnw',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			toPnw:
-			{
-				comment : 'drag the item to this pnw',
-				type : [ 'undefined', 'euclid_point' ]
 			}
 		}
 	};
@@ -33,7 +33,7 @@ if( JION )
 
 
 var
-	action_itemDrag;
+	action_dragItems;
 
 
 /*
@@ -49,13 +49,13 @@ var
 
 if( NODE )
 {
-	action_itemDrag = require( 'jion' ).this( module, 'source' );
+	action_dragItems = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
 
 
-prototype = action_itemDrag.prototype;
+prototype = action_dragItems.prototype;
 
 
 /*
@@ -66,8 +66,29 @@ prototype.affects =
 		path
 	)
 {
-	return this.itemPath.equals( path );
+	var
+		a,
+		pa,
+		paths,
+		pLen;
+
+	paths = this.paths;
+
+	for( a = 0, pLen = paths.length; a < pLen; a++ )
+	{
+		pa = paths.get( a );
+
+		if( pa.equals( path ) ) return true;
+	}
+
+	return false;
 };
+
+
+/*
+| This is a hand action.
+*/
+prototype.isHand = true;
 
 
 } )( );

@@ -28,7 +28,9 @@ if( JION )
 
 
 var
-	action_select;
+	action_select,
+	euclid_rect,
+	jion;
 
 
 /*
@@ -62,12 +64,54 @@ prototype.affects =
 	)
 {
 	var
-		item;
+		item,
+		iPnw,
+		iPse,
+		iZone,
+		tZone,
+		tPnw,
+		tPse;
+
+	tZone = this.vZone;
+
+	if( !tZone ) return false;
 
 	item = root.getPath( path );
 
-	return false;
+	tPnw = tZone.pnw;
+
+	tPse = tZone.pse;
+
+	iZone = item.vZone;
+
+	iPnw = iZone.pnw;
+
+	iPse = iZone.pse;
+
+	return(
+		iPnw.x >= tPnw.x
+		&& iPnw.y >= tPnw.y
+		&& iPse.x <= tPse.x
+		&& iPse.y <= tPse.y
+	);
 };
+
+
+jion.lazyValue(
+	prototype,
+	'vZone',
+	function( )
+{
+	return(
+		this.startPoint
+		&& euclid_rect.createArbitrary(
+			this.startPoint,
+			this.toPoint
+		)
+	);
+}
+);
+
 
 
 } )( );

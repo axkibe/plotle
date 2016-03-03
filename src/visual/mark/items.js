@@ -139,25 +139,6 @@ jion.lazyFunctionInteger(
 prototype.hasCaret = false;
 
 
-// XXX TODO
-jion.lazyValue(
-	prototype,
-	'path',
-	function( )
-{
-	var
-		paths;
-
-	paths = this.paths;
-
-	return(
-		paths.length === 1
-		? paths.get( 0 )
-		: undefined
-	);
-}
-);
-
 /*
 | The item's path.
 */
@@ -223,5 +204,78 @@ prototype.containsPath =
 	return false;
 };
 
+
+/*
+| Returns a items-mark with the path added
+| when it isn't part of this mark, or the
+| path removed when it is.
+*/
+prototype.togglePath =
+	function(
+		path
+	)
+{
+	var
+		a,
+		aZ,
+		paths;
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.empty ) throw new Error( );
+/**/}
+
+	paths = this.paths;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		if( path.subPathOf( paths.get( a ) ) )
+		{
+			return(
+				this.create(
+					'paths',
+						this.paths.create( 'ray:remove', a )
+				)
+			);
+		}
+	}
+
+	return(
+		this.create(
+			'paths',
+				this.paths.create( 'ray:append', path )
+		)
+	);
+};
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+prototype.containsPath =
+	function(
+		path
+	)
+{
+	var
+		a,
+		aZ,
+		paths;
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.empty ) throw new Error( );
+/**/}
+
+	paths = this.paths;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		if( path.subPathOf( paths.get( a ) ) ) return true;
+	}
+
+	return false;
+};
 
 } )( );

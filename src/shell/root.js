@@ -15,8 +15,7 @@ if( JION )
 			access :
 			{
 				comment : 'access level to current space',
-				type : [ 'undefined', 'string' ],
-				assign : '_access'
+				type : [ 'undefined', 'string' ]
 			},
 			action :
 			{
@@ -24,8 +23,7 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'shell_root.prepareAction( action, spaceFabric )',
-				assign : '_action'
+				prepare : 'shell_root.prepareAction( action, spaceFabric )'
 			},
 			ajax :
 			{
@@ -66,8 +64,7 @@ if( JION )
 			hover :
 			{
 				comment : 'current hovered item',
-				type : [ 'undefined', 'jion$path' ],
-				assign : '_hover'
+				type : [ 'undefined', 'jion$path' ]
 			},
 			link :
 			{
@@ -79,14 +76,7 @@ if( JION )
 				comment : 'the users mark',
 				type :
 					require( '../typemaps/visualMark' )
-					.concat( [ 'undefined' ] ),
-				assign : '_mark'
-			},
-			mode :
-			{
-				comment : 'current mode',
-				type : 'string',
-				assign : '_mode'
+					.concat( [ 'undefined' ] )
 			},
 			spaceFabric :
 			{
@@ -106,8 +96,7 @@ if( JION )
 			systemFocus :
 			{
 				comment : 'shell has system focus',
-				type : 'boolean',
-				assign : '_systemFocus'
+				type : 'boolean'
 			},
 			user :
 			{
@@ -117,8 +106,7 @@ if( JION )
 			view :
 			{
 				comment : 'current view',
-				type : 'euclid_view',
-				assign : '_view'
+				type : 'euclid_view'
 			},
 			_drawn :
 			{
@@ -153,6 +141,8 @@ if( JION )
 
 
 var
+	action_form,
+	action_select,
 	change_grow,
 	change_join,
 	change_ray,
@@ -208,12 +198,8 @@ root = undefined;
 'use strict';
 
 
-/*
-| Valid modes
-*/
 var
 	loadingSpaceTextPath,
-	modes,
 	prototype;
 
 
@@ -227,50 +213,6 @@ if( NODE )
 }
 
 
-/**/if( CHECK )
-/**/{
-/**/	modes =
-/**/		{
-/**/			// Creating a new item.
-/**/			'create' : true,
-/**/
-/**/			// Loading a space.
-/**/			'loading' : true,
-/**/
-/**/			// Logging in.
-/**/			'login' : true,
-/**/
-/**/			// Moveing To another space.
-/**/			'moveTo' : true,
-/**/
-/**/			// Standard selection, moving stuff around.
-/**/			'normal' : true,
-/**/
-/**/			// User does not have access to a space.
-/**/			'noAccessToSpace' : true,
-/**/
-/**/			// space does not exist,
-/**/			// but user is allowed to create it.
-/**/			'nonExistingSpace' : true,
-/**/
-/**/			// Signing up
-/**/			'signUp' : true,
-/**/
-/**/			// space view
-/**/			'space' : true,
-/**/
-/**/			// user view
-/**/			'user' : true,
-/**/
-/**/			// welcome view
-/**/			'welcome' : true
-/**/		};
-/**/}
-/**/
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( modes );
-/**/}
 
 
 prototype = shell_root.prototype;
@@ -293,19 +235,25 @@ loadingSpaceTextPath =
 */
 shell_root.prepareAction =
 	function(
-		action,
-		space
+		action
+//		space
 	)
 {
-	if( !space || !action )
-	{
-		return undefined;
-	}
+//	if( !space || !action )
+//	{
+//		return undefined;
+//	}
+
+	return action;
+
+	// XXX TODO FIXME remove invalided itemPaths
+
+	/*
 
 	switch( action.reflect )
 	{
-		case 'action_itemDrag' :
-		case 'action_itemResize' :
+		case 'action_dragItems' :
+		case 'action_resizeItems' :
 
 			return(
 				root.getPath( action.itemPath )
@@ -315,6 +263,7 @@ shell_root.prepareAction =
 
 		default : return action;
 	}
+	*/
 };
 
 
@@ -327,12 +276,12 @@ shell_root.startup =
 	)
 {
 	var
+		action,
 		ajaxPath,
 		canvas,
 		dj,
 		djPath,
 		djTwPath,
-		mode,
 		user,
 		view;
 
@@ -366,7 +315,7 @@ shell_root.startup =
 			'height', display.height
 		);
 
-	mode = 'loading';
+	action = action_form.loading;
 
 	ajaxPath = jion$path.empty.append( 'ajax' );
 
@@ -383,8 +332,8 @@ shell_root.startup =
 
 	dj =
 		disc_jockey.create(
+			'action', action,
 			'controlView', view,
-			'mode', mode,
 			'path', djPath,
 			'spaceView', view,
 			'twig:add', 'mainDisc',
@@ -398,6 +347,7 @@ shell_root.startup =
 		);
 
 	shell_root.create(
+		'action', action,
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -409,7 +359,6 @@ shell_root.startup =
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
-		'mode', mode,
 		'systemFocus', true,
 		'view', view,
 		'disc', dj,
@@ -448,7 +397,6 @@ prototype._init =
 		action,
 		hover,
 		mark,
-		mode,
 		spaceFabric,
 		spaceRef,
 		user,
@@ -460,19 +408,17 @@ prototype._init =
 		this._drawn = false;
 	}
 
-	access = this._access;
+	access = this.access;
 
-	action = this._action;
+	action = this.action;
 
-	mark = this._mark;
+	mark = this.mark;
 
-	view = this._view;
+	view = this.view;
 
-	hover = this._hover;
+	hover = this.hover;
 
 	user = this.user;
-
-	mode = this._mode;
 
 	spaceRef = this.spaceRef;
 
@@ -480,28 +426,7 @@ prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	if( !modes[ mode ] )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( mode === 'loading' && this.screen )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if(
-/**/		( mode === 'normal' || mode === 'create' )
-/**/		&& !spaceFabric
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( hover && hover.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
 
 	if(
@@ -531,7 +456,7 @@ prototype._init =
 
 	if( mark && mark.reflect === 'visual_mark_caret' )
 	{
-		mark = mark.create( 'focus', this._systemFocus );
+		mark = mark.create( 'focus', this.systemFocus );
 	}
 
 	if( !spaceFabric ) this.spaceVisual = undefined;
@@ -539,13 +464,12 @@ prototype._init =
 	// skips recreating children when no need
 	if(
 		!inherit
-		|| access !== inherit._access
-		|| action !== inherit._action
-		|| hover !== inherit._hover
-		|| mark !== inherit._mark
-		|| mode !== inherit.mode
+		|| access !== inherit.access
+		|| action !== inherit.action
+		|| hover !== inherit.hover
+		|| mark !== inherit.mark
 		|| user !== inherit.user
-		|| view !== inherit._view
+		|| view !== inherit.view
 		|| spaceFabric !== inherit.spaceFabric
 	)
 	{
@@ -587,7 +511,6 @@ prototype._init =
 					),
 				'hover', hover,
 				'mark', mark,
-				'mode', mode,
 				'spaceRef', spaceRef,
 				'spaceView', view,
 				'user', user
@@ -615,7 +538,11 @@ prototype.alter =
 		changeRay,
 		changeWrap;
 
-	if( Array.isArray( a1 ) )
+	if( a1.reflect === 'change_ray' )
+	{
+		changeRay = a1;
+	}
+	else if( Array.isArray( a1 ) )
 	{
 		changeRay = change_ray.create( 'ray:init', a1 );
 	}
@@ -706,7 +633,7 @@ Object.defineProperty(
 			var
 				mark;
 
-			mark = this._mark;
+			mark = this.mark;
 
 			return mark ? mark.clipboard : '';
 		}
@@ -723,7 +650,7 @@ prototype.clearRetainX =
 	var
 		mark;
 
-	mark = this._mark;
+	mark = this.mark;
 
 	if( mark.retainx !== undefined )
 	{
@@ -896,17 +823,10 @@ prototype.moveToSpace =
 		createMissing // if true, non-existing spaces are to be created
 	)
 {
-	var
-		mode;
-
-	mode = root._mode;
 
 	root.create(
+		'action', action_form.loading,
 		'fallbackSpaceRef', this.spaceRef,
-		'mode',
-			mode === 'normal' || mode === 'create'
-			? 'loading'
-			: pass,
 		'spaceFabric', undefined
 	);
 
@@ -1007,8 +927,8 @@ prototype.showHome =
 	function( )
 {
 	root.create(
-		'action', undefined,
-		'mode', root.spaceVisual ? 'normal' : 'loading'
+		'action',
+			root.spaceVisual ? undefined : action_form.loading
 	);
 };
 
@@ -1024,15 +944,55 @@ prototype.specialKey =
 	)
 {
 	var
+		action,
 		screen;
 
 	screen = root._currentScreen;
+
+	if( key === 'shift' )
+	{
+		action = this.action;
+
+		if( !action )
+		{
+			root.create( 'action', action_select.create( ) );
+		}
+
+		return true;
+	}
 
 	if( screen ) screen.specialKey( key, shift, ctrl );
 
 	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
 };
 
+
+/*
+| User is releasing a special key.
+*/
+prototype.releaseSpecialKey =
+	function(
+		key
+//		shift,
+//		ctrl
+	)
+{
+	var
+		action;
+
+	if( key !== 'shift' ) return;
+
+	action = this.action;
+
+	if(
+		action
+		&& action.reflect === 'action_select'
+		&& !action.startPoint
+	)
+	{
+		root.create( 'action', undefined );
+	}
+};
 
 
 /*
@@ -1042,7 +1002,7 @@ prototype.specialKey =
 prototype.suggestingKeyboard =
 	function( )
 {
-	return this._mark && this._mark.hasCaret;
+	return this.mark && this.mark.hasCaret;
 };
 
 
@@ -1057,7 +1017,7 @@ prototype.update =
 	var
 		mark;
 
-	mark = this._mark;
+	mark = this.mark;
 
 	if( !mark ) return;
 
@@ -1100,7 +1060,7 @@ prototype.resize =
 				'height', height
 			),
 		'view',
-			root._view.create(
+			root.view.create(
 				'width', width,
 				'height', height
 			)
@@ -1118,7 +1078,8 @@ prototype.onAcquireSpace =
 	)
 {
 	var
-		access;
+		access,
+		action;
 
 	if( reply.reflect === 'reply_error' )
 	{
@@ -1146,7 +1107,7 @@ prototype.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'mode', 'nonExistingSpace' );
+			root.create( 'action', action_form.nonExistingSpace );
 
 			return;
 
@@ -1163,7 +1124,7 @@ prototype.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'mode', 'noAccessToSpace' );
+			root.create( 'action', action_form.noAccessToSpace );
 
 			return;
 
@@ -1176,13 +1137,19 @@ prototype.onAcquireSpace =
 
 	access = reply.access;
 
+	action = root.action;
+
 	root.create(
 		'access', access,
-		'mark', undefined,
-		'mode',
-			root._mode === 'loading'
-			? 'normal'
+		'action',
+			(
+				action
+				&& action.reflect === 'action_form'
+				&& action.formName === 'loading'
+			)
+			? undefined
 			: pass,
+		'mark', undefined,
 		'spaceFabric', reply.space,
 		'spaceRef', request.spaceRef,
 		'view',
@@ -1205,9 +1172,17 @@ prototype.onAuth =
 		reply
 	)
 {
-	// if in login mode this is a tempted login
+	var
+		action;
 
-	if( root._mode === 'login' )
+	action = root.action;
+
+	// if in login form this is a tempted login
+	if(
+		action
+		&& action.reflect === 'action_form'
+		&& action.formName === 'login'
+	)
 	{
 		root.form.get( 'login' ).onAuth( request, reply );
 
@@ -1249,9 +1224,17 @@ prototype.onRegister =
 		reply
 	)
 {
-	// if in login mode this is a tempted login
+	var
+		action;
 
-	if( root._mode !== 'signUp' )
+	action = root.action;
+
+	// if not in signup form this came out of band.
+	if(
+		!action
+		|| action.reflect !== 'action_form'
+		|| action.formName !== 'signUp'
+	)
 	{
 /**/	if( CHECK )
 /**/	{
@@ -1448,34 +1431,30 @@ jion.lazyValue(
 	function( )
 {
 	var
-		name;
+		action;
 
-	name = root._mode;
+	action = root.action;
 
-	switch( name )
+	switch( action && action.reflect )
 	{
-		case 'create' :
-		case 'normal' :
+		case undefined :
+		case 'action_create' :
+		case 'action_createGeneric' :
+		case 'action_createRelation' :
+		case 'action_dragItems' :
+		case 'action_pan' :
+		case 'action_resizeItems' :
+		case 'action_select' :
+		case 'action_scrolly' :
 
 			return root.spaceVisual;
 
-		case 'login' :
-		case 'loading' :
-		case 'moveTo' :
-		case 'noAccessToSpace' :
-		case 'nonExistingSpace' :
-		case 'signUp' :
-		case 'space' :
-		case 'user' :
-		case 'welcome' :
+		case 'action_form' :
 
-			return root.form.get( name );
+			return root.form.get( action.formName );
 
-		default :
-
-			throw new Error( 'unknown mode: ' + name );
+		default : throw new Error( );
 	}
-
 }
 );
 

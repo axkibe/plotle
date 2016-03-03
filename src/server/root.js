@@ -854,7 +854,7 @@ prototype.extraMangle =
 	{
 		at = mangleList[ a ];
 
-		mangle[ at ] = '$$' + server_tools.b64Encode( a );
+		mangle[ at ] = '$' + server_tools.b64Encode( a );
 	}
 
 	if( !config.noWrite )

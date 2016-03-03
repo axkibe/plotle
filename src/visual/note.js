@@ -20,7 +20,6 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action',
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
@@ -130,7 +129,7 @@ prototype = visual_note.prototype;
 
 
 /*
-| Hack to fix visual_note:static references
+| Hack to fix visual_note:static references.
 */
 visual_note.equals =
 	function( o )
@@ -140,9 +139,9 @@ visual_note.equals =
 
 
 /*
-| Resize handles to show on notes.
+| Notes do not need to be resized proportionally.
 */
-visual_note.prototype.resizeHandles = 'arbitrary';
+prototype.proportional = false;
 
 
 /*
@@ -339,9 +338,15 @@ jion.lazyValue(
 
 
 /*
-| Checks if the item is being clicked and reacts.
+| Reacts on clicks.
 */
 prototype.click = visual_docItem.click;
+
+
+/*
+| Reacts on ctrl-clicks.
+*/
+prototype.ctrlClick = visual_item.ctrlClick;
 
 
 /*
@@ -431,15 +436,15 @@ prototype.input = visual_docItem.input;
 
 
 /*
-| An itemDrag action stopped.
+| Returns the change for dragging this item.
 */
-prototype.itemDrag = visual_item.itemDragForZonePositioning;
+prototype.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
-| An itemResize action stopped.
+| Returns the change for resizing this item.
 */
-prototype.stopItemResize = visual_item.stopItemResizeZone;
+prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
@@ -602,6 +607,30 @@ prototype.specialKey = visual_docItem.specialKey;
 
 
 /*
+| Returns the minimum x-scale factor this item could go through.
+*/
+prototype.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minWidth / zone.width;
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+prototype.minScaleY =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minHeight / zone.height;
+};
+
+
+/*
 | Silhoutte in current view.
 */
 jion.lazyValue(
@@ -649,37 +678,53 @@ jion.lazyValue(
 function( )
 {
 	var
-		action;
+		action,
+		moveBy,
+		pBase,
+		zone;
 
-	action = this._action;
+	action = this.action;
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' :
+		case 'action_dragItems' :
+
+			moveBy = action.moveBy;
+
+			zone = this.fabric.zone;
 
 			return(
-				action.toPnw
-				? euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse',
-						action.toPnw.add(
-							this.fabric.zone.width,
-							this.fabric.zone.height
-						)
-				)
-				: this.fabric.zone
+				moveBy
+				? zone.add( moveBy )
+				: zone
 			);
 
-		case 'action_itemResize' :
+		case 'action_resizeItems' :
 
-			return(
-				action.toPnw
-				?  euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse', action.toPse
-				)
-				: this.fabric.zone
-			);
+			pBase = action.pBase;
+
+			zone = action.startZones.get( this.path.get( 2 ) );
+
+			if( !pBase ) return zone;
+
+			zone = zone.intercept( pBase, action.scaleX, action.scaleY );
+
+			if(
+				zone.height < this.minHeight
+				|| zone.width < this.minWidth
+			)
+			{
+				zone =
+					zone.create(
+						'pse',
+							zone.pnw.add(
+								Math.max( zone.width, this.minWidth ),
+								Math.max( zone.height, this.minHeight )
+							)
+					);
+			}
+
+			return zone;
 
 		default :
 

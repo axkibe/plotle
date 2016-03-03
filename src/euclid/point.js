@@ -31,7 +31,8 @@ if( JION )
 
 var
 	euclid_fixPoint,
-	euclid_point;
+	euclid_point,
+	jion;
 
 
 /*
@@ -46,7 +47,9 @@ var prototype;
 
 if( NODE )
 {
-	euclid_point = require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	euclid_point = jion.this( module, 'source' );
 }
 
 prototype = euclid_point.prototype;
@@ -125,6 +128,61 @@ prototype.fromView =
 
 
 /*
+| Returns the point transformed back by a view.
+*/
+prototype.deView =
+	function(
+		view
+	)
+{
+	return(
+		this.create(
+			'x', view.dex( this.x ),
+			'y', view.dey( this.y )
+		)
+	);
+};
+
+
+/*
+| Returns this point scaled by
+| scaleX, scaleY relative to the base point.
+*/
+prototype.intercept =
+	function(
+		base,
+		scaleX,
+		scaleY
+	)
+{
+	var
+		x,
+		y,
+		bx,
+		by;
+
+	if( scaleX === 1 && scaleY === 1 ) return this;
+
+	x = this.x;
+
+	y = this.y;
+
+	bx = base.x;
+
+	by = base.y;
+
+	if( x === bx && y === by ) return this;
+
+	return(
+		this.create(
+			'x', ( x - bx ) * scaleX + bx,
+			'y', ( y - by ) * scaleY + by
+		)
+	);
+};
+
+
+/*
 | Returns the point repositioned to a view.
 */
 prototype.inView =
@@ -139,6 +197,41 @@ prototype.inView =
 		)
 	);
 };
+
+
+/*
+| Returns a point which x/y values are snapped to the nearest
+| whole number.
+*/
+jion.lazyValue(
+	prototype,
+	'snapRound',
+	function( )
+{
+	var
+		x,
+		xSnap,
+		y,
+		ySnap;
+
+	x = this.x;
+
+	y = this.y;
+
+	xSnap = Math.round( x );
+
+	ySnap = Math.round( y );
+
+	if( x === xSnap && y === ySnap ) return this;
+
+	return(
+		this.create(
+			'x', xSnap,
+			'y', ySnap
+		)
+	);
+}
+);
 
 
 /*

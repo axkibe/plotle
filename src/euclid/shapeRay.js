@@ -80,7 +80,7 @@ prototype.within =
 	{
 		if( this.get( a ).within( p ) ) return true;
 	}
-	
+
 	return false;
 };
 

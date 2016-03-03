@@ -19,6 +19,7 @@ var
 	gruga_iconMoveTo,
 	gruga_iconNormal,
 	gruga_iconRemove,
+	gruga_iconSelect,
 	gruga_mainDisc,
 	shell_fontPool,
 	widget_button;
@@ -44,6 +45,7 @@ var
 	movetoButtonPnw,
 	normalButtonPnw,
 	removeButtonPnw,
+	selectButtonPnw,
 	signupButtonPnw,
 	spaceButtonPnw,
 	spaceButtonSize,
@@ -105,15 +107,17 @@ buttonModel =
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
-createButtonPnw = dw.create( 'x', 19, 'y', -270 );
-
 loginButtonPnw = dw.create( 'x', 30, 'y', 155 );
 
 movetoButtonPnw = dw.create( 'x', 46, 'y', -74 );
 
 normalButtonPnw = dw.create( 'x', 5, 'y', -324 );
 
-removeButtonPnw = dw.create( 'x', 31, 'y', -214 );
+selectButtonPnw = dw.create( 'x', 19, 'y', -270 );
+
+createButtonPnw = dw.create( 'x', 31, 'y', -216 );
+
+removeButtonPnw = dw.create( 'x', 40, 'y', -162 );
 
 signupButtonPnw = dw.create( 'x', 17, 'y', 210 );
 
@@ -187,6 +191,17 @@ gruga_mainDisc =
 					euclid_anchor_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
+					)
+			),
+		'twig:add', 'select',
+			buttonModel.create(
+				'iconAnchorShape', gruga_iconSelect.shape,
+				'iconFacet', gruga_iconSelect.facet,
+				'visible', false,
+				'designArea',
+					euclid_anchor_rect.create(
+						'pnw', selectButtonPnw,
+						'pse', selectButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'create',

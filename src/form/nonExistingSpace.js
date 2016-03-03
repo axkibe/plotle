@@ -261,8 +261,6 @@ prototype.pushButton =
 
 			root.moveToSpace( this.nonSpaceRef, true );
 
-			root.create( 'mode', 'loading' );
-
 			break;
 
 		default :

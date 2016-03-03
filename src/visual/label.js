@@ -18,7 +18,6 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action',
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
@@ -128,9 +127,9 @@ visual_label.equals =
 
 
 /*
-| Resize handles to show on labels
+| Labels resize proportional only.
 */
-visual_label.prototype.resizeHandles = 'zoom';
+prototype.proportional = true;
 
 
 /*
@@ -299,9 +298,15 @@ jion.lazyValue(
 
 
 /*
-| Checks if the item is being clicked and reacts.
+| Reacts on clicks.
 */
 prototype.click = visual_docItem.click;
+
+
+/*
+| Reacts on ctrl-clicks.
+*/
+prototype.ctrlClick = visual_item.ctrlClick;
 
 
 /*
@@ -333,7 +338,7 @@ prototype.draw =
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 	display.drawImage(
 		'image', this._display,
@@ -376,16 +381,26 @@ visual_label.fontsize =
 	function( )
 {
 	var
-		action;
+		action,
+		fs;
 
-	action = this._action;
+	action = this.action;
 
-	switch( action && action.reflect )
+	fs = this.fabric.fontsize;
+
+	if( action && action.reflect === 'action_resizeItems' )
 	{
-		case 'action_itemResize' : return action.toFontsize;
+/**/	if( CHECK )
+/**/	{
+/**/		if( action.scaleX !== action.scaleY ) throw new Error( );
+/**/	}
 
-		default : return this.fabric.fontsize;
+		fs *= action.scaleY;
+
+		fs = Math.max( fs, gruga_label.minSize );
 	}
+
+	return fs;
 };
 
 
@@ -393,21 +408,47 @@ jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 
 
 /*
-| An itemDrag action stopped.
+| Returns the change for dragging this item.
 */
-prototype.itemDrag = visual_item.itemDragForFontsizePositioning;
+prototype.getDragItemChange = visual_item.getDragItemChangePnwFs;
 
 
 /*
-| An itemResize action stopped.
+| Returns the change for resizing this item.
 */
-prototype.stopItemResize = visual_item.stopItemResizePnwFs;
+prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
 
 
 /*
 | A text has been inputed.
 */
 prototype.input = visual_docItem.input;
+
+
+/*
+| Returns the minimum x-scale factor this item could go through.
+*/
+visual_label.minScaleX =
+prototype.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minScaleY( zone );
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+visual_label.minScaleY =
+prototype.minScaleY =
+	function(
+//		zone  // original zone
+	)
+{
+	return ( gruga_label.minSize / this.fabric.fontsize );
+};
 
 
 /*
@@ -431,16 +472,81 @@ visual_label.pnw =
 	function( )
 {
 	var
-		action;
+		action,
+		zone,
+		pne,
+		pnw,
+		pse,
+		psw;
 
-	action = this._action;
+	action = this.action;
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' :
-		case 'action_itemResize' :
+		case 'action_dragItems' :
 
-			return action.toPnw;
+			return this.fabric.pnw.add( action.moveBy );
+
+		case 'action_resizeItems' :
+
+			zone = action.startZones.get( this.path.get( 2 ) );
+
+			switch( action.resizeDir )
+			{
+				case 'ne' :
+
+					psw =
+						zone.psw.intercept(
+							action.pBase,
+							action.scaleX,
+							action.scaleY
+						);
+
+					pnw = psw.sub( 0 , this._zoneHeight );
+
+					break;
+
+				case 'nw' :
+
+					pse =
+						zone.pse.intercept(
+							action.pBase,
+							action.scaleX,
+							action.scaleY
+						);
+
+					pnw = pse.sub( this._zoneWidth, this._zoneHeight );
+
+					break;
+
+				case 'se' :
+
+					pnw =
+						zone.pnw.intercept(
+							action.pBase,
+							action.scaleX,
+							action.scaleY
+						);
+
+					break;
+
+				case 'sw' :
+
+					pne =
+						zone.pne.intercept(
+							action.pBase,
+							action.scaleX,
+							action.scaleY
+						);
+
+					pnw = pne.sub( this._zoneWidth, 0 );
+
+					break;
+
+				default : throw new Error( );
+			}
+
+			return pnw;
 
 		default :
 
@@ -589,6 +695,33 @@ visual_label.zeroSilhoutte =
 
 jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
 
+/*
+| TODO
+*/
+visual_label._zoneHeight =
+	function( )
+{
+	return this.doc.fullsize.height + 2;
+};
+
+jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
+
+
+/*
+| TODO
+*/
+visual_label._zoneWidth =
+	function( )
+{
+	return(
+		Math.max(
+			this.doc.fullsize.width + 4,
+			this._zoneHeight / 4
+		)
+	);
+};
+
+jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
 
 
 /*
@@ -599,27 +732,14 @@ visual_label.zone =
 	function( )
 {
 	var
-		doc,
-		dHeight,
-		dWidth,
 		pnw;
 
 	pnw = this.pnw;
 
-	doc = this.doc;
-
-	dHeight = doc.fullsize.height;
-
-	dWidth = doc.fullsize.width;
-
 	return(
 		euclid_rect.create(
 			'pnw', pnw,
-			'pse',
-				pnw.add(
-					Math.max( dWidth + 4, dHeight / 4 ),
-					dHeight + 2
-			)
+			'pse', pnw.add( this._zoneWidth, this._zoneHeight )
 		)
 	);
 };

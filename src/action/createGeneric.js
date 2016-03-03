@@ -35,7 +35,7 @@ if( JION )
 			},
 			startPoint :
 			{
-				comment : 'mouse down point on drag creation',
+				comment : 'start point of drag creation',
 				type : [ 'undefined', 'euclid_point' ]
 			}
 		}
@@ -67,6 +67,12 @@ if( NODE )
 
 
 prototype = action_createGeneric.prototype;
+
+
+/*
+| Mark it as a creation action.
+*/
+prototype.isCreate = true;
 
 
 /*

@@ -17,7 +17,7 @@ if( JION )
 				comment : 'starting pan when panning during creation',
 				type : [ 'undefined', 'euclid_point' ]
 			},
-			pStart :
+			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
 				type : [ 'undefined', 'euclid_point' ]

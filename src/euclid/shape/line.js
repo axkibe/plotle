@@ -35,6 +35,7 @@ if( JION )
 
 
 var
+	euclid_constants,
 	euclid_point,
 	euclid_shape_line;
 
@@ -47,6 +48,7 @@ var
 
 
 var
+	e,
 	prototype;
 
 
@@ -59,6 +61,8 @@ if( NODE )
 
 
 prototype = euclid_shape_line.prototype;
+
+e = euclid_constants.epsilon;
 
 
 /*
@@ -105,7 +109,7 @@ prototype.getProjection =
 
 	la1 = p.y - pc.y;
 
-	lb1 = pc.x -  p.x;
+	lb1 = pc.x - p.x;
 
 	lc1 = la1 * pc.x + lb1 * pc.y;
 
@@ -124,15 +128,15 @@ prototype.getProjection =
 	piy = ( la1 * lc2 - la2 * lc1 ) / det;
 
 	if(
-		Math.min( pp.x, pn.x ) <= pix &&
-		Math.max( pp.x, pn.x ) >= pix &&
-		Math.min( pp.y, pn.y ) <= piy &&
-		Math.max( pp.y, pn.y ) >= piy &&
+		Math.min( pp.x, pn.x ) <= pix + e
+		&& Math.max( pp.x, pn.x ) >= pix - e
+		&& Math.min( pp.y, pn.y ) <= piy + e
+		&& Math.max( pp.y, pn.y ) >= piy - e
 
-		Math.min( pc.x, p.x  ) <= pix &&
-		Math.max( pc.x, p.x  ) >= pix &&
-		Math.min( pc.y, p.y  ) <= piy &&
-		Math.max( pc.y, p.y  ) >= piy
+		&& Math.min( pc.x, p.x  ) <= pix + e
+		&& Math.max( pc.x, p.x  ) >= pix - e
+		&& Math.min( pc.y, p.y  ) <= piy + e
+		&& Math.max( pc.y, p.y  ) >= piy - e
 	)
 	{
 		return euclid_point.create( 'x', pix, 'y', piy );

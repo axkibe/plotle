@@ -58,11 +58,6 @@ if( JION )
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
-			mode :
-			{
-				comment : 'current mode the UI is in',
-				type : [ 'undefined', 'string' ]
-			},
 			path :
 			{
 				comment : 'path of the disc',

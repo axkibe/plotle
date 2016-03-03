@@ -5,10 +5,10 @@
 
 var
 	action_createRelation,
-	action_itemDrag,
 	action_scrolly,
+	change_ray,
 	change_set,
-	euclid_rect,
+	euclid_point,
 	jion$path,
 	jion$pathRay,
 	result_hover,
@@ -79,7 +79,7 @@ visual_item.dragStart =
 		action,
 		sbary;
 
-	action = this._action;
+	action = this.action;
 
 	sbary = this.scrollbarY;
 
@@ -136,12 +136,13 @@ visual_item.dragStart =
 	}
 
 	// scrolling or dragging
+	/*
 	if( access == 'rw' )
 	{
 		// also takes focus
 		root.create(
 			'action',
-				action_itemDrag.create(
+				action_dragItems.create(
 					'startPoint', p.fromView( this.view ),
 					'itemPath', this.path
 				),
@@ -161,143 +162,137 @@ visual_item.dragStart =
 	{
 		return false;
 	}
+	*/
+
+	return access === 'rw';
 };
 
 
 /*
-| An itemDrag action stopped.
+| Returns the change-set for a dragging
+| the item, defined by its zone.
 */
-visual_item.itemDragForZonePositioning =
+visual_item.getDragItemChangeZone =
 	function( )
 {
 	var
-		action;
+		action,
+		moveBy,
+		zone;
 
-	action = this._action;
+	action = this.action;
 
-	if( action.toPnw.equals( this.fabric.pnw ) )
+	moveBy = action.moveBy;
+
+	if( moveBy.equals( euclid_point.zero ) )
 	{
-		root.create( 'action', undefined );
-
 		return;
 	}
 
-	root.alter(
+	zone = this.fabric.zone;
+
+	return(
 		change_set.create(
 			'path', this.path.chop.append( 'zone' ),
-			'val',
-				euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse',
-						action.toPnw.add(
-							this.fabric.zone.width,
-							this.fabric.zone.height
-						)
-				),
+			'val', zone.add( moveBy ),
 			'prev', this.fabric.zone
 		)
 	);
-
-	root.create( 'action', undefined );
 };
 
 
 /*
-| An itemDrag action stopped.
+| An dragItems action stopped.
 */
-visual_item.itemDragForFontsizePositioning =
+visual_item.getDragItemChangePnwFs =
 	function( )
 {
 	var
-		action;
+		action,
+		moveBy,
+		pnw;
 
-	action = this._action;
+	action = this.action;
 
-	if( action.toPnw.equals( this.fabric.pnw ) )
+	moveBy = action.moveBy;
+
+	if( action.moveBy.equals( euclid_point.zero ) )
 	{
-		root.create( 'action', undefined );
-
 		return;
 	}
 
-	root.alter(
+	pnw = this.fabric.pnw;
+
+	return(
 		change_set.create(
 			'path', this.path.chop.append( 'pnw' ),
-			'val', action.toPnw,
-			'prev', this.fabric.pnw
+			'val', pnw.add( moveBy ),
+			'prev', pnw
 		)
 	);
-
-	root.create( 'action', undefined );
 };
 
 
 /*
-| An itemResize action stopped
-| for an item which size is defined
-| by zone.
+| Returns the change-set for a resizing
+| the item, defined by its zone.
 */
-visual_item.stopItemResizeZone =
+visual_item.getResizeItemChangeZone =
 	function( )
 {
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.positioning !== 'zone' ) throw new Error( );
 /**/}
 
-	root.alter(
+	return(
 		change_set.create(
 			'path', this.path.chop.append( 'zone' ),
-			'val',
-				euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse', action.toPse
-				),
+			'val', this.zone,
 			'prev', this.fabric.zone
 		)
 	);
-
-	root.create( 'action', undefined );
 };
 
 
 /*
-| An itemResize action stopped
-| for an item which size is defined
-| by pnw/fontsize
+| Returns the change-set for a resizing
+| the item, defined by pnw/fontsize.
 */
-visual_item.stopItemResizePnwFs =
+visual_item.getResizeItemChangePnwFs =
 	function( )
 {
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.positioning !== 'pnw/fontsize' ) throw new Error( );
 /**/}
 
-	root.alter(
-		change_set.create(
-			'path', this.path.chop.append( 'pnw' ),
-			'val', action.toPnw,
-			'prev', this.fabric.pnw
-		),
-		change_set.create(
-			'path', this.path.chop.append( 'fontsize' ),
-			'val', action.toFontsize,
-			'prev', this.fabric.fontsize
+	return(
+		change_ray.create(
+			'ray:append',
+			change_set.create(
+				'path', this.path.chop.append( 'pnw' ),
+				'val', this.pnw,
+				'prev', this.fabric.pnw
+			),
+			'ray:append',
+			change_set.create(
+				'path', this.path.chop.append( 'fontsize' ),
+				'val', this.fontsize,
+				'prev', this.fabric.fontsize
+			)
 		)
 	);
-
-	root.create( 'action', undefined );
 };
 
 
@@ -327,16 +322,15 @@ visual_item.createRelationMove =
 |
 | Returns true if it handled the click event.
 */
-visual_item.click =
+visual_item.ctrlClick =
 	function(
 		p,      // the point clicked
 		shift,  // true if shift key was pressed
-		ctrl,   // true if ctrl key was pressed
 		access, // 'r' or 'rw'
 		mark    // the mark of the space
 	)
 {
-	if( !ctrl || access !== 'rw' ) return false;
+	if( access !== 'rw' ) return false;
 
 	if( !mark )
 	{
@@ -349,6 +343,33 @@ visual_item.click =
 		);
 
 		return true;
+	}
+
+	switch( mark.reflect )
+	{
+		case 'visual_mark_items' :
+
+			root.create(
+				'mark', mark.togglePath( this.path )
+			);
+
+			return true;
+
+		case 'visual_mark_caret' :
+		case 'visual_mark_range' :
+
+			root.create(
+				'mark',
+					visual_mark_items.create(
+						'paths',
+							jion$pathRay.create(
+								'ray:init',
+								[ mark.itemPath, this.path ]
+							)
+					)
+			);
+
+			return true;
 	}
 };
 
@@ -364,7 +385,7 @@ visual_item.createRelationStop =
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 /**/if( CHECK )
 /**/{

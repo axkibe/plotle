@@ -41,8 +41,7 @@ form_form.init =
 		twig,
 		widgetProto;
 
-	// this is an abstract
-	// design mode form
+	// this is an abstract design form
 	// FUTURE use abstract( )
 	if( !this.path ) return;
 

@@ -238,6 +238,12 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
+		'filePath', 'src/euclid/rectGroup.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/gradient/colorStop.js',
 		'hasJion', true,
 		'inBundle', true
@@ -673,6 +679,10 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gruga/iconSelect.js',
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gruga/genericButton.js',
 		'inBundle', true
 	),
@@ -746,6 +756,10 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/nonExistingSpace.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/select.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -859,6 +873,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/visual/itemRay.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'filePath', 'src/shell/system.js',
 		'inBundle', true
 	),
@@ -888,6 +908,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/action/create.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/action/createGeneric.js',
 		'hasJion', true,
 		'inBundle', true
@@ -898,12 +923,12 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/action/itemDrag.js',
+		'filePath', 'src/action/dragItems.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/action/itemResize.js',
+		'filePath', 'src/action/form.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -913,7 +938,17 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/action/resizeItems.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/action/scrolly.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/action/select.js',
 		'hasJion', true,
 		'inBundle', true
 	),

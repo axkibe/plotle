@@ -633,7 +633,7 @@ prototype._keyBackspace =
 
 	mark = this.mark;
 
-	at = mark.at;
+	at = mark.caret.at;
 
 	if( at <= 0 ) return;
 
@@ -661,7 +661,7 @@ prototype._keyDel =
 {
 	var
 		at;
-	
+
 	at = this.mark.caret.at;
 
 	if( at >= this.value.length ) return;
@@ -746,7 +746,7 @@ prototype._keyPos1 =
 
 	mark = this.mark;
 
-	if( mark.at <= 0 ) return;
+	if( mark.caret.at <= 0 ) return;
 
 	root.create(
 		'mark',

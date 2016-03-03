@@ -1052,9 +1052,9 @@ gleam_canvas.prototype._sketchShape =
 		aZ,
 		magic,
 		pos,
-		pc,
-		pn,
-		pStart,
+		pc, // center point
+		pn, // next point
+		ps, // start point
 		section;
 
 	cx = this._cx;
@@ -1074,35 +1074,35 @@ gleam_canvas.prototype._sketchShape =
 /**/	}
 /**/}
 
-	pStart = shape.get( 0 ).p;
+	ps = shape.get( 0 ).p;
 
 	pc = shape.pc;
 
-	pStart =
-		pStart.add(
-			pStart.x > pc.x
+	ps =
+		ps.add(
+			ps.x > pc.x
 				?  -border
-				: ( pStart.x < pc.x ? border : 0 ),
-			pStart.y > pc.y
+				: ( ps.x < pc.x ? border : 0 ),
+			ps.y > pc.y
 				?  -border
-				: ( pStart.y < pc.y ? border : 0 )
+				: ( ps.y < pc.y ? border : 0 )
 		);
 
-	if( pStart.reflect === 'euclid_fixPoint' )
+	if( ps.reflect === 'euclid_fixPoint' )
 	{
-		pStart = pStart.inView( euclid_view.proper );
+		ps = ps.inView( euclid_view.proper );
 	}
 
-	pos = pStart;
+	pos = ps;
 
-	cx.moveTo( pStart.x + twist, pStart.y + twist );
+	cx.moveTo( ps.x + twist, ps.y + twist );
 
 	for( a = 1, aZ = shape.length; a < aZ; a++ )
 	{
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( !pStart )
+/**/		if( !ps )
 /**/		{
 /**/			// there was a close before end?
 /**/			throw new Error( );
@@ -1113,9 +1113,9 @@ gleam_canvas.prototype._sketchShape =
 
 		if( section.close )
 		{
-			pn = pStart;
+			pn = ps;
 
-			pStart = undefined;
+			ps = undefined;
 		}
 		else
 		{

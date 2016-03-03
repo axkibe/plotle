@@ -18,7 +18,6 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action',
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
@@ -110,9 +109,9 @@ prototype = visual_relation.prototype;
 
 
 /*
-| Resize handles to show on relations.
+| Relations resize proportional only.
 */
-visual_relation.prototype.resizeHandles = 'zoom';
+prototype.proportional = true;
 
 
 /*
@@ -167,9 +166,15 @@ prototype.beam =
 
 
 /*
-| Checks if the item is being clicked and reacts.
+| Reacts on clicks.
 */
 prototype.click = visual_docItem.click;
+
+
+/*
+| Reacts on ctrl-clicks.
+*/
+prototype.ctrlClick = visual_item.ctrlClick;
 
 
 /*
@@ -291,15 +296,15 @@ jion.lazyValue(
 
 
 /*
-| An itemDrag action stopped.
+| Returns the change for dragging this item.
 */
-prototype.itemDrag = visual_item.itemDragForFontsizePositioning;
+prototype.getDragItemChange = visual_item.getDragItemChangePnwFs;
 
 
 /*
-| An itemResize action stopped.
+| Returns the change for resizing this item.
 */
-prototype.stopItemResize = visual_item.stopItemResizePnwFs;
+prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
 
 
 /*
@@ -357,6 +362,13 @@ jion.lazyValue(
 */
 prototype.specialKey = visual_docItem.specialKey;
 
+
+/*
+| Returns the minimum scale factor this item could go through.
+*/
+prototype.minScaleX = visual_label.minScaleX;
+
+prototype.minScaleY = visual_label.minScaleY;
 
 
 /*
@@ -537,6 +549,12 @@ jion.lazyValue(
 	);
 }
 );
+
+
+jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
+
+
+jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
 
 
 } )( );

@@ -18,7 +18,6 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				assign : '_action',
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
 			fabric :
@@ -142,9 +141,9 @@ spaceFields =
 
 
 /*
-| Resize handles to show on portals.
+| Portals do not need to be resized proportionally.
 */
-prototype.resizeHandles = 'arbitrary';
+prototype.proportional = false;
 
 
 /*
@@ -463,6 +462,12 @@ prototype.click =
 
 
 /*
+| Reacts on ctrl-clicks.
+*/
+prototype.ctrlClick = visual_item.ctrlClick;
+
+
+/*
 | A create relation action moves.
 */
 prototype.createRelationMove = visual_item.createRelationMove;
@@ -491,7 +496,7 @@ prototype.draw =
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 	display.drawImage(
 		'image', this._display,
@@ -556,15 +561,15 @@ prototype.input =
 
 
 /*
-| An itemDrag action stopped.
+| Returns the change for dragging this item.
 */
-prototype.itemDrag = visual_item.itemDragForZonePositioning;
+prototype.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
-| An itemResize action stopped.
+| Returns the change for resizing this item.
 */
-prototype.stopItemResize = visual_item.stopItemResizeZone;
+prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
@@ -577,6 +582,30 @@ prototype.minHeight = gruga_portal.minHeight;
 | Minimum width.
 */
 prototype.minWidth = gruga_portal.minWidth;
+
+
+/*
+| Returns the minimum x-scale factor this item could go through.
+*/
+prototype.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minWidth / zone.width;
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+prototype.minScaleY =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minHeight / zone.height;
+};
 
 
 /*
@@ -706,33 +735,22 @@ jion.lazyValue(
 function( )
 {
 	var
-		action;
+		action,
+		zone;
 
-	action = this._action;
+	action = this.action;
+
+	zone = this.fabric.zone;
 
 	switch( action && action.reflect )
 	{
-		case 'action_itemDrag' :
+		case 'action_dragItems' :
 
-			return(
-				euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse',
-						action.toPnw.add(
-							this.fabric.zone.width,
-							this.fabric.zone.height
-						)
-				)
-			);
+			return zone.add( action.moveBy );
 
-		case 'action_itemResize' :
+		case 'action_resizeItems' :
 
-			return(
-				euclid_rect.create(
-					'pnw', action.toPnw,
-					'pse', action.toPse
-				)
-			);
+			return zone.intercept( action.pBase, action.scaleX, action.scaleY );
 
 		default : return this.fabric.zone;
 	}

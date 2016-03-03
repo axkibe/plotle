@@ -70,12 +70,12 @@ visual_docItem.click =
 	pi =
 		vp.sub(
 			pnw.x,
-			pnw.y -
-				(
-					this.scrollbarY
-					? this.scrollbarY.pos
-					: 0
-				)
+			pnw.y
+			- (
+				this.scrollbarY
+				? this.scrollbarY.pos
+				: 0
+			)
 		);
 
 	doc = this.doc;
@@ -96,6 +96,7 @@ visual_docItem.click =
 	}
 
 	root.create(
+		'action', undefined,
 		'mark',
 			visual_mark_caret.create(
 				'path', para.textPath,

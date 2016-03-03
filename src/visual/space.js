@@ -22,8 +22,7 @@ if( JION )
 				comment : 'current action',
 				type :
 					require( '../typemaps/action' )
-					.concat( [ 'undefined' ] ),
-				assign : '_action'
+					.concat( [ 'undefined' ] )
 			},
 			fabric :
 			{
@@ -68,7 +67,12 @@ if( JION )
 
 
 var
+	action_create,
+	action_createGeneric,
+	action_createRelation,
 	action_pan,
+	action_select,
+	change_ray,
 	euclid_arrow,
 	euclid_connect,
 	euclid_point,
@@ -76,11 +80,15 @@ var
 	gleam_container,
 	gruga_label,
 	gruga_relation,
+	gruga_select,
 	jion,
+	jion$pathRay,
 	result_hover,
 	root,
 	visual_frame,
+	visual_itemRay,
 	visual_label,
+	visual_mark_items,
 	visual_note,
 	visual_portal,
 	visual_relation,
@@ -189,7 +197,7 @@ prototype._init =
 		twig,
 		view;
 
-	action = this._action;
+	action = this.action;
 
 	fabric = this.fabric;
 
@@ -232,8 +240,16 @@ prototype._init =
 		highlight =
 			(
 				action
-				&& action.reflect === 'action_createRelation'
-				&& action.affects( path )
+				&& (
+					(
+						action.reflect === 'action_createRelation'
+						&& action.affects( path )
+					)
+					|| (
+						action.reflect === 'action_select'
+						&& action.affects( path )
+					)
+				)
 			)
 			|| (
 				mark
@@ -320,17 +336,33 @@ jion.lazyValue(
 
 	view = this.view;
 
-	if( mark && mark.itemPath )
+	if( mark )
 	{
-		content = this.get( mark.itemPath.get( 2 ) );
+		if( mark.itemPath )
+		{
+			content =
+				visual_itemRay.create(
+					'ray:init',
+					[
+						this.get( mark.itemPath.get( 2 ) )
+					]
+				);
+		}
+		else if( mark.reflect === 'visual_mark_items' )
+		{
+			content = this.getRay( mark.paths );
+		}
 
-		return(
-			( this._inheritFrame || visual_frame)
-			.create(
-				'content', content,
-				'view', view
-			)
-		);
+		if( content )
+		{
+			return(
+				( this._inheritFrame || visual_frame )
+				.create(
+					'content', content,
+					'view', view
+				)
+			);
+		}
 	}
 }
 );
@@ -408,7 +440,7 @@ prototype.draw =
 
 	view = this.view,
 
-	action = this._action;
+	action = this.action;
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
@@ -475,7 +507,60 @@ prototype.draw =
 			}
 
 			break;
+
+		case 'action_select' :
+
+			if( action.vZone )
+			{
+				display.paint( gruga_select.facet, action.vZone );
+			}
+
+			break;
 	}
+};
+
+
+/*
+| Returns a ray of visual item by a ray of paths
+*/
+prototype.getRay =
+	function(
+		paths
+	)
+{
+	var
+		a,
+		aZ,
+		path,
+		items,
+		iZ;
+
+/**/if( CHECK )
+/**/{
+/**/	if( paths.reflect === 'jion$pathRay' ) throw new Error( );
+/**/
+/**/	if( paths.length === 0 ) throw new Error( );
+/**/}
+
+	items = [ ];
+
+	iZ = 0;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		path = paths.get( a );
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/
+/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
+/**/	}
+
+		items[ iZ++ ] = this.get( path.get( 2 ) );
+	}
+
+	return visual_itemRay.create( 'ray:init', items );
 };
 
 
@@ -533,7 +618,7 @@ prototype.pointingHover =
 		result,
 		view;
 
-	action = this._action;
+	action = this.action;
 
 	view = this.view;
 
@@ -639,7 +724,7 @@ prototype.dragStart =
 		if( result !== undefined ) return result;
 	}
 
-	action = this._action;
+	action = this.action;
 
 	if( action && action.reflect === 'action_createGeneric' )
 	{
@@ -656,27 +741,58 @@ prototype.dragStart =
 		if( item.dragStart( p, shift, ctrl, access ) ) return;
 	}
 
-	// starts panning while creating a relation
-	if( action && action.reflect === 'action_createRelation' )
+	if( action )
 	{
-		root.create(
-			'action',
-				action.create(
-					'pan', view.pan,
-					'relationState', 'pan',
-					'startPoint', p
-				)
-		);
+		switch( action.reflect )
+		{
+			case 'action_select' :
 
-		return;
+				root.create(
+					'action',
+						action.create(
+							'startPoint', p,
+							'toPoint', p
+						)
+				);
+
+				return;
+
+			case 'action_createRelation' :
+				// starts panning while creating a relation
+
+				root.create(
+					'action',
+						action.create(
+							'pan', view.pan,
+							'relationState', 'pan', // FIXME remove pan
+							'startPoint', p
+						)
+				);
+
+				return;
+
+			case 'action_create' :
+
+				// starts panning while creating nothing
+				root.create(
+					'action',
+						action.create(
+							'pan', view.pan,
+							'startPoint', p
+						)
+				);
+
+				return;
+		}
 	}
+
 
 	// otherwise panning is initiated
 	root.create(
 		'action',
 			action_pan.create(
-				'startPoint', p,
-				'pan', view.pan
+				'pan', view.pan,
+				'startPoint', p
 			)
 	);
 };
@@ -713,9 +829,14 @@ prototype.click =
 
 		if( !item.vSilhoutte.within( p ) ) continue;
 
-		if( visual_item.click.call( item, p, shift, ctrl, access, mark ) ) return true;
-
-		if( item.click( p, shift, ctrl, access ) ) return true;
+		if( ctrl )
+		{
+			if( item.ctrlClick( p, shift, access, mark ) ) return true;
+		}
+		else
+		{
+			if( item.click( p, shift, ctrl, access ) ) return true;
+		}
 	}
 
 	// otherwise ...
@@ -737,11 +858,21 @@ prototype.dragStop =
 	)
 {
 	var
+		a,
 		action,
+		aZ,
+		changes,
+		chi,
+		paths,
 		item,
 		view;
 
-	action = this._action;
+/**/if( CHECK )
+/**/{
+/**/	if( root.spaceVisual !== this ) throw new Error( );
+/**/}
+
+	action = this.action;
 
 	view = this.view;
 
@@ -749,15 +880,15 @@ prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'action_createGeneric' :
+		case 'action_create' :
 
-			this._stopCreateGeneric( p, shift, ctrl );
+			this._stopCreate( p, shift, ctrl );
 
 			break;
 
-		case 'action_pan' :
+		case 'action_createGeneric' :
 
-			root.create( 'action', undefined );
+			this._stopCreateGeneric( p, shift, ctrl );
 
 			break;
 
@@ -767,25 +898,103 @@ prototype.dragStop =
 
 			break;
 
-		case 'action_itemDrag' :
+		case 'action_dragItems' :
 
-			item = root.getPath( action.itemPath );
+			paths = action.paths;
 
-			item.itemDrag( );
+			for( a = 0, aZ = paths.length; a < aZ; a++ )
+			{
+				item = root.getPath( paths.get( a ) );
+
+				chi = item.getDragItemChange( );
+
+				if( !chi ) continue;
+
+				if( !changes )
+				{
+					changes = chi;
+				}
+				else
+				{
+					if( changes.reflect !== 'change_ray' )
+					{
+						changes = change_ray.create( 'ray:append', changes );
+					}
+
+					if( chi.reflect !== 'change_ray' )
+					{
+						changes = changes.create( 'ray:append', chi );
+					}
+					else
+					{
+						changes = changes.appendRay( chi );
+					}
+
+				}
+			}
+
+			if( changes ) root.alter( changes );
+
+			root.create( 'action', undefined );
 
 			break;
 
-		case 'action_itemResize' :
+		case 'action_pan' :
 
-			item = root.getPath( action.itemPath );
+			root.create( 'action', undefined );
 
-			item.stopItemResize( );
+			break;
+
+		case 'action_resizeItems' :
+
+			paths = action.paths;
+
+			for( a = 0, aZ = paths.length; a < aZ; a++ )
+			{
+				item = root.getPath( paths.get( a ) );
+
+				chi = item.getResizeItemChange( );
+
+				if( !chi ) continue;
+
+				if( !changes )
+				{
+					changes = chi;
+				}
+				else
+				{
+					if( changes.reflect !== 'change_ray' )
+					{
+						changes = change_ray.create( 'ray:append', changes );
+					}
+
+					if( chi.reflect !== 'change_ray' )
+					{
+						changes = changes.create( 'ray:append', chi );
+					}
+					else
+					{
+						changes = changes.appendRay( chi );
+					}
+
+				}
+			}
+
+			if( changes ) root.alter( changes );
+
+			root.create( 'action', undefined );
 
 			break;
 
 		case 'action_scrolly' :
 
 			root.create( 'action', undefined );
+
+			break;
+
+		case 'action_select' :
+
+			this._stopSelect( p, shift, ctrl );
 
 			break;
 
@@ -811,12 +1020,16 @@ prototype.dragMove =
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 	if( !action ) return 'pointer';
 
 	switch( action.reflect )
 	{
+		case 'action_create' :
+
+			return this._moveCreate( p, shift, ctrl );
+
 		case 'action_createGeneric' :
 
 			return this._moveCreateGeneric( p, shift, ctrl );
@@ -829,18 +1042,21 @@ prototype.dragMove =
 
 			return this._movePan( p, shift, ctrl );
 
-		case 'action_itemDrag' :
+		case 'action_dragItems' :
 
-			return this._moveItemDrag( p, shift, ctrl );
+			return this._moveDragItems( p, shift, ctrl );
 
-		case 'action_itemResize' :
+		case 'action_resizeItems' :
 
-			return this._moveItemResize( p, shift, ctrl );
-
+			return this._moveResizeItems( p, shift, ctrl );
 
 		case 'action_scrolly' :
 
 			return this._moveScrollY( p, shift, ctrl );
+
+		case 'action_select' :
+
+			return this._moveSelect( p, shift, ctrl );
 
 		default :
 
@@ -967,7 +1183,7 @@ prototype._moveCreateGeneric =
 		view,
 		zone;
 
-	action = this._action;
+	action = this.action;
 
 	view = this.view;
 
@@ -1051,7 +1267,7 @@ prototype._moveCreateRelation =
 		rZ,
 		view;
 
-	action = this._action;
+	action = this.action;
 
 	view = this.view;
 
@@ -1097,9 +1313,9 @@ prototype._moveCreateRelation =
 
 
 /*
-| Moves during item dragging.
+| Moves during creating.
 */
-prototype._moveItemDrag =
+prototype._moveCreate =
 	function(
 		p         // point, viewbased point of stop
 		// shift, // true if shift key was pressed
@@ -1108,23 +1324,65 @@ prototype._moveItemDrag =
 {
 	var
 		action,
-		item,
+		pd,
 		view;
 
-	action = this._action;
+	action = this.action;
 
-	item = root.getPath( action.itemPath );
+	view = this.view;
+
+	if( action.pan )
+	{
+		// panning while creating a relation
+
+		pd = p.sub( action.startPoint );
+
+		root.create(
+			'view',
+				view.create(
+					'pan',
+						action.pan.add(
+							pd.x / view.zoom,
+							pd.y / view.zoom
+						)
+				)
+		);
+	}
+
+	return 'pointer';
+};
+
+
+
+/*
+| Moves during item dragging.
+*/
+prototype._moveDragItems =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		startPoint,
+		view;
+
+	action = this.action;
+
+	startPoint = action.startPoint;
 
 	view = this.view;
 
 	root.create(
 		'action',
 			action.create(
-				'toPnw',
-					item.fabric.pnw.add(
-						view.dex( p.x ) - action.startPoint.x,
-						view.dey( p.y ) - action.startPoint.y
-				)
+				'moveBy',
+					euclid_point.create(
+						'x', view.dex( p.x ) - startPoint.x,
+						'y', view.dey( p.y ) - startPoint.y
+					)
 			)
 	);
 
@@ -1135,7 +1393,7 @@ prototype._moveItemDrag =
 /*
 | Moves during item resizing.
 */
-prototype._moveItemResize =
+prototype._moveResizeItems =
 	function(
 		p         // point, viewbased point of stop
 		// shift, // true if shift key was pressed
@@ -1143,112 +1401,133 @@ prototype._moveItemResize =
 	)
 {
 	var
+		a,
 		action,
-		align,
+		aZ,
+		dx,
 		dy,
-		fs,
 		item,
-		resized,
-		view,
-		zone;
+		key,
+		path,
+		paths,
+		pBase,
+		startPoint,
+		min,
+		scaleX,
+		scaleY,
+		startZone,
+		startZones,
+		view;
 
-	action = this._action;
-
-	align = action.align;
-
-	item = root.getPath( action.itemPath );
+	action = this.action;
 
 	view = this.view;
 
-	switch( item.positioning )
+	pBase = action.pBase;
+
+	startPoint = action.startPoint;
+
+	dx = view.dex( p.x );
+
+	dy = view.dey( p.y );
+
+	switch( action.resizeDir )
 	{
+		case 'n' :
+		case 'ne' :
+		case 'nw' :
+		case 's' :
+		case 'se' :
+		case 'sw' :
 
-		case 'zone' :
-
-			zone =
-				item.fabric.zone.cardinalResize(
-					align,
-					view.dex( p.x ) - action.startPoint.x,
-					view.dey( p.y ) - action.startPoint.y,
-					item.minHeight,
-					item.minWidth
-				);
-
-			root.create(
-				'action',
-					action.create(
-						'toPnw', zone.pnw,
-						'toPse', zone.pse
-					)
-			);
-
-			return true;
-
-		case 'pnw/fontsize' :
-
-			switch( action.align )
-			{
-				case 'ne' :
-				case 'nw' :
-
-					dy = action.startPoint.y - view.dey( p.y );
-
-					break;
-
-				case 'se' :
-				case 'sw' :
-
-					dy = view.dey( p.y ) - action.startPoint.y;
-
-					break;
-
-				default :
-
-					throw new Error( );
-			}
-
-			fs =
+			scaleY =
 				Math.max(
-					item.fabric.fontsize
-					* ( action.startZone.height + dy )
-					/ action.startZone.height,
-					gruga_label.minSize
+					( pBase.y - dy ) / ( pBase.y - startPoint.y ),
+					0
 				);
 
-			resized =
-				item.create(
-					'path', undefined,
-					'fabric', item.fabric.create( 'fontsize', fs )
-				);
-
-			action =
-				action.create(
-					'toFontsize', fs,
-					'toPnw',
-						item.fabric.pnw.add(
-							( align === 'sw' || align === 'nw' )
-							? (
-								action.startZone.width -
-								resized.zone.width
-							)
-							: 0,
-							( align === 'ne' || align === 'nw' )
-							? (
-								action.startZone.height -
-								resized.zone.height
-							)
-							: 0
-						)
-				);
-
-				root.create( 'action', action );
-
-			return true;
-
-		default :
-
-			throw new Error( );
+			break;
 	}
+
+	if( !action.proportional || scaleY === undefined )
+	{
+		switch( action.resizeDir )
+		{
+			case 'ne' :
+			case 'nw' :
+			case 'e' :
+			case 'se' :
+			case 'sw' :
+			case 'w' :
+
+				scaleX =
+					Math.max(
+						( pBase.x - dx ) / ( pBase.x - startPoint.x ),
+						0
+					);
+
+				break;
+		}
+	}
+
+	if( action.proportional )
+	{
+		if( scaleX === undefined )
+		{
+			scaleX = scaleY;
+		}
+		else if( scaleY === undefined )
+		{
+			scaleY = scaleX;
+		}
+	}
+	else
+	{
+		if( scaleX === undefined ) scaleX = 1;
+
+		if( scaleY === undefined ) scaleY = 1;
+	}
+
+	paths = action.paths;
+
+	startZones = action.startZones;
+
+	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	{
+		path = paths.get( a );
+
+		key = path.get( 2 );
+
+		item = this.get( path.get( 2 ) );
+
+		startZone = startZones.get( key );
+
+		min = item.minScaleX( startZone );
+
+		if( scaleX < min ) scaleX = min;
+
+		min = item.minScaleY( startZone );
+
+		if( scaleY < min ) scaleY = min;
+	}
+
+	if( action.proportional )
+	{
+		scaleX =
+		scaleY =
+			Math.max( scaleX, scaleY );
+	}
+
+
+	root.create(
+		'action',
+			action.create(
+				'scaleX', scaleX,
+				'scaleY', scaleY
+			)
+	);
+
+	return true;
 };
 
 
@@ -1267,7 +1546,7 @@ prototype._movePan =
 		pd,
 		view;
 
-	action = this._action;
+	action = this.action;
 
 	view = this.view;
 
@@ -1289,6 +1568,33 @@ prototype._movePan =
 
 
 /*
+| Moves during selecting.
+*/
+prototype._moveSelect =
+	function(
+		p         // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action;
+
+	action = this.action;
+
+	root.create(
+		'action',
+			action.create(
+				'toPoint', p
+			)
+	);
+
+	return 'pointer';
+};
+
+
+
+/*
 | Moves during scrolling.
 */
 prototype._moveScrollY =
@@ -1306,7 +1612,7 @@ prototype._moveScrollY =
 		spos,
 		view;
 
-	action = this._action;
+	action = this.action;
 
 	item = this.get( action.itemPath.get( -1 ) );
 
@@ -1341,7 +1647,7 @@ prototype._startCreateGeneric =
 		model,
 		transItem;
 
-	action = this._action;
+	action = this.action;
 
 	itemType = action.itemType;
 
@@ -1407,11 +1713,36 @@ prototype._stopCreateGeneric =
 	var
 		action;
 
-	action = this._action;
+	action = this.action;
 
 	action.itemType.createGeneric( action, p.fromView( this.view ) );
 
-	if( !ctrl ) root.create( 'action', undefined );
+	root.create(
+		'action',
+			ctrl
+			? action_createGeneric.create( 'itemType', action.itemType )
+			: action_create.create( )
+	);
+};
+
+
+/*
+| Stops creating.
+*/
+prototype._stopCreate =
+	function(
+		// p      // point, viewbased point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	root.create(
+		'action',
+			this.action.create(
+				'pan', undefined,
+				'startPoint', undefined
+			)
+	);
 };
 
 
@@ -1420,22 +1751,19 @@ prototype._stopCreateGeneric =
 */
 prototype._stopCreateRelation =
 	function(
-		p         // point, viewbased point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,      // point, viewbased point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 	var
 		action,
 		item;
 
-	action = this._action;
+	action = this.action;
 
 	switch( action.relationState )
 	{
-
-		case 'start' : root.create( 'action', undefined ); return;
-
 		case 'hadSelect' :
 
 			if( action.toItemPath )
@@ -1444,6 +1772,17 @@ prototype._stopCreateRelation =
 
 				item.createRelationStop( p );
 			}
+
+			root.create(
+				'action',
+				ctrl
+				? action_createRelation.create( 'relationState', 'start' )
+				: undefined
+			);
+
+			return;
+
+		case 'start' :
 
 			root.create( 'action', undefined );
 
@@ -1460,6 +1799,66 @@ prototype._stopCreateRelation =
 
 		default : throw new Error( );
 	}
+};
+
+
+/*
+| Stops selecting.
+*/
+prototype._stopSelect =
+	function(
+		p,      // point, viewbased point of stop
+		shift  // true if shift key was pressed
+//		ctrl    // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		item,
+		path,
+		paths,
+		pZ,
+		r,
+		rZ;
+
+	action = this.action;
+
+/**/if( CHECK )
+/**/{
+/**/	if( action.reflect !== 'action_select' ) throw new Error( );
+/**/}
+
+	action = action.create( 'toPoint', p );
+
+	paths = [ ];
+
+	pZ = 0;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		item = this.atRank( r );
+
+		path = item.path;
+
+		if( action.affects( path ) )
+		{
+			paths[ pZ++ ] = path;
+		}
+	}
+
+	root.create(
+		'action',
+			shift
+			? action_select.create( )
+			: undefined,
+		'mark',
+			pZ > 0
+			? visual_mark_items.create(
+				'paths',
+				jion$pathRay.create( 'ray:init', paths )
+			)
+			: pass
+	);
 };
 
 

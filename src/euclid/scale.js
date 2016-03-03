@@ -25,8 +25,8 @@ if( JION )
 				type :
 					require( '../typemaps/shape' )
 					.concat( 'euclid_shapeRay' )
-			},
-		},
+			}
+		}
 	};
 }
 

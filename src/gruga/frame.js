@@ -32,17 +32,17 @@ gruga_frame.facet =
 				'ray:append',
 				gleam_gradient_colorStop.create(
 					'offset', 0,
-					'color', gleam_color.rgba( 255, 255, 255, 0.5 )
+					'color', gleam_color.rgba( 255, 255, 220, 0.9 )
 				),
 				'ray:append',
 				gleam_gradient_colorStop.create(
 					'offset', 1,
-					'color', gleam_color.rgba( 255, 255, 200, 0.7 )
+					'color', gleam_color.rgba( 255, 255, 200, 0.9 )
 				)
 			),
 		'border',
 			gleam_border.create(
-				'color', gleam_color.rgba( 255, 230, 167, 0.8 )
+				'color', gleam_color.rgba( 255, 230, 167, 0.9 )
 			)
 	);
 

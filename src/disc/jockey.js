@@ -42,11 +42,6 @@ if( JION )
 					require( '../typemaps/visualMark' )
 					.concat( [ 'undefined' ] )
 			},
-			mode :
-			{
-				comment : 'current mode the UI is in',
-				type : 'string'
-			},
 			path :
 			{
 				comment : 'path of the disc',
@@ -107,7 +102,7 @@ prototype = disc_jockey.prototype;
 
 
 /*
-| Updates the gleam container
+| Updates the gleam container.
 */
 prototype.beam =
 	function(
@@ -115,6 +110,7 @@ prototype.beam =
 	)
 {
 	var
+		action,
 		createContainer,
 		createDisc,
 		mainContainer,
@@ -128,7 +124,9 @@ prototype.beam =
 
 	mainDisc = this.get( 'mainDisc' );
 
-	if( this.mode === 'create' )
+	action = this.action;
+
+	if( action && action.isCreate )
 	{
 		if( !createContainer )
 		{
@@ -256,7 +254,6 @@ prototype._init =
 				'controlView', this.controlView,
 				'hover', this.hover,
 				'mark', this.mark,
-				'mode', this.mode,
 				'spaceRef', this.spaceRef,
 				'spaceView', this.spaceView,
 				'user', this.user
@@ -280,13 +277,16 @@ prototype.dragStart =
 	)
 {
 	var
+		action,
 		bubble;
 
 	bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
 
 	if( bubble ) return bubble;
 
-	if( this.mode === 'create' )
+	action = this.action;
+
+	if( action && action.isCreate )
 	{
 		return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
 	}
@@ -303,7 +303,15 @@ prototype.draw =
 		display
 	)
 {
-	if( this.mode === 'create' ) this.get( 'createDisc' ).draw( display );
+	var
+		action;
+
+	action = this.action;
+
+	if( action && action.isCreate )
+	{
+		this.get( 'createDisc' ).draw( display );
+	}
 
 	this.get( 'mainDisc' ).draw( display );
 };
@@ -321,13 +329,16 @@ prototype.mousewheel =
 	)
 {
 	var
+		action,
 		bubble;
 
 	bubble = this.get( 'mainDisc' ).mousewheel( p, dir, shift, ctrl );
 
 	if( bubble ) return bubble;
 
-	if( this.mode === 'create' )
+	action = this.action;
+
+	if( action && action.isCreate )
 	{
 		return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
 	}
@@ -347,13 +358,16 @@ prototype.pointingHover =
 	)
 {
 	var
+		action,
 		hover;
 
 	hover = this.get( 'mainDisc' ).pointingHover( p, shift, ctrl );
 
 	if( hover ) return hover;
 
-	if( this.mode === 'create' )
+	action = this.action;
+
+	if( action && action.isCreate )
 	{
 		return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
 	}
@@ -371,13 +385,16 @@ prototype.click =
 	)
 {
 	var
+		action,
 		start;
 
 	start = this.get( 'mainDisc' ).click( p, shift, ctrl );
 
 	if( start ) return start;
 
-	if( this.mode === 'create' )
+	action = this.action;
+
+	if( action && action.isCreate )
 	{
 		return this.get( 'createDisc' ).click( p, shift, ctrl );
 	}

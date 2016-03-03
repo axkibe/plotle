@@ -210,9 +210,11 @@ prototype.getProjection =
 		// ...
 	)
 {
-	return this.shape.getProjection.apply(
-		this.shape,
-		arguments
+	return(
+		this.shape.getProjection.apply(
+			this.shape,
+			arguments
+		)
 	);
 };
 

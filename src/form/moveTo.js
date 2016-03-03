@@ -55,6 +55,7 @@ if( JION )
 
 
 var
+	action_form,
 	fabric_spaceRef,
 	form_form,
 	form_moveTo,
@@ -242,7 +243,7 @@ prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
-	root.create( 'mode', 'loading' );
+	root.create( 'action', action_form.loading );
 
 	switch( buttonName )
 	{

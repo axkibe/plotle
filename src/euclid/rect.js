@@ -394,6 +394,28 @@ jion.lazyValue(
 
 
 /*
+| Returns this point scaled by
+| scaleX, scaleY relative to the base point.
+*/
+prototype.intercept =
+	function(
+		base,
+		scaleX,
+		scaleY
+	)
+{
+	if( scaleX === 1 && scaleY === 1 ) return this;
+
+	return(
+		this.create(
+			'pnw', this.pnw.intercept( base, scaleX, scaleY ),
+			'pse', this.pse.intercept( base, scaleX, scaleY )
+		)
+	);
+};
+
+
+/*
 | Returns this rect repositioned and resized to a view.
 */
 prototype.inView =
@@ -401,13 +423,17 @@ prototype.inView =
 		view
 	)
 {
+	var
+		result;
+
 	if( view.zoom === 1 )
 	{
-		return(
+		result =
 			( view.pan.x === 0 && view.pan.y === 0 )
 			? this
-			: this.add( view.pan )
-		);
+			: this.add( view.pan );
+
+		return result.snapRound;
 	}
 
 	return(
@@ -417,6 +443,41 @@ prototype.inView =
 		)
 	);
 };
+
+
+/*
+| Returns a rectangle which pnw/pse points are snapped to the nearest
+| whole number
+*/
+jion.lazyValue(
+	prototype,
+	'snapRound',
+	function( )
+{
+	var
+		pnw,
+		pnwSnap,
+		pse,
+		pseSnap;
+
+	pnw = this.pnw;
+
+	pse = this.pse;
+
+	pnwSnap = pnw.snapRound;
+
+	pseSnap = pse.snapRound;
+
+	if( pnwSnap.equals( pnw ) && pseSnap.equals( pse ) ) return this;
+
+	return(
+		this.create(
+			'pnw', pnwSnap,
+			'pse', pseSnap
+		)
+	);
+}
+);
 
 
 /*

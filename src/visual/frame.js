@@ -15,7 +15,7 @@ if( JION )
 			content :
 			{
 				comment : 'content of the frame',
-				type : require( '../typemaps/visualItem' )
+				type : 'visual_itemRay'
 			},
 			view :
 			{
@@ -28,9 +28,10 @@ if( JION )
 
 
 var
-	action_itemDrag,
-	action_itemResize,
+	action_dragItems,
+	action_resizeItems,
 	euclid_ellipse,
+	euclid_point,
 	euclid_rect,
 	euclid_scale,
 	euclid_shape,
@@ -90,41 +91,6 @@ prototype.beam =
 
 
 /*
-| Returns the compass direction of the handle
-| if p is on a resizer handle.
-*/
-prototype.checkHandles =
-	function(
-		p
-	)
-{
-	if( !this._outerZone.within( p ) ) return;
-
-	if( this._withinContentMask( p ) ) return;
-
-	if( this._handleNwShape.within( p ) ) return 'nw';
-
-	if( this._handleNeShape.within( p ) ) return 'ne';
-
-	if( this._handleSeShape.within( p ) ) return 'se';
-
-	if( this._handleSwShape.within( p ) ) return 'sw';
-
-	if( this.resizeHandles === 'arbitrary' )
-	{
-		if( this._handleNShape.within( p ) ) return 'n';
-
-		if( this._handleEShape.within( p ) ) return 'e';
-
-		if( this._handleSShape.within( p ) ) return 's';
-
-		if( this._handleWShape.within( p ) ) return 'w';
-	}
-};
-
-
-
-/*
 | Draws the frame.
 */
 prototype.draw =
@@ -133,18 +99,23 @@ prototype.draw =
 	)
 {
 	var
+		a,
 		content,
+		cLen,
+		ca,
 		sbary;
 
 	content = this.content;
 
-	sbary = content.scrollbarY;
-
-	display.reverseClip( content.vSilhoutte, -2 );
-
-	if( sbary )
+	for( a = 0, cLen = content.length; a < cLen; a++ )
 	{
-		display.reverseClip( sbary.area, -0.5 );
+		ca = content.get( a );
+
+		sbary = ca.scrollbarY;
+
+		display.reverseClip( ca.vSilhoutte, -2 );
+
+		if( sbary ) display.reverseClip( sbary.area, -0.5 );
 	}
 
 	display.paint( gruga_frame.facet, this._frameBodyShape );
@@ -157,7 +128,7 @@ prototype.draw =
 
 	display.paint( gruga_frame.handleFacet, this._handleSwShape );
 
-	if( this.resizeHandles === 'arbitrary' )
+	if( !this.proportional )
 	{
 		display.paint( gruga_frame.handleFacet, this._handleNShape );
 
@@ -193,20 +164,91 @@ jion.lazyValue(
 	'zone',
 function( )
 {
-	return this.content.zone;
+	var
+		a,
+		content,
+		cLen,
+		cZone,
+		ex,
+		ny,
+		pnw,
+		pse,
+		sy,
+		wx;
+
+	content = this.content;
+
+	cLen = content.length;
+
+/**/if( CHECK )
+/**/{
+/**/	if ( cLen === 0 ) throw new Error( );
+/**/}
+
+	cZone = content.get( 0 ).zone;
+
+	pnw = cZone.pnw;
+
+	pse = cZone.pse;
+
+	ny = pnw.y;
+
+	wx = pnw.x;
+
+	sy = pse.y;
+
+	ex = pse.x;
+
+	if( cLen === 1 ) return cZone;
+
+	for( a = 1; a < cLen; a++ )
+	{
+		cZone = content.get( a ).zone;
+
+		pnw = cZone.pnw;
+
+		pse = cZone.pse;
+
+		if( pnw.x < wx ) wx = pnw.x;
+
+		if( pse.x > ex ) ex = pse.x;
+
+		if( pnw.y < ny ) ny = pnw.y;
+
+		if( pse.y > sy ) sy = pse.y;
+	}
+
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.create( 'x', wx, 'y', ny ),
+			'pse', euclid_point.create( 'x', ex, 'y', sy )
+		)
+	);
 }
 );
 
 
 /*
-| '"arbitrary" or "zoom"',
+| If true resize content proportional only.
 */
 jion.lazyValue(
 	prototype,
-	'resizeHandles',
+	'proportional',
 function( )
 {
-	return this.content.resizeHandles;
+	var
+		a,
+		aZ,
+		content;
+
+	content = this.content;
+
+	for( a = 0, aZ = content.length; a < aZ; a++ )
+	{
+		if( content.get( a ).proportional ) return true;
+	}
+
+	return false;
 }
 );
 
@@ -224,41 +266,77 @@ prototype.dragStart =
 {
 	var
 		com,
-		item,
-		dp;
+		dp,
+		pBase,
+		zone;
 
 	if( access !== 'rw' ) return;
+
+	zone = this.zone;
 
 	if( !this._outerZone.within( p ) ) return;
 
 	if( this._withinContentMask( p ) ) return;
 
-	if( this._handleNwShape.within( p ) ) com = 'nw';
-	else if( this._handleNeShape.within( p ) ) com = 'ne';
-	else if( this._handleSeShape.within( p ) ) com = 'se';
-	else if( this._handleSwShape.within( p ) ) com = 'sw';
-	else if( this.resizeHandles === 'arbitrary' )
+	if( this._handleNwShape.within( p ) )
 	{
-		if( this._handleNShape.within( p ) ) com = 'n';
-		if( this._handleEShape.within( p ) ) com = 'e';
-		if( this._handleSShape.within( p ) ) com = 's';
-		if( this._handleWShape.within( p ) ) com = 'w';
+		com = 'nw';
+		pBase = zone.pse;
+	}
+	else if( this._handleNeShape.within( p ) )
+	{
+		com = 'ne';
+		pBase = zone.psw;
+	}
+	else if( this._handleSeShape.within( p ) )
+	{
+		com = 'se';
+		pBase = zone.pnw;
+	}
+	else if( this._handleSwShape.within( p ) )
+	{
+		com = 'sw';
+		pBase = zone.pne;
+	}
+	else if( !this.proportional )
+	{
+		if( this._handleNShape.within( p ) )
+		{
+			com = 'n';
+			pBase = zone.ps;
+		}
+		else if( this._handleEShape.within( p ) )
+		{
+			com = 'e';
+			pBase = zone.pw;
+		}
+		else if( this._handleSShape.within( p ) )
+		{
+			com = 's';
+			pBase = zone.pn;
+		}
+		else if( this._handleWShape.within( p ) )
+		{
+			com = 'w';
+			pBase = zone.pe;
+		}
 	}
 
 	dp = p.fromView( this.view );
-
-	item = this.content;
 
 	if( com )
 	{
 		root.create(
 			'action',
-				action_itemResize.create(
-					'align', com,
-					'itemPath', item.path,
+				action_resizeItems.create(
+					'paths', this.content.paths,
+					'startZones', this.content.zones,
+					'proportional', this.proportional,
+					'resizeDir', com,
 					'startPoint', dp,
-					'startZone', item.zone,
-					'toFontsize', item.fontsize
+					'pBase', pBase,
+					'scaleX', 1,
+					'scaleY', 1
 				)
 		);
 
@@ -267,9 +345,9 @@ prototype.dragStart =
 
 	root.create(
 		'action',
-			action_itemDrag.create(
+			action_dragItems.create(
 				'startPoint', dp,
-				'itemPath', item.path
+				'paths', this.content.paths
 			)
 	);
 
@@ -298,7 +376,7 @@ prototype.pointingHover =
 	else if( this._handleNeShape.within( p ) ) com = 'ne';
 	else if( this._handleSeShape.within( p ) ) com = 'se';
 	else if( this._handleSwShape.within( p ) ) com = 'sw';
-	else if( this.resizeHandles === 'arbitrary' )
+	else if( !this.proportional )
 	{
 		if( this._handleNShape.within( p ) ) com = 'n';
 		if( this._handleEShape.within( p ) ) com = 'e';
@@ -360,7 +438,7 @@ jion.lazyValue(
 			'twig:set+', hswg.id, hswg
 		);
 
-	if( this.resizeHandles === 'arbitrary' )
+	if( !this.proportional )
 	{
 		hng = this._handleNGlint;
 
@@ -397,7 +475,7 @@ jion.lazyValue(
 
 	scale =
 		euclid_scale.create(
-			'shape', this.content.vSilhoutte,
+			'shape', this.content.get( 0 ).vSilhoutte,
 			'distance', -1
 		);
 
@@ -504,7 +582,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.resizeHandles !== 'arbitrary' ) throw new Error( );
+/**/	if( this.proportional ) throw new Error( );
 /**/}
 
 	oPn = this._outerZone.pn;
@@ -632,7 +710,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.resizeHandles !== 'arbitrary' ) throw new Error( );
+/**/	if( this.proportional ) throw new Error( );
 /**/}
 
 	oPe = this._outerZone.pe;
@@ -678,7 +756,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.resizeHandles !== 'arbitrary' ) throw new Error( );
+/**/	if( this.proportional ) throw new Error( );
 /**/}
 
 	oPs = this._outerZone.ps;
@@ -806,7 +884,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.resizeHandles !== 'arbitrary' ) throw new Error( );
+/**/	if( this.proportional ) throw new Error( );
 /**/}
 
 	oPw = this._outerZone.pw;
@@ -849,14 +927,11 @@ jion.lazyValue(
 	'_maxHandleLoadFactor',
 	function( )
 {
-	switch( this.resizeHandles )
-	{
-		case 'arbitrary' : return 3.5;
-
-		case 'zoom' : return 2.5;
-
-		default : throw new Error( );
-	}
+	return(
+		this.proportional
+		? 2.5
+		: 3.5
+	);
 }
 );
 
@@ -934,7 +1009,7 @@ prototype._withinContentMask =
 		content,
 		sbary;
 
-	content = this.content;
+	content = this.content.get( 0 );
 
 	if( content.vSilhoutte.within( p ) ) return true;
 

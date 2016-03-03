@@ -330,7 +330,7 @@ prototype.onAuth =
 		return;
 	}
 
-	root.create( 'mode', 'normal', 'user', reply.user );
+	root.create( 'action', undefined, 'user', reply.user );
 
 	this.clear( );
 

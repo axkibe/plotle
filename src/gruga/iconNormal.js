@@ -33,7 +33,7 @@ var
 */
 ( function( ) {
 'use strict';
-	
+
 
 var
 	ap;
@@ -45,7 +45,7 @@ ap =
 		'x', 18,
 		'y', 12
 	);
-			
+
 
 gruga_iconNormal = { };
 

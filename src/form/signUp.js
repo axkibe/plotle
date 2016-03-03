@@ -56,6 +56,7 @@ if( JION )
 
 
 var
+	action_form,
 	fabric_spaceRef,
 	form_form,
 	form_signUp,
@@ -252,11 +253,11 @@ prototype.onRegister =
 		return;
 	}
 
-	root.create( 'mode', 'welcome', 'user', request.user );
-
 	this.clear( );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+
+	root.create( 'action', action_form.welcome, 'user', request.user );
 };
 
 
