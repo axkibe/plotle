@@ -12,10 +12,10 @@ if( JION )
 		id : 'action_scrolly',
 		attributes :
 		{
-			itemPath :
+			itemPaths :
 			{
 				comment : 'path to the item being scrolled',
-				type : 'jion$path'
+				type : 'jion$pathRay'
 			},
 			startPoint :
 			{
@@ -66,7 +66,7 @@ prototype.affects =
 		path
 	)
 {
-	return this.itemPath.equals( path );
+	return this.itemPaths.get( 0 ).equals( path );
 };
 
 

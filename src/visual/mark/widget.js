@@ -55,11 +55,11 @@ prototype.hasCaret = false;
 
 
 /*
-| The item's path.
+| A widget has no item paths.
 */
 jion.lazyValue(
 	prototype,
-	'itemPath',
+	'paths',
 	function( )
 {
 	return;
@@ -74,9 +74,9 @@ jion.lazyValue(
 	prototype,
 	'widgetPath',
 	function( )
-	{
-		return this.path;
-	}
+{
+	return this.path;
+}
 );
 
 

@@ -140,28 +140,6 @@ prototype.hasCaret = false;
 
 
 /*
-| The item's path.
-*/
-jion.lazyValue(
-	prototype,
-	'itemPath',
-	function( )
-{
-	var
-		paths;
-
-	paths = this.paths;
-
-	return(
-		paths.length === 1
-		? paths.get( 0 )
-		: undefined
-	);
-}
-);
-
-
-/*
 | The widget's path.
 */
 prototype.widgetPath = undefined;

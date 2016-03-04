@@ -294,8 +294,6 @@ prototype.showDisc = true;
 
 /*
 | Determines the focused item.
-|
-| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -304,15 +302,20 @@ jion.lazyValue(
 {
 	var
 		mark,
-		path;
+		path,
+		paths;
 
 	mark = this.mark;
 
 	if( !mark ) return undefined;
 
-	path = mark.itemPath;
+	paths = mark.paths;
 
-	if( !path || path.length <= 2 ) return undefined;
+	if( !paths || paths.length !== 1 ) return undefined;
+
+	path = paths.get( 0 );
+
+	if( path.length <= 2 ) return undefined; // FIXME shouldn't be necessary
 
 	return this.get( path.get( 2 ) );
 }
@@ -338,17 +341,7 @@ jion.lazyValue(
 
 	if( mark )
 	{
-		if( mark.itemPath )
-		{
-			content =
-				visual_itemRay.create(
-					'ray:init',
-					[
-						this.get( mark.itemPath.get( 2 ) )
-					]
-				);
-		}
-		else if( mark.reflect === 'visual_mark_items' )
+		if( mark.paths )
 		{
 			content = this.getRay( mark.paths );
 		}
@@ -841,7 +834,10 @@ prototype.click =
 
 	// otherwise ...
 
-	root.create( 'mark', undefined );
+	if( !ctrl )
+	{
+		root.create( 'mark', undefined );
+	}
 
 	return true;
 };
@@ -1614,7 +1610,7 @@ prototype._moveScrollY =
 
 	action = this.action;
 
-	item = this.get( action.itemPath.get( -1 ) );
+	item = this.get( action.paths.get( 0 ).get( -1 ) );
 
 	view = this.view;
 
@@ -1808,13 +1804,14 @@ prototype._stopCreateRelation =
 prototype._stopSelect =
 	function(
 		p,      // point, viewbased point of stop
-		shift  // true if shift key was pressed
-//		ctrl    // true if ctrl key was pressed
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 	var
 		action,
 		item,
+		mark,
 		path,
 		paths,
 		pZ,
@@ -1846,18 +1843,35 @@ prototype._stopSelect =
 		}
 	}
 
+	action =
+		shift
+		? action_select.create( )
+		: undefined;
+
+	if( pZ === 0 )
+	{
+		mark = pass;
+	}
+	else
+	{
+		paths = jion$pathRay.create( 'ray:init', paths );
+
+		if( !ctrl || !this.mark )
+		{
+			mark = visual_mark_items.create( 'paths', paths );
+		}
+		else
+		{
+			mark =
+				visual_mark_items.create(
+					'paths', paths.combine( this.mark.paths )
+				);
+		}
+	}
+
 	root.create(
-		'action',
-			shift
-			? action_select.create( )
-			: undefined,
-		'mark',
-			pZ > 0
-			? visual_mark_items.create(
-				'paths',
-				jion$pathRay.create( 'ray:init', paths )
-			)
-			: pass
+		'action', action,
+		'mark', mark
 	);
 };
 

@@ -39,6 +39,7 @@ if( JION )
 
 var
 	jion,
+	jion$pathRay,
 	visual_mark_range;
 
 
@@ -186,11 +187,13 @@ jion.lazyValue(
 
 
 /*
-| The item's path.
+| The item path.
+|
+| This is either undefined or an pathRay of length === 1
 */
 jion.lazyValue(
 	prototype,
-	'itemPath',
+	'paths',
 	function( )
 {
 	var
@@ -206,7 +209,7 @@ jion.lazyValue(
 		return;
 	}
 
-	return beginPath.limit( 3 );
+	return jion$pathRay.create( 'ray:append', beginPath.limit( 3 ) );
 }
 );
 
@@ -319,7 +322,7 @@ prototype.containsPath =
 	doc = this.doc;
 
 	fr = doc.rankOf( fp.get( -2 ) );
-	
+
 	br = doc.rankOf( bp.get( -2 ) );
 
 	// NOTE: this code is untested.

@@ -223,7 +223,7 @@ prototype._init =
 					!!(
 						this.access === 'rw'
 						&& this.mark
-						&& this.mark.itemPath
+						&& this.mark.paths
 					);
 
 				down = false;
@@ -380,8 +380,17 @@ prototype.pushButton =
 {
 	var
 		buttonName,
+		changes,
 		discname,
-		mip;
+		p,
+		paths,
+		pi,
+		pZ,
+		rank,
+		ranks,
+		rc,
+		r,
+		rZ;        // rank correction
 
 	discname = path.get( 2 );
 
@@ -415,15 +424,37 @@ prototype.pushButton =
 
 		case 'remove' :
 
-			mip = this.mark.itemPath;
+			paths = this.mark.paths;
 
-			root.alter(
-				change_shrink.create(
-					'path', mip.chop,
-					'prev', root.spaceFabric.getPath( mip.chop ),
-					'rank', root.spaceFabric.rankOf( mip.get( 2 ) )
-				)
-			);
+			changes = [ ];
+
+			ranks = [ ];
+
+			for( p = 0, pZ = paths.length; p < pZ; p++ )
+			{
+				pi = paths.get( p );
+
+				rank = root.spaceFabric.rankOf( pi.get( 2 ) );
+
+				rc = 0;
+
+				for( r = 0, rZ = ranks.length; r < rZ; r++ )
+				{
+					if( ranks[ r ] <= rank ) rc++;
+				}
+
+				ranks.push( rank );
+
+				changes[ p ] =
+					change_shrink.create(
+						'path', pi.chop,
+						'prev', root.spaceFabric.getPath( pi.chop ),
+						'rank', rank - rc
+					);
+
+			}
+
+			root.alter( changes );
 
 			break;
 
@@ -523,7 +554,6 @@ prototype.click =
 		display,
 		pp,
 		r,
-		reply,
 		rZ;
 
 	// shortcut if p is not near the panel
@@ -538,12 +568,10 @@ prototype.click =
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply = this.atRank( r ).click( pp, shift, ctrl );
-
-		if( reply ) return reply;
+		this.atRank( r ).click( pp, shift, ctrl );
 	}
 
-	return false;
+	return true;
 };
 
 

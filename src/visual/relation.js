@@ -196,6 +196,98 @@ prototype.dragStart = visual_item.dragStart;
 
 
 /*
+| Arrow 1 shape.
+|
+| This cannot be a lazyValue since when the other
+| item moves, the arrow changes.
+*/
+prototype.arrow1Shape =
+	function( )
+{
+	var
+		item1;
+
+	item1 = root.spaceVisual.get( this.item1key );
+
+	if( !item1 ) return undefined;
+
+	return(
+		euclid_arrow.shape(
+			euclid_connect.line(
+				item1.silhoutte,
+				this.zone
+			),
+			'normal',
+			'normal'
+		)
+	);
+};
+
+
+/*
+| Arrow 2 shape.
+|
+| This cannot be a lazyValue since when the other
+| item moves, the arrow changes.
+*/
+prototype.arrow2Shape =
+	function( )
+{
+	var
+		item2;
+
+	item2 = root.spaceVisual.get( this.item2key );
+
+	if( !item2 ) return undefined;
+
+	return(
+		euclid_arrow.shape(
+			euclid_connect.line(
+				this.zone,
+				item2.silhoutte
+			),
+			'normal',
+			'arrow'
+		)
+	);
+};
+
+
+/*
+| Arrow 1 shape in view.
+*/
+prototype.vArrow1Shape =
+	function( )
+{
+	var
+		arrow1;
+
+	arrow1 = this.arrow1Shape( );
+
+	if( !arrow1 ) return undefined;
+
+	return arrow1.inView( this.view );
+};
+
+
+/*
+| Arrow 2 shape in view.
+*/
+prototype.vArrow2Shape =
+	function( )
+{
+	var
+		arrow2;
+
+	arrow2 = this.arrow2Shape( );
+
+	if( !arrow2 ) return undefined;
+
+	return arrow2.inView( this.view );
+};
+
+
+/*
 | Displays the relation.
 */
 prototype.draw =
@@ -204,8 +296,6 @@ prototype.draw =
 	)
 {
 	var
-		item1,
-		item2,
 		arrow1,
 		arrow2,
 		space,
@@ -213,43 +303,19 @@ prototype.draw =
 
 	space = root.spaceVisual;
 
-	item1 = space.get( this.item1key );
+	arrow1 = this.vArrow1Shape( );
 
-	item2 = space.get( this.item2key );
+	arrow2 = this.vArrow2Shape( );
 
 	zone = this.zone;
 
-	if( item1 )
+	if( arrow1 )
 	{
-		arrow1 =
-			euclid_arrow.shape(
-				euclid_connect.line(
-					item1.silhoutte,
-					zone
-				),
-				'normal',
-				'normal'
-			);
-
-		arrow1 = arrow1.inView( this.view );
-
 		display.paint( gruga_relation.facet, arrow1 );
 	}
 
-	if( item2 )
+	if( arrow2 )
 	{
-		arrow2 =
-			euclid_arrow.shape(
-				euclid_connect.line(
-					zone,
-					item2.silhoutte
-				),
-				'normal',
-				'arrow'
-			);
-
-		arrow2 = arrow2.inView( this.view );
-
 		display.paint( gruga_relation.facet, arrow2 );
 	}
 
@@ -471,23 +537,13 @@ prototype._arrow1Glint =
 	function( )
 {
 	var
-		arrow1,
-		item1;
+		arrow1;
 
-	item1 = root.spaceVisual.get( this.item1key );
+	arrow1 = this.arrow1Shape( );
 
-	if( !item1 ) return undefined;
+	if( !arrow1 ) return undefined;
 
-	arrow1 =
-		euclid_arrow.shape(
-			euclid_connect.line(
-				item1.silhoutte,
-				this.zone
-			),
-			'normal',
-			'normal'
-		).
-		inView( this.view );
+	arrow1 = arrow1.inView( this.view );
 
 	return(
 		gleam_glint_paint.create(
@@ -505,23 +561,13 @@ prototype._arrow2Glint =
 	function( )
 {
 	var
-		arrow2,
-		item2;
+		arrow2;
 
-	item2 = root.spaceVisual.get( this.item2key );
+	arrow2 = this.arrow2Shape( );
 
-	if( !item2 ) return undefined;
+	if( !arrow2 ) return undefined;
 
-	arrow2 =
-		euclid_arrow.shape(
-			euclid_connect.line(
-				this.zone,
-				item2.silhoutte
-			),
-			'normal',
-			'arrow'
-		).
-		inView( this.view );
+	arrow2 = arrow2.inView( this.view );
 
 	return(
 		gleam_glint_paint.create(

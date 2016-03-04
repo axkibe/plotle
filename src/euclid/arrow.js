@@ -109,16 +109,16 @@ euclid_arrow.shape =
 				euclid_shape_line.create(
 					'p',
 						p2.fixPoint(
-							-round( arrowSize * cos( d - ad ) ),
-							-round( arrowSize * sin( d - ad ) )
+							-round( arrowSize * cos( d + ad ) ),
+							-round( arrowSize * sin( d + ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', p2 ),
 				euclid_shape_line.create(
 					'p',
 						p2.fixPoint(
-							-round( arrowSize * cos( d + ad ) ),
-							-round( arrowSize * sin( d + ad ) )
+							-round( arrowSize * cos( d - ad ) ),
+							-round( arrowSize * sin( d - ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', arrowBase )

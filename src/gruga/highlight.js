@@ -23,9 +23,9 @@ gruga_highlight =
 		'group:init', { highlight : true },
 		'border',
 			gleam_border.create(
-				'width', 2,
-				'color', gleam_color.rgba( 255, 183, 15, 0.5 ),
-				'distance', -2
+				'width', 3,
+				'color', gleam_color.rgba( 255, 170, 0, 0.45 ),
+				'distance', -1
 			)
 	);
 

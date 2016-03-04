@@ -246,7 +246,7 @@ shell_root.prepareAction =
 
 	return action;
 
-	// XXX TODO FIXME remove invalided itemPaths
+	// XXX TODO FIXME remove invalided paths
 
 	/*
 
@@ -256,7 +256,7 @@ shell_root.prepareAction =
 		case 'action_resizeItems' :
 
 			return(
-				root.getPath( action.itemPath )
+				root.getPath( action.paths )
 				? action
 				: undefined
 			);
@@ -622,6 +622,8 @@ prototype.click =
 
 /*
 | Returns the what the clipboard should hold.
+|
+| FIXME jion
 */
 Object.defineProperty(
 	prototype,

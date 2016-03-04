@@ -5,6 +5,7 @@
 
 var
 	action_createRelation,
+	action_dragItems,
 	action_scrolly,
 	change_ray,
 	change_set,
@@ -77,6 +78,7 @@ visual_item.dragStart =
 {
 	var
 		action,
+		paths,
 		sbary;
 
 	action = this.action;
@@ -92,7 +94,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_scrolly.create(
-					'itemPath', this.path,
+					'paths', jion$pathRay.create( 'ray:append', this.path ),
 					'startPoint', p,
 					'startPos', sbary.pos
 				)
@@ -136,24 +138,24 @@ visual_item.dragStart =
 	}
 
 	// scrolling or dragging
-	/*
 	if( access == 'rw' )
 	{
 		// also takes focus
+
+		paths =
+			jion$pathRay.create(
+				'ray:init',
+				[ this.path ]
+			);
+
 		root.create(
 			'action',
 				action_dragItems.create(
 					'startPoint', p.fromView( this.view ),
-					'itemPath', this.path
+					'paths', paths
 				),
 			'mark',
-				visual_mark_items.create(
-					'paths',
-						jion$pathRay.create(
-							'ray:init',
-							[ this.path ]
-						)
-				)
+				visual_mark_items.create( 'paths', paths )
 		);
 
 		return true;
@@ -162,7 +164,6 @@ visual_item.dragStart =
 	{
 		return false;
 	}
-	*/
 
 	return access === 'rw';
 };
@@ -361,11 +362,7 @@ visual_item.ctrlClick =
 			root.create(
 				'mark',
 					visual_mark_items.create(
-						'paths',
-							jion$pathRay.create(
-								'ray:init',
-								[ mark.itemPath, this.path ]
-							)
+						'paths', mark.paths.create( 'ray:append', this.path )
 					)
 			);
 

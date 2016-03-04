@@ -48,6 +48,7 @@ if( JION )
 
 var
 	jion,
+	jion$pathRay,
 	visual_mark_caret,
 	visual_mark_text;
 
@@ -140,11 +141,13 @@ prototype.hasCaret = true;
 
 
 /*
-| The item's path.
+| The item path.
+|
+| This is either undefined or an pathRay of length === 1
 */
 jion.lazyValue(
 	prototype,
-	'itemPath',
+	'paths',
 	function( )
 {
 	var
@@ -154,7 +157,9 @@ jion.lazyValue(
 
 	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
 
-	return path.limit( 3 );
+	return(
+		jion$pathRay.create( 'ray:append', path.limit( 3 ) )
+	);
 }
 );
 

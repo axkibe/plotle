@@ -146,7 +146,7 @@ visual_para.concernsMark =
 	if( mark.reflect === 'visual_mark_range' )
 	{
 		return(
-			mark.itemPath.subPathOf( path )
+			mark.containsPath( path.limit( 3 ) )
 			? mark
 			: undefined
 		);

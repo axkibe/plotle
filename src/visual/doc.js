@@ -260,7 +260,7 @@ prototype.draw =
 	if(
 		mark
 		&& mark.reflect === 'visual_mark_range'
-		&& mark.itemPath.subPathOf( this.path )
+		&& mark.containsPath( this.path.limit( 3 ) )
 	)
 	{
 		display.paint(
