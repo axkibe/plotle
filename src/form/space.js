@@ -140,7 +140,6 @@ prototype.dragMove =
 		// ctrl
 	)
 {
-	return true;
 };
 
 

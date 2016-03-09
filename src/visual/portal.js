@@ -82,6 +82,7 @@ var
 	fabric_spaceRef,
 	gruga_portal,
 	jion,
+	jion$pathRay,
 	math_half,
 	visual_mark_caret,
 	visual_mark_items,
@@ -441,12 +442,12 @@ prototype.click =
 
 	// if non of the field were clicked
 	// just focus the portal itself
-	if( !setMark && !this.mark )
+	if( !setMark )
 	{
 		setMark =
 			visual_mark_items.create(
-				'paths',
-					jion.pathRay.create(
+				'itemPaths',
+					jion$pathRay.create(
 						'ray:init', [ this.path ]
 					)
 			);
@@ -660,7 +661,7 @@ prototype.pointingHover =
 		return(
 			result_hover.create(
 				'path', this.path.append( 'moveToButton' ),
-				'cursor', 'default'
+				'cursor', 'pointer'
 			)
 		);
 	}

@@ -45,10 +45,7 @@ transmitter =
 		var
 			message;
 
-		if( failScreen )
-		{
-			return;
-		}
+		if( failScreen ) return;
 
 		if( config.devel && !config.debug.weinre )
 		{
@@ -530,8 +527,6 @@ _resetAtweenState =
 prototype._onAtweenTime =
 	function( )
 {
-	var
-		cursor;
 
 /**/if( CHECK )
 /**/{
@@ -545,11 +540,11 @@ prototype._onAtweenTime =
 
 	root.dragStart( atweenPos, atweenShift, atweenCtrl );
 
-	cursor = root.dragMove( atweenMove, atweenShift, atweenCtrl );
+	root.dragMove( atweenMove, atweenShift, atweenCtrl );
 
 	_resetAtweenState( );
 
-	if( cursor ) canvas.style.cursor = cursor;
+	system._repeatHover( );
 };
 
 
@@ -812,9 +807,49 @@ prototype._pointingHover =
 
 	cursor = root.pointingHover( p, shift, ctrl );
 
-	if( cursor ) canvas.style.cursor = cursor;
+	this._setCursor( cursor );
+
 };
 
+
+/*
+| Sets the cursor
+*/
+prototype._setCursor =
+	function(
+		cursor
+	)
+{
+	if( !cursor ) return;
+
+	switch( cursor )
+	{
+
+		case 'grab' :
+
+			canvas.style.cursor = '';
+
+			canvas.className = 'grab';
+
+			break;
+
+		case 'grabbing' :
+
+			canvas.style.cursor = '';
+
+			canvas.className = 'grabbing';
+
+			break;
+
+		default :
+
+			canvas.style.cursor = cursor;
+
+			canvas.className = '';
+
+			break;
+	}
+};
 
 /*
 | Repeats the last hover.
@@ -824,17 +859,9 @@ prototype._pointingHover =
 prototype._repeatHover =
 	function( )
 {
-	var
-		cursor;
+	if( !hoverP ) return;
 
-	if( !hoverP )
-	{
-		return;
-	}
-
-	cursor = root.pointingHover( hoverP, hoverShift, hoverCtrl );
-
-	if( cursor ) canvas.style.cursor = cursor;
+	this._setCursor( root.pointingHover( hoverP, hoverShift, hoverCtrl ) );
 };
 
 
@@ -890,7 +917,9 @@ prototype._onMouseMove =
 
 				root.dragStart( atweenPos, shift, ctrl );
 
-				cursor = root.dragMove( p, shift, ctrl );
+				root.dragMove( p, shift, ctrl );
+
+				system._repeatHover( );
 
 				_resetAtweenState( );
 
@@ -905,7 +934,9 @@ prototype._onMouseMove =
 
 		case 'drag':
 
-			cursor = root.dragMove( p, shift, ctrl );
+			root.dragMove( p, shift, ctrl );
+
+			system._repeatHover( );
 
 			break;
 
@@ -915,7 +946,7 @@ prototype._onMouseMove =
 
 	}
 
-	if( cursor ) canvas.style.cursor = cursor;
+	this._setCursor( cursor );
 
 	return true;
 };
@@ -1087,7 +1118,6 @@ prototype._onTouchMove =
 {
 	var
 		ctrl,
-		cursor,
 		dragbox,
 		p,
 		shift;
@@ -1095,10 +1125,7 @@ prototype._onTouchMove =
 	event.preventDefault();
 
 	// for now ignore multi-touches
-	if( event.touches.length !== 1 )
-	{
-		return false;
-	}
+	if( event.touches.length !== 1 ) return false;
 
 	p =
 		euclid_point.create(
@@ -1135,7 +1162,9 @@ prototype._onTouchMove =
 
 				root.dragStart( atweenPos, shift, ctrl );
 
-				cursor = root.dragMove( p, shift, ctrl );
+				root.dragMove( p, shift, ctrl );
+
+				system._repeatHover( );
 
 				_resetAtweenState( );
 
@@ -1151,7 +1180,9 @@ prototype._onTouchMove =
 
 		case 'drag':
 
-			cursor = root.dragMove( p, shift, ctrl );
+			root.dragMove( p, shift, ctrl );
+
+			system._repeatHover( );
 
 			break;
 
@@ -1293,7 +1324,9 @@ prototype._specialKey =
 
 	root.specialKey( key, shift, ctrl );
 
-	this._steerAttention( );
+	system._repeatHover( );
+
+	system._steerAttention( );
 
 	return false;
 };
@@ -1324,6 +1357,10 @@ prototype._releaseSpecialKey =
 	if( !key ) return;
 
 	root.releaseSpecialKey( key, shift, ctrl );
+
+	system._repeatHover( );
+
+	system._steerAttention( );
 };
 
 
@@ -1349,7 +1386,9 @@ prototype._testInput =
 
 	root.input( text.substr( 2 ) );
 
-	this._steerAttention( );
+	system._repeatHover( );
+
+	system._steerAttention( );
 };
 
 

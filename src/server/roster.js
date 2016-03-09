@@ -675,6 +675,10 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gruga/iconHand.js',
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gruga/iconRemove.js',
 		'inBundle', true
 	),
@@ -988,6 +992,10 @@ server_resourceRay.create( 'ray:init', [
 //	),
 	server_resource.create(
 		'filePath', 'media/dejavusans/style.css',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'media/cursor.css',
 		'maxage', 'long'
 	),
 	server_resource.create(

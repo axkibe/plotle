@@ -12,7 +12,7 @@ if( JION )
 		id : 'visual_mark_items',
 		attributes :
 		{
-			paths :
+			itemPaths :
 			{
 				comment : 'paths of the items',
 				type : 'jion$pathRay'
@@ -61,7 +61,7 @@ prototype._init =
 /**/{
 /**/	var c, cZ, paths;
 /**/
-/**/	paths = this.paths;
+/**/	paths = this.itemPaths;
 /**/
 /**/	if( paths.length !== 1 ) throw new Error( ); // TODO
 /**/
@@ -92,7 +92,7 @@ prototype.createTransformed =
 		paths,
 		tm;
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	arr = [ ];
 
@@ -114,7 +114,7 @@ prototype.createTransformed =
 
 	return(
 		this.create(
-			'paths', this.paths.create( 'ray:init', arr )
+			'itemPaths', this.itemPaths.create( 'ray:init', arr )
 		)
 	);
 };
@@ -128,7 +128,7 @@ jion.lazyFunctionInteger(
 	'_changeMarkNode',
 	function( i )
 {
-	return change_mark_node.create( 'path', this.paths.get( i ).chop );
+	return change_mark_node.create( 'path', this.itemPaths.get( i ).chop );
 }
 );
 
@@ -172,7 +172,7 @@ prototype.containsPath =
 /**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	for( a = 0, aZ = paths.length; a < aZ; a++ )
 	{
@@ -203,7 +203,7 @@ prototype.togglePath =
 /**/	if( path.empty ) throw new Error( );
 /**/}
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	for( a = 0, aZ = paths.length; a < aZ; a++ )
 	{
@@ -211,8 +211,8 @@ prototype.togglePath =
 		{
 			return(
 				this.create(
-					'paths',
-						this.paths.create( 'ray:remove', a )
+					'itemPaths',
+						this.itemPaths.create( 'ray:remove', a )
 				)
 			);
 		}
@@ -220,11 +220,14 @@ prototype.togglePath =
 
 	return(
 		this.create(
-			'paths',
-				this.paths.create( 'ray:append', path )
+			'itemPaths',
+				this.itemPaths.create( 'ray:append', path )
 		)
 	);
 };
+
+
+jion.lazyValue( prototype, 'paths', function() { throw new Error( ); } ); // TODO
 
 
 /*
@@ -246,7 +249,7 @@ prototype.containsPath =
 /**/	if( path.empty ) throw new Error( );
 /**/}
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	for( a = 0, aZ = paths.length; a < aZ; a++ )
 	{

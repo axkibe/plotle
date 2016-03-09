@@ -12,12 +12,12 @@ if( JION )
 		id : 'action_dragItems',
 		attributes :
 		{
-			moveBy:
+			moveBy :
 			{
 				comment : 'drag the item to this pnw',
 				type : [ 'undefined', 'euclid_point' ]
 			},
-			paths:
+			itemPaths :
 			{
 				comment : 'the paths of the items to drag',
 				type : [ 'undefined', 'jion$pathRay' ]
@@ -72,7 +72,7 @@ prototype.affects =
 		paths,
 		pLen;
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	for( a = 0, pLen = paths.length; a < pLen; a++ )
 	{

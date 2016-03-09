@@ -106,6 +106,7 @@ var
 	gleam_canvas,
 	gleam_glint_window,
 	jion,
+	result_hover,
 	root;
 
 /*
@@ -223,7 +224,7 @@ prototype._init =
 					!!(
 						this.access === 'rw'
 						&& this.mark
-						&& this.mark.paths
+						&& this.mark.itemPaths
 					);
 
 				down = false;
@@ -424,7 +425,7 @@ prototype.pushButton =
 
 		case 'remove' :
 
-			paths = this.mark.paths;
+			paths = this.mark.itemPaths;
 
 			changes = [ ];
 
@@ -536,7 +537,7 @@ prototype.pointingHover =
 		}
 	}
 
-	return;
+	return result_hover.create( 'cursor', 'default' );
 };
 
 

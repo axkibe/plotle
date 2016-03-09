@@ -38,13 +38,7 @@ var
 var
 	ap;
 
-// FIXME anchor to center
-ap =
-	euclid_anchor_point.create(
-		'anchor', 'nw',
-		'x', 18,
-		'y', 12
-	);
+ap = euclid_anchor_point.c.add( -4, -9 );
 
 
 gruga_iconNormal = { };
@@ -73,7 +67,7 @@ gruga_iconNormal.shape =
 			euclid_anchor_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
 			euclid_anchor_shape_line.create( 'close', true )
 		],
-		'pc', ap.add( 5, 9 )
+		'pc', euclid_anchor_point.c
 	);
 
 

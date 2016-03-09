@@ -147,7 +147,7 @@ prototype.hasCaret = true;
 */
 jion.lazyValue(
 	prototype,
-	'paths',
+	'itemPaths',
 	function( )
 {
 	var

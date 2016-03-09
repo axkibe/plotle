@@ -309,7 +309,7 @@ jion.lazyValue(
 
 	if( !mark ) return undefined;
 
-	paths = mark.paths;
+	paths = mark.itemPaths;
 
 	if( !paths || paths.length !== 1 ) return undefined;
 
@@ -341,9 +341,9 @@ jion.lazyValue(
 
 	if( mark )
 	{
-		if( mark.paths )
+		if( mark.itemPaths )
 		{
-			content = this.getRay( mark.paths );
+			content = this.getRay( mark.itemPaths );
 		}
 
 		if( content )
@@ -619,48 +619,65 @@ prototype.pointingHover =
 
 	frame = this.frame;
 
+	if( action )
+	{
+		switch( action.reflect )
+		{
+			case 'action_createRelation' :
+
+				if( action.relationState === 'start' )
+				{
+					for( a = 0, aZ = this.length; a < aZ; a++ )
+					{
+						item = this.atRank( a );
+
+						if( item.vZone.within( p ) )
+						{
+							root.create(
+								'action', action.create( 'fromItemPath', item.path )
+							);
+
+							return result_hover.create( 'cursor', 'default' );
+						}
+					}
+
+					root.create(
+						'action', action.create( 'fromItemPath', undefined )
+					);
+
+					return result_hover.create( 'cursor', 'default' );
+				}
+
+				break;
+
+			case 'action_dragItems' :
+
+				return result_hover.create( 'cursor', 'grabbing' );
+
+			case 'action_resizeItems' :
+
+				return result_hover.create( 'cursor', action.resizeDir + '-resize' );
+
+			case 'action_pan' :
+
+				if( action.startPoint )
+				{
+					return result_hover.create( 'cursor', 'grabbing' );
+				}
+
+				break;
+
+			case 'action_select' :
+
+				return result_hover.create( 'cursor', 'crosshair' );
+		}
+	}
+
 	if( frame )
 	{
 		result = frame.pointingHover( p );
 
 		if( result ) return result;
-	}
-
-	if(
-		action
-		&& action.reflect === 'action_createRelation'
-		&& action.relationState === 'start'
-	)
-	{
-		for( a = 0, aZ = this.length; a < aZ; a++ )
-		{
-			item = this.atRank( a );
-
-			if( item.vZone.within( p ) )
-			{
-				root.create(
-					'action', action.create( 'fromItemPath', item.path )
-				);
-
-				return(
-					result_hover.create(
-						'path', undefined,
-						'cursor', 'default'
-					)
-				);
-			}
-		}
-
-		root.create(
-			'action', action.create( 'fromItemPath', undefined )
-		);
-
-		return(
-			result_hover.create(
-				'path', undefined,
-				'cursor', 'default'
-			)
-		);
 	}
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
@@ -709,30 +726,7 @@ prototype.dragStart =
 	// resizing
 	dp = p.fromView( view );
 
-	// see if the handles were targeted
-	if( access == 'rw' && frame )
-	{
-		result = frame.dragStart( p, shift, ctrl, access );
-
-		if( result !== undefined ) return result;
-	}
-
 	action = this.action;
-
-	if( action && action.reflect === 'action_createGeneric' )
-	{
-		this._startCreateGeneric( dp );
-
-		return;
-	}
-
-	// see if one item was targeted
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		item = this.atRank( a );
-
-		if( item.dragStart( p, shift, ctrl, access ) ) return;
-	}
 
 	if( action )
 	{
@@ -777,6 +771,29 @@ prototype.dragStart =
 
 				return;
 		}
+	}
+
+	// see if the frame was targeted
+	if( access == 'rw' && frame )
+	{
+		result = frame.dragStart( p, shift, ctrl, access );
+
+		if( result !== undefined ) return result;
+	}
+
+	if( action && action.reflect === 'action_createGeneric' )
+	{
+		this._startCreateGeneric( dp );
+
+		return;
+	}
+
+	// see if one item was targeted
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		item = this.atRank( a );
+
+		if( item.dragStart( p, shift, ctrl, access ) ) return;
 	}
 
 
@@ -896,7 +913,7 @@ prototype.dragStop =
 
 		case 'action_dragItems' :
 
-			paths = action.paths;
+			paths = action.itemPaths;
 
 			for( a = 0, aZ = paths.length; a < aZ; a++ )
 			{
@@ -943,7 +960,7 @@ prototype.dragStop =
 
 		case 'action_resizeItems' :
 
-			paths = action.paths;
+			paths = action.itemPaths;
 
 			for( a = 0, aZ = paths.length; a < aZ; a++ )
 			{
@@ -1024,39 +1041,53 @@ prototype.dragMove =
 	{
 		case 'action_create' :
 
-			return this._moveCreate( p, shift, ctrl );
+			this._moveCreate( p, shift, ctrl );
+
+			return;
 
 		case 'action_createGeneric' :
 
-			return this._moveCreateGeneric( p, shift, ctrl );
+			this._moveCreateGeneric( p, shift, ctrl );
+
+			return;
 
 		case 'action_createRelation' :
 
-			return this._moveCreateRelation( p, shift, ctrl );
+			this._moveCreateRelation( p, shift, ctrl );
+
+			return;
 
 		case 'action_pan' :
 
-			return this._movePan( p, shift, ctrl );
+			this._movePan( p, shift, ctrl );
+
+			return;
 
 		case 'action_dragItems' :
 
-			return this._moveDragItems( p, shift, ctrl );
+			this._moveDragItems( p, shift, ctrl );
+
+			return;
 
 		case 'action_resizeItems' :
 
-			return this._moveResizeItems( p, shift, ctrl );
+			this._moveResizeItems( p, shift, ctrl );
+
+			return;
 
 		case 'action_scrolly' :
 
-			return this._moveScrollY( p, shift, ctrl );
+			this._moveScrollY( p, shift, ctrl );
+
+			return;
 
 		case 'action_select' :
 
-			return this._moveSelect( p, shift, ctrl );
+			this._moveSelect( p, shift, ctrl );
 
-		default :
+			return;
 
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -1076,10 +1107,7 @@ prototype.input =
 
 	mark = this.mark;
 
-	if( !mark || !mark.hasCaret )
-	{
-		return false;
-	}
+	if( !mark || !mark.hasCaret ) return false;
 
 	path = mark.caret.path;
 
@@ -1117,29 +1145,68 @@ prototype.specialKey =
 {
 	var
 		item,
-		mark;
+		mark,
+		paths,
+		r,
+		rZ,
+		pZ;
 
 	if( ctrl )
 	{
 		switch( key )
 		{
-			case 'z' : root.doTracker.undo( ); return;
+			case 'z' : root.doTracker.undo( ); return true;
 
-			case 'y' : root.doTracker.redo( ); return;
+			case 'y' : root.doTracker.redo( ); return true;
 
-			case ',' : this._changeZoom(  1 ); return;
+			case ',' : this._changeZoom(  1 ); return true;
 
-			case '.' : this._changeZoom( -1 ); return;
+			case '.' : this._changeZoom( -1 ); return true;
 		}
 	}
 
 	mark = this.mark;
 
-	if( !mark || !mark.hasCaret ) return;
+	if( mark && mark.hasCaret )
+	{
+		item = this.get( mark.caret.path.get( 2 ) );
 
-	item = this.get( mark.caret.path.get( 2 ) );
+		if( item )
+		{
+			item.specialKey( key, shift, ctrl );
+		}
 
-	if( item ) item.specialKey( key, shift, ctrl );
+		return;
+	}
+
+	if( ctrl )
+	{
+		switch( key )
+		{
+			case 'a' :
+
+				// selects all items in this space
+
+				paths = [ ];
+
+				pZ = 0;
+
+				for( r = 0, rZ = this.length; r < rZ; r++ )
+				{
+					paths[ pZ++ ] = this.atRank( r ).path;
+				}
+
+				paths = jion$pathRay.create( 'ray:init', paths );
+
+				mark = visual_mark_items.create( 'itemPaths', paths );
+
+				root.create( 'mark', mark );
+
+				return true;
+		}
+
+		return true;
+	}
 };
 
 
@@ -1241,8 +1308,6 @@ prototype._moveCreateGeneric =
 	root.create(
 		'action', action.create( 'transItem', transItem )
 	);
-
-	return 'pointer';
 };
 
 
@@ -1284,7 +1349,7 @@ prototype._moveCreateRelation =
 				)
 		);
 
-		return 'pointer';
+		return;
 	}
 
 	// Looks if the action is dragging to an item
@@ -1292,7 +1357,7 @@ prototype._moveCreateRelation =
 	{
 		if( this.atRank( r ).createRelationMove( p, action ) )
 		{
-			return 'pointer';
+			return;
 		}
 	}
 
@@ -1303,8 +1368,6 @@ prototype._moveCreateRelation =
 				'toPoint', p
 			)
 	);
-
-	return 'pointer';
 };
 
 
@@ -1344,8 +1407,6 @@ prototype._moveCreate =
 				)
 		);
 	}
-
-	return 'pointer';
 };
 
 
@@ -1381,8 +1442,6 @@ prototype._moveDragItems =
 					)
 			)
 	);
-
-	return true;
 };
 
 
@@ -1484,7 +1543,7 @@ prototype._moveResizeItems =
 		if( scaleY === undefined ) scaleY = 1;
 	}
 
-	paths = action.paths;
+	paths = action.itemPaths;
 
 	startZones = action.startZones;
 
@@ -1522,8 +1581,6 @@ prototype._moveResizeItems =
 				'scaleY', scaleY
 			)
 	);
-
-	return true;
 };
 
 
@@ -1558,8 +1615,6 @@ prototype._movePan =
 					)
 			)
 	);
-
-	return 'pointer';
 };
 
 
@@ -1584,8 +1639,6 @@ prototype._moveSelect =
 				'toPoint', p
 			)
 	);
-
-	return 'pointer';
 };
 
 
@@ -1610,7 +1663,7 @@ prototype._moveScrollY =
 
 	action = this.action;
 
-	item = this.get( action.paths.get( 0 ).get( -1 ) );
+	item = this.get( action.itemPaths.get( 0 ).get( -1 ) );
 
 	view = this.view;
 
@@ -1624,8 +1677,6 @@ prototype._moveScrollY =
 		item.path.append( 'scrollPos' ),
 		item.scrollPos.create( 'y', spos )
 	);
-
-	return 'move';
 };
 
 
@@ -1858,13 +1909,13 @@ prototype._stopSelect =
 
 		if( !ctrl || !this.mark )
 		{
-			mark = visual_mark_items.create( 'paths', paths );
+			mark = visual_mark_items.create( 'itemPaths', paths );
 		}
 		else
 		{
 			mark =
 				visual_mark_items.create(
-					'paths', paths.combine( this.mark.paths )
+					'itemPaths', paths.combine( this.mark.itemPaths )
 				);
 		}
 	}

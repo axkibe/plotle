@@ -193,7 +193,7 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'paths',
+	'itemPaths',
 	function( )
 {
 	var

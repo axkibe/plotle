@@ -12,7 +12,7 @@ if( JION )
 		id : 'action_resizeItems',
 		attributes :
 		{
-			paths:
+			itemPaths:
 			{
 				comment : 'the paths of the items to drag',
 				type : [ 'undefined', 'jion$pathRay' ]
@@ -98,7 +98,7 @@ prototype.affects =
 		paths,
 		pLen;
 
-	paths = this.paths;
+	paths = this.itemPaths;
 
 	for( a = 0, pLen = paths.length; a < pLen; a++ )
 	{

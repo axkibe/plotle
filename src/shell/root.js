@@ -689,9 +689,7 @@ prototype.dragMove =
 
 	screen = root._currentScreen;
 
-	if( screen ) return screen.dragMove( p, shift, ctrl );
-
-	return;
+	if( screen ) screen.dragMove( p, shift, ctrl );
 };
 
 
@@ -947,6 +945,7 @@ prototype.specialKey =
 {
 	var
 		action,
+		result,
 		screen;
 
 	screen = root._currentScreen;
@@ -963,9 +962,14 @@ prototype.specialKey =
 		return true;
 	}
 
-	if( screen ) screen.specialKey( key, shift, ctrl );
+	if( screen )
+	{
+		result = screen.specialKey( key, shift, ctrl );
+	}
 
 	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
+
+	return result;
 };
 
 

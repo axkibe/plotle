@@ -94,7 +94,8 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_scrolly.create(
-					'paths', jion$pathRay.create( 'ray:append', this.path ),
+					'itemPaths',
+						jion$pathRay.create( 'ray:append', this.path ),
 					'startPoint', p,
 					'startPos', sbary.pos
 				)
@@ -144,18 +145,17 @@ visual_item.dragStart =
 
 		paths =
 			jion$pathRay.create(
-				'ray:init',
-				[ this.path ]
+				'ray:init', [ this.path ]
 			);
 
 		root.create(
 			'action',
 				action_dragItems.create(
 					'startPoint', p.fromView( this.view ),
-					'paths', paths
+					'itemPaths', paths
 				),
 			'mark',
-				visual_mark_items.create( 'paths', paths )
+				visual_mark_items.create( 'itemPaths', paths )
 		);
 
 		return true;
@@ -306,7 +306,7 @@ visual_item.createRelationMove =
 		action
 	)
 {
-	if( !this.vZone.within( p ) ) return false;
+	if( !this.vZone.within( p ) ) return;
 
 	root.create(
 		'action', action.create( 'toItemPath', this.path )
@@ -338,7 +338,7 @@ visual_item.ctrlClick =
 		root.create(
 			'mark',
 				visual_mark_items.create(
-					'paths',
+					'itemPaths',
 						jion$pathRay.create( 'ray:init', [ this.path ] )
 				)
 		);
@@ -362,7 +362,11 @@ visual_item.ctrlClick =
 			root.create(
 				'mark',
 					visual_mark_items.create(
-						'paths', mark.paths.create( 'ray:append', this.path )
+						'itemPaths',
+							mark.itemPaths.create(
+								'ray:append',
+								this.path
+							)
 					)
 			);
 
@@ -412,6 +416,7 @@ visual_item.pointingHover =
 	)
 {
 	var
+		cursor,
 		sbary;
 
 	sbary = this.scrollbarY;
@@ -421,17 +426,33 @@ visual_item.pointingHover =
 		return(
 			result_hover.create(
 				'path', this.path,
-				'cursor', 'default'
+				'cursor', 'ns-resize'
 			)
 		);
 	}
 
 	if( !this.vZone.within( p ) ) return;
 
+	cursor = 'default';
+
+	/*
+	if( root.action )
+	{
+		switch( root.action.reflect )
+		{
+			case 'action_select' :
+
+				cursor = 'normal';
+
+				break;
+		}
+	}
+	*/
+
 	return(
 		result_hover.create(
 			'path', this.path,
-			'cursor', 'default'
+			'cursor', cursor
 		)
 	);
 };

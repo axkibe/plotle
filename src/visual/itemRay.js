@@ -46,12 +46,10 @@ prototype = visual_itemRay.prototype;
 
 /*
 | Returns the ray of paths of the items
-|
-| TODO change to 'keys'
 */
 jion.lazyValue(
 	prototype,
-	'paths',
+	'itemPaths',
 	function( )
 {
 	var

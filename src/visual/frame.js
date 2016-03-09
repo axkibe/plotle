@@ -276,7 +276,7 @@ prototype.dragStart =
 
 	if( !this._outerZone.within( p ) ) return;
 
-	if( this._withinContentMask( p ) ) return;
+	//if( this._withinContentMask( p ) ) return;
 
 	if( this._handleNwShape.within( p ) )
 	{
@@ -329,7 +329,7 @@ prototype.dragStart =
 		root.create(
 			'action',
 				action_resizeItems.create(
-					'paths', this.content.paths,
+					'itemPaths', this.content.itemPaths,
 					'startZones', this.content.zones,
 					'proportional', this.proportional,
 					'resizeDir', com,
@@ -347,7 +347,7 @@ prototype.dragStart =
 		'action',
 			action_dragItems.create(
 				'startPoint', dp,
-				'paths', this.content.paths
+				'itemPaths', this.content.itemPaths
 			)
 	);
 
@@ -389,7 +389,7 @@ prototype.pointingHover =
 		return result_hover.create( 'cursor', com + '-resize' );
 	}
 
-	return result_hover.create( 'cursor', 'pointer' );
+	return result_hover.create( 'cursor', 'grab' );
 };
 
 
@@ -1006,18 +1006,26 @@ prototype._withinContentMask =
 )
 {
 	var
+		c,
+		cZ,
+		ci,
 		content,
 		sbary;
 
-	content = this.content.get( 0 );
+	content = this.content;
 
-	if( content.vSilhoutte.within( p ) ) return true;
-
-	sbary = content.scrollbarY;
-
-	if( sbary )
+	for( c = 0, cZ = content.length; c < cZ; c++ )
 	{
-		if( sbary.area.within( p ) ) return true;
+		ci = content.get( c );
+
+		if( ci.vSilhoutte.within( p ) ) return true;
+
+		sbary = ci.scrollbarY;
+
+		if( sbary )
+		{
+			if( sbary.area.within( p ) ) return true;
+		}
 	}
 
 	return false;
