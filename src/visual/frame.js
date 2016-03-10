@@ -253,6 +253,31 @@ function( )
 );
 
 
+
+/*
+| Checks if the frame has been clicked.
+*/
+prototype.click =
+	function(
+		p,        // cursor point ( in view )
+		shift,    // true if shift key was pressed
+		ctrl      // true if ctrl key was pressed
+		//access  // rights the current user has for current space
+	)
+{
+	// ctrl-clicks are not swallowed.
+	if( ctrl ) return false;
+
+	if( !this._outerZone.within( p ) ) return;
+
+	if( this._withinContentMask( p ) ) return;
+
+	// it has been clicked, yet do nothing.
+
+	return true;
+};
+
+
 /*
 | Starts an operation with the pointing device held down.
 */
@@ -276,7 +301,7 @@ prototype.dragStart =
 
 	if( !this._outerZone.within( p ) ) return;
 
-	//if( this._withinContentMask( p ) ) return;
+	if( this._withinContentMask( p ) ) return;
 
 	if( this._handleNwShape.within( p ) )
 	{

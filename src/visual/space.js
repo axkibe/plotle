@@ -604,6 +604,7 @@ prototype.pointingHover =
 	var
 		a,
 		action,
+		aType,
 		aZ,
 		item,
 		focus,
@@ -619,61 +620,56 @@ prototype.pointingHover =
 
 	frame = this.frame;
 
-	if( action )
+	aType = action && action.reflect;
+
+	switch( aType )
 	{
-		switch( action.reflect )
-		{
-			case 'action_createRelation' :
+		case 'action_createRelation' :
 
-				if( action.relationState === 'start' )
+			if( action.relationState === 'start' )
+			{
+				for( a = 0, aZ = this.length; a < aZ; a++ )
 				{
-					for( a = 0, aZ = this.length; a < aZ; a++ )
+					item = this.atRank( a );
+
+					if( item.vZone.within( p ) )
 					{
-						item = this.atRank( a );
+						root.create(
+							'action', action.create( 'fromItemPath', item.path )
+						);
 
-						if( item.vZone.within( p ) )
-						{
-							root.create(
-								'action', action.create( 'fromItemPath', item.path )
-							);
-
-							return result_hover.create( 'cursor', 'default' );
-						}
+						return result_hover.create( 'cursor', 'default' );
 					}
-
-					root.create(
-						'action', action.create( 'fromItemPath', undefined )
-					);
-
-					return result_hover.create( 'cursor', 'default' );
 				}
 
-				break;
+				root.create(
+					'action', action.create( 'fromItemPath', undefined )
+				);
 
-			case 'action_dragItems' :
+				return result_hover.create( 'cursor', 'default' );
+			}
 
+			break;
+
+		case 'action_dragItems' :
+
+			return result_hover.create( 'cursor', 'grabbing' );
+
+		case 'action_resizeItems' :
+
+			return result_hover.create( 'cursor', action.resizeDir + '-resize' );
+
+		case 'action_pan' :
+
+			if( action.startPoint )
+			{
 				return result_hover.create( 'cursor', 'grabbing' );
+			}
 
-			case 'action_resizeItems' :
-
-				return result_hover.create( 'cursor', action.resizeDir + '-resize' );
-
-			case 'action_pan' :
-
-				if( action.startPoint )
-				{
-					return result_hover.create( 'cursor', 'grabbing' );
-				}
-
-				break;
-
-			case 'action_select' :
-
-				return result_hover.create( 'cursor', 'crosshair' );
-		}
+			break;
 	}
 
-	if( frame )
+	if( frame && aType !== 'action_select' )
 	{
 		result = frame.pointingHover( p );
 
@@ -684,12 +680,16 @@ prototype.pointingHover =
 	{
 		item = this.atRank( a );
 
-		result = item.pointingHover( p );
+		result = item.pointingHover( p, action );
 
 		if( result ) return result;
 	}
 
-	return result_hover.create( 'cursor', 'default' );
+	return(
+		result_hover.create(
+			'cursor', aType === 'action_select' ? 'crosshair' : 'pointer'
+		)
+	);
 };
 
 
@@ -706,12 +706,12 @@ prototype.dragStart =
 	var
 		a,
 		access,
+		aType,
 		aZ,
 		action,
 		dp,
 		focus,
 		frame,
-		result,
 		item,
 		view;
 
@@ -728,60 +728,15 @@ prototype.dragStart =
 
 	action = this.action;
 
-	if( action )
-	{
-		switch( action.reflect )
-		{
-			case 'action_select' :
-
-				root.create(
-					'action',
-						action.create(
-							'startPoint', p,
-							'toPoint', p
-						)
-				);
-
-				return;
-
-			case 'action_createRelation' :
-				// starts panning while creating a relation
-
-				root.create(
-					'action',
-						action.create(
-							'pan', view.pan,
-							'relationState', 'pan', // FIXME remove pan
-							'startPoint', p
-						)
-				);
-
-				return;
-
-			case 'action_create' :
-
-				// starts panning while creating nothing
-				root.create(
-					'action',
-						action.create(
-							'pan', view.pan,
-							'startPoint', p
-						)
-				);
-
-				return;
-		}
-	}
+	aType = action && action.reflect;
 
 	// see if the frame was targeted
-	if( access == 'rw' && frame )
+	if( access == 'rw' && frame && aType !== 'action_select' )
 	{
-		result = frame.dragStart( p, shift, ctrl, access );
-
-		if( result !== undefined ) return result;
+		if( frame.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
-	if( action && action.reflect === 'action_createGeneric' )
+	if( aType === 'action_createGeneric' )
 	{
 		this._startCreateGeneric( dp );
 
@@ -793,18 +748,63 @@ prototype.dragStart =
 	{
 		item = this.atRank( a );
 
-		if( item.dragStart( p, shift, ctrl, access ) ) return;
+		if( item.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
 
 	// otherwise panning is initiated
-	root.create(
-		'action',
-			action_pan.create(
-				'pan', view.pan,
-				'startPoint', p
-			)
-	);
+
+	switch( aType )
+	{
+		case 'action_create' :
+
+			root.create(
+				'action',
+					action.create(
+						'pan', view.pan,
+						'startPoint', p
+					)
+			);
+
+			return;
+
+		case 'action_createRelation' :
+
+			root.create(
+				'action',
+					action.create(
+						'pan', view.pan,
+						'relationState', 'pan', // FIXME remove pan
+						'startPoint', p
+					)
+			);
+
+			return;
+
+		case 'action_select' :
+
+			root.create(
+				'action',
+					action.create(
+						'startPoint', p,
+						'toPoint', p
+					)
+			);
+
+			return;
+
+		default :
+
+			root.create(
+				'action',
+					action_pan.create(
+						'pan', view.pan,
+						'startPoint', p
+					)
+			);
+
+			return;
+	}
 };
 
 
@@ -822,6 +822,7 @@ prototype.click =
 		a,
 		aZ,
 		access,
+		frame,
 		item,
 		mark,
 		view;
@@ -831,6 +832,10 @@ prototype.click =
 	mark = this.mark;
 
 	view = this.view;
+
+	frame = this.frame;
+
+	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
 
 	// clicked some item?
 	for( a = 0, aZ = this.length; a < aZ; a++ )

@@ -632,11 +632,10 @@ prototype.mousewheel =
 */
 prototype.pointingHover =
 	function(
-		p
+		p       // point hovered upon
 	)
 {
 	var
-		moveToButton,
 		pp,
 		view,
 		zone;
@@ -646,17 +645,11 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.vSilhoutte.within( p ) )
-	{
-		return;
-	}
-
-	moveToButton = this._moveToButton;
-
+	if( !this.vSilhoutte.within( p ) ) return;
 
 	pp = p.fromView( view ).sub( zone.pnw );
 
-	if( moveToButton.shape.within( pp ) )
+	if( this._moveToButton.shape.within( pp ) )
 	{
 		return(
 			result_hover.create(
@@ -665,16 +658,9 @@ prototype.pointingHover =
 			)
 		);
 	}
-	else
 	{
-		return(
-			result_hover.create(
-				'path', this.path,
-				'cursor', 'default'
-			)
-		);
+		return result_hover.create( 'cursor', 'default' );
 	}
-
 };
 
 

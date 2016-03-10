@@ -192,7 +192,7 @@ prototype.createRelationStop = visual_item.createRelationStop;
 /*
 | Handles a potential dragStart event for this item.
 */
-prototype.dragStart = visual_item.dragStart;
+prototype.dragStart = visual_docItem.dragStart;
 
 
 /*
@@ -396,7 +396,7 @@ jion.lazyValue( prototype, 'pnw', visual_label.pnw );
 /*
 | User is hovering their pointing device over something.
 */
-prototype.pointingHover = visual_item.pointingHover;
+prototype.pointingHover = visual_docItem.pointingHover;
 
 
 /*
@@ -412,14 +412,14 @@ jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
-	{
-		return(
-			euclid_rect.create(
-				'pnw', this.zone.pnw,
-				'pse', this.zone.pse.sub( 1, 1 )
-			)
-		);
-	}
+{
+	return(
+		euclid_rect.create(
+			'pnw', this.zone.pnw,
+			'pse', this.zone.pse.sub( 1, 1 )
+		)
+	);
+}
 );
 
 

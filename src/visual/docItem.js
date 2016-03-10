@@ -4,10 +4,16 @@
 
 
 var
+	action_scrolly,
+	jion$pathRay,
 	math_limit,
+	result_hover,
 	root,
+	visual_item,
 	visual_docItem,
-	visual_mark_caret;
+	visual_mark_caret,
+	visual_mark_range,
+	visual_mark_text;
 
 
 /*
@@ -39,27 +45,24 @@ visual_docItem.attentionCenter =
 
 
 /*
-| Checks if the item is being clicked and reacts.
+| Returns the mark for a point
 */
-visual_docItem.click =
+visual_docItem.markForPoint =
 	function(
-		p,
-		shift,
-		ctrl,
-		access
-	)
+		p,       // the point to mark to
+		doRange  // if true possible make a range
+)
 {
 	var
 		at,
 		doc,
+		mark,
 		para,
 		ppnw,
 		pnw,
 		pi,
 		vp,
 		view;
-
-	if( access != 'rw' ) return false;
 
 	view = this.view;
 
@@ -70,12 +73,7 @@ visual_docItem.click =
 	pi =
 		vp.sub(
 			pnw.x,
-			pnw.y
-			- (
-				this.scrollbarY
-				? this.scrollbarY.pos
-				: 0
-			)
+			pnw.y - ( this.scrollbarY ? this.scrollbarY.pos : 0 )
 		);
 
 	doc = this.doc;
@@ -95,16 +93,169 @@ visual_docItem.click =
 		at = para.text.length;
 	}
 
-	root.create(
-		'action', undefined,
-		'mark',
+	mark = this.mark;
+
+	if( doRange && mark && mark.reflect === 'visual_mark_caret' )
+	{
+		return(
+			visual_mark_range.create(
+				'doc', this.doc.fabric,
+				'beginMark', mark.textMark,
+				'endMark',
+					visual_mark_text.create(
+						'path', para.textPath,
+						'at', at
+					)
+			)
+		);
+	}
+	else if( doRange && mark && mark.reflect === 'visual_mark_range' )
+	{
+		return(
+			mark.create(
+				'endMark',
+					visual_mark_text.create(
+						'path', para.textPath,
+						'at', at
+					)
+			)
+		);
+	}
+	else
+	{
+		return(
 			visual_mark_caret.create(
 				'path', para.textPath,
 				'at', at
 			)
+		);
+	}
+};
+
+
+/*
+| Checks if the item is being clicked and reacts.
+*/
+visual_docItem.click =
+	function(
+		p,
+		shift,
+		ctrl,
+		access
+	)
+{
+	var
+		mark;
+
+	if( access != 'rw' ) return false;
+
+	// FUTURE make this less ugly.
+	mark = visual_docItem.markForPoint.call( this, p, shift );
+
+	root.create(
+		'action', undefined,
+		'mark', mark
 	);
 
 	return true;
+};
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+visual_docItem.dragStart =
+	function(
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		access,  // current space access rights
+		action   // current space action
+	)
+{
+	var
+		aType,
+		mark,
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	aType = action && action.reflect;
+
+	if(
+		!this.action
+		&& sbary
+		&& sbary.within( p )
+	)
+	{
+		root.create(
+			'action',
+				action_scrolly.create(
+					'itemPaths',
+						jion$pathRay.create( 'ray:append', this.path ),
+					'startPoint', p,
+					'startPos', sbary.pos
+				)
+		);
+
+		return true;
+	}
+
+	if( aType === 'action_select' )
+	{
+		if( !this.vSilhoutte.within( p ) ) return false;
+
+		mark = visual_docItem.markForPoint.call( this, p, true );
+
+		root.create( 'mark', mark );
+
+		return true;
+	}
+
+	return visual_item.dragStart.call( this, p, shift, ctrl, access, action );
+};
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+visual_docItem.pointingHover =
+	function(
+		p,     // point hovered upon
+		action // space action
+	)
+{
+	var
+		cursor,
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	if( sbary && sbary.within( p ) )
+	{
+		return(
+			result_hover.create(
+				'path', this.path,
+				'cursor', 'ns-resize'
+			)
+		);
+	}
+
+	if( !this.vZone.within( p ) ) return;
+
+	cursor = 'default';
+
+	switch( action && action.reflect )
+	{
+		case 'action_select' : cursor = 'text'; break;
+	}
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', cursor
+		)
+	);
 };
 
 

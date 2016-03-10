@@ -4,15 +4,11 @@
 
 
 var
-	action_createRelation,
 	action_dragItems,
-	action_scrolly,
 	change_ray,
 	change_set,
 	euclid_point,
-	jion$path,
 	jion$pathRay,
-	result_hover,
 	root,
 	visual_item,
 	visual_mark_items;
@@ -78,31 +74,10 @@ visual_item.dragStart =
 {
 	var
 		action,
-		paths,
-		sbary;
+		mark,
+		paths;
 
 	action = this.action;
-
-	sbary = this.scrollbarY;
-
-	if(
-		!action
-		&& sbary
-		&& sbary.within( p )
-	)
-	{
-		root.create(
-			'action',
-				action_scrolly.create(
-					'itemPaths',
-						jion$pathRay.create( 'ray:append', this.path ),
-					'startPoint', p,
-					'startPos', sbary.pos
-				)
-		);
-
-		return true;
-	}
 
 	if( !this.vSilhoutte.within( p ) ) return false;
 
@@ -122,27 +97,14 @@ visual_item.dragStart =
 			return true;
 	}
 
-	if( ctrl && access == 'rw' )
+	// dragging
+	if( access !== 'rw' ) return false;
+
+	mark = this.mark;
+
+	if( !mark || mark.reflect !== 'visual_mark_items' )
 	{
-		// relation binding
-		root.create(
-			'action',
-				action_createRelation.create(
-					'fromItemPath', this.path,
-					'toItemPath', jion$path.empty,
-					'relationState', 'hadSelect',
-					'toPoint', p
-				)
-		);
-
-		return true;
-	}
-
-	// scrolling or dragging
-	if( access == 'rw' )
-	{
-		// also takes focus
-
+		// also makes the user mark to this item
 		paths =
 			jion$pathRay.create(
 				'ray:init', [ this.path ]
@@ -157,15 +119,21 @@ visual_item.dragStart =
 			'mark',
 				visual_mark_items.create( 'itemPaths', paths )
 		);
-
-		return true;
 	}
 	else
 	{
-		return false;
+		// this is already part of a (multi) item mark.
+
+		root.create(
+			'action',
+				action_dragItems.create(
+					'startPoint', p.fromView( this.view ),
+					'itemPaths', mark.itemPaths
+				)
+		);
 	}
 
-	return access === 'rw';
+	return true;
 };
 
 
@@ -406,55 +374,5 @@ visual_item.createRelationStop =
 	return true;
 };
 
-
-/*
-| User is hovering their pointing device over something.
-*/
-visual_item.pointingHover =
-	function(
-		p
-	)
-{
-	var
-		cursor,
-		sbary;
-
-	sbary = this.scrollbarY;
-
-	if( sbary && sbary.within( p ) )
-	{
-		return(
-			result_hover.create(
-				'path', this.path,
-				'cursor', 'ns-resize'
-			)
-		);
-	}
-
-	if( !this.vZone.within( p ) ) return;
-
-	cursor = 'default';
-
-	/*
-	if( root.action )
-	{
-		switch( root.action.reflect )
-		{
-			case 'action_select' :
-
-				cursor = 'normal';
-
-				break;
-		}
-	}
-	*/
-
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', cursor
-		)
-	);
-};
 
 } )( );

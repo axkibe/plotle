@@ -324,7 +324,7 @@ prototype.createRelationStop = visual_item.createRelationStop;
 /*
 | Handles a potential dragStart event for this item.
 */
-prototype.dragStart = visual_item.dragStart;
+prototype.dragStart = visual_docItem.dragStart;
 
 
 /*
@@ -564,7 +564,7 @@ jion.lazyValue( prototype, 'pnw', visual_label.pnw );
 /*
 | User is hovering their pointing device over something.
 */
-prototype.pointingHover = visual_item.pointingHover;
+prototype.pointingHover = visual_docItem.pointingHover;
 
 
 /*
