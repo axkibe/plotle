@@ -462,6 +462,12 @@ prototype.positioning =
 
 
 /*
+| Returns the mark for a point
+*/
+prototype.markForPoint = visual_docItem.markForPoint;
+
+
+/*
 | Minimum height.
 */
 prototype.minHeight = gruga_note.minHeight;
@@ -498,6 +504,12 @@ prototype.mousewheel =
 
 	return true;
 };
+
+
+/*
+| A move during a text select on this item.
+*/
+prototype.moveSelect = visual_docItem.moveSelect;
 
 
 /*

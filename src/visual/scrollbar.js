@@ -200,10 +200,11 @@ jion.lazyValue(
 */
 prototype.within =
 	function(
-		p
+		p,
+		border
 	)
 {
-	return this.vZone.within( p );
+	return this.area.within( p, border );
 };
 
 

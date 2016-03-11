@@ -610,6 +610,8 @@ prototype.getPointOffset =
 
 	flow = this.flow;
 
+	if( point.y < 0 ) return 0;
+
 	for( line = 0; line < flow.length; line++ )
 	{
 		if( point.y <= flow.get( line ).y ) break;

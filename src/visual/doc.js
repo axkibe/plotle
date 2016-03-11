@@ -372,7 +372,10 @@ prototype.getParaAtPoint =
 		r,
 		rZ;
 
-	if( p.y < this.innerMargin.n ) return;
+	if( p.y < this.innerMargin.n )
+	{
+		return this.atRank( 0 );
+	}
 
 	pnws = this.paraPnws;
 

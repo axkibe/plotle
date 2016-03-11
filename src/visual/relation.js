@@ -374,6 +374,12 @@ prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
 
 
 /*
+| Returns the mark for a point
+*/
+prototype.markForPoint = visual_docItem.markForPoint;
+
+
+/*
 | Mouse wheel turned.
 */
 prototype.mousewheel =
@@ -435,6 +441,12 @@ prototype.specialKey = visual_docItem.specialKey;
 prototype.minScaleX = visual_label.minScaleX;
 
 prototype.minScaleY = visual_label.minScaleY;
+
+
+/*
+| A move during a text select on this item.
+*/
+prototype.moveSelect = visual_docItem.moveSelect;
 
 
 /*

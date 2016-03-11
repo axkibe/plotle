@@ -1634,9 +1634,17 @@ prototype._moveSelect =
 	)
 {
 	var
-		action;
+		action,
+		item;
 
 	action = this.action;
+
+	if( action.itemPath )
+	{
+		item = this.get( action.itemPath.get( 2 ) );
+
+		return item.moveSelect( p );
+	}
 
 	root.create(
 		'action',

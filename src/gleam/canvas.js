@@ -772,8 +772,9 @@ gleam_canvas.prototype.scale =
 */
 gleam_canvas.prototype.withinSketch =
 	function(
-		shape,
-		p
+		shape,   // the shape to test
+		p,       // the point
+		border   // additional border
 	)
 {
 	var
@@ -783,12 +784,11 @@ gleam_canvas.prototype.withinSketch =
 
 	cx.beginPath( );
 
-	if( arguments.length !== 2 ) throw new Error( );
-
-	this._sketch( shape, 0, 0.5 );
+	this._sketch( shape, border || 0, 0.5 );
 
 	return cx.isPointInPath( p.x, p.y );
 };
+
 
 
 /*::::::::::::

@@ -134,6 +134,25 @@ visual_docItem.markForPoint =
 
 
 /*
+| A move during a text select on this item.
+*/
+visual_docItem.moveSelect =
+	function(
+		p
+	)
+{
+	var
+		mark;
+
+	mark = this.markForPoint( p, true );
+
+	root.create( 'mark', mark );
+
+	this.scrollMarkIntoView( );
+};
+
+
+/*
 | Checks if the item is being clicked and reacts.
 */
 visual_docItem.click =
@@ -149,13 +168,9 @@ visual_docItem.click =
 
 	if( access != 'rw' ) return false;
 
-	// FUTURE make this less ugly.
-	mark = visual_docItem.markForPoint.call( this, p, shift );
+	mark = this.markForPoint( p, shift );
 
-	root.create(
-		'action', undefined,
-		'mark', mark
-	);
+	root.create( 'mark', mark );
 
 	return true;
 };
@@ -185,7 +200,7 @@ visual_docItem.dragStart =
 	if(
 		!this.action
 		&& sbary
-		&& sbary.within( p )
+		&& sbary.within( p, -1 )
 	)
 	{
 		root.create(
@@ -205,9 +220,11 @@ visual_docItem.dragStart =
 	{
 		if( !this.vSilhoutte.within( p ) ) return false;
 
-		mark = visual_docItem.markForPoint.call( this, p, true );
+		mark = this.markForPoint( p, false );
 
-		root.create( 'mark', mark );
+		action = action.create( 'itemPath', this.path );
+
+		root.create( 'action', action, 'mark', mark );
 
 		return true;
 	}
@@ -231,7 +248,7 @@ visual_docItem.pointingHover =
 
 	sbary = this.scrollbarY;
 
-	if( sbary && sbary.within( p ) )
+	if( sbary && sbary.within( p, -1 ) )
 	{
 		return(
 			result_hover.create(

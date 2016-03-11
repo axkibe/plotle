@@ -691,7 +691,8 @@ prototype.sub =
 */
 prototype.within =
 	function(
-		p
+		p,      // point
+		border  // additional border
 	)
 {
 	var
@@ -699,6 +700,8 @@ prototype.within =
 		y,
 		pnw,
 		pse;
+
+	border = border || 0;
 
 	x = p.x;
 
@@ -709,10 +712,10 @@ prototype.within =
 	pse = this.pse;
 
 	return(
-		x >= pnw.x
-		&& y >= pnw.y
-		&& x <= pse.x
-		&& y <= pse.y
+		x >= pnw.x + border
+		&& y >= pnw.y + border
+		&& x <= pse.x - border
+		&& y <= pse.y - border
 	);
 };
 

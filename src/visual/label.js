@@ -426,6 +426,12 @@ prototype.input = visual_docItem.input;
 
 
 /*
+| Returns the mark for a point
+*/
+prototype.markForPoint = visual_docItem.markForPoint;
+
+
+/*
 | Returns the minimum x-scale factor this item could go through.
 */
 visual_label.minScaleX =
@@ -463,6 +469,12 @@ prototype.mousewheel =
 {
 	return false;
 };
+
+
+/*
+| A move during a text select on this item.
+*/
+prototype.moveSelect = visual_docItem.moveSelect;
 
 
 /*

@@ -12,6 +12,11 @@ if( JION )
 		id : 'action_select',
 		attributes :
 		{
+			itemPath :
+			{
+				comment : 'if selecting ranges, item to path',
+				type : [ 'undefined', 'jion$path' ]
+			},
 			startPoint :
 			{
 				comment : 'point at start of operation',

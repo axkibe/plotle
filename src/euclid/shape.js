@@ -154,10 +154,11 @@ prototype.inView =
 */
 prototype.within =
 	function(
-		p
+		p,      // point
+		border  // additional border (can be undefined for 0)
 	)
 {
-	return swatch.withinSketch( this, p );
+	return swatch.withinSketch( this, p, border );
 };
 
 
