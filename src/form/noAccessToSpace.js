@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'form_noAccessToSpace',
+		hasAbstract : true,
 		attributes :
 		{
 			hover :

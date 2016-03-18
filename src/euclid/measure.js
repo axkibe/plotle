@@ -28,6 +28,8 @@ euclid_measure =
 	{
 		euclid_measure._cx =
 			canvas.getContext( '2d' );
+
+		/**/if( FREEZE ) Object.freeze( euclid_measure );
 	},
 
 
@@ -55,6 +57,5 @@ euclid_measure =
 };
 
 
-// FIXME freeze
 
 } )( );

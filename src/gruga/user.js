@@ -41,7 +41,7 @@ closeButton =
 | Layout
 */
 gruga_user =
-	form_user.create(
+	form_user.abstract(
 		'twig:add',
 		'headline',
 			widget_label.create(
@@ -135,7 +135,7 @@ gruga_user =
 			),
 		'twig:add',
 		'closeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

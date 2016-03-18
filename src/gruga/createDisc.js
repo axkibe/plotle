@@ -151,7 +151,7 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createNote',
-			genericButtonModel.create(
+			genericButtonModel.abstract(
 				'text', 'Note',
 				'designArea',
 					euclid_anchor_rect.create(
@@ -161,7 +161,7 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createLabel',
-			genericButtonModel.create(
+			genericButtonModel.abstract(
 				'text', 'Label',
 				'designArea',
 					euclid_anchor_rect.create(
@@ -172,7 +172,7 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createRelation',
-			genericButtonModel.create(
+			genericButtonModel.abstract(
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
 				'designArea',
@@ -183,7 +183,7 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createPortal',
-			genericButtonModel.create(
+			genericButtonModel.abstract(
 				'text', 'Portal',
 				'designArea',
 					euclid_anchor_rect.create(

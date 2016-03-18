@@ -39,7 +39,7 @@ var
 | Layout
 */
 gruga_welcome =
-	form_welcome.create(
+	form_welcome.abstract(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', 'welcome',
@@ -63,7 +63,7 @@ gruga_welcome =
 					)
 			),
 		'twig:add', 'closeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

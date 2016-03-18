@@ -708,7 +708,7 @@ visual_label.zeroSilhoutte =
 jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
 
 /*
-| TODO
+| Returns the zone height.
 */
 visual_label._zoneHeight =
 	function( )
@@ -720,7 +720,7 @@ jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
 
 
 /*
-| TODO
+| Returns the zone width.
 */
 visual_label._zoneWidth =
 	function( )
@@ -802,7 +802,7 @@ jion.lazyValue(
 	'_windowGlint',
 	function( )
 {
-	// TODO inherit
+	// FUTURE GLINT inherit
 	return(
 		gleam_glint_window.create(
 			'display', this._display,

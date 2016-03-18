@@ -1,3 +1,17 @@
+. _moveSelect
+. _setCursor
+. _stopSelect
+. arrow1Shape
+. arrow2Shape
+. className
+. combine
+. contains
+. itemPaths
+. markForPoint
+. moveSelect
+. togglePath
+. vArrow1Shape
+. vArrow2Shape
 > Container
 > Sprite
 > Texture

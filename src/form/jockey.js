@@ -48,6 +48,7 @@ if( JION )
 			}
 		},
 		init : [ 'twigDup' ],
+		// FUTURE make a group instead of twig
 		twig :
 			[
 				'form_loading',

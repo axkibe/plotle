@@ -48,7 +48,7 @@ var
 | Layout
 */
 gruga_login =
-	form_login.create(
+	form_login.abstract(
 		'twig:add',
 		'headline',
 			widget_label.create(
@@ -144,7 +144,7 @@ gruga_login =
 			),
 		'twig:add',
 		'loginButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(
@@ -168,7 +168,7 @@ gruga_login =
 			),
 		'twig:add',
 		'closeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

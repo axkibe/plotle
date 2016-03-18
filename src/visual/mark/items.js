@@ -17,7 +17,8 @@ if( JION )
 				comment : 'paths of the items',
 				type : 'jion$pathRay'
 			}
-		}
+		},
+		init : [ ]
 	};
 }
 
@@ -62,8 +63,6 @@ prototype._init =
 /**/	var c, cZ, paths;
 /**/
 /**/	paths = this.itemPaths;
-/**/
-/**/	if( paths.length !== 1 ) throw new Error( ); // TODO
 /**/
 /**/	for( c = 0, cZ = paths.length; c < cZ; c++ )
 /**/	{
@@ -225,9 +224,6 @@ prototype.togglePath =
 		)
 	);
 };
-
-
-jion.lazyValue( prototype, 'paths', function() { throw new Error( ); } ); // TODO
 
 
 /*

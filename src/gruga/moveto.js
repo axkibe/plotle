@@ -104,7 +104,7 @@ portalButtonFacets =
 | Layout
 */
 gruga_moveTo =
-	form_moveTo.create(
+	form_moveTo.abstract(
 		'twig:add',
 		'headline',
 			widget_label.create(
@@ -119,7 +119,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomHomeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'designArea',
 					euclid_anchor_rect.create(
@@ -153,7 +153,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'designArea',
 					euclid_anchor_rect.create(
@@ -187,7 +187,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'userHomeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'designArea',
 					euclid_anchor_rect.create(

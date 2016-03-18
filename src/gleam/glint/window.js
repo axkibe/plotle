@@ -15,7 +15,7 @@ if( JION )
 			display :
 			{
 				comment : 'the display to draw',
-				type : 'gleam_canvas' // TODO
+				type : 'gleam_canvas' // FUTURE GLINT
 			},
 			p :
 			{
@@ -94,7 +94,9 @@ prototype._init =
 
 
 /*
-| TODO
+| Turns the window into a pixiSprite
+|
+| FUTURE GLINT, rename pixiSprite
 */
 jion.lazyValue(
 	prototype,
@@ -113,10 +115,9 @@ jion.lazyValue(
 	}
 	else
 	{
-		// FIXME private access
+		// FUTURE GLINT
 		// move sprite to display
-		sprite =
-			new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
+		sprite = new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
 	}
 
 	sprite.x = this.p.x;

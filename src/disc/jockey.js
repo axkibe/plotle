@@ -227,6 +227,9 @@ prototype._init =
 	var
 		a,
 		aZ,
+		b,
+		bZ,
+		disc,
 		key,
 		ranks,
 		twig;
@@ -247,8 +250,25 @@ prototype._init =
 	{
 		key = ranks[ a ];
 
+		disc = twig[ key ];
+
+		if( disc.isAbstract )
+		{
+			for( b = 0, bZ = disc.length; b < bZ; b++ )
+			{
+				disc =
+					disc.abstract(
+						'twig:set',
+						disc.getKey( b ),
+						disc.atRank( b ).create(
+							'view', this.controlView
+						)
+					);
+			}
+		}
+
 		twig[ key ] =
-			twig[ key ].create(
+			disc.create(
 				'access', this.access,
 				'action', this.action,
 				'controlView', this.controlView,

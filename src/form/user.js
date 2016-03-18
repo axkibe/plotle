@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'form_user',
+		hasAbstract : true,
 		attributes :
 		{
 			hover :

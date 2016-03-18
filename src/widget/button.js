@@ -100,7 +100,7 @@ if( JION )
 			view :
 			{
 				comment : 'the view for the widget',
-				type : [ 'undefined', 'euclid_view' ]
+				type : 'euclid_view'
 			},
 			visible :
 			{
@@ -182,18 +182,11 @@ prototype._init =
 
 	if( font )
 	{
-		if( view ) // FIXME make view required
-		{
-			fs = view.scale( font.size );
+		fs = view.scale( font.size );
 
-			if( !this._font || this._font.size !== fs )
-			{
-				this._font = font.create( 'size', fs );
-			}
-		}
-		else
+		if( !this._font || this._font.size !== fs )
 		{
-			this._font = font;
+			this._font = font.create( 'size', fs );
 		}
 	}
 };

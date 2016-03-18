@@ -38,7 +38,7 @@ var
 | Layout
 */
 gruga_space =
-	form_space.create(
+	form_space.abstract(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', '',
@@ -62,7 +62,7 @@ gruga_space =
 					)
 			),
 		'twig:add', 'closeButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

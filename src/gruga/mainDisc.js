@@ -184,7 +184,7 @@ gruga_mainDisc =
 				)
 			),
 		'twig:add', 'normal',
-			buttonModel.create(
+			buttonModel.abstract(
 				'iconAnchorShape', gruga_iconNormal.shape,
 				'iconFacet', gruga_iconNormal.facet,
 				'designArea',
@@ -194,7 +194,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'select',
-			buttonModel.create(
+			buttonModel.abstract(
 				'iconAnchorShape', gruga_iconSelect.shape,
 				'iconFacet', gruga_iconSelect.facet,
 				'visible', false,
@@ -205,7 +205,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'create',
-			buttonModel.create(
+			buttonModel.abstract(
 				'visible', false,
 				'text', 'new',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -217,7 +217,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'remove',
-			buttonModel.create(
+			buttonModel.abstract(
 				'iconAnchorShape', gruga_iconRemove.shape,
 				'iconFacet', gruga_iconRemove.facet,
 				'visible', false,
@@ -228,7 +228,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'moveTo',
-			buttonModel.create(
+			buttonModel.abstract(
 				'iconAnchorShape', gruga_iconMoveTo.shape,
 				'iconFacet', gruga_iconMoveTo.facet,
 				'visible', false,
@@ -239,7 +239,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'space',
-			buttonModel.create(
+			buttonModel.abstract(
 				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', spaceButtonPnw,
@@ -256,7 +256,7 @@ gruga_mainDisc =
 				'textRotation', - Math.PI / 2
 			),
 		'twig:add', 'user',
-			buttonModel.create(
+			buttonModel.abstract(
 				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', userButtonPnw,
@@ -273,7 +273,7 @@ gruga_mainDisc =
 				'textRotation', ( -Math.PI / 2 )
 			),
 		'twig:add', 'login',
-			buttonModel.create(
+			buttonModel.abstract(
 				'visible', false,
 				'text', 'log\nin',
 				'textNewline', 14,
@@ -286,7 +286,7 @@ gruga_mainDisc =
 					)
 			),
 		'twig:add', 'signUp',
-			buttonModel.create(
+			buttonModel.abstract(
 				'visible', false,
 				'text', 'sign\nup',
 				'textNewline', 14,

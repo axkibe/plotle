@@ -174,7 +174,7 @@ jion.lazyStaticValue(
 /*
 | Initializer.
 |
-| FIXME inherit optimizations.
+| FUTURE inherit optimizations.
 */
 prototype._init =
 	function(
@@ -315,7 +315,7 @@ jion.lazyValue(
 
 	path = paths.get( 0 );
 
-	if( path.length <= 2 ) return undefined; // FIXME shouldn't be necessary
+	if( path.length <= 2 ) return undefined; // FUTURE shouldn't be necessary
 
 	return this.get( path.get( 2 ) );
 }
@@ -774,7 +774,7 @@ prototype.dragStart =
 				'action',
 					action.create(
 						'pan', view.pan,
-						'relationState', 'pan', // FIXME remove pan
+						'relationState', 'pan', // FUTURE remove pan
 						'startPoint', p
 					)
 			);

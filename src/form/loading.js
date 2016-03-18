@@ -12,6 +12,7 @@ if( JION )
 {
 	throw{
 		id : 'form_loading',
+		hasAbstract : true,
 		attributes :
 		{
 			hover :

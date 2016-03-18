@@ -37,19 +37,18 @@ var
 */
 ( function( ) {
 'use strict';
-	
+
 
 var
 	ap;
 
-// FIXME anchor to center
 ap =
 	euclid_anchor_point.create(
-		'anchor', 'nw',
-		'x', 22,
-		'y', 11
+		'anchor', 'c',
+		'x', 0,
+		'y', -11
 	);
-			
+
 
 gruga_iconMoveTo = { };
 

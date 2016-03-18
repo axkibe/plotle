@@ -175,6 +175,7 @@ var
 	gruga_welcome,
 	jion,
 	jion$path,
+	jion$pathRay,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -230,40 +231,85 @@ loadingSpaceTextPath =
 /*
 | Prepares the current action.
 |
-| Makes sure the action has not been invalidated by
-| a space update. In that case it is set undefined.
+| Makes sure the action has not any removed items in them.
+| If so the paths are removed from its itemPathsRay.
+|
+| If no item is left, action is set to undefined.
 */
 shell_root.prepareAction =
 	function(
-		action
-//		space
+		action,
+		space
 	)
 {
-//	if( !space || !action )
-//	{
-//		return undefined;
-//	}
+	var
+		p,
+		p2,
+		path,
+		pZ,
+		iPaths,
+		nPaths;
 
-	return action;
-
-	// XXX TODO FIXME remove invalided paths
-
-	/*
+	if( !space || !action )
+	{
+		return undefined;
+	}
 
 	switch( action.reflect )
 	{
 		case 'action_dragItems' :
 		case 'action_resizeItems' :
 
-			return(
-				root.getPath( action.paths )
-				? action
-				: undefined
-			);
+			iPaths = action.itemPaths;
 
-		default : return action;
+			if( iPaths )
+			{
+				for( p = 0, pZ = iPaths.length; p < pZ; p++ )
+				{
+					path = iPaths.get( p );
+
+					if( !root.getPath( path ) ) break;
+				}
+
+				if( p < pZ )
+				{
+					// there is an item missing!
+
+					nPaths = [ ];
+
+					// first copies over already checked items.
+
+					for( p2 = 0; p2 < p; p2++ )
+					{
+						nPaths[ p2 ] = iPaths.get( p );
+					}
+
+					p++; // the last item was a guaranteed skip
+
+					for( ; p < pZ; p++ )
+					{
+						path = iPaths.get( p );
+
+						if( !root.getPath( path ) ) continue;
+
+						nPaths[ p2++ ] = path;
+					}
+
+					if( p2 === 0 ) return undefined;
+
+					return(
+						action.create(
+							'itemPaths',
+							jion$pathRay.create( 'ray:init', nPaths )
+						)
+					);
+				}
+
+				return action;
+			}
 	}
-	*/
+
+	return action;
 };
 
 
@@ -362,21 +408,7 @@ shell_root.startup =
 		'systemFocus', true,
 		'view', view,
 		'disc', dj,
-		'form',
-			form_jockey.create(
-				'hover', undefined,
-				'path', jion$path.empty.append( 'form' ),
-				'view', view,
-				'twig:add', 'loading', gruga_loading,
-				'twig:add', 'login', gruga_login,
-				'twig:add', 'moveTo', gruga_moveTo,
-				'twig:add', 'noAccessToSpace', gruga_noAccessToSpace,
-				'twig:add', 'nonExistingSpace', gruga_nonExistingSpace,
-				'twig:add', 'signUp', gruga_signUp,
-				'twig:add', 'space', gruga_space,
-				'twig:add', 'user', gruga_user,
-				'twig:add', 'welcome', gruga_welcome
-			),
+		'form', shell_root._createFormJockey( view ),
 		'_drawn', false
 	);
 
@@ -622,24 +654,19 @@ prototype.click =
 
 /*
 | Returns the what the clipboard should hold.
-|
-| FIXME jion
 */
-Object.defineProperty(
+jion.lazyValue(
 	prototype,
 	'clipboard',
-	{
-		get :
-			function( )
-		{
-			var
-				mark;
+	function( )
+{
+	var
+		mark;
 
-			mark = this.mark;
+	mark = this.mark;
 
-			return mark ? mark.clipboard : '';
-		}
-	}
+	return mark ? mark.clipboard : '';
+}
 );
 
 
@@ -1468,7 +1495,7 @@ jion.lazyValue(
 /*
 | Draws everything.
 |
-| TODO remove
+| FUTURE GLINT remove
 */
 prototype.classicDraw =
 	function( )
@@ -1493,9 +1520,12 @@ prototype.classicDraw =
 
 	screen = root._currentScreen;
 
-	screen.draw( display );
+	if( screen )
+	{
+		screen.draw( display );
 
-	if( screen.showDisc ) root.disc.draw( display );
+		if( screen.showDisc ) root.disc.draw( display );
+	}
 
 	root = root.create( '_drawn', true );
 };
@@ -1515,7 +1545,7 @@ prototype.draw =
 		display,
 		screen;
 
-	// TODO remove
+	// FUTURE GLINT remove
 	if( root.display.reflect === 'gleam_canvas' )
 	{
 		return this.classicDraw( );
@@ -1582,5 +1612,88 @@ prototype.draw =
 		);
 };
 
+
+/*
+| Creates the form jockey.
+*/
+shell_root._createFormJockey =
+	function(
+		view
+	)
+{
+	var
+		a,
+		aZ,
+		form,
+		forms,
+		jockey,
+		key,
+		keys,
+		name,
+		w,
+		widget,
+		wZ;
+
+	forms =
+		{
+			loading : gruga_loading,
+			login : gruga_login,
+			moveTo : gruga_moveTo,
+			noAccessToSpace : gruga_noAccessToSpace,
+			nonExistingSpace : gruga_nonExistingSpace,
+			signUp : gruga_signUp,
+			space : gruga_space,
+			user : gruga_user,
+			welcome : gruga_welcome
+		};
+
+	for( name in forms )
+	{
+		form = forms[ name ];
+
+		for( w = 0, wZ = form.length; w < wZ; w++ )
+		{
+			key = form.getKey( w );
+
+			widget = form.get( key );
+
+			if( widget.isAbstract )
+			{
+				form =
+					form.abstract(
+						'twig:set',
+						key,
+						widget.create(
+							'view', view
+						)
+					);
+			}
+		}
+
+		forms[ name ] = form;
+	}
+
+	jockey =
+		form_jockey.create(
+			'path', jion$path.empty.append( 'form' ),
+			'view', view
+		);
+
+	keys = Object.keys( forms );
+
+	for( a = 0, aZ = keys.length; a < aZ; a++ )
+	{
+		key = keys[ a ];
+
+		jockey =
+			jockey.create(
+				'twig:add',
+				key,
+				forms[ key ].create( 'view', view )
+			);
+	}
+
+	return jockey;
+};
 
 } )( );

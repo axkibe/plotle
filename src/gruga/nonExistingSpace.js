@@ -45,7 +45,7 @@ var
 | Layout
 */
 gruga_nonExistingSpace =
-	form_nonExistingSpace.create(
+	form_nonExistingSpace.abstract(
 		'twig:add',
 		'headline',
 			widget_label.create(
@@ -61,10 +61,8 @@ gruga_nonExistingSpace =
 		'twig:add',
 		'message1',
 			widget_label.create(
-				'text',
-					'Do you want to create it?',
-				'font',
-					shell_fontPool.get( 16, 'ca' ),
+				'text', 'Do you want to create it?',
+				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
 					euclid_anchor_point.create(
 						'anchor', 'c',
@@ -74,7 +72,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'noButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(
@@ -98,7 +96,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'yesButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

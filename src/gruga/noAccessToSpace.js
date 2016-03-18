@@ -38,7 +38,7 @@ var
 | Layout
 */
 gruga_noAccessToSpace =
-	form_noAccessToSpace.create(
+	form_noAccessToSpace.abstract(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', '',
@@ -62,7 +62,7 @@ gruga_noAccessToSpace =
 					)
 			),
 		'twig:add', 'okButton',
-			widget_button.create(
+			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'designArea',
 					euclid_anchor_rect.create(

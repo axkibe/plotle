@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'form_nonExistingSpace',
+		hasAbstract : true,
 		attributes :
 		{
 			hover :

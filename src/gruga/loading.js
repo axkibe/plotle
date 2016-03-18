@@ -22,7 +22,7 @@ var
 | Layout
 */
 gruga_loading =
-	form_loading.create(
+	form_loading.abstract(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', 'loading',

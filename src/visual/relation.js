@@ -598,7 +598,7 @@ jion.lazyValue(
 	'_windowGlint',
 	function( )
 {
-	// TODO inherit
+	// FUTURE GLINT inherit
 	return(
 		gleam_glint_window.create(
 			'display', this._display,
