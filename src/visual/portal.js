@@ -574,6 +574,12 @@ prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
+| Nofication when the item lost the users mark.
+*/
+prototype.markLost = function( ){ };
+
+
+/*
 | Minimum height.
 */
 prototype.minHeight = gruga_portal.minHeight;

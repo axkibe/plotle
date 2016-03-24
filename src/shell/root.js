@@ -552,6 +552,11 @@ prototype._init =
 	this.link = this.link.create( 'user', user );
 
 	root = this;
+
+	if( inherit && mark !== inherit.mark )
+	{
+		root._markLostNotifications( root.mark, inherit.mark );
+	}
 };
 
 
@@ -1695,5 +1700,48 @@ shell_root._createFormJockey =
 
 	return jockey;
 };
+
+
+/*
+| Sends out update/check notifications when an item
+| is no longer in the user marked.
+*/
+prototype._markLostNotifications =
+	function(
+		nMark,  // new mark
+		oMark   // old mark
+	)
+{
+	var
+		a,
+		aZ,
+		item,
+		nip,
+		oip,
+		op;
+
+	if( !oMark ) return;
+
+	oip = oMark.itemPaths;
+
+	if( !oip ) return;
+
+	nip = nMark && nMark.itemPaths;
+
+	for( a = 0, aZ = oip.length; a < aZ; a++ )
+	{
+		op = oip.get( a );
+
+		if( nip && nip.contains( op ) ) continue;
+
+		item = root.getPath( op );
+
+		if( !item ) continue;
+
+		item.markLost( );
+	}
+
+};
+
 
 } )( );

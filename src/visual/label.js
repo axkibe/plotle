@@ -69,6 +69,7 @@ if( JION )
 
 var
 	change_grow,
+	change_shrink,
 	gleam_canvas,
 	gleam_glint_window,
 	euclid_point,
@@ -429,6 +430,30 @@ prototype.input = visual_docItem.input;
 | Returns the mark for a point
 */
 prototype.markForPoint = visual_docItem.markForPoint;
+
+
+/*
+| Nofication when the item lost the users mark.
+*/
+prototype.markLost =
+	function( )
+{
+	var
+		pc;
+
+	if( this.doc.fabric.isBlank )
+	{
+		pc = this.path.chop;
+
+		root.alter(
+			change_shrink.create(
+				'path', pc,
+				'prev', root.spaceFabric.getPath( pc ),
+				'rank', root.spaceFabric.rankOf( pc.get( 1 ) )
+			)
+		);
+	}
+};
 
 
 /*

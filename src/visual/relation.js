@@ -436,6 +436,12 @@ prototype.specialKey = visual_docItem.specialKey;
 
 
 /*
+| Nofication when the item lost the users mark.
+*/
+prototype.markLost = visual_label.prototype.markLost;
+
+
+/*
 | Returns the minimum scale factor this item could go through.
 */
 prototype.minScaleX = visual_label.minScaleX;

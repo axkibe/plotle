@@ -16,7 +16,6 @@ var
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
 	euclid_point,
-	gruga_iconMoveTo,
 	gruga_iconNormal,
 	gruga_iconRemove,
 	gruga_iconSelect,
@@ -229,14 +228,15 @@ gruga_mainDisc =
 			),
 		'twig:add', 'moveTo',
 			buttonModel.abstract(
-				'iconAnchorShape', gruga_iconMoveTo.shape,
-				'iconFacet', gruga_iconMoveTo.facet,
-				'visible', false,
+				'text', 'go',
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'textDesignPos', euclid_anchor_point.c,
 				'designArea',
 					euclid_anchor_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
-					)
+					),
+				'visible', false
 			),
 		'twig:add', 'space',
 			buttonModel.abstract(

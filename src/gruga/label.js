@@ -4,8 +4,6 @@
 
 
 var
-	gleam_border,
-	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
 	euclid_margin,
@@ -28,10 +26,10 @@ gruga_label.facets =
 		'ray:append',
 		// default
 		gleam_facet.create(
-			'border',
-				gleam_border.create(
-					'color', gleam_color.rgba( 100, 100, 0, 0.1 )
-				)
+		// 'border',
+		//		gleam_border.create(
+		//			'color', gleam_color.rgba( 100, 100, 0, 0.1 )
+		//		)
 		),
 		'ray:append', gruga_highlight
 	);

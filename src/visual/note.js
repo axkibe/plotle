@@ -462,6 +462,12 @@ prototype.positioning =
 
 
 /*
+| Nofication when the item lost the users mark.
+*/
+prototype.markLost = function( ){ };
+
+
+/*
 | Returns the mark for a point
 */
 prototype.markForPoint = visual_docItem.markForPoint;

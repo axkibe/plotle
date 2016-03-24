@@ -352,16 +352,19 @@ gleam_canvas.prototype.border =
 		return;
 	}
 
-	if( border.reflect === 'gleam_borderRay' )
+	if( border )
 	{
-		for( a = 0, aZ = border.length; a < aZ; a++ )
+		if( border.reflect === 'gleam_borderRay' )
 		{
-			this._border( border.get( a ), shape );
+			for( a = 0, aZ = border.length; a < aZ; a++ )
+			{
+				this._border( border.get( a ), shape );
+			}
 		}
-	}
-	else
-	{
-		this._border( border, shape );
+		else
+		{
+			this._border( border, shape );
+		}
 	}
 };
 

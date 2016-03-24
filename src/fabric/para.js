@@ -65,9 +65,9 @@ jion.lazyValue(
 	prototype,
 	'key',
 	function( )
-	{
-		return this.path.get( -1 );
-	}
+{
+	return this.path.get( -1 );
+}
 );
 
 
@@ -78,9 +78,22 @@ jion.lazyValue(
 	prototype,
 	'textPath',
 	function( )
-	{
-		return this.path && this.path.append( 'text' );
-	}
+{
+	return this.path && this.path.append( 'text' );
+}
+);
+
+
+/*
+| True if the para is effectively empty or has only blank characters.
+*/
+jion.lazyValue(
+	prototype,
+	'isBlank',
+	function( )
+{
+	return /^\s*$/.test( this.text );
+}
 );
 
 

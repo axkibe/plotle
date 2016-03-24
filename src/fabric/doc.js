@@ -90,4 +90,30 @@ prototype._init =
 
 
 
+
+/*
+| True if the para is effectively empty or has only blank characters.
+*/
+jion.lazyValue(
+	prototype,
+	'isBlank',
+	function( )
+{
+	var
+		para,
+		r,
+		rZ;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		para = this.atRank( r );
+
+		if( !para.isBlank ) return false;
+	}
+
+	return true;
+}
+);
+
+
 } )( );
