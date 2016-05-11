@@ -23,6 +23,12 @@ if( JION )
 				comment : 'height of the display',
 				type : [ 'number' ]
 			},
+			'scaled' :
+			{
+				// used for devicePixelRatio adjustments
+				comment : 'if defined the canvas is scaled',
+				type : [ 'undefined', 'number' ]
+			},
 			'width' :
 			{
 				comment : 'width of the display',
@@ -107,7 +113,10 @@ get2dContext =
 */
 gleam_canvas.createAroundHTMLCanvas =
 	function(
-		canvas
+		canvas,
+		width,
+		height,
+		scaled
 	)
 {
 	var
@@ -128,9 +137,10 @@ gleam_canvas.createAroundHTMLCanvas =
 		gleam_canvas.create(
 			'_cv', canvas,
 			'_cx', cx,
-			'background', 'rgb(251, 251, 251)',
-			'width', canvas.width,
-			'height', canvas.height
+			'background', 'rgb( 251, 251, 251 )',
+			'height', height,
+			'scaled', scaled,
+			'width', width
 		)
 	);
 };
@@ -143,7 +153,10 @@ gleam_canvas.prototype._init =
 	function( )
 {
 	var
-		cv;
+		cv,
+		height,
+		scaled,
+		width;
 
 	cv = this._cv;
 
@@ -156,14 +169,30 @@ gleam_canvas.prototype._init =
 		this._cx = get2dContext( cv );
 	}
 
-	if( cv.width !== this.width )
-	{
-		cv.width = this.width;
-	}
 
-	if( cv.height !== this.height )
+	height = this.height;
+
+	width = this.width;
+
+	scaled = this.scaled;
+
+	if( !scaled )
 	{
-		cv.height = this.height;
+		if( cv.width !== width ) cv.width = width;
+
+		if( cv.height !== height ) cv.height = height;
+	}
+	else
+	{
+		if( cv.width !== width * scaled ) cv.width = width * scaled;
+
+		if( cv.height !== height * scaled ) cv.height = height * scaled;
+
+		cv.style.height = height + 'px';
+
+		cv.style.width = width + 'px';
+
+		this._cx.scale( scaled, scaled );
 	}
 };
 

@@ -12,6 +12,12 @@ if( JION )
 		id : 'gleam_display_canvas',
 		attributes :
 		{
+			'background' :
+			{
+				comment : 'if set the canvas is opaque and has background',
+				type : [ 'undefined', 'string' ]
+
+			},
 			'container' :
 			{
 				comment : 'the container to display',
@@ -21,6 +27,12 @@ if( JION )
 			{
 				comment : 'height of the display',
 				type : [ 'number' ]
+			},
+			'scaled' :
+			{
+				// used for devicePixelRatio adjustments
+				comment : 'if defined the canvas is scaled',
+				type : [ 'undefined', 'number' ]
 			},
 			'width' :
 			{
@@ -46,6 +58,7 @@ if( JION )
 var
 	euclid_constants,
 	euclid_view,
+	get2dContext,
 	gleam_container,
 	gleam_display_canvas,
 	jion;
@@ -73,25 +86,64 @@ prototype = gleam_display_canvas.prototype;
 
 
 /*
-| Creates a display around an existing HTML canvas.
+| Internal function to get a 2d context.
+|
+| This turns on performance vs. quality settings.
 */
-gleam_display_canvas.createAroundHTMLCanvas =
+get2dContext =
 	function(
-		canvas
+		canvas,
+		opaque
 	)
 {
 	var
 		cx;
 
-	cx = canvas.getContext( '2d' );
+	if( opaque )
+	{
+		cx = canvas.getContext( '2d', { alpha: false } );
+	}
+	else
+	{
+		cx = canvas.getContext( '2d' );
+	}
+
+	cx.imageSmoothingEnabled = false;
+	cx.mozImageSmoothingEnabled = false;
+	cx.oImageSmoothingEnabled = false;
+	cx.msImageSmoothingEnabled = false;
+
+	return cx;
+};
+
+
+
+
+/*
+| Creates a display around an existing HTML canvas.
+*/
+gleam_display_canvas.createAroundHTMLCanvas =
+	function(
+		canvas,
+		width,
+		height,
+		scaled
+	)
+{
+	var
+		cx;
+
+	cx = get2dContext( canvas, true );
 
 	return(
 		gleam_display_canvas.create(
 			'_cv', canvas,
 			'_cx', cx,
+			'background', 'rgb( 251, 251, 251 )',
 			'container', gleam_container.create( ),
-			'width', canvas.width,
-			'height', canvas.height
+			'height', height,
+			'scaled', scaled,
+			'width', width
 		)
 	);
 };
@@ -104,7 +156,10 @@ prototype._init =
 	function( inherit )
 {
 	var
-		cv;
+		cv,
+		height,
+		scaled,
+		width;
 
 /**/if( CHECK )
 /**/{
@@ -127,17 +182,32 @@ prototype._init =
 		this._cv =
 			document.createElement( 'canvas' );
 
-		this._cx = cv.getContext( '2d' );
+		this._cx = get2dContext( cv );
 	}
 
-	if( cv.width !== this.width )
-	{
-		cv.width = this.width;
-	}
+	height = this.height;
 
-	if( cv.height !== this.height )
+	width = this.width;
+
+	scaled = this.scaled;
+
+	if( !scaled )
 	{
-		cv.height = this.height;
+		if( cv.width !== width ) cv.width = width;
+
+		if( cv.height !== height ) cv.height = height;
+	}
+	else
+	{
+		if( cv.width !== width * scaled ) cv.width = width * scaled;
+
+		if( cv.height !== height * scaled ) cv.height = height * scaled;
+
+		cv.style.height = height + 'px';
+
+		cv.style.width = width + 'px';
+
+		this._cx.scale( scaled, scaled );
 	}
 };
 
@@ -162,7 +232,16 @@ prototype._init =
 prototype.render =
 	function( )
 {
-	this._cx.clearRect( 0, 0, this.width, this.height );
+	if( this.background )
+	{
+		this._cx.fillStyle = this.background;
+
+		this._cx.fillRect( 0, 0, this.width, this.height );
+	}
+	else
+	{
+		this._cx.clearRect( 0, 0, this.width, this.height );
+	}
 
 	this._renderContainer( this.container );
 };

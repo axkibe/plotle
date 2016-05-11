@@ -23,6 +23,9 @@ var
 	transmitter;
 
 
+//var gleam_impl = gleam_display_canvas;
+var gleam_impl = gleam_canvas;
+
 /*
 | Capsule
 */
@@ -269,22 +272,17 @@ systemTransmitter =
 shell_system =
 	function( )
 {
-	if( system )
-	{
-		throw new Error( );
-	}
+	if( system ) throw new Error( );
 
 	canvas = document.getElementById( 'canvas' );
 
-	canvas.width = window.innerWidth - 1;
-
-	mainWindowHeight =
-	canvas.height =
-		window.innerHeight - 1;
-
-	this._display = gleam_canvas.createAroundHTMLCanvas( canvas );
-//	this._display = gleam_display_canvas.createAroundHTMLCanvas( canvas );
-//	this._display = gleam_display_pixi.createAroundHTMLCanvas( canvas );
+	this._display =
+		gleam_impl.createAroundHTMLCanvas(
+			canvas,
+			window.innerWidth - 1,
+			window.innerHeight - 1,
+			window.devicePixelRatio
+		);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -595,13 +593,9 @@ prototype._onResize =
 		// event
 	)
 {
-	if( root )
-	{
-		root.resize(
-			window.innerWidth - 1,
-			window.innerHeight - 1
-		);
-	}
+	if( !root ) return;
+
+	root.resize( window.innerWidth - 1, window.innerHeight - 1 );
 };
 
 

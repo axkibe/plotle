@@ -23,7 +23,7 @@ if( JION )
 				type :
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] ),
-				prepare : 'shell_root.prepareAction( action, spaceFabric )'
+				prepare : 'shell_root.prepareAction( action )'
 			},
 			ajax :
 			{
@@ -238,8 +238,7 @@ loadingSpaceTextPath =
 */
 shell_root.prepareAction =
 	function(
-		action,
-		space
+		action
 	)
 {
 	var
@@ -250,10 +249,7 @@ shell_root.prepareAction =
 		iPaths,
 		nPaths;
 
-	if( !space || !action )
-	{
-		return undefined;
-	}
+	if( !action ) return undefined;
 
 	switch( action.reflect )
 	{
@@ -342,7 +338,7 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = gleam_canvas.createAroundHTMLCanvas( canvas );
+	swatch = gleam_canvas.createAroundHTMLCanvas( canvas, 10, 10, undefined );
 
 	euclid_measure.init( canvas );
 
