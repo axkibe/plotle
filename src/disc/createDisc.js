@@ -188,26 +188,6 @@ prototype._init =
 
 
 /*
-| Beams the item onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	var
-		wg;
-
-	wg = this._windowGlint;
-
-	return(
-		container.create( 'twig:set+', 'mainDisc', wg )
-	);
-};
-
-
-
-/*
 | A button of the main disc has been pushed.
 */
 prototype.pushButton =
@@ -374,6 +354,26 @@ prototype.click =
 
 	return false;
 };
+
+
+/*
+| The discs glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	// FUTURE GLINT inherit
+	return(
+		gleam_glint_window.create(
+			'display', this._display,
+			'key', 'createDisc',
+			'p', this.area.pnw
+		)
+	);
+}
+);
 
 
 /*
@@ -551,25 +551,6 @@ jion.lazyValue(
 	display.border( this.border, this.silhoutte );
 
 	return display;
-}
-);
-
-
-/*
-| The discs window glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_windowGlint',
-	function( )
-{
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'display', this._display,
-			'p', this.area.pnw
-		)
-	);
 }
 );
 

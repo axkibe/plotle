@@ -150,8 +150,7 @@ var
 	change_wrap,
 	disc_jockey,
 	euclid_connect,
-	gleam_canvas,
-	gleam_container,
+	gleam_canvas, // TODO
 	euclid_measure,
 	euclid_point,
 	euclid_view,
@@ -338,7 +337,7 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = gleam_canvas.createAroundHTMLCanvas( canvas, 10, 10, undefined );
+	swatch = gleam_canvas.createAroundHTMLCanvas( canvas, 'swatch', 10, 10, undefined );
 
 	euclid_measure.init( canvas );
 
@@ -1540,9 +1539,8 @@ prototype.draw =
 	function( )
 {
 	var
-		container,
-		containerDisc,
-		containerScreen,
+		disc,
+		glint,
 		display,
 		screen;
 
@@ -1554,55 +1552,34 @@ prototype.draw =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this !== root )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this !== root ) throw new Error( );
 /**/}
 
 	if( root._drawn ) return;
 
 	display = root.display;
 
-	container = display.container;
-
-	containerScreen =
-		container.get( 'screen' )
-		|| gleam_container.create( );
-
-	containerDisc =
-		container.get( 'disc' )
-		|| gleam_container.create( );
+	glint = display.glint;
 
 	screen = root._currentScreen;
 
-	containerScreen = screen.beam( containerScreen );
-
-	container =
-		container.create(
-			'twig:set+',
-			'screen',
-			containerScreen
-		);
+	glint = glint.create( 'twine:set+', screen.glint );
 
 	if( screen.showDisc )
 	{
-		containerDisc = root.disc.beam( containerDisc );
+		disc = root.disc;
 
-		container =
-			container.create( 'twig:set+', 'disc', containerDisc );
+		glint = glint.create( 'twine:set+', disc.glint );
 	}
 	else
 	{
-		if( containerDisc )
+		if( glint.get( 'disc' ) )
 		{
-			containerDisc = undefined;
-
-			container = container.create( 'twig:remove', 'disc' );
+			glint = glint.create( 'twig:remove', 'disc' );
 		}
 	}
 
-	display = display.create( 'container', container );
+	display = display.create( 'glint', glint );
 
 	display.render( );
 

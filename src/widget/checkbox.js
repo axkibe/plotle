@@ -70,6 +70,8 @@ if( JION )
 
 
 var
+	gleam_glint_paint,
+	gleam_glint_twig,
 	gruga_iconCheck,
 	jion,
 	result_hover,
@@ -136,25 +138,6 @@ prototype.focusable = true;
 
 
 /*
-| Mouse hover.
-*/
-prototype.pointingHover =
-	function(
-		p
-	)
-{
-	if( !this.visible || !this.area.within( p ) ) return undefined;
-
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'pointer'
-		)
-	);
-};
-
-
-/*
 | checkbox is being changed.
 */
 prototype.change =
@@ -193,6 +176,126 @@ prototype.click =
 
 
 /*
+| Draws the checkbox.
+*/
+prototype.draw =
+	function(
+		display
+	)
+{
+	var
+		facet;
+
+	if( !this.visible ) return;
+
+	facet =
+		this.facets.getFacet(
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	display.paint( facet, this.area );
+
+	if( this.checked ) display.paint( gruga_iconCheck.facet, this.checkIcon );
+};
+
+
+/*
+| The widget's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	var
+		facet,
+		glint;
+
+	if( !this.visible ) return undefined;
+
+	facet =
+		this.facets.getFacet(
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	glint =
+		gleam_glint_twig.create(
+			'key', this.key,
+			'twine:set+',
+				gleam_glint_paint.create(
+					'facet', facet,
+					'key', 'box',
+					'shape', this.area
+				)
+		);
+	
+	if( this.checked )
+	{
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', gruga_iconCheck.facet,
+						'key', 'check',
+						'shape', this.checkIcon
+					)
+			);
+	}
+
+	return glint;
+}
+);
+
+
+/*
+| Any normal key for a checkbox triggers it to flip
+*/
+prototype.input =
+	function(
+		// text
+	)
+{
+	root.setPath( this.path.append( 'checked' ), !this.checked );
+
+	return true;
+};
+
+
+/*
+| The key of this widget.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
+
+
+/*
+| Mouse hover.
+*/
+prototype.pointingHover =
+	function(
+		p
+	)
+{
+	if( !this.visible || !this.area.within( p ) ) return undefined;
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'pointer'
+		)
+	);
+};
+
+
+/*
 | Special keys for buttons having focus
 */
 prototype.specialKey =
@@ -226,49 +329,6 @@ prototype.specialKey =
 			return;
 	}
 };
-
-
-/*
-| Any normal key for a checkbox triggers it to flip
-*/
-prototype.input =
-	function(
-		// text
-	)
-{
-	root.setPath( this.path.append( 'checked' ), !this.checked );
-
-	return true;
-};
-
-
-/*
-| Draws the checkbox.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		facet;
-
-	if( !this.visible )
-	{
-		return;
-	}
-
-	facet =
-		this.facets.getFacet(
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.mark
-		);
-
-	display.paint( facet, this.area );
-
-	if( this.checked ) display.paint( gruga_iconCheck.facet, this.checkIcon );
-};
-
 
 
 } )( );

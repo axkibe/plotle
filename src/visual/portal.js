@@ -71,6 +71,8 @@ var
 	change_insert,
 	change_remove,
 	gleam_canvas,
+	gleam_glint_paint,
+	gleam_glint_twig,
 	gleam_glint_window,
 	euclid_ellipse,
 	euclid_measure,
@@ -119,7 +121,7 @@ if( NODE )
 	return;
 }
 
-visual_portal.reflect = 'visual_label:static';
+visual_portal.reflect = 'visual_portal:static';
 
 
 prototype = visual_portal.prototype;
@@ -129,10 +131,10 @@ prototype = visual_portal.prototype;
 | List of all space fields of the portal
 */
 spaceFields =
-	{
-		spaceUser : '_fieldSpaceUser',
-		spaceTag : '_fieldSpaceTag'
-	};
+{
+	spaceUser : '_fieldSpaceUser',
+	spaceTag : '_fieldSpaceTag'
+};
 
 
 /**/if( FREEZE )
@@ -185,12 +187,7 @@ visual_portal.createGeneric =
 
 	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
-	portal =
-		action.transItem.fabric.create(
-			'zone', zone,
-			'spaceUser', root.user.name,
-			'spaceTag', 'home'
-		);
+	portal = action.transItem.fabric.create( 'zone', zone );
 
 	key = session_uid( );
 
@@ -364,25 +361,6 @@ jion.lazyValue(
 
 
 /*
-| Beams the item onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	var
-		wg;
-
-	wg = this._windowGlint;
-
-	return(
-		container.create( 'twig:set+', wg.id, wg )
-	);
-};
-
-
-/*
 | Sees if this portal is being clicked.
 */
 prototype.click =
@@ -487,31 +465,46 @@ prototype.dragStart = visual_item.dragStart;
 
 
 /*
-| Draws the portal.
+| The item's glint.
 */
-prototype.draw =
-	function(
-		display
-	)
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
 {
 	var
-		action;
+		facet,
+		glint;
 
-	action = this.action;
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.zone.pnw.inView( this.view )
-	);
+	glint =
+		gleam_glint_twig.create(
+			'key', this.key,
+			'twine:set+',
+				gleam_glint_window.create(
+					'display', this._display,
+					'key', ':body',
+					'p', this.vZone.pnw
+				)
+		);
 
 	if( this.highlight )
 	{
-		display.border(
-			gruga_portal.facets.getFacet( 'highlight', true ).border,
-			this.vSilhoutte
-		);
+		facet = gruga_portal.facets.getFacet( 'highlight', true );
+
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', facet,
+						'key', ':highlight',
+						'shape', this.vSilhoutte
+					)
+			);
 	}
-};
+
+	return glint;
+}
+);
 
 
 /*
@@ -571,6 +564,19 @@ prototype.getDragItemChange = visual_item.getDragItemChangeZone;
 | Returns the change for resizing this item.
 */
 prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
+
+
+/*
+| The key of this item.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*
@@ -1698,25 +1704,6 @@ prototype._drawCaret =
 	// displays the caret
 	display.fillRect( 'black', p.x + fieldPNW.x, n, 1, s - n );
 };
-
-
-/*
-| The notes gleam window.
-*/
-jion.lazyValue(
-	prototype,
-	'_windowGlint',
-	function( )
-{
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'display', this._display,
-			'p', this.vZone.pnw
-		)
-	);
-}
-);
 
 
 /*

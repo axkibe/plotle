@@ -77,7 +77,7 @@ if( JION )
 
 var
 	disc_jockey,
-	gleam_container,
+	gleam_glint_twig,
 	jion;
 
 /*
@@ -102,23 +102,22 @@ prototype = disc_jockey.prototype;
 
 
 /*
-| Updates the gleam container.
+| Updates the glint twig.
 */
-prototype.beam =
-	function(
-		container
-	)
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
 {
 	var
 		action,
-		createContainer,
 		createDisc,
-		mainContainer,
+		glint,
 		mainDisc;
 
 	// ++ create disc ++
 
-	createContainer = container.get( 'createDisc' );
+	// TODO inherit glint
 
 	createDisc = this.get( 'createDisc' );
 
@@ -126,62 +125,29 @@ prototype.beam =
 
 	action = this.action;
 
+	glint = gleam_glint_twig.create( 'key', 'disc' );
+
 	if( action && action.isCreate )
 	{
-		if( !createContainer )
-		{
-			createContainer = gleam_container.create( );
-
-			createContainer = createDisc.beam( createContainer );
-
-			container =
-				container.create(
-					'twig:insert',
-					'createDisc', 0,
-					createContainer
-				);
-		}
-		else
-		{
-			createContainer = createDisc.beam( createContainer );
-
-			container =
-				container.create(
-					'twig:set',
-					'createDisc',
-					createContainer
-				);
-		}
+		glint = glint.create( 'twine:set+', createDisc.glint );
 	}
+	/*
 	else
 	{
-		if( createContainer )
+		if( createGlint )
 		{
-			container =
-				container.create( 'twig:remove', 'createDisc' );
+			glint = glint.create( 'twig:remove', 'createDisc' );
 		}
 	}
+	*/
 
 	// ++ main disc ++
 
-	mainContainer = container.get( 'mainDisc' );
+	glint = glint.create( 'twine:set+', mainDisc.glint );
 
-	mainDisc = this.get( 'mainDisc' );
-
-	if( !mainContainer )
-	{
-		mainContainer = gleam_container.create( );
-	}
-
-	container =
-		container.create(
-			'twig:set+',
-			'mainDisc',
-				mainDisc.beam( mainContainer )
-		);
-
-	return container;
-};
+	return glint;
+}
+);
 
 
 

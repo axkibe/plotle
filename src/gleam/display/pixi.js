@@ -1,5 +1,8 @@
 /*
 | Stuff to show.
+|
+| FUTURE call schematics
+|   createAroundHTMLCanvas
 */
 
 
@@ -12,10 +15,10 @@ if( JION )
 		id : 'gleam_display_pixi',
 		attributes :
 		{
-			'container' :
+			'glint' :
 			{
-				comment : 'the container to display',
-				type : 'gleam_container'
+				comment : 'the glint twig to display',
+				type : 'gleam_glint_twig'
 			},
 			'height' :
 			{
@@ -49,7 +52,7 @@ if( JION )
 
 
 var
-	gleam_container,
+	gleam_glint_twig,
 	gleam_display_pixi,
 	jion,
 	PIXI;
@@ -110,7 +113,7 @@ gleam_display_pixi.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_pr', pr,
 			'_pc', pc,
-			'container', gleam_container.create( ),
+			'glint', gleam_glint_twig.create( ),
 			'width', canvas.width,
 			'height', canvas.height
 		)
@@ -144,15 +147,15 @@ prototype._init =
 
 	if( inherit )
 	{
-		if( jion.hasLazyValueSet( inherit, '_renderedContainer' ) )
+		if( jion.hasLazyValueSet( inherit, '_renderedGlint' ) )
 		{
-			this._inheritedRenderedContainer =
-				inherit._renderedContainer;
+			this._inheritedRenderedGlint =
+				inherit._renderedGlint;
 		}
 		else
 		{
-			this._inheritedRenderedContainer =
-				inherit._inheritedRenderedContainer;
+			this._inheritedRenderedGlint =
+				inherit._inheritedRenderedGlint;
 		}
 	}
 
@@ -184,10 +187,10 @@ prototype._init =
 
 jion.lazyValue(
 	prototype,
-	'_renderedContainer',
+	'_renderedGlint',
 function( )
 {
-	return this.container;
+	return this.glint;
 }
 );
 
@@ -206,9 +209,9 @@ gleam_display_pixi.prototype.render =
 		pc,
 		pcl;
 
-	this._renderedContainer;
+	this._renderedGlint;
 
-	cs = this.container.get( 'screen' );
+	cs = this.glint.get( 'screen' );
 
 	pc = this._pc;
 

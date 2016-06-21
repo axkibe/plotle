@@ -17,15 +17,15 @@ if( JION )
 				comment : 'the display to draw',
 				type : 'gleam_canvas' // FUTURE GLINT
 			},
+			key :
+			{
+				comment : 'key in parent twig',
+				type : 'string'
+			},
 			p :
 			{
 				comment : 'where to draw it',
 				type : 'euclid_point'
-			},
-			id :
-			{
-				comment : 'the unique id',
-				type : [ 'undefined', 'string' ]
 			}
 		},
 		init : [ 'inherit' ]
@@ -35,10 +35,7 @@ if( JION )
 
 var
 	gleam_glint_window,
-	jion,
-	PIXI,
-	session_uid;
-
+	jion;
 
 /*
 | Capsule
@@ -69,11 +66,6 @@ prototype._init =
 		inherit
 	)
 {
-	if( !this.id )
-	{
-		this.id = session_uid( );
-	}
-
 	if( inherit )
 	{
 		if( jion.hasLazyValueSet( inherit, 'sprite' ) )
@@ -95,12 +87,11 @@ prototype._init =
 
 /*
 | Turns the window into a pixiSprite
-|
-| FUTURE GLINT, rename pixiSprite
 */
+/*
 jion.lazyValue(
 	prototype,
-	'sprite',
+	'pixiSprite',
 	function( )
 {
 	var
@@ -129,6 +120,7 @@ jion.lazyValue(
 	return sprite;
 }
 );
+*/
 
 
 } )( );

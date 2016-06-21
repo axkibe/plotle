@@ -116,6 +116,7 @@ if( JION )
 
 var
 	gleam_canvas,
+	gleam_glint_window,
 	jion,
 	result_hover,
 	root,
@@ -294,6 +295,40 @@ prototype.dragStop =
 {
 	root.create( 'action', undefined );
 };
+
+
+/*
+| The widget's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	if( !this.visible ) return undefined;
+
+	return(
+		gleam_glint_window.create(
+			'display', this._display,
+			'key', this.key,
+			'p', this.area.pnw
+		)
+	);
+}
+);
+
+
+/*
+| The key of this widget.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*

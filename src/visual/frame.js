@@ -34,11 +34,12 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_scale,
+	euclid_scaleRay,
 	euclid_shape,
 	euclid_shape_line,
 	euclid_shape_round,
 	euclid_shape_start,
-	gleam_container,
+	gleam_glint_twig,
 	gleam_glint_paint,
 	gleam_glint_mask,
 	gruga_frame,
@@ -72,22 +73,6 @@ prototype = visual_frame.prototype;
 handleSize = gruga_frame.handleSize;
 
 handleSize2 = math_half( handleSize );
-
-
-/*
-| Beams the item onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	return(
-		container.create(
-			'twig:set+', 'frame', this._frameMaskGlint
-		)
-	);
-};
 
 
 /*
@@ -234,7 +219,7 @@ function( )
 jion.lazyValue(
 	prototype,
 	'proportional',
-function( )
+	function( )
 {
 	var
 		a,
@@ -381,6 +366,72 @@ prototype.dragStart =
 
 
 /*
+| The frames glint
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	var
+		a,
+		an,
+		arr,
+		aZ,
+		ca,
+		content,
+		sbary,
+		scale;
+
+	content = this.content;
+
+/**/if( CHECK )
+/**/{
+/**/	if( content.length === 0 ) throw new Error( );
+/**/}
+
+	arr = [ ];
+
+	an = 0;
+
+	for( a = 0, aZ = content.length; a < aZ; a++ )
+	{
+		ca = content.get( a );
+
+		arr[ an++ ] =
+			euclid_scale.create(
+				'shape', ca.vSilhoutte,
+				'distance', -1
+			);
+	
+		sbary = ca.scrollbarY;
+
+		if( sbary )
+		{
+			arr[ an++ ] =
+				euclid_scale.create(
+					'shape', sbary.area,
+					'distance', -0.5
+				);
+		}
+	}
+
+	scale = euclid_scaleRay.create( 'ray:init', arr );
+
+	return(
+		gleam_glint_mask.create(
+			'glint', this._frameGlint,
+			'key', '$frame',
+			'scale', scale,
+			'reverse', true
+		)
+	);
+}
+);
+
+
+
+/*
 | Mouse hover.
 |
 | Returns true if the pointing device hovers over anything.
@@ -424,93 +475,40 @@ prototype.pointingHover =
 
 
 /*
-| The frame container holding all stuff unmasked.
+| The frame glint holding all stuff unmasked.
+|
+| TODO inherit
 */
 jion.lazyValue(
 	prototype,
-	'_frameContainer',
+	'_frameGlint',
 	function( )
 {
-
 	var
-		container,
-		fbg,
-		hng,
-		heg,
-		hneg,
-		hnwg,
-		hseg,
-		hsg,
-		hswg,
-		hwg;
+		glint;
 
-	fbg = this._frameBodyGlint;
-
-	hnwg = this._handleNwGlint;
-
-	hneg = this._handleNeGlint;
-
-	hseg = this._handleSeGlint;
-
-	hswg = this._handleSwGlint;
-
-	container =
-		gleam_container.create(
-			'twig:set+', fbg.id, fbg,
-			'twig:set+', hnwg.id, hnwg,
-			'twig:set+', hneg.id, hneg,
-			'twig:set+', hseg.id, hseg,
-			'twig:set+', hswg.id, hswg
+	glint =
+		gleam_glint_twig.create(
+			'key', 'frame',
+			'twine:set+', this._frameBodyGlint,
+			'twine:set+', this._handleNwGlint,
+			'twine:set+', this._handleNeGlint,
+			'twine:set+', this._handleSeGlint,
+			'twine:set+', this._handleSwGlint
 		);
 
 	if( !this.proportional )
 	{
-		hng = this._handleNGlint;
-
-		heg = this._handleEGlint;
-
-		hsg = this._handleSGlint;
-
-		hwg = this._handleWGlint;
-
-		container =
-			container.create(
-				'twig:set+', hng.id, hng,
-				'twig:set+', heg.id, heg,
-				'twig:set+', hsg.id, hsg,
-				'twig:set+', hwg.id, hwg
+		glint =
+			glint.create(
+				'twine:set+', this._handleNGlint,
+				'twine:set+', this._handleEGlint,
+				'twine:set+', this._handleSGlint,
+				'twine:set+', this._handleWGlint
 			);
 	}
 
-	return container;
-}
-);
-
-
-/*
-| The frame mask.
-*/
-jion.lazyValue(
-	prototype,
-	'_frameMaskGlint',
-	function( )
-{
-	var
-		scale;
-
-	scale =
-		euclid_scale.create(
-			'shape', this.content.get( 0 ).vSilhoutte,
-			'distance', -1
-		);
-
-	return(
-		gleam_glint_mask.create(
-			'container', this._frameContainer,
-			'scale', scale,
-			'reverse', true
-		)
-	);
+	return glint;
 }
 );
 
@@ -587,6 +585,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.facet,
+			'key', 'frameBody',
 			'shape', this._frameBodyShape
 		)
 	);
@@ -633,6 +632,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleN',
 			'shape', this._handleNShape
 		)
 	);
@@ -674,6 +674,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleNe',
 			'shape', this._handleNeShape
 		)
 	);
@@ -715,6 +716,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleNw',
 			'shape', this._handleNwShape
 		)
 	);
@@ -761,6 +763,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleE',
 			'shape', this._handleEShape
 		)
 	);
@@ -807,6 +810,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleS',
 			'shape', this._handleSShape
 		)
 	);
@@ -848,6 +852,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleSe',
 			'shape', this._handleSeShape
 		)
 	);
@@ -889,6 +894,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleSw',
 			'shape', this._handleSwShape
 		)
 	);
@@ -935,6 +941,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
+			'key', 'handleW',
 			'shape', this._handleWShape
 		)
 	);

@@ -32,17 +32,17 @@ gruga_frame.facet =
 				'ray:append',
 				gleam_gradient_colorStop.create(
 					'offset', 0,
-					'color', gleam_color.rgba( 255, 255, 220, 0.9 )
+					'color', gleam_color.rgba( 255, 245, 200, 0.9 )
 				),
 				'ray:append',
 				gleam_gradient_colorStop.create(
 					'offset', 1,
-					'color', gleam_color.rgba( 255, 255, 200, 0.9 )
+					'color', gleam_color.rgba( 255, 235, 180, 0.9 )
 				)
 			),
 		'border',
 			gleam_border.create(
-				'color', gleam_color.rgba( 255, 230, 167, 0.9 )
+				'color', gleam_color.rgba( 255, 220, 157, 0.9 )
 			)
 	);
 
@@ -52,23 +52,19 @@ gruga_frame.facet =
 */
 gruga_frame.handleFacet =
 	gleam_facet.create(
-		'fill', gleam_color.rgba( 255, 230, 167, 0.955 ),
-		'border',
-			gleam_border.create(
-				'color', gleam_color.rgba( 255, 180, 110, 0.9 )
-			)
+		'fill', gleam_color.rgba( 255, 220, 157, 0.955 )
 	);
 
 /*
 | The frames width.
 */
-gruga_frame.width = 21;
+gruga_frame.width = 26;
 
 
 /*
 | The handles size
 */
-gruga_frame.handleSize = 38;
+gruga_frame.handleSize = 53;
 
 
 if( FREEZE ) Object.freeze( gruga_frame );

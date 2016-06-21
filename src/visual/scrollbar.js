@@ -54,6 +54,7 @@ if( JION )
 var
 	euclid_rect,
 	euclid_roundRect,
+	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
 	math_half,
@@ -82,13 +83,22 @@ prototype = visual_scrollbar.prototype;
 
 
 /*
-| Draws the scrollbar.
+| The scrollbar's glint.
 */
-prototype.draw =
-	function( display )
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
 {
-	display.paint( gruga_scrollbar.facet, this.area );
-};
+	return(
+		gleam_glint_paint.create(
+			'facet', gruga_scrollbar.facet,
+			'key', ':scrollbar',
+			'shape', this.area 
+		)
+	);
+}
+);
 
 
 /*

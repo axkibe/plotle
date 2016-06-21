@@ -5,7 +5,8 @@
 
 var
 	form_form,
-	gleam_container,
+	gleam_glint_paint,
+	gleam_glint_twig,
 	gruga_formFacet,
 	jion,
 	result_hover,
@@ -81,19 +82,12 @@ form_form.init =
 
 
 /*
-| Beams a form.
+| Creates a glint for the a form.
 */
-form_form.beam =
-	function(
-		container
-	)
+form_form.glint =
+	function( )
 {
-	if( container )
-	{
-		return container;
-	}
-
-	return gleam_container.create( );
+	return gleam_glint_twig.create( 'key', 'screen' );
 };
 
 
@@ -265,6 +259,46 @@ form_form.getFocusedWidget =
 /**/}
 
 	return this.get( path.get( 4 ) );
+};
+
+
+/*
+| Return the space glint.
+|
+| TODO inherit.
+*/
+form_form.glint =
+	function( )
+{
+	var
+		glint,
+		r,
+		s,
+		sg;
+
+	// TODO background
+
+	glint =
+		gleam_glint_twig.create(
+			'key', 'screen',
+			'twine:add',
+				gleam_glint_paint.create(
+					'facet', gruga_formFacet,
+					'key', '$background',
+					'shape', this.view.baseArea
+				)
+		);
+
+	for( r = this.length - 1; r >= 0; r-- )
+	{
+		s = this.atRank( r );
+
+		sg = s.glint;
+
+		if( sg ) glint = glint.create( 'twine:add', sg );
+	}
+
+	return glint;
 };
 
 

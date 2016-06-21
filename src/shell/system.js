@@ -10,8 +10,8 @@
 */
 var
 	config,
-	gleam_canvas,
-//	gleam_display_canvas,
+//	gleam_canvas,
+	gleam_display_canvas,
 //	gleam_display_pixi,
 	euclid_point,
 	math_limit,
@@ -23,8 +23,8 @@ var
 	transmitter;
 
 
-//var gleam_impl = gleam_display_canvas;
-var gleam_impl = gleam_canvas;
+var gleam_impl = gleam_display_canvas;
+//var gleam_impl = gleam_canvas;
 
 /*
 | Capsule
@@ -279,6 +279,7 @@ shell_system =
 	this._display =
 		gleam_impl.createAroundHTMLCanvas(
 			canvas,
+			'root',
 			window.innerWidth - 1,
 			window.innerHeight - 1,
 			window.devicePixelRatio

@@ -74,6 +74,8 @@ if( JION )
 
 
 var
+	gleam_glint_text,
+	jion,
 	widget_label;
 
 
@@ -130,6 +132,41 @@ prototype.draw =
 		'font', this.font
 	);
 };
+
+
+/*
+| The widget's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	if( !this.visible ) return undefined;
+
+	return(
+		gleam_glint_text.create(
+			'font', this.font,
+			'key', this.key,
+			'p', this.pos,
+			'text', this.text
+		)
+	);
+}
+);
+
+
+/*
+| The key of this widget.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*

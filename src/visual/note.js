@@ -76,8 +76,6 @@ if( JION )
 
 var
 	change_grow,
-	gleam_canvas,
-	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
@@ -85,6 +83,10 @@ var
 	fabric_doc,
 	fabric_note,
 	fabric_para,
+	gleam_canvas,
+	gleam_glint_paint,
+	gleam_glint_twig,
+	gleam_glint_window,
 	gruga_note,
 	jion,
 	math_half,
@@ -315,13 +317,13 @@ prototype._init =
 			jion.aheadValue( this, '_display', inherit._display );
 		}
 
-		if( jion.hasLazyValueSet( inherit, '_windowGlint' ) )
+		if( jion.hasLazyValueSet( inherit, 'glint' ) )
 		{
-			this._inheritedWindowGlint = inherit._windowGlint;
+			this._inheritedGlint = inherit.glint;
 		}
 		else
 		{
-			this._inheritedWindowGlint = inherit._inheritedWindowGlint;
+			this._inheritedGlint = inherit._inheritedGlint;
 		}
 	}
 };
@@ -398,25 +400,6 @@ prototype.draw =
 
 
 /*
-| Beams the item onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	var
-		wg;
-
-	wg = this._windowGlint;
-
-	return(
-		container.create( 'twig:set+', wg.id, wg )
-	);
-};
-
-
-/*
 | Forwards fabric settings.
 */
 jion.lazyValue(
@@ -445,6 +428,70 @@ prototype.getDragItemChange = visual_item.getDragItemChangeZone;
 | Returns the change for resizing this item.
 */
 prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
+
+
+/*
+| The item's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	var
+		facet,
+		glint,
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	glint =
+		gleam_glint_twig.create(
+			'key', this.key,
+			'twine:set+',
+				gleam_glint_window.create(
+					'display', this._display,
+					'key', ':body',
+					'p', this.vZone.pnw
+				)
+		);
+
+	if( this.highlight )
+	{
+		facet = gruga_note.facets.getFacet( 'highlight', true );
+
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', facet,
+						'key', ':highlight',
+						'shape', this.vSilhoutte
+					)
+			);
+	}
+
+	if( sbary )
+	{
+		glint = glint.create( 'twine:set+', sbary.glint );
+	}
+
+	return glint;
+}
+);
+
+
+/*
+| The key of this item.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*
@@ -830,25 +877,6 @@ jion.lazyValue(
 	d.border( facet.border, this.vZeroSilhoutte );
 
 	return d;
-}
-);
-
-
-/*
-| The items window glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_windowGlint',
-	function( )
-{
-	return(
-		( this._inheritedWindowGlint || gleam_glint_window )
-		.create(
-			'display', this._display,
-			'p', this.vZone.pnw
-		)
-	);
 }
 );
 

@@ -71,6 +71,8 @@ var
 	change_grow,
 	change_shrink,
 	gleam_canvas,
+	gleam_glint_paint,
+	gleam_glint_twig,
 	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
@@ -329,53 +331,6 @@ prototype.dragStart = visual_docItem.dragStart;
 
 
 /*
-| Draws the label.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		action;
-
-	action = this.action;
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.vPnw
-	);
-
-	if( this.highlight )
-	{
-		display.border(
-			gruga_label.facets.getFacet( 'highlight', true ).border,
-			this.vSilhoutte
-		);
-	}
-};
-
-
-/*
-| Beams the label onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	var
-		wg;
-
-	wg = this._windowGlint;
-
-	return(
-		container.create( 'twig:set+', wg.id, wg )
-	);
-};
-
-
-/*
 | The fontsize of the label.
 */
 visual_label.fontsize =
@@ -421,9 +376,66 @@ prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
 
 
 /*
+| The items glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	// FUTURE GLINT inherit
+	var
+		facet,
+		glint;
+
+	glint =
+		gleam_glint_twig.create(
+			'key', this.key,
+			'twine:set+',
+				gleam_glint_window.create(
+					'display', this._display,
+					'key', ':content',
+					'p', this.vPnw
+				)
+		);
+
+	if( this.highlight )
+	{
+		facet = gruga_label.facets.getFacet( 'highlight', true );
+
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', facet,
+						'key', ':highlight',
+						'shape', this.vSilhoutte
+					)
+			);
+	}
+
+	return glint;
+}
+);
+
+
+/*
 | A text has been inputed.
 */
 prototype.input = visual_docItem.input;
+
+
+/*
+| The key of this item.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*
@@ -818,23 +830,5 @@ jion.lazyValue(
 }
 );
 
-
-/*
-| The items window glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_windowGlint',
-	function( )
-{
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'display', this._display,
-			'p', this.vPnw
-		)
-	);
-}
-);
 
 } )( );

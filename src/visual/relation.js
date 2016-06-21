@@ -65,6 +65,7 @@ var
 	euclid_connect,
 	gleam_canvas,
 	gleam_glint_paint,
+	gleam_glint_twig,
 	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
@@ -128,41 +129,6 @@ prototype._init =
 | The attention center.
 */
 jion.lazyValue( prototype, 'attentionCenter', visual_docItem.attentionCenter );
-
-
-/*
-| Beams the item onto a gleam container.
-*/
-prototype.beam =
-	function(
-		container
-	)
-{
-	var
-		arrow1,
-		arrow2,
-		wg;
-
-	wg = this._windowGlint;
-
-	arrow1 = this._arrow1Glint( );
-
-	arrow2 = this._arrow2Glint( );
-
-	container = container.create( 'twig:set+', wg.id, wg );
-
-	if( arrow1 )
-	{
-		container = container.create( 'twig:set+', arrow1.id, arrow1 );
-	}
-
-	if( arrow2 )
-	{
-		container = container.create( 'twig:set+', arrow2.id, arrow2 );
-	}
-
-	return container;
-};
 
 
 /*
@@ -288,45 +254,81 @@ prototype.vArrow2Shape =
 
 
 /*
-| Displays the relation.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		arrow1,
-		arrow2,
-		space,
-		zone;
-
-	space = root.spaceVisual;
-
-	arrow1 = this.vArrow1Shape( );
-
-	arrow2 = this.vArrow2Shape( );
-
-	zone = this.zone;
-
-	if( arrow1 )
-	{
-		display.paint( gruga_relation.facet, arrow1 );
-	}
-
-	if( arrow2 )
-	{
-		display.paint( gruga_relation.facet, arrow2 );
-	}
-
-	visual_label.prototype.draw.call( this, display );
-};
-
-
-/*
 | Fontsize of the relations label.
 */
 jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
+
+
+/*
+| The item's glint.
+|
+| This cannot be done lazily, since
+| when one of the items the relation
+| points to is moved the arrows are moved
+| too.
+|
+| FIXME do some caching nonetheless.
+*/
+Object.defineProperty(
+	prototype,
+	'glint',
+{
+	get:
+		function( )
+	{
+		var
+			arrow1,
+			arrow2,
+			facet,
+			glint,
+			wg;
+
+		wg =
+			gleam_glint_window.create(
+				'display', this._display,
+				'key', 'label',
+				'p', this.vZone.pnw
+			);
+
+		arrow1 = this._arrow1Glint( );
+
+		arrow2 = this._arrow2Glint( );
+
+		glint =
+			gleam_glint_twig.create(
+				'key', this.key,
+				'twine:set+', wg
+			);
+	
+		if( this.highlight )
+		{
+			facet = gruga_label.facets.getFacet( 'highlight', true );
+
+			glint =
+				glint.create(
+						'twine:set+',
+						gleam_glint_paint.create(
+							'facet', facet,
+							'key', ':highlight',
+							'shape', this.vSilhoutte
+						)
+				);
+		}
+
+		if( arrow1 )
+		{
+			glint = glint.create( 'twine:set+', arrow1 );
+		}
+
+		if( arrow2 )
+		{
+			glint = glint.create( 'twine:set+', arrow2 );
+		}
+
+		return glint;
+	}
+}
+);
 
 
 /*
@@ -371,6 +373,19 @@ prototype.getDragItemChange = visual_item.getDragItemChangePnwFs;
 | Returns the change for resizing this item.
 */
 prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
+
+
+/*
+| The key of this item.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*
@@ -566,6 +581,7 @@ prototype._arrow1Glint =
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
+			'key', 'arrow1',
 			'shape', arrow1
 		)
 	);
@@ -590,29 +606,11 @@ prototype._arrow2Glint =
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
+			'key', 'arrow2',
 			'shape', arrow2
 		)
 	);
 };
-
-
-/*
-| The item's window gling
-*/
-jion.lazyValue(
-	prototype,
-	'_windowGlint',
-	function( )
-{
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'display', this._display,
-			'p', this.vZone.pnw
-		)
-	);
-}
-);
 
 
 jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );

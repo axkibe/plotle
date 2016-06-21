@@ -1,5 +1,5 @@
 /*
-| Draws a container masked by a border(Ray).
+| Masked glints.
 */
 
 
@@ -12,21 +12,25 @@ if( JION )
 		id : 'gleam_glint_mask',
 		attributes :
 		{
-			'container' :
+			glint :
 			{
-				comment : 'the container to draw',
-				type : 'gleam_container'
+				comment : 'the glints to draw',
+				type : 'gleam_glint_twig'
 			},
-			'scale' :
+			key :
 			{
-				comment : 'a scaled shape(ray) to mask',
-				type : [ 'euclid_scale' ]
-
+				comment : 'key in parent twig',
+				type : 'string'
 			},
-			'reverse' :
+			reverse :
 			{
 				comment : 'true if reversing mask',
 				type : [ 'undefined', 'boolean' ]
+			},
+			scale :
+			{
+				comment : 'a scaled shape(ray) to mask',
+				type : [ 'euclid_scale', 'euclid_scaleRay' ]
 			}
 		}
 	};

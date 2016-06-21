@@ -22,9 +22,7 @@ if( JION )
 			shape :
 			{
 				comment : 'the shape to scale',
-				type :
-					require( '../typemaps/shape' )
-					.concat( 'euclid_shapeRay' )
+				type : require( '../typemaps/shape' )
 			}
 		}
 	};

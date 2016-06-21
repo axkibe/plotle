@@ -32,6 +32,7 @@ if( JION )
 var
 	euclid_fixPoint,
 	euclid_point,
+	euclid_rect,
 	jion;
 
 
@@ -89,6 +90,26 @@ prototype.add =
 		);
 	}
 };
+
+
+/*
+| Creates a rect of size width*height with this
+| point as pnw.
+*/
+prototype.createRectOfSize =
+	function(
+		width,
+		height
+	)
+{
+	return(
+		euclid_rect.create(
+			'pnw', this,
+			'pse', this.add( width, height )
+		)
+	);
+};
+
 
 
 /*

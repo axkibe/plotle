@@ -18,10 +18,10 @@ if( JION )
 				type : [ 'undefined', 'string' ]
 
 			},
-			'container' :
+			'glint' :
 			{
-				comment : 'the container to display',
-				type : 'gleam_container'
+				comment : 'the glint twig to display',
+				type : 'gleam_glint_twig'
 			},
 			'height' :
 			{
@@ -59,7 +59,7 @@ var
 	euclid_constants,
 	euclid_view,
 	get2dContext,
-	gleam_container,
+	gleam_glint_twig,
 	gleam_display_canvas,
 	jion;
 
@@ -124,10 +124,12 @@ get2dContext =
 */
 gleam_display_canvas.createAroundHTMLCanvas =
 	function(
-		canvas,
-		width,
-		height,
-		scaled
+		canvas,  // the canvas to create around
+		name,    // the name(id) of the display
+		width,   // the width the canvas should have
+		height,  // the height the canvas should have
+		scaled   // if defined, the backing store scale factor
+		//       // via pixelratio for HiDPI displays
 	)
 {
 	var
@@ -140,7 +142,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
-			'container', gleam_container.create( ),
+			'glint', gleam_glint_twig.create( 'key', name ),
 			'height', height,
 			'scaled', scaled,
 			'width', width
@@ -243,7 +245,7 @@ prototype.render =
 		this._cx.clearRect( 0, 0, this.width, this.height );
 	}
 
-	this._renderContainer( this.container );
+	this._renderGlintTwig( this.glint );
 };
 
 
@@ -374,46 +376,61 @@ prototype._colorStyle =
 
 
 /*
-| Renders a container.
+| Renders a glint twig.
 */
-prototype._renderContainer =
-	function( co )
+prototype._renderGlintTwig =
+	function(
+		glint
+	)
 {
 	var
-		glint,
+		a,
+		aZ,
+		cx,
+		g,
 		h,
-		w,
+		p,
 		r,
 		rZ,
-		cx,
-		p,
-		scale;
+		sa,
+		scale,
+		w;
 
 	cx = this._cx;
 
-	for( r = 0, rZ = co.length; r < rZ; r++ )
+	for( r = 0, rZ = glint.length; r < rZ; r++ )
 	{
-		glint = co.atRank( r );
+		g = glint.atRank( r );
 
-		switch( glint.reflect )
+		switch( g.reflect )
 		{
-			case 'gleam_container' :
+			case 'gleam_glint_twig' :
 
-				this._renderContainer( glint );
+				this._renderGlintTwig( g );
 
 				break;
 
 			case 'gleam_glint_paint' :
 
-				this._paint( glint.facet, glint.shape );
+				this._paint( g.facet, g.shape );
+
+				break;
+
+			case 'gleam_glint_text' :
+
+				this._setFont( g.font );
+
+				p = g.p;
+
+				cx.fillText( g.text, p.x, p.y );
 
 				break;
 
 			case 'gleam_glint_window' :
 
-				p = glint.p;
+				p = g.p;
 
-				cx.drawImage( glint.display._cv, p.x, p.y );
+				cx.drawImage( g.display._cv, p.x, p.y );
 
 				break;
 
@@ -425,25 +442,59 @@ prototype._renderContainer =
 
 				cx.save( );
 
-				cx.beginPath( );
+				scale = g.scale;
 
-				cx.moveTo( 0, 0 );
+				switch( scale.reflect )
+				{
+					case 'euclid_scale' :
 
-				cx.lineTo( 0, h );
+						cx.beginPath( );
 
-				cx.lineTo( w, h );
+						cx.moveTo( 0, 0 );
 
-				cx.lineTo( w, 0 );
+						cx.lineTo( 0, h );
 
-				cx.lineTo( 0, 0 );
+						cx.lineTo( w, h );
 
-				scale = glint.scale;
+						cx.lineTo( w, 0 );
 
-				this._sketch( scale.shape, scale.distance, 0.5 );
+						cx.lineTo( 0, 0 );
 
-				cx.clip( );
+						this._sketch( scale.shape, scale.distance, 0.5 );
 
-				this._renderContainer( glint.container );
+						cx.clip( );
+
+						break;
+
+					case 'euclid_scaleRay' :
+
+						for( a = 0, aZ = scale.length; a < aZ; a++ )
+						{
+							cx.beginPath( );
+
+							cx.moveTo( 0, 0 );
+
+							cx.lineTo( 0, h );
+
+							cx.lineTo( w, h );
+
+							cx.lineTo( w, 0 );
+
+							cx.lineTo( 0, 0 );
+
+							sa = scale.get( a );
+
+							this._sketch( sa.shape, sa.distance, 0.5 );
+
+							cx.clip( );
+						}
+
+						break;
+
+					default : throw new Error( );
+				}
+
+				this._renderGlintTwig( g.glint );
 
 				cx.restore( );
 
@@ -570,6 +621,27 @@ prototype._paint =
 };
 
 
+/*
+| Sets the context to the font.
+*/
+prototype._setFont =
+	function(
+		font
+	)
+{
+	var
+		cx;
+
+	cx = this._cx;
+
+	cx.font = font.css;
+
+	cx.fillStyle = font.fill.css;
+
+	cx.textAlign = font.align;
+
+	cx.textBaseline = font.base;
+};
 
 
 /*

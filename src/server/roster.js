@@ -313,7 +313,17 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gleam/glint/mask.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/glint/paint.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/glint/text.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -323,12 +333,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/glint/mask.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/gleam/container.js',
+		'filePath', 'src/gleam/glint/twig.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -383,6 +388,11 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/euclid/scale.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/scaleRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),

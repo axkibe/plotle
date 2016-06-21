@@ -9,12 +9,21 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_container',
+		id : 'gleam_glint_twig',
+		attributes :
+		{
+			key :
+			{
+				comment : 'key in parent twig',
+				type : 'string'
+			}
+		},
 		twig :
 		[
-			'gleam_container',
+			'gleam_glint_twig',
 			'gleam_glint_mask',
 			'gleam_glint_paint',
+			'gleam_glint_text',
 			'gleam_glint_window'
 		]
 	};

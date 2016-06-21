@@ -88,6 +88,7 @@ if( JION )
 var
 	gleam_color,
 	gleam_canvas,
+	gleam_glint_window,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -249,6 +250,27 @@ prototype.draw =
 
 
 /*
+| The widget's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	if( !this.visible ) return undefined;
+
+	return(
+		gleam_glint_window.create(
+			'display', this._display,
+			'key', this.key,
+			'p', this.area.pnw
+		)
+	);
+}
+);
+
+
+/*
 | User input.
 */
 prototype.input =
@@ -295,6 +317,19 @@ prototype.input =
 			)
 	);
 };
+
+
+/*
+| The key of this widget.
+*/
+jion.lazyValue(
+	prototype,
+	'key',
+	function( )
+{
+	return this.path.get( -1 );
+}
+);
 
 
 /*

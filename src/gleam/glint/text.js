@@ -1,7 +1,5 @@
 /*
-| Draws a shape in a display.
-|
-| This is first the fill then the border
+| A text glint for gleam.
 */
 
 
@@ -11,23 +9,28 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_glint_paint',
+		id : 'gleam_glint_text',
 		attributes :
 		{
-			facet :
+			font :
 			{
-				comment : 'the facet to draw the shape with',
-				type : 'gleam_facet'
+				comment : 'the font to display the text in',
+				type : 'gleam_font'
 			},
 			key :
 			{
 				comment : 'key in parent twig',
 				type : 'string'
 			},
-			shape :
+			p :
 			{
-				comment : 'the shape to draw',
-				type : require( '../../typemaps/shape' )
+				comment : 'where to draw it',
+				type : 'euclid_point'
+			},
+			text :
+			{
+				comment : 'text to display',
+				type : 'string'
 			}
 		}
 	};

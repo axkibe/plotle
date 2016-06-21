@@ -114,6 +114,7 @@ get2dContext =
 gleam_canvas.createAroundHTMLCanvas =
 	function(
 		canvas,
+		name,
 		width,
 		height,
 		scaled

@@ -77,11 +77,13 @@ var
 	euclid_connect,
 	euclid_point,
 	euclid_rect,
-	gleam_container,
+	gleam_glint_paint,
+	gleam_glint_twig,
 	gruga_label,
 	gruga_relation,
 	gruga_select,
 	jion,
+	jion$path,
 	jion$pathRay,
 	result_hover,
 	root,
@@ -156,6 +158,28 @@ visual_space.concernsHover =
 };
 
 
+/*
+| The path for transientItems
+*/
+jion.lazyStaticValue(
+	visual_space,
+	'transPath',
+	function( )
+{
+	return(
+		jion$path.create(
+			'ray:init', [ 'spaceVisual', ':transient' ]
+		)
+	);
+}
+);
+
+
+/*
+| Mapping of fabric item name to visual items.
+|
+| FIXME freeze
+*/
 jion.lazyStaticValue(
 	visual_space,
 	'visualMap',
@@ -382,34 +406,134 @@ jion.lazyValue(
 
 
 /*
-| Updates the gleam container
+| Return the space glint.
+|
+| TODO inherit.
 */
-prototype.beam =
-	function(
-		// container
-	)
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
 {
 	var
-		c,
+		action,
+		arrow,
+		frame,
+		fromItem,
+		fromSilhoutte,
+		glint,
 		r,
-		s;
+		s,
+		toItem,
+		toSilhoutte,
+		view;
 
-	c = gleam_container.create( );
+	action = this.action;
+
+	glint = gleam_glint_twig.create( 'key', 'screen' );
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
-		c = s.beam( c );
+		glint = glint.create( 'twine:add', s.glint );
 	}
 
-	if( this.frame )
+	frame = this.frame;
+
+	if( frame )
 	{
-		c = this.frame.beam( c );
+		glint = glint.create( 'twine:add', frame.glint );
 	}
 
-	return c;
-};
+	switch( action && action.reflect )
+	{
+		case 'action_createGeneric' :
+			
+			if( action.startPoint )
+			{
+				glint = glint.create( 'twine:set+', action.transItem.glint );
+			}
+
+			break;
+
+		case 'action_createRelation' :
+
+			if( action.fromItemPath )
+			{
+				view = this.view;
+
+				fromItem = this.get( action.fromItemPath.get( -1 ) );
+
+				if( action.toItemPath )
+				{
+					toItem = this.get( action.toItemPath.get( -1 ) );
+				}
+
+				fromSilhoutte = fromItem.silhoutte;
+
+				if(
+					action.toItemPath
+					&& !action.toItemPath.equals( action.fromItemPath )
+				)
+				{
+					// arrow connects two items
+					toSilhoutte = toItem.silhoutte;
+				}
+				else if ( action.relationState === 'hadSelect' )
+				{
+					// arrow points into nowhere
+					toSilhoutte = action.toPoint.fromView( view );
+				}
+
+				if( toSilhoutte )
+				{
+					arrow =
+						euclid_arrow.shape(
+								euclid_connect.line(
+									fromSilhoutte,
+									toSilhoutte
+								),
+								'normal',
+								'arrow'
+						)
+						.inView( view );
+
+					glint =
+						glint.create(
+							'twine:set+',
+							gleam_glint_paint.create(
+								'facet', gruga_relation.facet,
+								'key', ':transient',
+								'shape', arrow
+							)
+						);
+				}
+			}
+
+			break;
+
+		case 'action_select' :
+
+			if( action.vZone )
+			{
+				glint =
+					glint.create(
+						'twine:set+',
+							gleam_glint_paint.create(
+								'facet', gruga_select.facet,
+								'key', ':select',
+								'shape', action.vZone
+							)
+					);
+			}
+
+			break;
+	}
+
+	return glint;
+}
+);
 
 
 /*
@@ -423,7 +547,6 @@ prototype.draw =
 	var
 		action,
 		arrow,
-		focus,
 		fromItem,
 		fromSilhoutte,
 		r,
@@ -439,8 +562,6 @@ prototype.draw =
 	{
 		this.atRank( r ).draw( display );
 	}
-
-	focus = this.focus;
 
 	if( this.frame )
 	{
@@ -751,9 +872,7 @@ prototype.dragStart =
 		if( item.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
-
 	// otherwise panning is initiated
-
 	switch( aType )
 	{
 		case 'action_create' :
@@ -1261,6 +1380,8 @@ prototype._moveCreateGeneric =
 
 	model = action.itemType.model;
 
+	transItem = action.transItem;
+
 	switch( action.itemType )
 	{
 		case visual_note :
@@ -1269,8 +1390,8 @@ prototype._moveCreateGeneric =
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
 			transItem =
-				model.create(
-					'fabric', model.fabric.create( 'zone', zone ),
+				transItem.create(
+					'fabric', transItem.fabric.create( 'zone', zone ),
 					'view', view
 				);
 
@@ -1287,7 +1408,7 @@ prototype._moveCreateGeneric =
 				);
 
 			resized =
-				model.create(
+				transItem.create(
 					'fabric', model.fabric.create( 'fontsize', fs )
 				);
 
@@ -1703,6 +1824,7 @@ prototype._startCreateGeneric =
 {
 	var
 		action,
+		fabric,
 		itemType,
 		model,
 		transItem;
@@ -1717,20 +1839,28 @@ prototype._startCreateGeneric =
 	{
 		case 'zone' :
 
+			fabric  =
+				model.fabric.create(
+					'zone',
+						dp.createRectOfSize(
+							model.minWidth,
+							model.minHeight
+						)
+				);
+
+			if( itemType === visual_portal )
+			{
+				fabric =
+					fabric.create(
+						'spaceUser', root.user.name,
+						'spaceTag', 'home'
+					);
+			}
+
 			transItem =
 				model.create(
-					'fabric',
-						model.fabric.create(
-							'zone',
-								euclid_rect.create(
-									'pnw', dp,
-									'pse',
-										dp.add(
-											model.minWidth,
-											model.minHeight
-										)
-								)
-						),
+					'fabric', fabric,
+					'path', visual_space.transPath,
 					'view', this.view
 				);
 
@@ -1741,6 +1871,7 @@ prototype._startCreateGeneric =
 			transItem =
 				model.create(
 					'fabric', model.fabric.create( 'pnw', dp ),
+					'path', visual_space.transPath,
 					'view', this.view
 				);
 
