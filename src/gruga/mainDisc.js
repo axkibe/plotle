@@ -131,24 +131,40 @@ userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
 gruga_mainDisc =
 	disc_mainDisc.abstract(
-		'border',
-			gleam_borderRay.create(
-				'ray:append',
-				gleam_border.create(
-					'distance', 1,
-					'color', gleam_color.rgb( 255, 94, 44 )
-				),
-				'ray:append',
-				gleam_border.create(
-					'color', gleam_color.rgb( 94, 94, 0 )
-				)
-			),
 		'designArea',
 			euclid_anchor_rect.create(
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -500 ),
 				'pse',
 					euclid_anchor_point.w.create( 'x', 100, 'y', 500 )
+			),
+		'facet',
+			gleam_facet.create(
+				'border',
+					gleam_borderRay.create(
+						'ray:append',
+						gleam_border.create(
+							'distance', 1,
+							'color', gleam_color.rgb( 255, 94, 44 )
+						),
+						'ray:append',
+						gleam_border.create(
+							'color', gleam_color.rgb( 94, 94, 0 )
+						)
+					),
+				'fill',
+					gleam_gradient_radial.create(
+						'ray:append',
+						gleam_gradient_colorStop.create(
+							'offset', 0,
+							'color', gleam_color.rgba( 255, 255,  20, 0.955 )
+						),
+						'ray:append',
+						gleam_gradient_colorStop.create(
+							'offset', 1,
+							'color', gleam_color.rgba( 255, 255, 180, 0.955 )
+						)
+					)
 			),
 		'shape',
 			euclid_anchor_ellipse.create(
@@ -168,19 +184,6 @@ gruga_mainDisc =
 						'y', 0
 					),
 				'gradientR1', 650
-			),
-		'fill',
-			gleam_gradient_radial.create(
-				'ray:append',
-				gleam_gradient_colorStop.create(
-					'offset', 0,
-					'color', gleam_color.rgba( 255, 255,  20, 0.955 )
-				),
-				'ray:append',
-				gleam_gradient_colorStop.create(
-					'offset', 1,
-					'color', gleam_color.rgba( 255, 255, 180, 0.955 )
-				)
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(

@@ -115,26 +115,6 @@ prototype._init =
 
 
 /*
-| Displays the label.
-|
-| FUTURE use _display
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	if( !this.visible ) return;
-
-	display.paintText(
-		'text', this.text,
-		'p', this.pos,
-		'font', this.font
-	);
-};
-
-
-/*
 | The widget's glint.
 */
 jion.lazyValue(

@@ -236,19 +236,6 @@ prototype.click =
 };
 
 
-
-/*
-| Draws the input field.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	display.drawImage( 'image', this._display, 'pnw', this.area.pnw );
-};
-
-
 /*
 | The widget's glint.
 */

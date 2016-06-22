@@ -1,5 +1,5 @@
 /*
-| A container of stuff to display.
+| The fill of a shape.
 */
 
 
@@ -9,25 +9,25 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_glint_twig',
+		id : 'gleam_glint_fill',
 		attributes :
 		{
+			facet :
+			{
+				comment : 'the facet to draw the fill with',
+				type : 'gleam_facet'
+			},
 			key :
 			{
 				comment : 'key in parent twig',
 				type : 'string'
+			},
+			shape :
+			{
+				comment : 'the shape to draw',
+				type : require( '../../typemaps/shape' )
 			}
-		},
-		twig :
-		[
-			'gleam_glint_border',
-			'gleam_glint_fill',
-			'gleam_glint_mask',
-			'gleam_glint_paint',
-			'gleam_glint_text',
-			'gleam_glint_twig',
-			'gleam_glint_window'
-		]
+		}
 	};
 }
 

@@ -189,26 +189,6 @@ form_form.cycleFocus =
 
 
 /*
-| Draws a form.
-*/
-form_form.draw =
-	function(
-		display
-	)
-{
-	var
-		r;
-
-	display.fill( gruga_formFacet.fill, display.silhoutte );
-
-	for( r = this.length - 1; r >= 0; r-- )
-	{
-		this.atRank( r ).draw( display );
-	}
-};
-
-
-/*
 | Returns the attention center.
 |
 | To be used as lazyValue getter.

@@ -98,24 +98,40 @@ genericButtonModel =
 
 gruga_createDisc =
 	disc_createDisc.abstract(
-		'border',
-			gleam_borderRay.create(
-				'ray:append',
-				gleam_border.create(
-					'distance', 1,
-					'color', gleam_color.rgb( 255, 94, 44 )
-				),
-				'ray:append',
-				gleam_border.create(
-					'color', gleam_color.rgb( 94, 94, 0 )
-				)
-			),
 		'designArea',
 			euclid_anchor_rect.create(
 				'pnw',
 					euclid_anchor_point.w.create( 'x', 0, 'y', -505 ),
 				'pse',
 					euclid_anchor_point.w.create( 'x', 176, 'y', 505 )
+			),
+		'facet',
+			gleam_facet.create(
+				'border',
+					gleam_borderRay.create(
+						'ray:append',
+						gleam_border.create(
+							'distance', 1,
+							'color', gleam_color.rgb( 255, 94, 44 )
+						),
+						'ray:append',
+						gleam_border.create(
+							'color', gleam_color.rgb( 94, 94, 0 )
+						)
+					),
+				'fill',
+					gleam_gradient_radial.create(
+						'ray:append',
+						gleam_gradient_colorStop.create(
+							'offset', 0,
+							'color', gleam_color.rgba( 255, 255,  20, 0.955 )
+						),
+						'ray:append',
+						gleam_gradient_colorStop.create(
+							'offset', 1,
+							'color', gleam_color.rgba( 255, 255, 205, 0.955 )
+						)
+					)
 			),
 		'shape',
 			euclid_anchor_ellipse.create(
@@ -135,19 +151,6 @@ gruga_createDisc =
 						'y', 0
 					),
 				'gradientR1', 650
-			),
-		'fill',
-			gleam_gradient_radial.create(
-				'ray:append',
-				gleam_gradient_colorStop.create(
-					'offset', 0,
-					'color', gleam_color.rgba( 255, 255,  20, 0.955 )
-				),
-				'ray:append',
-				gleam_gradient_colorStop.create(
-					'offset', 1,
-					'color', gleam_color.rgba( 255, 255, 205, 0.955 )
-				)
 			),
 		'twig:add',
 		'createNote',

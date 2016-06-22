@@ -271,23 +271,6 @@ prototype.input =
 
 
 /*
-| Draws the button.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	if( !this.visible ) return;
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.area.pnw
-	);
-};
-
-
-/*
 | Stops a ReButton action.
 */
 prototype.dragStop =

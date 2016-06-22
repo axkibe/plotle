@@ -176,31 +176,6 @@ prototype.click =
 
 
 /*
-| Draws the checkbox.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		facet;
-
-	if( !this.visible ) return;
-
-	facet =
-		this.facets.getFacet(
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.mark
-		);
-
-	display.paint( facet, this.area );
-
-	if( this.checked ) display.paint( gruga_iconCheck.facet, this.checkIcon );
-};
-
-
-/*
 | The widget's glint.
 */
 jion.lazyValue(
@@ -230,7 +205,7 @@ jion.lazyValue(
 					'shape', this.area
 				)
 		);
-	
+
 	if( this.checked )
 	{
 		glint =

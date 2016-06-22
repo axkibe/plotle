@@ -15,7 +15,8 @@ if( JION )
 			display :
 			{
 				comment : 'the display to draw',
-				type : 'gleam_canvas' // FUTURE GLINT
+				// TODO remove gleam_canvas
+				type : [ 'gleam_canvas', 'gleam_display_canvas' ] // FUTURE GLINT
 			},
 			key :
 			{

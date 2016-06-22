@@ -25,11 +25,6 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
-			border :
-			{
-				comment : 'display border',
-				type : require( '../typemaps/border' )
-			},
 			controlView :
 			{
 				comment : 'the current view of controls',
@@ -40,10 +35,10 @@ if( JION )
 				comment : 'designed area (using anchors)',
 				type : 'euclid_anchor_rect'
 			},
-			fill :
+			facet :
 			{
-				comment : 'display fill',
-				type : require( '../typemaps/fill' )
+				comment : 'facet of the disc',
+				type : 'gleam_facet'
 			},
 			hover :
 			{
@@ -97,10 +92,12 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
-	gleam_canvas,
+	gleam_display_canvas,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_twig,
 	gleam_glint_window,
 	jion,
-	math_half,
 	root,
 	visual_label,
 	visual_note,
@@ -261,22 +258,6 @@ prototype.pushButton =
 			throw new Error( );
 	}
 
-};
-
-
-/*
-| Draws the disc panel.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	display.drawImage(
-		'image', this._display,
-		'x', 0,
-		'y', math_half( this.controlView.height - this.area.height )
-	);
 };
 
 
@@ -523,7 +504,7 @@ disc_createDisc._isActiveButton =
 
 
 /*
-| The disc panel's display.
+| The disc's display.
 */
 jion.lazyValue(
 	prototype,
@@ -531,26 +512,49 @@ jion.lazyValue(
 	function( )
 {
 	var
-		display,
+		g,
+		glint,
 		r,
 		rZ;
 
-	display =
-		gleam_canvas.create(
-			'width', this.area.width,
-			'height', this.area.height
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+				gleam_glint_fill.create(
+					'facet', this.facet,
+					'key', 'fill',
+					'shape', this.silhoutte
+				)
 		);
-
-	display.fill( this.fill, this.silhoutte );
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		this.atRank( r ).draw( display );
+		g = this.atRank( r ).glint;
+
+		if( g )
+		{
+			glint = glint.create( 'twine:set+', g );
+		}
 	}
 
-	display.border( this.border, this.silhoutte );
+	glint =
+		glint.create(
+			'twine:set+',
+				gleam_glint_border.create(
+					'facet', this.facet,
+					'key', 'border',
+					'shape', this.silhoutte
+				)
+		);
 
-	return display;
+	return(
+		gleam_display_canvas.create(
+			'width', this.area.width,
+			'height', this.area.height,
+			'glint', glint
+		)
+	);
 }
 );
 

@@ -12,39 +12,39 @@ if( JION )
 		id : 'gleam_display_canvas',
 		attributes :
 		{
-			'background' :
+			background :
 			{
 				comment : 'if set the canvas is opaque and has background',
 				type : [ 'undefined', 'string' ]
 
 			},
-			'glint' :
+			glint :
 			{
 				comment : 'the glint twig to display',
 				type : 'gleam_glint_twig'
 			},
-			'height' :
+			height :
 			{
 				comment : 'height of the display',
 				type : [ 'number' ]
 			},
-			'scaled' :
+			scaled :
 			{
 				// used for devicePixelRatio adjustments
 				comment : 'if defined the canvas is scaled',
 				type : [ 'undefined', 'number' ]
 			},
-			'width' :
+			width :
 			{
 				comment : 'width of the display',
 				type : [ 'number' ]
 			},
-			'_cv' :
+			_cv :
 			{
 				comment : 'the html canvas',
 				type : [ 'undefined', 'protean' ]
 			},
-			'_cx' :
+			_cx :
 			{
 				comment : 'the html canvas context',
 				type : [ 'undefined', 'protean' ]
@@ -152,6 +152,29 @@ gleam_display_canvas.createAroundHTMLCanvas =
 
 
 /*
+| Returns true if a point is in a sketch.
+*/
+prototype.withinSketch =
+	function(
+		shape,   // the shape to test
+		p,       // the point
+		border   // additional border
+	)
+{
+	var
+		cx;
+
+	cx = this._cx;
+
+	cx.beginPath( );
+
+	this._sketch( shape, border || 0, 0.5 );
+
+	return cx.isPointInPath( p.x, p.y );
+};
+
+
+/*
 | Initializer.
 */
 prototype._init =
@@ -167,12 +190,12 @@ prototype._init =
 /**/{
 /**/	if( inherit )
 /**/	{
-/**/		if( jion.hasLazyValueSet( inherit, 'expired' ) )
+/**/		if( jion.hasLazyValueSet( inherit, '_expired' ) )
 /**/    	{
 /**/        	throw new Error( );
 /**/    	}
 /**/
-/**/    	inherit.expired;
+/**/    	inherit._expired;
 /**/	}
 /**/}
 
@@ -218,7 +241,7 @@ prototype._init =
 /**/{
 /**/	jion.lazyValue(
 /**/		prototype,
-/**/		'expired',
+/**/		'_expired',
 /**/		function( )
 /**/	{
 /**/		return true;
@@ -227,6 +250,18 @@ prototype._init =
 /**/}
 
 
+/*
+| Set when the canvas has been rendered.
+*/
+jion.lazyValue(
+	prototype,
+	'_rendered',
+	function( )
+{
+	return true;
+}
+);
+
 
 /*
 | Renders the display.
@@ -234,6 +269,8 @@ prototype._init =
 prototype.render =
 	function( )
 {
+	if( jion.hasLazyValueSet( this, '_rendered' ) ) return true;
+
 	if( this.background )
 	{
 		this._cx.fillStyle = this.background;
@@ -246,6 +283,8 @@ prototype.render =
 	}
 
 	this._renderGlintTwig( this.glint );
+
+	this._rendered;
 };
 
 
@@ -277,6 +316,65 @@ prototype._border =
 	cx.lineWidth = border.width;
 
 	cx.stroke( );
+};
+
+
+/*
+| Draws a border or borderRay.
+*/
+prototype._borders  =
+	function(
+		border, // the gleam_border
+		shape   // an object which has sketch defined
+	)
+{
+	var
+		a,
+		aZ;
+
+	switch( border.reflect )
+	{
+		case 'gleam_borderRay' :
+
+			for( a = 0, aZ = border.length; a < aZ; a++ )
+			{
+				this._border( border.get( a ), shape );
+			}
+
+			break;
+
+		case 'gleam_border' :
+
+			this._border( border, shape );
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+/*
+| Draws a fill.
+*/
+prototype._fill  =
+	function(
+		fill,  // the gleam_border
+		shape  // an object which has sketch defined
+	)
+{
+	var
+		cx;
+
+	cx = this._cx;
+
+	this._sketch( shape, 0, 0 );
+
+	cx.fillStyle = this._colorStyle( fill, shape );
+
+	cx.fill( );
 };
 
 
@@ -404,9 +502,15 @@ prototype._renderGlintTwig =
 
 		switch( g.reflect )
 		{
-			case 'gleam_glint_twig' :
+			case 'gleam_glint_border' :
 
-				this._renderGlintTwig( g );
+				this._borders( g.facet.border, g.shape );
+
+				break;
+
+			case 'gleam_glint_fill' :
+
+				this._fill( g.facet.fill, g.shape );
 
 				break;
 
@@ -426,9 +530,18 @@ prototype._renderGlintTwig =
 
 				break;
 
+			case 'gleam_glint_twig' :
+
+				this._renderGlintTwig( g );
+
+				break;
+
 			case 'gleam_glint_window' :
 
 				p = g.p;
+
+				// FIXME
+				if( g.display.render ) g.display.render( );
 
 				cx.drawImage( g.display._cv, p.x, p.y );
 
@@ -585,39 +698,9 @@ prototype._paint =
 
 	cx.beginPath( );
 
-	this._sketch( shape, 0, 0 );
+	if( fill ) this._fill( fill, shape );
 
-	if( fill )
-	{
-		cx.fillStyle = this._colorStyle( fill, shape );
-
-		cx.fill( );
-	}
-
-	if( border )
-	{
-		switch( border.reflect )
-		{
-			case 'gleam_borderRay' :
-
-				for( a = 0, aZ = border.length; a < aZ; a++ )
-				{
-					this._border( border.get( a ), shape );
-				}
-
-				break;
-
-			case 'gleam_border' :
-
-				this._border( border, shape );
-
-				break;
-
-			default :
-
-				throw new Error( );
-		}
-	}
+	if( border ) this._borders( border, shape );
 };
 
 

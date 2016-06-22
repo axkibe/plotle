@@ -25,25 +25,20 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
-			border :
-			{
-				comment : 'display border',
-				type : require( '../typemaps/border' )
-			},
 			controlView :
 			{
 				comment : 'the current view of controls',
 				type : [ 'undefined', 'euclid_view' ]
 			},
-			fill :
-			{
-				comment : 'display fill',
-				type : require( '../typemaps/fill' )
-			},
 			designArea :
 			{
 				comment : 'designed aera (using anchors)',
 				type : 'euclid_anchor_rect'
+			},
+			facet :
+			{
+				comment : 'facet of the disc',
+				type : 'gleam_facet'
 			},
 			hover :
 			{
@@ -103,7 +98,10 @@ var
 	action_select,
 	disc_mainDisc,
 	change_shrink,
-	gleam_canvas,
+	gleam_display_canvas,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_twig,
 	gleam_glint_window,
 	jion,
 	result_hover,
@@ -314,43 +312,6 @@ prototype._init =
 
 
 /*
-| The disc panel's display.
-*/
-jion.lazyValue(
-	prototype,
-	'_display',
-	function( )
-	{
-		var
-			display,
-			r,
-			rZ;
-
-		display =
-			gleam_canvas.create(
-				'width', this.area.width,
-				'height', this.area.height
-			);
-
-		display.fill( this.fill, this.silhoutte );
-
-		for(
-			r = 0, rZ = this.length;
-			r < rZ;
-			r++
-		)
-		{
-			this.atRank( r ).draw( display );
-		}
-
-		display.border( this.border, this.silhoutte );
-
-		return display;
-	}
-);
-
-
-/*
 | A button of the main disc has been pushed.
 */
 prototype.pushButton =
@@ -464,21 +425,6 @@ prototype.pushButton =
 
 		default : throw new Error( );
 	}
-};
-
-
-/*
-| Draws the disc panel.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.area.pnw
-	);
 };
 
 
@@ -656,6 +602,62 @@ prototype.dragStart =
 
 	return true;
 };
+
+
+/*
+| The disc panel's display.
+*/
+jion.lazyValue(
+	prototype,
+	'_display',
+	function( )
+{
+	var
+		g,
+		glint,
+		r,
+		rZ;
+
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+				gleam_glint_fill.create(
+					'facet', this.facet,
+					'key', 'fill',
+					'shape', this.silhoutte
+				)
+		);
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		g = this.atRank( r ).glint;
+
+		if( g )
+		{
+			glint = glint.create( 'twine:set+', g );
+		}
+	}
+
+	glint =
+		glint.create(
+			'twine:set+',
+				gleam_glint_border.create(
+					'facet', this.facet,
+					'key', 'border',
+					'shape', this.silhoutte
+				)
+		);
+
+	return(
+		gleam_display_canvas.create(
+			'width', this.area.width,
+			'height', this.area.height,
+			'glint', glint
+		)
+	);
+}
+);
 
 
 } )( );

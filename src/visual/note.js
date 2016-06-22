@@ -370,36 +370,6 @@ prototype.dragStart = visual_docItem.dragStart;
 
 
 /*
-| Draws the note.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		sbary;
-
-	sbary = this.scrollbarY;
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.vZone.pnw
-	);
-
-	if( this.highlight )
-	{
-		display.border(
-			gruga_note.facets.getFacet( 'highlight', true ).border,
-			this.vSilhoutte
-		);
-	}
-
-	if( sbary ) sbary.draw( display );
-};
-
-
-/*
 | Forwards fabric settings.
 */
 jion.lazyValue(

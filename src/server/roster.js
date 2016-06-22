@@ -318,6 +318,16 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gleam/glint/border.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/glint/fill.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/glint/paint.js',
 		'hasJion', true,
 		'inBundle', true

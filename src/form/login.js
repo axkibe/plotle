@@ -177,9 +177,8 @@ prototype.dragStop =
 
 
 /*
-| Draws a form.
+| The form's glint.
 */
-prototype.draw = form_form.draw;
 jion.lazyValue( prototype, 'glint', form_form.glint );
 
 

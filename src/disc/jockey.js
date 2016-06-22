@@ -102,56 +102,6 @@ prototype = disc_jockey.prototype;
 
 
 /*
-| Updates the glint twig.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var
-		action,
-		createDisc,
-		glint,
-		mainDisc;
-
-	// ++ create disc ++
-
-	// TODO inherit glint
-
-	createDisc = this.get( 'createDisc' );
-
-	mainDisc = this.get( 'mainDisc' );
-
-	action = this.action;
-
-	glint = gleam_glint_twig.create( 'key', 'disc' );
-
-	if( action && action.isCreate )
-	{
-		glint = glint.create( 'twine:set+', createDisc.glint );
-	}
-	/*
-	else
-	{
-		if( createGlint )
-		{
-			glint = glint.create( 'twig:remove', 'createDisc' );
-		}
-	}
-	*/
-
-	// ++ main disc ++
-
-	glint = glint.create( 'twine:set+', mainDisc.glint );
-
-	return glint;
-}
-);
-
-
-
-/*
 | Returns the mark if the disc jockey concerns a mark.
 */
 disc_jockey.concernsMark =
@@ -282,25 +232,44 @@ prototype.dragStart =
 
 
 /*
-| Dispalys the disc panel.
+| Updates the glint twig.
 */
-prototype.draw =
-	function(
-		display
-	)
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
 {
 	var
-		action;
+		action,
+		createDisc,
+		glint,
+		mainDisc;
+
+	// ++ create disc ++
+
+	// TODO inherit glint
+
+	createDisc = this.get( 'createDisc' );
+
+	mainDisc = this.get( 'mainDisc' );
 
 	action = this.action;
 
+	glint = gleam_glint_twig.create( 'key', 'disc' );
+
 	if( action && action.isCreate )
 	{
-		this.get( 'createDisc' ).draw( display );
+		glint = glint.create( 'twine:set+', createDisc.glint );
 	}
 
-	this.get( 'mainDisc' ).draw( display );
-};
+	// ++ main disc ++
+
+	glint = glint.create( 'twine:set+', mainDisc.glint );
+
+	return glint;
+}
+);
+
 
 
 /*

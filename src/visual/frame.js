@@ -76,59 +76,6 @@ handleSize2 = math_half( handleSize );
 
 
 /*
-| Draws the frame.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		a,
-		content,
-		cLen,
-		ca,
-		sbary;
-
-	content = this.content;
-
-	for( a = 0, cLen = content.length; a < cLen; a++ )
-	{
-		ca = content.get( a );
-
-		sbary = ca.scrollbarY;
-
-		display.reverseClip( ca.vSilhoutte, -2 );
-
-		if( sbary ) display.reverseClip( sbary.area, -0.5 );
-	}
-
-	display.paint( gruga_frame.facet, this._frameBodyShape );
-
-	display.paint( gruga_frame.handleFacet, this._handleNwShape );
-
-	display.paint( gruga_frame.handleFacet, this._handleNeShape );
-
-	display.paint( gruga_frame.handleFacet, this._handleSeShape );
-
-	display.paint( gruga_frame.handleFacet, this._handleSwShape );
-
-	if( !this.proportional )
-	{
-		display.paint( gruga_frame.handleFacet, this._handleNShape );
-
-		display.paint( gruga_frame.handleFacet, this._handleEShape );
-
-		display.paint( gruga_frame.handleFacet, this._handleSShape );
-
-		display.paint( gruga_frame.handleFacet, this._handleWShape );
-	}
-
-	display.deClip( );
-};
-
-
-/*
 | Zone in current view.
 */
 jion.lazyValue(
