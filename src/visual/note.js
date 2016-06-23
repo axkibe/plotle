@@ -814,7 +814,6 @@ jion.lazyValue(
 		d,
 		doc,
 		facet,
-		sbary,
 		vZone;
 
 	vZone = this.vZone;
@@ -829,19 +828,10 @@ jion.lazyValue(
 
 	facet = gruga_note.facets.getFacet( );
 
-	sbary = this.scrollbarY;
-
 	d.fill( facet.fill, this.vZeroSilhoutte );
 
 	// draws selection and text
-	doc.draw(
-		d,
-		this.zone.width,
-		euclid_point.create(
-			'x', 0,
-			'y', sbary ? sbary.pos : 0
-		)
-	);
+	doc.draw( d );
 
 	// draws the border
 	d.border( facet.border, this.vZeroSilhoutte );

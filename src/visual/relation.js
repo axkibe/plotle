@@ -67,7 +67,6 @@ var
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gleam_glint_window,
-	euclid_point,
 	euclid_rect,
 	gleam_glint_paint,
 	gruga_label,
@@ -547,11 +546,7 @@ jion.lazyValue(
 			);
 
 		// displays selection and text
-		this.doc.draw(
-			display,
-			this.zone.width,
-			euclid_point.zero
-		);
+		this.doc.draw( display );
 
 		facet = gruga_label.facets.getFacet( );
 

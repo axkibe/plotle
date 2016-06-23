@@ -819,7 +819,7 @@ jion.lazyValue(
 		);
 
 	// displays selection and text
-	this.doc.draw( display, this.zone.width, euclid_point.zero );
+	this.doc.draw( display );
 
 	// displays the border
 	facet = gruga_label.facets.getFacet( );

@@ -40,6 +40,11 @@ if( JION )
 				comment : 'the path of the para',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			pnw :
+			{
+				comment : 'point in north west',
+				type : 'euclid_point'
+			},
 			view :
 			{
 				comment : 'the current view',
@@ -48,9 +53,13 @@ if( JION )
 		},
 		alike :
 		{
-			alikeIgnoringView :
+			alikeVisually :
 			{
-				ignores : { 'view' : true }
+				ignores :
+				{
+					'pnw' : true,
+					'view' : true
+				}
 			}
 		},
 		init : [ 'inherit' ]
@@ -114,7 +123,7 @@ prototype._init =
 {
 	if(
 		inherit
-		&& inherit.alikeIgnoringView( this )
+		&& inherit.alikeVisually( this )
 		&& inherit.view.zoom === this.view.zoom
 	)
 	{

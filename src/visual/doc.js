@@ -125,10 +125,15 @@ prototype._init =
 		a,
 		aZ,
 		fabric,
+		innerMargin,
 		key,
+		para,
+		paraSep,
+		pnw,
 		twig,
 		twigPath,
-		ranks;
+		ranks,
+		y;
 
 	fabric = this.fabric;
 
@@ -138,21 +143,37 @@ prototype._init =
 
 	twigPath = this.path && this.path.append( 'twig' );
 
+	paraSep = this.paraSep;
+
+	innerMargin = this.innerMargin;
+
+	y = innerMargin.n;
+
 	for( a = 0, aZ = fabric.length; a < aZ; a++ )
 	{
 		key = fabric.getKey( a );
 
 		ranks[ a ] = key;
 
+		pnw =
+			euclid_point.create(
+				'x', innerMargin.w,
+				'y', Math.round( y )
+			);
+
+		para =
 		twig[ key ] =
 			( inherit && inherit._twig[ key ] || visual_para ).create(
 				'fabric', fabric.get( key ),
 				'fontsize', this.fontsize,
 				'path', twigPath && twigPath.appendNC( key ),
+				'pnw', pnw,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
 				'view', this.view
 			);
+
+		y += para.flow.height + paraSep;
 	}
 
 	if( FREEZE )
@@ -223,9 +244,7 @@ jion.lazyValue(
 */
 prototype.draw =
 	function(
-		display,     // to display within
-		width,       // the width to draw the document with
-		scrollp      // scroll position
+		display     // to display within
 	)
 {
 	var
@@ -235,14 +254,12 @@ prototype.draw =
 		pnw,
 		pnws,
 		r,
-		rZ;
+		rZ,
+		sy;
 
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( arguments.length !== 1 ) throw new Error( );
 /**/
 /**/	// mark sanity check cannot be done in _init
 /**/    // since it might be temporarily outOfOrder during update operation
@@ -256,6 +273,8 @@ prototype.draw =
 /**/}
 
 	mark = this.mark;
+
+	sy = Math.round( this.scrollPos.y );
 
 	if(
 		mark
@@ -278,7 +297,7 @@ prototype.draw =
 
 		pnw = pnws.get( this.getKey( r ) );
 
-		p = pnw.sub( 0, Math.round( scrollp.y ) );
+		p = pnw.sub( 0, sy );
 
 		para.draw( display, p.inView( this.view ) );
 	}
