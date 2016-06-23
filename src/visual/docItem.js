@@ -58,7 +58,6 @@ visual_docItem.markForPoint =
 		doc,
 		mark,
 		para,
-		ppnw,
 		pnw,
 		pi,
 		vp,
@@ -82,9 +81,7 @@ visual_docItem.markForPoint =
 
 	if( para )
 	{
-		ppnw = doc.getPNW( para.key );
-
-		at = para.getPointOffset( pi.sub( ppnw ) );
+		at = para.getPointOffset( pi.sub( para.pnw ) );
 	}
 	else
 	{

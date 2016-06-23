@@ -210,15 +210,7 @@ jion.lazyValue(
 
 	key = path.get( 5 ); // FUTURE
 
-/**/if( CHECK )
-/**/{
-/**/	if( !this.getPNW( key ) ) throw new Error( );
-/**/}
-
-	return(
-		this.getPNW( key ).y
-		+ this.get( key ).attentionCenter
-	);
+	return this.get( key ).attentionCenter;
 }
 );
 
@@ -288,16 +280,11 @@ prototype.draw =
 		);
 	}
 
-	// north-west points of paras
-	pnws = this.paraPnws;
-
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		para = this.atRank( r );
 
-		pnw = pnws.get( this.getKey( r ) );
-
-		p = pnw.sub( 0, sy );
+		p = para.pnw.sub( 0, sy );
 
 		para.draw( display, p.inView( this.view ) );
 	}
@@ -387,7 +374,6 @@ prototype.getParaAtPoint =
 {
 	var
 		para,
-		pnws,
 		r,
 		rZ;
 
@@ -396,31 +382,15 @@ prototype.getParaAtPoint =
 		return this.atRank( 0 );
 	}
 
-	pnws = this.paraPnws;
-
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		para = this.atRank( r );
 
-		if( p.y < pnws.get( this.getKey( r ) ).y + para.flow.height )
+		if( p.y < para.pnw.y + para.flow.height )
 		{
 			return para;
 		}
 	}
-
-	return;
-};
-
-
-/*
-| returns the north-west point of the paragraph with the key 'key'.
-*/
-prototype.getPNW =
-	function(
-		key
-	)
-{
-	return this.paraPnws.get( key );
 };
 
 
@@ -465,49 +435,6 @@ prototype.input =
 		.input( text )
 	);
 };
-
-
-/*
-| The para pnws.
-*/
-jion.lazyValue(
-	prototype,
-	'paraPnws',
-	function( )
-{
-	var
-		innerMargin,
-		para,
-		paraSep,
-		pnws,
-		r,
-		rZ,
-		y;
-
-	pnws = { };
-
-	paraSep = this.paraSep;
-
-	innerMargin = this.innerMargin;
-
-	y = innerMargin.n;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		para = this.atRank( r );
-
-		pnws[ this.getKey( r ) ] =
-			euclid_point.create(
-				'x', innerMargin.w,
-				'y', Math.round( y )
-			);
-
-		y += para.flow.height + paraSep;
-	}
-
-	return fabric_pointGroup.create( 'group:init', pnws );
-}
-);
 
 
 /*
@@ -621,13 +548,13 @@ jion.lazyValue(
 
 	sp = this.scrollPos;
 
-	frontPnw = this.getPNW( frontKey );
-
-	backPnw = this.getPNW( backKey );
-
 	frontPara = this.get( frontKey );
 
+	frontPnw = frontPara.pnw;
+
 	backPara = this.get( backKey );
+
+	backPnw = backPara.pnw;
 
 	fp = frontPara.locateOffsetPoint( frontMark.at );
 
@@ -797,7 +724,7 @@ jion.lazyValue(
 			f2y =
 				Math.round(
 					f2Para.flow.get( 0 ).y
-					+ this.getPNW( f2Key ).y
+					+ f2Para.pnw.y
 					- sp.y
 				);
 		}
@@ -822,7 +749,7 @@ jion.lazyValue(
 			b2y =
 				Math.round(
 					b2Para.flow.get( b2Para.flow.length - 1 ).y
-					+ this.getPNW( b2Key ).y
+					+ b2Para.pnw.y
 					- sp.y
 				);
 		}

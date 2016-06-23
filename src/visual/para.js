@@ -203,26 +203,26 @@ jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
-	{
-		var
-			descend,
-			fs,
-			n,
-			p,
-			s;
+{
+	var
+		descend,
+		fs,
+		n,
+		p,
+		s;
 
-		fs = this.fontsize;
+	fs = this.fontsize;
 
-		descend = fs * shell_settings.bottombox;
+	descend = fs * shell_settings.bottombox;
 
-		p = this.locateOffsetPoint( this.mark.caret.at );
+	p = this.locateOffsetPoint( this.mark.caret.at );
 
-		s = Math.round( p.y + descend );
+	s = Math.round( p.y + descend );
 
-		n = s - Math.round( fs + descend );
+	n = s - Math.round( fs + descend );
 
-		return n;
-	}
+	return this.pnw.y + n;
+}
 );
 
 
@@ -1118,7 +1118,6 @@ prototype._pageUpDown =
 {
 	var
 		p,
-		pnw,
 		size,
 		tp,
 		tpara,
@@ -1133,10 +1132,8 @@ prototype._pageUpDown =
 
 	size = doc.clipsize;
 
-	pnw = doc.getPNW( this.key );
-
 	tp =
-		pnw.add(
+		this.pnw.add(
 			retainx !== undefined ? retainx : p.x,
 			p.y + size.height * dir
 		);

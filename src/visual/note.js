@@ -578,7 +578,7 @@ prototype.scrollMarkIntoView =
 
 	p = para.locateOffsetPoint( mark.caret.at );
 
-	pnw = this.doc.getPNW( para.key );
+	pnw = para.pnw;
 
 	s = Math.round( p.y + descend );
 
