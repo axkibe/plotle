@@ -73,6 +73,7 @@ var
 	change_remove,
 	change_split,
 	gleam_canvas,
+	gleam_glint_window,
 	euclid_measure,
 	euclid_point,
 	flow_block,
@@ -167,6 +168,26 @@ visual_para.concernsMark =
 		: undefined
 	);
 };
+
+
+/*
+| The para's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	return(
+		gleam_glint_window.create(
+			'display', this._display,
+			'key', this.key,
+			'p', this.pnw,
+			'view', this.view.home
+		)
+	);
+}
+);
 
 
 /*
@@ -313,11 +334,13 @@ jion.lazyValue(
 */
 prototype.draw =
 	function(
-		display, // the display to draw upon
-		pnw      // pnw of this para
+		display // the display to draw upon
 	)
 {
-	display.drawImage( 'image', this._display, 'pnw', pnw );
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.pnw.inView( this.view )
+	);
 };
 
 

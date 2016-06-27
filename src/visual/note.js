@@ -83,7 +83,9 @@ var
 	fabric_doc,
 	fabric_note,
 	fabric_para,
-	gleam_canvas,
+	gleam_display_canvas,
+	gleam_glint_border,
+	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gleam_glint_window,
@@ -422,7 +424,8 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.vZone.pnw
+					'p', this.vZone.pnw,
+					'view', this.view.home  // FIXME scrollpos
 				)
 		);
 
@@ -811,32 +814,53 @@ jion.lazyValue(
 	function( )
 {
 	var
-		d,
 		doc,
 		facet,
+		glint,
 		vZone;
 
 	vZone = this.vZone;
-
-	d =
-		gleam_canvas.create(
-			'width', vZone.width + 2,
-			'height', vZone.height + 2
-		);
 
 	doc = this.doc;
 
 	facet = gruga_note.facets.getFacet( );
 
-	d.fill( facet.fill, this.vZeroSilhoutte );
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+				gleam_glint_fill.create(
+					'facet', facet,
+					'key', 'fill',
+					'shape', this.vZeroSilhoutte
+				)
+		);
+		
+
+	glint =
+		glint.create(
+			'twine:set+', doc.glint
+		);
+
+	glint =
+		glint.create(
+			'twine:set+',
+				gleam_glint_border.create(
+					'facet', facet,
+					'key', 'border',
+					'shape', this.vZeroSilhoutte
+				)
+		);
 
 	// draws selection and text
-	doc.draw( d );
 
-	// draws the border
-	d.border( facet.border, this.vZeroSilhoutte );
-
-	return d;
+	return(
+		gleam_display_canvas.create(
+			'width', vZone.width + 2,
+			'height', vZone.height + 2,
+			'glint', glint
+		)
+	);
 }
 );
 

@@ -81,7 +81,7 @@ var
 	euclid_shapeRay,
 	euclid_shape_start,
 	euclid_shape_line,
-	fabric_pointGroup,
+	gleam_glint_twig,
 	gruga_selection,
 	jion,
 	math_half,
@@ -243,8 +243,6 @@ prototype.draw =
 		mark,
 		para,
 		p,
-		pnw,
-		pnws,
 		r,
 		rZ,
 		sy;
@@ -286,7 +284,7 @@ prototype.draw =
 
 		p = para.pnw.sub( 0, sy );
 
-		para.draw( display, p.inView( this.view ) );
+		para.draw( display );
 	}
 };
 
@@ -392,6 +390,36 @@ prototype.getParaAtPoint =
 		}
 	}
 };
+
+
+/*
+| Return the doc's glint.
+|
+| TODO inherit.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	var
+		glint,
+		r,
+		rZ,
+		s;
+
+	glint = gleam_glint_twig.create( 'key', 'doc' );
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		s = this.atRank( r );
+
+		glint = glint.create( 'twine:add', s.glint );
+	}
+
+	return glint;
+}
+);
 
 
 /*
