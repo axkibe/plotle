@@ -285,10 +285,10 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'display', this._display,
-				'key', 'label',
-				'p', this.vZone.pnw,
+				'key', ':label',
+				'p', this.vPnw,
 				'view', this.view.home
-		);
+			);
 
 		arrow1 = this._arrow1Glint( );
 
@@ -299,7 +299,7 @@ Object.defineProperty(
 				'key', this.key,
 				'twine:set+', wg
 			);
-	
+
 		if( this.highlight )
 		{
 			facet = gruga_label.facets.getFacet( 'highlight', true );
@@ -532,30 +532,22 @@ jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
-	{
-		var
-			display,
-			facet,
-			vZone;
+{
+	var
+		display,
+		vZone;
 
-		vZone = this.vZone;
+	vZone = this.vZone;
 
-		display =
-			gleam_canvas.create(
-				'width', vZone.width,
-				'height', vZone.height + 1
-			);
+	display =
+		gleam_display_canvas.create(
+			'width', vZone.width,
+			'height', vZone.height + 1,
+			'glint', this.doc.glint
+		);
 
-		// displays selection and text
-		this.doc.draw( display );
-
-		facet = gruga_label.facets.getFacet( );
-
-		// displays the border
-		display.border( facet.border, this.vZeroSilhoutte );
-
-		return display;
-	}
+	return display;
+}
 );
 
 

@@ -133,9 +133,12 @@ prototype._init =
 		twig,
 		twigPath,
 		ranks,
+		view,
 		y;
 
 	fabric = this.fabric;
+
+	view = this.view;
 
 	twig = { };
 
@@ -159,7 +162,7 @@ prototype._init =
 			euclid_point.create(
 				'x', innerMargin.w,
 				'y', Math.round( y )
-			);
+			).inView( view.home );
 
 		para =
 		twig[ key ] =
@@ -170,7 +173,7 @@ prototype._init =
 				'pnw', pnw,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
-				'view', this.view
+				'view', view
 			);
 
 		y += para.flow.height + paraSep;
@@ -234,6 +237,7 @@ jion.lazyValue(
 /*
 | Displays the document.
 */
+/*
 prototype.draw =
 	function(
 		display     // to display within
@@ -247,20 +251,20 @@ prototype.draw =
 		rZ,
 		sy;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/
-/**/	// mark sanity check cannot be done in _init
-/**/    // since it might be temporarily outOfOrder during update operation
-/**/	if( this.mark && this.mark.hasCaret )
-/**/	{
-/**/		if( !this.get( this.mark.caret.path.get( 5 ) ) )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/}
+	if( CHECK )
+	{
+		if( arguments.length !== 1 ) throw new Error( );
+
+		// mark sanity check cannot be done in _init
+		// since it might be temporarily outOfOrder during update operation
+		if( this.mark && this.mark.hasCaret )
+		{
+			if( !this.get( this.mark.caret.path.get( 5 ) ) )
+			{
+				throw new Error( );
+			}
+		}
+	}
 
 	mark = this.mark;
 
@@ -287,6 +291,7 @@ prototype.draw =
 		para.draw( display );
 	}
 };
+*/
 
 
 /*

@@ -55,6 +55,7 @@ if( JION )
 			{
 				comment : 'scroll position',
 				type : [ 'undefined', 'euclid_point' ]
+				// is force defined in _init
 			},
 			view :
 			{
@@ -273,7 +274,7 @@ prototype._init =
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
 			'scrollPos', this.scrollPos,
-			'view', this.view.home
+			'view', this.view
 		);
 
 	dHeight = doc.fullsize.height;
@@ -835,7 +836,6 @@ jion.lazyValue(
 					'shape', this.vZeroSilhoutte
 				)
 		);
-		
 
 	glint =
 		glint.create(

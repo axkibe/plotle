@@ -808,24 +808,16 @@ jion.lazyValue(
 {
 	var
 		display,
-		facet,
 		vZone;
 
 	vZone = this.vZone;
 
 	display =
-		gleam_canvas.create(
+		gleam_display_canvas.create(
 			'width', vZone.width,
-			'height', vZone.height + 1
+			'height', vZone.height + 1,
+			'glint', this.doc.glint
 		);
-
-	// displays selection and text
-	this.doc.draw( display );
-
-	// displays the border
-	facet = gruga_label.facets.getFacet( );
-
-	display.border( facet.border, this.vZeroSilhoutte );
 
 	return display;
 }
