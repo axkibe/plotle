@@ -20,12 +20,12 @@ if( JION )
 			x :
 			{
 				comment : 'x-distance',
-				type : 'integer'
+				type : 'number'
 			},
 			y :
 			{
 				comment : 'y-distance',
-				type : 'integer'
+				type : 'number'
 			}
 		}
 	};
@@ -35,6 +35,7 @@ if( JION )
 var
 	euclid_anchor_point,
 	euclid_point,
+	jion,
 	math_half;
 
 
@@ -57,69 +58,6 @@ var
 	prototype;
 
 prototype = euclid_anchor_point.prototype;
-
-
-/*
-| Point in center.
-*/
-euclid_anchor_point.c =
-	euclid_anchor_point.create(
-		'anchor', 'c',
-		'x', 0,
-		'y', 0
-	);
-
-
-/*
-| Point in north west.
-*/
-euclid_anchor_point.nw =
-	euclid_anchor_point.create(
-		'anchor', 'nw',
-		'x', 0,
-		'y', 0
-	);
-
-/*
-| Point in south east.
-*/
-euclid_anchor_point.se =
-	euclid_anchor_point.create(
-		'anchor', 'se',
-		'x', 0,
-		'y', 0
-	);
-
-/*
-| Point in south east minus 1.
-*/
-euclid_anchor_point.seMin1 =
-	euclid_anchor_point.create(
-		'anchor', 'se',
-		'x', -1,
-		'y', -1
-	);
-
-
-/*
-| Point in east.
-*/
-euclid_anchor_point.e =
-	euclid_anchor_point.create(
-		'anchor', 'e',
-		'x', 0,
-		'y', 0
-	);
-
-/*
-| Point in west.
-*/
-euclid_anchor_point.w =
-	euclid_anchor_point.create(
-		'anchor', 'w',
-		'x', 0,
-		'y', 0
-	);
 
 
 /*
@@ -187,6 +125,23 @@ prototype.compute =
 	pnw = area.pnw;
 
 	pse = area.pse;
+	
+	if(
+		this.anchor === 'nw'
+		&& pnw.x === 0
+		&& pnw.y === 0
+		&& (
+			!view
+			|| (
+				view.pan.x === 0
+				&& view.pan.y === 0
+				&& view.fact === 0
+			)
+		)
+	)
+	{
+		return this.euclidPoint;
+	}
 
 	x = this.x;
 
@@ -277,6 +232,145 @@ prototype.compute =
 			throw new Error( );
 	}
 };
+
+
+/*
+| The plain euclid_point equivalent,
+| If anchor is nw and pan and parent pnw is zero
+*/
+jion.lazyValue(
+	prototype,
+	'euclidPoint',
+	function( )
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.anchor !== 'nw' ) throw new Error( );	
+/**/}
+
+	return(
+		euclid_point.create(
+			'x', this.x,
+			'y', this.y
+		)
+	);
+}
+);
+
+
+/*
+| Point in center.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'c',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'c',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in north west.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'nw',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'nw',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in south east.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'se',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'se',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in south east minus 1.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'seMin1',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'se',
+			'x', -1,
+			'y', -1
+		)
+	);
+}
+);
+
+
+/*
+| Point in east.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'e',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'e',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in west.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'w',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'w',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
 
 
 })( );

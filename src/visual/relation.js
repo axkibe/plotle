@@ -63,7 +63,8 @@ if( JION )
 var
 	euclid_arrow,
 	euclid_connect,
-	gleam_canvas,
+	euclid_point,
+	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gleam_glint_window,
@@ -286,8 +287,7 @@ Object.defineProperty(
 			gleam_glint_window.create(
 				'display', this._display,
 				'key', ':label',
-				'p', this.vPnw,
-				'view', this.view.home
+				'p', this.pnw.apnw
 			);
 
 		arrow1 = this._arrow1Glint( );
@@ -541,8 +541,12 @@ jion.lazyValue(
 
 	display =
 		gleam_display_canvas.create(
-			'width', vZone.width,
-			'height', vZone.height + 1,
+			'view',
+				this.view.create(
+					'pan', euclid_point.zero,
+					'height', vZone.height,
+					'width', vZone.width
+				),
 			'glint', this.doc.glint
 		);
 

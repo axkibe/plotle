@@ -182,8 +182,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.pnw,
-			'view', this.view.home
+			'p', this.pnw.apnw
 		)
 	);
 }

@@ -23,21 +23,17 @@ if( JION )
 				comment : 'the glint twig to display',
 				type : 'gleam_glint_twig'
 			},
-			height :
-			{
-				comment : 'height of the display',
-				type : [ 'number' ]
-			},
 			scaled :
 			{
 				// used for devicePixelRatio adjustments
 				comment : 'if defined the canvas is scaled',
 				type : [ 'undefined', 'number' ]
 			},
-			width :
+			view :
 			{
-				comment : 'width of the display',
-				type : [ 'number' ]
+				// FIXME remove since it's in twig
+				comment : 'the view of the display',
+				type : 'euclid_view'
 			},
 			_cv :
 			{
@@ -57,6 +53,8 @@ if( JION )
 
 var
 	euclid_constants,
+	euclid_point,
+	euclid_rect,
 	euclid_view,
 	get2dContext,
 	gleam_glint_twig,
@@ -126,8 +124,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 	function(
 		canvas,  // the canvas to create around
 		name,    // the name(id) of the display
-		width,   // the width the canvas should have
-		height,  // the height the canvas should have
+		view,    // the view of the canvas
 		scaled   // if defined, the backing store scale factor
 		//       // via pixelratio for HiDPI displays
 	)
@@ -143,9 +140,8 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
 			'glint', gleam_glint_twig.create( 'key', name ),
-			'height', height,
 			'scaled', scaled,
-			'width', width
+			'view', view
 		)
 	);
 };
@@ -168,10 +164,18 @@ prototype.withinSketch =
 
 	cx.beginPath( );
 
+	/*
+	if( view )
+	{
+		shape = shape.compute( this._area, view );
+	}
+	*/
+
 	this._sketch( shape, border || 0, 0.5 );
 
 	return cx.isPointInPath( p.x, p.y );
 };
+
 
 
 /*
@@ -184,6 +188,7 @@ prototype._init =
 		cv,
 		height,
 		scaled,
+		view,
 		width;
 
 /**/if( CHECK )
@@ -210,9 +215,11 @@ prototype._init =
 		this._cx = get2dContext( cv );
 	}
 
-	height = this.height;
+	view = this.view;
 
-	width = this.width;
+	height = view.height;
+
+	width = view.width;
 
 	scaled = this.scaled;
 
@@ -251,38 +258,36 @@ prototype._init =
 
 
 /*
-| Set when the canvas has been rendered.
-*/
-jion.lazyValue(
-	prototype,
-	'_rendered',
-	function( )
-{
-	return true;
-}
-);
-
-
-/*
 | Renders the display.
 */
 prototype.render =
 	function( )
 {
+	var
+		view;
+
+	view = this.view;
+
 	if( jion.hasLazyValueSet( this, '_rendered' ) ) return true;
 
 	if( this.background )
 	{
 		this._cx.fillStyle = this.background;
 
-		this._cx.fillRect( 0, 0, this.width, this.height );
+		this._cx.fillRect( 0, 0, view.width, view.height );
 	}
 	else
 	{
-		this._cx.clearRect( 0, 0, this.width, this.height );
+		this._cx.clearRect( 0, 0, view.width, view.height );
 	}
 
-	this._renderGlintTwig( this.glint );
+	// FIXME view should always be in glint.
+	if( this.glint.view )
+	{
+		view = this.glint.view;
+	}
+
+	this._renderGlintTwig( this.glint, view );
 
 	this._rendered;
 };
@@ -294,12 +299,37 @@ prototype.render =
 
 
 /*
+| The area of the display.
+|
+| TODO make euclid_rect part of view.
+*/
+jion.lazyValue(
+	prototype,
+	'_area',
+	function( )
+{
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', this.view.width,
+					'y', this.view.height
+				)
+		)
+	);
+}
+);
+
+
+/*
 | Draws a single border.
 */
 prototype._border =
 	function(
 		border, // the gleam_border
-		shape   // an object which has sketch defined
+		shape,  // an object to draw
+		view    // the view to scale/pan the shape
 	)
 {
 	var
@@ -308,6 +338,11 @@ prototype._border =
 	cx = this._cx;
 
 	cx.beginPath( );
+
+	if( shape.compute ) // FIXME
+	{
+		shape = shape.compute( this._area, view );
+	}
 
 	this._sketch( shape, border.distance, 0.5 );
 
@@ -325,7 +360,8 @@ prototype._border =
 prototype._borders  =
 	function(
 		border, // the gleam_border
-		shape   // an object which has sketch defined
+		shape,  // the shape to draw the border in
+		view    // the view to draw the border in
 	)
 {
 	var
@@ -338,14 +374,14 @@ prototype._borders  =
 
 			for( a = 0, aZ = border.length; a < aZ; a++ )
 			{
-				this._border( border.get( a ), shape );
+				this._border( border.get( a ), shape, view );
 			}
 
 			break;
 
 		case 'gleam_border' :
 
-			this._border( border, shape );
+			this._border( border, shape, view );
 
 			break;
 
@@ -361,14 +397,20 @@ prototype._borders  =
 */
 prototype._fill  =
 	function(
-		fill,  // the gleam_border
-		shape  // an object which has sketch defined
+		fill,   // the gleam_border
+		shape,  // a shape to sketch
+		view    // the view to scale the shape to
 	)
 {
 	var
 		cx;
 
 	cx = this._cx;
+
+	if( shape.compute ) // FIXME
+	{
+		shape = shape.compute( this._area, view );
+	}
 
 	this._sketch( shape, 0, 0 );
 
@@ -478,7 +520,9 @@ prototype._colorStyle =
 */
 prototype._renderGlintTwig =
 	function(
-		glint
+		glint,  // the glint to render
+		view	// the view to render it with
+		//		// if the glint doesn't override it
 	)
 {
 	var
@@ -491,10 +535,12 @@ prototype._renderGlintTwig =
 		r,
 		rZ,
 		sa,
-		scale,
+		shape,
 		w;
 
 	cx = this._cx;
+
+	if( glint.view ) view = glint.view;
 
 	for( r = 0, rZ = glint.length; r < rZ; r++ )
 	{
@@ -516,15 +562,15 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_paint' :
 
-				this._paint( g.facet, g.shape );
+				this._paint( g.facet, g.shape, view );
 
 				break;
 
 			case 'gleam_glint_text' :
 
-				this._setFont( g.font );
+				this._setFont( g.font, view );
 
-				p = g.p;
+				p = g.p.compute( this._area, view );
 
 				cx.fillText( g.text, p.x, p.y );
 
@@ -532,59 +578,48 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_twig' :
 
-				this._renderGlintTwig( g );
+				this._renderGlintTwig( g, view );
 
 				break;
 
 			case 'gleam_glint_window' :
 
-				p = g.p;
+				p = g.p.compute( this._area, view );
 
 				// FIXME
 				if( g.display.render ) g.display.render( );
 
-				cx.drawImage( g.display._cv, p.x, p.y );
+				cx.drawImage(
+					g.display._cv,
+					Math.round( p.x ),
+					Math.round( p.y )
+				);
 
 				break;
 
 			case 'gleam_glint_mask' :
 
-				h = this.height;
+				h = this.view.height;
 
-				w = this.width;
+				w = this.view.width;
 
 				cx.save( );
 
-				scale = g.scale;
-
-				switch( scale.reflect )
+				shape = g.shape;
+					
+				if( shape.compute ) // FIXME
 				{
-					case 'euclid_scale' :
+					shape = shape.compute( this._area, view );
+				}
 
+				if( shape.reflect === 'euclid_shapeRay' )
+				{
+					for( a = 0, aZ = shape.length; a < aZ; a++ )
+					{
 						cx.beginPath( );
 
-						cx.moveTo( 0, 0 );
-
-						cx.lineTo( 0, h );
-
-						cx.lineTo( w, h );
-
-						cx.lineTo( w, 0 );
-
-						cx.lineTo( 0, 0 );
-
-						this._sketch( scale.shape, scale.distance, 0.5 );
-
-						cx.clip( );
-
-						break;
-
-					case 'euclid_scaleRay' :
-
-						for( a = 0, aZ = scale.length; a < aZ; a++ )
+						if( g.reverse )
 						{
-							cx.beginPath( );
-
 							cx.moveTo( 0, 0 );
 
 							cx.lineTo( 0, h );
@@ -594,20 +629,43 @@ prototype._renderGlintTwig =
 							cx.lineTo( w, 0 );
 
 							cx.lineTo( 0, 0 );
-
-							sa = scale.get( a );
-
-							this._sketch( sa.shape, sa.distance, 0.5 );
-
-							cx.clip( );
 						}
 
-						break;
+						sa = shape.get( a );
 
-					default : throw new Error( );
+						this._sketch( sa, 0, 0.5 );
+
+						cx.clip( );
+					}
+				}
+				else
+				{
+					cx.beginPath( );
+
+					if( g.reverse )
+					{
+						cx.moveTo( 0, 0 );
+
+						cx.lineTo( 0, h );
+
+						cx.lineTo( w, h );
+
+						cx.lineTo( w, 0 );
+
+						cx.lineTo( 0, 0 );
+					}
+	
+					if( shape.compute ) // FIXME
+					{
+						shape = shape.compute( this._area, view );
+					}
+
+					this._sketch( shape, 0, 0.5 );
+
+					cx.clip( );
 				}
 
-				this._renderGlintTwig( g.glint );
+				this._renderGlintTwig( g.glint, view );
 
 				cx.restore( );
 
@@ -664,8 +722,9 @@ prototype._sketchRect =
 */
 prototype._paint =
 	function(
-		facet,
-		shape
+		facet,  // paint in this facet
+		shape,  // paint this shape
+		view    // resize the shape to this view
 	)
 {
 	var
@@ -679,7 +738,7 @@ prototype._paint =
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
-			this._paint( facet, shape.get( a ) );
+			this._paint( facet, shape.get( a ), view );
 		}
 
 		return;
@@ -698,10 +757,24 @@ prototype._paint =
 
 	cx.beginPath( );
 
-	if( fill ) this._fill( fill, shape );
+	if( fill ) this._fill( fill, shape, view );
 
-	if( border ) this._borders( border, shape );
+	if( border ) this._borders( border, shape, view );
 };
+
+
+/*
+| Set when the canvas has been rendered.
+*/
+jion.lazyValue(
+	prototype,
+	'_rendered',
+	function( )
+{
+	return true;
+}
+);
+
 
 
 /*
@@ -709,7 +782,8 @@ prototype._paint =
 */
 prototype._setFont =
 	function(
-		font
+		font,
+		view // use this view for the font
 	)
 {
 	var
@@ -717,7 +791,10 @@ prototype._setFont =
 
 	cx = this._cx;
 
-	cx.font = font.css;
+	cx.font =
+		view
+		? font.viewCss( view )
+		: font.css;
 
 	cx.fillStyle = font.fill.css;
 
@@ -827,11 +904,8 @@ prototype._sketchGenericShape =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( !ps )
-/**/		{
-/**/			// there was a close before end?
-/**/			throw new Error( );
-/**/		}
+/**/		// there was a close before end?
+/**/		if( !ps ) throw new Error( );
 /**/	}
 
 		section = shape.get( a );

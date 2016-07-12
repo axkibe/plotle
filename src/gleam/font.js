@@ -62,18 +62,36 @@ if( NODE )
 	return;
 }
 
+var
+	prototype;
+
+prototype = gleam_font.prototype;
+
 
 /*
 | The CSS-string for this font.
 */
 jion.lazyValue(
-	gleam_font.prototype,
+	prototype,
 	'css',
 	function( )
 {
 	return this.size + 'px ' + this.family;
 }
 );
+
+
+/*
+| The CSS-string for this font 
+| resized for a view.
+*/
+prototype.viewCss =
+	function(
+		view
+	)
+{
+	return view.scale( this.size ) + 'px ' + this.family;
+};
 
 
 })( );

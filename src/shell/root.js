@@ -41,7 +41,6 @@ if( JION )
 				comment : 'the display within everything happens',
 				type :
 					[
-						'gleam_canvas',
 						'gleam_display_canvas',
 						'gleam_display_pixi'
 					]
@@ -150,7 +149,7 @@ var
 	change_wrap,
 	disc_jockey,
 	euclid_connect,
-	gleam_canvas, // TODO
+	gleam_display_canvas,
 	euclid_measure,
 	euclid_point,
 	euclid_view,
@@ -337,7 +336,18 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = gleam_canvas.createAroundHTMLCanvas( canvas, 'swatch', 10, 10, undefined );
+	// FIXME swatch should be part of system
+
+	swatch =
+		gleam_display_canvas.createAroundHTMLCanvas(
+			canvas,
+			'swatch',
+			euclid_view.proper.create(
+				'height', 10,
+				'width', 10
+			),
+			undefined
+		);
 
 	euclid_measure.init( canvas );
 
@@ -348,13 +358,7 @@ shell_root.startup =
 		euclid_measure.width( root._fontWFont, 'ideoloom$8833' );
 	*/
 
-	view =
-		euclid_view.create(
-			'pan', euclid_point.zero,
-			'fact', 0,
-			'width', display.width,
-			'height', display.height
-		);
+	view = display.view;
 
 	action = action_form.loading;
 
@@ -1086,17 +1090,18 @@ prototype.resize =
 		height
 	)
 {
+	var
+		view;
+
+	view =
+		root.view.create(
+			'width', width,
+			'height', height
+		);
+
 	root.create(
-		'display',
-			this.display.create(
-				'width', width,
-				'height', height
-			),
-		'view',
-			root.view.create(
-				'width', width,
-				'height', height
-			)
+		'display', this.display.create( 'view', view ),
+		'view', view
 	);
 };
 
@@ -1185,13 +1190,7 @@ prototype.onAcquireSpace =
 		'mark', undefined,
 		'spaceFabric', reply.space,
 		'spaceRef', request.spaceRef,
-		'view',
-			euclid_view.create(
-				'fact', 0,
-				'height', root.display.height,
-				'pan', euclid_point.zero,
-				'width', root.display.width
-			)
+		'view', root.display.view
 	);
 };
 

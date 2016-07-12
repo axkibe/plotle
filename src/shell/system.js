@@ -10,6 +10,7 @@
 */
 var
 	config,
+	euclid_view,
 //	gleam_canvas,
 	gleam_display_canvas,
 //	gleam_display_pixi,
@@ -23,6 +24,7 @@ var
 	transmitter;
 
 
+// FIXME remove impl
 var gleam_impl = gleam_display_canvas;
 //var gleam_impl = gleam_canvas;
 
@@ -280,8 +282,10 @@ shell_system =
 		gleam_impl.createAroundHTMLCanvas(
 			canvas,
 			'root',
-			window.innerWidth - 1,
-			window.innerHeight - 1,
+			euclid_view.proper.create(
+				'height', window.innerHeight - 1,
+				'width', window.innerWidth - 1
+			),
 			window.devicePixelRatio
 		);
 
@@ -366,10 +370,7 @@ prototype.failScreen =
 		console.log( 'failScreen', message );
 	}
 
-	if( failScreen )
-	{
-		return;
-	}
+	if( failScreen ) return;
 
 	failScreen = true;
 

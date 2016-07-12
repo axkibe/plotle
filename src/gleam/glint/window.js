@@ -26,12 +26,7 @@ if( JION )
 			p :
 			{
 				comment : 'where to draw it',
-				type : 'euclid_point'
-			},
-			view :
-			{
-				comment : 'the view for the inner window',
-				type : 'euclid_view'
+				type : 'euclid_anchor_point'
 			}
 		},
 		init : [ 'inherit' ]

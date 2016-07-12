@@ -38,6 +38,7 @@ if( JION )
 
 
 var
+	euclid_anchor_border,
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_ellipse;
@@ -64,14 +65,22 @@ prototype = euclid_anchor_ellipse.prototype;
 
 
 /*
-| ellipse filling the full area
-| skewed a little to north west
+| Returns an euclid_anchor_border for this
+| anchored shape.
 */
-euclid_anchor_ellipse.fullSkewNW =
-	euclid_anchor_ellipse.create(
-		'pnw', euclid_anchor_point.nw,
-		'pse', euclid_anchor_point.seMin1
+prototype.border =
+	function(
+		d
+	)
+{
+	return(
+		euclid_anchor_border.create(
+			'distance', d,
+			'shape', this
+		)
 	);
+};
+
 
 
 /*
@@ -104,5 +113,15 @@ prototype.compute =
 	);
 };
 
+
+/*
+| ellipse filling the full area
+| skewed a little to north west
+*/
+euclid_anchor_ellipse.fullSkewNW =
+	euclid_anchor_ellipse.create(
+		'pnw', euclid_anchor_point.nw,
+		'pse', euclid_anchor_point.seMin1
+	);
 
 })( );

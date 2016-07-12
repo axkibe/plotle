@@ -41,6 +41,32 @@ prototype = euclid_shapeRay.prototype;
 
 
 /*
+| Returns a shapeRay bordering this shape by 
+| +/- distance. See euclid_shape.border for further 
+| explanation.
+*/
+prototype.border =
+	function(
+		d // distance to border
+	)
+{
+	var
+		a,
+		arr,
+		aZ;
+
+	arr = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		arr[ a ] = this.get( a ).border( d );
+	}
+
+	return( this.create( 'ray:init', arr ) );
+};
+
+
+/*
 | Returns the shapeRay repositioned for 'view'.
 */
 prototype.inView =

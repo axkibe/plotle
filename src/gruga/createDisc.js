@@ -28,7 +28,7 @@ var
 
 
 var
-	dnw,
+	dw,
 	genericButtonFacets,
 	genericButtonModel,
 	genericButtonSize,
@@ -38,15 +38,15 @@ var
 	relationButtonPnw;
 
 
-dnw = euclid_anchor_point.nw;
+dw = euclid_anchor_point.w;
 
-noteButtonPnw = dnw.create( 'x', 65, 'y', 180 );
+noteButtonPnw = dw.create( 'x', 65, 'y', -325 );
 
-labelButtonPnw = dnw.create( 'x', 81, 'y', 251 );
+labelButtonPnw = dw.create( 'x', 81, 'y', -254 );
 
-relationButtonPnw = dnw.create( 'x', 92, 'y', 322 );
+relationButtonPnw = dw.create( 'x', 92, 'y', -183 );
 
-portalButtonPnw = dnw.create( 'x', 99, 'y', 393 );
+portalButtonPnw = dw.create( 'x', 99, 'y', -112 );
 
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 

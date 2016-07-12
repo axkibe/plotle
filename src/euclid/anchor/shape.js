@@ -24,6 +24,7 @@ if( JION )
 
 
 var
+	euclid_anchor_border,
 	euclid_anchor_shape,
 	euclid_shape;
 
@@ -50,7 +51,28 @@ prototype = euclid_anchor_shape.prototype;
 
 
 /*
+| Returns an euclid_anchor_border for this
+| anchored shape.
+*/
+prototype.border =
+	function(
+		d
+	)
+{
+	return(
+		euclid_anchor_border.create(
+			'distance', d,
+			'shape', this
+		)
+	);
+};
+
+
+/*
 | Computes to an unanchored shape for a area/view.
+|
+| FIXME area should be part of view.
+| FIXME cache last view (including other anchor shapes)
 */
 prototype.compute =
 	function(

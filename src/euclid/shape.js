@@ -55,6 +55,54 @@ prototype = euclid_shape.prototype;
 
 
 /*
+| Returns a shape bordering this shape by 
+| +/- distance. It is kind of a zoom to or from
+| central point, but it isn't a real scale/zoom, since
+| the border distance is from example always 1 regardless
+| how far from central point away.
+*/
+prototype.border =
+	function(
+		d // distance to border
+	)
+{
+	var
+		a,
+		arr,
+		aZ,
+		pc,
+		p,
+		section;
+
+	arr = [ ];
+
+	pc = this.pc;
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		section = this.get( a );
+
+		if( section.close )
+		{
+			arr[ a ] = section;
+
+			continue;
+		}
+
+		p = section.p;
+
+		arr[ a ] =
+			section.create(
+				// FIXME make a point.border( d ) call
+				'p', p.border( pc, d )
+			);
+	}
+
+	return( this.create( 'ray:init', arr ) );
+};
+
+
+/*
 | Gets the source of a projection to p.
 */
 prototype.getProjection =

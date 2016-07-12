@@ -70,7 +70,7 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
-	gleam_canvas,
+	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gleam_glint_window,
@@ -395,8 +395,7 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'display', this._display,
 					'key', ':content',
-					'p', this.vPnw,
-					'view', this.view.home
+					'p', this.pnw.apnw
 				)
 		);
 
@@ -814,9 +813,12 @@ jion.lazyValue(
 
 	display =
 		gleam_display_canvas.create(
-			'width', vZone.width,
-			'height', vZone.height + 1,
-			'glint', this.doc.glint
+			'glint', this.doc.glint,
+			'view',
+				euclid_view.proper.create(
+					'height', vZone.height + 1,
+					'width', vZone.width + 1
+				)
 		);
 
 	return display;

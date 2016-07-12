@@ -425,8 +425,7 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.vZone.pnw,
-					'view', this.view.home  // FIXME scrollpos
+					'p', this.zone.pnw.apnw
 				)
 		);
 
@@ -856,9 +855,14 @@ jion.lazyValue(
 
 	return(
 		gleam_display_canvas.create(
-			'width', vZone.width + 2,
-			'height', vZone.height + 2,
-			'glint', glint
+			'glint', glint,
+			'view',
+				this.view.create(
+					'height', vZone.height + 2,
+					'width', vZone.width + 2,
+					'pan', euclid_point.zero
+					// FIXME scrollPos!
+				)
 		)
 	);
 }

@@ -84,6 +84,28 @@ prototype.add =
 
 
 /*
+| Returns a shape bordering this shape by d.
+*/
+prototype.border =
+	function(
+		d // distance to border
+	)
+{
+	var
+		pc;
+
+	pc = this.pc;
+
+	return(
+		this.create(
+			'pnw', this.pnw.border( pc, d ),
+			'pse', this.pse.border( pc, d )
+		)
+	)
+};
+
+
+/*
 | Returns a resized rect with cardinal limits.
 */
 prototype.cardinalResize =

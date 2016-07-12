@@ -81,6 +81,7 @@ var
 	euclid_shapeRay,
 	euclid_shape_start,
 	euclid_shape_line,
+	gleam_glint_paint,
 	gleam_glint_twig,
 	gruga_selection,
 	jion,
@@ -161,8 +162,8 @@ prototype._init =
 		pnw =
 			euclid_point.create(
 				'x', innerMargin.w,
-				'y', Math.round( y )
-			).inView( view.home );
+				'y', Math.round( y - this.scrollPos.y )
+			);
 
 		para =
 		twig[ key ] =
@@ -173,7 +174,7 @@ prototype._init =
 				'pnw', pnw,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
-				'view', view
+				'view', view.home
 			);
 
 		y += para.flow.height + paraSep;
@@ -409,17 +410,37 @@ jion.lazyValue(
 {
 	var
 		glint,
+		mark,
 		r,
 		rZ,
 		s;
 
 	glint = gleam_glint_twig.create( 'key', 'doc' );
 
+	mark = this.mark;
+
+	if(
+		mark
+		&& mark.reflect === 'visual_mark_range'
+		&& mark.containsPath( this.path.limit( 3 ) )
+	)
+	{
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', gruga_selection,
+						'key', ':selection',
+						'shape', this._rangeShape.inView( this.view.home )
+					)
+			);
+	}
+
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		s = this.atRank( r );
 
-		glint = glint.create( 'twine:add', s.glint );
+		glint = glint.create( 'twine:set+', s.glint );
 	}
 
 	return glint;
@@ -561,8 +582,7 @@ jion.lazyValue(
 		rx,
 		shapes,
 		sections,
-		sections2,
-		sp;
+		sections2;
 
 	mark = this.mark;
 
@@ -578,8 +598,6 @@ jion.lazyValue(
 	frontKey = frontMark.path.get( -2 );
 
 	backKey = backMark.path.get( -2 );
-
-	sp = this.scrollPos;
 
 	frontPara = this.get( frontKey );
 
@@ -611,17 +629,9 @@ jion.lazyValue(
 
 	// FUTURE do not create points
 
-	fp =
-		fp.add(
-			frontPnw.x - sp.x,
-			frontPnw.y - sp.y
-		);
+	fp = fp.add( frontPnw );
 
-	bp =
-		bp.add(
-			backPnw.x - sp.x,
-			backPnw.y - sp.y
-		);
+	bp = bp.add( backPnw );
 
 	frontFlow = frontPara.flow;
 
@@ -749,7 +759,6 @@ jion.lazyValue(
 				Math.round(
 					frontFlow.get( fLine + 1 ).y
 					+ frontPnw.y
-					- sp.y
 				);
 		}
 		else
@@ -758,7 +767,6 @@ jion.lazyValue(
 				Math.round(
 					f2Para.flow.get( 0 ).y
 					+ f2Para.pnw.y
-					- sp.y
 				);
 		}
 
@@ -768,7 +776,6 @@ jion.lazyValue(
 				Math.round(
 					backFlow.get( bLine - 1 ).y
 					+ backPnw.y
-					- sp.y
 				);
 		}
 		else
@@ -783,7 +790,6 @@ jion.lazyValue(
 				Math.round(
 					b2Para.flow.get( b2Para.flow.length - 1 ).y
 					+ b2Para.pnw.y
-					- sp.y
 				);
 		}
 

@@ -430,7 +430,13 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint = gleam_glint_twig.create( 'key', 'screen' );
+	view = this.view;
+
+	glint =
+		gleam_glint_twig.create(
+			'key', 'screen',
+			'view', view
+		);
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
@@ -449,7 +455,7 @@ jion.lazyValue(
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
-			
+
 			if( action.startPoint )
 			{
 				glint = glint.create( 'twine:set+', action.transItem.glint );
@@ -461,8 +467,6 @@ jion.lazyValue(
 
 			if( action.fromItemPath )
 			{
-				view = this.view;
-
 				fromItem = this.get( action.fromItemPath.get( -1 ) );
 
 				if( action.toItemPath )

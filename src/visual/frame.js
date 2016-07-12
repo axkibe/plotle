@@ -33,9 +33,8 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
-	euclid_scale,
-	euclid_scaleRay,
 	euclid_shape,
+	euclid_shapeRay,
 	euclid_shape_line,
 	euclid_shape_round,
 	euclid_shape_start,
@@ -328,7 +327,7 @@ jion.lazyValue(
 		ca,
 		content,
 		sbary,
-		scale;
+		shape;
 
 	content = this.content;
 
@@ -345,31 +344,23 @@ jion.lazyValue(
 	{
 		ca = content.get( a );
 
-		arr[ an++ ] =
-			euclid_scale.create(
-				'shape', ca.vSilhoutte,
-				'distance', -1
-			);
-	
+		arr[ an++ ] = ca.vSilhoutte.border( -1 );
+
 		sbary = ca.scrollbarY;
 
 		if( sbary )
 		{
-			arr[ an++ ] =
-				euclid_scale.create(
-					'shape', sbary.area,
-					'distance', -0.5
-				);
+			arr[ an++ ] = sbary.area.border( -0.5 );
 		}
 	}
 
-	scale = euclid_scaleRay.create( 'ray:init', arr );
+	shape = euclid_shapeRay.create( 'ray:init', arr );
 
 	return(
 		gleam_glint_mask.create(
 			'glint', this._frameGlint,
 			'key', '$frame',
-			'scale', scale,
+			'shape', shape,
 			'reverse', true
 		)
 	);

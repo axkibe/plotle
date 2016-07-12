@@ -17,6 +17,7 @@ if( JION )
 
 var
 	euclid_shapeRay,
+	euclid_anchor_border,
 	euclid_anchor_shapeRay;
 
 
@@ -39,6 +40,24 @@ var
 	prototype;
 
 prototype = euclid_anchor_shapeRay.prototype;
+
+
+/*
+| Returns an euclid_anchor_border for this
+| anchored shape.
+*/
+prototype.border =
+	function(
+		d
+	)
+{
+	return(
+		euclid_anchor_border.create(
+			'distance', d,
+			'shape', this
+		)
+	);
+};
 
 
 /*

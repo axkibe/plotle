@@ -27,10 +27,13 @@ if( JION )
 				comment : 'true if reversing mask',
 				type : [ 'undefined', 'boolean' ]
 			},
-			scale :
+			shape :
 			{
-				comment : 'a scaled shape(ray) to mask',
-				type : [ 'euclid_scale', 'euclid_scaleRay' ]
+				comment : 'the shape(ray) to mask to',
+				type :
+					require( '../../typemaps/shape' )
+					.concat( [ 'euclid_shapeRay' ] )
+					.concat( require( '../../typemaps/anchorShape' ) )
 			}
 		}
 	};

@@ -163,6 +163,17 @@ prototype.add =
 };
 
 
+/*
+| Returns a shape bordering this shape by d.
+*/
+prototype.border =
+	function(
+		d // distance to border
+	)
+{
+	return this.shape.border( d );
+};
+
 
 /*
 | Gets the source of a projection to p.

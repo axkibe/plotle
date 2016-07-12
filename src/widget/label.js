@@ -46,6 +46,7 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			// FIXME remove?
 			superArea :
 			{
 				comment : 'the area the widget resides in',
@@ -107,10 +108,13 @@ prototype = widget_label.prototype;
 prototype._init =
 	function( )
 {
+//	FIXME remove
+		/*
 	this.pos =
 		this.superArea
 		? this.designPos.compute( this.superArea )
 		: undefined;
+		*/
 };
 
 
@@ -128,7 +132,7 @@ jion.lazyValue(
 		gleam_glint_text.create(
 			'font', this.font,
 			'key', this.key,
-			'p', this.pos,
+			'p', this.designPos,
 			'text', this.text
 		)
 	);

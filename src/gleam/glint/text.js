@@ -25,7 +25,7 @@ if( JION )
 			p :
 			{
 				comment : 'where to draw it',
-				type : 'euclid_point'
+				type : 'euclid_anchor_point'
 			},
 			text :
 			{

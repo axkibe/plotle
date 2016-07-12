@@ -30,6 +30,7 @@ if( JION )
 
 
 var
+	euclid_anchor_point,
 	euclid_fixPoint,
 	euclid_point,
 	euclid_rect,
@@ -57,7 +58,54 @@ prototype = euclid_point.prototype;
 
 
 /*
+| Returns a border bordering this point.
+| See euclid_shape.border for further explanation.
+*/
+prototype.border =
+	function(
+		pc,  // center point to border relatively to
+		d    // distance to border
+	)
+{
+	var
+		cx,
+		cy,
+		x,
+		y;
+
+	x = this.x;
+
+	y = this.y;
+
+	cx = pc.x;
+
+	cy = pc.y;
+
+	return(
+		this.create(
+			'x',
+				x +
+				(
+					x > cx
+					?  -d
+					: ( x < cx ? d : 0 )
+				),
+			'y',
+				y +
+				(
+					y > cy
+					?  -d
+					: ( y < cy ? d : 0 )
+				)
+		)
+	);
+};
+
+
+/*
 | Adds two points or x/y values, returns a new point.
+|
+| FIXME; change to multiple point adding
 */
 prototype.add =
 	function(
@@ -90,6 +138,7 @@ prototype.add =
 		);
 	}
 };
+
 
 
 /*
@@ -292,9 +341,28 @@ prototype.sub =
 
 
 /*
+| Returns this euclidean point as 'nw' anchored point.
+*/
+jion.lazyValue(
+	prototype,
+	'apnw',
+	function( )
+{
+	return(
+		euclid_anchor_point.nw.create(
+			'x', this.x,
+			'y', this.y
+		)
+	);
+}
+);
+
+
+/*
 | Shortcut for point at 0/0.
 */
-euclid_point.zero = euclid_point.create( 'x', 0, 'y', 0 );
+euclid_point.zero =
+	euclid_point.create( 'x', 0, 'y', 0 );
 
 
 } )( );

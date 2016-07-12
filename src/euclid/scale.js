@@ -1,6 +1,8 @@
 /*
 | A scaled shape.
 |
+| FIXME remove
+|
 | Does not recompute points by itself.
 */
 

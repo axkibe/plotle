@@ -27,7 +27,11 @@ if( JION )
 			shape :
 			{
 				comment : 'the shape to draw',
-				type : require( '../../typemaps/shape' )
+				type :
+					// FIXME only anchors
+					require( '../../typemaps/shape' )
+					.concat( [ 'euclid_shapeRay' ] )
+					.concat( require( '../../typemaps/anchorShape' ) )
 			}
 		}
 	};

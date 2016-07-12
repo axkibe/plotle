@@ -441,8 +441,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'display', this._display,
 			'key', 'mainDisc',
-			'p', this.area.pnw,
-			'view', this.controlView.home
+			'p', this.designArea.pnw
 		)
 	);
 }
@@ -622,6 +621,7 @@ jion.lazyValue(
 	glint =
 		gleam_glint_twig.create(
 			'key', 'root',
+			'view', this.controlView,
 			'twine:set+',
 				gleam_glint_fill.create(
 					'facet', this.facet,
@@ -652,9 +652,12 @@ jion.lazyValue(
 
 	return(
 		gleam_display_canvas.create(
-			'width', this.area.width,
-			'height', this.area.height,
-			'glint', glint
+			'glint', glint,
+			'view',
+				this.controlView.create(
+					'height', this.area.height,
+					'width', this.area.width
+				)
 		)
 	);
 }

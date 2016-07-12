@@ -1,5 +1,7 @@
 /*
 | A ray of scaled shapes.
+|
+| FIXME remove
 */
 
 

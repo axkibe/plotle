@@ -70,10 +70,17 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	gleam_canvas,
+	gleam_display_canvas,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_mask,
 	gleam_glint_paint,
+	gleam_glint_text,
 	gleam_glint_twig,
 	gleam_glint_window,
+	euclid_anchor_ellipse,
+	euclid_anchor_point,
+	euclid_anchor_roundRect,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -310,53 +317,53 @@ jion.lazyValue(
 	prototype,
 	'attentionCenter',
 	function( )
+{
+	var
+		ac,
+		descend,
+		fieldP,
+		font,
+		fs,
+		mark,
+		n,
+		p,
+		s,
+		section;
+
+	ac = this.zone.pnw.y,
+
+	mark = this.mark;
+
+	if( !mark || !mark.hasCaret )
 	{
-		var
-			ac,
-			descend,
-			fieldPNW,
-			font,
-			fs,
-			mark,
-			n,
-			p,
-			s,
-			section;
-
-		ac = this.zone.pnw.y,
-
-		mark = this.mark;
-
-		if( !mark || !mark.hasCaret )
-		{
-			return ac;
-		}
-
-		section = mark.caret.path.get( -1 );
-
-		if( !isSection( section ) ) return ac;
-
-		if( section === 'moveToButton' )
-		{
-			return ac + this._moveToButton.shape.pnw.y;
-		}
-
-		font = this._fonts[ section ];
-
-		fs = font.size;
-
-		descend = fs * shell_settings.bottombox;
-
-		fieldPNW = this[ spaceFields[ section ] ].pnw;
-
-		p = this._locateOffset( section, mark.caret.at );
-
-		s = Math.round( p.y + descend ) + fieldPNW.y;
-
-		n = s - Math.round( fs + descend );
-
-		return ac + n;
+		return ac;
 	}
+
+	section = mark.caret.path.get( -1 );
+
+	if( !isSection( section ) ) return ac;
+
+	if( section === 'moveToButton' )
+	{
+		return ac + this._moveToButton.shape.pnw.y;
+	}
+
+	font = this._fonts[ section ];
+
+	fs = font.size;
+
+	descend = fs * shell_settings.bottombox;
+
+	fieldP = this[ spaceFields[ section ] ].p;
+
+	p = this._locateOffset( section, mark.caret.at );
+
+	s = Math.round( p.y + descend ) + fieldP.y;
+
+	n = s - Math.round( fs + descend );
+
+	return ac + n;
+}
 );
 
 
@@ -483,8 +490,7 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.vZone.pnw,
-					'view', this.view.home
+					'p', this.zone.pnw.apnw
 				)
 		);
 
@@ -726,6 +732,17 @@ jion.lazyValue(
 );
 
 
+
+/*
+| The portal's silhoutte at zero.
+*/
+prototype.azSilhoutte =
+	euclid_anchor_ellipse.create(
+		'pnw', euclid_anchor_point.nw,
+		'pse', euclid_anchor_point.se
+	);
+
+
 /*
 | The items zone possibly altered by action.
 */
@@ -771,10 +788,10 @@ prototype._fonts =
 };
 
 
-if( FREEZE )
-{
-	Object.freeze( prototype._fonts );
-}
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( prototype._fonts );
+/**/}
 
 
 /*
@@ -968,7 +985,7 @@ prototype._keyDown =
 						'at',
 							this._getOffsetAt(
 								'spaceTag',
-								cpos.x + this._fieldSpaceUser.pnw.x
+								cpos.x + this._fieldSpaceUser.p.x
 							)
 					)
 			);
@@ -1128,7 +1145,7 @@ prototype._keyUp =
 						'at',
 							this._getOffsetAt(
 								'spaceUser',
-								cpos.x + this._fieldSpaceTag.pnw.x
+								cpos.x + this._fieldSpaceTag.p.x
 							)
 					)
 			);
@@ -1330,56 +1347,67 @@ jion.lazyValue(
 	prototype,
 	'_moveToButton',
 	function( )
-	{
-		var
-			height,
-			pnw,
-			pse,
-			result,
-			rounding,
-			width,
-			zone;
+{
+	var
+		height,
+		pnw,
+		pse,
+		result,
+		rounding,
+		width,
+		zone;
 
-		zone = this.zone;
+	zone = this.zone;
 
-		width = gruga_portal.moveToWidth;
+	width = gruga_portal.moveToWidth;
 
-		height = gruga_portal.moveToHeight;
+	height = gruga_portal.moveToHeight;
 
-		rounding = gruga_portal.moveToRounding;
+	rounding = gruga_portal.moveToRounding;
 
-		pnw =
-			euclid_point.create(
-				'x', math_half( zone.width - width ),
-				'y', math_half( zone.height ) + 10
-			),
+	pnw =
+		euclid_point.create(
+			'x', math_half( zone.width - width ),
+			'y', math_half( zone.height ) + 10
+		),
 
-		pse = pnw.add( width, height );
+	pse = pnw.add( width, height );
 
-		result =
-			{
-				shape :
-					euclid_roundRect.create(
-						'pnw', pnw,
-						'pse', pse,
-						'a', rounding,
-						'b', rounding
-					),
+	result =
+		{
+			shape :
+				euclid_roundRect.create(
+					'pnw', pnw,
+					'pse', pse,
+					'a', rounding,
+					'b', rounding
+				),
 
-				textCenter :
-					euclid_point.create(
-						'x', math_half( pnw.x + pse.x ),
-						'y', math_half( pnw.y + pse.y )
-					)
-			};
+			// FIXME only have an anchorded shape
+			// and make it anchored to center
+			aShape :
+				euclid_anchor_roundRect.create(
+					'pnw', pnw.apnw,
+					'pse', pse.apnw,
+					'a', rounding,
+					'b', rounding
+				),
 
-/**/	if( FREEZE )
-/**/	{
-/**/		Object.freeze( result );
-/**/	}
 
-		return result;
-	}
+			textCenter :
+				euclid_point.create(
+					'x', math_half( pnw.x + pse.x ),
+					'y', math_half( pnw.y + pse.y )
+				)
+		};
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( result );
+/**/}
+
+	return result;
+}
 );
 
 /*
@@ -1388,13 +1416,13 @@ jion.lazyValue(
 prototype._prepareField =
 	function(
 		section,
-		basePNW
+		baseP
 	)
 {
 	var
 		height,
 		pitch,
-		pnw,
+		p,
 		rounding,
 		silhoutte,
 		text,
@@ -1413,21 +1441,21 @@ prototype._prepareField =
 
 	height = this._fonts[ section ].size + 2;
 
-	pnw =
-		basePNW
-		? euclid_point.create(
+	p =
+		baseP
+		? euclid_anchor_point.nw.create(
 			'x', math_half( zone.width - width ),
-			'y', basePNW.y + 23
+			'y', baseP.y + 23
 		)
-		: euclid_point.create(
+		: euclid_anchor_point.nw.create(
 			'x', math_half( zone.width - width ),
 			'y', Math.round( math_half( zone.height ) - 30 )
 		);
 
 	silhoutte =
 		euclid_roundRect.create(
-			'pnw', pnw.sub( pitch, height ),
-			'pse', pnw.add( Math.round( width ) + pitch, pitch ),
+			'pnw', p.euclidPoint.sub( pitch, height ),
+			'pse', p.euclidPoint.add( Math.round( width ) + pitch, pitch ),
 			'a', rounding,
 			'b', rounding
 		);
@@ -1436,7 +1464,7 @@ prototype._prepareField =
 		text : text,
 		width : width,
 		height : height,
-		pnw : pnw,
+		p : p,
 		silhoutte : silhoutte
 	};
 };
@@ -1463,7 +1491,7 @@ jion.lazyValue(
 	'_fieldSpaceTag',
 	function( )
 	{
-		return this._prepareField( 'spaceTag', this._fieldSpaceUser.pnw );
+		return this._prepareField( 'spaceTag', this._fieldSpaceUser.p );
 	}
 );
 
@@ -1496,7 +1524,7 @@ prototype._getOffsetAt =
 		x1,
 		x2;
 
-	dx = x - this[ spaceFields[ section ] ].pnw.x;
+	dx = x - this[ spaceFields[ section ] ].p.x;
 
 	value = this.fabric[ section ];
 
@@ -1506,26 +1534,16 @@ prototype._getOffsetAt =
 
 	font = this._fonts[ section ];
 
-	for(
-		a = 0, aZ = value.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = value.length; a < aZ; a++ )
 	{
 		x1 = x2;
 
 		x2 = euclid_measure.width( font, value.substr( 0, a ) );
 
-		if( x2 >= dx )
-		{
-			break;
-		}
+		if( x2 >= dx ) break;
 	}
 
-	if(
-		dx - x1 < x2 - dx &&
-		a > 0
-	)
+	if( dx - x1 < x2 - dx && a > 0 )
 	{
 		a--;
 	}
@@ -1541,122 +1559,162 @@ jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
-	{
-		var
-			buttonFacet,
-			display,
-			facet,
-			hview,
-			inputFacet,
-			mark,
-			moveToButton,
-			section,
-			fieldSpaceUser,
-			fieldSpaceTag,
-			vZone;
+{
+	var
+		buttonFacet,
+		content,
+		facet,
+		glint,
+		hview,
+		inputFacet,
+		mark,
+		moveToButton,
+		section,
+		fieldSpaceUser,
+		fieldSpaceTag,
+		vZone;
 
-		vZone = this.vZone;
+	vZone = this.vZone;
 
-		display =
-			gleam_canvas.create(
-				'width', vZone.width + 2,
-				'height', vZone.height + 2
-			),
+	hview = this.view.home;
 
-		hview = this.view.home;
+	mark = this.mark;
 
-		mark = this.mark;
+	section =
+		mark
+		&& mark.hasCaret
+		&& mark.caret.path.get( -1 );
 
-		section =
-			mark
-			&& mark.hasCaret
-			&& mark.caret.path.get( -1 );
+	facet = gruga_portal.facets.getFacet( );
 
-		facet = gruga_portal.facets.getFacet( );
-
-		display.fill( facet.fill, this.vZeroSilhoutte );
-
-		if( this.path )
-		{
-			display.clip( this.vZeroSilhoutte, 0 );
-
-			fieldSpaceUser = this._fieldSpaceUser;
-
-			fieldSpaceTag = this._fieldSpaceTag;
-
-			moveToButton = this._moveToButton;
-
-			buttonFacet =
-				gruga_portal.buttonFacets.getFacet(
-					'hover',
-						this.hover
-						?  this.hover.equals(
-							this.path.append( 'moveToButton' )
-						)
-						: false,
-					'focus', section === 'moveToButton'
-				);
-
-			inputFacet =
-				gruga_portal.inputFacets.getFacet(
-					'hover', false,
-					'focus', false
-				);
-
-			display.paint( buttonFacet, moveToButton.shape.inView( hview ) );
-
-			display.paint(
-				inputFacet,
-				fieldSpaceUser.silhoutte.inView( hview )
-			);
-
-			display.paint(
-				inputFacet,
-				fieldSpaceTag.silhoutte.inView( hview )
-			);
-
-			display.scale( hview.zoom );
-
-			display.paintText(
-				'text', fieldSpaceUser.text,
-				'p', fieldSpaceUser.pnw,
-				'font', this._fonts.spaceUser
-			);
-
-			display.paintText(
-				'text', fieldSpaceTag.text,
-				'p', fieldSpaceTag.pnw,
-				'font', this._fonts.spaceTag
-			);
-
-			display.paintText(
-				'text', 'move to',
-				'p', moveToButton.textCenter,
-				'font', this._fonts.moveTo
-			);
-
-
-			if(
-				mark
-				&& mark.reflect === 'visual_mark_caret'
-				&& mark.focus
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+			gleam_glint_fill.create(
+				'facet', facet,
+				'key', 'background',
+				'shape', this.azSilhoutte
 			)
-			{
-				this._drawCaret( display );
-			}
+		);
 
-			display.scale( 1 / hview.zoom );
+	fieldSpaceUser = this._fieldSpaceUser;
 
-			display.deClip( );
-		}
+	fieldSpaceTag = this._fieldSpaceTag;
 
-		// redraws the border on the end to top
-		// everything else
+	moveToButton = this._moveToButton;
 
-		display.border( facet.border, this.vZeroSilhoutte );
+	buttonFacet =
+		gruga_portal.buttonFacets.getFacet(
+			'hover',
+				this.hover
+				?  this.hover.equals(
+					this.path.append( 'moveToButton' )
+				)
+				: false,
+			'focus', section === 'moveToButton'
+		);
 
-		return display;
+	inputFacet =
+		gruga_portal.inputFacets.getFacet(
+			'hover', false,
+			'focus', false
+		);
+
+	content =
+		gleam_glint_twig.create(
+			'key', 'content',
+			'twine:set+',
+				gleam_glint_paint.create(
+					'facet', buttonFacet,
+					'key', 'moveToButton',
+					'shape', moveToButton.aShape
+				),
+			'twine:set+',
+				gleam_glint_paint.create(
+					'facet', inputFacet,
+					'key', 'spaceUserField',
+					'shape', fieldSpaceUser.silhoutte.inView( hview )
+				),
+			'twine:set+',
+				gleam_glint_paint.create(
+					'facet', inputFacet,
+					'key', 'spaceTagField',
+					'shape', fieldSpaceTag.silhoutte.inView( hview )
+				),
+			'twine:set+',
+				gleam_glint_text.create(
+					'font', this._fonts.spaceUser,
+					'key', 'spaceUserText',
+					'p', fieldSpaceUser.p,
+					'text', fieldSpaceUser.text
+				)
+		);
+
+
+	/*
+	display.paintText(
+		'text', fieldSpaceUser.text,
+		'p', fieldSpaceUser.p,
+		'font', this._fonts.spaceUser
+	);
+
+	display.paintText(
+		'text', fieldSpaceTag.text,
+		'p', fieldSpaceTag.p,
+		'font', this._fonts.spaceTag
+	);
+
+	display.paintText(
+		'text', 'move to',
+		'p', moveToButton.textCenter,
+		'font', this._fonts.moveTo
+	);
+
+
+	if(
+		mark
+		&& mark.reflect === 'visual_mark_caret'
+		&& mark.focus
+	)
+	{
+		this._drawCaret( display );
 	}
+
+	// redraws the border on the end to top
+	// everything else
+
+	*/
+
+	glint =
+		glint.create(
+			'twine:set+',
+				gleam_glint_mask.create(
+					'key', 'mask',
+					'glint', content,
+					'shape', this.azSilhoutte
+				),
+			'twine:set+',
+				gleam_glint_border.create(
+					'facet', facet,
+					'key', 'border',
+					'shape', this.azSilhoutte
+				)
+		);
+
+
+	return(
+		gleam_display_canvas.create(
+			'glint', glint,
+			'view',
+				this.view.create(
+					'pan', euclid_point.zero,
+					'height', vZone.height,
+					'width', vZone.width
+				)
+		)
+	);
+}
 );
 
 
@@ -1694,7 +1752,7 @@ prototype._drawCaret =
 
 	descend = fs * shell_settings.bottombox;
 
-	fieldPNW = this[ spaceFields[ section ] ].pnw;
+	fieldPNW = this[ spaceFields[ section ] ].p;
 
 	p = this._locateOffset( section, mark.caret.at );
 
