@@ -58,7 +58,7 @@ gruga_frame.handleFacet =
 /*
 | The frames width.
 */
-gruga_frame.width = 26;
+gruga_frame.width = 36;
 
 
 /*

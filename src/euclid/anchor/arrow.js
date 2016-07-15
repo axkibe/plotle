@@ -3,8 +3,47 @@
 */
 
 
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	throw{
+		id : 'euclid_anchor_arrow',
+		attributes :
+		{
+			end1 :
+			{
+				comment : '"normal" or "arrow"',
+				type : 'string',
+			},
+			end2 :
+			{
+				comment : '"normal" or "arrow"',
+				type : 'string',
+			},
+			joint1 :
+			{
+				comment : 'connect to this point or shape',
+				type :
+					require( '../../typemaps/anchorShape' )
+					.concat( [ 'euclid_anchor_point' ] )
+			},
+			joint2 :
+			{
+				comment : 'connect to this point or shape',
+				type :
+					require( '../../typemaps/anchorShape' )
+					.concat( [ 'euclid_anchor_point' ] )
+			}
+		}
+	};
+}
+
+
 var
-	euclid_arrow,
+	euclid_anchor_arrow,
+	euclid_connect,
 	euclid_shape,
 	euclid_shape_line,
 	euclid_shape_start;
@@ -17,39 +56,60 @@ var
 'use strict';
 
 
+if( NODE )
+{
+	require( 'jion' ).this( module, 'source' );
+
+	return;
+}
+
+
 var
 	arrowSize,
-	cos,
-	sin;
+	prototype;
 
-euclid_arrow = { };
+prototype = euclid_anchor_arrow.prototype;
 
-arrowSize = 12;
+arrowSize = 12;  // FIXME move to gruga
 
-cos = Math.cos;
-
-sin = Math.sin;
 
 
 /*
-| Returns an arrow shape for a line.
+| Returns the computed arrow shape for a view
+|
+| FIXME remove area
 */
-euclid_arrow.shape =
+prototype.compute =
 	function(
-		line,    // the line
-		end1,    // 'normal' or 'arrow'
-		end2     // 'normal' or 'arrow'
+		area,
+		view
 	)
 {
 	var
 		ad,
 		arrowBase,
 		d,
+		end1,
+		end2,
+		line,
+		joint1,
+		joint2,
+		ms,
 		p1,
 		p2,
-		ms,
 		round,
 		sections;
+
+
+	joint1 = this.joint1.compute( area, view );
+
+	joint2 = this.joint2.compute( area, view );
+
+	end1 = this.end1;
+
+	end2 = this.end2;
+
+	line = euclid_connect.line( joint1, joint2 );
 
 	p1 = line.p1;
 
@@ -100,25 +160,25 @@ euclid_arrow.shape =
 
 			arrowBase =
 				p2.fixPoint(
-					-round( ms * cos( d ) ),
-					-round( ms * sin( d ) )
+					-round( ms * Math.cos( d ) ),
+					-round( ms * Math.sin( d ) )
 				);
 
 			sections.push(
 				euclid_shape_line.create( 'p', arrowBase ),
 				euclid_shape_line.create(
 					'p',
-						p2.fixPoint(
-							-round( arrowSize * cos( d + ad ) ),
-							-round( arrowSize * sin( d + ad ) )
+						p2.add(
+							-round( arrowSize * Math.cos( d + ad ) ),
+							-round( arrowSize * Math.sin( d + ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', p2 ),
 				euclid_shape_line.create(
 					'p',
-						p2.fixPoint(
-							-round( arrowSize * cos( d - ad ) ),
-							-round( arrowSize * sin( d - ad ) )
+						p2.add(
+							-round( arrowSize * Math.cos( d - ad ) ),
+							-round( arrowSize * Math.sin( d - ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', arrowBase )
@@ -145,12 +205,6 @@ euclid_arrow.shape =
 		)
 	);
 };
-
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( euclid_arrow );
-/**/}
 
 
 } )( );

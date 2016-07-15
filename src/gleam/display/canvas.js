@@ -550,13 +550,13 @@ prototype._renderGlintTwig =
 		{
 			case 'gleam_glint_border' :
 
-				this._borders( g.facet.border, g.shape );
+				this._borders( g.facet.border, g.shape, view );
 
 				break;
 
 			case 'gleam_glint_fill' :
 
-				this._fill( g.facet.fill, g.shape );
+				this._fill( g.facet.fill, g.shape, view );
 
 				break;
 
@@ -606,11 +606,8 @@ prototype._renderGlintTwig =
 				cx.save( );
 
 				shape = g.shape;
-					
-				if( shape.compute ) // FIXME
-				{
-					shape = shape.compute( this._area, view );
-				}
+
+				shape = shape.compute( this._area, view );
 
 				if( shape.reflect === 'euclid_shapeRay' )
 				{

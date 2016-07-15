@@ -70,6 +70,7 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
+	euclid_anchor_rect,
 	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
@@ -288,6 +289,26 @@ prototype._init =
 		jion.aheadValue( this, '_display', inherit._display );
 	}
 };
+
+
+/*
+| The notes anchored silhoutte.
+|
+| FIXME anchor to center.
+*/
+jion.lazyValue(
+	prototype,
+	'aSilhoutte',
+	function( )
+{
+	return(
+		euclid_anchor_rect.create(
+			'pnw', this.zone.pnw.apnw,
+			'pse', this.zone.pse.apnw
+		)
+	);
+}
+);
 
 
 /*
@@ -633,14 +654,14 @@ jion.lazyValue(
 	prototype,
 	'silhoutte',
 	function( )
-	{
-		return(
-			euclid_rect.create(
-				'pnw', this.zone.pnw,
-				'pse', this.zone.pse.sub( 1, 1 )
-			)
-		);
-	}
+{
+	return(
+		euclid_rect.create(
+			'pnw', this.zone.pnw,
+			'pse', this.zone.pse.sub( 1, 1 )
+		)
+	);
+}
 );
 
 

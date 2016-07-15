@@ -82,7 +82,6 @@ prototype.border =
 };
 
 
-
 /*
 | Computes a rect modelled relative to this rect.
 */
@@ -117,6 +116,8 @@ prototype.compute =
 /*
 | ellipse filling the full area
 | skewed a little to north west
+|
+| FIXME remove the "Skew"
 */
 euclid_anchor_ellipse.fullSkewNW =
 	euclid_anchor_ellipse.create(

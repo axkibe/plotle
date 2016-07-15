@@ -73,7 +73,8 @@ var
 	action_pan,
 	action_select,
 	change_ray,
-	euclid_arrow,
+	euclid_arrow, // FIXME
+	euclid_anchor_arrow,
 	euclid_connect,
 	euclid_point,
 	euclid_rect,
@@ -474,7 +475,7 @@ jion.lazyValue(
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromSilhoutte = fromItem.silhoutte;
+				fromSilhoutte = fromItem.aSilhoutte;
 
 				if(
 					action.toItemPath
@@ -482,26 +483,23 @@ jion.lazyValue(
 				)
 				{
 					// arrow connects two items
-					toSilhoutte = toItem.silhoutte;
+					toSilhoutte = toItem.aSilhoutte;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte = action.toPoint.fromView( view );
+					toSilhoutte = action.toPoint.fromView( view ).apnw;
 				}
 
 				if( toSilhoutte )
 				{
 					arrow =
-						euclid_arrow.shape(
-								euclid_connect.line(
-									fromSilhoutte,
-									toSilhoutte
-								),
-								'normal',
-								'arrow'
-						)
-						.inView( view );
+						euclid_anchor_arrow.create(
+							'joint1', fromSilhoutte,
+							'joint2', toSilhoutte,
+							'end1', 'normal',
+							'end2', 'arrow'
+						);
 
 					glint =
 						glint.create(

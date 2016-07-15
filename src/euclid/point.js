@@ -359,6 +359,24 @@ jion.lazyValue(
 
 
 /*
+| Returns this euclidean point as 'center' anchored point.
+*/
+jion.lazyValue(
+	prototype,
+	'apc',
+	function( )
+{
+	return(
+		euclid_anchor_point.c.create(
+			'x', this.x,
+			'y', this.y
+		)
+	);
+}
+);
+
+
+/*
 | Shortcut for point at 0/0.
 */
 euclid_point.zero =

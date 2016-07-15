@@ -20,7 +20,7 @@ if( JION )
 			shape :
 			{
 				comment : 'the anchor shape to scale',
-				type : require( '../typemaps/anchorShape' )
+				type : require( '../../typemaps/anchorShape' )
 			}
 		}
 	};
@@ -70,7 +70,7 @@ prototype.compute =
 	return(
 		this.shape
 		.compute( area, view )
-		.border( this.d )
+		.border( this.distance )
 	);
 };
 

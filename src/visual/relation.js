@@ -61,8 +61,8 @@ if( JION )
 
 
 var
-	euclid_arrow,
-	euclid_connect,
+	euclid_anchor_arrow,
+	euclid_anchor_rect,
 	euclid_point,
 	gleam_display_canvas,
 	gleam_glint_paint,
@@ -126,6 +126,28 @@ prototype._init =
 
 
 /*
+| The notes anchored silhoutte.
+|
+| FIXME anchor to center.
+|
+| FUTURE also incluse the arrows
+*/
+jion.lazyValue(
+	prototype,
+	'aSilhoutte',
+	function( )
+{
+	return(
+		euclid_anchor_rect.create(
+			'pnw', this.zone.pnw.apnw,
+			'pse', this.zone.pse.apnw
+		)
+	);
+}
+);
+
+
+/*
 | The attention center.
 */
 jion.lazyValue( prototype, 'attentionCenter', visual_docItem.attentionCenter );
@@ -178,13 +200,11 @@ prototype.arrow1Shape =
 	if( !item1 ) return undefined;
 
 	return(
-		euclid_arrow.shape(
-			euclid_connect.line(
-				item1.silhoutte,
-				this.zone
-			),
-			'normal',
-			'normal'
+		euclid_anchor_arrow.create(
+			'joint1', item1.aSilhoutte,
+			'joint2', this.aSilhoutte,
+			'end1', 'normal',
+			'end2', 'normal'
 		)
 	);
 };
@@ -207,49 +227,13 @@ prototype.arrow2Shape =
 	if( !item2 ) return undefined;
 
 	return(
-		euclid_arrow.shape(
-			euclid_connect.line(
-				this.zone,
-				item2.silhoutte
-			),
-			'normal',
-			'arrow'
+		euclid_anchor_arrow.create(
+			'joint1', this.aSilhoutte,
+			'joint2', item2.aSilhoutte,
+			'end1', 'normal',
+			'end2', 'arrow'
 		)
 	);
-};
-
-
-/*
-| Arrow 1 shape in view.
-*/
-prototype.vArrow1Shape =
-	function( )
-{
-	var
-		arrow1;
-
-	arrow1 = this.arrow1Shape( );
-
-	if( !arrow1 ) return undefined;
-
-	return arrow1.inView( this.view );
-};
-
-
-/*
-| Arrow 2 shape in view.
-*/
-prototype.vArrow2Shape =
-	function( )
-{
-	var
-		arrow2;
-
-	arrow2 = this.arrow2Shape( );
-
-	if( !arrow2 ) return undefined;
-
-	return arrow2.inView( this.view );
 };
 
 
@@ -568,8 +552,6 @@ prototype._arrow1Glint =
 
 	if( !arrow1 ) return undefined;
 
-	arrow1 = arrow1.inView( this.view );
-
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
@@ -592,8 +574,6 @@ prototype._arrow2Glint =
 	arrow2 = this.arrow2Shape( );
 
 	if( !arrow2 ) return undefined;
-
-	arrow2 = arrow2.inView( this.view );
 
 	return(
 		gleam_glint_paint.create(

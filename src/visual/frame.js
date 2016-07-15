@@ -30,11 +30,11 @@ if( JION )
 var
 	action_dragItems,
 	action_resizeItems,
+	euclid_anchor_shapeRay,
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	euclid_shape,
-	euclid_shapeRay,
 	euclid_shape_line,
 	euclid_shape_round,
 	euclid_shape_start,
@@ -326,7 +326,6 @@ jion.lazyValue(
 		aZ,
 		ca,
 		content,
-		sbary,
 		shape;
 
 	content = this.content;
@@ -344,17 +343,10 @@ jion.lazyValue(
 	{
 		ca = content.get( a );
 
-		arr[ an++ ] = ca.vSilhoutte.border( -1 );
-
-		sbary = ca.scrollbarY;
-
-		if( sbary )
-		{
-			arr[ an++ ] = sbary.area.border( -0.5 );
-		}
+		arr[ an++ ] = ca.aSilhoutte.border( -12 );
 	}
 
-	shape = euclid_shapeRay.create( 'ray:init', arr );
+	shape = euclid_anchor_shapeRay.create( 'ray:init', arr );
 
 	return(
 		gleam_glint_mask.create(

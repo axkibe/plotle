@@ -26,8 +26,7 @@ if( JION )
 			{
 				comment : 'the shape to draw',
 				type :
-					require( '../../typemaps/shape' )
-					.concat( require( '../../typemaps/anchorShape' ) )
+					require( '../../typemaps/anchorShape' )
 			}
 		}
 	};

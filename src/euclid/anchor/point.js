@@ -84,7 +84,7 @@ prototype.add =
 					'y', this.y + a1.y
 				)
 			);
-	
+
 		case 2 :
 
 			return(
@@ -102,6 +102,8 @@ prototype.add =
 
 /*
 | Computes the point to an euclid one.
+|
+| FIXME make area part of view
 */
 prototype.compute =
 	function(
@@ -125,7 +127,7 @@ prototype.compute =
 	pnw = area.pnw;
 
 	pse = area.pse;
-	
+
 	if(
 		this.anchor === 'nw'
 		&& pnw.x === 0
@@ -246,7 +248,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.anchor !== 'nw' ) throw new Error( );	
+/**/	if( this.anchor !== 'nw' ) throw new Error( );
 /**/}
 
 	return(

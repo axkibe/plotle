@@ -504,7 +504,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.vSilhoutte
+						'shape', this.aSilhoutte
 					)
 			);
 	}
@@ -692,6 +692,34 @@ prototype.positioning =
 
 
 /*
+| The portal's anchor silhoutte.
+|
+| FIXME this should be *THE* silhoutte same in
+|   note
+|   label
+|   relation
+*/
+jion.lazyValue(
+	prototype,
+	'aSilhoutte',
+	function( )
+{
+	var
+		zone;
+
+	zone = this.zone;
+
+	return(
+		euclid_anchor_ellipse.create(
+			'pnw', zone.pnw.apnw,
+			'pse', zone.pse.apnw
+		)
+	);
+}
+);
+
+
+/*
 | The portal's silhoutte.
 */
 jion.lazyValue(
@@ -739,7 +767,7 @@ jion.lazyValue(
 prototype.azSilhoutte =
 	euclid_anchor_ellipse.create(
 		'pnw', euclid_anchor_point.nw,
-		'pse', euclid_anchor_point.se
+		'pse', euclid_anchor_point.seMin1
 	);
 
 
@@ -1395,7 +1423,7 @@ jion.lazyValue(
 
 
 			textCenter :
-				euclid_point.create(
+				euclid_anchor_point.nw.create(
 					'x', math_half( pnw.x + pse.x ),
 					'y', math_half( pnw.y + pse.y )
 				)
@@ -1420,6 +1448,7 @@ prototype._prepareField =
 	)
 {
 	var
+		aSilhoutte,
 		height,
 		pitch,
 		p,
@@ -1452,10 +1481,19 @@ prototype._prepareField =
 			'y', Math.round( math_half( zone.height ) - 30 )
 		);
 
+	// FIXME only use anchored.
 	silhoutte =
 		euclid_roundRect.create(
 			'pnw', p.euclidPoint.sub( pitch, height ),
 			'pse', p.euclidPoint.add( Math.round( width ) + pitch, pitch ),
+			'a', rounding,
+			'b', rounding
+		);
+
+	aSilhoutte =
+		euclid_anchor_roundRect.create(
+			'pnw', p.euclidPoint.sub( pitch, height ).apnw,
+			'pse', p.euclidPoint.add( Math.round( width ) + pitch, pitch ).apnw,
 			'a', rounding,
 			'b', rounding
 		);
@@ -1465,7 +1503,8 @@ prototype._prepareField =
 		width : width,
 		height : height,
 		p : p,
-		silhoutte : silhoutte
+		silhoutte : silhoutte,
+		aSilhoutte : aSilhoutte
 	};
 };
 
@@ -1477,9 +1516,9 @@ jion.lazyValue(
 	prototype,
 	'_fieldSpaceUser',
 	function( )
-	{
-		return this._prepareField( 'spaceUser' );
-	}
+{
+	return this._prepareField( 'spaceUser' );
+}
 );
 
 
@@ -1490,9 +1529,9 @@ jion.lazyValue(
 	prototype,
 	'_fieldSpaceTag',
 	function( )
-	{
-		return this._prepareField( 'spaceTag', this._fieldSpaceUser.p );
-	}
+{
+	return this._prepareField( 'spaceTag', this._fieldSpaceUser.p );
+}
 );
 
 
@@ -1634,13 +1673,13 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceUserField',
-					'shape', fieldSpaceUser.silhoutte.inView( hview )
+					'shape', fieldSpaceUser.aSilhoutte
 				),
 			'twine:set+',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceTagField',
-					'shape', fieldSpaceTag.silhoutte.inView( hview )
+					'shape', fieldSpaceTag.aSilhoutte
 				),
 			'twine:set+',
 				gleam_glint_text.create(
@@ -1648,23 +1687,25 @@ jion.lazyValue(
 					'key', 'spaceUserText',
 					'p', fieldSpaceUser.p,
 					'text', fieldSpaceUser.text
+				),
+			'twine:set+',
+				gleam_glint_text.create(
+					'font', this._fonts.spaceTag,
+					'key', 'spaceTagText',
+					'p', fieldSpaceTag.p,
+					'text', fieldSpaceTag.text
+				),
+			'twine:set+',
+				gleam_glint_text.create(
+					'font', this._fonts.moveTo,
+					'key', 'moveToText',
+					'p', moveToButton.textCenter,
+					'text', 'move to'
 				)
 		);
 
 
 	/*
-	display.paintText(
-		'text', fieldSpaceUser.text,
-		'p', fieldSpaceUser.p,
-		'font', this._fonts.spaceUser
-	);
-
-	display.paintText(
-		'text', fieldSpaceTag.text,
-		'p', fieldSpaceTag.p,
-		'font', this._fonts.spaceTag
-	);
-
 	display.paintText(
 		'text', 'move to',
 		'p', moveToButton.textCenter,

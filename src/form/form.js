@@ -4,6 +4,7 @@
 
 
 var
+	euclid_anchor_rect,
 	form_form,
 	gleam_glint_paint,
 	gleam_glint_twig,
@@ -265,7 +266,7 @@ form_form.glint =
 				gleam_glint_paint.create(
 					'facet', gruga_formFacet,
 					'key', '$background',
-					'shape', this.view.baseArea
+					'shape', euclid_anchor_rect.full
 				)
 		);
 

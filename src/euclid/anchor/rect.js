@@ -28,6 +28,8 @@ if( JION )
 
 
 var
+	euclid_anchor_border,
+	euclid_anchor_point,
 	euclid_anchor_rect,
 	euclid_rect;
 
@@ -53,6 +55,24 @@ prototype = euclid_anchor_rect.prototype;
 
 
 /*
+| Returns an euclid_anchor_border for this
+| anchored shape.
+*/
+prototype.border =
+	function(
+		d
+	)
+{
+	return(
+		euclid_anchor_border.create(
+			'distance', d,
+			'shape', this
+		)
+	);
+};
+
+
+/*
 | Computes to an unanchored rect for a area/view:
 */
 prototype.compute =
@@ -68,6 +88,16 @@ prototype.compute =
 		)
 	);
 };
+
+
+/*
+| Rect filling the full area.
+*/
+euclid_anchor_rect.full =
+	euclid_anchor_rect.create(
+		'pnw', euclid_anchor_point.nw,
+		'pse', euclid_anchor_point.seMin1
+	);
 
 
 })( );

@@ -133,6 +133,7 @@ prototype._init =
 
 	if( this.superArea )
 	{
+		// FIXME remove
 		area =
 		this.area =
 			this.designArea.compute( this.superArea );
@@ -250,8 +251,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.area.pnw,
-			'view', this.view.home
+			'p', this.area.pnw.apnw
 		)
 	);
 }

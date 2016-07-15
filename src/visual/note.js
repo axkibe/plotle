@@ -77,6 +77,8 @@ if( JION )
 
 var
 	change_grow,
+	euclid_anchor_point,
+	euclid_anchor_roundRect,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
@@ -340,6 +342,18 @@ jion.lazyValue(
 	'attentionCenter',
 	visual_docItem.attentionCenter
 );
+
+
+/*
+| The notes's silhoutte at zero.
+*/
+prototype.azSilhoutte =
+	euclid_anchor_roundRect.create(
+		'pnw', euclid_anchor_point.nw,
+		'pse', euclid_anchor_point.seMin1,
+		'a', gruga_note.cornerRadius,
+		'b', gruga_note.cornerRadius
+	);
 
 
 /*
@@ -639,6 +653,36 @@ jion.lazyValue(
 
 
 /*
+| The notes anchored silhoutte.
+|
+| FIXME anchor to center.
+*/
+jion.lazyValue(
+	prototype,
+	'aSilhoutte',
+	function( )
+{
+	var
+		zone,
+		cr;
+
+	zone = this.zone;
+
+	cr = gruga_note.cornerRadius;
+
+	return(
+		euclid_anchor_roundRect.create(
+			'pnw', zone.pnw.apnw,
+			'pse', zone.pse.apnw,
+			'a', cr,
+			'b', cr
+		)
+	);
+}
+);
+
+
+/*
 | Handles a special key.
 */
 prototype.specialKey = visual_docItem.specialKey;
@@ -832,7 +876,7 @@ jion.lazyValue(
 				gleam_glint_fill.create(
 					'facet', facet,
 					'key', 'fill',
-					'shape', this.vZeroSilhoutte
+					'shape', this.azSilhoutte
 				)
 		);
 
@@ -847,7 +891,7 @@ jion.lazyValue(
 				gleam_glint_border.create(
 					'facet', facet,
 					'key', 'border',
-					'shape', this.vZeroSilhoutte
+					'shape', this.azSilhoutte
 				)
 		);
 

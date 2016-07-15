@@ -101,7 +101,7 @@ prototype.border =
 			'pnw', this.pnw.border( pc, d ),
 			'pse', this.pse.border( pc, d )
 		)
-	)
+	);
 };
 
 
