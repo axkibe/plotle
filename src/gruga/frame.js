@@ -7,8 +7,6 @@ var
 	gleam_border,
 	gleam_color,
 	gleam_facet,
-	gleam_gradient_colorStop,
-	gleam_gradient_radial,
 	gruga_frame;
 
 
@@ -28,6 +26,8 @@ gruga_frame = { };
 gruga_frame.facet =
 	gleam_facet.create(
 		'fill',
+			gleam_color.rgba( 255, 245, 200, 0.9 ),
+			/*
 			gleam_gradient_radial.create(
 				'ray:append',
 				gleam_gradient_colorStop.create(
@@ -40,6 +40,7 @@ gruga_frame.facet =
 					'color', gleam_color.rgba( 255, 235, 180, 0.9 )
 				)
 			),
+			*/
 		'border',
 			gleam_border.create(
 				'color', gleam_color.rgba( 255, 220, 157, 0.9 )

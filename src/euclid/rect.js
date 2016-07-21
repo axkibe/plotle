@@ -661,8 +661,8 @@ jion.lazyValue(
 {
 	return(
 		euclid_point.create(
-			'x', math_half( this.pse.x + this.pnw.x ),
-			'y', math_half( this.pse.y + this.pnw.y )
+			'x', ( this.pse.x + this.pnw.x ) / 2,
+			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
 	);
 }

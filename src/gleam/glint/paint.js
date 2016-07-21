@@ -32,7 +32,7 @@ if( JION )
 					// XXX
 					require( '../../typemaps/shape' )
 					.concat( [ 'euclid_shapeRay' ] )
-					.concat( require( '../../typemaps/anchorShape' ) )
+					.concat( require( '../../euclid/anchor/typemap-shape' ) )
 //					require( '../../typemaps/anchorShape' )
 			}
 		}

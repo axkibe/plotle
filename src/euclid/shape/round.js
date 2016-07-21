@@ -17,7 +17,7 @@ if( JION )
 			p :
 			{
 				comment : 'connect to',
-				type : [ 'undefined', 'euclid_point', 'euclid_fixPoint' ]
+				type : [ 'undefined', 'euclid_point' ]
 			},
 			ccw :
 			{

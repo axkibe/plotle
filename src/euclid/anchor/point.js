@@ -17,6 +17,13 @@ if( JION )
 				comment : 'compass of the anchor',
 				type : 'string'
 			},
+			shape :
+			{
+				comment : 'if defined anchor to this instead of view area',
+				type :
+					require( './typemap-shape' )
+					.concat( [ 'undefined' ] )
+			},
 			x :
 			{
 				comment : 'x-distance',
@@ -33,6 +40,7 @@ if( JION )
 
 
 var
+	euclid_anchor_fixPoint,
 	euclid_anchor_point,
 	euclid_point,
 	jion,
@@ -259,6 +267,25 @@ jion.lazyValue(
 	);
 }
 );
+
+
+/*
+| Returns a fixPoint anchored to this.
+*/
+prototype.fixPoint =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		euclid_anchor_fixPoint.create(
+			'anchor', this,
+			'x', x,
+			'y', y
+		)
+	);
+};
 
 
 /*

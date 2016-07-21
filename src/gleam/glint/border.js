@@ -26,7 +26,7 @@ if( JION )
 			{
 				comment : 'the shape to draw',
 				type :
-					require( '../../typemaps/anchorShape' )
+					require( '../../euclid/anchor/typemap-shape' )
 			}
 		}
 	};

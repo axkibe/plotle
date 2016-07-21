@@ -18,7 +18,7 @@ if( JION )
 				type : 'euclid_anchor_point'
 			}
 		},
-		ray : require( '../../typemaps/anchorShapeSection' )
+		ray : require( './typemap-shapeSection' )
 	};
 }
 

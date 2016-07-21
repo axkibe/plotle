@@ -27,12 +27,12 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north-west',
-				type : 'euclid_anchor_point'
+				type : require( './typemap-points.js' )
 			},
 			pse :
 			{
 				comment : 'point in south-east',
-				type : 'euclid_anchor_point'
+				type : require( './typemap-points.js' )
 			},
 			a :
 			{
@@ -43,7 +43,12 @@ if( JION )
 			{
 				comment : 'vertical rounding',
 				type : 'number'
-			}
+			},
+			fixRounds :
+			{
+				comment : 'if true the rounds are not scaled',
+				type : [ 'undefined', 'boolean' ]
+			},
 		}
 	};
 }
@@ -102,12 +107,17 @@ prototype.compute =
 		view
 	)
 {
+	var
+		fr;
+
+	fr = this.fixRounds;
+
 	return(
 		euclid_roundRect.create(
 			'pnw', this.pnw.compute( area, view ),
 			'pse', this.pse.compute( area, view ),
-			'a', view.scale( this.a ),
-			'b', view.scale( this.b )
+			'a', !fr ? view.scale( this.a ) : this.a,
+			'b', !fr ? view.scale( this.b ) : this.b
 		)
 	);
 };

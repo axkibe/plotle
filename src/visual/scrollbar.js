@@ -194,10 +194,11 @@ jion.lazyValue(
 
 	return(
 		euclid_anchor_roundRect.create(
-			'pnw', pnw.apnw.add( 0, sy ).add( -s05, 0 ),
-			'pse', pnw.apnw.add( 0, sy + map ).add( s05, 0 ),
+			'pnw', pnw.apnw.add( 0, sy ).fixPoint( -s05, 0 ),
+			'pse', pnw.apnw.add( 0, sy + map ).fixPoint( s05, 0 ),
 			'a', gruga_scrollbar.ellipseA,
-			'b', gruga_scrollbar.ellipseB
+			'b', gruga_scrollbar.ellipseB,
+			'fixRounds', true
 		)
 	);
 }

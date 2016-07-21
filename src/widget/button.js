@@ -44,7 +44,7 @@ if( JION )
 			{
 				comment : 'icon anchor shape',
 				type :
-					require( '../typemaps/anchorShape' )
+					require( '../euclid/anchor/typemap-shape' )
 					.concat( [ 'undefined' ] )
 			},
 			iconFacet :

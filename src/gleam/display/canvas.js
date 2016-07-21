@@ -938,12 +938,6 @@ prototype._sketchGenericShape =
 
 		switch( section.reflect )
 		{
-			case 'euclid_shape_fly' :
-
-				cx.moveTo( pn.x + twist, pn.y + twist );
-
-				break;
-
 			case 'euclid_shape_line' :
 
 				if( !section.fly || !twist )

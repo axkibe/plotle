@@ -311,6 +311,8 @@ prototype.review =
 
 /*
 | The zero based area of this view.
+|
+| FIXME simply call it area.
 */
 jion.lazyValue(
 	prototype,

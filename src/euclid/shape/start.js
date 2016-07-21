@@ -17,7 +17,7 @@ if( JION )
 			p :
 			{
 				comment : 'start here',
-				type : [ 'euclid_point', 'euclid_fixPoint' ]
+				type : [ 'euclid_point' ]
 			}
 		}
 	};

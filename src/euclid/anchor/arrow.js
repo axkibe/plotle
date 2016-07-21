@@ -26,14 +26,14 @@ if( JION )
 			{
 				comment : 'connect to this point or shape',
 				type :
-					require( '../../typemaps/anchorShape' )
+					require( './typemap-shape' )
 					.concat( [ 'euclid_anchor_point' ] )
 			},
 			joint2 :
 			{
 				comment : 'connect to this point or shape',
 				type :
-					require( '../../typemaps/anchorShape' )
+					require( './typemap-shape' )
 					.concat( [ 'euclid_anchor_point' ] )
 			}
 		}
@@ -159,9 +159,9 @@ prototype.compute =
 			ms = 2 / Math.sqrt(3) * arrowSize;
 
 			arrowBase =
-				p2.fixPoint(
-					-round( ms * Math.cos( d ) ),
-					-round( ms * Math.sin( d ) )
+				p2.add(
+					-view.scale( ms * Math.cos( d ) ),
+					-view.scale( ms * Math.sin( d ) )
 				);
 
 			sections.push(
@@ -169,21 +169,20 @@ prototype.compute =
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-round( arrowSize * Math.cos( d + ad ) ),
-							-round( arrowSize * Math.sin( d + ad ) )
+							-view.scale( arrowSize * Math.cos( d + ad ) ),
+							-view.scale( arrowSize * Math.sin( d + ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', p2 ),
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-round( arrowSize * Math.cos( d - ad ) ),
-							-round( arrowSize * Math.sin( d - ad ) )
+							-view.scale( arrowSize * Math.cos( d - ad ) ),
+							-view.scale( arrowSize * Math.sin( d - ad ) )
 						)
 				),
 				euclid_shape_line.create( 'p', arrowBase )
 			);
-
 
 			break;
 

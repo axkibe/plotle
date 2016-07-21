@@ -20,7 +20,7 @@ if( JION )
 			shape :
 			{
 				comment : 'the anchor shape to scale',
-				type : require( '../../typemaps/anchorShape' )
+				type : require( './typemap-shape' )
 			}
 		}
 	};

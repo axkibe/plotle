@@ -227,11 +227,6 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/fixPoint.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/euclid/rect.js',
 		'hasJion', true,
 		'inBundle', true,
@@ -352,11 +347,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shape/fly.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/euclid/shape/line.js',
 		'hasJion', true,
 		'inBundle', true
@@ -402,6 +392,16 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/euclid/anchor/point.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/fixPoint.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/euclid/anchor/minPoint.js',
 		'hasJion', true,
 		'inBundle', true
 	),
