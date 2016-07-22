@@ -27,12 +27,14 @@ if( JION )
 			x :
 			{
 				comment : 'x-distance',
-				type : 'number'
+				type : 'number',
+				defaultValue : '0'
 			},
 			y :
 			{
 				comment : 'y-distance',
-				type : 'number'
+				type : 'number',
+				defaultValue : '0'
 			}
 		}
 	};
@@ -122,6 +124,7 @@ prototype.compute =
 	var
 		pnw,
 		pse,
+		shape,
 		x,
 		y;
 
@@ -132,32 +135,47 @@ prototype.compute =
 /**/	if( view && view.reflect !== 'euclid_view' ) throw new Error( );
 /**/}
 
-	pnw = area.pnw;
+	shape = this.shape;
 
-	pse = area.pse;
+	if( !shape )
+	{
+		pnw = area.pnw;
 
-	if(
-		this.anchor === 'nw'
-		&& pnw.x === 0
-		&& pnw.y === 0
-		&& (
-			!view
-			|| (
-				view.pan.x === 0
-				&& view.pan.y === 0
-				&& view.fact === 0
+		pse = area.pse;
+
+		if(
+			this.anchor === 'nw'
+			&& pnw.x === 0
+			&& pnw.y === 0
+			&& (
+				!view
+				|| (
+					view.pan.x === 0
+					&& view.pan.y === 0
+					&& view.fact === 0
+				)
 			)
 		)
-	)
-	{
-		return this.euclidPoint;
+		{
+			return this.euclidPoint;
+		}
 	}
+	else
+	{
+		shape = this.shape.compute( area, view );
+
+		pnw = shape.pnw;
+
+		pse = shape.pse;
+	}
+
 
 	x = this.x;
 
 	y = this.y;
 
-	if( view )
+	// FIXME is view ever undefined?
+	if( view && !shape )
 	{
 		x = view.x( x );
 

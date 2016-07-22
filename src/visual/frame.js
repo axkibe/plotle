@@ -36,7 +36,6 @@ var
 	euclid_anchor_rect,
 	euclid_anchor_roundRect,
 	euclid_anchor_shapeRay,
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	gleam_glint_twig,
@@ -245,34 +244,34 @@ prototype.dragStart =
 		com = 'ne';
 		pBase = zone.psw;
 	}
-	else if( this._handleSeShape.within( p ) )
+	else if( this._vHandleSeShape.within( p ) )
 	{
 		com = 'se';
 		pBase = zone.pnw;
 	}
-	else if( this._handleSwShape.within( p ) )
+	else if( this._vHandleSwShape.within( p ) )
 	{
 		com = 'sw';
 		pBase = zone.pne;
 	}
 	else if( !this.proportional )
 	{
-		if( this._handleNShape.within( p ) )
+		if( this._vHandleNShape.within( p ) )
 		{
 			com = 'n';
 			pBase = zone.ps;
 		}
-		else if( this._handleEShape.within( p ) )
+		else if( this._vHandleEShape.within( p ) )
 		{
 			com = 'e';
 			pBase = zone.pw;
 		}
-		else if( this._handleSShape.within( p ) )
+		else if( this._vHandleSShape.within( p ) )
 		{
 			com = 's';
 			pBase = zone.pn;
 		}
-		else if( this._handleWShape.within( p ) )
+		else if( this._vHandleWShape.within( p ) )
 		{
 			com = 'w';
 			pBase = zone.pe;
@@ -379,16 +378,17 @@ prototype.pointingHover =
 
 	if( this._withinContentMask( p ) ) return;
 
+	// YYY XXX
 	if( this._vHandleNwShape.within( p ) ) com = 'nw';
 	else if( this._vHandleNeShape.within( p ) ) com = 'ne';
-	else if( this._handleSeShape.within( p ) ) com = 'se';
-	else if( this._handleSwShape.within( p ) ) com = 'sw';
+	else if( this._vHandleSeShape.within( p ) ) com = 'se';
+	else if( this._vHandleSwShape.within( p ) ) com = 'sw';
 	else if( !this.proportional )
 	{
-		if( this._handleNShape.within( p ) ) com = 'n';
-		if( this._handleEShape.within( p ) ) com = 'e';
-		if( this._handleSShape.within( p ) ) com = 's';
-		if( this._handleWShape.within( p ) ) com = 'w';
+		if( this._vHandleNShape.within( p ) ) com = 'n';
+		if( this._vHandleEShape.within( p ) ) com = 'e';
+		if( this._vHandleSShape.within( p ) ) com = 's';
+		if( this._vHandleWShape.within( p ) ) com = 'w';
 	}
 
 	if( com )
@@ -498,19 +498,19 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPn;
+		pn;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	oPn = this._vOuterZone.pn; // XXX
+	pn = this._outerZone.pn;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPn.add( -handleSize2, 0 ),
-			'pse', oPn.add( handleSize2, handleSize )
+		euclid_anchor_ellipse.create(
+			'pnw', pn.fixPoint( -handleSize2, 0 ),
+			'pse', pn.fixPoint( handleSize2, handleSize )
 		)
 	);
 }
@@ -547,22 +547,12 @@ jion.lazyValue(
 	var
 		pne;
 
-	pne = this._ozPne;
+	pne = this._outerZone.pne;
 
 	return(
 		euclid_anchor_ellipse.create(
-			'pnw',
-				euclid_anchor_fixPoint.create(
-					'anchor', pne,
-					'x', -handleSize,
-					'y', 0
-				),
-			'pse',
-				euclid_anchor_fixPoint.create(
-					'anchor', pne,
-					'x', 0,
-					'y', handleSize
-				)
+			'pnw', pne.fixPoint( -handleSize, 0 ),
+			'pse', pne.fixPoint( 0, handleSize )
 		)
 	);
 }
@@ -677,19 +667,19 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPe;
+		pe;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	oPe = this._vOuterZone.pe; // XXX
+	pe = this._outerZone.pe;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPe.add( -handleSize, -handleSize2 ),
-			'pse', oPe.add( 0, handleSize2 )
+		euclid_anchor_ellipse.create(
+			'pnw', pe.fixPoint( -handleSize, -handleSize / 2 ),
+			'pse', pe.fixPoint( 0, handleSize / 2 )
 		)
 	);
 }
@@ -724,19 +714,19 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPs;
+		ps;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	oPs = this._vOuterZone.ps; // XXX
+	ps = this._outerZone.ps;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPs.add( -handleSize2, -handleSize ),
-			'pse', oPs.add( handleSize2, 0 )
+		euclid_anchor_ellipse.create(
+			'pnw', ps.fixPoint( -handleSize2, -handleSize ),
+			'pse', ps.fixPoint( handleSize2, 0 )
 		)
 	);
 }
@@ -771,14 +761,14 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPse;
+		pse;
 
-	oPse = this._vOuterZone.pse; // XXX
+	pse = this._outerZone.pse;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPse.add( -handleSize, -handleSize ),
-			'pse', oPse
+		euclid_anchor_ellipse.create(
+			'pnw', pse.fixPoint( -handleSize, -handleSize ),
+			'pse', pse
 		)
 	);
 }
@@ -813,14 +803,14 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPsw;
+		psw;
 
-	oPsw = this._vOuterZone.psw; // XXX
+	psw = this._outerZone.psw;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPsw.add(  0, -handleSize ),
-			'pse', oPsw.add(  handleSize , 0 )
+		euclid_anchor_ellipse.create(
+			'pnw', psw.fixPoint( 0, -handleSize ),
+			'pse', psw.fixPoint( handleSize, 0 )
 		)
 	);
 }
@@ -855,19 +845,19 @@ jion.lazyValue(
 	function( )
 {
 	var
-		oPw;
+		pw;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	oPw = this._vOuterZone.pw; // XXX
+	pw = this._outerZone.pw;
 
 	return(
-		euclid_ellipse.create(
-			'pnw', oPw.add( 0, -handleSize2 ),
-			'pse', oPw.add( handleSize, handleSize2 )
+		euclid_anchor_ellipse.create(
+			'pnw', pw.fixPoint( 0, -handleSize2 ),
+			'pse', pw.fixPoint( handleSize, handleSize2 )
 		)
 	);
 }
@@ -961,102 +951,6 @@ jion.lazyValue(
 );
 
 
-/*
-| Outer zone point in north east
-| FUTURE this isn't elegant.
-| replace with an anchor logic that
-| allows to say "pne of this computed shape".
-*/
-jion.lazyValue(
-	prototype,
-	'_ozPne',
-	function( )
-{
-	var
-		dfw,
-		hw,
-		hh,
-		fw,
-		min,
-		pc,
-		view,
-		zone;
-
-	fw = gruga_frame.width;
-
-	view = this.view; // FIXME remove
-
-	dfw = fw / view.zoom;
-
-	zone = this.zone;
-
-	pc = zone.pc.apnw,
-
-	hw = zone.width / 2;
-
-	hh = zone.height / 2;
-
-	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
-
-	return(
-		euclid_anchor_minPoint.create(
-			'anchor', pc,
-			'x', hw + dfw,
-			'y', -hh - dfw,
-			'minx', min,
-			'miny', -min
-		)
-	);
-}
-);
-
-
-/*
-| Outer zone point in north east
-| FUTURE this isn't elegant.
-*/
-jion.lazyValue(
-	prototype,
-	'_ozPsw',
-	function( )
-{
-	var
-		dfw,
-		hw,
-		hh,
-		fw,
-		min,
-		pc,
-		view,
-		zone;
-
-	fw = gruga_frame.width;
-
-	view = this.view; // FIXME remove
-
-	dfw = fw / view.zoom;
-
-	zone = this.zone;
-
-	pc = zone.pc.apnw,
-
-	hw = zone.width / 2;
-
-	hh = zone.height / 2;
-
-	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
-
-	return(
-		euclid_anchor_minPoint.create(
-			'anchor', pc,
-			'x', - hw - dfw,
-			'y', hh + dfw,
-			'minx', -min,
-			'miny', min
-		)
-	);
-}
-);
 
 
 /*

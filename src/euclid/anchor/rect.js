@@ -31,7 +31,8 @@ var
 	euclid_anchor_border,
 	euclid_anchor_point,
 	euclid_anchor_rect,
-	euclid_rect;
+	euclid_rect,
+	jion;
 
 /*
 | Capsule
@@ -98,6 +99,114 @@ euclid_anchor_rect.full =
 		'pnw', euclid_anchor_point.nw,
 		'pse', euclid_anchor_point.seMin1
 	);
+
+
+/*
+| Point in east.
+*/
+jion.lazyValue(
+	prototype,
+	'pe',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'e',
+			'shape', this
+		)
+	);
+}
+);
+
+
+/*
+| Point in north.
+*/
+jion.lazyValue(
+	prototype,
+	'pn',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'n',
+			'shape', this
+		)
+	);
+}
+);
+
+
+/*
+| Point in north east.
+*/
+jion.lazyValue(
+	prototype,
+	'pne',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'ne',
+			'shape', this
+		)
+	);
+}
+);
+
+
+/*
+| Point in south.
+*/
+jion.lazyValue(
+	prototype,
+	'ps',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 's',
+			'shape', this
+		)
+	);
+}
+);
+
+
+/*
+| Point in south west.
+*/
+jion.lazyValue(
+	prototype,
+	'psw',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'sw',
+			'shape', this
+		)
+	);
+}
+);
+
+
+/*
+| Point in west.
+*/
+jion.lazyValue(
+	prototype,
+	'pw',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'w',
+			'shape', this
+		)
+	);
+}
+);
 
 
 })( );
