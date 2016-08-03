@@ -30,7 +30,8 @@ if( JION )
 			shape :
 			{
 				comment : 'the shape(ray) to mask to',
-				type : require( '../../euclid/anchor/typemap-shape' )
+				type :
+					require( '../../euclid/anchor/typemap-shape' )
 			}
 		}
 	};

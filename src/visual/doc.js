@@ -75,17 +75,17 @@ if( JION )
 
 
 var
+	euclid_anchor_point,
+	euclid_anchor_shape,
+	euclid_anchor_shapeRay,
+	euclid_anchor_shape_start,
+	euclid_anchor_shape_line,
 	euclid_point,
 	euclid_rect,
-	euclid_shape,
-	euclid_shapeRay,
-	euclid_shape_start,
-	euclid_shape_line,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gruga_selection,
 	jion,
-	math_half,
 	root,
 	shell_fontPool,
 	shell_settings,
@@ -236,66 +236,6 @@ jion.lazyValue(
 
 
 /*
-| Displays the document.
-*/
-/*
-prototype.draw =
-	function(
-		display     // to display within
-	)
-{
-	var
-		mark,
-		para,
-		p,
-		r,
-		rZ,
-		sy;
-
-	if( CHECK )
-	{
-		if( arguments.length !== 1 ) throw new Error( );
-
-		// mark sanity check cannot be done in _init
-		// since it might be temporarily outOfOrder during update operation
-		if( this.mark && this.mark.hasCaret )
-		{
-			if( !this.get( this.mark.caret.path.get( 5 ) ) )
-			{
-				throw new Error( );
-			}
-		}
-	}
-
-	mark = this.mark;
-
-	sy = Math.round( this.scrollPos.y );
-
-	if(
-		mark
-		&& mark.reflect === 'visual_mark_range'
-		&& mark.containsPath( this.path.limit( 3 ) )
-	)
-	{
-		display.paint(
-			gruga_selection,
-			this._rangeShape.inView( this.view )
-		);
-	}
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		para = this.atRank( r );
-
-		p = para.pnw.sub( 0, sy );
-
-		para.draw( display );
-	}
-};
-*/
-
-
-/*
 | The default font for the document.
 */
 jion.lazyValue(
@@ -431,7 +371,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', gruga_selection,
 						'key', ':selection',
-						'shape', this._rangeShape.inView( this.view.home )
+						'shape', this._rangeShape
 					)
 			);
 	}
@@ -551,6 +491,7 @@ jion.lazyValue(
 	function( )
 {
 	var
+		apnw,
 		ascend,
 		b2Key,
 		b2Para,
@@ -591,6 +532,8 @@ jion.lazyValue(
 /**/	if( mark.reflect !== 'visual_mark_range' ) throw new Error( );
 /**/}
 
+	apnw = euclid_anchor_point.nw;
+
 	frontMark = mark.frontMark;
 
 	backMark = mark.backMark;
@@ -607,9 +550,9 @@ jion.lazyValue(
 
 	backPnw = backPara.pnw;
 
-	fp = frontPara.locateOffsetPoint( frontMark.at );
+	fp = frontPara.locateOffsetPoint( frontMark.at ).apnw;
 
-	bp = backPara.locateOffsetPoint( backMark.at );
+	bp = backPara.locateOffsetPoint( backMark.at ).apnw;
 
 	fLine = frontPara.locateOffsetLine( frontMark.at );
 
@@ -652,20 +595,20 @@ jion.lazyValue(
 
 		sections =
 		[
-			euclid_shape_start.create( 'p', fp.add( 0, descend ) ),
-			euclid_shape_line.create( 'p', fp.add( 0, -ascend ) ),
-			euclid_shape_line.create( 'p', bp.add( 0, -ascend ) ),
-			euclid_shape_line.create( 'p', bp.add( 0, descend ) ),
-			euclid_shape_line.create( 'close', true )
+			euclid_anchor_shape_start.create( 'p', fp.add( 0, descend ) ),
+			euclid_anchor_shape_line.create( 'p', fp.add( 0, -ascend ) ),
+			euclid_anchor_shape_line.create( 'p', bp.add( 0, -ascend ) ),
+			euclid_anchor_shape_line.create( 'p', bp.add( 0, descend ) ),
+			euclid_anchor_shape_line.create( 'close', true )
 		];
 
 		return(
-			euclid_shape.create(
+			euclid_anchor_shape.create(
 				'ray:init', sections,
 				'pc',
-					euclid_point.create(
-						'x', math_half( fp.x + bp.x ),
-						'y', math_half( fp.y + bp.y )
+					apnw.create(
+						'x', ( fp.x + bp.x ) / 2,
+						'y', ( fp.y + bp.y ) / 2
 					)
 			)
 		);
@@ -689,59 +632,59 @@ jion.lazyValue(
 
 		sections =
 		[
-			euclid_shape_start.create(
-				'p', euclid_point.create( 'x', rx, 'y', fp.y - ascend )
+			euclid_anchor_shape_start.create(
+				'p', apnw.create( 'x', rx, 'y', fp.y - ascend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', fp.x, 'y', fp.y - ascend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', fp.x, 'y', fp.y - ascend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', fp.x, 'y', fp.y + descend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', fp.x, 'y', fp.y + descend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', rx, 'y', fp.y + descend )
 			),
-			euclid_shape_line.create( 'close', true, 'fly', true )
+			euclid_anchor_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		sections2 =
 		[
-			euclid_shape_start.create(
-				'p', euclid_point.create( 'x', lx, 'y', bp.y - ascend )
+			euclid_anchor_shape_start.create(
+				'p', apnw.create( 'x', lx, 'y', bp.y - ascend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', bp.x, 'y', bp.y - ascend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', bp.x, 'y', bp.y - ascend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', bp.x, 'y', bp.y + descend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', bp.x, 'y', bp.y + descend )
 			),
-			euclid_shape_line.create(
-				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
+			euclid_anchor_shape_line.create(
+				'p', apnw.create( 'x', lx, 'y', bp.y + descend )
 			),
-			euclid_shape_line.create( 'close', true, 'fly', true )
+			euclid_anchor_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		shapes =
 		[
-			euclid_shape.create(
+			euclid_anchor_shape.create(
 				'ray:init', sections,
 				'pc',
-					euclid_point.create(
-						'x', math_half( fp.x + rx ),
-						'y', math_half( 2 * fp.y - ascend + descend )
+					apnw.create(
+						'x', ( fp.x + rx ) / 2,
+						'y', ( 2 * fp.y - ascend + descend ) / 2
 					)
 			),
-			euclid_shape.create(
+			euclid_anchor_shape.create(
 				'ray:init', sections2,
 				'pc',
-					euclid_point.create(
-						'x', math_half( fp.x + rx ),
-						'y', math_half( 2 * fp.y - ascend + descend )
+					apnw.create(
+						'x', ( fp.x + rx ) / 2,
+						'y', ( 2 * fp.y - ascend + descend ) / 2
 					)
 			)
 		];
 
-		return euclid_shapeRay.create( 'ray:init', shapes );
+		return euclid_anchor_shapeRay.create( 'ray:init', shapes );
 	}
 	else
 	{
@@ -755,28 +698,16 @@ jion.lazyValue(
 
 		if( fLine + 1 < frontFlow.length )
 		{
-			f2y =
-				Math.round(
-					frontFlow.get( fLine + 1 ).y
-					+ frontPnw.y
-				);
+			f2y = frontFlow.get( fLine + 1 ).y + frontPnw.y;
 		}
 		else
 		{
-			f2y =
-				Math.round(
-					f2Para.flow.get( 0 ).y
-					+ f2Para.pnw.y
-				);
+			f2y = f2Para.flow.get( 0 ).y + f2Para.pnw.y;
 		}
 
 		if( bLine > 0 )
 		{
-			b2y =
-				Math.round(
-					backFlow.get( bLine - 1 ).y
-					+ backPnw.y
-				);
+			b2y = backFlow.get( bLine - 1 ).y + backPnw.y;
 		}
 		else
 		{
@@ -787,10 +718,8 @@ jion.lazyValue(
 			b2Para = this.get( b2Key );
 
 			b2y =
-				Math.round(
-					b2Para.flow.get( b2Para.flow.length - 1 ).y
-					+ b2Para.pnw.y
-				);
+				b2Para.flow.get( b2Para.flow.length - 1 ).y
+				+ b2Para.pnw.y;
 		}
 
 
@@ -798,76 +727,76 @@ jion.lazyValue(
 		{
 			sections =
 			[
-				euclid_shape_start.create( // 1
+				euclid_anchor_shape_start.create( // 1
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', rx,
 						'y', b2y + descend
 					)
 				),
-				euclid_shape_line.create( // 2
+				euclid_anchor_shape_line.create( // 2
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', bp.x,
 						'y', b2y + descend
 					)
 				),
-				euclid_shape_line.create( // 3
+				euclid_anchor_shape_line.create( // 3
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', bp.x,
 						'y', bp.y + descend
 					)
 				),
-				euclid_shape_line.create( // 4
+				euclid_anchor_shape_line.create( // 4
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', lx,
 						'y', bp.y + descend
 					)
 				),
-				euclid_shape_line.create( // 5
+				euclid_anchor_shape_line.create( // 5
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', lx,
 						'y', f2y - ascend
 					),
 					'fly', true
 				),
-				euclid_shape_line.create( // 6
+				euclid_anchor_shape_line.create( // 6
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', fp.x,
 						'y', f2y - ascend
 					)
 				),
-				euclid_shape_line.create( // 7
+				euclid_anchor_shape_line.create( // 7
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', fp.x,
 						'y', fp.y - ascend
 					)
 				),
-				euclid_shape_line.create( // 8
+				euclid_anchor_shape_line.create( // 8
 					'p',
-					euclid_point.create(
+					apnw.create(
 						'x', rx,
 						'y', fp.y - ascend
 					)
 				),
-				euclid_shape_line.create(
+				euclid_anchor_shape_line.create(
 					'close', true,
 					'fly', true
 				)
 			];
 
 			return(
-				euclid_shape.create(
+				euclid_anchor_shape.create(
 					'ray:init', sections,
 					'pc',
-						euclid_point.create(
-							'x', math_half( rx + lx ),
-							'y', math_half( b2y + descend + f2y - ascend )
+						apnw.create(
+							'x', ( rx + lx ) / 2,
+							'y', ( b2y + descend + f2y - ascend ) / 2
 						)
 				)
 			);
@@ -876,62 +805,62 @@ jion.lazyValue(
 		{
 				sections =
 				[
-					euclid_shape_start.create( // 1
+					euclid_anchor_shape_start.create( // 1
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', rx,
 							'y', b2y + descend
 						)
 					),
-					euclid_shape_line.create( // 2
+					euclid_anchor_shape_line.create( // 2
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', bp.x,
 							'y', b2y + descend
 						)
 					),
-					euclid_shape_line.create( // 3
+					euclid_anchor_shape_line.create( // 3
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', bp.x,
 							'y', bp.y + descend
 						)
 					),
-					euclid_shape_line.create( // 4
+					euclid_anchor_shape_line.create( // 4
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', lx,
 							'y', bp.y + descend
 						)
 					),
-					euclid_shape_line.create( // 7
+					euclid_anchor_shape_line.create( // 7
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', lx,
 							'y', fp.y - ascend
 						),
 						'fly', true
 					),
-					euclid_shape_line.create( // 8
+					euclid_anchor_shape_line.create( // 8
 						'p',
-						euclid_point.create(
+						apnw.create(
 							'x', rx,
 							'y', fp.y - ascend
 						)
 					),
-					euclid_shape_line.create(
+					euclid_anchor_shape_line.create(
 						'close', true,
 						'fly', true
 					)
 				];
 
 			return(
-				euclid_shape.create(
+				euclid_anchor_shape.create(
 					'ray:init', sections,
 					'pc',
-						euclid_point.create(
-							'x', math_half( rx + lx ),
-							'y', math_half( b2y + descend + f2y - ascend )
+						apnw.create(
+							'x', ( rx + lx ) / 2,
+							'y', ( b2y + descend + f2y - ascend ) / 2
 						)
 				)
 			);

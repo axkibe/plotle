@@ -453,7 +453,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.vSilhoutte
+						'shape', this.aSilhoutte
 					)
 			);
 	}

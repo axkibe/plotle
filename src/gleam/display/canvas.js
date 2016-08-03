@@ -651,7 +651,7 @@ prototype._renderGlintTwig =
 
 						cx.lineTo( 0, 0 );
 					}
-	
+
 					if( shape.compute ) // FIXME
 					{
 						shape = shape.compute( this._area, view );
@@ -731,7 +731,7 @@ prototype._paint =
 		cx,
 		fill;
 
-	if( shape.reflect === 'euclid_shapeRay' )
+	if( shape.reflect === 'euclid_anchor_shapeRay' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
