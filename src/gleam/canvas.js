@@ -56,7 +56,6 @@ var
 	gleam_canvas,
 	euclid_point,
 	euclid_rect,
-	euclid_view,
 	jion,
 	math_half;
 

@@ -55,7 +55,6 @@ var
 	euclid_constants,
 	euclid_point,
 	euclid_rect,
-	euclid_view,
 	get2dContext,
 	gleam_glint_twig,
 	gleam_display_canvas,
