@@ -1493,46 +1493,6 @@ jion.lazyValue(
 
 /*
 | Draws everything.
-|
-| FUTURE GLINT remove
-*/
-prototype.classicDraw =
-	function( )
-{
-	var
-		display,
-		screen;
-
-/**/if( CHECK )
-/**/{
-/**/	if( this !== root )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( root._drawn ) return;
-
-	display = root.display;
-
-	display.clear( );
-
-	screen = root._currentScreen;
-
-	if( screen )
-	{
-		screen.draw( display );
-
-		if( screen.showDisc ) root.disc.draw( display );
-	}
-
-	root = root.create( '_drawn', true );
-};
-
-
-
-/*
-| Draws everything.
 */
 prototype.draw =
 	function( )
@@ -1542,12 +1502,6 @@ prototype.draw =
 		glint,
 		display,
 		screen;
-
-	// FUTURE GLINT remove
-	if( root.display.reflect === 'gleam_canvas' )
-	{
-		return this.classicDraw( );
-	}
 
 /**/if( CHECK )
 /**/{

@@ -11,9 +11,8 @@
 var
 	config,
 	euclid_view,
-//	gleam_canvas,
 	gleam_display_canvas,
-//	gleam_display_pixi,
+	gleam_impl,
 	euclid_point,
 	math_limit,
 	root,
@@ -24,9 +23,11 @@ var
 	transmitter;
 
 
-// FIXME remove impl
-var gleam_impl = gleam_display_canvas;
-//var gleam_impl = gleam_canvas;
+/*
+| Currently only canvas is supported as display backend.
+*/
+gleam_impl = gleam_display_canvas;
+
 
 /*
 | Capsule
