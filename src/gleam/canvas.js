@@ -1121,11 +1121,6 @@ gleam_canvas.prototype._sketchShape =
 				: ( ps.y < pc.y ? border : 0 )
 		);
 
-	if( ps.reflect === 'euclid_fixPoint' )
-	{
-		ps = ps.inView( euclid_view.proper );
-	}
-
 	pos = ps;
 
 	cx.moveTo( ps.x + twist, ps.y + twist );
@@ -1153,11 +1148,6 @@ gleam_canvas.prototype._sketchShape =
 		else
 		{
 			pn = section.p;
-
-			if( pn.reflect === 'euclid_fixPoint' )
-			{
-				pn = pn.inView( euclid_view.proper );
-			}
 
 			if( border !== 0 )
 			{

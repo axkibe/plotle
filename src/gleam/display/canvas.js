@@ -887,11 +887,6 @@ prototype._sketchGenericShape =
 				: ( ps.y < pc.y ? border : 0 )
 		);
 
-	if( ps.reflect === 'euclid_fixPoint' )
-	{
-		ps = ps.inView( euclid_view.proper );
-	}
-
 	pos = ps;
 
 	cx.moveTo( ps.x + twist, ps.y + twist );
@@ -916,11 +911,6 @@ prototype._sketchGenericShape =
 		else
 		{
 			pn = section.p;
-
-			if( pn.reflect === 'euclid_fixPoint' )
-			{
-				pn = pn.inView( euclid_view.proper );
-			}
 
 			if( border !== 0 )
 			{

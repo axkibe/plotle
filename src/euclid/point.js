@@ -31,7 +31,6 @@ if( JION )
 
 var
 	euclid_anchor_point,
-	euclid_fixPoint,
 	euclid_point,
 	euclid_rect,
 	jion;
@@ -155,26 +154,6 @@ prototype.createRectOfSize =
 		euclid_rect.create(
 			'pnw', this,
 			'pse', this.add( width, height )
-		)
-	);
-};
-
-
-
-/*
-| Creates a fix point anchored to this point.
-*/
-prototype.fixPoint =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		euclid_fixPoint.create(
-			'anchor', this,
-			'x', x,
-			'y', y
 		)
 	);
 };
