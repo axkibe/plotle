@@ -253,78 +253,70 @@ jion.lazyValue(
 	prototype,
 	'_display',
 	function( )
+{
+	var
+		a,
+		aZ,
+		b,
+		bZ,
+		f,
+		flow,
+		font,
+		line,
+		mark,
+		token,
+		view,
+		zoom;
+
+	flow = this.flow;
+
+	font = this.font;
+
+	mark = this.mark;
+
+	view = this.view;
+
+	zoom = view.zoom;
+
+	// adds to width so the caret gets visible.
+	f =
+		gleam_canvas.create(
+			'width', Math.round( flow.width * zoom + 5 ),
+			'height', Math.round( this.height * zoom + 1 )
+		);
+
+	f.scale( zoom );
+
+	// draws text into the display
+	for( a = 0, aZ = flow.length; a < aZ; a++ )
 	{
-		var
-			a,
-			aZ,
-			b,
-			bZ,
-			f,
-			flow,
-			font,
-			line,
-			mark,
-			token,
-			view,
-			zoom;
+		line = flow.get( a );
 
-		flow = this.flow;
+		for( b = 0, bZ = line.length; b < bZ; b++ )
+		{
+			token = line.get( b );
 
-		font = this.font;
-
-		mark = this.mark;
-
-		view = this.view;
-
-		zoom = view.zoom;
-
-		// adds to width so the caret gets visible.
-		f =
-			gleam_canvas.create(
-				'width', Math.round( flow.width * zoom + 5 ),
-				'height', Math.round( this.height * zoom + 1 )
+			f.paintText(
+				'text', token.text,
+				'xy', token.x, line.y,
+				'font', font
 			);
-
-		f.scale( zoom );
-
-		// draws text into the display
-		for(
-			a = 0, aZ = flow.length;
-			a < aZ;
-			a++
-		)
-		{
-			line = flow.get( a );
-
-			for(
-				b = 0, bZ = line.length;
-				b < bZ;
-				b++
-			)
-			{
-				token = line.get( b );
-
-				f.paintText(
-					'text', token.text,
-					'xy', token.x, line.y,
-					'font', font
-				);
-			}
 		}
-
-		f.scale( 1 / zoom );
-
-		if(
-			mark
-			&& mark.reflect === 'visual_mark_caret'
-			&& mark.focus
-		)
-		{
-			this._drawCaret( f );
-		}
-
-		return f;
 	}
+
+	f.scale( 1 / zoom );
+
+	if(
+		mark
+		&& mark.reflect === 'visual_mark_caret'
+		&& mark.focus
+	)
+	{
+		this._drawCaret( f );
+	}
+
+	return f;
+}
 );
 
 
@@ -584,10 +576,7 @@ prototype.getOffsetAt =
 		token = line.get( --tn );
 	}
 
-	if( !token )
-	{
-		return 0;
-	}
+	if( !token ) return 0;
 
 	dx = x - token.x;
 
@@ -597,20 +586,13 @@ prototype.getOffsetAt =
 
 	x2 = 0;
 
-	for(
-		a = 0;
-		a <= text.length;
-		a++
-	)
+	for( a = 0; a <= text.length; a++ )
 	{
 		x1 = x2;
 
 		x2 = euclid_measure.width( font, text.substr( 0, a ) );
 
-		if( x2 >= dx )
-		{
-			break;
-		}
+		if( x2 >= dx ) break;
 	}
 
 	if( a > text.length )
@@ -725,14 +707,14 @@ jion.lazyFunctionInteger(
 	function(
 		offset
 	)
-	{
-		this._locateOffset( offset );
+{
+	this._locateOffset( offset );
 
-		// this is not recursive, it returns
-		// the aheaded value set by _locateOffset
+	// this is not recursive, it returns
+	// the aheaded value set by _locateOffset
 
-		return this.locateOffsetLine( offset );
-	}
+	return this.locateOffsetLine( offset );
+}
 );
 
 
@@ -745,14 +727,14 @@ jion.lazyFunctionInteger(
 	function(
 		offset
 	)
-	{
-		this._locateOffset( offset );
+{
+	this._locateOffset( offset );
 
-		// this is not recursive, it returns
-		// the aheaded value set by _locateOffset
+	// this is not recursive, it returns
+	// the aheaded value set by _locateOffset
 
-		return this.locateOffsetPoint( offset );
-	}
+	return this.locateOffsetPoint( offset );
+}
 );
 
 
@@ -864,9 +846,9 @@ jion.lazyValue(
 	prototype,
 	'textPath',
 	function( )
-	{
-		return this.path.append( 'text' );
-	}
+{
+	return this.path.append( 'text' );
+}
 );
 
 
@@ -1114,8 +1096,6 @@ prototype._keyLeft =
 		ve = doc.atRank( r - 1 );
 
 		ve._setMark( ve.text.length, undefined, beginMark, doc );
-
-		return;
 	}
 	else
 	{
@@ -1333,10 +1313,7 @@ prototype._locateOffset =
 		lineN++
 	)
 	{
-		if( flow.get( lineN + 1 ).offset > offset )
-		{
-			break;
-		}
+		if( flow.get( lineN + 1 ).offset > offset ) break;
 	}
 
 	line = flow.get( lineN );
