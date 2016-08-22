@@ -35,6 +35,8 @@ if( JION )
 
 
 var
+	jion,
+	gleam_color,
 	gleam_facet;
 
 
@@ -58,5 +60,22 @@ var
 
 prototype = gleam_facet.prototype;
 
+
+/*
+| A simple black fill.
+*/
+jion.lazyStaticValue(
+	gleam_facet,
+	'blackFill',
+	function( )
+{
+	return(
+		gleam_facet.create(
+			'fill', gleam_color.black
+		)
+
+	);
+}
+);
 
 })( );

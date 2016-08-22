@@ -72,7 +72,13 @@ var
 	change_join,
 	change_remove,
 	change_split,
-	gleam_canvas,
+	euclid_anchor_point,
+	euclid_anchor_rect,
+	gleam_display_canvas,
+	gleam_facet,
+	gleam_glint_paint,
+	gleam_glint_text,
+	gleam_glint_twig,
 	gleam_glint_window,
 	euclid_measure,
 	euclid_point,
@@ -259,10 +265,11 @@ jion.lazyValue(
 		aZ,
 		b,
 		bZ,
-		f,
 		flow,
 		font,
+		glint,
 		line,
+		lineKey,
 		mark,
 		token,
 		view,
@@ -278,33 +285,40 @@ jion.lazyValue(
 
 	zoom = view.zoom;
 
-	// adds to width so the caret gets visible.
-	f =
-		gleam_canvas.create(
-			'width', Math.round( flow.width * zoom + 5 ),
-			'height', Math.round( this.height * zoom + 1 )
+	// draws text into the display
+
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root'
 		);
 
-	f.scale( zoom );
-
-	// draws text into the display
+	// FIXME create the glint in one go
 	for( a = 0, aZ = flow.length; a < aZ; a++ )
 	{
 		line = flow.get( a );
+
+		lineKey = '' + a + '_';
 
 		for( b = 0, bZ = line.length; b < bZ; b++ )
 		{
 			token = line.get( b );
 
-			f.paintText(
-				'text', token.text,
-				'xy', token.x, line.y,
-				'font', font
-			);
+			glint =
+				glint.create(
+					'twine:set+',
+						gleam_glint_text.create(
+							'font', font,
+							'key', lineKey + b,
+							'p',
+								euclid_anchor_point.nw.create(
+									'x', token.x,
+									'y', line.y
+								),
+							'text', token.text
+						)
+				);
 		}
 	}
-
-	f.scale( 1 / zoom );
 
 	if(
 		mark
@@ -312,63 +326,78 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		this._drawCaret( f );
+		glint = glint.create( 'twine:set+', this._caretGlint );
 	}
 
-	return f;
+	return(
+		gleam_display_canvas.create(
+			'glint', glint,
+			'view',
+				this.view.create(
+					'pan', euclid_point.zero,
+					// FIXME Math.ceiling
+					'height', Math.round( this.height * zoom + 1 ),
+					// adds to width so the caret gets visible.
+					'width', Math.round( flow.width * zoom + 5 )
+				)
+		)
+	);
 }
 );
 
 
 /*
-| Draws the paragraph in a display.
+| Glint for the caret.
+|
+| FUTURE this could be part for doc.
 */
-prototype.draw =
-	function(
-		display // the display to draw upon
-	)
-{
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.pnw.inView( this.view )
-	);
-};
-
-
-/*
-| Draws the caret.
-*/
-prototype._drawCaret =
-	function(
-		display
-	)
+jion.lazyValue(
+	prototype,
+	'_caretGlint',
+	function( )
 {
 	var
 		descend,
 		n,
 		p,
-		s,
-		view;
-
-	view = this.view;
+		pnw,
+		pse,
+		s;
 
 	descend = this.fontsize * shell_settings.bottombox;
 
+	// FIXME simplify
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
-	s = Math.round( p.y + descend );
+	s = p.y + descend;
 
-	n = s - Math.round( this.fontsize + descend );
+	n = s - ( this.fontsize + descend );
 
-	// displays the caret
-	display.fillRect(
-		'black',
-		view.scale( p.x ),
-		view.scale( n ),
-		1,
-		view.scale( s - n )
+	pnw =
+		euclid_anchor_point.nw.create(
+			'x', p.x,
+			'y', n
+		);
+
+	pse =
+		pnw.create(
+			'x', pnw.x + 1,
+			'y', s
+		);
+
+	return(
+		gleam_glint_paint.create(
+			'facet', gleam_facet.blackFill,
+			'key', ':caret',
+			'shape',
+				euclid_anchor_rect.create(
+					'pnw', pnw,
+					'pse', pse
+				)
+		)
 	);
-};
+}
+);
 
 
 /*
