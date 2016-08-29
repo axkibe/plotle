@@ -526,13 +526,14 @@ prototype._init =
 				'user', user,
 				'view', view
 			);
-
+		
 		this.disc =
 			this.disc.create(
 				'access', access,
 				'action', action,
 				'controlView',
 					view.create(
+						'fact', 0,
 						'zoom',
 							Math.min(
 							  view.height / gruga_controls.designSize.height,

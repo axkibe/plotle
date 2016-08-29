@@ -82,6 +82,7 @@ if( JION )
 				type : 'string',
 				defaultValue : '""'
 			},
+			// FIXME simply call it testPos
 			textDesignPos :
 			{
 				comment : 'designed position of the text',
@@ -115,7 +116,11 @@ if( JION )
 
 
 var
-	gleam_canvas,
+	euclid_point,
+	gleam_display_canvas,
+	gleam_glint_paint,
+	gleam_glint_text,
+	gleam_glint_twig,
 	gleam_glint_window,
 	jion,
 	result_hover,
@@ -169,6 +174,7 @@ prototype._init =
 
 		if( this.iconAnchorShape )
 		{
+			// FIXME remove
 			this._iconShape =
 				this.iconAnchorShape.compute( area.zeroPnw, view );
 		}
@@ -337,19 +343,6 @@ prototype.specialKey =
 
 
 /*
-| The computed position of the button text.
-*/
-jion.lazyValue(
-	prototype,
-	'textPos',
-	function( )
-{
-	return this.textDesignPos.compute( this.area.zeroPnw, this.view );
-}
-);
-
-
-/*
 | The button's display.
 */
 jion.lazyValue(
@@ -358,21 +351,14 @@ jion.lazyValue(
 	function( )
 {
 	var
-		a,
-		display,
 		facet,
 		font,
+		glint,
 		newline,
 		text,
+		t,
 		tZ,
-		x,
 		y;
-
-	display =
-		gleam_canvas.create(
-			'width', this.area.width,
-			'height', this.area.height
-		);
 
 	facet =
 		this.facets.getFacet(
@@ -381,7 +367,16 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	display.paint( facet, this._shape );
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+				gleam_glint_paint.create(
+					'facet', facet,
+					'key', ':paint',
+					'shape', this.shape
+				)
+		);
 
 	if( this.text )
 	{
@@ -391,41 +386,68 @@ jion.lazyValue(
 
 		if( newline === undefined )
 		{
-			display.paintText(
-				'text', this.text,
-				'p', this.textPos,
-				'font', font,
-				'rotate', this.textRotation
-			);
+			glint =
+				glint.create(
+					'twine:set+',
+						gleam_glint_text.create(
+							'font', font,
+							'key', ':text',
+							'p', this.textDesignPos,
+							'rotate', this.textRotation,
+							'text', this.text
+						)
+				);
 		}
 		else
 		{
-			newline = this.view.scale( newline );
-
-			x = this.textPos.x;
-
-			y = this.textPos.y;
-
 			text = this.text.split( '\n' );
 
 			tZ = text.length;
 
-			y -= Math.round( ( tZ - 1 ) / 2 * newline );
+			newline = this.view.scale( newline );
 
-			for( a = 0; a < tZ; a++, y += newline )
+			y = - ( tZ - 1 ) / 2 * newline;
+
+			for( t = 0; t < tZ; t++, y += newline )
 			{
-				display.paintText(
-					'text', text[ a ],
-					'xy', x, y,
-					'font', font
-				);
+				glint =
+					glint.create(
+						'twine:set+',
+							gleam_glint_text.create(
+								'font', font,
+								'key', ':text' + t,
+								'p', this.textDesignPos.add( 0, y ),
+								'text', text[ t ]
+							)
+					);
 			}
 		}
 	}
 
-	if( this._iconShape ) display.paint( this.iconFacet, this._iconShape );
+	if( this.iconAnchorShape )
+	{
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_paint.create(
+						'facet', this.iconFacet,
+						'key', ':icon',
+						'shape', this.iconAnchorShape
+					)
+			);
+	}
 
-	return display;
+	return(
+		gleam_display_canvas.create(
+			'glint', glint,
+			'view',
+				this.view.create(
+					'pan', euclid_point.zero,
+					'height', this.area.height,
+					'width', this.area.width
+				)
+		)
+	);
 }
 );
 

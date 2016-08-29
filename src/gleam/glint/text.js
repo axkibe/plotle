@@ -31,6 +31,11 @@ if( JION )
 			{
 				comment : 'text to display',
 				type : 'string'
+			},
+			rotate :
+			{
+				comment : 'if defined rotation in radiant',
+				type : [ 'undefined', 'number' ]
 			}
 		}
 	};

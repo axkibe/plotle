@@ -293,11 +293,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/canvas.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/gleam/display/canvas.js',
 		'hasJion', true,
 		'inBundle', true

@@ -76,7 +76,7 @@ var
 	euclid_anchor_rect,
 	gleam_display_canvas,
 	gleam_facet,
-	gleam_glint_paint,
+	gleam_glint_fill,
 	gleam_glint_text,
 	gleam_glint_twig,
 	gleam_glint_window,
@@ -386,7 +386,7 @@ jion.lazyValue(
 		);
 
 	return(
-		gleam_glint_paint.create(
+		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'key', ':caret',
 			'shape',

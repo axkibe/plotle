@@ -528,13 +528,17 @@ prototype._renderGlintTwig =
 		a,
 		aZ,
 		cx,
+		det,
 		g,
 		h,
 		p,
 		r,
+		rotate,
 		rZ,
 		sa,
 		shape,
+		t1,
+		t2,
 		w;
 
 	cx = this._cx;
@@ -549,11 +553,15 @@ prototype._renderGlintTwig =
 		{
 			case 'gleam_glint_border' :
 
+				cx.beginPath( );
+
 				this._borders( g.facet.border, g.shape, view );
 
 				break;
 
 			case 'gleam_glint_fill' :
+
+				cx.beginPath( );
 
 				this._fill( g.facet.fill, g.shape, view );
 
@@ -571,7 +579,38 @@ prototype._renderGlintTwig =
 
 				p = g.p.compute( this._area, view );
 
-				cx.fillText( g.text, p.x, p.y );
+				rotate = g.rotate;
+
+				if( rotate === undefined )
+				{
+					cx.fillText( g.text, p.x, p.y );
+				}
+				else
+				{
+					t1 = Math.cos( rotate );
+
+					t2 = Math.sin( rotate );
+
+					det = t1 * t1 + t2 * t2;
+
+					cx.setTransform(
+						t1, t2,
+						-t2, t1,
+						0, 0
+					);
+
+					cx.fillText(
+						g.text,
+						( p.x * t1 + p.y * t2 ) / det,
+						( p.y * t1 - p.x * t2 ) / det
+					);
+
+					cx.setTransform(
+						1, 0,
+						0, 1,
+						0, 0
+					);
+				}
 
 				break;
 

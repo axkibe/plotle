@@ -86,13 +86,19 @@ if( JION )
 
 
 var
-	gleam_color,
-	gleam_canvas,
+	gleam_facet,
+	gleam_display_canvas,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_text,
+	gleam_glint_twig,
 	gleam_glint_window,
-	euclid_ellipse,
+	euclid_anchor_ellipse,
+	euclid_anchor_point,
+	euclid_anchor_rect,
+	euclid_anchor_roundRect,
 	euclid_measure,
 	euclid_point,
-	euclid_roundRect,
 	jion,
 	result_hover,
 	root,
@@ -139,9 +145,9 @@ prototype._init =
 			this.designArea.compute( this.superArea );
 
 		this._shape =
-			euclid_roundRect.create(
-				'pnw', euclid_point.zero,
-				'pse', area.pse.sub( area.pnw ),
+			euclid_anchor_roundRect.create(
+				'pnw', euclid_point.zero.apnw,
+				'pse', area.pse.sub( area.pnw ).apnw,
 				'a', 7,
 				'b', 3
 			);
@@ -223,7 +229,7 @@ prototype.click =
 
 	pp = p.sub( this.area.pnw );
 
-	if( !this._shape.within( pp ) ) return undefined;
+	if( !this._vShape.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',
@@ -411,7 +417,7 @@ prototype.pointingHover =
 {
 	if(
 		!this.area.within( p )
-		|| !this._shape.within( p.sub( this.area.pnw ) )
+		|| !this._vShape.within( p.sub( this.area.pnw ) )
 	)
 	{
 		return undefined;
@@ -460,6 +466,54 @@ prototype.specialKey =
 
 
 /*
+| Glint for the caret.
+*/
+jion.lazyValue(
+	prototype,
+	'_caretGlint',
+	function( )
+{
+	var
+		descend,
+		fs,
+		n,
+		p,
+		s;
+
+	fs = this.font.size;
+
+	descend = fs * shell_settings.bottombox;
+
+	p = this.locateOffsetPoint( this.mark.caret.at );
+
+	s = p.y + descend + 1;
+
+	n = s - ( fs + descend );
+
+	return(
+		gleam_glint_fill.create(
+			'facet', gleam_facet.blackFill,
+			'key', ':caret',
+			'shape',
+				euclid_anchor_rect.create(
+					'pnw',
+						euclid_anchor_point.nw.create(
+							'x', p.x,
+							'y', n
+						),
+					'pse',
+						euclid_anchor_point.nw.create(
+							'x', p.x + 1,
+							'y', s
+						)
+				)
+		)
+	);
+}
+);
+
+
+/*
 | Returns the display for the input field.
 */
 jion.lazyValue(
@@ -470,9 +524,9 @@ jion.lazyValue(
 	var
 		a,
 		aZ,
-		display,
 		facet,
 		font,
+		glint,
 		mark,
 		pitch,
 		pm,
@@ -487,21 +541,24 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	display =
-		gleam_canvas.create(
-			'width', shape.width + 1,
-			'height', shape.height + 1
-		);
-
 	facet =
 		this.facets.getFacet(
 			'hover', false, // FUTURE
 			'focus', !!this.mark
 		);
 
-	font = this.font;
+	glint =
+		gleam_glint_twig.create(
+			'key', 'root',
+			'twine:set+',
+				gleam_glint_fill.create(
+					'facet', facet,
+					'key', ':fill',
+					'shape', shape
+				)
+		);
 
-	display.fill( facet.fill, shape );
+	font = this.font;
 
 	if( this.password )
 	{
@@ -509,18 +566,34 @@ jion.lazyValue(
 
 		for( a = 0, aZ = pm.length; a < aZ; a++ )
 		{
-			display.fill( gleam_color.black, pm[ a ] );
+			glint =
+				glint.create(
+					'twine:set+',
+						gleam_glint_fill.create(
+							'facet', gleam_facet.blackFill,
+							'key', ':password' + a,
+							'shape', pm[ a ]
+						)
+				);
 		}
 	}
 	else
 	{
-		display.paintText(
-			'text', value,
-			'xy', pitch.x, font.size + pitch.y,
-			'font', font
-		);
+		glint =
+			glint.create(
+				'twine:set+',
+					gleam_glint_text.create(
+						'font', font,
+						'key', ':text',
+						'p',
+							euclid_anchor_point.nw.create(
+								'x', pitch.x,
+								'y', font.size + pitch.y
+							),
+						'text', value
+				)
+			);
 	}
-
 
 	if(
 		mark
@@ -528,50 +601,35 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		this._drawCaret( display );
+		glint =
+			glint.create(
+				'twine:set+', this._caretGlint
+			);
 	}
 
-	display.border( facet.border, shape );
+	glint =
+		glint.create(
+			'twine:set+',
+				gleam_glint_border.create(
+					'facet', facet,
+					'key', ':border',
+					'shape', shape
+				)
+		);
 
-	return display;
+	return(
+		gleam_display_canvas.create(
+			'glint', glint,
+			'view',
+				this.view.create(
+					'pan', euclid_point.zero,
+					'height', shape.pse.y + 1,
+					'width', shape.pse.x + 1
+				)
+		)
+	);
 }
 );
-
-
-/*
-| Draws the caret
-*/
-prototype._drawCaret =
-	function(
-		display
-	)
-{
-	// draws the caret
-	var
-		descend,
-		fs,
-		n,
-		p,
-		s;
-
-	fs = this.font.size;
-
-	descend = fs * shell_settings.bottombox;
-
-	p = this.locateOffsetPoint( this.mark.caret.at );
-
-	s = Math.round( p.y + descend + 1 );
-
-	n = s - Math.round( fs + descend );
-
-	display.fillRect(
-		'black',
-		p.x,
-		n,
-		1,
-		s - n
-	);
-};
 
 
 /*
@@ -824,57 +882,72 @@ jion.lazyValue(
 	prototype,
 	'_passMask',
 	function( )
+{
+	var
+		a,
+		aZ,
+		h,
+		k,
+		pitch,
+		pm,
+		size,
+		value,
+		w,
+		x,
+		y;
+
+	value = this.value;
+
+	size = this.font.size;
+
+	pm = [ ];
+
+	pitch = this._pitch;
+
+	x = pitch.x;
+
+	y =	pitch.y + Math.round( size * 0.7 );
+
+	h = Math.round( size * 0.32 ),
+
+	w = this.maskWidth( size );
+
+	k = this.maskKern( size );
+
+	for( a = 0, aZ = value.length; a < aZ; a++, x += w + k )
 	{
-		var
-			a,
-			aZ,
-			h,
-			k,
-			pitch,
-			pm,
-			size,
-			value,
-			w,
-			x,
-			y;
-
-		value = this.value;
-
-		size = this.font.size;
-
-		pm = [ ];
-
-		pitch = this._pitch;
-
-		x = pitch.x;
-
-		y =	pitch.y + Math.round( size * 0.7 );
-
-		h = Math.round( size * 0.32 ),
-
-		w = this.maskWidth( size );
-
-		k = this.maskKern( size );
-
-		for( a = 0, aZ = value.length; a < aZ; a++, x += w + k )
-		{
-			pm[ a ] =
-				euclid_ellipse.create(
-					'pnw',
-						euclid_point.create(
-							'x', x,
-							'y', y - h
-						),
-					'pse',
-						euclid_point.create(
-							'x', x + w,
-							'y', y + h
-						)
-				);
-		}
-
-		return pm;
+		pm[ a ] =
+			euclid_anchor_ellipse.create(
+				'pnw',
+					euclid_anchor_point.nw.create(
+						'x', x,
+						'y', y - h
+					),
+				'pse',
+					euclid_anchor_point.nw.create(
+						'x', x + w,
+						'y', y + h
+					)
+			);
 	}
+
+	return pm;
+}
+);
+
+
+/*
+| Outer zone in view.
+|
+| FIXME remove
+*/
+jion.lazyValue(
+	prototype,
+	'_vShape',
+	function( )
+{
+	return this._shape.compute( this.view.baseArea, this.view );
+}
 );
 
 

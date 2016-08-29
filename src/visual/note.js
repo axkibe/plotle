@@ -877,16 +877,8 @@ jion.lazyValue(
 					'facet', facet,
 					'key', 'fill',
 					'shape', this.azSilhoutte
-				)
-		);
-
-	glint =
-		glint.create(
-			'twine:set+', doc.glint
-		);
-
-	glint =
-		glint.create(
+				),
+			'twine:set+', doc.glint,
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,

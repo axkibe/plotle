@@ -18,6 +18,7 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
+			// FIXME make this this.area
 			designArea :
 			{
 				comment : 'designed area (using anchors)',
@@ -123,10 +124,36 @@ prototype._init =
 */
 jion.lazyValue(
 	prototype,
-	'checkIcon',
+	'_checkIcon',
 	function( )
 {
-	return gruga_iconCheck.shape.compute( this.area, this.view );
+	var
+		a,
+		aZ,
+		da,
+		gs,
+		section,
+		sections;
+
+	gs = gruga_iconCheck.shape;
+
+	sections = [ ];
+
+	da = this.designArea;
+
+	for( a = 0, aZ = gs.length; a < aZ; a++ )
+	{
+		section = gs.get( a );
+
+		if( !section.p ) continue;
+
+		sections[ a ] =
+			section.create(
+				'p', section.p.create( 'shape', da )
+			);
+	}
+
+	return gs.create( 'ray:init', sections );
 }
 );
 
@@ -202,7 +229,7 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', facet,
 					'key', 'box',
-					'shape', this.area
+					'shape', this.designArea
 				)
 		);
 
@@ -214,7 +241,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', gruga_iconCheck.facet,
 						'key', 'check',
-						'shape', this.checkIcon
+						'shape', this._checkIcon
 					)
 			);
 	}

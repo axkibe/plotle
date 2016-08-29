@@ -74,7 +74,7 @@ prototype.border =
 
 
 /*
-| Computes to an unanchored rect for a area/view:
+| Computes to an unanchored rect for an area/view:
 */
 prototype.compute =
 	function(

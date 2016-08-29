@@ -78,4 +78,22 @@ jion.lazyStaticValue(
 }
 );
 
+
+/*
+| A simple white fill.
+*/
+jion.lazyStaticValue(
+	gleam_facet,
+	'whiteFill',
+	function( )
+{
+	return(
+		gleam_facet.create(
+			'fill', gleam_color.white
+		)
+
+	);
+}
+);
+
 })( );
