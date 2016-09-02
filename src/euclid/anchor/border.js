@@ -58,18 +58,21 @@ prototype = euclid_anchor_border.prototype;
 | central point, but it isn't a real scale/zoom, since
 | the border distance is from example always 1 regardless
 | how far from central point away.
-|
-| FIXME remove area
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	return(
 		this.shape
-		.compute( area, view )
+		.compute( view )
 		.border( this.distance )
 	);
 };

@@ -74,7 +74,7 @@ var
 	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	euclid_point,
 	euclid_rect,
 	euclid_view,
@@ -413,7 +413,7 @@ jion.lazyValue(
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_window.create(
+				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':content',
 					'p', this.pnw.apnw
@@ -836,9 +836,10 @@ jion.lazyValue(
 		gleam_display_canvas.create(
 			'glint', this.doc.glint,
 			'view',
-				euclid_view.proper.create(
-					'height', vZone.height + 1,
-					'width', vZone.width + 1
+				this.view.create(
+					'height', Math.round( vZone.height + 1 ),
+					'width', Math.round( vZone.width + 1 ),
+					'pan', euclid_point.zero
 				)
 		);
 

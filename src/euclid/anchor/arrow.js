@@ -81,7 +81,6 @@ arrowSize = 12;  // FIXME move to gruga
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
@@ -100,10 +99,14 @@ prototype.compute =
 		round,
 		sections;
 
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
 
-	joint1 = this.joint1.compute( area, view );
+	joint1 = this.joint1.compute( view );
 
-	joint2 = this.joint2.compute( area, view );
+	joint2 = this.joint2.compute( view );
 
 	end1 = this.end1;
 

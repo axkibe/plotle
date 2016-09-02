@@ -223,7 +223,7 @@ gleam_display_pixi.prototype.render =
 	{
 		g = cs.atRank( a );
 		g.sprite;
-		if( g.reflect === 'gleam_glint_window' )
+		if( g.reflect === 'gleam_glint_disWindow' )
 		{
 			if( pcl === 0 )
 			pc.addChild( g.sprite );

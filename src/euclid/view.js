@@ -13,11 +13,6 @@ if( JION )
 		id : 'euclid_view',
 		attributes :
 		{
-			fact :
-			{
-				comment : 'zooming factor of view',
-				type : 'number'
-			},
 			height :
 			{
 				comment : 'current height of screen',
@@ -35,12 +30,10 @@ if( JION )
 			},
 			zoom :
 			{
-				comment : 'set the zoom factor directly',
-				type : [ 'undefined', 'number' ],
-				assign : ''
+				comment : 'the zoom factor',
+				type : 'number'
 			}
-		},
-		init : [ 'zoom' ]
+		}
 	};
 }
 
@@ -49,9 +42,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_view,
-	jion,
-	math_limit,
-	shell_settings;
+	jion;
 
 
 /*
@@ -86,32 +77,6 @@ prototype = euclid_view.prototype;
 
 
 /*
-| Initializer.
-*/
-prototype._init =
-	function(
-		zoom
-	)
-{
-	if( zoom === undefined )
-	{
-		this.fact =
-			math_limit(
-				shell_settings.zoomMin,
-				this.fact,
-				shell_settings.zoomMax
-			);
-
-		this.zoom = Math.pow( shell_settings.zoomBase, this.fact );
-	}
-	else
-	{
-		this.zoom = zoom;
-	}
-};
-
-
-/*
 | Returns the scaled distance of d
 */
 prototype.scale =
@@ -143,7 +108,7 @@ prototype.x =
 /**/	}
 /**/}
 
-	return Math.round( ( x + this.pan.x ) * this.zoom );
+	return x * this.zoom + this.pan.x;
 };
 
 
@@ -164,7 +129,7 @@ prototype.dex =
 /**/	}
 /**/}
 
-	return Math.round( x / this.zoom - this.pan.x );
+	return ( x  - this.pan.x ) / this.zoom;
 };
 
 
@@ -189,9 +154,7 @@ prototype.y =
 /**/	}
 /**/}
 
-	return Math.round(
-		( y + this.pan.y ) * this.zoom
-	);
+	return y * this.zoom + this.pan.y;
 };
 
 
@@ -212,12 +175,12 @@ prototype.dey =
 /**/	}
 /**/}
 
-	return Math.round( y / this.zoom - this.pan.y );
+	return ( y - this.pan.y ) / this.zoom;
 };
 
 
 /*
-| A view with pan zero, but same fact level
+| A view with pan zero, but same zoom level
 */
 jion.lazyValue(
 	prototype,
@@ -231,7 +194,7 @@ jion.lazyValue(
 
 
 /*
-| A view with pan zero and fact zero
+| A view with pan zero and zoom 1
 */
 jion.lazyValue(
 	prototype,
@@ -241,7 +204,7 @@ jion.lazyValue(
 	return(
 		this.create(
 			'pan', euclid_point.zero,
-			'fact', 0
+			'zoom', 1
 		)
 	);
 }
@@ -249,70 +212,36 @@ jion.lazyValue(
 
 
 /*
-| Returns a view with changed zoom level and
-| a pan so p stays in the same spot.
-|
-| new pnw (k1) calculates as:
-|
-| A: p = (y0 + k1) * z1
-| B: p = (y0 + k0) * z0
-|
-| A: p / z1 = y0 + k1
-| B: p / z0 = y0 + k0
-|
-| A - B: p / z1 - p / z0 = k1 - k0
-|
-| -> k1 = p *(1 / z1 - 1 / z0) + k0
+| The rect covered by this view.
 */
-prototype.review =
-	function(
-		df,
-		p
-	)
+jion.lazyValue(
+	prototype,
+	'rect',
+	function( )
 {
 	var
-		f,
-		f1,
-		pan,
-		z1;
+		pan;
 
 	pan = this.pan;
 
-	if( df === 0 )
-	{
-		f1 = 0;
-	}
-	else
-	{
-		f1 =
-			math_limit(
-				shell_settings.zoomMin,
-				this.fact + df,
-				shell_settings.zoomMax
-			);
-	}
-
-	z1 = Math.pow( 1.1, f1 );
-
-	f = 1 / z1 - 1 / this.zoom;
-
 	return(
-		this.create(
-			'fact', f1,
-			'pan',
-				euclid_point.create(
-					'x', Math.round( pan.x + p.x * f ),
-					'y', Math.round( pan.y + p.y * f )
+		euclid_rect.create(
+			'pnw', pan,
+			'pse',
+				pan.add(
+					this.width / this.zoom,
+					this.height / this.zoom
 				)
 		)
 	);
-};
+}
+);
 
 
 /*
 | The zero based area of this view.
 |
-| FIXME simply call it area.
+| FIXME check if still useful.
 */
 jion.lazyValue(
 	prototype,
@@ -339,9 +268,9 @@ jion.lazyValue(
 euclid_view.proper =
 	euclid_view.create(
 		'height', 0,
-		'fact', 0,
 		'pan', euclid_point.zero,
-		'width', 0
+		'width', 0,
+		'zoom', 1
 	);
 
 

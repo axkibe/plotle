@@ -40,6 +40,7 @@ if( JION )
 				type : [ 'undefined', 'jion$path' ],
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
+			// XXX FIXME cal iconShape
 			iconAnchorShape :
 			{
 				comment : 'icon anchor shape',
@@ -121,7 +122,7 @@ var
 	gleam_glint_paint,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	jion,
 	result_hover,
 	root,
@@ -157,8 +158,6 @@ prototype._init =
 {
 	var
 		area,
-		font,
-		fs,
 		view;
 
 	view = this.view;
@@ -168,34 +167,27 @@ prototype._init =
 		// FIXME remove
 		area =
 		this.area =
-			this.designArea.compute( this.superArea, view );
+			this.designArea.compute(
+				this.view.create(
+					'height', this.superArea.height,
+					'width', this.superArea.width
+				)
+			).align;
 
-		this._shape = this.shape.compute( area.zeroPnw, view );
-
-		if( this.iconAnchorShape )
-		{
-			// FIXME remove
-			this._iconShape =
-				this.iconAnchorShape.compute( area.zeroPnw, view );
-		}
+		// XXX FIXME remove
+		this._shape =
+			this.shape.compute(
+				view.create(
+					'height', this.area.height,
+					'width', this.area.width
+				)
+			);
 	}
 	else
 	{
 		this.area = undefined;
 
 		this._shape = undefined;
-	}
-
-	font = this.font;
-
-	if( font )
-	{
-		fs = view.scale( font.size );
-
-		if( !this._font || this._font.size !== fs )
-		{
-			this._font = font.create( 'size', fs );
-		}
 	}
 };
 
@@ -298,7 +290,7 @@ jion.lazyValue(
 	if( !this.visible ) return undefined;
 
 	return(
-		gleam_glint_window.create(
+		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
 			'p', this.designArea.pnw
@@ -382,7 +374,7 @@ jion.lazyValue(
 	{
 		newline = this.textNewline;
 
-		font = this._font;
+		font = this.font;
 
 		if( newline === undefined )
 		{
@@ -404,8 +396,6 @@ jion.lazyValue(
 
 			tZ = text.length;
 
-			newline = this.view.scale( newline );
-
 			y = - ( tZ - 1 ) / 2 * newline;
 
 			for( t = 0; t < tZ; t++, y += newline )
@@ -423,7 +413,7 @@ jion.lazyValue(
 			}
 		}
 	}
-
+			
 	if( this.iconAnchorShape )
 	{
 		glint =

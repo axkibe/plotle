@@ -35,11 +35,19 @@ if( JION )
 }
 
 
+var
+	gleam_glint_paint;
+
+
 /*
 | Capsule
 */
 ( function( ) {
 'use strict';
+
+
+var
+	prototype;
 
 
 if( NODE )
@@ -48,6 +56,22 @@ if( NODE )
 
 	return;
 }
+
+prototype = gleam_glint_paint.prototype;
+
+
+/*
+| Returns true if p is within the 
+| glint its shape.
+*/
+prototype.within =
+	function(
+		p,
+		view
+	)
+{
+	return this.shape.within( p, view );
+};
 
 
 } )( );

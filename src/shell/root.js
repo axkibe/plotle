@@ -107,6 +107,12 @@ if( JION )
 				comment : 'current view',
 				type : 'euclid_view'
 			},
+			_viewExponent :
+			{
+				comment : 'view zoom as power of 1.1',
+				type : 'number',
+				defaultValue : '0'
+			},
 			_drawn :
 			{
 				comment : 'this root has been drawn on display',
@@ -174,6 +180,7 @@ var
 	jion,
 	jion$path,
 	jion$pathRay,
+	math_limit,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -181,6 +188,7 @@ var
 	session_uid,
 	shell_doTracker,
 	shell_root,
+	shell_settings,
 	system,
 	swatch,
 	user_creds,
@@ -360,6 +368,11 @@ shell_root.startup =
 
 	view = display.view;
 
+/**/if( CHECK )
+/**/{
+/**/	if( view.zoom !== 1 ) throw new Error( );
+/**/}
+
 	action = action_form.loading;
 
 	ajaxPath = jion$path.empty.append( 'ajax' );
@@ -533,7 +546,6 @@ prototype._init =
 				'action', action,
 				'controlView',
 					view.create(
-						'fact', 0,
 						'zoom',
 							Math.min(
 							  view.height / gruga_controls.designSize.height,
@@ -630,6 +642,80 @@ Object.defineProperty(
 			}
 	}
 );
+
+
+/*
+| Changed the views zoom factor
+| and pans it, so p stays in the same spot.
+|
+| new pan (p1) calculates as:
+|
+| A: py = y0 * z1 + p0
+| B: py = y0 * z0 + p1
+|
+| A: py / z1 = y0 + p1 / z1
+| B: py / z0 = y0 + p0 / z0
+|
+| A - B: py / z1 - py / z0 = p1 / z1 - p0 / z0
+|
+| -> p1 = ( py * (1 / z1 - 1 / z0 ) + p0 / z0 ) * z1
+*/
+prototype.changeView =
+	function(
+		de,  // difference of view zoom exponent
+		p    // point to keep constant
+	)
+{
+	var
+		e,
+		e1,
+		pan,
+		view,
+		x,
+		y,
+		zoom;
+
+	view = this.view;
+
+	pan = view.pan;
+
+	if( de === 0 )
+	{
+		e1 = 0;
+	}
+	else
+	{
+		e1 =
+			math_limit(
+				shell_settings.zoomMin,
+				this._viewExponent + de,
+				shell_settings.zoomMax
+			);
+	}
+
+	zoom = Math.pow( 1.1, e1 );
+
+	x = ( ( p.x - pan.x ) / view.zoom );
+
+	y = ( ( p.y - pan.y ) / view.zoom );
+
+	e = ( 1 / zoom - 1 / view.zoom );
+
+	return(
+		this.create(
+			'_viewExponent', e1,
+			'view',
+				view.create(
+					'pan',
+						euclid_point.create(
+							'x', Math.round( ( p.x * e + pan.x / view.zoom ) * zoom ),
+							'y', Math.round( ( p.y * e + pan.y / view.zoom ) * zoom )
+						),
+					'zoom', zoom
+				)
+		)
+	);
+};
 
 
 /*

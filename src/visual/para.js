@@ -43,7 +43,7 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_point'
+				type : 'euclid_anchor_point'
 			},
 			view :
 			{
@@ -79,7 +79,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	euclid_measure,
 	euclid_point,
 	flow_block,
@@ -185,10 +185,10 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		gleam_glint_window.create(
+		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.pnw.apnw
+			'p', this.pnw
 		)
 	);
 }
@@ -203,9 +203,9 @@ jion.lazyValue(
 	prototype,
 	'key',
 	function( )
-	{
-		return this.path.get( -1 );
-	}
+{
+	return this.path.get( -1 );
+}
 );
 
 
@@ -407,9 +407,9 @@ jion.lazyValue(
 	prototype,
 	'font',
 	function( )
-	{
-		return shell_fontPool.get( this.fontsize, 'la' );
-	}
+{
+	return shell_fontPool.get( this.fontsize, 'la' );
+}
 );
 
 
@@ -439,10 +439,7 @@ jion.lazyValue(
 
 /**/if( CHECK )
 /**/{
-/**/	if( !this.fontsize )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( !this.fontsize ) throw new Error( );
 /**/}
 
 	// width the flow can fill
@@ -551,12 +548,12 @@ jion.lazyValue(
 	prototype,
 	'height',
 	function( )
-	{
-		return(
-			this.flow.height
-			+ Math.round( this.fontsize * shell_settings.bottombox )
-		);
-	}
+{
+	return(
+		this.flow.height
+		+ Math.round( this.fontsize * shell_settings.bottombox )
+	);
+}
 );
 
 

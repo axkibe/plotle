@@ -71,12 +71,10 @@ prototype.border =
 /*
 | Computes to an unanchored shape for a area/view.
 |
-| FIXME area should be part of view.
 | FIXME cache last view (including other anchor shapes)
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
@@ -85,16 +83,21 @@ prototype.compute =
 		ray,
 		rZ;
 
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	ray = [ ];
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( area, view );
+		ray[ r ] = this.get( r ).compute( view );
 	}
-
+	
 	return(
 		euclid_shape.create(
-			'pc', this.pc.compute( area, view ),
+			'pc', this.pc.compute( view ),
 			'ray:init', ray
 		)
 	);

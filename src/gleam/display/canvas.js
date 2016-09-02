@@ -53,8 +53,6 @@ if( JION )
 
 var
 	euclid_constants,
-	euclid_point,
-	euclid_rect,
 	get2dContext,
 	gleam_glint_twig,
 	gleam_display_canvas,
@@ -162,13 +160,6 @@ prototype.withinSketch =
 	cx = this._cx;
 
 	cx.beginPath( );
-
-	/*
-	if( view )
-	{
-		shape = shape.compute( this._area, view );
-	}
-	*/
 
 	this._sketch( shape, border || 0, 0.5 );
 
@@ -298,30 +289,6 @@ prototype.render =
 
 
 /*
-| The area of the display.
-|
-| TODO make euclid_rect part of view.
-*/
-jion.lazyValue(
-	prototype,
-	'_area',
-	function( )
-{
-	return(
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
-			'pse',
-				euclid_point.create(
-					'x', this.view.width,
-					'y', this.view.height
-				)
-		)
-	);
-}
-);
-
-
-/*
 | Draws a single border.
 */
 prototype._border =
@@ -338,10 +305,7 @@ prototype._border =
 
 	cx.beginPath( );
 
-	if( shape.compute ) // FIXME
-	{
-		shape = shape.compute( this._area, view );
-	}
+	shape = shape.compute( view );
 
 	this._sketch( shape, border.distance, 0.5 );
 
@@ -406,10 +370,7 @@ prototype._fill  =
 
 	cx = this._cx;
 
-	if( shape.compute ) // FIXME
-	{
-		shape = shape.compute( this._area, view );
-	}
+	shape = shape.compute( view );
 
 	this._sketch( shape, 0, 0 );
 
@@ -577,7 +538,8 @@ prototype._renderGlintTwig =
 
 				this._setFont( g.font, view );
 
-				p = g.p.compute( this._area, view );
+				// XXX
+				p = g.p.compute( view );
 
 				rotate = g.rotate;
 
@@ -620,12 +582,11 @@ prototype._renderGlintTwig =
 
 				break;
 
-			case 'gleam_glint_window' :
+			case 'gleam_glint_disWindow' :
 
-				p = g.p.compute( this._area, view );
+				p = g.p.compute( view );
 
-				// FIXME
-				if( g.display.render ) g.display.render( );
+				g.display.render( );
 
 				cx.drawImage(
 					g.display._cv,
@@ -645,7 +606,7 @@ prototype._renderGlintTwig =
 
 				shape = g.shape;
 
-				shape = shape.compute( this._area, view );
+				shape = shape.compute( view );
 
 				if( shape.reflect === 'euclid_shapeRay' )
 				{
@@ -688,11 +649,6 @@ prototype._renderGlintTwig =
 						cx.lineTo( w, 0 );
 
 						cx.lineTo( 0, 0 );
-					}
-
-					if( shape.compute ) // FIXME
-					{
-						shape = shape.compute( this._area, view );
 					}
 
 					this._sketch( shape, 0, 0.5 );

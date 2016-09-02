@@ -87,7 +87,6 @@ prototype.border =
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
@@ -95,15 +94,20 @@ prototype.compute =
 		gpc,
 		gr1;
 
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	gpc = this.gradientPC;
 
 	gr1 = this.gradientR1;
 
 	return(
 		euclid_ellipse.create(
-			'pnw', this.pnw.compute( area, view ),
-			'pse', this.pse.compute( area, view ),
-			'gradientPC', gpc && gpc.compute( area, view ),
+			'pnw', this.pnw.compute( view ),
+			'pse', this.pse.compute( view ),
+			'gradientPC', gpc && gpc.compute( view ),
 			'gradientR1',
 				view
 				? ( gr1 ? view.scale( gr1 ) : undefined )

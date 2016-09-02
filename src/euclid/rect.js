@@ -84,6 +84,26 @@ prototype.add =
 
 
 /*
+| Returns a rect aligned to rounded coords.
+|
+| FIXME should not be needed.
+*/
+jion.lazyValue(
+	prototype,
+	'align',
+	function( )
+{
+	return(
+		this.create(
+			'pnw', this.pnw.align,
+			'pse', this.pse.align
+		)
+	);
+}
+);
+
+
+/*
 | Returns a shape bordering this shape by d.
 */
 prototype.border =

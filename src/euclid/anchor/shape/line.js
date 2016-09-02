@@ -65,13 +65,12 @@ prototype = euclid_anchor_shape_line.prototype;
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
 	return(
 		euclid_shape_line.create(
-			'p', this.p && this.p.compute( area, view ),
+			'p', this.p && this.p.compute( view ),
 			'close', this.close,
 			'fly', this.fly
 		)

@@ -51,17 +51,21 @@ prototype = euclid_anchor_shape_start.prototype;
 
 
 /*
-| Computes to an unanchored round for a area/view.
+| Computes to a view.
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
+	if( CHECK )
+	{
+		if( arguments.length !== 1 ) throw new Error( );
+	}
+
 	return(
 		euclid_shape_start.create(
-			'p', this.p.compute( area, view )
+			'p', this.p.compute( view )
 		)
 	);
 };

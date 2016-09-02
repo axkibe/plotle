@@ -1,5 +1,7 @@
 /*
-| Draws a display in a display.
+| Bases it's child glints in a window.
+|
+| May do caching.
 */
 
 
@@ -12,10 +14,10 @@ if( JION )
 		id : 'gleam_glint_window',
 		attributes :
 		{
-			display :
+			glint :
 			{
-				comment : 'the display to draw',
-				type : [ 'gleam_display_canvas' ] // FUTURE GLINT
+				comment : 'the glints to draw in the window',
+				type : 'gleam_glint_twig'
 			},
 			key :
 			{
@@ -24,8 +26,13 @@ if( JION )
 			},
 			p :
 			{
-				comment : 'where to draw it',
+				comment : 'position to draw it at',
 				type : 'euclid_anchor_point'
+			},
+			view :
+			{
+				comment : 'the view to draw it in',
+				type : 'euclid_view'
 			}
 		},
 		init : [ 'inherit' ]
@@ -34,8 +41,8 @@ if( JION )
 
 
 var
-	gleam_glint_window,
-	jion;
+	gleam_glint_window;
+
 
 /*
 | Capsule
@@ -56,71 +63,6 @@ var
 	prototype;
 
 prototype = gleam_glint_window.prototype;
-
-
-/*
-| Initialization.
-*/
-prototype._init =
-	function(
-		inherit
-	)
-{
-	if( inherit )
-	{
-		if( jion.hasLazyValueSet( inherit, 'sprite' ) )
-		{
-			this._inheritedSprite = inherit.sprite;
-		}
-		else
-		{
-			this._inheritedSprite = inherit._inheritedSprite;
-		}
-
-		if( this.display === inherit.display )
-		{
-			this._inheritedDisplayEqual = true;
-		}
-	}
-};
-
-
-/*
-| Turns the window into a pixiSprite
-*/
-/*
-jion.lazyValue(
-	prototype,
-	'pixiSprite',
-	function( )
-{
-	var
-		p,
-		sprite;
-
-	p = this.p;
-
-	if( this._inheritedDisplayEqual )
-	{
-		sprite = this._inheritedSprite;
-	}
-	else
-	{
-		// FUTURE GLINT
-		// move sprite to display
-		sprite = new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
-	}
-
-	sprite.x = this.p.x;
-
-	sprite.y = this.p.y;
-
-	sprite.id = this.id;
-
-	return sprite;
-}
-);
-*/
 
 
 } )( );

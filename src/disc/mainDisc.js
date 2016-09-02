@@ -102,7 +102,7 @@ var
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	jion,
 	result_hover,
 	root;
@@ -152,14 +152,19 @@ prototype._init =
 
 	cv = this.controlView;
 
-	// FIXME remove
+	// FIXME XXX remove
 	area =
 	this.area =
-		this.designArea.compute( cv.baseArea, cv );
+		this.designArea.compute( cv ).align;
 
-	// FIXME remove
+	// FIXME XXX remove
 	this.silhoutte =
-		this.shape.compute( area.zeroPnw, cv );
+		this.shape.compute(
+			cv.create(
+				'height', this.area.height,
+				'width', this.area.width
+			)
+		);
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
@@ -440,7 +445,7 @@ jion.lazyValue(
 {
 	// FUTURE GLINT inherit
 	return(
-		gleam_glint_window.create(
+		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', 'mainDisc',
 			'p', this.designArea.pnw
@@ -618,16 +623,22 @@ jion.lazyValue(
 		g,
 		glint,
 		r,
-		rZ;
+		rZ,
+		view;
+
+	view =
+		this.controlView.create(
+			'height', this.area.height,
+			'width', this.area.width
+		);
 
 	glint =
 		gleam_glint_twig.create(
 			'key', 'root',
-			'view', this.controlView,
 			'twine:set+',
 				gleam_glint_fill.create(
 					'facet', this.facet,
-					'key', 'fill',
+					'key', ':fill',
 					'shape', this.shape
 				)
 		);
@@ -647,7 +658,7 @@ jion.lazyValue(
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', this.facet,
-					'key', 'border',
+					'key', ':border',
 					'shape', this.shape
 				)
 		);
@@ -655,11 +666,7 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.controlView.create(
-					'height', this.area.height,
-					'width', this.area.width
-				)
+			'view', view
 		)
 	);
 }

@@ -328,6 +328,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gleam/glint/disWindow.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/glint/window.js',
 		'hasJion', true,
 		'inBundle', true

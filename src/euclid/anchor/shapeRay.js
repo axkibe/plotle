@@ -65,7 +65,6 @@ prototype.border =
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
@@ -74,11 +73,16 @@ prototype.compute =
 		ray,
 		rZ;
 
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	ray = [ ];
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( area, view );
+		ray[ r ] = this.get( r ).compute( view );
 	}
 	
 	return(

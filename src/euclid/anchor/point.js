@@ -17,6 +17,7 @@ if( JION )
 				comment : 'compass of the anchor',
 				type : 'string'
 			},
+			// FIXME call it anchorRect instead
 			shape :
 			{
 				comment : 'if defined anchor to this instead of view area',
@@ -45,8 +46,7 @@ var
 	euclid_anchor_fixPoint,
 	euclid_anchor_point,
 	euclid_point,
-	jion,
-	math_half;
+	jion;
 
 
 /*
@@ -117,147 +117,86 @@ prototype.add =
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
 	var
 		pnw,
 		pse,
+		rect,
 		shape,
 		x,
-		y;
+		y,
+		w,
+		h;
 
 /**/if( CHECK )
 /**/{
-/**/	if( area.reflect !== 'euclid_rect' ) throw new Error( );
-/**/
-/**/	if( view && view.reflect !== 'euclid_view' ) throw new Error( );
+/**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
 	shape = this.shape;
 
 	if( !shape )
 	{
-		pnw = area.pnw;
+		rect = view.rect;
 
-		pse = area.pse;
+		pnw = rect.pnw;
+
+		pse = rect.pse;
 
 		if(
 			this.anchor === 'nw'
 			&& pnw.x === 0
 			&& pnw.y === 0
-			&& (
-				!view
-				|| (
-					view.pan.x === 0
-					&& view.pan.y === 0
-					&& view.fact === 0
-				)
-			)
+			&& view.zoom === 1
 		)
 		{
 			return this.euclidPoint;
 		}
+
+		w = ( pse.x - pnw.x ) * view.zoom;
+
+		h = ( pse.y - pnw.y ) * view.zoom;
 	}
 	else
 	{
-		shape = this.shape.compute( area, view );
+		shape = this.shape.compute( view );
 
 		pnw = shape.pnw;
 
 		pse = shape.pse;
+
+		w = pse.x - pnw.x;
+
+		h = pse.y - pnw.y;
 	}
 
+	x = this.x * view.zoom;
 
-	x = this.x;
-
-	y = this.y;
-
-	// FIXME is view ever undefined?
-	if( view && !shape )
-	{
-		x = view.x( x );
-
-		y = view.y( y );
-	}
+	y = this.y * view.zoom;
 
 	switch( this.anchor )
 	{
-		case 'c'  :
+		case 'c'  : return pnw.add( w / 2 + x, h / 2 + y );
 
-			return(
-				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + x,
-					'y', math_half( pnw.y + pse.y ) + y
-				)
-			);
+		case 'n'  : return pnw.add( w / 2 + x, y );
 
-		case 'n'  :
+		case 'ne' : return pnw.add( w + x, y );
 
-			return(
-				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + x,
-					'y', pnw.y + y
-				)
-			);
+		case 'e'  : return pnw.add( w + x, h / 2 + y );
 
-		case 'ne' :
+		case 'se' : return pnw.add( w + x, h + y );
 
-			return(
-				euclid_point.create(
-					'x', pse.x + x,
-					'y', pnw.y + y
-				)
-			);
+		case 's'  : return pnw.add( w / 2 + x, h + y );
 
-		case 'e'  :
+		case 'sw' : return pnw.add( x, h + y );
 
-			return(
-				euclid_point.create(
-					'x', pse.x + x,
-					'y', math_half( pnw.y + pse.y ) + y
-				)
-			);
+		case 'w'  : return pnw.add( x, h / 2 + y );
 
-		case 'se' :
+		case 'nw' : return pnw.add( x, y );
 
-			return pse.add( x, y );
-
-		case 's'  :
-
-			return(
-				euclid_point.create(
-					'x', math_half( pnw.x + pse.x ) + x,
-					'y', pse.y + y
-				)
-			);
-
-		case 'sw' :
-
-			return(
-				euclid_point.create(
-					'x', pnw.x + x,
-					'y', pse.y + y
-				)
-			);
-
-		case 'w'  :
-
-			return(
-				euclid_point.create(
-					'x', pnw.x + x,
-					'y', math_half( pnw.y + pse.y ) + y
-				)
-			);
-
-		case 'nw' :
-
-			return pnw.add( x, y );
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 

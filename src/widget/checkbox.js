@@ -71,6 +71,7 @@ if( JION )
 
 
 var
+	euclid_view,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gruga_iconCheck,
@@ -109,7 +110,14 @@ prototype._init =
 {
 	if( this.superArea )
 	{
-		this.area = this.designArea.compute( this.superArea );
+		// XXX remove
+		this.area =
+			this.designArea.compute(
+				euclid_view.proper.create(
+					'width', this.superArea.width,
+					'height', this.superArea.height
+				)
+			);
 	}
 	else
 	{

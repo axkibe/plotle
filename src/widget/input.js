@@ -92,7 +92,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
@@ -135,14 +135,21 @@ prototype._init =
 	function( )
 {
 	var
-		area;
+		area,
+		view;
 
 	if( this.superArea )
 	{
+		view =
+			this.view.create(
+				'width', this.superArea.width,
+				'height', this.superArea.height
+			);
+
 		// FIXME remove
 		area =
 		this.area =
-			this.designArea.compute( this.superArea );
+			this.designArea.compute( view );
 
 		this._shape =
 			euclid_anchor_roundRect.create(
@@ -151,6 +158,9 @@ prototype._init =
 				'a', 7,
 				'b', 3
 			);
+	
+		// FIXME remove
+		this._vShape = this._shape.compute( view );
 	}
 	else
 	{
@@ -254,7 +264,7 @@ jion.lazyValue(
 	if( !this.visible ) return undefined;
 
 	return(
-		gleam_glint_window.create(
+		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
 			'p', this.area.pnw.apnw
@@ -932,21 +942,6 @@ jion.lazyValue(
 	}
 
 	return pm;
-}
-);
-
-
-/*
-| Outer zone in view.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'_vShape',
-	function( )
-{
-	return this._shape.compute( this.view.baseArea, this.view );
 }
 );
 

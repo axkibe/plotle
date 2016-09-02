@@ -608,35 +608,35 @@ jion.lazyValue(
 
 // XXX
 jion.lazyValue( prototype, '_vHandleNwShape',
-	function( ) { return this._handleNwShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleNwShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleNShape',
-	function( ) { return this._handleNShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleNShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleNeShape',
-	function( ) { return this._handleNeShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleNeShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleEShape',
-	function( ) { return this._handleEShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleEShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleSeShape',
-	function( ) { return this._handleSeShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleSeShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleSShape',
-	function( ) { return this._handleSShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleSShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleSwShape',
-	function( ) { return this._handleSwShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleSwShape.compute( this.view ); }  );
 
 // XXX
 jion.lazyValue( prototype, '_vHandleWShape',
-	function( ) { return this._handleWShape.compute( this.view.baseArea, this.view ); }  );
+	function( ) { return this._handleWShape.compute( this.view ); }  );
 
 
 /*
@@ -963,7 +963,7 @@ jion.lazyValue(
 	'_vOuterZone',
 	function( )
 {
-	return this._outerZone.compute( this.view.baseArea, this.view );
+	return this._outerZone.compute( this.view );
 }
 );
 

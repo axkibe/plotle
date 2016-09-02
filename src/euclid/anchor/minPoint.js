@@ -79,7 +79,6 @@ prototype = euclid_anchor_minPoint.prototype;
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
@@ -92,12 +91,10 @@ prototype.compute =
 
 /**/if( CHECK )
 /**/{
-/**/	if( area.reflect !== 'euclid_rect' ) throw new Error( );
-/**/
-/**/	if( view && view.reflect !== 'euclid_view' ) throw new Error( );
+/**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	anchor = this.anchor.compute( area, view );
+	anchor = this.anchor.compute( view );
 
 	minx = this.minx;
 

@@ -73,9 +73,7 @@ var
 	action_pan,
 	action_select,
 	change_ray,
-	euclid_arrow, // FIXME
 	euclid_anchor_arrow,
-	euclid_connect,
 	euclid_point,
 	euclid_rect,
 	gleam_glint_paint,
@@ -539,104 +537,6 @@ jion.lazyValue(
 
 
 /*
-| Displays the whole space.
-*/
-prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		action,
-		arrow,
-		fromItem,
-		fromSilhoutte,
-		r,
-		toItem,
-		toSilhoutte,
-		view;
-
-	view = this.view,
-
-	action = this.action;
-
-	for( r = this.length - 1; r >= 0; r-- )
-	{
-		this.atRank( r ).draw( display );
-	}
-
-	if( this.frame )
-	{
-		this.frame.draw( display );
-	}
-
-	switch( action && action.reflect )
-	{
-		case 'action_createGeneric' :
-
-			if( action.startPoint ) action.transItem.draw( display );
-
-			break;
-
-		case 'action_createRelation' :
-
-			if( action.fromItemPath )
-			{
-				fromItem = this.get( action.fromItemPath.get( -1 ) );
-
-				if( action.toItemPath )
-				{
-					toItem = this.get( action.toItemPath.get( -1 ) );
-				}
-
-				fromSilhoutte = fromItem.silhoutte;
-
-				if(
-					action.toItemPath
-					&& !action.toItemPath.equals( action.fromItemPath )
-				)
-				{
-					// arrow connects two items
-					toSilhoutte = toItem.silhoutte;
-				}
-				else if ( action.relationState === 'hadSelect' )
-				{
-					// arrow points into nowhere
-					toSilhoutte = action.toPoint.fromView( view );
-				}
-
-				if( toSilhoutte )
-				{
-					arrow =
-						euclid_arrow.shape(
-								euclid_connect.line(
-									fromSilhoutte,
-									toSilhoutte
-								),
-								'normal',
-								'arrow'
-						)
-						.inView( view );
-
-					display.paint( gruga_relation.facet, arrow );
-				}
-			}
-
-			break;
-
-		case 'action_select' :
-
-			if( action.vZone )
-			{
-				display.paint( gruga_select.facet, action.vZone );
-			}
-
-			break;
-	}
-};
-
-
-/*
 | Returns a ray of visual item by a ray of paths
 */
 prototype.getRay =
@@ -685,7 +585,7 @@ prototype.getRay =
 */
 prototype.mousewheel =
 	function(
-		p,     // cursor point ( in view )
+		p,     // cursor point
 		dir,   // wheel direction, >0 for down, <0 for up
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
@@ -706,7 +606,7 @@ prototype.mousewheel =
 		if( item.mousewheel( view, p, dir, shift, ctrl ) ) return true;
 	}
 
-	root.create( 'view', view.review( dir > 0 ? 1 : -1, p ) );
+	root.changeView( dir > 0 ? 1 : -1, p );
 
 	return true;
 };
@@ -907,8 +807,8 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action.create(
-						'startPoint', p,
-						'toPoint', p
+						'startPoint', dp,
+						'toPoint', dp
 					)
 			);
 
@@ -1347,7 +1247,7 @@ prototype._changeZoom =
 
 	pm = this.view.baseArea.pc.fromView( this.view );
 
-	root.create( 'view', this.view.review( df, pm ) );
+	root.changeView( df, pm );
 };
 
 
@@ -1469,11 +1369,7 @@ prototype._moveCreateRelation =
 		root.create(
 			'view',
 				view.create(
-					'pan',
-						action.pan.add(
-							pd.x / view.zoom,
-							pd.y / view.zoom
-						)
+					'pan', action.pan.add( pd.x, pd.y )
 				)
 		);
 
@@ -1738,8 +1634,8 @@ prototype._movePan =
 			view.create(
 				'pan',
 					action.pan.add(
-						Math.round( pd.x / view.zoom ),
-						Math.round( pd.y / view.zoom )
+						Math.round( pd.x ),
+						Math.round( pd.y )
 					)
 			)
 	);
@@ -1751,7 +1647,7 @@ prototype._movePan =
 */
 prototype._moveSelect =
 	function(
-		p         // point, viewbased point of stop
+		p         // point
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1772,7 +1668,7 @@ prototype._moveSelect =
 	root.create(
 		'action',
 			action.create(
-				'toPoint', p
+				'toPoint', p.fromView( this.view )
 			)
 	);
 };

@@ -33,11 +33,18 @@ if( JION )
 }
 
 
+var
+	gleam_glint_border;
+
+
 /*
 | Capsule
 */
 ( function( ) {
 'use strict';
+
+
+var prototype;
 
 
 if( NODE )
@@ -46,6 +53,8 @@ if( NODE )
 
 	return;
 }
+
+prototype = gleam_glint_border.prototype;
 
 
 } )( );

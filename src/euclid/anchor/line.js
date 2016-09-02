@@ -59,14 +59,19 @@ prototype = euclid_anchor_line.prototype;
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	return(
 		euclid_anchor_line.create(
-			'pnw', this.pnw.compute( area, view ),
-			'pse', this.pse.compute( area, view )
+			'pnw', this.pnw.compute( view ),
+			'pse', this.pse.compute( view )
 		)
 	);
 };

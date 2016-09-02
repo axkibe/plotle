@@ -57,6 +57,26 @@ prototype = euclid_point.prototype;
 
 
 /*
+| Returns a point aligned to rounded coords.
+|
+| FIXME should not be needed.
+*/
+jion.lazyValue(
+	prototype,
+	'align',
+	function( )
+{
+	return(
+		this.create(
+			'x', Math.round( this.x ),
+			'y', Math.round( this.y )
+		)
+	);
+}
+);
+
+
+/*
 | Returns a border bordering this point.
 | See euclid_shape.border for further explanation.
 */
@@ -178,6 +198,8 @@ prototype.fromView =
 
 /*
 | Returns the point transformed back by a view.
+|
+| FIXME remove as double to fromView
 */
 prototype.deView =
 	function(

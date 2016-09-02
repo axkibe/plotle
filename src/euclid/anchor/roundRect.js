@@ -103,19 +103,23 @@ prototype.border =
 */
 prototype.compute =
 	function(
-		area,
 		view
 	)
 {
 	var
 		fr;
 
-	fr = this.fixRounds;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
 
+	fr = this.fixRounds;
+	
 	return(
 		euclid_roundRect.create(
-			'pnw', this.pnw.compute( area, view ),
-			'pse', this.pse.compute( area, view ),
+			'pnw', this.pnw.compute( view ),
+			'pse', this.pse.compute( view ),
 			'a', !fr ? view.scale( this.a ) : this.a,
 			'b', !fr ? view.scale( this.b ) : this.b
 		)

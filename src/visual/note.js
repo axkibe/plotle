@@ -91,7 +91,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	gruga_note,
 	jion,
 	math_half,
@@ -436,7 +436,7 @@ jion.lazyValue(
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_window.create(
+				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
 					'p', this.zone.pnw.apnw
@@ -894,8 +894,8 @@ jion.lazyValue(
 			'glint', glint,
 			'view',
 				this.view.create(
-					'height', vZone.height + 2,
-					'width', vZone.width + 2,
+					'height', Math.round( vZone.height + 2 ),
+					'width', Math.round( vZone.width + 2 ),
 					'pan', euclid_point.zero
 					// FIXME scrollPos!
 				)

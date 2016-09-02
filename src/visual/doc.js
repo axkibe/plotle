@@ -160,7 +160,7 @@ prototype._init =
 		ranks[ a ] = key;
 
 		pnw =
-			euclid_point.create(
+			euclid_anchor_point.nw.create(
 				'x', innerMargin.w,
 				'y', Math.round( y - this.scrollPos.y )
 			);
@@ -572,9 +572,9 @@ jion.lazyValue(
 
 	// FUTURE do not create points
 
-	fp = fp.add( frontPnw );
+	fp = fp.add( frontPnw.x, frontPnw.y );
 
-	bp = bp.add( backPnw );
+	bp = bp.add( backPnw.x, backPnw.y );
 
 	frontFlow = frontPara.flow;
 

@@ -77,7 +77,7 @@ var
 	gleam_glint_paint,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_roundRect,
@@ -487,7 +487,7 @@ jion.lazyValue(
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_window.create(
+				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
 					'p', this.zone.pnw.apnw
@@ -1706,13 +1706,6 @@ jion.lazyValue(
 
 
 	/*
-	display.paintText(
-		'text', 'move to',
-		'p', moveToButton.textCenter,
-		'font', this._fonts.moveTo
-	);
-
-
 	if(
 		mark
 		&& mark.reflect === 'visual_mark_caret'
@@ -1750,8 +1743,8 @@ jion.lazyValue(
 			'view',
 				this.view.create(
 					'pan', euclid_point.zero,
-					'height', vZone.height,
-					'width', vZone.width
+					'height', Math.round( vZone.height ),
+					'width', Math.round( vZone.width )
 				)
 		)
 	);

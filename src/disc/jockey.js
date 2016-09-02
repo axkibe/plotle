@@ -256,11 +256,7 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint =
-		gleam_glint_twig.create(
-			'key', 'disc',
-			'view', this.controlView
-		);
+	glint = gleam_glint_twig.create( 'key', 'disc', 'view', this.controlView );
 
 	if( action && action.isCreate )
 	{

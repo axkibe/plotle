@@ -16,7 +16,9 @@ if( JION )
 			{
 				comment : 'key in parent twig',
 				type : 'string'
-			},
+			}
+			
+			,
 			view :
 			{
 				comment : 'if defined apply this view',
@@ -31,7 +33,7 @@ if( JION )
 			'gleam_glint_paint',
 			'gleam_glint_text',
 			'gleam_glint_twig',
-			'gleam_glint_window'
+			'gleam_glint_disWindow'
 		]
 	};
 }

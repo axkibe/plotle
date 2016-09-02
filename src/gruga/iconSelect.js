@@ -57,26 +57,19 @@ var
 	line,
 	round;
 
+
 pc = euclid_anchor_point.c;
 
-/*
-| half dash line
-*/
+// half dash line
 hd = 2;
 
-/*
-| half size
-*/
+// half size
 hs = 8;
 
-/*
-| corner size
-*/
+// corner size
 cs = 3;
 
-/*
-| corner extension
-*/
+// corner extension
 ce = 4;
 
 

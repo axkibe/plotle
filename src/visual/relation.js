@@ -67,7 +67,7 @@ var
 	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_window,
+	gleam_glint_disWindow,
 	euclid_rect,
 	gleam_glint_paint,
 	gruga_label,
@@ -268,7 +268,7 @@ Object.defineProperty(
 			wg;
 
 		wg =
-			gleam_glint_window.create(
+			gleam_glint_disWindow.create(
 				'display', this._display,
 				'key', ':label',
 				'p', this.pnw.apnw
@@ -528,8 +528,8 @@ jion.lazyValue(
 			'view',
 				this.view.create(
 					'pan', euclid_point.zero,
-					'height', vZone.height,
-					'width', vZone.width
+					'height', Math.round( vZone.height ),
+					'width', Math.round( vZone.width )
 				),
 			'glint', this.doc.glint
 		);
