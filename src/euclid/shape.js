@@ -23,7 +23,7 @@ if( JION )
 				type : [ 'undefined', 'number' ]
 			}
 		},
-		ray : require( '../typemaps/shapeSection' )
+		ray : require( './typemap-shapeSection' )
 	};
 }
 

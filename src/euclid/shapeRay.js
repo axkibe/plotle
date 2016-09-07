@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'euclid_shapeRay',
-		ray : require( '../typemaps/shape' )
+		ray : require( './typemap-shape' )
 	};
 }
 

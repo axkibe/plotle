@@ -115,9 +115,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 'e',
-			'shape', this
+		euclid_anchor_point.e.create(
+			'tenter', this
 		)
 	);
 }
@@ -133,9 +132,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 'n',
-			'shape', this
+		euclid_anchor_point.n.create(
+			'tenter', this
 		)
 	);
 }
@@ -151,9 +149,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 'ne',
-			'shape', this
+		euclid_anchor_point.ne.create(
+			'tenter', this
 		)
 	);
 }
@@ -169,9 +166,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 's',
-			'shape', this
+		euclid_anchor_point.s.create(
+			'tenter', this
 		)
 	);
 }
@@ -187,9 +183,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 'sw',
-			'shape', this
+		euclid_anchor_point.sw.create(
+			'tenter', this
 		)
 	);
 }
@@ -205,9 +200,8 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_anchor_point.create(
-			'anchor', 'w',
-			'shape', this
+		euclid_anchor_point.w.create(
+			'tenter', this
 		)
 	);
 }

@@ -17,13 +17,10 @@ if( JION )
 				comment : 'compass of the anchor',
 				type : 'string'
 			},
-			// FIXME call it anchorRect instead
-			shape :
+			tenter :
 			{
-				comment : 'if defined anchor to this instead of view area',
-				type :
-					require( './typemap-shape' )
-					.concat( [ 'undefined' ] )
+				comment : 'if defined anchor to this instead',
+				type : [ 'undefined', 'euclid_anchor_rect' ]
 			},
 			x :
 			{
@@ -124,7 +121,7 @@ prototype.compute =
 		pnw,
 		pse,
 		rect,
-		shape,
+		tenter,
 		x,
 		y,
 		w,
@@ -135,9 +132,9 @@ prototype.compute =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	shape = this.shape;
+	tenter = this.tenter;
 
-	if( !shape )
+	if( !tenter )
 	{
 		rect = view.rect;
 
@@ -161,11 +158,11 @@ prototype.compute =
 	}
 	else
 	{
-		shape = this.shape.compute( view );
+		tenter = tenter.compute( view );
 
-		pnw = shape.pnw;
+		pnw = tenter.pnw;
 
-		pse = shape.pse;
+		pse = tenter.pse;
 
 		w = pse.x - pnw.x;
 
@@ -265,6 +262,63 @@ jion.lazyStaticValue(
 
 
 /*
+| Point in east.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'e',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'e',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in north east.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'n',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'n',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in north east.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	'ne',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 'ne',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
 | Point in north west.
 */
 jion.lazyStaticValue(
@@ -275,6 +329,25 @@ jion.lazyStaticValue(
 	return(
 		euclid_anchor_point.create(
 			'anchor', 'nw',
+			'x', 0,
+			'y', 0
+		)
+	);
+}
+);
+
+
+/*
+| Point in south.
+*/
+jion.lazyStaticValue(
+	euclid_anchor_point,
+	's',
+	function( )
+{
+	return(
+		euclid_anchor_point.create(
+			'anchor', 's',
 			'x', 0,
 			'y', 0
 		)
@@ -322,16 +395,16 @@ jion.lazyStaticValue(
 
 
 /*
-| Point in east.
+| Point in south west.
 */
 jion.lazyStaticValue(
 	euclid_anchor_point,
-	'e',
+	'sw',
 	function( )
 {
 	return(
 		euclid_anchor_point.create(
-			'anchor', 'e',
+			'anchor', 'sw',
 			'x', 0,
 			'y', 0
 		)
