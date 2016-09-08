@@ -1266,10 +1266,7 @@ prototype._keyDel =
 
 	at = mark.caret.at;
 
-	if( at >= value.length )
-	{
-		return;
-	}
+	if( at >= value.length ) return;
 
 	root.alter(
 		change_remove.create(
@@ -1411,8 +1408,7 @@ jion.lazyValue(
 					'b', rounding
 				),
 
-			// FIXME only have an anchorded shape
-			// and make it anchored to center
+			// FIXME get rid of anchoring
 			aShape :
 				euclid_anchor_roundRect.create(
 					'pnw', pnw.apnw,
@@ -1421,11 +1417,10 @@ jion.lazyValue(
 					'b', rounding
 				),
 
-
 			textCenter :
-				euclid_anchor_point.nw.create(
-					'x', math_half( pnw.x + pse.x ),
-					'y', math_half( pnw.y + pse.y )
+				euclid_point.create(
+					'x', ( pnw.x + pse.x ) / 2,
+					'y', ( pnw.y + pse.y ) / 2
 				)
 		};
 
@@ -1472,28 +1467,27 @@ prototype._prepareField =
 
 	p =
 		baseP
-		? euclid_anchor_point.nw.create(
-			'x', math_half( zone.width - width ),
+		? euclid_point.create(
+			'x', ( zone.width - width ) / 2,
 			'y', baseP.y + 23
 		)
-		: euclid_anchor_point.nw.create(
-			'x', math_half( zone.width - width ),
-			'y', Math.round( math_half( zone.height ) - 30 )
+		: euclid_point.create(
+			'x', ( zone.width - width ) / 2,
+			'y', zone.height / 2 - 30
 		);
 
-	// FIXME only use anchored.
 	silhoutte =
 		euclid_roundRect.create(
-			'pnw', p.euclidPoint.sub( pitch, height ),
-			'pse', p.euclidPoint.add( Math.round( width ) + pitch, pitch ),
+			'pnw', p.sub( pitch, height ),
+			'pse', p.add( Math.round( width ) + pitch, pitch ),
 			'a', rounding,
 			'b', rounding
 		);
 
 	aSilhoutte =
 		euclid_anchor_roundRect.create(
-			'pnw', p.euclidPoint.sub( pitch, height ).apnw,
-			'pse', p.euclidPoint.add( Math.round( width ) + pitch, pitch ).apnw,
+			'pnw', p.sub( pitch, height ).apnw,
+			'pse', p.add( width + pitch, pitch ).apnw,
 			'a', rounding,
 			'b', rounding
 		);
@@ -1685,21 +1679,21 @@ jion.lazyValue(
 				gleam_glint_text.create(
 					'font', this._fonts.spaceUser,
 					'key', 'spaceUserText',
-					'p', fieldSpaceUser.p,
+					'p', fieldSpaceUser.p.inView( hview ),
 					'text', fieldSpaceUser.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
 					'font', this._fonts.spaceTag,
 					'key', 'spaceTagText',
-					'p', fieldSpaceTag.p,
+					'p', fieldSpaceTag.p.inView( hview ),
 					'text', fieldSpaceTag.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
 					'font', this._fonts.moveTo,
 					'key', 'moveToText',
-					'p', moveToButton.textCenter,
+					'p', moveToButton.textCenter.inView( hview ),
 					'text', 'move to'
 				)
 		);
@@ -1754,6 +1748,8 @@ jion.lazyValue(
 
 /*
 | Displays the caret.
+|
+| FIXME remove
 */
 prototype._drawCaret =
 	function(

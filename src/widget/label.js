@@ -68,8 +68,7 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'true'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -101,21 +100,24 @@ var
 prototype = widget_label.prototype;
 
 
-
 /*
-| Initializes the widget.
+| The unanchored position of the label.
 */
-prototype._init =
+jion.lazyValue(
+	prototype,
+	'_pos',
 	function( )
 {
-//	FIXME remove
-		/*
-	this.pos =
-		this.superArea
-		? this.designPos.compute( this.superArea )
-		: undefined;
-		*/
-};
+	return(
+		this.designPos.compute(
+			this.view.create(
+				'height', this.superArea.height,
+				'width', this.superArea.width
+			)
+		)
+	);
+}
+);
 
 
 /*
@@ -132,7 +134,7 @@ jion.lazyValue(
 		gleam_glint_text.create(
 			'font', this.font,
 			'key', this.key,
-			'p', this.designPos,
+			'p', this._pos,
 			'text', this.text
 		)
 	);

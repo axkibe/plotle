@@ -310,10 +310,10 @@ jion.lazyValue(
 							'font', font,
 							'key', lineKey + b,
 							'p',
-								euclid_anchor_point.nw.create(
+								euclid_point.create(
 									'x', token.x,
 									'y', line.y
-								),
+								).inView( view ),
 							'text', token.text
 						)
 				);

@@ -596,7 +596,7 @@ jion.lazyValue(
 						'font', font,
 						'key', ':text',
 						'p',
-							euclid_anchor_point.nw.create(
+							euclid_point.create(
 								'x', pitch.x,
 								'y', font.size + pitch.y
 							),

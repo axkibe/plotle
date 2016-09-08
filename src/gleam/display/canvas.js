@@ -538,8 +538,7 @@ prototype._renderGlintTwig =
 
 				this._setFont( g.font, view );
 
-				// XXX
-				p = g.p.compute( view );
+				p = g.p;
 
 				rotate = g.rotate;
 

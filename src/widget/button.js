@@ -162,6 +162,7 @@ prototype._init =
 
 	view = this.view;
 
+	// FIXME move into lazyValues
 	if( this.superArea )
 	{
 		// FIXME remove
@@ -182,6 +183,17 @@ prototype._init =
 					'width', this.area.width
 				)
 			);
+
+		if( this.textDesignPos )
+		{
+			this._textPos =
+				this.textDesignPos.compute(
+					view.create(
+						'height', this.area.height,
+						'width', this.area.width
+					)
+				);
+		}
 	}
 	else
 	{
@@ -384,7 +396,7 @@ jion.lazyValue(
 						gleam_glint_text.create(
 							'font', font,
 							'key', ':text',
-							'p', this.textDesignPos,
+							'p', this._textPos,
 							'rotate', this.textRotation,
 							'text', this.text
 						)
@@ -406,7 +418,7 @@ jion.lazyValue(
 							gleam_glint_text.create(
 								'font', font,
 								'key', ':text' + t,
-								'p', this.textDesignPos.add( 0, y ),
+								'p', this._textPos.add( 0, y ),
 								'text', text[ t ]
 							)
 					);
