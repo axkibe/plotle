@@ -1,7 +1,5 @@
 /*
 | An arrow is a line with arrow heads.
-|
-| NOTE: not used!
 */
 
 
@@ -11,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_anchor_arrow',
+		id : 'euclid_arrow',
 		attributes :
 		{
 			end1 :
@@ -36,7 +34,7 @@ if( JION )
 				comment : 'connect to this point or shape',
 				type :
 					require( './typemap-shape' )
-					.concat( [ 'euclid_anchor_point' ] )
+					.concat( [ 'euclid_point' ] )
 			}
 		}
 	};
@@ -44,11 +42,12 @@ if( JION )
 
 
 var
-	euclid_anchor_arrow,
+	euclid_arrow,
 	euclid_connect,
 	euclid_shape,
 	euclid_shape_line,
-	euclid_shape_start;
+	euclid_shape_start,
+	jion;
 
 
 /*
@@ -70,21 +69,19 @@ var
 	arrowSize,
 	prototype;
 
-prototype = euclid_anchor_arrow.prototype;
+prototype = euclid_arrow.prototype;
 
 arrowSize = 12;  // FIXME move to gruga
 
 
 
 /*
-| Returns the computed arrow shape for a view
-|
-| FIXME remove area
+| Returns the arrow shape.
 */
-prototype.compute =
-	function(
-		view
-	)
+jion.lazyValue(
+	prototype,
+	'shape',
+	function( )
 {
 	var
 		ad,
@@ -101,14 +98,9 @@ prototype.compute =
 		round,
 		sections;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
+	joint1 = this.joint1;
 
-	joint1 = this.joint1.compute( view );
-
-	joint2 = this.joint2.compute( view );
+	joint2 = this.joint2;
 
 	end1 = this.end1;
 
@@ -165,8 +157,8 @@ prototype.compute =
 
 			arrowBase =
 				p2.add(
-					-view.scale( ms * Math.cos( d ) ),
-					-view.scale( ms * Math.sin( d ) )
+					-ms * Math.cos( d ),
+					-ms * Math.sin( d )
 				);
 
 			sections.push(
@@ -174,16 +166,16 @@ prototype.compute =
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-view.scale( arrowSize * Math.cos( d + ad ) ),
-							-view.scale( arrowSize * Math.sin( d + ad ) )
+							-arrowSize * Math.cos( d + ad ),
+							-arrowSize * Math.sin( d + ad )
 						)
 				),
 				euclid_shape_line.create( 'p', p2 ),
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-view.scale( arrowSize * Math.cos( d - ad ) ),
-							-view.scale( arrowSize * Math.sin( d - ad ) )
+							-arrowSize * Math.cos( d - ad ),
+							-arrowSize * Math.sin( d - ad )
 						)
 				),
 				euclid_shape_line.create( 'p', arrowBase )
@@ -208,7 +200,8 @@ prototype.compute =
 			'pc', line.pc
 		)
 	);
-};
+}
+);
 
 
 } )( );

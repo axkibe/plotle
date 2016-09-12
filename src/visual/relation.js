@@ -61,8 +61,8 @@ if( JION )
 
 
 var
-	euclid_anchor_arrow,
 	euclid_anchor_rect,
+	euclid_arrow,
 	euclid_point,
 	gleam_display_canvas,
 	gleam_glint_paint,
@@ -128,9 +128,7 @@ prototype._init =
 /*
 | The notes anchored silhoutte.
 |
-| FIXME anchor to center.
-|
-| FUTURE also incluse the arrows
+| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -200,9 +198,9 @@ prototype.arrow1Shape =
 	if( !item1 ) return undefined;
 
 	return(
-		euclid_anchor_arrow.create(
-			'joint1', item1.aSilhoutte,
-			'joint2', this.aSilhoutte,
+		euclid_arrow.create(
+			'joint1', item1.silhoutte,
+			'joint2', this.silhoutte,
 			'end1', 'normal',
 			'end2', 'normal'
 		)
@@ -227,9 +225,9 @@ prototype.arrow2Shape =
 	if( !item2 ) return undefined;
 
 	return(
-		euclid_anchor_arrow.create(
-			'joint1', this.aSilhoutte,
-			'joint2', item2.aSilhoutte,
+		euclid_arrow.create(
+			'joint1', this.silhoutte,
+			'joint2', item2.silhoutte,
 			'end1', 'normal',
 			'end2', 'arrow'
 		)
@@ -556,7 +554,7 @@ prototype._arrow1Glint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'key', 'arrow1',
-			'shape', arrow1
+			'shape', arrow1.shape.inView( this.view )
 		)
 	);
 };
@@ -579,7 +577,7 @@ prototype._arrow2Glint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'key', 'arrow2',
-			'shape', arrow2
+			'shape', arrow2.shape.inView( this.view )
 		)
 	);
 };

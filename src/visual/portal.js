@@ -79,8 +79,6 @@ var
 	gleam_glint_twig,
 	gleam_glint_disWindow,
 	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_roundRect,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -92,7 +90,6 @@ var
 	gruga_portal,
 	jion,
 	jion$pathRay,
-	math_half,
 	visual_mark_caret,
 	visual_mark_items,
 	result_hover,
@@ -175,6 +172,27 @@ prototype._init =
 	}
 };
 
+/*
+| FIXME remove.
+*/
+jion.lazyValue(
+	prototype,
+	'aSilhoutte',
+	function( )
+{
+	var
+		zone;
+
+	zone = this.zone;
+
+	return(
+		euclid_anchor_ellipse.create(
+			'pnw', zone.pnw.apnw,
+			'pse', zone.pse.apnw
+		)
+	);
+}
+);
 
 
 /*
@@ -504,7 +522,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.aSilhoutte
+						'shape', this.vSilhoutte
 					)
 			);
 	}
@@ -692,35 +710,8 @@ prototype.positioning =
 
 
 /*
-| The portal's anchor silhoutte.
-|
-| FIXME this should be *THE* silhoutte same in
-|   note
-|   label
-|   relation
-*/
-jion.lazyValue(
-	prototype,
-	'aSilhoutte',
-	function( )
-{
-	var
-		zone;
-
-	zone = this.zone;
-
-	return(
-		euclid_anchor_ellipse.create(
-			'pnw', zone.pnw.apnw,
-			'pse', zone.pse.apnw
-		)
-	);
-}
-);
-
-
-/*
 | The portal's silhoutte.
+| FIXME se minus 1
 */
 jion.lazyValue(
 	prototype,
@@ -753,22 +744,16 @@ jion.lazyValue(
 	return(
 		euclid_ellipse.create(
 			'pnw', euclid_point.zero,
-			'pse', euclid_point.create( 'x', zone.width, 'y', zone.height )
+			'pse',
+				euclid_point.create(
+					'x', zone.width,
+					'y', zone.height
+				)
 		)
 	);
 }
 );
 
-
-
-/*
-| The portal's silhoutte at zero.
-*/
-prototype.azSilhoutte =
-	euclid_anchor_ellipse.create(
-		'pnw', euclid_anchor_point.nw,
-		'pse', euclid_anchor_point.seMin1
-	);
 
 
 /*
@@ -910,6 +895,8 @@ prototype.specialKey =
 
 /*
 | Silhoutte in current view.
+»
+| FIXME privatize
 */
 jion.lazyValue(
 	prototype,
@@ -923,6 +910,8 @@ function( )
 
 /*
 | The portals silhoutte at zero for current zoom.
+|
+| FIXME privatize
 */
 jion.lazyValue(
 	prototype,
@@ -1392,8 +1381,8 @@ jion.lazyValue(
 
 	pnw =
 		euclid_point.create(
-			'x', math_half( zone.width - width ),
-			'y', math_half( zone.height ) + 10
+			'x', ( zone.width - width ) / 2,
+			'y', ( zone.height + 10 ) / 2
 		),
 
 	pse = pnw.add( width, height );
@@ -1404,15 +1393,6 @@ jion.lazyValue(
 				euclid_roundRect.create(
 					'pnw', pnw,
 					'pse', pse,
-					'a', rounding,
-					'b', rounding
-				),
-
-			// FIXME get rid of anchoring
-			aShape :
-				euclid_anchor_roundRect.create(
-					'pnw', pnw.apnw,
-					'pse', pse.apnw,
 					'a', rounding,
 					'b', rounding
 				),
@@ -1443,7 +1423,6 @@ prototype._prepareField =
 	)
 {
 	var
-		aSilhoutte,
 		height,
 		pitch,
 		p,
@@ -1484,21 +1463,12 @@ prototype._prepareField =
 			'b', rounding
 		);
 
-	aSilhoutte =
-		euclid_anchor_roundRect.create(
-			'pnw', p.sub( pitch, height ).apnw,
-			'pse', p.add( width + pitch, pitch ).apnw,
-			'a', rounding,
-			'b', rounding
-		);
-
 	return {
 		text : text,
 		width : width,
 		height : height,
 		p : p,
-		silhoutte : silhoutte,
-		aSilhoutte : aSilhoutte
+		silhoutte : silhoutte
 	};
 };
 
@@ -1627,7 +1597,7 @@ jion.lazyValue(
 			gleam_glint_fill.create(
 				'facet', facet,
 				'key', 'background',
-				'shape', this.azSilhoutte
+				'shape', this.vZeroSilhoutte
 			)
 		);
 
@@ -1661,19 +1631,19 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', buttonFacet,
 					'key', 'moveToButton',
-					'shape', moveToButton.aShape
+					'shape', moveToButton.shape.inView( hview )
 				),
 			'twine:set+',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceUserField',
-					'shape', fieldSpaceUser.aSilhoutte
+					'shape', fieldSpaceUser.silhoutte.inView( hview )
 				),
 			'twine:set+',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceTagField',
-					'shape', fieldSpaceTag.aSilhoutte
+					'shape', fieldSpaceTag.silhoutte.inView( hview )
 				),
 			'twine:set+',
 				gleam_glint_text.create(
@@ -1720,13 +1690,13 @@ jion.lazyValue(
 				gleam_glint_mask.create(
 					'key', 'mask',
 					'glint', content,
-					'shape', this.azSilhoutte
+					'shape', this.vZeroSilhoutte
 				),
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,
 					'key', 'border',
-					'shape', this.azSilhoutte
+					'shape', this.vZeroSilhoutte
 				)
 		);
 
@@ -1737,8 +1707,8 @@ jion.lazyValue(
 			'view',
 				this.view.create(
 					'pan', euclid_point.zero,
-					'height', Math.round( vZone.height ),
-					'width', Math.round( vZone.width )
+					'height', Math.round( vZone.height + 1.5 ),
+					'width', Math.round( vZone.width + 1.5 )
 				)
 		)
 	);

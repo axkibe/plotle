@@ -77,7 +77,6 @@ if( JION )
 
 var
 	change_grow,
-	euclid_anchor_point,
 	euclid_anchor_roundRect,
 	euclid_point,
 	euclid_rect,
@@ -345,18 +344,6 @@ jion.lazyValue(
 
 
 /*
-| The notes's silhoutte at zero.
-*/
-prototype.azSilhoutte =
-	euclid_anchor_roundRect.create(
-		'pnw', euclid_anchor_point.nw,
-		'pse', euclid_anchor_point.seMin1,
-		'a', gruga_note.cornerRadius,
-		'b', gruga_note.cornerRadius
-	);
-
-
-/*
 | Reacts on clicks.
 */
 prototype.click = visual_docItem.click;
@@ -453,7 +440,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.aSilhoutte
+						'shape', this.vSilhoutte
 					)
 			);
 	}
@@ -655,7 +642,7 @@ jion.lazyValue(
 /*
 | The notes anchored silhoutte.
 |
-| FIXME anchor to center.
+| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -876,14 +863,14 @@ jion.lazyValue(
 				gleam_glint_fill.create(
 					'facet', facet,
 					'key', 'fill',
-					'shape', this.azSilhoutte
+					'shape', this.vZeroSilhoutte
 				),
 			'twine:set+', doc.glint,
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,
 					'key', 'border',
-					'shape', this.azSilhoutte
+					'shape', this.vZeroSilhoutte
 				)
 		);
 

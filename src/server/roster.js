@@ -391,6 +391,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/euclid/arrow.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/euclid/anchor/point.js',
 		'hasJion', true,
 		'inBundle', true
@@ -452,11 +457,6 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/euclid/anchor/shapeRay.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/anchor/arrow.js',
 		'hasJion', true,
 		'inBundle', true
 	),

@@ -305,7 +305,9 @@ prototype._border =
 
 	cx.beginPath( );
 
-	shape = shape.compute( view );
+	// FIXME XXX
+	if( shape.compute )
+		shape = shape.compute( view );
 
 	this._sketch( shape, border.distance, 0.5 );
 
@@ -370,7 +372,9 @@ prototype._fill  =
 
 	cx = this._cx;
 
-	shape = shape.compute( view );
+	// FIXME XXX
+	if( shape.compute )
+		shape = shape.compute( view );
 
 	this._sketch( shape, 0, 0 );
 
@@ -605,7 +609,9 @@ prototype._renderGlintTwig =
 
 				shape = g.shape;
 
-				shape = shape.compute( view );
+				// FIXME XXX remove
+				if( shape.compute )
+					shape = shape.compute( view );
 
 				if( shape.reflect === 'euclid_shapeRay' )
 				{

@@ -73,7 +73,7 @@ var
 	action_pan,
 	action_select,
 	change_ray,
-	euclid_anchor_arrow,
+	euclid_arrow,
 	euclid_point,
 	euclid_rect,
 	gleam_glint_paint,
@@ -473,7 +473,7 @@ jion.lazyValue(
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromSilhoutte = fromItem.aSilhoutte;
+				fromSilhoutte = fromItem.silhoutte;
 
 				if(
 					action.toItemPath
@@ -481,18 +481,18 @@ jion.lazyValue(
 				)
 				{
 					// arrow connects two items
-					toSilhoutte = toItem.aSilhoutte;
+					toSilhoutte = toItem.silhoutte;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte = action.toPoint.fromView( view ).apnw;
+					toSilhoutte = action.toPoint.fromView( view );
 				}
 
 				if( toSilhoutte )
 				{
 					arrow =
-						euclid_anchor_arrow.create(
+						euclid_arrow.create(
 							'joint1', fromSilhoutte,
 							'joint2', toSilhoutte,
 							'end1', 'normal',
@@ -505,7 +505,7 @@ jion.lazyValue(
 							gleam_glint_paint.create(
 								'facet', gruga_relation.facet,
 								'key', ':transient',
-								'shape', arrow
+								'shape', arrow.shape.inView( view )
 							)
 						);
 				}

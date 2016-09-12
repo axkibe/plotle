@@ -294,7 +294,7 @@ prototype._init =
 /*
 | The notes anchored silhoutte.
 |
-| FIXME anchor to center.
+| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -430,7 +430,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.aSilhoutte
+						'shape', this.vSilhoutte
 					)
 			);
 	}
