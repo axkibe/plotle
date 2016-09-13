@@ -35,7 +35,7 @@ var
 	euclid_anchor_minPoint,
 	euclid_anchor_rect,
 	euclid_anchor_roundRect,
-	euclid_anchor_shapeRay,
+	euclid_shapeRay,
 	euclid_point,
 	euclid_rect,
 	gleam_glint_twig,
@@ -343,10 +343,10 @@ jion.lazyValue(
 	{
 		ca = content.get( a );
 
-		arr[ an++ ] = ca.aSilhoutte.border( -12 );
+		arr[ an++ ] = ca.vSilhoutte.border( -12 );
 	}
 
-	shape = euclid_anchor_shapeRay.create( 'ray:init', arr );
+	shape = euclid_shapeRay.create( 'ray:init', arr );
 
 	return(
 		gleam_glint_mask.create(

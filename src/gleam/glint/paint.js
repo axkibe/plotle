@@ -31,6 +31,7 @@ if( JION )
 					// FIXME XXX
 					require( '../../euclid/anchor/typemap-shape' )
 					.concat( require( '../../euclid/typemap-shape' ) )
+					.concat( [ 'euclid_shapeRay' ] )
 			}
 		}
 	};

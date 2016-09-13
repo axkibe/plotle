@@ -343,6 +343,8 @@ prototype.sub =
 
 /*
 | Returns this euclidean point as 'nw' anchored point.
+|
+| FIXME XXX REMOVE
 */
 jion.lazyValue(
 	prototype,

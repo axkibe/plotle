@@ -43,7 +43,7 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_anchor_point'
+				type : 'euclid_point'
 			},
 			view :
 			{
@@ -72,8 +72,8 @@ var
 	change_join,
 	change_remove,
 	change_split,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_point,
+	euclid_rect,
 	gleam_display_canvas,
 	gleam_facet,
 	gleam_glint_fill,
@@ -188,7 +188,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.pnw
+			'p', this.pnw.inView( this.view.home )
 		)
 	);
 }
@@ -374,7 +374,7 @@ jion.lazyValue(
 	n = s - ( this.fontsize + descend );
 
 	pnw =
-		euclid_anchor_point.nw.create(
+		euclid_point.create(
 			'x', p.x,
 			'y', n
 		);
@@ -390,10 +390,10 @@ jion.lazyValue(
 			'facet', gleam_facet.blackFill,
 			'key', ':caret',
 			'shape',
-				euclid_anchor_rect.create(
+				euclid_rect.create(
 					'pnw', pnw,
 					'pse', pse
-				)
+				).inView( this.view.home )
 		)
 	);
 }

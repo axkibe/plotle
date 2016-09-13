@@ -61,7 +61,6 @@ if( JION )
 
 
 var
-	euclid_anchor_rect,
 	euclid_arrow,
 	euclid_point,
 	gleam_display_canvas,
@@ -123,26 +122,6 @@ prototype._init =
 {
 	visual_label.prototype._init.call( this );
 };
-
-
-/*
-| The notes anchored silhoutte.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'aSilhoutte',
-	function( )
-{
-	return(
-		euclid_anchor_rect.create(
-			'pnw', this.zone.pnw.apnw,
-			'pse', this.zone.pse.apnw
-		)
-	);
-}
-);
 
 
 /*
@@ -292,7 +271,7 @@ Object.defineProperty(
 						gleam_glint_paint.create(
 							'facet', facet,
 							'key', ':highlight',
-							'shape', this.aSilhoutte
+							'shape', this.vSilhoutte
 						)
 				);
 		}

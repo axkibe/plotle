@@ -587,7 +587,11 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_disWindow' :
 
-				p = g.p.compute( view );
+				p = g.p;
+
+				// FIXME XXX remove
+				if( p.compute )
+					p = p.compute( view );
 
 				g.display.render( );
 
@@ -730,7 +734,7 @@ prototype._paint =
 		cx,
 		fill;
 
-	if( shape.reflect === 'euclid_anchor_shapeRay' )
+	if( shape.reflect === 'euclid_shapeRay' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{

@@ -27,7 +27,8 @@ if( JION )
 			p :
 			{
 				comment : 'where to draw it',
-				type : 'euclid_anchor_point'
+				// FIXME remove anchor
+				type : [ 'euclid_anchor_point', 'euclid_point' ]
 			}
 		},
 		init : [ 'inherit' ]

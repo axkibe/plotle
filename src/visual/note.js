@@ -77,7 +77,6 @@ if( JION )
 
 var
 	change_grow,
-	euclid_anchor_roundRect,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
@@ -631,36 +630,6 @@ jion.lazyValue(
 		euclid_roundRect.create(
 			'pnw', zone.pnw,
 			'pse', zone.pse,
-			'a', cr,
-			'b', cr
-		)
-	);
-}
-);
-
-
-/*
-| The notes anchored silhoutte.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'aSilhoutte',
-	function( )
-{
-	var
-		zone,
-		cr;
-
-	zone = this.zone;
-
-	cr = gruga_note.cornerRadius;
-
-	return(
-		euclid_anchor_roundRect.create(
-			'pnw', zone.pnw.apnw,
-			'pse', zone.pse.apnw,
 			'a', cr,
 			'b', cr
 		)

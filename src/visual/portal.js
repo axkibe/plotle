@@ -78,7 +78,6 @@ var
 	gleam_glint_text,
 	gleam_glint_twig,
 	gleam_glint_disWindow,
-	euclid_anchor_ellipse,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -171,28 +170,6 @@ prototype._init =
 		jion.aheadValue( this, '_display', inherit._display );
 	}
 };
-
-/*
-| FIXME remove.
-*/
-jion.lazyValue(
-	prototype,
-	'aSilhoutte',
-	function( )
-{
-	var
-		zone;
-
-	zone = this.zone;
-
-	return(
-		euclid_anchor_ellipse.create(
-			'pnw', zone.pnw.apnw,
-			'pse', zone.pse.apnw
-		)
-	);
-}
-);
 
 
 /*
