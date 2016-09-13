@@ -52,9 +52,8 @@ if( JION )
 
 
 var
-	euclid_anchor_roundRect,
-	euclid_rect,
 	euclid_roundRect,
+	euclid_rect,
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
@@ -95,7 +94,7 @@ jion.lazyValue(
 		gleam_glint_paint.create(
 			'facet', gruga_scrollbar.facet,
 			'key', ':scrollbar',
-			'shape', this.azSilhoutte
+			'shape', this.area
 		)
 	);
 }
@@ -104,8 +103,6 @@ jion.lazyValue(
 
 /*
 | Returns the (2d) area of the scrollbar.
-|
-| FIXME remove
 */
 jion.lazyValue(
 	prototype,
@@ -143,8 +140,15 @@ jion.lazyValue(
 
 	return(
 		euclid_roundRect.create(
-			'pnw', pnw.add( 0, sy ).inView( view ).add( -s05, 0 ),
-			'pse', pnw.add( 0, sy + map ).inView( view ).add( s05, 0 ),
+			'pnw',
+				pnw
+				.add( 0, sy )
+				.inView( view )
+				.add( -s05, 0 ),
+			'pse',
+				pnw.add( 0, sy + map )
+				.inView( view )
+				.add( s05, 0 ),
 			'a', gruga_scrollbar.ellipseA,
 			'b', gruga_scrollbar.ellipseB
 		)
@@ -152,57 +156,6 @@ jion.lazyValue(
 }
 );
 
-
-/*
-| Returns the (2d) area of the scrollbar.
-|
-| FUTURE use fixPoints
-*/
-jion.lazyValue(
-	prototype,
-	'azSilhoutte',
-	function( )
-{
-	var
-		pnw,
-		size,
-		pos,
-		max,
-		ap,
-		map,
-		sy,
-		s05,
-		view;
-
-	pnw = this.pnw;
-
-	size = this.size;
-
-	pos = this.pos;
-
-	max = this.max;
-
-	ap = Math.round( this.aperture * size / max );
-
-	map = Math.max( ap, gruga_scrollbar.minHeight );
-
-	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
-
-	s05 = math_half( gruga_scrollbar.strength );
-
-	view = this.view;
-
-	return(
-		euclid_anchor_roundRect.create(
-			'pnw', pnw.apnw.add( 0, sy ).fixPoint( -s05, 0 ),
-			'pse', pnw.apnw.add( 0, sy + map ).fixPoint( s05, 0 ),
-			'a', gruga_scrollbar.ellipseA,
-			'b', gruga_scrollbar.ellipseB,
-			'fixRounds', true
-		)
-	);
-}
-);
 
 
 /*
@@ -220,6 +173,8 @@ prototype.scale =
 
 /*
 | Pnw in current view.
+|
+| FIXME used?
 */
 jion.lazyValue(
 	prototype,
@@ -233,6 +188,8 @@ jion.lazyValue(
 
 /*
 | Zone in current view.
+|
+| FIXME used?
 */
 jion.lazyValue(
 	prototype,
