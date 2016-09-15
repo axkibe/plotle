@@ -34,7 +34,6 @@ if( JION )
 
 var
 	action_select,
-	euclid_anchor_rect,
 	euclid_rect,
 	jion;
 
@@ -78,7 +77,7 @@ prototype.affects =
 		tPnw,
 		tPse;
 
-	tZone = this.vZone;
+	tZone = this.zone;
 
 	if( !tZone ) return false;
 
@@ -88,7 +87,7 @@ prototype.affects =
 
 	tPse = tZone.pse;
 
-	iZone = item.vZone;
+	iZone = item.zone;
 
 	iPnw = iZone.pnw;
 
@@ -103,40 +102,9 @@ prototype.affects =
 };
 
 
-/*
-| FIXME recompute startPoint/toPoint where they
-| are gathered
-*/
 jion.lazyValue(
 	prototype,
-	'aZone',
-	function( )
-{
-	var
-		rect;
-
-	if( !this.startPoint ) return;
-
-	rect =
-		euclid_rect.createArbitrary(
-			this.startPoint,
-			this.toPoint
-		);
-
-	return(
-		euclid_anchor_rect.create(
-			'pnw', rect.pnw.apnw,
-			'pse', rect.pse.apnw
-		)
-	);
-}
-);
-
-
-// FIXME remove
-jion.lazyValue(
-	prototype,
-	'vZone',
+	'zone',
 	function( )
 {
 	return(

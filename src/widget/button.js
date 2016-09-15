@@ -40,10 +40,9 @@ if( JION )
 				type : [ 'undefined', 'jion$path' ],
 				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
-			// XXX FIXME cal iconShape
-			iconAnchorShape :
+			iconShape :
 			{
-				comment : 'icon anchor shape',
+				comment : 'icon shape',
 				type :
 					require( '../euclid/anchor/typemap-shape' )
 					.concat( [ 'undefined' ] )
@@ -167,7 +166,7 @@ prototype._init =
 	{
 		// FIXME remove
 		area =
-		this.area =
+		this._area =
 			this.designArea.compute(
 				this.view.create(
 					'height', this.superArea.height,
@@ -179,25 +178,37 @@ prototype._init =
 		this._shape =
 			this.shape.compute(
 				view.create(
-					'height', this.area.height,
-					'width', this.area.width
+					'height', this._area.height,
+					'width', this._area.width
 				)
 			);
+		
+		if( this.iconShape )
+		{
+			// XXX FIXME remove
+			this._iconShape =
+				this.iconShape.compute(
+					view.create(
+						'height', this._area.height,
+						'width', this._area.width
+					)
+				);
+		}
 
 		if( this.textDesignPos )
 		{
 			this._textPos =
 				this.textDesignPos.compute(
 					view.create(
-						'height', this.area.height,
-						'width', this.area.width
+						'height', this._area.height,
+						'width', this._area.width
 					)
 				);
 		}
 	}
 	else
 	{
-		this.area = undefined;
+		this._area = undefined;
 
 		this._shape = undefined;
 	}
@@ -220,10 +231,10 @@ prototype.pointingHover =
 {
 	if(
 		!this.visible
-		|| !this.area.within( p )
+		|| !this._area.within( p )
 		|| !this._display.withinSketch(
 			this._shape,
-			p.sub( this.area.pnw )
+			p.sub( this._area.pnw )
 		)
 	)
 	{
@@ -251,10 +262,10 @@ prototype.click =
 {
 	if(
 		!this.visible ||
-		!this.area.within( p ) ||
+		!this._area.within( p ) ||
 		!this._display.withinSketch(
 			this._shape,
-			p.sub( this.area.pnw )
+			p.sub( this._area.pnw )
 		)
 	)
 	{
@@ -305,7 +316,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.designArea.pnw
+			'p', this._area.pnw
 		)
 	);
 }
@@ -378,7 +389,7 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', facet,
 					'key', ':paint',
-					'shape', this.shape
+					'shape', this._shape
 				)
 		);
 
@@ -404,6 +415,8 @@ jion.lazyValue(
 		}
 		else
 		{
+			newline = this.view.scale( newline );
+
 			text = this.text.split( '\n' );
 
 			tZ = text.length;
@@ -426,7 +439,7 @@ jion.lazyValue(
 		}
 	}
 			
-	if( this.iconAnchorShape )
+	if( this.iconShape )
 	{
 		glint =
 			glint.create(
@@ -434,7 +447,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', this.iconFacet,
 						'key', ':icon',
-						'shape', this.iconAnchorShape
+						'shape', this._iconShape
 					)
 			);
 	}
@@ -445,8 +458,8 @@ jion.lazyValue(
 			'view',
 				this.view.create(
 					'pan', euclid_point.zero,
-					'height', this.area.height,
-					'width', this.area.width
+					'height', this._area.height,
+					'width', this._area.width
 				)
 		)
 	);

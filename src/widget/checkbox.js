@@ -157,7 +157,7 @@ jion.lazyValue(
 
 		sections[ a ] =
 			section.create(
-				'p', section.p.create( 'shape', da )
+				'p', section.p.create( 'tenter', da )
 			);
 	}
 

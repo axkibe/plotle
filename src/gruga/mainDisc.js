@@ -187,7 +187,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(
-				'iconAnchorShape', gruga_iconNormal.shape,
+				'iconShape', gruga_iconNormal.shape,
 				'iconFacet', gruga_iconNormal.facet,
 				'designArea',
 					euclid_anchor_rect.create(
@@ -197,7 +197,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'select',
 			buttonModel.abstract(
-				'iconAnchorShape', gruga_iconSelect.shape,
+				'iconShape', gruga_iconSelect.shape,
 				'iconFacet', gruga_iconSelect.facet,
 				'visible', false,
 				'designArea',
@@ -220,7 +220,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'remove',
 			buttonModel.abstract(
-				'iconAnchorShape', gruga_iconRemove.shape,
+				'iconShape', gruga_iconRemove.shape,
 				'iconFacet', gruga_iconRemove.facet,
 				'visible', false,
 				'designArea',

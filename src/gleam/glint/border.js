@@ -26,9 +26,7 @@ if( JION )
 			{
 				comment : 'the shape to draw',
 				type :
-					// FIXME XXX
-					require( '../../euclid/anchor/typemap-shape' )
-					.concat( require( '../../euclid/typemap-shape' ) )
+					require( '../../euclid/typemap-shape' )
 					.concat( [ 'euclid_shapeRay' ] )
 			}
 		}

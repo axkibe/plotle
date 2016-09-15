@@ -362,13 +362,16 @@ jion.lazyValue(
 		p,
 		pnw,
 		pse,
-		s;
+		s,
+		hView;
+
+	hView = this.view.home;
 
 	descend = this.fontsize * shell_settings.bottombox;
 
-	// FIXME simplify
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
+	// FIXME simplify all this
 	s = p.y + descend;
 
 	n = s - ( this.fontsize + descend );
@@ -377,12 +380,12 @@ jion.lazyValue(
 		euclid_point.create(
 			'x', p.x,
 			'y', n
-		);
+		).inView( hView );
 
 	pse =
-		pnw.create(
-			'x', pnw.x + 1,
-			'y', s
+		pnw.add(
+			1,
+			hView.scale( this.fontsize + descend )
 		);
 
 	return(
@@ -393,7 +396,7 @@ jion.lazyValue(
 				euclid_rect.create(
 					'pnw', pnw,
 					'pse', pse
-				).inView( this.view.home )
+				)
 		)
 	);
 }

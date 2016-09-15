@@ -425,7 +425,7 @@ jion.lazyValue(
 				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.zone.pnw.apnw
+					'p', this.zone.pnw.inView( this.view )
 				)
 		);
 

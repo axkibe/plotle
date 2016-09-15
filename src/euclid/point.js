@@ -146,10 +146,12 @@ prototype.add =
 	}
 	else
 	{
-		if( a1 === 0 && a2 === 0 )
-		{
-			return this;
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( arguments.length !== 2 ) throw new Error( );
+/**/	}
+
+		if( a1 === 0 && a2 === 0 ) return this;
 
 		return euclid_point.create(
 			'x', this.x + a1,

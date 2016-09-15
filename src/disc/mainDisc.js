@@ -154,15 +154,15 @@ prototype._init =
 
 	// FIXME XXX remove
 	area =
-	this.area =
+	this._area =
 		this.designArea.compute( cv ).align;
 
 	// FIXME XXX remove
 	this.silhoutte =
 		this.shape.compute(
 			cv.create(
-				'height', this.area.height,
-				'width', this.area.width
+				'height', area.height,
+				'width', area.width
 			)
 		);
 
@@ -305,7 +305,7 @@ prototype._init =
 					twig[ wname ].path
 					? pass
 					: this.path.append( 'twig' ).append( wname ),
-				'superArea', this.area.zeroPnw,
+				'superArea', area.zeroPnw,
 				'text', text,
 				'visible', visible,
 				'view', cv
@@ -448,7 +448,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', 'mainDisc',
-			'p', this.designArea.pnw
+			'p', this._area.pnw
 		)
 	);
 }
@@ -472,9 +472,9 @@ prototype.pointingHover =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !this._area.within( p ) ) return;
 
-	pp = p.sub( this.area.pnw );
+	pp = p.sub( this._area.pnw );
 
 	if( !this._display.withinSketch( this.silhoutte, pp ) ) return;
 
@@ -512,11 +512,11 @@ prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !this._area.within( p ) ) return;
 
 	display = this._display;
 
-	pp = p.sub( this.area.pnw );
+	pp = p.sub( this._area.pnw );
 
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
 
@@ -554,12 +554,12 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !this._area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.area.pnw )
+			p.sub( this._area.pnw )
 		)
 	)
 	{
@@ -595,12 +595,12 @@ prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !this._area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.area.pnw )
+			p.sub( this._area.pnw )
 		)
 	)
 	{
@@ -628,8 +628,8 @@ jion.lazyValue(
 
 	view =
 		this.controlView.create(
-			'height', this.area.height,
-			'width', this.area.width
+			'height', this._area.height,
+			'width', this._area.width
 		);
 
 	glint =
@@ -639,7 +639,7 @@ jion.lazyValue(
 				gleam_glint_fill.create(
 					'facet', this.facet,
 					'key', ':fill',
-					'shape', this.shape
+					'shape', this.silhoutte
 				)
 		);
 
@@ -659,7 +659,7 @@ jion.lazyValue(
 				gleam_glint_border.create(
 					'facet', this.facet,
 					'key', ':border',
-					'shape', this.shape
+					'shape', this.silhoutte
 				)
 		);
 

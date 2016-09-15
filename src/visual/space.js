@@ -515,7 +515,7 @@ jion.lazyValue(
 
 		case 'action_select' :
 
-			if( action.aZone )
+			if( action.zone )
 			{
 				glint =
 					glint.create(
@@ -523,7 +523,7 @@ jion.lazyValue(
 							gleam_glint_paint.create(
 								'facet', gruga_select.facet,
 								'key', ':select',
-								'shape', action.aZone
+								'shape', action.zone.inView( view )
 							)
 					);
 			}

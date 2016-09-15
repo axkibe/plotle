@@ -248,7 +248,7 @@ Object.defineProperty(
 			gleam_glint_disWindow.create(
 				'display', this._display,
 				'key', ':label',
-				'p', this.pnw.apnw
+				'p', this.pnw.inView( this.view )
 			);
 
 		arrow1 = this._arrow1Glint( );

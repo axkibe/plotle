@@ -75,9 +75,13 @@ if( NODE )
 
 
 var
-	prototype;
+	prototype,
+	round;
+
 
 prototype = gleam_display_canvas.prototype;
+
+round = Math.round;
 
 
 /*
@@ -294,8 +298,7 @@ prototype.render =
 prototype._border =
 	function(
 		border, // the gleam_border
-		shape,  // an object to draw
-		view    // the view to scale/pan the shape
+		shape   // an object to draw
 	)
 {
 	var
@@ -304,10 +307,6 @@ prototype._border =
 	cx = this._cx;
 
 	cx.beginPath( );
-
-	// FIXME XXX
-	if( shape.compute )
-		shape = shape.compute( view );
 
 	this._sketch( shape, border.distance, 0.5 );
 
@@ -325,8 +324,7 @@ prototype._border =
 prototype._borders  =
 	function(
 		border, // the gleam_border
-		shape,  // the shape to draw the border in
-		view    // the view to draw the border in
+		shape   // the shape to draw the border in
 	)
 {
 	var
@@ -339,14 +337,14 @@ prototype._borders  =
 
 			for( a = 0, aZ = border.length; a < aZ; a++ )
 			{
-				this._border( border.get( a ), shape, view );
+				this._border( border.get( a ), shape );
 			}
 
 			break;
 
 		case 'gleam_border' :
 
-			this._border( border, shape, view );
+			this._border( border, shape );
 
 			break;
 
@@ -363,18 +361,13 @@ prototype._borders  =
 prototype._fill  =
 	function(
 		fill,   // the gleam_border
-		shape,  // a shape to sketch
-		view    // the view to scale the shape to
+		shape   // a shape to sketch
 	)
 {
 	var
 		cx;
 
 	cx = this._cx;
-
-	// FIXME XXX
-	if( shape.compute )
-		shape = shape.compute( view );
 
 	this._sketch( shape, 0, 0 );
 
@@ -520,7 +513,7 @@ prototype._renderGlintTwig =
 
 				cx.beginPath( );
 
-				this._borders( g.facet.border, g.shape, view );
+				this._borders( g.facet.border, g.shape );
 
 				break;
 
@@ -528,7 +521,7 @@ prototype._renderGlintTwig =
 
 				cx.beginPath( );
 
-				this._fill( g.facet.fill, g.shape, view );
+				this._fill( g.facet.fill, g.shape );
 
 				break;
 
@@ -589,16 +582,12 @@ prototype._renderGlintTwig =
 
 				p = g.p;
 
-				// FIXME XXX remove
-				if( p.compute )
-					p = p.compute( view );
-
 				g.display.render( );
 
 				cx.drawImage(
 					g.display._cv,
-					Math.round( p.x ),
-					Math.round( p.y )
+					round( p.x ),
+					round( p.y )
 				);
 
 				break;
@@ -612,10 +601,6 @@ prototype._renderGlintTwig =
 				cx.save( );
 
 				shape = g.shape;
-
-				// FIXME XXX remove
-				if( shape.compute )
-					shape = shape.compute( view );
 
 				if( shape.reflect === 'euclid_shapeRay' )
 				{
@@ -697,13 +682,13 @@ prototype._sketchRect =
 
 	cx = this._cx;
 
-	wx = rect.pnw.x + border + twist;
+	wx = round( rect.pnw.x ) + border + twist;
 
-	ny = rect.pnw.y + border + twist;
+	ny = round( rect.pnw.y ) + border + twist;
 
-	ex = rect.pse.x - border + twist;
+	ex = round( rect.pse.x ) - border + twist;
 
-	sy = rect.pse.y - border + twist;
+	sy = round( rect.pse.y ) - border + twist;
 
 	cx.moveTo( wx, ny );
 
@@ -722,9 +707,8 @@ prototype._sketchRect =
 */
 prototype._paint =
 	function(
-		facet,  // paint in this facet
-		shape,  // paint this shape
-		view    // resize the shape to this view
+		facet, // paint in this facet
+		shape  // paint this shape
 	)
 {
 	var
@@ -738,7 +722,7 @@ prototype._paint =
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
-			this._paint( facet, shape.get( a ), view );
+			this._paint( facet, shape.get( a ) );
 		}
 
 		return;
@@ -757,9 +741,9 @@ prototype._paint =
 
 	cx.beginPath( );
 
-	if( fill ) this._fill( fill, shape, view );
+	if( fill ) this._fill( fill, shape );
 
-	if( border ) this._borders( border, shape, view );
+	if( border ) this._borders( border, shape );
 };
 
 

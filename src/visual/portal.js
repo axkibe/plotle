@@ -70,14 +70,6 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	gleam_display_canvas,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_mask,
-	gleam_glint_paint,
-	gleam_glint_text,
-	gleam_glint_twig,
-	gleam_glint_disWindow,
 	euclid_ellipse,
 	euclid_measure,
 	euclid_point,
@@ -86,6 +78,15 @@ var
 	euclid_view,
 	fabric_portal,
 	fabric_spaceRef,
+	gleam_display_canvas,
+	gleam_facet,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_mask,
+	gleam_glint_paint,
+	gleam_glint_text,
+	gleam_glint_twig,
+	gleam_glint_disWindow,
 	gruga_portal,
 	jion,
 	jion$pathRay,
@@ -485,7 +486,7 @@ jion.lazyValue(
 				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.zone.pnw.apnw
+					'p', this.zone.pnw.inView( this.view )
 				)
 		);
 
@@ -1060,6 +1061,7 @@ prototype._keyLeft =
 	return;
 };
 
+
 /*
 | User pressed down key.
 */
@@ -1092,6 +1094,7 @@ prototype._keyTab =
 			)
 	);
 };
+
 
 /*
 | User pressed down key.
@@ -1159,6 +1162,7 @@ prototype._keyUp =
 			break;
 	}
 };
+
 
 /*
 | User pressed right key.
@@ -1390,6 +1394,7 @@ jion.lazyValue(
 }
 );
 
+
 /*
 | Prepares an input field ( user / tag )
 */
@@ -1542,6 +1547,7 @@ jion.lazyValue(
 {
 	var
 		buttonFacet,
+		caretGlint,
 		content,
 		facet,
 		glint,
@@ -1645,30 +1651,30 @@ jion.lazyValue(
 				)
 		);
 
-
-	/*
 	if(
 		mark
 		&& mark.reflect === 'visual_mark_caret'
 		&& mark.focus
 	)
 	{
-		this._drawCaret( display );
+		caretGlint = this._caretGlint;
+
+		if( caretGlint )
+		{
+			content = content.create( 'twine:set+', caretGlint );
+		}
 	}
-
-	// redraws the border on the end to top
-	// everything else
-
-	*/
 
 	glint =
 		glint.create(
+			// masks the portals content
 			'twine:set+',
 				gleam_glint_mask.create(
-					'key', 'mask',
+					'key', ':mask',
 					'glint', content,
 					'shape', this.vZeroSilhoutte
 				),
+			// puts the border on top of everything else
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,
@@ -1676,7 +1682,6 @@ jion.lazyValue(
 					'shape', this.vZeroSilhoutte
 				)
 		);
-
 
 	return(
 		gleam_display_canvas.create(
@@ -1694,27 +1699,30 @@ jion.lazyValue(
 
 
 /*
-| Displays the caret.
-|
-| FIXME remove
+| Glint for the caret.
 */
-prototype._drawCaret =
-	function(
-		display
-	)
+jion.lazyValue(
+	prototype,
+	'_caretGlint',
+	function( )
 {
 	var
 		descend,
-		fieldPNW,
+		fieldPnw,
 		font,
 		fs,
+		hView,
 		mark,
 		n,
 		p,
+		pnw,
+		pse,
 		s,
 		section;
 
 	mark = this.mark;
+
+	hView = this.view.home;
 
 	section = mark.caret.path.get( -1 );
 
@@ -1729,17 +1737,40 @@ prototype._drawCaret =
 
 	descend = fs * shell_settings.bottombox;
 
-	fieldPNW = this[ spaceFields[ section ] ].p;
+	fieldPnw = this[ spaceFields[ section ] ].p;
 
 	p = this._locateOffset( section, mark.caret.at );
 
-	s = Math.round( p.y + descend ) + fieldPNW.y;
+	// FIXME simplify all this
+	s = p.y + descend + fieldPnw.y;
 
-	n = s - Math.round( fs + descend );
+	n = s - ( fs + descend );
 
-	// displays the caret
-	display.fillRect( 'black', p.x + fieldPNW.x, n, 1, s - n );
-};
+	pnw =
+		p
+		.add( 0, n )
+		.inView( hView )
+		.add( fieldPnw.x, 0 );
+
+	pse =
+		pnw.add(
+			1,
+			hView.scale( fs + descend )
+		);
+
+	return(
+		gleam_glint_fill.create(
+			'facet', gleam_facet.blackFill,
+			'key', ':caret',
+			'shape',
+				euclid_rect.create(
+					'pnw', pnw,
+					'pse', pse
+				)
+		)
+	);
+}
+);
 
 
 /*

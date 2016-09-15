@@ -30,14 +30,11 @@ if( JION )
 var
 	action_dragItems,
 	action_resizeItems,
-	euclid_anchor_ellipse,
-	euclid_anchor_fixPoint,
-	euclid_anchor_minPoint,
-	euclid_anchor_rect,
-	euclid_anchor_roundRect,
-	euclid_shapeRay,
+	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
+	euclid_roundRect,
+	euclid_shapeRay,
 	gleam_glint_twig,
 	gleam_glint_paint,
 	gleam_glint_mask,
@@ -72,19 +69,6 @@ prototype = visual_frame.prototype;
 handleSize = gruga_frame.handleSize;
 
 handleSize2 = math_half( handleSize );
-
-
-/*
-| Zone in current view.
-*/
-jion.lazyValue(
-	prototype,
-	'vZone',
-function( )
-{
-	return this.zone.inView( this.view );
-}
-);
 
 
 /*
@@ -199,7 +183,7 @@ prototype.click =
 	// ctrl-clicks are not swallowed.
 	if( ctrl ) return false;
 
-	if( !this._vOuterZone.within( p ) ) return; // XXX
+	if( !this._outerZone.within( p ) ) return;
 
 	if( this._withinContentMask( p ) ) return;
 
@@ -230,48 +214,48 @@ prototype.dragStart =
 
 	zone = this.zone;
 
-	if( !this._vOuterZone.within( p ) ) return; //XXX
+	if( !this._outerZone.within( p ) ) return;
 
 	if( this._withinContentMask( p ) ) return;
 
-	if( this._vHandleNwShape.within( p ) )
+	if( this._handleNwShape.within( p ) )
 	{
 		com = 'nw';
 		pBase = zone.pse;
 	}
-	else if( this._vHandleNeShape.within( p ) )
+	else if( this._handleNeShape.within( p ) )
 	{
 		com = 'ne';
 		pBase = zone.psw;
 	}
-	else if( this._vHandleSeShape.within( p ) )
+	else if( this._handleSeShape.within( p ) )
 	{
 		com = 'se';
 		pBase = zone.pnw;
 	}
-	else if( this._vHandleSwShape.within( p ) )
+	else if( this._handleSwShape.within( p ) )
 	{
 		com = 'sw';
 		pBase = zone.pne;
 	}
 	else if( !this.proportional )
 	{
-		if( this._vHandleNShape.within( p ) )
+		if( this._handleNShape.within( p ) )
 		{
 			com = 'n';
 			pBase = zone.ps;
 		}
-		else if( this._vHandleEShape.within( p ) )
+		else if( this._handleEShape.within( p ) )
 		{
 			com = 'e';
 			pBase = zone.pw;
 		}
-		else if( this._vHandleSShape.within( p ) )
+		else if( this._handleSShape.within( p ) )
 		{
 			com = 's';
 			pBase = zone.pn;
 		}
-		else if( this._vHandleWShape.within( p ) )
+		else if( this._handleWShape.within( p ) )
 		{
 			com = 'w';
 			pBase = zone.pe;
@@ -374,21 +358,20 @@ prototype.pointingHover =
 	var
 		com;
 
-	if( !this._vOuterZone.within( p ) ) return;
+	if( !this._outerZone.within( p ) ) return;
 
 	if( this._withinContentMask( p ) ) return;
 
-	// YYY XXX
-	if( this._vHandleNwShape.within( p ) ) com = 'nw';
-	else if( this._vHandleNeShape.within( p ) ) com = 'ne';
-	else if( this._vHandleSeShape.within( p ) ) com = 'se';
-	else if( this._vHandleSwShape.within( p ) ) com = 'sw';
+	if( this._handleNwShape.within( p ) ) com = 'nw';
+	else if( this._handleNeShape.within( p ) ) com = 'ne';
+	else if( this._handleSeShape.within( p ) ) com = 'se';
+	else if( this._handleSwShape.within( p ) ) com = 'sw';
 	else if( !this.proportional )
 	{
-		if( this._vHandleNShape.within( p ) ) com = 'n';
-		if( this._vHandleEShape.within( p ) ) com = 'e';
-		if( this._vHandleSShape.within( p ) ) com = 's';
-		if( this._vHandleWShape.within( p ) ) com = 'w';
+		if( this._handleNShape.within( p ) ) com = 'n';
+		if( this._handleEShape.within( p ) ) com = 'e';
+		if( this._handleSShape.within( p ) ) com = 's';
+		if( this._handleWShape.within( p ) ) com = 'w';
 	}
 
 	if( com )
@@ -458,12 +441,11 @@ jion.lazyValue(
 	oZone = this._outerZone;
 
 	return(
-		euclid_anchor_roundRect.create(
+		euclid_roundRect.create(
 			'pnw', oZone.pnw,
 			'pse', oZone.pse,
 			'a', handleSize / 2,
-			'b', handleSize / 2,
-			'fixRounds', true
+			'b', handleSize / 2
 		)
 	);
 }
@@ -508,9 +490,9 @@ jion.lazyValue(
 	pn = this._outerZone.pn;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', pn.fixPoint( -handleSize2, 0 ),
-			'pse', pn.fixPoint( handleSize2, handleSize )
+		euclid_ellipse.create(
+			'pnw', pn.add( -handleSize2, 0 ),
+			'pse', pn.add( handleSize2, handleSize )
 		)
 	);
 }
@@ -550,9 +532,9 @@ jion.lazyValue(
 	pne = this._outerZone.pne;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', pne.fixPoint( -handleSize, 0 ),
-			'pse', pne.fixPoint( 0, handleSize )
+		euclid_ellipse.create(
+			'pnw', pne.add( -handleSize, 0 ),
+			'pse', pne.add( 0, handleSize )
 		)
 	);
 }
@@ -592,51 +574,13 @@ jion.lazyValue(
 	pnw = this._outerZone.pnw;
 
 	return(
-		euclid_anchor_ellipse.create(
+		euclid_ellipse.create(
 			'pnw', pnw,
-			'pse',
-				euclid_anchor_fixPoint.create(
-					'anchor', pnw,
-					'x', handleSize,
-					'y', handleSize
-				)
+			'pse', pnw.add( handleSize, handleSize )
 		)
 	);
 }
 );
-
-
-// XXX
-jion.lazyValue( prototype, '_vHandleNwShape',
-	function( ) { return this._handleNwShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleNShape',
-	function( ) { return this._handleNShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleNeShape',
-	function( ) { return this._handleNeShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleEShape',
-	function( ) { return this._handleEShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleSeShape',
-	function( ) { return this._handleSeShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleSShape',
-	function( ) { return this._handleSShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleSwShape',
-	function( ) { return this._handleSwShape.compute( this.view ); }  );
-
-// XXX
-jion.lazyValue( prototype, '_vHandleWShape',
-	function( ) { return this._handleWShape.compute( this.view ); }  );
 
 
 /*
@@ -677,9 +621,9 @@ jion.lazyValue(
 	pe = this._outerZone.pe;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', pe.fixPoint( -handleSize, -handleSize / 2 ),
-			'pse', pe.fixPoint( 0, handleSize / 2 )
+		euclid_ellipse.create(
+			'pnw', pe.add( -handleSize, -handleSize / 2 ),
+			'pse', pe.add( 0, handleSize / 2 )
 		)
 	);
 }
@@ -724,9 +668,9 @@ jion.lazyValue(
 	ps = this._outerZone.ps;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', ps.fixPoint( -handleSize2, -handleSize ),
-			'pse', ps.fixPoint( handleSize2, 0 )
+		euclid_ellipse.create(
+			'pnw', ps.add( -handleSize2, -handleSize ),
+			'pse', ps.add( handleSize2, 0 )
 		)
 	);
 }
@@ -766,8 +710,8 @@ jion.lazyValue(
 	pse = this._outerZone.pse;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', pse.fixPoint( -handleSize, -handleSize ),
+		euclid_ellipse.create(
+			'pnw', pse.add( -handleSize, -handleSize ),
 			'pse', pse
 		)
 	);
@@ -808,9 +752,9 @@ jion.lazyValue(
 	psw = this._outerZone.psw;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', psw.fixPoint( 0, -handleSize ),
-			'pse', psw.fixPoint( handleSize, 0 )
+		euclid_ellipse.create(
+			'pnw', psw.add( 0, -handleSize ),
+			'pse', psw.add( handleSize, 0 )
 		)
 	);
 }
@@ -855,9 +799,9 @@ jion.lazyValue(
 	pw = this._outerZone.pw;
 
 	return(
-		euclid_anchor_ellipse.create(
-			'pnw', pw.fixPoint( 0, -handleSize2 ),
-			'pse', pw.fixPoint( handleSize, handleSize2 )
+		euclid_ellipse.create(
+			'pnw', pw.add( 0, -handleSize2 ),
+			'pse', pw.add( handleSize, handleSize2 )
 		)
 	);
 }
@@ -896,7 +840,6 @@ jion.lazyValue(
 	function( )
 {
 	var
-		dfw,
 		hw,
 		hh,
 		fw,
@@ -905,65 +848,40 @@ jion.lazyValue(
 		pnw,
 		pse,
 		view,
-		zone;
+		vZone;
 
 	fw = gruga_frame.width;
 
-	view = this.view; // FIXME remove
+	view = this.view;
 
-	dfw = fw / view.zoom;
+	vZone = this.zone.inView( view );
 
-	zone = this.zone;
+	pc = vZone.pc,
 
-	pc = zone.pc.apnw,
+	hw = vZone.width / 2;
 
-	hw = zone.width / 2;
-
-	hh = zone.height / 2;
+	hh = vZone.height / 2;
 
 	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
 
 	pnw =
-		euclid_anchor_minPoint.create(
-			'anchor', pc,
-			'x', -hw - dfw,
-			'y', -hh - dfw,
-			'minx', -min,
-			'miny', -min
+		pc.add(
+			Math.min( -hw - fw, -min ),
+			Math.min( -hh - fw, -min )
 		);
 
 	pse =
-		euclid_anchor_minPoint.create(
-			'anchor', pc,
-			'x', hw + dfw,
-			'y', hh + dfw,
-			'minx', min,
-			'miny', min
+		pc.add(
+			Math.max( hw + fw, min ),
+			Math.max( hh + fw, min )
 		);
 
 	return(
-		euclid_anchor_rect.create(
+		euclid_rect.create(
 			'pnw', pnw,
 			'pse', pse
 		)
 	);
-}
-);
-
-
-
-
-/*
-| Outer zone in view.
-|
-| FIXME remove
-*/
-jion.lazyValue(
-	prototype,
-	'_vOuterZone',
-	function( )
-{
-	return this._outerZone.compute( this.view );
 }
 );
 

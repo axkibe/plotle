@@ -536,7 +536,7 @@ jion.lazyValue(
 				gleam_glint_fill.create(
 					'facet', this.facet,
 					'key', 'fill',
-					'shape', this.shape
+					'shape', this.silhoutte
 				)
 		);
 
@@ -556,7 +556,7 @@ jion.lazyValue(
 				gleam_glint_border.create(
 					'facet', this.facet,
 					'key', 'border',
-					'shape', this.shape
+					'shape', this.silhoutte
 				)
 		);
 

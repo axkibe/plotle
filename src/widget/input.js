@@ -14,7 +14,7 @@ if( JION )
 		{
 			designArea :
 			{
-				comment : 'designed area (using anchors',
+				comment : 'designed area (using anchors)',
 				type : 'euclid_anchor_rect'
 			},
 			facets :
@@ -86,6 +86,11 @@ if( JION )
 
 
 var
+	euclid_ellipse,
+	euclid_measure,
+	euclid_point,
+	euclid_rect,
+	euclid_roundRect,
 	gleam_facet,
 	gleam_display_canvas,
 	gleam_glint_border,
@@ -93,12 +98,6 @@ var
 	gleam_glint_text,
 	gleam_glint_twig,
 	gleam_glint_disWindow,
-	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
-	euclid_anchor_roundRect,
-	euclid_measure,
-	euclid_point,
 	jion,
 	result_hover,
 	root,
@@ -152,15 +151,12 @@ prototype._init =
 			this.designArea.compute( view );
 
 		this._shape =
-			euclid_anchor_roundRect.create(
-				'pnw', euclid_point.zero.apnw,
-				'pse', area.pse.sub( area.pnw ).apnw,
+			euclid_roundRect.create(
+				'pnw', euclid_point.zero,
+				'pse', area.pse.sub( area.pnw ),
 				'a', 7,
 				'b', 3
 			);
-	
-		// FIXME remove
-		this._vShape = this._shape.compute( view );
 	}
 	else
 	{
@@ -239,7 +235,7 @@ prototype.click =
 
 	pp = p.sub( this.area.pnw );
 
-	if( !this._vShape.within( pp ) ) return undefined;
+	if( !this._shape.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',
@@ -267,7 +263,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.area.pnw.apnw
+			'p', this.area.pnw
 		)
 	);
 }
@@ -427,7 +423,7 @@ prototype.pointingHover =
 {
 	if(
 		!this.area.within( p )
-		|| !this._vShape.within( p.sub( this.area.pnw ) )
+		|| !this._shape.within( p.sub( this.area.pnw ) )
 	)
 	{
 		return undefined;
@@ -496,7 +492,7 @@ jion.lazyValue(
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
-	s = p.y + descend + 1;
+	s = descend + 1;
 
 	n = s - ( fs + descend );
 
@@ -505,17 +501,9 @@ jion.lazyValue(
 			'facet', gleam_facet.blackFill,
 			'key', ':caret',
 			'shape',
-				euclid_anchor_rect.create(
-					'pnw',
-						euclid_anchor_point.nw.create(
-							'x', p.x,
-							'y', n
-						),
-					'pse',
-						euclid_anchor_point.nw.create(
-							'x', p.x + 1,
-							'y', s
-						)
+				euclid_rect.create(
+					'pnw', p.add( 0, n ),
+					'pse', p.add( 1, s )
 				)
 		)
 	);
@@ -927,14 +915,14 @@ jion.lazyValue(
 	for( a = 0, aZ = value.length; a < aZ; a++, x += w + k )
 	{
 		pm[ a ] =
-			euclid_anchor_ellipse.create(
+			euclid_ellipse.create(
 				'pnw',
-					euclid_anchor_point.nw.create(
+					euclid_point.create(
 						'x', x,
 						'y', y - h
 					),
 				'pse',
-					euclid_anchor_point.nw.create(
+					euclid_point.create(
 						'x', x + w,
 						'y', y + h
 					)

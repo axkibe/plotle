@@ -108,6 +108,7 @@ jion.lazyValue(
 	'_pos',
 	function( )
 {
+	// XXX
 	return(
 		this.designPos.compute(
 			this.view.create(
