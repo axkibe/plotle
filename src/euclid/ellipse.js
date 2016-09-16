@@ -147,7 +147,7 @@ prototype._init =
 
 
 /*
-| Returns an ellipse moved by a point.
+| Returns a moved ellipse.
 */
 prototype.add =
 	function(
@@ -155,7 +155,9 @@ prototype.add =
 	)
 {
 	return(
-		this.create(
+		( p.x === 0 && p.y === 0 )
+		? this
+		: this.create(
 			'pnw', this.pnw.add( p ),
 			'pse', this.pse.add( p )
 		)
@@ -298,20 +300,47 @@ prototype.inView =
 
 
 /*
+| Returns a transformed roundRect.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.add( transform.pan )
+		: this.create(
+			'pnw', this.pnw.transform( transform ),
+			'pse', this.pse.transform( transform ),
+			'a', transform.scale( this.a ),
+			'b', transform.scale( this.b )
+		)
+	);
+};
+
+
+/*
 | Center point of an ellipse.
 */
 jion.lazyValue(
 	prototype,
 	'pc',
 	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', math_half( this.pnw.x + this.pse.x ),
-				'y', math_half( this.pnw.y + this.pse.y )
-			)
-		);
-	}
+{
+	return(
+		euclid_point.create(
+			'x', math_half( this.pnw.x + this.pse.x ),
+			'y', math_half( this.pnw.y + this.pse.y )
+		)
+	);
+}
 );
 
 

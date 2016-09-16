@@ -48,9 +48,14 @@ if( JION )
 				comment : 'reference to this space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
+			transform :
+			{
+				comment : 'the current transform of space',
+				type : 'euclid_transform'
+			},
 			view :
 			{
-				comment : 'the current view',
+				comment : 'the current view of space',
 				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
@@ -217,6 +222,7 @@ prototype._init =
 		mark,
 		path,
 		ranks,
+		transform,
 		twig,
 		view;
 
@@ -227,6 +233,8 @@ prototype._init =
 	hover = this.hover;
 
 	mark = this.mark;
+
+	transform = this.transform;
 
 	view = this.view;
 
@@ -355,12 +363,9 @@ jion.lazyValue(
 {
 	var
 		content,
-		mark,
-		view;
+		mark;
 
 	mark = this.mark;
-
-	view = this.view;
 
 	if( mark )
 	{
@@ -375,7 +380,7 @@ jion.lazyValue(
 				( this._inheritFrame || visual_frame )
 				.create(
 					'content', content,
-					'view', view
+					'view', this.view
 				)
 			);
 		}

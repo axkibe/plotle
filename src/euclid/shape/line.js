@@ -143,5 +143,26 @@ prototype.getProjection =
 	}
 };
 
+/*
+| Returns a transformed shape section.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		this.p !== undefined
+		? this.create( 'p', this.p.transform( transform ) )
+		: this
+	);
+};
+
 
 })( );

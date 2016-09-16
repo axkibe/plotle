@@ -61,4 +61,22 @@ prototype.inView =
 };
 
 
+/*
+| Returns the shape section repositioned to a view.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return this.create( 'p', this.p.transform( transform ) );
+};
+
+
 })( );

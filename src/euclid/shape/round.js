@@ -78,6 +78,28 @@ prototype.inView =
 
 
 /*
+| Returns a transformed shape section.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		this.p !== undefined
+		? this.create( 'p', this.p.transform( transform ) )
+		: this
+	);
+};
+
+
+/*
 | Gets the source of a projection to p.
 |
 | Returns the projection intersection in

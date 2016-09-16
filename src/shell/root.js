@@ -87,6 +87,11 @@ if( JION )
 				comment : 'reference to current space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
+			spaceTransform :
+			{
+				comment : 'current space transform',
+				type : 'euclid_transform'
+			},
 			spaceVisual :
 			{
 				comment : 'current space visualisation',
@@ -155,6 +160,7 @@ var
 	change_wrap,
 	disc_jockey,
 	euclid_connect,
+	euclid_transform,
 	gleam_display_canvas,
 	euclid_measure,
 	euclid_point,
@@ -417,6 +423,7 @@ shell_root.startup =
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
+		'spaceTransform', euclid_transform.normal,
 		'systemFocus', true,
 		'view', view,
 		'disc', dj,
@@ -443,8 +450,10 @@ prototype._init =
 		mark,
 		spaceFabric,
 		spaceRef,
+		spaceTransform,
 		user,
 		view;
+
 
 	// sets drawn false
 	if( !this.lookAlike( inherit ) )
@@ -459,6 +468,8 @@ prototype._init =
 	mark = this.mark;
 
 	view = this.view;
+
+	spaceTransform = this.spaceTransform;
 
 	hover = this.hover;
 
@@ -514,6 +525,7 @@ prototype._init =
 		|| mark !== inherit.mark
 		|| user !== inherit.user
 		|| view !== inherit.view
+		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
 	)
 	{
@@ -527,6 +539,7 @@ prototype._init =
 					'fabric', spaceFabric,
 					'hover', hover,
 					'mark', mark,
+					'transform', spaceTransform,
 					'view', view
 				);
 		}
@@ -539,7 +552,7 @@ prototype._init =
 				'user', user,
 				'view', view
 			);
-		
+
 		this.disc =
 			this.disc.create(
 				'access', access,

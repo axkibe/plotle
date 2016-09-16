@@ -198,6 +198,36 @@ prototype.inView =
 
 
 /*
+| Returns a transformed shape.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	var
+		a,
+		aZ,
+		ray;
+
+	ray = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		ray[ a ] = this.get( a ).transform( transform );
+	}
+
+	return this.create( 'ray:init', ray );
+};
+
+
+/*
 | Returns true if point is within the shape.
 */
 prototype.within =

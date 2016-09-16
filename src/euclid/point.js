@@ -30,7 +30,6 @@ if( JION )
 
 
 var
-	euclid_anchor_point,
 	euclid_point,
 	euclid_rect,
 	jion;
@@ -257,6 +256,8 @@ prototype.intercept =
 
 /*
 | Returns the point repositioned to a view.
+|
+| FIXME remove
 */
 prototype.inView =
 	function(
@@ -273,38 +274,45 @@ prototype.inView =
 
 
 /*
-| Returns a point which x/y values are snapped to the nearest
-| whole number.
+| Returns a transformed point.
 */
-jion.lazyValue(
-	prototype,
-	'snapRound',
-	function( )
+prototype.transform =
+	function(
+		transform
+	)
 {
-	var
-		x,
-		xSnap,
-		y,
-		ySnap;
 
-	x = this.x;
-
-	y = this.y;
-
-	xSnap = Math.round( x );
-
-	ySnap = Math.round( y );
-
-	if( x === xSnap && y === ySnap ) return this;
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
 
 	return(
-		this.create(
-			'x', xSnap,
-			'y', ySnap
+		transform.zoom === 1
+		? this.add( transform.offset )
+		: this.create(
+			'x', transform.x( this.x ),
+			'y', transform.y( this.y )
 		)
 	);
-}
-);
+};
+
+
+/*
+| Returns a detransformed point.
+*/
+prototype.detransform =
+	function(
+		transform
+	)
+{
+	return(
+		this.create(
+			'x', transform.dex( this.x ),
+			'y', transform.dey( this.y )
+		)
+	);
+};
 
 
 /*
@@ -341,44 +349,6 @@ prototype.sub =
 		);
 	}
 };
-
-
-/*
-| Returns this euclidean point as 'nw' anchored point.
-|
-| FIXME XXX REMOVE
-*/
-jion.lazyValue(
-	prototype,
-	'apnw',
-	function( )
-{
-	return(
-		euclid_anchor_point.nw.create(
-			'x', this.x,
-			'y', this.y
-		)
-	);
-}
-);
-
-
-/*
-| Returns this euclidean point as 'center' anchored point.
-*/
-jion.lazyValue(
-	prototype,
-	'apc',
-	function( )
-{
-	return(
-		euclid_anchor_point.c.create(
-			'x', this.x,
-			'y', this.y
-		)
-	);
-}
-);
 
 
 /*

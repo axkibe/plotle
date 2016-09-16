@@ -459,29 +459,52 @@ prototype.intercept =
 
 /*
 | Returns this rect repositioned and resized to a view.
+|
+| FIXME remove
 */
 prototype.inView =
 	function(
 		view
 	)
 {
-	var
-		result;
-
 	if( view.zoom === 1 )
 	{
-		result =
+		return(
 			( view.pan.x === 0 && view.pan.y === 0 )
 			? this
-			: this.add( view.pan );
-
-		return result.snapRound;
+			: this.add( view.pan )
+		);
 	}
 
 	return(
 		this.create(
 			'pnw', this.pnw.inView( view ),
 			'pse', this.pse.inView( view )
+		)
+	);
+};
+
+
+/*
+| Returns this transformed rect.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.add( transform.offset )
+		: this.create(
+			'pnw', this.pnw.transform( transform ),
+			'pse', this.pse.transform( transform )
 		)
 	);
 };

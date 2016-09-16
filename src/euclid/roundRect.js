@@ -146,6 +146,8 @@ prototype.add =
 		p
 	)
 {
+	if( p.x === 0 && p.y === 0 ) return this;
+
 	return(
 		this.create(
 			'pnw', this.pnw.add( p ),
@@ -233,6 +235,8 @@ prototype.getProjection =
 
 /*
 | Returns a roundRect for the current view.
+|
+| FIXME remove
 */
 prototype.inView =
 	function(
@@ -257,6 +261,34 @@ prototype.inView =
 		)
 	);
 };
+
+
+/*
+| Returns a transformed roundRect.
+*/
+prototype.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.add( transform.pan )
+		: this.create(
+			'pnw', this.pnw.transform( transform ),
+			'pse', this.pse.transform( transform ),
+			'a', transform.scale( this.a ),
+			'b', transform.scale( this.b )
+		)
+	);
+};
+
 
 /*
 | Returns true if point is within the ellipse.
