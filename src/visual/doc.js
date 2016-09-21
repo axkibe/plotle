@@ -62,6 +62,11 @@ if( JION )
 				comment : 'scroll position of the doc',
 				type : 'euclid_point'
 			},
+			transform :
+			{
+				comment : 'the current space transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the current view',
@@ -177,6 +182,7 @@ prototype._init =
 				'pnw', pnw,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
+				'transform', this.transform,
 				'view', hview
 			);
 

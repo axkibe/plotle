@@ -57,6 +57,11 @@ if( JION )
 				type : [ 'undefined', 'euclid_point' ]
 				// is force defined in _init
 			},
+			transform :
+			{
+				comment : 'the current space transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the current view',
@@ -80,6 +85,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	euclid_transform,
 	euclid_view,
 	fabric_doc,
 	fabric_note,
@@ -219,7 +225,8 @@ jion.lazyStaticValue(
 						)
 				),
 			'highlight', false,
-			'view', euclid_view.proper
+			'view', euclid_view.proper,
+			'transform', euclid_transform.normal
 		)
 	);
 }
@@ -274,6 +281,7 @@ prototype._init =
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
 			'scrollPos', this.scrollPos,
+			'transform', this.transform,
 			'view', this.view
 		);
 

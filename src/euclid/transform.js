@@ -29,7 +29,8 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_transform;
+	euclid_transform,
+	jion;
 
 
 /*
@@ -89,7 +90,7 @@ prototype.x =
 /**/	}
 /**/}
 
-	return x * this.zoom + this.pan.x;
+	return x * this.zoom + this.offset.x;
 };
 
 
@@ -110,7 +111,7 @@ prototype.dex =
 /**/	}
 /**/}
 
-	return ( x  - this.pan.x ) / this.zoom;
+	return ( x  - this.offset.x ) / this.zoom;
 };
 
 
@@ -127,15 +128,14 @@ prototype.y =
 /**/{
 /**/	if(
 /**/		typeof( y ) !== 'number'
-/**/		||
-/**/		arguments.length !== 1
+/**/		|| arguments.length !== 1
 /**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return y * this.zoom + this.pan.y;
+	return y * this.zoom + this.offset.y;
 };
 
 
@@ -156,8 +156,22 @@ prototype.dey =
 /**/	}
 /**/}
 
-	return ( y - this.pan.y ) / this.zoom;
+	return ( y - this.offset.y ) / this.zoom;
 };
+
+
+/*
+| Returns a transform with the same zoom like this,
+| but with a zeroOffset.
+*/
+jion.lazyValue(
+	prototype,
+	'ortho',
+	function( )
+{
+	return this.create( 'offset', euclid_point.zero );
+}
+);
 
 
 /*

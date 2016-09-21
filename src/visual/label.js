@@ -49,6 +49,11 @@ if( JION )
 				comment : 'the path of the doc',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			transform :
+			{
+				comment : 'the current space transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the current view',
@@ -76,6 +81,7 @@ var
 	gleam_glint_disWindow,
 	euclid_point,
 	euclid_rect,
+	euclid_transform,
 	euclid_view,
 	fabric_doc,
 	fabric_label,
@@ -245,7 +251,8 @@ jion.lazyStaticValue(
 						)
 				),
 			'highlight', false,
-			'view', euclid_view.proper
+			'view', euclid_view.proper,
+			'transform', euclid_transform.normal
 		)
 	);
 }
@@ -275,6 +282,7 @@ prototype._init =
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),
 			'scrollPos', euclid_point.zero,
+			'transform', euclid_transform.normal,
 			'view', this.view.home
 		);
 

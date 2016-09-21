@@ -663,6 +663,8 @@ Object.defineProperty(
 |
 | new pan (p1) calculates as:
 |
+| FIXME rename to changeSpaceTransform
+|
 | A: py = y0 * z1 + p0
 | B: py = y0 * z0 + p1
 |
@@ -683,12 +685,15 @@ prototype.changeView =
 		e,
 		e1,
 		pan,
+		st,
 		view,
 		x,
 		y,
 		zoom;
 
 	view = this.view;
+
+	st = this.spaceTransform;
 
 	pan = view.pan;
 
@@ -721,8 +726,17 @@ prototype.changeView =
 				view.create(
 					'pan',
 						euclid_point.create(
-							'x', Math.round( ( p.x * e + pan.x / view.zoom ) * zoom ),
-							'y', Math.round( ( p.y * e + pan.y / view.zoom ) * zoom )
+							'x', ( p.x * e + pan.x / view.zoom ) * zoom,
+							'y', ( p.y * e + pan.y / view.zoom ) * zoom
+						),
+					'zoom', zoom
+				),
+			'spaceTransform',
+				st.create(
+					'offset',
+						euclid_point.create(
+							'x', ( p.x * e + pan.x / st.zoom ) * zoom,
+							'y', ( p.y * e + pan.y / st.zoom ) * zoom
 						),
 					'zoom', zoom
 				)

@@ -45,6 +45,11 @@ if( JION )
 				comment : 'point in north west',
 				type : 'euclid_point'
 			},
+			transform :
+			{
+				comment : 'the current space transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the current view',
@@ -272,6 +277,7 @@ jion.lazyValue(
 		lineKey,
 		mark,
 		token,
+		transform,
 		view,
 		zoom;
 
@@ -282,6 +288,8 @@ jion.lazyValue(
 	mark = this.mark;
 
 	view = this.view;
+
+	transform = this.transform.ortho;
 
 	zoom = view.zoom;
 
@@ -310,10 +318,11 @@ jion.lazyValue(
 							'font', font,
 							'key', lineKey + b,
 							'p',
+								// FIXME make a createTransform
 								euclid_point.create(
 									'x', token.x,
 									'y', line.y
-								).inView( view ),
+								).transform( transform ),
 							'text', token.text
 						)
 				);

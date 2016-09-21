@@ -49,6 +49,11 @@ if( JION )
 				comment : 'the path of the doc',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			transform :
+			{
+				comment : 'the current space transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the current view',

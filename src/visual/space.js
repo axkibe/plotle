@@ -295,7 +295,8 @@ prototype._init =
 				'fabric', item,
 				'mark', mark,
 				'path', path,
-				'view', view
+				'view', view,
+				'transform', transform
 			);
 	}
 
