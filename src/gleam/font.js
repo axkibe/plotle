@@ -82,7 +82,7 @@ jion.lazyValue(
 
 
 /*
-| The CSS-string for this font 
+| The CSS-string for this font
 | resized for a view.
 */
 prototype.viewCss =

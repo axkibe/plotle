@@ -33,7 +33,13 @@ if( JION )
 			{
 				// FIXME remove since it's in twig
 				comment : 'the view of the display',
-				type : 'euclid_view'
+				type : [ 'undefined', 'euclid_view' ]
+			},
+			size :
+			{
+				comment : 'the size of the display',
+				// FIXME remove undefined
+				type : [ 'undefined', 'euclid_rect' ]
 			},
 			_cv :
 			{
@@ -182,7 +188,6 @@ prototype._init =
 		cv,
 		height,
 		scaled,
-		view,
 		width;
 
 /**/if( CHECK )
@@ -209,11 +214,19 @@ prototype._init =
 		this._cx = get2dContext( cv );
 	}
 
-	view = this.view;
+	// FIXME remove
+	if( !this.size )
+	{
+		height = this.view.height;
 
-	height = view.height;
+		width = this.view.width;
+	}
+	else
+	{
+		height = this.size.height;
 
-	width = view.width;
+		width = this.size.width;
+	}
 
 	scaled = this.scaled;
 
@@ -262,17 +275,19 @@ prototype.render =
 
 	view = this.view;
 
+	var size = this.size || this.view; // FIXME REMOVE
+
 	if( jion.hasLazyValueSet( this, '_rendered' ) ) return true;
 
 	if( this.background )
 	{
 		this._cx.fillStyle = this.background;
 
-		this._cx.fillRect( 0, 0, view.width, view.height );
+		this._cx.fillRect( 0, 0, size.width, size.height );
 	}
 	else
 	{
-		this._cx.clearRect( 0, 0, view.width, view.height );
+		this._cx.clearRect( 0, 0, size.width, size.height );
 	}
 
 	// FIXME view should always be in glint.

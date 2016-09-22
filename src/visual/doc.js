@@ -182,8 +182,7 @@ prototype._init =
 				'pnw', pnw,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
-				'transform', this.transform,
-				'view', hview
+				'transform', this.transform
 			);
 
 		y += para.flow.height + paraSep;

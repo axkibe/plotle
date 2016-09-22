@@ -49,11 +49,6 @@ if( JION )
 			{
 				comment : 'the current space transform',
 				type : 'euclid_transform'
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		alike :
@@ -63,7 +58,7 @@ if( JION )
 				ignores :
 				{
 					'pnw' : true,
-					'view' : true
+					'transform' : true
 				}
 			}
 		},
@@ -136,7 +131,7 @@ prototype._init =
 	if(
 		inherit
 		&& inherit.alikeVisually( this )
-		&& inherit.view.zoom === this.view.zoom
+		&& inherit.transform.zoom === this.transform.zoom
 	)
 	{
 		if( jion.hasLazyValueSet( inherit, 'flow' ) )
@@ -193,7 +188,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.pnw.inView( this.view.home )
+			'p', this.pnw.transform( this.transform.ortho )
 		)
 	);
 }
@@ -271,33 +266,27 @@ jion.lazyValue(
 		b,
 		bZ,
 		flow,
-		font,
+		tFont,
 		glint,
 		line,
 		lineKey,
 		mark,
 		token,
-		transform,
-		view,
-		zoom;
+		transform;
 
 	flow = this.flow;
 
-	font = this.font;
+	tFont = this.tFont;
 
 	mark = this.mark;
 
-	view = this.view;
-
 	transform = this.transform.ortho;
-
-	zoom = view.zoom;
 
 	// draws text into the display
 
 	glint =
 		gleam_glint_twig.create(
-			'key', 'root'
+			'key', ':root'
 		);
 
 	// FIXME create the glint in one go
@@ -315,7 +304,7 @@ jion.lazyValue(
 				glint.create(
 					'twine:set+',
 						gleam_glint_text.create(
-							'font', font,
+							'font', tFont,
 							'key', lineKey + b,
 							'p',
 								// FIXME make a createTransform
@@ -341,14 +330,16 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.view.create(
-					'pan', euclid_point.zero,
-					// FIXME Math.ceiling
-					'height', Math.round( this.height * zoom + 1 ),
-					// adds to width so the caret gets visible.
-					'width', Math.round( flow.width * zoom + 5 )
+			'size',
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						euclid_point.create(
+							'x', Math.round( flow.width * transform.zoom + 5 ),
+							'y', Math.round( this.height * transform.zoom + 1 )
+						)
 				)
+				// FIXME why +5?
 		)
 	);
 }
@@ -372,9 +363,9 @@ jion.lazyValue(
 		pnw,
 		pse,
 		s,
-		hView;
+		transform;
 
-	hView = this.view.home;
+	transform = this.transform.ortho;
 
 	descend = this.fontsize * shell_settings.bottombox;
 
@@ -389,12 +380,12 @@ jion.lazyValue(
 		euclid_point.create(
 			'x', p.x,
 			'y', n
-		).inView( hView );
+		).transform( transform );
 
 	pse =
 		pnw.add(
 			1,
-			hView.scale( this.fontsize + descend )
+			transform.scale( this.fontsize + descend )
 		);
 
 	return(
@@ -420,7 +411,27 @@ jion.lazyValue(
 	'font',
 	function( )
 {
-	return shell_fontPool.get( this.fontsize, 'la' );
+	return(
+		shell_fontPool.get( this.fontsize, 'la' )
+	);
+}
+);
+
+
+/*
+| The font for current transform.
+*/
+jion.lazyValue(
+	prototype,
+	'tFont',
+	function( )
+{
+	return(
+		shell_fontPool.get(
+			this.transform.scale( this.fontsize ),
+			'la'
+		)
+	);
 }
 );
 
@@ -469,7 +480,7 @@ jion.lazyValue(
 	// current x positon, and current x including last tokens width
 	x = 0;
 
-	y = Math.round( font.size );
+	y = font.size;
 
 	space = euclid_measure.width( font, ' ' );
 
@@ -506,10 +517,7 @@ jion.lazyValue(
 
 				currentLineRay = [ ];
 
-				y +=
-					Math.round(
-						font.size * ( 1 + shell_settings.bottombox )
-					);
+				y += font.size * ( 1 + shell_settings.bottombox );
 
 				currentLineOffset = ca.index;
 			}
@@ -603,10 +611,7 @@ prototype.getOffsetAt =
 	{
 		token = line.get( tn );
 
-		if( x <= token.x + token.width )
-		{
-			break;
-		}
+		if( x <= token.x + token.width ) break;
 	}
 
 	if( tn >= lZ && lZ > 0 )
