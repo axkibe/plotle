@@ -66,11 +66,6 @@ if( JION )
 			{
 				comment : 'the current space transform',
 				type : 'euclid_transform'
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : 'euclid_view'
 			}
 		},
 		init : [ 'inherit' ],
@@ -131,7 +126,6 @@ prototype._init =
 		a,
 		aZ,
 		fabric,
-		hview,
 		innerMargin,
 		key,
 		para,
@@ -140,14 +134,9 @@ prototype._init =
 		twig,
 		twigPath,
 		ranks,
-		view,
 		y;
 
 	fabric = this.fabric;
-
-	view = this.view;
-
-	hview = view.home;
 
 	twig = { };
 
@@ -186,13 +175,6 @@ prototype._init =
 			);
 
 		y += para.flow.height + paraSep;
-	}
-
-	if( FREEZE )
-	{
-		Object.freeze( ranks );
-
-		Object.freeze( twig );
 	}
 
 	this._ranks = ranks;
@@ -376,7 +358,10 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', gruga_selection,
 						'key', ':selection',
-						'shape', this._rangeShape.inView( this.view.home )
+						'shape',
+							this._rangeShape.transform(
+								this.transform.ortho
+							)
 					)
 			);
 	}

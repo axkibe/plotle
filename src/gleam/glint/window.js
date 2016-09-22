@@ -28,11 +28,6 @@ if( JION )
 			{
 				comment : 'position to draw it at',
 				type : 'euclid_point'
-			},
-			view :
-			{
-				comment : 'the view to draw it in',
-				type : 'euclid_view'
 			}
 		},
 		init : [ 'inherit' ]

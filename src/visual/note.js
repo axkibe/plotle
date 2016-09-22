@@ -281,8 +281,7 @@ prototype._init =
 			'paraSep', math_half( this.fontsize ),
 			'path', path && path.append( 'doc' ),
 			'scrollPos', this.scrollPos,
-			'transform', this.transform,
-			'view', this.view
+			'transform', this.transform
 		);
 
 	dHeight = doc.fullsize.height;

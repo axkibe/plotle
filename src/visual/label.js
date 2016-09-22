@@ -282,8 +282,7 @@ prototype._init =
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),
 			'scrollPos', euclid_point.zero,
-			'transform', euclid_transform.normal,
-			'view', this.view.home
+			'transform', this.transform.ortho
 		);
 
 	if(
