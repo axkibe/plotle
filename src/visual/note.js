@@ -313,7 +313,7 @@ prototype._init =
 					),
 				'pos', this.scrollPos.y,
 				'size', zone.height - gruga_note.vScrollbarDis * 2,
-				'view', this.view
+				'transform', this.transform
 			);
 	}
 

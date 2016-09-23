@@ -41,10 +41,10 @@ if( JION )
 				comment : 'size',
 				type : 'number'
 			},
-			view :
+			transform :
 			{
-				comment : 'view',
-				type : 'euclid_view'
+				comment : 'transform',
+				type : 'euclid_transform'
 			}
 		}
 	};
@@ -53,7 +53,6 @@ if( JION )
 
 var
 	euclid_roundRect,
-	euclid_rect,
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
@@ -118,7 +117,7 @@ jion.lazyValue(
 		map,
 		sy,
 		s05,
-		view;
+		transform;
 
 	pnw = this.pnw;
 
@@ -136,18 +135,18 @@ jion.lazyValue(
 
 	s05 = math_half( gruga_scrollbar.strength );
 
-	view = this.view;
+	transform = this.transform;
 
 	return(
 		euclid_roundRect.create(
 			'pnw',
 				pnw
 				.add( 0, sy )
-				.inView( view )
+				.transform( transform )
 				.add( -s05, 0 ),
 			'pse',
 				pnw.add( 0, sy + map )
-				.inView( view )
+				.transform( transform )
 				.add( s05, 0 ),
 			'a', gruga_scrollbar.ellipseA,
 			'b', gruga_scrollbar.ellipseB
@@ -176,6 +175,7 @@ prototype.scale =
 |
 | FIXME used?
 */
+/*
 jion.lazyValue(
 	prototype,
 	'vPnw',
@@ -184,6 +184,7 @@ jion.lazyValue(
 	return this.pnw.inView( this.view );
 }
 );
+*/
 
 
 /*
@@ -191,6 +192,7 @@ jion.lazyValue(
 |
 | FIXME used?
 */
+/*
 jion.lazyValue(
 	prototype,
 	'vZone',
@@ -213,6 +215,7 @@ jion.lazyValue(
 	);
 }
 );
+*/
 
 
 /*
