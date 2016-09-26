@@ -71,9 +71,9 @@ if( JION )
 		init : [ 'inherit' ],
 		alike :
 		{
-			alikeIgnoringView :
+			alikeIgnoringTransform :
 			{
-				ignores : { 'view' : true }
+				ignores : { 'transform' : true }
 			}
 		}
 	};
@@ -319,8 +319,9 @@ prototype._init =
 
 	if( inherit )
 	{
-		if( inherit.alikeIgnoringView( this )
-			&& inherit.view.zoom === this.view.zoom
+		if( false && // FIXME
+			inherit.alikeIgnoringTransform( this )
+			&& inherit.transform.zoom === this.transform.zoom
 			&& jion.hasLazyValueSet( inherit, '_display' )
 		)
 		{
@@ -432,7 +433,7 @@ jion.lazyValue(
 				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.zone.pnw.inView( this.view )
+					'p', this.zone.pnw.transform( this.transform )
 				)
 		);
 
@@ -446,7 +447,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.vSilhoutte
+						'shape', this.tSilhoutte
 					)
 			);
 	}
@@ -517,7 +518,6 @@ prototype.minWidth = gruga_note.minWidth;
 */
 prototype.mousewheel =
 	function(
-		view,
 		p,
 		dir
 		// shift,
@@ -617,8 +617,6 @@ prototype.scrollMarkIntoView =
 
 /*
 | The notes silhoutte.
-|
-| FUTURE move to vSilhoutte
 */
 jion.lazyValue(
 	prototype,
@@ -680,10 +678,10 @@ prototype.minScaleY =
 */
 jion.lazyValue(
 	prototype,
-	'vSilhoutte',
+	'tSilhoutte',
 function( )
 {
-	return this.silhoutte.inView( this.view );
+	return this.silhoutte.transform( this.transform );
 }
 );
 

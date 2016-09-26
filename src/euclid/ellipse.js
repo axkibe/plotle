@@ -263,6 +263,7 @@ jion.lazyValue(
 
 /*
 | Returns the ellipse in a view.
+| FIXME remove
 */
 prototype.inView =
 	function(
@@ -315,12 +316,22 @@ prototype.transform =
 
 	return(
 		transform.zoom === 1
-		? this.add( transform.pan )
+		? this.add( transform.offset )
 		: this.create(
 			'pnw', this.pnw.transform( transform ),
 			'pse', this.pse.transform( transform ),
-			'a', transform.scale( this.a ),
-			'b', transform.scale( this.b )
+			'gradientPC',
+				this.gradientPC !== undefined
+				? this.gradientPC.transform( transform )
+				: pass,
+			'gradientR0',
+				this.gradientR0 !== undefined
+				? transform.scale( this.gradientR0 )
+				: pass,
+			'gradientR1',
+				this.gradientR1 !== undefined
+				? transform.scale( this.gradientR1 )
+				: pass
 		)
 	);
 };

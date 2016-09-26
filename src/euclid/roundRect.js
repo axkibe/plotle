@@ -279,7 +279,7 @@ prototype.transform =
 
 	return(
 		transform.zoom === 1
-		? this.add( transform.pan )
+		? this.add( transform.offset )
 		: this.create(
 			'pnw', this.pnw.transform( transform ),
 			'pse', this.pse.transform( transform ),

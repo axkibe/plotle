@@ -327,7 +327,7 @@ jion.lazyValue(
 	{
 		ca = content.get( a );
 
-		arr[ an++ ] = ca.vSilhoutte.border( -12 );
+		arr[ an++ ] = ca.tSilhoutte.border( -12 );
 	}
 
 	shape = euclid_shapeRay.create( 'ray:init', arr );
@@ -907,7 +907,7 @@ prototype._withinContentMask =
 	{
 		ci = content.get( c );
 
-		if( ci.vSilhoutte.within( p ) ) return true;
+		if( ci.tSilhoutte.within( p ) ) return true;
 
 		sbary = ci.scrollbarY;
 

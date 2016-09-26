@@ -600,16 +600,13 @@ prototype.mousewheel =
 	var
 		item,
 		r,
-		rZ,
-		view;
-
-	view = this.view;
+		rZ;
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		item = this.atRank( r );
 
-		if( item.mousewheel( view, p, dir, shift, ctrl ) ) return true;
+		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
 	}
 
 	root.changeView( dir > 0 ? 1 : -1, p );
@@ -869,7 +866,8 @@ prototype.click =
 	{
 		item = this.atRank( a );
 
-		if( !item.vSilhoutte.within( p ) ) continue;
+		// FIXME the space shouldn't do this!
+		if( !item.tSilhoutte.within( p ) ) continue;
 
 		if( ctrl )
 		{

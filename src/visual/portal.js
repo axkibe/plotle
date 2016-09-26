@@ -505,7 +505,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.vSilhoutte
+						'shape', this.tSilhoutte
 					)
 			);
 	}
@@ -634,14 +634,13 @@ prototype.minScaleY =
 */
 prototype.mousewheel =
 	function(
-		view,
 		p
 		// dir,
 		// shift,
 		// ctrl
 	)
 {
-	return this.vSilhoutte.within( p );
+	return this.tSilhoutte.within( p );
 };
 
 
@@ -665,7 +664,7 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.vSilhoutte.within( p ) ) return;
+	if( !this.tSilhoutte.within( p ) ) return;
 
 	pp = p.fromView( view ).sub( zone.pnw );
 
@@ -883,10 +882,10 @@ prototype.specialKey =
 */
 jion.lazyValue(
 	prototype,
-	'vSilhoutte',
+	'tSilhoutte',
 function( )
 {
-	return this.silhoutte.inView( this.view );
+	return this.silhoutte.transform( this.transform );
 }
 );
 

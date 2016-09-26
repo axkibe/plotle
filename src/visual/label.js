@@ -416,7 +416,7 @@ jion.lazyValue(
 					gleam_glint_paint.create(
 						'facet', facet,
 						'key', ':highlight',
-						'shape', this.vSilhoutte
+						'shape', this.tSilhoutte
 					)
 			);
 	}
@@ -503,10 +503,10 @@ prototype.minScaleY =
 
 /*
 | Mouse wheel turned.
+| FIXME this is wrong, it should return true if the label was hit.
 */
 prototype.mousewheel =
 	function(
-		// view,
 		// p,
 		// dir
 	)
@@ -634,7 +634,7 @@ prototype.positioning =
 /*
 | The item's silhoutte.
 |
-| FUTURE remove in favor of vSilhoutte
+| FUTURE remove in favor of tSilhoutte
 */
 jion.lazyValue(
 	prototype,
@@ -685,17 +685,17 @@ jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
 /*
 | The item's silhoutte in current view.
 */
-visual_label.vSilhoutte =
+visual_label.tSilhoutte =
 	function( )
 {
-	return this.silhoutte.inView( this.view );
+	return this.silhoutte.transform( this.transform );
 };
 
 
 /*
 | The item's silhoutte in current view.
 */
-jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte);
+jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte);
 
 
 /*

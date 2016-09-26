@@ -276,7 +276,7 @@ Object.defineProperty(
 						gleam_glint_paint.create(
 							'facet', facet,
 							'key', ':highlight',
-							'shape', this.vSilhoutte
+							'shape', this.tSilhoutte
 						)
 				);
 		}
@@ -362,10 +362,10 @@ prototype.markForPoint = visual_docItem.markForPoint;
 
 /*
 | Mouse wheel turned.
+| FIXME see visual_label.mousewheel
 */
 prototype.mousewheel =
 	function(
-		// view,
 		// p,
 		// dir
 	)
@@ -476,7 +476,7 @@ jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
 /*
 | Calculates the relations silhoutte for current view.
 */
-jion.lazyValue( prototype, 'vSilhoutte', visual_label.vSilhoutte );
+jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte );
 
 
 /*
