@@ -62,7 +62,7 @@ if( JION )
 		init : [ 'inherit' ],
 		alike :
 		{
-			alikeIgnoringView :
+			alikeIgnoringTransform :
 			{
 				ignores : { 'view' : true }
 			}
@@ -169,7 +169,7 @@ prototype._init =
 	if(
 		inherit
 		&& inherit.alikeIgnoringView( this )
-		&& inherit.view.zoom === this.view.zoom
+		&& inherit.transform.zoom === this.transform.zoom
 		&& jion.hasLazyValueSet( inherit, '_display' )
 	)
 	{
@@ -184,7 +184,7 @@ prototype._init =
 visual_portal.createGeneric =
 	function(
 		action, // the create action
-		dp      // the deviewed point the createGeneric
+		dp      // the detransform point the createGeneric
 		//      // stoped at.
 	)
 {

@@ -63,9 +63,9 @@ if( JION )
 		init : [ 'inherit' ],
 		alike :
 		{
-			alikeIgnoringView :
+			alikeIgnoringTransform :
 			{
-				ignores : { 'view' : true }
+				ignores : { 'transform' : true }
 			}
 		}
 	};
@@ -82,7 +82,6 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_transform,
-	euclid_view,
 	fabric_doc,
 	fabric_label,
 	fabric_para,
@@ -147,7 +146,7 @@ prototype.proportional = true;
 visual_label.createGeneric =
 	function(
 		action, // the create action
-		dp      // the deviewed point the createGeneric
+		dp      // the detransform point the createGeneric
 		//      // stoped at.
 	)
 {
@@ -251,7 +250,6 @@ jion.lazyStaticValue(
 						)
 				),
 			'highlight', false,
-			'view', euclid_view.proper,
 			'transform', euclid_transform.normal
 		)
 	);
@@ -287,8 +285,8 @@ prototype._init =
 
 	if(
 		inherit
-		&& inherit.alikeIgnoringView( this )
-		&& inherit.view.zoom === this.view.zoom
+		&& inherit.alikeIgnoringTransform( this )
+		&& inherit.transform.zoom === this.transform.zoom
 		&& jion.hasLazyValueSet( inherit, '_display' )
 	)
 	{
@@ -402,7 +400,7 @@ jion.lazyValue(
 				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':content',
-					'p', this.pnw.inView( this.view )
+					'p', this.pnw.transform( this.transform )
 				)
 		);
 
@@ -670,20 +668,7 @@ prototype.scrollPage = function( ){ };
 
 
 /*
-| Pnw in current view.
-*/
-visual_label.vPnw =
-	function( )
-{
-	return this.pnw.inView( this.view );
-};
-
-
-jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
-
-
-/*
-| The item's silhoutte in current view.
+| The item's silhoutte in current transform.
 */
 visual_label.tSilhoutte =
 	function( )
@@ -693,36 +678,36 @@ visual_label.tSilhoutte =
 
 
 /*
-| The item's silhoutte in current view.
+| The item's silhoutte in current transform.
 */
 jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte);
 
 
 /*
-| The items silhoutte anchoret at zero for current view.
+| The items silhoutte ortho-transformed.
 */
 jion.lazyValue(
 	prototype,
-	'vZeroSilhoutte',
+	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.inView( this.view.home );
+	return this.zeroSilhoutte.inView( this.transform.orth );
 }
 );
 
 
 
 /*
-| Zone in current view.
+| Zone in current transform.
 */
-visual_label.vZone =
+visual_label.tZone =
 	function( )
 {
-	return this.zone.inView( this.view );
+	return this.zone.transform( this.transform );
 };
 
 
-jion.lazyValue( prototype, 'vZone', visual_label.vZone );
+jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 
 
 /*
@@ -814,18 +799,20 @@ jion.lazyValue(
 {
 	var
 		display,
-		vZone;
+		tZone;
 
-	vZone = this.vZone;
+	tZone = this.tZone;
 
 	display =
 		gleam_display_canvas.create(
 			'glint', this.doc.glint,
-			'view',
-				this.view.create(
-					'height', Math.round( vZone.height + 1 ),
-					'width', Math.round( vZone.width + 1 ),
-					'pan', euclid_point.zero
+			'size',
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse', euclid_point.create(
+						'y', Math.round( tZone.height + 1 ),
+						'x', Math.round( tZone.width + 1 )
+					)
 				)
 		);
 

@@ -253,7 +253,7 @@ Object.defineProperty(
 			gleam_glint_disWindow.create(
 				'display', this._display,
 				'key', ':label',
-				'p', this.pnw.inView( this.view )
+				'p', this.pnw.transform( this.transform )
 			);
 
 		arrow1 = this._arrow1Glint( );
@@ -455,38 +455,32 @@ jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
 
 
 /*
-| The items silhoutte anchored at zero for current view.
+| The items silhoutte otrho-transformed.
 */
 jion.lazyValue(
 	prototype,
-	'vZeroSilhoutte',
+	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.inView( this.view.home );
+	return this.zeroSilhoutte.transform( this.transform.ortho );
 }
 );
 
 
 /*
-| Pnw in current view.
-*/
-jion.lazyValue( prototype, 'vPnw', visual_label.vPnw );
-
-
-/*
-| Calculates the relations silhoutte for current view.
+| The relations silhoutte for current transform.
 */
 jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte );
 
 
 /*
-| Calculates the relations zone for current view.
+| The relations zone for current transform.
 */
-jion.lazyValue( prototype, 'vZone', visual_label.vZone );
+jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 
 
 /*
-| Calculates the relations zone, FUTURE vZone only
+| The relations zone.
 */
 jion.lazyValue( prototype, 'zone', visual_label.zone );
 
@@ -501,19 +495,21 @@ jion.lazyValue(
 {
 	var
 		display,
-		vZone;
+		tZone;
 
-	vZone = this.vZone;
+	tZone = this.tZone;
 
 	display =
 		gleam_display_canvas.create(
-			'view',
-				this.view.create(
-					'pan', euclid_point.zero,
-					'height', Math.round( vZone.height ),
-					'width', Math.round( vZone.width )
-				),
-			'glint', this.doc.glint
+			'glint', this.doc.glint,
+			'size',
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse', euclid_point.create(
+						'y', Math.round( tZone.height + 1 ),
+						'x', Math.round( tZone.width + 1 )
+					)
+				)
 		);
 
 	return display;
@@ -538,7 +534,7 @@ prototype._arrow1Glint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'key', 'arrow1',
-			'shape', arrow1.shape.inView( this.view )
+			'shape', arrow1.shape.transform( this.transform )
 		)
 	);
 };
@@ -561,7 +557,7 @@ prototype._arrow2Glint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'key', 'arrow2',
-			'shape', arrow2.shape.inView( this.view )
+			'shape', arrow2.shape.transform( this.transform )
 		)
 	);
 };

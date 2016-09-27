@@ -252,7 +252,7 @@ visual_docItem.pointingHover =
 		);
 	}
 
-	if( !this.vZone.within( p ) ) return;
+	if( !this.tSilhoutte.within( p ) ) return;
 
 	cursor = 'default';
 

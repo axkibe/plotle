@@ -86,7 +86,6 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	euclid_transform,
-	euclid_view,
 	fabric_doc,
 	fabric_note,
 	fabric_para,
@@ -161,7 +160,7 @@ prototype.proportional = false;
 visual_note.createGeneric =
 	function(
 		action, // the create action
-		dp      // the deviewed point the createGeneric
+		dp      // the detransform point the createGeneric
 		//      // stoped at.
 	)
 {
@@ -225,7 +224,6 @@ jion.lazyStaticValue(
 						)
 				),
 			'highlight', false,
-			'view', euclid_view.proper,
 			'transform', euclid_transform.normal
 		)
 	);
@@ -317,7 +315,7 @@ prototype._init =
 			);
 	}
 
-	if( false && inherit ) // FIXME
+	if( inherit )
 	{
 		if(
 			inherit.alikeIgnoringTransform( this )
@@ -524,7 +522,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.vZone.within( p ) ) return false;
+	if( !this.tSilhoutte.within( p ) ) return false;
 
 	root.setPath(
 		this.path.append( 'scrollPos' ),
@@ -674,7 +672,7 @@ prototype.minScaleY =
 
 
 /*
-| Silhoutte in current view.
+| Transormed silhoutte.
 */
 jion.lazyValue(
 	prototype,
@@ -687,27 +685,27 @@ function( )
 
 
 /*
-| The notes silhoutte anchored at zero.
+| The notes silhoutte ortho-transformed.
 */
 jion.lazyValue(
 	prototype,
-	'vZeroSilhoutte',
+	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.inView( this.view.home );
+	return this.zeroSilhoutte.transform( this.transform.ortho );
 }
 );
 
 
 /*
-| Zone in current view.
+| Zone in current transform.
 */
 jion.lazyValue(
 	prototype,
-	'vZone',
+	'tZone',
 function( )
 {
-	return this.zone.inView( this.view );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -822,11 +820,11 @@ jion.lazyValue(
 		doc,
 		facet,
 		glint,
-		vZone;
-
-	vZone = this.vZone;
+		tZone;
 
 	doc = this.doc;
+
+	tZone = this.tZone;
 
 	facet = gruga_note.facets.getFacet( );
 
@@ -837,14 +835,14 @@ jion.lazyValue(
 				gleam_glint_fill.create(
 					'facet', facet,
 					'key', 'fill',
-					'shape', this.vZeroSilhoutte
+					'shape', this.tOrthoSilhoutte
 				),
 			'twine:set+', doc.glint,
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,
 					'key', 'border',
-					'shape', this.vZeroSilhoutte
+					'shape', this.tOrthoSilhoutte
 				)
 		);
 
@@ -853,12 +851,14 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.view.create(
-					'height', Math.round( vZone.height + 2 ),
-					'width', Math.round( vZone.width + 2 ),
-					'pan', euclid_point.zero
-					// FIXME scrollPos!
+			'size',
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						euclid_point.create(
+							'y', Math.round( tZone.height + 2 ),
+							'x', Math.round( tZone.width + 2 )
+						)
 				)
 		)
 	);
