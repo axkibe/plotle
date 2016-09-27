@@ -1625,15 +1625,22 @@ prototype._movePan =
 	var
 		action,
 		pd,
+		transform,
 		view;
 
 	action = this.action;
 
 	view = this.view;
 
+	transform = this.transform;
+
 	pd = p.sub( action.startPoint );
 
 	root.create(
+		'spaceTransform',
+			transform.create(
+				'offset', action.pan.add( pd )
+			),
 		'view',
 			view.create(
 				'pan',

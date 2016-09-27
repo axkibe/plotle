@@ -171,54 +171,6 @@ prototype.scale =
 
 
 /*
-| Pnw in current view.
-|
-| FIXME used?
-*/
-/*
-jion.lazyValue(
-	prototype,
-	'vPnw',
-	function( )
-{
-	return this.pnw.inView( this.view );
-}
-);
-*/
-
-
-/*
-| Zone in current view.
-|
-| FIXME used?
-*/
-/*
-jion.lazyValue(
-	prototype,
-	'vZone',
-	function( )
-{
-	var
-		vPnw;
-
-	vPnw = this.vPnw;
-
-	return(
-		euclid_rect.create(
-			'pnw', vPnw,
-			'pse',
-				vPnw.add(
-					gruga_scrollbar.strength,
-					this.view.scale( this.size )
-				)
-		)
-	);
-}
-);
-*/
-
-
-/*
 | Returns true if p is within the scrollbar.
 */
 prototype.within =

@@ -317,9 +317,9 @@ prototype._init =
 			);
 	}
 
-	if( inherit )
+	if( false && inherit ) // FIXME
 	{
-		if( false && // FIXME
+		if(
 			inherit.alikeIgnoringTransform( this )
 			&& inherit.transform.zoom === this.transform.zoom
 			&& jion.hasLazyValueSet( inherit, '_display' )

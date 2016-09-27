@@ -17,7 +17,7 @@ if( JION )
 				comment : 'mouse down point on start of scrolling',
 				type : 'euclid_point'
 			},
-			pan :
+			pan : // FIXME call it offset
 			{
 				comment : 'pan position on start',
 				type : 'euclid_point'

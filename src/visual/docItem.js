@@ -60,17 +60,14 @@ visual_docItem.markForPoint =
 		para,
 		pnw,
 		pi,
-		vp,
-		view;
+		tp;
 
-	view = this.view;
-
-	vp = p.fromView( view );
+	tp = p.detransform( this.transform );
 
 	pnw = this.zone.pnw;
 
 	pi =
-		vp.sub(
+		tp.sub(
 			pnw.x,
 			pnw.y - ( this.scrollbarY ? this.scrollbarY.pos : 0 )
 		);
