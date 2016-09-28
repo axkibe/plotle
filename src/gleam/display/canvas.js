@@ -609,9 +609,10 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_mask' :
 
-				h = this.view.height;
+				// FIXME
+				h = ( this.view || this.size ).height;
 
-				w = this.view.width;
+				w = ( this.view || this.size ).width;
 
 				cx.save( );
 

@@ -64,7 +64,7 @@ if( JION )
 		{
 			alikeIgnoringTransform :
 			{
-				ignores : { 'view' : true }
+				ignores : { 'transform' : true }
 			}
 		}
 	};
@@ -80,7 +80,6 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
-	euclid_view,
 	fabric_portal,
 	fabric_spaceRef,
 	gleam_display_canvas,
@@ -168,7 +167,7 @@ prototype._init =
 {
 	if(
 		inherit
-		&& inherit.alikeIgnoringView( this )
+		&& inherit.alikeIgnoringTransform( this )
 		&& inherit.transform.zoom === this.transform.zoom
 		&& jion.hasLazyValueSet( inherit, '_display' )
 	)
@@ -303,8 +302,7 @@ jion.lazyStaticValue(
 					'spaceUser', '',
 					'spaceTag', ''
 				),
-			'highlight', false,
-			'view', euclid_view.proper
+			'highlight', false
 		)
 	);
 }
@@ -335,10 +333,7 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	if( !mark || !mark.hasCaret )
-	{
-		return ac;
-	}
+	if( !mark || !mark.hasCaret ) return ac;
 
 	section = mark.caret.path.get( -1 );
 
@@ -386,16 +381,16 @@ prototype.click =
 		pp,
 		setMark,
 		sf,
-		view,
+		transform,
 		zone;
 
-	view = this.view;
+	transform = this.transform;
 
 	zone = this.zone;
 
 	moveToButton = this._moveToButton;
 
-	pp = p.fromView( view ).sub( zone.pnw );
+	pp = p.detransform( transform ).sub( zone.pnw );
 
 	if( moveToButton.shape.within( pp ) )
 	{
@@ -406,7 +401,7 @@ prototype.click =
 
 	if( access != 'rw' ) return false;
 
-	pp = p.fromView( view ).sub( zone.pnw );
+	pp = p.detransform( transform ).sub( zone.pnw );
 
 	for( field in spaceFields )
 	{
@@ -491,7 +486,7 @@ jion.lazyValue(
 				gleam_glint_disWindow.create(
 					'display', this._display,
 					'key', ':body',
-					'p', this.zone.pnw.inView( this.view )
+					'p', this.zone.pnw.transform( this.transform )
 				)
 		);
 
@@ -656,17 +651,17 @@ prototype.pointingHover =
 {
 	var
 		pp,
-		view,
+		transform,
 		zone;
 
-	view = this.view;
+	transform = this.transform;
 
 	zone = this.zone;
 
 	// not clicked on the portal?
 	if( !this.tSilhoutte.within( p ) ) return;
 
-	pp = p.fromView( view ).sub( zone.pnw );
+	pp = p.detransform( transform ).sub( zone.pnw );
 
 	if( this._moveToButton.shape.within( pp ) )
 	{
@@ -876,7 +871,7 @@ prototype.specialKey =
 
 
 /*
-| Silhoutte in current view.
+| Silhoutte in current transform.
 »
 | FIXME privatize
 */
@@ -897,23 +892,23 @@ function( )
 */
 jion.lazyValue(
 	prototype,
-	'vZeroSilhoutte',
+	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.inView( this.view.home );
+	return this.zeroSilhoutte.transform( this.transform.ortho );
 }
 );
 
 
 /*
-| Zone in current view.
+| Zone in current transform.
 */
 jion.lazyValue(
 	prototype,
-	'vZone',
+	'tZone',
 function( )
 {
-	return this.zone.inView( this.view );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -1554,19 +1549,19 @@ jion.lazyValue(
 		caretGlint,
 		content,
 		facet,
+		fieldSpaceUser,
+		fieldSpaceTag,
 		glint,
-		hview,
 		inputFacet,
 		mark,
 		moveToButton,
+		ot,
 		section,
-		fieldSpaceUser,
-		fieldSpaceTag,
-		vZone;
+		tZone;
 
-	vZone = this.vZone;
+	tZone = this.tZone;
 
-	hview = this.view.home;
+	ot = this.transform.ortho;
 
 	mark = this.mark;
 
@@ -1584,7 +1579,7 @@ jion.lazyValue(
 			gleam_glint_fill.create(
 				'facet', facet,
 				'key', 'background',
-				'shape', this.vZeroSilhoutte
+				'shape', this.tOrthoSilhoutte
 			)
 		);
 
@@ -1618,39 +1613,39 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', buttonFacet,
 					'key', 'moveToButton',
-					'shape', moveToButton.shape.inView( hview )
+					'shape', moveToButton.shape.transform( ot )
 				),
 			'twine:set+',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceUserField',
-					'shape', fieldSpaceUser.silhoutte.inView( hview )
+					'shape', fieldSpaceUser.silhoutte.transform( ot )
 				),
 			'twine:set+',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
 					'key', 'spaceTagField',
-					'shape', fieldSpaceTag.silhoutte.inView( hview )
+					'shape', fieldSpaceTag.silhoutte.transform( ot )
 				),
 			'twine:set+',
 				gleam_glint_text.create(
 					'font', this._fonts.spaceUser,
 					'key', 'spaceUserText',
-					'p', fieldSpaceUser.p.inView( hview ),
+					'p', fieldSpaceUser.p.transform( ot ),
 					'text', fieldSpaceUser.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
 					'font', this._fonts.spaceTag,
 					'key', 'spaceTagText',
-					'p', fieldSpaceTag.p.inView( hview ),
+					'p', fieldSpaceTag.p.transform( ot ),
 					'text', fieldSpaceTag.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
 					'font', this._fonts.moveTo,
 					'key', 'moveToText',
-					'p', moveToButton.textCenter.inView( hview ),
+					'p', moveToButton.textCenter.transform( ot ),
 					'text', 'move to'
 				)
 		);
@@ -1676,25 +1671,27 @@ jion.lazyValue(
 				gleam_glint_mask.create(
 					'key', ':mask',
 					'glint', content,
-					'shape', this.vZeroSilhoutte
+					'shape', this.tOrthoSilhoutte
 				),
 			// puts the border on top of everything else
 			'twine:set+',
 				gleam_glint_border.create(
 					'facet', facet,
 					'key', 'border',
-					'shape', this.vZeroSilhoutte
+					'shape', this.tOrthoSilhoutte
 				)
 		);
 
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.view.create(
-					'pan', euclid_point.zero,
-					'height', Math.round( vZone.height + 1.5 ),
-					'width', Math.round( vZone.width + 1.5 )
+			'size',
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse', euclid_point.create(
+						'x', Math.round( tZone.width + 1.5 ),
+						'y', Math.round( tZone.height + 1.5 )
+					)
 				)
 		)
 	);
@@ -1715,18 +1712,18 @@ jion.lazyValue(
 		fieldPnw,
 		font,
 		fs,
-		hView,
 		mark,
 		n,
 		p,
 		pnw,
 		pse,
 		s,
-		section;
+		section,
+		ot;
 
 	mark = this.mark;
 
-	hView = this.view.home;
+	ot = this.transform.ortho;
 
 	section = mark.caret.path.get( -1 );
 
@@ -1752,15 +1749,11 @@ jion.lazyValue(
 
 	pnw =
 		p
-		.add( 0, n )
-		.inView( hView )
-		.add( fieldPnw.x, 0 );
+		.add( fieldPnw.x, n )
+		.transform( ot );
 
 	pse =
-		pnw.add(
-			1,
-			hView.scale( fs + descend )
-		);
+		pnw.add( 1, ot.scale( fs + descend ) );
 
 	return(
 		gleam_glint_fill.create(
