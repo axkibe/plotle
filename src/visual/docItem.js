@@ -37,7 +37,7 @@ visual_docItem.attentionCenter =
 		+ math_limit(
 			0,
 			this.doc.attentionCenter
-			- ( this.scrollbarY ?  this.scrollbarY.pos : 0 ),
+			- ( this.scrollPos ?  this.scrollPos.y : 0 ),
 			this.zone.height
 		)
 	);
@@ -66,11 +66,7 @@ visual_docItem.markForPoint =
 
 	pnw = this.zone.pnw;
 
-	pi =
-		tp.sub(
-			pnw.x,
-			pnw.y - ( this.scrollbarY ? this.scrollbarY.pos : 0 )
-		);
+	pi = tp.sub( pnw );
 
 	doc = this.doc;
 
