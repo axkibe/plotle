@@ -52,11 +52,6 @@ if( JION )
 			{
 				comment : 'the current space transform',
 				type : 'euclid_transform'
-			},
-			view :
-			{
-				comment : 'the current view',
-				type : [ 'euclid_view' ]
 			}
 		},
 		init : [ 'inherit' ],
@@ -344,7 +339,7 @@ jion.lazyValue(
 		return ac + this._moveToButton.shape.pnw.y;
 	}
 
-	font = this._fonts[ section ];
+	font = this._fontFor( section );
 
 	fs = font.size;
 
@@ -766,22 +761,105 @@ function( )
 
 
 /*
-| Font for spacesUser/Tag
+| Font for spaceUser.
 */
-prototype._fonts =
+jion.lazyValue(
+	prototype,
+	'_fontSpaceUser',
+	function( )
 {
-	spaceUser : shell_fontPool.get( 13, 'la' ),
+	return shell_fontPool.get( 13, 'la' );
+}
+);
 
-	spaceTag : shell_fontPool.get( 13, 'la' ),
 
-	moveTo : shell_fontPool.get( 13, 'cm' )
+/*
+| Font for spaceTag.
+*/
+jion.lazyValue(
+	prototype,
+	'_fontSpaceTag',
+	function( )
+{
+	return shell_fontPool.get( 13, 'la' );
+}
+);
+
+
+/*
+| Font for moveToButton.
+*/
+jion.lazyValue(
+	prototype,
+	'_fontMoveTo',
+	function( )
+{
+	return shell_fontPool.get( 13, 'cm' );
+}
+);
+
+
+// FIXME create a font.transform( )  call to use the non transform
+//       definitions as base.
+
+/*
+| Font for spaceUser.
+*/
+jion.lazyValue(
+	prototype,
+	'_tFontSpaceUser',
+	function( )
+{
+	return shell_fontPool.get( this.transform.scale( 13 ), 'la' );
+}
+);
+
+
+/*
+| Font for spaceTag.
+*/
+jion.lazyValue(
+	prototype,
+	'_tFontSpaceTag',
+	function( )
+{
+	return shell_fontPool.get( this.transform.scale( 13 ), 'la' );
+}
+);
+
+
+/*
+| Font for moveToButton.
+*/
+jion.lazyValue(
+	prototype,
+	'_tFontMoveTo',
+	function( )
+{
+	return shell_fontPool.get( this.transform.scale( 13 ), 'cm' );
+}
+);
+
+
+/*
+| Returns the font for 'section'.
+*/
+prototype._fontFor =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' : return this._fontSpaceUser;
+
+		case 'spaceTag' : return this._fontSpaceTag;
+
+		case 'moveTo' : return this._fontMoveTo;
+
+		default : throw new Error( );
+	}
 };
-
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( prototype._fonts );
-/**/}
 
 
 /*
@@ -798,7 +876,7 @@ prototype._locateOffset =
 		text;
 
 	// FUTURE cache position
-	font = this._fonts[ section ];
+	font = this._fontFor( section );
 
 	text = this.fabric[ section ];
 
@@ -1404,6 +1482,7 @@ prototype._prepareField =
 	)
 {
 	var
+		font,
 		height,
 		pitch,
 		p,
@@ -1421,9 +1500,11 @@ prototype._prepareField =
 
 	text = this.fabric[ section ];
 
-	width = euclid_measure.width( this._fonts[ section ], text );
+	font = this._fontFor( section );
 
-	height = this._fonts[ section ].size + 2;
+	width = euclid_measure.width( font, text );
+
+	height = font.size + 2;
 
 	p =
 		baseP
@@ -1516,7 +1597,7 @@ prototype._getOffsetAt =
 
 	x2 = 0;
 
-	font = this._fonts[ section ];
+	font = this._fontFor( section );
 
 	for( a = 0, aZ = value.length; a < aZ; a++ )
 	{
@@ -1629,21 +1710,21 @@ jion.lazyValue(
 				),
 			'twine:set+',
 				gleam_glint_text.create(
-					'font', this._fonts.spaceUser,
+					'font', this._tFontSpaceUser,
 					'key', 'spaceUserText',
 					'p', fieldSpaceUser.p.transform( ot ),
 					'text', fieldSpaceUser.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
-					'font', this._fonts.spaceTag,
+					'font', this._tFontSpaceTag,
 					'key', 'spaceTagText',
 					'p', fieldSpaceTag.p.transform( ot ),
 					'text', fieldSpaceTag.text
 				),
 			'twine:set+',
 				gleam_glint_text.create(
-					'font', this._fonts.moveTo,
+					'font', this._tFontMoveTo,
 					'key', 'moveToText',
 					'p', moveToButton.textCenter.transform( ot ),
 					'text', 'move to'
@@ -1732,7 +1813,7 @@ jion.lazyValue(
 		return;
 	}
 
-	font = this._fonts[ section ];
+	font = this._fontFor( section );
 
 	fs = font.size;
 

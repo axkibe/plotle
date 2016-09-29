@@ -223,8 +223,7 @@ prototype._init =
 		path,
 		ranks,
 		transform,
-		twig,
-		view;
+		twig;
 
 	action = this.action;
 
@@ -235,8 +234,6 @@ prototype._init =
 	mark = this.mark;
 
 	transform = this.transform;
-
-	view = this.view;
 
 	twig = { };
 
@@ -295,7 +292,6 @@ prototype._init =
 				'fabric', item,
 				'mark', mark,
 				'path', path,
-				'view', view,
 				'transform', transform
 			);
 	}
