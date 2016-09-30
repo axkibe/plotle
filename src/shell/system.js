@@ -1033,6 +1033,8 @@ prototype._onMouseWheel =
 		dir,
 		p;
 
+	event.preventDefault( );
+
 	p =
 		euclid_point.create(
 			'x', event.pageX - canvas.offsetLeft,

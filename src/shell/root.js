@@ -112,9 +112,9 @@ if( JION )
 				comment : 'current view',
 				type : 'euclid_view'
 			},
-			_viewExponent :
+			_transformExponent :
 			{
-				comment : 'view zoom as power of 1.1',
+				comment : 'transform zoom as power of 1.1',
 				type : 'number',
 				defaultValue : '0'
 			},
@@ -706,7 +706,7 @@ prototype.changeView =
 		e1 =
 			math_limit(
 				shell_settings.zoomMin,
-				this._viewExponent + de,
+				this._transformExponent + de,
 				shell_settings.zoomMax
 			);
 	}
@@ -721,7 +721,7 @@ prototype.changeView =
 
 	return(
 		this.create(
-			'_viewExponent', e1,
+			'_transformExponent', e1,
 			'view',
 				view.create(
 					'pan',

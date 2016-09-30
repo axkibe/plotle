@@ -377,7 +377,7 @@ jion.lazyValue(
 				( this._inheritFrame || visual_frame )
 				.create(
 					'content', content,
-					'view', this.view
+					'transform', this.transform
 				)
 			);
 		}
@@ -401,7 +401,7 @@ jion.lazyValue(
 
 	if( !focus ) return undefined;
 
-	return this.view.y( focus.attentionCenter );
+	return this.transform.y( focus.attentionCenter );
 }
 );
 
@@ -427,16 +427,15 @@ jion.lazyValue(
 		s,
 		toItem,
 		toSilhoutte,
-		view;
+		transform;
 
 	action = this.action;
 
-	view = this.view;
+	transform = this.transform;
 
 	glint =
 		gleam_glint_twig.create(
-			'key', 'screen',
-			'view', view
+			'key', 'screen'
 		);
 
 	for( r = this.length - 1; r >= 0; r-- )
@@ -488,7 +487,7 @@ jion.lazyValue(
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte = action.toPoint.fromView( view );
+					toSilhoutte = action.toPoint.detransform( transform );
 				}
 
 				if( toSilhoutte )
@@ -507,7 +506,7 @@ jion.lazyValue(
 							gleam_glint_paint.create(
 								'facet', gruga_relation.facet,
 								'key', ':transient',
-								'shape', arrow.shape.inView( view )
+								'shape', arrow.shape.transform( transform )
 							)
 						);
 				}
@@ -525,7 +524,7 @@ jion.lazyValue(
 							gleam_glint_paint.create(
 								'facet', gruga_select.facet,
 								'key', ':select',
-								'shape', action.zone.inView( view )
+								'shape', action.zone.transform( transform )
 							)
 					);
 			}
@@ -618,7 +617,7 @@ prototype.mousewheel =
 */
 prototype.pointingHover =
 	function(
-		p         // cursor point ( in view )
+		p         // cursor point
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -631,12 +630,9 @@ prototype.pointingHover =
 		item,
 		focus,
 		frame,
-		result,
-		view;
+		result;
 
 	action = this.action;
-
-	view = this.view;
 
 	focus = this.focus;
 
@@ -720,7 +716,7 @@ prototype.pointingHover =
 */
 prototype.dragStart =
 	function(
-		p,     // cursor point ( in view )
+		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
@@ -735,18 +731,18 @@ prototype.dragStart =
 		focus,
 		frame,
 		item,
-		view;
+		transform;
 
 	access = this.access;
-
-	view = this.view;
 
 	focus = this.focus;
 
 	frame = this.frame;
 
+	transform = this.transform;
+
 	// resizing
-	dp = p.fromView( view );
+	dp = p.detransform( transform );
 
 	action = this.action;
 
@@ -781,7 +777,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action.create(
-						'pan', view.pan,
+						'pan', transform.offset, // FIXME call it offset
 						'startPoint', p
 					)
 			);
@@ -793,7 +789,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action.create(
-						'pan', view.pan,
+						'pan', transform.offset, // FIXME call it offset
 						'relationState', 'pan', // FUTURE remove pan
 						'startPoint', p
 					)
@@ -818,7 +814,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action_pan.create(
-						'pan', view.pan,
+						'pan', transform.offset, // FIXME call it offset
 						'startPoint', p
 					)
 			);
@@ -833,7 +829,7 @@ prototype.dragStart =
 */
 prototype.click =
 	function(
-		p,     // cursor point ( in view )
+		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
@@ -844,14 +840,11 @@ prototype.click =
 		access,
 		frame,
 		item,
-		mark,
-		view;
+		mark;
 
 	access = this.access;
 
 	mark = this.mark;
-
-	view = this.view;
 
 	frame = this.frame;
 
@@ -891,7 +884,7 @@ prototype.click =
 */
 prototype.dragStop =
 	function(
-		p,     // cursor point ( in view )
+		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
@@ -903,8 +896,7 @@ prototype.dragStop =
 		changes,
 		chi,
 		paths,
-		item,
-		view;
+		item;
 
 /**/if( CHECK )
 /**/{
@@ -912,8 +904,6 @@ prototype.dragStop =
 /**/}
 
 	action = this.action;
-
-	view = this.view;
 
 	if( !action ) return;
 
@@ -1051,7 +1041,7 @@ prototype.dragStop =
 */
 prototype.dragMove =
 	function(
-		p,     // cursor point ( in view )
+		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
@@ -1245,7 +1235,7 @@ prototype._changeZoom =
 	var
 		pm;
 
-	pm = this.view.baseArea.pc.fromView( this.view );
+	pm = this.view.baseArea.pc.detransform( this.transform );
 
 	root.changeView( df, pm );
 };
@@ -1268,15 +1258,15 @@ prototype._moveCreateGeneric =
 		model,
 		pnw,
 		resized,
+		transform,
 		transItem,
-		view,
 		zone;
 
 	action = this.action;
 
-	view = this.view;
+	transform = this.transform;
 
-	dp = p.fromView( view );
+	dp = p.detransform( transform );
 
 	zone = euclid_rect.createArbitrary( action.startPoint, dp );
 
@@ -1294,7 +1284,7 @@ prototype._moveCreateGeneric =
 			transItem =
 				transItem.create(
 					'fabric', transItem.fabric.create( 'zone', zone ),
-					'view', view
+					'transform', transform
 				);
 
 			break;
@@ -1325,7 +1315,7 @@ prototype._moveCreateGeneric =
 			transItem =
 				resized.create(
 					'fabric', resized.fabric.create( 'pnw', pnw ),
-					'view', view
+					'transform', transform
 				);
 
 			break;
@@ -1354,11 +1344,11 @@ prototype._moveCreateRelation =
 		pd,
 		r,
 		rZ,
-		view;
+		transform;
 
 	action = this.action;
 
-	view = this.view;
+	transform = this.transform;
 
 	if( action.relationState === 'pan' )
 	{
@@ -1367,9 +1357,9 @@ prototype._moveCreateRelation =
 		pd = p.sub( action.startPoint );
 
 		root.create(
-			'view',
-				view.create(
-					'pan', action.pan.add( pd.x, pd.y )
+			'transform',
+				transform.create(
+					'offset', action.pan.add( pd )
 				)
 		);
 
@@ -1379,10 +1369,7 @@ prototype._moveCreateRelation =
 	// Looks if the action is dragging to an item
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		if( this.atRank( r ).createRelationMove( p, action ) )
-		{
-			return;
-		}
+		if( this.atRank( r ).createRelationMove( p, action ) ) return;
 	}
 
 	root.create(
@@ -1400,7 +1387,7 @@ prototype._moveCreateRelation =
 */
 prototype._moveCreate =
 	function(
-		p         // point, viewbased point of stop
+		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1408,11 +1395,11 @@ prototype._moveCreate =
 	var
 		action,
 		pd,
-		view;
+		transform;
 
 	action = this.action;
 
-	view = this.view;
+	transform = this.transform;
 
 	if( action.pan )
 	{
@@ -1421,12 +1408,12 @@ prototype._moveCreate =
 		pd = p.sub( action.startPoint );
 
 		root.create(
-			'view',
-				view.create(
-					'pan',
+			'transform',
+				this.transform.create(
+					'offset',
 						action.pan.add(
-							pd.x / view.zoom,
-							pd.y / view.zoom
+							pd.x / transform.zoom,
+							pd.y / transform.zoom
 						)
 				)
 		);
@@ -1440,7 +1427,7 @@ prototype._moveCreate =
 */
 prototype._moveDragItems =
 	function(
-		p         // point, viewbased point of stop
+		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1448,21 +1435,21 @@ prototype._moveDragItems =
 	var
 		action,
 		startPoint,
-		view;
+		transform;
 
 	action = this.action;
 
 	startPoint = action.startPoint;
 
-	view = this.view;
+	transform = this.transform;
 
 	root.create(
 		'action',
 			action.create(
 				'moveBy',
 					euclid_point.create(
-						'x', view.dex( p.x ) - startPoint.x,
-						'y', view.dey( p.y ) - startPoint.y
+						'x', transform.dex( p.x ) - startPoint.x,
+						'y', transform.dey( p.y ) - startPoint.y
 					)
 			)
 	);
@@ -1474,7 +1461,7 @@ prototype._moveDragItems =
 */
 prototype._moveResizeItems =
 	function(
-		p         // point, viewbased point of stop
+		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1496,19 +1483,17 @@ prototype._moveResizeItems =
 		scaleY,
 		startZone,
 		startZones,
-		view;
+		transform;
 
 	action = this.action;
-
-	view = this.view;
 
 	pBase = action.pBase;
 
 	startPoint = action.startPoint;
 
-	dx = view.dex( p.x );
+	dx = transform.dex( p.x );
 
-	dy = view.dey( p.y );
+	dy = transform.dey( p.y );
 
 	switch( action.resizeDir )
 	{
@@ -1613,7 +1598,7 @@ prototype._moveResizeItems =
 */
 prototype._movePan =
 	function(
-		p         // point, viewbased point of stop
+		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1621,12 +1606,9 @@ prototype._movePan =
 	var
 		action,
 		pd,
-		transform,
-		view;
+		transform;
 
 	action = this.action;
-
-	view = this.view;
 
 	transform = this.transform;
 
@@ -1636,14 +1618,6 @@ prototype._movePan =
 		'spaceTransform',
 			transform.create(
 				'offset', action.pan.add( pd )
-			),
-		'view',
-			view.create(
-				'pan',
-					action.pan.add(
-						Math.round( pd.x ),
-						Math.round( pd.y )
-					)
 			)
 	);
 };
@@ -1675,7 +1649,7 @@ prototype._moveSelect =
 	root.create(
 		'action',
 			action.create(
-				'toPoint', p.fromView( this.view )
+				'toPoint', p.detransform( this.transform )
 			)
 	);
 };
@@ -1687,7 +1661,7 @@ prototype._moveSelect =
 */
 prototype._moveScrollY =
 	function(
-		p         // point, viewbased point of stop
+		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1697,16 +1671,13 @@ prototype._moveScrollY =
 		dy,
 		item,
 		sbary,
-		spos,
-		view;
+		spos;
 
 	action = this.action;
 
 	item = this.get( action.itemPaths.get( 0 ).get( -1 ) );
 
-	view = this.view;
-
-	dy = ( p.y - action.startPoint.y ) / view.zoom;
+	dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
 
 	sbary = item.scrollbarY;
 
@@ -1766,7 +1737,7 @@ prototype._startCreateGeneric =
 				model.create(
 					'fabric', fabric,
 					'path', visual_space.transPath,
-					'view', this.view
+					'transform', this.transform
 				);
 
 			break;
@@ -1777,7 +1748,7 @@ prototype._startCreateGeneric =
 				model.create(
 					'fabric', model.fabric.create( 'pnw', dp ),
 					'path', visual_space.transPath,
-					'view', this.view
+					'transform', this.tansform
 				);
 
 			break;
@@ -1801,7 +1772,7 @@ prototype._startCreateGeneric =
 */
 prototype._stopCreateGeneric =
 	function(
-		p,     // point, viewbased point of stop
+		p,     // point of stop
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
@@ -1811,7 +1782,7 @@ prototype._stopCreateGeneric =
 
 	action = this.action;
 
-	action.itemType.createGeneric( action, p.fromView( this.view ) );
+	action.itemType.createGeneric( action, p.detransform( this.transform ) );
 
 	root.create(
 		'action',
@@ -1827,7 +1798,7 @@ prototype._stopCreateGeneric =
 */
 prototype._stopCreate =
 	function(
-		// p      // point, viewbased point of stop
+		// p      // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
@@ -1847,7 +1818,7 @@ prototype._stopCreate =
 */
 prototype._stopCreateRelation =
 	function(
-		p,      // point, viewbased point of stop
+		p,      // point of stop
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
@@ -1903,7 +1874,7 @@ prototype._stopCreateRelation =
 */
 prototype._stopSelect =
 	function(
-		p,      // point, viewbased point of stop
+		p,      // point of stop
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)

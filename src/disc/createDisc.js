@@ -146,14 +146,14 @@ prototype._init =
 	cv = this.controlView;
 
 	area =
-	this.area =
+	this._area =
 		this.designArea.compute( cv ).align;
-	
+
 	this.silhoutte =
 		this.shape.compute(
 			cv.create(
-				'height', this.area.height,
-				'width', this.area.width
+				'height', area.height,
+				'width', area.width
 			)
 		);
 
@@ -174,7 +174,7 @@ prototype._init =
 					 twig[ wname ].path
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
-				'superArea', this.area.zeroPnw,
+				'superArea', area.zeroPnw,
 				'hover', this.hover,
 				'down',
 					disc_createDisc._isActiveButton( this.action, wname ),
@@ -277,18 +277,21 @@ prototype.pointingHover =
 	)
 {
 	var
+		area,
 		display,
 		pp,
 		r,
 		reply,
 		rZ;
 
+	area = this._area;
+
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !area.within( p ) ) return;
 
 	display = this._display;
-
-	pp = p.sub( this.area.pnw );
+	
+	pp = p.sub( area.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
@@ -314,18 +317,21 @@ prototype.click =
 	)
 {
 	var
+		area,
 		display,
 		pp,
 		reply,
 		r,
 		rZ;
 
+	area = this._area;
+
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !area.within( p ) ) return;
 
 	display = this._display,
 
-	pp = p.sub( this.area.pnw );
+	pp = p.sub( area.pnw );
 
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, pp ) ) return;
@@ -355,7 +361,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', 'createDisc',
-			'p', this.designArea.pnw
+			'p', this._area.pnw
 		)
 	);
 }
@@ -410,13 +416,18 @@ prototype.dragStart =
 		// ctrl
 	)
 {
+	var
+		area;
+
+	area = this._area;
+
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) ) return;
+	if( !area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.area.pnw )
+			p.sub( area.pnw )
 		)
 	)
 	{
@@ -438,16 +449,18 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
+	var
+		area;
+
+	area = this._area;
+
 	// shortcut if p is not near the panel
-	if( !this.area.within( p ) )
-	{
-		return;
-	}
+	if( !area.within( p ) ) return;
 
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			p.sub( this.area.pnw )
+			p.sub( area.pnw )
 		)
 	)
 	{
@@ -517,16 +530,19 @@ jion.lazyValue(
 	function( )
 {
 	var
+		area,
 		g,
 		glint,
 		r,
 		rZ,
 		view;
 
+	area = this._area,
+
 	view =
 		this.controlView.create(
-			'height', this.area.height,
-			'width', this.area.width
+			'height', area.height,
+			'width', area.width
 		);
 
 	glint =

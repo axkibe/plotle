@@ -113,7 +113,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_dragItems.create(
-					'startPoint', p.fromView( this.view ),
+					'startPoint', p.detransform( this.transform ),
 					'itemPaths', paths
 				),
 			'mark',
@@ -127,7 +127,7 @@ visual_item.dragStart =
 		root.create(
 			'action',
 				action_dragItems.create(
-					'startPoint', p.fromView( this.view ),
+					'startPoint', p.detransform( this.transform ),
 					'itemPaths', mark.itemPaths
 				)
 		);

@@ -17,10 +17,10 @@ if( JION )
 				comment : 'content of the frame',
 				type : 'visual_itemRay'
 			},
-			view :
+			transform :
 			{
-				comment : 'the view',
-				type : 'euclid_view'
+				comment : 'current transform of the frame',
+				type : 'euclid_transform'
 			}
 		}
 	};
@@ -174,7 +174,7 @@ jion.lazyValue(
 */
 prototype.click =
 	function(
-		p,        // cursor point ( in view )
+		p,        // cursor point
 		shift,    // true if shift key was pressed
 		ctrl      // true if ctrl key was pressed
 		//access  // rights the current user has for current space
@@ -198,7 +198,7 @@ prototype.click =
 */
 prototype.dragStart =
 	function(
-		p,      // cursor point ( in view )
+		p,      // cursor point
 		shift,  // true if shift key was pressed
 		ctrl,   // true if ctrl key was pressed
 		access  // rights the current user has for current space
@@ -262,7 +262,7 @@ prototype.dragStart =
 		}
 	}
 
-	dp = p.fromView( this.view );
+	dp = p.detransform( this.transform );
 
 	if( com )
 	{
@@ -847,20 +847,20 @@ jion.lazyValue(
 		pc,
 		pnw,
 		pse,
-		view,
-		vZone;
+		transform,
+		tZone;
 
 	fw = gruga_frame.width;
 
-	view = this.view;
+	transform = this.transform;
 
-	vZone = this.zone.inView( view );
+	tZone = this.zone.transform( transform );
 
-	pc = vZone.pc,
+	pc = tZone.pc,
 
-	hw = vZone.width / 2;
+	hw = tZone.width / 2;
 
-	hh = vZone.height / 2;
+	hh = tZone.height / 2;
 
 	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
 
