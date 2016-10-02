@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'widget_label',
+		hasAbstract : true,
 		attributes :
 		{
 			designPos :
@@ -56,6 +57,11 @@ if( JION )
 			{
 				comment : 'the label text',
 				type : 'string'
+			},
+			transform :
+			{
+				comment : 'the transform',
+				type : 'euclid_transform'
 			},
 			view :
 			{

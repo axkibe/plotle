@@ -24,7 +24,11 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
-			// FIXME this should be called simply "view"
+			controlTransform :
+			{
+				comment : 'the current transform of controls',
+				type : 'euclid_transform'
+			},
 			controlView :
 			{
 				comment : 'the current view of controls',
@@ -178,6 +182,7 @@ prototype._init =
 						'twig:set',
 						disc.getKey( b ),
 						disc.atRank( b ).create(
+							'transform', this.controlTransform,
 							'view', this.controlView
 						)
 					);

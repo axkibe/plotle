@@ -107,7 +107,7 @@ gruga_moveTo =
 	form_moveTo.abstract(
 		'twig:add',
 		'headline',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'move to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',

@@ -48,7 +48,7 @@ gruga_nonExistingSpace =
 	form_nonExistingSpace.abstract(
 		'twig:add',
 		'headline',
-			widget_label.create(
+			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -60,7 +60,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'message1',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'Do you want to create it?',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',

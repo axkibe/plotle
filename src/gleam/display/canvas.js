@@ -39,7 +39,7 @@ if( JION )
 			{
 				comment : 'the size of the display',
 				// FIXME remove undefined
-				type : [ 'undefined', 'euclid_rect' ]
+				type : [ 'undefined', 'euclid_size' ]
 			},
 			_cv :
 			{
@@ -131,7 +131,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 	function(
 		canvas,  // the canvas to create around
 		name,    // the name(id) of the display
-		view,    // the view of the canvas
+		size,    // the size of the canvas
 		scaled   // if defined, the backing store scale factor
 		//       // via pixelratio for HiDPI displays
 	)
@@ -148,7 +148,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'background', 'rgb( 251, 251, 251 )',
 			'glint', gleam_glint_twig.create( 'key', name ),
 			'scaled', scaled,
-			'view', view
+			'size', size
 		)
 	);
 };

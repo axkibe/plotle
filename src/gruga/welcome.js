@@ -41,7 +41,7 @@ var
 gruga_welcome =
 	form_welcome.abstract(
 		'twig:add', 'headline',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'welcome',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -52,7 +52,7 @@ gruga_welcome =
 					)
 			),
 		'twig:add', 'message1',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'Your registration was successful :-)',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',

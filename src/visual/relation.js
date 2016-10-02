@@ -62,7 +62,7 @@ if( JION )
 
 var
 	euclid_arrow,
-	euclid_point,
+	euclid_size,
 	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
@@ -498,12 +498,9 @@ jion.lazyValue(
 		gleam_display_canvas.create(
 			'glint', this.doc.glint,
 			'size',
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse', euclid_point.create(
-						'y', Math.round( tZone.height + 1 ),
-						'x', Math.round( tZone.width + 1 )
-					)
+				euclid_size.create(
+					'height', Math.round( tZone.height + 1 ),
+					'width', Math.round( tZone.width + 1 )
 				)
 		);
 

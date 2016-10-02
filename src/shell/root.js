@@ -112,6 +112,11 @@ if( JION )
 				comment : 'current view',
 				type : 'euclid_view'
 			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
+			},
 			_transformExponent :
 			{
 				comment : 'transform zoom as power of 1.1',
@@ -164,6 +169,7 @@ var
 	gleam_display_canvas,
 	euclid_measure,
 	euclid_point,
+	euclid_size,
 	euclid_view,
 	fabric_doc,
 	fabric_para,
@@ -356,7 +362,7 @@ shell_root.startup =
 		gleam_display_canvas.createAroundHTMLCanvas(
 			canvas,
 			'swatch',
-			euclid_view.proper.create(
+			euclid_size.create(
 				'height', 10,
 				'width', 10
 			),
@@ -372,12 +378,11 @@ shell_root.startup =
 		euclid_measure.width( root._fontWFont, 'ideoloom$8833' );
 	*/
 
-	view = display.view;
-
-/**/if( CHECK )
-/**/{
-/**/	if( view.zoom !== 1 ) throw new Error( );
-/**/}
+	view =
+		euclid_view.proper.create(
+			'height', display.size.height,
+			'width', display.size.width
+		);
 
 	action = action_form.loading;
 
@@ -397,6 +402,7 @@ shell_root.startup =
 	dj =
 		disc_jockey.create(
 			'action', action,
+			'controlTransform', euclid_transform.normal,
 			'controlView', view,
 			'path', djPath,
 			'spaceView', view,
@@ -426,6 +432,7 @@ shell_root.startup =
 		'spaceTransform', euclid_transform.normal,
 		'systemFocus', true,
 		'view', view,
+		'viewSize', display.size,
 		'disc', dj,
 		'form', shell_root._createFormJockey( view ),
 		'_drawn', false
@@ -452,7 +459,8 @@ prototype._init =
 		spaceRef,
 		spaceTransform,
 		user,
-		view;
+		view,
+		viewSize;
 
 
 	// sets drawn false
@@ -468,6 +476,8 @@ prototype._init =
 	mark = this.mark;
 
 	view = this.view;
+
+	viewSize = this.viewSize;
 
 	spaceTransform = this.spaceTransform;
 
@@ -527,6 +537,7 @@ prototype._init =
 		|| view !== inherit.view
 		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
+		|| viewSize !== inherit.viewSize
 	)
 	{
 		if( spaceFabric )
@@ -540,7 +551,8 @@ prototype._init =
 					'hover', hover,
 					'mark', mark,
 					'transform', spaceTransform,
-					'view', view
+					'view', view,
+					'viewSize', viewSize
 				);
 		}
 
@@ -549,6 +561,7 @@ prototype._init =
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
+				'transform', euclid_transform.normal,
 				'user', user,
 				'view', view
 			);
@@ -1200,7 +1213,7 @@ prototype.update =
 */
 prototype.resize =
 	function(
-		width,
+		width,  // FIXME give an euclid_size jion
 		height
 	)
 {
@@ -1215,7 +1228,12 @@ prototype.resize =
 
 	root.create(
 		'display', this.display.create( 'view', view ),
-		'view', view
+		'view', view,
+		'viewSize',
+			euclid_size.create(
+				'height', height,
+				'width', width
+			)
 	);
 };
 
@@ -1304,7 +1322,11 @@ prototype.onAcquireSpace =
 		'mark', undefined,
 		'spaceFabric', reply.space,
 		'spaceRef', request.spaceRef,
-		'view', root.display.view
+		'view',
+			euclid_view.proper.create(
+				'height', this.viewSize.height,
+				'width', this.viewSize.width
+			)
 	);
 };
 
@@ -1709,6 +1731,7 @@ shell_root._createFormJockey =
 						'twig:set',
 						key,
 						widget.create(
+							'transform', euclid_transform.normal,
 							'view', view
 						)
 					);
@@ -1721,6 +1744,7 @@ shell_root._createFormJockey =
 	jockey =
 		form_jockey.create(
 			'path', jion$path.empty.append( 'form' ),
+			'transform', euclid_transform.normal,
 			'view', view
 		);
 
@@ -1734,7 +1758,7 @@ shell_root._createFormJockey =
 			jockey.create(
 				'twig:add',
 				key,
-				forms[ key ].create( 'view', view )
+				forms[ key ].create( 'view', view, 'transform', euclid_transform.normal )
 			);
 	}
 

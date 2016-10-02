@@ -24,7 +24,7 @@ var
 gruga_loading =
 	form_loading.abstract(
 		'twig:add', 'headline',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'loading',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'designPos',
@@ -35,7 +35,7 @@ gruga_loading =
 					)
 			),
 		'twig:add', 'spaceText',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'ideoloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'designPos',

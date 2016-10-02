@@ -75,6 +75,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	euclid_size,
 	fabric_portal,
 	fabric_spaceRef,
 	gleam_display_canvas,
@@ -1767,12 +1768,9 @@ jion.lazyValue(
 		gleam_display_canvas.create(
 			'glint', glint,
 			'size',
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse', euclid_point.create(
-						'x', Math.round( tZone.width + 1.5 ),
-						'y', Math.round( tZone.height + 1.5 )
-					)
+				euclid_size.create(
+					'width', Math.round( tZone.width + 1.5 ),
+					'height', Math.round( tZone.height + 1.5 )
 				)
 		)
 	);

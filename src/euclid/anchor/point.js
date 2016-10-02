@@ -109,8 +109,6 @@ prototype.add =
 
 /*
 | Computes the point to an euclid one.
-|
-| FIXME make area part of view
 */
 prototype.compute =
 	function(

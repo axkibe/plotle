@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'widget_checkbox',
+		hasAbstract : true,
 		attributes :
 		{
 			checked :
@@ -52,6 +53,11 @@ if( JION )
 			{
 				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
+			},
+			transform :
+			{
+				comment : 'the transform',
+				type : 'euclid_transform'
 			},
 			visible :
 			{

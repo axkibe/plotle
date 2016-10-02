@@ -227,6 +227,11 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
+		'filePath', 'src/euclid/size.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/euclid/rect.js',
 		'hasJion', true,
 		'inBundle', true,

@@ -32,7 +32,6 @@ if( JION )
 var
 	euclid_point,
 	euclid_rect,
-	math_half,
 	jion;
 
 
@@ -52,8 +51,6 @@ if( NODE )
 	jion = require( 'jion' );
 
 	euclid_rect = jion.this( module, 'source' );
-
-	math_half = require( '../math/half' );
 
 	euclid_point = require( './point' );
 }
@@ -318,7 +315,7 @@ jion.lazyValue(
 {
 	return(
 		euclid_point.create(
-			'x', math_half( this.pnw.x + this.pse.x ),
+			'x', ( this.pnw.x + this.pse.x ) / 2,
 			'y', this.pnw.y
 		)
 	);
@@ -336,7 +333,7 @@ jion.lazyValue(
 {
 	return(
 		euclid_point.create(
-			'x', math_half( this.pnw.x + this.pse.x ),
+			'x', ( this.pnw.x + this.pse.x ) / 2,
 			'y', this.pse.y
 		)
 	);
@@ -355,7 +352,7 @@ jion.lazyValue(
 	return(
 		euclid_point.create(
 			'x', this.pse.x,
-			'y', math_half( this.pse.y + this.pnw.y )
+			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
 	);
 }
@@ -723,7 +720,7 @@ jion.lazyValue(
 	return(
 		euclid_point.create(
 			'x', this.pnw.x,
-			'y', math_half( this.pse.y + this.pnw.y )
+			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
 	);
 }

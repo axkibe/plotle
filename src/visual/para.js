@@ -74,6 +74,7 @@ var
 	change_split,
 	euclid_point,
 	euclid_rect,
+	euclid_size,
 	gleam_display_canvas,
 	gleam_facet,
 	gleam_glint_fill,
@@ -331,13 +332,9 @@ jion.lazyValue(
 		gleam_display_canvas.create(
 			'glint', glint,
 			'size',
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse',
-						euclid_point.create(
-							'x', Math.round( flow.width * transform.zoom + 5 ),
-							'y', Math.round( this.height * transform.zoom + 1 )
-						)
+				euclid_size.create(
+					'height', Math.round( this.height * transform.zoom + 1 ),
+					'width', Math.round( flow.width * transform.zoom + 5 )
 				)
 				// FIXME why +5?
 		)

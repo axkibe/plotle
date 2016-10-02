@@ -98,6 +98,11 @@ if( JION )
 				comment : 'rotation of the text',
 				type : [ 'undefined', 'number' ]
 			},
+			transform :
+			{
+				comment : 'the transform',
+				type : 'euclid_transform'
+			},
 			view :
 			{
 				comment : 'the view for the widget',

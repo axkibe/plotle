@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'widget_input',
+		hasAbstract : true,
 		attributes :
 		{
 			designArea :
@@ -61,6 +62,11 @@ if( JION )
 			{
 				comment : 'the area the widget resides in',
 				type : [ 'undefined', 'euclid_rect' ]
+			},
+			transform :
+			{
+				comment : 'the transform',
+				type : 'euclid_transform'
 			},
 			value :
 			{

@@ -57,6 +57,11 @@ if( JION )
 			{
 				comment : 'the current view of space',
 				type : [ 'undefined', 'euclid_view' ]
+			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'inherit' ],
@@ -1230,12 +1235,24 @@ prototype.specialKey =
 | Changes the zoom factor ( around center )
 */
 prototype._changeZoom =
-	function( df )
+	function(
+		df
+	)
 {
 	var
-		pm;
+		pc,
+		pm,
+		vs;
 
-	pm = this.view.baseArea.pc.detransform( this.transform );
+	vs = this.viewSize;
+
+	pc =
+		euclid_point.create(
+			'x', vs.width / 2,
+			'y', vs.height / 2
+		);
+
+	pm = pc.detransform( this.transform );
 
 	root.changeView( df, pm );
 };
@@ -1486,6 +1503,8 @@ prototype._moveResizeItems =
 		transform;
 
 	action = this.action;
+
+	transform = this.transform;
 
 	pBase = action.pBase;
 
@@ -1896,7 +1915,7 @@ prototype._stopSelect =
 /**/	if( action.reflect !== 'action_select' ) throw new Error( );
 /**/}
 
-	action = action.create( 'toPoint', p );
+	action = action.create( 'toPoint', p.detransform( this.transform ) );
 
 	paths = [ ];
 

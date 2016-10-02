@@ -40,7 +40,7 @@ var
 gruga_space =
 	form_space.abstract(
 		'twig:add', 'headline',
-			widget_label.create(
+			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -51,7 +51,7 @@ gruga_space =
 					)
 			),
 		'twig:add', 'message1',
-			widget_label.create(
+			widget_label.abstract(
 				'text', 'In future space settings can be altered here.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
