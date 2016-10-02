@@ -19,7 +19,6 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
-			// FIXME make this this.area
 			designArea :
 			{
 				comment : 'designed area (using anchors)',
@@ -116,8 +115,7 @@ prototype._init =
 {
 	if( this.superArea )
 	{
-		// XXX remove
-		this.area =
+		this._area =
 			this.designArea.compute(
 				euclid_view.proper.create(
 					'width', this.superArea.width,
@@ -125,11 +123,6 @@ prototype._init =
 				)
 			);
 	}
-	else
-	{
-		this.area = undefined;
-	}
-
 };
 
 
@@ -153,7 +146,7 @@ jion.lazyValue(
 
 	sections = [ ];
 
-	da = this.designArea;
+	da = this._area;
 
 	for( a = 0, aZ = gs.length; a < aZ; a++ )
 	{
@@ -167,7 +160,16 @@ jion.lazyValue(
 			);
 	}
 
-	return gs.create( 'ray:init', sections );
+	return(
+		gs.create( 'ray:init', sections )
+		.compute(
+			euclid_view.proper.create(
+				'width', this._area.width,
+				'height', this._area.height,
+				'pan', this._area.pnw
+			)
+		)
+	);
 }
 );
 
@@ -203,7 +205,7 @@ prototype.click =
 {
 	if( !this.visible ) return undefined;
 
-	if( this.area.within( p ) )
+	if( this._area.within( p ) )
 	{
 		root.setPath( this.path.append( 'checked' ), !this.checked );
 
@@ -243,7 +245,7 @@ jion.lazyValue(
 				gleam_glint_paint.create(
 					'facet', facet,
 					'key', 'box',
-					'shape', this.designArea
+					'shape', this._area
 				)
 		);
 
@@ -300,7 +302,7 @@ prototype.pointingHover =
 		p
 	)
 {
-	if( !this.visible || !this.area.within( p ) ) return undefined;
+	if( !this.visible || !this._area.within( p ) ) return undefined;
 
 	return(
 		result_hover.create(

@@ -17,10 +17,11 @@ if( JION )
 				comment : 'compass of the anchor',
 				type : 'string'
 			},
+			// FIXME remove
 			tenter :
 			{
 				comment : 'if defined anchor to this instead',
-				type : [ 'undefined', 'euclid_anchor_rect' ]
+				type : [ 'undefined', 'euclid_rect' ]
 			},
 			x :
 			{
@@ -156,8 +157,6 @@ prototype.compute =
 	}
 	else
 	{
-		tenter = tenter.compute( view );
-
 		pnw = tenter.pnw;
 
 		pse = tenter.pse;
