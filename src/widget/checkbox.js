@@ -134,34 +134,8 @@ jion.lazyValue(
 	'_checkIcon',
 	function( )
 {
-	var
-		a,
-		aZ,
-		da,
-		gs,
-		section,
-		sections;
-
-	gs = gruga_iconCheck.shape;
-
-	sections = [ ];
-
-	da = this._area;
-
-	for( a = 0, aZ = gs.length; a < aZ; a++ )
-	{
-		section = gs.get( a );
-
-		if( !section.p ) continue;
-
-		sections[ a ] =
-			section.create(
-				'p', section.p.create( 'tenter', da )
-			);
-	}
-
 	return(
-		gs.create( 'ray:init', sections )
+		gruga_iconCheck.shape
 		.compute(
 			euclid_view.proper.create(
 				'width', this._area.width,

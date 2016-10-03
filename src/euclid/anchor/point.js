@@ -17,12 +17,6 @@ if( JION )
 				comment : 'compass of the anchor',
 				type : 'string'
 			},
-			// FIXME remove
-			tenter :
-			{
-				comment : 'if defined anchor to this instead',
-				type : [ 'undefined', 'euclid_rect' ]
-			},
 			x :
 			{
 				comment : 'x-distance',
@@ -120,7 +114,6 @@ prototype.compute =
 		pnw,
 		pse,
 		rect,
-		tenter,
 		x,
 		y,
 		w,
@@ -131,40 +124,25 @@ prototype.compute =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	tenter = this.tenter;
+	rect = view.rect;
 
-	if( !tenter )
+	pnw = rect.pnw;
+
+	pse = rect.pse;
+
+	if(
+		this.anchor === 'nw'
+		&& pnw.x === 0
+		&& pnw.y === 0
+		&& view.zoom === 1
+	)
 	{
-		rect = view.rect;
-
-		pnw = rect.pnw;
-
-		pse = rect.pse;
-
-		if(
-			this.anchor === 'nw'
-			&& pnw.x === 0
-			&& pnw.y === 0
-			&& view.zoom === 1
-		)
-		{
-			return this.euclidPoint;
-		}
-
-		w = ( pse.x - pnw.x ) * view.zoom;
-
-		h = ( pse.y - pnw.y ) * view.zoom;
+		return this.euclidPoint;
 	}
-	else
-	{
-		pnw = tenter.pnw;
 
-		pse = tenter.pse;
+	w = ( pse.x - pnw.x ) * view.zoom;
 
-		w = pse.x - pnw.x;
-
-		h = pse.y - pnw.y;
-	}
+	h = ( pse.y - pnw.y ) * view.zoom;
 
 	x = this.x * view.zoom;
 

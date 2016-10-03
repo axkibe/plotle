@@ -31,8 +31,7 @@ var
 	euclid_anchor_border,
 	euclid_anchor_point,
 	euclid_anchor_rect,
-	euclid_rect,
-	jion;
+	euclid_rect;
 
 /*
 | Capsule
@@ -104,108 +103,6 @@ euclid_anchor_rect.full =
 		'pnw', euclid_anchor_point.nw,
 		'pse', euclid_anchor_point.seMin1
 	);
-
-
-/*
-| Point in east.
-*/
-jion.lazyValue(
-	prototype,
-	'pe',
-	function( )
-{
-	return(
-		euclid_anchor_point.e.create(
-			'tenter', this
-		)
-	);
-}
-);
-
-
-/*
-| Point in north.
-*/
-jion.lazyValue(
-	prototype,
-	'pn',
-	function( )
-{
-	return(
-		euclid_anchor_point.n.create(
-			'tenter', this
-		)
-	);
-}
-);
-
-
-/*
-| Point in north east.
-*/
-jion.lazyValue(
-	prototype,
-	'pne',
-	function( )
-{
-	return(
-		euclid_anchor_point.ne.create(
-			'tenter', this
-		)
-	);
-}
-);
-
-
-/*
-| Point in south.
-*/
-jion.lazyValue(
-	prototype,
-	'ps',
-	function( )
-{
-	return(
-		euclid_anchor_point.s.create(
-			'tenter', this
-		)
-	);
-}
-);
-
-
-/*
-| Point in south west.
-*/
-jion.lazyValue(
-	prototype,
-	'psw',
-	function( )
-{
-	return(
-		euclid_anchor_point.sw.create(
-			'tenter', this
-		)
-	);
-}
-);
-
-
-/*
-| Point in west.
-*/
-jion.lazyValue(
-	prototype,
-	'pw',
-	function( )
-{
-	return(
-		euclid_anchor_point.w.create(
-			'tenter', this
-		)
-	);
-}
-);
 
 
 })( );
