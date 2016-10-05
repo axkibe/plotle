@@ -103,11 +103,6 @@ if( JION )
 				comment : 'the transform',
 				type : 'euclid_transform'
 			},
-			view :
-			{
-				comment : 'the view for the widget',
-				type : 'euclid_view'
-			},
 			visible :
 			{
 				comment : 'if false the button is hidden',
@@ -122,6 +117,8 @@ if( JION )
 
 var
 	euclid_point,
+	euclid_rect,
+	euclid_size,
 	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_text,
@@ -161,54 +158,61 @@ prototype._init =
 	function( )
 {
 	var
-		area,
-		view;
-
-	view = this.view;
+		area;
 
 	// FIXME move into lazyValues
 	if( this.superArea )
 	{
-		// FIXME remove
+		// FIXME this in unnecessairly complicated
+		//       remove all anchors in favor of transform
 		area =
 		this._area =
 			this.designArea.compute(
-				this.view.create(
-					'height', this.superArea.height,
-					'width', this.superArea.width
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						this.superArea.zeroPnw.pse.detransform( this.transform )
 				)
-			).align;
+			)
+			.transform( this.transform )
+			.align;
 
-		// XXX FIXME remove
+		// FIXME decomplicate
 		this._shape =
 			this.shape.compute(
-				view.create(
-					'height', this._area.height,
-					'width', this._area.width
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						this._area.zeroPnw.pse.detransform( this.transform )
 				)
-			);
-		
+			).transform( this.transform );
+
+
+		// FIXME decomplicate
 		if( this.iconShape )
 		{
-			// XXX FIXME remove
+			// XXX FIXME decomplicate
 			this._iconShape =
 				this.iconShape.compute(
-					view.create(
-						'height', this._area.height,
-						'width', this._area.width
+					euclid_rect.create(
+						'pnw', euclid_point.zero,
+						'pse',
+							this._area.zeroPnw.pse.detransform( this.transform )
 					)
-				);
+				).transform( this.transform );
 		}
 
 		if( this.textDesignPos )
 		{
+			// XXX FIXME decomplicate
 			this._textPos =
 				this.textDesignPos.compute(
-					view.create(
-						'height', this._area.height,
-						'width', this._area.width
+					euclid_rect.create(
+						'pnw', euclid_point.zero,
+						'pse',
+							this._area.zeroPnw.pse.detransform( this.transform )
 					)
-				);
+				).transform( this.transform );
 		}
 	}
 	else
@@ -402,7 +406,7 @@ jion.lazyValue(
 	{
 		newline = this.textNewline;
 
-		font = this.font;
+		font = this._font;
 
 		if( newline === undefined )
 		{
@@ -420,7 +424,7 @@ jion.lazyValue(
 		}
 		else
 		{
-			newline = this.view.scale( newline );
+			newline = this.transform.scale( newline );
 
 			text = this.text.split( '\n' );
 
@@ -443,7 +447,7 @@ jion.lazyValue(
 			}
 		}
 	}
-			
+
 	if( this.iconShape )
 	{
 		glint =
@@ -460,13 +464,27 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.view.create(
-					'pan', euclid_point.zero,
+			'size',
+				euclid_size.create(
 					'height', this._area.height,
 					'width', this._area.width
 				)
 		)
+	);
+}
+);
+
+
+/*
+| The font of the button label.
+*/
+jion.lazyValue(
+	prototype,
+	'_font',
+	function( )
+{
+	return(
+		this.font.create( 'size', this.transform.scale( this.font.size ) )
 	);
 }
 );

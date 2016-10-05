@@ -87,7 +87,7 @@ prototype.border =
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	var
@@ -105,12 +105,12 @@ prototype.compute =
 
 	return(
 		euclid_ellipse.create(
-			'pnw', this.pnw.compute( view ),
-			'pse', this.pse.compute( view ),
-			'gradientPC', gpc && gpc.compute( view ),
+			'pnw', this.pnw.compute( tenter ),
+			'pse', this.pse.compute( tenter ),
+			'gradientPC', gpc && gpc.compute( tenter ),
 			'gradientR1',
-				view
-				? ( gr1 ? view.scale( gr1 ) : undefined )
+				tenter && tenter.reflect === 'euclid_view'
+				? ( gr1 ? tenter.scale( gr1 ) : undefined )
 				: gr1
 		)
 	);

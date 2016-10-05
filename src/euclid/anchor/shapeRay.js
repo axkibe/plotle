@@ -61,11 +61,11 @@ prototype.border =
 
 
 /*
-| Computes to an unanchored shapeRay for a area/view.
+| Computes to an unanchored shapeRay for a tenter.
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	var
@@ -82,9 +82,9 @@ prototype.compute =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( view );
+		ray[ r ] = this.get( r ).compute( tenter );
 	}
-	
+
 	return(
 		euclid_shapeRay.create(
 			'ray:init', ray

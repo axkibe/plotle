@@ -274,7 +274,7 @@ visual_item.createRelationMove =
 		action
 	)
 {
-	if( !this.vZone.within( p ) ) return;
+	if( !this.tZone.within( p ) ) return;
 
 	root.create(
 		'action', action.create( 'toItemPath', this.path )
@@ -358,13 +358,10 @@ visual_item.createRelationStop =
 
 /**/if( CHECK )
 /**/{
-/**/	if( action.reflect !== 'action_createRelation' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( action.reflect !== 'action_createRelation' ) throw new Error( );
 /**/}
 
-	if( !this.vZone.within( p ) ) return false;
+	if( !this.tZone.within( p ) ) return false;
 
 	root.spawnRelation(
 		root.spaceVisual.get( action.fromItemPath.get( -1 ) ),

@@ -63,11 +63,6 @@ if( JION )
 				comment : 'if false the button is hidden',
 				type : 'boolean',
 				defaultValue : 'true'
-			},
-			view :
-			{
-				comment : 'the view for the widget',
-				type : [ 'undefined', 'euclid_view' ]
 			}
 		},
 		init : [ ]
@@ -76,7 +71,6 @@ if( JION )
 
 
 var
-	euclid_view,
 	gleam_glint_paint,
 	gleam_glint_twig,
 	gruga_iconCheck,
@@ -116,12 +110,7 @@ prototype._init =
 	if( this.superArea )
 	{
 		this._area =
-			this.designArea.compute(
-				euclid_view.proper.create(
-					'width', this.superArea.width,
-					'height', this.superArea.height
-				)
-			);
+			this.designArea.compute( this.superArea );
 	}
 };
 
@@ -136,13 +125,7 @@ jion.lazyValue(
 {
 	return(
 		gruga_iconCheck.shape
-		.compute(
-			euclid_view.proper.create(
-				'width', this._area.width,
-				'height', this._area.height,
-				'pan', this._area.pnw
-			)
-		)
+		.compute( this._area )
 	);
 }
 );

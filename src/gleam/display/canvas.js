@@ -39,7 +39,7 @@ if( JION )
 			{
 				comment : 'the size of the display',
 				// FIXME remove undefined
-				type : [ 'undefined', 'euclid_size' ]
+				type : [ 'undefined', 'euclid_size', 'euclid_rect' ]
 			},
 			_cv :
 			{
@@ -242,12 +242,12 @@ prototype._init =
 
 		if( cv.height !== height * scaled ) cv.height = height * scaled;
 
-		cv.style.height = height + 'px';
-
-		cv.style.width = width + 'px';
-
 		this._cx.scale( scaled, scaled );
 	}
+
+	cv.style.height = height + 'px';
+
+	cv.style.width = width + 'px';
 };
 
 

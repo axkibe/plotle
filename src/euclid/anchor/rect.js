@@ -73,14 +73,14 @@ prototype.border =
 
 
 /*
-| Computes to an unanchored rect for an area/view:
+| Computes to an unanchored rect for a tenter:
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
-		
+
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
@@ -88,8 +88,8 @@ prototype.compute =
 
 	return(
 		euclid_rect.create(
-			'pnw', this.pnw.compute( view ),
-			'pse', this.pse.compute( view )
+			'pnw', this.pnw.compute( tenter ),
+			'pse', this.pse.compute( tenter )
 		)
 	);
 };

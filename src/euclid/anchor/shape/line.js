@@ -61,16 +61,16 @@ prototype = euclid_anchor_shape_line.prototype;
 
 
 /*
-| Computes to an unanchored line for a area/view.
+| Anchors to an unanchored a tenter.
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	return(
 		euclid_shape_line.create(
-			'p', this.p && this.p.compute( view ),
+			'p', this.p && this.p.compute( tenter ),
 			'close', this.close,
 			'fly', this.fly
 		)

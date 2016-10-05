@@ -25,6 +25,11 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
+			controlTransform :
+			{
+				comment : 'the current transform of controls',
+				type : 'euclid_transform'
+			},
 			controlView :
 			{
 				comment : 'the current view of controls',
@@ -135,6 +140,7 @@ prototype._init =
 	)
 {
 	var
+		ct,
 		cv,
 		area,
 		r,
@@ -142,6 +148,8 @@ prototype._init =
 		rZ,
 		twig,
 		wname;
+
+	ct = this.controlTransform;
 
 	cv = this.controlView;
 
@@ -178,7 +186,7 @@ prototype._init =
 				'hover', this.hover,
 				'down',
 					disc_createDisc._isActiveButton( this.action, wname ),
-				'view', cv
+				'transform', ct
 			);
 	}
 

@@ -570,6 +570,15 @@ prototype._init =
 			this.disc.create(
 				'access', access,
 				'action', action,
+				'controlTransform',
+					euclid_transform.create(
+						'zoom',
+							Math.min(
+							  viewSize.height / gruga_controls.designSize.height,
+							  1
+							),
+						'offset', euclid_point.zero
+					),
 				'controlView',
 					view.create(
 						'zoom',
@@ -1218,7 +1227,8 @@ prototype.resize =
 	)
 {
 	var
-		view;
+		view,
+		viewSize;
 
 	view =
 		root.view.create(
@@ -1226,14 +1236,20 @@ prototype.resize =
 			'height', height
 		);
 
+	viewSize =
+		euclid_size.create(
+			'height', height,
+			'width', width
+		);
+
 	root.create(
-		'display', this.display.create( 'view', view ),
+		'display',
+			this.display.create(
+				'view', view,
+				'size', viewSize
+			),
 		'view', view,
-		'viewSize',
-			euclid_size.create(
-				'height', height,
-				'width', width
-			)
+		'viewSize', viewSize
 	);
 };
 
@@ -1731,8 +1747,7 @@ shell_root._createFormJockey =
 						'twig:set',
 						key,
 						widget.create(
-							'transform', euclid_transform.normal,
-							'view', view
+							'transform', euclid_transform.normal
 						)
 					);
 			}
@@ -1758,7 +1773,10 @@ shell_root._createFormJockey =
 			jockey.create(
 				'twig:add',
 				key,
-				forms[ key ].create( 'view', view, 'transform', euclid_transform.normal )
+				forms[ key ].create(
+					'view', view,
+					'transform', euclid_transform.normal
+				)
 			);
 	}
 

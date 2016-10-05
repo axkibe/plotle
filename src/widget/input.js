@@ -74,11 +74,6 @@ if( JION )
 				type : 'string',
 				defaultValue : '""'
 			},
-			view :
-			{
-				comment : 'the view for the widget',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			visible :
 			{
 				comment : 'if false the button is hidden',
@@ -97,6 +92,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	euclid_size,
 	gleam_facet,
 	gleam_display_canvas,
 	gleam_glint_border,
@@ -140,21 +136,13 @@ prototype._init =
 	function( )
 {
 	var
-		area,
-		view;
+		area;
 
 	if( this.superArea )
 	{
-		view =
-			this.view.create(
-				'width', this.superArea.width,
-				'height', this.superArea.height
-			);
-
-		// FIXME remove
 		area =
-		this.area =
-			this.designArea.compute( view );
+		this._area =
+			this.designArea.compute( this.superArea );
 
 		this._shape =
 			euclid_roundRect.create(
@@ -167,7 +155,7 @@ prototype._init =
 	else
 	{
 		area =
-		this.area =
+		this._area =
 		this._shape =
 			undefined;
 	}
@@ -206,7 +194,7 @@ jion.lazyValue(
 	s = Math.round( p.y + descend + 1 );
 
 	return(
-		this.area.pnw.y + s - Math.round( fs + descend )
+		this._area.pnw.y + s - Math.round( fs + descend )
 	);
 }
 );
@@ -237,9 +225,9 @@ prototype.click =
 	var
 		pp;
 
-	if( !p || !this.area.within( p ) ) return undefined;
+	if( !p || !this._area.within( p ) ) return undefined;
 
-	pp = p.sub( this.area.pnw );
+	pp = p.sub( this._area.pnw );
 
 	if( !this._shape.within( pp ) ) return undefined;
 
@@ -269,7 +257,7 @@ jion.lazyValue(
 		gleam_glint_disWindow.create(
 			'display', this._display,
 			'key', this.key,
-			'p', this.area.pnw
+			'p', this._area.pnw
 		)
 	);
 }
@@ -428,8 +416,8 @@ prototype.pointingHover =
 	)
 {
 	if(
-		!this.area.within( p )
-		|| !this._shape.within( p.sub( this.area.pnw ) )
+		!this._area.within( p )
+		|| !this._shape.within( p.sub( this._area.pnw ) )
 	)
 	{
 		return undefined;
@@ -624,11 +612,10 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view',
-				this.view.create(
-					'pan', euclid_point.zero,
-					'height', shape.pse.y + 1,
-					'width', shape.pse.x + 1
+			'size',
+				euclid_size.create(
+					'height', this._area.height + 1,
+					'width', this._area.width + 1
 				)
 		)
 	);

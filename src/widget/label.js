@@ -63,11 +63,6 @@ if( JION )
 				comment : 'the transform',
 				type : 'euclid_transform'
 			},
-			view :
-			{
-				comment : 'the view for the widget',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			visible :
 			{
 				comment : 'if false the button is hidden',
@@ -80,6 +75,8 @@ if( JION )
 
 
 var
+	euclid_point,
+	euclid_rect,
 	gleam_glint_text,
 	jion,
 	widget_label;
@@ -114,14 +111,16 @@ jion.lazyValue(
 	'_pos',
 	function( )
 {
-	// XXX
 	return(
+		// FIXME recomplicate
 		this.designPos.compute(
-			this.view.create(
-				'height', this.superArea.height,
-				'width', this.superArea.width
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse',
+					this.superArea.zeroPnw.pse.detransform( this.transform )
 			)
 		)
+		.transform( this.transform )
 	);
 }
 );

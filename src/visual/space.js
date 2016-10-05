@@ -655,7 +655,7 @@ prototype.pointingHover =
 				{
 					item = this.atRank( a );
 
-					if( item.vZone.within( p ) )
+					if( item.tZone.within( p ) )
 					{
 						root.create(
 							'action', action.create( 'fromItemPath', item.path )

@@ -509,7 +509,9 @@ prototype.transform =
 
 /*
 | Returns a rectangle which pnw/pse points are snapped to the nearest
-| whole number
+| whole number.
+|
+| FIXME; this is the same as align???
 */
 jion.lazyValue(
 	prototype,

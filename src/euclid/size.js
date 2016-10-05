@@ -28,6 +28,8 @@ if( JION )
 
 
 var
+	euclid_point,
+	euclid_rect,
 	euclid_size,
 	jion;
 
@@ -39,8 +41,8 @@ var
 'use strict';
 
 
-//var
-//	prototype;
+var
+	prototype;
 
 
 if( NODE )
@@ -51,7 +53,29 @@ if( NODE )
 }
 
 
-//prototype = euclid_rect.prototype;
+prototype = euclid_size.prototype;
+
+
+/*
+| A rectangle of same size with pnw at 0/0
+*/
+jion.lazyValue(
+	prototype,
+	'zeroPnwRect',
+	function( )
+{
+	return(
+		euclid_rect.create(
+			'pnw', euclid_point.zero,
+			'pse',
+				euclid_point.create(
+					'x', this.width,
+					'y', this.height
+				)
+		)
+	);
+}
+);
 
 
 } )( );

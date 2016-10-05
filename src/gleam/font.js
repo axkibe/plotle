@@ -84,6 +84,8 @@ jion.lazyValue(
 /*
 | The CSS-string for this font
 | resized for a view.
+|
+| FIXME remove
 */
 prototype.viewCss =
 	function(

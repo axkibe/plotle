@@ -69,13 +69,13 @@ prototype.border =
 
 
 /*
-| Computes to an unanchored shape for a area/view.
+| Computes to an unanchored shape for a tenter.
 |
-| FIXME cache last view (including other anchor shapes)
+| FIXME cache last tenter (including other anchor shapes)
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	var
@@ -92,12 +92,12 @@ prototype.compute =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		ray[ r ] = this.get( r ).compute( view );
+		ray[ r ] = this.get( r ).compute( tenter );
 	}
-	
+
 	return(
 		euclid_shape.create(
-			'pc', this.pc.compute( view ),
+			'pc', this.pc.compute( tenter ),
 			'ray:init', ray
 		)
 	);

@@ -182,8 +182,7 @@ prototype._init =
 						'twig:set',
 						disc.getKey( b ),
 						disc.atRank( b ).create(
-							'transform', this.controlTransform,
-							'view', this.controlView
+							'transform', this.controlTransform
 						)
 					);
 			}
@@ -193,6 +192,7 @@ prototype._init =
 			disc.create(
 				'access', this.access,
 				'action', this.action,
+				'controlTransform', this.controlTransform,
 				'controlView', this.controlView,
 				'hover', this.hover,
 				'mark', this.mark,

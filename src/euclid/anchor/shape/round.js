@@ -61,11 +61,11 @@ prototype = euclid_anchor_shape_round.prototype;
 
 
 /*
-| Computes to a view.
+| Anchors to a tenter.
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	if( CHECK )
@@ -75,7 +75,7 @@ prototype.compute =
 
 	return(
 		euclid_shape_round.create(
-			'p', this.p && this.p.compute( view ),
+			'p', this.p && this.p.compute( tenter ),
 			'ccw', this.ccw,
 			'close', this.close
 		)

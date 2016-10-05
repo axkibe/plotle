@@ -51,11 +51,13 @@ prototype = euclid_anchor_shape_start.prototype;
 
 
 /*
-| Computes to a view.
+| Anchors to a tenter.
+|
+| FIXME rename all "compute" to "tenter".
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	if( CHECK )
@@ -65,7 +67,7 @@ prototype.compute =
 
 	return(
 		euclid_shape_start.create(
-			'p', this.p.compute( view )
+			'p', this.p.compute( tenter )
 		)
 	);
 };

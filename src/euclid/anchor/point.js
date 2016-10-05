@@ -107,29 +107,40 @@ prototype.add =
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	var
 		pnw,
 		pse,
-		rect,
 		x,
 		y,
 		w,
-		h;
+		h,
+		zoom;
 
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	rect = view.rect;
+	if( tenter.reflect === 'euclid_view' )
+	{
+		zoom = tenter.zoom;
 
-	pnw = rect.pnw;
+		tenter = tenter.rect;
+	}
+	else
+	{
+		zoom = 1;
+	}
 
-	pse = rect.pse;
 
+	pnw = tenter.pnw;
+
+	pse = tenter.pse;
+
+	/*
 	if(
 		this.anchor === 'nw'
 		&& pnw.x === 0
@@ -139,14 +150,15 @@ prototype.compute =
 	{
 		return this.euclidPoint;
 	}
+	*/
 
-	w = ( pse.x - pnw.x ) * view.zoom;
+	w = ( pse.x - pnw.x ) * zoom;
 
-	h = ( pse.y - pnw.y ) * view.zoom;
+	h = ( pse.y - pnw.y ) * zoom;
 
-	x = this.x * view.zoom;
+	x = this.x * zoom;
 
-	y = this.y * view.zoom;
+	y = this.y * zoom;
 
 	switch( this.anchor )
 	{

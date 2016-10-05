@@ -25,6 +25,11 @@ if( JION )
 					require( '../typemaps/action' )
 					.concat( [ 'undefined' ] )
 			},
+			controlTransform :
+			{
+				comment : 'the current transform of controls',
+				type : 'euclid_transform'
+			},
 			controlView :
 			{
 				comment : 'the current view of controls',
@@ -139,9 +144,10 @@ prototype._init =
 	)
 {
 	var
-		cv,
 		action,
 		area,
+		ct,
+		cv,
 		down,
 		r,
 		rZ,
@@ -151,6 +157,8 @@ prototype._init =
 		wname;
 
 	cv = this.controlView;
+
+	ct = this.controlTransform;
 
 	// FIXME XXX remove
 	area =
@@ -308,7 +316,7 @@ prototype._init =
 				'superArea', area.zeroPnw,
 				'text', text,
 				'visible', visible,
-				'view', cv
+				'transform', ct
 			);
 	}
 

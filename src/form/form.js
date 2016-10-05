@@ -71,8 +71,7 @@ form_form.init =
 				'superArea', this.area,
 				'hover', this.hover,
 				'mark', this.mark,
-				'transform', this.transform,
-				'view', this.view
+				'transform', this.transform
 			);
 	}
 

@@ -44,6 +44,7 @@ if( JION )
 				comment : 'vertical rounding',
 				type : 'number'
 			},
+			// FIXME remove
 			fixRounds :
 			{
 				comment : 'if true the rounds are not scaled',
@@ -99,11 +100,11 @@ prototype.border =
 
 
 /*
-| Computes to an unanchored rect for a area/view:
+| Computes to an unanchored rect for a tenter:
 */
 prototype.compute =
 	function(
-		view
+		tenter
 	)
 {
 	var
@@ -115,13 +116,13 @@ prototype.compute =
 /**/}
 
 	fr = this.fixRounds;
-	
+
 	return(
 		euclid_roundRect.create(
-			'pnw', this.pnw.compute( view ),
-			'pse', this.pse.compute( view ),
-			'a', !fr ? view.scale( this.a ) : this.a,
-			'b', !fr ? view.scale( this.b ) : this.b
+			'pnw', this.pnw.compute( tenter ),
+			'pse', this.pse.compute( tenter ),
+			'a', !fr && tenter.reflect === 'euclid_view' ? tenter.scale( this.a ) : this.a,
+			'b', !fr && tenter.reflect === 'euclid_view' ? tenter.scale( this.b ) : this.b
 		)
 	);
 };
