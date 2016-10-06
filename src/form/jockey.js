@@ -45,12 +45,6 @@ if( JION )
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
 			},
-			view :
-			{
-				comment : 'the current view',
-				type : 'euclid_view',
-				prepare : 'view ? view.sizeOnly : view'
-			},
 			viewSize :
 			{
 				comment : 'current view size',
@@ -158,7 +152,6 @@ prototype._init =
 				'path', path,
 				'spaceRef', this.spaceRef,
 				'user', this.user,
-				'view', this.view,
 				'viewSize', this.viewSize
 			);
 

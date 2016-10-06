@@ -47,12 +47,6 @@ if( JION )
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
 			},
-			view :
-			{
-				comment : 'the current view',
-				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'view ? view.sizeOnly : view'
-			},
 			viewSize :
 			{
 				comment : 'current view size',

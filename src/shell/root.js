@@ -441,7 +441,7 @@ shell_root.startup =
 		'view', view,
 		'viewSize', display.size,
 		'disc', dj,
-		'form', shell_root._createFormJockey( view, viewSize ),
+		'form', shell_root._createFormJockey( viewSize ),
 		'_drawn', false
 	);
 
@@ -570,7 +570,6 @@ prototype._init =
 				'spaceRef', spaceRef,
 				'transform', euclid_transform.normal,
 				'user', user,
-				'view', view,
 				'viewSize', viewSize
 			);
 
@@ -1709,7 +1708,6 @@ prototype.draw =
 */
 shell_root._createFormJockey =
 	function(
-		view,
 		viewSize
 	)
 {
@@ -1769,7 +1767,6 @@ shell_root._createFormJockey =
 		form_jockey.create(
 			'path', jion$path.empty.append( 'form' ),
 			'transform', euclid_transform.normal,
-			'view', view,
 			'viewSize', viewSize
 		);
 
@@ -1785,7 +1782,6 @@ shell_root._createFormJockey =
 				'twig:add',
 				key,
 				forms[ key ].create(
-					'view', view,
 					'transform', euclid_transform.normal,
 					'viewSize', viewSize
 				)
