@@ -66,6 +66,11 @@ if( JION )
 			{
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
+			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'twigDup' ],

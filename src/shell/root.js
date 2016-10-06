@@ -413,6 +413,7 @@ shell_root.startup =
 			'controlView', view,
 			'path', djPath,
 			'spaceView', view,
+			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
 				gruga_mainDisc.abstract(
 					'path', djTwPath.append( 'mainDisc' )
@@ -599,7 +600,8 @@ prototype._init =
 				'mark', mark,
 				'spaceRef', spaceRef,
 				'spaceView', view,
-				'user', user
+				'user', user,
+				'viewSize', viewSize
 			);
 	}
 
