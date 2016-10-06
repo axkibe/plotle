@@ -570,7 +570,8 @@ prototype._init =
 				'spaceRef', spaceRef,
 				'transform', euclid_transform.normal,
 				'user', user,
-				'view', view
+				'view', view,
+				'viewSize', viewSize
 			);
 
 		this.disc =

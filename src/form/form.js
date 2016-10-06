@@ -46,7 +46,7 @@ form_form.init =
 	// FUTURE use abstract( )
 	if( !this.path ) return;
 
-	this.area = this.view.baseArea;
+	this.area = this.viewSize.zeroPnwRect;
 
 	// all components of the form
 	twig = twigDup ? this._twig :  jion.copy( this._twig );
@@ -265,7 +265,7 @@ form_form.glint =
 				gleam_glint_paint.create(
 					'facet', gruga_formFacet,
 					'key', '$background',
-					'shape', this.view.rect
+					'shape', this.area
 				)
 		);
 

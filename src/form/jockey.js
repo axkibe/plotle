@@ -158,7 +158,8 @@ prototype._init =
 				'path', path,
 				'spaceRef', this.spaceRef,
 				'user', this.user,
-				'view', this.view
+				'view', this.view,
+				'viewSize', this.viewSize
 			);
 
 /**/	if( CHECK )
