@@ -343,7 +343,8 @@ shell_root.startup =
 		djPath,
 		djTwPath,
 		user,
-		view;
+		view,
+		viewSize;
 
 /**/if( CHECK )
 /**/{
@@ -380,6 +381,12 @@ shell_root.startup =
 
 	view =
 		euclid_view.proper.create(
+			'height', display.size.height,
+			'width', display.size.width
+		);
+
+	viewSize =
+		euclid_size.create(
 			'height', display.size.height,
 			'width', display.size.width
 		);
@@ -434,7 +441,7 @@ shell_root.startup =
 		'view', view,
 		'viewSize', display.size,
 		'disc', dj,
-		'form', shell_root._createFormJockey( view ),
+		'form', shell_root._createFormJockey( view, viewSize ),
 		'_drawn', false
 	);
 
@@ -1701,7 +1708,8 @@ prototype.draw =
 */
 shell_root._createFormJockey =
 	function(
-		view
+		view,
+		viewSize
 	)
 {
 	var
@@ -1760,11 +1768,13 @@ shell_root._createFormJockey =
 		form_jockey.create(
 			'path', jion$path.empty.append( 'form' ),
 			'transform', euclid_transform.normal,
-			'view', view
+			'view', view,
+			'viewSize', viewSize
 		);
 
 	keys = Object.keys( forms );
 
+	// FIXME do a twig:init instead
 	for( a = 0, aZ = keys.length; a < aZ; a++ )
 	{
 		key = keys[ a ];
@@ -1775,7 +1785,8 @@ shell_root._createFormJockey =
 				key,
 				forms[ key ].create(
 					'view', view,
-					'transform', euclid_transform.normal
+					'transform', euclid_transform.normal,
+					'viewSize', viewSize
 				)
 			);
 	}

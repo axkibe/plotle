@@ -52,6 +52,11 @@ if( JION )
 				comment : 'the current view',
 				type : [ 'undefined', 'euclid_view' ],
 				prepare : 'view ? view.sizeOnly : view'
+			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'twigDup' ],
