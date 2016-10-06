@@ -412,7 +412,6 @@ shell_root.startup =
 			'controlTransform', euclid_transform.normal,
 			'controlView', view,
 			'path', djPath,
-			'spaceView', view,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
 				gruga_mainDisc.abstract(
@@ -599,7 +598,6 @@ prototype._init =
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
-				'spaceView', view,
 				'user', user,
 				'viewSize', viewSize
 			);

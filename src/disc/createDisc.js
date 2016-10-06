@@ -74,12 +74,6 @@ if( JION )
 				type : [ 'undefined', 'fabric_spaceRef' ],
 				assign : ''
 			},
-			spaceView :
-			{
-				comment : 'the current view of space',
-				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'spaceView && spaceView.sizeOnly'
-			},
 			user :
 			{
 				comment : 'currently logged in user',

@@ -73,12 +73,6 @@ if( JION )
 				comment : 'reference to current space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
-			spaceView :
-			{
-				comment : 'the current view for space',
-				type : [ 'undefined', 'euclid_view' ],
-				prepare : 'spaceView && spaceView.sizeOnly'
-			},
 			user :
 			{
 				comment : 'currently logged in user',
@@ -631,14 +625,7 @@ jion.lazyValue(
 		g,
 		glint,
 		r,
-		rZ,
-		view;
-
-	view =
-		this.controlView.create(
-			'height', this._area.height,
-			'width', this._area.width
-		);
+		rZ;
 
 	glint =
 		gleam_glint_twig.create(
@@ -674,7 +661,7 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view', view
+			'size', this._area.size
 		)
 	);
 }

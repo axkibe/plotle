@@ -57,11 +57,6 @@ if( JION )
 				comment : 'currently loaded space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
-			spaceView :
-			{
-				comment : 'the current view',
-				type : 'euclid_view'
-			},
 			user :
 			{
 				comment : 'currently logged in user',
@@ -202,7 +197,6 @@ prototype._init =
 				'hover', this.hover,
 				'mark', this.mark,
 				'spaceRef', this.spaceRef,
-				'spaceView', this.spaceView,
 				'user', this.user
 			);
 	}
@@ -266,7 +260,7 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint = gleam_glint_twig.create( 'key', 'disc', 'view', this.controlView );
+	glint = gleam_glint_twig.create( 'key', 'disc' );
 
 	if( action && action.isCreate )
 	{

@@ -64,7 +64,10 @@ jion.lazyValue(
 	'zeroPnwRect',
 	function( )
 {
-	return(
+	var
+		rect;
+
+	rect =
 		euclid_rect.create(
 			'pnw', euclid_point.zero,
 			'pse',
@@ -72,8 +75,11 @@ jion.lazyValue(
 					'x', this.width,
 					'y', this.height
 				)
-		)
-	);
+		);
+
+	jion.aheadValue( rect, 'size', this );
+
+	return rect;
 }
 );
 

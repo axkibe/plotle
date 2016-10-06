@@ -32,6 +32,7 @@ if( JION )
 var
 	euclid_point,
 	euclid_rect,
+	euclid_size,
 	jion;
 
 
@@ -725,6 +726,33 @@ jion.lazyValue(
 			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
 	);
+}
+);
+
+
+/*
+| A size jion matching this rect.
+*/
+jion.lazyValue(
+	prototype,
+	'size',
+	function( )
+{
+	var
+		size;
+
+	size =
+		euclid_size.create(
+			'height', this.height,
+			'width', this.width
+		);
+
+	if( this.pnw.equals( euclid_point.zero ) )
+	{
+		jion.aheadValue( size, 'zeroPnwRect', this );
+	}
+
+	return size;
 }
 );
 

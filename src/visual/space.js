@@ -1767,7 +1767,7 @@ prototype._startCreateGeneric =
 				model.create(
 					'fabric', model.fabric.create( 'pnw', dp ),
 					'path', visual_space.transPath,
-					'transform', this.tansform
+					'transform', this.transform
 				);
 
 			break;
