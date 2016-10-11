@@ -509,6 +509,31 @@ prototype.transform =
 
 
 /*
+| Returns this detransformed rect.
+*/
+prototype.detransform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.sub( transform.offset )
+		: this.create(
+			'pnw', this.pnw.detransform( transform ),
+			'pse', this.pse.detransform( transform )
+		)
+	);
+};
+
+
+/*
 | Returns a rectangle which pnw/pse points are snapped to the nearest
 | whole number.
 |

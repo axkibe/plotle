@@ -32,7 +32,7 @@ if( JION )
 			},
 			controlView :
 			{
-				comment : 'the current view of controls',
+				comment : 'FIXME',
 				type : [ 'undefined', 'euclid_view' ]
 			},
 			designArea :
@@ -79,6 +79,11 @@ if( JION )
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ],
 				assign : ''
+			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
@@ -135,7 +140,6 @@ prototype._init =
 {
 	var
 		ct,
-		cv,
 		area,
 		r,
 		ranks,
@@ -145,19 +149,16 @@ prototype._init =
 
 	ct = this.controlTransform;
 
-	cv = this.controlView;
-
 	area =
 	this._area =
-		this.designArea.compute( cv ).align;
+		this.designArea.compute( this.viewSize.zeroPnwRect.detransform( ct ) )
+		.transform( ct )
+		.align;
 
 	this.silhoutte =
 		this.shape.compute(
-			cv.create(
-				'height', area.height,
-				'width', area.width
-			)
-		);
+			area.zeroPnw.detransform( ct )
+		).transform( ct );
 
 	twig =
 		twigDup
@@ -536,16 +537,9 @@ jion.lazyValue(
 		g,
 		glint,
 		r,
-		rZ,
-		view;
+		rZ;
 
 	area = this._area,
-
-	view =
-		this.controlView.create(
-			'height', area.height,
-			'width', area.width
-		);
 
 	glint =
 		gleam_glint_twig.create(
@@ -581,7 +575,7 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', glint,
-			'view', view
+			'size', this._area.size
 		)
 	);
 }

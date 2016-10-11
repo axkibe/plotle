@@ -116,8 +116,6 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
 	euclid_size,
 	gleam_display_canvas,
 	gleam_glint_paint,
@@ -168,11 +166,7 @@ prototype._init =
 		area =
 		this._area =
 			this.designArea.compute(
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse',
-						this.superArea.zeroPnw.pse.detransform( this.transform )
-				)
+				this.superArea.zeroPnw.detransform( this.transform )
 			)
 			.transform( this.transform )
 			.align;
@@ -180,38 +174,26 @@ prototype._init =
 		// FIXME decomplicate
 		this._shape =
 			this.shape.compute(
-				euclid_rect.create(
-					'pnw', euclid_point.zero,
-					'pse',
-						this._area.zeroPnw.pse.detransform( this.transform )
-				)
+				this._area.zeroPnw.detransform( this.transform )
 			).transform( this.transform );
 
 
 		// FIXME decomplicate
 		if( this.iconShape )
 		{
-			// XXX FIXME decomplicate
+			// FIXME decomplicate
 			this._iconShape =
 				this.iconShape.compute(
-					euclid_rect.create(
-						'pnw', euclid_point.zero,
-						'pse',
-							this._area.zeroPnw.pse.detransform( this.transform )
-					)
+					this._area.zeroPnw.detransform( this.transform )
 				).transform( this.transform );
 		}
 
 		if( this.textDesignPos )
 		{
-			// XXX FIXME decomplicate
+			// FIXME decomplicate
 			this._textPos =
 				this.textDesignPos.compute(
-					euclid_rect.create(
-						'pnw', euclid_point.zero,
-						'pse',
-							this._area.zeroPnw.pse.detransform( this.transform )
-					)
+					this._area.zeroPnw.detransform( this.transform )
 				).transform( this.transform );
 		}
 	}

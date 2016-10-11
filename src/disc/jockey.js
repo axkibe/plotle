@@ -197,7 +197,8 @@ prototype._init =
 				'hover', this.hover,
 				'mark', this.mark,
 				'spaceRef', this.spaceRef,
-				'user', this.user
+				'user', this.user,
+				'viewSize', this.viewSize
 			);
 	}
 

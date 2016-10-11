@@ -32,7 +32,7 @@ if( JION )
 			},
 			controlView :
 			{
-				comment : 'the current view of controls',
+				comment : 'FIXME',
 				type : [ 'undefined', 'euclid_view' ]
 			},
 			designArea :
@@ -77,6 +77,11 @@ if( JION )
 			{
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
+			},
+			viewSize :
+			{
+				comment : 'current view size',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
@@ -141,7 +146,6 @@ prototype._init =
 		action,
 		area,
 		ct,
-		cv,
 		down,
 		r,
 		rZ,
@@ -150,23 +154,18 @@ prototype._init =
 		visible,
 		wname;
 
-	cv = this.controlView;
-
 	ct = this.controlTransform;
 
-	// FIXME XXX remove
 	area =
 	this._area =
-		this.designArea.compute( cv ).align;
+		this.designArea.compute( this.viewSize.zeroPnwRect.detransform( ct ) )
+		.transform( ct )
+		.align;
 
-	// FIXME XXX remove
 	this.silhoutte =
 		this.shape.compute(
-			cv.create(
-				'height', area.height,
-				'width', area.width
-			)
-		);
+			area.zeroPnw.detransform( ct )
+		).transform( ct );
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
