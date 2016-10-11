@@ -53,11 +53,6 @@ if( JION )
 				comment : 'the current transform of space',
 				type : 'euclid_transform'
 			},
-			view :
-			{
-				comment : 'the current view of space',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			viewSize :
 			{
 				comment : 'current view size',

@@ -557,7 +557,6 @@ prototype._init =
 					'hover', hover,
 					'mark', mark,
 					'transform', spaceTransform,
-					'view', view,
 					'viewSize', viewSize
 				);
 		}
