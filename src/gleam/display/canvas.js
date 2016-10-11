@@ -261,11 +261,9 @@ prototype.render =
 	function( )
 {
 	var
-		view;
+		size;
 
-	view = this.view;
-
-	var size = this.size || this.view; // FIXME REMOVE
+	size = this.size;
 
 	if( jion.hasLazyValueSet( this, '_rendered' ) ) return true;
 
@@ -280,13 +278,7 @@ prototype.render =
 		this._cx.clearRect( 0, 0, size.width, size.height );
 	}
 
-	// FIXME view should always be in glint.
-	if( this.glint.view )
-	{
-		view = this.glint.view;
-	}
-
-	this._renderGlintTwig( this.glint, view );
+	this._renderGlintTwig( this.glint );
 
 	this._rendered;
 };
@@ -482,9 +474,7 @@ prototype._colorStyle =
 */
 prototype._renderGlintTwig =
 	function(
-		glint,  // the glint to render
-		view	// the view to render it with
-		//		// if the glint doesn't override it
+		glint  // the glint to render
 	)
 {
 	var
@@ -505,8 +495,6 @@ prototype._renderGlintTwig =
 		w;
 
 	cx = this._cx;
-
-	if( glint.view ) view = glint.view;
 
 	for( r = 0, rZ = glint.length; r < rZ; r++ )
 	{
@@ -532,13 +520,13 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_paint' :
 
-				this._paint( g.facet, g.shape, view );
+				this._paint( g.facet, g.shape );
 
 				break;
 
 			case 'gleam_glint_text' :
 
-				this._setFont( g.font, view );
+				this._setFont( g.font );
 
 				p = g.p;
 
@@ -579,7 +567,7 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_twig' :
 
-				this._renderGlintTwig( g, view );
+				this._renderGlintTwig( g );
 
 				break;
 
@@ -656,7 +644,7 @@ prototype._renderGlintTwig =
 					cx.clip( );
 				}
 
-				this._renderGlintTwig( g.glint, view );
+				this._renderGlintTwig( g.glint );
 
 				cx.restore( );
 
