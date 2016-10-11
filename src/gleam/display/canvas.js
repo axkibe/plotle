@@ -587,10 +587,9 @@ prototype._renderGlintTwig =
 
 			case 'gleam_glint_mask' :
 
-				// FIXME
-				h = ( this.view || this.size ).height;
+				h = this.size.height;
 
-				w = ( this.view || this.size ).width;
+				w = this.size.width;
 
 				cx.save( );
 
@@ -760,8 +759,7 @@ jion.lazyValue(
 */
 prototype._setFont =
 	function(
-		font,
-		view // use this view for the font
+		font
 	)
 {
 	var
@@ -769,10 +767,7 @@ prototype._setFont =
 
 	cx = this._cx;
 
-	cx.font =
-		view
-		? font.viewCss( view )
-		: font.css;
+	cx.font = font.css;
 
 	cx.fillStyle = font.fill.css;
 
