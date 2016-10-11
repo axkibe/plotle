@@ -62,16 +62,15 @@ prototype = gleam_glint_paint.prototype;
 
 
 /*
-| Returns true if p is within the 
+| Returns true if p is within the
 | glint its shape.
 */
 prototype.within =
 	function(
-		p,
-		view
+		p
 	)
 {
-	return this.shape.within( p, view );
+	return this.shape.within( p );
 };
 
 

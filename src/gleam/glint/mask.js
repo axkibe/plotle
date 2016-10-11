@@ -69,20 +69,19 @@ prototype = gleam_glint_mask.prototype;
 */
 prototype.within =
 	function(
-		p,
-		view
+		p
 	)
 {
 	if( this.reverse )
 	{
-		if( this.shape.within( p, view ) ) return false;
+		if( this.shape.within( p ) ) return false;
 	}
 	else
 	{
-		if( !this.shape.within( p, view ) ) return false;
+		if( !this.shape.within( p ) ) return false;
 	}
 
-	return this.glint.within( p, view );
+	return this.glint.within( p );
 };
 
 

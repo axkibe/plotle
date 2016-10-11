@@ -17,13 +17,6 @@ if( JION )
 				comment : 'key in parent twig',
 				type : 'string'
 			}
-			
-			,
-			view :
-			{
-				comment : 'if defined apply this view',
-				type : [ 'undefined', 'euclid_view' ]
-			}
 		},
 		twig :
 		[
