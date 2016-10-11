@@ -29,11 +29,6 @@ if( JION )
 				comment : 'the current transform of controls',
 				type : 'euclid_transform'
 			},
-			controlView :
-			{
-				comment : 'the current view of controls',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
@@ -193,7 +188,6 @@ prototype._init =
 				'access', this.access,
 				'action', this.action,
 				'controlTransform', this.controlTransform,
-				'controlView', this.controlView,
 				'hover', this.hover,
 				'mark', this.mark,
 				'spaceRef', this.spaceRef,

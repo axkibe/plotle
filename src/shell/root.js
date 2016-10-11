@@ -410,7 +410,6 @@ shell_root.startup =
 		disc_jockey.create(
 			'action', action,
 			'controlTransform', euclid_transform.normal,
-			'controlView', view,
 			'path', djPath,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
@@ -585,15 +584,6 @@ prototype._init =
 							  1
 							),
 						'offset', euclid_point.zero
-					),
-				'controlView',
-					view.create(
-						'zoom',
-							Math.min(
-							  view.height / gruga_controls.designSize.height,
-							  1
-							),
-						'pan', euclid_point.zero
 					),
 				'hover', hover,
 				'mark', mark,

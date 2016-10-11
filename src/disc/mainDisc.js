@@ -30,11 +30,6 @@ if( JION )
 				comment : 'the current transform of controls',
 				type : 'euclid_transform'
 			},
-			controlView :
-			{
-				comment : 'FIXME',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			designArea :
 			{
 				comment : 'designed aera (using anchors)',
