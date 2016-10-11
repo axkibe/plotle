@@ -29,12 +29,6 @@ if( JION )
 				comment : 'if defined the canvas is scaled',
 				type : [ 'undefined', 'number' ]
 			},
-			view :
-			{
-				// FIXME remove since it's in twig
-				comment : 'the view of the display',
-				type : [ 'undefined', 'euclid_view' ]
-			},
 			size :
 			{
 				comment : 'the size of the display',
