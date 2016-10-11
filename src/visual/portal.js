@@ -298,7 +298,8 @@ jion.lazyStaticValue(
 					'spaceUser', '',
 					'spaceTag', ''
 				),
-			'highlight', false
+			'highlight', false,
+			'transform', euclid_transform.normal
 		)
 	);
 }

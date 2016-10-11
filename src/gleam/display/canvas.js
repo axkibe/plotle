@@ -214,19 +214,9 @@ prototype._init =
 		this._cx = get2dContext( cv );
 	}
 
-	// FIXME remove
-	if( !this.size )
-	{
-		height = this.view.height;
+	height = this.size.height;
 
-		width = this.view.width;
-	}
-	else
-	{
-		height = this.size.height;
-
-		width = this.size.width;
-	}
+	width = this.size.width;
 
 	scaled = this.scaled;
 
