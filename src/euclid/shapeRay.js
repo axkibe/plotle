@@ -67,54 +67,6 @@ prototype.border =
 
 
 /*
-| Returns the shapeRay repositioned for 'view'.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	var
-		a,
-		aZ,
-		ray;
-
-	ray = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		ray[ a ] = this.get( a ).inView( view );
-	}
-
-	return this.create( 'ray:init', ray );
-};
-
-
-/*
-| Returns a transformed shapeRay.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	var
-		a,
-		aZ,
-		ray;
-
-	ray = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		ray[ a ] = this.get( a ).inView( view );
-	}
-
-	return this.create( 'ray:init', ray );
-};
-
-
-/*
 | Returns a transformed shapeRay.
 */
 prototype.transform =

@@ -43,13 +43,7 @@ if( JION )
 			{
 				comment : 'vertical rounding',
 				type : 'number'
-			},
-			// FIXME remove
-			fixRounds :
-			{
-				comment : 'if true the rounds are not scaled',
-				type : [ 'undefined', 'boolean' ]
-			},
+			}
 		}
 	};
 }
@@ -115,14 +109,12 @@ prototype.compute =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	fr = this.fixRounds;
-
 	return(
 		euclid_roundRect.create(
 			'pnw', this.pnw.compute( tenter ),
 			'pse', this.pse.compute( tenter ),
-			'a', !fr && tenter.reflect === 'euclid_view' ? tenter.scale( this.a ) : this.a,
-			'b', !fr && tenter.reflect === 'euclid_view' ? tenter.scale( this.b ) : this.b
+			'a', this.a,
+			'b', this.b
 		)
 	);
 };

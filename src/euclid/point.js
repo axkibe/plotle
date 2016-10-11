@@ -181,42 +181,6 @@ prototype.createRectOfSize =
 
 
 /*
-| Returns the original position of repositioned point.
-*/
-prototype.fromView =
-	function(
-		view
-	)
-{
-	return(
-		this.create(
-			'x', view.dex( this.x ),
-			'y', view.dey( this.y )
-		)
-	);
-};
-
-
-/*
-| Returns the point transformed back by a view.
-|
-| FIXME remove as double to fromView
-*/
-prototype.deView =
-	function(
-		view
-	)
-{
-	return(
-		this.create(
-			'x', view.dex( this.x ),
-			'y', view.dey( this.y )
-		)
-	);
-};
-
-
-/*
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
@@ -249,25 +213,6 @@ prototype.intercept =
 		this.create(
 			'x', ( x - bx ) * scaleX + bx,
 			'y', ( y - by ) * scaleY + by
-		)
-	);
-};
-
-
-/*
-| Returns the point repositioned to a view.
-|
-| FIXME remove
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	return(
-		this.create(
-			'x', view.x( this.x ),
-			'y', view.y( this.y )
 		)
 	);
 };

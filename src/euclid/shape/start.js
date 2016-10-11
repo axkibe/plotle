@@ -52,18 +52,6 @@ prototype = euclid_shape_start.prototype;
 /*
 | Returns the shape section repositioned to a view.
 */
-prototype.inView =
-	function(
-		view
-	)
-{
-	return this.create( 'p', this.p.inView( view ) );
-};
-
-
-/*
-| Returns the shape section repositioned to a view.
-*/
 prototype.transform =
 	function(
 		transform

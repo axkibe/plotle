@@ -108,10 +108,7 @@ prototype.compute =
 			'pnw', this.pnw.compute( tenter ),
 			'pse', this.pse.compute( tenter ),
 			'gradientPC', gpc && gpc.compute( tenter ),
-			'gradientR1',
-				tenter && tenter.reflect === 'euclid_view'
-				? ( gr1 ? tenter.scale( gr1 ) : undefined )
-				: gr1
+			'gradientR1', gr1
 		)
 	);
 };

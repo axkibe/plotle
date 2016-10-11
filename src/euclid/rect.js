@@ -456,34 +456,6 @@ prototype.intercept =
 
 
 /*
-| Returns this rect repositioned and resized to a view.
-|
-| FIXME remove
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	if( view.zoom === 1 )
-	{
-		return(
-			( view.pan.x === 0 && view.pan.y === 0 )
-			? this
-			: this.add( view.pan )
-		);
-	}
-
-	return(
-		this.create(
-			'pnw', this.pnw.inView( view ),
-			'pse', this.pse.inView( view )
-		)
-	);
-};
-
-
-/*
 | Returns this transformed rect.
 */
 prototype.transform =

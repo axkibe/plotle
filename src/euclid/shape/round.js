@@ -62,22 +62,6 @@ prototype = euclid_shape_round.prototype;
 
 
 /*
-| Returns the shape section repositioned to a view.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	return(
-		this.p !== undefined
-		? this.create( 'p', this.p.inView( view ) )
-		: this
-	);
-};
-
-
-/*
 | Returns a transformed shape section.
 */
 prototype.transform =

@@ -66,22 +66,6 @@ e = euclid_constants.epsilon;
 
 
 /*
-| Returns the shape section repositioned to a view.
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	return(
-		this.p !== undefined
-		? this.create( 'p', this.p.inView( view ) )
-		: this
-	);
-};
-
-
-/*
 | Gets the source of a projection to p.
 |
 | Returns the projection intersection in

@@ -124,17 +124,7 @@ prototype.compute =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	if( tenter.reflect === 'euclid_view' )
-	{
-		zoom = tenter.zoom;
-
-		tenter = tenter.rect;
-	}
-	else
-	{
-		zoom = 1;
-	}
-
+	zoom = 1;
 
 	pnw = tenter.pnw;
 
