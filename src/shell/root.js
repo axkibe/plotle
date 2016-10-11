@@ -107,11 +107,6 @@ if( JION )
 				comment : 'current user',
 				type : [ 'undefined', 'user_creds' ]
 			},
-			view :
-			{
-				comment : 'current view',
-				type : 'euclid_view'
-			},
 			viewSize :
 			{
 				comment : 'current view size',
@@ -170,7 +165,6 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_size,
-	euclid_view,
 	fabric_doc,
 	fabric_para,
 	fabric_relation,
@@ -343,7 +337,6 @@ shell_root.startup =
 		djPath,
 		djTwPath,
 		user,
-		view,
 		viewSize;
 
 /**/if( CHECK )
@@ -378,12 +371,6 @@ shell_root.startup =
 	root._fontWatch =
 		euclid_measure.width( root._fontWFont, 'ideoloom$8833' );
 	*/
-
-	view =
-		euclid_view.proper.create(
-			'height', display.size.height,
-			'width', display.size.width
-		);
 
 	viewSize =
 		euclid_size.create(
@@ -437,7 +424,6 @@ shell_root.startup =
 		'link', net_link.create( ),
 		'spaceTransform', euclid_transform.normal,
 		'systemFocus', true,
-		'view', view,
 		'viewSize', display.size,
 		'disc', dj,
 		'form', shell_root._createFormJockey( viewSize ),
@@ -465,7 +451,6 @@ prototype._init =
 		spaceRef,
 		spaceTransform,
 		user,
-		view,
 		viewSize;
 
 
@@ -480,8 +465,6 @@ prototype._init =
 	action = this.action;
 
 	mark = this.mark;
-
-	view = this.view;
 
 	viewSize = this.viewSize;
 
@@ -540,7 +523,6 @@ prototype._init =
 		|| hover !== inherit.hover
 		|| mark !== inherit.mark
 		|| user !== inherit.user
-		|| view !== inherit.view
 		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
 		|| viewSize !== inherit.viewSize
@@ -663,14 +645,14 @@ Object.defineProperty(
 	{
 		get :
 			function( )
-			{
-				var
-					screen;
+		{
+			var
+				screen;
 
-				screen = root._currentScreen;
+			screen = root._currentScreen;
 
-				return screen && screen.attentionCenter;
-			}
+			return screen && screen.attentionCenter;
+		}
 	}
 );
 
@@ -702,18 +684,13 @@ prototype.changeView =
 	var
 		e,
 		e1,
-		pan,
+		offset,
 		st,
-		view,
-		x,
-		y,
 		zoom;
-
-	view = this.view;
 
 	st = this.spaceTransform;
 
-	pan = view.pan;
+	offset = st.offset;
 
 	if( de === 0 )
 	{
@@ -731,30 +708,17 @@ prototype.changeView =
 
 	zoom = Math.pow( 1.1, e1 );
 
-	x = ( ( p.x - pan.x ) / view.zoom );
-
-	y = ( ( p.y - pan.y ) / view.zoom );
-
-	e = ( 1 / zoom - 1 / view.zoom );
+	e = ( 1 / zoom - 1 / st.zoom );
 
 	return(
 		this.create(
 			'_transformExponent', e1,
-			'view',
-				view.create(
-					'pan',
-						euclid_point.create(
-							'x', ( p.x * e + pan.x / view.zoom ) * zoom,
-							'y', ( p.y * e + pan.y / view.zoom ) * zoom
-						),
-					'zoom', zoom
-				),
 			'spaceTransform',
 				st.create(
 					'offset',
 						euclid_point.create(
-							'x', ( p.x * e + pan.x / st.zoom ) * zoom,
-							'y', ( p.y * e + pan.y / st.zoom ) * zoom
+							'x', ( p.x * e + offset.x / st.zoom ) * zoom,
+							'y', ( p.y * e + offset.y / st.zoom ) * zoom
 						),
 					'zoom', zoom
 				)
@@ -1223,14 +1187,7 @@ prototype.resize =
 	)
 {
 	var
-		view,
 		viewSize;
-
-	view =
-		root.view.create(
-			'width', width,
-			'height', height
-		);
 
 	viewSize =
 		euclid_size.create(
@@ -1241,10 +1198,8 @@ prototype.resize =
 	root.create(
 		'display',
 			this.display.create(
-				'view', view,
 				'size', viewSize
 			),
-		'view', view,
 		'viewSize', viewSize
 	);
 };
@@ -1333,12 +1288,7 @@ prototype.onAcquireSpace =
 			: pass,
 		'mark', undefined,
 		'spaceFabric', reply.space,
-		'spaceRef', request.spaceRef,
-		'view',
-			euclid_view.proper.create(
-				'height', this.viewSize.height,
-				'width', this.viewSize.width
-			)
+		'spaceRef', request.spaceRef
 	);
 };
 
