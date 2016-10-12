@@ -261,44 +261,6 @@ jion.lazyValue(
 );
 
 
-/*
-| Returns the ellipse in a view.
-| FIXME remove
-*/
-prototype.inView =
-	function(
-		view
-	)
-{
-	if( view.zoom === 1 )
-	{
-		return(
-			( view.pan.x === 0 && view.pan.y === 0 )
-			? this
-			: this.add( view.pan )
-		);
-	}
-
-	return(
-		this.create(
-			'pnw', this.pnw.inView( view ),
-			'pse', this.pse.inView( view ),
-			'gradientPC',
-				this.gradientPC !== undefined
-				? this.gradientPC.inView( view )
-				: pass,
-			'gradientR0',
-				this.gradientR0 !== undefined
-				? view.scale( this.gradientR0 )
-				: pass,
-			'gradientR1',
-				this.gradientR1 !== undefined
-				? view.scale( this.gradientR1 )
-				: pass
-		)
-	);
-};
-
 
 /*
 | Returns a transformed roundRect.

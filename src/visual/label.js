@@ -687,7 +687,7 @@ jion.lazyValue(
 	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.inView( this.transform.orth );
+	return this.zeroSilhoutte.transform( this.transform.orth );
 }
 );
 

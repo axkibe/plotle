@@ -480,11 +480,6 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/view.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/euclid/transform.js',
 		'hasJion', true,
 		'inBundle', true

@@ -76,6 +76,7 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	euclid_size,
+	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
 	gleam_display_canvas,

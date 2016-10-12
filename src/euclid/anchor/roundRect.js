@@ -101,8 +101,6 @@ prototype.compute =
 		tenter
 	)
 {
-	var
-		fr;
 
 /**/if( CHECK )
 /**/{
