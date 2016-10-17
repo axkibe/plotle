@@ -28,6 +28,11 @@ if( JION )
 			{
 				comment : 'position to draw it at',
 				type : 'euclid_point'
+			},
+			size :
+			{
+				comment : 'the size of the window',
+				type : 'euclid_size'
 			}
 		},
 		init : [ 'inherit' ]
@@ -36,6 +41,8 @@ if( JION )
 
 
 var
+	jion,
+	gleam_display_canvas,
 	gleam_glint_window;
 
 
@@ -58,6 +65,44 @@ var
 	prototype;
 
 prototype = gleam_glint_window.prototype;
+
+
+/*
+| Initialization.
+*/
+prototype._init =
+	function(
+		inherit
+	)
+{
+	if(
+		inherit
+		&& jion.hasLazyValueSet( inherit, '_canvasDisplay' )
+		&& this.twig === inherit.twig
+		&& this.size.equals( inherit.size )
+	)
+	{
+		jion.aheadValue( this, '_canvasDisplay', inherit._canvasDisplay );
+	}
+};
+
+
+/*
+| Creates a subcanvas for rendering and caching.
+*/
+jion.lazyValue(
+	prototype,
+	'_canvasDisplay',
+	function( )
+{
+	return(
+		gleam_display_canvas.create(
+			'twig', this.twig,
+			'size', this.size
+		)
+	);
+}
+);
 
 
 } )( );

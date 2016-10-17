@@ -259,7 +259,7 @@ prototype.render =
 
 	size = this.size;
 
-	if( jion.hasLazyValueSet( this, '_rendered' ) ) return true;
+	if( jion.hasLazyValueSet( this, '_rendered' ) ) return;
 
 	if( this.background )
 	{
@@ -474,6 +474,7 @@ prototype._renderGlintTwig =
 	var
 		a,
 		aZ,
+		cd,
 		cx,
 		det,
 		g,
@@ -562,6 +563,25 @@ prototype._renderGlintTwig =
 			case 'gleam_glint_twig' :
 
 				this._renderGlintTwig( g );
+
+				break;
+
+			case 'gleam_glint_window' :
+
+				p = g.p;
+
+				// FUTURE only do via _display
+				//        when relatively small.
+
+				cd = g._canvasDisplay;
+
+				cd.render( );
+
+				cx.drawImage(
+					cd._cv,
+					round( p.x ),
+					round( p. y )
+				);
 
 				break;
 

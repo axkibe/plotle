@@ -17,7 +17,7 @@ if( JION )
 			display :
 			{
 				comment : 'the display to draw',
-				type : [ 'gleam_display_canvas' ] // FUTURE GLINT
+				type : [ 'gleam_display_canvas' ]
 			},
 			key :
 			{
@@ -36,8 +36,7 @@ if( JION )
 
 
 var
-	gleam_glint_disWindow,
-	jion;
+	gleam_glint_disWindow;
 
 /*
 | Capsule
@@ -70,59 +69,12 @@ prototype._init =
 {
 	if( inherit )
 	{
-		if( jion.hasLazyValueSet( inherit, 'sprite' ) )
-		{
-			this._inheritedSprite = inherit.sprite;
-		}
-		else
-		{
-			this._inheritedSprite = inherit._inheritedSprite;
-		}
-
 		if( this.display === inherit.display )
 		{
 			this._inheritedDisplayEqual = true;
 		}
 	}
 };
-
-
-/*
-| Turns the window into a pixiSprite
-*/
-/*
-jion.lazyValue(
-	prototype,
-	'pixiSprite',
-	function( )
-{
-	var
-		p,
-		sprite;
-
-	p = this.p;
-
-	if( this._inheritedDisplayEqual )
-	{
-		sprite = this._inheritedSprite;
-	}
-	else
-	{
-		// FUTURE GLINT
-		// move sprite to display
-		sprite = new PIXI.Sprite( PIXI.Texture.fromCanvas( this.display._cv ) );
-	}
-
-	sprite.x = this.p.x;
-
-	sprite.y = this.p.y;
-
-	sprite.id = this.id;
-
-	return sprite;
-}
-);
-*/
 
 
 } )( );
