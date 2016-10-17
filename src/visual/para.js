@@ -80,7 +80,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	euclid_measure,
 	euclid_point,
 	flow_block,
@@ -140,9 +140,13 @@ prototype._init =
 			jion.aheadValue( this, 'flow', inherit.flow );
 		}
 
-		if( jion.hasLazyValueSet( inherit, '_display' ) )
+		if( jion.hasLazyValueSet( inherit, 'glint' ) )
 		{
-			jion.aheadValue( this, '_display', inherit._display );
+			this._inheritedGlint = inherit.glint;
+		}
+		else
+		{
+			this._inheritedGlint = inherit._inheritedGlint;
 		}
 	}
 };
@@ -186,10 +190,17 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		gleam_glint_disWindow.create(
-			'display', this._display,
+		( this._inheritedGlint || gleam_glint_window )
+		.create(
+			'glint', this._glint,
 			'key', this.key,
-			'p', this.pnw.transform( this.transform.ortho )
+			'p', this.pnw.transform( this.transform.ortho ),
+			'size',
+				euclid_size.create(
+					'height', Math.round( this.height * this.transform.zoom + 1 ),
+					'width', Math.round( this.flow.width * this.transform.zoom + 5 )
+				)
+				// FIXME why +5?
 		)
 	);
 }
@@ -254,11 +265,11 @@ jion.lazyValue(
 
 
 /*
-| The para's display.
+| The para's glint without window.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -328,15 +339,28 @@ jion.lazyValue(
 		glint = glint.create( 'twine:set+', this._caretGlint );
 	}
 
+	return glint;
+}
+);
+
+
+/*
+| The para's display.
+| FIXME XXX remove
+*/
+jion.lazyValue(
+	prototype,
+	'_display',
+	function( )
+{
 	return(
 		gleam_display_canvas.create(
-			'glint', glint,
+			'glint', this._glint,
 			'size',
 				euclid_size.create(
-					'height', Math.round( this.height * transform.zoom + 1 ),
-					'width', Math.round( flow.width * transform.zoom + 5 )
+					'height', Math.round( this.height * this.transform.zoom + 1 ),
+					'width', Math.round( this.flow.width * this.transform.zoom + 5 )
 				)
-				// FIXME why +5?
 		)
 	);
 }

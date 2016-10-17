@@ -97,7 +97,7 @@ jion.lazyValue(
 {
 	return(
 		gleam_display_canvas.create(
-			'twig', this.twig,
+			'glint', this.glint,
 			'size', this.size
 		)
 	);
