@@ -63,10 +63,9 @@ if( JION )
 var
 	euclid_arrow,
 	euclid_size,
-	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	euclid_rect,
 	gleam_glint_paint,
 	gruga_label,
@@ -242,13 +241,21 @@ Object.defineProperty(
 			arrow2,
 			facet,
 			glint,
+			tZone,
 			wg;
 
+		tZone = this.tZone;
+
 		wg =
-			gleam_glint_disWindow.create(
-				'display', this._display,
+			gleam_glint_window.create(
+				'glint', this.doc.glint,
 				'key', ':label',
-				'p', this.pnw.transform( this.transform )
+				'p', this.pnw.transform( this.transform ), // FIXME use tZone
+				'size',
+					euclid_size.create(
+						'height', Math.round( tZone.height + 1 ),
+						'width', Math.round( tZone.width + 1 )
+					)
 			);
 
 		arrow1 = this._arrow1Glint( );
@@ -478,35 +485,6 @@ jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 | The relations zone.
 */
 jion.lazyValue( prototype, 'zone', visual_label.zone );
-
-
-/*
-| The relation's display.
-*/
-jion.lazyValue(
-	prototype,
-	'_display',
-	function( )
-{
-	var
-		display,
-		tZone;
-
-	tZone = this.tZone;
-
-	display =
-		gleam_display_canvas.create(
-			'glint', this.doc.glint,
-			'size',
-				euclid_size.create(
-					'height', Math.round( tZone.height + 1 ),
-					'width', Math.round( tZone.width + 1 )
-				)
-		);
-
-	return display;
-}
-);
 
 
 /*
