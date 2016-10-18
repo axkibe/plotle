@@ -70,10 +70,9 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
-	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
 	euclid_size,
@@ -387,16 +386,24 @@ jion.lazyValue(
 	// FUTURE GLINT inherit
 	var
 		facet,
-		glint;
+		glint,
+		tZone;
+
+	tZone = this.tZone;
 
 	glint =
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_disWindow.create(
-					'display', this._display,
+				gleam_glint_window.create(
+					'glint', this.doc.glint,
 					'key', ':content',
-					'p', this.pnw.transform( this.transform )
+					'p', this.pnw.transform( this.transform ), // FIXME use tZone
+					'size',
+						euclid_size.create(
+							'height', Math.round( tZone.height + 1 ),
+							'width', Math.round( tZone.width + 1 )
+						)
 				)
 		);
 
@@ -783,35 +790,6 @@ visual_label.zone =
 
 
 jion.lazyValue( prototype, 'zone', visual_label.zone );
-
-
-/*
-| The label's display.
-*/
-jion.lazyValue(
-	prototype,
-	'_display',
-	function( )
-{
-	var
-		display,
-		tZone;
-
-	tZone = this.tZone;
-
-	display =
-		gleam_display_canvas.create(
-			'glint', this.doc.glint,
-			'size',
-				euclid_size.create(
-					'height', Math.round( tZone.height + 1 ),
-					'width', Math.round( tZone.width + 1 )
-				)
-		);
-
-	return display;
-}
-);
 
 
 } )( );
