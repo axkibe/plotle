@@ -117,11 +117,10 @@ if( JION )
 
 var
 	euclid_size,
-	gleam_display_canvas,
 	gleam_glint_paint,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	jion,
 	result_hover,
 	root,
@@ -223,8 +222,7 @@ prototype.pointingHover =
 	if(
 		!this.visible
 		|| !this._area.within( p )
-		|| !this._display.withinSketch(
-			this._shape,
+		|| !this._shape.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -252,10 +250,9 @@ prototype.click =
 	)
 {
 	if(
-		!this.visible ||
-		!this._area.within( p ) ||
-		!this._display.withinSketch(
-			this._shape,
+		!this.visible
+		|| !this._area.within( p )
+		|| !this._shape.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -301,13 +298,23 @@ jion.lazyValue(
 	'glint',
 	function( )
 {
+	var
+		area;
+
 	if( !this.visible ) return undefined;
 
+	area = this._area;
+
 	return(
-		gleam_glint_disWindow.create(
-			'display', this._display,
+		gleam_glint_window.create(
+			'glint', this._glint,
 			'key', this.key,
-			'p', this._area.pnw
+			'p', area.pnw,
+			'size',
+				euclid_size.create(
+					'height', area.height,
+					'width', area.width
+				)
 		)
 	);
 }
@@ -349,11 +356,11 @@ prototype.specialKey =
 
 
 /*
-| The button's display.
+| The button's inner glint.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -443,16 +450,7 @@ jion.lazyValue(
 			);
 	}
 
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size',
-				euclid_size.create(
-					'height', this._area.height,
-					'width', this._area.width
-				)
-		)
-	);
+	return glint;
 }
 );
 
