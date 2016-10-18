@@ -85,12 +85,11 @@ var
 	fabric_doc,
 	fabric_note,
 	fabric_para,
-	gleam_display_canvas,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	gruga_note,
 	jion,
 	math_half,
@@ -416,18 +415,26 @@ jion.lazyValue(
 	var
 		facet,
 		glint,
-		sbary;
+		sbary,
+		tZone;
 
 	sbary = this.scrollbarY;
+
+	tZone = this.tZone;
 
 	glint =
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_disWindow.create(
-					'display', this._display,
+				gleam_glint_window.create(
+					'glint', this._glint,
 					'key', ':body',
-					'p', this.zone.pnw.transform( this.transform )
+					'p', this.zone.pnw.transform( this.transform ), // FIXME use tZone
+					'size',
+						euclid_size.create(
+							'height', Math.round( tZone.height + 2 ),
+							'width', Math.round( tZone.width + 2 )
+						)
 				)
 		);
 
@@ -805,17 +812,16 @@ jion.lazyValue(
 
 
 /*
-| The notes display.
+| The notes inner glint.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
 		doc,
 		facet,
-		glint,
 		tZone;
 
 	doc = this.doc;
@@ -824,7 +830,7 @@ jion.lazyValue(
 
 	facet = gruga_note.facets.getFacet( );
 
-	glint =
+	return(
 		gleam_glint_twig.create(
 			'key', 'root',
 			'twine:set+',
@@ -839,18 +845,6 @@ jion.lazyValue(
 					'facet', facet,
 					'key', 'border',
 					'shape', this.tOrthoSilhoutte
-				)
-		);
-
-	// draws selection and text
-
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size',
-				euclid_size.create(
-					'height', Math.round( tZone.height + 2 ),
-					'width', Math.round( tZone.width + 2 )
 				)
 		)
 	);
