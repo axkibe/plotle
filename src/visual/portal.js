@@ -79,7 +79,6 @@ var
 	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
-	gleam_display_canvas,
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
@@ -87,7 +86,7 @@ var
 	gleam_glint_paint,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	gruga_portal,
 	jion,
 	jion$pathRay,
@@ -159,9 +158,13 @@ prototype.proportional = false;
 */
 prototype._init =
 	function(
-		inherit
+		// inherit
 	)
 {
+	/*
+
+	FIXME glint caching
+
 	if(
 		inherit
 		&& inherit.alikeIgnoringTransform( this )
@@ -171,6 +174,7 @@ prototype._init =
 	{
 		jion.aheadValue( this, '_display', inherit._display );
 	}
+	*/
 };
 
 
@@ -475,16 +479,24 @@ jion.lazyValue(
 {
 	var
 		facet,
-		glint;
+		glint,
+		tZone;
+
+	tZone = this.tZone;
 
 	glint =
 		gleam_glint_twig.create(
 			'key', this.key,
 			'twine:set+',
-				gleam_glint_disWindow.create(
-					'display', this._display,
+				gleam_glint_window.create(
+					'glint', this._glint,
 					'key', ':body',
-					'p', this.zone.pnw.transform( this.transform )
+					'p', this.zone.pnw.transform( this.transform ),  // FIXME use tZone
+					'size',
+						euclid_size.create(
+							'width', Math.round( tZone.width + 1.5 ),
+							'height', Math.round( tZone.height + 1.5 )
+						)
 				)
 		);
 
@@ -1621,11 +1633,11 @@ prototype._getOffsetAt =
 
 
 /*
-| Creates the portal's display.
+| Creates the portal's inner glint.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -1766,16 +1778,7 @@ jion.lazyValue(
 				)
 		);
 
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size',
-				euclid_size.create(
-					'width', Math.round( tZone.width + 1.5 ),
-					'height', Math.round( tZone.height + 1.5 )
-				)
-		)
-	);
+	return glint;
 }
 );
 
