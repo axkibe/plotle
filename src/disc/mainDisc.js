@@ -97,11 +97,10 @@ var
 	action_select,
 	disc_mainDisc,
 	change_shrink,
-	gleam_display_canvas,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	jion,
 	result_hover,
 	root;
@@ -441,10 +440,11 @@ jion.lazyValue(
 {
 	// FUTURE GLINT inherit
 	return(
-		gleam_glint_disWindow.create(
-			'display', this._display,
+		gleam_glint_window.create(
+			'glint', this._glint,
 			'key', 'mainDisc',
-			'p', this._area.pnw
+			'p', this._area.pnw,
+			'size', this._area.size
 		)
 	);
 }
@@ -472,7 +472,7 @@ prototype.pointingHover =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !this._display.withinSketch( this.silhoutte, pp ) ) return;
+	if( !this.silhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -514,7 +514,7 @@ prototype.click =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !display.withinSketch( this.silhoutte, pp ) ) return;
+	if( !this.silhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -553,8 +553,7 @@ prototype.mousewheel =
 	if( !this._area.within( p ) ) return;
 
 	if(
-		!this._display.withinSketch(
-			this.silhoutte,
+		!this.silhoutte.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -594,8 +593,7 @@ prototype.dragStart =
 	if( !this._area.within( p ) ) return;
 
 	if(
-		!this._display.withinSketch(
-			this.silhoutte,
+		!this.silhoutte.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -608,11 +606,11 @@ prototype.dragStart =
 
 
 /*
-| The disc panel's display.
+| Returns the panel's inner glint.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -652,12 +650,7 @@ jion.lazyValue(
 				)
 		);
 
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size', this._area.size
-		)
-	);
+	return glint;
 }
 );
 

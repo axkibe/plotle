@@ -91,11 +91,10 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
-	gleam_display_canvas,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	jion,
 	root,
 	visual_label,
@@ -288,11 +287,10 @@ prototype.pointingHover =
 	if( !area.within( p ) ) return;
 
 	display = this._display;
-	
+
 	pp = p.sub( area.pnw );
 
-	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, pp ) ) return;
+	if( !this.silhoutte.within( pp ) ) return;
 
 	// it's on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -331,8 +329,7 @@ prototype.click =
 
 	pp = p.sub( area.pnw );
 
-	// FUTURE optimize by reusing the latest path of this._display
-	if( !display.withinSketch( this.silhoutte, pp ) ) return;
+	if( !this.silhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -356,10 +353,11 @@ jion.lazyValue(
 {
 	// FUTURE GLINT inherit
 	return(
-		gleam_glint_disWindow.create(
-			'display', this._display,
+		gleam_glint_window.create(
+			'glint', this._glint,
 			'key', 'createDisc',
-			'p', this._area.pnw
+			'p', this._area.pnw,
+			'size', this._area.size
 		)
 	);
 }
@@ -423,8 +421,7 @@ prototype.dragStart =
 	if( !area.within( p ) ) return;
 
 	if(
-		!this._display.withinSketch(
-			this.silhoutte,
+		!this.silhoutte.within(
 			p.sub( area.pnw )
 		)
 	)
@@ -456,8 +453,7 @@ prototype.mousewheel =
 	if( !area.within( p ) ) return;
 
 	if(
-		!this._display.withinSketch(
-			this.silhoutte,
+		!this.silhoutte.within(
 			p.sub( area.pnw )
 		)
 	)
@@ -520,11 +516,11 @@ disc_createDisc._isActiveButton =
 
 
 /*
-| The disc's display.
+| The disc's inner glint.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -567,12 +563,7 @@ jion.lazyValue(
 				)
 		);
 
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size', this._area.size
-		)
-	);
+	return glint;
 }
 );
 
