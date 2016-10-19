@@ -250,7 +250,7 @@ Object.defineProperty(
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
 				'key', ':label',
-				'p', this.pnw.transform( this.transform ), // FIXME use tZone
+				'p', tZone.pnw,
 				'size',
 					euclid_size.create(
 						'height', Math.round( tZone.height + 1 ),

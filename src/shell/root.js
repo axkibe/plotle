@@ -37,12 +37,10 @@ if( JION )
 			},
 			display :
 			{
-				// REMOVE classic support
 				comment : 'the display within everything happens',
 				type :
 					[
 						'gleam_display_canvas',
-						'gleam_display_pixi'
 					]
 			},
 			doTracker :

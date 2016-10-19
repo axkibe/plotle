@@ -429,7 +429,7 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'glint', this._glint,
 					'key', ':body',
-					'p', this.zone.pnw.transform( this.transform ), // FIXME use tZone
+					'p', tZone.pnw,
 					'size',
 						euclid_size.create(
 							'height', Math.round( tZone.height + 2 ),

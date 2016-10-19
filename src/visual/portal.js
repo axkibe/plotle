@@ -491,7 +491,7 @@ jion.lazyValue(
 				gleam_glint_window.create(
 					'glint', this._glint,
 					'key', ':body',
-					'p', this.zone.pnw.transform( this.transform ),  // FIXME use tZone
+					'p', tZone.pnw,
 					'size',
 						euclid_size.create(
 							'width', Math.round( tZone.width + 1.5 ),
