@@ -94,12 +94,11 @@ var
 	euclid_roundRect,
 	euclid_size,
 	gleam_facet,
-	gleam_display_canvas,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_text,
 	gleam_glint_twig,
-	gleam_glint_disWindow,
+	gleam_glint_window,
 	jion,
 	result_hover,
 	root,
@@ -251,13 +250,18 @@ jion.lazyValue(
 	'glint',
 	function( )
 {
-	if( !this.visible ) return undefined;
+	if( !this.visible ) return;
 
 	return(
-		gleam_glint_disWindow.create(
-			'display', this._display,
+		gleam_glint_window.create(
+			'glint', this._glint,
 			'key', this.key,
-			'p', this._area.pnw
+			'p', this._area.pnw,
+			'size',
+				euclid_size.create(
+					'height', this._area.height + 1,
+					'width', this._area.width + 1
+				)
 		)
 	);
 }
@@ -506,11 +510,11 @@ jion.lazyValue(
 
 
 /*
-| Returns the display for the input field.
+| Returns the inner glint of the input field.
 */
 jion.lazyValue(
 	prototype,
-	'_display',
+	'_glint',
 	function( )
 {
 	var
@@ -609,16 +613,7 @@ jion.lazyValue(
 				)
 		);
 
-	return(
-		gleam_display_canvas.create(
-			'glint', glint,
-			'size',
-				euclid_size.create(
-					'height', this._area.height + 1,
-					'width', this._area.width + 1
-				)
-		)
-	);
+	return glint;
 }
 );
 
