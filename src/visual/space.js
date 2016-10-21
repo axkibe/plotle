@@ -423,6 +423,7 @@ jion.lazyValue(
 		fromItem,
 		fromSilhoutte,
 		glint,
+		gray,
 		r,
 		s,
 		toItem,
@@ -433,32 +434,24 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	glint = gleam_glint_ray.create( );
-
-	// XRX
+	gray = [ ];
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
-		glint = glint.create( 'ray:append', s.glint );
+		gray.push( s.glint );
 	}
 
 	frame = this.frame;
 
-	if( frame )
-	{
-		glint = glint.create( 'ray:append', frame.glint );
-	}
+	if( frame ) gray.push( frame.glint );
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.startPoint )
-			{
-				glint = glint.create( 'ray:append', action.transItem.glint );
-			}
+			if( action.startPoint ) gray.push( action.transItem.glint );
 
 			break;
 
@@ -499,14 +492,13 @@ jion.lazyValue(
 							'end2', 'arrow'
 						);
 
-					glint =
-						glint.create(
-							'ray:append',
-							gleam_glint_paint.create(
-								'facet', gruga_relation.facet,
-								'shape', arrow.shape.transform( transform )
-							)
-						);
+					gray.push(
+						'ray:append',
+						gleam_glint_paint.create(
+							'facet', gruga_relation.facet,
+							'shape', arrow.shape.transform( transform )
+						)
+					);
 				}
 			}
 
@@ -516,20 +508,18 @@ jion.lazyValue(
 
 			if( action.zone )
 			{
-				glint =
-					glint.create(
-						'ray:append',
-							gleam_glint_paint.create(
-								'facet', gruga_select.facet,
-								'shape', action.zone.transform( transform )
-							)
-					);
+				gray.push(
+					gleam_glint_paint.create(
+						'facet', gruga_select.facet,
+						'shape', action.zone.transform( transform )
+					)
+				);
 			}
 
 			break;
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gray );
 }
 );
 
