@@ -433,23 +433,22 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	glint =
-		gleam_glint_twig.create(
-			'key', 'screen'
-		);
+	glint = gleam_glint_twig.create( );
+
+	// XRX
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
-		glint = glint.create( 'twine:add', s.glint );
+		glint = glint.create( 'ray:append', s.glint );
 	}
 
 	frame = this.frame;
 
 	if( frame )
 	{
-		glint = glint.create( 'twine:add', frame.glint );
+		glint = glint.create( 'ray:append', frame.glint );
 	}
 
 	switch( action && action.reflect )
@@ -458,7 +457,7 @@ jion.lazyValue(
 
 			if( action.startPoint )
 			{
-				glint = glint.create( 'twine:set+', action.transItem.glint );
+				glint = glint.create( 'ray:append', action.transItem.glint );
 			}
 
 			break;
@@ -502,10 +501,9 @@ jion.lazyValue(
 
 					glint =
 						glint.create(
-							'twine:set+',
+							'ray:append',
 							gleam_glint_paint.create(
 								'facet', gruga_relation.facet,
-								'key', ':transient',
 								'shape', arrow.shape.transform( transform )
 							)
 						);
@@ -520,10 +518,9 @@ jion.lazyValue(
 			{
 				glint =
 					glint.create(
-						'twine:set+',
+						'ray:append',
 							gleam_glint_paint.create(
 								'facet', gruga_select.facet,
-								'key', ':select',
 								'shape', action.zone.transform( transform )
 							)
 					);
@@ -1276,6 +1273,9 @@ prototype._moveCreateGeneric =
 
 	action = this.action;
 
+	// there isn't really a creation going on?
+	if( !action.startPoint ) return;
+
 	transform = this.transform;
 
 	dp = p.detransform( transform );
@@ -1360,6 +1360,9 @@ prototype._moveCreateRelation =
 
 	action = this.action;
 
+	// there isn't really a creation or panning going on?
+	if( !action.startPoint ) return;
+
 	transform = this.transform;
 
 	if( action.relationState === 'pan' )
@@ -1369,7 +1372,7 @@ prototype._moveCreateRelation =
 		pd = p.sub( action.startPoint );
 
 		root.create(
-			'transform',
+			'spaceTransform',
 				transform.create(
 					'offset', action.pan.add( pd )
 				)
@@ -1420,7 +1423,7 @@ prototype._moveCreate =
 		pd = p.sub( action.startPoint );
 
 		root.create(
-			'transform',
+			'spaceTransform',
 				this.transform.create(
 					'offset',
 						action.pan.add(
@@ -1796,6 +1799,8 @@ prototype._stopCreateGeneric =
 
 	action = this.action;
 
+	if( !action.startPoint ) return;
+
 	action.itemType.createGeneric( action, p.detransform( this.transform ) );
 
 	root.create(
@@ -1842,6 +1847,8 @@ prototype._stopCreateRelation =
 		item;
 
 	action = this.action;
+
+	if( !action.startPoint ) return;
 
 	switch( action.relationState )
 	{

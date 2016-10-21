@@ -342,7 +342,9 @@ jion.lazyValue(
 		rZ,
 		s;
 
-	glint = gleam_glint_twig.create( 'key', 'doc' );
+	// XRX
+
+	glint = gleam_glint_twig.create( );
 
 	mark = this.mark;
 
@@ -354,10 +356,9 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', gruga_selection,
-						'key', ':selection',
 						'shape',
 							this._rangeShape.transform(
 								this.transform.ortho
@@ -370,7 +371,7 @@ jion.lazyValue(
 	{
 		s = this.atRank( r );
 
-		glint = glint.create( 'twine:set+', s.glint );
+		glint = glint.create( 'ray:append', s.glint );
 	}
 
 	return glint;

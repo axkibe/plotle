@@ -92,7 +92,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_scrollbar.facet,
-			'key', ':scrollbar',
 			'shape', this.area
 		)
 	);

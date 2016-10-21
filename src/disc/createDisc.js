@@ -355,7 +355,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'key', 'createDisc',
 			'p', this._area.pnw,
 			'size', this._area.size
 		)
@@ -429,7 +428,9 @@ prototype.dragStart =
 		return;
 	}
 
-	return true;
+	// the dragging operation is on the panel
+	// but it denies it.
+	return false;
 };
 
 
@@ -532,13 +533,13 @@ jion.lazyValue(
 
 	area = this._area,
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'root',
-			'twine:set+',
+			'ray:append',
 				gleam_glint_fill.create(
 					'facet', this.facet,
-					'key', 'fill',
 					'shape', this.silhoutte
 				)
 		);
@@ -549,16 +550,15 @@ jion.lazyValue(
 
 		if( g )
 		{
-			glint = glint.create( 'twine:set+', g );
+			glint = glint.create( 'ray:append', g );
 		}
 	}
 
 	glint =
 		glint.create(
-			'twine:set+',
+			'ray:append',
 				gleam_glint_border.create(
 					'facet', this.facet,
-					'key', 'border',
 					'shape', this.silhoutte
 				)
 		);

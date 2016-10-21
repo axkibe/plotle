@@ -218,7 +218,7 @@ prototype.dragStart =
 
 	bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
 
-	if( bubble ) return bubble;
+	if( bubble !== undefined ) return bubble;
 
 	action = this.action;
 
@@ -226,8 +226,6 @@ prototype.dragStart =
 	{
 		return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
 	}
-
-	return;
 };
 
 
@@ -255,16 +253,18 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint = gleam_glint_twig.create( 'key', 'disc' );
+	glint = gleam_glint_twig.create( );
+
+	// XRX
 
 	if( action && action.isCreate )
 	{
-		glint = glint.create( 'twine:set+', createDisc.glint );
+		glint = glint.create( 'ray:append', createDisc.glint );
 	}
 
 	// ++ main disc ++
 
-	glint = glint.create( 'twine:set+', mainDisc.glint );
+	glint = glint.create( 'ray:append', mainDisc.glint );
 
 	return glint;
 }

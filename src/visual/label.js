@@ -391,13 +391,13 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', this.key,
-			'twine:set+',
+			'ray:append',
 				gleam_glint_window.create(
 					'glint', this.doc.glint,
-					'key', ':content',
 					'p', tZone.pnw,
 					'size',
 						euclid_size.create(
@@ -413,10 +413,9 @@ jion.lazyValue(
 
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', facet,
-						'key', ':highlight',
 						'shape', this.tSilhoutte
 					)
 			);

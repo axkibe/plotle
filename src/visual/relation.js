@@ -249,7 +249,6 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
-				'key', ':label',
 				'p', tZone.pnw,
 				'size',
 					euclid_size.create(
@@ -262,10 +261,11 @@ Object.defineProperty(
 
 		arrow2 = this._arrow2Glint( );
 
+		// XRX
+
 		glint =
 			gleam_glint_twig.create(
-				'key', this.key,
-				'twine:set+', wg
+				'ray:append', wg
 			);
 
 		if( this.highlight )
@@ -274,10 +274,9 @@ Object.defineProperty(
 
 			glint =
 				glint.create(
-						'twine:set+',
+						'ray:append',
 						gleam_glint_paint.create(
 							'facet', facet,
-							'key', ':highlight',
 							'shape', this.tSilhoutte
 						)
 				);
@@ -285,12 +284,12 @@ Object.defineProperty(
 
 		if( arrow1 )
 		{
-			glint = glint.create( 'twine:set+', arrow1 );
+			glint = glint.create( 'ray:append', arrow1 );
 		}
 
 		if( arrow2 )
 		{
-			glint = glint.create( 'twine:set+', arrow2 );
+			glint = glint.create( 'ray:append', arrow2 );
 		}
 
 		return glint;
@@ -503,7 +502,6 @@ prototype._arrow1Glint =
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
-			'key', 'arrow1',
 			'shape', arrow1.shape.transform( this.transform )
 		)
 	);
@@ -526,7 +524,6 @@ prototype._arrow2Glint =
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
-			'key', 'arrow2',
 			'shape', arrow2.shape.transform( this.transform )
 		)
 	);

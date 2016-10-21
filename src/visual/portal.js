@@ -484,13 +484,13 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', this.key,
-			'twine:set+',
+			'ray:append',
 				gleam_glint_window.create(
 					'glint', this._glint,
-					'key', ':body',
 					'p', tZone.pnw,
 					'size',
 						euclid_size.create(
@@ -506,10 +506,9 @@ jion.lazyValue(
 
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', facet,
-						'key', ':highlight',
 						'shape', this.tSilhoutte
 					)
 			);
@@ -1668,13 +1667,13 @@ jion.lazyValue(
 
 	facet = gruga_portal.facets.getFacet( );
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'root',
-			'twine:set+',
+			'ray:append',
 			gleam_glint_fill.create(
 				'facet', facet,
-				'key', 'background',
 				'shape', this.tOrthoSilhoutte
 			)
 		);
@@ -1704,43 +1703,36 @@ jion.lazyValue(
 
 	content =
 		gleam_glint_twig.create(
-			'key', 'content',
-			'twine:set+',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', buttonFacet,
-					'key', 'moveToButton',
 					'shape', moveToButton.shape.transform( ot )
 				),
-			'twine:set+',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
-					'key', 'spaceUserField',
 					'shape', fieldSpaceUser.silhoutte.transform( ot )
 				),
-			'twine:set+',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', inputFacet,
-					'key', 'spaceTagField',
 					'shape', fieldSpaceTag.silhoutte.transform( ot )
 				),
-			'twine:set+',
+			'ray:append',
 				gleam_glint_text.create(
 					'font', this._tFontSpaceUser,
-					'key', 'spaceUserText',
 					'p', fieldSpaceUser.p.transform( ot ),
 					'text', fieldSpaceUser.text
 				),
-			'twine:set+',
+			'ray:append',
 				gleam_glint_text.create(
 					'font', this._tFontSpaceTag,
-					'key', 'spaceTagText',
 					'p', fieldSpaceTag.p.transform( ot ),
 					'text', fieldSpaceTag.text
 				),
-			'twine:set+',
+			'ray:append',
 				gleam_glint_text.create(
 					'font', this._tFontMoveTo,
-					'key', 'moveToText',
 					'p', moveToButton.textCenter.transform( ot ),
 					'text', 'move to'
 				)
@@ -1756,24 +1748,22 @@ jion.lazyValue(
 
 		if( caretGlint )
 		{
-			content = content.create( 'twine:set+', caretGlint );
+			content = content.create( 'ray:append', caretGlint );
 		}
 	}
 
 	glint =
 		glint.create(
 			// masks the portals content
-			'twine:set+',
+			'ray:append',
 				gleam_glint_mask.create(
-					'key', ':mask',
 					'glint', content,
 					'shape', this.tOrthoSilhoutte
 				),
 			// puts the border on top of everything else
-			'twine:set+',
+			'ray:append',
 				gleam_glint_border.create(
 					'facet', facet,
-					'key', 'border',
 					'shape', this.tOrthoSilhoutte
 				)
 		);
@@ -1842,7 +1832,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
-			'key', ':caret',
 			'shape',
 				euclid_rect.create(
 					'pnw', pnw,

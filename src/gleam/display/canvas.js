@@ -140,7 +140,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
-			'glint', gleam_glint_twig.create( 'key', name ),
+			'glint', gleam_glint_twig.create( ), // FIXME allow undefined
 			'scaled', scaled,
 			'size', size
 		)
@@ -493,7 +493,7 @@ prototype._renderGlintTwig =
 
 	for( r = 0, rZ = glint.length; r < rZ; r++ )
 	{
-		g = glint.atRank( r );
+		g = glint.get( r );
 
 		switch( g.reflect )
 		{

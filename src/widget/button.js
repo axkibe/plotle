@@ -308,9 +308,9 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'key', this.key,
 			'p', area.pnw,
 			'size',
+				// FIXME do area.size
 				euclid_size.create(
 					'height', area.height,
 					'width', area.width
@@ -380,13 +380,13 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'root',
-			'twine:set+',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', facet,
-					'key', ':paint',
 					'shape', this._shape
 				)
 		);
@@ -401,10 +401,9 @@ jion.lazyValue(
 		{
 			glint =
 				glint.create(
-					'twine:set+',
+					'ray:append',
 						gleam_glint_text.create(
 							'font', font,
-							'key', ':text',
 							'p', this._textPos,
 							'rotate', this.textRotation,
 							'text', this.text
@@ -425,10 +424,9 @@ jion.lazyValue(
 			{
 				glint =
 					glint.create(
-						'twine:set+',
+						'ray:append',
 							gleam_glint_text.create(
 								'font', font,
-								'key', ':text' + t,
 								'p', this._textPos.add( 0, y ),
 								'text', text[ t ]
 							)
@@ -441,10 +439,9 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', this.iconFacet,
-						'key', ':icon',
 						'shape', this._iconShape
 					)
 			);

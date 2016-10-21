@@ -335,7 +335,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_mask.create(
 			'glint', this._frameGlint,
-			'key', '$frame',
 			'shape', shape,
 			'reverse', true
 		)
@@ -401,24 +400,25 @@ jion.lazyValue(
 	var
 		glint;
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'frame',
-			'twine:set+', this._frameBodyGlint,
-			'twine:set+', this._handleNwGlint,
-			'twine:set+', this._handleNeGlint,
-			'twine:set+', this._handleSeGlint,
-			'twine:set+', this._handleSwGlint
+			'ray:append', this._frameBodyGlint,
+			'ray:append', this._handleNwGlint,
+			'ray:append', this._handleNeGlint,
+			'ray:append', this._handleSeGlint,
+			'ray:append', this._handleSwGlint
 		);
 
 	if( !this.proportional )
 	{
 		glint =
 			glint.create(
-				'twine:set+', this._handleNGlint,
-				'twine:set+', this._handleEGlint,
-				'twine:set+', this._handleSGlint,
-				'twine:set+', this._handleWGlint
+				'ray:append', this._handleNGlint,
+				'ray:append', this._handleEGlint,
+				'ray:append', this._handleSGlint,
+				'ray:append', this._handleWGlint
 			);
 	}
 
@@ -463,7 +463,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.facet,
-			'key', 'frameBody',
 			'shape', this._frameBodyShape
 		)
 	);
@@ -510,7 +509,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleN',
 			'shape', this._handleNShape
 		)
 	);
@@ -552,7 +550,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleNe',
 			'shape', this._handleNeShape
 		)
 	);
@@ -594,7 +591,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleNw',
 			'shape', this._handleNwShape
 		)
 	);
@@ -641,7 +637,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleE',
 			'shape', this._handleEShape
 		)
 	);
@@ -688,7 +683,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleS',
 			'shape', this._handleSShape
 		)
 	);
@@ -730,7 +724,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleSe',
 			'shape', this._handleSeShape
 		)
 	);
@@ -772,7 +765,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleSw',
 			'shape', this._handleSwShape
 		)
 	);
@@ -819,7 +811,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_frame.handleFacet,
-			'key', 'handleW',
 			'shape', this._handleWShape
 		)
 	);

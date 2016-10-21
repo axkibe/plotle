@@ -197,11 +197,9 @@ jion.lazyValue(
 
 	glint =
 		gleam_glint_twig.create(
-			'key', this.key,
-			'twine:set+',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', facet,
-					'key', 'box',
 					'shape', this._area
 				)
 		);
@@ -210,10 +208,9 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', gruga_iconCheck.facet,
-						'key', 'check',
 						'shape', this._checkIcon
 					)
 			);

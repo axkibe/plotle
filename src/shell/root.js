@@ -160,6 +160,7 @@ var
 	euclid_connect,
 	euclid_transform,
 	gleam_display_canvas,
+	gleam_glint_twig,
 	euclid_measure,
 	euclid_point,
 	euclid_size,
@@ -842,10 +843,15 @@ prototype.dragStart =
 	{
 		bubble = root.disc.dragStart( p, shift, ctrl );
 
-		if( bubble !== undefined ) return bubble;
+		console.log( bubble );
+
+		if( bubble !== undefined ) return;
 	}
 
-	if( screen ) return screen.dragStart( p, shift, ctrl );
+	if( screen )
+	{
+		screen.dragStart( p, shift, ctrl );
+	}
 };
 
 
@@ -1608,17 +1614,21 @@ prototype.draw =
 
 	display = root.display;
 
-	glint = display.glint;
+//	glint = display.glint;
+
+	glint = gleam_glint_twig.create( );
 
 	screen = root._currentScreen;
 
-	glint = glint.create( 'twine:set+', screen.glint );
+	// XRX
+
+	glint = glint.create( 'ray:append', screen.glint );
 
 	if( screen.showDisc )
 	{
 		disc = root.disc;
 
-		glint = glint.create( 'twine:set+', disc.glint );
+		glint = glint.create( 'ray:append', disc.glint );
 	}
 	else
 	{

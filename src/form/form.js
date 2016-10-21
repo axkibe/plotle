@@ -82,16 +82,6 @@ form_form.init =
 
 
 /*
-| Creates a glint for the a form.
-*/
-form_form.glint =
-	function( )
-{
-	return gleam_glint_twig.create( 'key', 'screen' );
-};
-
-
-/*
 | User clicked.
 */
 form_form.click =
@@ -258,13 +248,13 @@ form_form.glint =
 
 	// TODO background
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'screen',
-			'twine:add',
+			'ray:append',
 				gleam_glint_paint.create(
 					'facet', gruga_formFacet,
-					'key', '$background',
 					'shape', this.area
 				)
 		);
@@ -275,7 +265,7 @@ form_form.glint =
 
 		sg = s.glint;
 
-		if( sg ) glint = glint.create( 'twine:add', sg );
+		if( sg ) glint = glint.create( 'ray:append', sg );
 	}
 
 	return glint;

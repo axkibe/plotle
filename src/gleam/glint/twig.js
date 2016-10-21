@@ -1,5 +1,7 @@
 /*
 | A container of stuff to display.
+|
+| FIXME XXX rename ray
 */
 
 
@@ -12,13 +14,8 @@ if( JION )
 		id : 'gleam_glint_twig',
 		attributes :
 		{
-			key :
-			{
-				comment : 'key in parent twig',
-				type : 'string'
-			}
 		},
-		twig :
+		ray :
 		[
 			'gleam_glint_border',
 			'gleam_glint_fill',

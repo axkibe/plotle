@@ -422,13 +422,13 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', this.key,
-			'twine:set+',
+			'ray:append',
 				gleam_glint_window.create(
 					'glint', this._glint,
-					'key', ':body',
 					'p', tZone.pnw,
 					'size',
 						euclid_size.create(
@@ -444,10 +444,9 @@ jion.lazyValue(
 
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_paint.create(
 						'facet', facet,
-						'key', ':highlight',
 						'shape', this.tSilhoutte
 					)
 			);
@@ -455,7 +454,7 @@ jion.lazyValue(
 
 	if( sbary )
 	{
-		glint = glint.create( 'twine:set+', sbary.glint );
+		glint = glint.create( 'ray:append', sbary.glint );
 	}
 
 	return glint;
@@ -830,20 +829,19 @@ jion.lazyValue(
 
 	facet = gruga_note.facets.getFacet( );
 
+	// XRX
+
 	return(
 		gleam_glint_twig.create(
-			'key', 'root',
-			'twine:set+',
+			'ray:append',
 				gleam_glint_fill.create(
 					'facet', facet,
-					'key', 'fill',
 					'shape', this.tOrthoSilhoutte
 				),
-			'twine:set+', doc.glint,
-			'twine:set+',
+			'ray:append', doc.glint,
+			'ray:append',
 				gleam_glint_border.create(
 					'facet', facet,
-					'key', 'border',
 					'shape', this.tOrthoSilhoutte
 				)
 		)

@@ -17,11 +17,6 @@ if( JION )
 				comment : 'the font to display the text in',
 				type : 'gleam_font'
 			},
-			key :
-			{
-				comment : 'key in parent twig',
-				type : 'string'
-			},
 			p :
 			{
 				comment : 'where to draw it',

@@ -193,7 +193,6 @@ jion.lazyValue(
 		( this._inheritedGlint || gleam_glint_window )
 		.create(
 			'glint', this._glint,
-			'key', this.key,
 			'p', this.pnw.transform( this.transform.ortho ),
 			'size',
 				euclid_size.create(
@@ -296,10 +295,9 @@ jion.lazyValue(
 
 	// draws text into the display
 
-	glint =
-		gleam_glint_twig.create(
-			'key', ':root'
-		);
+	// XRX
+
+	glint = gleam_glint_twig.create( );
 
 	// FIXME create the glint in one go
 	for( a = 0, aZ = flow.length; a < aZ; a++ )
@@ -314,10 +312,9 @@ jion.lazyValue(
 
 			glint =
 				glint.create(
-					'twine:set+',
+					'ray:append',
 						gleam_glint_text.create(
 							'font', tFont,
-							'key', lineKey + b,
 							'p',
 								// FIXME make a createTransform
 								euclid_point.create(
@@ -336,7 +333,7 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		glint = glint.create( 'twine:set+', this._caretGlint );
+		glint = glint.create( 'ray:append', this._caretGlint );
 	}
 
 	return glint;
@@ -412,7 +409,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
-			'key', ':caret',
 			'shape',
 				euclid_rect.create(
 					'pnw', pnw,

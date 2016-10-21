@@ -17,11 +17,6 @@ if( JION )
 				comment : 'the glints to draw',
 				type : 'gleam_glint_twig'
 			},
-			key :
-			{
-				comment : 'key in parent twig',
-				type : 'string'
-			},
 			reverse :
 			{
 				comment : 'true if reversing mask',

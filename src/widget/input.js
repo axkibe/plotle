@@ -255,7 +255,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'key', this.key,
 			'p', this._area.pnw,
 			'size',
 				euclid_size.create(
@@ -497,7 +496,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
-			'key', ':caret',
 			'shape',
 				euclid_rect.create(
 					'pnw', p.add( 0, n ),
@@ -543,13 +541,13 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
+	// XRX
+
 	glint =
 		gleam_glint_twig.create(
-			'key', 'root',
-			'twine:set+',
+			'ray:append',
 				gleam_glint_fill.create(
 					'facet', facet,
-					'key', ':fill',
 					'shape', shape
 				)
 		);
@@ -564,10 +562,9 @@ jion.lazyValue(
 		{
 			glint =
 				glint.create(
-					'twine:set+',
+					'ray:append',
 						gleam_glint_fill.create(
 							'facet', gleam_facet.blackFill,
-							'key', ':password' + a,
 							'shape', pm[ a ]
 						)
 				);
@@ -577,10 +574,9 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'twine:set+',
+				'ray:append',
 					gleam_glint_text.create(
 						'font', font,
-						'key', ':text',
 						'p',
 							euclid_point.create(
 								'x', pitch.x,
@@ -599,16 +595,15 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'twine:set+', this._caretGlint
+				'ray:append', this._caretGlint
 			);
 	}
 
 	glint =
 		glint.create(
-			'twine:set+',
+			'ray:append',
 				gleam_glint_border.create(
 					'facet', facet,
-					'key', ':border',
 					'shape', shape
 				)
 		);

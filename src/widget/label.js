@@ -139,7 +139,6 @@ jion.lazyValue(
 	return(
 		gleam_glint_text.create(
 			'font', this.font,
-			'key', this.key,
 			'p', this._pos,
 			'text', this.text
 		)
