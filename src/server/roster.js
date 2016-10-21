@@ -333,7 +333,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/glint/twig.js',
+		'filePath', 'src/gleam/glint/ray.js',
 		'hasJion', true,
 		'inBundle', true
 	),

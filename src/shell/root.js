@@ -160,7 +160,7 @@ var
 	euclid_connect,
 	euclid_transform,
 	gleam_display_canvas,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	euclid_measure,
 	euclid_point,
 	euclid_size,
@@ -1616,7 +1616,7 @@ prototype.draw =
 
 //	glint = display.glint;
 
-	glint = gleam_glint_twig.create( );
+	glint = gleam_glint_ray.create( );
 
 	screen = root._currentScreen;
 

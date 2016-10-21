@@ -82,7 +82,7 @@ var
 	euclid_point,
 	euclid_rect,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gruga_label,
 	gruga_relation,
 	gruga_select,
@@ -433,7 +433,7 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	glint = gleam_glint_twig.create( );
+	glint = gleam_glint_ray.create( );
 
 	// XRX
 

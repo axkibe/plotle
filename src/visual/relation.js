@@ -64,7 +64,7 @@ var
 	euclid_arrow,
 	euclid_size,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gleam_glint_window,
 	euclid_rect,
 	gleam_glint_paint,
@@ -264,7 +264,7 @@ Object.defineProperty(
 		// XRX
 
 		glint =
-			gleam_glint_twig.create(
+			gleam_glint_ray.create(
 				'ray:append', wg
 			);
 

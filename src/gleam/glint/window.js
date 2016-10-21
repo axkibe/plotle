@@ -17,7 +17,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glints to draw in the window',
-				type : 'gleam_glint_twig'
+				type : 'gleam_glint_ray'
 			},
 			p :
 			{

@@ -78,8 +78,8 @@ var
 	gleam_display_canvas,
 	gleam_facet,
 	gleam_glint_fill,
+	gleam_glint_ray,
 	gleam_glint_text,
-	gleam_glint_twig,
 	gleam_glint_window,
 	euclid_measure,
 	euclid_point,
@@ -297,7 +297,7 @@ jion.lazyValue(
 
 	// XRX
 
-	glint = gleam_glint_twig.create( );
+	glint = gleam_glint_ray.create( );
 
 	// FIXME create the glint in one go
 	for( a = 0, aZ = flow.length; a < aZ; a++ )

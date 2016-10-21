@@ -20,8 +20,8 @@ if( JION )
 			},
 			glint :
 			{
-				comment : 'the glint twig to display',
-				type : 'gleam_glint_twig'
+				comment : 'the glint ray to display',
+				type : 'gleam_glint_ray'
 			},
 			scaled :
 			{
@@ -54,7 +54,7 @@ if( JION )
 var
 	euclid_constants,
 	get2dContext,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gleam_display_canvas,
 	jion;
 
@@ -140,7 +140,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
-			'glint', gleam_glint_twig.create( ), // FIXME allow undefined
+			'glint', gleam_glint_ray.create( ), // FIXME allow undefined
 			'scaled', scaled,
 			'size', size
 		)
@@ -272,7 +272,7 @@ prototype.render =
 		this._cx.clearRect( 0, 0, size.width, size.height );
 	}
 
-	this._renderGlintTwig( this.glint );
+	this._renderGlintRay( this.glint );
 
 	this._rendered;
 };
@@ -466,7 +466,7 @@ prototype._colorStyle =
 /*
 | Renders a glint twig.
 */
-prototype._renderGlintTwig =
+prototype._renderGlintRay =
 	function(
 		glint  // the glint to render
 	)
@@ -560,9 +560,9 @@ prototype._renderGlintTwig =
 
 				break;
 
-			case 'gleam_glint_twig' :
+			case 'gleam_glint_ray' :
 
-				this._renderGlintTwig( g );
+				this._renderGlintRay( g );
 
 				break;
 
@@ -657,7 +657,7 @@ prototype._renderGlintTwig =
 					cx.clip( );
 				}
 
-				this._renderGlintTwig( g.glint );
+				this._renderGlintRay( g.glint );
 
 				cx.restore( );
 

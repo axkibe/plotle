@@ -83,7 +83,7 @@ var
 	euclid_point,
 	euclid_rect,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gruga_selection,
 	jion,
 	root,
@@ -344,7 +344,7 @@ jion.lazyValue(
 
 	// XRX
 
-	glint = gleam_glint_twig.create( );
+	glint = gleam_glint_ray.create( );
 
 	mark = this.mark;
 

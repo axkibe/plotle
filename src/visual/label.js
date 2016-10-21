@@ -71,7 +71,7 @@ var
 	change_grow,
 	change_shrink,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gleam_glint_window,
 	euclid_point,
 	euclid_rect,
@@ -394,7 +394,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_window.create(
 					'glint', this.doc.glint,

@@ -93,7 +93,7 @@ var
 	disc_createDisc,
 	gleam_glint_border,
 	gleam_glint_fill,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gleam_glint_window,
 	jion,
 	root,
@@ -536,7 +536,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_fill.create(
 					'facet', this.facet,

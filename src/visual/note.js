@@ -88,7 +88,7 @@ var
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gleam_glint_window,
 	gruga_note,
 	jion,
@@ -425,7 +425,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_window.create(
 					'glint', this._glint,
@@ -832,7 +832,7 @@ jion.lazyValue(
 	// XRX
 
 	return(
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_fill.create(
 					'facet', facet,

@@ -6,7 +6,7 @@
 var
 	form_form,
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gruga_formFacet,
 	jion,
 	result_hover,
@@ -251,7 +251,7 @@ form_form.glint =
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_paint.create(
 					'facet', gruga_formFacet,

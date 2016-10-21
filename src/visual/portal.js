@@ -84,8 +84,8 @@ var
 	gleam_glint_fill,
 	gleam_glint_mask,
 	gleam_glint_paint,
+	gleam_glint_ray,
 	gleam_glint_text,
-	gleam_glint_twig,
 	gleam_glint_window,
 	gruga_portal,
 	jion,
@@ -487,7 +487,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_window.create(
 					'glint', this._glint,
@@ -1670,7 +1670,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 			gleam_glint_fill.create(
 				'facet', facet,
@@ -1702,7 +1702,7 @@ jion.lazyValue(
 		);
 
 	content =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_paint.create(
 					'facet', buttonFacet,

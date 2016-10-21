@@ -35,8 +35,8 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	euclid_shapeRay,
-	gleam_glint_twig,
 	gleam_glint_paint,
+	gleam_glint_ray,
 	gleam_glint_mask,
 	gruga_frame,
 	jion,
@@ -403,7 +403,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append', this._frameBodyGlint,
 			'ray:append', this._handleNwGlint,
 			'ray:append', this._handleNeGlint,

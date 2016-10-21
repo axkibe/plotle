@@ -1,7 +1,5 @@
 /*
-| A container of stuff to display.
-|
-| FIXME XXX rename ray
+| A list of stuff to display.
 */
 
 
@@ -11,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_glint_twig',
+		id : 'gleam_glint_ray',
 		attributes :
 		{
 		},
@@ -22,7 +20,7 @@ if( JION )
 			'gleam_glint_mask',
 			'gleam_glint_paint',
 			'gleam_glint_text',
-			'gleam_glint_twig',
+			'gleam_glint_ray',
 			'gleam_glint_window'
 		]
 	};

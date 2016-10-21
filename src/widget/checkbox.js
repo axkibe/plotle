@@ -72,7 +72,7 @@ if( JION )
 
 var
 	gleam_glint_paint,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	gruga_iconCheck,
 	jion,
 	result_hover,
@@ -196,7 +196,7 @@ jion.lazyValue(
 		);
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_paint.create(
 					'facet', facet,

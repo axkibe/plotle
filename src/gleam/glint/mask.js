@@ -15,7 +15,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glints to draw',
-				type : 'gleam_glint_twig'
+				type : 'gleam_glint_ray'
 			},
 			reverse :
 			{

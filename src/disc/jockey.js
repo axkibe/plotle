@@ -77,7 +77,7 @@ if( JION )
 
 var
 	disc_jockey,
-	gleam_glint_twig,
+	gleam_glint_ray,
 	jion;
 
 /*
@@ -253,7 +253,7 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint = gleam_glint_twig.create( );
+	glint = gleam_glint_ray.create( );
 
 	// XRX
 

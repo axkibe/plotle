@@ -96,8 +96,8 @@ var
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
+	gleam_glint_ray,
 	gleam_glint_text,
-	gleam_glint_twig,
 	gleam_glint_window,
 	jion,
 	result_hover,
@@ -544,7 +544,7 @@ jion.lazyValue(
 	// XRX
 
 	glint =
-		gleam_glint_twig.create(
+		gleam_glint_ray.create(
 			'ray:append',
 				gleam_glint_fill.create(
 					'facet', facet,
