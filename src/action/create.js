@@ -1,5 +1,6 @@
 /*
-| A user is creating something.
+| A user has selected 'new' on the main disc
+| but not yet decided for any item.
 */
 
 

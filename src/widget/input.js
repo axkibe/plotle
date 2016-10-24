@@ -520,7 +520,8 @@ jion.lazyValue(
 		aZ,
 		facet,
 		font,
-		glint,
+		gLen,
+		gRay,
 		mark,
 		pitch,
 		pm,
@@ -541,16 +542,15 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	// XRX
+	gRay =
+		[
+			gleam_glint_fill.create(
+				'facet', facet,
+				'shape', shape
+			)
+		];
 
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_fill.create(
-					'facet', facet,
-					'shape', shape
-				)
-		);
+	gLen = 1;
 
 	font = this.font;
 
@@ -560,30 +560,24 @@ jion.lazyValue(
 
 		for( a = 0, aZ = pm.length; a < aZ; a++ )
 		{
-			glint =
-				glint.create(
-					'ray:append',
-						gleam_glint_fill.create(
-							'facet', gleam_facet.blackFill,
-							'shape', pm[ a ]
-						)
+			gRay[ gLen++ ] =
+				gleam_glint_fill.create(
+					'facet', gleam_facet.blackFill,
+					'shape', pm[ a ]
 				);
 		}
 	}
 	else
 	{
-		glint =
-			glint.create(
-				'ray:append',
-					gleam_glint_text.create(
-						'font', font,
-						'p',
-							euclid_point.create(
-								'x', pitch.x,
-								'y', font.size + pitch.y
-							),
-						'text', value
-				)
+		gRay[ gLen++ ] =
+			gleam_glint_text.create(
+				'font', font,
+				'p',
+					euclid_point.create(
+						'x', pitch.x,
+						'y', font.size + pitch.y
+					),
+				'text', value
 			);
 	}
 
@@ -593,22 +587,16 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		glint =
-			glint.create(
-				'ray:append', this._caretGlint
-			);
+		gRay[ gLen++ ] = this._caretGlint;
 	}
 
-	glint =
-		glint.create(
-			'ray:append',
-				gleam_glint_border.create(
-					'facet', facet,
-					'shape', shape
-				)
+	gRay[ gLen++ ] =
+		gleam_glint_border.create(
+			'facet', facet,
+			'shape', shape
 		);
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

@@ -616,41 +616,36 @@ jion.lazyValue(
 {
 	var
 		g,
-		glint,
+		gLen,
+		gRay,
 		r,
 		rZ;
 
-	// XRX
+	gRay =
+		[
+			gleam_glint_fill.create(
+				'facet', this.facet,
+				'shape', this.silhoutte
+			)
+		];
 
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_fill.create(
-					'facet', this.facet,
-					'shape', this.silhoutte
-				)
-		);
+	gLen = 1;
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		g = this.atRank( r ).glint;
 
-		if( g )
-		{
-			glint = glint.create( 'ray:append', g );
-		}
+		if( g ) gRay[ gLen++ ] = g;
 	}
 
-	glint =
-		glint.create(
-			'ray:append',
-				gleam_glint_border.create(
-					'facet', this.facet,
-					'shape', this.silhoutte
-				)
+
+	gRay[ gLen++ ] =
+		gleam_glint_border.create(
+			'facet', this.facet,
+			'shape', this.silhoutte
 		);
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

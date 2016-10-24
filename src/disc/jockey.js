@@ -240,12 +240,9 @@ jion.lazyValue(
 	var
 		action,
 		createDisc,
-		glint,
+		gLen,
+		gRay,
 		mainDisc;
-
-	// ++ create disc ++
-
-	// TODO inherit glint
 
 	createDisc = this.get( 'createDisc' );
 
@@ -253,20 +250,18 @@ jion.lazyValue(
 
 	action = this.action;
 
-	glint = gleam_glint_ray.create( );
+	gRay = [ ];
 
-	// XRX
+	gLen = 0;
 
 	if( action && action.isCreate )
 	{
-		glint = glint.create( 'ray:append', createDisc.glint );
+		gRay[ gLen++ ] = createDisc.glint;
 	}
 
-	// ++ main disc ++
+	gRay[ gLen++ ] = mainDisc.glint;
 
-	glint = glint.create( 'ray:append', mainDisc.glint );
-
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

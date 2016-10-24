@@ -336,15 +336,16 @@ jion.lazyValue(
 	function( )
 {
 	var
-		glint,
+		gLen,
+		gRay,
 		mark,
 		r,
 		rZ,
 		s;
 
-	// XRX
+	gRay = [ ];
 
-	glint = gleam_glint_ray.create( );
+	gLen = 0;
 
 	mark = this.mark;
 
@@ -354,27 +355,36 @@ jion.lazyValue(
 		&& mark.containsPath( this.path.limit( 3 ) )
 	)
 	{
-		glint =
-			glint.create(
-				'ray:append',
-					gleam_glint_paint.create(
-						'facet', gruga_selection,
-						'shape',
-							this._rangeShape.transform(
-								this.transform.ortho
-							)
+		gRay[ gLen++ ] =
+			gleam_glint_paint.create(
+				'facet', gruga_selection,
+				'shape',
+					this._rangeShape.transform(
+						// FIXME have _rangeShape already
+						// return transformed
+						this.transform.ortho
 					)
 			);
 	}
+	else if(
+		mark
+		&& mark.reflect === 'visual_mark_caret'
+		&& mark.focus
+	)
+	{
+		gRay[ gLen++ ] =
+			this.get( mark.textMark.path.get( -2 ) ).caretGlint;
+	}
+
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		s = this.atRank( r );
 
-		glint = glint.create( 'ray:append', s.glint );
+		gRay[ gLen++ ] = s.glint;
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

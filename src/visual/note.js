@@ -414,7 +414,8 @@ jion.lazyValue(
 {
 	var
 		facet,
-		glint,
+		gLen,
+		gRay,
 		sbary,
 		tZone;
 
@@ -422,19 +423,18 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
-	// XRX
+	gRay = [ ];
 
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_window.create(
-					'glint', this._glint,
-					'p', tZone.pnw,
-					'size',
-						euclid_size.create(
-							'height', Math.round( tZone.height + 2 ),
-							'width', Math.round( tZone.width + 2 )
-						)
+	gLen = 0;
+
+	gRay[ gLen++ ] =
+		gleam_glint_window.create(
+			'glint', this._glint,
+			'p', tZone.pnw,
+			'size',
+				euclid_size.create(
+					'height', Math.round( tZone.height + 2 ),
+					'width', Math.round( tZone.width + 2 )
 				)
 		);
 
@@ -442,22 +442,16 @@ jion.lazyValue(
 	{
 		facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		glint =
-			glint.create(
-				'ray:append',
-					gleam_glint_paint.create(
-						'facet', facet,
-						'shape', this.tSilhoutte
-					)
+		gRay[ gLen++ ] =
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this.tSilhoutte
 			);
 	}
 
-	if( sbary )
-	{
-		glint = glint.create( 'ray:append', sbary.glint );
-	}
+	if( sbary ) gRay[ gLen++ ] = sbary.glint;
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 
@@ -829,21 +823,20 @@ jion.lazyValue(
 
 	facet = gruga_note.facets.getFacet( );
 
-	// XRX
-
 	return(
 		gleam_glint_ray.create(
-			'ray:append',
+			'ray:init',
+			[
 				gleam_glint_fill.create(
 					'facet', facet,
 					'shape', this.tOrthoSilhoutte
 				),
-			'ray:append', doc.glint,
-			'ray:append',
+				doc.glint,
 				gleam_glint_border.create(
 					'facet', facet,
 					'shape', this.tOrthoSilhoutte
 				)
+			]
 		)
 	);
 }

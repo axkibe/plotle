@@ -843,8 +843,6 @@ prototype.dragStart =
 	{
 		bubble = root.disc.dragStart( p, shift, ctrl );
 
-		console.log( bubble );
-
 		if( bubble !== undefined ) return;
 	}
 
@@ -1601,7 +1599,7 @@ prototype.draw =
 {
 	var
 		disc,
-		glint,
+		gRay,
 		display,
 		screen;
 
@@ -1614,31 +1612,21 @@ prototype.draw =
 
 	display = root.display;
 
-//	glint = display.glint;
-
-	glint = gleam_glint_ray.create( );
-
 	screen = root._currentScreen;
 
-	// XRX
-
-	glint = glint.create( 'ray:append', screen.glint );
+	gRay = [ screen.glint ];
 
 	if( screen.showDisc )
 	{
 		disc = root.disc;
 
-		glint = glint.create( 'ray:append', disc.glint );
-	}
-	else
-	{
-		if( glint.get( 'disc' ) )
-		{
-			glint = glint.create( 'twig:remove', 'disc' );
-		}
+		gRay[ 1 ] = disc.glint;
 	}
 
-	display = display.create( 'glint', glint );
+	display =
+		display.create(
+			'glint', gleam_glint_ray.create( 'ray:init', gRay )
+		);
 
 	display.render( );
 

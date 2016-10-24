@@ -19,12 +19,10 @@ if( JION )
 			itemType :
 			{
 				comment : 'item type to be created',
-				type :
-				[
-					'visual_note:static',
-					'visual_label:static',
-					'visual_portal:static'
-				]
+				type : 'protean'
+				// 'visual_note:static',
+				// 'visual_label:static',
+				// 'visual_portal:static'
 			},
 			transItem :
 			{

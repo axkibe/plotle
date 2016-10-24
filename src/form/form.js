@@ -241,23 +241,21 @@ form_form.glint =
 	function( )
 {
 	var
-		glint,
+		gLen,
+		gRay,
 		r,
 		s,
 		sg;
 
-	// TODO background
+	gRay =
+		[
+			gleam_glint_paint.create(
+				'facet', gruga_formFacet,
+				'shape', this.area
+			)
+		];
 
-	// XRX
-
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_paint.create(
-					'facet', gruga_formFacet,
-					'shape', this.area
-				)
-		);
+	gLen = 1;
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
@@ -265,10 +263,10 @@ form_form.glint =
 
 		sg = s.glint;
 
-		if( sg ) glint = glint.create( 'ray:append', sg );
+		if( sg ) gRay[ gLen++ ] = sg;
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 };
 
 

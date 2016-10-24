@@ -479,42 +479,36 @@ jion.lazyValue(
 {
 	var
 		facet,
-		glint,
+		gRay,
 		tZone;
 
 	tZone = this.tZone;
 
-	// XRX
-
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_window.create(
-					'glint', this._glint,
-					'p', tZone.pnw,
-					'size',
-						euclid_size.create(
-							'width', Math.round( tZone.width + 1.5 ),
-							'height', Math.round( tZone.height + 1.5 )
-						)
-				)
-		);
+	gRay =
+		[
+			gleam_glint_window.create(
+				'glint', this._glint,
+				'p', tZone.pnw,
+				'size',
+					euclid_size.create(
+						'width', Math.round( tZone.width + 1.5 ),
+						'height', Math.round( tZone.height + 1.5 )
+					)
+			)
+		];
 
 	if( this.highlight )
 	{
 		facet = gruga_portal.facets.getFacet( 'highlight', true );
 
-		glint =
-			glint.create(
-				'ray:append',
-					gleam_glint_paint.create(
-						'facet', facet,
-						'shape', this.tSilhoutte
-					)
+		gRay[ 1 ] =
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this.tSilhoutte
 			);
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 
@@ -1642,11 +1636,10 @@ jion.lazyValue(
 	var
 		buttonFacet,
 		caretGlint,
-		content,
+		cRay,
 		facet,
 		fieldSpaceUser,
 		fieldSpaceTag,
-		glint,
 		inputFacet,
 		mark,
 		moveToButton,
@@ -1666,17 +1659,6 @@ jion.lazyValue(
 		&& mark.caret.path.get( -1 );
 
 	facet = gruga_portal.facets.getFacet( );
-
-	// XRX
-
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-			gleam_glint_fill.create(
-				'facet', facet,
-				'shape', this.tOrthoSilhoutte
-			)
-		);
 
 	fieldSpaceUser = this._fieldSpaceUser;
 
@@ -1701,42 +1683,36 @@ jion.lazyValue(
 			'focus', false
 		);
 
-	content =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_paint.create(
-					'facet', buttonFacet,
-					'shape', moveToButton.shape.transform( ot )
-				),
-			'ray:append',
-				gleam_glint_paint.create(
-					'facet', inputFacet,
-					'shape', fieldSpaceUser.silhoutte.transform( ot )
-				),
-			'ray:append',
-				gleam_glint_paint.create(
-					'facet', inputFacet,
-					'shape', fieldSpaceTag.silhoutte.transform( ot )
-				),
-			'ray:append',
-				gleam_glint_text.create(
-					'font', this._tFontSpaceUser,
-					'p', fieldSpaceUser.p.transform( ot ),
-					'text', fieldSpaceUser.text
-				),
-			'ray:append',
-				gleam_glint_text.create(
-					'font', this._tFontSpaceTag,
-					'p', fieldSpaceTag.p.transform( ot ),
-					'text', fieldSpaceTag.text
-				),
-			'ray:append',
-				gleam_glint_text.create(
-					'font', this._tFontMoveTo,
-					'p', moveToButton.textCenter.transform( ot ),
-					'text', 'move to'
-				)
-		);
+	cRay =
+		[
+			gleam_glint_paint.create(
+				'facet', buttonFacet,
+				'shape', moveToButton.shape.transform( ot )
+			),
+			gleam_glint_paint.create(
+				'facet', inputFacet,
+				'shape', fieldSpaceUser.silhoutte.transform( ot )
+			),
+			gleam_glint_paint.create(
+				'facet', inputFacet,
+				'shape', fieldSpaceTag.silhoutte.transform( ot )
+			),
+			gleam_glint_text.create(
+				'font', this._tFontSpaceUser,
+				'p', fieldSpaceUser.p.transform( ot ),
+				'text', fieldSpaceUser.text
+			),
+			gleam_glint_text.create(
+				'font', this._tFontSpaceTag,
+				'p', fieldSpaceTag.p.transform( ot ),
+				'text', fieldSpaceTag.text
+			),
+			gleam_glint_text.create(
+				'font', this._tFontMoveTo,
+				'p', moveToButton.textCenter.transform( ot ),
+				'text', 'move to'
+			)
+		];
 
 	if(
 		mark
@@ -1746,29 +1722,31 @@ jion.lazyValue(
 	{
 		caretGlint = this._caretGlint;
 
-		if( caretGlint )
-		{
-			content = content.create( 'ray:append', caretGlint );
-		}
+		if( caretGlint ) cRay[ 6 ] = caretGlint;
 	}
 
-	glint =
-		glint.create(
-			// masks the portals content
-			'ray:append',
-				gleam_glint_mask.create(
-					'glint', content,
+	return(
+		gleam_glint_ray.create(
+			'ray:init',
+			[
+				// portal's background
+				gleam_glint_fill.create(
+					'facet', facet,
 					'shape', this.tOrthoSilhoutte
 				),
-			// puts the border on top of everything else
-			'ray:append',
+				// masks the portals content
+				gleam_glint_mask.create(
+					'glint', gleam_glint_ray.create( 'ray:init', cRay ),
+					'shape', this.tOrthoSilhoutte
+				),
+				// puts the border on top of everything else
 				gleam_glint_border.create(
 					'facet', facet,
 					'shape', this.tOrthoSilhoutte
 				)
-		);
-
-	return glint;
+			]
+		)
+	);
 }
 );
 

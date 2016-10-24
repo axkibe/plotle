@@ -398,31 +398,36 @@ jion.lazyValue(
 	function( )
 {
 	var
-		glint;
+		gRay;
 
-	// XRX
-
-	glint =
-		gleam_glint_ray.create(
-			'ray:append', this._frameBodyGlint,
-			'ray:append', this._handleNwGlint,
-			'ray:append', this._handleNeGlint,
-			'ray:append', this._handleSeGlint,
-			'ray:append', this._handleSwGlint
-		);
-
-	if( !this.proportional )
+	if( this.proportional )
 	{
-		glint =
-			glint.create(
-				'ray:append', this._handleNGlint,
-				'ray:append', this._handleEGlint,
-				'ray:append', this._handleSGlint,
-				'ray:append', this._handleWGlint
-			);
+		gRay =
+			[
+				this._frameBodyGlint,
+				this._handleNwGlint,
+				this._handleNeGlint,
+				this._handleSeGlint,
+				this._handleSwGlint
+			];
+	}
+	else
+	{
+		gRay =
+			[
+				this._frameBodyGlint,
+				this._handleNwGlint,
+				this._handleNeGlint,
+				this._handleSeGlint,
+				this._handleSwGlint,
+				this._handleNGlint,
+				this._handleEGlint,
+				this._handleSGlint,
+				this._handleWGlint
+			];
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

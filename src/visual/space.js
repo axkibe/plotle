@@ -422,8 +422,8 @@ jion.lazyValue(
 		frame,
 		fromItem,
 		fromSilhoutte,
-		glint,
-		gray,
+		gLen,
+		gRay,
 		r,
 		s,
 		toItem,
@@ -434,24 +434,26 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	gray = [ ];
+	gRay = [ ];
+
+	gLen = 0;
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
-		gray.push( s.glint );
+		gRay[ gLen++ ] = s.glint;
 	}
 
 	frame = this.frame;
 
-	if( frame ) gray.push( frame.glint );
+	if( frame ) gRay[ gLen++ ] = frame.glint;
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.startPoint ) gray.push( action.transItem.glint );
+			if( action.startPoint ) gRay[ gLen++ ] = action.transItem.glint;
 
 			break;
 
@@ -492,13 +494,11 @@ jion.lazyValue(
 							'end2', 'arrow'
 						);
 
-					gray.push(
-						'ray:append',
+					gRay[ gLen++ ] =
 						gleam_glint_paint.create(
 							'facet', gruga_relation.facet,
 							'shape', arrow.shape.transform( transform )
-						)
-					);
+						);
 				}
 			}
 
@@ -508,18 +508,17 @@ jion.lazyValue(
 
 			if( action.zone )
 			{
-				gray.push(
+				gRay[ gLen++ ] =
 					gleam_glint_paint.create(
 						'facet', gruga_select.facet,
 						'shape', action.zone.transform( transform )
-					)
-				);
+					);
 			}
 
 			break;
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gray );
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 
@@ -1350,9 +1349,6 @@ prototype._moveCreateRelation =
 
 	action = this.action;
 
-	// there isn't really a creation or panning going on?
-	if( !action.startPoint ) return;
-
 	transform = this.transform;
 
 	if( action.relationState === 'pan' )
@@ -1837,8 +1833,6 @@ prototype._stopCreateRelation =
 		item;
 
 	action = this.action;
-
-	if( !action.startPoint ) return;
 
 	switch( action.relationState )
 	{

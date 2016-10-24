@@ -462,7 +462,7 @@ prototype.setInput =
 {
 	inputVal = text;
 
-	hiddenInput.value = '88' + text;
+	hiddenInput.value = '__' + text;
 
 	hiddenInput.setSelectionRange( 2, 2 + text.length );
 };
@@ -1372,7 +1372,7 @@ prototype._testInput =
 
 	text = hiddenInput.value;
 
-	if( text === '88' + inputVal || !root )
+	if( text === '__' + inputVal || !root )
 	{
 		return;
 	}

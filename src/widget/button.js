@@ -366,7 +366,8 @@ jion.lazyValue(
 	var
 		facet,
 		font,
-		glint,
+		gLen,
+		gRay,
 		newline,
 		text,
 		t,
@@ -380,16 +381,15 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	// XRX
+	gRay =
+		[
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this._shape
+			)
+		];
 
-	glint =
-		gleam_glint_ray.create(
-			'ray:append',
-				gleam_glint_paint.create(
-					'facet', facet,
-					'shape', this._shape
-				)
-		);
+	gLen = 1;
 
 	if( this.text )
 	{
@@ -399,15 +399,12 @@ jion.lazyValue(
 
 		if( newline === undefined )
 		{
-			glint =
-				glint.create(
-					'ray:append',
-						gleam_glint_text.create(
-							'font', font,
-							'p', this._textPos,
-							'rotate', this.textRotation,
-							'text', this.text
-						)
+			gRay[ gLen++ ] =
+				gleam_glint_text.create(
+					'font', font,
+					'p', this._textPos,
+					'rotate', this.textRotation,
+					'text', this.text
 				);
 		}
 		else
@@ -422,14 +419,11 @@ jion.lazyValue(
 
 			for( t = 0; t < tZ; t++, y += newline )
 			{
-				glint =
-					glint.create(
-						'ray:append',
-							gleam_glint_text.create(
-								'font', font,
-								'p', this._textPos.add( 0, y ),
-								'text', text[ t ]
-							)
+				gRay[ gLen++ ] =
+					gleam_glint_text.create(
+						'font', font,
+						'p', this._textPos.add( 0, y ),
+						'text', text[ t ]
 					);
 			}
 		}
@@ -437,17 +431,14 @@ jion.lazyValue(
 
 	if( this.iconShape )
 	{
-		glint =
-			glint.create(
-				'ray:append',
-					gleam_glint_paint.create(
-						'facet', this.iconFacet,
-						'shape', this._iconShape
-					)
+		gRay[ gLen++ ] =
+			gleam_glint_paint.create(
+				'facet', this.iconFacet,
+				'shape', this._iconShape
 			);
 	}
 
-	return glint;
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 

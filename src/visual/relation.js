@@ -240,7 +240,8 @@ Object.defineProperty(
 			arrow1,
 			arrow2,
 			facet,
-			glint,
+			gLen,
+			gRay,
 			tZone,
 			wg;
 
@@ -261,38 +262,32 @@ Object.defineProperty(
 
 		arrow2 = this._arrow2Glint( );
 
-		// XRX
+		gRay = [ wg ];
 
-		glint =
-			gleam_glint_ray.create(
-				'ray:append', wg
-			);
+		gLen = 1;
 
 		if( this.highlight )
 		{
 			facet = gruga_label.facets.getFacet( 'highlight', true );
 
-			glint =
-				glint.create(
-						'ray:append',
-						gleam_glint_paint.create(
-							'facet', facet,
-							'shape', this.tSilhoutte
-						)
+			gRay[ gLen++ ] =
+				gleam_glint_paint.create(
+					'facet', facet,
+					'shape', this.tSilhoutte
 				);
 		}
 
 		if( arrow1 )
 		{
-			glint = glint.create( 'ray:append', arrow1 );
+			gRay[ gLen++ ] = arrow1;
 		}
 
 		if( arrow2 )
 		{
-			glint = glint.create( 'ray:append', arrow2 );
+			gRay[ gLen++ ] = arrow2;
 		}
 
-		return glint;
+		return gleam_glint_ray.create( 'ray:init', gRay );
 	}
 }
 );

@@ -58,7 +58,8 @@ if( JION )
 				ignores :
 				{
 					'pnw' : true,
-					'transform' : true
+					'transform' : true,
+					'mark' : true
 				}
 			}
 		},
@@ -75,7 +76,6 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_size,
-	gleam_display_canvas,
 	gleam_facet,
 	gleam_glint_fill,
 	gleam_glint_ray,
@@ -278,7 +278,8 @@ jion.lazyValue(
 		bZ,
 		flow,
 		tFont,
-		glint,
+		gLen,
+		gRay,
 		line,
 		lineKey,
 		mark,
@@ -291,15 +292,14 @@ jion.lazyValue(
 
 	mark = this.mark;
 
+	gRay = [ ];
+
+	gLen = 0;
+
 	transform = this.transform.ortho;
 
 	// draws text into the display
 
-	// XRX
-
-	glint = gleam_glint_ray.create( );
-
-	// FIXME create the glint in one go
 	for( a = 0, aZ = flow.length; a < aZ; a++ )
 	{
 		line = flow.get( a );
@@ -310,56 +310,20 @@ jion.lazyValue(
 		{
 			token = line.get( b );
 
-			glint =
-				glint.create(
-					'ray:append',
-						gleam_glint_text.create(
-							'font', tFont,
-							'p',
-								// FIXME make a createTransform
-								euclid_point.create(
-									'x', token.x,
-									'y', line.y
-								).transform( transform ),
-							'text', token.text
-						)
+			gRay[ gLen++ ] =
+				gleam_glint_text.create(
+					'font', tFont,
+					'p',
+						euclid_point.create(
+							'x', transform.x( token.x ),
+							'y', transform.y( line.y )
+						),
+					'text', token.text
 				);
 		}
 	}
 
-	if(
-		mark
-		&& mark.reflect === 'visual_mark_caret'
-		&& mark.focus
-	)
-	{
-		glint = glint.create( 'ray:append', this._caretGlint );
-	}
-
-	return glint;
-}
-);
-
-
-/*
-| The para's display.
-| FIXME XXX remove
-*/
-jion.lazyValue(
-	prototype,
-	'_display',
-	function( )
-{
-	return(
-		gleam_display_canvas.create(
-			'glint', this._glint,
-			'size',
-				euclid_size.create(
-					'height', Math.round( this.height * this.transform.zoom + 1 ),
-					'width', Math.round( this.flow.width * this.transform.zoom + 5 )
-				)
-		)
-	);
+	return gleam_glint_ray.create( 'ray:init', gRay );
 }
 );
 
@@ -371,7 +335,7 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_caretGlint',
+	'caretGlint',
 	function( )
 {
 	var
@@ -395,10 +359,14 @@ jion.lazyValue(
 	n = s - ( this.fontsize + descend );
 
 	pnw =
+		/*
 		euclid_point.create(
 			'x', p.x,
 			'y', n
 		).transform( transform );
+		*/
+		this.pnw.add( p.x, n)
+		.transform( transform );
 
 	pse =
 		pnw.add(
@@ -1207,7 +1175,7 @@ prototype._pageUpDown =
 		tpara = doc.atRank( dir > 0 ? doc.length - 1 : 0 );
 	}
 
-	tpnw = doc.getPNW( tpara.key );
+	tpnw = doc.get( tpara.key ).pnw;
 
 	at = tpara.getPointOffset( tp.sub( tpnw ) );
 
