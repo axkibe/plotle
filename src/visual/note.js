@@ -524,7 +524,7 @@ prototype.mousewheel =
 		this.path.append( 'scrollPos' ),
 		this.scrollPos.create(
 			'y',
-				( this.scrollbarY ? this.scrollbarY.pos : 0 )
+				this.scrollPos.y
 				- dir * system.textWheelSpeed
 		)
 	);
@@ -562,7 +562,7 @@ prototype.scrollMarkIntoView =
 
 	if( !mark || !mark.hasCaret ) return;
 
-	sy = this.scrollbarY ? this.scrollbarY.pos : 0;
+	sy = this.scrollPos.y;
 
 	// FUTURE, more elegant path getting
 	para = this.doc.get( mark.caret.path.get( 5 ) );
@@ -584,25 +584,25 @@ prototype.scrollMarkIntoView =
 
 	pnw = para.pnw;
 
-	s = Math.round( p.y + descend );
+	s = p.y + descend;
 
-	n = s - Math.round( fs + descend );
+	n = s - ( fs + descend );
 
-	if( n + pnw.y - imargin.n < sy )
+	if( n + pnw.y - imargin.n < 0 )
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
 			this.scrollPos.create(
-				'y', n + pnw.y - imargin.n
+				'y', sy + ( n + pnw.y - imargin.n )
 			)
 		);
 	}
-	else if( s + pnw.y + imargin.s > sy + zone.height )
+	else if( s + pnw.y + imargin.s > zone.height )
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
 			this.scrollPos.create(
-				'y', s + pnw.y - zone.height + imargin.s
+				'y', sy + ( s + pnw.y - zone.height + imargin.s )
 			)
 		);
 	}

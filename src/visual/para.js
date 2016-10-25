@@ -340,38 +340,32 @@ jion.lazyValue(
 {
 	var
 		descend,
-		n,
+		fs,
 		p,
 		pnw,
 		pse,
-		s,
 		transform;
 
 	transform = this.transform.ortho;
 
-	descend = this.fontsize * shell_settings.bottombox;
+	fs = this.fontsize;
+
+	descend = fs * shell_settings.bottombox;
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
-	// FIXME simplify all this
-	s = p.y + descend;
-
-	n = s - ( this.fontsize + descend );
+	pnw = this.pnw;
 
 	pnw =
-		/*
-		euclid_point.create(
-			'x', p.x,
-			'y', n
-		).transform( transform );
-		*/
-		this.pnw.add( p.x, n)
-		.transform( transform );
+		transform.point(
+			pnw.x + p.x,
+			pnw.y + p.y - fs
+		);
 
 	pse =
 		pnw.add(
 			1,
-			transform.scale( this.fontsize + descend )
+			transform.scale( fs + descend )
 		);
 
 	return(
