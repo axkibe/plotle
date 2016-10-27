@@ -82,6 +82,8 @@ var
 	euclid_shape_line,
 	euclid_point,
 	euclid_rect,
+	gleam_facet,
+	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gruga_selection,
@@ -372,8 +374,7 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		gRay[ gLen++ ] =
-			this.get( mark.textMark.path.get( -2 ) ).caretGlint;
+		gRay[ gLen++ ] = this._caretGlint;
 	}
 
 
@@ -481,6 +482,67 @@ prototype.specialKey =
 		.specialKey( key, this, shift, ctrl )
 	);
 };
+
+
+/*
+| Glint for the caret.
+*/
+jion.lazyValue(
+	prototype,
+	'_caretGlint',
+	function( )
+{
+	var
+		descend,
+		fs,
+		key,
+		mark,
+		p,
+		para,
+		pnw,
+		pse,
+		transform;
+
+	mark = this.mark.textMark;
+
+	transform = this.transform.ortho;
+
+	key = mark.path.get( -2 );
+
+	para = this.get( key );
+
+	fs = this.fontsize;
+
+	descend = fs * shell_settings.bottombox;
+
+	p = para.locateOffsetPoint( mark.at );
+
+	pnw = para.pnw;
+
+	pnw =
+		transform.point(
+			pnw.x + p.x,
+			pnw.y + p.y - fs
+		);
+
+	pse =
+		pnw.add(
+			1,
+			transform.scale( fs + descend )
+		);
+
+	return(
+		gleam_glint_fill.create(
+			'facet', gleam_facet.blackFill,
+			'shape',
+				euclid_rect.create(
+					'pnw', pnw,
+					'pse', pse
+				)
+		)
+	);
+}
+);
 
 
 /*

@@ -74,10 +74,7 @@ var
 	change_remove,
 	change_split,
 	euclid_point,
-	euclid_rect,
 	euclid_size,
-	gleam_facet,
-	gleam_glint_fill,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
@@ -324,60 +321,6 @@ jion.lazyValue(
 	}
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
-}
-);
-
-
-/*
-| Glint for the caret.
-|
-| FUTURE this could be part for doc.
-*/
-jion.lazyValue(
-	prototype,
-	'caretGlint',
-	function( )
-{
-	var
-		descend,
-		fs,
-		p,
-		pnw,
-		pse,
-		transform;
-
-	transform = this.transform.ortho;
-
-	fs = this.fontsize;
-
-	descend = fs * shell_settings.bottombox;
-
-	p = this.locateOffsetPoint( this.mark.caret.at );
-
-	pnw = this.pnw;
-
-	pnw =
-		transform.point(
-			pnw.x + p.x,
-			pnw.y + p.y - fs
-		);
-
-	pse =
-		pnw.add(
-			1,
-			transform.scale( fs + descend )
-		);
-
-	return(
-		gleam_glint_fill.create(
-			'facet', gleam_facet.blackFill,
-			'shape',
-				euclid_rect.create(
-					'pnw', pnw,
-					'pse', pse
-				)
-		)
-	);
 }
 );
 

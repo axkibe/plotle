@@ -18,6 +18,7 @@ if( JION )
 				type : [ 'undefined', 'integer' ],
 				assign : ''
 			},
+			// FIXME this would better not be here
 			focus :
 			{
 				comment : 'the shell has the system focus',

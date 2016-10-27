@@ -584,25 +584,25 @@ prototype.scrollMarkIntoView =
 
 	pnw = para.pnw;
 
-	s = p.y + descend;
+	s = pnw.y + p.y + descend + imargin.s;
 
-	n = s - ( fs + descend );
+	n = pnw.y + p.y - fs - imargin.n;
 
-	if( n + pnw.y - imargin.n < 0 )
+	if( n < 0 )
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
 			this.scrollPos.create(
-				'y', sy + ( n + pnw.y - imargin.n )
+				'y', sy + n
 			)
 		);
 	}
-	else if( s + pnw.y + imargin.s > zone.height )
+	else if( s > zone.height )
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
 			this.scrollPos.create(
-				'y', sy + ( s + pnw.y - zone.height + imargin.s )
+				'y', sy + s - zone.height
 			)
 		);
 	}

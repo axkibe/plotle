@@ -494,7 +494,7 @@ prototype.minScaleY =
 //		zone  // original zone
 	)
 {
-	return ( gruga_label.minSize / this.fabric.fontsize );
+	return gruga_label.minSize / this.fabric.fontsize;
 };
 
 
