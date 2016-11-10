@@ -15,12 +15,12 @@ if( JION )
 			end1 :
 			{
 				comment : '"normal" or "arrow"',
-				type : 'string',
+				type : 'string'
 			},
 			end2 :
 			{
 				comment : '"normal" or "arrow"',
-				type : 'string',
+				type : 'string'
 			},
 			joint1 :
 			{

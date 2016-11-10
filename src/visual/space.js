@@ -590,7 +590,7 @@ prototype.mousewheel =
 		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
 	}
 
-	root.changeView( dir > 0 ? 1 : -1, p );
+	root.changeSpaceTransform( dir > 0 ? 1 : -1, p );
 
 	return true;
 };
@@ -1235,7 +1235,7 @@ prototype._changeZoom =
 
 	pm = pc.detransform( this.transform );
 
-	root.changeView( df, pm );
+	root.changeSpaceTransform( df, pm );
 };
 
 

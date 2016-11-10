@@ -40,7 +40,7 @@ if( JION )
 				comment : 'the display within everything happens',
 				type :
 					[
-						'gleam_display_canvas',
+						'gleam_display_canvas'
 					]
 			},
 			doTracker :
@@ -662,8 +662,6 @@ Object.defineProperty(
 |
 | new pan (p1) calculates as:
 |
-| FIXME rename to changeSpaceTransform
-|
 | A: py = y0 * z1 + p0
 | B: py = y0 * z0 + p1
 |
@@ -674,7 +672,7 @@ Object.defineProperty(
 |
 | -> p1 = ( py * (1 / z1 - 1 / z0 ) + p0 / z0 ) * z1
 */
-prototype.changeView =
+prototype.changeSpaceTransform =
 	function(
 		de,  // difference of view zoom exponent
 		p    // point to keep constant

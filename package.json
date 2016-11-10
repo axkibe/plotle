@@ -1,0 +1,16 @@
+{
+  "name": "ideoloom",
+  "version": "1.21.1",
+  "description": "collaborative concept map editor",
+  "author": "Axel Kittenberger <axkibe@gmail.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axkibe/ideoloom"
+  },
+  "dependencies": {
+    "mongodb": "^2.2.11",
+    "suspend": "^0.7.0",
+    "uglify-js": "^2.7.4"
+  }
+}
