@@ -234,8 +234,6 @@ form_form.getFocusedWidget =
 
 /*
 | Return the space glint.
-|
-| TODO inherit.
 */
 form_form.glint =
 	function( )

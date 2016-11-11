@@ -329,8 +329,6 @@ prototype.getParaAtPoint =
 
 /*
 | Return the doc's glint.
-|
-| TODO inherit.
 */
 jion.lazyValue(
 	prototype,

@@ -29,7 +29,6 @@ if( JION )
 
 var
 	euclid_anchor_border,
-	euclid_anchor_point,
 	euclid_anchor_rect,
 	euclid_rect;
 

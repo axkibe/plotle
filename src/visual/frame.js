@@ -389,8 +389,6 @@ prototype.pointingHover =
 
 /*
 | The frame glint holding all stuff unmasked.
-|
-| TODO inherit
 */
 jion.lazyValue(
 	prototype,

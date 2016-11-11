@@ -408,8 +408,6 @@ jion.lazyValue(
 
 /*
 | Return the space glint.
-|
-| TODO inherit.
 */
 jion.lazyValue(
 	prototype,
