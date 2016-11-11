@@ -95,14 +95,4 @@ prototype.compute =
 };
 
 
-/*
-| Rect filling the full area.
-*/
-euclid_anchor_rect.full =
-	euclid_anchor_rect.create(
-		'pnw', euclid_anchor_point.nw,
-		'pse', euclid_anchor_point.seMin1
-	);
-
-
 })( );

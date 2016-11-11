@@ -690,7 +690,7 @@ jion.lazyValue(
 	'tOrthoSilhoutte',
 	function( )
 {
-	return this.zeroSilhoutte.transform( this.transform.orth );
+	return this.zeroSilhoutte.transform( this.transform.ortho );
 }
 );
 
