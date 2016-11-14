@@ -40,7 +40,6 @@ var
 	gleam_glint_mask,
 	gruga_frame,
 	jion,
-	math_half,
 	result_hover,
 	visual_frame;
 
@@ -68,7 +67,7 @@ prototype = visual_frame.prototype;
 
 handleSize = gruga_frame.handleSize;
 
-handleSize2 = math_half( handleSize );
+handleSize2 = handleSize / 2;
 
 
 /*

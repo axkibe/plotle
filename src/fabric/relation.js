@@ -47,9 +47,15 @@ if( JION )
 				type : 'euclid_point',
 				json : true
 			}
-		}
+		},
+		init : [ ]
 	};
 }
+
+
+var
+	fabric_relation,
+	jion;
 
 
 /*
@@ -59,10 +65,36 @@ if( JION )
 'use strict';
 
 
+var
+	prototype;
+
+
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
+	jion = require( 'jion' );
+
+	fabric_relation = jion.this( module, 'source' );
+
+	fabric_relation.prototype._init = function( ) { };
+
+	return;
 }
+
+
+prototype = fabric_relation.prototype;
+
+
+/*
+| Initializer.
+*/
+prototype._init =
+	function( )
+{
+	this.doc =
+		this.doc.create(
+			'path', this.path && this.path.append( 'doc' )
+		);
+};
 
 
 } )( );

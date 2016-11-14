@@ -92,7 +92,6 @@ var
 	gleam_glint_window,
 	gruga_note,
 	jion,
-	math_half,
 	root,
 	session_uid,
 	shell_settings,
@@ -271,7 +270,7 @@ prototype._init =
 			'fontsize', this.fontsize,
 			'innerMargin', gruga_note.innerMargin,
 			'mark', this.mark,
-			'paraSep', math_half( this.fontsize ),
+			'paraSep', this.fontsize / 2,
 			'path', path && path.append( 'doc' ),
 			'scrollPos', this.scrollPos,
 			'transform', this.transform

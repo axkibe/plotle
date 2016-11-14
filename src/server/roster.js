@@ -96,12 +96,6 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/math/half.js',
-		'inBundle', true,
-		'inTestGleam', true,
-		'inTestPad', true
-	),
-	server_resource.create(
 		'filePath', 'src/math/limit.js',
 		'inBundle', true,
 		'inTestGleam', true,

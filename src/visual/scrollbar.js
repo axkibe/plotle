@@ -56,7 +56,6 @@ var
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
-	math_half,
 	visual_scrollbar;
 
 
@@ -132,7 +131,7 @@ jion.lazyValue(
 
 	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
 
-	s05 = math_half( gruga_scrollbar.strength );
+	s05 = gruga_scrollbar.strength / 2;
 
 	transform = this.transform;
 

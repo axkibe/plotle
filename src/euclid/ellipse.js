@@ -52,8 +52,7 @@ var
 	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
-	jion,
-	math_half;
+	jion;
 
 
 /*
@@ -110,9 +109,9 @@ prototype._init =
 	sy = pse.y;
 
 	// middles of cardinal cords
-	my = math_half( ny + sy );
+	my = ( ny + sy ) / 2;
 
-	mx = math_half(wx + ex);
+	mx = ( wx + ex ) / 2;
 
 	// cardinal points
 	pw =
@@ -200,12 +199,7 @@ function( )
 {
 	if( this._gradientPC ) return this._gradientPC;
 
-	return(
-		euclid_point.create(
-			'x', math_half( this.pnw.x + this.pse.x ),
-			'y', math_half( this.pnw.y + this.pse.y )
-		)
-	);
+	return this.pc;
 }
 );
 
@@ -309,8 +303,8 @@ jion.lazyValue(
 {
 	return(
 		euclid_point.create(
-			'x', math_half( this.pnw.x + this.pse.x ),
-			'y', math_half( this.pnw.y + this.pse.y )
+			'x', ( this.pnw.x + this.pse.x ) / 2,
+			'y', ( this.pnw.y + this.pse.y ) / 2
 		)
 	);
 }

@@ -72,7 +72,6 @@ if( NODE )
 prototype = fabric_label.prototype;
 
 
-
 /*
 | Initializer.
 */
@@ -84,5 +83,6 @@ prototype._init =
 			'path', this.path && this.path.append( 'doc' )
 		);
 };
+
 
 } )( );

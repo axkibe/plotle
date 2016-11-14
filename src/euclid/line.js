@@ -31,8 +31,7 @@ var
 	euclid_line,
 	euclid_point,
 	euclid_rect,
-	jion,
-	math_half;
+	jion;
 
 
 /*
@@ -108,8 +107,8 @@ jion.lazyValue(
 
 		return(
 			euclid_point.create(
-				'x', math_half( p1.x + p2.x ),
-				'y', math_half( p1.y + p2.y )
+				'x', ( p1.x + p2.x ) / 2,
+				'y', ( p1.y + p2.y ) / 2
 			)
 		);
 	}

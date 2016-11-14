@@ -37,7 +37,6 @@ if( JION )
 var
 	euclid_anchor_fixPoint,
 	euclid_anchor_point,
-	euclid_point,
 	jion;
 
 
@@ -130,18 +129,6 @@ prototype.compute =
 
 	pse = tenter.pse;
 
-	/*
-	if(
-		this.anchor === 'nw'
-		&& pnw.x === 0
-		&& pnw.y === 0
-		&& view.zoom === 1
-	)
-	{
-		return this.euclidPoint;
-	}
-	*/
-
 	w = ( pse.x - pnw.x ) * zoom;
 
 	h = ( pse.y - pnw.y ) * zoom;
@@ -173,31 +160,6 @@ prototype.compute =
 		default : throw new Error( );
 	}
 };
-
-
-/*
-| The plain euclid_point equivalent,
-| If anchor is nw and pan and parent pnw is zero
-*/
-jion.lazyValue(
-	prototype,
-	'euclidPoint',
-	function( )
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( this.anchor !== 'nw' ) throw new Error( );
-/**/}
-
-	return(
-		euclid_point.create(
-			'x', this.x,
-			'y', this.y
-		)
-	);
-}
-);
 
 
 /*

@@ -1454,11 +1454,7 @@ prototype.removeRange =
 			frontMark.path.chop
 		);
 
-	for(
-		r = r1;
-		r < r2;
-		r++
-	)
+	for( r = r1; r < r2; r++ )
 	{
 		ve = pivot.atRank( r + 1 );
 
