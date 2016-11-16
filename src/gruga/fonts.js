@@ -17,7 +17,7 @@ var
 var
 	defaultFamily,
 	defaultBoldFamily;
-	
+
 defaultFamily = 'DejaVuSans,sans-serif';
 
 defaultBoldFamily = 'DejaVuSansBold,sans-serif';

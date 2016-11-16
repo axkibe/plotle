@@ -38,6 +38,17 @@ if( JION )
 				comment : 'vertical alignment',
 				type : 'string'
 			}
+		},
+		init : [ 'inherit' ],
+		alike :
+		{
+			alikeWithoutSize :
+			{
+				ignores :
+				{
+					size : true
+				}
+			}
 		}
 	};
 }
@@ -69,6 +80,30 @@ prototype = gleam_font.prototype;
 
 
 /*
+| Initializer.
+*/
+prototype._init =
+	function(
+		inherit
+	)
+{
+	if(
+		inherit
+		&& inherit._tPool
+		&& this.alikeWithoutSize( inherit )
+	)
+	{
+		this._tPool = inherit._tPool;
+	}
+	else if( FREEZE )
+	{
+		this._tPool = { };
+	}
+};
+
+
+
+/*
 | The CSS-string for this font.
 */
 jion.lazyValue(
@@ -81,18 +116,30 @@ jion.lazyValue(
 );
 
 
-/*
-| The CSS-string for this font
-| resized for a view.
-|
-| FIXME remove
-*/
-prototype.viewCss =
+prototype.transform =
 	function(
-		view
+		transform
 	)
 {
-	return view.scale( this.size ) + 'px ' + this.family;
+	var
+		tp;
+
+	if( this._tPool )
+	{
+		tp = this._tPool[ transform.zoom ];
+	}
+
+	if( tp ) return tp;
+
+	if( !FREEZE && !this._tPool ) this._tPool = { };
+
+	tp =
+	this._tPool[ transform.zoom ] =
+		this.create( 'size', this.size * transform.zoom );
+
+	// FIXME clear pool too large
+
+	return tp;
 };
 
 

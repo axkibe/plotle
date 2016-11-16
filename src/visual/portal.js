@@ -807,9 +807,6 @@ jion.lazyValue(
 );
 
 
-// FIXME create a font.transform( )  call to use the non transform
-//       definitions as base.
-
 /*
 | Font for spaceUser.
 */
@@ -818,7 +815,7 @@ jion.lazyValue(
 	'_tFontSpaceUser',
 	function( )
 {
-	return shell_fontPool.get( this.transform.scale( 13 ), 'la' );
+	return this._fontSpaceUser.transform( this.transform );
 }
 );
 
@@ -831,7 +828,7 @@ jion.lazyValue(
 	'_tFontSpaceTag',
 	function( )
 {
-	return shell_fontPool.get( this.transform.scale( 13 ), 'la' );
+	return this._fontSpaceTag.transform( this.transform );
 }
 );
 
@@ -844,7 +841,7 @@ jion.lazyValue(
 	'_tFontMoveTo',
 	function( )
 {
-	return shell_fontPool.get( this.transform.scale( 13 ), 'cm' );
+	return this._fontMoveTo.transform( this.transform );
 }
 );
 
