@@ -23,11 +23,11 @@
 
 var
 	gruga_iconHand,
-	euclid_anchor_point,
-	euclid_anchor_shape,
-	euclid_anchor_shape_round,
-	euclid_anchor_shape_start,
-	euclid_anchor_shape_line,
+	euclid_point,
+	euclid_shape,
+	euclid_shape_round,
+	euclid_shape_start,
+	euclid_shape_line,
 	gleam_border,
 	gleam_color,
 	gleam_facet;
@@ -76,7 +76,7 @@ gruga_iconHand.facet =
 	);
 
 
-ap = euclid_anchor_point.c.add( -4, -12 );
+ap = euclid_point.create( 'x', -4, 'y', -12 );
 
 fh = 12;
 
@@ -121,30 +121,30 @@ pp = qp.add( -3, 2 );
 
 
 gruga_iconHand.shape =
-	euclid_anchor_shape.create(
+	euclid_shape.create(
 		'ray:init',
 		[
-			euclid_anchor_shape_start.create( 'p', ap ), // A
-			euclid_anchor_shape_round.create( 'p', bp ), // B
-			euclid_anchor_shape_line.create ( 'p', cp ), // C
-			euclid_anchor_shape_line.create ( 'p', dp ), // D
-			euclid_anchor_shape_round.create( 'p', ep ), // E
-			euclid_anchor_shape_line.create ( 'p', fp ), // F
-			euclid_anchor_shape_line.create ( 'p', gp ), // G
-			euclid_anchor_shape_round.create( 'p', hp ), // H
-			euclid_anchor_shape_line.create ( 'p', ip ), // I
-			euclid_anchor_shape_line.create ( 'p', jp ), // J
-			euclid_anchor_shape_round.create( 'p', kp ), // K
-			euclid_anchor_shape_line.create(  'p', lp ), // L
-			euclid_anchor_shape_round.create( 'p', mp ), // M
-			euclid_anchor_shape_line.create ( 'p', np ), // N
-			euclid_anchor_shape_line.create ( 'p', op ), // OO
-			euclid_anchor_shape_line.create ( 'p', pp ), // P
-			euclid_anchor_shape_round.create( 'p', qp ), // Q
-			euclid_anchor_shape_line.create ( 'p', rp ), // R
-			euclid_anchor_shape_line.create ( 'close', true )
+			euclid_shape_start.create( 'p', ap ), // A
+			euclid_shape_round.create( 'p', bp ), // B
+			euclid_shape_line.create ( 'p', cp ), // C
+			euclid_shape_line.create ( 'p', dp ), // D
+			euclid_shape_round.create( 'p', ep ), // E
+			euclid_shape_line.create ( 'p', fp ), // F
+			euclid_shape_line.create ( 'p', gp ), // G
+			euclid_shape_round.create( 'p', hp ), // H
+			euclid_shape_line.create ( 'p', ip ), // I
+			euclid_shape_line.create ( 'p', jp ), // J
+			euclid_shape_round.create( 'p', kp ), // K
+			euclid_shape_line.create(  'p', lp ), // L
+			euclid_shape_round.create( 'p', mp ), // M
+			euclid_shape_line.create ( 'p', np ), // N
+			euclid_shape_line.create ( 'p', op ), // OO
+			euclid_shape_line.create ( 'p', pp ), // P
+			euclid_shape_round.create( 'p', qp ), // Q
+			euclid_shape_line.create ( 'p', rp ), // R
+			euclid_shape_line.create ( 'close', true )
 		],
-		'pc', euclid_anchor_point.c
+		'pc', euclid_point.zero
 	);
 
 

@@ -30,7 +30,8 @@ if( JION )
 
 
 var
-	gleam_glint_border;
+	gleam_glint_border,
+	swatch;
 
 
 /*
@@ -52,5 +53,22 @@ if( NODE )
 
 prototype = gleam_glint_border.prototype;
 
+
+/*
+| Returns true if p is within the
+| glint's shape.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return swatch.within( p, this.shape );
+};
 
 } )( );

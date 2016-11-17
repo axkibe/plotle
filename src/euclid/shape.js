@@ -183,16 +183,15 @@ prototype.transform =
 		transform
 	)
 {
+	var
+		a,
+		aZ,
+		ray;
 
 /**/if( CHECK )
 /**/{
 /**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
 /**/}
-
-	var
-		a,
-		aZ,
-		ray;
 
 	ray = [ ];
 

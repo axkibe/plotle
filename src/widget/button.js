@@ -45,6 +45,7 @@ if( JION )
 				comment : 'icon shape',
 				type :
 					require( '../euclid/anchor/typemap-shape' )
+					.concat( require( '../euclid/typemap-shape' ) )
 					.concat( [ 'undefined' ] )
 			},
 			iconFacet :
@@ -117,6 +118,7 @@ if( JION )
 
 var
 	euclid_size,
+	euclid_transform,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_text,
@@ -155,7 +157,8 @@ prototype._init =
 	function( )
 {
 	var
-		area;
+		area,
+		pc;
 
 	// FIXME move into lazyValues
 	if( this.superArea )
@@ -180,11 +183,27 @@ prototype._init =
 		// FIXME decomplicate
 		if( this.iconShape )
 		{
-			// FIXME decomplicate
-			this._iconShape =
-				this.iconShape.compute(
-					this._area.zeroPnw.detransform( this.transform )
-				).transform( this.transform );
+			if( this.iconShape.reflect === 'euclid_shape' ) // XXX
+			{
+				// FIXME decomplicate
+				pc = this._area.zeroPnw.detransform( this.transform ).pc;
+
+				// XXX
+				this._iconShape =
+					this.iconShape.transform(
+						euclid_transform.create(
+							'offset', pc,
+							'zoom', 1
+						)
+					).transform( this.transform );
+			}
+			else
+			{
+				this._iconShape =
+					this.iconShape.compute(
+						this._area.zeroPnw.detransform( this.transform )
+					).transform( this.transform );
+			}
 		}
 
 		if( this.textDesignPos )

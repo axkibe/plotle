@@ -21,12 +21,12 @@ var
 	base1,
 	base2,
 	gruga_iconMoveTo,
-	euclid_anchor_point,
-	euclid_anchor_rect,
-	euclid_anchor_shape,
-	euclid_anchor_shape_start,
-	euclid_anchor_shape_line,
-	euclid_anchor_shapeRay,
+	euclid_point,
+	euclid_rect,
+	euclid_shape,
+	euclid_shape_start,
+	euclid_shape_line,
+	euclid_shapeRay,
 	gleam_border,
 	gleam_color,
 	gleam_facet;
@@ -43,8 +43,7 @@ var
 	ap;
 
 ap =
-	euclid_anchor_point.create(
-		'anchor', 'c',
+	euclid_point.create(
 		'x', 0,
 		'y', -11
 	);
@@ -64,39 +63,38 @@ gruga_iconMoveTo.facet =
 
 
 arrow =
-	euclid_anchor_shape.create(
+	euclid_shape.create(
 		'ray:init',
 		[
-			euclid_anchor_shape_start.create( 'p', ap ), // A
-			euclid_anchor_shape_line.create( 'p', ap.add(   6,   8 ) ), // B
-			euclid_anchor_shape_line.create( 'p', ap.add(   2,   8 ) ), // C
-			euclid_anchor_shape_line.create( 'p', ap.add(   2,  14 ) ), // D
-			euclid_anchor_shape_line.create( 'p', ap.add(  -2,  14 ) ), // E
-			euclid_anchor_shape_line.create( 'p', ap.add(  -2,   8 ) ), // F
-			euclid_anchor_shape_line.create( 'p', ap.add(  -6,   8 ) ), // G
-			euclid_anchor_shape_line.create( 'close', true )
+			euclid_shape_start.create( 'p', ap ), // A
+			euclid_shape_line.create( 'p', ap.add(   6,   8 ) ), // B
+			euclid_shape_line.create( 'p', ap.add(   2,   8 ) ), // C
+			euclid_shape_line.create( 'p', ap.add(   2,  14 ) ), // D
+			euclid_shape_line.create( 'p', ap.add(  -2,  14 ) ), // E
+			euclid_shape_line.create( 'p', ap.add(  -2,   8 ) ), // F
+			euclid_shape_line.create( 'p', ap.add(  -6,   8 ) ), // G
+			euclid_shape_line.create( 'close', true )
 		],
-		'pc',
-			ap.add( 0, 7 )
+		'pc', ap.add( 0, 7 )
 	);
 
 
 base1 =
-    euclid_anchor_rect.create(
+	euclid_rect.create(
 		'pnw', ap.add( -2, 16 ),
 		'pse', ap.add( +2, 17 )
 	);
 
 
 base2 =
-	euclid_anchor_rect.create(
+	euclid_rect.create(
 		'pnw', ap.add( -2, 19 ),
 		'pse', ap.add( +2, 20 )
 	);
 
 
 gruga_iconMoveTo.shape =
-	euclid_anchor_shapeRay.create(
+	euclid_shapeRay.create(
 		'ray:init',
 		[
 			arrow,

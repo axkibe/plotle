@@ -390,27 +390,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/anchor/fixPoint.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/euclid/anchor/rect.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/anchor/line.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/anchor/border.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/anchor/roundRect.js',
 		'hasJion', true,
 		'inBundle', true
 	),

@@ -21,11 +21,11 @@
 
 var
 	gruga_iconSelect,
-	euclid_anchor_point,
-	euclid_anchor_shape,
-	euclid_anchor_shape_round,
-	euclid_anchor_shape_start,
-	euclid_anchor_shape_line,
+	euclid_point,
+	euclid_shape,
+	euclid_shape_round,
+	euclid_shape_start,
+	euclid_shape_line,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -58,7 +58,7 @@ var
 	round;
 
 
-pc = euclid_anchor_point.c;
+pc = euclid_point.zero;
 
 // half dash line
 hd = 2;
@@ -89,11 +89,11 @@ ps = pc.add( 0, hs );
 
 pw = pc.add( -hs, 0 );
 
-start = euclid_anchor_shape_start;
+start = euclid_shape_start;
 
-line = euclid_anchor_shape_line;
+line = euclid_shape_line;
 
-round = euclid_anchor_shape_round;
+round = euclid_shape_round;
 
 gruga_iconSelect = { };
 
@@ -118,7 +118,7 @@ gruga_iconSelect.facet =
 
 
 gruga_iconSelect.shape =
-	euclid_anchor_shape.create(
+	euclid_shape.create(
 		'ray:init',
 		[
 			start.create( 'p', pnw.add(   0 ,  ce ) ),

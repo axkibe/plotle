@@ -35,7 +35,6 @@ if( JION )
 
 
 var
-	euclid_anchor_fixPoint,
 	euclid_anchor_point,
 	jion;
 
@@ -159,25 +158,6 @@ prototype.compute =
 
 		default : throw new Error( );
 	}
-};
-
-
-/*
-| Returns a fixPoint anchored to this.
-*/
-prototype.fixPoint =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		euclid_anchor_fixPoint.create(
-			'anchor', this,
-			'x', x,
-			'y', y
-		)
-	);
 };
 
 

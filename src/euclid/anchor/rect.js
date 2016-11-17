@@ -15,12 +15,12 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north-west',
-				type : require( './typemap-points.js' )
+				type : 'euclid_anchor_point'
 			},
 			pse :
 			{
 				comment : 'point in south-east',
-				type : require( './typemap-points.js' )
+				type : 'euclid_anchor_point'
 			}
 		}
 	};

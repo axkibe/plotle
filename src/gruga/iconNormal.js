@@ -19,10 +19,10 @@
 
 var
 	gruga_iconNormal,
-	euclid_anchor_point,
-	euclid_anchor_shape,
-	euclid_anchor_shape_start,
-	euclid_anchor_shape_line,
+	euclid_point,
+	euclid_shape,
+	euclid_shape_start,
+	euclid_shape_line,
 	gleam_border,
 	gleam_color,
 	gleam_facet;
@@ -38,7 +38,11 @@ var
 var
 	ap;
 
-ap = euclid_anchor_point.c.add( -4, -9 );
+ap =
+	euclid_point.create(
+		'x', -4,
+		'y', -9
+	);
 
 
 gruga_iconNormal = { };
@@ -55,19 +59,19 @@ gruga_iconNormal.facet =
 
 
 gruga_iconNormal.shape =
-	euclid_anchor_shape.create(
+	euclid_shape.create(
 		'ray:init',
 		[
-			euclid_anchor_shape_start.create( 'p', ap ), // A
-			euclid_anchor_shape_line.create( 'p', ap.add(  11,  10 ) ), // B
-			euclid_anchor_shape_line.create( 'p', ap.add(   6,  11 ) ), // C
-			euclid_anchor_shape_line.create( 'p', ap.add(   9,  17 ) ), // D
-			euclid_anchor_shape_line.create( 'p', ap.add(   7,  18 ) ), // E
-			euclid_anchor_shape_line.create( 'p', ap.add(   4,  12 ) ), // F
-			euclid_anchor_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
-			euclid_anchor_shape_line.create( 'close', true )
+			euclid_shape_start.create( 'p', ap ), // A
+			euclid_shape_line.create( 'p', ap.add(  11,  10 ) ), // B
+			euclid_shape_line.create( 'p', ap.add(   6,  11 ) ), // C
+			euclid_shape_line.create( 'p', ap.add(   9,  17 ) ), // D
+			euclid_shape_line.create( 'p', ap.add(   7,  18 ) ), // E
+			euclid_shape_line.create( 'p', ap.add(   4,  12 ) ), // F
+			euclid_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
+			euclid_shape_line.create( 'close', true )
 		],
-		'pc', euclid_anchor_point.c
+		'pc', euclid_point.zero
 	);
 
 

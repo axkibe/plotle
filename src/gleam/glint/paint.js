@@ -32,7 +32,8 @@ if( JION )
 
 
 var
-	gleam_glint_paint;
+	gleam_glint_paint,
+	swatch;
 
 
 /*
@@ -58,14 +59,19 @@ prototype = gleam_glint_paint.prototype;
 
 /*
 | Returns true if p is within the
-| glint its shape.
+| glint's shape.
 */
 prototype.within =
 	function(
 		p
 	)
 {
-	return this.shape.within( p );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return swatch.within( p, this.shape );
 };
 
 

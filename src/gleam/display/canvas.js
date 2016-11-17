@@ -1,5 +1,7 @@
 /*
 | Displays stuff using a HTML5 canvas renderer.
+|
+| FIXME: Remove the 'border' stuff
 */
 
 
@@ -32,8 +34,7 @@ if( JION )
 			size :
 			{
 				comment : 'the size of the display',
-				// FIXME remove undefined
-				type : [ 'undefined', 'euclid_size', 'euclid_rect' ]
+				type : [ 'euclid_size', 'euclid_rect' ]
 			},
 			_cv :
 			{
@@ -149,7 +150,70 @@ gleam_display_canvas.createAroundHTMLCanvas =
 
 
 /*
+| Returns true if p is within the shape.
+*/
+prototype.within =
+	function(
+		p,
+		shape
+	)
+{
+	var
+		pnw,
+		pse,
+		x,
+		y;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/
+/**/	if( p.reflect !== 'euclid_point' ) throw new Error( );
+/**/}
+
+	switch( shape.reflect )
+	{
+		case 'euclid_ellipse' :
+		case 'euclid_roundRect' :
+
+			this._sketchGenericShape( shape.shape, 0, 0.5 );
+
+			break;
+
+		case 'euclid_shape' :
+
+			this._sketchGenericShape( shape, 0, 0.5 );
+
+			break;
+
+		case 'euclid_rect' :
+
+			x = p.x;
+
+			y = p.y;
+
+			pnw = shape.pnw;
+
+			pse = shape.pse;
+
+			return(
+				x >= pnw.x
+				&& y >= pnw.y
+				&& x <= pse.x
+				&& y <= pse.y
+			);
+
+		default : throw new Error( );
+	}
+
+	return this._cx.isPointInPath( p.x, p.y );
+};
+
+
+/*
 | Returns true if a point is in a sketch.
+|
+| FIXME remove
 */
 prototype.withinSketch =
 	function(
