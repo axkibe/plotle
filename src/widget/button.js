@@ -180,30 +180,19 @@ prototype._init =
 			).transform( this.transform );
 
 
-		// FIXME decomplicate
 		if( this.iconShape )
 		{
-			if( this.iconShape.reflect === 'euclid_shape' ) // XXX
-			{
-				// FIXME decomplicate
-				pc = this._area.zeroPnw.detransform( this.transform ).pc;
+			// FIXME decomplicate
+			pc = this._area.zeroPnw.detransform( this.transform ).pc;
 
-				// XXX
-				this._iconShape =
-					this.iconShape.transform(
-						euclid_transform.create(
-							'offset', pc,
-							'zoom', 1
-						)
-					).transform( this.transform );
-			}
-			else
-			{
-				this._iconShape =
-					this.iconShape.compute(
-						this._area.zeroPnw.detransform( this.transform )
-					).transform( this.transform );
-			}
+			// XXX
+			this._iconShape =
+				this.iconShape.transform(
+					euclid_transform.create(
+						'offset', pc,
+						'zoom', 1
+					)
+				).transform( this.transform );
 		}
 
 		if( this.textDesignPos )

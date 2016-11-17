@@ -34,7 +34,11 @@ var
 	pc;
 
 
-pc = euclid_point.zero;
+pc =
+	euclid_point.create(
+		'x', -2,
+		'y', 0
+	);
 
 
 gruga_iconCheck = { };

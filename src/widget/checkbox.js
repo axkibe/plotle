@@ -71,6 +71,7 @@ if( JION )
 
 
 var
+	euclid_transform,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gruga_iconCheck,
@@ -124,8 +125,12 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		gruga_iconCheck.shape
-		.compute( this._area )
+		gruga_iconCheck.shape.transform(
+			euclid_transform.create(
+				'zoom', 1,
+				'offset', this._area.pc
+			)
+		)
 	);
 }
 );

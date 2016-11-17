@@ -14,10 +14,10 @@
 
 var
 	gruga_iconRemove,
-	euclid_anchor_point,
-	euclid_anchor_shape,
-	euclid_anchor_shape_start,
-	euclid_anchor_shape_line,
+	euclid_point,
+	euclid_shape,
+	euclid_shape_start,
+	euclid_shape_line,
 	gleam_border,
 	gleam_color,
 	gleam_facet;
@@ -41,7 +41,7 @@ var
 	pse,
 	psw;
 
-pc = euclid_anchor_point.c;
+pc = euclid_point.zero;
 
 pnw = pc.add( -6, -6 );
 
@@ -75,58 +75,58 @@ gruga_iconRemove.facet =
 
 
 gruga_iconRemove.shape =
-	euclid_anchor_shape.create(
+	euclid_shape.create(
 		'ray:init',
 		[
-			euclid_anchor_shape_start.create(
+			euclid_shape_start.create(
 				'p', pnw                  // A
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pnw.add(  aw,   0 )  // B
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pc.add(    0, -ch )  // C
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pne.add( -aw,   0 )  // D
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pne                  // E
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pne.add(   0,  ah )  // F
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pc.add(   cw,   0 )  // G
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pse.add(   0, -ah )  // H
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pse                  // I
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pse.add( -aw,   0 )  // J
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pc.add(    0,  ch )  // K
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', psw.add(  aw,   0 )  // L
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', psw                  // M
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', psw.add(   0, -ah )  // N
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pc.add(  -cw,   0 )  // O
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'p', pnw.add(   0,  ah )  // P
 			),
-			euclid_anchor_shape_line.create(
+			euclid_shape_line.create(
 				'close', true             // A
 			)
 		],
