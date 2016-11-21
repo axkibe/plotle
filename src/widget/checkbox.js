@@ -13,16 +13,23 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			// FIXME remove undefined
+			area :
+			{
+				comment : 'designed area (using anchors)',
+				type : [ 'undefined', 'euclid_rect' ]
+			},
 			checked :
 			{
 				comment : 'true if the checkbox is checked',
 				type : 'boolean',
 				defaultValue : 'false'
 			},
+			// FIXME remove
 			designArea :
 			{
 				comment : 'designed area (using anchors)',
-				type : 'euclid_anchor_rect'
+				type : [ 'undefined', 'euclid_anchor_rect' ]
 			},
 			facets :
 			{
@@ -110,8 +117,19 @@ prototype._init =
 {
 	if( this.superArea )
 	{
-		this._area =
-			this.designArea.compute( this.superArea );
+		if( this.area )
+		{
+			this._area =
+				this.area
+				.transform( this.transform )
+				.align;
+		}
+		else
+		{
+			// FIXME remove
+			this._area =
+				this.designArea.compute( this.superArea );
+		}
 	}
 };
 

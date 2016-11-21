@@ -39,11 +39,6 @@ if( JION )
 				type : [ 'undefined', 'fabric_spaceRef' ],
 				assign : ''
 			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'euclid_transform'
-			},
 			user :
 			{
 				comment : 'currently logged in user',

@@ -1,3 +1,4 @@
+FIXME: select button is enabled when no access
 FIXME: remove '_assign' renames
 FIXME: 'highlight' for visual items controled by space
 FIXME: remove all 'withinSketch'

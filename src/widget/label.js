@@ -13,10 +13,11 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			// FIXME remove
 			designPos :
 			{
 				comment : 'designed position of the text',
-				type : 'euclid_anchor_point'
+				type : [ 'undefined', 'euclid_anchor_point' ]
 			},
 			hover :
 			{
@@ -47,7 +48,13 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			// FIXME remove?
+			// FIXME remove undefined
+			pos :
+			{
+				comment : 'designed pos',
+				type : [ 'undefined', 'euclid_point' ]
+			},
+			// FIXME remove
 			superArea :
 			{
 				comment : 'the area the widget resides in',
@@ -112,7 +119,12 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		// FIXME recomplicate
+		this.pos
+		? (
+			this.pos.transform( this.transform )
+		)
+		:
+		// FIXME decomplicate
 		this.designPos.compute(
 			euclid_rect.create(
 				'pnw', euclid_point.zero,

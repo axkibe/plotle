@@ -8,6 +8,7 @@ var
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
+	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -28,25 +29,25 @@ var
 
 
 var
-	dw,
 	genericButtonFacets,
 	genericButtonModel,
 	genericButtonSize,
 	labelButtonPnw,
 	noteButtonPnw,
 	portalButtonPnw,
+	pw,
 	relationButtonPnw;
 
 
-dw = euclid_anchor_point.w;
+pw = euclid_point.create( 'x', 0, 'y', 505 );
 
-noteButtonPnw = dw.create( 'x', 65, 'y', -325 );
+noteButtonPnw = pw.add( 65, -325 );
 
-labelButtonPnw = dw.create( 'x', 81, 'y', -254 );
+labelButtonPnw = pw.add( 81, -254 );
 
-relationButtonPnw = dw.create( 'x', 92, 'y', -183 );
+relationButtonPnw = pw.add( 92, -183 );
 
-portalButtonPnw = dw.create( 'x', 99, 'y', -112 );
+portalButtonPnw = pw.add( 99, -112 );
 
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
@@ -155,44 +156,44 @@ gruga_createDisc =
 		'twig:add',
 		'createNote',
 			genericButtonModel.abstract(
-				'text', 'Note',
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
-					)
+					),
+				'text', 'Note'
 			),
 		'twig:add',
 		'createLabel',
 			genericButtonModel.abstract(
-				'text', 'Label',
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
 					),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', euclid_anchor_ellipse.fullSkewNW,
+				'text', 'Label'
 			),
 		'twig:add',
 		'createRelation',
 			genericButtonModel.abstract(
-				'text', 'Rela-\ntion',
-				'textNewline', 20,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
-					)
+					),
+				'text', 'Rela-\ntion',
+				'textNewline', 20
 			),
 		'twig:add',
 		'createPortal',
 			genericButtonModel.abstract(
-				'text', 'Portal',
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )
-					)
+					),
+				'text', 'Portal'
 			)
 	);
 

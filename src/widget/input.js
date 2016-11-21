@@ -13,10 +13,17 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			// FIXME remove undefined
+			area :
+			{
+				comment : 'designed area (using anchors)',
+				type : [ 'undefined', 'euclid_rect' ]
+			},
+			// FIXME remove
 			designArea :
 			{
 				comment : 'designed area (using anchors)',
-				type : 'euclid_anchor_rect'
+				type : [ 'undefined', 'euclid_anchor_rect' ]
 			},
 			facets :
 			{
@@ -139,9 +146,20 @@ prototype._init =
 
 	if( this.superArea )
 	{
-		area =
-		this._area =
-			this.designArea.compute( this.superArea );
+		if( this.area )
+		{
+			area =
+			this._area =
+				this.area
+				.transform( this.transform )
+				.align;
+		}
+		else
+		{
+			area =
+			this._area =
+				this.designArea.compute( this.superArea );
+		}
 
 		this._shape =
 			euclid_roundRect.create(

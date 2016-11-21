@@ -56,6 +56,24 @@ prototype = euclid_point.prototype;
 
 
 /*
+| Shortcut to create x/y.
+*/
+euclid_point.xy =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		euclid_point.create(
+			'x', x,
+			'y', y
+		)
+	);
+};
+
+
+/*
 | Returns a point aligned to rounded coords.
 |
 | FIXME should not be needed.

@@ -35,11 +35,6 @@ if( JION )
 				comment : 'the reference of current space',
 				type : [ 'undefined', 'fabric_spaceRef' ]
 			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'euclid_transform'
-			},
 			user :
 			{
 				comment : 'currently logged in user',

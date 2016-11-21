@@ -5,8 +5,8 @@
 
 var
 	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_point,
+	euclid_rect,
 	gleam_facet,
 	gleam_facetRay,
 	gleam_border,
@@ -110,9 +110,8 @@ gruga_moveTo =
 			widget_label.abstract(
 				'text', 'move to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
+				'pos',
+					euclid_point.create(
 						'x', 0,
 						'y', -150
 					)
@@ -121,17 +120,15 @@ gruga_moveTo =
 		'ideoloomHomeButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x', ideoloomHomeButton.w,
 								'y', ideoloomHomeButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x',
 									ideoloomHomeButton.w
 									+ ideoloomHomeButton.width,
@@ -143,29 +140,21 @@ gruga_moveTo =
 				'text', 'ideoloom\nhome',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', 0
-					),
 				'shape', euclid_anchor_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x', ideoloomSandboxButton.w,
 								'y', ideoloomSandboxButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x',
 									ideoloomSandboxButton.w +
 									ideoloomSandboxButton.width,
@@ -177,29 +166,21 @@ gruga_moveTo =
 				'text', 'ideoloom\nsandbox',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', 0
-					),
 				'shape', euclid_anchor_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'userHomeButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x', userHomeButton.w,
 								'y', userHomeButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
+							euclid_point.create(
 								'x', userHomeButton.w + userHomeButton.width,
 								'y', userHomeButton.n + userHomeButton.height
 							)
@@ -207,12 +188,6 @@ gruga_moveTo =
 				'text', 'your\nhome',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', 0
-					),
 				'shape', euclid_anchor_ellipse.fullSkewNW
 			)
 	);

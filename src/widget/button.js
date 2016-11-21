@@ -13,10 +13,17 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			// FIXME remove undefined
+			area :
+			{
+				comment : 'designed area',
+				type : [ 'undefined', 'euclid_rect' ]
+			},
+			// FIXME remove
 			designArea :
 			{
 				comment : 'designed area ( using anchors )',
-				type : 'euclid_anchor_rect'
+				type : [ 'undefined', 'euclid_anchor_rect' ]
 			},
 			down :
 			{
@@ -72,6 +79,7 @@ if( JION )
 				// FUTURE allow other types
 				type : 'euclid_anchor_ellipse'
 			},
+			// FIXME remove
 			superArea :
 			{
 				comment : 'the area the widget resides in',
@@ -165,13 +173,25 @@ prototype._init =
 	{
 		// FIXME this in unnecessairly complicated
 		//       remove all anchors in favor of transform
-		area =
-		this._area =
-			this.designArea.compute(
-				this.superArea.zeroPnw.detransform( this.transform )
-			)
-			.transform( this.transform )
-			.align;
+		if( this.area )
+		{
+			area =
+			this._area =
+				this.area
+				.transform( this.transform )
+				.align;
+		}
+		else
+		{
+			// FIXME remove
+			area =
+			this._area =
+				this.designArea.compute(
+					this.superArea.zeroPnw.detransform( this.transform )
+				)
+				.transform( this.transform )
+				.align;
+		}
 
 		// FIXME decomplicate
 		this._shape =
@@ -202,6 +222,15 @@ prototype._init =
 				this.textDesignPos.compute(
 					this._area.zeroPnw.detransform( this.transform )
 				).transform( this.transform );
+		}
+		else
+		{
+			// FIXME remove
+			this._textPos =
+				this._area.zeroPnw
+				.detransform( this.transform )
+				.pc
+				.transform( this.transform );
 		}
 	}
 	else

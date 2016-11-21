@@ -5,8 +5,8 @@
 
 var
 	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_point,
+	euclid_rect,
 	shell_fontPool,
 	form_signUp,
 	gruga_genericButton,
@@ -58,84 +58,49 @@ gruga_signUp =
 			widget_label.abstract(
 				'text', 'Sign Up',
 				'font', shell_fontPool.get( 22, 'la' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -245,
-						'y', -165
-					)
+				'pos', euclid_point.xy( -245, -165 )
 			),
 		'twig:add',
 		'usernameLabel',
 			widget_label.abstract(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -98,
-						'y', -102
-					)
+				'pos', euclid_point.xy( -98, -102 )
 			),
 		'twig:add',
 		'emailLabel',
 			widget_label.abstract(
 				'text', 'email',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -98,
-						'y', -62
-					)
+				'pos', euclid_point.xy( -98, -62 )
 			),
 		'twig:add',
 		'passwordLabel',
 			widget_label.abstract(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -98,
-						'y', -22
-					)
+				'pos', euclid_point.xy( -98, -22 )
 			),
 		'twig:add',
 		'password2Label',
 			widget_label.abstract(
 				'text', 'repeat password',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -98,
-						'y', 18
-					)
+				'pos', euclid_point.xy( -98, 18 )
 			),
 		'twig:add',
 		'newsletterLabel',
 			widget_label.abstract(
 				'text', 'newsletter',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -98,
-						'y', 58
-					)
+				'pos', euclid_point.xy( -98, 58 )
 			),
 		'twig:add',
 		'errorLabel',
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -20,
-						'y', -136
-					)
+				'pos', euclid_point.xy( -20, -136 )
 			),
 		'twig:add',
 		'userInput',
@@ -143,20 +108,10 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -80,
-								'y', -120
-							),
-						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', 130,
-								'y', -95
-							)
+				'area',
+					euclid_rect.create(
+						'pnw', euclid_point.xy( -80, -120 ),
+						'pse', euclid_point.xy( 130, -95 )
 					)
 			),
 		'twig:add',
@@ -165,20 +120,10 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -80,
-								'y', -80
-							),
-						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', 130,
-								'y', -55
-							)
+				'area',
+					euclid_rect.create(
+						'pnw', euclid_point.xy( -80, -80 ),
+						'pse', euclid_point.xy( 130, -55 )
 					)
 			),
 		'twig:add',
@@ -188,20 +133,10 @@ gruga_signUp =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -80,
-								'y', -40
-							),
-						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', 130,
-								'y', -15
-							)
+				'area',
+					euclid_rect.create(
+						'pnw', euclid_point.xy( -80, -40 ),
+						'pse', euclid_point.xy( 130, -15 )
 					)
 			),
 		'twig:add',
@@ -211,20 +146,10 @@ gruga_signUp =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -80,
-								'y', 0
-							),
-						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', 130,
-								'y', 25
-							)
+				'area',
+					euclid_rect.create(
+						'pnw', euclid_point.xy( -80, 0 ),
+						'pse', euclid_point.xy( 130, 25 )
 					)
 			),
 		'twig:add',
@@ -232,20 +157,10 @@ gruga_signUp =
 			widget_checkbox.abstract(
 				'facets', gruga_genericCheckbox.facets,
 				'checked', true,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -75,
-								'y', 45
-							),
-						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', -59,
-								'y', 60
-							)
+				'area',
+					euclid_rect.create(
+						'pnw', euclid_point.xy( -75, 45 ),
+						'pse', euclid_point.xy( -59, 60 )
 					)
 			),
 		'twig:add',
@@ -253,12 +168,7 @@ gruga_signUp =
 			widget_label.abstract(
 				'text', 'Updates and News',
 				'font', shell_fontPool.get( 12, 'la' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -45,
-						'y', 57
-					)
+				'pos', euclid_point.xy( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
@@ -266,59 +176,45 @@ gruga_signUp =
 				'text',
 					'Never going to be more than an email a month. For sure!',
 				'font', shell_fontPool.get( 12, 'la' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', -45,
-						'y', 77
-					)
+				'pos', euclid_point.xy( -45, 77 )
 			),
 		'twig:add',
 		'signupButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', signupButton.w,
-								'y', signupButton.n
-							),
+							euclid_point.xy( signupButton.w, signupButton.n ),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', signupButton.w + signupButton.width,
-								'y', signupButton.n + signupButton.height
+							euclid_point.xy(
+								signupButton.w + signupButton.width,
+								signupButton.n + signupButton.height
 							)
 					),
 				'text', 'sign up',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'shape', euclid_anchor_ellipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', closeButton.w,
-								'y', closeButton.n
+							euclid_point.xy(
+								closeButton.w,
+								closeButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', closeButton.w + closeButton.width,
-								'y', closeButton.n + closeButton.height
+							euclid_point.xy(
+								closeButton.w + closeButton.width,
+								closeButton.n + closeButton.height
 							)
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'shape', euclid_anchor_ellipse.fullSkewNW
 			)
 	);

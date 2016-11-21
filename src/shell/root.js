@@ -547,7 +547,6 @@ prototype._init =
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
-				'transform', euclid_transform.normal,
 				'user', user,
 				'viewSize', viewSize
 			);
@@ -1695,7 +1694,6 @@ shell_root._createFormJockey =
 	jockey =
 		form_jockey.create(
 			'path', jion$path.empty.append( 'form' ),
-			'transform', euclid_transform.normal,
 			'viewSize', viewSize
 		);
 
@@ -1711,7 +1709,6 @@ shell_root._createFormJockey =
 				'twig:add',
 				key,
 				forms[ key ].create(
-					'transform', euclid_transform.normal,
 					'viewSize', viewSize
 				)
 			);

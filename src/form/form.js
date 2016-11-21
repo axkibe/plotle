@@ -4,6 +4,7 @@
 
 
 var
+	euclid_transform,
 	form_form,
 	gleam_glint_paint,
 	gleam_glint_ray,
@@ -39,6 +40,7 @@ form_form.init =
 		name,
 		path,
 		ranks,
+		transform,
 		twig,
 		widgetProto;
 
@@ -65,13 +67,19 @@ form_form.init =
 			widgetProto.path
 			|| this.path.append( 'twig' ).append( name );
 
+		transform =
+			euclid_transform.create(
+				'zoom', 1,
+				'offset', this.area.pc
+			);
+
 		twig[ name ] =
 			widgetProto.create(
 				'path', path,
 				'superArea', this.area,
 				'hover', this.hover,
 				'mark', this.mark,
-				'transform', this.transform
+				'transform', transform
 			);
 	}
 

@@ -4,10 +4,12 @@
 
 
 var
+	disc_mainDisc,
 	euclid_anchor_ellipse,
 	euclid_anchor_point,
 	euclid_anchor_rect,
-	disc_mainDisc,
+	euclid_point,
+	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -15,7 +17,6 @@ var
 	gleam_facetRay,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
-	euclid_point,
 	gruga_iconNormal,
 	gruga_iconRemove,
 	gruga_iconSelect,
@@ -35,7 +36,7 @@ var
 | All important design variables for convenience.
 */
 var
-	dw,
+	pw,
 	buttonFacets,
 	buttonModel,
 	buttonSize,
@@ -51,7 +52,11 @@ var
 	userButtonPnw,
 	userButtonSize;
 
-dw = euclid_anchor_point.w;
+pw =
+	euclid_point.create(
+		'x', 0,
+		'y', 500
+	);
 
 
 buttonFacets =
@@ -106,25 +111,25 @@ buttonModel =
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
-loginButtonPnw = dw.create( 'x', 30, 'y', 155 );
+loginButtonPnw = pw.add( 30, 155 );
 
-movetoButtonPnw = dw.create( 'x', 46, 'y', -74 );
+movetoButtonPnw = pw.add( 46, -74 );
 
-normalButtonPnw = dw.create( 'x', 5, 'y', -324 );
+normalButtonPnw = pw.add( 5, -324 );
 
-selectButtonPnw = dw.create( 'x', 19, 'y', -270 );
+selectButtonPnw = pw.add( 19, -270 );
 
-createButtonPnw = dw.create( 'x', 31, 'y', -216 );
+createButtonPnw = pw.add( 31, -216 );
 
-removeButtonPnw = dw.create( 'x', 40, 'y', -162 );
+removeButtonPnw = pw.add( 40, -162 );
 
-signupButtonPnw = dw.create( 'x', 17, 'y', 210 );
+signupButtonPnw = pw.add( 17, 210 );
 
-spaceButtonPnw = dw.create( 'x', 0, 'y', -230 );
+spaceButtonPnw = pw.add( 0, -230 );
 
 spaceButtonSize = euclid_point.create( 'x', 28, 'y', 290 );
 
-userButtonPnw = dw.create( 'x', 0, 'y', 40 );
+userButtonPnw = pw.add( 0, 40 );
 
 userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
@@ -187,64 +192,64 @@ gruga_mainDisc =
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(
-				'iconShape', gruga_iconNormal.shape,
-				'iconFacet', gruga_iconNormal.facet,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
-					)
+					),
+				'iconShape', gruga_iconNormal.shape,
+				'iconFacet', gruga_iconNormal.facet
 			),
 		'twig:add', 'select',
 			buttonModel.abstract(
-				'iconShape', gruga_iconSelect.shape,
-				'iconFacet', gruga_iconSelect.facet,
-				'visible', false,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', selectButtonPnw,
 						'pse', selectButtonPnw.add( buttonSize )
-					)
+					),
+				'iconShape', gruga_iconSelect.shape,
+				'iconFacet', gruga_iconSelect.facet,
+				'visible', false
 			),
 		'twig:add', 'create',
 			buttonModel.abstract(
-				'visible', false,
-				'text', 'new',
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', createButtonPnw,
 						'pse', createButtonPnw.add( buttonSize )
-					)
+					),
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'text', 'new',
+				'textDesignPos', euclid_anchor_point.c,
+				'visible', false
 			),
 		'twig:add', 'remove',
 			buttonModel.abstract(
-				'iconShape', gruga_iconRemove.shape,
-				'iconFacet', gruga_iconRemove.facet,
-				'visible', false,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', removeButtonPnw,
 						'pse', removeButtonPnw.add( buttonSize )
-					)
+					),
+				'iconShape', gruga_iconRemove.shape,
+				'iconFacet', gruga_iconRemove.facet,
+				'visible', false
 			),
 		'twig:add', 'moveTo',
 			buttonModel.abstract(
-				'text', 'go',
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
 					),
+				'text', 'go',
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'textDesignPos', euclid_anchor_point.c,
 				'visible', false
 			),
 		'twig:add', 'space',
 			buttonModel.abstract(
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', spaceButtonPnw,
 						'pse', spaceButtonPnw.add( spaceButtonSize )
 					),
@@ -260,8 +265,8 @@ gruga_mainDisc =
 			),
 		'twig:add', 'user',
 			buttonModel.abstract(
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw', userButtonPnw,
 						'pse', userButtonPnw.add( userButtonSize )
 					),
@@ -277,29 +282,29 @@ gruga_mainDisc =
 			),
 		'twig:add', 'login',
 			buttonModel.abstract(
-				'visible', false,
+				'area',
+					euclid_rect.create(
+						'pnw', loginButtonPnw,
+						'pse', loginButtonPnw.add( buttonSize )
+					),
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw', loginButtonPnw,
-						'pse', loginButtonPnw.add( buttonSize )
-					)
+				'visible', false
 			),
 		'twig:add', 'signUp',
 			buttonModel.abstract(
-				'visible', false,
+				'area',
+					euclid_rect.create(
+						'pnw', signupButtonPnw,
+						'pse', signupButtonPnw.add( buttonSize )
+					),
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', euclid_anchor_point.c,
-				'designArea',
-					euclid_anchor_rect.create(
-						'pnw', signupButtonPnw,
-						'pse', signupButtonPnw.add( buttonSize )
-					)
+				'visible', false
 			)
 	);
 
