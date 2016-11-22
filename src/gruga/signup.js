@@ -4,7 +4,6 @@
 
 
 var
-	euclid_anchor_ellipse,
 	euclid_point,
 	euclid_rect,
 	shell_fontPool,
@@ -194,7 +193,7 @@ gruga_signUp =
 					),
 				'text', 'sign up',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			),
 		'twig:add',
 		'closeButton',
@@ -215,7 +214,7 @@ gruga_signUp =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			)
 	);
 

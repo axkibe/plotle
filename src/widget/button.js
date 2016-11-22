@@ -77,7 +77,7 @@ if( JION )
 			{
 				comment : 'shape of the button',
 				// FUTURE allow other types
-				type : 'euclid_anchor_ellipse'
+				type : [ 'string', 'euclid_anchor_ellipse' ]
 			},
 			// FIXME remove
 			superArea :
@@ -125,6 +125,8 @@ if( JION )
 
 
 var
+	euclid_ellipse,
+	euclid_point,
 	euclid_size,
 	euclid_transform,
 	gleam_glint_paint,
@@ -166,7 +168,10 @@ prototype._init =
 {
 	var
 		area,
-		pc;
+		pc,
+		transform;
+
+	transform = this.transform;
 
 	// FIXME move into lazyValues
 	if( this.superArea )
@@ -178,7 +183,7 @@ prototype._init =
 			area =
 			this._area =
 				this.area
-				.transform( this.transform )
+				.transform( transform )
 				.align;
 		}
 		else
@@ -187,23 +192,41 @@ prototype._init =
 			area =
 			this._area =
 				this.designArea.compute(
-					this.superArea.zeroPnw.detransform( this.transform )
+					this.superArea.zeroPnw.detransform( transform )
 				)
-				.transform( this.transform )
+				.transform( transform )
 				.align;
 		}
 
 		// FIXME decomplicate
-		this._shape =
-			this.shape.compute(
-				this._area.zeroPnw.detransform( this.transform )
-			).transform( this.transform );
+		switch( this.shape )
+		{
+			case 'ellipse' :
 
+				this._shape =
+					euclid_ellipse.create(
+						'pnw', euclid_point.zero,
+						'pse',
+							euclid_point.xy(
+								area.width - 1,
+								area.height - 1
+							)
+					);
+
+				break;
+
+			default :
+
+				this._shape =
+					this.shape.compute(
+						this._area.zeroPnw.detransform( transform )
+					).transform( transform );
+		}
 
 		if( this.iconShape )
 		{
 			// FIXME decomplicate
-			pc = this._area.zeroPnw.detransform( this.transform ).pc;
+			pc = this._area.zeroPnw.detransform( transform ).pc;
 
 			// XXX
 			this._iconShape =
@@ -212,7 +235,7 @@ prototype._init =
 						'offset', pc,
 						'zoom', 1
 					)
-				).transform( this.transform );
+				).transform( transform );
 		}
 
 		if( this.textDesignPos )
@@ -220,17 +243,17 @@ prototype._init =
 			// FIXME decomplicate
 			this._textPos =
 				this.textDesignPos.compute(
-					this._area.zeroPnw.detransform( this.transform )
-				).transform( this.transform );
+					this._area.zeroPnw.detransform( transform )
+				).transform( transform );
 		}
 		else
 		{
 			// FIXME remove
 			this._textPos =
 				this._area.zeroPnw
-				.detransform( this.transform )
+				.detransform( transform )
 				.pc
-				.transform( this.transform );
+				.transform( transform );
 		}
 	}
 	else

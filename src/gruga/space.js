@@ -4,7 +4,6 @@
 
 
 var
-	euclid_anchor_ellipse,
 	euclid_point,
 	euclid_rect,
 	form_space,
@@ -69,7 +68,7 @@ gruga_space =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			)
 	);
 

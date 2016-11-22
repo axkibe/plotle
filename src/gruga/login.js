@@ -4,7 +4,6 @@
 
 
 var
-	euclid_anchor_ellipse,
 	euclid_point,
 	euclid_rect,
 	form_login,
@@ -154,7 +153,7 @@ gruga_login =
 					),
 				'text', 'log in',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			),
 		'twig:add',
 		'closeButton',
@@ -175,7 +174,7 @@ gruga_login =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			)
 	);
 

@@ -106,7 +106,7 @@ buttonFacets =
 buttonModel =
 	widget_button.abstract(
 		'facets', buttonFacets,
-		'shape', euclid_anchor_ellipse.fullSkewNW
+		'shape', 'ellipse'
 	);
 
 buttonSize = euclid_point.create( 'x', 44, 'y', 44 );

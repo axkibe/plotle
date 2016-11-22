@@ -4,9 +4,8 @@
 
 
 var
-	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_point,
+	euclid_rect,
 	form_nonExistingSpace,
 	gruga_genericButton,
 	gruga_nonExistingSpace,
@@ -51,72 +50,56 @@ gruga_nonExistingSpace =
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', -120
-					)
+				'pos', euclid_point.xy( 0, -120 )
 			),
 		'twig:add',
 		'message1',
 			widget_label.abstract(
 				'text', 'Do you want to create it?',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', -50
-					)
+				'pos', euclid_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'noButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', noButton.w,
-								'y', noButton.n
+							euclid_point.xy(
+								noButton.w,
+								noButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', noButton.w + noButton.width,
-								'y', noButton.n + noButton.height
+							euclid_point.xy(
+								noButton.w + noButton.width,
+								noButton.n + noButton.height
 							)
 					),
 				'text', 'No',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			),
 		'twig:add',
 		'yesButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'designArea',
-					euclid_anchor_rect.create(
+				'area',
+					euclid_rect.create(
 						'pnw',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', yesButton.w,
-								'y', yesButton.n
+							euclid_point.xy(
+								yesButton.w,
+								yesButton.n
 							),
 						'pse',
-							euclid_anchor_point.create(
-								'anchor', 'c',
-								'x', yesButton.w + yesButton.width,
-								'y', yesButton.n + yesButton.height
+							euclid_point.xy(
+								yesButton.w + yesButton.width,
+								yesButton.n + yesButton.height
 							)
 					),
 				'text', 'Yes',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			)
 	);
 

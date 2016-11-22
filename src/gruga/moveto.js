@@ -4,7 +4,6 @@
 
 
 var
-	euclid_anchor_ellipse,
 	euclid_point,
 	euclid_rect,
 	gleam_facet,
@@ -140,7 +139,7 @@ gruga_moveTo =
 				'text', 'ideoloom\nhome',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
@@ -166,7 +165,7 @@ gruga_moveTo =
 				'text', 'ideoloom\nsandbox',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			),
 		'twig:add',
 		'userHomeButton',
@@ -188,7 +187,7 @@ gruga_moveTo =
 				'text', 'your\nhome',
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', euclid_anchor_ellipse.fullSkewNW
+				'shape', 'ellipse'
 			)
 	);
 

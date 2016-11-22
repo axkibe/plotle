@@ -4,7 +4,7 @@
 
 
 var
-	euclid_anchor_point,
+	euclid_point,
 	shell_fontPool,
 	form_loading,
 	gruga_loading,
@@ -27,23 +27,13 @@ gruga_loading =
 			widget_label.abstract(
 				'text', 'loading',
 				'font', shell_fontPool.get( 28, 'ca' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', -56
-					)
+				'pos', euclid_point.xy( 0, -56)
 			),
 		'twig:add', 'spaceText',
 			widget_label.abstract(
 				'text', 'ideoloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
-				'designPos',
-					euclid_anchor_point.create(
-						'anchor', 'c',
-						'x', 0,
-						'y', 0
-					)
+				'pos', euclid_point.zero
 			)
 	);
 
