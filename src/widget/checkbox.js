@@ -13,23 +13,16 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			// FIXME remove undefined
 			area :
 			{
-				comment : 'designed area (using anchors)',
-				type : [ 'undefined', 'euclid_rect' ]
+				comment : 'designed area',
+				type : 'euclid_rect'
 			},
 			checked :
 			{
 				comment : 'true if the checkbox is checked',
 				type : 'boolean',
 				defaultValue : 'false'
-			},
-			// FIXME remove
-			designArea :
-			{
-				comment : 'designed area (using anchors)',
-				type : [ 'undefined', 'euclid_anchor_rect' ]
 			},
 			facets :
 			{
@@ -54,11 +47,6 @@ if( JION )
 			{
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
-			},
-			superArea :
-			{
-				comment : 'the area the widget resides in',
-				type : [ 'undefined', 'euclid_rect' ]
 			},
 			transform :
 			{
@@ -115,22 +103,10 @@ prototype = widget_checkbox.prototype;
 prototype._init =
 	function( )
 {
-	if( this.superArea )
-	{
-		if( this.area )
-		{
-			this._area =
-				this.area
-				.transform( this.transform )
-				.align;
-		}
-		else
-		{
-			// FIXME remove
-			this._area =
-				this.designArea.compute( this.superArea );
-		}
-	}
+	this._area =
+		this.area
+		.transform( this.transform )
+		.align;
 };
 
 

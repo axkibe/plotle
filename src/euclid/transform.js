@@ -59,6 +59,35 @@ prototype = euclid_transform.prototype;
 
 
 /*
+| Returns a transform which does the same
+| as the combination of
+| t applied after this transform.
+*/
+prototype.combine =
+	function(
+		t
+	)
+{
+	var
+		tzoom;
+
+	tzoom = t.zoom;
+
+	return(
+		euclid_transform.create(
+			'offset',
+				euclid_point.create(
+					'x', this.offset.x * tzoom + t.offset.x,
+					'y', this.offset.y * tzoom + t.offset.y
+				),
+			'zoom',
+				this.zoom * tzoom
+		)
+	);
+};
+
+
+/*
 | Returns a reverse transformed x value.
 */
 prototype.dex =
@@ -129,27 +158,6 @@ prototype.point =
 			'y', this.y( y )
 		)
 	);
-};
-
-
-/*
-| Returns the reverse transformed y value.
-*/
-prototype.dey =
-	function(
-		y
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( typeof( y ) !== 'number' || arguments.length !== 1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return ( y - this.offset.y ) / this.zoom;
 };
 
 

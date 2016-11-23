@@ -13,17 +13,10 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			// FIXME remove undefined
 			area :
 			{
 				comment : 'designed area',
-				type : [ 'undefined', 'euclid_rect' ]
-			},
-			// FIXME remove
-			designArea :
-			{
-				comment : 'designed area ( using anchors )',
-				type : [ 'undefined', 'euclid_anchor_rect' ]
+				type : 'euclid_rect'
 			},
 			down :
 			{
@@ -51,8 +44,7 @@ if( JION )
 			{
 				comment : 'icon shape',
 				type :
-					require( '../euclid/anchor/typemap-shape' )
-					.concat( require( '../euclid/typemap-shape' ) )
+					require( '../euclid/typemap-shape' )
 					.concat( [ 'undefined' ] )
 			},
 			iconFacet :
@@ -76,26 +68,14 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the button',
-				// FUTURE allow other types
-				type : [ 'string', 'euclid_anchor_ellipse' ]
-			},
-			// FIXME remove
-			superArea :
-			{
-				comment : 'the area the widget resides in',
-				type : [ 'undefined', 'euclid_rect' ]
+				// FIXME allow other types
+				type : [ 'string', 'euclid_ellipse' ]
 			},
 			text :
 			{
 				comment : 'the text written in the button',
 				type : 'string',
 				defaultValue : '""'
-			},
-			// FIXME simply call it testPos
-			textDesignPos :
-			{
-				comment : 'designed position of the text',
-				type : [ 'undefined', 'euclid_anchor_point' ]
 			},
 			textNewline :
 			{
@@ -174,94 +154,65 @@ prototype._init =
 	transform = this.transform;
 
 	// FIXME move into lazyValues
-	if( this.superArea )
+	area =
+	this._area =
+		this.area
+		.transform( transform )
+		.align;
+
+	// FIXME decomplicate
+	switch( this.shape )
 	{
-		// FIXME this in unnecessairly complicated
-		//       remove all anchors in favor of transform
-		if( this.area )
-		{
-			area =
-			this._area =
-				this.area
-				.transform( transform )
-				.align;
-		}
-		else
-		{
-			// FIXME remove
-			area =
-			this._area =
-				this.designArea.compute(
-					this.superArea.zeroPnw.detransform( transform )
-				)
-				.transform( transform )
-				.align;
-		}
+		case 'ellipse' :
 
-		// FIXME decomplicate
-		switch( this.shape )
-		{
-			case 'ellipse' :
+			this._shape =
+				euclid_ellipse.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						euclid_point.xy(
+							area.width - 1,
+							area.height - 1
+						)
+				);
 
-				this._shape =
-					euclid_ellipse.create(
-						'pnw', euclid_point.zero,
-						'pse',
-							euclid_point.xy(
-								area.width - 1,
-								area.height - 1
-							)
-					);
+			break;
 
-				break;
+		default :
 
-			default :
-
+			if( this.shape.reflect === 'euclid_ellipse' )
+			{
+				this._shape = this.shape.transform( transform );
+			}
+			else
+			{
 				this._shape =
 					this.shape.compute(
 						this._area.zeroPnw.detransform( transform )
 					).transform( transform );
+			}
 		}
 
-		if( this.iconShape )
-		{
-			// FIXME decomplicate
-			pc = this._area.zeroPnw.detransform( transform ).pc;
-
-			// XXX
-			this._iconShape =
-				this.iconShape.transform(
-					euclid_transform.create(
-						'offset', pc,
-						'zoom', 1
-					)
-				).transform( transform );
-		}
-
-		if( this.textDesignPos )
-		{
-			// FIXME decomplicate
-			this._textPos =
-				this.textDesignPos.compute(
-					this._area.zeroPnw.detransform( transform )
-				).transform( transform );
-		}
-		else
-		{
-			// FIXME remove
-			this._textPos =
-				this._area.zeroPnw
-				.detransform( transform )
-				.pc
-				.transform( transform );
-		}
-	}
-	else
+	if( this.iconShape )
 	{
-		this._area = undefined;
+		// FIXME decomplicate
+		pc = this._area.zeroPnw.detransform( transform ).pc;
 
-		this._shape = undefined;
+		// XXX
+		this._iconShape =
+			this.iconShape.transform(
+				euclid_transform.create(
+					'offset', pc,
+					'zoom', 1
+				)
+			).transform( transform );
 	}
+
+	// FIXME remove
+	this._textPos =
+		this._area.zeroPnw
+		.detransform( transform )
+		.pc
+		.transform( transform );
 };
 
 

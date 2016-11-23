@@ -5,10 +5,10 @@
 
 var
 	disc_createDisc,
-	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_ellipse,
+	euclid_point,
 	euclid_rect,
+	euclid_size,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -92,19 +92,16 @@ genericButtonModel =
 	widget_button.abstract(
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
-		'shape', euclid_anchor_ellipse.fullSkewNW,
-		'textDesignPos', euclid_anchor_point.c
+		'shape', 'ellipse'
 	);
 
 
 gruga_createDisc =
 	disc_createDisc.abstract(
-		'designArea',
-			euclid_anchor_rect.create(
-				'pnw',
-					euclid_anchor_point.w.create( 'x', 0, 'y', -505 ),
-				'pse',
-					euclid_anchor_point.w.create( 'x', 176, 'y', 505 )
+		'size',
+			euclid_size.create(
+				'width', 176,
+				'height', 1010
 			),
 		'facet',
 			gleam_facet.create(
@@ -135,22 +132,10 @@ gruga_createDisc =
 					)
 			),
 		'shape',
-			euclid_anchor_ellipse.create(
-				'pnw',
-					euclid_anchor_point.e.create(
-						'x', -2351,
-						'y', -1175
-					),
-				'pse',
-					euclid_anchor_point.e.create(
-						'x', -1,
-						'y', 1175
-					),
-				'gradientPC',
-					euclid_anchor_point.e.create(
-						'x', -600,
-						'y', 0
-					),
+			euclid_ellipse.create(
+				'pnw', euclid_point.xy( -2175, -1175 ),
+				'pse', euclid_point.xy( 175, 1175 ),
+				'gradientPC', euclid_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add',
@@ -171,7 +156,6 @@ gruga_createDisc =
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
 					),
-				'shape', euclid_anchor_ellipse.fullSkewNW,
 				'text', 'Label'
 			),
 		'twig:add',

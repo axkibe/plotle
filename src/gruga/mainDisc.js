@@ -5,11 +5,10 @@
 
 var
 	disc_mainDisc,
-	euclid_anchor_ellipse,
-	euclid_anchor_point,
-	euclid_anchor_rect,
+	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
+	euclid_size,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -127,21 +126,19 @@ signupButtonPnw = pw.add( 17, 210 );
 
 spaceButtonPnw = pw.add( 0, -230 );
 
-spaceButtonSize = euclid_point.create( 'x', 28, 'y', 290 );
+spaceButtonSize = euclid_point.xy( 28, 290 );
 
 userButtonPnw = pw.add( 0, 40 );
 
-userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
+userButtonSize = euclid_point.xy( 24, 180 );
 
 
 gruga_mainDisc =
 	disc_mainDisc.abstract(
-		'designArea',
-			euclid_anchor_rect.create(
-				'pnw',
-					euclid_anchor_point.w.create( 'x', 0, 'y', -500 ),
-				'pse',
-					euclid_anchor_point.w.create( 'x', 100, 'y', 500 )
+		'size',
+			euclid_size.create(
+				'width', 100,
+				'height', 1000
 			),
 		'facet',
 			gleam_facet.create(
@@ -172,22 +169,10 @@ gruga_mainDisc =
 					)
 			),
 		'shape',
-			euclid_anchor_ellipse.create(
-				'pnw',
-					euclid_anchor_point.e.create(
-						'x', -2201,
-						'y', -1100
-					),
-				'pse',
-					euclid_anchor_point.e.create(
-						'x', -1,
-						'y', 1100
-					),
-				'gradientPC',
-					euclid_anchor_point.w.create(
-						'x', -600,
-						'y', 0
-					),
+			euclid_ellipse.create(
+				'pnw', euclid_point.xy( -2101, -1100 ),
+				'pse', euclid_point.xy( 99, 1100 ),
+				'gradientPC', euclid_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add', 'normal',
@@ -220,7 +205,6 @@ gruga_mainDisc =
 					),
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'text', 'new',
-				'textDesignPos', euclid_anchor_point.c,
 				'visible', false
 			),
 		'twig:add', 'remove',
@@ -243,7 +227,6 @@ gruga_mainDisc =
 					),
 				'text', 'go',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'visible', false
 			),
 		'twig:add', 'space',
@@ -255,11 +238,10 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'shape',
-					euclid_anchor_ellipse.create(
-						'pnw', euclid_anchor_point.nw.create( 'x', -60, 'y', 0 ),
-						'pse', euclid_anchor_point.seMin1
+					euclid_ellipse.create(
+						'pnw', euclid_point.xy( -60, 0 ),
+						'pse', spaceButtonSize.sub( 1, 1 )
 					),
 				'textRotation', - Math.PI / 2
 			),
@@ -272,11 +254,10 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'shape',
-					euclid_anchor_ellipse.create(
-						'pnw', euclid_anchor_point.nw.create( 'x', -70, 'y', 0 ),
-						'pse', euclid_anchor_point.seMin1
+					euclid_ellipse.create(
+						'pnw', euclid_point.xy( -70, 0 ),
+						'pse', userButtonSize.sub( 1, 1 )
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),
@@ -290,7 +271,6 @@ gruga_mainDisc =
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'visible', false
 			),
 		'twig:add', 'signUp',
@@ -303,7 +283,6 @@ gruga_mainDisc =
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', euclid_anchor_point.c,
 				'visible', false
 			)
 	);

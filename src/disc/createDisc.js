@@ -30,11 +30,6 @@ if( JION )
 				comment : 'the current transform of controls',
 				type : 'euclid_transform'
 			},
-			designArea :
-			{
-				comment : 'designed area (using anchors)',
-				type : 'euclid_anchor_rect'
-			},
 			facet :
 			{
 				comment : 'facet of the disc',
@@ -61,7 +56,12 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the disc',
-				type : 'euclid_anchor_ellipse'
+				type : 'euclid_ellipse'
+			},
+			size :
+			{
+				comment : 'designed size',
+				type : 'euclid_size'
 			},
 			spaceRef :
 			{
@@ -91,6 +91,8 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
+	euclid_rect,
+	euclid_transform,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
@@ -138,21 +140,44 @@ prototype._init =
 		r,
 		ranks,
 		rZ,
+		size,
 		twig,
+		vsr,
+		wt,
 		wname;
 
 	ct = this.controlTransform;
 
+	vsr = this.viewSize.zeroPnwRect;
+
+	size = this.size;
+
+	wt =
+		euclid_transform.create(
+			'offset', size.zeroPnwRect.pw,
+			'zoom', 1
+		);
+
 	area =
 	this._area =
-		this.designArea.compute( this.viewSize.zeroPnwRect.detransform( ct ) )
-		.transform( ct )
+		euclid_rect.create(
+			'pnw',
+				vsr.pw.add(
+					0,
+					-size.height * ct.zoom / 2
+				),
+			'pse',
+				vsr.pw.add(
+					size.width * ct.zoom,
+					size.height * ct.zoom / 2
+				)
+		)
 		.align;
 
 	this.silhoutte =
-		this.shape.compute(
-			area.zeroPnw.detransform( ct )
-		).transform( ct );
+		this.shape
+		.transform( wt )
+		.transform( ct );
 
 	twig =
 		twigDup
@@ -171,7 +196,6 @@ prototype._init =
 					 twig[ wname ].path
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
-				'superArea', area.zeroPnw,
 				'hover', this.hover,
 				'down',
 					disc_createDisc._isActiveButton( this.action, wname ),

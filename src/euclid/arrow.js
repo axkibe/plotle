@@ -27,7 +27,7 @@ if( JION )
 				comment : 'connect to this point or shape',
 				type :
 					require( './typemap-shape' )
-					.concat( [ 'euclid_anchor_point' ] )
+					.concat( [ 'euclid_point' ] )
 			},
 			joint2 :
 			{

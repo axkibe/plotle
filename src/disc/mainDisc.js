@@ -30,11 +30,6 @@ if( JION )
 				comment : 'the current transform of controls',
 				type : 'euclid_transform'
 			},
-			designArea :
-			{
-				comment : 'designed aera (using anchors)',
-				type : 'euclid_anchor_rect'
-			},
 			facet :
 			{
 				comment : 'facet of the disc',
@@ -61,7 +56,12 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the disc',
-				type : 'euclid_anchor_ellipse'
+				type : 'euclid_ellipse'
+			},
+			size :
+			{
+				comment : 'designed size',
+				type : 'euclid_size'
 			},
 			spaceRef :
 			{
@@ -96,6 +96,8 @@ var
 	action_form,
 	action_select,
 	disc_mainDisc,
+	euclid_rect,
+	euclid_transform,
 	change_shrink,
 	gleam_glint_border,
 	gleam_glint_fill,
@@ -143,23 +145,46 @@ prototype._init =
 		down,
 		r,
 		rZ,
+		size,
 		text,
 		twig,
 		visible,
-		wname;
+		vsr,
+		wname,
+		wt;
 
 	ct = this.controlTransform;
 
+	vsr = this.viewSize.zeroPnwRect;
+
+	size = this.size;
+
 	area =
 	this._area =
-		this.designArea.compute( this.viewSize.zeroPnwRect.detransform( ct ) )
-		.transform( ct )
+		euclid_rect.create(
+			'pnw',
+				vsr.pw.add(
+					0,
+					-size.height * ct.zoom / 2
+				),
+			'pse',
+				vsr.pw.add(
+					size.width * ct.zoom,
+					size.height * ct.zoom / 2
+				)
+		)
 		.align;
 
+	wt =
+		euclid_transform.create(
+			'offset', size.zeroPnwRect.pw,
+			'zoom', 1
+		)
+		.combine( ct );
+
 	this.silhoutte =
-		this.shape.compute(
-			area.zeroPnw.detransform( ct )
-		).transform( ct );
+		this.shape
+		.transform( wt );
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
@@ -300,7 +325,6 @@ prototype._init =
 					twig[ wname ].path
 					? pass
 					: this.path.append( 'twig' ).append( wname ),
-				'superArea', area.zeroPnw,
 				'text', text,
 				'visible', visible,
 				'transform', ct

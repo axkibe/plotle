@@ -76,7 +76,6 @@ form_form.init =
 		twig[ name ] =
 			widgetProto.create(
 				'path', path,
-				'superArea', this.area,
 				'hover', this.hover,
 				'mark', this.mark,
 				'transform', transform

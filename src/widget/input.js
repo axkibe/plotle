@@ -13,17 +13,10 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			// FIXME remove undefined
 			area :
 			{
-				comment : 'designed area (using anchors)',
-				type : [ 'undefined', 'euclid_rect' ]
-			},
-			// FIXME remove
-			designArea :
-			{
-				comment : 'designed area (using anchors)',
-				type : [ 'undefined', 'euclid_anchor_rect' ]
+				comment : 'designed area',
+				type : 'euclid_rect'
 			},
 			facets :
 			{
@@ -64,11 +57,6 @@ if( JION )
 			{
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
-			},
-			superArea :
-			{
-				comment : 'the area the widget resides in',
-				type : [ 'undefined', 'euclid_rect' ]
 			},
 			transform :
 			{
@@ -144,39 +132,19 @@ prototype._init =
 	var
 		area;
 
-	if( this.superArea )
-	{
-		if( this.area )
-		{
-			area =
-			this._area =
-				this.area
-				.transform( this.transform )
-				.align;
-		}
-		else
-		{
-			area =
-			this._area =
-				this.designArea.compute( this.superArea );
-		}
+	area =
+	this._area =
+		this.area
+		.transform( this.transform )
+		.align;
 
-		this._shape =
-			euclid_roundRect.create(
-				'pnw', euclid_point.zero,
-				'pse', area.pse.sub( area.pnw ),
-				'a', 7,
-				'b', 3
-			);
-	}
-	else
-	{
-		area =
-		this._area =
-		this._shape =
-			undefined;
-	}
-
+	this._shape =
+		euclid_roundRect.create(
+			'pnw', euclid_point.zero,
+			'pse', area.pse.sub( area.pnw ),
+			'a', 7,
+			'b', 3
+		);
 
 	this._pitch = widget_input._pitch;
 };

@@ -13,12 +13,6 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			// FIXME remove
-			designPos :
-			{
-				comment : 'designed position of the text',
-				type : [ 'undefined', 'euclid_anchor_point' ]
-			},
 			hover :
 			{
 				comment : 'component hovered upon',
@@ -48,17 +42,10 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			// FIXME remove undefined
 			pos :
 			{
 				comment : 'designed pos',
-				type : [ 'undefined', 'euclid_point' ]
-			},
-			// FIXME remove
-			superArea :
-			{
-				comment : 'the area the widget resides in',
-				type : [ 'undefined', 'euclid_rect' ]
+				type : 'euclid_point'
 			},
 			text :
 			{
@@ -82,8 +69,6 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
 	gleam_glint_text,
 	jion,
 	widget_label;
@@ -111,29 +96,14 @@ prototype = widget_label.prototype;
 
 
 /*
-| The unanchored position of the label.
+| The transformed position of the label.
 */
 jion.lazyValue(
 	prototype,
 	'_pos',
 	function( )
 {
-	return(
-		this.pos
-		? (
-			this.pos.transform( this.transform )
-		)
-		:
-		// FIXME decomplicate
-		this.designPos.compute(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					this.superArea.zeroPnw.pse.detransform( this.transform )
-			)
-		)
-		.transform( this.transform )
-	);
+	return this.pos.transform( this.transform );
 }
 );
 
