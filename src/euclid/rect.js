@@ -61,6 +61,70 @@ prototype = euclid_rect.prototype;
 
 
 /*
+| Creates a rect by two arbitrary corner points
+*/
+euclid_rect.createArbitrary =
+	function(
+		p1,
+		p2
+	)
+{
+	var
+		pnw,
+		pse;
+
+	if( p2.x >= p1.x && p2.y >= p1.y )
+	{
+		pnw = p1;
+
+		pse = p2;
+	}
+	else if( p1.x >= p2.x && p1.y >= p2.y )
+	{
+		pnw = p2;
+
+		pse = p1;
+	}
+	else if( p2.x >= p1.x && p1.y >= p2.y )
+	{
+		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
+
+		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
+	}
+	else if( p1.x >= p2.x && p2.y >= p1.y )
+	{
+		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
+
+		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
+	}
+	else
+	{
+		throw new Error( );
+	}
+
+	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
+};
+
+
+/*
+| Shortcut to create a rect by specifying pnw and size.
+*/
+euclid_rect.pnwSize =
+	function(
+		pnw,
+		size
+	)
+{
+	return(
+		euclid_rect.create(
+			'pnw', pnw,
+			'pse', pnw.add( size.width, size.height )
+		)
+	);
+};
+
+
+/*
 | returns a rect moved by a point or x/y
 |
 | add( point )   -or-
@@ -131,7 +195,7 @@ prototype.cardinalResize =
 		cardinal,  // 'n', 'ne', 'e', etc.
 		dx,        // x-difference
 		dy,        // y-difference
-		minw,      // minimum width
+		minw,      // minimum width   // FIXME use a size jion
 		minh       // minimum height
 	)
 {
@@ -257,52 +321,6 @@ prototype.cardinalResize =
 			'pse', this.pse.create( 'x', ex, 'y', sy )
 		)
 	);
-};
-
-
-/*
-| Creates a rect by two arbitrary corner points
-*/
-euclid_rect.createArbitrary =
-	function(
-		p1,
-		p2
-	)
-{
-	var
-		pnw,
-		pse;
-
-	if( p2.x >= p1.x && p2.y >= p1.y )
-	{
-		pnw = p1;
-
-		pse = p2;
-	}
-	else if( p1.x >= p2.x && p1.y >= p2.y )
-	{
-		pnw = p2;
-
-		pse = p1;
-	}
-	else if( p2.x >= p1.x && p1.y >= p2.y )
-	{
-		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
-
-		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
-	}
-	else if( p1.x >= p2.x && p2.y >= p1.y )
-	{
-		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
-
-		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
-	}
-	else
-	{
-		throw new Error( );
-	}
-
-	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 

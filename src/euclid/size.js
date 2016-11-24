@@ -57,6 +57,24 @@ prototype = euclid_size.prototype;
 
 
 /*
+| Shortcut to create an euclid_size jion.
+*/
+euclid_size.wh =
+	function(
+		width,
+		height
+	)
+{
+	return(
+		euclid_size.create(
+			'width', width,
+			'height', height
+		)
+	);
+};
+
+
+/*
 | A rectangle of same size with pnw at 0/0
 */
 jion.lazyValue(

@@ -6,6 +6,7 @@
 var
 	euclid_point,
 	euclid_rect,
+	euclid_size,
 	form_login,
 	gruga_genericButton,
 	gruga_genericInput,
@@ -23,24 +24,19 @@ var
 'use strict';
 
 
-// FIXME create euclid stuff right away.
 var
 	// login control
 	loginButton =
 	{
-		width : 70,
-		height : 70,
-		w : 95,
-		n : 28
+		pnw : euclid_point.xy( 95, 28 ),
+		size : euclid_size.wh( 70, 70 )
 	},
 
 	// Close control
 	closeButton =
 	{
-		width : 50,
-		height : 50,
-		w : 180,
-		n : 38
+		pnw : euclid_point.xy( 180, 38 ),
+		size : euclid_size.wh(  50, 50 )
 	};
 
 
@@ -54,44 +50,28 @@ gruga_login =
 			widget_label.abstract(
 				'text', 'Log In',
 				'font', shell_fontPool.get( 22, 'la' ),
-				'pos',
-					euclid_point.create(
-						'x', -225,
-						'y', -112
-					)
+				'pos', euclid_point.xy( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			widget_label.abstract(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'la' ),
-				'pos',
-					euclid_point.create(
-						'x', -175,
-						'y', -49
-					)
+				'pos', euclid_point.xy( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			widget_label.abstract(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'la' ),
-				'pos',
-					euclid_point.create(
-						'x', -175,
-						'y', -9
-					)
+				'pos', euclid_point.xy( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
-				'pos',
-					euclid_point.create(
-						'x', -20,
-						'y', -83
-					)
+				'pos', euclid_point.xy( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
@@ -101,16 +81,8 @@ gruga_login =
 				'maxlen', 100,
 				'area',
 					euclid_rect.create(
-						'pnw',
-							euclid_point.create(
-								'x', -80,
-								'y', -67
-							),
-						'pse',
-							euclid_point.create(
-								'x', 130,
-								'y', -42
-							)
+						'pnw', euclid_point.xy( -80, -67 ),
+						'pse', euclid_point.xy( 130, -42 )
 					)
 			),
 		'twig:add',
@@ -122,16 +94,8 @@ gruga_login =
 				'maxlen', 100,
 				'area',
 					euclid_rect.create(
-						'pnw',
-							euclid_point.create(
-								'x', -80,
-								'y', -27
-							),
-						'pse',
-							euclid_point.create(
-								'x', 130,
-								'y', -2
-							)
+						'pnw', euclid_point.xy( -80, -27 ),
+						'pse', euclid_point.xy( 130, -2 )
 					)
 			),
 		'twig:add',
@@ -139,17 +103,9 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
-						'pnw',
-							euclid_point.create(
-								'x', loginButton.w,
-								'y', loginButton.n
-							),
-						'pse',
-							euclid_point.create(
-								'x', loginButton.w + loginButton.width,
-								'y', loginButton.n + loginButton.height
-							)
+					euclid_rect.pnwSize(
+						loginButton.pnw,
+						loginButton.size
 					),
 				'text', 'log in',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -160,17 +116,9 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
-						'pnw',
-							euclid_point.create(
-								'x', closeButton.w,
-								'y', closeButton.n
-							),
-						'pse',
-							euclid_point.create(
-								'x', closeButton.w + closeButton.width,
-								'y', closeButton.n + closeButton.height
-							)
+					euclid_rect.pnwSize(
+						closeButton.pnw,
+						closeButton.size
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
