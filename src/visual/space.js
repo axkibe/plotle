@@ -761,7 +761,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action.create(
-						'pan', transform.offset, // FIXME call it offset
+						'offset', transform.offset,
 						'startPoint', p
 					)
 			);
@@ -773,7 +773,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action.create(
-						'pan', transform.offset, // FIXME call it offset
+						'offset', transform.offset,
 						'relationState', 'pan', // FUTURE remove pan
 						'startPoint', p
 					)
@@ -798,7 +798,7 @@ prototype.dragStart =
 			root.create(
 				'action',
 					action_pan.create(
-						'pan', transform.offset, // FIXME call it offset
+						'offset', transform.offset,
 						'startPoint', p
 					)
 			);
@@ -1358,7 +1358,7 @@ prototype._moveCreateRelation =
 		root.create(
 			'spaceTransform',
 				transform.create(
-					'offset', action.pan.add( pd )
+					'offset', action.offset.add( pd )
 				)
 		);
 
@@ -1400,7 +1400,7 @@ prototype._moveCreate =
 
 	transform = this.transform;
 
-	if( action.pan )
+	if( action.offset )
 	{
 		// panning while creating a relation
 
@@ -1410,7 +1410,7 @@ prototype._moveCreate =
 			'spaceTransform',
 				this.transform.create(
 					'offset',
-						action.pan.add(
+						action.offset.add(
 							pd.x / transform.zoom,
 							pd.y / transform.zoom
 						)
@@ -1618,7 +1618,7 @@ prototype._movePan =
 	root.create(
 		'spaceTransform',
 			transform.create(
-				'offset', action.pan.add( pd )
+				'offset', action.offset.add( pd )
 			)
 	);
 };
@@ -1809,7 +1809,7 @@ prototype._stopCreate =
 	root.create(
 		'action',
 			this.action.create(
-				'pan', undefined,
+				'offset', undefined,
 				'startPoint', undefined
 			)
 	);

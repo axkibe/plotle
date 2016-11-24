@@ -17,9 +17,9 @@ if( JION )
 				comment : 'the item the relation goes from',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			pan :
+			offset :
 			{
-				comment : 'starting pan when panning during creation',
+				comment : 'offset when panning during creation',
 				type : [ 'undefined', 'euclid_point' ]
 			},
 			toItemPath :

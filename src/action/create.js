@@ -13,9 +13,9 @@ if( JION )
 		id : 'action_create',
 		attributes :
 		{
-			pan :
+			offset :
 			{
-				comment : 'starting pan when panning during creation',
+				comment : 'offset when panning during creation',
 				type : [ 'undefined', 'euclid_point' ]
 			},
 			startPoint :

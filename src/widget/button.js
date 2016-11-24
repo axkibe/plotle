@@ -97,8 +97,7 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'true'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -106,7 +105,6 @@ if( JION )
 var
 	euclid_ellipse,
 	euclid_point,
-	euclid_size,
 	euclid_transform,
 	gleam_glint_paint,
 	gleam_glint_ray,
@@ -137,65 +135,6 @@ var
 	prototype;
 
 prototype = widget_button.prototype;
-
-
-/*
-| Initializes the widget.
-*/
-prototype._init =
-	function( )
-{
-	var
-		area,
-		pc,
-		transform;
-
-	transform = this.transform;
-
-	// FIXME move into lazyValues
-	area =
-	this._area =
-		this.area
-		.transform( transform )
-		.align;
-
-	// FIXME decomplicate
-	switch( this.shape )
-	{
-		case 'ellipse' :
-
-			this._shape =
-				euclid_ellipse.create(
-					'pnw', euclid_point.zero,
-					'pse',
-						euclid_point.xy(
-							area.width - 1,
-							area.height - 1
-						)
-				);
-
-			break;
-
-		default :
-
-			this._shape = this.shape.transform( transform );
-		}
-
-	if( this.iconShape )
-	{
-		// FIXME decomplicate
-		pc = this._area.zeroPnw.detransform( transform ).pc;
-
-		// XXX
-		this._iconShape =
-			this.iconShape.transform(
-				euclid_transform.create(
-					'offset', pc,
-					'zoom', 1
-				)
-			).transform( transform );
-	}
-};
 
 
 /*
@@ -302,12 +241,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'glint', this._glint,
 			'p', area.pnw,
-			'size',
-				// FIXME do area.size
-				euclid_size.create(
-					'height', area.height,
-					'width', area.width
-				)
+			'size', area.size
 		)
 	);
 }
@@ -334,6 +268,19 @@ prototype.specialKey =
 	}
 };
 
+	
+/*
+| The transformed area of the button.
+*/
+jion.lazyValue(
+	prototype,
+	'_area',
+	function( )
+{
+	return this.area.transform( this.transform ).align;
+}
+);
+	
 
 /*
 | The font of the button label.
@@ -397,7 +344,7 @@ jion.lazyValue(
 			gRay[ gLen++ ] =
 				gleam_glint_text.create(
 					'font', font,
-					'p', this._textPos,
+					'p', this._pc,
 					'rotate', this.textRotation,
 					'text', this.text
 				);
@@ -417,7 +364,7 @@ jion.lazyValue(
 				gRay[ gLen++ ] =
 					gleam_glint_text.create(
 						'font', font,
-						'p', this._textPos.add( 0, y ),
+						'p', this._pc.add( 0, y ),
 						'text', text[ t ]
 					);
 			}
@@ -439,11 +386,69 @@ jion.lazyValue(
 
 
 /*
+| The transformed iconShape.
+*/
+jion.lazyValue(
+	prototype,
+	'_iconShape',
+	function( )
+{
+	return(
+		this.iconShape
+		.transform(
+			euclid_transform.create(
+				'offset', this.area.zeroPnw.pc,
+				'zoom', 1
+			)
+		)
+		.transform( this.transform )
+	);
+}
+);
+
+
+/*
+| The shape of the button.
+*/
+jion.lazyValue(
+	prototype,
+	'_shape',
+	function( )
+{
+	var
+		area;
+
+	switch( this.shape )
+	{
+		case 'ellipse' :
+
+			area = this._area;
+
+			return(
+				euclid_ellipse.create(
+					'pnw', euclid_point.zero,
+					'pse',
+						euclid_point.xy(
+							area.width - 1,
+							area.height - 1
+						)
+				)
+			);
+
+		default :
+
+			return this.shape.transform( this.transform );
+	}
+}
+);
+
+
+/*
 | The key of this widget.
 */
 jion.lazyValue(
 	prototype,
-	'_textPos',
+	'_pc',
 	function( )
 {
 	return this._area.zeroPnw.pc;
