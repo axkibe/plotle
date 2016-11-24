@@ -68,7 +68,6 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the button',
-				// FIXME allow other types
 				type : [ 'string', 'euclid_ellipse' ]
 			},
 			text :
@@ -179,17 +178,7 @@ prototype._init =
 
 		default :
 
-			if( this.shape.reflect === 'euclid_ellipse' )
-			{
-				this._shape = this.shape.transform( transform );
-			}
-			else
-			{
-				this._shape =
-					this.shape.compute(
-						this._area.zeroPnw.detransform( transform )
-					).transform( transform );
-			}
+			this._shape = this.shape.transform( transform );
 		}
 
 	if( this.iconShape )
@@ -206,13 +195,6 @@ prototype._init =
 				)
 			).transform( transform );
 	}
-
-	// FIXME remove
-	this._textPos =
-		this._area.zeroPnw
-		.detransform( transform )
-		.pc
-		.transform( transform );
 };
 
 
@@ -333,19 +315,6 @@ jion.lazyValue(
 
 
 /*
-| The key of this widget.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
-
-
-/*
 | Special keys for buttons having focus
 */
 prototype.specialKey =
@@ -364,6 +333,21 @@ prototype.specialKey =
 		case 'enter' : root.pushButton( this.path ); return;
 	}
 };
+
+
+/*
+| The font of the button label.
+*/
+jion.lazyValue(
+	prototype,
+	'_font',
+	function( )
+{
+	return(
+		this.font.create( 'size', this.transform.scale( this.font.size ) )
+	);
+}
+);
 
 
 /*
@@ -455,16 +439,14 @@ jion.lazyValue(
 
 
 /*
-| The font of the button label.
+| The key of this widget.
 */
 jion.lazyValue(
 	prototype,
-	'_font',
+	'_textPos',
 	function( )
 {
-	return(
-		this.font.create( 'size', this.transform.scale( this.font.size ) )
-	);
+	return this._area.zeroPnw.pc;
 }
 );
 

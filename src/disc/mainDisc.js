@@ -258,7 +258,9 @@ prototype._init =
 
 			case 'select' :
 
-				visible = this.spaceRef !== undefined;
+				visible =
+					this.spaceRef !== undefined
+					&& this.access === 'rw';
 
 				down = action && action.reflect === 'action_select';
 

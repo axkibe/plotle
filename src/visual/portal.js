@@ -691,7 +691,6 @@ prototype.positioning =
 
 /*
 | The portal's silhoutte.
-| FIXME se minus 1
 */
 jion.lazyValue(
 	prototype,

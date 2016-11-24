@@ -194,9 +194,8 @@ jion.lazyValue(
 			'size',
 				euclid_size.create(
 					'height', Math.round( this.height * this.transform.zoom + 1 ),
-					'width', Math.round( this.flow.width * this.transform.zoom + 5 )
+					'width', Math.round( this.flow.width * this.transform.zoom + 1 )
 				)
-				// FIXME why +5?
 		)
 	);
 }

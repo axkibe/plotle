@@ -235,19 +235,6 @@ prototype.input =
 
 
 /*
-| The key of this widget.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
-
-
-/*
 | Mouse hover.
 */
 prototype.pointingHover =

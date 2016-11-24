@@ -137,7 +137,7 @@ prototype.transform =
 	this._tPool[ transform.zoom ] =
 		this.create( 'size', this.size * transform.zoom );
 
-	// FIXME clear pool too large
+	// FUTURE clear pool too large
 
 	return tp;
 };

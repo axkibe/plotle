@@ -130,19 +130,6 @@ jion.lazyValue(
 
 
 /*
-| The key of this widget.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
-
-
-/*
 | User is hovering his/her pointer ( mouse move )
 */
 prototype.pointingHover =
