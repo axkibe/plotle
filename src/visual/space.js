@@ -839,25 +839,19 @@ prototype.click =
 	{
 		item = this.atRank( a );
 
-		// FIXME the space shouldn't do this!
-		if( !item.tSilhoutte.within( p ) ) continue;
-
 		if( ctrl )
 		{
 			if( item.ctrlClick( p, shift, access, mark ) ) return true;
 		}
 		else
 		{
-			if( item.click( p, shift, ctrl, access ) ) return true;
+			if( item.click( p, shift, access ) ) return true;
 		}
 	}
 
 	// otherwise ...
 
-	if( !ctrl )
-	{
-		root.create( 'mark', undefined );
-	}
+	if( !ctrl ) root.create( 'mark', undefined );
 
 	return true;
 };

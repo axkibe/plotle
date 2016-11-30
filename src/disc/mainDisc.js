@@ -497,7 +497,7 @@ prototype.pointingHover =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._glintFillSilhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -539,7 +539,7 @@ prototype.click =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._glintFillSilhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -578,7 +578,7 @@ prototype.mousewheel =
 	if( !this._area.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
+		!this._glintFillSilhoutte.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -618,7 +618,7 @@ prototype.dragStart =
 	if( !this._area.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
+		!this._glintFillSilhoutte.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -630,6 +630,24 @@ prototype.dragStart =
 	// but it denies it.
 	return false;
 };
+
+/*
+| The silhoutte fill.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintFillSilhoutte',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', this.facet,
+			'shape', this.silhoutte
+		)
+	);
+}
+);
+
 
 
 /*
@@ -647,13 +665,7 @@ jion.lazyValue(
 		r,
 		rZ;
 
-	gRay =
-		[
-			gleam_glint_fill.create(
-				'facet', this.facet,
-				'shape', this.silhoutte
-			)
-		];
+	gRay = [ this._glintFillSilhoutte ];
 
 	gLen = 1;
 

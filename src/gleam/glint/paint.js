@@ -66,6 +66,7 @@ prototype.within =
 		p
 	)
 {
+
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );

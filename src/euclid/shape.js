@@ -213,6 +213,8 @@ prototype.within =
 		border  // additional border (can be undefined for 0)
 	)
 {
+	console.log( 'FIXME shape.within called' );
+
 	return swatch.withinSketch( this, p, border );
 };
 

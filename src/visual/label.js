@@ -70,6 +70,7 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
+	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
@@ -786,6 +787,25 @@ visual_label.zone =
 
 
 jion.lazyValue( prototype, 'zone', visual_label.zone );
+
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_label.facets.getFacet( ),
+			'shape', this.tSilhoutte
+		)
+	);
+}
+);
+
 
 
 } )( );

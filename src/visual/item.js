@@ -299,6 +299,8 @@ visual_item.ctrlClick =
 		mark    // the mark of the space
 	)
 {
+	if( !this._glintBackground.within( p ) ) return;
+
 	if( access !== 'rw' ) return false;
 
 	if( !mark )

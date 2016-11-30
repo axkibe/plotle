@@ -159,6 +159,8 @@ prototype.within =
 	)
 {
 	var
+		a,
+		aZ,
 		pnw,
 		pse,
 		x,
@@ -171,16 +173,30 @@ prototype.within =
 /**/	if( p.reflect !== 'euclid_point' ) throw new Error( );
 /**/}
 
+	if( shape.reflect === 'euclid_shapeRay' )
+	{
+		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			if( this.within( p, shape.get( a ) ) ) return true;
+		}
+
+		return false;
+	}
+
 	switch( shape.reflect )
 	{
 		case 'euclid_ellipse' :
 		case 'euclid_roundRect' :
+
+			this._cx.beginPath( );
 
 			this._sketchGenericShape( shape.shape, 0, 0.5 );
 
 			break;
 
 		case 'euclid_shape' :
+
+			this._cx.beginPath( );
 
 			this._sketchGenericShape( shape, 0, 0.5 );
 
@@ -352,7 +368,7 @@ prototype.render =
 */
 prototype._border =
 	function(
-		border, // the gleam_border
+		border, // the gleam_border  FIXME remove
 		shape   // an object to draw
 	)
 {
@@ -861,7 +877,7 @@ prototype._setFont =
 prototype._sketch =
 	function(
 		shape,  // shape to sketch
-		border, // additional border
+		border, // additional border  FIXME remove
 		twist   // 0.5 offset in case of borders vs. fills
 	)
 {

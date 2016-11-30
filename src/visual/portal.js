@@ -337,7 +337,7 @@ jion.lazyValue(
 
 	if( !mark || !mark.hasCaret ) return ac;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return ac;
 
@@ -372,7 +372,6 @@ prototype.click =
 	function(
 		p,
 		shift,
-		ctrl,
 		access
 	)
 {
@@ -385,6 +384,8 @@ prototype.click =
 		sf,
 		transform,
 		zone;
+	
+	if( !this._glintBackground.within( p ) ) return;
 
 	transform = this.transform;
 
@@ -394,7 +395,7 @@ prototype.click =
 
 	pp = p.detransform( transform ).sub( zone.pnw );
 
-	if( moveToButton.shape.within( pp ) )
+	if( this._glintPaintMoveToButton.within( pp ) )
 	{
 		this._moveTo( );
 
@@ -532,7 +533,7 @@ prototype.input =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return false;
 
@@ -638,7 +639,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	return this.tSilhoutte.within( p );
+	return this._glintBackground.within( p );
 };
 
 
@@ -662,11 +663,11 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this._glintBackground.within( p ) ) return;
 
 	pp = p.detransform( transform ).sub( zone.pnw );
 
-	if( this._moveToButton.shape.within( pp ) )
+	if( this._glintPaintMoveToButton.within( pp ) )
 	{
 		return(
 			result_hover.create(
@@ -1011,7 +1012,7 @@ prototype._keyBackspace =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1044,7 +1045,7 @@ prototype._keyDown =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1109,7 +1110,7 @@ prototype._keyLeft =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1158,7 +1159,7 @@ prototype._keyTab =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1190,7 +1191,7 @@ prototype._keyUp =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1259,7 +1260,7 @@ prototype._keyRight =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return false;
 
@@ -1309,7 +1310,7 @@ prototype._keyDel =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	value = this.fabric[ section ];
 
@@ -1344,7 +1345,7 @@ prototype._keyEnd =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if(
 		!isSection( section )
@@ -1383,7 +1384,7 @@ prototype._keyEnter =
 
 	mark = this.mark;
 
-	section = mark.caret.path.get( -1 );
+	section = this._markSection;
 
 	if( !isSection( section ) ) return;
 
@@ -1620,6 +1621,71 @@ prototype._getOffsetAt =
 	return a;
 };
 
+				
+
+/*
+| The background glint.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintOrthoBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_portal.facets.getFacet( ),
+			'shape', this.tOrthoSilhoutte
+		)
+	);
+}
+);
+
+
+/*
+| The moveToButton facet.
+*/
+jion.lazyValue(
+	prototype,
+	'_facetMoveToButton',
+	function( )
+{
+	return(
+		gruga_portal.buttonFacets.getFacet(
+			'hover',
+				this.hover
+				? this.hover.equals(
+					this.path.append( 'moveToButton' )
+				)
+				: false,
+			'focus', this._markSection === 'moveToButton'
+		)
+	);
+}
+);
+
+
+/*
+| The section of the current mark
+*/
+jion.lazyValue(
+	prototype,
+	'_markSection',
+	function( )
+{
+	var
+		mark;
+
+	mark = this.mark;
+
+	return(
+		mark
+		&& mark.hasCaret
+		&& mark.caret.path.get( -1 )
+	);
+}
+);
+
+
 
 /*
 | Creates the portal's inner glint.
@@ -1630,8 +1696,7 @@ jion.lazyValue(
 	function( )
 {
 	var
-		buttonFacet,
-		caretGlint,
+		glintCaret,
 		cRay,
 		facet,
 		fieldSpaceUser,
@@ -1640,7 +1705,6 @@ jion.lazyValue(
 		mark,
 		moveToButton,
 		ot,
-		section,
 		tZone;
 
 	tZone = this.tZone;
@@ -1648,11 +1712,6 @@ jion.lazyValue(
 	ot = this.transform.ortho;
 
 	mark = this.mark;
-
-	section =
-		mark
-		&& mark.hasCaret
-		&& mark.caret.path.get( -1 );
 
 	facet = gruga_portal.facets.getFacet( );
 
@@ -1662,17 +1721,6 @@ jion.lazyValue(
 
 	moveToButton = this._moveToButton;
 
-	buttonFacet =
-		gruga_portal.buttonFacets.getFacet(
-			'hover',
-				this.hover
-				?  this.hover.equals(
-					this.path.append( 'moveToButton' )
-				)
-				: false,
-			'focus', section === 'moveToButton'
-		);
-
 	inputFacet =
 		gruga_portal.inputFacets.getFacet(
 			'hover', false,
@@ -1681,10 +1729,7 @@ jion.lazyValue(
 
 	cRay =
 		[
-			gleam_glint_paint.create(
-				'facet', buttonFacet,
-				'shape', moveToButton.shape.transform( ot )
-			),
+			this._glintPaintMoveToButton,
 			gleam_glint_paint.create(
 				'facet', inputFacet,
 				'shape', fieldSpaceUser.silhoutte.transform( ot )
@@ -1716,20 +1761,16 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		caretGlint = this._caretGlint;
+		glintCaret = this._glintCaret;
 
-		if( caretGlint ) cRay[ 6 ] = caretGlint;
+		if( glintCaret ) cRay[ 6 ] = glintCaret;
 	}
 
 	return(
 		gleam_glint_ray.create(
 			'ray:init',
 			[
-				// portal's background
-				gleam_glint_fill.create(
-					'facet', facet,
-					'shape', this.tOrthoSilhoutte
-				),
+				this._glintOrthoBackground,
 				// masks the portals content
 				gleam_glint_mask.create(
 					'glint', gleam_glint_ray.create( 'ray:init', cRay ),
@@ -1748,11 +1789,29 @@ jion.lazyValue(
 
 
 /*
+| Creates the portal's background glint.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_portal.facets.getFacet( ),
+			'shape', this.tSilhoutte
+		)
+	);
+}
+);
+
+
+/*
 | Glint for the caret.
 */
 jion.lazyValue(
 	prototype,
-	'_caretGlint',
+	'_glintCaret',
 	function( )
 {
 	var
@@ -1773,7 +1832,7 @@ jion.lazyValue(
 
 	ot = this.transform.ortho;
 
-	section = mark.caret.path.get( -1 );
+	section = this._sectionMark;
 
 	if( !isSection( section ) || section === 'moveToButton' )
 	{
@@ -1811,6 +1870,24 @@ jion.lazyValue(
 					'pnw', pnw,
 					'pse', pse
 				)
+		)
+	);
+}
+);
+
+
+/*
+| The moveToButton glint.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintPaintMoveToButton',
+	function( )
+{
+	return(
+		gleam_glint_paint.create(
+			'facet', this._facetMoveToButton,
+			'shape', this._moveToButton.shape.transform( this.transform.ortho )
 		)
 	);
 }

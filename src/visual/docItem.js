@@ -45,6 +45,89 @@ visual_docItem.attentionCenter =
 
 
 /*
+| Checks if the item is being clicked and reacts.
+*/
+visual_docItem.click =
+	function(
+		p,
+		shift,
+		access
+	)
+{
+	var
+		mark;
+
+	if( !this._glintBackground.within( p ) ) return;
+
+	if( access != 'rw' ) return false;
+
+	mark = this.markForPoint( p, shift );
+
+	root.create( 'mark', mark );
+
+	return true;
+};
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+visual_docItem.dragStart =
+	function(
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		access,  // current space access rights
+		action   // current space action
+	)
+{
+	var
+		aType,
+		mark,
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	aType = action && action.reflect;
+
+	if(
+		!this.action
+		&& sbary
+		&& sbary.within( p, -1 )
+	)
+	{
+		root.create(
+			'action',
+				action_scrolly.create(
+					'itemPaths',
+						jion$pathRay.create( 'ray:append', this.path ),
+					'startPoint', p,
+					'startPos', sbary.pos
+				)
+		);
+
+		return true;
+	}
+
+	if( aType === 'action_select' )
+	{
+		if( !this.tSilhoutte.within( p ) ) return false;
+
+		mark = this.markForPoint( p, false );
+
+		action = action.create( 'itemPath', this.path );
+
+		root.create( 'action', action, 'mark', mark );
+
+		return true;
+	}
+
+	return visual_item.dragStart.call( this, p, shift, ctrl, access, action );
+};
+
+
+
+/*
 | Returns the mark for a point
 */
 visual_docItem.markForPoint =
@@ -143,87 +226,6 @@ visual_docItem.moveSelect =
 
 
 /*
-| Checks if the item is being clicked and reacts.
-*/
-visual_docItem.click =
-	function(
-		p,
-		shift,
-		ctrl,
-		access
-	)
-{
-	var
-		mark;
-
-	if( access != 'rw' ) return false;
-
-	mark = this.markForPoint( p, shift );
-
-	root.create( 'mark', mark );
-
-	return true;
-};
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-visual_docItem.dragStart =
-	function(
-		p,       // point where dragging starts
-		shift,   // true if shift key was held down
-		ctrl,    // true if ctrl or meta key was held down
-		access,  // current space access rights
-		action   // current space action
-	)
-{
-	var
-		aType,
-		mark,
-		sbary;
-
-	sbary = this.scrollbarY;
-
-	aType = action && action.reflect;
-
-	if(
-		!this.action
-		&& sbary
-		&& sbary.within( p, -1 )
-	)
-	{
-		root.create(
-			'action',
-				action_scrolly.create(
-					'itemPaths',
-						jion$pathRay.create( 'ray:append', this.path ),
-					'startPoint', p,
-					'startPos', sbary.pos
-				)
-		);
-
-		return true;
-	}
-
-	if( aType === 'action_select' )
-	{
-		if( !this.tSilhoutte.within( p ) ) return false;
-
-		mark = this.markForPoint( p, false );
-
-		action = action.create( 'itemPath', this.path );
-
-		root.create( 'action', action, 'mark', mark );
-
-		return true;
-	}
-
-	return visual_item.dragStart.call( this, p, shift, ctrl, access, action );
-};
-
-
-/*
 | User is hovering their pointing device over something.
 */
 visual_docItem.pointingHover =
@@ -248,7 +250,7 @@ visual_docItem.pointingHover =
 		);
 	}
 
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this._glintBackground.within( p ) ) return;
 
 	cursor = 'default';
 

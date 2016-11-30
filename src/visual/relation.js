@@ -63,6 +63,7 @@ if( JION )
 var
 	euclid_arrow,
 	euclid_size,
+	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
@@ -523,6 +524,24 @@ prototype._arrow2Glint =
 		)
 	);
 };
+
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_label.facets.getFacet( ),
+			'shape', this.tSilhoutte
+		)
+	);
+}
+);
 
 
 jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );

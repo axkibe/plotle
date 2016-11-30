@@ -35,7 +35,8 @@ if( JION )
 
 
 var
-	gleam_glint_mask;
+	gleam_glint_mask,
+	swatch;
 
 
 /*
@@ -69,11 +70,11 @@ prototype.within =
 {
 	if( this.reverse )
 	{
-		if( this.shape.within( p ) ) return false;
+		if( swatch.within( p, this.shape ) ) return false;
 	}
 	else
 	{
-		if( !this.shape.within( p ) ) return false;
+		if( !swatch.within( p, this.shape ) ) return false;
 	}
 
 	return this.glint.within( p );

@@ -517,7 +517,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.tSilhoutte.within( p ) ) return false;
+	if( !this._glintBackground.within( p ) ) return false;
 
 	root.setPath(
 		this.path.append( 'scrollPos' ),
@@ -836,6 +836,24 @@ jion.lazyValue(
 					'shape', this.tOrthoSilhoutte
 				)
 			]
+		)
+	);
+}
+);
+
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_note.facets.getFacet( ),
+			'shape', this.tSilhoutte
 		)
 	);
 }
