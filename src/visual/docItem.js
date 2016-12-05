@@ -93,7 +93,7 @@ visual_docItem.dragStart =
 	if(
 		!this.action
 		&& sbary
-		&& sbary.within( p, -1 )
+		&& sbary.within( p )
 	)
 	{
 		root.create(
@@ -240,7 +240,7 @@ visual_docItem.pointingHover =
 
 	sbary = this.scrollbarY;
 
-	if( sbary && sbary.within( p, -1 ) )
+	if( sbary && sbary.within( p ) )
 	{
 		return(
 			result_hover.create(

@@ -227,36 +227,12 @@ prototype.within =
 
 
 /*
-| Returns true if a point is in a sketch.
-|
-| FIXME remove
-*/
-prototype.withinSketch =
-	function(
-		shape,   // the shape to test
-		p,       // the point
-		border   // additional border
-	)
-{
-	var
-		cx;
-
-	cx = this._cx;
-
-	cx.beginPath( );
-
-	this._sketch( shape, border || 0, 0.5 );
-
-	return cx.isPointInPath( p.x, p.y );
-};
-
-
-
-/*
 | Initializer.
 */
 prototype._init =
-	function( inherit )
+	function(
+		inherit
+	)
 {
 	var
 		cv,
@@ -368,7 +344,7 @@ prototype.render =
 */
 prototype._border =
 	function(
-		border, // the gleam_border  FIXME remove
+		border, // the gleam_border
 		shape   // an object to draw
 	)
 {

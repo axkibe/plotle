@@ -79,7 +79,7 @@ visual_item.dragStart =
 
 	action = this.action;
 
-	if( !this.tSilhoutte.within( p ) ) return false;
+	if( !this._glintBackground.within( p ) ) return false;
 
 	switch( action && action.reflect )
 	{

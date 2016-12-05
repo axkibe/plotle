@@ -158,23 +158,18 @@ prototype.proportional = false;
 */
 prototype._init =
 	function(
-		// inherit
+		inherit
 	)
 {
-	/*
-
-	FIXME glint caching
-
 	if(
 		inherit
 		&& inherit.alikeIgnoringTransform( this )
 		&& inherit.transform.zoom === this.transform.zoom
-		&& jion.hasLazyValueSet( inherit, '_display' )
+		&& jion.hasLazyValueSet( inherit, '_glint' )
 	)
 	{
-		jion.aheadValue( this, '_display', inherit._display );
+		jion.aheadValue( this, '_glint', inherit._glint );
 	}
-	*/
 };
 
 

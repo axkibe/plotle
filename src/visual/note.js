@@ -309,25 +309,14 @@ prototype._init =
 			);
 	}
 
-	if( inherit )
+	if(
+		inherit
+		&& inherit.alikeIgnoringTransform( this )
+		&& inherit.transform.zoom === this.transform.zoom
+		&& jion.hasLazyValueSet( inherit, '_glint' )
+	)
 	{
-		if(
-			inherit.alikeIgnoringTransform( this )
-			&& inherit.transform.zoom === this.transform.zoom
-			&& jion.hasLazyValueSet( inherit, '_display' )
-		)
-		{
-			jion.aheadValue( this, '_display', inherit._display );
-		}
-
-		if( jion.hasLazyValueSet( inherit, 'glint' ) )
-		{
-			this._inheritedGlint = inherit.glint;
-		}
-		else
-		{
-			this._inheritedGlint = inherit._inheritedGlint;
-		}
+		jion.aheadValue( this, '_glint', inherit._glint );
 	}
 };
 

@@ -1,5 +1,5 @@
 /*
-| A line. FIXME remove
+| A line.
 */
 
 

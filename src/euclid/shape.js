@@ -29,8 +29,7 @@ if( JION )
 
 
 var
-	euclid_shape,
-	swatch;
+	euclid_shape;
 
 
 /*
@@ -201,21 +200,6 @@ prototype.transform =
 	}
 
 	return this.create( 'ray:init', ray );
-};
-
-
-/*
-| Returns true if point is within the shape.
-*/
-prototype.within =
-	function(
-		p,      // point
-		border  // additional border (can be undefined for 0)
-	)
-{
-	console.log( 'FIXME shape.within called' );
-
-	return swatch.withinSketch( this, p, border );
 };
 
 

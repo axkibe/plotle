@@ -173,11 +173,10 @@ prototype.scale =
 */
 prototype.within =
 	function(
-		p,
-		border
+		p
 	)
 {
-	return this.area.within( p, border );
+	return this.glint.within( p );
 };
 
 
