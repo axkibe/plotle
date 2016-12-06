@@ -161,60 +161,6 @@ prototype.dragStart = visual_docItem.dragStart;
 
 
 /*
-| Arrow 1 shape.
-|
-| This cannot be a lazyValue since when the other
-| item moves, the arrow changes.
-*/
-prototype.arrow1Shape =
-	function( )
-{
-	var
-		item1;
-
-	item1 = root.spaceVisual.get( this.item1key );
-
-	if( !item1 ) return undefined;
-
-	return(
-		euclid_arrow.create(
-			'joint1', item1.silhoutte,
-			'joint2', this.silhoutte,
-			'end1', 'normal',
-			'end2', 'normal'
-		)
-	);
-};
-
-
-/*
-| Arrow 2 shape.
-|
-| This cannot be a lazyValue since when the other
-| item moves, the arrow changes.
-*/
-prototype.arrow2Shape =
-	function( )
-{
-	var
-		item2;
-
-	item2 = root.spaceVisual.get( this.item2key );
-
-	if( !item2 ) return undefined;
-
-	return(
-		euclid_arrow.create(
-			'joint1', this.silhoutte,
-			'joint2', item2.silhoutte,
-			'end1', 'normal',
-			'end2', 'arrow'
-		)
-	);
-};
-
-
-/*
 | Fontsize of the relations label.
 */
 jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
@@ -484,16 +430,28 @@ jion.lazyValue( prototype, 'zone', visual_label.zone );
 
 /*
 | The item's arrow 1 glint.
+|
+| This cannot be a lazyValue since when the other
+| item moves, the arrow changes.
 */
 prototype._arrow1Glint =
 	function( )
 {
 	var
-		arrow1;
+		arrow1,
+		item1;
 
-	arrow1 = this.arrow1Shape( );
+	item1 = root.spaceVisual.get( this.item1key );
 
-	if( !arrow1 ) return undefined;
+	if( !item1 ) return undefined;
+
+	arrow1 =
+		euclid_arrow.create(
+			'joint1', item1.silhoutte,
+			'joint2', this.silhoutte,
+			'end1', 'normal',
+			'end2', 'normal'
+		);
 
 	return(
 		gleam_glint_paint.create(
@@ -506,16 +464,28 @@ prototype._arrow1Glint =
 
 /*
 | The item's gleam arrow 2.
+|
+| This cannot be a lazyValue since when the other
+| item moves, the arrow changes.
 */
 prototype._arrow2Glint =
 	function( )
 {
 	var
-		arrow2;
+		arrow2,
+		item2;
 
-	arrow2 = this.arrow2Shape( );
+	item2 = root.spaceVisual.get( this.item2key );
 
-	if( !arrow2 ) return undefined;
+	if( !item2 ) return undefined;
+
+	arrow2 =
+		euclid_arrow.create(
+			'joint1', this.silhoutte,
+			'joint2', item2.silhoutte,
+			'end1', 'normal',
+			'end2', 'arrow'
+		);
 
 	return(
 		gleam_glint_paint.create(

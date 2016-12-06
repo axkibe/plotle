@@ -47,6 +47,7 @@ var
 	euclid_shape,
 	euclid_shape_line,
 	euclid_shape_start,
+	gruga_relation,
 	jion;
 
 
@@ -66,13 +67,10 @@ if( NODE )
 
 
 var
-	arrowSize,
 	prototype;
 
+
 prototype = euclid_arrow.prototype;
-
-arrowSize = 12;  // FIXME move to gruga
-
 
 
 /*
@@ -153,7 +151,7 @@ jion.lazyValue(
 
 			// arrow span
 			// the arrow is formed as hexagon piece
-			ms = 2 / Math.sqrt(3) * arrowSize;
+			ms = 2 / Math.sqrt(3) * gruga_relation.arrowSize;
 
 			arrowBase =
 				p2.add(
@@ -166,16 +164,16 @@ jion.lazyValue(
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-arrowSize * Math.cos( d + ad ),
-							-arrowSize * Math.sin( d + ad )
+							-gruga_relation.arrowSize * Math.cos( d + ad ),
+							-gruga_relation.arrowSize * Math.sin( d + ad )
 						)
 				),
 				euclid_shape_line.create( 'p', p2 ),
 				euclid_shape_line.create(
 					'p',
 						p2.add(
-							-arrowSize * Math.cos( d - ad ),
-							-arrowSize * Math.sin( d - ad )
+							-gruga_relation.arrowSize * Math.cos( d - ad ),
+							-gruga_relation.arrowSize * Math.sin( d - ad )
 						)
 				),
 				euclid_shape_line.create( 'p', arrowBase )

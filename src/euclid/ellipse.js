@@ -312,27 +312,6 @@ jion.lazyValue(
 
 
 /*
-| Returns true if point is within the ellipse.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	if( p.x < this.pnw.x
-		|| p.y < this.pnw.y
-		|| p.x > this.pse.x
-		|| p.y > this.pse.y
-	)
-	{
-		return false;
-	}
-
-	return this.shape.within( p );
-};
-
-
-/*
 | Ellipse width.
 */
 jion.lazyValue(

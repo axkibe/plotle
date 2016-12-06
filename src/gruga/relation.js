@@ -52,4 +52,17 @@ gruga_relation.spawnOffset =
 	euclid_point.create( 'x', 44, 'y', 12 );
 
 
+
+/*
+| Size of the arrow.
+*/
+gruga_relation.arrowSize = 12;
+
+
+if( FREEZE )
+{
+	Object.freeze( gruga_relation );
+}
+
+
 } )( );
