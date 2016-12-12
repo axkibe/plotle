@@ -631,6 +631,7 @@ prototype.dragStart =
 	return false;
 };
 
+
 /*
 | The silhoutte fill.
 */
@@ -647,7 +648,6 @@ jion.lazyValue(
 	);
 }
 );
-
 
 
 /*

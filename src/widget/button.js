@@ -268,7 +268,7 @@ prototype.specialKey =
 	}
 };
 
-	
+
 /*
 | The transformed area of the button.
 */
@@ -280,7 +280,7 @@ jion.lazyValue(
 	return this.area.transform( this.transform ).align;
 }
 );
-	
+
 
 /*
 | The font of the button label.

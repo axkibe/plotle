@@ -75,8 +75,7 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'true'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -124,36 +123,10 @@ prototype = widget_input.prototype;
 
 
 /*
-| Initializes the widget.
-*/
-prototype._init =
-	function( )
-{
-	var
-		area;
-
-	area =
-	this._area =
-		this.area
-		.transform( this.transform )
-		.align;
-
-	this._shape =
-		euclid_roundRect.create(
-			'pnw', euclid_point.zero,
-			'pse', area.pse.sub( area.pnw ),
-			'a', 7,
-			'b', 3
-		);
-
-	this._pitch = widget_input._pitch;
-};
-
-
-/*
 | Default distance of text
 */
-widget_input._pitch = euclid_point.create( 'x', 8, 'y', 3 );
+widget_input._pitch =
+	euclid_point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -214,7 +187,7 @@ prototype.click =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !this._shape.within( pp ) ) return undefined;
+	if( !this._glintShapeFill.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',
@@ -319,7 +292,7 @@ jion.lazyFunctionInteger(
 
 	font = this.font;
 
-	pitch = this._pitch;
+	pitch = widget_input._pitch;
 
 	value = this.value;
 
@@ -393,7 +366,7 @@ prototype.pointingHover =
 {
 	if(
 		!this._area.within( p )
-		|| !this._shape.within( p.sub( this._area.pnw ) )
+		|| !this._glintShapeFill.within( p.sub( this._area.pnw ) )
 	)
 	{
 		return undefined;
@@ -439,6 +412,19 @@ prototype.specialKey =
 		case 'up' : this._keyUp( ); break;
 	}
 };
+
+
+/*
+| The transformed area of the button.
+*/
+jion.lazyValue(
+	prototype,
+	'_area',
+	function( )
+{
+	return this.area.transform( this.transform ).align;
+}
+);
 
 
 /*
@@ -491,37 +477,21 @@ jion.lazyValue(
 	var
 		a,
 		aZ,
-		facet,
 		font,
 		gLen,
 		gRay,
 		mark,
 		pitch,
 		pm,
-		shape,
 		value;
 
-	pitch = this._pitch;
-
-	shape = this._shape;
+	pitch = widget_input._pitch;
 
 	value = this.value;
 
 	mark = this.mark;
 
-	facet =
-		this.facets.getFacet(
-			'hover', false, // FUTURE
-			'focus', !!this.mark
-		);
-
-	gRay =
-		[
-			gleam_glint_fill.create(
-				'facet', facet,
-				'shape', shape
-			)
-		];
+	gRay = [ this._glintShapeFill ];
 
 	gLen = 1;
 
@@ -565,11 +535,47 @@ jion.lazyValue(
 
 	gRay[ gLen++ ] =
 		gleam_glint_border.create(
-			'facet', facet,
-			'shape', shape
+			'facet', this._facet,
+			'shape', this._shape
 		);
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
+}
+);
+
+
+/*
+| The widget's background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintShapeFill',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', this._facet,
+			'shape', this._shape
+		)
+	);
+}
+);
+
+
+/*
+| The widget's facet.
+*/
+jion.lazyValue(
+	prototype,
+	'_facet',
+	function( )
+{
+	return(
+		this.facets.getFacet(
+			'hover', false, // FUTURE
+			'focus', !!this.mark
+		)
+	);
 }
 );
 
@@ -593,7 +599,7 @@ prototype._getOffsetAt =
 		x1,
 		x2;
 
-	pitch = this._pitch;
+	pitch = widget_input._pitch;
 
 	dx = p.x - pitch.x;
 
@@ -817,6 +823,31 @@ prototype._keyUp =
 
 
 /*
+| The transformed area of the button.
+*/
+jion.lazyValue(
+	prototype,
+	'_shape',
+	function( )
+{
+	var
+		area;
+
+	area = this._area;
+
+	return(
+		euclid_roundRect.create(
+			'pnw', euclid_point.zero,
+			'pse', area.pse.sub( area.pnw ),
+			'a', 7,
+			'b', 3
+		)
+	);
+}
+);
+
+
+/*
 | Returns an array of ellipses
 | representing the password mask.
 */
@@ -844,7 +875,7 @@ jion.lazyValue(
 
 	pm = [ ];
 
-	pitch = this._pitch;
+	pitch = widget_input._pitch;
 
 	x = pitch.x;
 

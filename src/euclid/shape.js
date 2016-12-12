@@ -168,9 +168,6 @@ prototype.getProjection =
 	console.log( 'no section created a projection.' );
 
 	return pc;
-
-	// no section created a projection.
-	//throw new Error( );
 };
 
 

@@ -299,7 +299,6 @@ prototype.pointingHover =
 {
 	var
 		area,
-		display,
 		pp,
 		r,
 		reply,
@@ -310,11 +309,9 @@ prototype.pointingHover =
 	// shortcut if p is not near the panel
 	if( !area.within( p ) ) return;
 
-	display = this._display;
-
 	pp = p.sub( area.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._glintFillSilhoutte.within( pp ) ) return;
 
 	// it's on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -338,7 +335,6 @@ prototype.click =
 {
 	var
 		area,
-		display,
 		pp,
 		reply,
 		r,
@@ -349,11 +345,9 @@ prototype.click =
 	// shortcut if p is not near the panel
 	if( !area.within( p ) ) return;
 
-	display = this._display,
-
 	pp = p.sub( area.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._glintFillSilhoutte.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -444,7 +438,7 @@ prototype.dragStart =
 	if( !area.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
+		!this._glintFillSilhoutte.within(
 			p.sub( area.pnw )
 		)
 	)
@@ -478,7 +472,7 @@ prototype.mousewheel =
 	if( !area.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
+		!this._glintFillSilhoutte.within(
 			p.sub( area.pnw )
 		)
 	)
@@ -582,6 +576,24 @@ jion.lazyValue(
 		);
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
+}
+);
+
+
+/*
+| The silhoutte fill.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintFillSilhoutte',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', this.facet,
+			'shape', this.silhoutte
+		)
+	);
 }
 );
 
