@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_arrow',
+		id : 'gleam_arrow',
 		attributes :
 		{
 			end1 :
@@ -26,15 +26,23 @@ if( JION )
 			{
 				comment : 'connect to this point or shape',
 				type :
-					require( './typemap-shape' )
-					.concat( [ 'euclid_point' ] )
+					[
+						'euclid_point',
+						'gleam_glint_border',
+						'gleam_glint_fill',
+						'gleam_glint_paint',
+					]
 			},
 			joint2 :
 			{
 				comment : 'connect to this point or shape',
 				type :
-					require( './typemap-shape' )
-					.concat( [ 'euclid_point' ] )
+					[
+						'euclid_point',
+						'gleam_glint_border',
+						'gleam_glint_fill',
+						'gleam_glint_paint',
+					]
 			}
 		}
 	};
@@ -42,8 +50,8 @@ if( JION )
 
 
 var
-	euclid_arrow,
-	euclid_connect,
+	gleam_arrow,
+	gleam_connect,
 	euclid_shape,
 	euclid_shape_line,
 	euclid_shape_start,
@@ -70,7 +78,7 @@ var
 	prototype;
 
 
-prototype = euclid_arrow.prototype;
+prototype = gleam_arrow.prototype;
 
 
 /*
@@ -104,7 +112,7 @@ jion.lazyValue(
 
 	end2 = this.end2;
 
-	line = euclid_connect.line( joint1, joint2 );
+	line = gleam_connect.line( joint1, joint2 );
 
 	p1 = line.p1;
 

@@ -379,7 +379,7 @@ prototype.click =
 		sf,
 		transform,
 		zone;
-	
+
 	if( !this._glintBackground.within( p ) ) return;
 
 	transform = this.transform;

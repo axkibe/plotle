@@ -157,8 +157,8 @@ var
 	change_remove,
 	change_wrap,
 	disc_jockey,
-	euclid_connect,
 	euclid_transform,
+	gleam_connect,
 	gleam_display_canvas,
 	gleam_glint_ray,
 	euclid_measure,
@@ -1503,9 +1503,9 @@ prototype.spawnRelation =
 		val;
 
 	line =
-		euclid_connect.line(
-			item1.silhoutte,
-			item2.silhoutte
+		gleam_connect.line(
+			item1._glintBackground,
+			item2._glintBackground
 		);
 
 	pnw = line.pc.sub( gruga_relation.spawnOffset );

@@ -14,6 +14,7 @@ if( JION )
 		{
 		},
 		ray :
+		// TODO make a typemap
 		[
 			'gleam_glint_border',
 			'gleam_glint_fill',

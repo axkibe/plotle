@@ -349,6 +349,9 @@ prototype.createTransformed =
 		doc
 	)
 {
+	var
+		bm,
+		em;
 
 /**/if( CHECK )
 /**/{
@@ -357,10 +360,18 @@ prototype.createTransformed =
 
 	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
+	bm = this.beginMark.createTransformed( changes );
+
+	if( bm === undefined ) return;
+
+	em = this.endMark.createTransformed( changes );
+
+	if( em === undefined ) return;
+
 	return(
 		this.create(
-			'beginMark', this.beginMark.createTransformed( changes ),
-			'endMark', this.endMark.createTransformed( changes ),
+			'beginMark', bm,
+			'endMark', em,
 			'doc', doc
 		)
 	);

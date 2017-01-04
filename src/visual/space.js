@@ -78,9 +78,9 @@ var
 	action_pan,
 	action_select,
 	change_ray,
-	euclid_arrow,
 	euclid_point,
 	euclid_rect,
+	gleam_arrow,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gruga_label,
@@ -419,13 +419,13 @@ jion.lazyValue(
 		arrow,
 		frame,
 		fromItem,
-		fromSilhoutte,
+		fromJoint,
 		gLen,
 		gRay,
 		r,
 		s,
 		toItem,
-		toSilhoutte,
+		toJoint,
 		transform;
 
 	action = this.action;
@@ -466,7 +466,7 @@ jion.lazyValue(
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromSilhoutte = fromItem.silhoutte;
+				fromJoint = fromItem._glintBackground; // FIXME private
 
 				if(
 					action.toItemPath
@@ -474,20 +474,20 @@ jion.lazyValue(
 				)
 				{
 					// arrow connects two items
-					toSilhoutte = toItem.silhoutte;
+					toJoint = toItem._glintBackground; // FIXME private
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte = action.toPoint.detransform( transform );
+					toJoint = action.toPoint.detransform( transform );
 				}
 
-				if( toSilhoutte )
+				if( toJoint )
 				{
 					arrow =
-						euclid_arrow.create(
-							'joint1', fromSilhoutte,
-							'joint2', toSilhoutte,
+						gleam_arrow.create(
+							'joint1', fromJoint,
+							'joint2', toJoint,
 							'end1', 'normal',
 							'end2', 'arrow'
 						);

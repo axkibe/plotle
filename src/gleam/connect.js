@@ -4,7 +4,7 @@
 
 
 var
-	euclid_connect,
+	gleam_connect,
 	euclid_line;
 
 
@@ -15,16 +15,16 @@ var
 'use strict';
 
 
-euclid_connect = { };
+gleam_connect = { };
 
 
 /*
 | Finds the shortest connection between two shapes/points.
 */
-euclid_connect.line =
+gleam_connect.line =
 	function(
-		sp1,  // shape1 or point1
-		sp2   // shape2 or point2
+		sp1,  // glint1 or point1
+		sp2   // glint2 or point2
 	)
 {
 	var
@@ -44,12 +44,12 @@ euclid_connect.line =
 	pc1 =
 		sp1.reflect === 'euclid_point'
 		? sp1
-		: sp1.pc;
+		: sp1.shape.pc;
 
 	pc2 =
 		sp2.reflect === 'euclid_point'
 		? sp2
-		: sp2.pc;
+		: sp2.shape.pc;
 
 	if( sp1.reflect === 'euclid_point' )
 	{
@@ -61,7 +61,7 @@ euclid_connect.line =
 	}
 	else
 	{
-		p1 = sp1.getProjection( pc2 );
+		p1 = sp1.shape.getProjection( pc2 );
 	}
 
 	if( sp2.reflect === 'euclid_point' )
@@ -74,7 +74,7 @@ euclid_connect.line =
 	}
 	else
 	{
-		p2 = sp2.getProjection( pc1 );
+		p2 = sp2.shape.getProjection( pc1 );
 	}
 
 	return(
@@ -88,7 +88,7 @@ euclid_connect.line =
 
 /**/if( FREEZE )
 /**/{
-/**/	Object.freeze( euclid_connect );
+/**/	Object.freeze( gleam_connect );
 /**/}
 
 } )( );

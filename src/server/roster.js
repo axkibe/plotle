@@ -376,11 +376,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/connect.js',
+		'filePath', 'src/gleam/connect.js',
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/arrow.js',
+		'filePath', 'src/gleam/arrow.js',
 		'hasJion', true,
 		'inBundle', true
 	),

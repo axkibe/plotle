@@ -61,8 +61,8 @@ if( JION )
 
 
 var
-	euclid_arrow,
 	euclid_size,
+	gleam_arrow,
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
@@ -224,15 +224,9 @@ Object.defineProperty(
 				);
 		}
 
-		if( arrow1 )
-		{
-			gRay[ gLen++ ] = arrow1;
-		}
+		if( arrow1 ) gRay[ gLen++ ] = arrow1;
 
-		if( arrow2 )
-		{
-			gRay[ gLen++ ] = arrow2;
-		}
+		if( arrow2 ) gRay[ gLen++ ] = arrow2;
 
 		return gleam_glint_ray.create( 'ray:init', gRay );
 	}
@@ -446,9 +440,9 @@ prototype._arrow1Glint =
 	if( !item1 ) return undefined;
 
 	arrow1 =
-		euclid_arrow.create(
-			'joint1', item1.silhoutte,
-			'joint2', this.silhoutte,
+		gleam_arrow.create(
+			'joint1', item1._glintBackground, // TODO not access private
+			'joint2', this._glintBackground,
 			'end1', 'normal',
 			'end2', 'normal'
 		);
@@ -480,9 +474,9 @@ prototype._arrow2Glint =
 	if( !item2 ) return undefined;
 
 	arrow2 =
-		euclid_arrow.create(
-			'joint1', this.silhoutte,
-			'joint2', item2.silhoutte,
+		gleam_arrow.create(
+			'joint1', this._glintBackground,
+			'joint2', item2._glintBackground, // TODO not access private
 			'end1', 'normal',
 			'end2', 'arrow'
 		);
