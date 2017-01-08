@@ -30,7 +30,7 @@ if( JION )
 						'euclid_point',
 						'gleam_glint_border',
 						'gleam_glint_fill',
-						'gleam_glint_paint',
+						'gleam_glint_paint'
 					]
 			},
 			joint2 :
@@ -41,7 +41,7 @@ if( JION )
 						'euclid_point',
 						'gleam_glint_border',
 						'gleam_glint_fill',
-						'gleam_glint_paint',
+						'gleam_glint_paint'
 					]
 			}
 		}
