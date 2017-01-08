@@ -466,7 +466,7 @@ jion.lazyValue(
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromJoint = fromItem._glintBackground; // FIXME private
+				fromJoint = fromItem._glintNormalBackground; // FIXME private
 
 				if(
 					action.toItemPath
@@ -474,7 +474,7 @@ jion.lazyValue(
 				)
 				{
 					// arrow connects two items
-					toJoint = toItem._glintBackground; // FIXME private
+					toJoint = toItem._glintNormalBackground; // FIXME private
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{

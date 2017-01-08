@@ -799,13 +799,30 @@ jion.lazyValue(
 {
 	return(
 		gleam_glint_fill.create(
-			'facet', gruga_label.facets.getFacet( ),
+			'facet', gruga_label.facets.getFacet( ), // FIXME
 			'shape', this.tSilhoutte
 		)
 	);
 }
 );
 
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintNormalBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_label.facets.getFacet( ), // FIXME
+			'shape', this.silhoutte
+		)
+	);
+}
+);
 
 
 } )( );

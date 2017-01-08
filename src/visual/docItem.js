@@ -111,7 +111,7 @@ visual_docItem.dragStart =
 
 	if( aType === 'action_select' )
 	{
-		if( !this.tSilhoutte.within( p ) ) return false;
+		if( !this._glintBackground.within( p ) ) return false;
 
 		mark = this.markForPoint( p, false );
 

@@ -1504,8 +1504,8 @@ prototype.spawnRelation =
 
 	line =
 		gleam_connect.line(
-			item1._glintBackground,
-			item2._glintBackground
+			item1._glintNormalBackground, // FIXME no private access
+			item2._glintNormalBackground  // FIXME no private access
 		);
 
 	pnw = line.pc.sub( gruga_relation.spawnOffset );

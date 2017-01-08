@@ -1616,7 +1616,6 @@ prototype._getOffsetAt =
 	return a;
 };
 
-				
 
 /*
 | The background glint.
@@ -1628,7 +1627,7 @@ jion.lazyValue(
 {
 	return(
 		gleam_glint_fill.create(
-			'facet', gruga_portal.facets.getFacet( ),
+			'facet', gruga_portal.facets.getFacet( ), // FIXME lazy
 			'shape', this.tOrthoSilhoutte
 		)
 	);
@@ -1898,5 +1897,22 @@ prototype._moveTo =
 	root.moveToSpace( this.spaceRef, false );
 };
 
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
+	'_glintNormalBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_portal.facets.getFacet( ),
+			'shape', this.silhoutte
+		)
+	);
+}
+);
 
 } )( );

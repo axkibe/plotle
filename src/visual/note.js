@@ -809,7 +809,7 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
-	facet = gruga_note.facets.getFacet( );
+	facet = gruga_note.facets.getFacet( ); // FIXME lazy
 
 	return(
 		gleam_glint_ray.create(
@@ -836,12 +836,30 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
+	'_glintNormalBackground',
+	function( )
+{
+	return(
+		gleam_glint_fill.create(
+			'facet', gruga_note.facets.getFacet( ), // FIXME lazy
+			'shape', this.silhoutte
+		)
+	);
+}
+);
+
+
+/*
+| The background.
+*/
+jion.lazyValue(
+	prototype,
 	'_glintBackground',
 	function( )
 {
 	return(
 		gleam_glint_fill.create(
-			'facet', gruga_note.facets.getFacet( ),
+			'facet', gruga_note.facets.getFacet( ), // FIXME lazy
 			'shape', this.tSilhoutte
 		)
 	);
