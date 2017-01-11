@@ -39,7 +39,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'widget_widget.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			maxlen :

@@ -44,7 +44,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/visualMark' )
+					require( './mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			paraSep :

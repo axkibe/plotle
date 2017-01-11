@@ -16,7 +16,7 @@ if( JION )
 			{
 				comment : 'current action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
@@ -40,7 +40,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( './mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
@@ -407,7 +407,7 @@ prototype.click =
 
 		sf = this[ fieldLazyName ];
 
-		if( sf.silhoutte.within( pp ) )
+		if( sf.glint.within( pp ) )
 		{
 			setMark =
 				visual_mark_caret.create(
@@ -1483,6 +1483,7 @@ prototype._prepareField =
 {
 	var
 		font,
+		glint,
 		height,
 		pitch,
 		p,
@@ -1525,12 +1526,23 @@ prototype._prepareField =
 			'b', rounding
 		);
 
+	glint =
+		gleam_glint_paint.create(
+			'facet',
+				gruga_portal.inputFacets.getFacet(
+					'hover', false,
+					'focus', false
+				),
+			'shape', silhoutte
+		);
+
 	return {
 		text : text,
 		width : width,
 		height : height,
 		p : p,
-		silhoutte : silhoutte
+		silhoutte : silhoutte,
+		glint : glint
 	};
 };
 
@@ -1757,7 +1769,7 @@ jion.lazyValue(
 	{
 		glintCaret = this._glintCaret;
 
-		if( glintCaret ) cRay[ 6 ] = glintCaret;
+		if( glintCaret ) cRay[ 6 ] = this._glintCaret;
 	}
 
 	return(
@@ -1826,12 +1838,9 @@ jion.lazyValue(
 
 	ot = this.transform.ortho;
 
-	section = this._sectionMark;
+	section = this._markSection;
 
-	if( !isSection( section ) || section === 'moveToButton' )
-	{
-		return;
-	}
+	if( !isSection( section ) || section === 'moveToButton' ) return;
 
 	font = this._fontFor( section );
 

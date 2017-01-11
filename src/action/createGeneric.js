@@ -28,7 +28,7 @@ if( JION )
 			{
 				comment : 'the transient item in creation',
 				type :
-					require( '../typemaps/visualItem' )
+					require( '../visual/typemap-item' )
 					.concat( [ 'undefined' ] )
 			},
 			startPoint :

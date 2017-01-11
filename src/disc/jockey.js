@@ -21,7 +21,7 @@ if( JION )
 			{
 				comment : 'currently active action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			controlTransform :
@@ -39,7 +39,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'disc_jockey.concernsMark( mark )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :

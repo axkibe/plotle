@@ -18,15 +18,23 @@ if( JION )
 			{
 				comment : 'border',
 				type :
-					require( '../typemaps/border' )
-					.concat( [ 'undefined' ] )
+					[
+						'gleam_border',
+						'gleam_borderRay',
+						'undefined'
+					]
+
 			},
 			fill :
 			{
 				comment : 'fill',
 				type :
-					require( '../typemaps/fill' )
-					.concat( [ 'undefined' ] )
+					[
+						'gleam_color',
+						'gleam_gradient_askew',
+						'gleam_gradient_radial',
+						'undefined'
+					]
 			}
 		},
 		group : [ 'boolean' ]

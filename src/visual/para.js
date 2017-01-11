@@ -32,7 +32,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_para.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( './mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :

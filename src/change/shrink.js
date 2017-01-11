@@ -22,7 +22,7 @@ if( JION )
 			{
 				comment : 'value tree had',
 				json : true,
-				type : require( '../typemaps/spaceVal' )
+				type : require( './typemap-value' )
 			},
 			rank :
 			{

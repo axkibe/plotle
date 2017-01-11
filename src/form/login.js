@@ -23,7 +23,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'form_form.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
@@ -50,7 +50,7 @@ if( JION )
 			}
 		},
 		init : [ 'twigDup' ],
-		twig : require( '../typemaps/formWidgets' )
+		twig : require( '../form/typemap-widget' )
 	};
 }
 

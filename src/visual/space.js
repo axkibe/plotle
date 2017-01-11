@@ -21,7 +21,7 @@ if( JION )
 			{
 				comment : 'current action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			fabric :
@@ -39,7 +39,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/visualMark' )
+					require( './mark/typemap' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'visual_space.concernsMark( mark )'
 			},

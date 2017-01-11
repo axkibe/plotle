@@ -1,5 +1,5 @@
 /*
-| Typemap of factions.
+| Typemap of actions.
 */
 module.exports =
 [

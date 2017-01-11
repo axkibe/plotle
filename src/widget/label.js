@@ -28,7 +28,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( ['undefined' ] ),
 				assign : ''
 			},

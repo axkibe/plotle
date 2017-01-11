@@ -22,7 +22,7 @@ if( JION )
 			{
 				comment : 'currently active action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			controlTransform :
@@ -45,7 +45,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :
@@ -82,7 +82,7 @@ if( JION )
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],
-		twig : require( '../typemaps/formWidgets' )
+		twig : require( '../form/typemap-widget' )
 	};
 }
 

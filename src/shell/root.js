@@ -21,7 +21,7 @@ if( JION )
 			{
 				comment : 'current action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'shell_root.prepareAction( action )'
 			},
@@ -72,7 +72,7 @@ if( JION )
 			{
 				comment : 'the users mark',
 				type :
-					require( '../typemaps/visualMark' )
+					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			spaceFabric :

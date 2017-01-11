@@ -18,7 +18,7 @@ if( JION )
 			{
 				comment : 'current action',
 				type :
-					require( '../typemaps/action' )
+					require( '../action/typemap' )
 					.concat( [ 'undefined' ] ),
 				prepare : 'visual_item.concernsAction( action, path )'
 			},
@@ -43,7 +43,7 @@ if( JION )
 				comment : 'the users mark',
 				prepare : 'visual_item.concernsMark( mark, path )',
 				type :
-					require( '../typemaps/visualMark' )
+					require( './mark/typemap' )
 					.concat( [ 'undefined' ] )
 			},
 			path :

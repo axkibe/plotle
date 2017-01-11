@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'visual_itemRay',
-		ray : require( '../typemaps/visualItem' )
+		ray : require( './typemap-item' )
 	};
 }
 

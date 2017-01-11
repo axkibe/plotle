@@ -22,13 +22,13 @@ if( JION )
 			{
 				comment : 'value to set',
 				json : true,
-				type : require( '../typemaps/spaceVal' )
+				type : require( './typemap-value' )
 			},
 			prev :
 			{
 				comment : 'value tree had',
 				json : true,
-				type : require( '../typemaps/spaceVal' )
+				type : require( './typemap-value' )
 			}
 		}
 	};
