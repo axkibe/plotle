@@ -82,17 +82,17 @@ if( JION )
 
 var
 	euclid_ellipse,
-	euclid_measure,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
-	euclid_size,
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
+	gleam_measure,
+	gleam_size,
 	jion,
 	result_hover,
 	root,
@@ -216,7 +216,7 @@ jion.lazyValue(
 			'glint', this._glint,
 			'p', this._area.pnw,
 			'size',
-				euclid_size.create(
+				gleam_size.create(
 					'height', this._area.height + 1,
 					'width', this._area.width + 1
 				)
@@ -318,7 +318,7 @@ jion.lazyFunctionInteger(
 			'x',
 				Math.round(
 					pitch.x
-					+ euclid_measure.width(
+					+ gleam_measure.width(
 						font,
 						value.substring( 0, offset )
 					)
@@ -622,26 +622,15 @@ prototype._getOffsetAt =
 	{
 		x1 = x2;
 
-		if( password )
-		{
-			x2 = a * mw;
-		}
-		else
-		{
-			x2 = euclid_measure.width( font, value.substr( 0, a ) );
-		}
+		x2 =
+			password
+			? a * mw
+			: gleam_measure.width( font, value.substr( 0, a ) );
 
-		if( x2 >= dx )
-		{
-			break;
-		}
+		if( x2 >= dx ) break;
 	}
 
-	if(
-		dx - x1 < x2 - dx
-		&&
-		a > 0
-	)
+	if( dx - x1 < x2 - dx && a > 0 )
 	{
 		a--;
 	}

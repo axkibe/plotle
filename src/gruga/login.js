@@ -6,8 +6,8 @@
 var
 	euclid_point,
 	euclid_rect,
-	euclid_size,
 	form_login,
+	gleam_size,
 	gruga_genericButton,
 	gruga_genericInput,
 	gruga_login,
@@ -29,14 +29,14 @@ var
 	loginButton =
 	{
 		pnw : euclid_point.xy( 95, 28 ),
-		size : euclid_size.wh( 70, 70 )
+		size : gleam_size.wh( 70, 70 )
 	},
 
 	// Close control
 	closeButton =
 	{
 		pnw : euclid_point.xy( 180, 38 ),
-		size : euclid_size.wh(  50, 50 )
+		size : gleam_size.wh(  50, 50 )
 	};
 
 

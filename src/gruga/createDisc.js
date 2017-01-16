@@ -8,7 +8,6 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
-	euclid_size,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -16,6 +15,7 @@ var
 	gleam_facetRay,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
+	gleam_size,
 	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
@@ -99,7 +99,7 @@ genericButtonModel =
 gruga_createDisc =
 	disc_createDisc.abstract(
 		'size',
-			euclid_size.create(
+			gleam_size.create(
 				'width', 176,
 				'height', 1010
 			),

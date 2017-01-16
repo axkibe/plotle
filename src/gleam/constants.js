@@ -1,10 +1,10 @@
 /*
-| Constans for euclid.
+| Constans for gleam.
 */
 
 
 var
-	euclid_constants;
+	gleam_constants;
 
 
 /*
@@ -14,7 +14,7 @@ var
 'use strict';
 
 
-euclid_constants =
+gleam_constants =
 {
 	/*
 	|'magic' number to approximate ellipses with beziers.
@@ -26,6 +26,9 @@ euclid_constants =
 	*/
 	epsilon : 0.0000000001
 };
+
+
+/**/if( FREEZE ) Object.freeze( gleam_constants );
 
 
 } )( );

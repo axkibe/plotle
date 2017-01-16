@@ -7,7 +7,7 @@
 
 var
 	config,
-	euclid_size,
+	gleam_size,
 	gleam_display_canvas,
 	gleam_impl,
 	euclid_point,
@@ -280,7 +280,7 @@ shell_system =
 		gleam_impl.createAroundHTMLCanvas(
 			canvas,
 			'root',
-			euclid_size.create(
+			gleam_size.create(
 				'height', window.innerHeight - 1,
 				'width', window.innerWidth - 1
 			),

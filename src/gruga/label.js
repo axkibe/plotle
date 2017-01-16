@@ -6,7 +6,7 @@
 var
 	gleam_facet,
 	gleam_facetRay,
-	euclid_margin,
+	gleam_margin,
 	gruga_highlight,
 	gruga_label;
 
@@ -39,10 +39,12 @@ gruga_label.defaultFontsize = 13;
 
 
 gruga_label.innerMargin =
-	euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 );
+	gleam_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 );
 
 
 gruga_label.minSize = 8;
 
+
+// FIXME FREEZE
 
 } )( );

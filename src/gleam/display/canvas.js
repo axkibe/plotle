@@ -34,7 +34,7 @@ if( JION )
 			size :
 			{
 				comment : 'the size of the display',
-				type : [ 'euclid_size', 'euclid_rect' ]
+				type : [ 'gleam_size', 'euclid_rect' ]
 			},
 			_cv :
 			{
@@ -53,8 +53,8 @@ if( JION )
 
 
 var
-	euclid_constants,
 	get2dContext,
+	gleam_constants,
 	gleam_glint_ray,
 	gleam_display_canvas,
 	jion;
@@ -904,7 +904,7 @@ prototype._sketchGenericShape =
 
 	cx = this._cx;
 
-	magic = euclid_constants.magic;
+	magic = gleam_constants.magic;
 
 /**/if( CHECK )
 /**/{

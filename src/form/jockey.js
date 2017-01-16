@@ -43,7 +43,7 @@ if( JION )
 			viewSize :
 			{
 				comment : 'current view size',
-				type : 'euclid_size'
+				type : 'gleam_size'
 			}
 		},
 		init : [ 'twigDup' ],

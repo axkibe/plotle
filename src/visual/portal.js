@@ -71,11 +71,9 @@ var
 	change_insert,
 	change_remove,
 	euclid_ellipse,
-	euclid_measure,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
-	euclid_size,
 	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
@@ -87,6 +85,8 @@ var
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
+	gleam_measure,
+	gleam_size,
 	gruga_portal,
 	jion,
 	jion$pathRay,
@@ -486,7 +486,7 @@ jion.lazyValue(
 				'glint', this._glint,
 				'p', tZone.pnw,
 				'size',
-					euclid_size.create(
+					gleam_size.create(
 						'width', Math.round( tZone.width + 1.5 ),
 						'height', Math.round( tZone.height + 1.5 )
 					)
@@ -883,7 +883,7 @@ prototype._locateOffset =
 	return euclid_point.create(
 		'x',
 			Math.round(
-				euclid_measure.width(
+				gleam_measure.width(
 					font,
 					text.substring( 0, offset )
 				)
@@ -1503,7 +1503,7 @@ prototype._prepareField =
 
 	font = this._fontFor( section );
 
-	width = euclid_measure.width( font, text );
+	width = gleam_measure.width( font, text );
 
 	height = font.size + 2;
 
@@ -1615,7 +1615,7 @@ prototype._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = euclid_measure.width( font, value.substr( 0, a ) );
+		x2 = gleam_measure.width( font, value.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}

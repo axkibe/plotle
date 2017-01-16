@@ -61,7 +61,7 @@ if( JION )
 			size :
 			{
 				comment : 'designed size',
-				type : 'euclid_size'
+				type : 'gleam_size'
 			},
 			spaceRef :
 			{
@@ -78,7 +78,7 @@ if( JION )
 			viewSize :
 			{
 				comment : 'current view size',
-				type : 'euclid_size'
+				type : 'gleam_size'
 			}
 		},
 		init : [ 'inherit', 'twigDup' ],

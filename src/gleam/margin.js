@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_margin',
+		id : 'gleam_margin',
 		attributes :
 		{
 			n :
@@ -38,7 +38,7 @@ if( JION )
 
 
 var
-	euclid_margin,
+	gleam_margin,
 	jion;
 
 
@@ -53,26 +53,15 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	euclid_margin = jion.this( module, 'source' );
+	gleam_margin = jion.this( module, 'source' );
 }
 
-
-/*
-| A margin with all distances 0.
-*/
-euclid_margin.zero =
-	euclid_margin.create(
-		'n', 0,
-		'e', 0,
-		's', 0,
-		'w', 0
-	);
 
 /*
 | east + west margin = x
 */
 jion.lazyValue(
-	euclid_margin.prototype,
+	gleam_margin.prototype,
 	'x',
 	function( )
 	{
@@ -85,7 +74,7 @@ jion.lazyValue(
 | north + south margin = y
 */
 jion.lazyValue(
-	euclid_margin.prototype,
+	gleam_margin.prototype,
 	'y',
 	function( )
 	{

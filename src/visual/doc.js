@@ -38,7 +38,7 @@ if( JION )
 			innerMargin :
 			{
 				comment : 'inner margin of the doc',
-				type : 'euclid_margin'
+				type : 'gleam_margin'
 			},
 			mark :
 			{

@@ -8,7 +8,6 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
-	euclid_size,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -16,6 +15,7 @@ var
 	gleam_facetRay,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
+	gleam_size,
 	gruga_iconNormal,
 	gruga_iconRemove,
 	gruga_iconSelect,
@@ -136,7 +136,7 @@ userButtonSize = euclid_point.xy( 24, 180 );
 gruga_mainDisc =
 	disc_mainDisc.abstract(
 		'size',
-			euclid_size.create(
+			gleam_size.create(
 				'width', 100,
 				'height', 1000
 			),

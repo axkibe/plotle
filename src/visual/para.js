@@ -74,11 +74,11 @@ var
 	change_remove,
 	change_split,
 	euclid_point,
-	euclid_size,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
-	euclid_measure,
+	gleam_measure,
+	gleam_size,
 	euclid_point,
 	flow_block,
 	flow_line,
@@ -192,7 +192,7 @@ jion.lazyValue(
 			'glint', this._glint,
 			'p', this.pnw.transform( this.transform.ortho ),
 			'size',
-				euclid_size.create(
+				gleam_size.create(
 					'height', Math.round( this.height * this.transform.zoom + 1 ),
 					'width', Math.round( this.flow.width * this.transform.zoom + 1 )
 				)
@@ -403,7 +403,7 @@ jion.lazyValue(
 
 	y = font.size;
 
-	space = euclid_measure.width( font, ' ' );
+	space = gleam_measure.width( font, ' ' );
 
 	lines = [ ];
 
@@ -419,7 +419,7 @@ jion.lazyValue(
 		// a token is a word plus following hard spaces
 		tokenText = ca[ 1 ] + ca[ 3 ];
 
-		w = euclid_measure.width( font, tokenText );
+		w = gleam_measure.width( font, tokenText );
 
 		if( flowWidth > 0 && x + w > flowWidth )
 		{
@@ -554,7 +554,7 @@ prototype.getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = euclid_measure.width( font, text.substr( 0, a ) );
+		x2 = gleam_measure.width( font, text.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}
@@ -1300,7 +1300,7 @@ prototype._locateOffset =
 				'x',
 					Math.round(
 						token.x
-						+ euclid_measure.width(
+						+ gleam_measure.width(
 							font,
 							text.substring( token.offset, offset )
 						)

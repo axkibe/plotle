@@ -35,7 +35,7 @@ if( JION )
 
 
 var
-	euclid_constants,
+	gleam_constants,
 	euclid_point,
 	euclid_shape_line;
 
@@ -62,7 +62,7 @@ if( NODE )
 
 prototype = euclid_shape_line.prototype;
 
-e = euclid_constants.epsilon;
+e = gleam_constants.epsilon;
 
 
 /*

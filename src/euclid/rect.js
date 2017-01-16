@@ -32,7 +32,7 @@ if( JION )
 var
 	euclid_point,
 	euclid_rect,
-	euclid_size,
+	gleam_size,
 	jion;
 
 
@@ -571,7 +571,7 @@ prototype.reduce =
 
 /**/if( CHECK )
 /**/{
-/**/	if( margin.reflect !== 'euclid_margin' ) throw new Error( );
+/**/	if( margin.reflect !== 'gleam_margin' ) throw new Error( );
 /**/}
 
 	// allows margins to reduce the rect to zero size without erroring.
@@ -757,7 +757,7 @@ jion.lazyValue(
 		size;
 
 	size =
-		euclid_size.create(
+		gleam_size.create(
 			'height', this.height,
 			'width', this.width
 		);

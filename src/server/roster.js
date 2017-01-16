@@ -221,7 +221,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/size.js',
+		'filePath', 'src/gleam/size.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -273,15 +273,11 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/constants.js',
+		'filePath', 'src/gleam/constants.js',
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/compass.js',
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/euclid/margin.js',
+		'filePath', 'src/gleam/margin.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -332,7 +328,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/measure.js',
+		'filePath', 'src/gleam/measure.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1021,20 +1017,6 @@ server_resourceRay.create( 'ray:init', [
 		'devel', true,
 		'hasJion', true,
 		'inTestPad', true
-	),
-
-	// --- TestGleam ---
-	server_resource.create(
-		'aliases', stringRay( [ 'testgleam.html' ] ),
-		'filePath', 'media/testgleam.html',
-		'devel', true,
-		'postProcessor', 'testGleamHtml'
-	),
-	server_resource.create(
-		'filePath', 'src/testgleam/root.js',
-		'devel', true,
-		'hasJion', true,
-		'inTestGleam', true
 	)
 ] );
 

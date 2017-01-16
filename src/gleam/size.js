@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_size',
+		id : 'gleam_size',
 		attributes :
 		{
 			height :
@@ -30,7 +30,7 @@ if( JION )
 var
 	euclid_point,
 	euclid_rect,
-	euclid_size,
+	gleam_size,
 	jion;
 
 
@@ -49,24 +49,24 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	euclid_size = jion.this( module, 'source' );
+	gleam_size = jion.this( module, 'source' );
 }
 
 
-prototype = euclid_size.prototype;
+prototype = gleam_size.prototype;
 
 
 /*
-| Shortcut to create an euclid_size jion.
+| Shortcut to create an gleam_size jion.
 */
-euclid_size.wh =
+gleam_size.wh =
 	function(
 		width,
 		height
 	)
 {
 	return(
-		euclid_size.create(
+		gleam_size.create(
 			'width', width,
 			'height', height
 		)

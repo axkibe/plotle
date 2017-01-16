@@ -11,7 +11,7 @@ var
 	gleam_facetRay,
 	gleam_gradient_askew,
 	gleam_gradient_colorStop,
-	euclid_margin,
+	gleam_margin,
 	gruga_highlight,
 	gruga_note;
 
@@ -63,7 +63,7 @@ gruga_note.facets =
 | Inner distance of note to doc.
 */
 gruga_note.innerMargin =
-	euclid_margin.create(
+	gleam_margin.create(
 		'n', 4,
 		'e', 5,
 		's', 4,

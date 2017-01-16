@@ -4,7 +4,7 @@
 
 
 var
-	euclid_measure;
+	gleam_measure;
 
 
 /*
@@ -17,7 +17,7 @@ var
 /*
 | Singleton
 */
-euclid_measure =
+gleam_measure =
 {
 
 	/*
@@ -26,10 +26,9 @@ euclid_measure =
 	init :
 		function( canvas )
 	{
-		euclid_measure._cx =
-			canvas.getContext( '2d' );
+		gleam_measure._cx = canvas.getContext( '2d' );
 
-		/**/if( FREEZE ) Object.freeze( euclid_measure );
+		/**/if( FREEZE ) Object.freeze( gleam_measure );
 	},
 
 
@@ -45,7 +44,7 @@ euclid_measure =
 		var
 			cx;
 
-		cx = euclid_measure._cx;
+		cx = gleam_measure._cx;
 
 		if( cx.font !== font.css )
 		{

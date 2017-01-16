@@ -61,12 +61,12 @@ if( JION )
 
 
 var
-	euclid_size,
 	gleam_arrow,
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_size,
 	euclid_rect,
 	gleam_glint_paint,
 	gruga_label,
@@ -199,7 +199,7 @@ Object.defineProperty(
 				'glint', this.doc.glint,
 				'p', tZone.pnw,
 				'size',
-					euclid_size.create(
+					gleam_size.create(
 						'height', Math.round( tZone.height + 1 ),
 						'width', Math.round( tZone.width + 1 )
 					)

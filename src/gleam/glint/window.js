@@ -27,7 +27,7 @@ if( JION )
 			size :
 			{
 				comment : 'the size of the window',
-				type : 'euclid_size'
+				type : 'gleam_size'
 			}
 		},
 		init : [ 'inherit' ]

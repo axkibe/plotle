@@ -108,7 +108,7 @@ if( JION )
 			viewSize :
 			{
 				comment : 'current view size',
-				type : 'euclid_size'
+				type : 'gleam_size'
 			},
 			_transformExponent :
 			{
@@ -161,9 +161,9 @@ var
 	gleam_connect,
 	gleam_display_canvas,
 	gleam_glint_ray,
-	euclid_measure,
+	gleam_measure,
+	gleam_size,
 	euclid_point,
-	euclid_size,
 	fabric_doc,
 	fabric_para,
 	fabric_relation,
@@ -355,24 +355,24 @@ shell_root.startup =
 		gleam_display_canvas.createAroundHTMLCanvas(
 			canvas,
 			'swatch',
-			euclid_size.create(
+			gleam_size.create(
 				'height', 10,
 				'width', 10
 			),
 			undefined
 		);
 
-	euclid_measure.init( canvas );
+	gleam_measure.init( canvas );
 
 	/*
 	root._fontWFont = shell_fontPool.get( 20, 'la' );
 
 	root._fontWatch =
-		euclid_measure.width( root._fontWFont, 'ideoloom$8833' );
+		gleam_measure.width( root._fontWFont, 'ideoloom$8833' );
 	*/
 
 	viewSize =
-		euclid_size.create(
+		gleam_size.create(
 			'height', display.size.height,
 			'width', display.size.width
 		);
@@ -1181,7 +1181,7 @@ prototype.update =
 */
 prototype.resize =
 	function(
-		width,  // FIXME give an euclid_size jion
+		width,  // FIXME give an gleam_size jion
 		height
 	)
 {
@@ -1189,7 +1189,7 @@ prototype.resize =
 		viewSize;
 
 	viewSize =
-		euclid_size.create(
+		gleam_size.create(
 			'height', height,
 			'width', width
 		);
