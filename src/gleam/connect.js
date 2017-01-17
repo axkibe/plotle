@@ -5,7 +5,7 @@
 
 var
 	gleam_connect,
-	euclid_line;
+	gleam_line;
 
 
 /*
@@ -78,7 +78,7 @@ gleam_connect.line =
 	}
 
 	return(
-		euclid_line.create(
+		gleam_line.create(
 			'p1', p1,
 			'p2', p2
 		)

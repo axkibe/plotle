@@ -9,14 +9,14 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shapeRay',
-		ray : require( './typemap-shape' )
+		id : 'gleam_shapeRay',
+		ray : require( '../euclid/typemap-shape' ) // XXX ./typemap-shape
 	};
 }
 
 
 var
-	euclid_shapeRay;
+	gleam_shapeRay;
 
 
 /*
@@ -37,7 +37,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_shapeRay.prototype;
+prototype = gleam_shapeRay.prototype;
 
 
 /*

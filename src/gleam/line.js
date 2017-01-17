@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_line',
+		id : 'gleam_line',
 		attributes :
 		{
 			p1 :
@@ -28,9 +28,9 @@ if( JION )
 
 
 var
-	euclid_line,
 	euclid_point,
 	euclid_rect,
+	gleam_line,
 	jion;
 
 
@@ -52,7 +52,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_line.prototype;
+prototype = gleam_line.prototype;
 
 
 /*

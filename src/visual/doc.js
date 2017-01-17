@@ -77,7 +77,6 @@ if( JION )
 var
 	euclid_point,
 	euclid_shape,
-	euclid_shapeRay,
 	euclid_shape_start,
 	euclid_shape_line,
 	euclid_point,
@@ -86,6 +85,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_shapeRay,
 	gruga_selection,
 	jion,
 	root,
@@ -742,7 +742,7 @@ jion.lazyValue(
 			)
 		];
 
-		return euclid_shapeRay.create( 'ray:init', shapes );
+		return gleam_shapeRay.create( 'ray:init', shapes );
 	}
 	else
 	{

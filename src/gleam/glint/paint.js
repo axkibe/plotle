@@ -24,7 +24,7 @@ if( JION )
 				comment : 'the shape to draw',
 				type :
 					require( '../../euclid/typemap-shape' )
-					.concat( [ 'euclid_shapeRay' ] )
+					.concat( [ 'gleam_shapeRay' ] )
 			}
 		}
 	};

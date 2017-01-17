@@ -352,7 +352,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shapeRay.js',
+		'filePath', 'src/gleam/shapeRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -367,7 +367,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/line.js',
+		'filePath', 'src/gleam/line.js',
 		'hasJion', true,
 		'inBundle', true
 	),

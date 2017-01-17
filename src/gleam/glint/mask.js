@@ -27,7 +27,7 @@ if( JION )
 				comment : 'the shape(ray) to mask to',
 				type :
 					require( '../../euclid/typemap-shape' )
-					.concat( [ 'euclid_shapeRay' ] )
+					.concat( [ 'gleam_shapeRay' ] )
 			}
 		}
 	};

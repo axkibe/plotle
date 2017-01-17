@@ -173,7 +173,7 @@ prototype.within =
 /**/	if( p.reflect !== 'euclid_point' ) throw new Error( );
 /**/}
 
-	if( shape.reflect === 'euclid_shapeRay' )
+	if( shape.reflect === 'gleam_shapeRay' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
@@ -665,7 +665,7 @@ prototype._renderGlintRay =
 
 				shape = g.shape;
 
-				if( shape.reflect === 'euclid_shapeRay' )
+				if( shape.reflect === 'gleam_shapeRay' )
 				{
 					for( a = 0, aZ = shape.length; a < aZ; a++ )
 					{
@@ -781,7 +781,7 @@ prototype._paint =
 		cx,
 		fill;
 
-	if( shape.reflect === 'euclid_shapeRay' )
+	if( shape.reflect === 'gleam_shapeRay' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{

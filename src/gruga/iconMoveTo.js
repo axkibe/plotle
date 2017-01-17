@@ -26,10 +26,10 @@ var
 	euclid_shape,
 	euclid_shape_start,
 	euclid_shape_line,
-	euclid_shapeRay,
 	gleam_border,
 	gleam_color,
-	gleam_facet;
+	gleam_facet,
+	gleam_shapeRay;
 
 
 /*
@@ -94,7 +94,7 @@ base2 =
 
 
 gruga_iconMoveTo.shape =
-	euclid_shapeRay.create(
+	gleam_shapeRay.create(
 		'ray:init',
 		[
 			arrow,

@@ -33,12 +33,12 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
-	euclid_shapeRay,
 	gleam_ellipse,
-	gruga_frame,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_mask,
+	gleam_shapeRay,
+	gruga_frame,
 	jion,
 	result_hover,
 	visual_frame;
@@ -325,7 +325,7 @@ jion.lazyValue(
 		arr[ an++ ] = ca.tSilhoutte.border( -12 );
 	}
 
-	shape = euclid_shapeRay.create( 'ray:init', arr );
+	shape = gleam_shapeRay.create( 'ray:init', arr );
 
 	return(
 		gleam_glint_mask.create(
