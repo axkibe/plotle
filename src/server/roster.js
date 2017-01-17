@@ -362,7 +362,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/ellipse.js',
+		'filePath', 'src/gleam/ellipse.js',
 		'hasJion', true,
 		'inBundle', true
 	),

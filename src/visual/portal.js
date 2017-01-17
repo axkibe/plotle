@@ -70,13 +70,13 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
 	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
+	gleam_ellipse,
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
@@ -698,7 +698,7 @@ jion.lazyValue(
 
 	zone = this.zone;
 
-	return euclid_ellipse.create( 'pnw', zone.pnw, 'pse', zone.pse );
+	return gleam_ellipse.create( 'pnw', zone.pnw, 'pse', zone.pse );
 }
 );
 
@@ -717,7 +717,7 @@ jion.lazyValue(
 	zone = this.zone;
 
 	return(
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', euclid_point.zero,
 			'pse',
 				euclid_point.create(

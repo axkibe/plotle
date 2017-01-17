@@ -68,7 +68,7 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the button',
-				type : [ 'string', 'euclid_ellipse' ]
+				type : [ 'string', 'gleam_ellipse' ]
 			},
 			text :
 			{
@@ -103,9 +103,9 @@ if( JION )
 
 
 var
-	euclid_ellipse,
 	euclid_point,
 	euclid_transform,
+	gleam_ellipse,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_text,
@@ -439,7 +439,7 @@ jion.lazyValue(
 			area = this._area;
 
 			return(
-				euclid_ellipse.create(
+				gleam_ellipse.create(
 					'pnw', euclid_point.zero,
 					'pse',
 						euclid_point.xy(

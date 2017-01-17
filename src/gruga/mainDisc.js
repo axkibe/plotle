@@ -5,12 +5,12 @@
 
 var
 	disc_mainDisc,
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
+	gleam_ellipse,
 	gleam_facet,
 	gleam_facetRay,
 	gleam_gradient_colorStop,
@@ -169,7 +169,7 @@ gruga_mainDisc =
 					)
 			),
 		'shape',
-			euclid_ellipse.create(
+			gleam_ellipse.create(
 				'pnw', euclid_point.xy( -2101, -1100 ),
 				'pse', euclid_point.xy( 99, 1100 ),
 				'gradientPC', euclid_point.xy( -600, 0 ),
@@ -239,7 +239,7 @@ gruga_mainDisc =
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
-					euclid_ellipse.create(
+					gleam_ellipse.create(
 						'pnw', euclid_point.xy( -60, 0 ),
 						'pse', spaceButtonSize.sub( 1, 1 )
 					),
@@ -255,7 +255,7 @@ gruga_mainDisc =
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
-					euclid_ellipse.create(
+					gleam_ellipse.create(
 						'pnw', euclid_point.xy( -70, 0 ),
 						'pse', userButtonSize.sub( 1, 1 )
 					),

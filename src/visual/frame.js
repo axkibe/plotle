@@ -30,15 +30,15 @@ if( JION )
 var
 	action_dragItems,
 	action_resizeItems,
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
 	euclid_shapeRay,
+	gleam_ellipse,
+	gruga_frame,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_mask,
-	gruga_frame,
 	jion,
 	result_hover,
 	visual_frame;
@@ -486,7 +486,7 @@ jion.lazyValue(
 	pn = this._outerZone.pn;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pn.add( -handleSize2, 0 ),
 			'pse', pn.add( handleSize2, handleSize )
 		);
@@ -516,7 +516,7 @@ jion.lazyValue(
 	pne = this._outerZone.pne;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pne.add( -handleSize, 0 ),
 			'pse', pne.add( 0, handleSize )
 		);
@@ -546,7 +546,7 @@ jion.lazyValue(
 	pnw = this._outerZone.pnw;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pnw,
 			'pse', pnw.add( handleSize, handleSize )
 		);
@@ -581,7 +581,7 @@ jion.lazyValue(
 	pe = this._outerZone.pe;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pe.add( -handleSize, -handleSize / 2 ),
 			'pse', pe.add( 0, handleSize / 2 )
 		);
@@ -616,7 +616,7 @@ jion.lazyValue(
 	ps = this._outerZone.ps;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', ps.add( -handleSize2, -handleSize ),
 			'pse', ps.add( handleSize2, 0 )
 		);
@@ -646,7 +646,7 @@ jion.lazyValue(
 	pse = this._outerZone.pse;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pse.add( -handleSize, -handleSize ),
 			'pse', pse
 		);
@@ -676,7 +676,7 @@ jion.lazyValue(
 	psw = this._outerZone.psw;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', psw.add( 0, -handleSize ),
 			'pse', psw.add( handleSize, 0 )
 		);
@@ -711,7 +711,7 @@ jion.lazyValue(
 	pw = this._outerZone.pw;
 
 	shape =
-		euclid_ellipse.create(
+		gleam_ellipse.create(
 			'pnw', pw.add( 0, -handleSize2 ),
 			'pse', pw.add( handleSize, handleSize2 )
 		);

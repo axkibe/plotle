@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_ellipse',
+		id : 'gleam_ellipse',
 		attributes :
 		{
 			pnw :
@@ -47,11 +47,11 @@ if( JION )
 
 
 var
-	euclid_ellipse,
 	euclid_point,
 	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
+	gleam_ellipse,
 	jion;
 
 
@@ -73,7 +73,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_ellipse.prototype;
+prototype = gleam_ellipse.prototype;
 
 
 /*

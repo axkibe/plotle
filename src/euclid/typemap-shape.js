@@ -3,7 +3,7 @@
 */
 module.exports =
 [
-	'euclid_ellipse',
+	'gleam_ellipse',
 	'euclid_rect',
 	'euclid_roundRect',
 	'euclid_shape'

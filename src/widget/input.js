@@ -81,10 +81,10 @@ if( JION )
 
 
 var
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	gleam_ellipse,
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
@@ -879,7 +879,7 @@ jion.lazyValue(
 	for( a = 0, aZ = value.length; a < aZ; a++, x += w + k )
 	{
 		pm[ a ] =
-			euclid_ellipse.create(
+			gleam_ellipse.create(
 				'pnw',
 					euclid_point.create(
 						'x', x,

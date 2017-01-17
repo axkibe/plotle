@@ -5,12 +5,12 @@
 
 var
 	disc_createDisc,
-	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
+	gleam_ellipse,
 	gleam_facet,
 	gleam_facetRay,
 	gleam_gradient_colorStop,
@@ -132,7 +132,7 @@ gruga_createDisc =
 					)
 			),
 		'shape',
-			euclid_ellipse.create(
+			gleam_ellipse.create(
 				'pnw', euclid_point.xy( -2175, -1175 ),
 				'pse', euclid_point.xy( 175, 1175 ),
 				'gradientPC', euclid_point.xy( -600, 0 ),

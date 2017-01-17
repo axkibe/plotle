@@ -56,7 +56,7 @@ if( JION )
 			shape :
 			{
 				comment : 'shape of the disc',
-				type : 'euclid_ellipse'
+				type : 'gleam_ellipse'
 			},
 			size :
 			{
