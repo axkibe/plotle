@@ -15,12 +15,12 @@
 var
 	gruga_iconRemove,
 	euclid_point,
-	euclid_shape,
 	euclid_shape_start,
 	euclid_shape_line,
 	gleam_border,
 	gleam_color,
-	gleam_facet;
+	gleam_facet,
+	gleam_shape;
 
 
 /*
@@ -75,7 +75,7 @@ gruga_iconRemove.facet =
 
 
 gruga_iconRemove.shape =
-	euclid_shape.create(
+	gleam_shape.create(
 		'ray:init',
 		[
 			euclid_shape_start.create(

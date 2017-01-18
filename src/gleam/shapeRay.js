@@ -41,8 +41,8 @@ prototype = gleam_shapeRay.prototype;
 
 
 /*
-| Returns a shapeRay bordering this shape by 
-| +/- distance. See euclid_shape.border for further 
+| Returns a shapeRay bordering this shape by
+| +/- distance. See gleam_shape.border for further
 | explanation.
 */
 prototype.border =

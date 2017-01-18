@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shape',
+		id : 'gleam_shape',
 		attributes :
 		{
 			pc :
@@ -29,7 +29,7 @@ if( JION )
 
 
 var
-	euclid_shape;
+	gleam_shape;
 
 
 /*
@@ -50,11 +50,11 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_shape.prototype;
+prototype = gleam_shape.prototype;
 
 
 /*
-| Returns a shape bordering this shape by 
+| Returns a shape bordering this shape by
 | +/- distance. It is kind of a zoom to or from
 | central point, but it isn't a real scale/zoom, since
 | the border distance is from example always 1 regardless

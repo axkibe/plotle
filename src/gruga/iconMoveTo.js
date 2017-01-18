@@ -20,12 +20,12 @@ var
 	arrow,
 	base1,
 	base2,
-	gruga_iconMoveTo,
 	euclid_point,
 	euclid_rect,
-	euclid_shape,
 	euclid_shape_start,
 	euclid_shape_line,
+	gleam_shape,
+	gruga_iconMoveTo,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
@@ -63,7 +63,7 @@ gruga_iconMoveTo.facet =
 
 
 arrow =
-	euclid_shape.create(
+	gleam_shape.create(
 		'ray:init',
 		[
 			euclid_shape_start.create( 'p', ap ), // A

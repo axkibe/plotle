@@ -23,7 +23,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_roundRect',
+		id : 'gleam_roundRect',
 		attributes :
 		{
 			pnw :
@@ -54,12 +54,12 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_roundRect,
-	euclid_shape,
-	jion,
 	euclid_shape_line,
 	euclid_shape_round,
-	euclid_shape_start;
+	euclid_shape_start,
+	gleam_roundRect,
+	gleam_shape,
+	jion;
 
 
 /*
@@ -78,7 +78,7 @@ if( NODE )
 
 
 var
-	prototype = euclid_roundRect.prototype;
+	prototype = gleam_roundRect.prototype;
 
 
 /*
@@ -101,7 +101,7 @@ prototype._init =
 	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
-		euclid_shape.create(
+		gleam_shape.create(
 			'ray:init',
 				[
 					euclid_shape_start.create(

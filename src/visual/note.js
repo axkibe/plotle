@@ -79,7 +79,6 @@ var
 	change_grow,
 	euclid_point,
 	euclid_rect,
-	euclid_roundRect,
 	euclid_transform,
 	fabric_doc,
 	fabric_note,
@@ -89,6 +88,7 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_roundRect,
 	gleam_size,
 	gruga_note,
 	jion,
@@ -614,7 +614,7 @@ jion.lazyValue(
 	cr = gruga_note.cornerRadius;
 
 	return(
-		euclid_roundRect.create(
+		gleam_roundRect.create(
 			'pnw', zone.pnw,
 			'pse', zone.pse,
 			'a', cr,
@@ -775,8 +775,8 @@ jion.lazyValue(
 
 		cr = gruga_note.cornerRadius;
 
-		return (
-			euclid_roundRect.create(
+		return(
+			gleam_roundRect.create(
 				'pnw', euclid_point.zero,
 				'pse',
 					euclid_point.create(

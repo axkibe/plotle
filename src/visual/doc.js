@@ -76,7 +76,6 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape,
 	euclid_shape_start,
 	euclid_shape_line,
 	euclid_point,
@@ -85,6 +84,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_shape,
 	gleam_shapeRay,
 	gruga_selection,
 	jion,
@@ -661,7 +661,7 @@ jion.lazyValue(
 		];
 
 		return(
-			euclid_shape.create(
+			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
 					euclid_point.create(
@@ -724,7 +724,7 @@ jion.lazyValue(
 
 		shapes =
 		[
-			euclid_shape.create(
+			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
 					euclid_point.create(
@@ -732,7 +732,7 @@ jion.lazyValue(
 						'y', ( 2 * fp.y - ascend + descend ) / 2
 					)
 			),
-			euclid_shape.create(
+			gleam_shape.create(
 				'ray:init', sections2,
 				'pc',
 					euclid_point.create(
@@ -849,7 +849,7 @@ jion.lazyValue(
 			];
 
 			return(
-				euclid_shape.create(
+				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
 						euclid_point.create(
@@ -913,7 +913,7 @@ jion.lazyValue(
 				];
 
 			return(
-				euclid_shape.create(
+				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
 						euclid_point.create(

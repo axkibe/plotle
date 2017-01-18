@@ -48,10 +48,10 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
 	gleam_ellipse,
+	gleam_shape,
 	jion;
 
 
@@ -131,7 +131,7 @@ prototype._init =
 		euclid_point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		euclid_shape.create(
+		gleam_shape.create(
 			'ray:init',
 			[
 				euclid_shape_start.create( 'p', pw ),

@@ -14,13 +14,13 @@
 
 
 var
-	gruga_iconCheck,
 	euclid_point,
-	euclid_shape,
 	euclid_shape_start,
 	euclid_shape_line,
 	gleam_color,
-	gleam_facet;
+	gleam_facet,
+	gleam_shape,
+	gruga_iconCheck;
 
 
 /*
@@ -51,7 +51,7 @@ gruga_iconCheck.facet =
 
 
 gruga_iconCheck.shape =
-	euclid_shape.create(
+	gleam_shape.create(
 		'ray:init',
 		[
 			euclid_shape_start.create(

@@ -18,14 +18,14 @@
 
 
 var
-	gruga_iconNormal,
 	euclid_point,
-	euclid_shape,
-	euclid_shape_start,
-	euclid_shape_line,
+	gleam_shape,
 	gleam_border,
 	gleam_color,
-	gleam_facet;
+	gleam_facet,
+	gruga_iconNormal,
+	euclid_shape_start,
+	euclid_shape_line;
 
 
 /*
@@ -59,7 +59,7 @@ gruga_iconNormal.facet =
 
 
 gruga_iconNormal.shape =
-	euclid_shape.create(
+	gleam_shape.create(
 		'ray:init',
 		[
 			euclid_shape_start.create( 'p', ap ), // A

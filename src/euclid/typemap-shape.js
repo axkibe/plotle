@@ -5,6 +5,6 @@ module.exports =
 [
 	'gleam_ellipse',
 	'euclid_rect',
-	'euclid_roundRect',
-	'euclid_shape'
+	'gleam_roundRect',
+	'gleam_shape'
 ];

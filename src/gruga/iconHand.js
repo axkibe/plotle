@@ -24,13 +24,13 @@
 var
 	gruga_iconHand,
 	euclid_point,
-	euclid_shape,
 	euclid_shape_round,
 	euclid_shape_start,
 	euclid_shape_line,
 	gleam_border,
 	gleam_color,
-	gleam_facet;
+	gleam_facet,
+	gleam_shape;
 
 
 /*
@@ -121,7 +121,7 @@ pp = qp.add( -3, 2 );
 
 
 gruga_iconHand.shape =
-	euclid_shape.create(
+	gleam_shape.create(
 		'ray:init',
 		[
 			euclid_shape_start.create( 'p', ap ), // A

@@ -50,11 +50,11 @@ if( JION )
 
 
 var
-	gleam_arrow,
-	gleam_connect,
-	euclid_shape,
 	euclid_shape_line,
 	euclid_shape_start,
+	gleam_arrow,
+	gleam_connect,
+	gleam_shape,
 	gruga_relation,
 	jion;
 
@@ -201,7 +201,7 @@ jion.lazyValue(
 	);
 
 	return(
-		euclid_shape.create(
+		gleam_shape.create(
 			'ray:init', sections,
 			'pc', line.pc
 		)

@@ -52,7 +52,7 @@ if( JION )
 
 
 var
-	euclid_roundRect,
+	gleam_roundRect,
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
@@ -136,7 +136,7 @@ jion.lazyValue(
 	transform = this.transform;
 
 	return(
-		euclid_roundRect.create(
+		gleam_roundRect.create(
 			'pnw',
 				pnw
 				.add( 0, sy )

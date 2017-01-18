@@ -95,7 +95,7 @@ jion.lazyValue(
 
 /*
 | Returns a border bordering this point.
-| See euclid_shape.border for further explanation.
+| See gleam_shape.border for further explanation.
 */
 prototype.border =
 	function(

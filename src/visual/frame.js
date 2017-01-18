@@ -32,11 +32,11 @@ var
 	action_resizeItems,
 	euclid_point,
 	euclid_rect,
-	euclid_roundRect,
 	gleam_ellipse,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_mask,
+	gleam_roundRect,
 	gleam_shapeRay,
 	gruga_frame,
 	jion,
@@ -437,7 +437,7 @@ jion.lazyValue(
 	oZone = this._outerZone;
 
 	return(
-		euclid_roundRect.create(
+		gleam_roundRect.create(
 			'pnw', oZone.pnw,
 			'pse', oZone.pse,
 			'a', handleSize / 2,

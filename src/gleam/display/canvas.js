@@ -186,7 +186,7 @@ prototype.within =
 	switch( shape.reflect )
 	{
 		case 'gleam_ellipse' :
-		case 'euclid_roundRect' :
+		case 'gleam_roundRect' :
 
 			this._cx.beginPath( );
 
@@ -194,7 +194,7 @@ prototype.within =
 
 			break;
 
-		case 'euclid_shape' :
+		case 'gleam_shape' :
 
 			this._cx.beginPath( );
 
@@ -860,7 +860,7 @@ prototype._sketch =
 	switch( shape.reflect )
 	{
 		case 'gleam_ellipse' :
-		case 'euclid_roundRect' :
+		case 'gleam_roundRect' :
 
 			return this._sketchGenericShape( shape.shape, border, twist );
 
@@ -868,7 +868,7 @@ prototype._sketch =
 
 			return this._sketchRect( shape, border, twist );
 
-		case 'euclid_shape' :
+		case 'gleam_shape' :
 
 			return this._sketchGenericShape( shape, border, twist );
 

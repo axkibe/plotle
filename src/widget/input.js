@@ -83,7 +83,6 @@ if( JION )
 var
 	euclid_point,
 	euclid_rect,
-	euclid_roundRect,
 	gleam_ellipse,
 	gleam_facet,
 	gleam_glint_border,
@@ -92,6 +91,7 @@ var
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
+	gleam_roundRect,
 	gleam_size,
 	jion,
 	result_hover,
@@ -825,7 +825,7 @@ jion.lazyValue(
 	area = this._area;
 
 	return(
-		euclid_roundRect.create(
+		gleam_roundRect.create(
 			'pnw', euclid_point.zero,
 			'pse', area.pse.sub( area.pnw ),
 			'a', 7,

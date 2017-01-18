@@ -72,7 +72,6 @@ var
 	change_remove,
 	euclid_point,
 	euclid_rect,
-	euclid_roundRect,
 	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
@@ -86,6 +85,7 @@ var
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
+	gleam_roundRect,
 	gleam_size,
 	gruga_portal,
 	jion,
@@ -1448,7 +1448,7 @@ jion.lazyValue(
 	result =
 		{
 			shape :
-				euclid_roundRect.create(
+				gleam_roundRect.create(
 					'pnw', pnw,
 					'pse', pse,
 					'a', rounding,
@@ -1519,7 +1519,7 @@ prototype._prepareField =
 		);
 
 	silhoutte =
-		euclid_roundRect.create(
+		gleam_roundRect.create(
 			'pnw', p.sub( pitch, height ),
 			'pse', p.add( Math.round( width ) + pitch, pitch ),
 			'a', rounding,
