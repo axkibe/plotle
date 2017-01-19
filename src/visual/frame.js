@@ -20,7 +20,7 @@ if( JION )
 			transform :
 			{
 				comment : 'current transform of the frame',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		}
 	};

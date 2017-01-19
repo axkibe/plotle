@@ -44,7 +44,7 @@ if( JION )
 			{
 				comment : 'icon shape',
 				type :
-					require( '../euclid/typemap-shape' )
+					require( '../gleam/typemap-shape' )
 					.concat( [ 'undefined' ] )
 			},
 			iconFacet :
@@ -89,7 +89,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			visible :
 			{
@@ -104,12 +104,12 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_transform,
 	gleam_ellipse,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
+	gleam_transform,
 	jion,
 	result_hover,
 	root,
@@ -410,7 +410,7 @@ jion.lazyValue(
 	return(
 		this.iconShape
 		.transform(
-			euclid_transform.create(
+			gleam_transform.create(
 				'offset', this.area.zeroPnw.pc,
 				'zoom', 1
 			)

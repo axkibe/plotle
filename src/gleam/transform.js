@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_transform',
+		id : 'gleam_transform',
 		attributes :
 		{
 			offset :
@@ -29,7 +29,7 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_transform,
+	gleam_transform,
 	jion;
 
 
@@ -55,7 +55,7 @@ if( NODE )
 }
 
 
-prototype = euclid_transform.prototype;
+prototype = gleam_transform.prototype;
 
 
 /*
@@ -74,7 +74,7 @@ prototype.combine =
 	tzoom = t.zoom;
 
 	return(
-		euclid_transform.create(
+		gleam_transform.create(
 			'offset',
 				euclid_point.create(
 					'x', this.offset.x * tzoom + t.offset.x,
@@ -226,8 +226,8 @@ prototype.y =
 /*
 | The normal transform is a transform that doesn't transform.
 */
-euclid_transform.normal =
-	euclid_transform.create(
+gleam_transform.normal =
+	gleam_transform.create(
 		'offset', euclid_point.zero,
 		'zoom', 1
 	);

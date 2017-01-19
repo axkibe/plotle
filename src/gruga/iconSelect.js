@@ -21,14 +21,14 @@
 
 var
 	euclid_point,
-	euclid_shape_round,
-	euclid_shape_start,
-	euclid_shape_line,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
 	gleam_shape,
+	gleam_shape_line,
+	gleam_shape_round,
+	gleam_shape_start,
 	gruga_iconSelect;
 
 
@@ -89,11 +89,11 @@ ps = pc.add( 0, hs );
 
 pw = pc.add( -hs, 0 );
 
-start = euclid_shape_start;
+start = gleam_shape_start;
 
-line = euclid_shape_line;
+line = gleam_shape_line;
 
-round = euclid_shape_round;
+round = gleam_shape_round;
 
 gruga_iconSelect = { };
 

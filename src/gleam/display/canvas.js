@@ -908,15 +908,9 @@ prototype._sketchGenericShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( shape.length === undefined || shape.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( shape.length === undefined || shape.length === 0 )	throw new Error( );
 /**/
-/**/	if( shape.get( 0 ).reflect !== 'euclid_shape_start' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( shape.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
 /**/}
 
 	ps = shape.get( 0 ).p;
@@ -974,7 +968,7 @@ prototype._sketchGenericShape =
 
 		switch( section.reflect )
 		{
-			case 'euclid_shape_line' :
+			case 'gleam_shape_line' :
 
 				if( !section.fly || !twist )
 				{
@@ -987,7 +981,7 @@ prototype._sketchGenericShape =
 
 				break;
 
-			case 'euclid_shape_round' :
+			case 'gleam_shape_round' :
 
 				dx = pn.x - pos.x;
 

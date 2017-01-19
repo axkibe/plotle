@@ -11,7 +11,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shape_start',
+		id : 'gleam_shape_start',
 		attributes :
 		{
 			p :
@@ -25,7 +25,7 @@ if( JION )
 
 
 var
-	euclid_shape_start;
+	gleam_shape_start;
 
 /*
 | Capsule
@@ -40,13 +40,13 @@ var
 
 if( NODE )
 {
-	euclid_shape_start = require( 'jion' ).this( module, 'source' );
+	gleam_shape_start = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
 
 
-prototype = euclid_shape_start.prototype;
+prototype = gleam_shape_start.prototype;
 
 
 /*
@@ -60,7 +60,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return this.create( 'p', this.p.transform( transform ) );

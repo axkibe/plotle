@@ -51,7 +51,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the current space transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		},
 		init : [ 'inherit' ],
@@ -72,7 +72,6 @@ var
 	change_remove,
 	euclid_point,
 	euclid_rect,
-	euclid_transform,
 	fabric_portal,
 	fabric_spaceRef,
 	gleam_ellipse,
@@ -87,6 +86,7 @@ var
 	gleam_measure,
 	gleam_roundRect,
 	gleam_size,
+	gleam_transform,
 	gruga_portal,
 	jion,
 	jion$pathRay,
@@ -299,7 +299,7 @@ jion.lazyStaticValue(
 					'spaceTag', ''
 				),
 			'highlight', false,
-			'transform', euclid_transform.normal
+			'transform', gleam_transform.normal
 		)
 	);
 }

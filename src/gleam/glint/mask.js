@@ -26,7 +26,7 @@ if( JION )
 			{
 				comment : 'the shape(ray) to mask to',
 				type :
-					require( '../../euclid/typemap-shape' )
+					require( '../typemap-shape' )
 					.concat( [ 'gleam_shapeRay' ] )
 			}
 		}

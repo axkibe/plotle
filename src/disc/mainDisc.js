@@ -28,7 +28,7 @@ if( JION )
 			controlTransform :
 			{
 				comment : 'the current transform of controls',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			facet :
 			{
@@ -97,12 +97,12 @@ var
 	action_select,
 	disc_mainDisc,
 	euclid_rect,
-	euclid_transform,
 	change_shrink,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_transform,
 	jion,
 	result_hover,
 	root;
@@ -176,7 +176,7 @@ prototype._init =
 		.align;
 
 	wt =
-		euclid_transform.create(
+		gleam_transform.create(
 			'offset', size.zeroPnwRect.pw,
 			'zoom', 1
 		)

@@ -54,11 +54,11 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape_line,
-	euclid_shape_round,
-	euclid_shape_start,
 	gleam_roundRect,
 	gleam_shape,
+	gleam_shape_line,
+	gleam_shape_round,
+	gleam_shape_start,
 	jion;
 
 
@@ -104,31 +104,31 @@ prototype._init =
 		gleam_shape.create(
 			'ray:init',
 				[
-					euclid_shape_start.create(
+					gleam_shape_start.create(
 						'p', pnw.add( 0 , b )
 					),
-					euclid_shape_round.create(
+					gleam_shape_round.create(
 						'p', pnw.add( a , 0 )
 					),
-					euclid_shape_line.create(
+					gleam_shape_line.create(
 						'p', pne.sub( a , 0 )
 					),
-					euclid_shape_round.create(
+					gleam_shape_round.create(
 						'p', pne.add( 0 , b )
 					),
-					euclid_shape_line.create(
+					gleam_shape_line.create(
 						'p', pse.sub( 0 , b )
 					),
-					euclid_shape_round.create(
+					gleam_shape_round.create(
 						'p', pse.sub( a , 0 )
 					),
-					euclid_shape_line.create(
+					gleam_shape_line.create(
 						'p', psw.add( a , 0 )
 					),
-					euclid_shape_round.create(
+					gleam_shape_round.create(
 						'p', psw.sub( 0 , b )
 					),
-					euclid_shape_line.create(
+					gleam_shape_line.create(
 						'close', true
 					)
 				],
@@ -243,7 +243,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return(

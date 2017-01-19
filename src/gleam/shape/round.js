@@ -11,7 +11,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shape_round',
+		id : 'gleam_shape_round',
 		attributes :
 		{
 			p :
@@ -36,7 +36,7 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape_round;
+	gleam_shape_round;
 
 
 /*
@@ -58,7 +58,7 @@ if( NODE )
 }
 
 
-prototype = euclid_shape_round.prototype;
+prototype = gleam_shape_round.prototype;
 
 
 /*
@@ -72,7 +72,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return(

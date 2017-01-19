@@ -232,7 +232,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/rectGroup.js',
+		'filePath', 'src/gleam/rectGroup.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -332,17 +332,17 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shape/line.js',
+		'filePath', 'src/gleam/shape/line.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shape/round.js',
+		'filePath', 'src/gleam/shape/round.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/shape/start.js',
+		'filePath', 'src/gleam/shape/start.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -395,7 +395,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/transform.js',
+		'filePath', 'src/gleam/transform.js',
 		'hasJion', true,
 		'inBundle', true
 	),

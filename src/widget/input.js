@@ -61,7 +61,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			value :
 			{

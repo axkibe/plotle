@@ -15,12 +15,12 @@
 var
 	gruga_iconRemove,
 	euclid_point,
-	euclid_shape_start,
-	euclid_shape_line,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
-	gleam_shape;
+	gleam_shape,
+	gleam_shape_line,
+	gleam_shape_start;
 
 
 /*
@@ -78,55 +78,55 @@ gruga_iconRemove.shape =
 	gleam_shape.create(
 		'ray:init',
 		[
-			euclid_shape_start.create(
+			gleam_shape_start.create(
 				'p', pnw                  // A
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pnw.add(  aw,   0 )  // B
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add(    0, -ch )  // C
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pne.add( -aw,   0 )  // D
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pne                  // E
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pne.add(   0,  ah )  // F
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add(   cw,   0 )  // G
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pse.add(   0, -ah )  // H
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pse                  // I
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pse.add( -aw,   0 )  // J
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add(    0,  ch )  // K
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', psw.add(  aw,   0 )  // L
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', psw                  // M
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', psw.add(   0, -ah )  // N
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add(  -cw,   0 )  // O
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pnw.add(   0,  ah )  // P
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'close', true             // A
 			)
 		],

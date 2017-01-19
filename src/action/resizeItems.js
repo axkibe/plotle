@@ -51,7 +51,7 @@ if( JION )
 			startZones :
 			{
 				comment : 'the zones as the resize started',
-				type : [ 'undefined', 'euclid_rectGroup' ]
+				type : [ 'undefined', 'gleam_rectGroup' ]
 			}
 		}
 	};

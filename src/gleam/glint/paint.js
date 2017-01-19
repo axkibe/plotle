@@ -23,7 +23,7 @@ if( JION )
 			{
 				comment : 'the shape to draw',
 				type :
-					require( '../../euclid/typemap-shape' )
+					require( '../typemap-shape' )
 					.concat( [ 'gleam_shapeRay' ] )
 			}
 		}

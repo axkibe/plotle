@@ -51,7 +51,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the current transform of space',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			viewSize :
 			{

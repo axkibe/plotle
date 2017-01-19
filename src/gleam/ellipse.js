@@ -48,10 +48,10 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape_round,
-	euclid_shape_start,
+	gleam_shape_round,
 	gleam_ellipse,
 	gleam_shape,
+	gleam_shape_start,
 	jion;
 
 
@@ -134,11 +134,11 @@ prototype._init =
 		gleam_shape.create(
 			'ray:init',
 			[
-				euclid_shape_start.create( 'p', pw ),
-				euclid_shape_round.create( 'p', pn ),
-				euclid_shape_round.create( 'p', pe ),
-				euclid_shape_round.create( 'p', ps ),
-				euclid_shape_round.create( 'close', true )
+				gleam_shape_start.create( 'p', pw ),
+				gleam_shape_round.create( 'p', pn ),
+				gleam_shape_round.create( 'p', pe ),
+				gleam_shape_round.create( 'p', ps ),
+				gleam_shape_round.create( 'close', true )
 			],
 			'pc', this.pc
 		);
@@ -267,7 +267,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return(

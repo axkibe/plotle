@@ -247,7 +247,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return(

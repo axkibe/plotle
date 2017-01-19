@@ -22,14 +22,14 @@ var
 	base2,
 	euclid_point,
 	euclid_rect,
-	euclid_shape_start,
-	euclid_shape_line,
-	gleam_shape,
 	gruga_iconMoveTo,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
-	gleam_shapeRay;
+	gleam_shape,
+	gleam_shapeRay,
+	gleam_shape_line,
+	gleam_shape_start;
 
 
 /*
@@ -66,14 +66,14 @@ arrow =
 	gleam_shape.create(
 		'ray:init',
 		[
-			euclid_shape_start.create( 'p', ap ), // A
-			euclid_shape_line.create( 'p', ap.add(   6,   8 ) ), // B
-			euclid_shape_line.create( 'p', ap.add(   2,   8 ) ), // C
-			euclid_shape_line.create( 'p', ap.add(   2,  14 ) ), // D
-			euclid_shape_line.create( 'p', ap.add(  -2,  14 ) ), // E
-			euclid_shape_line.create( 'p', ap.add(  -2,   8 ) ), // F
-			euclid_shape_line.create( 'p', ap.add(  -6,   8 ) ), // G
-			euclid_shape_line.create( 'close', true )
+			gleam_shape_start.create( 'p', ap ), // A
+			gleam_shape_line.create( 'p', ap.add(   6,   8 ) ), // B
+			gleam_shape_line.create( 'p', ap.add(   2,   8 ) ), // C
+			gleam_shape_line.create( 'p', ap.add(   2,  14 ) ), // D
+			gleam_shape_line.create( 'p', ap.add(  -2,  14 ) ), // E
+			gleam_shape_line.create( 'p', ap.add(  -2,   8 ) ), // F
+			gleam_shape_line.create( 'p', ap.add(  -6,   8 ) ), // G
+			gleam_shape_line.create( 'close', true )
 		],
 		'pc', ap.add( 0, 7 )
 	);

@@ -24,9 +24,9 @@
 var
 	gruga_iconHand,
 	euclid_point,
-	euclid_shape_round,
-	euclid_shape_start,
-	euclid_shape_line,
+	gleam_shape_line,
+	gleam_shape_round,
+	gleam_shape_start,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
@@ -124,25 +124,25 @@ gruga_iconHand.shape =
 	gleam_shape.create(
 		'ray:init',
 		[
-			euclid_shape_start.create( 'p', ap ), // A
-			euclid_shape_round.create( 'p', bp ), // B
-			euclid_shape_line.create ( 'p', cp ), // C
-			euclid_shape_line.create ( 'p', dp ), // D
-			euclid_shape_round.create( 'p', ep ), // E
-			euclid_shape_line.create ( 'p', fp ), // F
-			euclid_shape_line.create ( 'p', gp ), // G
-			euclid_shape_round.create( 'p', hp ), // H
-			euclid_shape_line.create ( 'p', ip ), // I
-			euclid_shape_line.create ( 'p', jp ), // J
-			euclid_shape_round.create( 'p', kp ), // K
-			euclid_shape_line.create(  'p', lp ), // L
-			euclid_shape_round.create( 'p', mp ), // M
-			euclid_shape_line.create ( 'p', np ), // N
-			euclid_shape_line.create ( 'p', op ), // OO
-			euclid_shape_line.create ( 'p', pp ), // P
-			euclid_shape_round.create( 'p', qp ), // Q
-			euclid_shape_line.create ( 'p', rp ), // R
-			euclid_shape_line.create ( 'close', true )
+			gleam_shape_start.create( 'p', ap ), // A
+			gleam_shape_round.create( 'p', bp ), // B
+			gleam_shape_line.create ( 'p', cp ), // C
+			gleam_shape_line.create ( 'p', dp ), // D
+			gleam_shape_round.create( 'p', ep ), // E
+			gleam_shape_line.create ( 'p', fp ), // F
+			gleam_shape_line.create ( 'p', gp ), // G
+			gleam_shape_round.create( 'p', hp ), // H
+			gleam_shape_line.create ( 'p', ip ), // I
+			gleam_shape_line.create ( 'p', jp ), // J
+			gleam_shape_round.create( 'p', kp ), // K
+			gleam_shape_line.create(  'p', lp ), // L
+			gleam_shape_round.create( 'p', mp ), // M
+			gleam_shape_line.create ( 'p', np ), // N
+			gleam_shape_line.create ( 'p', op ), // OO
+			gleam_shape_line.create ( 'p', pp ), // P
+			gleam_shape_round.create( 'p', qp ), // Q
+			gleam_shape_line.create ( 'p', rp ), // R
+			gleam_shape_line.create ( 'close', true )
 		],
 		'pc', euclid_point.zero
 	);

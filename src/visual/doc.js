@@ -65,7 +65,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the current space transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		},
 		init : [ 'inherit' ],
@@ -76,8 +76,6 @@ if( JION )
 
 var
 	euclid_point,
-	euclid_shape_start,
-	euclid_shape_line,
 	euclid_point,
 	euclid_rect,
 	gleam_facet,
@@ -86,6 +84,8 @@ var
 	gleam_glint_ray,
 	gleam_shape,
 	gleam_shapeRay,
+	gleam_shape_line,
+	gleam_shape_start,
 	gruga_selection,
 	jion,
 	root,
@@ -653,11 +653,11 @@ jion.lazyValue(
 
 		sections =
 		[
-			euclid_shape_start.create( 'p', fp.add( 0, descend ) ),
-			euclid_shape_line.create( 'p', fp.add( 0, -ascend ) ),
-			euclid_shape_line.create( 'p', bp.add( 0, -ascend ) ),
-			euclid_shape_line.create( 'p', bp.add( 0, descend ) ),
-			euclid_shape_line.create( 'close', true )
+			gleam_shape_start.create( 'p', fp.add( 0, descend ) ),
+			gleam_shape_line.create( 'p', fp.add( 0, -ascend ) ),
+			gleam_shape_line.create( 'p', bp.add( 0, -ascend ) ),
+			gleam_shape_line.create( 'p', bp.add( 0, descend ) ),
+			gleam_shape_line.create( 'close', true )
 		];
 
 		return(
@@ -690,36 +690,36 @@ jion.lazyValue(
 
 		sections =
 		[
-			euclid_shape_start.create(
+			gleam_shape_start.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y - ascend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', fp.x, 'y', fp.y - ascend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', fp.x, 'y', fp.y + descend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
 			),
-			euclid_shape_line.create( 'close', true, 'fly', true )
+			gleam_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		sections2 =
 		[
-			euclid_shape_start.create(
+			gleam_shape_start.create(
 				'p', euclid_point.create( 'x', lx, 'y', bp.y - ascend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', bp.x, 'y', bp.y - ascend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', bp.x, 'y', bp.y + descend )
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
 			),
-			euclid_shape_line.create( 'close', true, 'fly', true )
+			gleam_shape_line.create( 'close', true, 'fly', true )
 		];
 
 		shapes =
@@ -785,35 +785,35 @@ jion.lazyValue(
 		{
 			sections =
 			[
-				euclid_shape_start.create( // 1
+				gleam_shape_start.create( // 1
 					'p',
 					euclid_point.create(
 						'x', rx,
 						'y', b2y + descend
 					)
 				),
-				euclid_shape_line.create( // 2
+				gleam_shape_line.create( // 2
 					'p',
 					euclid_point.create(
 						'x', bp.x,
 						'y', b2y + descend
 					)
 				),
-				euclid_shape_line.create( // 3
+				gleam_shape_line.create( // 3
 					'p',
 					euclid_point.create(
 						'x', bp.x,
 						'y', bp.y + descend
 					)
 				),
-				euclid_shape_line.create( // 4
+				gleam_shape_line.create( // 4
 					'p',
 					euclid_point.create(
 						'x', lx,
 						'y', bp.y + descend
 					)
 				),
-				euclid_shape_line.create( // 5
+				gleam_shape_line.create( // 5
 					'p',
 					euclid_point.create(
 						'x', lx,
@@ -821,28 +821,28 @@ jion.lazyValue(
 					),
 					'fly', true
 				),
-				euclid_shape_line.create( // 6
+				gleam_shape_line.create( // 6
 					'p',
 					euclid_point.create(
 						'x', fp.x,
 						'y', f2y - ascend
 					)
 				),
-				euclid_shape_line.create( // 7
+				gleam_shape_line.create( // 7
 					'p',
 					euclid_point.create(
 						'x', fp.x,
 						'y', fp.y - ascend
 					)
 				),
-				euclid_shape_line.create( // 8
+				gleam_shape_line.create( // 8
 					'p',
 					euclid_point.create(
 						'x', rx,
 						'y', fp.y - ascend
 					)
 				),
-				euclid_shape_line.create(
+				gleam_shape_line.create(
 					'close', true,
 					'fly', true
 				)
@@ -863,35 +863,35 @@ jion.lazyValue(
 		{
 				sections =
 				[
-					euclid_shape_start.create( // 1
+					gleam_shape_start.create( // 1
 						'p',
 						euclid_point.create(
 							'x', rx,
 							'y', b2y + descend
 						)
 					),
-					euclid_shape_line.create( // 2
+					gleam_shape_line.create( // 2
 						'p',
 						euclid_point.create(
 							'x', bp.x,
 							'y', b2y + descend
 						)
 					),
-					euclid_shape_line.create( // 3
+					gleam_shape_line.create( // 3
 						'p',
 						euclid_point.create(
 							'x', bp.x,
 							'y', bp.y + descend
 						)
 					),
-					euclid_shape_line.create( // 4
+					gleam_shape_line.create( // 4
 						'p',
 						euclid_point.create(
 							'x', lx,
 							'y', bp.y + descend
 						)
 					),
-					euclid_shape_line.create( // 7
+					gleam_shape_line.create( // 7
 						'p',
 						euclid_point.create(
 							'x', lx,
@@ -899,14 +899,14 @@ jion.lazyValue(
 						),
 						'fly', true
 					),
-					euclid_shape_line.create( // 8
+					gleam_shape_line.create( // 8
 						'p',
 						euclid_point.create(
 							'x', rx,
 							'y', fp.y - ascend
 						)
 					),
-					euclid_shape_line.create(
+					gleam_shape_line.create(
 						'close', true,
 						'fly', true
 					)

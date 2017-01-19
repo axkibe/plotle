@@ -9,14 +9,14 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_rectGroup',
+		id : 'gleam_rectGroup',
 		group : [ 'euclid_rect' ]
 	};
 }
 
 
 var
-	euclid_rectGroup;
+	gleam_rectGroup;
 
 
 /*
@@ -37,7 +37,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = euclid_rectGroup.prototype;
+prototype = gleam_rectGroup.prototype;
 
 
 })( );

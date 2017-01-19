@@ -4,10 +4,10 @@
 
 
 var
-	euclid_transform,
 	form_form,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_transform,
 	gruga_formFacet,
 	jion,
 	result_hover,
@@ -68,7 +68,7 @@ form_form.init =
 			|| this.path.append( 'twig' ).append( name );
 
 		transform =
-			euclid_transform.create(
+			gleam_transform.create(
 				'zoom', 1,
 				'offset', this.area.pc
 			);

@@ -16,7 +16,7 @@ if( JION )
 
 
 var
-	euclid_rectGroup,
+	gleam_rectGroup,
 	jion,
 	jion$pathRay,
 	visual_itemRay;
@@ -106,7 +106,7 @@ jion.lazyValue(
 		group[ key ] = item.zone;
 	}
 
-	return euclid_rectGroup.create( 'group:init', group );
+	return gleam_rectGroup.create( 'group:init', group );
 }
 );
 

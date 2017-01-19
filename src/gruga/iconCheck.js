@@ -15,11 +15,11 @@
 
 var
 	euclid_point,
-	euclid_shape_start,
-	euclid_shape_line,
 	gleam_color,
 	gleam_facet,
 	gleam_shape,
+	gleam_shape_line,
+	gleam_shape_start,
 	gruga_iconCheck;
 
 
@@ -54,19 +54,19 @@ gruga_iconCheck.shape =
 	gleam_shape.create(
 		'ray:init',
 		[
-			euclid_shape_start.create(
+			gleam_shape_start.create(
 				'p', pc.add( -5, -3 )            // A
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add( 2, 5 )              // B
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add( 14, -12 )           // C
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'p', pc.add( 2, -1 )             // D
 			),
-			euclid_shape_line.create(
+			gleam_shape_line.create(
 				'close', true                    // A
 			)
 		],

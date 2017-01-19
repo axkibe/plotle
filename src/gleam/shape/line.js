@@ -11,7 +11,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_shape_line',
+		id : 'gleam_shape_line',
 		attributes :
 		{
 			p :
@@ -35,9 +35,9 @@ if( JION )
 
 
 var
-	gleam_constants,
 	euclid_point,
-	euclid_shape_line;
+	gleam_constants,
+	gleam_shape_line;
 
 
 /*
@@ -60,7 +60,7 @@ if( NODE )
 }
 
 
-prototype = euclid_shape_line.prototype;
+prototype = gleam_shape_line.prototype;
 
 e = gleam_constants.epsilon;
 
@@ -138,7 +138,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	return(

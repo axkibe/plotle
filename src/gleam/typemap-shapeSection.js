@@ -3,7 +3,7 @@
 */
 module.exports =
 [
-	'euclid_shape_line',
-	'euclid_shape_round',
-	'euclid_shape_start'
+	'gleam_shape_line',
+	'gleam_shape_round',
+	'gleam_shape_start'
 ];

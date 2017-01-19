@@ -52,7 +52,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the current space transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		},
 		init : [ ]

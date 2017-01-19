@@ -52,7 +52,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the current space transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		},
 		init : [ 'inherit' ],
@@ -75,9 +75,9 @@ var
 	gleam_glint_ray,
 	gleam_glint_window,
 	gleam_size,
+	gleam_transform,
 	euclid_point,
 	euclid_rect,
-	euclid_transform,
 	fabric_doc,
 	fabric_label,
 	fabric_para,
@@ -246,7 +246,7 @@ jion.lazyStaticValue(
 						)
 				),
 			'highlight', false,
-			'transform', euclid_transform.normal
+			'transform', gleam_transform.normal
 		)
 	);
 }

@@ -88,7 +88,7 @@ if( JION )
 			spaceTransform :
 			{
 				comment : 'current space transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			spaceVisual :
 			{
@@ -157,12 +157,12 @@ var
 	change_remove,
 	change_wrap,
 	disc_jockey,
-	euclid_transform,
 	gleam_connect,
 	gleam_display_canvas,
 	gleam_glint_ray,
 	gleam_measure,
 	gleam_size,
+	gleam_transform,
 	euclid_point,
 	fabric_doc,
 	fabric_para,
@@ -395,7 +395,7 @@ shell_root.startup =
 	dj =
 		disc_jockey.create(
 			'action', action,
-			'controlTransform', euclid_transform.normal,
+			'controlTransform', gleam_transform.normal,
 			'path', djPath,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
@@ -421,7 +421,7 @@ shell_root.startup =
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
-		'spaceTransform', euclid_transform.normal,
+		'spaceTransform', gleam_transform.normal,
 		'systemFocus', true,
 		'viewSize', display.size,
 		'disc', dj,
@@ -556,7 +556,7 @@ prototype._init =
 				'access', access,
 				'action', action,
 				'controlTransform',
-					euclid_transform.create(
+					gleam_transform.create(
 						'zoom',
 							Math.min(
 							  viewSize.height / gruga_controls.designSize.height,
@@ -1682,7 +1682,7 @@ shell_root._createFormJockey =
 						'twig:set',
 						key,
 						widget.create(
-							'transform', euclid_transform.normal
+							'transform', gleam_transform.normal
 						)
 					);
 			}

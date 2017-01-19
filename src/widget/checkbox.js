@@ -51,7 +51,7 @@ if( JION )
 			transform :
 			{
 				comment : 'the transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			visible :
 			{
@@ -66,9 +66,9 @@ if( JION )
 
 
 var
-	euclid_transform,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_transform,
 	gruga_iconCheck,
 	jion,
 	result_hover,
@@ -120,7 +120,7 @@ jion.lazyValue(
 {
 	return(
 		gruga_iconCheck.shape.transform(
-			euclid_transform.create(
+			gleam_transform.create(
 				'zoom', 1,
 				'offset', this._area.pc
 			)

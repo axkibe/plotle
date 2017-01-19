@@ -44,7 +44,7 @@ if( JION )
 			transform :
 			{
 				comment : 'transform',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			}
 		}
 	};

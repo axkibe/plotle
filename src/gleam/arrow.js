@@ -50,11 +50,11 @@ if( JION )
 
 
 var
-	euclid_shape_line,
-	euclid_shape_start,
 	gleam_arrow,
 	gleam_connect,
 	gleam_shape,
+	gleam_shape_line,
+	gleam_shape_start,
 	gruga_relation,
 	jion;
 
@@ -126,7 +126,7 @@ jion.lazyValue(
 		case 'normal':
 
 			sections.push(
-				euclid_shape_start.create( 'p', p1 )
+				gleam_shape_start.create( 'p', p1 )
 			);
 
 			break;
@@ -142,7 +142,7 @@ jion.lazyValue(
 		case 'normal' :
 
 			sections.push(
-				euclid_shape_line.create( 'p', p2 )
+				gleam_shape_line.create( 'p', p2 )
 			);
 
 			break;
@@ -168,23 +168,23 @@ jion.lazyValue(
 				);
 
 			sections.push(
-				euclid_shape_line.create( 'p', arrowBase ),
-				euclid_shape_line.create(
+				gleam_shape_line.create( 'p', arrowBase ),
+				gleam_shape_line.create(
 					'p',
 						p2.add(
 							-gruga_relation.arrowSize * Math.cos( d + ad ),
 							-gruga_relation.arrowSize * Math.sin( d + ad )
 						)
 				),
-				euclid_shape_line.create( 'p', p2 ),
-				euclid_shape_line.create(
+				gleam_shape_line.create( 'p', p2 ),
+				gleam_shape_line.create(
 					'p',
 						p2.add(
 							-gruga_relation.arrowSize * Math.cos( d - ad ),
 							-gruga_relation.arrowSize * Math.sin( d - ad )
 						)
 				),
-				euclid_shape_line.create( 'p', arrowBase )
+				gleam_shape_line.create( 'p', arrowBase )
 			);
 
 			break;
@@ -194,7 +194,7 @@ jion.lazyValue(
 	}
 
 	sections.push(
-		euclid_shape_line.create(
+		gleam_shape_line.create(
 			'close', true,
 			'fly', true
 		)

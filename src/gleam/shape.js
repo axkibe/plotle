@@ -123,11 +123,8 @@ prototype.getProjection =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.get( 0 ).reflect !== 'euclid_shape_start' )
-/**/	{
-/**/		// must have start at [0]
-/**/		throw new Error( );
-/**/	}
+/**/	// must have start at [0]
+/**/	if( this.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
 /**/}
 
 	pstart = this.get( 0 ).p;
@@ -186,7 +183,7 @@ prototype.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'euclid_transform' ) throw new Error( );
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
 	ray = [ ];

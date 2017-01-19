@@ -27,7 +27,7 @@ if( JION )
 			controlTransform :
 			{
 				comment : 'the current transform of controls',
-				type : 'euclid_transform'
+				type : 'gleam_transform'
 			},
 			hover :
 			{
