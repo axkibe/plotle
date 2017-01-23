@@ -96,12 +96,12 @@ var
 	action_form,
 	action_select,
 	disc_mainDisc,
-	euclid_rect,
 	change_shrink,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_rect,
 	gleam_transform,
 	jion,
 	result_hover,
@@ -161,7 +161,7 @@ prototype._init =
 
 	area =
 	this._area =
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw',
 				vsr.pw.add(
 					0,

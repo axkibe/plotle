@@ -20,12 +20,12 @@ if( JION )
 			startPoint :
 			{
 				comment : 'point at start of operation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			toPoint :
 			{
 				comment : 'point the rectangle goes to',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			}
 		}
 	};
@@ -34,7 +34,7 @@ if( JION )
 
 var
 	action_select,
-	euclid_rect,
+	gleam_rect,
 	jion;
 
 
@@ -109,7 +109,7 @@ jion.lazyValue(
 {
 	return(
 		this.startPoint
-		&& euclid_rect.createArbitrary(
+		&& gleam_rect.createArbitrary(
 			this.startPoint,
 			this.toPoint
 		)

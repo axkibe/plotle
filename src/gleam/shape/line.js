@@ -17,7 +17,7 @@ if( JION )
 			p :
 			{
 				comment : 'connect to',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			close :
 			{
@@ -35,8 +35,8 @@ if( JION )
 
 
 var
-	euclid_point,
 	gleam_constants,
+	gleam_point,
 	gleam_shape_line;
 
 
@@ -123,7 +123,7 @@ prototype.getProjection =
 		&& Math.max( pc.y, p.y  ) >= piy - e
 	)
 	{
-		return euclid_point.create( 'x', pix, 'y', piy );
+		return gleam_point.create( 'x', pix, 'y', piy );
 	}
 };
 

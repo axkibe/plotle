@@ -3,8 +3,8 @@
 */
 module.exports =
 {
-	'euclid_point' : 'point',
-	'euclid_rect' : 'rect',
+	'gleam_point' : 'point',
+	'gleam_rect' : 'rect',
 
 	'fabric_label' : 'label',
 	'fabric_note' : 'note',

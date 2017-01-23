@@ -215,7 +215,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/point.js',
+		'filePath', 'src/gleam/point.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -226,7 +226,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/euclid/rect.js',
+		'filePath', 'src/gleam/rect.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true

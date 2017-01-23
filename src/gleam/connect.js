@@ -42,16 +42,16 @@ gleam_connect.line =
 /**/}
 
 	pc1 =
-		sp1.reflect === 'euclid_point'
+		sp1.reflect === 'gleam_point'
 		? sp1
 		: sp1.shape.pc;
 
 	pc2 =
-		sp2.reflect === 'euclid_point'
+		sp2.reflect === 'gleam_point'
 		? sp2
 		: sp2.shape.pc;
 
-	if( sp1.reflect === 'euclid_point' )
+	if( sp1.reflect === 'gleam_point' )
 	{
 		p1 = sp1;
 	}
@@ -64,7 +64,7 @@ gleam_connect.line =
 		p1 = sp1.shape.getProjection( pc2 );
 	}
 
-	if( sp2.reflect === 'euclid_point' )
+	if( sp2.reflect === 'gleam_point' )
 	{
 		p2 = sp2;
 	}

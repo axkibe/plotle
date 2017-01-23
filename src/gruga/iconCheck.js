@@ -14,9 +14,9 @@
 
 
 var
-	euclid_point,
 	gleam_color,
 	gleam_facet,
+	gleam_point,
 	gleam_shape,
 	gleam_shape_line,
 	gleam_shape_start,
@@ -34,11 +34,7 @@ var
 	pc;
 
 
-pc =
-	euclid_point.create(
-		'x', -2,
-		'y', 0
-	);
+pc = gleam_point.xy( -2, 0 );
 
 
 gruga_iconCheck = { };

@@ -43,7 +43,7 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			transform :
 			{
@@ -73,13 +73,12 @@ var
 	change_join,
 	change_remove,
 	change_split,
-	euclid_point,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
+	gleam_point,
 	gleam_size,
-	euclid_point,
 	flow_block,
 	flow_line,
 	flow_token,
@@ -310,7 +309,7 @@ jion.lazyValue(
 				gleam_glint_text.create(
 					'font', tFont,
 					'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', transform.x( token.x ),
 							'y', transform.y( line.y )
 						),
@@ -1296,7 +1295,7 @@ prototype._locateOffset =
 		token = line.get( tokenN );
 
 		p =
-			euclid_point.create(
+			gleam_point.create(
 				'x',
 					Math.round(
 						token.x
@@ -1310,7 +1309,7 @@ prototype._locateOffset =
 	}
 	else
 	{
-		p = euclid_point.create( 'x', 0, 'y', line.y );
+		p = gleam_point.create( 'x', 0, 'y', line.y );
 	}
 
 	jion.aheadFunctionInteger(

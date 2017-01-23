@@ -45,7 +45,7 @@ if( JION )
 			pos :
 			{
 				comment : 'designed pos',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			text :
 			{

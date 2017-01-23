@@ -22,15 +22,15 @@
 
 
 var
-	gruga_iconHand,
-	euclid_point,
+	gleam_point,
 	gleam_shape_line,
 	gleam_shape_round,
 	gleam_shape_start,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
-	gleam_shape;
+	gleam_shape,
+	gruga_iconHand;
 
 
 /*
@@ -76,7 +76,7 @@ gruga_iconHand.facet =
 	);
 
 
-ap = euclid_point.create( 'x', -4, 'y', -12 );
+ap = gleam_point.xy( -4, -12 );
 
 fh = 12;
 
@@ -144,7 +144,7 @@ gruga_iconHand.shape =
 			gleam_shape_line.create ( 'p', rp ), // R
 			gleam_shape_line.create ( 'close', true )
 		],
-		'pc', euclid_point.zero
+		'pc', gleam_point.zero
 	);
 
 

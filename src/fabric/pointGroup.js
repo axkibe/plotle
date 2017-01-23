@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'fabric_pointGroup',
-		group : [ 'euclid_point' ]
+		group : [ 'gleam_point' ]
 	};
 }
 

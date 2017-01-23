@@ -16,7 +16,7 @@ if( JION )
 			area :
 			{
 				comment : 'designed area',
-				type : 'euclid_rect'
+				type : 'gleam_rect'
 			},
 			checked :
 			{

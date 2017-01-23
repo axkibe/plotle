@@ -20,7 +20,7 @@ if( JION )
 			offset :
 			{
 				comment : 'offset when panning during creation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			toItemPath :
 			{
@@ -30,7 +30,7 @@ if( JION )
 			toPoint :
 			{
 				comment : 'the arrow destination while its floating',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			// FUTURE make a defined state list
 			relationState :
@@ -41,7 +41,7 @@ if( JION )
 			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			}
 		}
 	};

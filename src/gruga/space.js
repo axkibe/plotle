@@ -4,9 +4,9 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	form_space,
+	gleam_point,
+	gleam_rect,
 	gruga_genericButton,
 	gruga_space,
 	shell_fontPool,
@@ -42,26 +42,26 @@ gruga_space =
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', euclid_point.xy( 0, -120 )
+				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add', 'message1',
 			widget_label.abstract(
 				'text', 'In future space settings can be altered here.',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -50 )
+				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add', 'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w,
 								closeButton.n
 							),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w + closeButton.width,
 								closeButton.n + closeButton.height
 							)

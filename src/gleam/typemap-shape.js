@@ -4,7 +4,7 @@
 module.exports =
 [
 	'gleam_ellipse',
-	'euclid_rect',
+	'gleam_rect',
 	'gleam_roundRect',
 	'gleam_shape'
 ];

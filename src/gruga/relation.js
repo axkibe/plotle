@@ -8,7 +8,7 @@ var
 	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
-	euclid_point,
+	gleam_point,
 	gruga_relation;
 
 
@@ -49,7 +49,7 @@ gruga_relation.facet =
 | FUTURE calculate dynamically
 */
 gruga_relation.spawnOffset =
-	euclid_point.create( 'x', 44, 'y', 12 );
+	gleam_point.create( 'x', 44, 'y', 12 );
 
 
 

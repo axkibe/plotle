@@ -15,7 +15,7 @@ if( JION )
 			pc :
 			{
 				comment : 'center point',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			gradientR1 :
 			{

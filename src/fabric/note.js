@@ -34,7 +34,7 @@ if( JION )
 			zone :
 			{
 				comment : 'the notes zone',
-				type : 'euclid_rect',
+				type : 'gleam_rect',
 				json : true
 			}
 		},

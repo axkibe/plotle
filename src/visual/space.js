@@ -78,11 +78,11 @@ var
 	action_pan,
 	action_select,
 	change_ray,
-	euclid_point,
-	euclid_rect,
 	gleam_arrow,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_point,
+	gleam_rect,
 	gruga_label,
 	gruga_relation,
 	gruga_select,
@@ -1220,7 +1220,7 @@ prototype._changeZoom =
 	vs = this.viewSize;
 
 	pc =
-		euclid_point.create(
+		gleam_point.create(
 			'x', vs.width / 2,
 			'y', vs.height / 2
 		);
@@ -1261,7 +1261,7 @@ prototype._moveCreateGeneric =
 
 	dp = p.detransform( transform );
 
-	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+	zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
 	model = action.itemType.model;
 
@@ -1300,7 +1300,7 @@ prototype._moveCreateGeneric =
 			pnw =
 				( dp.x > action.startPoint.x )
 				? zone.pnw
-				: euclid_point.create(
+				: gleam_point.create(
 					'x', zone.pse.x - resized.zone.width,
 					'y', zone.pnw.y
 				);
@@ -1440,7 +1440,7 @@ prototype._moveDragItems =
 		'action',
 			action.create(
 				'moveBy',
-					euclid_point.create(
+					gleam_point.create(
 						'x', transform.dex( p.x ) - startPoint.x,
 						'y', transform.dey( p.y ) - startPoint.y
 					)

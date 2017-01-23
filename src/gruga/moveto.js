@@ -4,12 +4,12 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
-	gleam_facet,
-	gleam_facetRay,
 	gleam_border,
 	gleam_color,
+	gleam_facet,
+	gleam_facetRay,
+	gleam_point,
+	gleam_rect,
 	form_moveTo,
 	gruga_moveTo,
 	portalButtonFacets,
@@ -109,25 +109,21 @@ gruga_moveTo =
 			widget_label.abstract(
 				'text', 'move to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos',
-					euclid_point.create(
-						'x', 0,
-						'y', -150
-					)
+				'pos', gleam_point.xy( 0, -150 )
 			),
 		'twig:add',
 		'ideoloomHomeButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.create(
+							gleam_point.create(
 								'x', ideoloomHomeButton.w,
 								'y', ideoloomHomeButton.n
 							),
 						'pse',
-							euclid_point.create(
+							gleam_point.create(
 								'x',
 									ideoloomHomeButton.w
 									+ ideoloomHomeButton.width,
@@ -146,14 +142,14 @@ gruga_moveTo =
 			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.create(
+							gleam_point.create(
 								'x', ideoloomSandboxButton.w,
 								'y', ideoloomSandboxButton.n
 							),
 						'pse',
-							euclid_point.create(
+							gleam_point.create(
 								'x',
 									ideoloomSandboxButton.w +
 									ideoloomSandboxButton.width,
@@ -172,14 +168,14 @@ gruga_moveTo =
 			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.create(
+							gleam_point.create(
 								'x', userHomeButton.w,
 								'y', userHomeButton.n
 							),
 						'pse',
-							euclid_point.create(
+							gleam_point.create(
 								'x', userHomeButton.w + userHomeButton.width,
 								'y', userHomeButton.n + userHomeButton.height
 							)

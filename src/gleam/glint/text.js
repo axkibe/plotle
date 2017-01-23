@@ -20,7 +20,7 @@ if( JION )
 			p :
 			{
 				comment : 'where to draw it',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			text :
 			{

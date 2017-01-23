@@ -54,7 +54,7 @@ if( JION )
 			scrollPos :
 			{
 				comment : 'scroll position',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 				// is force defined in _init
 			},
 			transform :
@@ -77,8 +77,6 @@ if( JION )
 
 var
 	change_grow,
-	euclid_point,
-	euclid_rect,
 	fabric_doc,
 	fabric_note,
 	fabric_para,
@@ -87,6 +85,8 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_point,
+	gleam_rect,
 	gleam_roundRect,
 	gleam_size,
 	gleam_transform,
@@ -163,7 +163,7 @@ visual_note.createGeneric =
 		note,
 		zone;
 
-	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+	zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
 	note = action.transItem.fabric.create( 'zone', zone );
 
@@ -208,9 +208,9 @@ jion.lazyStaticValue(
 				fabric_note.create(
 					'fontsize', gruga_note.defaultFontsize,
 					'zone',
-						euclid_rect.create(
-							'pnw', euclid_point.zero,
-							'pse', euclid_point.zero
+						gleam_rect.create(
+							'pnw', gleam_point.zero,
+							'pse', gleam_point.zero
 						),
 					'doc',
 						fabric_doc.create(
@@ -249,7 +249,7 @@ prototype._init =
 
 	if( this.scrollPos === undefined )
 	{
-		this.scrollPos = euclid_point.zero;
+		this.scrollPos = gleam_point.zero;
 	}
 	else if( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
 	{
@@ -299,7 +299,7 @@ prototype._init =
 				'aperture', aperture,
 				'max', dHeight,
 				'pnw',
-					euclid_point.create(
+					gleam_point.create(
 						'x', zone.pse.x,
 						'y', zone.pnw.y + gruga_note.vScrollbarDis
 					),
@@ -777,9 +777,9 @@ jion.lazyValue(
 
 		return(
 			gleam_roundRect.create(
-				'pnw', euclid_point.zero,
+				'pnw', gleam_point.zero,
 				'pse',
-					euclid_point.create(
+					gleam_point.create(
 						'x', zone.width,
 						'y', zone.height
 					),

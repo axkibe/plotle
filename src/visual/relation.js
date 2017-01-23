@@ -66,8 +66,8 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_rect,
 	gleam_size,
-	euclid_rect,
 	gleam_glint_paint,
 	gruga_label,
 	gruga_relation,
@@ -338,7 +338,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', this.zone.pnw,
 			'pse', this.zone.pse.sub( 1, 1 )
 		)

@@ -17,7 +17,7 @@ if( JION )
 			p :
 			{
 				comment : 'connect to',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			ccw :
 			{
@@ -35,7 +35,7 @@ if( JION )
 
 
 var
-	euclid_point,
+	gleam_point,
 	gleam_shape_round;
 
 
@@ -154,15 +154,15 @@ prototype.getProjection =
 	{
 		if( p.y > cy )
 		{
-			return euclid_point.create( 'x', cx, 'y', cy + b );
+			return gleam_point.create( 'x', cx, 'y', cy + b );
 		}
 		else if( p.y < cy )
 		{
-			return euclid_point.create( 'x', cx, 'y', cy - b );
+			return gleam_point.create( 'x', cx, 'y', cy - b );
 		}
 		else if( p.y === cy )
 		{
-			return euclid_point.create( 'x', cx, 'y', cy );
+			return gleam_point.create( 'x', cx, 'y', cy );
 		}
 	}
 	else
@@ -218,7 +218,7 @@ prototype.getProjection =
 			)
 		)
 		{
-			return euclid_point.create( 'x', x, 'y', y );
+			return gleam_point.create( 'x', x, 'y', y );
 		}
 	}
 };

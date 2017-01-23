@@ -9,20 +9,20 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_rect',
+		id : 'gleam_rect',
 		attributes :
 		{
 			pnw :
 			{
 				comment : 'point in north west',
 				json : true,
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			pse :
 			{
 				comment : 'point in south east',
 				json : true,
-				type : 'euclid_point'
+				type : 'gleam_point'
 			}
 		}
 	};
@@ -30,8 +30,8 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
 	jion;
 
@@ -51,19 +51,19 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	euclid_rect = jion.this( module, 'source' );
+	gleam_rect = jion.this( module, 'source' );
 
-	euclid_point = require( './point' );
+	gleam_point = require( './point' );
 }
 
 
-prototype = euclid_rect.prototype;
+prototype = gleam_rect.prototype;
 
 
 /*
 | Creates a rect by two arbitrary corner points
 */
-euclid_rect.createArbitrary =
+gleam_rect.createArbitrary =
 	function(
 		p1,
 		p2
@@ -87,36 +87,36 @@ euclid_rect.createArbitrary =
 	}
 	else if( p2.x >= p1.x && p1.y >= p2.y )
 	{
-		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
+		pnw = gleam_point.create( 'x', p1.x, 'y', p2.y );
 
-		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
+		pse = gleam_point.create( 'x', p2.x, 'y', p1.y );
 	}
 	else if( p1.x >= p2.x && p2.y >= p1.y )
 	{
-		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
+		pnw = gleam_point.create( 'x', p2.x, 'y', p1.y );
 
-		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
+		pse = gleam_point.create( 'x', p1.x, 'y', p2.y );
 	}
 	else
 	{
 		throw new Error( );
 	}
 
-	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
+	return gleam_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
 /*
 | Shortcut to create a rect by specifying pnw and size.
 */
-euclid_rect.pnwSize =
+gleam_rect.pnwSize =
 	function(
 		pnw,
 		size
 	)
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', pnw,
 			'pse', pnw.add( size.width, size.height )
 		)
@@ -137,7 +137,7 @@ prototype.add =
 	)
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', this.pnw.add( a1, a2 ),
 			'pse', this.pse.add( a1, a2 )
 		)
@@ -333,7 +333,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', ( this.pnw.x + this.pse.x ) / 2,
 			'y', this.pnw.y
 		)
@@ -351,7 +351,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', ( this.pnw.x + this.pse.x ) / 2,
 			'y', this.pse.y
 		)
@@ -369,7 +369,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', this.pse.x,
 			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
@@ -387,7 +387,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', this.pse.x,
 			'y', this.pnw.y
 		)
@@ -405,7 +405,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', this.pnw.x,
 			'y', this.pse.y
 		)
@@ -577,7 +577,7 @@ prototype.reduce =
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw',
 				this.pnw.create(
 					'x', this.pnw.x + margin.e,
@@ -621,8 +621,8 @@ jion.lazyValue(
 	else
 	{
 		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
+			gleam_rect.create(
+				'pnw', gleam_point.zero,
 				'pse', this.pse.sub( this.pnw )
 			)
 		);
@@ -671,7 +671,7 @@ prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return euclid_point.create( 'x', x, 'y', ny );
+			return gleam_point.create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -681,7 +681,7 @@ prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return euclid_point.create( 'x', x, 'y', sy );
+			return gleam_point.create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -691,7 +691,7 @@ prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid_point.create( 'x', ex, 'y', y );
+			return gleam_point.create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -701,7 +701,7 @@ prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid_point.create( 'x', wx, 'y', y );
+			return gleam_point.create( 'x', wx, 'y', y );
 		}
 	}
 
@@ -718,7 +718,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', ( this.pse.x + this.pnw.x ) / 2,
 			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
@@ -736,7 +736,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', this.pnw.x,
 			'y', ( this.pse.y + this.pnw.y ) / 2
 		)
@@ -762,7 +762,7 @@ jion.lazyValue(
 			'width', this.width
 		);
 
-	if( this.pnw.equals( euclid_point.zero ) )
+	if( this.pnw.equals( gleam_point.zero ) )
 	{
 		jion.aheadValue( size, 'zeroPnwRect', this );
 	}
@@ -785,7 +785,7 @@ prototype.sub =
 	)
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', this.pnw.sub( a1, a2 ),
 			'pse', this.pse.sub( a1, a2 )
 		)

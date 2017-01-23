@@ -20,12 +20,12 @@ if( JION )
 			startPoint :
 			{
 				comment : 'mouseDown point on drag creation',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			pBase :
 			{
 				comment : 'base the resize to this point',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			proportional :
 			{

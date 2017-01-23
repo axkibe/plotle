@@ -74,10 +74,10 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
 	gleam_transform,
-	euclid_point,
-	euclid_rect,
 	fabric_doc,
 	fabric_label,
 	fabric_para,
@@ -157,7 +157,7 @@ visual_label.createGeneric =
 
 	model = visual_label.model;
 
-	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+	zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
 	fs =
 		Math.max(
@@ -175,7 +175,7 @@ visual_label.createGeneric =
 	pnw =
 		( dp.x > action.startPoint.x )
 		? zone.pnw
-		: euclid_point.create(
+		: gleam_point.create(
 			'x', zone.pse.x - resized.zone.width,
 			'y', zone.pnw.y
 		);
@@ -237,7 +237,7 @@ jion.lazyStaticValue(
 		visual_label.create(
 			'fabric',
 				fabric_label.create(
-					'pnw', euclid_point.zero,
+					'pnw', gleam_point.zero,
 					'fontsize', gruga_label.defaultFontsize,
 					'doc',
 						fabric_doc.create(
@@ -275,7 +275,7 @@ prototype._init =
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', this.path && this.path.append( 'doc' ),
-			'scrollPos', euclid_point.zero,
+			'scrollPos', gleam_point.zero,
 			'transform', this.transform.ortho
 		);
 
@@ -640,7 +640,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', this.zone.pnw,
 			'pse', this.zone.pse.sub( 1, 1 )
 		)
@@ -722,10 +722,10 @@ visual_label.zeroSilhoutte =
 	zone = this.zone;
 
 	return(
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
+		gleam_rect.create(
+			'pnw', gleam_point.zero,
 			'pse',
-				euclid_point.create(
+				gleam_point.create(
 					'x', Math.max( zone.width  - 1, 0 ),
 					'y', Math.max( zone.height - 1, 0 )
 				)
@@ -778,7 +778,7 @@ visual_label.zone =
 	pnw = this.pnw;
 
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', pnw,
 			'pse', pnw.add( this._zoneWidth, this._zoneHeight )
 		)

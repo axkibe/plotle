@@ -15,12 +15,12 @@ if( JION )
 			p1 :
 			{
 				comment : 'first point',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			p2 :
 			{
 				comment : 'second point',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			}
 		}
 	};
@@ -28,9 +28,9 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
 	gleam_line,
+	gleam_point,
+	gleam_rect,
 	jion;
 
 
@@ -72,7 +72,7 @@ jion.lazyValue(
 		p2 = this.p2;
 
 		return(
-			euclid_rect.create(
+			gleam_rect.create(
 				'pnw',
 					p1.create(
 						Math.min( p1.x, p2.x ),
@@ -106,7 +106,7 @@ jion.lazyValue(
 		p2 = this.p2;
 
 		return(
-			euclid_point.create(
+			gleam_point.create(
 				'x', ( p1.x + p2.x ) / 2,
 				'y', ( p1.y + p2.y ) / 2
 			)

@@ -36,11 +36,11 @@ if( JION )
 
 var
 	change_wrapRay,
-	euclid_point,
-	euclid_rect,
 	fabric_doc,
 	fabric_note,
 	fabric_para,
+	gleam_point,
+	gleam_rect,
 	math_limit,
 	root,
 	testpad_repository;
@@ -105,9 +105,9 @@ testpad_repository.prototype._init =
 							fabric_para.create( 'text', 'Dorime' )
 					),
 				'zone',
-					euclid_rect.create(
-						'pnw', euclid_point.create( 'x', 0, 'y', 0 ),
-						'pse', euclid_point.create( 'x', 100, 'y', 100 )
+					gleam_rect.create(
+						'pnw', gleam_point.create( 'x', 0, 'y', 0 ),
+						'pse', gleam_point.create( 'x', 100, 'y', 100 )
 					),
 				'fontsize', 13
 			);

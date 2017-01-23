@@ -15,17 +15,17 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			pse :
 			{
 				comment : 'point in south east',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			gradientPC :
 			{
 				comment : 'center for gradient',
-				type : [ 'undefined', 'euclid_point' ],
+				type : [ 'undefined', 'gleam_point' ],
 				assign : '_gradientPC'
 			},
 			gradientR0 :
@@ -47,9 +47,9 @@ if( JION )
 
 
 var
-	euclid_point,
-	gleam_shape_round,
 	gleam_ellipse,
+	gleam_point,
+	gleam_shape_round,
 	gleam_shape,
 	gleam_shape_start,
 	jion;
@@ -116,19 +116,19 @@ prototype._init =
 	// cardinal points
 	pw =
 	this.pw =
-		euclid_point.create( 'x', wx, 'y', my );
+		gleam_point.create( 'x', wx, 'y', my );
 
 	pn =
 	this.pn =
-		euclid_point.create( 'x', mx, 'y', ny );
+		gleam_point.create( 'x', mx, 'y', ny );
 
 	pe =
 	this.pe =
-		euclid_point.create( 'x', ex, 'y', my );
+		gleam_point.create( 'x', ex, 'y', my );
 
 	ps =
 	this.ps =
-		euclid_point.create( 'x', mx, 'y', sy );
+		gleam_point.create( 'x', mx, 'y', sy );
 
 	this.shape =
 		gleam_shape.create(
@@ -302,7 +302,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', ( this.pnw.x + this.pse.x ) / 2,
 			'y', ( this.pnw.y + this.pse.y ) / 2
 		)

@@ -70,8 +70,6 @@ var
 	change_grow,
 	change_insert,
 	change_remove,
-	euclid_point,
-	euclid_rect,
 	fabric_portal,
 	fabric_spaceRef,
 	gleam_ellipse,
@@ -84,6 +82,8 @@ var
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
+	gleam_point,
+	gleam_rect,
 	gleam_roundRect,
 	gleam_size,
 	gleam_transform,
@@ -188,7 +188,7 @@ visual_portal.createGeneric =
 		key,
 		zone;
 
-	zone = euclid_rect.createArbitrary( action.startPoint, dp );
+	zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
 	portal = action.transItem.fabric.create( 'zone', zone );
 
@@ -291,9 +291,9 @@ jion.lazyStaticValue(
 			'fabric',
 				fabric_portal.create(
 					'zone',
-						euclid_rect.create(
-							'pnw', euclid_point.zero,
-							'pse', euclid_point.zero
+						gleam_rect.create(
+							'pnw', gleam_point.zero,
+							'pse', gleam_point.zero
 						),
 					'spaceUser', '',
 					'spaceTag', ''
@@ -718,9 +718,9 @@ jion.lazyValue(
 
 	return(
 		gleam_ellipse.create(
-			'pnw', euclid_point.zero,
+			'pnw', gleam_point.zero,
 			'pse',
-				euclid_point.create(
+				gleam_point.create(
 					'x', zone.width,
 					'y', zone.height
 				)
@@ -880,7 +880,7 @@ prototype._locateOffset =
 
 	text = this.fabric[ section ];
 
-	return euclid_point.create(
+	return gleam_point.create(
 		'x',
 			Math.round(
 				gleam_measure.width(
@@ -1438,7 +1438,7 @@ jion.lazyValue(
 	rounding = gruga_portal.moveToRounding;
 
 	pnw =
-		euclid_point.create(
+		gleam_point.create(
 			'x', ( zone.width - width ) / 2,
 			'y', ( zone.height + 10 ) / 2
 		),
@@ -1456,7 +1456,7 @@ jion.lazyValue(
 				),
 
 			textCenter :
-				euclid_point.create(
+				gleam_point.create(
 					'x', ( pnw.x + pse.x ) / 2,
 					'y', ( pnw.y + pse.y ) / 2
 				)
@@ -1509,11 +1509,11 @@ prototype._prepareField =
 
 	p =
 		baseP
-		? euclid_point.create(
+		? gleam_point.create(
 			'x', ( zone.width - width ) / 2,
 			'y', baseP.y + 23
 		)
-		: euclid_point.create(
+		: gleam_point.create(
 			'x', ( zone.width - width ) / 2,
 			'y', zone.height / 2 - 30
 		);
@@ -1868,11 +1868,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
-			'shape',
-				euclid_rect.create(
-					'pnw', pnw,
-					'pse', pse
-				)
+			'shape', gleam_rect.create( 'pnw', pnw, 'pse', pse )
 		)
 	);
 }

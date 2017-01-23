@@ -34,7 +34,7 @@ if( JION )
 			startPoint :
 			{
 				comment : 'start point of drag creation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			}
 		}
 	};

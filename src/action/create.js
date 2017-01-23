@@ -16,12 +16,12 @@ if( JION )
 			offset :
 			{
 				comment : 'offset when panning during creation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			}
 		}
 	};

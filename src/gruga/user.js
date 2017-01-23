@@ -4,9 +4,9 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	form_user,
+	gleam_point,
+	gleam_rect,
 	gruga_genericButton,
 	gruga_user,
 	shell_fontPool,
@@ -46,70 +46,70 @@ gruga_user =
 			widget_label.abstract(
 				'text', 'Hello',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', euclid_point.xy( 0, -120 )
+				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add',
 		'visitor1',
 			widget_label.abstract(
 				'text', 'You\'re currently an anonymous visitor!',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -50 )
+				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'visitor2',
 			widget_label.abstract(
 				'text', 'Click on "sign up" or "log in"',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.zero
+				'pos', gleam_point.zero
 			),
 		'twig:add',
 		'visitor3',
 			widget_label.abstract(
 				'text', 'on the control disc to the left',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, 20 )
+				'pos', gleam_point.xy( 0, 20 )
 			),
 		'twig:add',
 		'visitor4',
 			widget_label.abstract(
 				'text', 'to register as an user.',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, 40 )
+				'pos', gleam_point.xy( 0, 40 )
 			),
 		'twig:add',
 		'greeting1',
 			widget_label.abstract(
 				'text', 'This is your profile page!',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -50 )
+				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'greeting2',
 			widget_label.abstract(
 				'text', 'In future you will be able to do stuff here,',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -10 )
+				'pos', gleam_point.xy( 0, -10 )
 			),
 		'twig:add',
 		'greeting3',
 			widget_label.abstract(
 				'text', 'like for example change your password.',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, 10 )
+				'pos', gleam_point.xy( 0, 10 )
 			),
 		'twig:add',
 		'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w,
 								closeButton.n
 							),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w + closeButton.width,
 								closeButton.n + closeButton.height
 							)

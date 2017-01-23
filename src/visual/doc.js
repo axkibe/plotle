@@ -17,7 +17,7 @@ if( JION )
 				comment : 'the visible size of the doc',
 				// if created with undefined,
 				// it is set to equal to fullsize
-				type : [ 'undefined', 'euclid_rect' ],
+				type : [ 'undefined', 'gleam_rect' ],
 				assign : '_clipsize'
 			},
 			fabric :
@@ -60,7 +60,7 @@ if( JION )
 			scrollPos :
 			{
 				comment : 'scroll position of the doc',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			transform :
 			{
@@ -75,13 +75,12 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_point,
-	euclid_rect,
 	gleam_facet,
 	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_point,
+	gleam_rect,
 	gleam_shape,
 	gleam_shapeRay,
 	gleam_shape_line,
@@ -159,7 +158,7 @@ prototype._init =
 		ranks[ a ] = key;
 
 		pnw =
-			euclid_point.create(
+			gleam_point.create(
 				'x', innerMargin.w,
 				'y', Math.round( y - this.scrollPos.y )
 			);
@@ -284,13 +283,9 @@ jion.lazyValue(
 	height += Math.round( fs * shell_settings.bottombox );
 
 	return(
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
-			'pse',
-				euclid_point.create(
-					'x', width,
-					'y', height
-				)
+		gleam_rect.create(
+			'pnw', gleam_point.zero,
+			'pse', gleam_point.create( 'x', width, 'y', height )
 		)
 	);
 }
@@ -533,7 +528,7 @@ jion.lazyValue(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'shape',
-				euclid_rect.create(
+				gleam_rect.create(
 					'pnw', pnw,
 					'pse', pse
 				)
@@ -664,7 +659,7 @@ jion.lazyValue(
 			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
-					euclid_point.create(
+					gleam_point.create(
 						'x', ( fp.x + bp.x ) / 2,
 						'y', ( fp.y + bp.y ) / 2
 					)
@@ -691,16 +686,16 @@ jion.lazyValue(
 		sections =
 		[
 			gleam_shape_start.create(
-				'p', euclid_point.create( 'x', rx, 'y', fp.y - ascend )
+				'p', gleam_point.create( 'x', rx, 'y', fp.y - ascend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', fp.x, 'y', fp.y - ascend )
+				'p', gleam_point.create( 'x', fp.x, 'y', fp.y - ascend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', fp.x, 'y', fp.y + descend )
+				'p', gleam_point.create( 'x', fp.x, 'y', fp.y + descend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
+				'p', gleam_point.create( 'x', rx, 'y', fp.y + descend )
 			),
 			gleam_shape_line.create( 'close', true, 'fly', true )
 		];
@@ -708,16 +703,16 @@ jion.lazyValue(
 		sections2 =
 		[
 			gleam_shape_start.create(
-				'p', euclid_point.create( 'x', lx, 'y', bp.y - ascend )
+				'p', gleam_point.create( 'x', lx, 'y', bp.y - ascend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', bp.x, 'y', bp.y - ascend )
+				'p', gleam_point.create( 'x', bp.x, 'y', bp.y - ascend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', bp.x, 'y', bp.y + descend )
+				'p', gleam_point.create( 'x', bp.x, 'y', bp.y + descend )
 			),
 			gleam_shape_line.create(
-				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
+				'p', gleam_point.create( 'x', lx, 'y', bp.y + descend )
 			),
 			gleam_shape_line.create( 'close', true, 'fly', true )
 		];
@@ -727,7 +722,7 @@ jion.lazyValue(
 			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
-					euclid_point.create(
+					gleam_point.create(
 						'x', ( fp.x + rx ) / 2,
 						'y', ( 2 * fp.y - ascend + descend ) / 2
 					)
@@ -735,7 +730,7 @@ jion.lazyValue(
 			gleam_shape.create(
 				'ray:init', sections2,
 				'pc',
-					euclid_point.create(
+					gleam_point.create(
 						'x', ( fp.x + rx ) / 2,
 						'y', ( 2 * fp.y - ascend + descend ) / 2
 					)
@@ -787,35 +782,35 @@ jion.lazyValue(
 			[
 				gleam_shape_start.create( // 1
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', rx,
 						'y', b2y + descend
 					)
 				),
 				gleam_shape_line.create( // 2
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', bp.x,
 						'y', b2y + descend
 					)
 				),
 				gleam_shape_line.create( // 3
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', bp.x,
 						'y', bp.y + descend
 					)
 				),
 				gleam_shape_line.create( // 4
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', lx,
 						'y', bp.y + descend
 					)
 				),
 				gleam_shape_line.create( // 5
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', lx,
 						'y', f2y - ascend
 					),
@@ -823,21 +818,21 @@ jion.lazyValue(
 				),
 				gleam_shape_line.create( // 6
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', fp.x,
 						'y', f2y - ascend
 					)
 				),
 				gleam_shape_line.create( // 7
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', fp.x,
 						'y', fp.y - ascend
 					)
 				),
 				gleam_shape_line.create( // 8
 					'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', rx,
 						'y', fp.y - ascend
 					)
@@ -852,7 +847,7 @@ jion.lazyValue(
 				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
-						euclid_point.create(
+						gleam_point.create(
 							'x', ( rx + lx ) / 2,
 							'y', ( b2y + descend + f2y - ascend ) / 2
 						)
@@ -865,35 +860,35 @@ jion.lazyValue(
 				[
 					gleam_shape_start.create( // 1
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', rx,
 							'y', b2y + descend
 						)
 					),
 					gleam_shape_line.create( // 2
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', bp.x,
 							'y', b2y + descend
 						)
 					),
 					gleam_shape_line.create( // 3
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', bp.x,
 							'y', bp.y + descend
 						)
 					),
 					gleam_shape_line.create( // 4
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', lx,
 							'y', bp.y + descend
 						)
 					),
 					gleam_shape_line.create( // 7
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', lx,
 							'y', fp.y - ascend
 						),
@@ -901,7 +896,7 @@ jion.lazyValue(
 					),
 					gleam_shape_line.create( // 8
 						'p',
-						euclid_point.create(
+						gleam_point.create(
 							'x', rx,
 							'y', fp.y - ascend
 						)
@@ -916,7 +911,7 @@ jion.lazyValue(
 				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
-						euclid_point.create(
+						gleam_point.create(
 							'x', ( rx + lx ) / 2,
 							'y', ( b2y + descend + f2y - ascend ) / 2
 						)

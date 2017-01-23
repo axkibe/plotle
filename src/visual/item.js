@@ -7,7 +7,7 @@ var
 	action_dragItems,
 	change_ray,
 	change_set,
-	euclid_point,
+	gleam_point,
 	jion$pathRay,
 	root,
 	visual_item,
@@ -153,10 +153,7 @@ visual_item.getDragItemChangeZone =
 
 	moveBy = action.moveBy;
 
-	if( moveBy.equals( euclid_point.zero ) )
-	{
-		return;
-	}
+	if( moveBy.equals( gleam_point.zero ) ) return;
 
 	zone = this.fabric.zone;
 
@@ -185,10 +182,7 @@ visual_item.getDragItemChangePnwFs =
 
 	moveBy = action.moveBy;
 
-	if( action.moveBy.equals( euclid_point.zero ) )
-	{
-		return;
-	}
+	if( action.moveBy.equals( gleam_point.zero ) ) return;
 
 	pnw = this.fabric.pnw;
 

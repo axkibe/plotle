@@ -15,7 +15,7 @@ if( JION )
 			moveBy :
 			{
 				comment : 'drag the item to this pnw',
-				type : [ 'undefined', 'euclid_point' ]
+				type : [ 'undefined', 'gleam_point' ]
 			},
 			itemPaths :
 			{
@@ -25,7 +25,7 @@ if( JION )
 			startPoint :
 			{
 				comment : 'mouse down point on drag creation',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			}
 		}
 	};

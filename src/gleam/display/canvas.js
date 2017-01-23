@@ -34,7 +34,7 @@ if( JION )
 			size :
 			{
 				comment : 'the size of the display',
-				type : [ 'gleam_size', 'euclid_rect' ]
+				type : [ 'gleam_size', 'gleam_rect' ]
 			},
 			_cv :
 			{
@@ -170,7 +170,7 @@ prototype.within =
 /**/{
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/
-/**/	if( p.reflect !== 'euclid_point' ) throw new Error( );
+/**/	if( p.reflect !== 'gleam_point' ) throw new Error( );
 /**/}
 
 	if( shape.reflect === 'gleam_shapeRay' )
@@ -194,15 +194,7 @@ prototype.within =
 
 			break;
 
-		case 'gleam_shape' :
-
-			this._cx.beginPath( );
-
-			this._sketchGenericShape( shape, 0, 0.5 );
-
-			break;
-
-		case 'euclid_rect' :
+		case 'gleam_rect' :
 
 			x = p.x;
 
@@ -218,6 +210,14 @@ prototype.within =
 				&& x <= pse.x
 				&& y <= pse.y
 			);
+
+		case 'gleam_shape' :
+
+			this._cx.beginPath( );
+
+			this._sketchGenericShape( shape, 0, 0.5 );
+
+			break;
 
 		default : throw new Error( );
 	}
@@ -864,7 +864,7 @@ prototype._sketch =
 
 			return this._sketchGenericShape( shape.shape, border, twist );
 
-		case 'euclid_rect' :
+		case 'gleam_rect' :
 
 			return this._sketchRect( shape, border, twist );
 

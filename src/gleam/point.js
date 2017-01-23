@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'euclid_point',
+		id : 'gleam_point',
 		attributes :
 		{
 			x :
@@ -30,8 +30,8 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
+	gleam_point,
+	gleam_rect,
 	jion;
 
 
@@ -49,23 +49,23 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	euclid_point = jion.this( module, 'source' );
+	gleam_point = jion.this( module, 'source' );
 }
 
-prototype = euclid_point.prototype;
+prototype = gleam_point.prototype;
 
 
 /*
 | Shortcut to create x/y.
 */
-euclid_point.xy =
+gleam_point.xy =
 	function(
 		x,
 		y
 	)
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', x,
 			'y', y
 		)
@@ -156,7 +156,7 @@ prototype.add =
 			return this;
 		}
 
-		return euclid_point.create(
+		return gleam_point.create(
 			'x', this.x + a1.x,
 			'y', this.y + a1.y
 		);
@@ -170,7 +170,7 @@ prototype.add =
 
 		if( a1 === 0 && a2 === 0 ) return this;
 
-		return euclid_point.create(
+		return gleam_point.create(
 			'x', this.x + a1,
 			'y', this.y + a2
 		);
@@ -190,7 +190,7 @@ prototype.createRectOfSize =
 	)
 {
 	return(
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw', this,
 			'pse', this.add( width, height )
 		)
@@ -289,24 +289,18 @@ prototype.sub =
 {
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1.x === 0 && a1.y === 0 )
-		{
-			return this;
-		}
+		if( a1.x === 0 && a1.y === 0 ) return this;
 
-		return euclid_point.create(
+		return gleam_point.create(
 			'x', this.x - a1.x,
 			'y', this.y - a1.y
 		);
 	}
 	else
 	{
-		if( a1 === 0 && a2 === 0 )
-		{
-			return this;
-		}
+		if( a1 === 0 && a2 === 0 ) return this;
 
-		return euclid_point.create(
+		return gleam_point.create(
 			'x', this.x - a1,
 			'y', this.y - a2
 		);
@@ -317,8 +311,8 @@ prototype.sub =
 /*
 | Shortcut for point at 0/0.
 */
-euclid_point.zero =
-	euclid_point.create( 'x', 0, 'y', 0 );
+gleam_point.zero =
+	gleam_point.create( 'x', 0, 'y', 0 );
 
 
 } )( );

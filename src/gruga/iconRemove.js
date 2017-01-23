@@ -14,10 +14,10 @@
 
 var
 	gruga_iconRemove,
-	euclid_point,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
+	gleam_point,
 	gleam_shape,
 	gleam_shape_line,
 	gleam_shape_start;
@@ -41,7 +41,7 @@ var
 	pse,
 	psw;
 
-pc = euclid_point.zero;
+pc = gleam_point.zero;
 
 pnw = pc.add( -6, -6 );
 

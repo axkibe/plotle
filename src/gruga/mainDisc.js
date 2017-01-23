@@ -5,8 +5,6 @@
 
 var
 	disc_mainDisc,
-	euclid_point,
-	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -15,6 +13,8 @@ var
 	gleam_facetRay,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
 	gruga_iconNormal,
 	gruga_iconRemove,
@@ -51,11 +51,7 @@ var
 	userButtonPnw,
 	userButtonSize;
 
-pw =
-	euclid_point.create(
-		'x', 0,
-		'y', 500
-	);
+pw = gleam_point.xy( 0, 500 );
 
 
 buttonFacets =
@@ -108,7 +104,7 @@ buttonModel =
 		'shape', 'ellipse'
 	);
 
-buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
+buttonSize = gleam_point.create( 'x', 44, 'y', 44 );
 
 loginButtonPnw = pw.add( 30, 155 );
 
@@ -126,11 +122,11 @@ signupButtonPnw = pw.add( 17, 210 );
 
 spaceButtonPnw = pw.add( 0, -230 );
 
-spaceButtonSize = euclid_point.xy( 28, 290 );
+spaceButtonSize = gleam_point.xy( 28, 290 );
 
 userButtonPnw = pw.add( 0, 40 );
 
-userButtonSize = euclid_point.xy( 24, 180 );
+userButtonSize = gleam_point.xy( 24, 180 );
 
 
 gruga_mainDisc =
@@ -170,15 +166,15 @@ gruga_mainDisc =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pnw', euclid_point.xy( -2101, -1100 ),
-				'pse', euclid_point.xy( 99, 1100 ),
-				'gradientPC', euclid_point.xy( -600, 0 ),
+				'pnw', gleam_point.xy( -2101, -1100 ),
+				'pse', gleam_point.xy( 99, 1100 ),
+				'gradientPC', gleam_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
 					),
@@ -188,7 +184,7 @@ gruga_mainDisc =
 		'twig:add', 'select',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', selectButtonPnw,
 						'pse', selectButtonPnw.add( buttonSize )
 					),
@@ -199,7 +195,7 @@ gruga_mainDisc =
 		'twig:add', 'create',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', createButtonPnw,
 						'pse', createButtonPnw.add( buttonSize )
 					),
@@ -210,7 +206,7 @@ gruga_mainDisc =
 		'twig:add', 'remove',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', removeButtonPnw,
 						'pse', removeButtonPnw.add( buttonSize )
 					),
@@ -221,7 +217,7 @@ gruga_mainDisc =
 		'twig:add', 'moveTo',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
 					),
@@ -232,7 +228,7 @@ gruga_mainDisc =
 		'twig:add', 'space',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', spaceButtonPnw,
 						'pse', spaceButtonPnw.add( spaceButtonSize )
 					),
@@ -240,7 +236,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
 					gleam_ellipse.create(
-						'pnw', euclid_point.xy( -60, 0 ),
+						'pnw', gleam_point.xy( -60, 0 ),
 						'pse', spaceButtonSize.sub( 1, 1 )
 					),
 				'textRotation', - Math.PI / 2
@@ -248,7 +244,7 @@ gruga_mainDisc =
 		'twig:add', 'user',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', userButtonPnw,
 						'pse', userButtonPnw.add( userButtonSize )
 					),
@@ -256,7 +252,7 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
 					gleam_ellipse.create(
-						'pnw', euclid_point.xy( -70, 0 ),
+						'pnw', gleam_point.xy( -70, 0 ),
 						'pse', userButtonSize.sub( 1, 1 )
 					),
 				'textRotation', ( -Math.PI / 2 )
@@ -264,7 +260,7 @@ gruga_mainDisc =
 		'twig:add', 'login',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', loginButtonPnw,
 						'pse', loginButtonPnw.add( buttonSize )
 					),
@@ -276,7 +272,7 @@ gruga_mainDisc =
 		'twig:add', 'signUp',
 			buttonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', signupButtonPnw,
 						'pse', signupButtonPnw.add( buttonSize )
 					),

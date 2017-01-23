@@ -20,11 +20,11 @@
 
 
 var
-	euclid_point,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
 	gleam_facet,
+	gleam_point,
 	gleam_shape,
 	gleam_shape_line,
 	gleam_shape_round,
@@ -58,7 +58,7 @@ var
 	round;
 
 
-pc = euclid_point.zero;
+pc = gleam_point.zero;
 
 // half dash line
 hd = 2;

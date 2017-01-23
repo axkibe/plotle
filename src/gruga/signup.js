@@ -4,10 +4,10 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	shell_fontPool,
 	form_signUp,
+	gleam_point,
+	gleam_rect,
 	gruga_genericButton,
 	gruga_genericCheckbox,
 	gruga_genericInput,
@@ -57,49 +57,49 @@ gruga_signUp =
 			widget_label.abstract(
 				'text', 'Sign Up',
 				'font', shell_fontPool.get( 22, 'la' ),
-				'pos', euclid_point.xy( -245, -165 )
+				'pos', gleam_point.xy( -245, -165 )
 			),
 		'twig:add',
 		'usernameLabel',
 			widget_label.abstract(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', euclid_point.xy( -98, -102 )
+				'pos', gleam_point.xy( -98, -102 )
 			),
 		'twig:add',
 		'emailLabel',
 			widget_label.abstract(
 				'text', 'email',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', euclid_point.xy( -98, -62 )
+				'pos', gleam_point.xy( -98, -62 )
 			),
 		'twig:add',
 		'passwordLabel',
 			widget_label.abstract(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', euclid_point.xy( -98, -22 )
+				'pos', gleam_point.xy( -98, -22 )
 			),
 		'twig:add',
 		'password2Label',
 			widget_label.abstract(
 				'text', 'repeat password',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', euclid_point.xy( -98, 18 )
+				'pos', gleam_point.xy( -98, 18 )
 			),
 		'twig:add',
 		'newsletterLabel',
 			widget_label.abstract(
 				'text', 'newsletter',
 				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', euclid_point.xy( -98, 58 )
+				'pos', gleam_point.xy( -98, 58 )
 			),
 		'twig:add',
 		'errorLabel',
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
-				'pos', euclid_point.xy( -20, -136 )
+				'pos', gleam_point.xy( -20, -136 )
 			),
 		'twig:add',
 		'userInput',
@@ -108,9 +108,9 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, -120 ),
-						'pse', euclid_point.xy( 130, -95 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, -120 ),
+						'pse', gleam_point.xy( 130, -95 )
 					)
 			),
 		'twig:add',
@@ -120,9 +120,9 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, -80 ),
-						'pse', euclid_point.xy( 130, -55 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, -80 ),
+						'pse', gleam_point.xy( 130, -55 )
 					)
 			),
 		'twig:add',
@@ -133,9 +133,9 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, -40 ),
-						'pse', euclid_point.xy( 130, -15 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, -40 ),
+						'pse', gleam_point.xy( 130, -15 )
 					)
 			),
 		'twig:add',
@@ -146,9 +146,9 @@ gruga_signUp =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, 0 ),
-						'pse', euclid_point.xy( 130, 25 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, 0 ),
+						'pse', gleam_point.xy( 130, 25 )
 					)
 			),
 		'twig:add',
@@ -157,9 +157,9 @@ gruga_signUp =
 				'facets', gruga_genericCheckbox.facets,
 				'checked', true,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -75, 45 ),
-						'pse', euclid_point.xy( -59, 60 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -75, 45 ),
+						'pse', gleam_point.xy( -59, 60 )
 					)
 			),
 		'twig:add',
@@ -167,7 +167,7 @@ gruga_signUp =
 			widget_label.abstract(
 				'text', 'Updates and News',
 				'font', shell_fontPool.get( 12, 'la' ),
-				'pos', euclid_point.xy( -45, 57 )
+				'pos', gleam_point.xy( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
@@ -175,18 +175,18 @@ gruga_signUp =
 				'text',
 					'Never going to be more than an email a month. For sure!',
 				'font', shell_fontPool.get( 12, 'la' ),
-				'pos', euclid_point.xy( -45, 77 )
+				'pos', gleam_point.xy( -45, 77 )
 			),
 		'twig:add',
 		'signupButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy( signupButton.w, signupButton.n ),
+							gleam_point.xy( signupButton.w, signupButton.n ),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								signupButton.w + signupButton.width,
 								signupButton.n + signupButton.height
 							)
@@ -200,14 +200,14 @@ gruga_signUp =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w,
 								closeButton.n
 							),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w + closeButton.width,
 								closeButton.n + closeButton.height
 							)

@@ -16,7 +16,7 @@ if( JION )
 			area :
 			{
 				comment : 'designed area',
-				type : 'euclid_rect'
+				type : 'gleam_rect'
 			},
 			down :
 			{
@@ -103,12 +103,12 @@ if( JION )
 
 
 var
-	euclid_point,
 	gleam_ellipse,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
+	gleam_point,
 	gleam_transform,
 	jion,
 	result_hover,
@@ -440,9 +440,9 @@ jion.lazyValue(
 
 			return(
 				gleam_ellipse.create(
-					'pnw', euclid_point.zero,
+					'pnw', gleam_point.zero,
 					'pse',
-						euclid_point.xy(
+						gleam_point.xy(
 							area.width - 1,
 							area.height - 1
 						)

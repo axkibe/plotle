@@ -29,12 +29,12 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			pse :
 			{
 				comment : 'point in south east',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			a :
 			{
@@ -53,7 +53,7 @@ if( JION )
 
 
 var
-	euclid_point,
+	gleam_point,
 	gleam_roundRect,
 	gleam_shape,
 	gleam_shape_line,
@@ -96,9 +96,9 @@ prototype._init =
 		pne,
 		psw;
 
-	pne = euclid_point.create( 'x', pse.x, 'y', pnw.y );
+	pne = gleam_point.create( 'x', pse.x, 'y', pnw.y );
 
-	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
+	psw = gleam_point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
 		gleam_shape.create(
@@ -190,7 +190,7 @@ jion.lazyValue(
 	function( )
 	{
 		return(
-			euclid_point.create(
+			gleam_point.create(
 				'x', ( this.pse.x + this.pnw.x ) / 2,
 				'y', ( this.pse.y + this.pnw.y ) / 2
 			)

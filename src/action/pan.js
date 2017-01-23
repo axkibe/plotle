@@ -15,12 +15,12 @@ if( JION )
 			startPoint :
 			{
 				comment : 'mouse down point on start of scrolling',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			offset :
 			{
 				comment : 'offset',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			}
 		}
 	};

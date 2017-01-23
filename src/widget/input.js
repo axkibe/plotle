@@ -16,7 +16,7 @@ if( JION )
 			area :
 			{
 				comment : 'designed area',
-				type : 'euclid_rect'
+				type : 'gleam_rect'
 			},
 			facets :
 			{
@@ -81,8 +81,6 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
 	gleam_ellipse,
 	gleam_facet,
 	gleam_glint_border,
@@ -91,6 +89,8 @@ var
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
+	gleam_point,
+	gleam_rect,
 	gleam_roundRect,
 	gleam_size,
 	jion,
@@ -126,7 +126,7 @@ prototype = widget_input.prototype;
 | Default distance of text
 */
 widget_input._pitch =
-	euclid_point.create( 'x', 8, 'y', 3 );
+	gleam_point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -299,7 +299,7 @@ jion.lazyFunctionInteger(
 	if( this.password )
 	{
 		return(
-			euclid_point.create(
+			gleam_point.create(
 				'x',
 					pitch.x
 					+ (
@@ -314,7 +314,7 @@ jion.lazyFunctionInteger(
 	}
 
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x',
 				Math.round(
 					pitch.x
@@ -456,7 +456,7 @@ jion.lazyValue(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'shape',
-				euclid_rect.create(
+				gleam_rect.create(
 					'pnw', p.add( 0, n ),
 					'pse', p.add( 1, s )
 				)
@@ -516,7 +516,7 @@ jion.lazyValue(
 			gleam_glint_text.create(
 				'font', font,
 				'p',
-					euclid_point.create(
+					gleam_point.create(
 						'x', pitch.x,
 						'y', font.size + pitch.y
 					),
@@ -826,7 +826,7 @@ jion.lazyValue(
 
 	return(
 		gleam_roundRect.create(
-			'pnw', euclid_point.zero,
+			'pnw', gleam_point.zero,
 			'pse', area.pse.sub( area.pnw ),
 			'a', 7,
 			'b', 3
@@ -880,16 +880,8 @@ jion.lazyValue(
 	{
 		pm[ a ] =
 			gleam_ellipse.create(
-				'pnw',
-					euclid_point.create(
-						'x', x,
-						'y', y - h
-					),
-				'pse',
-					euclid_point.create(
-						'x', x + w,
-						'y', y + h
-					)
+				'pnw', gleam_point.xy( x, y - h),
+				'pse', gleam_point.xy( x + w, y + h )
 			);
 	}
 

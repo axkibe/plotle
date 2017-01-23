@@ -7,10 +7,10 @@
 
 var
 	config,
-	gleam_size,
 	gleam_display_canvas,
 	gleam_impl,
-	euclid_point,
+	gleam_point,
+	gleam_size,
 	math_limit,
 	root,
 	shell_root,
@@ -749,7 +749,7 @@ prototype._onMouseDown =
 	//window.focus( );
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.pageX - canvas.offsetLeft,
 			'y', event.pageY - canvas.offsetTop
 		);
@@ -875,7 +875,7 @@ prototype._onMouseMove =
 		shift;
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.pageX - canvas.offsetLeft,
 			'y', event.pageY - canvas.offsetTop
 		);
@@ -964,7 +964,7 @@ prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.pageX - canvas.offsetLeft,
 			'y', event.pageY - canvas.offsetTop
 		);
@@ -1033,7 +1033,7 @@ prototype._onMouseWheel =
 	event.preventDefault( );
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.pageX - canvas.offsetLeft,
 			'y', event.pageY - canvas.offsetTop
 		);
@@ -1079,7 +1079,7 @@ prototype._onTouchStart =
 	}
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
 			'y', event.touches[ 0 ].pageY - canvas.offsetTop
 		),
@@ -1124,7 +1124,7 @@ prototype._onTouchMove =
 	if( event.touches.length !== 1 ) return false;
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
 			'y', event.touches[ 0 ].pageY - canvas.offsetTop
 		),
@@ -1216,7 +1216,7 @@ prototype._onTouchEnd =
 	this._releaseEvents( );
 
 	p =
-		euclid_point.create(
+		gleam_point.create(
 			'x',
 				event.changedTouches[ 0 ].pageX -
 				canvas.offsetLeft,

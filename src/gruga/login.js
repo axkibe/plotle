@@ -4,9 +4,9 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	form_login,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
 	gruga_genericButton,
 	gruga_genericInput,
@@ -28,14 +28,14 @@ var
 	// login control
 	loginButton =
 	{
-		pnw : euclid_point.xy( 95, 28 ),
+		pnw : gleam_point.xy( 95, 28 ),
 		size : gleam_size.wh( 70, 70 )
 	},
 
 	// Close control
 	closeButton =
 	{
-		pnw : euclid_point.xy( 180, 38 ),
+		pnw : gleam_point.xy( 180, 38 ),
 		size : gleam_size.wh(  50, 50 )
 	};
 
@@ -50,28 +50,28 @@ gruga_login =
 			widget_label.abstract(
 				'text', 'Log In',
 				'font', shell_fontPool.get( 22, 'la' ),
-				'pos', euclid_point.xy( -225, -112 )
+				'pos', gleam_point.xy( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			widget_label.abstract(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'la' ),
-				'pos', euclid_point.xy( -175, -49 )
+				'pos', gleam_point.xy( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			widget_label.abstract(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'la' ),
-				'pos', euclid_point.xy( -175, -9 )
+				'pos', gleam_point.xy( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
-				'pos', euclid_point.xy( -20, -83 )
+				'pos', gleam_point.xy( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
@@ -80,9 +80,9 @@ gruga_login =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, -67 ),
-						'pse', euclid_point.xy( 130, -42 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, -67 ),
+						'pse', gleam_point.xy( 130, -42 )
 					)
 			),
 		'twig:add',
@@ -93,9 +93,9 @@ gruga_login =
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'area',
-					euclid_rect.create(
-						'pnw', euclid_point.xy( -80, -27 ),
-						'pse', euclid_point.xy( 130, -2 )
+					gleam_rect.create(
+						'pnw', gleam_point.xy( -80, -27 ),
+						'pse', gleam_point.xy( 130, -2 )
 					)
 			),
 		'twig:add',
@@ -103,7 +103,7 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.pnwSize(
+					gleam_rect.pnwSize(
 						loginButton.pnw,
 						loginButton.size
 					),
@@ -116,7 +116,7 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.pnwSize(
+					gleam_rect.pnwSize(
 						closeButton.pnw,
 						closeButton.size
 					),

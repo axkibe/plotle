@@ -91,11 +91,11 @@ var
 	action_createGeneric,
 	action_createRelation,
 	disc_createDisc,
-	euclid_rect,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
 	gleam_glint_window,
+	gleam_rect,
 	gleam_transform,
 	jion,
 	root,
@@ -160,7 +160,7 @@ prototype._init =
 
 	area =
 	this._area =
-		euclid_rect.create(
+		gleam_rect.create(
 			'pnw',
 				vsr.pw.add(
 					0,

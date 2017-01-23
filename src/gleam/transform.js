@@ -15,7 +15,7 @@ if( JION )
 			offset :
 			{
 				comment : 'coordinate offset',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			zoom :
 			{
@@ -28,7 +28,7 @@ if( JION )
 
 
 var
-	euclid_point,
+	gleam_point,
 	gleam_transform,
 	jion;
 
@@ -76,7 +76,7 @@ prototype.combine =
 	return(
 		gleam_transform.create(
 			'offset',
-				euclid_point.create(
+				gleam_point.create(
 					'x', this.offset.x * tzoom + t.offset.x,
 					'y', this.offset.y * tzoom + t.offset.y
 				),
@@ -140,7 +140,7 @@ jion.lazyValue(
 	'ortho',
 	function( )
 {
-	return this.create( 'offset', euclid_point.zero );
+	return this.create( 'offset', gleam_point.zero );
 }
 );
 
@@ -155,7 +155,7 @@ prototype.point =
 	)
 {
 	return(
-		euclid_point.create(
+		gleam_point.create(
 			'x', this.x( x ),
 			'y', this.y( y )
 		)
@@ -228,7 +228,7 @@ prototype.y =
 */
 gleam_transform.normal =
 	gleam_transform.create(
-		'offset', euclid_point.zero,
+		'offset', gleam_point.zero,
 		'zoom', 1
 	);
 

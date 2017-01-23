@@ -4,10 +4,10 @@
 
 
 var
-	euclid_point,
-	shell_fontPool,
 	form_loading,
+	gleam_point,
 	gruga_loading,
+	shell_fontPool,
 	widget_label;
 
 
@@ -27,13 +27,13 @@ gruga_loading =
 			widget_label.abstract(
 				'text', 'loading',
 				'font', shell_fontPool.get( 28, 'ca' ),
-				'pos', euclid_point.xy( 0, -56)
+				'pos', gleam_point.xy( 0, -56)
 			),
 		'twig:add', 'spaceText',
 			widget_label.abstract(
 				'text', 'ideoloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
-				'pos', euclid_point.zero
+				'pos', gleam_point.zero
 			)
 	);
 

@@ -20,16 +20,16 @@ var
 	arrow,
 	base1,
 	base2,
-	euclid_point,
-	euclid_rect,
-	gruga_iconMoveTo,
+	gleam_point,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
+	gleam_rect,
 	gleam_shape,
 	gleam_shapeRay,
 	gleam_shape_line,
-	gleam_shape_start;
+	gleam_shape_start,
+	gruga_iconMoveTo;
 
 
 /*
@@ -42,11 +42,7 @@ var
 var
 	ap;
 
-ap =
-	euclid_point.create(
-		'x', 0,
-		'y', -11
-	);
+ap = gleam_point.xy( 0, -11 );
 
 
 gruga_iconMoveTo = { };
@@ -80,14 +76,14 @@ arrow =
 
 
 base1 =
-	euclid_rect.create(
+	gleam_rect.create(
 		'pnw', ap.add( -2, 16 ),
 		'pse', ap.add( +2, 17 )
 	);
 
 
 base2 =
-	euclid_rect.create(
+	gleam_rect.create(
 		'pnw', ap.add( -2, 19 ),
 		'pse', ap.add( +2, 20 )
 	);

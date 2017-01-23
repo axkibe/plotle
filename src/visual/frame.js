@@ -30,12 +30,12 @@ if( JION )
 var
 	action_dragItems,
 	action_resizeItems,
-	euclid_point,
-	euclid_rect,
 	gleam_ellipse,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_mask,
+	gleam_point,
+	gleam_rect,
 	gleam_roundRect,
 	gleam_shapeRay,
 	gruga_frame,
@@ -133,9 +133,9 @@ function( )
 	}
 
 	return(
-		euclid_rect.create(
-			'pnw', euclid_point.create( 'x', wx, 'y', ny ),
-			'pse', euclid_point.create( 'x', ex, 'y', sy )
+		gleam_rect.create(
+			'pnw', gleam_point.create( 'x', wx, 'y', ny ),
+			'pse', gleam_point.create( 'x', ex, 'y', sy )
 		)
 	);
 }
@@ -775,12 +775,7 @@ jion.lazyValue(
 			Math.max( hh + fw, min )
 		);
 
-	return(
-		euclid_rect.create(
-			'pnw', pnw,
-			'pse', pse
-		)
-	);
+	return gleam_rect.create( 'pnw', pnw, 'pse', pse );
 }
 );
 

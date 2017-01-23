@@ -22,7 +22,7 @@ if( JION )
 			p :
 			{
 				comment : 'position to draw it at',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			size :
 			{

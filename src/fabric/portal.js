@@ -32,7 +32,7 @@ if( JION )
 			zone :
 			{
 				comment : 'the portals zone',
-				type : 'euclid_rect',
+				type : 'gleam_rect',
 				json : true
 			}
 		}

@@ -32,7 +32,7 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in the north-west',
-				type : 'euclid_point',
+				type : 'gleam_point',
 				json : true
 			}
 		},

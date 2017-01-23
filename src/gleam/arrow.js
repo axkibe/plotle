@@ -27,10 +27,10 @@ if( JION )
 				comment : 'connect to this point or shape',
 				type :
 					[
-						'euclid_point',
 						'gleam_glint_border',
 						'gleam_glint_fill',
-						'gleam_glint_paint'
+						'gleam_glint_paint',
+						'gleam_point'
 					]
 			},
 			joint2 :
@@ -38,10 +38,10 @@ if( JION )
 				comment : 'connect to this point or shape',
 				type :
 					[
-						'euclid_point',
 						'gleam_glint_border',
 						'gleam_glint_fill',
-						'gleam_glint_paint'
+						'gleam_glint_paint',
+						'gleam_point'
 					]
 			}
 		}

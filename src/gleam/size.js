@@ -28,8 +28,8 @@ if( JION )
 
 
 var
-	euclid_point,
-	euclid_rect,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
 	jion;
 
@@ -86,10 +86,10 @@ jion.lazyValue(
 		rect;
 
 	rect =
-		euclid_rect.create(
-			'pnw', euclid_point.zero,
+		gleam_rect.create(
+			'pnw', gleam_point.zero,
 			'pse',
-				euclid_point.create(
+				gleam_point.create(
 					'x', this.width,
 					'y', this.height
 				)

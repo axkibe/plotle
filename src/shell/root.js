@@ -161,9 +161,9 @@ var
 	gleam_display_canvas,
 	gleam_glint_ray,
 	gleam_measure,
+	gleam_point,
 	gleam_size,
 	gleam_transform,
-	euclid_point,
 	fabric_doc,
 	fabric_para,
 	fabric_relation,
@@ -562,7 +562,7 @@ prototype._init =
 							  viewSize.height / gruga_controls.designSize.height,
 							  1
 							),
-						'offset', euclid_point.zero
+						'offset', gleam_point.zero
 					),
 				'hover', hover,
 				'mark', mark,
@@ -712,7 +712,7 @@ prototype.changeSpaceTransform =
 			'spaceTransform',
 				st.create(
 					'offset',
-						euclid_point.create(
+						gleam_point.create(
 							'x', ( p.x * e + offset.x / st.zoom ) * zoom,
 							'y', ( p.y * e + offset.y / st.zoom ) * zoom
 						),

@@ -5,8 +5,6 @@
 
 var
 	disc_createDisc,
-	euclid_point,
-	euclid_rect,
 	gleam_border,
 	gleam_borderRay,
 	gleam_color,
@@ -15,8 +13,9 @@ var
 	gleam_facetRay,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
+	gleam_point,
+	gleam_rect,
 	gleam_size,
-	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
 	widget_button;
@@ -39,7 +38,7 @@ var
 	relationButtonPnw;
 
 
-pw = euclid_point.create( 'x', 0, 'y', 505 );
+pw = gleam_point.xy( 0, 505 );
 
 noteButtonPnw = pw.add( 65, -325 );
 
@@ -49,7 +48,7 @@ relationButtonPnw = pw.add( 92, -183 );
 
 portalButtonPnw = pw.add( 99, -112 );
 
-genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
+genericButtonSize = gleam_point.xy( 70, 70 );
 
 genericButtonFacets =
 	gleam_facetRay.create(
@@ -133,16 +132,16 @@ gruga_createDisc =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pnw', euclid_point.xy( -2175, -1175 ),
-				'pse', euclid_point.xy( 175, 1175 ),
-				'gradientPC', euclid_point.xy( -600, 0 ),
+				'pnw', gleam_point.xy( -2175, -1175 ),
+				'pse', gleam_point.xy( 175, 1175 ),
+				'gradientPC', gleam_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add',
 		'createNote',
 			genericButtonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
 					),
@@ -152,7 +151,7 @@ gruga_createDisc =
 		'createLabel',
 			genericButtonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
 					),
@@ -162,7 +161,7 @@ gruga_createDisc =
 		'createRelation',
 			genericButtonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
 					),
@@ -173,7 +172,7 @@ gruga_createDisc =
 		'createPortal',
 			genericButtonModel.abstract(
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )
 					),

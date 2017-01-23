@@ -34,7 +34,7 @@ if( JION )
 			pnw :
 			{
 				comment : 'point in north west',
-				type : 'euclid_point'
+				type : 'gleam_point'
 			},
 			size :
 			{

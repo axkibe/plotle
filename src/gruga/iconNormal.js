@@ -18,10 +18,10 @@
 
 
 var
-	euclid_point,
 	gleam_border,
 	gleam_color,
 	gleam_facet,
+	gleam_point,
 	gleam_shape,
 	gleam_shape_line,
 	gleam_shape_start,
@@ -38,11 +38,7 @@ var
 var
 	ap;
 
-ap =
-	euclid_point.create(
-		'x', -4,
-		'y', -9
-	);
+ap = gleam_point.xy( -4, -9 );
 
 
 gruga_iconNormal = { };
@@ -71,7 +67,7 @@ gruga_iconNormal.shape =
 			gleam_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
 			gleam_shape_line.create( 'close', true )
 		],
-		'pc', euclid_point.zero
+		'pc', gleam_point.zero
 	);
 
 

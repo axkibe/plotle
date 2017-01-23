@@ -4,10 +4,10 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	shell_fontPool,
 	form_welcome,
+	gleam_point,
+	gleam_rect,
 	gruga_genericButton,
 	gruga_welcome,
 	widget_button,
@@ -43,26 +43,26 @@ gruga_welcome =
 			widget_label.abstract(
 				'text', 'welcome',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', euclid_point.xy( 0, -120 )
+				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add', 'message1',
 			widget_label.abstract(
 				'text', 'Your registration was successful :-)',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -50 )
+				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add', 'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w,
 								closeButton.n
 							),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								closeButton.w + closeButton.width,
 								closeButton.n + closeButton.height
 							)

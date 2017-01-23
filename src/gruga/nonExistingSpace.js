@@ -4,9 +4,9 @@
 
 
 var
-	euclid_point,
-	euclid_rect,
 	form_nonExistingSpace,
+	gleam_point,
+	gleam_rect,
 	gruga_genericButton,
 	gruga_nonExistingSpace,
 	shell_fontPool,
@@ -50,28 +50,25 @@ gruga_nonExistingSpace =
 			widget_label.abstract(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', euclid_point.xy( 0, -120 )
+				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add',
 		'message1',
 			widget_label.abstract(
 				'text', 'Do you want to create it?',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', euclid_point.xy( 0, -50 )
+				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'noButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
-								noButton.w,
-								noButton.n
-							),
+							gleam_point.xy( noButton.w, noButton.n ),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								noButton.w + noButton.width,
 								noButton.n + noButton.height
 							)
@@ -85,14 +82,11 @@ gruga_nonExistingSpace =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'area',
-					euclid_rect.create(
+					gleam_rect.create(
 						'pnw',
-							euclid_point.xy(
-								yesButton.w,
-								yesButton.n
-							),
+							gleam_point.xy( yesButton.w, yesButton.n ),
 						'pse',
-							euclid_point.xy(
+							gleam_point.xy(
 								yesButton.w + yesButton.width,
 								yesButton.n + yesButton.height
 							)

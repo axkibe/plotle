@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'gleam_rectGroup',
-		group : [ 'euclid_rect' ]
+		group : [ 'gleam_rect' ]
 	};
 }
 
