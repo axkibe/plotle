@@ -441,7 +441,7 @@ prototype._arrow1Glint =
 
 	arrow1 =
 		gleam_arrow.create(
-			'joint1', item1._glintNormalBackground, // TODO not access private
+			'joint1', item1._glintNormalBackground, // FIXME not access private
 			'joint2', this._glintNormalBackground,
 			'end1', 'normal',
 			'end2', 'normal'
@@ -476,7 +476,7 @@ prototype._arrow2Glint =
 	arrow2 =
 		gleam_arrow.create(
 			'joint1', this._glintNormalBackground,
-			'joint2', item2._glintNormalBackground, // TODO not access private
+			'joint2', item2._glintNormalBackground, // FIXME not access private
 			'end1', 'normal',
 			'end2', 'arrow'
 		);
@@ -488,24 +488,6 @@ prototype._arrow2Glint =
 		)
 	);
 };
-
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_label.facets.getFacet( ), // FIXME lazy
-			'shape', this.tSilhoutte
-		)
-	);
-}
-);
 
 
 /*

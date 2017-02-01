@@ -59,10 +59,7 @@ gruga_relation.spawnOffset =
 gruga_relation.arrowSize = 12;
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_relation );
-}
+if( FREEZE ) Object.freeze( gruga_relation );
 
 
 } )( );

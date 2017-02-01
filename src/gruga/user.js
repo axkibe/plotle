@@ -120,4 +120,8 @@ gruga_user =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_user );
+
+
 } )( );

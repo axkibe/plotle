@@ -70,4 +70,7 @@ gruga_noAccessToSpace =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_noAccessToSpace );
+
+
 } )( );

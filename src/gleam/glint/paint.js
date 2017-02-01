@@ -66,6 +66,7 @@ prototype.within =
 		p
 	)
 {
+	console.log( 'GLINT WITHIN' );
 
 /**/if( CHECK )
 /**/{

@@ -6,7 +6,7 @@
 /*
 | Running node normally, JION is false.
 */
-GLOBAL.JION = false;
+global.JION = false;
 
 
 /*
@@ -97,27 +97,27 @@ config.database_version = 13;
 /*
 | Server checking.
 */
-GLOBAL.CHECK = config.server_check;
+global.CHECK = config.server_check;
 
 /*
 | Server object freezing.
 */
-GLOBAL.FREEZE = config.server_freeze;
+global.FREEZE = config.server_freeze;
 
 /*
 | This is not a jion creation call.
 */
-GLOBAL.JION = false;
+global.JION = false;
 
 /*
 | This is node.
 */
-GLOBAL.NODE = true;
+global.NODE = true;
 
 /*
 | Sets root as global variable.
 */
-GLOBAL.root = undefined;
+global.root = undefined;
 
 
 var

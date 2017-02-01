@@ -794,24 +794,6 @@ jion.lazyValue( prototype, 'zone', visual_label.zone );
 */
 jion.lazyValue(
 	prototype,
-	'_glintBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_label.facets.getFacet( ), // FIXME
-			'shape', this.tSilhoutte
-		)
-	);
-}
-);
-
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
 	'_glintNormalBackground',
 	function( )
 {

@@ -218,4 +218,8 @@ gruga_signUp =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_signUp );
+
+
 } )( );

@@ -97,4 +97,8 @@ gruga_nonExistingSpace =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_nonExistingSpace );
+
+
 } )( );

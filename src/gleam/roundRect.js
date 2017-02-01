@@ -59,7 +59,8 @@ var
 	gleam_shape_line,
 	gleam_shape_round,
 	gleam_shape_start,
-	jion;
+	jion,
+	swatch;
 
 
 /*
@@ -256,6 +257,23 @@ prototype.transform =
 			'b', transform.scale( this.b )
 		)
 	);
+};
+
+
+/*
+| Returns true if p is within the shape.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return swatch.within( p, this );
 };
 
 

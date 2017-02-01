@@ -52,7 +52,8 @@ var
 	gleam_shape_round,
 	gleam_shape,
 	gleam_shape_start,
-	jion;
+	jion,
+	swatch;
 
 
 /*
@@ -322,6 +323,24 @@ function( )
 	return this.pse.x - this.pnw.x;
 }
 );
+
+
+/*
+| Returns true if p is within the ellipse.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return swatch.within( p, this );
+};
+
 
 
 } )( );

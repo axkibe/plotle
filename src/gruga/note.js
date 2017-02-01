@@ -97,10 +97,7 @@ gruga_note.defaultFontsize = 13;
 gruga_note.vScrollbarDis = 5;
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_note );
-}
+if( FREEZE ) Object.freeze( gruga_note );
 
 
 } )( );

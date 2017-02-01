@@ -79,7 +79,7 @@ visual_item.dragStart =
 
 	action = this.action;
 
-	if( !this._glintBackground.within( p ) ) return false;
+	if( !this.tSilhoutte.within( p ) ) return false;
 
 	switch( action && action.reflect )
 	{
@@ -293,7 +293,7 @@ visual_item.ctrlClick =
 		mark    // the mark of the space
 	)
 {
-	if( !this._glintBackground.within( p ) ) return;
+	if( !this.tSilhoutte.within( p ) ) return;
 
 	if( access !== 'rw' ) return false;
 

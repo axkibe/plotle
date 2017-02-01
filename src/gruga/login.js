@@ -127,4 +127,7 @@ gruga_login =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_login );
+
+
 } )( );

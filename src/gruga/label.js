@@ -45,6 +45,7 @@ gruga_label.innerMargin =
 gruga_label.minSize = 8;
 
 
-// FIXME FREEZE
+if( FREEZE ) Object.freeze( gruga_label );
+
 
 } )( );

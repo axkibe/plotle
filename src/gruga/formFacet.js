@@ -36,4 +36,7 @@ gruga_formFacet =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_formFacet );
+
+
 } )( );

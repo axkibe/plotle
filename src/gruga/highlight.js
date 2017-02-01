@@ -29,4 +29,8 @@ gruga_highlight =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_highlight );
+
+
 } )( );

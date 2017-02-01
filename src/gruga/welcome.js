@@ -74,4 +74,7 @@ gruga_welcome =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_welcome );
+
+
 } )( );

@@ -182,10 +182,13 @@ prototype.click =
 	// ctrl-clicks are not swallowed.
 	if( ctrl ) return false;
 
-	if( !this.glint.within( p ) ) return;
+	// not been clicked, pass through
+	if(
+		!this._frameBodyShape.within( p )
+		|| this._shapeMask.within( p )
+	) return;
 
 	// it has been clicked, yet do nothing.
-
 	return true;
 };
 
@@ -211,46 +214,49 @@ prototype.dragStart =
 
 	zone = this.zone;
 
-	if( !this.glint.within( p ) ) return;
+	if(
+		!this._frameBodyShape.within( p )
+		|| this._shapeMask.within( p )
+	) return;
 
-	if( this._glintHandleNw.within( p ) )
+	if( this._shapeHandleNw.within( p ) )
 	{
 		com = 'nw';
 		pBase = zone.pse;
 	}
-	else if( this._glintHandleNe.within( p ) )
+	else if( this._shapeHandleNe.within( p ) )
 	{
 		com = 'ne';
 		pBase = zone.psw;
 	}
-	else if( this._glintHandleSe.within( p ) )
+	else if( this._shapeHandleSe.within( p ) )
 	{
 		com = 'se';
 		pBase = zone.pnw;
 	}
-	else if( this._glintHandleSw.within( p ) )
+	else if( this._shapeHandleSw.within( p ) )
 	{
 		com = 'sw';
 		pBase = zone.pne;
 	}
 	else if( !this.proportional )
 	{
-		if( this._glintHandleN.within( p ) )
+		if( this._shapeHandleN.within( p ) )
 		{
 			com = 'n';
 			pBase = zone.ps;
 		}
-		else if( this._glintHandleE.within( p ) )
+		else if( this._shapeHandleE.within( p ) )
 		{
 			com = 'e';
 			pBase = zone.pw;
 		}
-		else if( this._glintHandleS.within( p ) )
+		else if( this._shapeHandleS.within( p ) )
 		{
 			com = 's';
 			pBase = zone.pn;
 		}
-		else if( this._glintHandleW.within( p ) )
+		else if( this._shapeHandleW.within( p ) )
 		{
 			com = 'w';
 			pBase = zone.pe;
@@ -290,12 +296,10 @@ prototype.dragStart =
 };
 
 
-/*
-| The frames glint
-*/
+
 jion.lazyValue(
 	prototype,
-	'glint',
+	'_shapeMask',
 	function( )
 {
 	var
@@ -304,8 +308,7 @@ jion.lazyValue(
 		arr,
 		aZ,
 		ca,
-		content,
-		shape;
+		content;
 
 	content = this.content;
 
@@ -325,12 +328,23 @@ jion.lazyValue(
 		arr[ an++ ] = ca.tSilhoutte.border( -12 );
 	}
 
-	shape = gleam_shapeRay.create( 'ray:init', arr );
+	return gleam_shapeRay.create( 'ray:init', arr );
+}
+);
 
+
+/*
+| The frames glint
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
 	return(
 		gleam_glint_mask.create(
 			'glint', this._glintFrame,
-			'shape', shape,
+			'shape', this._shapeMask,
 			'reverse', true
 		)
 	);
@@ -352,18 +366,21 @@ prototype.pointingHover =
 	var
 		com;
 
-	if( !this.glint.within( p ) ) return;
+	if(
+		!this._frameBodyShape.within( p )
+		|| this._shapeMask.within( p )
+	) return;
 
-	if( this._glintHandleNw.within( p ) ) com = 'nw';
-	else if( this._glintHandleNe.within( p ) ) com = 'ne';
-	else if( this._glintHandleSe.within( p ) ) com = 'se';
-	else if( this._glintHandleSw.within( p ) ) com = 'sw';
+	if( this._shapeHandleNw.within( p ) ) com = 'nw';
+	else if( this._shapeHandleNe.within( p ) ) com = 'ne';
+	else if( this._shapeHandleSe.within( p ) ) com = 'se';
+	else if( this._shapeHandleSw.within( p ) ) com = 'sw';
 	else if( !this.proportional )
 	{
-		if( this._glintHandleN.within( p ) ) com = 'n';
-		if( this._glintHandleE.within( p ) ) com = 'e';
-		if( this._glintHandleS.within( p ) ) com = 's';
-		if( this._glintHandleW.within( p ) ) com = 'w';
+		if( this._shapeHandleN.within( p ) ) com = 'n';
+		if( this._shapeHandleE.within( p ) ) com = 'e';
+		if( this._shapeHandleS.within( p ) ) com = 's';
+		if( this._shapeHandleW.within( p ) ) com = 'w';
 	}
 
 	if( com )
@@ -389,32 +406,95 @@ jion.lazyValue(
 	function( )
 {
 	var
+		glintFrameBody,
+		glintHandleE,
+		glintHandleN,
+		glintHandleNe,
+		glintHandleNw,
+		glintHandleS,
+		glintHandleSe,
+		glintHandleSw,
+		glintHandleW,
 		gRay;
+
+	glintFrameBody =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.facet,
+			'shape', this._frameBodyShape
+		);
+
+	glintHandleNe =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleNe
+		);
+
+	glintHandleNw =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleNw
+		);
+
+	glintHandleSe =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleSe
+		);
+
+	glintHandleSw =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleSw
+		);
 
 	if( this.proportional )
 	{
 		gRay =
 			[
-				this._glintFrameBody,
-				this._glintHandleNw,
-				this._glintHandleNe,
-				this._glintHandleSe,
-				this._glintHandleSw
+				glintFrameBody,
+				glintHandleNw,
+				glintHandleNe,
+				glintHandleSe,
+				glintHandleSw
 			];
 	}
 	else
 	{
+		glintHandleE =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleE
+			);
+
+		glintHandleN =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleN
+			);
+
+		glintHandleS =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleS
+			);
+
+		glintHandleW =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleW
+			);
+
 		gRay =
 			[
-				this._glintFrameBody,
-				this._glintHandleNw,
-				this._glintHandleNe,
-				this._glintHandleSe,
-				this._glintHandleSw,
-				this._glintHandleN,
-				this._glintHandleE,
-				this._glintHandleS,
-				this._glintHandleW
+				glintFrameBody,
+				glintHandleNw,
+				glintHandleNe,
+				glintHandleSe,
+				glintHandleSw,
+				glintHandleN,
+				glintHandleE,
+				glintHandleS,
+				glintHandleW
 			];
 	}
 
@@ -448,35 +528,17 @@ jion.lazyValue(
 );
 
 
-/*
-| The frames body glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintFrameBody',
-	function( )
-{
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.facet,
-			'shape', this._frameBodyShape
-		)
-	);
-}
-);
-
 
 /*
 | Handle glint in N.
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleN',
+	'_shapeHandleN',
 	function( )
 {
 	var
-		pn,
-		shape;
+		pn;
 
 /**/if( CHECK )
 /**/{
@@ -485,16 +547,10 @@ jion.lazyValue(
 
 	pn = this._outerZone.pn;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pn.add( -handleSize2, 0 ),
 			'pse', pn.add( handleSize2, handleSize )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -506,25 +562,18 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleNe',
+	'_shapeHandleNe',
 	function( )
 {
 	var
-		pne,
-		shape;
+		pne;
 
 	pne = this._outerZone.pne;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pne.add( -handleSize, 0 ),
 			'pse', pne.add( 0, handleSize )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -536,25 +585,18 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleNw',
+	'_shapeHandleNw',
 	function( )
 {
 	var
-		pnw,
-		shape;
+		pnw;
 
 	pnw = this._outerZone.pnw;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pnw,
 			'pse', pnw.add( handleSize, handleSize )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -566,12 +608,11 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleE',
+	'_shapeHandleE',
 	function( )
 {
 	var
-		pe,
-		shape;
+		pe;
 
 /**/if( CHECK )
 /**/{
@@ -580,16 +621,10 @@ jion.lazyValue(
 
 	pe = this._outerZone.pe;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pe.add( -handleSize, -handleSize / 2 ),
 			'pse', pe.add( 0, handleSize / 2 )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -601,12 +636,11 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleS',
+	'_shapeHandleS',
 	function( )
 {
 	var
-		ps,
-		shape;
+		ps;
 
 /**/if( CHECK )
 /**/{
@@ -615,16 +649,10 @@ jion.lazyValue(
 
 	ps = this._outerZone.ps;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', ps.add( -handleSize2, -handleSize ),
 			'pse', ps.add( handleSize2, 0 )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -636,25 +664,18 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleSe',
+	'_shapeHandleSe',
 	function( )
 {
 	var
-		pse,
-		shape;
+		pse;
 
 	pse = this._outerZone.pse;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pse.add( -handleSize, -handleSize ),
 			'pse', pse
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -666,25 +687,18 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleSw',
+	'_shapeHandleSw',
 	function( )
 {
 	var
-		psw,
-		shape;
+		psw;
 
 	psw = this._outerZone.psw;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', psw.add( 0, -handleSize ),
 			'pse', psw.add( handleSize, 0 )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }
@@ -696,12 +710,11 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_glintHandleW',
+	'_shapeHandleW',
 	function( )
 {
 	var
-		pw,
-		shape;
+		pw;
 
 /**/if( CHECK )
 /**/{
@@ -710,16 +723,10 @@ jion.lazyValue(
 
 	pw = this._outerZone.pw;
 
-	shape =
+	return(
 		gleam_ellipse.create(
 			'pnw', pw.add( 0, -handleSize2 ),
 			'pse', pw.add( handleSize, handleSize2 )
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', shape
 		)
 	);
 }

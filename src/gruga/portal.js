@@ -153,4 +153,7 @@ gruga_portal.moveToHeight = 22;
 gruga_portal.moveToRounding = 11;
 
 
+if( FREEZE ) Object.freeze( gruga_portal );
+
+
 } )( );

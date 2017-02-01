@@ -181,4 +181,7 @@ gruga_createDisc =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_createDisc );
+
+
 } )( );

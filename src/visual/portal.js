@@ -380,7 +380,7 @@ prototype.click =
 		transform,
 		zone;
 
-	if( !this._glintBackground.within( p ) ) return;
+	if( !this.tSilhoutte.within( p ) ) return;
 
 	transform = this.transform;
 
@@ -390,7 +390,7 @@ prototype.click =
 
 	pp = p.detransform( transform ).sub( zone.pnw );
 
-	if( this._glintPaintMoveToButton.within( pp ) )
+	if( this._moveToButton.shape.within( pp ) )
 	{
 		this._moveTo( );
 
@@ -407,7 +407,7 @@ prototype.click =
 
 		sf = this[ fieldLazyName ];
 
-		if( sf.glint.within( pp ) )
+		if( sf.shape.within( pp ) )
 		{
 			setMark =
 				visual_mark_caret.create(
@@ -634,7 +634,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	return this._glintBackground.within( p );
+	return this.tSilhoutte.within( p );
 };
 
 
@@ -658,11 +658,11 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this._glintBackground.within( p ) ) return;
+	if( !this.tSilhoutte.within( p ) ) return;
 
 	pp = p.detransform( transform ).sub( zone.pnw );
 
-	if( this._glintPaintMoveToButton.within( pp ) )
+	if( this._moveToButton.shape.within( pp ) )
 	{
 		return(
 			result_hover.create(
@@ -1426,6 +1426,7 @@ jion.lazyValue(
 		pse,
 		result,
 		rounding,
+		shape,
 		width,
 		zone;
 
@@ -1445,15 +1446,19 @@ jion.lazyValue(
 
 	pse = pnw.add( width, height );
 
+	shape =
+		gleam_roundRect.create(
+			'pnw', pnw,
+			'pse', pse,
+			'a', rounding,
+			'b', rounding
+		);
+
 	result =
 		{
-			shape :
-				gleam_roundRect.create(
-					'pnw', pnw,
-					'pse', pse,
-					'a', rounding,
-					'b', rounding
-				),
+			shape : shape,
+
+			oShape : shape.transform( this.transform.ortho ),
 
 			textCenter :
 				gleam_point.create(
@@ -1462,10 +1467,7 @@ jion.lazyValue(
 				)
 		};
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( result );
-/**/}
+/**/if( FREEZE ) Object.freeze( result );
 
 	return result;
 }
@@ -1488,7 +1490,7 @@ prototype._prepareField =
 		pitch,
 		p,
 		rounding,
-		silhoutte,
+		shape,
 		text,
 		width,
 		zone;
@@ -1518,7 +1520,7 @@ prototype._prepareField =
 			'y', zone.height / 2 - 30
 		);
 
-	silhoutte =
+	shape =
 		gleam_roundRect.create(
 			'pnw', p.sub( pitch, height ),
 			'pse', p.add( Math.round( width ) + pitch, pitch ),
@@ -1533,7 +1535,7 @@ prototype._prepareField =
 					'hover', false,
 					'focus', false
 				),
-			'shape', silhoutte
+			'shape', shape
 		);
 
 	return {
@@ -1541,7 +1543,7 @@ prototype._prepareField =
 		width : width,
 		height : height,
 		p : p,
-		silhoutte : silhoutte,
+		shape : shape,
 		glint : glint
 	};
 };
@@ -1735,14 +1737,17 @@ jion.lazyValue(
 
 	cRay =
 		[
-			this._glintPaintMoveToButton,
 			gleam_glint_paint.create(
-				'facet', inputFacet,
-				'shape', fieldSpaceUser.silhoutte.transform( ot )
+				'facet', this._facetMoveToButton,
+				'shape', this._moveToButton.oShape
 			),
 			gleam_glint_paint.create(
 				'facet', inputFacet,
-				'shape', fieldSpaceTag.silhoutte.transform( ot )
+				'shape', fieldSpaceUser.shape.transform( ot )
+			),
+			gleam_glint_paint.create(
+				'facet', inputFacet,
+				'shape', fieldSpaceTag.shape.transform( ot )
 			),
 			gleam_glint_text.create(
 				'font', this._tFontSpaceUser,
@@ -1788,24 +1793,6 @@ jion.lazyValue(
 					'shape', this.tOrthoSilhoutte
 				)
 			]
-		)
-	);
-}
-);
-
-
-/*
-| Creates the portal's background glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_portal.facets.getFacet( ),
-			'shape', this.tSilhoutte
 		)
 	);
 }
@@ -1869,24 +1856,6 @@ jion.lazyValue(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'shape', gleam_rect.create( 'pnw', pnw, 'pse', pse )
-		)
-	);
-}
-);
-
-
-/*
-| The moveToButton glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintPaintMoveToButton',
-	function( )
-{
-	return(
-		gleam_glint_paint.create(
-			'facet', this._facetMoveToButton,
-			'shape', this._moveToButton.shape.transform( this.transform.ortho )
 		)
 	);
 }

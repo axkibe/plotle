@@ -23,4 +23,8 @@ gruga_selection =
 		'border', gleam_border.simpleBlack
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_selection );
+
+
 } )( );

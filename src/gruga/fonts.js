@@ -80,10 +80,7 @@ gruga_fonts.ra =
 	);
 
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( gruga_fonts );
-/**/}
+if( FREEZE ) Object.freeze( gruga_fonts );
 
 
 } )( );

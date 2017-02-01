@@ -41,9 +41,7 @@ gruga_handles.cDistance = 12;
 gruga_handles.eDistance = 12;
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_handles );
-}
+if( FREEZE ) Object.freeze( gruga_handles );
+
 
 } )( );

@@ -61,10 +61,7 @@ gruga_genericInput.facets =
 	);
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_genericInput );
-}
+if( FREEZE ) Object.freeze( gruga_genericInput );
 
 
 })( );

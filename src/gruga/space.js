@@ -72,4 +72,8 @@ gruga_space =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_space );
+
+
 } )( );

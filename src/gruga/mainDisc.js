@@ -283,4 +283,8 @@ gruga_mainDisc =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_mainDisc );
+
+
 } )( );

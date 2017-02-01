@@ -29,7 +29,8 @@ if( JION )
 
 
 var
-	gleam_shape;
+	gleam_shape,
+	swatch;
 
 
 /*
@@ -194,6 +195,23 @@ prototype.transform =
 	}
 
 	return this.create( 'ray:init', ray );
+};
+
+
+/*
+| Returns true if p is within the shape.
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return swatch.within( p, this );
 };
 
 

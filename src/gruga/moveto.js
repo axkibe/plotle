@@ -187,4 +187,8 @@ gruga_moveTo =
 			)
 	);
 
+
+if( FREEZE ) Object.freeze( gruga_moveTo );
+
+
 } )( );

@@ -176,7 +176,7 @@ prototype.within =
 		p
 	)
 {
-	return this.glint.within( p );
+	return this.area.within( p );
 };
 
 

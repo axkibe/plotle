@@ -91,10 +91,7 @@ gruga_genericButton.facets =
 	);
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_genericButton );
-}
+if( FREEZE ) Object.freeze( gruga_genericButton );
 
 
 } )( );

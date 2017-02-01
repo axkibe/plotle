@@ -83,13 +83,9 @@ gruga_genericCheckbox.facets =
 			)
 		]
 	);
-			
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_genericCheckbox );
-}
+if( FREEZE ) Object.freeze( gruga_genericCheckbox );
 
 
 })( );

@@ -154,7 +154,7 @@ prototype.pointingHover =
 	if(
 		!this.visible
 		|| !this._area.within( p )
-		|| !this._glintPaintShape.within(
+		|| !this._shape.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -184,7 +184,7 @@ prototype.click =
 	if(
 		!this.visible
 		|| !this._area.within( p )
-		|| !this._glintPaintShape.within(
+		|| !this._shape.within(
 			p.sub( this._area.pnw )
 		)
 	)
@@ -306,6 +306,7 @@ jion.lazyValue(
 	function( )
 {
 	var
+		facet,
 		font,
 		gLen,
 		gRay,
@@ -315,7 +316,20 @@ jion.lazyValue(
 		tZ,
 		y;
 
-	gRay = [ this._glintPaintShape ];
+	facet =
+		this.facets.getFacet(
+			'down', this.down,
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	gRay =
+		[
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this._shape
+			)
+		];
 
 	gLen = 1;
 
@@ -379,22 +393,6 @@ jion.lazyValue(
 	'_glintPaintShape',
 	function( )
 {
-	var
-		facet;
-
-	facet =
-		this.facets.getFacet(
-			'down', this.down,
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.mark
-		);
-
-	return(
-		gleam_glint_paint.create(
-			'facet', facet,
-			'shape', this._shape
-		)
-	);
 }
 );
 

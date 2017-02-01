@@ -38,4 +38,7 @@ gruga_loading =
 	);
 
 
+if( FREEZE ) Object.freeze( gruga_loading );
+
+
 } )( );
