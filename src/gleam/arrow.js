@@ -26,23 +26,15 @@ if( JION )
 			{
 				comment : 'connect to this point or shape',
 				type :
-					[
-						'gleam_glint_border',
-						'gleam_glint_fill',
-						'gleam_glint_paint',
-						'gleam_point'
-					]
+					require( './typemap-shape' )
+					.concat( [ 'gleam_point' ] )
 			},
 			joint2 :
 			{
 				comment : 'connect to this point or shape',
 				type :
-					[
-						'gleam_glint_border',
-						'gleam_glint_fill',
-						'gleam_glint_paint',
-						'gleam_point'
-					]
+					require( './typemap-shape' )
+					.concat( [ 'gleam_point' ] )
 			}
 		}
 	};

@@ -62,7 +62,6 @@ if( JION )
 
 var
 	gleam_arrow,
-	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
@@ -441,8 +440,8 @@ prototype._arrow1Glint =
 
 	arrow1 =
 		gleam_arrow.create(
-			'joint1', item1._glintNormalBackground, // FIXME not access private
-			'joint2', this._glintNormalBackground,
+			'joint1', item1.silhoutte,
+			'joint2', this.silhoutte,
 			'end1', 'normal',
 			'end2', 'normal'
 		);
@@ -475,8 +474,8 @@ prototype._arrow2Glint =
 
 	arrow2 =
 		gleam_arrow.create(
-			'joint1', this._glintNormalBackground,
-			'joint2', item2._glintNormalBackground, // FIXME not access private
+			'joint1', this.silhoutte,
+			'joint2', item2.silhoutte,
 			'end1', 'normal',
 			'end2', 'arrow'
 		);
@@ -488,24 +487,6 @@ prototype._arrow2Glint =
 		)
 	);
 };
-
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintNormalBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_label.facets.getFacet( ), // FIXME lazy
-			'shape', this.silhoutte
-		)
-	);
-}
-);
 
 
 jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
