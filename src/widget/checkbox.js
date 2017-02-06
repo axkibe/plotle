@@ -59,8 +59,7 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'true'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
@@ -98,16 +97,16 @@ prototype = widget_checkbox.prototype;
 
 
 /*
-| Initializes the widget.
+| The transformed area.
 */
-prototype._init =
+jion.lazyValue(
+	prototype,
+	'_area',
 	function( )
 {
-	this._area =
-		this.area
-		.transform( this.transform )
-		.align;
-};
+	return this.area.transform( this.transform );
+}
+);
 
 
 /*

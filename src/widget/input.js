@@ -187,7 +187,7 @@ prototype.click =
 
 	pp = p.sub( this._area.pnw );
 
-	if( !this._glintShapeFill.within( pp ) ) return undefined;
+	if( !this._shape.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',
@@ -366,7 +366,7 @@ prototype.pointingHover =
 {
 	if(
 		!this._area.within( p )
-		|| !this._glintShapeFill.within( p.sub( this._area.pnw ) )
+		|| !this._shape.within( p.sub( this._area.pnw ) )
 	)
 	{
 		return undefined;
@@ -422,7 +422,7 @@ jion.lazyValue(
 	'_area',
 	function( )
 {
-	return this.area.transform( this.transform ).align;
+	return this.area.transform( this.transform );
 }
 );
 
@@ -491,7 +491,13 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	gRay = [ this._glintShapeFill ];
+	gRay =
+		[
+			gleam_glint_fill.create(
+				'facet', this._facet,
+				'shape', this._shape
+			)
+		];
 
 	gLen = 1;
 
@@ -540,24 +546,6 @@ jion.lazyValue(
 		);
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
-}
-);
-
-
-/*
-| The widget's background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintShapeFill',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', this._facet,
-			'shape', this._shape
-		)
-	);
 }
 );
 

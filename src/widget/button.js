@@ -277,7 +277,7 @@ jion.lazyValue(
 	'_area',
 	function( )
 {
-	return this.area.transform( this.transform ).align;
+	return this.area.transform( this.transform );
 }
 );
 

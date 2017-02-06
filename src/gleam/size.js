@@ -102,4 +102,22 @@ jion.lazyValue(
 );
 
 
+/*
+| A size jion increased by one, height and width.
+*/
+jion.lazyValue(
+	prototype,
+	'plusOne',
+	function( )
+{
+	return(
+		this.create(
+			'height', this.height + 1,
+			'width', this.width + 1
+		)
+	);
+}
+);
+
+
 } )( );

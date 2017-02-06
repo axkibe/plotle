@@ -172,8 +172,7 @@ prototype._init =
 					size.width * ct.zoom,
 					size.height * ct.zoom / 2
 				)
-		)
-		.align;
+		);
 
 	wt =
 		gleam_transform.create(
@@ -469,7 +468,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'glint', this._glint,
 			'p', this._area.pnw,
-			'size', this._area.size
+			'size', this._area.size.plusOne
 		)
 	);
 }

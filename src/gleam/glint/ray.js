@@ -52,32 +52,4 @@ if( NODE )
 prototype = gleam_glint_ray.prototype;
 
 
-/*
-| Returns true if p is within the
-| glint's shape.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	var
-		a,
-		aZ;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		if( this.get( a ).within( p ) ) return true;
-	}
-
-	return false;
-};
-
-
 } )( );

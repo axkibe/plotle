@@ -524,43 +524,6 @@ prototype.detransform =
 
 
 /*
-| Returns a rectangle which pnw/pse points are snapped to the nearest
-| whole number.
-|
-| FIXME; this is the same as align???
-*/
-jion.lazyValue(
-	prototype,
-	'snapRound',
-	function( )
-{
-	var
-		pnw,
-		pnwSnap,
-		pse,
-		pseSnap;
-
-	pnw = this.pnw;
-
-	pse = this.pse;
-
-	pnwSnap = pnw.snapRound;
-
-	pseSnap = pse.snapRound;
-
-	if( pnwSnap.equals( pnw ) && pseSnap.equals( pse ) ) return this;
-
-	return(
-		this.create(
-			'pnw', pnwSnap,
-			'pse', pseSnap
-		)
-	);
-}
-);
-
-
-/*
 | Returns a rectangle thats reduced on every side by a margin object
 */
 prototype.reduce =

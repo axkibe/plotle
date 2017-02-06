@@ -30,8 +30,7 @@ if( JION )
 
 
 var
-	gleam_glint_fill,
-	swatch;
+	gleam_glint_fill;
 
 
 /*
@@ -51,26 +50,6 @@ if( NODE )
 }
 
 prototype = gleam_glint_fill.prototype;
-
-
-/*
-| Returns true if p is within the
-| glint's shape.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	console.log( 'GLINT WITHIN' );
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
-	return swatch.within( p, this.shape );
-};
 
 
 } )( );

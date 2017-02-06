@@ -168,11 +168,10 @@ prototype._init =
 				),
 			'pse',
 				vsr.pw.add(
-					size.width * ct.zoom,
-					size.height * ct.zoom / 2
+					size.width * ct.zoom + 1,
+					size.height * ct.zoom / 2 + 1
 				)
-		)
-		.align;
+		);
 
 	this.silhoutte =
 		this.shape
@@ -374,7 +373,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'glint', this._glint,
 			'p', this._area.pnw,
-			'size', this._area.size
+			'size', this._area.size.plusOne
 		)
 	);
 }

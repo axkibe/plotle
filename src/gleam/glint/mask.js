@@ -35,8 +35,7 @@ if( JION )
 
 
 var
-	gleam_glint_mask,
-	swatch;
+	gleam_glint_mask;
 
 
 /*
@@ -57,29 +56,6 @@ if( NODE )
 }
 
 prototype = gleam_glint_mask.prototype;
-
-
-/*
-| Returns true if p is within the
-| glint its shape.
-*/
-prototype.within =
-	function(
-		p
-	)
-{
-	if( this.reverse )
-	{
-		if( swatch.within( p, this.shape ) ) return false;
-	}
-	else
-	{
-		if( !swatch.within( p, this.shape ) ) return false;
-	}
-
-	return this.glint.within( p );
-};
-
 
 
 } )( );
