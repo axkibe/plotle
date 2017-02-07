@@ -366,10 +366,7 @@ prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( discname !== this.reflectName ) throw new Error( );
 /**/}
 
 	buttonName = path.get( 4 );

@@ -74,26 +74,6 @@ gleam_point.xy =
 
 
 /*
-| Returns a point aligned to rounded coords.
-|
-| FIXME should not be needed.
-*/
-jion.lazyValue(
-	prototype,
-	'align',
-	function( )
-{
-	return(
-		this.create(
-			'x', Math.round( this.x ),
-			'y', Math.round( this.y )
-		)
-	);
-}
-);
-
-
-/*
 | Returns a border bordering this point.
 | See gleam_shape.border for further explanation.
 */
