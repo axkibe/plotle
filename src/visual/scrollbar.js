@@ -91,7 +91,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_scrollbar.facet,
-			'shape', this.area
+			'shape', this._tShape
 		)
 	);
 }
@@ -99,11 +99,11 @@ jion.lazyValue(
 
 
 /*
-| Returns the (2d) area of the scrollbar.
+| Returns the transformed shape of the scrollbar.
 */
 jion.lazyValue(
 	prototype,
-	'area',
+	'_tShape',
 	function( )
 {
 	var
@@ -176,7 +176,7 @@ prototype.within =
 		p
 	)
 {
-	return this.area.within( p );
+	return this._tShape.within( p );
 };
 
 
