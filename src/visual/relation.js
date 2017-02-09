@@ -219,7 +219,7 @@ Object.defineProperty(
 			gRay[ gLen++ ] =
 				gleam_glint_paint.create(
 					'facet', facet,
-					'shape', this.tSilhoutte
+					'shape', this.tShape
 				);
 		}
 
@@ -329,11 +329,11 @@ prototype.positioning = 'pnw/fontsize';
 
 
 /*
-| The item's silhoutte.
+| The item's shape.
 */
 jion.lazyValue(
 	prototype,
-	'silhoutte',
+	'shape',
 	function( )
 {
 	return(
@@ -385,28 +385,15 @@ prototype.scrollPage = function( ){ };
 
 
 /*
-| The items silhoutte anchored at zero.
+| The items shape  anchored at zero.
 */
-jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
+jion.lazyValue( prototype, 'zeroShape', visual_label.zeroShape );
 
 
 /*
-| The items silhoutte otrho-transformed.
+| The relations shape for current transform.
 */
-jion.lazyValue(
-	prototype,
-	'tOrthoSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.transform( this.transform.ortho );
-}
-);
-
-
-/*
-| The relations silhoutte for current transform.
-*/
-jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte );
+jion.lazyValue( prototype, 'tShape', visual_label.tShape );
 
 
 /*
@@ -440,8 +427,8 @@ prototype._arrow1Glint =
 
 	arrow1 =
 		gleam_arrow.create(
-			'joint1', item1.silhoutte,
-			'joint2', this.silhoutte,
+			'joint1', item1.shape,
+			'joint2', this.shape,
 			'end1', 'normal',
 			'end2', 'normal'
 		);
@@ -474,8 +461,8 @@ prototype._arrow2Glint =
 
 	arrow2 =
 		gleam_arrow.create(
-			'joint1', this.silhoutte,
-			'joint2', item2.silhoutte,
+			'joint1', this.shape,
+			'joint2', item2.shape,
 			'end1', 'normal',
 			'end2', 'arrow'
 		);

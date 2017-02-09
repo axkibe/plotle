@@ -120,8 +120,6 @@ prototype.border =
 
 /*
 | Adds two points or x/y values, returns a new point.
-|
-| FIXME; change to multiple point adding
 */
 prototype.add =
 	function(
@@ -131,10 +129,7 @@ prototype.add =
 {
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1.x === 0 && a1.y === 0 )
-		{
-			return this;
-		}
+		if( a1.x === 0 && a1.y === 0 ) return this;
 
 		return gleam_point.create(
 			'x', this.x + a1.x,

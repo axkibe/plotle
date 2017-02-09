@@ -466,7 +466,7 @@ jion.lazyValue(
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromJoint = fromItem.silhoutte;
+				fromJoint = fromItem.shape;
 
 				if(
 					action.toItemPath
@@ -474,7 +474,7 @@ jion.lazyValue(
 				)
 				{
 					// arrow connects two items
-					toJoint = toItem.silhoutte;
+					toJoint = toItem.shape;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{

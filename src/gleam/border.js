@@ -14,7 +14,7 @@ if( JION )
 		{
 			distance :
 			{
-				comment : 'distance from silhoutte',
+				comment : 'distance from shape',
 				type : 'number',
 				defaultValue : '0'
 			},

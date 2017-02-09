@@ -79,7 +79,7 @@ visual_item.dragStart =
 
 	action = this.action;
 
-	if( !this.tSilhoutte.within( p ) ) return false;
+	if( !this.tShape.within( p ) ) return false;
 
 	switch( action && action.reflect )
 	{
@@ -293,7 +293,7 @@ visual_item.ctrlClick =
 		mark    // the mark of the space
 	)
 {
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this.tShape.within( p ) ) return; // FIXME
 
 	if( access !== 'rw' ) return false;
 

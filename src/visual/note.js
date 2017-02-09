@@ -433,7 +433,7 @@ jion.lazyValue(
 		gRay[ gLen++ ] =
 			gleam_glint_paint.create(
 				'facet', facet,
-				'shape', this.tSilhoutte
+				'shape', this.tShape
 			);
 	}
 
@@ -506,7 +506,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.tSilhoutte.within( p ) ) return false;
+	if( !this.tShape.within( p ) ) return false;
 
 	root.setPath(
 		this.path.append( 'scrollPos' ),
@@ -598,11 +598,11 @@ prototype.scrollMarkIntoView =
 
 
 /*
-| The notes silhoutte.
+| The notes shape
 */
 jion.lazyValue(
 	prototype,
-	'silhoutte',
+	'shape',
 	function( )
 {
 	var
@@ -656,27 +656,14 @@ prototype.minScaleY =
 
 
 /*
-| Transormed silhoutte.
+| The transformed shape.
 */
 jion.lazyValue(
 	prototype,
-	'tSilhoutte',
+	'tShape',
 function( )
 {
-	return this.silhoutte.transform( this.transform );
-}
-);
-
-
-/*
-| The notes silhoutte ortho-transformed.
-*/
-jion.lazyValue(
-	prototype,
-	'tOrthoSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.transform( this.transform.ortho );
+	return this.shape.transform( this.transform );
 }
 );
 
@@ -760,34 +747,34 @@ function( )
 
 
 /*
-| The notes silhoutte anchored at zero.
+| The notes shape anchored at zero.
 */
 jion.lazyValue(
 	prototype,
-	'zeroSilhoutte',
+	'zeroShape',
 	function( )
-	{
-		var
-			zone,
-			cr;
+{
+	var
+		zone,
+		cr;
 
-		zone = this.zone;
+	zone = this.zone;
 
-		cr = gruga_note.cornerRadius;
+	cr = gruga_note.cornerRadius;
 
-		return(
-			gleam_roundRect.create(
-				'pnw', gleam_point.zero,
-				'pse',
-					gleam_point.create(
-						'x', zone.width,
-						'y', zone.height
-					),
-				'a', cr,
-				'b', cr
-			)
-		);
-	}
+	return(
+		gleam_roundRect.create(
+			'pnw', gleam_point.zero,
+			'pse',
+				gleam_point.create(
+					'x', zone.width,
+					'y', zone.height
+				),
+			'a', cr,
+			'b', cr
+		)
+	);
+}
 );
 
 
@@ -803,13 +790,17 @@ jion.lazyValue(
 	var
 		doc,
 		facet,
+		tOrthoShape,
 		tZone;
 
 	doc = this.doc;
 
 	tZone = this.tZone;
 
-	facet = gruga_note.facets.getFacet( ); // FIXME lazy
+	facet = gruga_note.facets.getFacet( );
+
+	tOrthoShape =
+		this.zeroShape.transform( this.transform.ortho );
 
 	return(
 		gleam_glint_ray.create(
@@ -817,32 +808,14 @@ jion.lazyValue(
 			[
 				gleam_glint_fill.create(
 					'facet', facet,
-					'shape', this.tOrthoSilhoutte
+					'shape', tOrthoShape
 				),
 				doc.glint,
 				gleam_glint_border.create(
 					'facet', facet,
-					'shape', this.tOrthoSilhoutte
+					'shape', tOrthoShape
 				)
 			]
-		)
-	);
-}
-);
-
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintNormalBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_note.facets.getFacet( ), // FIXME lazy
-			'shape', this.silhoutte
 		)
 	);
 }

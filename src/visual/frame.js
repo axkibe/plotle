@@ -325,7 +325,7 @@ jion.lazyValue(
 	{
 		ca = content.get( a );
 
-		arr[ an++ ] = ca.tSilhoutte.border( -12 );
+		arr[ an++ ] = ca.tShape.border( -12 );
 	}
 
 	return gleam_shapeRay.create( 'ray:init', arr );

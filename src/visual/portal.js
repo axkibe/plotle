@@ -380,7 +380,7 @@ prototype.click =
 		transform,
 		zone;
 
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this.tShape.within( p ) ) return;
 
 	transform = this.transform;
 
@@ -500,7 +500,7 @@ jion.lazyValue(
 		gRay[ 1 ] =
 			gleam_glint_paint.create(
 				'facet', facet,
-				'shape', this.tSilhoutte
+				'shape', this.tShape
 			);
 	}
 
@@ -634,7 +634,7 @@ prototype.mousewheel =
 		// ctrl
 	)
 {
-	return this.tSilhoutte.within( p );
+	return this.tShape.within( p );
 };
 
 
@@ -658,7 +658,7 @@ prototype.pointingHover =
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this.tShape.within( p ) ) return;
 
 	pp = p.detransform( transform ).sub( zone.pnw );
 
@@ -686,11 +686,11 @@ prototype.positioning =
 
 
 /*
-| The portal's silhoutte.
+| The portal's shape.
 */
 jion.lazyValue(
 	prototype,
-	'silhoutte',
+	'shape',
 	function( )
 {
 	var
@@ -704,11 +704,11 @@ jion.lazyValue(
 
 
 /*
-| The portal's silhoutte at zero.
+| The portal's shape at zero.
 */
 jion.lazyValue(
 	prototype,
-	'zeroSilhoutte',
+	'zeroShape',
 	function( )
 {
 	var
@@ -949,31 +949,14 @@ prototype.specialKey =
 
 
 /*
-| Silhoutte in current transform.
-»
-| FIXME privatize
+| The shape in current transform.
 */
 jion.lazyValue(
 	prototype,
-	'tSilhoutte',
+	'tShape',
 function( )
 {
-	return this.silhoutte.transform( this.transform );
-}
-);
-
-
-/*
-| The portals silhoutte at zero for current zoom.
-|
-| FIXME privatize
-*/
-jion.lazyValue(
-	prototype,
-	'tOrthoSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.transform( this.transform.ortho );
+	return this.shape.transform( this.transform );
 }
 );
 
@@ -1632,24 +1615,6 @@ prototype._getOffsetAt =
 
 
 /*
-| The background glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintOrthoBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_portal.facets.getFacet( ), // FIXME lazy
-			'shape', this.tOrthoSilhoutte
-		)
-	);
-}
-);
-
-
-/*
 | The moveToButton facet.
 */
 jion.lazyValue(
@@ -1713,7 +1678,8 @@ jion.lazyValue(
 		mark,
 		moveToButton,
 		ot,
-		tZone;
+		tZone,
+		tzs;
 
 	tZone = this.tZone;
 
@@ -1777,20 +1743,25 @@ jion.lazyValue(
 		if( glintCaret ) cRay[ 6 ] = this._glintCaret;
 	}
 
+	tzs = this.zeroShape.transform( ot );
+
 	return(
 		gleam_glint_ray.create(
 			'ray:init',
 			[
-				this._glintOrthoBackground,
+				gleam_glint_fill.create(
+					'facet', facet,
+					'shape', tzs
+				),
 				// masks the portals content
 				gleam_glint_mask.create(
 					'glint', gleam_glint_ray.create( 'ray:init', cRay ),
-					'shape', this.tOrthoSilhoutte
+					'shape', tzs
 				),
 				// puts the border on top of everything else
 				gleam_glint_border.create(
 					'facet', facet,
-					'shape', this.tOrthoSilhoutte
+					'shape', tzs
 				)
 			]
 		)
@@ -1813,13 +1784,11 @@ jion.lazyValue(
 		font,
 		fs,
 		mark,
-		n,
+		ot,
 		p,
 		pnw,
 		pse,
-		s,
-		section,
-		ot;
+		section;
 
 	mark = this.mark;
 
@@ -1839,14 +1808,12 @@ jion.lazyValue(
 
 	p = this._locateOffset( section, mark.caret.at );
 
-	// FIXME simplify all this
-	s = p.y + descend + fieldPnw.y;
-
-	n = s - ( fs + descend );
-
 	pnw =
 		p
-		.add( fieldPnw.x, n )
+		.add(
+			fieldPnw.x,
+			p.y + descend + fieldPnw.y - fs - descend
+		)
 		.transform( ot );
 
 	pse =
@@ -1871,22 +1838,5 @@ prototype._moveTo =
 	root.moveToSpace( this.spaceRef, false );
 };
 
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintNormalBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_portal.facets.getFacet( ),
-			'shape', this.silhoutte
-		)
-	);
-}
-);
 
 } )( );

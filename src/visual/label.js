@@ -70,7 +70,6 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
-	gleam_glint_fill,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
@@ -415,7 +414,7 @@ jion.lazyValue(
 		gRay[ gLen++ ] =
 			gleam_glint_paint.create(
 				'facet', facet,
-				'shape', this.tSilhoutte
+				'shape', this.tShape
 			);
 	}
 
@@ -630,13 +629,11 @@ prototype.positioning =
 
 
 /*
-| The item's silhoutte.
-|
-| FUTURE remove in favor of tSilhoutte
+| The item's shape.
 */
 jion.lazyValue(
 	prototype,
-	'silhoutte',
+	'shape',
 	function( )
 {
 	return(
@@ -668,33 +665,19 @@ prototype.scrollPage = function( ){ };
 
 
 /*
-| The item's silhoutte in current transform.
+| The item's shape in current transform.
 */
-visual_label.tSilhoutte =
+visual_label.tShape =
 	function( )
 {
-	return this.silhoutte.transform( this.transform );
+	return this.shape.transform( this.transform );
 };
 
 
 /*
-| The item's silhoutte in current transform.
+| The item's shape in current transform.
 */
-jion.lazyValue( prototype, 'tSilhoutte', visual_label.tSilhoutte);
-
-
-/*
-| The items silhoutte ortho-transformed.
-*/
-jion.lazyValue(
-	prototype,
-	'tOrthoSilhoutte',
-	function( )
-{
-	return this.zeroSilhoutte.transform( this.transform.ortho );
-}
-);
-
+jion.lazyValue( prototype, 'tShape', visual_label.tShape );
 
 
 /*
@@ -711,9 +694,9 @@ jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 
 
 /*
-| The items silhoutte anchored at zero.
+| The items shape anchored at zero.
 */
-visual_label.zeroSilhoutte =
+visual_label.zeroShape =
 	function( )
 {
 	var
@@ -734,7 +717,7 @@ visual_label.zeroSilhoutte =
 };
 
 
-jion.lazyValue( prototype, 'zeroSilhoutte', visual_label.zeroSilhoutte );
+jion.lazyValue( prototype, 'zeroShape', visual_label.zeroShape );
 
 /*
 | Returns the zone height.
@@ -787,24 +770,6 @@ visual_label.zone =
 
 
 jion.lazyValue( prototype, 'zone', visual_label.zone );
-
-
-/*
-| The background.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintNormalBackground',
-	function( )
-{
-	return(
-		gleam_glint_fill.create(
-			'facet', gruga_label.facets.getFacet( ), // FIXME
-			'shape', this.silhoutte
-		)
-	);
-}
-);
 
 
 } )( );

@@ -140,50 +140,13 @@ prototype._init =
 {
 	var
 		action,
-		area,
-		ct,
 		down,
 		r,
 		rZ,
-		size,
 		text,
 		twig,
 		visible,
-		vsr,
-		wname,
-		wt;
-
-	ct = this.controlTransform;
-
-	vsr = this.viewSize.zeroPnwRect;
-
-	size = this.size;
-
-	area =
-	this._area =
-		gleam_rect.create(
-			'pnw',
-				vsr.pw.add(
-					0,
-					-size.height * ct.zoom / 2
-				),
-			'pse',
-				vsr.pw.add(
-					size.width * ct.zoom,
-					size.height * ct.zoom / 2
-				)
-		);
-
-	wt =
-		gleam_transform.create(
-			'offset', size.zeroPnwRect.pw,
-			'zoom', 1
-		)
-		.combine( ct );
-
-	this.silhoutte =
-		this.shape
-		.transform( wt );
+		wname;
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
@@ -328,11 +291,9 @@ prototype._init =
 					: this.path.append( 'twig' ).append( wname ),
 				'text', text,
 				'visible', visible,
-				'transform', ct
+				'transform', this.controlTransform
 			);
 	}
-
-	if( FREEZE ) Object.freeze( twig );
 
 	this._twig = twig;
 };
@@ -464,8 +425,8 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', this._area.pnw,
-			'size', this._area.size.plusOne
+			'p', this._tZone.pnw,
+			'size', this._tZone.size.plusOne
 		)
 	);
 }
@@ -489,11 +450,11 @@ prototype.pointingHover =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this._area.within( p ) ) return;
+	if( !this._tZone.within( p ) ) return;
 
-	pp = p.sub( this._area.pnw );
+	pp = p.sub( this._tZone.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._tShape.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -529,13 +490,13 @@ prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this._area.within( p ) ) return;
+	if( !this._tZone.within( p ) ) return;
 
 	display = this._display;
 
-	pp = p.sub( this._area.pnw );
+	pp = p.sub( this._tZone.pnw );
 
-	if( !this.silhoutte.within( pp ) ) return;
+	if( !this._tShape.within( pp ) ) return;
 
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
@@ -571,11 +532,11 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this._area.within( p ) ) return;
+	if( !this._tZone.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
-			p.sub( this._area.pnw )
+		!this._tShape.within(
+			p.sub( this._tZone.pnw )
 		)
 	)
 	{
@@ -611,11 +572,11 @@ prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this._area.within( p ) ) return;
+	if( !this._tZone.within( p ) ) return;
 
 	if(
-		!this.silhoutte.within(
-			p.sub( this._area.pnw )
+		!this._tShape.within(
+			p.sub( this._tZone.pnw )
 		)
 	)
 	{
@@ -647,7 +608,7 @@ jion.lazyValue(
 		[
 			gleam_glint_fill.create(
 				'facet', this.facet,
-				'shape', this.silhoutte
+				'shape', this._tShape
 			)
 		];
 
@@ -664,10 +625,69 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_border.create(
 			'facet', this.facet,
-			'shape', this.silhoutte
+			'shape', this._tShape
 		);
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
+}
+);
+
+
+/*
+| The disc's transformed zone.
+*/
+jion.lazyValue(
+	prototype,
+	'_tZone',
+	function( )
+{
+	var
+		ctz,
+		size,
+		vsr;
+
+	ctz = this.controlTransform.zoom;
+
+	size = this.size;
+
+	vsr = this.viewSize.zeroPnwRect;
+
+	return(
+		gleam_rect.create(
+			'pnw',
+				vsr.pw.add(
+					0,
+					-size.height * ctz / 2
+				),
+			'pse',
+				vsr.pw.add(
+					size.width * ctz,
+					size.height * ctz / 2
+				)
+		)
+	);
+}
+);
+
+
+/*
+| The disc's transformed shape.
+*/
+jion.lazyValue(
+	prototype,
+	'_tShape',
+	function( )
+{
+	return(
+		this.shape
+		.transform(
+			gleam_transform.create(
+				'offset', this.size.zeroPnwRect.pw,
+				'zoom', 1
+			)
+		)
+		.transform( this.controlTransform )
+	);
 }
 );
 

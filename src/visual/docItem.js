@@ -57,7 +57,7 @@ visual_docItem.click =
 	var
 		mark;
 
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this.tShape.within( p ) ) return;
 
 	if( access != 'rw' ) return false;
 
@@ -111,7 +111,7 @@ visual_docItem.dragStart =
 
 	if( aType === 'action_select' )
 	{
-		if( !this.tSilhoutte.within( p ) ) return false;
+		if( !this.tShape.within( p ) ) return false;
 
 		mark = this.markForPoint( p, false );
 
@@ -250,7 +250,7 @@ visual_docItem.pointingHover =
 		);
 	}
 
-	if( !this.tSilhoutte.within( p ) ) return;
+	if( !this.tShape.within( p ) ) return;
 
 	cursor = 'default';
 

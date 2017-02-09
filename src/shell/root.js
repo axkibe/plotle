@@ -1502,11 +1502,7 @@ prototype.spawnRelation =
 		pnw,
 		val;
 
-	line =
-		gleam_connect.line(
-			item1.silhoutte,
-			item2.silhoutte
-		);
+	line = gleam_connect.line( item1.shape, item2.shape );
 
 	pnw = line.pc.sub( gruga_relation.spawnOffset );
 
