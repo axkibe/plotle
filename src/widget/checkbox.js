@@ -13,11 +13,6 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			area :
-			{
-				comment : 'designed area',
-				type : 'gleam_rect'
-			},
 			checked :
 			{
 				comment : 'true if the checkbox is checked',
@@ -58,6 +53,11 @@ if( JION )
 				comment : 'if false the button is hidden',
 				type : 'boolean',
 				defaultValue : 'true'
+			},
+			zone :
+			{
+				comment : 'designed zone',
+				type : 'gleam_rect'
 			}
 		}
 	};
@@ -97,14 +97,14 @@ prototype = widget_checkbox.prototype;
 
 
 /*
-| The transformed area.
+| The transformed zone.
 */
 jion.lazyValue(
 	prototype,
-	'_area',
+	'_tZone',
 	function( )
 {
-	return this.area.transform( this.transform );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -121,7 +121,7 @@ jion.lazyValue(
 		gruga_iconCheck.shape.transform(
 			gleam_transform.create(
 				'zoom', 1,
-				'offset', this._area.pc
+				'offset', this._tZone.pc
 			)
 		)
 	);
@@ -160,7 +160,7 @@ prototype.click =
 {
 	if( !this.visible ) return undefined;
 
-	if( this._area.within( p ) )
+	if( this._tZone.within( p ) )
 	{
 		root.setPath( this.path.append( 'checked' ), !this.checked );
 
@@ -198,7 +198,7 @@ jion.lazyValue(
 			'ray:append',
 				gleam_glint_paint.create(
 					'facet', facet,
-					'shape', this._area
+					'shape', this._tZone
 				)
 		);
 
@@ -241,7 +241,7 @@ prototype.pointingHover =
 		p
 	)
 {
-	if( !this.visible || !this._area.within( p ) ) return undefined;
+	if( !this.visible || !this._tZone.within( p ) ) return undefined;
 
 	return(
 		result_hover.create(

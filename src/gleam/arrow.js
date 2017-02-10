@@ -72,37 +72,31 @@ var
 
 prototype = gleam_arrow.prototype;
 
-
 /*
-| Returns the arrow shape.
+| Returns a shape of an arrow
+| going from/to joint1
+| from/to joint2.
+|
+| A joint is either a point or an shape.
 */
-jion.lazyValue(
-	prototype,
-	'shape',
-	function( )
+gleam_arrow.getArrowShape =
+	function(
+		joint1,
+		end1,
+		joint2,
+		end2
+	)
 {
 	var
 		ad,
 		arrowBase,
 		d,
-		end1,
-		end2,
 		line,
-		joint1,
-		joint2,
 		ms,
 		p1,
 		p2,
 		round,
 		sections;
-
-	joint1 = this.joint1;
-
-	joint2 = this.joint2;
-
-	end1 = this.end1;
-
-	end2 = this.end2;
 
 	line = gleam_connect.line( joint1, joint2 );
 
@@ -196,6 +190,25 @@ jion.lazyValue(
 		gleam_shape.create(
 			'ray:init', sections,
 			'pc', line.pc
+		)
+	);
+};
+
+
+/*
+| Returns the arrow shape.
+*/
+jion.lazyValue(
+	prototype,
+	'shape',
+	function( )
+{
+	return(
+		gleam_arrow.getArrowShape(
+			this.joint1,
+			this.end1,
+			this.joint2,
+			this.end2
 		)
 	);
 }

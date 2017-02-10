@@ -140,7 +140,7 @@ gruga_createDisc =
 		'twig:add',
 		'createNote',
 			genericButtonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', noteButtonPnw,
 						'pse', noteButtonPnw.add( genericButtonSize )
@@ -150,7 +150,7 @@ gruga_createDisc =
 		'twig:add',
 		'createLabel',
 			genericButtonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', labelButtonPnw,
 						'pse', labelButtonPnw.add( genericButtonSize )
@@ -160,7 +160,7 @@ gruga_createDisc =
 		'twig:add',
 		'createRelation',
 			genericButtonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', relationButtonPnw,
 						'pse', relationButtonPnw.add( genericButtonSize )
@@ -171,7 +171,7 @@ gruga_createDisc =
 		'twig:add',
 		'createPortal',
 			genericButtonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', portalButtonPnw,
 						'pse', portalButtonPnw.add( genericButtonSize )

@@ -54,7 +54,7 @@ gruga_welcome =
 		'twig:add', 'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy(

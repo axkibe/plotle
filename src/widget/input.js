@@ -13,11 +13,6 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			area :
-			{
-				comment : 'designed area',
-				type : 'gleam_rect'
-			},
 			facets :
 			{
 				comment : 'style facets',
@@ -74,6 +69,11 @@ if( JION )
 				comment : 'if false the button is hidden',
 				type : 'boolean',
 				defaultValue : 'true'
+			},
+			zone :
+			{
+				comment : 'designed zone',
+				type : 'gleam_rect'
 			}
 		}
 	};
@@ -152,7 +152,7 @@ jion.lazyValue(
 	s = Math.round( p.y + descend + 1 );
 
 	return(
-		this._area.pnw.y + s - Math.round( fs + descend )
+		this._tZone.pnw.y + s - Math.round( fs + descend )
 	);
 }
 );
@@ -183,11 +183,11 @@ prototype.click =
 	var
 		pp;
 
-	if( !p || !this._area.within( p ) ) return undefined;
+	if( !p || !this._tZone.within( p ) ) return undefined;
 
-	pp = p.sub( this._area.pnw );
+	pp = p.sub( this._tZone.pnw );
 
-	if( !this._shape.within( pp ) ) return undefined;
+	if( !this._tzShape.within( pp ) ) return undefined;
 
 	root.create(
 		'mark',
@@ -214,11 +214,11 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', this._area.pnw,
+			'p', this._tZone.pnw,
 			'size',
 				gleam_size.create(
-					'height', this._area.height + 1,
-					'width', this._area.width + 1
+					'height', this._tZone.height + 1,
+					'width', this._tZone.width + 1
 				)
 		)
 	);
@@ -365,8 +365,8 @@ prototype.pointingHover =
 	)
 {
 	if(
-		!this._area.within( p )
-		|| !this._shape.within( p.sub( this._area.pnw ) )
+		!this._tZone.within( p )
+		|| !this._tzShape.within( p.sub( this._tZone.pnw ) )
 	)
 	{
 		return undefined;
@@ -415,14 +415,14 @@ prototype.specialKey =
 
 
 /*
-| The transformed area of the button.
+| The transformed zone of the button.
 */
 jion.lazyValue(
 	prototype,
-	'_area',
+	'_tZone',
 	function( )
 {
-	return this.area.transform( this.transform );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -495,7 +495,7 @@ jion.lazyValue(
 		[
 			gleam_glint_fill.create(
 				'facet', this._facet,
-				'shape', this._shape
+				'shape', this._tzShape
 			)
 		];
 
@@ -542,7 +542,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_border.create(
 			'facet', this._facet,
-			'shape', this._shape
+			'shape', this._tzShape
 		);
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
@@ -800,22 +800,23 @@ prototype._keyUp =
 
 
 /*
-| The transformed area of the button.
+| The transformed shape of the button
+| positioned at zero.
 */
 jion.lazyValue(
 	prototype,
-	'_shape',
+	'_tzShape',
 	function( )
 {
 	var
-		area;
+		tZone;
 
-	area = this._area;
+	tZone = this._tZone;
 
 	return(
 		gleam_roundRect.create(
 			'pnw', gleam_point.zero,
-			'pse', area.pse.sub( area.pnw ),
+			'pse', tZone.pse.sub( tZone.pnw ),
 			'a', 7,
 			'b', 3
 		)

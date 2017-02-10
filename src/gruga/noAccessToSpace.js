@@ -53,7 +53,7 @@ gruga_noAccessToSpace =
 		'twig:add', 'okButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy( okButton.w, okButton.n ),

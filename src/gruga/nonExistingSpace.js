@@ -63,7 +63,7 @@ gruga_nonExistingSpace =
 		'noButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy( noButton.w, noButton.n ),
@@ -81,7 +81,7 @@ gruga_nonExistingSpace =
 		'yesButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy( yesButton.w, yesButton.n ),

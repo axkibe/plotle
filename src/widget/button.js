@@ -13,11 +13,6 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
-			area :
-			{
-				comment : 'designed area',
-				type : 'gleam_rect'
-			},
 			down :
 			{
 				comment : 'true if the button is down',
@@ -96,6 +91,11 @@ if( JION )
 				comment : 'if false the button is hidden',
 				type : 'boolean',
 				defaultValue : 'true'
+			},
+			zone :
+			{
+				comment : 'designed zone',
+				type : 'gleam_rect'
 			}
 		}
 	};
@@ -153,9 +153,9 @@ prototype.pointingHover =
 {
 	if(
 		!this.visible
-		|| !this._area.within( p )
-		|| !this._shape.within(
-			p.sub( this._area.pnw )
+		|| !this._tZone.within( p )
+		|| !this._tzShape.within(
+			p.sub( this._tZone.pnw )
 		)
 	)
 	{
@@ -183,9 +183,9 @@ prototype.click =
 {
 	if(
 		!this.visible
-		|| !this._area.within( p )
-		|| !this._shape.within(
-			p.sub( this._area.pnw )
+		|| !this._tZone.within( p )
+		|| !this._tzShape.within(
+			p.sub( this._tZone.pnw )
 		)
 	)
 	{
@@ -231,17 +231,17 @@ jion.lazyValue(
 	function( )
 {
 	var
-		area;
+		tZone;
 
 	if( !this.visible ) return undefined;
 
-	area = this._area;
+	tZone = this._tZone;
 
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', area.pnw,
-			'size', area.size
+			'p', tZone.pnw,
+			'size', tZone.size
 		)
 	);
 }
@@ -270,14 +270,14 @@ prototype.specialKey =
 
 
 /*
-| The transformed area of the button.
+| The transformed zone of the button.
 */
 jion.lazyValue(
 	prototype,
-	'_area',
+	'_tZone',
 	function( )
 {
-	return this.area.transform( this.transform );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -327,7 +327,7 @@ jion.lazyValue(
 		[
 			gleam_glint_paint.create(
 				'facet', facet,
-				'shape', this._shape
+				'shape', this._tzShape
 			)
 		];
 
@@ -409,7 +409,7 @@ jion.lazyValue(
 		this.iconShape
 		.transform(
 			gleam_transform.create(
-				'offset', this.area.zeroPnw.pc,
+				'offset', this.zone.zeroPnw.pc,
 				'zoom', 1
 			)
 		)
@@ -420,29 +420,30 @@ jion.lazyValue(
 
 
 /*
-| The shape of the button.
+| The shape of the button
+| transformed and zero positioned.
 */
 jion.lazyValue(
 	prototype,
-	'_shape',
+	'_tzShape',
 	function( )
 {
 	var
-		area;
+		tZone;
 
 	switch( this.shape )
 	{
 		case 'ellipse' :
 
-			area = this._area;
+			tZone = this._tZone;
 
 			return(
 				gleam_ellipse.create(
 					'pnw', gleam_point.zero,
 					'pse',
 						gleam_point.xy(
-							area.width - 1,
-							area.height - 1
+							tZone.width - 1,
+							tZone.height - 1
 						)
 				)
 			);
@@ -463,7 +464,7 @@ jion.lazyValue(
 	'_pc',
 	function( )
 {
-	return this._area.zeroPnw.pc;
+	return this._tZone.zeroPnw.pc;
 }
 );
 

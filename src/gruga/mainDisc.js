@@ -173,7 +173,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', normalButtonPnw,
 						'pse', normalButtonPnw.add( buttonSize )
@@ -183,7 +183,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'select',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', selectButtonPnw,
 						'pse', selectButtonPnw.add( buttonSize )
@@ -194,7 +194,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'create',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', createButtonPnw,
 						'pse', createButtonPnw.add( buttonSize )
@@ -205,7 +205,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'remove',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', removeButtonPnw,
 						'pse', removeButtonPnw.add( buttonSize )
@@ -216,7 +216,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'moveTo',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', movetoButtonPnw,
 						'pse', movetoButtonPnw.add( buttonSize )
@@ -227,7 +227,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'space',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', spaceButtonPnw,
 						'pse', spaceButtonPnw.add( spaceButtonSize )
@@ -243,7 +243,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'user',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', userButtonPnw,
 						'pse', userButtonPnw.add( userButtonSize )
@@ -259,7 +259,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'login',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', loginButtonPnw,
 						'pse', loginButtonPnw.add( buttonSize )
@@ -271,7 +271,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'signUp',
 			buttonModel.abstract(
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', signupButtonPnw,
 						'pse', signupButtonPnw.add( buttonSize )

@@ -183,11 +183,11 @@ Object.defineProperty(
 		function( )
 	{
 		var
-			arrow1,
-			arrow2,
 			facet,
 			gLen,
 			gRay,
+			item1,
+			item2,
 			tZone,
 			wg;
 
@@ -204,10 +204,6 @@ Object.defineProperty(
 					)
 			);
 
-		arrow1 = this._arrow1Glint( );
-
-		arrow2 = this._arrow2Glint( );
-
 		gRay = [ wg ];
 
 		gLen = 1;
@@ -223,9 +219,19 @@ Object.defineProperty(
 				);
 		}
 
-		if( arrow1 ) gRay[ gLen++ ] = arrow1;
+		item1 = root.spaceVisual.get( this.fabric.item1key );
 
-		if( arrow2 ) gRay[ gLen++ ] = arrow2;
+		if( item1 )
+		{
+			gRay[ gLen++ ] = this._getConnectionGlint( item1 );
+		}
+
+		item2 = root.spaceVisual.get( this.fabric.item2key );
+
+		if( item2 )
+		{
+			gRay[ gLen++ ] = this._getArrowGlint( item2 );
+		}
 
 		return gleam_glint_ray.create( 'ray:init', gRay );
 	}
@@ -237,32 +243,6 @@ Object.defineProperty(
 | A text has been inputed.
 */
 prototype.input = visual_docItem.input;
-
-
-/*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'item1key',
-	function( )
-{
-	return this.fabric.item1key;
-}
-);
-
-
-/*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'item2key',
-	function( )
-{
-	return this.fabric.item2key;
-}
-);
 
 
 /*
@@ -409,68 +389,48 @@ jion.lazyValue( prototype, 'zone', visual_label.zone );
 
 
 /*
-| The item's arrow 1 glint.
-|
-| This cannot be a lazyValue since when the other
-| item moves, the arrow changes.
+| Returns the glint of a connection to an item.
 */
-prototype._arrow1Glint =
-	function( )
+prototype._getConnectionGlint =
+	function(
+		item
+	)
 {
-	var
-		arrow1,
-		item1;
-
-	item1 = root.spaceVisual.get( this.item1key );
-
-	if( !item1 ) return undefined;
-
-	arrow1 =
-		gleam_arrow.create(
-			'joint1', item1.shape,
-			'joint2', this.shape,
-			'end1', 'normal',
-			'end2', 'normal'
-		);
-
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
-			'shape', arrow1.shape.transform( this.transform )
+			'shape',
+				gleam_arrow.getArrowShape(
+					item.shape,
+					'normal',
+					this.shape,
+					'normal'
+				)
+				.transform( this.transform )
 		)
 	);
 };
 
 
 /*
-| The item's gleam arrow 2.
-|
-| This cannot be a lazyValue since when the other
-| item moves, the arrow changes.
+| Returns the glint of an arrow to an item.
 */
-prototype._arrow2Glint =
-	function( )
+prototype._getArrowGlint =
+	function(
+		item
+	)
 {
-	var
-		arrow2,
-		item2;
-
-	item2 = root.spaceVisual.get( this.item2key );
-
-	if( !item2 ) return undefined;
-
-	arrow2 =
-		gleam_arrow.create(
-			'joint1', this.shape,
-			'joint2', item2.shape,
-			'end1', 'normal',
-			'end2', 'arrow'
-		);
-
 	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
-			'shape', arrow2.shape.transform( this.transform )
+			'shape',
+				gleam_arrow.getArrowShape(
+					this.shape,
+					'normal',
+					item.shape,
+					'arrow'
+				)
+				.transform( this.transform )
 		)
 	);
 };

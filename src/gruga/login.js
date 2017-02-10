@@ -79,7 +79,7 @@ gruga_login =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, -67 ),
 						'pse', gleam_point.xy( 130, -42 )
@@ -92,7 +92,7 @@ gruga_login =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, -27 ),
 						'pse', gleam_point.xy( 130, -2 )
@@ -102,7 +102,7 @@ gruga_login =
 		'loginButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.pnwSize(
 						loginButton.pnw,
 						loginButton.size
@@ -115,7 +115,7 @@ gruga_login =
 		'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.pnwSize(
 						closeButton.pnw,
 						closeButton.size

@@ -115,7 +115,7 @@ gruga_moveTo =
 		'ideoloomHomeButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.create(
@@ -141,7 +141,7 @@ gruga_moveTo =
 		'ideoloomSandboxButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.create(
@@ -167,7 +167,7 @@ gruga_moveTo =
 		'userHomeButton',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.create(

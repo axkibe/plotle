@@ -1393,7 +1393,7 @@ prototype._testInput =
 |
 | Checks if the virtual keyboard should be suggested
 | and if takes care the caret is scrolled into
-| visible screen area
+| visible screen area.
 */
 prototype._steerAttention =
 	function( )

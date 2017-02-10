@@ -107,7 +107,7 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, -120 ),
 						'pse', gleam_point.xy( 130, -95 )
@@ -119,7 +119,7 @@ gruga_signUp =
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, -80 ),
 						'pse', gleam_point.xy( 130, -55 )
@@ -129,10 +129,10 @@ gruga_signUp =
 		'passwordInput',
 			widget_input.abstract(
 				'facets', gruga_genericInput.facets,
-				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'password', true,
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, -40 ),
 						'pse', gleam_point.xy( 130, -15 )
@@ -145,7 +145,7 @@ gruga_signUp =
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -80, 0 ),
 						'pse', gleam_point.xy( 130, 25 )
@@ -156,7 +156,7 @@ gruga_signUp =
 			widget_checkbox.abstract(
 				'facets', gruga_genericCheckbox.facets,
 				'checked', true,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw', gleam_point.xy( -75, 45 ),
 						'pse', gleam_point.xy( -59, 60 )
@@ -181,7 +181,7 @@ gruga_signUp =
 		'signupButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy( signupButton.w, signupButton.n ),
@@ -199,7 +199,7 @@ gruga_signUp =
 		'closeButton',
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
-				'area',
+				'zone',
 					gleam_rect.create(
 						'pnw',
 							gleam_point.xy(
