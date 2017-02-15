@@ -132,8 +132,6 @@ prototype.dey =
 /*
 | Returns a transform with the same zoom like this,
 | but with a zeroOffset.
-|
-| FIXME ortho is not the right name...
 */
 jion.lazyValue(
 	prototype,

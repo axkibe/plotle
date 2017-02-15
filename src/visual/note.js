@@ -82,6 +82,7 @@ var
 	fabric_para,
 	gleam_glint_border,
 	gleam_glint_fill,
+	gleam_glint_mask,
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
@@ -810,7 +811,10 @@ jion.lazyValue(
 					'facet', facet,
 					'shape', tOrthoShape
 				),
-				doc.glint,
+				gleam_glint_mask.create(
+					'glint', doc.glint,
+					'shape', tOrthoShape
+				),
 				gleam_glint_border.create(
 					'facet', facet,
 					'shape', tOrthoShape

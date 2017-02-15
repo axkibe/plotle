@@ -25,9 +25,9 @@ shell_settings =
 	*/
 	zoomBase : 1.1,
 
-	zoomMin : -15,
+	zoomMin : -150,
 
-	zoomMax : 15
+	zoomMax : 150
 };
 
 

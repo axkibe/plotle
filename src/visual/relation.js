@@ -120,6 +120,8 @@ prototype._init =
 	function( )
 {
 	visual_label.prototype._init.call( this );
+
+	this._cache = { };
 };
 
 
@@ -172,8 +174,6 @@ jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 | when one of the items the relation
 | points to is moved the arrows are moved
 | too.
-|
-| FIXME do some caching nonetheless.
 */
 Object.defineProperty(
 	prototype,
@@ -183,13 +183,52 @@ Object.defineProperty(
 		function( )
 	{
 		var
+			arrShape,
+			cache,
+			cg,
+			conShape,
 			facet,
 			gLen,
 			gRay,
 			item1,
 			item2,
+			shape1,
+			shape2,
 			tZone,
 			wg;
+
+		cache = this._cache;
+
+		item1 = root.spaceVisual.get( this.fabric.item1key );
+
+		item2 = root.spaceVisual.get( this.fabric.item2key );
+
+		if( item1 ) shape1 = item1.shape;
+
+		if( item2 ) shape2 = item2.shape;
+
+		cg = cache.glint;
+
+		if( cg )
+		{
+			arrShape = cache.arrShape;
+
+			conShape = cache.conShape;
+
+			if(
+				(
+					( !conShape && !shape1 )
+					|| ( conShape && conShape.equals( shape1 ) )
+				)
+				&& (
+					( !arrShape && !shape2 )
+					|| ( arrShape && arrShape.equals( shape2 ) )
+				)
+			)
+			{
+				return cg;
+			}
+		}
 
 		tZone = this.tZone;
 
@@ -219,21 +258,20 @@ Object.defineProperty(
 				);
 		}
 
-		item1 = root.spaceVisual.get( this.fabric.item1key );
-
-		if( item1 )
+		if( shape1 )
 		{
-			gRay[ gLen++ ] = this._getConnectionGlint( item1 );
+			gRay[ gLen++ ] = this._getConnectionGlint( shape1 );
 		}
 
-		item2 = root.spaceVisual.get( this.fabric.item2key );
-
-		if( item2 )
+		if( shape2 )
 		{
-			gRay[ gLen++ ] = this._getArrowGlint( item2 );
+			gRay[ gLen++ ] = this._getArrowGlint( shape2 );
 		}
 
-		return gleam_glint_ray.create( 'ray:init', gRay );
+		return(
+			cache.glint =
+				gleam_glint_ray.create( 'ray:init', gRay )
+		);
 	}
 }
 );
@@ -278,16 +316,8 @@ prototype.markForPoint = visual_docItem.markForPoint;
 
 /*
 | Mouse wheel turned.
-| FIXME see visual_label.mousewheel
 */
-prototype.mousewheel =
-	function(
-		// p,
-		// dir
-	)
-{
-	return false;
-};
+prototype.mousewheel = visual_label.prototype.mousewheel;
 
 
 /*
@@ -359,12 +389,6 @@ prototype.scrollMarkIntoView = function( ){ };
 
 
 /*
-| Dummy since a label does not scroll.
-*/
-prototype.scrollPage = function( ){ };
-
-
-/*
 | The items shape  anchored at zero.
 */
 jion.lazyValue( prototype, 'zeroShape', visual_label.zeroShape );
@@ -389,50 +413,88 @@ jion.lazyValue( prototype, 'zone', visual_label.zone );
 
 
 /*
-| Returns the glint of a connection to an item.
+| Returns the glint of a connection to a shape.
 */
 prototype._getConnectionGlint =
 	function(
-		item
+		shape
 	)
 {
-	return(
+	var
+		cache,
+		conGlint,
+		conShape;
+
+	cache = this._cache;
+
+	conShape = cache.conShape;
+
+	if( conShape && conShape.equals( shape ) )
+	{
+		return cache.conGlint;
+	}
+
+	conGlint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
 				gleam_arrow.getArrowShape(
-					item.shape,
+					shape,
 					'normal',
 					this.shape,
 					'normal'
 				)
 				.transform( this.transform )
-		)
-	);
+		);
+
+	cache.conShape = shape;
+
+	cache.conGlint = conGlint;
+
+	return conGlint;
 };
 
 
 /*
-| Returns the glint of an arrow to an item.
+| Returns the glint of an arrow to a shape.
 */
 prototype._getArrowGlint =
 	function(
-		item
+		shape
 	)
 {
-	return(
+	var
+		arrShape,
+		arrGlint,
+		cache;
+
+	cache = this._cache;
+
+	arrShape = cache.arrShape;
+
+	if( arrShape && arrShape.equals( shape ) )
+	{
+		return cache.arrGlint;
+	}
+
+	arrGlint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
 				gleam_arrow.getArrowShape(
 					this.shape,
 					'normal',
-					item.shape,
+					shape,
 					'arrow'
 				)
 				.transform( this.transform )
-		)
-	);
+		);
+
+	cache.arrShape = shape;
+
+	cache.arrGlint = arrGlint;
+
+	return arrGlint;
 };
 
 

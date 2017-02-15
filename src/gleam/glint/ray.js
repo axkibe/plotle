@@ -14,7 +14,6 @@ if( JION )
 		{
 		},
 		ray :
-		// FIXME make a typemap
 		[
 			'gleam_glint_border',
 			'gleam_glint_fill',

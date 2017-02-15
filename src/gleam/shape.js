@@ -93,7 +93,6 @@ prototype.border =
 
 		arr[ a ] =
 			section.create(
-				// FIXME make a point.border( d ) call
 				'p', p.border( pc, d )
 			);
 	}

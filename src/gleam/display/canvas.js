@@ -1,7 +1,7 @@
 /*
 | Displays stuff using a HTML5 canvas renderer.
 |
-| FIXME: Remove the 'border' stuff
+| FUTURE: Remove the 'border' stuff
 */
 
 
@@ -23,7 +23,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glint ray to display',
-				type : 'gleam_glint_ray'
+				type : [ 'undefined', 'gleam_glint_ray' ]
 			},
 			scaled :
 			{
@@ -55,8 +55,8 @@ if( JION )
 var
 	get2dContext,
 	gleam_constants,
-	gleam_glint_ray,
 	gleam_display_canvas,
+	gleam_point,
 	jion;
 
 
@@ -77,8 +77,11 @@ if( NODE )
 
 var
 	prototype,
-	round;
+	round,
+	cachelimit;
 
+
+cachelimit = 12000;
 
 prototype = gleam_display_canvas.prototype;
 
@@ -141,7 +144,6 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
-			'glint', gleam_glint_ray.create( ), // FIXME allow undefined
 			'scaled', scaled,
 			'size', size
 		)
@@ -190,7 +192,7 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape( shape.shape, 0, 0.5 );
+			this._sketchGenericShape( shape.shape, 0, gleam_point.zero.add( 0.5, 0.5 ) );
 
 			break;
 
@@ -215,7 +217,7 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape( shape, 0, 0.5 );
+			this._sketchGenericShape( shape, 0, gleam_point.zero.add( 0.5, 0.5 ) );
 
 			break;
 
@@ -328,7 +330,7 @@ prototype.render =
 		this._cx.clearRect( 0, 0, size.width, size.height );
 	}
 
-	this._renderGlintRay( this.glint );
+	this._renderGlint( this.glint, gleam_point.zero );
 
 	this._rendered;
 };
@@ -345,7 +347,8 @@ prototype.render =
 prototype._border =
 	function(
 		border, // the gleam_border
-		shape   // an object to draw
+		shape,  // an object to draw
+		offset  // offset
 	)
 {
 	var
@@ -355,9 +358,9 @@ prototype._border =
 
 	cx.beginPath( );
 
-	this._sketch( shape, border.distance, 0.5 );
+	this._sketch( shape, border.distance, offset.add( 0.5, 0.5 ) );
 
-	cx.strokeStyle = this._colorStyle( border.color, shape );
+	cx.strokeStyle = this._colorStyle( border.color, shape, offset );
 
 	cx.lineWidth = border.width;
 
@@ -371,7 +374,8 @@ prototype._border =
 prototype._borders  =
 	function(
 		border, // the gleam_border
-		shape   // the shape to draw the border in
+		shape,  // the shape to draw the border in
+		offset  // offset everything by this
 	)
 {
 	var
@@ -384,14 +388,14 @@ prototype._borders  =
 
 			for( a = 0, aZ = border.length; a < aZ; a++ )
 			{
-				this._border( border.get( a ), shape );
+				this._border( border.get( a ), shape, offset );
 			}
 
 			break;
 
 		case 'gleam_border' :
 
-			this._border( border, shape );
+			this._border( border, shape, offset );
 
 			break;
 
@@ -408,7 +412,8 @@ prototype._borders  =
 prototype._fill  =
 	function(
 		fill,   // the gleam_border
-		shape   // a shape to sketch
+		shape,  // a shape to sketch
+		offset
 	)
 {
 	var
@@ -416,9 +421,9 @@ prototype._fill  =
 
 	cx = this._cx;
 
-	this._sketch( shape, 0, 0 );
+	this._sketch( shape, 0, offset );
 
-	cx.fillStyle = this._colorStyle( fill, shape );
+	cx.fillStyle = this._colorStyle( fill, shape, offset );
 
 	cx.fill( );
 };
@@ -430,7 +435,8 @@ prototype._fill  =
 prototype._colorStyle =
 	function(
 		style,
-		shape
+		shape,
+		offset
 	)
 {
 	var
@@ -460,10 +466,10 @@ prototype._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					shape.pnw.x,
-					shape.pnw.y,
-					shape.pnw.x + shape.width / 10,
-					shape.pse.y
+					shape.pnw.x + offset.x,
+					shape.pnw.y + offset.y,
+					shape.pnw.x + shape.width / 10 + offset.x,
+					shape.pse.y + offset.y
 				);
 
 			break;
@@ -487,11 +493,11 @@ prototype._colorStyle =
 
 			grad =
 				this._cx.createRadialGradient(
-					pc.x,
-					pc.y,
+					pc.x + offset.x,
+					pc.y + offset.y,
 					r0,
-					pc.x,
-					pc.y,
+					pc.x + offset.x,
+					pc.y + offset.y,
 					r1
 				);
 
@@ -503,11 +509,7 @@ prototype._colorStyle =
 			throw new Error( );
 	}
 
-	for(
-		a = 0, aZ = style.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = style.length; a < aZ; a++ )
 	{
 		cs = style.get( a );
 
@@ -524,7 +526,28 @@ prototype._colorStyle =
 */
 prototype._renderGlintRay =
 	function(
-		glint  // the glint to render
+		glint,  // the glint ray to render
+		offset  // offset all rendering by this
+	)
+{
+	var
+		a,
+		aZ;
+
+	for( a = 0, aZ = glint.length; a < aZ; a++ )
+	{
+		this._renderGlint( glint.get( a ), offset );
+	}
+};
+
+
+/*
+| Renders a glint
+*/
+prototype._renderGlint =
+	function(
+		glint,
+		offset
 	)
 {
 	var
@@ -536,162 +559,188 @@ prototype._renderGlintRay =
 		g,
 		h,
 		p,
-		r,
 		rotate,
-		rZ,
 		sa,
 		shape,
 		t1,
 		t2,
-		w;
+		w,
+		x,
+		y,
+		x2,
+		y2;
 
 	cx = this._cx;
 
-	for( r = 0, rZ = glint.length; r < rZ; r++ )
+	g = glint; // FIXME split this switch in subfunctions
+
+	switch( g.reflect )
 	{
-		g = glint.get( r );
+		case 'gleam_glint_border' :
 
-		switch( g.reflect )
-		{
-			case 'gleam_glint_border' :
+			cx.beginPath( );
+
+			this._borders( g.facet.border, g.shape, offset );
+
+			break;
+
+		case 'gleam_glint_fill' :
+
+			cx.beginPath( );
+
+			this._fill( g.facet.fill, g.shape, offset );
+
+			break;
+
+		case 'gleam_glint_paint' :
+
+			this._paint( g.facet, g.shape, offset );
+
+			break;
+
+		case 'gleam_glint_text' :
+
+			this._setFont( g.font );
+
+			p = g.p;
+
+			rotate = g.rotate;
+
+			if( rotate === undefined )
+			{
+//				var fact = g.font.size / 12;  // FIXME
+
+//				cx.setTransform( fact, 0, 0, fact, 0, 0 );
+
+				/*
+				cx.fillText(
+					g.text,
+					( p.x + offset.x ) / fact,
+					( p.y + offset.y ) / fact
+				);
+				*/
+
+				cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
+
+//				cx.setTransform( 1, 0, 0, 1, 0, 0 );
+			}
+			else
+			{
+				t1 = Math.cos( rotate );
+
+				t2 = Math.sin( rotate );
+
+				det = t1 * t1 + t2 * t2;
+
+				cx.setTransform(
+					t1, t2,
+					-t2, t1,
+					0, 0
+				);
+
+				x = p.x + offset.x;
+
+				y = p.y + offset.y;
+
+				cx.fillText(
+					g.text,
+					( x * t1 + y * t2 ) / det,
+					( y * t1 - x * t2 ) / det
+				);
+
+				cx.setTransform(
+					1, 0,
+					0, 1,
+					0, 0
+				);
+			}
+
+			break;
+
+		case 'gleam_glint_ray' :
+
+			this._renderGlintRay( g, offset );
+
+			break;
+
+		case 'gleam_glint_window' :
+
+			p = g.p;
+
+			h = this.size.height;
+
+			w = this.size.width;
+
+			x = offset.x + p.x;
+
+			y = offset.y + p.y;
+
+			if(
+				x > w
+				|| y > h
+				|| x + g.size.width < 0
+				|| y + g.size.height < 0
+			)
+			{
+				// if the window isn't visible at all
+				// no need to render it.
+				break;
+			}
+
+			if( h * w > cachelimit )
+			{
+				x2 = x + g.size.width;
+
+				y2 = y + g.size.height;
+
+				cx.save( );
 
 				cx.beginPath( );
 
-				this._borders( g.facet.border, g.shape );
+				cx.moveTo( x, y );
 
-				break;
+				cx.lineTo( x2, y );
 
-			case 'gleam_glint_fill' :
+				cx.lineTo( x2, y2 );
 
-				cx.beginPath( );
+				cx.lineTo( x, y2 );
 
-				this._fill( g.facet.fill, g.shape );
+				cx.lineTo( x, y );
 
-				break;
+				cx.clip( );
 
-			case 'gleam_glint_paint' :
+				this._renderGlintRay( g.glint, offset.add( p ) );
 
-				this._paint( g.facet, g.shape );
-
-				break;
-
-			case 'gleam_glint_text' :
-
-				this._setFont( g.font );
-
-				p = g.p;
-
-				rotate = g.rotate;
-
-				if( rotate === undefined )
-				{
-					cx.fillText( g.text, p.x, p.y );
-				}
-				else
-				{
-					t1 = Math.cos( rotate );
-
-					t2 = Math.sin( rotate );
-
-					det = t1 * t1 + t2 * t2;
-
-					cx.setTransform(
-						t1, t2,
-						-t2, t1,
-						0, 0
-					);
-
-					cx.fillText(
-						g.text,
-						( p.x * t1 + p.y * t2 ) / det,
-						( p.y * t1 - p.x * t2 ) / det
-					);
-
-					cx.setTransform(
-						1, 0,
-						0, 1,
-						0, 0
-					);
-				}
-
-				break;
-
-			case 'gleam_glint_ray' :
-
-				this._renderGlintRay( g );
-
-				break;
-
-			case 'gleam_glint_window' :
-
-				p = g.p;
-
-				// FUTURE only do via _display
-				//        when relatively small.
-
+				cx.restore( );
+			}
+			else
+			{
 				cd = g._canvasDisplay;
 
 				cd.render( );
 
 				cx.drawImage(
 					cd._cv,
-					round( p.x ),
-					round( p. y )
+					round( x ),
+					round( y )
 				);
+			}
 
-				break;
+			break;
 
-			case 'gleam_glint_disWindow' :
+		case 'gleam_glint_mask' :
 
-				p = g.p;
+			h = this.size.height;
 
-				g.display.render( );
+			w = this.size.width;
 
-				cx.drawImage(
-					g.display._cv,
-					round( p.x ),
-					round( p.y )
-				);
+			cx.save( );
 
-				break;
+			shape = g.shape;
 
-			case 'gleam_glint_mask' :
-
-				h = this.size.height;
-
-				w = this.size.width;
-
-				cx.save( );
-
-				shape = g.shape;
-
-				if( shape.reflect === 'gleam_shapeRay' )
-				{
-					for( a = 0, aZ = shape.length; a < aZ; a++ )
-					{
-						cx.beginPath( );
-
-						if( g.reverse )
-						{
-							cx.moveTo( 0, 0 );
-
-							cx.lineTo( 0, h );
-
-							cx.lineTo( w, h );
-
-							cx.lineTo( w, 0 );
-
-							cx.lineTo( 0, 0 );
-						}
-
-						sa = shape.get( a );
-
-						this._sketch( sa, 0, 0.5 );
-
-						cx.clip( );
-					}
-				}
-				else
+			if( shape.reflect === 'gleam_shapeRay' )
+			{
+				for( a = 0, aZ = shape.length; a < aZ; a++ )
 				{
 					cx.beginPath( );
 
@@ -708,19 +757,42 @@ prototype._renderGlintRay =
 						cx.lineTo( 0, 0 );
 					}
 
-					this._sketch( shape, 0, 0.5 );
+					sa = shape.get( a );
+
+					this._sketch( sa, 0, offset.add( 0.5, 0.5 ) );
 
 					cx.clip( );
 				}
+			}
+			else
+			{
+				cx.beginPath( );
 
-				this._renderGlintRay( g.glint );
+				if( g.reverse )
+				{
+					cx.moveTo( 0, 0 );
 
-				cx.restore( );
+					cx.lineTo( 0, h );
 
-				break;
+					cx.lineTo( w, h );
 
-			default : throw new Error( );
-		}
+					cx.lineTo( w, 0 );
+
+					cx.lineTo( 0, 0 );
+				}
+
+				this._sketch( shape, 0, offset.add( 0.5, 0.5 ) );
+
+				cx.clip( );
+			}
+
+			this._renderGlintRay( g.glint, offset );
+
+			cx.restore( );
+
+			break;
+
+		default : throw new Error( );
 	}
 };
 
@@ -733,7 +805,7 @@ prototype._sketchRect =
 	function(
 		rect,
 		border,
-		twist
+		offset
 	)
 {
 	var
@@ -745,13 +817,13 @@ prototype._sketchRect =
 
 	cx = this._cx;
 
-	wx = round( rect.pnw.x ) + border + twist;
+	wx = round( rect.pnw.x ) + border + offset.x;
 
-	ny = round( rect.pnw.y ) + border + twist;
+	ny = round( rect.pnw.y ) + border + offset.y;
 
-	ex = round( rect.pse.x ) - border + twist;
+	ex = round( rect.pse.x ) - border + offset.x;
 
-	sy = round( rect.pse.y ) - border + twist;
+	sy = round( rect.pse.y ) - border + offset.y;
 
 	cx.moveTo( wx, ny );
 
@@ -770,8 +842,9 @@ prototype._sketchRect =
 */
 prototype._paint =
 	function(
-		facet, // paint in this facet
-		shape  // paint this shape
+		facet,  // paint in this facet
+		shape,  // paint this shape
+		offset  // offset everything by this
 	)
 {
 	var
@@ -785,7 +858,7 @@ prototype._paint =
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
-			this._paint( facet, shape.get( a ) );
+			this._paint( facet, shape.get( a ), offset );
 		}
 
 		return;
@@ -804,9 +877,9 @@ prototype._paint =
 
 	cx.beginPath( );
 
-	if( fill ) this._fill( fill, shape );
+	if( fill ) this._fill( fill, shape, offset );
 
-	if( border ) this._borders( border, shape );
+	if( border ) this._borders( border, shape, offset );
 };
 
 
@@ -839,6 +912,8 @@ prototype._setFont =
 
 	cx.font = font.css;
 
+//	cx.font = '12px ' + font.family;
+
 	cx.fillStyle = font.fill.css;
 
 	cx.textAlign = font.align;
@@ -853,8 +928,8 @@ prototype._setFont =
 prototype._sketch =
 	function(
 		shape,  // shape to sketch
-		border, // additional border  FIXME remove
-		twist   // 0.5 offset in case of borders vs. fills
+		border, // additional border
+		offset  // offset by this
 	)
 {
 	switch( shape.reflect )
@@ -862,15 +937,15 @@ prototype._sketch =
 		case 'gleam_ellipse' :
 		case 'gleam_roundRect' :
 
-			return this._sketchGenericShape( shape.shape, border, twist );
+			return this._sketchGenericShape( shape.shape, border, offset );
 
 		case 'gleam_rect' :
 
-			return this._sketchRect( shape, border, twist );
+			return this._sketchRect( shape, border, offset );
 
 		case 'gleam_shape' :
 
-			return this._sketchGenericShape( shape, border, twist );
+			return this._sketchGenericShape( shape, border, offset );
 
 		default : throw new Error( );
 	}
@@ -883,9 +958,9 @@ prototype._sketch =
 */
 prototype._sketchGenericShape =
 	function(
-		shape,
-		border,
-		twist
+		shape,   // FIXME
+		border,  // FIXME
+		offset   // FIXME
 	)
 {
 	var
@@ -929,7 +1004,7 @@ prototype._sketchGenericShape =
 
 	pos = ps;
 
-	cx.moveTo( ps.x + twist, ps.y + twist );
+	cx.moveTo( ps.x + offset.x, ps.y + offset.y );
 
 	for( a = 1, aZ = shape.length; a < aZ; a++ )
 	{
@@ -970,13 +1045,14 @@ prototype._sketchGenericShape =
 		{
 			case 'gleam_shape_line' :
 
-				if( !section.fly || !twist )
+				//if( !section.fly || !twist ) FIXME
+				if( !section.fly || Math.floor( offset.x ) === offset.x )
 				{
-					cx.lineTo( pn.x + twist, pn.y + twist );
+					cx.lineTo( pn.x + offset.x, pn.y + offset.y );
 				}
 				else
 				{
-					cx.moveTo( pn.x + twist, pn.y + twist );
+					cx.moveTo( pn.x + offset.x, pn.y + offset.y );
 				}
 
 				break;
@@ -992,23 +1068,23 @@ prototype._sketchGenericShape =
 				if( !section.ccw )
 				{
 					cx.bezierCurveTo(
-						pos.x + twist + ( dxy > 0 ? magic * dx : 0 ),
-						pos.y + twist + ( dxy < 0 ? magic * dy : 0 ),
-						pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
-						pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
-						pn.x + twist,
-						pn.y + twist
+						pos.x + offset.x + ( dxy > 0 ? magic * dx : 0 ),
+						pos.y + offset.y + ( dxy < 0 ? magic * dy : 0 ),
+						pn.x + offset.x - ( dxy < 0 ? magic * dx : 0 ),
+						pn.y + offset.y - ( dxy > 0 ? magic * dy : 0 ),
+						pn.x + offset.x,
+						pn.y + offset.y
 					);
 				}
 				else
 				{
 					cx.bezierCurveTo(
-						pos.x + twist + ( dxy < 0 ? magic * dx : 0 ),
-						pos.y + twist + ( dxy > 0 ? magic * dy : 0 ),
-						pn.x + twist - ( dxy > 0 ? magic * dx : 0 ),
-						pn.y + twist - ( dxy < 0 ? magic * dy : 0 ),
-						pn.x + twist,
-						pn.y + twist
+						pos.x + offset.x + ( dxy < 0 ? magic * dx : 0 ),
+						pos.y + offset.y + ( dxy > 0 ? magic * dy : 0 ),
+						pn.x + offset.x - ( dxy > 0 ? magic * dx : 0 ),
+						pn.y + offset.y - ( dxy < 0 ? magic * dy : 0 ),
+						pn.x + offset.x,
+						pn.y + offset.y
 					);
 				}
 

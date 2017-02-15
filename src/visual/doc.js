@@ -353,12 +353,7 @@ jion.lazyValue(
 		gRay[ gLen++ ] =
 			gleam_glint_paint.create(
 				'facet', gruga_selection,
-				'shape',
-					this._rangeShape.transform(
-						// FIXME have _rangeShape already
-						// return transformed
-						this.transform.ortho
-					)
+				'shape', this._rangeShape.transform( this.transform.ortho )
 			);
 	}
 	else if(

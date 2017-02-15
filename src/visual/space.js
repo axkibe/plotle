@@ -181,20 +181,26 @@ jion.lazyStaticValue(
 
 /*
 | Mapping of fabric item name to visual items.
-|
-| FIXME freeze
 */
 jion.lazyStaticValue(
 	visual_space,
 	'visualMap',
 	function( )
 {
-	return {
+	var
+		map;
+
+	map =
+	{
 		'fabric_label' : visual_label,
 		'fabric_note' : visual_note,
 		'fabric_portal' : visual_portal,
 		'fabric_relation' : visual_relation
 	};
+
+	if( FREEZE ) Object.freeze( map );
+
+	return map;
 }
 );
 

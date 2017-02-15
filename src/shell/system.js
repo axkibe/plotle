@@ -16,6 +16,7 @@ var
 	shell_root,
 	shell_system,
 	startup,
+	swatch,
 	system,
 	transmitter;
 
@@ -595,7 +596,12 @@ prototype._onResize =
 {
 	if( !root ) return;
 
-	root.resize( window.innerWidth - 1, window.innerHeight - 1 );
+	root.resize(
+		gleam_size.create(
+			'width', window.innerWidth - 1,
+			'height', window.innerHeight - 1
+		)
+	);
 };
 
 
@@ -1440,6 +1446,24 @@ startup = function( )
 			function( )
 			{
 				system = new shell_system( );
+
+				swatch =
+					gleam_display_canvas.createAroundHTMLCanvas(
+						canvas,
+						'swatch',
+						gleam_size.create(
+							'height', 10,
+							'width', 10
+						),
+						undefined
+					);
+
+				/*
+				root._fontWFont = shell_fontPool.get( 20, 'la' );
+
+				root._fontWatch =
+					gleam_measure.width( root._fontWFont, 'ideoloom$8833' );
+				*/
 
 				shell_root.startup( system._display );
 			},

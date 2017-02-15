@@ -158,7 +158,6 @@ var
 	change_wrap,
 	disc_jockey,
 	gleam_connect,
-	gleam_display_canvas,
 	gleam_glint_ray,
 	gleam_measure,
 	gleam_point,
@@ -195,7 +194,6 @@ var
 	shell_root,
 	shell_settings,
 	system,
-	swatch,
 	user_creds,
 	visual_mark_caret,
 	visual_space;
@@ -349,27 +347,7 @@ shell_root.startup =
 
 	canvas = document.createElement( 'canvas' );
 
-	// FIXME swatch should be part of system
-
-	swatch =
-		gleam_display_canvas.createAroundHTMLCanvas(
-			canvas,
-			'swatch',
-			gleam_size.create(
-				'height', 10,
-				'width', 10
-			),
-			undefined
-		);
-
 	gleam_measure.init( canvas );
-
-	/*
-	root._fontWFont = shell_fontPool.get( 20, 'la' );
-
-	root._fontWatch =
-		gleam_measure.width( root._fontWFont, 'ideoloom$8833' );
-	*/
 
 	viewSize =
 		gleam_size.create(
@@ -1181,25 +1159,15 @@ prototype.update =
 */
 prototype.resize =
 	function(
-		width,  // FIXME give an gleam_size jion
-		height
+		size    // a gleam_size jion
 	)
 {
-	var
-		viewSize;
-
-	viewSize =
-		gleam_size.create(
-			'height', height,
-			'width', width
-		);
-
 	root.create(
 		'display',
 			this.display.create(
-				'size', viewSize
+				'size', size
 			),
-		'viewSize', viewSize
+		'viewSize', size
 	);
 };
 
@@ -1695,7 +1663,7 @@ shell_root._createFormJockey =
 
 	keys = Object.keys( forms );
 
-	// FIXME do a twig:init instead
+	// FUTURE do a twig:init instead
 	for( a = 0, aZ = keys.length; a < aZ; a++ )
 	{
 		key = keys[ a ];

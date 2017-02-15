@@ -293,7 +293,7 @@ visual_item.ctrlClick =
 		mark    // the mark of the space
 	)
 {
-	if( !this.tShape.within( p ) ) return; // FIXME
+	if( !this.tShape.within( p ) ) return;
 
 	if( access !== 'rw' ) return false;
 

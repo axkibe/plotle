@@ -499,15 +499,16 @@ prototype.minScaleY =
 
 
 /*
-| Mouse wheel turned.
-| FIXME this is wrong, it should return true if the label was hit.
+| The mouse wheel turned.
 */
 prototype.mousewheel =
 	function(
-		// p,
+		// p
 		// dir
 	)
 {
+	//return this.tShape.within( p );
+	// the label lets wheel events pass through it.
 	return false;
 };
 
@@ -656,12 +657,6 @@ prototype.specialKey = visual_docItem.specialKey;
 | Dummy since a label does not scroll.
 */
 prototype.scrollMarkIntoView = function( ){ };
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-prototype.scrollPage = function( ){ };
 
 
 /*
