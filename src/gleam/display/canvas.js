@@ -83,6 +83,8 @@ var
 
 cachelimit = 12000;
 
+cachelimit = 9999999999999999999999999999999;
+
 prototype = gleam_display_canvas.prototype;
 
 round = Math.round;
@@ -192,7 +194,11 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape( shape.shape, 0, gleam_point.zero.add( 0.5, 0.5 ) );
+			this._sketchGenericShape(
+				shape.shape,
+				0,
+				gleam_point.zero.add( 0.5, 0.5 )
+			);
 
 			break;
 
@@ -217,7 +223,11 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape( shape, 0, gleam_point.zero.add( 0.5, 0.5 ) );
+			this._sketchGenericShape(
+				shape,
+				0,
+				gleam_point.zero.add( 0.5, 0.5 )
+			);
 
 			break;
 
@@ -556,6 +566,7 @@ prototype._renderGlint =
 		cd,
 		cx,
 		det,
+		fact,
 		g,
 		h,
 		p,
@@ -608,21 +619,24 @@ prototype._renderGlint =
 
 			if( rotate === undefined )
 			{
-//				var fact = g.font.size / 12;  // FIXME
+				fact = g.font.fact;
 
-//				cx.setTransform( fact, 0, 0, fact, 0, 0 );
+				if( fact !== 1 )
+				{
+					cx.setTransform( fact, 0, 0, fact, 0, 0 );
 
-				/*
-				cx.fillText(
-					g.text,
-					( p.x + offset.x ) / fact,
-					( p.y + offset.y ) / fact
-				);
-				*/
+					cx.fillText(
+						g.text,
+						( p.x + offset.x ) / fact,
+						( p.y + offset.y ) / fact
+					);
 
-				cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
-
-//				cx.setTransform( 1, 0, 0, 1, 0, 0 );
+					cx.setTransform( 1, 0, 0, 1, 0, 0 );
+				}
+				else
+				{
+					cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
+				}
 			}
 			else
 			{
@@ -911,8 +925,6 @@ prototype._setFont =
 	cx = this._cx;
 
 	cx.font = font.css;
-
-//	cx.font = '12px ' + font.family;
 
 	cx.fillStyle = font.fill.css;
 
