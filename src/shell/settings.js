@@ -35,8 +35,27 @@ shell_settings =
 	|
 	| If zero the 'css' is set to be the exact used
 	| font used.
+	|
+	| Only used if not using opentype.
 	*/
 	uniFontSize : 0,
+
+
+	/*
+	| If true uses opentype font rendering, if false
+	| canvas.fillText()
+	*/
+	//opentype : true,
+	opentype : false,
+
+	/*
+	| Maximum size of a glint graphic cache
+	| in width * size
+	*/
+	//glintCacheLimit : 1200000
+	//glintCacheLimit : 0
+	//FIXME
+	glintCacheLimit : Number.POSITIVE_INFINITY
 };
 
 
