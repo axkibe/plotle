@@ -1458,13 +1458,6 @@ startup = function( )
 						undefined
 					);
 
-				/*
-				root._fontWFont = shell_fontPool.get( 20, 'la' );
-
-				root._fontWatch =
-					gleam_measure.width( root._fontWFont, 'ideoloom$8833' );
-				*/
-
 				shell_root.startup( system._display );
 			},
 			true
