@@ -53,11 +53,13 @@ if( JION )
 
 
 var
+	font_default,
 	get2dContext,
 	gleam_constants,
 	gleam_display_canvas,
 	gleam_point,
-	jion;
+	jion,
+	shell_settings;
 
 
 /*
@@ -77,13 +79,8 @@ if( NODE )
 
 var
 	prototype,
-	round,
-	cachelimit;
+	round;
 
-
-cachelimit = 12000;
-
-cachelimit = 9999999999999999999999999999999;
 
 prototype = gleam_display_canvas.prototype;
 
@@ -104,6 +101,8 @@ get2dContext =
 	var
 		cx;
 
+	//canvas.style['text-rendering'] = 'geometricPrecision';
+
 	if( opaque )
 	{
 		cx = canvas.getContext( '2d', { alpha: false } );
@@ -112,11 +111,11 @@ get2dContext =
 	{
 		cx = canvas.getContext( '2d' );
 	}
-
-	cx.imageSmoothingEnabled = false;
-	cx.mozImageSmoothingEnabled = false;
-	cx.oImageSmoothingEnabled = false;
-	cx.msImageSmoothingEnabled = false;
+	cx.imageSmoothingEnabled =
+	cx.mozImageSmoothingEnabled =
+	cx.oImageSmoothingEnabled =
+	cx.msImageSmoothingEnabled =
+		false;
 
 	return cx;
 };
@@ -611,62 +610,76 @@ prototype._renderGlint =
 
 		case 'gleam_glint_text' :
 
-			this._setFont( g.font );
-
 			p = g.p;
 
 			rotate = g.rotate;
 
-			if( rotate === undefined )
+			if( shell_settings.opentype )
 			{
-				fact = g.font.fact;
-
-				if( fact !== 1 )
-				{
-					cx.setTransform( fact, 0, 0, fact, 0, 0 );
-
-					cx.fillText(
-						g.text,
-						( p.x + offset.x ) / fact,
-						( p.y + offset.y ) / fact
-					);
-
-					cx.setTransform( 1, 0, 0, 1, 0, 0 );
-				}
-				else
-				{
-					cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
-				}
+				font_default.draw(
+					cx,
+					g.text,
+					p.x + offset.x,
+					p.y + offset.y,
+					g.font.size,
+					{ hinting: true }
+				);
 			}
 			else
 			{
-				t1 = Math.cos( rotate );
+				this._setFont( g.font );
 
-				t2 = Math.sin( rotate );
+				if( rotate === undefined )
+				{
+					fact = g.font.fact;
 
-				det = t1 * t1 + t2 * t2;
+					if( fact !== 1 )
+					{
+						cx.setTransform( fact, 0, 0, fact, 0, 0 );
 
-				cx.setTransform(
-					t1, t2,
-					-t2, t1,
-					0, 0
-				);
+						cx.fillText(
+							g.text,
+							( p.x + offset.x ) / fact,
+							( p.y + offset.y ) / fact
+						);
 
-				x = p.x + offset.x;
+					cx.setTransform( 1, 0, 0, 1, 0, 0 );
+					}
+					else
+					{
+						cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
+					}
+				}
+				else
+				{
+					t1 = Math.cos( rotate );
 
-				y = p.y + offset.y;
+					t2 = Math.sin( rotate );
 
-				cx.fillText(
-					g.text,
-					( x * t1 + y * t2 ) / det,
-					( y * t1 - x * t2 ) / det
-				);
+					det = t1 * t1 + t2 * t2;
 
-				cx.setTransform(
-					1, 0,
-					0, 1,
-					0, 0
-				);
+					cx.setTransform(
+						t1, t2,
+						-t2, t1,
+						0, 0
+					);
+
+					x = p.x + offset.x;
+
+					y = p.y + offset.y;
+
+					cx.fillText(
+						g.text,
+						( x * t1 + y * t2 ) / det,
+						( y * t1 - x * t2 ) / det
+					);
+
+					cx.setTransform(
+						1, 0,
+						0, 1,
+						0, 0
+					);
+				}
 			}
 
 			break;
@@ -701,7 +714,7 @@ prototype._renderGlint =
 				break;
 			}
 
-			if( h * w > cachelimit )
+			if( h * w > shell_settings.glintCacheLimit )
 			{
 				x2 = x + g.size.width;
 
