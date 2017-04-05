@@ -47,7 +47,11 @@ server_resourceRay.create( 'ray:init', [
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'webfont/webfont.js',
+		'filePath', 'import/webfont.js',   // FIXME add version info
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'import/opentype.js',  // FIXME add version info
 		'maxage', 'long'
 	),
 	server_resource.create(
@@ -56,7 +60,6 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -65,7 +68,6 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.path.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -74,7 +76,6 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.path.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -83,7 +84,6 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.pathRay.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -92,18 +92,15 @@ server_resourceRay.create( 'ray:init', [
 		'data', jion.pathRay.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/math/limit.js',
 		'inBundle', true,
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/math/maxInteger.js',
-		'inTestGleam', true,
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -926,6 +923,38 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'media/cursor.css',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/DejaVuSans.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/DejaVuSansCondensed.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/Arimo-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/OpenSans-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/SourceSansPro-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/Oxygen-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/Quicksand-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'fonts/Roboto-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(
