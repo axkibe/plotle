@@ -74,12 +74,6 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
-			inTestGleam :
-			{
-				comment : 'true if this resource is in the testgleam',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
 			jionId :
 			{
 				comment : 'if hasJion or isJion the jion id string',
