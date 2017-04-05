@@ -399,7 +399,6 @@ prototype.createShellConfig =
 			'data', cconfig.join( '' ),
 			'filePath', 'config.js',
 			'inBundle', true,
-			'inTestGleam', true,
 			'inTestPad', true
 		)
 	);
