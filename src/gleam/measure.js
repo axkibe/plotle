@@ -4,7 +4,9 @@
 
 
 var
-	gleam_measure;
+	font_default,
+	gleam_measure,
+	shell_settings;
 
 
 /*
@@ -44,14 +46,18 @@ gleam_measure =
 		var
 			cx;
 
-		cx = gleam_measure._cx;
-
-		if( cx.font !== font.css )
+		if( shell_settings.opentype )
 		{
-			cx.font = font.css;
+			return font_default.getAdvanceWidth(text, font.size);
 		}
+		else
+		{
+			cx = gleam_measure._cx;
 
-		return cx.measureText( text ).width * font.fact;
+			if( cx.font !== font.css ) cx.font = font.css;
+
+			return cx.measureText( text ).width * font.fact;
+		}
 	}
 };
 
