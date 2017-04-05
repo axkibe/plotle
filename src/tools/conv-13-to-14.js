@@ -14,13 +14,13 @@ config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-12'
+		name : 'ideoloom-13'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-13'
+		name : 'ideoloom-14'
 	}
 };
 
@@ -57,7 +57,6 @@ var
 	mongodb,
 	resume,
 	run,
-	json_typemap,
 	sus,
 	util;
 
@@ -69,8 +68,6 @@ mongodb = require( 'mongodb' );
 sus = require( 'suspend' );
 
 resume = sus.resume;
-
-json_typemap = require( '../json/typemap' );
 
 root = { };
 
@@ -148,9 +145,14 @@ convertChange =
 
 	if( typeof( c ) === 'string' || c instanceof String ) return;
 
-	if( json_typemap[ c.type ] )
+	if( c.type && c.type === 'rect' )
 	{
-		c.type = json_typemap[ c.type ];
+		console.log( 'CONVERTED FROM', c);
+		c.w = c.pse.x - c.pnw.x;
+		c.h = c.pse.y - c.pnw.y;
+		delete c.pse;
+		console.log( 'CONVERTED TO', c);
+		return;
 	}
 
 	keys = Object.keys( c );
@@ -230,9 +232,9 @@ run =
 			resume( )
 		);
 
-	if( o.version !== 12 )
+	if( o.version !== 13 )
 	{
-		throw new Error( 'src is not a v12 repository' );
+		throw new Error( 'src is not a v13 repository' );
 	}
 
 	console.log( '* connecting to trg' );
@@ -258,7 +260,7 @@ run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 13
+			version : 14
 		},
 		resume( )
 	);
