@@ -83,64 +83,6 @@ server_postProcessor.develHtml =
 
 
 /*
-| PostProcessor for testgleam.html
-*/
-server_postProcessor.testGleamHtml =
-	function(
-		data         // the data
-		// bundleRes // the resource of the bundle
-	)
-{
-	var
-		a,
-		aZ,
-		devels,
-		inventory,
-		resource;
-
-	devels = [ ];
-
-	data = data + '';
-
-	inventory = root.inventory;
-
-	for( a = 0, aZ = inventory.length; a < aZ; a++ )
-	{
-		resource = inventory.atRank( a );
-
-		if( resource.inTestGleam )
-		{
-			devels.push(
-				'<script src="'
-				+ resource.aliases.get( 0 )
-				+ '" type="text/javascript"></script>'
-			);
-		}
-	}
-
-
-	data =
-		data.replace(
-			/<!--TESTGLEAM.*>/,
-			devels.join( '\n' )
-		);
-
-	if( config.debug.weinre )
-	{
-		data =
-			data.replace(
-				/<!--WEINRE.*>/,
-				'<script src="http://'
-				+ config.debug.weinre
-				+ '/target/target-script-min.js"></script>'
-			);
-	}
-
-	return data;
-};
-
-
-/*
 | PostProcessor for testpad.html
 */
 server_postProcessor.testPadHtml =
