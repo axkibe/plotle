@@ -20,22 +20,6 @@ var
 'use strict';
 
 
-var
-	closeButton;
-
-
-/*
-| Close control
-*/
-closeButton =
-{
-	width : 50,
-	height : 50,
-	w : 180,
-	n : 38
-};
-
-
 /*
 | Layout
 */
@@ -103,16 +87,9 @@ gruga_user =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy(
-								closeButton.w,
-								closeButton.n
-							),
-						'pse',
-							gleam_point.xy(
-								closeButton.w + closeButton.width,
-								closeButton.n + closeButton.height
-							)
+						'pos', gleam_point.xy( 180, 38 ),
+						'width', 50,
+						'height', 50
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),

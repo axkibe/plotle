@@ -1467,16 +1467,16 @@ prototype.spawnRelation =
 	var
 		line,
 		key,
-		pnw,
+		pos,
 		val;
 
 	line = gleam_connect.line( item1.shape, item2.shape );
 
-	pnw = line.pc.sub( gruga_relation.spawnOffset );
+	pos = line.pc.sub( gruga_relation.spawnOffset );
 
 	val =
 		fabric_relation.create(
-			'pnw', pnw,
+			'pos', pos,
 			'doc',
 				fabric_doc.create(
 					'twig:add', '1',

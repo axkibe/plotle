@@ -63,28 +63,7 @@ jion.lazyValue(
 	'zone',
 	function( )
 	{
-		var
-			p1,
-			p2;
-
-		p1 = this.p1;
-
-		p2 = this.p2;
-
-		return(
-			gleam_rect.create(
-				'pnw',
-					p1.create(
-						Math.min( p1.x, p2.x ),
-						Math.min( p1.y, p2.y )
-					),
-				'pse',
-					p2.create(
-						Math.max( p1.x, p2.x ),
-						Math.max( p1.y, p2.y )
-					)
-			)
-		);
+		return gleam_rect.createArbitrary( this.p1, this.p2 );
 	}
 );
 

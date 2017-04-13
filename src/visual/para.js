@@ -40,7 +40,7 @@ if( JION )
 				comment : 'the path of the para',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			pnw :
+			pos :
 			{
 				comment : 'point in north west',
 				type : 'gleam_point'
@@ -57,7 +57,7 @@ if( JION )
 			{
 				ignores :
 				{
-					'pnw' : true,
+					'pos' : true,
 					'transform' : true,
 					'mark' : true
 				}
@@ -185,15 +185,20 @@ jion.lazyValue(
 	'glint',
 	function( )
 {
+	var transform;
+
+	transform = this.transform;
+
 	return(
 		( this._inheritedGlint || gleam_glint_window )
 		.create(
 			'glint', this._glint,
-			'p', this.pnw.transform( this.transform.ortho ),
+			'p', this.pos.transform( transform.ortho ),
 			'size',
+				// FIXME use transform.scale
 				gleam_size.create(
-					'height', Math.round( this.height * this.transform.zoom + 1 ),
-					'width', Math.round( this.flow.width * this.transform.zoom + 1 )
+					'height', Math.round( this.height * transform.zoom + 1 ),
+					'width', Math.round( this.flow.width * transform.zoom + 1 )
 				)
 		)
 	);
@@ -253,7 +258,7 @@ jion.lazyValue(
 
 	n = s - Math.round( fs + descend );
 
-	return this.pnw.y + n;
+	return this.pos.y + n;
 }
 );
 
@@ -1086,7 +1091,7 @@ prototype._pageUpDown =
 		size,
 		tp,
 		tpara,
-		tpnw;
+		tpos;
 
 /**/if( CHECK )
 /**/{
@@ -1098,7 +1103,7 @@ prototype._pageUpDown =
 	size = doc.clipsize;
 
 	tp =
-		this.pnw.add(
+		this.pos.add(
 			retainx !== undefined ? retainx : p.x,
 			p.y + size.height * dir
 		);
@@ -1110,9 +1115,9 @@ prototype._pageUpDown =
 		tpara = doc.atRank( dir > 0 ? doc.length - 1 : 0 );
 	}
 
-	tpnw = doc.get( tpara.key ).pnw;
+	tpos = doc.get( tpara.key ).pos;
 
-	at = tpara.getPointOffset( tp.sub( tpnw ) );
+	at = tpara.getPointOffset( tp.sub( tpos ) );
 
 	tpara._setMark( at, retainx, beginMark, doc );
 };

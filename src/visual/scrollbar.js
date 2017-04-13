@@ -16,9 +16,9 @@ if( JION )
 		id : 'visual_scrollbar',
 		attributes :
 		{
-			pos :
+			scrollpos :
 			{
-				comment : 'position of the scrollbar',
+				comment : 'scrollposition',
 				type : 'number'
 			},
 			aperture :
@@ -31,9 +31,9 @@ if( JION )
 				comment : 'maximum position',
 				type : 'number'
 			},
-			pnw :
+			pos :
 			{
-				comment : 'point in north west',
+				comment : 'position',
 				type : 'gleam_point'
 			},
 			size :
@@ -107,21 +107,21 @@ jion.lazyValue(
 	function( )
 {
 	var
-		pnw,
-		size,
 		pos,
+		scrollpos,
+		size,
 		max,
 		ap,
 		map,
 		sy,
-		s05,
+		st,
 		transform;
 
-	pnw = this.pnw;
+	pos = this.pos;
 
 	size = this.size;
 
-	pos = this.pos;
+	scrollpos = this.scrollpos;
 
 	max = this.max;
 
@@ -129,23 +129,21 @@ jion.lazyValue(
 
 	map = Math.max( ap, gruga_scrollbar.minHeight );
 
-	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
+	sy = Math.round( scrollpos * ( ( size - map + ap ) / max ) );
 
-	s05 = gruga_scrollbar.strength / 2;
+	st = gruga_scrollbar.strength;
 
 	transform = this.transform;
 
 	return(
 		gleam_roundRect.create(
-			'pnw',
-				pnw
-				.add( 0, sy )
+			'pos',
+				pos
+				.add( 0, sy )  // FIXME skip a point creation
 				.transform( transform )
-				.add( -s05, 0 ),
-			'pse',
-				pnw.add( 0, sy + map )
-				.transform( transform )
-				.add( s05, 0 ),
+				.add( -st / 2, 0 ),
+			'width', st,
+			'height', transform.scale( map ),
 			'a', gruga_scrollbar.ellipseA,
 			'b', gruga_scrollbar.ellipseB
 		)

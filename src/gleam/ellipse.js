@@ -12,15 +12,20 @@ if( JION )
 		id : 'gleam_ellipse',
 		attributes :
 		{
-			pnw :
+			pos :
 			{
-				comment : 'point in north west',
+				comment : 'position',
 				type : 'gleam_point'
 			},
-			pse :
+			width :
 			{
-				comment : 'point in south east',
-				type : 'gleam_point'
+				comment : 'width',
+				type : 'number'
+			},
+			height :
+			{
+				comment : 'height',
+				type : 'number'
 			},
 			gradientPC :
 			{
@@ -41,7 +46,7 @@ if( JION )
 				assign : '_gradientR1'
 			}
 		},
-		init : [ 'pnw', 'pse' ]
+		init : [ 'pos', 'width', 'height' ]
 	};
 }
 
@@ -79,11 +84,13 @@ prototype = gleam_ellipse.prototype;
 
 /*
 | Initialization.
+| FIXME make lazy
 */
 prototype._init =
 	function(
-		pnw,
-		pse
+		p,
+		width,
+		height
 	)
 {
 	// cardinal coords
@@ -101,13 +108,13 @@ prototype._init =
 		pe,
 		ps;
 
-	wx = pnw.x;
+	wx = p.x;
 
-	ny = pnw.y;
+	ny = p.y;
 
-	ex = pse.x;
+	ex = p.x + width;
 
-	sy = pse.y;
+	sy = p.y + height;
 
 	// middles of cardinal cords
 	my = ( ny + sy ) / 2;
@@ -147,6 +154,25 @@ prototype._init =
 
 
 /*
+| Shortcut to create an ellipse by specifying p and size.
+*/
+gleam_ellipse.posSize =
+	function(
+		pos,
+		size
+	)
+{
+	return(
+		gleam_ellipse.create(
+			'pos', pos,
+			'width', size.width,
+			'height', size.height
+		)
+	);
+};
+
+
+/*
 | Returns a moved ellipse.
 */
 prototype.add =
@@ -157,10 +183,7 @@ prototype.add =
 	return(
 		( p.x === 0 && p.y === 0 )
 		? this
-		: this.create(
-			'pnw', this.pnw.add( p ),
-			'pse', this.pse.add( p )
-		)
+		: this.create( 'pos', this.pos.add( p.x, p.y ) )
 	);
 };
 
@@ -213,17 +236,9 @@ jion.lazyValue(
 	'gradientR1',
 	function( )
 {
-	var
-		dx,
-		dy;
-
 	if( this._gradientR1 ) { return this._gradientR1; }
 
-	dx = this.pse.x - this.pnw.x;
-
-	dy = this.pse.y - this.pnw.y;
-
-	return Math.max( dx, dy );
+	return Math.max( this.width, this.height );
 }
 );
 
@@ -244,20 +259,6 @@ jion.lazyValue(
 
 
 /*
-| Ellipse height.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-{
-	return this.pse.y - this.pnw.y;
-}
-);
-
-
-
-/*
 | Returns a transformed roundRect.
 */
 prototype.transform =
@@ -275,8 +276,9 @@ prototype.transform =
 		transform.zoom === 1
 		? this.add( transform.offset )
 		: this.create(
-			'pnw', this.pnw.transform( transform ),
-			'pse', this.pse.transform( transform ),
+			'pos', this.pos.transform( transform ),
+			'width', transform.scale( this.width ),
+			'height', transform.scale( this.height ),
 			'gradientPC',
 				this.gradientPC !== undefined
 				? this.gradientPC.transform( transform )
@@ -304,23 +306,10 @@ jion.lazyValue(
 {
 	return(
 		gleam_point.create(
-			'x', ( this.pnw.x + this.pse.x ) / 2,
-			'y', ( this.pnw.y + this.pse.y ) / 2
+			'x', this.pos.x + this.width / 2,
+			'y', this.pos.y + this.height / 2
 		)
 	);
-}
-);
-
-
-/*
-| Ellipse width.
-*/
-jion.lazyValue(
-	prototype,
-	'width',
-function( )
-{
-	return this.pse.x - this.pnw.x;
 }
 );
 

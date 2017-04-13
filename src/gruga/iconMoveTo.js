@@ -77,15 +77,17 @@ arrow =
 
 base1 =
 	gleam_rect.create(
-		'pnw', ap.add( -2, 16 ),
-		'pse', ap.add( +2, 17 )
+		'p', ap.add( -2, 16 ),
+		'width', 4,
+		'height', 1
 	);
 
 
 base2 =
 	gleam_rect.create(
-		'pnw', ap.add( -2, 19 ),
-		'pse', ap.add( +2, 20 )
+		'p', ap.add( -2, 19 ),
+		'width', 4,
+		'height', 1
 	);
 
 

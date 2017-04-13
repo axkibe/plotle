@@ -438,9 +438,7 @@ jion.lazyValue(
 	var
 		descend,
 		fs,
-		n,
-		p,
-		s;
+		p;
 
 	fs = this.font.size;
 
@@ -448,17 +446,14 @@ jion.lazyValue(
 
 	p = this.locateOffsetPoint( this.mark.caret.at );
 
-	s = descend + 1;
-
-	n = s - ( fs + descend );
-
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'shape',
 				gleam_rect.create(
-					'pnw', p.add( 0, n ),
-					'pse', p.add( 1, s )
+					'pos', p.add( 0, 1 - fs ),
+					'width', 1,
+					'height', fs + descend
 				)
 		)
 	);
@@ -815,8 +810,9 @@ jion.lazyValue(
 
 	return(
 		gleam_roundRect.create(
-			'pnw', gleam_point.zero,
-			'pse', tZone.pse.sub( tZone.pnw ),
+			'pos', gleam_point.zero,
+			'width', tZone.width,
+			'height', tZone.height,
 			'a', 7,
 			'b', 3
 		)
@@ -859,7 +855,7 @@ jion.lazyValue(
 
 	y =	pitch.y + Math.round( size * 0.7 );
 
-	h = Math.round( size * 0.32 ),
+	h = size * 0.32,
 
 	w = this.maskWidth( size );
 
@@ -869,8 +865,9 @@ jion.lazyValue(
 	{
 		pm[ a ] =
 			gleam_ellipse.create(
-				'pnw', gleam_point.xy( x, y - h),
-				'pse', gleam_point.xy( x + w, y + h )
+				'pos', gleam_point.xy( x, y - h),
+				'width', w,
+				'height', 2 * h
 			);
 	}
 

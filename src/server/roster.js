@@ -609,18 +609,18 @@ server_resourceRay.create( 'ray:init', [
 		'filePath', 'src/gruga/iconCheck.js',
 		'inBundle', true
 	),
-	server_resource.create(
-		'filePath', 'src/gruga/iconMoveTo.js',
-		'inBundle', true
-	),
+//	server_resource.create(
+//		'filePath', 'src/gruga/iconMoveTo.js',
+//		'inBundle', true
+//	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconNormal.js',
 		'inBundle', true
 	),
-	server_resource.create(
-		'filePath', 'src/gruga/iconHand.js',
-		'inBundle', true
-	),
+//	server_resource.create(
+//		'filePath', 'src/gruga/iconHand.js',
+//		'inBundle', true
+//	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconRemove.js',
 		'inBundle', true

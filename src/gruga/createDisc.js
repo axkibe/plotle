@@ -48,7 +48,7 @@ relationButtonPnw = pw.add( 92, -183 );
 
 portalButtonPnw = pw.add( 99, -112 );
 
-genericButtonSize = gleam_point.xy( 70, 70 );
+genericButtonSize = gleam_size.wh( 70, 70 );
 
 genericButtonFacets =
 	gleam_facetRay.create(
@@ -132,39 +132,29 @@ gruga_createDisc =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pnw', gleam_point.xy( -2175, -1175 ),
-				'pse', gleam_point.xy( 175, 1175 ),
+				'pos', gleam_point.xy( -2175, -1175 ),
+				'width', 2350,
+				'height', 2350,
 				'gradientPC', gleam_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add',
 		'createNote',
 			genericButtonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', noteButtonPnw,
-						'pse', noteButtonPnw.add( genericButtonSize )
-					),
+				'zone', gleam_rect.posSize( noteButtonPnw, genericButtonSize ),
 				'text', 'Note'
 			),
 		'twig:add',
 		'createLabel',
 			genericButtonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', labelButtonPnw,
-						'pse', labelButtonPnw.add( genericButtonSize )
-					),
+				'zone', gleam_rect.posSize( labelButtonPnw, genericButtonSize ),
 				'text', 'Label'
 			),
 		'twig:add',
 		'createRelation',
 			genericButtonModel.abstract(
 				'zone',
-					gleam_rect.create(
-						'pnw', relationButtonPnw,
-						'pse', relationButtonPnw.add( genericButtonSize )
-					),
+					gleam_rect.posSize( relationButtonPnw, genericButtonSize ),
 				'text', 'Rela-\ntion',
 				'textNewline', 20
 			),
@@ -172,9 +162,9 @@ gruga_createDisc =
 		'createPortal',
 			genericButtonModel.abstract(
 				'zone',
-					gleam_rect.create(
-						'pnw', portalButtonPnw,
-						'pse', portalButtonPnw.add( genericButtonSize )
+					gleam_rect.posSize(
+						portalButtonPnw,
+						genericButtonSize
 					),
 				'text', 'Portal'
 			)

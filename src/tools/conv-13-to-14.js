@@ -144,15 +144,29 @@ convertChange =
 		keys;
 
 	if( typeof( c ) === 'string' || c instanceof String ) return;
-
+	
 	if( c.type && c.type === 'rect' )
 	{
-		console.log( 'CONVERTED FROM', c);
-		c.w = c.pse.x - c.pnw.x;
-		c.h = c.pse.y - c.pnw.y;
+		//console.log( 'CONVERTED FROM', c);
+		c.width = c.pse.x - c.pnw.x;
+		c.height = c.pse.y - c.pnw.y;
+		c.pos = c.pnw;
+		delete c.pnw;
 		delete c.pse;
-		console.log( 'CONVERTED TO', c);
+		//console.log( 'CONVERTED TO', c);
 		return;
+	}
+
+	if( c.pnw ) {
+		c.pos = c.pnw;
+		delete c.pnw;
+	}
+
+	if( c.path ) {
+		for( a = 0; a < c.path.length; a++ )
+		{
+			if( c.path[ a ] === 'pnw' ) c.path[ a ] = 'pos';
+		}
 	}
 
 	keys = Object.keys( c );

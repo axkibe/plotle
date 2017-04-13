@@ -409,7 +409,7 @@ jion.lazyValue(
 		this.iconShape
 		.transform(
 			gleam_transform.create(
-				'offset', this.zone.zeroPnw.pc,
+				'offset', this.zone.zeroPos.pc,
 				'zoom', 1
 			)
 		)
@@ -438,13 +438,10 @@ jion.lazyValue(
 			tZone = this._tZone;
 
 			return(
-				gleam_ellipse.create(
-					'pnw', gleam_point.zero,
-					'pse',
-						gleam_point.xy(
-							tZone.width - 1,
-							tZone.height - 1
-						)
+				gleam_ellipse.create(   // TODO use gleam_ellipse.zero.create
+					'pos', gleam_point.zero,
+					'width', tZone.width - 2,
+					'height', tZone.height - 2
 				)
 			);
 
@@ -464,7 +461,7 @@ jion.lazyValue(
 	'_pc',
 	function( )
 {
-	return this._tZone.zeroPnw.pc;
+	return this._tZone.zeroPos.pc;
 }
 );
 

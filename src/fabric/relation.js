@@ -41,9 +41,9 @@ if( JION )
 				comment : 'the path of the doc',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			pnw :
+			pos :
 			{
-				comment : 'point in the north-west',
+				comment : 'position',
 				type : 'gleam_point',
 				json : true
 			}

@@ -70,12 +70,10 @@ prototype.affects =
 {
 	var
 		item,
-		iPnw,
-		iPse,
+		iPos,
 		iZone,
-		tZone,
-		tPnw,
-		tPse;
+		tPos,
+		tZone;
 
 	tZone = this.zone;
 
@@ -83,21 +81,17 @@ prototype.affects =
 
 	item = root.getPath( path );
 
-	tPnw = tZone.pnw;
-
-	tPse = tZone.pse;
+	tPos = tZone.pos;
 
 	iZone = item.zone;
 
-	iPnw = iZone.pnw;
-
-	iPse = iZone.pse;
+	iPos = iZone.pos;
 
 	return(
-		iPnw.x >= tPnw.x
-		&& iPnw.y >= tPnw.y
-		&& iPse.x <= tPse.x
-		&& iPse.y <= tPse.y
+		iPos.x >= tPos.x
+		&& iPos.y >= tPos.y
+		&& iPos.x + iZone.width <= tPos.x + tZone.width
+		&& iPos.y + iZone.height <= tPos.y + tZone.height
 	);
 };
 

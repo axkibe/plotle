@@ -650,20 +650,13 @@ jion.lazyValue(
 
 	size = this.size;
 
-	vsr = this.viewSize.zeroPnwRect;
+	vsr = this.viewSize.zeroRect;
 
 	return(
 		gleam_rect.create(
-			'pnw',
-				vsr.pw.add(
-					0,
-					-size.height * ctz / 2
-				),
-			'pse',
-				vsr.pw.add(
-					size.width * ctz,
-					size.height * ctz / 2
-				)
+			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
+			'width', size.width * ctz,
+			'height', size.height * ctz
 		)
 	);
 }
@@ -682,7 +675,7 @@ jion.lazyValue(
 		this.shape
 		.transform(
 			gleam_transform.create(
-				'offset', this.size.zeroPnwRect.pw,
+				'offset', this.size.zeroRect.pw,
 				'zoom', 1
 			)
 		)

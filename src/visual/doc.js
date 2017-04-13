@@ -12,6 +12,7 @@ if( JION )
 		id : 'visual_doc',
 		attributes :
 		{
+			// FIXME make a gleam_size
 			clipsize :
 			{
 				comment : 'the visible size of the doc',
@@ -85,6 +86,7 @@ var
 	gleam_shapeRay,
 	gleam_shape_line,
 	gleam_shape_start,
+	gleam_size,
 	gruga_selection,
 	jion,
 	root,
@@ -131,7 +133,7 @@ prototype._init =
 		key,
 		para,
 		paraSep,
-		pnw,
+		pos,
 		twig,
 		twigPath,
 		ranks,
@@ -157,7 +159,7 @@ prototype._init =
 
 		ranks[ a ] = key;
 
-		pnw =
+		pos =
 			gleam_point.create(
 				'x', innerMargin.w,
 				'y', Math.round( y - this.scrollPos.y )
@@ -169,7 +171,7 @@ prototype._init =
 				'fabric', fabric.get( key ),
 				'fontsize', this.fontsize,
 				'path', twigPath && twigPath.appendNC( key ),
-				'pnw', pnw,
+				'pos', pos,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,
 				'transform', this.transform
@@ -282,12 +284,7 @@ jion.lazyValue(
 
 	height += Math.round( fs * shell_settings.bottombox );
 
-	return(
-		gleam_rect.create(
-			'pnw', gleam_point.zero,
-			'pse', gleam_point.create( 'x', width, 'y', height )
-		)
-	);
+	return gleam_size.wh( width, height );
 }
 );
 
@@ -314,7 +311,7 @@ prototype.getParaAtPoint =
 	{
 		para = this.atRank( r );
 
-		if( p.y < para.pnw.y + para.flow.height )
+		if( p.y < para.pos.y + para.flow.height )
 		{
 			return para;
 		}
@@ -487,8 +484,7 @@ jion.lazyValue(
 		mark,
 		p,
 		para,
-		pnw,
-		pse,
+		ppos,
 		transform;
 
 	mark = this.mark.textMark;
@@ -505,27 +501,20 @@ jion.lazyValue(
 
 	p = para.locateOffsetPoint( mark.at );
 
-	pnw = para.pnw;
-
-	pnw =
-		transform.point(
-			pnw.x + p.x,
-			pnw.y + p.y - fs
-		);
-
-	pse =
-		pnw.add(
-			1,
-			transform.scale( fs + descend )
-		);
+	ppos = para.pos;
 
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
 			'shape',
 				gleam_rect.create(
-					'pnw', pnw,
-					'pse', pse
+					'pos',
+						transform.point(
+							ppos.x + p.x,
+							ppos.y + p.y - fs
+						),
+					'width', 1,
+					'height', transform.scale( fs + descend )
 				)
 		)
 	);
@@ -550,7 +539,7 @@ jion.lazyValue(
 		backKey,
 		backMark,
 		backPara,
-		backPnw,
+		backPos,
 		backRank,
 		bLine,
 		bp,
@@ -565,7 +554,7 @@ jion.lazyValue(
 		frontKey,
 		frontMark,
 		frontPara,
-		frontPnw,
+		frontPos,
 		frontRank,
 		innerMargin,
 		lx,
@@ -592,11 +581,11 @@ jion.lazyValue(
 
 	frontPara = this.get( frontKey );
 
-	frontPnw = frontPara.pnw;
+	frontPos = frontPara.pos;
 
 	backPara = this.get( backKey );
 
-	backPnw = backPara.pnw;
+	backPos = backPara.pos;
 
 	fp = frontPara.locateOffsetPoint( frontMark.at );
 
@@ -620,9 +609,9 @@ jion.lazyValue(
 
 	// FUTURE do not create points
 
-	fp = fp.add( frontPnw.x, frontPnw.y );
+	fp = fp.add( frontPos.x, frontPos.y );
 
-	bp = bp.add( backPnw.x, backPnw.y );
+	bp = bp.add( backPos.x, backPos.y );
 
 	frontFlow = frontPara.flow;
 
@@ -746,16 +735,16 @@ jion.lazyValue(
 
 		if( fLine + 1 < frontFlow.length )
 		{
-			f2y = frontFlow.get( fLine + 1 ).y + frontPnw.y;
+			f2y = frontFlow.get( fLine + 1 ).y + frontPos.y;
 		}
 		else
 		{
-			f2y = f2Para.flow.get( 0 ).y + f2Para.pnw.y;
+			f2y = f2Para.flow.get( 0 ).y + f2Para.pos.y;
 		}
 
 		if( bLine > 0 )
 		{
-			b2y = backFlow.get( bLine - 1 ).y + backPnw.y;
+			b2y = backFlow.get( bLine - 1 ).y + backPos.y;
 		}
 		else
 		{
@@ -767,7 +756,7 @@ jion.lazyValue(
 
 			b2y =
 				b2Para.flow.get( b2Para.flow.length - 1 ).y
-				+ b2Para.pnw.y;
+				+ b2Para.pos.y;
 		}
 
 

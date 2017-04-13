@@ -26,8 +26,7 @@ gruga_relation = { };
 */
 gruga_relation.facet =
 	gleam_facet.create(
-		'fill',
-			gleam_color.rgba( 255, 225, 40, 0.5 ),
+		'fill', gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
 			gleam_borderRay.create(
 				'ray:append',

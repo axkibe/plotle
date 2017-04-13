@@ -176,7 +176,7 @@ visual_item.getDragItemChangePnwFs =
 	var
 		action,
 		moveBy,
-		pnw;
+		pos;
 
 	action = this.action;
 
@@ -184,13 +184,13 @@ visual_item.getDragItemChangePnwFs =
 
 	if( action.moveBy.equals( gleam_point.zero ) ) return;
 
-	pnw = this.fabric.pnw;
+	pos = this.fabric.pos;
 
 	return(
 		change_set.create(
-			'path', this.path.chop.append( 'pnw' ),
-			'val', pnw.add( moveBy ),
-			'prev', pnw
+			'path', this.path.chop.append( 'pos' ),
+			'val', pos.add( moveBy ),
+			'prev', pos
 		)
 	);
 };
@@ -225,9 +225,9 @@ visual_item.getResizeItemChangeZone =
 
 /*
 | Returns the change-set for a resizing
-| the item, defined by pnw/fontsize.
+| the item, defined by pos/fontsize.
 */
-visual_item.getResizeItemChangePnwFs =
+visual_item.getResizeItemChangePnwFs =  // FIXME
 	function( )
 {
 	var
@@ -237,16 +237,16 @@ visual_item.getResizeItemChangePnwFs =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.positioning !== 'pnw/fontsize' ) throw new Error( );
+/**/	if( this.positioning !== 'pos/fontsize' ) throw new Error( );
 /**/}
 
 	return(
 		change_ray.create(
 			'ray:append',
 			change_set.create(
-				'path', this.path.chop.append( 'pnw' ),
-				'val', this.pnw,
-				'prev', this.fabric.pnw
+				'path', this.path.chop.append( 'pos' ),
+				'val', this.pos,
+				'prev', this.fabric.pos
 			),
 			'ray:append',
 			change_set.create(

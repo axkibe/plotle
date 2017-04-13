@@ -171,17 +171,17 @@ visual_label.createGeneric =
 			'fabric', model.fabric.create( 'fontsize', fs )
 		);
 
-	pnw =
+	pnw = // FIXME
 		( dp.x > action.startPoint.x )
-		? zone.pnw
+		? zone.pos
 		: gleam_point.create(
-			'x', zone.pse.x - resized.zone.width,
-			'y', zone.pnw.y
+			'x', zone.pse.x - resized.zone.width,  // FIXME
+			'y', zone.pos.y
 		);
 
 	label =
 		resized.create(
-			'fabric', resized.fabric.create( 'pnw', pnw )
+			'fabric', resized.fabric.create( 'pos', pnw )
 		);
 
 	key = session_uid( );
@@ -193,7 +193,7 @@ visual_label.createGeneric =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( label.fabric.pnw !== label.pnw )
+/**/	if( label.fabric.pos !== label.pos )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -236,7 +236,7 @@ jion.lazyStaticValue(
 		visual_label.create(
 			'fabric',
 				fabric_label.create(
-					'pnw', gleam_point.zero,
+					'pos', gleam_point.zero,
 					'fontsize', gruga_label.defaultFontsize,
 					'doc',
 						fabric_doc.create(
@@ -399,7 +399,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_window.create(
 			'glint', this.doc.glint,
-			'p', tZone.pnw,
+			'p', tZone.pos,
 			'size',
 				gleam_size.create(
 					'height', Math.round( tZone.height + 1 ),
@@ -520,9 +520,9 @@ prototype.moveSelect = visual_docItem.moveSelect;
 
 
 /*
-| Forwards fabric settings.
+| The labels position possibly altered by actions
 */
-visual_label.pnw =
+visual_label.pos =
 	function( )
 {
 	var
@@ -539,7 +539,7 @@ visual_label.pnw =
 	{
 		case 'action_dragItems' :
 
-			return this.fabric.pnw.add( action.moveBy );
+			return this.fabric.pos.add( action.moveBy );
 
 		case 'action_resizeItems' :
 
@@ -550,7 +550,7 @@ visual_label.pnw =
 				case 'ne' :
 
 					psw =
-						zone.psw.intercept(
+						zone.pos.intercept(
 							action.pBase,
 							action.scaleX,
 							action.scaleY
@@ -563,7 +563,7 @@ visual_label.pnw =
 				case 'nw' :
 
 					pse =
-						zone.pse.intercept(
+						zone.pos.intercept(
 							action.pBase,
 							action.scaleX,
 							action.scaleY
@@ -576,7 +576,7 @@ visual_label.pnw =
 				case 'se' :
 
 					pnw =
-						zone.pnw.intercept(
+						zone.pos.intercept(
 							action.pBase,
 							action.scaleX,
 							action.scaleY
@@ -587,7 +587,7 @@ visual_label.pnw =
 				case 'sw' :
 
 					pne =
-						zone.pne.intercept(
+						zone.pos.intercept(
 							action.pBase,
 							action.scaleX,
 							action.scaleY
@@ -604,15 +604,15 @@ visual_label.pnw =
 
 		default :
 
-			return this.fabric.pnw;
+			return this.fabric.pos;
 	}
 };
 
 
 /*
-| The labels 'pnw', possibly altered by 'action'.
+| The labels position, possibly altered by an action.
 */
-jion.lazyValue( prototype, 'pnw', visual_label.pnw );
+jion.lazyValue( prototype, 'pos', visual_label.pos );
 
 
 /*
@@ -622,11 +622,11 @@ prototype.pointingHover = visual_docItem.pointingHover;
 
 
 /*
-| Labels use pnw/fontsize for positioning
+| Labels use pos/fontsize for positioning
 */
 visual_label.positioning =
 prototype.positioning =
-	'pnw/fontsize';
+	'pos/fontsize';
 
 
 /*
@@ -637,12 +637,7 @@ jion.lazyValue(
 	'shape',
 	function( )
 {
-	return(
-		gleam_rect.create(
-			'pnw', this.zone.pnw,
-			'pse', this.zone.pse.sub( 1, 1 )
-		)
-	);
+	return this.zone.sub1;
 }
 );
 
@@ -690,6 +685,8 @@ jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 
 /*
 | The items shape anchored at zero.
+|
+| FIXME needed?
 */
 visual_label.zeroShape =
 	function( )
@@ -701,12 +698,9 @@ visual_label.zeroShape =
 
 	return(
 		gleam_rect.create(
-			'pnw', gleam_point.zero,
-			'pse',
-				gleam_point.create(
-					'x', Math.max( zone.width  - 1, 0 ),
-					'y', Math.max( zone.height - 1, 0 )
-				)
+			'pos', gleam_point.zero,
+			'width', Math.max( zone.width - 1, 0 ),
+			'height', Math.max( zone.height - 1, 0 )
 		)
 	);
 };
@@ -746,19 +740,17 @@ jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
 /*
 | Calculates the labels zone,
 | possibly altered by action.
+|
+| FIXME inherit
 */
 visual_label.zone =
 	function( )
 {
-	var
-		pnw;
-
-	pnw = this.pnw;
-
 	return(
 		gleam_rect.create(
-			'pnw', pnw,
-			'pse', pnw.add( this._zoneWidth, this._zoneHeight )
+			'pos', this.pos,
+			'width', this._zoneWidth,
+			'height', this._zoneHeight
 		)
 	);
 };

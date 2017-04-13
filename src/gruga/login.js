@@ -24,22 +24,6 @@ var
 'use strict';
 
 
-var
-	// login control
-	loginButton =
-	{
-		pnw : gleam_point.xy( 95, 28 ),
-		size : gleam_size.wh( 70, 70 )
-	},
-
-	// Close control
-	closeButton =
-	{
-		pnw : gleam_point.xy( 180, 38 ),
-		size : gleam_size.wh(  50, 50 )
-	};
-
-
 /*
 | Layout
 */
@@ -81,8 +65,9 @@ gruga_login =
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, -67 ),
-						'pse', gleam_point.xy( 130, -42 )
+						'pos', gleam_point.xy( -80, -67 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -94,8 +79,9 @@ gruga_login =
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, -27 ),
-						'pse', gleam_point.xy( 130, -2 )
+						'pos', gleam_point.xy( -80, -27 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -103,9 +89,9 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'zone',
-					gleam_rect.pnwSize(
-						loginButton.pnw,
-						loginButton.size
+					gleam_rect.posSize(
+						gleam_point.xy( 95, 28 ),
+						gleam_size.wh( 70, 70 )
 					),
 				'text', 'log in',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -116,9 +102,9 @@ gruga_login =
 			widget_button.abstract(
 				'facets', gruga_genericButton.facets,
 				'zone',
-					gleam_rect.pnwSize(
-						closeButton.pnw,
-						closeButton.size
+					gleam_rect.posSize(
+						gleam_point.xy( 180, 38 ),
+						gleam_size.wh( 50, 50 )
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),

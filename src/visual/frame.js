@@ -134,8 +134,9 @@ function( )
 
 	return(
 		gleam_rect.create(
-			'pnw', gleam_point.create( 'x', wx, 'y', ny ),
-			'pse', gleam_point.create( 'x', ex, 'y', sy )
+			'pos', gleam_point.xy( wx, ny ),
+			'width', ex - wx,
+			'height', sy - ny
 		)
 	);
 }
@@ -518,15 +519,15 @@ jion.lazyValue(
 
 	return(
 		gleam_roundRect.create(
-			'pnw', oZone.pnw,
-			'pse', oZone.pse,
+			'pos', oZone.pos,
+			'width', oZone.width,
+			'height', oZone.height,
 			'a', handleSize / 2,
 			'b', handleSize / 2
 		)
 	);
 }
 );
-
 
 
 /*
@@ -537,20 +538,16 @@ jion.lazyValue(
 	'_shapeHandleN',
 	function( )
 {
-	var
-		pn;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	pn = this._outerZone.pn;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pn.add( -handleSize2, 0 ),
-			'pse', pn.add( handleSize2, handleSize )
+			'pos', this._outerZone.pn.add( -handleSize2, 0 ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -565,15 +562,11 @@ jion.lazyValue(
 	'_shapeHandleNe',
 	function( )
 {
-	var
-		pne;
-
-	pne = this._outerZone.pne;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pne.add( -handleSize, 0 ),
-			'pse', pne.add( 0, handleSize )
+			'pos', this._outerZone.pne.add( -handleSize, 0 ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -588,15 +581,11 @@ jion.lazyValue(
 	'_shapeHandleNw',
 	function( )
 {
-	var
-		pnw;
-
-	pnw = this._outerZone.pnw;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pnw,
-			'pse', pnw.add( handleSize, handleSize )
+			'pos', this._outerZone.pnw,
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -611,20 +600,16 @@ jion.lazyValue(
 	'_shapeHandleE',
 	function( )
 {
-	var
-		pe;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	pe = this._outerZone.pe;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pe.add( -handleSize, -handleSize / 2 ),
-			'pse', pe.add( 0, handleSize / 2 )
+			'pos', this._outerZone.pe.add( -handleSize, -handleSize2 ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -639,20 +624,16 @@ jion.lazyValue(
 	'_shapeHandleS',
 	function( )
 {
-	var
-		ps;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	ps = this._outerZone.ps;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', ps.add( -handleSize2, -handleSize ),
-			'pse', ps.add( handleSize2, 0 )
+			'pos', this._outerZone.ps.add( -handleSize2, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -667,15 +648,11 @@ jion.lazyValue(
 	'_shapeHandleSe',
 	function( )
 {
-	var
-		pse;
-
-	pse = this._outerZone.pse;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pse.add( -handleSize, -handleSize ),
-			'pse', pse
+			'pos', this._outerZone.pse.add( -handleSize, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -690,15 +667,11 @@ jion.lazyValue(
 	'_shapeHandleSw',
 	function( )
 {
-	var
-		psw;
-
-	psw = this._outerZone.psw;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', psw.add( 0, -handleSize ),
-			'pse', psw.add( handleSize, 0 )
+			'pos', this._outerZone.psw.add( 0, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
@@ -713,26 +686,20 @@ jion.lazyValue(
 	'_shapeHandleW',
 	function( )
 {
-	var
-		pw;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.proportional ) throw new Error( );
 /**/}
 
-	pw = this._outerZone.pw;
-
 	return(
 		gleam_ellipse.create(
-			'pnw', pw.add( 0, -handleSize2 ),
-			'pse', pw.add( handleSize, handleSize2 )
+			'pos', this._outerZone.pw.add( 0, -handleSize2 ),
+			'width', handleSize,
+			'height', handleSize
 		)
 	);
 }
 );
-
-
 
 
 /*
@@ -750,19 +717,11 @@ jion.lazyValue(
 		hh,
 		fw,
 		min,
-		pc,
-		pnw,
-		pse,
-		transform,
 		tZone;
 
 	fw = gruga_frame.width;
 
-	transform = this.transform;
-
-	tZone = this.zone.transform( transform );
-
-	pc = tZone.pc,
+	tZone = this.zone.transform( this.transform );
 
 	hw = tZone.width / 2;
 
@@ -770,22 +729,19 @@ jion.lazyValue(
 
 	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
 
-	pnw =
-		pc.add(
-			Math.min( -hw - fw, -min ),
-			Math.min( -hh - fw, -min )
-		);
-
-	pse =
-		pc.add(
-			Math.max( hw + fw, min ),
-			Math.max( hh + fw, min )
-		);
-
-	return gleam_rect.create( 'pnw', pnw, 'pse', pse );
+	return(
+		gleam_rect.create(
+			'pos',
+				tZone.pc.add(
+					Math.min( -hw - fw, -min ),
+					Math.min( -hh - fw, -min )
+				),
+			'width', 2 * Math.max( hw + fw, min ),
+			'height', 2 * Math.max( hh + fw, min )
+		)
+	);
 }
 );
-
 
 
 } )( );

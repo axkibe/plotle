@@ -24,32 +24,6 @@ var
 'use strict';
 
 
-var
-	ideoloomHomeButton =
-	{
-		w : -145,
-		n : -100,
-		width : 130,
-		height : 130
-	},
-
-	ideoloomSandboxButton =
-	{
-		w : 15,
-		n : -100,
-		width : 130,
-		height : 130
-	},
-
-	userHomeButton =
-	{
-		w : -145,
-		n : 60,
-		width : 130,
-		height : 130
-	};
-
-
 portalButtonFacets =
 	gleam_facetRay.create(
 		'ray:init',
@@ -117,20 +91,9 @@ gruga_moveTo =
 				'facets', portalButtonFacets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.create(
-								'x', ideoloomHomeButton.w,
-								'y', ideoloomHomeButton.n
-							),
-						'pse',
-							gleam_point.create(
-								'x',
-									ideoloomHomeButton.w
-									+ ideoloomHomeButton.width,
-								'y',
-									ideoloomHomeButton.n
-									+ ideoloomHomeButton.height
-							)
+						'pos', gleam_point.xy( -145, -100 ),
+						'width', 130,
+						'height', 130
 					),
 				'text', 'ideoloom\nhome',
 				'textNewline', 25,
@@ -143,20 +106,9 @@ gruga_moveTo =
 				'facets', portalButtonFacets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.create(
-								'x', ideoloomSandboxButton.w,
-								'y', ideoloomSandboxButton.n
-							),
-						'pse',
-							gleam_point.create(
-								'x',
-									ideoloomSandboxButton.w +
-									ideoloomSandboxButton.width,
-								'y',
-									ideoloomSandboxButton.n +
-									ideoloomSandboxButton.height
-							)
+						'pos', gleam_point.xy( 15, -100 ),
+						'width', 130,
+						'height', 130
 					),
 				'text', 'ideoloom\nsandbox',
 				'textNewline', 25,
@@ -169,16 +121,9 @@ gruga_moveTo =
 				'facets', portalButtonFacets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.create(
-								'x', userHomeButton.w,
-								'y', userHomeButton.n
-							),
-						'pse',
-							gleam_point.create(
-								'x', userHomeButton.w + userHomeButton.width,
-								'y', userHomeButton.n + userHomeButton.height
-							)
+						'pos', gleam_point.xy( -145, 60 ),
+						'width', 130,
+						'height', 130
 					),
 				'text', 'your\nhome',
 				'textNewline', 25,

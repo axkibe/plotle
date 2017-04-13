@@ -39,16 +39,16 @@ var
 	buttonFacets,
 	buttonModel,
 	buttonSize,
-	createButtonPnw,
-	loginButtonPnw,
-	movetoButtonPnw,
-	normalButtonPnw,
-	removeButtonPnw,
-	selectButtonPnw,
-	signupButtonPnw,
-	spaceButtonPnw,
+	createButtonPos,
+	loginButtonPos,
+	movetoButtonPos,
+	normalButtonPos,
+	removeButtonPos,
+	selectButtonPos,
+	signupButtonPos,
+	spaceButtonPos,
 	spaceButtonSize,
-	userButtonPnw,
+	userButtonPos,
 	userButtonSize;
 
 pw = gleam_point.xy( 0, 500 );
@@ -104,29 +104,29 @@ buttonModel =
 		'shape', 'ellipse'
 	);
 
-buttonSize = gleam_point.create( 'x', 44, 'y', 44 );
+buttonSize = gleam_size.create( 'width', 44, 'height', 44 );
 
-loginButtonPnw = pw.add( 30, 155 );
+loginButtonPos = pw.add( 30, 155 );
 
-movetoButtonPnw = pw.add( 46, -74 );
+movetoButtonPos = pw.add( 46, -74 );
 
-normalButtonPnw = pw.add( 5, -324 );
+normalButtonPos = pw.add( 5, -324 );
 
-selectButtonPnw = pw.add( 19, -270 );
+selectButtonPos = pw.add( 19, -270 );
 
-createButtonPnw = pw.add( 31, -216 );
+createButtonPos = pw.add( 31, -216 );
 
-removeButtonPnw = pw.add( 40, -162 );
+removeButtonPos = pw.add( 40, -162 );
 
-signupButtonPnw = pw.add( 17, 210 );
+signupButtonPos = pw.add( 17, 210 );
 
-spaceButtonPnw = pw.add( 0, -230 );
+spaceButtonPos = pw.add( 0, -230 );
 
-spaceButtonSize = gleam_point.xy( 28, 290 );
+spaceButtonSize = gleam_size.wh( 28, 290 );
 
-userButtonPnw = pw.add( 0, 40 );
+userButtonPos = pw.add( 0, 40 );
 
-userButtonSize = gleam_point.xy( 24, 180 );
+userButtonSize = gleam_size.wh( 24, 180 );
 
 
 gruga_mainDisc =
@@ -166,104 +166,73 @@ gruga_mainDisc =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pnw', gleam_point.xy( -2101, -1100 ),
-				'pse', gleam_point.xy( 99, 1100 ),
+				'pos', gleam_point.xy( -2101, -1100 ),
+				'width', 2200,
+				'height', 2200,
 				'gradientPC', gleam_point.xy( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add', 'normal',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', normalButtonPnw,
-						'pse', normalButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( normalButtonPos, buttonSize ),
 				'iconShape', gruga_iconNormal.shape,
 				'iconFacet', gruga_iconNormal.facet
 			),
 		'twig:add', 'select',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', selectButtonPnw,
-						'pse', selectButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( selectButtonPos, buttonSize ),
 				'iconShape', gruga_iconSelect.shape,
 				'iconFacet', gruga_iconSelect.facet,
 				'visible', false
 			),
 		'twig:add', 'create',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', createButtonPnw,
-						'pse', createButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( createButtonPos, buttonSize ),
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'text', 'new',
 				'visible', false
 			),
 		'twig:add', 'remove',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', removeButtonPnw,
-						'pse', removeButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( removeButtonPos, buttonSize ),
 				'iconShape', gruga_iconRemove.shape,
 				'iconFacet', gruga_iconRemove.facet,
 				'visible', false
 			),
 		'twig:add', 'moveTo',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', movetoButtonPnw,
-						'pse', movetoButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize ),
 				'text', 'go',
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'visible', false
 			),
 		'twig:add', 'space',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', spaceButtonPnw,
-						'pse', spaceButtonPnw.add( spaceButtonSize )
-					),
+				'zone', gleam_rect.posSize( spaceButtonPos, spaceButtonSize ),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
-					gleam_ellipse.create(
-						'pnw', gleam_point.xy( -60, 0 ),
-						'pse', spaceButtonSize.sub( 1, 1 )
+					gleam_ellipse.posSize(
+						gleam_point.xy( -60, 0 ),
+						spaceButtonSize.add( 60 - 1, -1 )
 					),
 				'textRotation', - Math.PI / 2
 			),
 		'twig:add', 'user',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', userButtonPnw,
-						'pse', userButtonPnw.add( userButtonSize )
-					),
+				'zone', gleam_rect.posSize( userButtonPos, userButtonSize ),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
-					gleam_ellipse.create(
-						'pnw', gleam_point.xy( -70, 0 ),
-						'pse', userButtonSize.sub( 1, 1 )
+					gleam_ellipse.posSize(
+						gleam_point.xy( -70, 0 ),
+						userButtonSize.add( 70 - 1, -1 )
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),
 		'twig:add', 'login',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', loginButtonPnw,
-						'pse', loginButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( loginButtonPos, buttonSize ),
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
@@ -271,11 +240,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'signUp',
 			buttonModel.abstract(
-				'zone',
-					gleam_rect.create(
-						'pnw', signupButtonPnw,
-						'pse', signupButtonPnw.add( buttonSize )
-					),
+				'zone', gleam_rect.posSize( signupButtonPos, buttonSize ),
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),

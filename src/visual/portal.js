@@ -290,11 +290,7 @@ jion.lazyStaticValue(
 		visual_portal.create(
 			'fabric',
 				fabric_portal.create(
-					'zone',
-						gleam_rect.create(
-							'pnw', gleam_point.zero,
-							'pse', gleam_point.zero
-						),
+					'zone', gleam_rect.zero,
 					'spaceUser', '',
 					'spaceTag', ''
 				),
@@ -326,7 +322,7 @@ jion.lazyValue(
 		s,
 		section;
 
-	ac = this.zone.pnw.y,
+	ac = this.zone.pos.y,
 
 	mark = this.mark;
 
@@ -338,7 +334,7 @@ jion.lazyValue(
 
 	if( section === 'moveToButton' )
 	{
-		return ac + this._moveToButton.shape.pnw.y;
+		return ac + this._moveToButtonShape.pos.y;
 	}
 
 	font = this._fontFor( section );
@@ -347,9 +343,11 @@ jion.lazyValue(
 
 	descend = fs * shell_settings.bottombox;
 
-	fieldP = this[ spaceFields[ section ] ].p;
+	fieldP = this[ spaceFields[ section ] ].pos;
 
 	p = this._locateOffset( section, mark.caret.at );
+
+	// FIXME remove rounds and simplify
 
 	s = Math.round( p.y + descend ) + fieldP.y;
 
@@ -373,7 +371,6 @@ prototype.click =
 	var
 		field,
 		fieldLazyName,
-		moveToButton,
 		pp,
 		setMark,
 		sf,
@@ -386,11 +383,9 @@ prototype.click =
 
 	zone = this.zone;
 
-	moveToButton = this._moveToButton;
+	pp = p.detransform( transform ).sub( zone.pos );
 
-	pp = p.detransform( transform ).sub( zone.pnw );
-
-	if( this._moveToButton.shape.within( pp ) )
+	if( this._moveToButtonShape.within( pp ) )
 	{
 		this._moveTo( );
 
@@ -399,7 +394,7 @@ prototype.click =
 
 	if( access != 'rw' ) return false;
 
-	pp = p.detransform( transform ).sub( zone.pnw );
+	pp = p.detransform( transform ).sub( zone.pos );
 
 	for( field in spaceFields )
 	{
@@ -484,7 +479,7 @@ jion.lazyValue(
 		[
 			gleam_glint_window.create(
 				'glint', this._glint,
-				'p', tZone.pnw,
+				'p', tZone.pos,
 				'size',
 					gleam_size.create(
 						'width', Math.round( tZone.width + 1.5 ),
@@ -660,9 +655,9 @@ prototype.pointingHover =
 	// not clicked on the portal?
 	if( !this.tShape.within( p ) ) return;
 
-	pp = p.detransform( transform ).sub( zone.pnw );
+	pp = p.detransform( transform ).sub( zone.pos );
 
-	if( this._moveToButton.shape.within( pp ) )
+	if( this._moveToButtonShape.within( pp ) )
 	{
 		return(
 			result_hover.create(
@@ -698,7 +693,13 @@ jion.lazyValue(
 
 	zone = this.zone;
 
-	return gleam_ellipse.create( 'pnw', zone.pnw, 'pse', zone.pse );
+	return(
+		gleam_ellipse.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height
+		)
+	);
 }
 );
 
@@ -718,12 +719,9 @@ jion.lazyValue(
 
 	return(
 		gleam_ellipse.create(
-			'pnw', gleam_point.zero,
-			'pse',
-				gleam_point.create(
-					'x', zone.width,
-					'y', zone.height
-				)
+			'pos', gleam_point.zero,
+			'width', zone.width,
+			'height', zone.height
 		)
 	);
 }
@@ -1040,7 +1038,7 @@ prototype._keyDown =
 						'at',
 							this._getOffsetAt(
 								'spaceTag',
-								cpos.x + this._fieldSpaceUser.p.x
+								cpos.x + this._fieldSpaceUser.pos.x
 							)
 					)
 			);
@@ -1202,7 +1200,7 @@ prototype._keyUp =
 						'at',
 							this._getOffsetAt(
 								'spaceUser',
-								cpos.x + this._fieldSpaceTag.p.x
+								cpos.x + this._fieldSpaceTag.pos.x
 							)
 					)
 			);
@@ -1396,20 +1394,16 @@ prototype._keyEnter =
 
 
 /*
-| Prepares the moveTo button.
+| The move to button shape.
 */
 jion.lazyValue(
 	prototype,
-	'_moveToButton',
+	'_moveToButtonShape',
 	function( )
 {
 	var
 		height,
-		pnw,
-		pse,
-		result,
 		rounding,
-		shape,
 		width,
 		zone;
 
@@ -1421,41 +1415,34 @@ jion.lazyValue(
 
 	rounding = gruga_portal.moveToRounding;
 
-	pnw =
-		gleam_point.create(
-			'x', ( zone.width - width ) / 2,
-			'y', ( zone.height + 10 ) / 2
-		),
-
-	pse = pnw.add( width, height );
-
-	shape =
+	return(
 		gleam_roundRect.create(
-			'pnw', pnw,
-			'pse', pse,
+			'pos',
+				gleam_point.create(
+					'x', ( zone.width - width ) / 2,
+					'y', ( zone.height + 10 ) / 2
+				),
+			'width', width,
+			'height', height,
 			'a', rounding,
 			'b', rounding
-		);
-
-	result =
-		{
-			shape : shape,
-
-			oShape : shape.transform( this.transform.ortho ),
-
-			textCenter :
-				gleam_point.create(
-					'x', ( pnw.x + pse.x ) / 2,
-					'y', ( pnw.y + pse.y ) / 2
-				)
-		};
-
-/**/if( FREEZE ) Object.freeze( result );
-
-	return result;
+		)
+	);
 }
 );
 
+
+/*
+| The move to button shape transformed to current zoom level.
+*/
+jion.lazyValue(
+	prototype,
+	'_orthoMoveToButtonShape',
+	function( )
+{
+	return this._moveToButtonShape.transform( this.transform.ortho );
+}
+);
 
 /*
 | Prepares an input field ( user / tag )
@@ -1471,7 +1458,7 @@ prototype._prepareField =
 		glint,
 		height,
 		pitch,
-		p,
+		pos,
 		rounding,
 		shape,
 		text,
@@ -1492,7 +1479,7 @@ prototype._prepareField =
 
 	height = font.size + 2;
 
-	p =
+	pos =
 		baseP
 		? gleam_point.create(
 			'x', ( zone.width - width ) / 2,
@@ -1505,8 +1492,9 @@ prototype._prepareField =
 
 	shape =
 		gleam_roundRect.create(
-			'pnw', p.sub( pitch, height ),
-			'pse', p.add( Math.round( width ) + pitch, pitch ),
+			'pos', pos.sub( pitch, height ),
+			'width', width + 2 * pitch,
+			'height', height + pitch,
 			'a', rounding,
 			'b', rounding
 		);
@@ -1521,11 +1509,13 @@ prototype._prepareField =
 			'shape', shape
 		);
 
+	// FIXME Freeze
+
 	return {
 		text : text,
 		width : width,
 		height : height,
-		p : p,
+		pos : pos,
 		shape : shape,
 		glint : glint
 	};
@@ -1553,7 +1543,7 @@ jion.lazyValue(
 	'_fieldSpaceTag',
 	function( )
 {
-	return this._prepareField( 'spaceTag', this._fieldSpaceUser.p );
+	return this._prepareField( 'spaceTag', this._fieldSpaceUser.pos );
 }
 );
 
@@ -1586,7 +1576,7 @@ prototype._getOffsetAt =
 		x1,
 		x2;
 
-	dx = x - this[ spaceFields[ section ] ].p.x;
+	dx = x - this[ spaceFields[ section ] ].pos.x;
 
 	value = this.fabric[ section ];
 
@@ -1676,7 +1666,7 @@ jion.lazyValue(
 		fieldSpaceTag,
 		inputFacet,
 		mark,
-		moveToButton,
+		orthoMoveToButtonShape,
 		ot,
 		tZone,
 		tzs;
@@ -1693,7 +1683,7 @@ jion.lazyValue(
 
 	fieldSpaceTag = this._fieldSpaceTag;
 
-	moveToButton = this._moveToButton;
+	orthoMoveToButtonShape = this._orthoMoveToButtonShape;
 
 	inputFacet =
 		gruga_portal.inputFacets.getFacet(
@@ -1705,7 +1695,7 @@ jion.lazyValue(
 		[
 			gleam_glint_paint.create(
 				'facet', this._facetMoveToButton,
-				'shape', this._moveToButton.oShape
+				'shape', orthoMoveToButtonShape
 			),
 			gleam_glint_paint.create(
 				'facet', inputFacet,
@@ -1717,17 +1707,17 @@ jion.lazyValue(
 			),
 			gleam_glint_text.create(
 				'font', this._tFontSpaceUser,
-				'p', fieldSpaceUser.p.transform( ot ),
+				'p', fieldSpaceUser.pos.transform( ot ),
 				'text', fieldSpaceUser.text
 			),
 			gleam_glint_text.create(
 				'font', this._tFontSpaceTag,
-				'p', fieldSpaceTag.p.transform( ot ),
+				'p', fieldSpaceTag.pos.transform( ot ),
 				'text', fieldSpaceTag.text
 			),
 			gleam_glint_text.create(
 				'font', this._tFontMoveTo,
-				'p', moveToButton.textCenter.transform( ot ),
+				'p', orthoMoveToButtonShape.pc,
 				'text', 'move to'
 			)
 		];
@@ -1780,14 +1770,13 @@ jion.lazyValue(
 {
 	var
 		descend,
-		fieldPnw,
+		fieldPos,
 		font,
 		fs,
 		mark,
 		ot,
 		p,
-		pnw,
-		pse,
+		pos,
 		section;
 
 	mark = this.mark;
@@ -1804,25 +1793,27 @@ jion.lazyValue(
 
 	descend = fs * shell_settings.bottombox;
 
-	fieldPnw = this[ spaceFields[ section ] ].p;
+	fieldPos = this[ spaceFields[ section ] ].pos;
 
 	p = this._locateOffset( section, mark.caret.at );
 
-	pnw =
+	pos =
 		p
 		.add(
-			fieldPnw.x,
-			p.y + descend + fieldPnw.y - fs - descend
+			fieldPos.x,
+			p.y + descend + fieldPos.y - fs - descend
 		)
 		.transform( ot );
-
-	pse =
-		pnw.add( 1, ot.scale( fs + descend ) );
 
 	return(
 		gleam_glint_fill.create(
 			'facet', gleam_facet.blackFill,
-			'shape', gleam_rect.create( 'pnw', pnw, 'pse', pse )
+			'shape',
+				gleam_rect.create(
+					'pos', pos,
+					'width', 1,
+					'height', ot.scale( fs + descend )
+				)
 		)
 	);
 }

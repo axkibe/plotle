@@ -33,7 +33,7 @@ visual_docItem.attentionCenter =
 	function( )
 {
 	return(
-		this.zone.pnw.y
+		this.zone.pos.y
 		+ math_limit(
 			0,
 			this.doc.attentionCenter
@@ -102,7 +102,7 @@ visual_docItem.dragStart =
 					'itemPaths',
 						jion$pathRay.create( 'ray:append', this.path ),
 					'startPoint', p,
-					'startPos', sbary.pos
+					'startPos', sbary.scrollpos
 				)
 		);
 
@@ -141,15 +141,15 @@ visual_docItem.markForPoint =
 		doc,
 		mark,
 		para,
-		pnw,
+		pos,
 		pi,
 		tp;
 
 	tp = p.detransform( this.transform );
 
-	pnw = this.zone.pnw;
+	pos = this.zone.pos;
 
-	pi = tp.sub( pnw );
+	pi = tp.sub( pos );
 
 	doc = this.doc;
 
@@ -157,7 +157,7 @@ visual_docItem.markForPoint =
 
 	if( para )
 	{
-		at = para.getPointOffset( pi.sub( para.pnw ) );
+		at = para.getPointOffset( pi.sub( para.pos ) );
 	}
 	else
 	{

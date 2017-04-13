@@ -164,8 +164,7 @@ prototype.within =
 	var
 		a,
 		aZ,
-		pnw,
-		pse,
+		ps,
 		x,
 		y;
 
@@ -207,15 +206,13 @@ prototype.within =
 
 			y = p.y;
 
-			pnw = shape.pnw;
-
-			pse = shape.pse;
+			ps = shape.p;
 
 			return(
-				x >= pnw.x
-				&& y >= pnw.y
-				&& x <= pse.x
-				&& y <= pse.y
+				x >= ps.x
+				&& y >= ps.y
+				&& x <= ps.x + shape.width
+				&& y <= ps.y + shape.height
 			);
 
 		case 'gleam_shape' :
@@ -225,7 +222,7 @@ prototype.within =
 			this._sketchGenericShape(
 				shape,
 				0,
-				gleam_point.zero.add( 0.5, 0.5 )
+				gleam_point.zero.add( 0.5, 0.5 ) // FIXME precreate
 			);
 
 			break;
@@ -467,18 +464,15 @@ prototype._colorStyle =
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !shape.pnw || !shape.pse )
-/**/			{
-/**/				throw new Error( );
-/**/			}
+/**/			if( !shape.pos ) throw new Error( );
 /**/		}
 
 			grad =
 				this._cx.createLinearGradient(
-					shape.pnw.x + offset.x,
-					shape.pnw.y + offset.y,
-					shape.pnw.x + shape.width / 10 + offset.x,
-					shape.pse.y + offset.y
+					shape.pos.x + offset.x,
+					shape.pos.y + offset.y,
+					shape.pos.x + shape.width / 10 + offset.x,
+					shape.pos.y + shape.width + offset.y
 				);
 
 			break;

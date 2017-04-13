@@ -31,7 +31,6 @@ if( JION )
 
 var
 	gleam_point,
-	gleam_rect,
 	jion;
 
 
@@ -129,6 +128,7 @@ prototype.add =
 {
 	if( typeof( a1 ) === 'object' )
 	{
+		//console.log('FIXME');
 		if( a1.x === 0 && a1.y === 0 ) return this;
 
 		return gleam_point.create(
@@ -153,29 +153,11 @@ prototype.add =
 };
 
 
-
-/*
-| Creates a rect of size width*height with this
-| point as pnw.
-*/
-prototype.createRectOfSize =
-	function(
-		width,
-		height
-	)
-{
-	return(
-		gleam_rect.create(
-			'pnw', this,
-			'pse', this.add( width, height )
-		)
-	);
-};
-
-
 /*
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
+|
+| FIXME remove
 */
 prototype.intercept =
 	function(

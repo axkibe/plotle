@@ -23,29 +23,6 @@ var
 ( function( ) {
 'use strict';
 
-var
-	/*
-	| Signup control
-	*/
-	signupButton =
-	{
-		width : 70,
-		height : 70,
-		w : 95,
-		n : 95
-	},
-
-	/*
-	| Close control
-	*/
-	closeButton =
-	{
-		width : 50,
-		height : 50,
-		w : 180,
-		n : 105
-	};
-
 
 /*
 | Layout
@@ -109,8 +86,9 @@ gruga_signUp =
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, -120 ),
-						'pse', gleam_point.xy( 130, -95 )
+						'pos', gleam_point.xy( -80, -120 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -121,8 +99,9 @@ gruga_signUp =
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, -80 ),
-						'pse', gleam_point.xy( 130, -55 )
+						'pos', gleam_point.xy( -80, -80 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -134,8 +113,9 @@ gruga_signUp =
 				'password', true,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, -40 ),
-						'pse', gleam_point.xy( 130, -15 )
+						'pos', gleam_point.xy( -80, -40 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -147,8 +127,9 @@ gruga_signUp =
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -80, 0 ),
-						'pse', gleam_point.xy( 130, 25 )
+						'pos', gleam_point.xy( -80, 0 ),
+						'width', 210,
+						'height', 25
 					)
 			),
 		'twig:add',
@@ -158,8 +139,9 @@ gruga_signUp =
 				'checked', true,
 				'zone',
 					gleam_rect.create(
-						'pnw', gleam_point.xy( -75, 45 ),
-						'pse', gleam_point.xy( -59, 60 )
+						'pos', gleam_point.xy( -75, 45 ),
+						'width', 16,
+						'height', 15
 					)
 			),
 		'twig:add',
@@ -183,13 +165,9 @@ gruga_signUp =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy( signupButton.w, signupButton.n ),
-						'pse',
-							gleam_point.xy(
-								signupButton.w + signupButton.width,
-								signupButton.n + signupButton.height
-							)
+						'pos', gleam_point.xy( 95, 95 ),
+						'width', 70,
+						'height', 70
 					),
 				'text', 'sign up',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -201,16 +179,9 @@ gruga_signUp =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy(
-								closeButton.w,
-								closeButton.n
-							),
-						'pse',
-							gleam_point.xy(
-								closeButton.w + closeButton.width,
-								closeButton.n + closeButton.height
-							)
+						'pos', gleam_point.xy( 180, 105 ),
+						'width', 50,
+						'height', 50
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -220,6 +191,4 @@ gruga_signUp =
 
 
 if( FREEZE ) Object.freeze( gruga_signUp );
-
-
 } )( );

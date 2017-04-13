@@ -12,17 +12,23 @@ if( JION )
 		id : 'gleam_rect',
 		attributes :
 		{
-			pnw :
+			pos :
 			{
-				comment : 'point in north west',
+				comment : 'position',
 				json : true,
 				type : 'gleam_point'
 			},
-			pse :
+			height :
 			{
-				comment : 'point in south east',
+				comment : 'height',
 				json : true,
-				type : 'gleam_point'
+				type : 'number'
+			},
+			width :
+			{
+				comment : 'width',
+				json : true,
+				type : 'number'
 			}
 		}
 	};
@@ -69,56 +75,67 @@ gleam_rect.createArbitrary =
 		p2
 	)
 {
-	var
-		pnw,
-		pse;
-
 	if( p2.x >= p1.x && p2.y >= p1.y )
 	{
-		pnw = p1;
-
-		pse = p2;
+		return(
+			gleam_rect.create(
+				'pos', p1,
+				'width', p2.x - p1.x,
+				'height', p2.y - p1.y
+			)
+		);
 	}
 	else if( p1.x >= p2.x && p1.y >= p2.y )
 	{
-		pnw = p2;
-
-		pse = p1;
+		return(
+			gleam_rect.create(
+				'pos', p2,
+				'width', p1.x - p2.x,
+				'height', p1.y - p2.y
+			)
+		);
 	}
 	else if( p2.x >= p1.x && p1.y >= p2.y )
 	{
-		pnw = gleam_point.create( 'x', p1.x, 'y', p2.y );
-
-		pse = gleam_point.create( 'x', p2.x, 'y', p1.y );
+		return(
+			gleam_rect.create(
+				'pos', gleam_point.xy( p1.x, p2.y ),
+				'width', p2.x - p1.x,
+				'height', p1.y - p2.y
+			)
+		);
 	}
 	else if( p1.x >= p2.x && p2.y >= p1.y )
 	{
-		pnw = gleam_point.create( 'x', p2.x, 'y', p1.y );
-
-		pse = gleam_point.create( 'x', p1.x, 'y', p2.y );
+		return(
+			gleam_rect.create(
+				'pos', gleam_point.xy( p2.x, p1.y ),
+				'width', p1.x - p2.x,
+				'height', p2.y - p1.y
+			)
+		);
 	}
 	else
 	{
 		throw new Error( );
 	}
-
-	return gleam_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
 /*
-| Shortcut to create a rect by specifying pnw and size.
+| Shortcut to create a rect by specifying position and size.
 */
-gleam_rect.pnwSize =
+gleam_rect.posSize =
 	function(
-		pnw,
+		pos,
 		size
 	)
 {
 	return(
 		gleam_rect.create(
-			'pnw', pnw,
-			'pse', pnw.add( size.width, size.height )
+			'pos', pos,
+			'width', size.width,
+			'height', size.height
 		)
 	);
 };
@@ -136,12 +153,7 @@ prototype.add =
 		a2
 	)
 {
-	return(
-		gleam_rect.create(
-			'pnw', this.pnw.add( a1, a2 ),
-			'pse', this.pse.add( a1, a2 )
-		)
-	);
+	return this.create( 'pos', this.pos.add( a1, a2 ) );
 };
 
 
@@ -153,15 +165,11 @@ prototype.border =
 		d // distance to border
 	)
 {
-	var
-		pc;
-
-	pc = this.pc;
-
 	return(
 		this.create(
-			'pnw', this.pnw.border( pc, d ),
-			'pse', this.pse.border( pc, d )
+			'pos', this.pos.add(d, d),
+			'width', this.width - 2 * d,
+			'height', this.height - 2 * d
 		)
 	);
 };
@@ -175,12 +183,7 @@ jion.lazyValue(
 	'pn',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', ( this.pnw.x + this.pse.x ) / 2,
-			'y', this.pnw.y
-		)
-	);
+	return this.pos.add( this.width / 2, 0 );
 }
 );
 
@@ -193,12 +196,7 @@ jion.lazyValue(
 	'ps',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', ( this.pnw.x + this.pse.x ) / 2,
-			'y', this.pse.y
-		)
-	);
+	return this.pos.add( this.width / 2, this.height );
 }
 );
 
@@ -211,12 +209,7 @@ jion.lazyValue(
 	'pe',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', this.pse.x,
-			'y', ( this.pse.y + this.pnw.y ) / 2
-		)
-	);
+	return this.pos.add( this.width, this.height / 2 );
 }
 );
 
@@ -229,12 +222,34 @@ jion.lazyValue(
 	'pne',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', this.pse.x,
-			'y', this.pnw.y
-		)
-	);
+	return this.pos.add( this.width, 0 );
+}
+);
+
+
+/*
+| North west point.
+*/
+jion.lazyValue(
+	prototype,
+	'pnw',
+	function( )
+{
+	// FIXME console.log('XXX');
+	return this.pos;
+}
+);
+
+
+/*
+| South east point.
+*/
+jion.lazyValue(
+	prototype,
+	'pse',
+	function( )
+{
+	return this.pos.add( this.width, this.height );
 }
 );
 
@@ -247,12 +262,7 @@ jion.lazyValue(
 	'psw',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', this.pnw.x,
-			'y', this.pse.y
-		)
-	);
+	return this.pos.add( 0, this.height );
 }
 );
 
@@ -271,27 +281,11 @@ prototype.ensureMinSize =
 
 	return(
 		this.create(
-			'pse',
-				this.pse.create(
-					'x', Math.max( this.pse.x, this.pnw.x + minWidth ),
-					'y', Math.max( this.pse.y, this.pnw.y + minHeight )
-				)
+			'width', Math.max( this.width, minWidth ),
+			'height', Math.max( this.height, minHeight )
 		)
 	);
 };
-
-
-/*
-| Rectangle height.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-{
-	return this.pse.y - this.pnw.y;
-}
-);
 
 
 /*
@@ -305,12 +299,21 @@ prototype.intercept =
 		scaleY
 	)
 {
+	var
+		pnw,
+		pse;
+
 	if( scaleX === 1 && scaleY === 1 ) return this;
+
+	pnw = this.pos.intercept( base, scaleX, scaleY );
+
+	pse = this.pse.intercept( base, scaleX, scaleY );
 
 	return(
 		this.create(
-			'pnw', this.pnw.intercept( base, scaleX, scaleY ),
-			'pse', this.pse.intercept( base, scaleX, scaleY )
+			'pos', pnw,
+			'width', pse.x - pnw.x,
+			'height', pse.y - pnw.y
 		)
 	);
 };
@@ -334,8 +337,9 @@ prototype.transform =
 		transform.zoom === 1
 		? this.add( transform.offset )
 		: this.create(
-			'pnw', this.pnw.transform( transform ),
-			'pse', this.pse.transform( transform )
+			'pos', this.pos.transform( transform ),
+			'width', transform.scale( this.width ),
+			'height', transform.scale( this.height )
 		)
 	);
 };
@@ -359,8 +363,9 @@ prototype.detransform =
 		transform.zoom === 1
 		? this.sub( transform.offset )
 		: this.create(
-			'pnw', this.pnw.detransform( transform ),
-			'pse', this.pse.detransform( transform )
+			'pos', this.pos.detransform( transform ),
+			'width', transform.scale( this.width ),
+			'height', transform.scale( this.height )
 		)
 	);
 };
@@ -384,32 +389,12 @@ prototype.reduce =
 
 	return(
 		gleam_rect.create(
-			'pnw',
-				this.pnw.create(
-					'x', this.pnw.x + margin.e,
-					'y', this.pnw.y + margin.n
-				),
-			'pse',
-				this.pse.create(
-					'x', this.pse.x - margin.w,
-					'y', this.pse.y - margin.s
-				)
+			'pos', this.pos.add( margin.e, margin.n ),
+			'width', this.width - margin.e - margin.w,
+			'height', this.height - margin.n - margin.s
 		)
 	);
 };
-
-
-/*
-| Rectangle width.
-*/
-jion.lazyValue(
-	prototype,
-	'width',
-	function( )
-{
-	return this.pse.x - this.pnw.x;
-}
-);
 
 
 /*
@@ -417,21 +402,16 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'zeroPnw',
+	'zeroPos',
 	function( )
 {
-	if( this.pnw.x === 0 && this.pnw.y === 0 )
+	if( this.pos.x === 0 && this.pos.y === 0 )
 	{
 		return this;
 	}
 	else
 	{
-		return(
-			gleam_rect.create(
-				'pnw', gleam_point.zero,
-				'pse', this.pse.sub( this.pnw )
-			)
-		);
+		return this.create( 'pos', gleam_point.zero );
 	}
 }
 );
@@ -525,8 +505,8 @@ jion.lazyValue(
 {
 	return(
 		gleam_point.create(
-			'x', ( this.pse.x + this.pnw.x ) / 2,
-			'y', ( this.pse.y + this.pnw.y ) / 2
+			'x', this.pos.x + this.width / 2,
+			'y', this.pos.y + this.height / 2
 		)
 	);
 }
@@ -543,8 +523,8 @@ jion.lazyValue(
 {
 	return(
 		gleam_point.create(
-			'x', this.pnw.x,
-			'y', ( this.pse.y + this.pnw.y ) / 2
+			'x', this.pos.x,
+			'y', this.pos.y + this.height / 2
 		)
 	);
 }
@@ -570,7 +550,7 @@ jion.lazyValue(
 
 	if( this.pnw.equals( gleam_point.zero ) )
 	{
-		jion.aheadValue( size, 'zeroPnwRect', this );
+		jion.aheadValue( size, 'zeroRect', this );
 	}
 
 	return size;
@@ -579,28 +559,35 @@ jion.lazyValue(
 
 
 /*
-| Returns a rect moved by -point or -x/-y.
-|
-| sub(point)   -or-
-| sub(x, y)
+| Returns a rect moved by -x/-y.
 */
 prototype.sub =
 	function(
-		a1,
-		a2
+		x,
+		y
 	)
 {
-	return(
-		gleam_rect.create(
-			'pnw', this.pnw.sub( a1, a2 ),
-			'pse', this.pse.sub( a1, a2 )
-		)
-	);
+	return this.create( 'pos', this.pos.sub( x, y ) );
 };
 
 
 /*
+| A rect smaller by 1.
+*/
+jion.lazyValue(
+	prototype,
+	'sub1',
+	function( )
+{
+	return this.create( 'width', this.width - 1, 'height', this.height - 1 );
+}
+);
+
+
+/*
 | Returns true if point is within this rect.
+|
+| FIXME remove that border thing
 */
 prototype.within =
 	function(
@@ -611,8 +598,7 @@ prototype.within =
 	var
 		x,
 		y,
-		pnw,
-		pse;
+		pos;
 
 	border = border || 0;
 
@@ -620,17 +606,26 @@ prototype.within =
 
 	y = p.y;
 
-	pnw = this.pnw;
-
-	pse = this.pse;
+	pos = this.pos;
 
 	return(
-		x >= pnw.x + border
-		&& y >= pnw.y + border
-		&& x <= pse.x - border
-		&& y <= pse.y - border
+		x >= pos.x + border
+		&& y >= pos.y + border
+		&& x <= pos.x + this.width - border
+		&& y <= pos.y + this.height - border
 	);
 };
+
+
+/*
+| A zero rect.
+*/
+gleam_rect.zero =
+	gleam_rect.create(
+		'pos', gleam_point.zero,
+		'width', 0,
+		'height', 0
+	);
 
 
 

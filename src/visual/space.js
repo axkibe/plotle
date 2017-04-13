@@ -1252,7 +1252,7 @@ prototype._moveCreateGeneric =
 		dp,
 		fs,
 		model,
-		pnw,
+		pos,
 		resized,
 		transform,
 		transItem,
@@ -1303,17 +1303,17 @@ prototype._moveCreateGeneric =
 					'fabric', model.fabric.create( 'fontsize', fs )
 				);
 
-			pnw =
+			pos =
 				( dp.x > action.startPoint.x )
-				? zone.pnw
+				? zone.pos
 				: gleam_point.create(
-					'x', zone.pse.x - resized.zone.width,
-					'y', zone.pnw.y
+					'x', zone.pos.x + zone.width - resized.zone.width,
+					'y', zone.pos.y
 				);
 
 			transItem =
 				resized.create(
-					'fabric', resized.fabric.create( 'pnw', pnw ),
+					'fabric', resized.fabric.create( 'pos', pos ),
 					'transform', transform
 				);
 
@@ -1719,9 +1719,10 @@ prototype._startCreateGeneric =
 			fabric  =
 				model.fabric.create(
 					'zone',
-						dp.createRectOfSize(
-							model.minWidth,
-							model.minHeight
+						gleam_rect.create(
+							'pos', dp,
+							'width', model.minWidth,
+							'height', model.minHeight
 						)
 				);
 
@@ -1747,7 +1748,7 @@ prototype._startCreateGeneric =
 
 			transItem =
 				model.create(
-					'fabric', model.fabric.create( 'pnw', dp ),
+					'fabric', model.fabric.create( 'pos', dp ),
 					'path', visual_space.transPath,
 					'transform', this.transform
 				);

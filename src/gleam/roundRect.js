@@ -5,15 +5,16 @@
 |
 |      <--> a
 |      |  |
-| pnw  + .----------------. - - - A
-|      .'                  `. _ _ V b
+|  pos + .----------------. - - - A - - - A
+|      .'                  `. _ _ V b     | height
+|      |                    |             |
+|      |                    |             |
+|      |                    |             |
+|      |                    |             |
+|      '.                  .'             | 
+|        `----------------' + - - - - - - V
 |      |                    |
-|      |                    |
-|      |                    |
-|      |                    |
-|      '.                  .'
-|        `----------------' + pse
-|
+|      <--------------------> width
 */
 
 
@@ -26,19 +27,24 @@ if( JION )
 		id : 'gleam_roundRect',
 		attributes :
 		{
-			pnw :
+			pos :
 			{
-				comment : 'point in north west',
+				comment : 'position',
 				type : 'gleam_point'
 			},
-			pse :
+			width :
 			{
-				comment : 'point in south east',
-				type : 'gleam_point'
+				comment : 'width',
+				type : 'number'
+			},
+			height :
+			{
+				comment : 'height',
+				type : 'number'
 			},
 			a :
 			{
-				comment : 'horizontal rounding',
+				comment : 'horizonal rounding',
 				type : 'number'
 			},
 			b :
@@ -47,7 +53,7 @@ if( JION )
 				type : 'number'
 			}
 		},
-		init : [ 'pnw', 'pse', 'a', 'b' ]
+		init : [ 'pos', 'width', 'height', 'a', 'b' ]
 	};
 }
 
@@ -84,32 +90,39 @@ var
 
 /*
 | Initializes the round rect.
+|
+| FIXME make it a lazy value instead
 */
 prototype._init =
 	function(
-		pnw,
-		pse,
+		pos,
+		width,
+		height,
 		a,
 		b
 	)
 {
 	var
 		pne,
+		pse,
 		psw;
 
-	pne = gleam_point.create( 'x', pse.x, 'y', pnw.y );
+	// FIXME these points aren't needed
+	pne = gleam_point.xy( pos.x + width, pos.y );
 
-	psw = gleam_point.create( 'x', pnw.x, 'y', pse.y );
+	pse = gleam_point.xy( pos.x + width, pos.y + height );
+
+	psw = gleam_point.xy( pos.x, pos.y + height );
 
 	this.shape =
 		gleam_shape.create(
 			'ray:init',
 				[
 					gleam_shape_start.create(
-						'p', pnw.add( 0 , b )
+						'p', pos.add( 0 , b )
 					),
 					gleam_shape_round.create(
-						'p', pnw.add( a , 0 )
+						'p', pos.add( a , 0 )
 					),
 					gleam_shape_line.create(
 						'p', pne.sub( a , 0 )
@@ -139,21 +152,17 @@ prototype._init =
 
 
 /*
-| Returns a round rect moved by a point.
+| Returns a round rect moved by x/y
 */
 prototype.add =
 	function(
-		p
+		x,
+		y
 	)
 {
-	if( p.x === 0 && p.y === 0 ) return this;
+	if( x === 0 && y === 0 ) return this;
 
-	return(
-		this.create(
-			'pnw', this.pnw.add( p ),
-			'pse', this.pse.add( p )
-		)
-	);
+	return this.create( 'pos', this.pos.add( x, y ) );
 };
 
 
@@ -170,19 +179,6 @@ prototype.border =
 
 
 /*
-| Rectangle height.
-*/
-jion.lazyValue(
-	prototype,
-	'height',
-	function( )
-	{
-		return this.pse.y - this.pnw.y;
-	}
-);
-
-
-/*
 | point in the center
 */
 jion.lazyValue(
@@ -192,27 +188,12 @@ jion.lazyValue(
 	{
 		return(
 			gleam_point.create(
-				'x', ( this.pse.x + this.pnw.x ) / 2,
-				'y', ( this.pse.y + this.pnw.y ) / 2
+				'x', this.pos.x + this.width / 2,
+				'y', this.pos.y + this.height / 2
 			)
 		);
 	}
 );
-
-
-/*
-| Rectangle width.
-*/
-jion.lazyValue(
-	prototype,
-	'width',
-	function( )
-	{
-		return this.pse.x - this.pnw.x;
-	}
-);
-
-
 
 
 /*
@@ -251,8 +232,9 @@ prototype.transform =
 		transform.zoom === 1
 		? this.add( transform.offset )
 		: this.create(
-			'pnw', this.pnw.transform( transform ),
-			'pse', this.pse.transform( transform ),
+			'pos', this.pos.transform( transform ),
+			'width', transform.scale( this.width ),
+			'height', transform.scale( this.height ),
 			'a', transform.scale( this.a ),
 			'b', transform.scale( this.b )
 		)

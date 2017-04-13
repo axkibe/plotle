@@ -48,7 +48,7 @@ form_form.init =
 	// FUTURE use abstract( )
 	if( !this.path ) return;
 
-	this.area = this.viewSize.zeroPnwRect;
+	this.area = this.viewSize.zeroRect;
 
 	// all components of the form
 	twig = twigDup ? this._twig :  jion.copy( this._twig );

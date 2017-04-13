@@ -208,11 +208,7 @@ jion.lazyStaticValue(
 			'fabric',
 				fabric_note.create(
 					'fontsize', gruga_note.defaultFontsize,
-					'zone',
-						gleam_rect.create(
-							'pnw', gleam_point.zero,
-							'pse', gleam_point.zero
-						),
+					'zone', gleam_rect.zero,
 					'doc',
 						fabric_doc.create(
 							'twig:add', '1', fabric_para.create( 'text', '' )
@@ -265,7 +261,7 @@ prototype._init =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
-			'clipsize', zone.zeroPnw,
+			'clipsize', zone.zeroPos,
 			'fabric', fabric.doc,
 			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
@@ -299,12 +295,8 @@ prototype._init =
 			visual_scrollbar.create(
 				'aperture', aperture,
 				'max', dHeight,
-				'pnw',
-					gleam_point.create(
-						'x', zone.pse.x,
-						'y', zone.pnw.y + gruga_note.vScrollbarDis
-					),
-				'pos', this.scrollPos.y,
+				'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
+				'scrollpos', this.scrollPos.y,
 				'size', zone.height - gruga_note.vScrollbarDis * 2,
 				'transform', this.transform
 			);
@@ -419,7 +411,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', tZone.pnw,
+			'p', tZone.pos,
 			'size',
 				gleam_size.create(
 					'height', Math.round( tZone.height + 2 ),
@@ -542,7 +534,7 @@ prototype.scrollMarkIntoView =
 		n,
 		p,
 		para,
-		pnw,
+		ppos,
 		s,
 		sy,
 		zone;
@@ -571,11 +563,11 @@ prototype.scrollMarkIntoView =
 
 	p = para.locateOffsetPoint( mark.caret.at );
 
-	pnw = para.pnw;
+	ppos = para.pos;
 
-	s = pnw.y + p.y + descend + imargin.s;
+	s = ppos.y + p.y + descend + imargin.s;
 
-	n = pnw.y + p.y - fs - imargin.n;
+	n = ppos.y + p.y - fs - imargin.n;
 
 	if( n < 0 )
 	{
@@ -616,8 +608,9 @@ jion.lazyValue(
 
 	return(
 		gleam_roundRect.create(
-			'pnw', zone.pnw,
-			'pse', zone.pse,
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height,
 			'a', cr,
 			'b', cr
 		)
@@ -722,18 +715,12 @@ function( )
 
 			zone = zone.intercept( pBase, action.scaleX, action.scaleY );
 
-			if(
-				zone.height < this.minHeight
-				|| zone.width < this.minWidth
-			)
+			if( zone.height < this.minHeight || zone.width < this.minWidth )
 			{
 				zone =
 					zone.create(
-						'pse',
-							zone.pnw.add(
-								Math.max( zone.width, this.minWidth ),
-								Math.max( zone.height, this.minHeight )
-							)
+						'width', Math.max( zone.width, this.minWidth ),
+						'height', Math.max( zone.height, this.minHeight )
 					);
 			}
 
@@ -765,12 +752,9 @@ jion.lazyValue(
 
 	return(
 		gleam_roundRect.create(
-			'pnw', gleam_point.zero,
-			'pse',
-				gleam_point.create(
-					'x', zone.width,
-					'y', zone.height
-				),
+			'pos', gleam_point.zero,
+			'width', zone.width,
+			'height', zone.height,
 			'a', cr,
 			'b', cr
 		)

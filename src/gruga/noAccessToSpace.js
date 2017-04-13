@@ -20,19 +20,6 @@ var
 'use strict';
 
 
-var
-	/*
-	| Close control
-	*/
-	okButton =
-	{
-		width : 50,
-		height : 50,
-		w : 180,
-		n : 38
-	};
-
-
 /*
 | Layout
 */
@@ -55,13 +42,9 @@ gruga_noAccessToSpace =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy( okButton.w, okButton.n ),
-						'pse',
-							gleam_point.xy(
-								okButton.w + okButton.width,
-								okButton.n + okButton.height
-							)
+						'pos', gleam_point.xy( 180, 38 ),
+						'width', 50,
+						'height', 50
 					),
 				'text', 'ok',
 				'font', shell_fontPool.get( 14, 'cm' ),

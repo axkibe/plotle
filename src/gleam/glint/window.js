@@ -19,6 +19,7 @@ if( JION )
 				comment : 'the glints to draw in the window',
 				type : [ 'gleam_glint_mask', 'gleam_glint_ray' ]
 			},
+			// FIXME replace posSize with rect
 			p :
 			{
 				comment : 'position to draw it at',

@@ -20,25 +20,6 @@ var
 ( function( ) {
 'use strict';
 
-var
-	// 'no' control
-	noButton =
-	{
-		width : 75,
-		height : 75,
-		w : -100,
-		n : 28
-	},
-
-	// yes control
-	yesButton =
-	{
-		width : 75,
-		height : 75,
-		w : 25,
-		n : 28
-	};
-
 
 /*
 | Layout
@@ -65,13 +46,9 @@ gruga_nonExistingSpace =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy( noButton.w, noButton.n ),
-						'pse',
-							gleam_point.xy(
-								noButton.w + noButton.width,
-								noButton.n + noButton.height
-							)
+						'pos', gleam_point.xy( -100, 28 ),
+						'width', 75,
+						'height', 75
 					),
 				'text', 'No',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -83,13 +60,9 @@ gruga_nonExistingSpace =
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pnw',
-							gleam_point.xy( yesButton.w, yesButton.n ),
-						'pse',
-							gleam_point.xy(
-								yesButton.w + yesButton.width,
-								yesButton.n + yesButton.height
-							)
+						'pos', gleam_point.xy( 25, 28 ),
+						'width', 75,
+						'height', 75
 					),
 				'text', 'Yes',
 				'font', shell_fontPool.get( 14, 'cm' ),

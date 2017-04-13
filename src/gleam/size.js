@@ -75,35 +75,25 @@ gleam_size.wh =
 
 
 /*
-| A rectangle of same size with pnw at 0/0
+| Returns a size jion enlarged by w/h.
+| Or reduced by -w/-h
 */
-jion.lazyValue(
-	prototype,
-	'zeroPnwRect',
-	function( )
+prototype.add =
+	function( w, h )
 {
-	var
-		rect;
-
-	rect =
-		gleam_rect.create(
-			'pnw', gleam_point.zero,
-			'pse',
-				gleam_point.create(
-					'x', this.width,
-					'y', this.height
-				)
-		);
-
-	jion.aheadValue( rect, 'size', this );
-
-	return rect;
-}
-);
+	return(
+		this.create(
+			'width', this.width + w,
+			'height', this.height + h
+		)
+	);
+};
 
 
 /*
 | A size jion increased by one, height and width.
+|
+| FIXME rename add1
 */
 jion.lazyValue(
 	prototype,
@@ -116,6 +106,49 @@ jion.lazyValue(
 			'width', this.width + 1
 		)
 	);
+}
+);
+
+
+/*
+| A size jion increased by one, height and width.
+*/
+jion.lazyValue(
+	prototype,
+	'sub1',
+	function( )
+{
+	return(
+		this.create(
+			'height', this.height - 1,
+			'width', this.width - 1
+		)
+	);
+}
+);
+
+
+/*
+| A rectangle of same size with p at 0/0
+*/
+jion.lazyValue(
+	prototype,
+	'zeroRect',
+	function( )
+{
+	var
+		rect;
+
+	rect =
+		gleam_rect.create(
+			'pos', gleam_point.zero,
+			'width', this.width,
+			'height', this.height
+		);
+
+	jion.aheadValue( rect, 'size', this );
+
+	return rect;
 }
 );
 

@@ -4,8 +4,7 @@
 
 
 var
-	gleam_point,
-	gleam_rect,
+	gleam_size,
 	gruga_controls;
 
 
@@ -24,13 +23,9 @@ gruga_controls = { };
 | and will resize to current screenSize.
 */
 gruga_controls.designSize =
-	gleam_rect.create(
-		'pnw', gleam_point.zero,
-		'pse',
-			gleam_point.create(
-				'x', 1024,  // this is currently ignored
-				'y',  768
-			)
+	gleam_size.create(
+		'width', 1024,  // this is currently ignored
+		'height', 768
 	);
 
 

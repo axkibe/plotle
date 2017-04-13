@@ -65,7 +65,6 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
-	gleam_rect,
 	gleam_size,
 	gleam_glint_paint,
 	gruga_label,
@@ -235,7 +234,7 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
-				'p', tZone.pnw,
+				'p', tZone.pos,
 				'size',
 					gleam_size.create(
 						'height', Math.round( tZone.height + 1 ),
@@ -321,9 +320,9 @@ prototype.mousewheel = visual_label.prototype.mousewheel;
 
 
 /*
-| The labels 'pnw', possibly altered by 'action'.
+| The labels position possibly altered by an action.
 */
-jion.lazyValue( prototype, 'pnw', visual_label.pnw );
+jion.lazyValue( prototype, 'pos', visual_label.pos );
 
 
 /*
@@ -333,9 +332,9 @@ prototype.pointingHover = visual_docItem.pointingHover;
 
 
 /*
-| Relations use pnw/fontsize for positioning
+| Relations use pos/fontsize for positioning
 */
-prototype.positioning = 'pnw/fontsize';
+prototype.positioning = 'pos/fontsize';
 
 
 /*
@@ -346,12 +345,7 @@ jion.lazyValue(
 	'shape',
 	function( )
 {
-	return(
-		gleam_rect.create(
-			'pnw', this.zone.pnw,
-			'pse', this.zone.pse.sub( 1, 1 )
-		)
-	);
+	return this.zone.sub1;
 }
 );
 
