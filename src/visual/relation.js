@@ -234,12 +234,7 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
-				'p', tZone.pos,
-				'size',
-					gleam_size.create(
-						'height', Math.round( tZone.height + 1 ),
-						'width', Math.round( tZone.width + 1 )
-					)
+				'rect', tZone.add1
 			);
 
 		gRay = [ wg ];

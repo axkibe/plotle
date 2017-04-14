@@ -154,40 +154,49 @@ prototype.add =
 
 
 /*
-| Returns this point scaled by
-| scaleX, scaleY relative to the base point.
+| Returns a point scaled by
+| action.scaleX, action.scaleY relative to the action.bPoint.
 |
-| FIXME remove
+| ax / ay are added afterward.
 */
-prototype.intercept =
+prototype.baseScale =
 	function(
-		base,
-		scaleX,
-		scaleY
+		action,
+		ax,
+		ay
 	)
 {
 	var
+		pBase,
+		scaleX,
+		scaleY,
 		x,
 		y,
 		bx,
 		by;
 
-	if( scaleX === 1 && scaleY === 1 ) return this;
+	pBase = action.pBase;
+
+	scaleX = action.scaleX;
+
+	scaleY = action.scaleY;
+
+	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
 
 	x = this.x;
 
 	y = this.y;
 
-	bx = base.x;
+	bx = pBase.x;
 
-	by = base.y;
+	by = pBase.y;
 
-	if( x === bx && y === by ) return this;
+	if( x === bx && y === by ) return this.add( ax, ay );
 
 	return(
 		this.create(
-			'x', ( x - bx ) * scaleX + bx,
-			'y', ( y - by ) * scaleY + by
+			'x', ( x - bx ) * scaleX + bx + ax,
+			'y', ( y - by ) * scaleY + by + ay
 		)
 	);
 };

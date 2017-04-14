@@ -19,16 +19,10 @@ if( JION )
 				comment : 'the glints to draw in the window',
 				type : [ 'gleam_glint_mask', 'gleam_glint_ray' ]
 			},
-			// FIXME replace posSize with rect
-			p :
+			rect :
 			{
-				comment : 'position to draw it at',
-				type : 'gleam_point'
-			},
-			size :
-			{
-				comment : 'the size of the window',
-				type : 'gleam_size'
+				comment : 'the position and size of the window',
+				type : 'gleam_rect'
 			}
 		},
 		init : [ 'inherit' ]
@@ -75,7 +69,8 @@ prototype._init =
 		inherit
 		&& jion.hasLazyValueSet( inherit, '_canvasDisplay' )
 		&& this.twig === inherit.twig
-		&& this.size.equals( inherit.size )
+		&& this.rect.width === inherit.rect.width
+		&& this.rect.height === inherit.rect.height
 	)
 	{
 		jion.aheadValue( this, '_canvasDisplay', inherit._canvasDisplay );
@@ -94,7 +89,7 @@ jion.lazyValue(
 	return(
 		gleam_display_canvas.create(
 			'glint', this.glint,
-			'size', this.size
+			'size', this.rect.size
 		)
 	);
 }

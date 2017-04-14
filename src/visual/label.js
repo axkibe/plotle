@@ -150,7 +150,7 @@ visual_label.createGeneric =
 		key,
 		label,
 		model,
-		pnw,
+		pos,
 		resized,
 		zone;
 
@@ -171,18 +171,15 @@ visual_label.createGeneric =
 			'fabric', model.fabric.create( 'fontsize', fs )
 		);
 
-	pnw = // FIXME
+	pos =
 		( dp.x > action.startPoint.x )
 		? zone.pos
 		: gleam_point.create(
-			'x', zone.pse.x - resized.zone.width,  // FIXME
+			'x', zone.pos.x + zone.width - resized.zone.width,
 			'y', zone.pos.y
 		);
 
-	label =
-		resized.create(
-			'fabric', resized.fabric.create( 'pos', pnw )
-		);
+	label = resized.create( 'fabric', resized.fabric.create( 'pos', pos ) );
 
 	key = session_uid( );
 
@@ -399,12 +396,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_window.create(
 			'glint', this.doc.glint,
-			'p', tZone.pos,
-			'size',
-				gleam_size.create(
-					'height', Math.round( tZone.height + 1 ),
-					'width', Math.round( tZone.width + 1 )
-				)
+			'rect', tZone.add1
 		);
 
 	if( this.highlight )
@@ -527,11 +519,7 @@ visual_label.pos =
 {
 	var
 		action,
-		zone,
-		pne,
-		pnw,
-		pse,
-		psw;
+		zone;
 
 	action = this.action;
 
@@ -549,58 +537,36 @@ visual_label.pos =
 			{
 				case 'ne' :
 
-					psw =
-						zone.pos.intercept(
-							action.pBase,
-							action.scaleX,
-							action.scaleY
-						);
-
-					pnw = psw.sub( 0 , this._zoneHeight );
-
-					break;
+					return(
+						zone.psw.baseScale(
+							action, 0, -this._zoneHeight
+						)
+					);
 
 				case 'nw' :
 
-					pse =
-						zone.pos.intercept(
-							action.pBase,
-							action.scaleX,
-							action.scaleY
-						);
-
-					pnw = pse.sub( this._zoneWidth, this._zoneHeight );
-
-					break;
+					return(
+						zone.pse.baseScale(
+							action, -this._zoneWidth, -this._zoneHeight
+						)
+					);
 
 				case 'se' :
 
-					pnw =
-						zone.pos.intercept(
-							action.pBase,
-							action.scaleX,
-							action.scaleY
-						);
-
-					break;
+					return zone.pos.baseScale( action, 0, 0 );
 
 				case 'sw' :
 
-					pne =
-						zone.pos.intercept(
-							action.pBase,
-							action.scaleX,
-							action.scaleY
-						);
-
-					pnw = pne.sub( this._zoneWidth, 0 );
-
-					break;
+					return(
+						zone.pne.baseScale(
+							action,
+							-this._zoneWidth,
+							0
+						)
+					);
 
 				default : throw new Error( );
 			}
-
-			return pnw;
 
 		default :
 

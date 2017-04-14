@@ -425,8 +425,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', this._tZone.pnw,
-			'size', this._tZone.size.plusOne
+			'rect', this._tZone.add1
 		)
 	);
 }

@@ -563,6 +563,8 @@ prototype._renderGlint =
 		g,
 		h,
 		p,
+		pos,
+		rect,
 		rotate,
 		sa,
 		shape,
@@ -686,21 +688,23 @@ prototype._renderGlint =
 
 		case 'gleam_glint_window' :
 
-			p = g.p;
+			rect = g.rect;
+
+			pos = rect.pos;
 
 			h = this.size.height;
 
 			w = this.size.width;
 
-			x = offset.x + p.x;
+			x = offset.x + pos.x;
 
-			y = offset.y + p.y;
+			y = offset.y + pos.y;
 
 			if(
 				x > w
 				|| y > h
-				|| x + g.size.width < 0
-				|| y + g.size.height < 0
+				|| x + rect.width < 0
+				|| y + rect.height < 0
 			)
 			{
 				// if the window isn't visible at all
@@ -710,9 +714,9 @@ prototype._renderGlint =
 
 			if( h * w > shell_settings.glintCacheLimit )
 			{
-				x2 = x + g.size.width;
+				x2 = x + rect.width;
 
-				y2 = y + g.size.height;
+				y2 = y + rect.height;
 
 				cx.save( );
 
@@ -730,7 +734,7 @@ prototype._renderGlint =
 
 				cx.clip( );
 
-				this._renderGlintRay( g.glint, offset.add( p ) );
+				this._renderGlintRay( g.glint, offset.add( pos ) );
 
 				cx.restore( );
 			}

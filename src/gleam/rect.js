@@ -292,28 +292,29 @@ prototype.ensureMinSize =
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
-prototype.intercept =
+prototype.baseScale =
 	function(
-		base,
-		scaleX,
-		scaleY
+		action,
+		ax,
+		ay
 	)
 {
 	var
-		pnw,
+		pos,
 		pse;
 
-	if( scaleX === 1 && scaleY === 1 ) return this;
+	if( action.scaleX === 1 && action.scaleY === 1 )
+		return this.add( ax, ay );
 
-	pnw = this.pos.intercept( base, scaleX, scaleY );
+	pos = this.pos.baseScale( action, ax, ay );
 
-	pse = this.pse.intercept( base, scaleX, scaleY );
+	pse = this.pse.baseScale( action, ax, ay );
 
 	return(
 		this.create(
-			'pos', pnw,
-			'width', pse.x - pnw.x,
-			'height', pse.y - pnw.y
+			'pos', pos,
+			'width', pse.x - pos.x,
+			'height', pse.y - pos.y
 		)
 	);
 };
@@ -572,6 +573,47 @@ prototype.sub =
 
 
 /*
+| A rect larger by 1.
+| FIXME rename enlarge1
+*/
+jion.lazyValue(
+	prototype,
+	'add1',
+	function( )
+{
+	var add1;
+
+	add1 = this.create( 'width', this.width + 1, 'height', this.height + 1 );
+
+	jion.aheadValue( add1, 'sub1', this );
+
+	return add1;
+}
+);
+
+
+/*
+| A rect larger by 1.5.
+*/
+jion.lazyValue(
+	prototype,
+	'add1_5',
+	function( )
+{
+	var add1_5;
+
+	add1_5 =
+		this.create(
+			'width', this.width + 1.5,
+			'height', this.height + 1.5
+		);
+
+	return add1_5;
+}
+);
+
+
+/*
 | A rect smaller by 1.
 */
 jion.lazyValue(
@@ -579,7 +621,13 @@ jion.lazyValue(
 	'sub1',
 	function( )
 {
-	return this.create( 'width', this.width - 1, 'height', this.height - 1 );
+	var sub1;
+
+	sub1 = this.create( 'width', this.width - 1, 'height', this.height - 1 );
+
+	jion.aheadValue( sub1, 'add1', this );
+
+	return sub1;
 }
 );
 

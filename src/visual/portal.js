@@ -479,12 +479,7 @@ jion.lazyValue(
 		[
 			gleam_glint_window.create(
 				'glint', this._glint,
-				'p', tZone.pos,
-				'size',
-					gleam_size.create(
-						'width', Math.round( tZone.width + 1.5 ),
-						'height', Math.round( tZone.height + 1.5 )
-					)
+				'rect', tZone.add1_5
 			)
 		];
 
@@ -753,7 +748,7 @@ function( )
 
 		case 'action_resizeItems' :
 
-			return zone.intercept( action.pBase, action.scaleX, action.scaleY );
+			return zone.baseScale( action, 0, 0 );
 
 		default : return this.fabric.zone;
 	}

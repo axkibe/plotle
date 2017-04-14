@@ -411,12 +411,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'p', tZone.pos,
-			'size',
-				gleam_size.create(
-					'height', Math.round( tZone.height + 2 ),
-					'width', Math.round( tZone.width + 2 )
-				)
+			'rect', tZone.add1_5
 		);
 
 	if( this.highlight )
@@ -713,7 +708,7 @@ function( )
 
 			if( !pBase ) return zone;
 
-			zone = zone.intercept( pBase, action.scaleX, action.scaleY );
+			zone = zone.baseScale( action, 0, 0 );
 
 			if( zone.height < this.minHeight || zone.width < this.minWidth )
 			{

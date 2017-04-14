@@ -1744,7 +1744,7 @@ prototype._startCreateGeneric =
 
 			break;
 
-		case 'pnw/fontsize' :
+		case 'pos/fontsize' :
 
 			transItem =
 				model.create(

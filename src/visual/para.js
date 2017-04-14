@@ -193,12 +193,11 @@ jion.lazyValue(
 		( this._inheritedGlint || gleam_glint_window )
 		.create(
 			'glint', this._glint,
-			'p', this.pos.transform( transform.ortho ),
-			'size',
-				// FIXME use transform.scale
-				gleam_size.create(
-					'height', Math.round( this.height * transform.zoom + 1 ),
-					'width', Math.round( this.flow.width * transform.zoom + 1 )
+			'rect',
+				gleam_rect.create(
+					'pos', this.pos.transform( transform.ortho ),
+					'height', transform.scale( this.height ) + 1,
+					'width', transform.scale( this.flow.width ) + 1
 				)
 		)
 	);
