@@ -92,7 +92,6 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
-	gleam_size,
 	jion,
 	result_hover,
 	root,

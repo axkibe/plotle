@@ -65,7 +65,6 @@ var
 	gleam_glint_paint,
 	gleam_glint_ray,
 	gleam_glint_window,
-	gleam_size,
 	gleam_glint_paint,
 	gruga_label,
 	gruga_relation,
@@ -375,12 +374,6 @@ prototype.moveSelect = visual_docItem.moveSelect;
 | Dummy since a relation does not scroll.
 */
 prototype.scrollMarkIntoView = function( ){ };
-
-
-/*
-| The items shape  anchored at zero.
-*/
-jion.lazyValue( prototype, 'zeroShape', visual_label.zeroShape );
 
 
 /*

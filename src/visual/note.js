@@ -89,7 +89,6 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
-	gleam_size,
 	gleam_transform,
 	gruga_note,
 	jion,
@@ -734,7 +733,7 @@ function( )
 */
 jion.lazyValue(
 	prototype,
-	'zeroShape',
+	'_zeroShape',
 	function( )
 {
 	var
@@ -758,7 +757,6 @@ jion.lazyValue(
 );
 
 
-
 /*
 | The notes inner glint.
 */
@@ -779,8 +777,7 @@ jion.lazyValue(
 
 	facet = gruga_note.facets.getFacet( );
 
-	tOrthoShape =
-		this.zeroShape.transform( this.transform.ortho );
+	tOrthoShape = this._zeroShape.transform( this.transform.ortho );
 
 	return(
 		gleam_glint_ray.create(

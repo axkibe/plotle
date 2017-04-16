@@ -75,7 +75,6 @@ var
 	gleam_glint_window,
 	gleam_point,
 	gleam_rect,
-	gleam_size,
 	gleam_transform,
 	fabric_doc,
 	fabric_label,
@@ -565,13 +564,13 @@ visual_label.pos =
 						)
 					);
 
-				default : throw new Error( );
 			}
 
-		default :
-
-			return this.fabric.pos;
+		// should never be reached
+		throw new Error( );
 	}
+
+	return this.fabric.pos;
 };
 
 
@@ -648,31 +647,6 @@ visual_label.tZone =
 
 jion.lazyValue( prototype, 'tZone', visual_label.tZone );
 
-
-/*
-| The items shape anchored at zero.
-|
-| FIXME needed?
-*/
-visual_label.zeroShape =
-	function( )
-{
-	var
-		zone;
-
-	zone = this.zone;
-
-	return(
-		gleam_rect.create(
-			'pos', gleam_point.zero,
-			'width', Math.max( zone.width - 1, 0 ),
-			'height', Math.max( zone.height - 1, 0 )
-		)
-	);
-};
-
-
-jion.lazyValue( prototype, 'zeroShape', visual_label.zeroShape );
 
 /*
 | Returns the zone height.

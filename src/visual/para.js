@@ -78,7 +78,7 @@ var
 	gleam_glint_window,
 	gleam_measure,
 	gleam_point,
-	gleam_size,
+	gleam_rect,
 	flow_block,
 	flow_line,
 	flow_token,

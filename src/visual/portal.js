@@ -85,7 +85,6 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
-	gleam_size,
 	gleam_transform,
 	gruga_portal,
 	jion,
@@ -704,7 +703,7 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'zeroShape',
+	'_zeroShape',
 	function( )
 {
 	var
@@ -1728,7 +1727,7 @@ jion.lazyValue(
 		if( glintCaret ) cRay[ 6 ] = this._glintCaret;
 	}
 
-	tzs = this.zeroShape.transform( ot );
+	tzs = this._zeroShape.transform( ot );
 
 	return(
 		gleam_glint_ray.create(
