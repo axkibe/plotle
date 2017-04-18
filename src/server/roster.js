@@ -918,43 +918,19 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'media/dejavusans/style.css',
-		'maxage', 'long'
-	),
-	server_resource.create(
 		'filePath', 'media/cursor.css',
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'fonts/DejaVuSans.ttf',
+		'filePath', 'media/fonts/OpenSans-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'fonts/DejaVuSansCondensed.ttf',
+		'filePath', 'media/fonts/Roboto-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'fonts/Arimo-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'fonts/OpenSans-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'fonts/SourceSansPro-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'fonts/Oxygen-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'fonts/Quicksand-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'fonts/Roboto-Regular.ttf',
+		'filePath', 'media/dejavusans/style.css',
 		'maxage', 'long'
 	),
 	server_resource.create(

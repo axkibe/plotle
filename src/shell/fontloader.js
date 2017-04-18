@@ -29,11 +29,8 @@ openTypeLoad =
 	function( )
 {
 	opentype.load(
-		//'fonts-DejaVuSans.ttf',
-		'fonts-OpenSans-Regular.ttf',
-		//'fonts-SourceSansPro-Regular.ttf',
-		//'fonts-Roboto-Regular.ttf',
-		//'fonts-Arimo-Regular.ttf',
+		'media-fonts-OpenSans-Regular.ttf',
+		//'media-fonts-Roboto-Regular.ttf',
 		function( err, font )
 	{
 		if (err)
