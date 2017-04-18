@@ -395,7 +395,7 @@ jion.lazyValue(
 	gRay[ gLen++ ] =
 		gleam_glint_window.create(
 			'glint', this.doc.glint,
-			'rect', tZone.add1
+			'rect', tZone.enlarge1
 		);
 
 	if( this.highlight )
@@ -602,7 +602,7 @@ jion.lazyValue(
 	'shape',
 	function( )
 {
-	return this.zone.sub1;
+	return this.zone.shrink1;
 }
 );
 

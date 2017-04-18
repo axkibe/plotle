@@ -45,8 +45,8 @@ shell_settings =
 	| If true uses opentype font rendering, if false
 	| canvas.fillText()
 	*/
-	//opentype : true,
-	opentype : false,
+	opentype : true,
+	//opentype : false,
 
 	/*
 	| Maximum size of a glint graphic cache

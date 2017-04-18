@@ -233,7 +233,7 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
-				'rect', tZone.add1
+				'rect', tZone.enlarge1
 			);
 
 		gRay = [ wg ];
@@ -339,7 +339,7 @@ jion.lazyValue(
 	'shape',
 	function( )
 {
-	return this.zone.sub1;
+	return this.zone.shrink1;
 }
 );
 

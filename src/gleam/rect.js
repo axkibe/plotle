@@ -235,7 +235,7 @@ jion.lazyValue(
 	'pnw',
 	function( )
 {
-	// FIXME console.log('XXX');
+	console.log('FIXME');
 	return this.pos;
 }
 );
@@ -429,6 +429,7 @@ prototype.getProjection =
 {
 	var
 		pc,
+		pos,
 		ny,
 		ex,
 		sy,
@@ -437,15 +438,17 @@ prototype.getProjection =
 		x,
 		y;
 
-	pc = this.pc,
+	pos = this.pos;
 
-	ny = this.pnw.y,
+	pc = this.pc;
 
-	ex = this.pse.x,
+	ny = pos.y;
 
-	sy = this.pse.y,
+	wx = pos.x;
 
-	wx = this.pnw.x,
+	ex = pos.x + this.width;
+
+	sy = pos.y + this.height;
 
 	k = ( p.y - pc.y ) / ( p.x - pc.x );
 
@@ -458,7 +461,7 @@ prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return gleam_point.create( 'x', x, 'y', ny );
+			return gleam_point.xy( x, ny );
 		}
 	}
 
@@ -468,7 +471,7 @@ prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return gleam_point.create( 'x', x, 'y', sy );
+			return gleam_point.xy( x, sy );
 		}
 	}
 
@@ -478,7 +481,7 @@ prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return gleam_point.create( 'x', ex, 'y', y );
+			return gleam_point.xy( ex, y );
 		}
 	}
 
@@ -488,7 +491,7 @@ prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return gleam_point.create( 'x', wx, 'y', y );
+			return gleam_point.xy( wx, y );
 		}
 	}
 
@@ -504,10 +507,15 @@ jion.lazyValue(
 	'pc',
 	function( )
 {
+	var
+		pos;
+
+	pos = this.pos;
+
 	return(
-		gleam_point.create(
-			'x', this.pos.x + this.width / 2,
-			'y', this.pos.y + this.height / 2
+		gleam_point.xy(
+			pos.x + this.width / 2,
+			pos.y + this.height / 2
 		)
 	);
 }
@@ -522,12 +530,12 @@ jion.lazyValue(
 	'pw',
 	function( )
 {
-	return(
-		gleam_point.create(
-			'x', this.pos.x,
-			'y', this.pos.y + this.height / 2
-		)
-	);
+	var
+		pos;
+
+	pos = this.pos;
+
+	return gleam_point.xy( pos.x, pos.y + this.height / 2 );
 }
 );
 
@@ -543,13 +551,9 @@ jion.lazyValue(
 	var
 		size;
 
-	size =
-		gleam_size.create(
-			'height', this.height,
-			'width', this.width
-		);
+	size = gleam_size.wh( this.width, this.height );
 
-	if( this.pnw.equals( gleam_point.zero ) )
+	if( this.pos.equals( gleam_point.zero ) )
 	{
 		jion.aheadValue( size, 'zeroRect', this );
 	}
@@ -578,16 +582,20 @@ prototype.sub =
 */
 jion.lazyValue(
 	prototype,
-	'add1',
+	'enlarge1',
 	function( )
 {
-	var add1;
+	var enlarge1;
 
-	add1 = this.create( 'width', this.width + 1, 'height', this.height + 1 );
+	enlarge1 =
+		this.create(
+			'width', this.width + 1,
+			'height', this.height + 1
+		);
 
-	jion.aheadValue( add1, 'sub1', this );
+	jion.aheadValue( enlarge1, 'shrink1', this );
 
-	return add1;
+	return enlarge1;
 }
 );
 
@@ -618,16 +626,20 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'sub1',
+	'shrink1',
 	function( )
 {
-	var sub1;
+	var shrink1;
 
-	sub1 = this.create( 'width', this.width - 1, 'height', this.height - 1 );
+	shrink1 =
+		this.create(
+			'width', this.width - 1,
+			'height', this.height - 1
+		);
 
-	jion.aheadValue( sub1, 'add1', this );
+	jion.aheadValue( shrink1, 'enlarge1', this );
 
-	return sub1;
+	return shrink1;
 }
 );
 

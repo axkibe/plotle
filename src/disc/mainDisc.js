@@ -425,7 +425,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'rect', this._tZone.add1
+			'rect', this._tZone.enlarge1
 		)
 	);
 }
@@ -451,7 +451,7 @@ prototype.pointingHover =
 	// shortcut if p is not near the panel
 	if( !this._tZone.within( p ) ) return;
 
-	pp = p.sub( this._tZone.pnw );
+	pp = p.sub( this._tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
@@ -493,7 +493,7 @@ prototype.click =
 
 	display = this._display;
 
-	pp = p.sub( this._tZone.pnw );
+	pp = p.sub( this._tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
@@ -535,7 +535,7 @@ prototype.mousewheel =
 
 	if(
 		!this._tShape.within(
-			p.sub( this._tZone.pnw )
+			p.sub( this._tZone.pos )
 		)
 	)
 	{
@@ -575,7 +575,7 @@ prototype.dragStart =
 
 	if(
 		!this._tShape.within(
-			p.sub( this._tZone.pnw )
+			p.sub( this._tZone.pos )
 		)
 	)
 	{

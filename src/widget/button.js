@@ -155,7 +155,7 @@ prototype.pointingHover =
 		!this.visible
 		|| !this._tZone.within( p )
 		|| !this._tzShape.within(
-			p.sub( this._tZone.pnw )
+			p.sub( this._tZone.pos )
 		)
 	)
 	{
@@ -185,7 +185,7 @@ prototype.click =
 		!this.visible
 		|| !this._tZone.within( p )
 		|| !this._tzShape.within(
-			p.sub( this._tZone.pnw )
+			p.sub( this._tZone.pos )
 		)
 	)
 	{

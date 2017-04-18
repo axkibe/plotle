@@ -80,13 +80,14 @@ function( )
 {
 	var
 		a,
+		cex,
+		csy,
 		content,
 		cLen,
 		cZone,
 		ex,
 		ny,
-		pnw,
-		pse,
+		pos,
 		sy,
 		wx;
 
@@ -101,35 +102,35 @@ function( )
 
 	cZone = content.get( 0 ).zone;
 
-	pnw = cZone.pnw;
-
-	pse = cZone.pse;
-
-	ny = pnw.y;
-
-	wx = pnw.x;
-
-	sy = pse.y;
-
-	ex = pse.x;
-
 	if( cLen === 1 ) return cZone;
+
+	pos = cZone.pos;
+
+	ny = pos.y;
+
+	wx = pos.x;
+
+	sy = pos.y + cZone.height;
+
+	ex = pos.x + cZone.width;
 
 	for( a = 1; a < cLen; a++ )
 	{
 		cZone = content.get( a ).zone;
 
-		pnw = cZone.pnw;
+		pos = cZone.pos;
 
-		pse = cZone.pse;
+		cex = pos.x + cZone.width;
 
-		if( pnw.x < wx ) wx = pnw.x;
+		csy = pos.y + cZone.height;
 
-		if( pse.x > ex ) ex = pse.x;
+		if( pos.x < wx ) wx = pos.x;
 
-		if( pnw.y < ny ) ny = pnw.y;
+		if( cex > ex ) ex = cex;
 
-		if( pse.y > sy ) sy = pse.y;
+		if( pos.y < ny ) ny = pos.y;
+
+		if( csy > sy ) sy = csy;
 	}
 
 	return(
@@ -233,7 +234,7 @@ prototype.dragStart =
 	else if( this._shapeHandleSe.within( p ) )
 	{
 		com = 'se';
-		pBase = zone.pnw;
+		pBase = zone.pos;
 	}
 	else if( this._shapeHandleSw.within( p ) )
 	{
@@ -583,7 +584,7 @@ jion.lazyValue(
 {
 	return(
 		gleam_ellipse.create(
-			'pos', this._outerZone.pnw,
+			'pos', this._outerZone.pos,
 			'width', handleSize,
 			'height', handleSize
 		)

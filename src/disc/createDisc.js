@@ -263,7 +263,7 @@ prototype.pointingHover =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	pp = p.sub( tZone.pnw );
+	pp = p.sub( tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
@@ -299,7 +299,7 @@ prototype.click =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	pp = p.sub( tZone.pnw );
+	pp = p.sub( tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
@@ -327,7 +327,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'rect', this._tZone.add1
+			'rect', this._tZone.enlarge1
 		)
 	);
 }
@@ -390,7 +390,7 @@ prototype.dragStart =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pnw ) ) ) return;
+	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
 
 	// the dragging operation is on the panel
 	// but it denies it.
@@ -417,7 +417,7 @@ prototype.mousewheel =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pnw ) ) ) return;
+	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
 
 	return true;
 };

@@ -834,6 +834,7 @@ prototype._sketchRect =
 	)
 {
 	var
+		pos,
 		cx,
 		wx,
 		ny,
@@ -842,13 +843,15 @@ prototype._sketchRect =
 
 	cx = this._cx;
 
-	wx = round( rect.pnw.x ) + border + offset.x;
+	pos = rect.pos;
 
-	ny = round( rect.pnw.y ) + border + offset.y;
+	wx = round( pos.x ) + border + offset.x;
 
-	ex = round( rect.pse.x ) - border + offset.x;
+	ny = round( pos.y ) + border + offset.y;
 
-	sy = round( rect.pse.y ) - border + offset.y;
+	ex = round( pos.x + rect.width ) - border + offset.x;
+
+	sy = round( pos.y + rect.height ) - border + offset.y;
 
 	cx.moveTo( wx, ny );
 

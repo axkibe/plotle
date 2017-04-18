@@ -151,7 +151,7 @@ jion.lazyValue(
 	s = Math.round( p.y + descend + 1 );
 
 	return(
-		this._tZone.pnw.y + s - Math.round( fs + descend )
+		this._tZone.pos.y + s - Math.round( fs + descend )
 	);
 }
 );
@@ -184,7 +184,7 @@ prototype.click =
 
 	if( !p || !this._tZone.within( p ) ) return undefined;
 
-	pp = p.sub( this._tZone.pnw );
+	pp = p.sub( this._tZone.pos );
 
 	if( !this._tzShape.within( pp ) ) return undefined;
 
@@ -213,7 +213,7 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'rect', this._tZone.add1
+			'rect', this._tZone.enlarge1
 		)
 	);
 }
@@ -360,7 +360,7 @@ prototype.pointingHover =
 {
 	if(
 		!this._tZone.within( p )
-		|| !this._tzShape.within( p.sub( this._tZone.pnw ) )
+		|| !this._tzShape.within( p.sub( this._tZone.pos ) )
 	)
 	{
 		return undefined;
