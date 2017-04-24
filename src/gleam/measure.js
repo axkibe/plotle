@@ -56,7 +56,7 @@ gleam_measure =
 
 			if( cx.font !== font.css ) cx.font = font.css;
 
-			return cx.measureText( text ).width * font.fact;
+			return cx.measureText( text ).width;
 		}
 	}
 };

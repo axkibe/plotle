@@ -37,11 +37,20 @@ if( JION )
 }
 
 
+var
+	gleam_glint_text,
+	jion;
+
+
 /*
 | Capsule
 */
 ( function( ) {
 'use strict';
+
+
+var
+	prototype;
 
 
 if( NODE )
@@ -50,6 +59,21 @@ if( NODE )
 
 	return;
 }
+
+
+prototype = gleam_glint_text.prototype;
+
+
+jion.lazyValue(
+	prototype,
+	'cacheKey',
+	function( )
+{
+	if( !this.rotate ) return this.font.size + ':' + this.text;
+
+	return this.font.size + ':' + this.rotate + ':' + this.text;
+}
+);
 
 
 } )( );

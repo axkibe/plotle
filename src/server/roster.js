@@ -104,6 +104,10 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
+		'filePath', 'src/shell/settings.js',
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/hash/sha1.js',
 		'inBundle', true
 	),
@@ -194,7 +198,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true,
 		'inTestPad', true
 	),
-
+	server_resource.create(
+		'filePath', 'src/cache/pool.js',
+		'hasJion', true,
+		'inBundle', true
+	),
 	server_resource.create(
 		'filePath', 'src/gleam/color.js',
 		'hasJion', true,
@@ -385,10 +393,6 @@ server_resourceRay.create( 'ray:init', [
 	server_resource.create(
 		'filePath', 'src/gleam/facetRay.js',
 		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/shell/settings.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -927,6 +931,10 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'media/fonts/Roboto-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'media/fonts/DejaVuSans-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(

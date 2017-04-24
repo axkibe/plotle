@@ -53,6 +53,7 @@ if( JION )
 
 
 var
+	cache_pool,
 	font_default,
 	get2dContext,
 	gleam_constants,
@@ -78,8 +79,15 @@ if( NODE )
 
 
 var
+	textCache,
 	prototype,
 	round;
+
+
+if( shell_settings.opentype )
+{
+	textCache = cache_pool.create( 'maxSize', shell_settings.textCacheSize );
+}
 
 
 prototype = gleam_display_canvas.prototype;
@@ -111,6 +119,7 @@ get2dContext =
 	{
 		cx = canvas.getContext( '2d' );
 	}
+
 	cx.imageSmoothingEnabled =
 	cx.mozImageSmoothingEnabled =
 	cx.oImageSmoothingEnabled =
@@ -265,9 +274,7 @@ prototype._init =
 
 	if( !cv )
 	{
-		cv =
-		this._cv =
-			document.createElement( 'canvas' );
+		cv = this._cv = document.createElement( 'canvas' );
 
 		this._cx = get2dContext( cv );
 	}
@@ -544,6 +551,8 @@ prototype._renderGlintRay =
 };
 
 
+
+
 /*
 | Renders a glint
 */
@@ -553,267 +562,53 @@ prototype._renderGlint =
 		offset
 	)
 {
-	var
-		a,
-		aZ,
-		cd,
-		cx,
-		det,
-		fact,
-		g,
-		h,
-		p,
-		pos,
-		rect,
-		rotate,
-		sa,
-		shape,
-		t1,
-		t2,
-		w,
-		x,
-		y,
-		x2,
-		y2;
-
-	cx = this._cx;
-
-	g = glint; // FIXME split this switch in subfunctions
-
-	switch( g.reflect )
+	switch( glint.reflect )
 	{
 		case 'gleam_glint_border' :
 
-			cx.beginPath( );
+			this._cx.beginPath( );
 
-			this._borders( g.facet.border, g.shape, offset );
+			this._borders( glint.facet.border, glint.shape, offset );
 
 			break;
 
 		case 'gleam_glint_fill' :
 
-			cx.beginPath( );
+			this._cx.beginPath( );
 
-			this._fill( g.facet.fill, g.shape, offset );
+			this._fill( glint.facet.fill, glint.shape, offset );
 
 			break;
 
 		case 'gleam_glint_paint' :
 
-			this._paint( g.facet, g.shape, offset );
+			this._paint( glint.facet, glint.shape, offset );
 
 			break;
 
 		case 'gleam_glint_text' :
 
-			p = g.p;
-
-			rotate = g.rotate;
-
-			if( shell_settings.opentype )
-			{
-				font_default.draw(
-					cx,
-					g.text,
-					p.x + offset.x,
-					p.y + offset.y,
-					g.font.size,
-					{ hinting: true }
-				);
-			}
-			else
-			{
-				this._setFont( g.font );
-
-				if( rotate === undefined )
-				{
-					fact = g.font.fact;
-
-					if( fact !== 1 )
-					{
-						cx.setTransform( fact, 0, 0, fact, 0, 0 );
-
-						cx.fillText(
-							g.text,
-							( p.x + offset.x ) / fact,
-							( p.y + offset.y ) / fact
-						);
-
-					cx.setTransform( 1, 0, 0, 1, 0, 0 );
-					}
-					else
-					{
-						cx.fillText( g.text, p.x + offset.x, p.y + offset.y );
-					}
-				}
-				else
-				{
-					t1 = Math.cos( rotate );
-
-					t2 = Math.sin( rotate );
-
-					det = t1 * t1 + t2 * t2;
-
-					cx.setTransform(
-						t1, t2,
-						-t2, t1,
-						0, 0
-					);
-
-					x = p.x + offset.x;
-
-					y = p.y + offset.y;
-
-					cx.fillText(
-						g.text,
-						( x * t1 + y * t2 ) / det,
-						( y * t1 - x * t2 ) / det
-					);
-
-					cx.setTransform(
-						1, 0,
-						0, 1,
-						0, 0
-					);
-				}
-			}
+			shell_settings.opentype
+			? this._renderTextOpenType( glint, offset )
+			: this._renderTextCanvas( glint, offset );
 
 			break;
 
 		case 'gleam_glint_ray' :
 
-			this._renderGlintRay( g, offset );
+			this._renderGlintRay( glint, offset );
 
 			break;
 
 		case 'gleam_glint_window' :
 
-			rect = g.rect;
-
-			pos = rect.pos;
-
-			h = this.size.height;
-
-			w = this.size.width;
-
-			x = offset.x + pos.x;
-
-			y = offset.y + pos.y;
-
-			if(
-				x > w
-				|| y > h
-				|| x + rect.width < 0
-				|| y + rect.height < 0
-			)
-			{
-				// if the window isn't visible at all
-				// no need to render it.
-				break;
-			}
-
-			if( h * w > shell_settings.glintCacheLimit )
-			{
-				x2 = x + rect.width;
-
-				y2 = y + rect.height;
-
-				cx.save( );
-
-				cx.beginPath( );
-
-				cx.moveTo( x, y );
-
-				cx.lineTo( x2, y );
-
-				cx.lineTo( x2, y2 );
-
-				cx.lineTo( x, y2 );
-
-				cx.lineTo( x, y );
-
-				cx.clip( );
-
-				this._renderGlintRay( g.glint, offset.add( pos ) );
-
-				cx.restore( );
-			}
-			else
-			{
-				cd = g._canvasDisplay;
-
-				cd.render( );
-
-				cx.drawImage(
-					cd._cv,
-					round( x ),
-					round( y )
-				);
-			}
+			this._renderWindow( glint, offset );
 
 			break;
 
 		case 'gleam_glint_mask' :
 
-			h = this.size.height;
-
-			w = this.size.width;
-
-			cx.save( );
-
-			shape = g.shape;
-
-			if( shape.reflect === 'gleam_shapeRay' )
-			{
-				for( a = 0, aZ = shape.length; a < aZ; a++ )
-				{
-					cx.beginPath( );
-
-					if( g.reverse )
-					{
-						cx.moveTo( 0, 0 );
-
-						cx.lineTo( 0, h );
-
-						cx.lineTo( w, h );
-
-						cx.lineTo( w, 0 );
-
-						cx.lineTo( 0, 0 );
-					}
-
-					sa = shape.get( a );
-
-					this._sketch( sa, 0, offset.add( 0.5, 0.5 ) );
-
-					cx.clip( );
-				}
-			}
-			else
-			{
-				cx.beginPath( );
-
-				if( g.reverse )
-				{
-					cx.moveTo( 0, 0 );
-
-					cx.lineTo( 0, h );
-
-					cx.lineTo( w, h );
-
-					cx.lineTo( w, 0 );
-
-					cx.lineTo( 0, 0 );
-				}
-
-				this._sketch( shape, 0, offset.add( 0.5, 0.5 ) );
-
-				cx.clip( );
-			}
-
-			this._renderGlintRay( g.glint, offset );
-
-			cx.restore( );
+			this._renderMask( glint, offset );
 
 			break;
 
@@ -821,6 +616,340 @@ prototype._renderGlint =
 	}
 };
 
+
+/*
+| Renders a text using canvas buildin.
+*/
+prototype._renderTextCanvas =
+	function(
+		glint,
+		offset
+	)
+{
+	var
+		cx,
+		det,
+		font,
+		p,
+		rotate,
+		t1,
+		t2,
+		text,
+		x,
+		y;
+
+/**/if( CHECK ) {
+/**/	if( shell_settings.opentype ) throw new Error();
+/**/
+/**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
+/**/}
+
+	cx = this._cx;
+
+	font = glint.font;
+
+	rotate = glint.rotate;
+
+	text = glint.text;
+
+	p = glint.p;
+
+	this._setFont( font );
+
+	if( rotate === undefined )
+	{
+		cx.fillText( text, p.x + offset.x, p.y + offset.y );
+	}
+	else
+	{
+		t1 = Math.cos( rotate );
+
+		t2 = Math.sin( rotate );
+
+		det = t1 * t1 + t2 * t2;
+
+		cx.setTransform(
+			t1, t2,
+			-t2, t1,
+			0, 0
+		);
+
+		x = p.x + offset.x;
+
+		y = p.y + offset.y;
+
+		cx.fillText(
+			text,
+			( x * t1 + y * t2 ) / det,
+			( y * t1 - x * t2 ) / det
+		);
+
+		cx.setTransform(
+			1, 0,
+			0, 1,
+			0, 0
+		);
+	}
+};
+
+
+/*
+| Renders masked stuff.
+*/
+prototype._renderMask =
+	function(
+		glint,
+		offset
+	)
+{
+	var
+		a,
+		aZ,
+		cx,
+		h,
+		sa,
+		shape,
+		w;
+
+/**/if( CHECK ) {
+/**/	if( glint.reflect !== 'gleam_glint_mask' ) throw new Error();
+/**/}
+
+	cx = this._cx;
+
+	h = this.size.height;
+
+	w = this.size.width;
+
+	cx.save( );
+
+	shape = glint.shape;
+
+	if( shape.reflect === 'gleam_shapeRay' )
+	{
+		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			cx.beginPath( );
+
+			if( glint.reverse )
+			{
+				cx.moveTo( 0, 0 );
+
+				cx.lineTo( 0, h );
+
+				cx.lineTo( w, h );
+
+				cx.lineTo( w, 0 );
+
+				cx.lineTo( 0, 0 );
+			}
+
+			sa = shape.get( a );
+
+			this._sketch( sa, 0, offset.add( 0.5, 0.5 ) );
+
+			cx.clip( );
+		}
+	}
+	else
+	{
+		cx.beginPath( );
+
+		if( glint.reverse )
+		{
+			cx.moveTo( 0, 0 );
+
+			cx.lineTo( 0, h );
+
+			cx.lineTo( w, h );
+
+			cx.lineTo( w, 0 );
+
+			cx.lineTo( 0, 0 );
+		}
+
+		this._sketch( shape, 0, offset.add( 0.5, 0.5 ) );
+
+		cx.clip( );
+	}
+
+	this._renderGlintRay( glint.glint, offset );
+
+	cx.restore( );
+};
+
+
+/*
+| Renders a text using opentype
+*/
+prototype._renderTextOpenType =
+	function(
+		glint,
+		offset
+	)
+{
+	var
+		bbox,
+		cacheKey,
+		canvas,
+		cvx,
+		cx,
+		p,
+		path,
+		text,
+		x1,
+		y1,
+		x2,
+		y2;
+
+/**/if( CHECK ) {
+/**/	if( !shell_settings.opentype ) throw new Error();
+/**/
+/**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
+/**/}
+
+	cx = this._cx;
+
+	text = glint.text;
+
+	cacheKey = glint.cacheKey;
+
+	p = glint.p;
+
+	canvas = textCache.retrieve( cacheKey );
+
+	if( !canvas )
+	{
+		path =
+			font_default.getPath(
+				glint.text,
+				p.x + offset.x,
+				p.y + offset.y,
+				round( glint.font.size ),
+				{ hinting: true }
+			);
+
+		bbox = path.getBoundingBox();
+
+		x1 = Math.floor( bbox.x1 );
+
+		y1 = Math.floor( bbox.y1 );
+
+		x2 = Math.ceil( bbox.x2 );
+
+		y2 = Math.ceil( bbox.y2 );
+
+		if( true || ( x2 - x1 ) * ( y2 - y1 ) > shell_settings.glintCacheLimit )
+		{
+			path.draw( cx );
+
+			return;
+		}
+
+	    canvas = document.createElement( 'canvas' );
+
+		canvas.width = x2 - x1;
+
+		canvas.height = y2 - y1 + 1;
+
+		canvas.x1 = x1 - p.x;
+
+		canvas.y1 = y1 - p.y;
+
+		cvx = get2dContext( canvas );
+
+		cvx.translate( -x1, -y1 );
+
+		path.draw( cvx );
+
+//		textCache.store( cacheKey, canvas );
+	}
+
+	cx.drawImage( canvas, canvas.x1 + p.x, canvas.y1 + p.y );
+};
+			
+
+/*
+| Renders a window.
+*/
+prototype._renderWindow =
+	function(
+		glint,
+		offset
+	)
+{
+	var
+		cd,
+		cx,
+		h,
+		pos,
+		rect,
+		w,
+		x,
+		x2,
+		y,
+		y2;
+
+/**/if( CHECK ) {
+/**/	if( glint.reflect !== 'gleam_glint_window' ) throw new Error();
+/**/}
+
+	cx = this._cx;
+
+	rect = glint.rect;
+
+	pos = rect.pos;
+
+	h = this.size.height;
+
+	w = this.size.width;
+
+	x = offset.x + pos.x;
+
+	y = offset.y + pos.y;
+
+	if( x > w || y > h || x + rect.width < 0 || y + rect.height < 0 )
+	{
+		// if the window isn't visible at all
+		// no need to render it.
+		return;
+	}
+
+	if( h * w > shell_settings.glintCacheLimit )
+	{
+		x2 = x + rect.width;
+
+		y2 = y + rect.height;
+
+		cx.save( );
+
+		cx.beginPath( );
+
+		cx.moveTo( x, y );
+
+		cx.lineTo( x2, y );
+
+		cx.lineTo( x2, y2 );
+
+		cx.lineTo( x, y2 );
+
+		cx.lineTo( x, y );
+
+		cx.clip( );
+
+		this._renderGlintRay( glint.glint, offset.add( pos ) );
+
+		cx.restore( );
+	}
+	else
+	{
+		cd = glint._canvasDisplay;
+
+		cd.render( );
+
+		cx.drawImage( cd._cv, round( x ), round( y ) );
+	}
+};
 
 
 /*

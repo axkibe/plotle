@@ -56,8 +56,7 @@ if( JION )
 
 var
 	gleam_font,
-	jion,
-	shell_settings;
+	jion;
 
 
 /*
@@ -112,32 +111,18 @@ jion.lazyValue(
 	'css',
 	function( )
 {
-	if( shell_settings.uniFontSize === 0 )
-	{
-		return this.size + 'px ' + this.family;
-	}
-	else
-	{
-		return shell_settings.uniFontSize + 'px ' + this.family;
-	}
+	return Math.round( this.size ) + 'px ' + 'Ideoloom-' + this.family;
 }
 );
 
 
 
-/*
-| The transformation factor if uniFontSize is not 0.
-*/
 jion.lazyValue(
 	prototype,
 	'fact',
 	function( )
 {
-	return(
-		shell_settings.uniFontSize === 0
-		? 1
-		: this.size / shell_settings.uniFontSize
-	);
+	console.log( 'FIXME' );
 }
 );
 

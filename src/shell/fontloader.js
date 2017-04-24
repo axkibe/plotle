@@ -29,8 +29,10 @@ openTypeLoad =
 	function( )
 {
 	opentype.load(
-		'media-fonts-OpenSans-Regular.ttf',
+		//'media-fonts-OpenSans-Regular.ttf',
 		//'media-fonts-Roboto-Regular.ttf',
+		'media-fonts-DejaVuSans-Regular.ttf',
+		//'media-dejavusans-webfont.ttf',
 		function( err, font )
 	{
 		if (err)
@@ -61,7 +63,7 @@ webFontLoad =
 		{
 			families:
 			[
-				'DejaVuSans'
+				'Ideoloom-DejaVuSans'
 			]
 			//urls: [ '/fonts/dejavu.css' ], already in CSS
 		},

@@ -1219,9 +1219,9 @@ Font.prototype.getPaths = function(text, x, y, fontSize, options) {
  * This is something different than Path.getBoundingBox() as for example a
  * suffixed whitespace increases the advancewidth but not the bounding box
  * or an overhanging letter like a calligraphic 'f' might have a quite larger
- * bounding box than it's advance width.
+ * bounding box than its advance width.
  *
- * This corrosponds to canvas2dContext.measureText(text).width
+ * This corresponds to canvas2dContext.measureText(text).width
  *
  * @param  {string} text - The text to create.
  * @param  {number} [fontSize=72] - Font size in pixels. We scale the glyph units by `1 / unitsPerEm * fontSize`.
@@ -2015,14 +2015,14 @@ function roundToGrid(v) {
 * Rounding to double grid.
 */
 function roundToDoubleGrid(v) {
-    return Math.sign(v) * Math.round(Math.abs(v / 2)) * 2;
+    return Math.sign(v) * Math.round(Math.abs(v * 2)) / 2;
 }
 
 /*
 * Rounding to half grid.
 */
 function roundToHalfGrid(v) {
-    return Math.sign(v) * Math.round(Math.abs(v * 2)) / 2;
+    return Math.sign(v) * (Math.round(Math.abs(v) + 0.5) - 0.5);
 }
 
 /*
@@ -2053,12 +2053,17 @@ var roundSuper = function(v) {
         sign = -1;
     }
 
+    v += threshold - phase;
+
+    v = Math.trunc(v / period) * period;
+
     v += phase;
 
-    var f = v % period;
+    // according to http://xgridfit.sourceforge.net/round.html
+    if (sign > 0 && v < 0) return phase;
+    if (sign < 0 && v > 0) return -phase;
 
-    if (f >= threshold) return Math.ceil(v) * sign - phase;
-    else return Math.floor(v) * sign - phase;
+    return v * sign;
 };
 
 /*
@@ -3617,7 +3622,6 @@ function MIAP(round, state) {
     var cv = state.cvt[n];
 
     // TODO cvtcutin should be considered here
-
     if (round) cv = state.round(cv);
 
     if (DEBUG) {
@@ -4426,7 +4430,7 @@ function MDRP_MIRP(indirect, setRp0, keepD, ro, dt, state) {
     var cv;
 
     d = od = pv.distance(p, rp, true, true);
-    sign = d > 0 ? 1 : -1; // Math.sign would be 0 in case of 0
+    sign = d >= 0 ? 1 : -1; // Math.sign would be 0 in case of 0
 
     // TODO consider autoFlip
     d = Math.abs(d);
@@ -5434,7 +5438,7 @@ function parseBuffer(buffer) {
     var numTables;
     var tableEntries = [];
     var signature = parse.getTag(data, 0);
-    if (signature === String.fromCharCode(0, 1, 0, 0)) {
+    if (signature === String.fromCharCode(0, 1, 0, 0) || signature === 'true' || signature === 'typ1') {
         font.outlinesFormat = 'truetype';
         numTables = parse.getUShort(data, 4);
         tableEntries = parseOpenTypeTableEntries(data, numTables);
