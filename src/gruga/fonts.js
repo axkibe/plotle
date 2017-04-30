@@ -15,13 +15,9 @@ var
 'use strict';
 
 var
-	defaultFamily,
-	defaultBoldFamily;
+	defaultFamily;
 
 defaultFamily = 'DejaVuSans,sans-serif';
-
-defaultBoldFamily = 'DejaVuSansBold,sans-serif';
-
 
 gruga_fonts = { };
 

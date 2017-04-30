@@ -53,11 +53,10 @@ if( JION )
 
 
 var
-	cache_pool,
-	font_default,
 	get2dContext,
 	gleam_constants,
 	gleam_display_canvas,
+	gleam_intern_opentype,
 	gleam_point,
 	jion,
 	shell_settings;
@@ -79,15 +78,8 @@ if( NODE )
 
 
 var
-	textCache,
 	prototype,
 	round;
-
-
-if( shell_settings.opentype )
-{
-	textCache = cache_pool.create( 'maxSize', shell_settings.textCacheSize );
-}
 
 
 prototype = gleam_display_canvas.prototype;
@@ -228,11 +220,7 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape(
-				shape,
-				0,
-				gleam_point.zero.add( 0.5, 0.5 ) // FIXME precreate
-			);
+			this._sketchGenericShape( shape, 0, gleam_point.zeroHalf );
 
 			break;
 
@@ -789,18 +777,14 @@ prototype._renderTextOpenType =
 	)
 {
 	var
-		bbox,
-		cacheKey,
-		canvas,
-		cvx,
 		cx,
+		det,
 		p,
-		path,
-		text,
-		x1,
-		y1,
-		x2,
-		y2;
+		rotate,
+		t1,
+		t2,
+		x,
+		y;
 
 /**/if( CHECK ) {
 /**/	if( !shell_settings.opentype ) throw new Error();
@@ -808,66 +792,56 @@ prototype._renderTextOpenType =
 /**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
 /**/}
 
-	cx = this._cx;
-
-	text = glint.text;
-
-	cacheKey = glint.cacheKey;
-
 	p = glint.p;
 
-	canvas = textCache.retrieve( cacheKey );
+	rotate = glint.rotate;
 
-	if( !canvas )
+	if( rotate === undefined )
 	{
-		path =
-			font_default.getPath(
-				glint.text,
-				p.x + offset.x,
-				p.y + offset.y,
-				round( glint.font.size ),
-				{ hinting: true }
-			);
+		gleam_intern_opentype.drawText(
+			glint.text,
+			p.x + offset.x,
+			p.y + offset.y,
+			glint.font,
+			this._cx
+		);
 
-		bbox = path.getBoundingBox();
-
-		x1 = Math.floor( bbox.x1 );
-
-		y1 = Math.floor( bbox.y1 );
-
-		x2 = Math.ceil( bbox.x2 );
-
-		y2 = Math.ceil( bbox.y2 );
-
-		if( true || ( x2 - x1 ) * ( y2 - y1 ) > shell_settings.glintCacheLimit )
-		{
-			path.draw( cx );
-
-			return;
-		}
-
-	    canvas = document.createElement( 'canvas' );
-
-		canvas.width = x2 - x1;
-
-		canvas.height = y2 - y1 + 1;
-
-		canvas.x1 = x1 - p.x;
-
-		canvas.y1 = y1 - p.y;
-
-		cvx = get2dContext( canvas );
-
-		cvx.translate( -x1, -y1 );
-
-		path.draw( cvx );
-
-//		textCache.store( cacheKey, canvas );
+		return;
 	}
 
-	cx.drawImage( canvas, canvas.x1 + p.x, canvas.y1 + p.y );
+	cx = this._cx;
+		
+	t1 = Math.cos( rotate );
+
+	t2 = Math.sin( rotate );
+
+	det = t1 * t1 + t2 * t2;
+
+	cx.setTransform(
+		t1, t2,
+		-t2, t1,
+		0, 0
+	);
+
+	x = p.x + offset.x;
+
+	y = p.y + offset.y;
+
+	gleam_intern_opentype.drawText(
+		glint.text,
+		( x * t1 + y * t2 ) / det,
+		( y * t1 - x * t2 ) / det,
+		glint.font,
+		this._cx
+	);
+
+	cx.setTransform(
+		1, 0,
+		0, 1,
+		0, 0
+	);
 };
-			
+
 
 /*
 | Renders a window.
@@ -974,13 +948,13 @@ prototype._sketchRect =
 
 	pos = rect.pos;
 
-	wx = round( pos.x ) + border + offset.x;
+	wx = round( pos.x + border + offset.x );
 
-	ny = round( pos.y ) + border + offset.y;
+	ny = round( pos.y + border + offset.y );
 
-	ex = round( pos.x + rect.width ) - border + offset.x;
+	ex = round( pos.x + rect.width - border + offset.x );
 
-	sy = round( pos.y + rect.height ) - border + offset.y;
+	sy = round( pos.y + rect.height - border + offset.y );
 
 	cx.moveTo( wx, ny );
 

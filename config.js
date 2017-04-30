@@ -53,39 +53,43 @@ config.database_name = 'ideoloom-14';
 
 
 /*
-| Determines the amount of checking and complaining if things go wrong.
+| Runs in devel mode.
 */
-config.shell_devel = true;
-//config.shell_devel = false;
+config.devel = false;
 
 
 /*
-| Do not provide a bundle.
-| Only to be used with develShell
+| Provides the shell devel files.
 */
-config.shell_noBundle = config.shell_devel;
+config.shell_devel = true;
+
+
+/*
+| Provide a bundle.
+*/
+config.shell_bundle = !config.devel;
 
 
 /*
 | If true checking code is turned on in shell
 */
-config.shell_check = true;
+config.shell_check = config.devel;
 
 
 /*
 | If true freezing objects is turned on in shell
 */
-config.shell_freeze = true;
+config.shell_freeze = config.devel;
 
 
 /*
-| If true checking code is turned on in shell
+| If true checking code is turned on in server
 */
 config.server_check = true;
 
 
 /*
-| If true freezing objects is turned on in shell
+| If true freezing objects is turned on in server
 |
 | NOTE: this make the server very slow!
 */
@@ -114,19 +118,13 @@ config.uglify = !config.shell_devel;
 /*
 | If true does extra mangles on output compression
 */
-config.extraMangle = !config.shell_devel;
+config.extraMangle = config.shell_bundle;
 
 
 /*
 | If true "beautifies" uglify output.
 */
 config.beautify = false;
-
-
-/*
-| Max. number of undo events queued.
-*/
-config.maxUndo = 1000;
 
 
 /*

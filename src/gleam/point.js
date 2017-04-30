@@ -281,4 +281,11 @@ gleam_point.zero =
 	gleam_point.create( 'x', 0, 'y', 0 );
 
 
+/*
+| Shortcut for point at 0.5/0.5.
+*/
+gleam_point.zeroHalf =
+	gleam_point.create( 'x', 0.5, 'y', 0.5 );
+
+
 } )( );

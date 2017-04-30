@@ -350,8 +350,7 @@ prototype.createShellConfig =
 
 	cconfig.push(
 		'var config = {\n',
-		'\tdevel   : ', config.shell_devel, ',\n',
-		'\tmaxUndo : ', config.maxUndo, ',\n',
+		'\tdevel   : ', config.devel, ',\n',
 		'\tdebug   : {\n'
 	);
 
@@ -489,7 +488,7 @@ prototype.prepareInventory =
 		codes[ a ] = code;
 	}
 
-	if( !config.shell_noBundle )
+	if( config.shell_bundle )
 	{
 		log_start( 'parsing bundle' );
 
@@ -563,7 +562,7 @@ prototype.prepareInventory =
 			ast.mangle_names(
 				{
 					toplevel : true,
-					except : [ 'WebFont' ]
+					except : [ 'WebFont', 'opentype' ]
 				}
 			);
 		}
@@ -632,17 +631,9 @@ prototype.prepareInventory =
 			);
 		}
 
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					resource.create(
-						'data',
-							server_postProcessor[ resource.postProcessor ](
-								resource.data,
-								bundleFilePath
-							)
-					)
-				)
+		server_postProcessor[ resource.postProcessor ](
+			resource,
+			bundleFilePath
 		);
 	}
 
@@ -653,10 +644,10 @@ prototype.prepareInventory =
 	{
 		resource = inv.atRank( a );
 
-		if( resource.inBundle || resource.devel )
-		{
-			continue;
-		}
+		//if( resource.inBundle || resource.devel )
+		//{
+		//	continue;
+		//}
 
 		root.create(
 			'inventory',
@@ -669,7 +660,7 @@ prototype.prepareInventory =
 		);
 	}
 
-	if( !config.shell_noBundle )
+	if( config.shell_bundle )
 	{
 		log_start(
 			'uncompressed bundle size is ',
@@ -1171,9 +1162,9 @@ prototype.requestListener =
 	// this should not happen
 	if( !resource.data ) throw new Error( 'resource misses data' );
 
-	// if in shell devel mode, check if the resource cache
+	// if in devel mode, check if the resource cache
 	// has been invalidated
-	if( config.shell_devel )
+	if( config.devel )
 	{
 		try
 		{
@@ -1203,8 +1194,7 @@ prototype.requestListener =
 
 			data =
 				server_postProcessor[ resource.postProcessor ](
-					data,
-					root.inventory,
+					resource,
 					root.bundleFilePath
 				);
 		}
@@ -1212,7 +1202,7 @@ prototype.requestListener =
 
 	// delivers the resource
 
-	if( !config.shell_devel && resource.gzip )
+	if( !config.devel && resource.gzip )
 	{
 		aenc = request.headers[ 'accept-encoding' ];
 	}
@@ -1221,7 +1211,7 @@ prototype.requestListener =
 	{
 		'Content-Type' : resource.mime,
 		'Cache-Control' :
-			!config.shell_devel
+			!config.devel
 			? server_maxAge.map( resource.maxage )
 			: 'no-cache',
 		'Date' : new Date().toUTCString()

@@ -1410,15 +1410,11 @@ prototype._moveCreate =
 			'spaceTransform',
 				this.transform.create(
 					'offset',
-						action.offset.add(
-							pd.x / transform.zoom,
-							pd.y / transform.zoom
-						)
+						action.offset.add( pd )
 				)
 		);
 	}
 };
-
 
 
 /*

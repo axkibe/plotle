@@ -128,14 +128,14 @@ prototype.prepareResource =
 			);
 	}
 
-	if( config.shell_devel && realpath )
+	if( config.devel && realpath )
 	{
 		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
 	}
 
 	if( resource.hasJion )
 	{
-		if( config.shell_devel ) delete require.cache[ realpath ];
+		if( config.devel ) delete require.cache[ realpath ];
 
 		that = require( realpath );
 

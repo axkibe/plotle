@@ -20,9 +20,82 @@ module.exports =
 
 
 var
-	config;
+	config,
+	hash_sha1,
+	jion,
+	opentypeHash,
+	opentypeMinHash;
+
+jion = require( 'jion' );
 
 config = require( '../../config' );
+
+hash_sha1 = require( '../hash/sha1' );
+
+opentypeHash = '';
+opentypeMinHash = '';
+
+
+/*
+| Postprocessor for opentype.
+*/
+server_postProcessor.opentype =
+	function(
+		resource       // the resource 
+	)
+{
+	opentypeHash = hash_sha1( resource.data + '' );
+
+	root.create(
+		'inventory',
+			root.inventory.updateResource( 
+				resource.create(
+					'aliases',
+						jion.stringRay.stringRay(
+							[
+							resource.filePath
+							.substr(0, resource.filePath.length - 3 )
+							.replace( /\//g, '-' )
+							+ '-'
+							+ opentypeHash
+							+ '.js'
+							]
+						)
+				)
+			)
+	);
+};
+
+
+/*
+| Postprocessor for minified opentype.
+*/
+server_postProcessor.opentypeMin =
+	function(
+		resource       // the resource 
+	)
+{
+	opentypeMinHash = hash_sha1( resource.data + '' );
+
+	root.create(
+		'inventory',
+			root.inventory.updateResource( 
+				resource.create(
+					'aliases',
+						jion.stringRay.stringRay(
+							[
+							resource.filePath
+							.substr(0, resource.filePath.length - 3 )
+							.replace( /\//g, '-' )
+							+ '-'
+							+ opentypeMinHash
+							+ '.js'
+							]
+						)
+				)
+			)
+	);
+};
 
 
 /*
@@ -30,32 +103,33 @@ config = require( '../../config' );
 */
 server_postProcessor.develHtml =
 	function(
-		data         // the data
-		// bundleRes // the resource of the bundle
+		resource       // the resource 
+		//bundleFilePath, // the file path of the bundle resource
 	)
 {
 	var
 		a,
 		aZ,
+		data,
 		devels,
-		inventory,
-		resource;
+		res,
+		inventory;
 
 	devels = [ ];
 
-	data = data + '';
+	data = resource.data + '';
 
 	inventory = root.inventory;
 
 	for( a = 0, aZ = inventory.length; a < aZ; a++ )
 	{
-		resource = inventory.atRank( a );
+		res = inventory.atRank( a );
 
-		if( resource.inBundle )
+		if( res.inBundle )
 		{
 			devels.push(
 				'<script src="'
-				+ resource.aliases.get( 0 )
+				+ res.aliases.get( 0 )
 				+ '" type="text/javascript"></script>'
 			);
 		}
@@ -77,8 +151,21 @@ server_postProcessor.develHtml =
 				+ '/target/target-script-min.js"></script>'
 			);
 	}
+		
+	data =
+		data.replace(
+			/<!--OPENTYPE.*>/,
+			'<script src="import-opentype-'
+			+ opentypeHash
+			+ '.js" type="text/javascript"></script>'
+		);
 
-	return data;
+	root.create(
+		'inventory',
+			root.inventory.updateResource( 
+				resource.create( 'data', data )
+			)
+	);
 };
 
 
@@ -87,16 +174,17 @@ server_postProcessor.develHtml =
 */
 server_postProcessor.testPadHtml =
 	function(
-		data         // the data
-		// bundleRes // the resource of the bundle
+		resource       // the resource 
+		//bundleFilePath, // the file path of the bundle resource
 	)
 {
 	var
 		a,
 		aZ,
+		data,
 		devels,
 		inventory,
-		resource;
+		res;
 
 	devels = [ ];
 
@@ -106,13 +194,13 @@ server_postProcessor.testPadHtml =
 
 	for( a = 0, aZ = inventory.length; a < aZ; a++ )
 	{
-		resource = inventory.atRank( a );
+		res = inventory.atRank( a );
 
-		if( resource.inTestPad )
+		if( res.inTestPad )
 		{
 			devels.push(
 				'<script src="'
-				+ resource.aliases.get( 0 )
+				+ res.aliases.get( 0 )
 				+ '" type="text/javascript"></script>'
 			);
 		}
@@ -136,7 +224,12 @@ server_postProcessor.testPadHtml =
 			);
 	}
 
-	return data;
+	root.create(
+		'inventory',
+			root.inventory.updateResource( 
+				resource.create( 'data', data )
+			)
+	);
 };
 
 
@@ -145,19 +238,36 @@ server_postProcessor.testPadHtml =
 */
 server_postProcessor.indexHtml =
 	function(
-		data,          // the data
-		bundleFilePath // the file path of the bundle resource
+		resource,       // the resource 
+		bundleFilePath  // the file path of the bundle resource
 	)
 {
-	data = data + '';
+	var
+		data;
 
-	return (
+	data = resource.data + '';
+
+	data =
 		data.replace(
 			/<!--COPACK.*>/,
 			'<script src="'
 			+ bundleFilePath
 			+ '" type="text/javascript"></script>'
-		)
+		);
+
+	data =
+		data.replace(
+			/<!--OPENTYPE.*>/,
+			'<script src="import-opentype.min-'
+			+ opentypeMinHash
+			+ '.js" type="text/javascript"></script>'
+		);
+	
+	root.create(
+		'inventory',
+			root.inventory.updateResource( 
+				resource.create( 'data', data )
+			)
 	);
 };
 

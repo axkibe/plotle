@@ -30,6 +30,20 @@ stringRay = jion.stringRay.stringRay; // FUTURE
 module.exports =
 server_resourceRay.create( 'ray:init', [
 	server_resource.create(
+		'filePath', 'import/webfont.js',   // FIXME add version info
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'import/opentype.js',
+		'maxage', 'long',
+		'postProcessor', 'opentype'
+	),
+	server_resource.create(
+		'filePath', 'import/opentype.min.js',
+		'maxage', 'long',
+		'postProcessor', 'opentypeMin'
+	),
+	server_resource.create(
 		'aliases', stringRay( [ 'ideoloom.html', 'index.html', '' ] ),
 		'filePath', 'media/ideoloom.html',
 		'maxage', 'short',
@@ -44,14 +58,6 @@ server_resourceRay.create( 'ray:init', [
 	server_resource.create(
 		'aliases', stringRay( [ 'favicon.ico', 'media-favicon.ico' ] ),
 		'filePath', 'media/favicon.ico',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'import/webfont.js',   // FIXME add version info
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'import/opentype.js',  // FIXME add version info
 		'maxage', 'long'
 	),
 	server_resource.create(
@@ -198,16 +204,20 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true,
 		'inTestPad', true
 	),
-	server_resource.create(
-		'filePath', 'src/cache/pool.js',
-		'hasJion', true,
-		'inBundle', true
-	),
+//	server_resource.create(
+//		'filePath', 'src/cache/pool.js',
+//		'hasJion', true,
+//		'inBundle', true
+//	),
 	server_resource.create(
 		'filePath', 'src/gleam/color.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
+	),
+	server_resource.create(
+		'filePath', 'src/gleam/intern/opentype.js',
+		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/border.js',
@@ -927,6 +937,14 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'media/fonts/OpenSans-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'media/fonts/NotoSans-Regular.ttf',
+		'maxage', 'long'
+	),
+	server_resource.create(
+		'filePath', 'media/fonts/SourceSansPro-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(

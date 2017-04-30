@@ -30,6 +30,11 @@ shell_settings =
 	zoomMax : 150,
 
 	/*
+	| Max. number of undo events queued.
+	*/
+	maxUndo : 1000,
+
+	/*
 	| If true uses opentype font rendering, if false
 	| canvas.fillText()
 	*/
@@ -37,17 +42,17 @@ shell_settings =
 	//opentype : false,
 
 	/*
-	| Maximum numbers of words in the opentype render cache.
+	| Do not cache the glyph for fonts larger than this.
 	| Only applicable if opentype is true
 	*/
-	textCacheSize : 10000,
+	glyphCacheLimit : 250,
 
 	/*
 	| Maximum size of a glint graphic cache
 	| in width * size
 	*/
-	//glintCacheLimit : 1200000
-	glintCacheLimit : Number.POSITIVE_INFINITY,
+	glintCacheLimit : 32767
+	//glintCacheLimit : Number.POSITIVE_INFINITY,
 };
 
 

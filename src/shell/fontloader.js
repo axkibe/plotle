@@ -32,6 +32,8 @@ openTypeLoad =
 		//'media-fonts-OpenSans-Regular.ttf',
 		//'media-fonts-Roboto-Regular.ttf',
 		'media-fonts-DejaVuSans-Regular.ttf',
+		//'media-fonts-NotoSans-Regular.ttf',
+		//'media-fonts-SourceSansPro-Regular.ttf',
 		//'media-dejavusans-webfont.ttf',
 		function( err, font )
 	{
@@ -41,6 +43,8 @@ openTypeLoad =
 		}
 		else
 		{
+			font.glyphCache = {};
+
 			font_default = font;
 
 			startup( );
@@ -74,8 +78,8 @@ webFontLoad =
 };
 
 
-//window.onload = openTypeLoad;
-window.onload = webFontLoad;
+window.onload = openTypeLoad;
+//window.onload = webFontLoad;
 
 
 } )( );

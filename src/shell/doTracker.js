@@ -29,9 +29,9 @@ if( JION )
 
 var
 	change_wrapRay,
-	config,
 	root,
-	shell_doTracker;
+	shell_doTracker,
+	shell_settings;
 
 
 /*
@@ -90,7 +90,7 @@ prototype.track =
 
 	undo = undo.append( changeWrap );
 
-	if( undo.length > config.maxUndo )
+	if( undo.length > shell_settings.maxUndo )
 	{
 		undo = undo.remove( 0 );
 	}
