@@ -1,5 +1,7 @@
 /*
 | Caches stuff.
+|
+| FUTURE currently unused.
 */
 
 
@@ -101,7 +103,7 @@ prototype.store =
 
 		pool[ key ] = idx;
 
-		// FIXME reduce if > maxSize
+		// FUTURE reduce if > maxSize
 	}
 };
 

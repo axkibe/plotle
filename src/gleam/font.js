@@ -116,19 +116,8 @@ jion.lazyValue(
 );
 
 
-
-jion.lazyValue(
-	prototype,
-	'fact',
-	function( )
-{
-	console.log( 'FIXME' );
-}
-);
-
-
 /*
-| FIXME
+| Applies a transformation to this font.
 */
 prototype.transform =
 	function(
@@ -151,7 +140,7 @@ prototype.transform =
 	this._tPool[ transform.zoom ] =
 		this.create( 'size', this.size * transform.zoom );
 
-	// FUTURE clear pool too large
+	// FUTURE clear a too large pool
 
 	return tp;
 };

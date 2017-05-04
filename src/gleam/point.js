@@ -128,7 +128,6 @@ prototype.add =
 {
 	if( typeof( a1 ) === 'object' )
 	{
-		//console.log('FIXME');
 		if( a1.x === 0 && a1.y === 0 ) return this;
 
 		return gleam_point.create(
@@ -279,13 +278,6 @@ prototype.sub =
 */
 gleam_point.zero =
 	gleam_point.create( 'x', 0, 'y', 0 );
-
-
-/*
-| Shortcut for point at 0.5/0.5.
-*/
-gleam_point.zeroHalf =
-	gleam_point.create( 'x', 0.5, 'y', 0.5 );
 
 
 } )( );

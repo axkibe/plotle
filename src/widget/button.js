@@ -437,10 +437,10 @@ jion.lazyValue(
 			tZone = this._tZone;
 
 			return(
-				gleam_ellipse.create(   // TODO use gleam_ellipse.zero.create
+				gleam_ellipse.create(
 					'pos', gleam_point.zero,
-					'width', tZone.width - 2,
-					'height', tZone.height - 2
+					'width', tZone.width - 1,
+					'height', tZone.height - 1
 				)
 			);
 

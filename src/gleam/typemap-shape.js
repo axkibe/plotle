@@ -4,6 +4,7 @@
 module.exports =
 [
 	'gleam_ellipse',
+	'gleam_line',
 	'gleam_rect',
 	'gleam_roundRect',
 	'gleam_shape'

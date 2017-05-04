@@ -284,8 +284,7 @@ shell_system =
 			gleam_size.create(
 				'height', window.innerHeight - 1,
 				'width', window.innerWidth - 1
-			),
-			window.devicePixelRatio
+			)
 		);
 
 	// if true browser supports the setCapture() call
@@ -699,7 +698,7 @@ prototype._onKeyPress =
 | Hidden input key up.
 */
 prototype._onKeyUp =
-	function( )
+	function( event )
 {
 	this._testInput( );
 

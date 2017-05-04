@@ -30,7 +30,7 @@ stringRay = jion.stringRay.stringRay; // FUTURE
 module.exports =
 server_resourceRay.create( 'ray:init', [
 	server_resource.create(
-		'filePath', 'import/webfont.js',   // FIXME add version info
+		'filePath', 'import/webfont.js',   // FUTURE add version info
 		'maxage', 'long'
 	),
 	server_resource.create(

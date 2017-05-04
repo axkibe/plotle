@@ -46,6 +46,7 @@ shell_settings =
 	| Only applicable if opentype is true
 	*/
 	glyphCacheLimit : 250,
+	//glyphCacheLimit : Number.POSITIVE_INFINITY,
 
 	/*
 	| Maximum size of a glint graphic cache

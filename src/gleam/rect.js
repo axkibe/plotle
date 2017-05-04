@@ -189,19 +189,6 @@ jion.lazyValue(
 
 
 /*
-| South point.
-*/
-jion.lazyValue(
-	prototype,
-	'ps',
-	function( )
-{
-	return this.pos.add( this.width / 2, this.height );
-}
-);
-
-
-/*
 | East point.
 */
 jion.lazyValue(
@@ -210,6 +197,19 @@ jion.lazyValue(
 	function( )
 {
 	return this.pos.add( this.width, this.height / 2 );
+}
+);
+
+
+/*
+| South point.
+*/
+jion.lazyValue(
+	prototype,
+	'ps',
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height );
 }
 );
 
@@ -230,15 +230,16 @@ jion.lazyValue(
 /*
 | North west point.
 */
+/*
 jion.lazyValue(
 	prototype,
 	'pnw',
 	function( )
 {
-	console.log('FIXME');
 	return this.pos;
 }
 );
+*/
 
 
 /*
@@ -578,7 +579,6 @@ prototype.sub =
 
 /*
 | A rect larger by 1.
-| FIXME rename enlarge1
 */
 jion.lazyValue(
 	prototype,
@@ -646,8 +646,6 @@ jion.lazyValue(
 
 /*
 | Returns true if point is within this rect.
-|
-| FIXME remove that border thing
 */
 prototype.within =
 	function(

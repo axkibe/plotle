@@ -52,8 +52,7 @@ if( JION )
 				comment : 'vertical rounding',
 				type : 'number'
 			}
-		},
-		init : [ 'pos', 'width', 'height', 'a', 'b' ]
+		}
 	};
 }
 
@@ -86,69 +85,6 @@ if( NODE )
 
 var
 	prototype = gleam_roundRect.prototype;
-
-
-/*
-| Initializes the round rect.
-|
-| FIXME make it a lazy value instead
-*/
-prototype._init =
-	function(
-		pos,
-		width,
-		height,
-		a,
-		b
-	)
-{
-	var
-		pne,
-		pse,
-		psw;
-
-	// FIXME these points aren't needed
-	pne = gleam_point.xy( pos.x + width, pos.y );
-
-	pse = gleam_point.xy( pos.x + width, pos.y + height );
-
-	psw = gleam_point.xy( pos.x, pos.y + height );
-
-	this.shape =
-		gleam_shape.create(
-			'ray:init',
-				[
-					gleam_shape_start.create(
-						'p', pos.add( 0 , b )
-					),
-					gleam_shape_round.create(
-						'p', pos.add( a , 0 )
-					),
-					gleam_shape_line.create(
-						'p', pne.sub( a , 0 )
-					),
-					gleam_shape_round.create(
-						'p', pne.add( 0 , b )
-					),
-					gleam_shape_line.create(
-						'p', pse.sub( 0 , b )
-					),
-					gleam_shape_round.create(
-						'p', pse.sub( a , 0 )
-					),
-					gleam_shape_line.create(
-						'p', psw.add( a , 0 )
-					),
-					gleam_shape_round.create(
-						'p', psw.sub( 0 , b )
-					),
-					gleam_shape_line.create(
-						'close', true
-					)
-				],
-			'pc', this.pc
-		);
-};
 
 
 /*
@@ -212,6 +148,106 @@ prototype.getProjection =
 		)
 	);
 };
+
+
+/*
+| The shape of the roundRect.
+*/
+jion.lazyValue(
+	prototype,
+	'shape',
+function( )
+{
+	var
+		a,
+		b,
+		b2,
+		h,
+		p,
+		w;
+
+	a = this.a;
+
+	b = this.b;
+
+	h = this.height;
+
+	p = this.pos;
+
+	w = this.width;
+
+	b2 = b * 2;
+
+	if( b2 + 0.1 >= h )
+	{
+		return(
+			gleam_shape.create(
+				'ray:init',
+				[
+					gleam_shape_start.create(
+						'p', p.add( 0 , b )
+					),
+					gleam_shape_round.create(
+						'p', p.add( a , 0 )
+					),
+					gleam_shape_line.create(
+						'p', p.add( w - a , 0 )
+					),
+					gleam_shape_round.create(
+						'p', p.add( w , b )
+					),
+					gleam_shape_round.create(
+						'p', p.add( w - a , h )
+					),
+					gleam_shape_line.create(
+						'p', p.add( a , h )
+					),
+					gleam_shape_round.create(
+						'close', true
+					),
+				],
+				'pc', this.pc
+			)
+		);
+	}
+
+	return(
+		gleam_shape.create(
+			'ray:init',
+			[
+				gleam_shape_start.create(
+					'p', p.add( 0 , b )
+				),
+				gleam_shape_round.create(
+					'p', p.add( a , 0 )
+				),
+				gleam_shape_line.create(
+					'p', p.add( w - a , 0 )
+				),
+				gleam_shape_round.create(
+					'p', p.add( w , b )
+				),
+				gleam_shape_line.create(
+					'p', p.add( w , h - b )
+				),
+				gleam_shape_round.create(
+					'p', p.add( w - a , h )
+				),
+				gleam_shape_line.create(
+					'p', p.add( a , h )
+				),
+				gleam_shape_round.create(
+					'p', p.add( 0 , h - b )
+				),
+				gleam_shape_line.create(
+					'close', true
+				)
+			],
+			'pc', this.pc
+		)
+	);
+}
+);
 
 
 /*

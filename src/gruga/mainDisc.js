@@ -188,7 +188,7 @@ gruga_mainDisc =
 		'twig:add', 'create',
 			buttonModel.abstract(
 				'zone', gleam_rect.posSize( createButtonPos, buttonSize ),
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 13, 'cm' ),
 				'text', 'new',
 				'visible', false
 			),
@@ -203,7 +203,7 @@ gruga_mainDisc =
 			buttonModel.abstract(
 				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize ),
 				'text', 'go',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 13, 'cm' ),
 				'visible', false
 			),
 		'twig:add', 'space',

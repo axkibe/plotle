@@ -25,16 +25,10 @@ if( JION )
 				comment : 'the glint ray to display',
 				type : [ 'undefined', 'gleam_glint_ray' ]
 			},
-			scaled :
-			{
-				// used for devicePixelRatio adjustments
-				comment : 'if defined the canvas is scaled',
-				type : [ 'undefined', 'number' ]
-			},
 			size :
 			{
 				comment : 'the size of the display',
-				type : [ 'gleam_size', 'gleam_rect' ]
+				type : [ 'gleam_size' ]
 			},
 			_cv :
 			{
@@ -79,12 +73,37 @@ if( NODE )
 
 var
 	prototype,
-	round;
+	ratio,
+	round,
+	_round;
 
+/*
+| Ratio of canvas backing store to display.
+| In case hiDPI canvas this can be > 1.
+*/
+ratio = window.devicePixelRatio || 1;
 
 prototype = gleam_display_canvas.prototype;
 
-round = Math.round;
+
+
+/*
+| Rounds a value and adapts it to screen ratio.
+*/
+if( ratio === 1 )
+{
+	round = Math.round;
+}
+else
+{
+	_round = Math.round;
+
+	round =
+		function( val )
+	{
+		return _round( val * ratio );
+	};
+}
 
 
 /*
@@ -131,9 +150,7 @@ gleam_display_canvas.createAroundHTMLCanvas =
 	function(
 		canvas,  // the canvas to create around
 		name,    // the name(id) of the display
-		size,    // the size of the canvas
-		scaled   // if defined, the backing store scale factor
-		//       // via pixelratio for HiDPI displays
+		size     // the size of the canvas
 	)
 {
 	var
@@ -146,7 +163,6 @@ gleam_display_canvas.createAroundHTMLCanvas =
 			'_cv', canvas,
 			'_cx', cx,
 			'background', 'rgb( 251, 251, 251 )',
-			'scaled', scaled,
 			'size', size
 		)
 	);
@@ -196,7 +212,8 @@ prototype.within =
 			this._sketchGenericShape(
 				shape.shape,
 				0,
-				gleam_point.zero.add( 0.5, 0.5 )
+				gleam_point.zero,
+				0
 			);
 
 			break;
@@ -220,14 +237,19 @@ prototype.within =
 
 			this._cx.beginPath( );
 
-			this._sketchGenericShape( shape, 0, gleam_point.zeroHalf );
+			this._sketchGenericShape(
+				shape,
+				0,
+				gleam_point.zero,
+				0
+			);
 
 			break;
 
 		default : throw new Error( );
 	}
 
-	return this._cx.isPointInPath( p.x, p.y );
+	return this._cx.isPointInPath( round( p.x ), round( p.y ) );
 };
 
 
@@ -242,7 +264,6 @@ prototype._init =
 	var
 		cv,
 		height,
-		scaled,
 		width;
 
 /**/if( CHECK )
@@ -260,37 +281,26 @@ prototype._init =
 
 	cv = this._cv;
 
+	height = this.size.height;
+
+	width = this.size.width;
+
 	if( !cv )
 	{
 		cv = this._cv = document.createElement( 'canvas' );
 
 		this._cx = get2dContext( cv );
 	}
-
-	height = this.size.height;
-
-	width = this.size.width;
-
-	scaled = this.scaled;
-
-	if( !scaled )
-	{
-		if( cv.width !== width ) cv.width = width;
-
-		if( cv.height !== height ) cv.height = height;
-	}
 	else
 	{
-		if( cv.width !== width * scaled ) cv.width = width * scaled;
+		cv.style.height = height + 'px';
 
-		if( cv.height !== height * scaled ) cv.height = height * scaled;
-
-		this._cx.scale( scaled, scaled );
+		cv.style.width = width + 'px';
 	}
 
-	cv.style.height = height + 'px';
+	if( cv.width !== round( width ) ) cv.width = round( width );
 
-	cv.style.width = width + 'px';
+	if( cv.height !== round( height ) ) cv.height = round( height );
 };
 
 
@@ -324,11 +334,19 @@ prototype.render =
 	{
 		this._cx.fillStyle = this.background;
 
-		this._cx.fillRect( 0, 0, size.width, size.height );
+		this._cx.fillRect(
+			0, 0,
+			round( size.width ),
+			round( size.height )
+		);
 	}
 	else
 	{
-		this._cx.clearRect( 0, 0, size.width, size.height );
+		this._cx.clearRect(
+			0, 0,
+			round( size.width ),
+			round( size.height )
+		);
 	}
 
 	this._renderGlint( this.glint, gleam_point.zero );
@@ -359,7 +377,7 @@ prototype._border =
 
 	cx.beginPath( );
 
-	this._sketch( shape, border.distance, offset.add( 0.5, 0.5 ) );
+	this._sketch( shape, border.distance, offset, 0.5 );
 
 	cx.strokeStyle = this._colorStyle( border.color, shape, offset );
 
@@ -422,7 +440,7 @@ prototype._fill  =
 
 	cx = this._cx;
 
-	this._sketch( shape, 0, offset );
+	this._sketch( shape, 0, offset, 0 );
 
 	cx.fillStyle = this._colorStyle( fill, shape, offset );
 
@@ -464,10 +482,10 @@ prototype._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					shape.pos.x + offset.x,
-					shape.pos.y + offset.y,
-					shape.pos.x + shape.width / 10 + offset.x,
-					shape.pos.y + shape.width + offset.y
+					round( shape.pos.x + offset.x ),
+					round( shape.pos.y + offset.y ),
+					round( shape.pos.x + shape.width / 10 + offset.x ),
+					round( shape.pos.y + shape.width + offset.y )
 				);
 
 			break;
@@ -491,12 +509,12 @@ prototype._colorStyle =
 
 			grad =
 				this._cx.createRadialGradient(
-					pc.x + offset.x,
-					pc.y + offset.y,
-					r0,
-					pc.x + offset.x,
-					pc.y + offset.y,
-					r1
+					round( pc.x + offset.x ),
+					round( pc.y + offset.y ),
+					round( r0 ),
+					round( pc.x + offset.x ),
+					round( pc.y + offset.y ),
+					round( r1 )
 				);
 
 			break;
@@ -646,7 +664,11 @@ prototype._renderTextCanvas =
 
 	if( rotate === undefined )
 	{
-		cx.fillText( text, p.x + offset.x, p.y + offset.y );
+		cx.fillText(
+			text,
+			round( p.x + offset.x ),
+			round( p.y + offset.y )
+		);
 	}
 	else
 	{
@@ -662,9 +684,9 @@ prototype._renderTextCanvas =
 			0, 0
 		);
 
-		x = p.x + offset.x;
+		x = round( p.x + offset.x );
 
-		y = p.y + offset.y;
+		y = round( p.y + offset.y );
 
 		cx.fillText(
 			text,
@@ -705,9 +727,9 @@ prototype._renderMask =
 
 	cx = this._cx;
 
-	h = this.size.height;
+	h = round( this.size.height );
 
-	w = this.size.width;
+	w = round( this.size.width );
 
 	cx.save( );
 
@@ -734,7 +756,7 @@ prototype._renderMask =
 
 			sa = shape.get( a );
 
-			this._sketch( sa, 0, offset.add( 0.5, 0.5 ) );
+			this._sketch( sa, 0, offset, 0.5 );
 
 			cx.clip( );
 		}
@@ -756,7 +778,7 @@ prototype._renderMask =
 			cx.lineTo( 0, 0 );
 		}
 
-		this._sketch( shape, 0, offset.add( 0.5, 0.5 ) );
+		this._sketch( shape, 0, offset, 0.5 );
 
 		cx.clip( );
 	}
@@ -800,9 +822,10 @@ prototype._renderTextOpenType =
 	{
 		gleam_intern_opentype.drawText(
 			glint.text,
-			p.x + offset.x,
-			p.y + offset.y,
+			round( p.x + offset.x ),
+			round( p.y + offset.y ),
 			glint.font,
+			round( glint.font.size ),
 			this._cx
 		);
 
@@ -829,9 +852,10 @@ prototype._renderTextOpenType =
 
 	gleam_intern_opentype.drawText(
 		glint.text,
-		( x * t1 + y * t2 ) / det,
-		( y * t1 - x * t2 ) / det,
+		round( ( x * t1 + y * t2 ) / det ),
+		round( ( y * t1 - x * t2 ) / det ),
 		glint.font,
+		round( glint.font.size ),
 		this._cx
 	);
 
@@ -858,6 +882,8 @@ prototype._renderWindow =
 		h,
 		pos,
 		rect,
+		rh,
+		rw,
 		w,
 		x,
 		x2,
@@ -865,7 +891,7 @@ prototype._renderWindow =
 		y2;
 
 /**/if( CHECK ) {
-/**/	if( glint.reflect !== 'gleam_glint_window' ) throw new Error();
+/**/	if( glint.reflect !== 'gleam_glint_window' ) throw new Error( );
 /**/}
 
 	cx = this._cx;
@@ -882,7 +908,11 @@ prototype._renderWindow =
 
 	y = offset.y + pos.y;
 
-	if( x > w || y > h || x + rect.width < 0 || y + rect.height < 0 )
+	rw = rect.width;
+
+	rh = rect.height;
+
+	if( x > w || y > h || x + rw < 0 || y + rh < 0 )
 	{
 		// if the window isn't visible at all
 		// no need to render it.
@@ -891,9 +921,17 @@ prototype._renderWindow =
 
 	if( h * w > shell_settings.glintCacheLimit )
 	{
-		x2 = x + rect.width;
+		x2 = x + rw;
 
-		y2 = y + rect.height;
+		y2 = y + rh;
+
+		x = round( x );
+
+		y = round( y );
+
+		x2 = round( x2 );
+
+		y2 = round( y2 );
 
 		cx.save( );
 
@@ -927,13 +965,59 @@ prototype._renderWindow =
 
 
 /*
+| Sketches a line.
+*/
+prototype._sketchLine =
+	function(
+		line,
+		border,
+		offset,
+		shift
+	)
+{
+	var
+		cx,
+		ox,
+		oy,
+		p1,
+		p2;
+
+/**/if( CHECK )
+/**/{
+/**/	if( line.reflect !== 'gleam_line' ) throw new Error( );
+/**/}
+
+	cx = this._cx;
+
+	ox = offset.x;
+
+	oy = offset.y;
+
+	p1 = line.p1;
+
+	p2 = line.p2;
+
+	cx.moveTo(
+		round( p1.x + ox ) + shift,
+		round( p1.y + oy ) + shift
+	);
+
+	cx.lineTo(
+		round( p2.x + ox ) + shift,
+		round( p2.y + oy ) + shift
+	);
+};
+
+
+/*
 | Sketches a rectangle.
 */
 prototype._sketchRect =
 	function(
 		rect,
 		border,
-		offset
+		offset,
+		shift
 	)
 {
 	var
@@ -948,13 +1032,13 @@ prototype._sketchRect =
 
 	pos = rect.pos;
 
-	wx = round( pos.x + border + offset.x );
+	wx = round( pos.x + offset.x ) + border + shift;
 
-	ny = round( pos.y + border + offset.y );
+	ny = round( pos.y + offset.y ) + border + shift;
 
-	ex = round( pos.x + rect.width - border + offset.x );
+	ex = round( pos.x + rect.width + offset.x ) - border + shift;
 
-	sy = round( pos.y + rect.height - border + offset.y );
+	sy = round( pos.y + rect.height + offset.y ) - border + shift;
 
 	cx.moveTo( wx, ny );
 
@@ -1058,23 +1142,40 @@ prototype._sketch =
 	function(
 		shape,  // shape to sketch
 		border, // additional border
-		offset  // offset by this
+		offset, // offset by this
+		shift   // possibly shift by 0.5
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
 	switch( shape.reflect )
 	{
 		case 'gleam_ellipse' :
 		case 'gleam_roundRect' :
 
-			return this._sketchGenericShape( shape.shape, border, offset );
+			return(
+				this._sketchGenericShape(
+					shape.shape,
+					border,
+					offset,
+					shift
+				)
+			);
+
+		case 'gleam_line' :
+
+			return this._sketchLine( shape, border, offset, shift );
 
 		case 'gleam_rect' :
 
-			return this._sketchRect( shape, border, offset );
+			return this._sketchRect( shape, border, offset, shift );
 
 		case 'gleam_shape' :
 
-			return this._sketchGenericShape( shape, border, offset );
+			return this._sketchGenericShape( shape, border, offset, shift );
 
 		default : throw new Error( );
 	}
@@ -1087,12 +1188,15 @@ prototype._sketch =
 */
 prototype._sketchGenericShape =
 	function(
-		shape,   // FIXME
-		border,  // FIXME
-		offset   // FIXME
+		shape,  // shape to sketch
+		border, // additional border
+		offset, // offset by this
+		shift   // possibly shift by 0.5
 	)
 {
 	var
+		cpx, // current point x
+		cpy, // current point y
 		cx,
 		dx,
 		dxy,
@@ -1100,11 +1204,16 @@ prototype._sketchGenericShape =
 		a,
 		aZ,
 		magic,
-		pos,
-		pc, // center point
-		pn, // next point
-		ps, // start point
-		section;
+		ox,  // offset x
+		oy,  // offset y
+		p,
+		pc,  // center point
+		pnx, // next point x
+		pny, // next point y
+		psx, // start point x
+		psy, // start point y
+		section,
+		nextSect;
 
 	cx = this._cx;
 
@@ -1117,56 +1226,102 @@ prototype._sketchGenericShape =
 /**/	if( shape.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
 /**/}
 
-	ps = shape.get( 0 ).p;
+	ox = offset.x;
+
+	oy = offset.y;
 
 	pc = shape.pc;
 
-	ps =
-		ps.add(
-			ps.x > pc.x
-				?  -border
-				: ( ps.x < pc.x ? border : 0 ),
-			ps.y > pc.y
-				?  -border
-				: ( ps.y < pc.y ? border : 0 )
-		);
+	section = shape.get( 0 );
 
-	pos = ps;
+	p = section.p;
 
-	cx.moveTo( ps.x + offset.x, ps.y + offset.y );
+	psx =
+		round( p.x + ox )
+		+ (
+			p.x > pc.x
+			?  -border
+			: ( p.x < pc.x ? border : 0 )
+		)
+		+ shift;
 
-	for( a = 1, aZ = shape.length; a < aZ; a++ )
+	psy =
+		round( p.y + oy )
+		+ (
+			p.y > pc.y
+			?  -border
+			: ( p.y < pc.y ? border : 0 )
+		)
+		+ shift;
+
+	aZ = shape.length;
+
+	if(
+		shift
+		&& section.reflect === 'gleam_shape_round'
+		&& shape.get( aZ - 1 ).reflect === 'gleam_shape_round'
+	)
+	{
+		// workaround gap bug in chrome
+		psx += 0.1;
+		psy += 0.1;
+	}
+
+	cpx = psx;
+	cpy = psy;
+
+	cx.moveTo( psx, psy );
+
+	nextSect = shape.get( 1 );
+
+	for( a = 1; a < aZ; a++ )
 	{
 
 /**/	if( CHECK )
 /**/	{
 /**/		// there was a close before end?
-/**/		if( !ps ) throw new Error( );
+/**/		if( psx === undefined ) throw new Error( );
 /**/	}
 
-		section = shape.get( a );
+		section = nextSect;
+
+		nextSect = a + 1 < aZ ? shape.get( a + 1 ) : shape.get( 0 );
 
 		if( section.close )
 		{
-			pn = ps;
+			pnx = psx;
+			pny = psy;
 
-			ps = undefined;
+			psx = psy = undefined;
 		}
 		else
 		{
-			pn = section.p;
+			p = section.p;
 
 			if( border !== 0 )
 			{
-				pn =
-					pn.add(
-						pn.x > pc.x
-							?  -border
-							: ( pn.x < pc.x ?  border : 0 ),
-						pn.y > pc.y
-							?  -border
-							: ( pn.y < pc.y ?  border : 0 )
-					);
+				pnx =
+					round( p.x + ox )
+					+ (
+						p.x > pc.x
+						?  -border
+						: ( p.x < pc.x ?  border : 0 )
+					)
+					+ shift;
+
+				pny =
+					round( p.y + oy )
+					+ (
+						p.y > pc.y
+						?  -border
+						: ( p.y < pc.y ?  border : 0 )
+					)
+					+ shift;
+			}
+			else
+			{
+				pnx = round( p.x + ox ) + shift;
+				pny = round( p.y + oy ) + shift;
 			}
 		}
 
@@ -1174,46 +1329,55 @@ prototype._sketchGenericShape =
 		{
 			case 'gleam_shape_line' :
 
-				//if( !section.fly || !twist ) FIXME
-				if( !section.fly || Math.floor( offset.x ) === offset.x )
+				if( !section.fly || shift === 0 )
 				{
-					cx.lineTo( pn.x + offset.x, pn.y + offset.y );
+					cx.lineTo( pnx, pny );
 				}
 				else
 				{
-					cx.moveTo( pn.x + offset.x, pn.y + offset.y );
+					cx.moveTo( pnx, pny );
 				}
 
 				break;
 
 			case 'gleam_shape_round' :
 
-				dx = pn.x - pos.x;
+				if(
+					shift
+					&& nextSect.reflect === 'gleam_shape_round'
+				)
+				{
+					// workaround gap bug in chrome
+					pnx += 0.1;
+					pny += 0.1;
+				}
 
-				dy = pn.y - pos.y;
+				dx = pnx - cpx;
+
+				dy = pny - cpy;
 
 				dxy = dx * dy;
 
 				if( !section.ccw )
 				{
 					cx.bezierCurveTo(
-						pos.x + offset.x + ( dxy > 0 ? magic * dx : 0 ),
-						pos.y + offset.y + ( dxy < 0 ? magic * dy : 0 ),
-						pn.x + offset.x - ( dxy < 0 ? magic * dx : 0 ),
-						pn.y + offset.y - ( dxy > 0 ? magic * dy : 0 ),
-						pn.x + offset.x,
-						pn.y + offset.y
+						cpx + ( dxy > 0 ? magic * dx : 0 ),
+						cpy + ( dxy < 0 ? magic * dy : 0 ),
+						pnx - ( dxy < 0 ? magic * dx : 0 ),
+						pny - ( dxy > 0 ? magic * dy : 0 ),
+						pnx,
+						pny
 					);
 				}
 				else
 				{
 					cx.bezierCurveTo(
-						pos.x + offset.x + ( dxy < 0 ? magic * dx : 0 ),
-						pos.y + offset.y + ( dxy > 0 ? magic * dy : 0 ),
-						pn.x + offset.x - ( dxy > 0 ? magic * dx : 0 ),
-						pn.y + offset.y - ( dxy < 0 ? magic * dy : 0 ),
-						pn.x + offset.x,
-						pn.y + offset.y
+						cpx + ( dxy < 0 ? magic * dx : 0 ),
+						cpy + ( dxy > 0 ? magic * dy : 0 ),
+						pnx - ( dxy > 0 ? magic * dx : 0 ),
+						pny - ( dxy < 0 ? magic * dy : 0 ),
+						pnx,
+						pny 
 					);
 				}
 
@@ -1225,7 +1389,8 @@ prototype._sketchGenericShape =
 				throw new Error( );
 		}
 
-		pos = pn;
+		cpx = pnx;
+		cpy = pny;
 	}
 };
 

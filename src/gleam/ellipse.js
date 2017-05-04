@@ -45,8 +45,7 @@ if( JION )
 				type : [ 'undefined', 'number' ],
 				assign : '_gradientR1'
 			}
-		},
-		init : [ 'pos', 'width', 'height' ]
+		}
 	};
 }
 
@@ -80,77 +79,6 @@ var
 	prototype;
 
 prototype = gleam_ellipse.prototype;
-
-
-/*
-| Initialization.
-| FIXME make lazy
-*/
-prototype._init =
-	function(
-		p,
-		width,
-		height
-	)
-{
-	// cardinal coords
-	var
-		wx,
-		ny,
-		ex,
-		sy,
-		// middles of cardinal cords
-		my,
-		mx,
-		// cardinal points
-		pw,
-		pn,
-		pe,
-		ps;
-
-	wx = p.x;
-
-	ny = p.y;
-
-	ex = p.x + width;
-
-	sy = p.y + height;
-
-	// middles of cardinal cords
-	my = ( ny + sy ) / 2;
-
-	mx = ( wx + ex ) / 2;
-
-	// cardinal points
-	pw =
-	this.pw =
-		gleam_point.create( 'x', wx, 'y', my );
-
-	pn =
-	this.pn =
-		gleam_point.create( 'x', mx, 'y', ny );
-
-	pe =
-	this.pe =
-		gleam_point.create( 'x', ex, 'y', my );
-
-	ps =
-	this.ps =
-		gleam_point.create( 'x', mx, 'y', sy );
-
-	this.shape =
-		gleam_shape.create(
-			'ray:init',
-			[
-				gleam_shape_start.create( 'p', pw ),
-				gleam_shape_round.create( 'p', pn ),
-				gleam_shape_round.create( 'p', pe ),
-				gleam_shape_round.create( 'p', ps ),
-				gleam_shape_round.create( 'close', true )
-			],
-			'pc', this.pc
-		);
-};
 
 
 /*
@@ -214,7 +142,32 @@ prototype.getProjection =
 
 
 /*
-| Gradient's center point.
+| The shape of the ellipse.
+*/
+jion.lazyValue(
+	prototype,
+	'shape',
+function( )
+{
+	return(
+		gleam_shape.create(
+			'ray:init',
+			[
+				gleam_shape_start.create( 'p', this.pw ),
+				gleam_shape_round.create( 'p', this.pn ),
+				gleam_shape_round.create( 'p', this.pe ),
+				gleam_shape_round.create( 'p', this.ps ),
+				gleam_shape_round.create( 'close', true )
+			],
+			'pc', this.pc
+		)
+	);
+}
+);
+
+
+/*
+| The center point.
 */
 jion.lazyValue(
 	prototype,
@@ -310,6 +263,63 @@ jion.lazyValue(
 			'y', this.pos.y + this.height / 2
 		)
 	);
+}
+);
+
+
+/*
+| East point.
+*/
+jion.lazyValue(
+	prototype,
+	'pe',
+	function( )
+{
+	return this.pos.add( this.width, this.height / 2 );
+}
+);
+
+
+/*
+| North point.
+*/
+jion.lazyValue(
+	prototype,
+	'pn',
+	function( )
+{
+	return this.pos.add( this.width / 2, 0 );
+}
+);
+
+
+/*
+| South point.
+*/
+jion.lazyValue(
+	prototype,
+	'ps',
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height );
+}
+);
+
+
+/*
+| West point.
+*/
+jion.lazyValue(
+	prototype,
+	'pw',
+	function( )
+{
+	var
+		pos;
+
+	pos = this.pos;
+
+	return gleam_point.xy( pos.x, pos.y + this.height / 2 );
 }
 );
 

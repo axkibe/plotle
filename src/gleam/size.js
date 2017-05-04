@@ -92,12 +92,10 @@ prototype.add =
 
 /*
 | A size jion increased by one, height and width.
-|
-| FIXME rename enlarge1
 */
 jion.lazyValue(
 	prototype,
-	'plusOne',
+	'enlarge1',
 	function( )
 {
 	return(

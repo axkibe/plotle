@@ -77,11 +77,11 @@ if( JION )
 
 var
 	gleam_facet,
-	gleam_glint_fill,
+	gleam_glint_border,
 	gleam_glint_paint,
 	gleam_glint_ray,
+	gleam_line,
 	gleam_point,
-	gleam_rect,
 	gleam_shape,
 	gleam_shapeRay,
 	gleam_shape_line,
@@ -502,19 +502,20 @@ jion.lazyValue(
 	p = para.locateOffsetPoint( mark.at );
 
 	ppos = para.pos;
+	
+	p =
+		transform.point(
+			ppos.x + p.x,
+			ppos.y + p.y - fs
+		);
 
 	return(
-		gleam_glint_fill.create(
-			'facet', gleam_facet.blackFill,
+		gleam_glint_border.create(
+			'facet', gleam_facet.blackStroke,
 			'shape',
-				gleam_rect.create(
-					'pos',
-						transform.point(
-							ppos.x + p.x,
-							ppos.y + p.y - fs
-						),
-					'width', 1,
-					'height', transform.scale( fs + descend )
+				gleam_line.create(
+					'p1', p,
+					'p2', p.add( 0, transform.scale( fs + descend ) )
 				)
 		)
 	);

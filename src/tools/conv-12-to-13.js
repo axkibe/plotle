@@ -80,7 +80,7 @@ json_typemap = {
 	'fabric_note' : 'note',
 	'fabric_portal' : 'portal',
 	'fabric_relation' : 'relation'
-}
+};
 
 root = { };
 

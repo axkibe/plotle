@@ -125,11 +125,11 @@ jion.lazyValue(
 
 	max = this.max;
 
-	ap = Math.round( this.aperture * size / max );
+	ap = this.aperture * size / max;
 
 	map = Math.max( ap, gruga_scrollbar.minHeight );
 
-	sy = Math.round( scrollpos * ( ( size - map + ap ) / max ) );
+	sy = scrollpos * ( ( size - map + ap ) / max );
 
 	st = gruga_scrollbar.strength;
 
@@ -139,9 +139,8 @@ jion.lazyValue(
 		gleam_roundRect.create(
 			'pos',
 				pos
-				.add( 0, sy )  // FIXME skip a point creation
 				.transform( transform )
-				.add( -st / 2, 0 ),
+				.add( -st / 2, transform.scale( sy ) ),
 			'width', st,
 			'height', transform.scale( map ),
 			'a', gruga_scrollbar.ellipseA,

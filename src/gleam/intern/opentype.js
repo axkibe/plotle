@@ -140,6 +140,7 @@ gleam_intern_opentype.drawText =
 		x,     // x
 		y,     // y
 		font,  // font to draw it in
+		size,  // the actual size to draw
 		cx     // canvas context to draw it on.
 	)
 {
@@ -159,13 +160,15 @@ gleam_intern_opentype.drawText =
 		index,
 		options,
 		path,
-		size,
 		x1,
 		y1,
 		x2,
 		y2;
 
-	size = Math.round( font.size );
+/**/if( CHECK )
+/**/{
+/**/	if( size !== Math.floor( size ) ) throw new Error();
+/**/}
 
 	glyphCache = font_default.glyphCache;
 
@@ -254,11 +257,14 @@ gleam_intern_opentype.drawText =
 
 		if( cg )
 		{
-			cx.drawImage(
-				cg.canvas,
-				round( x + cg.x1 ),
-				round( y + cg.y1 )
-			);
+			if( cg.canvas )
+			{
+				cx.drawImage(
+					cg.canvas,
+					round( x + cg.x1 ),
+					round( y + cg.y1 )
+				);
+			}
 
 			continue;
 		}
@@ -267,8 +273,6 @@ gleam_intern_opentype.drawText =
 
 		bb = path.getBoundingBox( );
 		
-		canvas = document.createElement( 'canvas' );
-
 		x1 = Math.floor( bb.x1 );
 
 		y1 = Math.floor( bb.y1 );
@@ -277,17 +281,28 @@ gleam_intern_opentype.drawText =
 
 		y2 = Math.ceil( bb.y2 );
 
-		canvas.width = x2 - x1;
+		if( x2 - x1 > 0 && y2 - y1 > 0 )
+		{
+			canvas = document.createElement( 'canvas' );
 
-		canvas.height = y2 - y1;
+			canvas.width = x2 - x1;
 
-		cvx = canvas.getContext( '2d' );
+			canvas.height = y2 - y1;
 
-		cvx.translate( -x1, -y1 );
+			cvx = canvas.getContext( '2d' );
+
+			cvx.translate( -x1, -y1 );
 		
-		path.draw( cvx );
+			path.draw( cvx );
+		
+			cx.drawImage( canvas, round( x + x1 ), round( y + y1 ) );
+		}
+		else
+		{
+			canvas = undefined;
 
-		cx.drawImage( canvas, round( x + x1 ), round( y + y1 ) );
+			x1 = x2 = y1 = y2 = 0;
+		}
 
 		glyphCacheSet[ index ] =
 			{
