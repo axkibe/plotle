@@ -12,13 +12,12 @@ if( JION )
 		id : 'visual_doc',
 		attributes :
 		{
-			// FIXME make a gleam_size
 			clipsize :
 			{
 				comment : 'the visible size of the doc',
 				// if created with undefined,
 				// it is set to equal to fullsize
-				type : [ 'undefined', 'gleam_rect' ],
+				type : [ 'undefined', 'gleam_size' ],
 				assign : '_clipsize'
 			},
 			fabric :
@@ -160,9 +159,10 @@ prototype._init =
 		ranks[ a ] = key;
 
 		pos =
-			gleam_point.create(
-				'x', innerMargin.w,
-				'y', Math.round( y - this.scrollPos.y )
+			gleam_point.xy(
+				innerMargin.w,
+				//Math.round( y - this.scrollPos.y )
+				y - this.scrollPos.y // FIXME?
 			);
 
 		para =
@@ -633,20 +633,20 @@ jion.lazyValue(
 
 		sections =
 		[
-			gleam_shape_start.create( 'p', fp.add( 0, descend ) ),
-			gleam_shape_line.create( 'p', fp.add( 0, -ascend ) ),
-			gleam_shape_line.create( 'p', bp.add( 0, -ascend ) ),
-			gleam_shape_line.create( 'p', bp.add( 0, descend ) ),
-			gleam_shape_line.create( 'close', true )
+			gleam_shape_start.p( fp.add( 0, descend ) ),
+			gleam_shape_line.p( fp.add( 0, -ascend ) ),
+			gleam_shape_line.p( bp.add( 0, -ascend ) ),
+			gleam_shape_line.p( bp.add( 0, descend ) ),
+			gleam_shape_line.close( )
 		];
 
 		return(
 			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
-					gleam_point.create(
-						'x', ( fp.x + bp.x ) / 2,
-						'y', ( fp.y + bp.y ) / 2
+					gleam_point.xy(
+						( fp.x + bp.x ) / 2,
+						( fp.y + bp.y ) / 2
 					)
 			)
 		);
@@ -670,36 +670,20 @@ jion.lazyValue(
 
 		sections =
 		[
-			gleam_shape_start.create(
-				'p', gleam_point.create( 'x', rx, 'y', fp.y - ascend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', fp.x, 'y', fp.y - ascend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', fp.x, 'y', fp.y + descend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', rx, 'y', fp.y + descend )
-			),
-			gleam_shape_line.create( 'close', true, 'fly', true )
+			gleam_shape_start.xy( rx, fp.y - ascend ),
+			gleam_shape_line.xy( fp.x, fp.y - ascend ),
+			gleam_shape_line.xy( fp.x, fp.y + descend ),
+			gleam_shape_line.xy( rx, fp.y + descend ),
+			gleam_shape_line.closeFly( )
 		];
 
 		sections2 =
 		[
-			gleam_shape_start.create(
-				'p', gleam_point.create( 'x', lx, 'y', bp.y - ascend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', bp.x, 'y', bp.y - ascend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', bp.x, 'y', bp.y + descend )
-			),
-			gleam_shape_line.create(
-				'p', gleam_point.create( 'x', lx, 'y', bp.y + descend )
-			),
-			gleam_shape_line.create( 'close', true, 'fly', true )
+			gleam_shape_start.xy( lx, bp.y - ascend ),
+			gleam_shape_line.xy( bp.x, bp.y - ascend ),
+			gleam_shape_line.xy( bp.x, bp.y + descend ),
+			gleam_shape_line.xy( lx, bp.y + descend ),
+			gleam_shape_line.closeFly( )
 		];
 
 		shapes =
@@ -707,17 +691,17 @@ jion.lazyValue(
 			gleam_shape.create(
 				'ray:init', sections,
 				'pc',
-					gleam_point.create(
-						'x', ( fp.x + rx ) / 2,
-						'y', ( 2 * fp.y - ascend + descend ) / 2
+					gleam_point.xy(
+						( fp.x + rx ) / 2,
+						( 2 * fp.y - ascend + descend ) / 2
 					)
 			),
 			gleam_shape.create(
 				'ray:init', sections2,
 				'pc',
-					gleam_point.create(
-						'x', ( fp.x + rx ) / 2,
-						'y', ( 2 * fp.y - ascend + descend ) / 2
+					gleam_point.xy(
+						( fp.x + rx ) / 2,
+						( 2 * fp.y - ascend + descend ) / 2
 					)
 			)
 		];
@@ -765,76 +749,24 @@ jion.lazyValue(
 		{
 			sections =
 			[
-				gleam_shape_start.create( // 1
-					'p',
-					gleam_point.create(
-						'x', rx,
-						'y', b2y + descend
-					)
-				),
-				gleam_shape_line.create( // 2
-					'p',
-					gleam_point.create(
-						'x', bp.x,
-						'y', b2y + descend
-					)
-				),
-				gleam_shape_line.create( // 3
-					'p',
-					gleam_point.create(
-						'x', bp.x,
-						'y', bp.y + descend
-					)
-				),
-				gleam_shape_line.create( // 4
-					'p',
-					gleam_point.create(
-						'x', lx,
-						'y', bp.y + descend
-					)
-				),
-				gleam_shape_line.create( // 5
-					'p',
-					gleam_point.create(
-						'x', lx,
-						'y', f2y - ascend
-					),
-					'fly', true
-				),
-				gleam_shape_line.create( // 6
-					'p',
-					gleam_point.create(
-						'x', fp.x,
-						'y', f2y - ascend
-					)
-				),
-				gleam_shape_line.create( // 7
-					'p',
-					gleam_point.create(
-						'x', fp.x,
-						'y', fp.y - ascend
-					)
-				),
-				gleam_shape_line.create( // 8
-					'p',
-					gleam_point.create(
-						'x', rx,
-						'y', fp.y - ascend
-					)
-				),
-				gleam_shape_line.create(
-					'close', true,
-					'fly', true
-				)
+				gleam_shape_start.xy( rx, b2y + descend ),    // 1
+				gleam_shape_line.xy( bp.x, b2y + descend ),   // 2
+				gleam_shape_line.xy( bp.x, bp.y + descend ),  // 3
+				gleam_shape_line.xy( lx, bp.y + descend ),    // 4
+				gleam_shape_line.xyFly( lx, f2y - ascend ),   // 5
+				gleam_shape_line.xy( fp.x, f2y - ascend ),    // 6
+				gleam_shape_line.xy( fp.x, fp.y - ascend ),   // 7
+				gleam_shape_line.xy( rx, fp.y - ascend ),     // 8
+				gleam_shape_line.closeFly( )
 			];
 
 			return(
 				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
-						gleam_point.create(
-							'x', ( rx + lx ) / 2,
-							'y', ( b2y + descend + f2y - ascend ) / 2
+						gleam_point.xy(
+							( rx + lx ) / 2,
+							( b2y + descend + f2y - ascend ) / 2
 						)
 				)
 			);
@@ -843,62 +775,22 @@ jion.lazyValue(
 		{
 				sections =
 				[
-					gleam_shape_start.create( // 1
-						'p',
-						gleam_point.create(
-							'x', rx,
-							'y', b2y + descend
-						)
-					),
-					gleam_shape_line.create( // 2
-						'p',
-						gleam_point.create(
-							'x', bp.x,
-							'y', b2y + descend
-						)
-					),
-					gleam_shape_line.create( // 3
-						'p',
-						gleam_point.create(
-							'x', bp.x,
-							'y', bp.y + descend
-						)
-					),
-					gleam_shape_line.create( // 4
-						'p',
-						gleam_point.create(
-							'x', lx,
-							'y', bp.y + descend
-						)
-					),
-					gleam_shape_line.create( // 7
-						'p',
-						gleam_point.create(
-							'x', lx,
-							'y', fp.y - ascend
-						),
-						'fly', true
-					),
-					gleam_shape_line.create( // 8
-						'p',
-						gleam_point.create(
-							'x', rx,
-							'y', fp.y - ascend
-						)
-					),
-					gleam_shape_line.create(
-						'close', true,
-						'fly', true
-					)
+					gleam_shape_start.xy( rx, b2y + descend ),   // 1
+					gleam_shape_line.xy( bp.x, b2y + descend ),  // 2
+					gleam_shape_line.xy( bp.x, bp.y + descend ), // 3
+					gleam_shape_line.xy( lx, bp.y + descend ),   // 4
+					gleam_shape_line.xyFly( lx, fp.y - ascend ), // 7
+					gleam_shape_line.xy( rx, fp.y - ascend ),    // 8
+					gleam_shape_line.closeFly( )
 				];
 
 			return(
 				gleam_shape.create(
 					'ray:init', sections,
 					'pc',
-						gleam_point.create(
-							'x', ( rx + lx ) / 2,
-							'y', ( b2y + descend + f2y - ascend ) / 2
+						gleam_point.xy(
+							( rx + lx ) / 2,
+							( b2y + descend + f2y - ascend ) / 2
 						)
 				)
 			);

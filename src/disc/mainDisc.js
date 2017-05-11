@@ -58,6 +58,11 @@ if( JION )
 				comment : 'shape of the disc',
 				type : 'gleam_ellipse'
 			},
+			show :
+			{
+				comment : 'currently form/disc shown',
+				type : require ( '../show/typemap' )
+			},
 			size :
 			{
 				comment : 'designed size',
@@ -92,8 +97,6 @@ if( JION )
 
 
 var
-	action_create,
-	action_form,
 	action_select,
 	disc_mainDisc,
 	change_shrink,
@@ -105,7 +108,11 @@ var
 	gleam_transform,
 	jion,
 	result_hover,
-	root;
+	root,
+	show_create,
+	show_form,
+	show_normal,
+	show_zoom;
 
 /*
 | Capsule
@@ -143,6 +150,7 @@ prototype._init =
 		down,
 		r,
 		rZ,
+		show,
 		text,
 		twig,
 		visible,
@@ -151,6 +159,8 @@ prototype._init =
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
 	action = this.action;
+
+	show = this.show;
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -166,7 +176,7 @@ prototype._init =
 
 				visible = this.access === 'rw' && this.spaceRef !== undefined;
 
-				down = action && action.isCreate;
+				down = show.reflect === 'show_create';
 
 				break;
 
@@ -180,9 +190,8 @@ prototype._init =
 					: 'log\nout';
 
 				down =
-					action
-					&& action.reflect === 'action_form'
-					&& action.formName === 'login';
+					show.reflect === 'show_form'
+					&& show.formName === 'login';
 
 				break;
 
@@ -191,9 +200,8 @@ prototype._init =
 				visible = true;
 
 				down =
-					action
-					&& action.reflect === 'action_form'
-					&& action.formName === 'moveTo';
+					show.reflect === 'show_form'
+					&& show.formName === 'moveTo';
 
 				break;
 
@@ -201,7 +209,17 @@ prototype._init =
 
 				visible = this.spaceRef !== undefined;
 
-				down = action === undefined || action.isHand;
+				if( show.reflect !== 'show_normal' )
+				{
+					down = false;
+				}
+				else
+				{
+					down =
+						action
+						? action.normalButtonDown
+						: true;
+				}
 
 				break;
 
@@ -233,9 +251,8 @@ prototype._init =
 				visible = this.user ? this.user.isVisitor : true;
 
 				down =
-					action
-					&& action.reflect === 'action_form'
-					&& action.formName === 'signUp';
+					show.reflect === 'show_form'
+					&& show.formName === 'signUp';
 
 				break;
 
@@ -253,9 +270,8 @@ prototype._init =
 				}
 
 				down =
-					action
-					&& action.reflect === 'action_form'
-					&& action.formName === 'space';
+					show.reflect === 'show_form'
+					&& show.formName === 'space';
 
 				break;
 
@@ -266,9 +282,16 @@ prototype._init =
 				visible = true;
 
 				down =
-					action
-					&& action.reflect === 'action_form'
-					&& action.formName === 'user';
+					show.reflect === 'show_form'
+					&& show.formName === 'user';
+
+				break;
+
+			case 'zoom' :
+
+				visible = this.spaceRef !== undefined;
+
+				down = show.reflect === 'show_zoom';
 
 				break;
 
@@ -388,13 +411,19 @@ prototype.pushButton =
 
 		case 'select' :
 
-			root.create( 'action', action_select.create( ) );
+			root.create(
+				'action', action_select.create( ),
+				'show', show_normal.create( )
+			);
 
 			break;
 
 		case 'create' :
 
-			root.create( 'action', action_create.create( ) );
+			root.create(
+				'action', undefined,
+				'show', show_create.create( )
+			);
 
 			break;
 
@@ -404,7 +433,13 @@ prototype.pushButton =
 		case 'space' :
 		case 'user' :
 
-			root.create( 'action', action_form[ buttonName ] );
+			root.create( 'show', show_form[ buttonName ] );
+
+			break;
+
+		case 'zoom' :
+
+			root.create( 'show', show_zoom.create( ) );
 
 			break;
 
@@ -462,10 +497,7 @@ prototype.pointingHover =
 			this.atRank( r )
 			.pointingHover( pp, shift, ctrl );
 
-		if( reply )
-		{
-			return reply;
-		}
+		if( reply ) return reply;
 	}
 
 	return result_hover.create( 'cursor', 'default' );

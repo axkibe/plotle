@@ -12,6 +12,11 @@ if( JION )
 		id : 'gleam_shape',
 		attributes :
 		{
+			nogrid :
+			{
+				comment : 'do not to grid fitting',
+				type : [ 'undefined', 'boolean']
+			},
 			pc :
 			{
 				comment : 'center point',

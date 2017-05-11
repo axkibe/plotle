@@ -74,6 +74,7 @@ config.shell_bundle = !config.devel;
 | If true checking code is turned on in shell
 */
 config.shell_check = config.devel;
+//config.shell_check = '{ noinherit: true }';
 
 
 /*

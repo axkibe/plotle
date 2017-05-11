@@ -544,6 +544,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/disc/zoomDisc.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/disc/jockey.js',
 		'hasJion', true,
 		'inBundle', true
@@ -631,6 +636,26 @@ server_resourceRay.create( 'ray:init', [
 		'filePath', 'src/gruga/iconNormal.js',
 		'inBundle', true
 	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconZoom.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconZoomAll.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconZoomHome.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconZoomIn.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/iconZoomOut.js',
+		'inBundle', true
+	),
 //	server_resource.create(
 //		'filePath', 'src/gruga/iconHand.js',
 //		'inBundle', true
@@ -665,6 +690,10 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/createDisc.js',
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/gruga/zoomDisc.js',
 		'inBundle', true
 	),
 	server_resource.create(
@@ -869,7 +898,22 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/action/create.js',
+		'filePath', 'src/show/create.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/show/form.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/show/zoom.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/show/normal.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -885,11 +929,6 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/action/dragItems.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/action/form.js',
 		'hasJion', true,
 		'inBundle', true
 	),

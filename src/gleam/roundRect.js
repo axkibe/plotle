@@ -204,7 +204,7 @@ function( )
 					),
 					gleam_shape_round.create(
 						'close', true
-					),
+					)
 				],
 				'pc', this.pc
 			)

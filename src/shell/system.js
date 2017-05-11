@@ -481,12 +481,6 @@ prototype.setTimer =
 };
 
 
-/*
-| Pixels to scroll on a wheel event
-*/
-prototype.textWheelSpeed = 12 * 5;
-
-
 // ---------------------------
 
 

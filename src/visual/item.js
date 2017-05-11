@@ -25,6 +25,38 @@ visual_item = NODE ? module.exports : { };
 
 
 /*
+| Returns the action if an item with 'path' concerns about
+| the action.
+*/
+visual_item.concernsAction =
+	function(
+		action,
+		path
+	)
+{
+	if( !path || !action ) return undefined;
+
+	return action.affects( path ) ? action : undefined;
+};
+
+
+/*
+| Returns the action if an item with 'path' concerns about
+| the hover.
+*/
+visual_item.concernsHover =
+	function(
+		hover,
+		path
+	)
+{
+	if( !path || !hover ) return undefined;
+
+	return path.subPathOf( hover ) ? hover : undefined;
+};
+
+
+/*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
@@ -42,22 +74,6 @@ visual_item.concernsMark =
 		? mark
 		: undefined
 	);
-};
-
-
-/*
-| Returns the action if an item with 'path' concerns about
-| the action.
-*/
-visual_item.concernsAction =
-	function(
-		action,
-		path
-	)
-{
-	if( !path || !action ) return undefined;
-
-	return action.affects( path ) ? action : undefined;
 };
 
 
@@ -170,7 +186,7 @@ visual_item.getDragItemChangeZone =
 /*
 | An dragItems action stopped.
 */
-visual_item.getDragItemChangePnwFs =
+visual_item.getDragItemChangePosFs =
 	function( )
 {
 	var
@@ -227,7 +243,7 @@ visual_item.getResizeItemChangeZone =
 | Returns the change-set for a resizing
 | the item, defined by pos/fontsize.
 */
-visual_item.getResizeItemChangePnwFs =  // FIXME
+visual_item.getResizeItemChangePosFs =
 	function( )
 {
 	var

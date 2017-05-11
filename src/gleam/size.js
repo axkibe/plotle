@@ -57,6 +57,19 @@ prototype = gleam_size.prototype;
 
 
 /*
+| Point in the center.
+*/
+jion.lazyValue(
+	prototype,
+	'pc',
+	function( )
+{
+	return gleam_point.xy( this.width / 2, this.height / 2 );
+}
+);
+
+
+/*
 | Shortcut to create an gleam_size jion.
 */
 gleam_size.wh =

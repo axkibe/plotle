@@ -56,11 +56,11 @@ if( JION )
 
 
 var
-	action_form,
 	fabric_spaceRef,
 	form_form,
 	form_signUp,
 	jion,
+	show_form,
 	user_creds,
 	user_passhash,
 	visual_mark_caret;
@@ -255,7 +255,7 @@ prototype.onRegister =
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
-	root.create( 'action', action_form.welcome, 'user', request.user );
+	root.create( 'show', show_form.welcome, 'user', request.user );
 };
 
 

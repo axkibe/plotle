@@ -25,6 +25,7 @@ if( JION )
 
 
 var
+	gleam_point,
 	gleam_shape_start;
 
 /*
@@ -47,6 +48,37 @@ if( NODE )
 
 
 prototype = gleam_shape_start.prototype;
+
+
+/*
+| Shortcut to create a start at ü.
+*/
+gleam_shape_start.p =
+	function( p )
+{
+	return gleam_shape_start.create( 'p', p );
+};
+
+
+/*
+| Shortcut to create a start at xy.
+*/
+gleam_shape_start.xy =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		gleam_shape_start.create(
+			'p',
+				gleam_point.create(
+					'x', x,
+					'y', y
+				)
+		)
+	);
+};
 
 
 /*

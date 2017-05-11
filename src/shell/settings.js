@@ -52,8 +52,14 @@ shell_settings =
 	| Maximum size of a glint graphic cache
 	| in width * size
 	*/
-	glintCacheLimit : 32767
+	glintCacheLimit : 32767,
 	//glintCacheLimit : Number.POSITIVE_INFINITY,
+
+
+	/*
+	| Pixels to scroll on a wheel event
+	*/
+	textWheelSpeed : 12 * 5
 };
 
 

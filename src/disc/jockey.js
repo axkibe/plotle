@@ -47,6 +47,11 @@ if( JION )
 				comment : 'path of the disc',
 				type : 'jion$path'
 			},
+			show :
+			{
+				comment : 'currently form/disc shown',
+				type : require ( '../show/typemap' )
+			},
 			spaceRef :
 			{
 				comment : 'currently loaded space',
@@ -69,7 +74,9 @@ if( JION )
 			'disc_mainDisc',
 			'disc_mainDisc:abstract',
 			'disc_createDisc',
-			'disc_createDisc:abstract'
+			'disc_createDisc:abstract',
+			'disc_zoomDisc',
+			'disc_zoomDisc:abstract'
 		]
 	};
 }
@@ -142,12 +149,14 @@ prototype._init =
 {
 	var
 		a,
+		access,
 		aZ,
 		b,
 		bZ,
 		disc,
 		key,
 		ranks,
+		show,
 		twig;
 
 /**/if( CHECK )
@@ -161,6 +170,12 @@ prototype._init =
 	ranks = this._ranks;
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
+
+	access = this.access;
+
+	show = this.show;
+
+	// FIXME lift other this. variables from loop
 
 	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
@@ -185,11 +200,12 @@ prototype._init =
 
 		twig[ key ] =
 			disc.create(
-				'access', this.access,
+				'access', access,
 				'action', this.action,
 				'controlTransform', this.controlTransform,
 				'hover', this.hover,
 				'mark', this.mark,
+				'show', show,
 				'spaceRef', this.spaceRef,
 				'user', this.user,
 				'viewSize', this.viewSize
@@ -213,18 +229,21 @@ prototype.dragStart =
 	)
 {
 	var
-		action,
 		bubble;
 
 	bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
 
 	if( bubble !== undefined ) return bubble;
 
-	action = this.action;
-
-	if( action && action.isCreate )
+	switch( this.show )
 	{
-		return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).dragStart( p, shift, ctrl );
 	}
 };
 
@@ -238,28 +257,30 @@ jion.lazyValue(
 	function( )
 {
 	var
-		action,
-		createDisc,
 		gLen,
-		gRay,
-		mainDisc;
-
-	createDisc = this.get( 'createDisc' );
-
-	mainDisc = this.get( 'mainDisc' );
-
-	action = this.action;
+		gRay;
 
 	gRay = [ ];
 
 	gLen = 0;
 
-	if( action && action.isCreate )
+	switch( this.show.reflect )
 	{
-		gRay[ gLen++ ] = createDisc.glint;
+		case 'show_create' :
+
+			gRay[ gLen++ ] = this.get( 'createDisc' ).glint;
+
+			break;
+
+		case 'show_zoom' :
+
+			gRay[ gLen++ ] = this.get( 'zoomDisc' ).glint;
+
+			break;
 	}
 
-	gRay[ gLen++ ] = mainDisc.glint;
+
+	gRay[ gLen++ ] = this.get( 'mainDisc' ).glint;
 
 	return gleam_glint_ray.create( 'ray:init', gRay );
 }
@@ -279,19 +300,23 @@ prototype.mousewheel =
 	)
 {
 	var
-		action,
 		bubble;
 
 	bubble = this.get( 'mainDisc' ).mousewheel( p, dir, shift, ctrl );
 
 	if( bubble ) return bubble;
 
-	action = this.action;
-
-	if( action && action.isCreate )
+	switch( this.show.reflect )
 	{
-		return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).mousewheel( p, dir, shift, ctrl );
 	}
+
 
 	return;
 };
@@ -308,18 +333,21 @@ prototype.pointingHover =
 	)
 {
 	var
-		action,
 		hover;
 
 	hover = this.get( 'mainDisc' ).pointingHover( p, shift, ctrl );
 
 	if( hover ) return hover;
 
-	action = this.action;
-
-	if( action && action.isCreate )
+	switch( this.show.reflect )
 	{
-		return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).pointingHover( p, shift, ctrl );
 	}
 };
 
@@ -335,18 +363,21 @@ prototype.click =
 	)
 {
 	var
-		action,
 		start;
 
 	start = this.get( 'mainDisc' ).click( p, shift, ctrl );
 
 	if( start ) return start;
 
-	action = this.action;
-
-	if( action && action.isCreate )
+	switch( this.show.reflect )
 	{
-		return this.get( 'createDisc' ).click( p, shift, ctrl );
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).click( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).click( p, shift, ctrl );
 	}
 };
 
@@ -370,6 +401,10 @@ prototype.pushButton =
 		case 'mainDisc' :
 
 			return this.get( 'mainDisc' ).pushButton( path, shift, ctrl );
+
+		case 'zoomDisc' :
+
+			return this.get( 'zoomDisc' ).pushButton( path, shift, ctrl );
 
 		default :
 

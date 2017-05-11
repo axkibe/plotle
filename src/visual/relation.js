@@ -279,13 +279,13 @@ prototype.input = visual_docItem.input;
 /*
 | Returns the change for dragging this item.
 */
-prototype.getDragItemChange = visual_item.getDragItemChangePnwFs;
+prototype.getDragItemChange = visual_item.getDragItemChangePosFs;
 
 
 /*
 | Returns the change for resizing this item.
 */
-prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
+prototype.getResizeItemChange = visual_item.getResizeItemChangePosFs;
 
 
 /*

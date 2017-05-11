@@ -71,9 +71,9 @@ prototype.affects =
 
 
 /*
-| This is a hand action.
+| 'Normal' button ought to be down during this action.
 */
-prototype.isHand = true;
+prototype.normalButtonDown = true;
 
 
 } )( );

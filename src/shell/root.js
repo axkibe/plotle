@@ -38,10 +38,7 @@ if( JION )
 			display :
 			{
 				comment : 'the display within everything happens',
-				type :
-					[
-						'gleam_display_canvas'
-					]
+				type : 'gleam_display_canvas'
 			},
 			doTracker :
 			{
@@ -74,6 +71,11 @@ if( JION )
 				type :
 					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
+			},
+			show :
+			{
+				comment : 'currently form/disc shown',
+				type : require ( '../show/typemap' )
 			},
 			spaceFabric :
 			{
@@ -123,11 +125,10 @@ if( JION )
 			},
 			_visitor :
 			{
-				comment :
-					// remembers an acquired visitor user name and
-					// passhash so when logging out from a real user
-					// the previous visitor id is regained.
-					'last acquired visitor credentials',
+				// remembers an acquired visitor user name and
+				// passhash so when logging out from a real user
+				// the previous visitor id is regained.
+				comment : 'last acquired visitor credentials',
 				type : [ 'undefined', 'user_creds' ]
 			}
 		},
@@ -149,7 +150,6 @@ if( JION )
 
 
 var
-	action_form,
 	action_select,
 	change_grow,
 	change_join,
@@ -181,6 +181,7 @@ var
 	gruga_space,
 	gruga_user,
 	gruga_welcome,
+	gruga_zoomDisc,
 	jion,
 	jion$path,
 	jion$pathRay,
@@ -193,6 +194,8 @@ var
 	shell_doTracker,
 	shell_root,
 	shell_settings,
+	show_form,
+	show_normal,
 	system,
 	user_creds,
 	visual_mark_caret,
@@ -327,12 +330,12 @@ shell_root.startup =
 	)
 {
 	var
-		action,
 		ajaxPath,
 		canvas,
 		dj,
 		djPath,
 		djTwPath,
+		show,
 		user,
 		viewSize;
 
@@ -355,7 +358,7 @@ shell_root.startup =
 			'width', display.size.width
 		);
 
-	action = action_form.loading;
+	show = show_form.loading;
 
 	ajaxPath = jion$path.empty.append( 'ajax' );
 
@@ -372,9 +375,9 @@ shell_root.startup =
 
 	dj =
 		disc_jockey.create(
-			'action', action,
 			'controlTransform', gleam_transform.normal,
 			'path', djPath,
+			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
 				gruga_mainDisc.abstract(
@@ -383,11 +386,14 @@ shell_root.startup =
 			'twig:add', 'createDisc',
 				gruga_createDisc.abstract(
 					'path', djTwPath.append( 'createDisc' )
+				),
+			'twig:add', 'zoomDisc',
+				gruga_zoomDisc.abstract(
+					'path', djTwPath.append( 'zoomDisc' )
 				)
 		);
 
 	shell_root.create(
-		'action', action,
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -399,6 +405,7 @@ shell_root.startup =
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
+		'show', show,
 		'spaceTransform', gleam_transform.normal,
 		'systemFocus', true,
 		'viewSize', display.size,
@@ -424,6 +431,7 @@ prototype._init =
 		action,
 		hover,
 		mark,
+		show,
 		spaceFabric,
 		spaceRef,
 		spaceTransform,
@@ -442,6 +450,8 @@ prototype._init =
 	action = this.action;
 
 	mark = this.mark;
+
+	show = this.show;
 
 	viewSize = this.viewSize;
 
@@ -493,6 +503,7 @@ prototype._init =
 	if( !spaceFabric ) this.spaceVisual = undefined;
 
 	// skips recreating children when no need
+	// FIXME use alike
 	if(
 		!inherit
 		|| access !== inherit.access
@@ -500,6 +511,7 @@ prototype._init =
 		|| hover !== inherit.hover
 		|| mark !== inherit.mark
 		|| user !== inherit.user
+		|| show !== inherit.show
 		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
 		|| viewSize !== inherit.viewSize
@@ -544,6 +556,7 @@ prototype._init =
 					),
 				'hover', hover,
 				'mark', mark,
+				'show', show,
 				'spaceRef', spaceRef,
 				'user', user,
 				'viewSize', viewSize
@@ -684,19 +697,30 @@ prototype.changeSpaceTransform =
 
 	e = ( 1 / zoom - 1 / st.zoom );
 
-	return(
-		this.create(
-			'_transformExponent', e1,
-			'spaceTransform',
-				st.create(
-					'offset',
-						gleam_point.create(
-							'x', ( p.x * e + offset.x / st.zoom ) * zoom,
-							'y', ( p.y * e + offset.y / st.zoom ) * zoom
-						),
-					'zoom', zoom
-				)
-		)
+	this.create(
+		'_transformExponent', e1,
+		'spaceTransform',
+			st.create(
+				'offset',
+					gleam_point.create(
+						'x', ( p.x * e + offset.x / st.zoom ) * zoom,
+						'y', ( p.y * e + offset.y / st.zoom ) * zoom
+					),
+				'zoom', zoom
+			)
+	);
+};
+
+
+/*
+| Changed the views zoom to 1 and pans to home.
+*/
+prototype.changeSpaceTransformHome =
+	function( )
+{
+	this.create(
+		'_transformExponent', 0,
+		'spaceTransform', gleam_transform.normal
 	);
 };
 
@@ -929,8 +953,8 @@ prototype.moveToSpace =
 {
 
 	root.create(
-		'action', action_form.loading,
 		'fallbackSpaceRef', this.spaceRef,
+		'show', show_form.loading,
 		'spaceFabric', undefined
 	);
 
@@ -1031,8 +1055,11 @@ prototype.showHome =
 	function( )
 {
 	root.create(
-		'action',
-			root.spaceVisual ? undefined : action_form.loading
+		'action', undefined,
+		'show',
+			root.spaceVisual
+			? show_normal.create( )
+			: show_form.loading
 	);
 };
 
@@ -1183,7 +1210,7 @@ prototype.onAcquireSpace =
 {
 	var
 		access,
-		action;
+		show;
 
 	if( reply.reflect === 'reply_error' )
 	{
@@ -1211,7 +1238,7 @@ prototype.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'action', action_form.nonExistingSpace );
+			root.create( 'show', show_form.nonExistingSpace );
 
 			return;
 
@@ -1228,7 +1255,7 @@ prototype.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'action', action_form.noAccessToSpace );
+			root.create( 'show', show_form.noAccessToSpace );
 
 			return;
 
@@ -1241,17 +1268,13 @@ prototype.onAcquireSpace =
 
 	access = reply.access;
 
-	action = root.action;
+	show = root.show;
 
 	root.create(
 		'access', access,
-		'action',
-			(
-				action
-				&& action.reflect === 'action_form'
-				&& action.formName === 'loading'
-			)
-			? undefined
+		'show',
+			( show.reflect === 'show_form' && show.formName === 'loading' )
+			? show_normal.create( )
 			: pass,
 		'mark', undefined,
 		'spaceFabric', reply.space,
@@ -1270,16 +1293,12 @@ prototype.onAuth =
 	)
 {
 	var
-		action;
+		show;
 
-	action = root.action;
+	show = root.show;
 
 	// if in login form this is a tempted login
-	if(
-		action
-		&& action.reflect === 'action_form'
-		&& action.formName === 'login'
-	)
+	if( show.reflect === 'show_form' && show.formName === 'login' )
 	{
 		root.form.get( 'login' ).onAuth( request, reply );
 
@@ -1329,7 +1348,7 @@ prototype.onRegister =
 	// if not in signup form this came out of band.
 	if(
 		!action
-		|| action.reflect !== 'action_form'
+		|| action.reflect !== 'show_form'
 		|| action.formName !== 'signUp'
 	)
 	{
@@ -1520,27 +1539,21 @@ jion.lazyValue(
 	function( )
 {
 	var
-		action;
+		show;
 
-	action = root.action;
+	show = this.show;
 
-	switch( action && action.reflect )
+	switch( show.reflect )
 	{
-		case undefined :
-		case 'action_create' :
-		case 'action_createGeneric' :
-		case 'action_createRelation' :
-		case 'action_dragItems' :
-		case 'action_pan' :
-		case 'action_resizeItems' :
-		case 'action_select' :
-		case 'action_scrolly' :
+		case 'show_create' :
+		case 'show_normal' :
+		case 'show_zoom' :
 
 			return root.spaceVisual;
 
-		case 'action_form' :
+		case 'show_form' :
 
-			return root.form.get( action.formName );
+			return root.form.get( show.formName );
 
 		default : throw new Error( );
 	}

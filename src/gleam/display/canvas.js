@@ -73,6 +73,7 @@ if( NODE )
 
 var
 	prototype,
+	noround,
 	ratio,
 	round,
 	_round;
@@ -103,6 +104,15 @@ else
 	{
 		return _round( val * ratio );
 	};
+}
+
+if( ratio === 1 )
+{
+	noround = function( val ) { return val; };
+}
+else
+{
+	noround = function( val ) { return val * ratio; };
 }
 
 
@@ -833,7 +843,7 @@ prototype._renderTextOpenType =
 	}
 
 	cx = this._cx;
-		
+
 	t1 = Math.cos( rotate );
 
 	t2 = Math.sin( rotate );
@@ -919,7 +929,7 @@ prototype._renderWindow =
 		return;
 	}
 
-	if( h * w > shell_settings.glintCacheLimit )
+	if( rh * rw > shell_settings.glintCacheLimit )
 	{
 		x2 = x + rw;
 
@@ -1063,21 +1073,9 @@ prototype._paint =
 	)
 {
 	var
-		a,
-		aZ,
 		border,
 		cx,
 		fill;
-
-	if( shape.reflect === 'gleam_shapeRay' )
-	{
-		for( a = 0, aZ = shape.length; a < aZ; a++ )
-		{
-			this._paint( facet, shape.get( a ), offset );
-		}
-
-		return;
-	}
 
 /**/if( CHECK )
 /**/{
@@ -1146,6 +1144,9 @@ prototype._sketch =
 		shift   // possibly shift by 0.5
 	)
 {
+	var
+		a, aZ;
+
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 4 ) throw new Error( );
@@ -1156,26 +1157,36 @@ prototype._sketch =
 		case 'gleam_ellipse' :
 		case 'gleam_roundRect' :
 
-			return(
-				this._sketchGenericShape(
-					shape.shape,
-					border,
-					offset,
-					shift
-				)
-			);
+			this._sketchGenericShape( shape.shape, border, offset, shift );
+
+			return;
 
 		case 'gleam_line' :
 
-			return this._sketchLine( shape, border, offset, shift );
+			this._sketchLine( shape, border, offset, shift );
+
+			return;
 
 		case 'gleam_rect' :
 
-			return this._sketchRect( shape, border, offset, shift );
+			this._sketchRect( shape, border, offset, shift );
+
+			return;
 
 		case 'gleam_shape' :
 
-			return this._sketchGenericShape( shape, border, offset, shift );
+			this._sketchGenericShape( shape, border, offset, shift );
+
+			return;
+
+		case 'gleam_shapeRay' :
+
+			for( a = 0, aZ = shape.length; a < aZ; a++ )
+			{
+				this._sketch( shape.get( a ), border, offset, shift );
+			}
+
+			return;
 
 		default : throw new Error( );
 	}
@@ -1212,6 +1223,7 @@ prototype._sketchGenericShape =
 		pny, // next point y
 		psx, // start point x
 		psy, // start point y
+		r,   // rounding function
 		section,
 		nextSect;
 
@@ -1236,8 +1248,10 @@ prototype._sketchGenericShape =
 
 	p = section.p;
 
+	r = shape.nogrid ? noround : round;
+
 	psx =
-		round( p.x + ox )
+		r( p.x + ox )
 		+ (
 			p.x > pc.x
 			?  -border
@@ -1246,7 +1260,7 @@ prototype._sketchGenericShape =
 		+ shift;
 
 	psy =
-		round( p.y + oy )
+		r( p.y + oy )
 		+ (
 			p.y > pc.y
 			?  -border
@@ -1301,7 +1315,7 @@ prototype._sketchGenericShape =
 			if( border !== 0 )
 			{
 				pnx =
-					round( p.x + ox )
+					r( p.x + ox )
 					+ (
 						p.x > pc.x
 						?  -border
@@ -1310,7 +1324,7 @@ prototype._sketchGenericShape =
 					+ shift;
 
 				pny =
-					round( p.y + oy )
+					r( p.y + oy )
 					+ (
 						p.y > pc.y
 						?  -border
@@ -1320,8 +1334,8 @@ prototype._sketchGenericShape =
 			}
 			else
 			{
-				pnx = round( p.x + ox ) + shift;
-				pny = round( p.y + oy ) + shift;
+				pnx = r( p.x + ox ) + shift;
+				pny = r( p.y + oy ) + shift;
 			}
 		}
 
@@ -1377,7 +1391,7 @@ prototype._sketchGenericShape =
 						pnx - ( dxy > 0 ? magic * dx : 0 ),
 						pny - ( dxy < 0 ? magic * dy : 0 ),
 						pnx,
-						pny 
+						pny
 					);
 				}
 

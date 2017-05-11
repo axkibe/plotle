@@ -33,7 +33,8 @@ if( JION )
 			hover :
 			{
 				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ]
+				type : [ 'undefined', 'jion$path' ],
+				prepare : 'visual_item.concernsHover( hover, path )'
 			},
 			mark :
 			{
@@ -169,6 +170,11 @@ prototype._init =
 	{
 		jion.aheadValue( this, '_glint', inherit._glint );
 	}
+/**/else if( CHECK && CHECK.noinherit )
+/**/{
+/**/	console.log( 'noinherit', 'visual_portal' );
+/**/}
+
 };
 
 

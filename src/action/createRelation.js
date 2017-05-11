@@ -75,12 +75,6 @@ prototype = action_createRelation.prototype;
 
 
 /*
-| Mark it as a creation action.
-*/
-prototype.isCreate = true;
-
-
-/*
 | Returns true if an entity with path is affected by this action.
 */
 prototype.affects =

@@ -66,6 +66,101 @@ e = gleam_constants.epsilon;
 
 
 /*
+| Shortcut to create a closing line.
+*/
+gleam_shape_line.close =
+	function( )
+{
+	return(
+		gleam_shape_line.create(
+			'close', true
+		)
+	);
+};
+
+
+/*
+| Shortcut to create a fyling, closing line.
+*/
+gleam_shape_line.closeFly =
+	function( )
+{
+	return(
+		gleam_shape_line.create(
+			'close', true,
+			'fly', true
+		)
+	);
+};
+
+
+/*
+| Shortcut to create a fly-line to xy.
+*/
+gleam_shape_line.xyFly =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		gleam_shape_line.create(
+			'fly', true,
+			'p',
+				gleam_point.create(
+					'x', x,
+					'y', y
+				)
+		)
+	);
+};
+
+
+/*
+| Shortcut to create a line to p.
+*/
+gleam_shape_line.p =
+	function( p )
+{
+	return(
+		gleam_shape_line.create( 'p', p )
+	);
+};
+
+
+/*
+| Shortcut to create a fly-line to p.
+*/
+gleam_shape_line.pFly =
+	function( p )
+{
+	return(
+		gleam_shape_line.create( 'fly', true, 'p', p )
+	);
+};
+
+/*
+| Shortcut to create a line to xy.
+*/
+gleam_shape_line.xy =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		gleam_shape_line.create(
+			'p',
+				gleam_point.create(
+					'x', x,
+					'y', y
+				)
+		)
+	);
+};
+
+
+/*
 | Gets the source of a projection to p.
 |
 | Returns the projection intersection in
@@ -126,6 +221,7 @@ prototype.getProjection =
 		return gleam_point.create( 'x', pix, 'y', piy );
 	}
 };
+
 
 /*
 | Returns a transformed shape section.

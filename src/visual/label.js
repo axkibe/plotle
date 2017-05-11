@@ -276,13 +276,17 @@ prototype._init =
 
 	if(
 		inherit
-		&& inherit.alikeIgnoringTransform( this )
-		&& inherit.transform.zoom === this.transform.zoom
-		&& jion.hasLazyValueSet( inherit, '_display' )
+		&& inherit.equals( this )
+		&& jion.hasLazyValueSet( inherit, 'glint' )
 	)
 	{
-		jion.aheadValue( this, '_display', inherit._display );
+		jion.aheadValue( this, 'glint', inherit.glint );
 	}
+/**/else if( CHECK && CHECK.noinherit )
+/**/{
+/**/	console.log( 'noinherit', 'visual_label' );
+/**/}
+
 };
 
 
@@ -362,13 +366,13 @@ jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 /*
 | Returns the change for dragging this item.
 */
-prototype.getDragItemChange = visual_item.getDragItemChangePnwFs;
+prototype.getDragItemChange = visual_item.getDragItemChangePosFs;
 
 
 /*
 | Returns the change for resizing this item.
 */
-prototype.getResizeItemChange = visual_item.getResizeItemChangePnwFs;
+prototype.getResizeItemChange = visual_item.getResizeItemChangePosFs;
 
 
 /*
@@ -681,7 +685,7 @@ jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
 | Calculates the labels zone,
 | possibly altered by action.
 |
-| FIXME inherit
+| FUTURE inherit
 */
 visual_label.zone =
 	function( )

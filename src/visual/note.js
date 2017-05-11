@@ -1,7 +1,7 @@
 /*
 | A fix sized text item.
 |
-| Has potentionaly a scrollbar.
+| Potentionally has a scrollbar.
 */
 
 
@@ -95,7 +95,6 @@ var
 	root,
 	session_uid,
 	shell_settings,
-	system,
 	visual_doc,
 	visual_docItem,
 	visual_item,
@@ -260,7 +259,7 @@ prototype._init =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
-			'clipsize', zone.zeroPos,
+			'clipsize', zone.size,
 			'fabric', fabric.doc,
 			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
@@ -299,6 +298,10 @@ prototype._init =
 				'size', zone.height - gruga_note.vScrollbarDis * 2,
 				'transform', this.transform
 			);
+	}
+	else if( this.scrollPos.y !== 0 )
+	{
+		this.scrollPos = this.scrollPos.create( 'y', 0 );
 	}
 
 	if(
@@ -500,7 +503,7 @@ prototype.mousewheel =
 		this.scrollPos.create(
 			'y',
 				this.scrollPos.y
-				- dir * system.textWheelSpeed
+				- dir * shell_settings.textWheelSpeed
 		)
 	);
 

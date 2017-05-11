@@ -72,7 +72,6 @@ if( JION )
 
 
 var
-	action_create,
 	action_createGeneric,
 	action_createRelation,
 	action_pan,
@@ -762,18 +761,6 @@ prototype.dragStart =
 	// otherwise panning is initiated
 	switch( aType )
 	{
-		case 'action_create' :
-
-			root.create(
-				'action',
-					action.create(
-						'offset', transform.offset,
-						'startPoint', p
-					)
-			);
-
-			return;
-
 		case 'action_createRelation' :
 
 			root.create(
@@ -893,12 +880,6 @@ prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'action_create' :
-
-			this._stopCreate( p, shift, ctrl );
-
-			break;
-
 		case 'action_createGeneric' :
 
 			this._stopCreateGeneric( p, shift, ctrl );
@@ -1039,12 +1020,6 @@ prototype.dragMove =
 
 	switch( action.reflect )
 	{
-		case 'action_create' :
-
-			this._moveCreate( p, shift, ctrl );
-
-			return;
-
 		case 'action_createGeneric' :
 
 			this._moveCreateGeneric( p, shift, ctrl );
@@ -1219,19 +1194,12 @@ prototype._changeZoom =
 	)
 {
 	var
-		pc,
-		pm,
-		vs;
+		pm;
 
-	vs = this.viewSize;
-
-	pc =
-		gleam_point.create(
-			'x', vs.width / 2,
-			'y', vs.height / 2
-		);
-
-	pm = pc.detransform( this.transform );
+	pm =
+		this.viewSize
+		.pc
+		.detransform( this.transform );
 
 	root.changeSpaceTransform( df, pm );
 };
@@ -1788,7 +1756,7 @@ prototype._stopCreateGeneric =
 		'action',
 			ctrl
 			? action_createGeneric.create( 'itemType', action.itemType )
-			: action_create.create( )
+			: undefined
 	);
 };
 

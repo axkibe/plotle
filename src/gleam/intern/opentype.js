@@ -32,22 +32,22 @@ var
 
 opentypeOptions =
 	{
-    	kerning: true,
+	  	kerning: true,
 	    features: {
-    	    liga: true,
+	   	    liga: true,
 			rlig: true
-    	},
+	   	},
 		script: 'latn'
 	};
 
 opentypeOptionsHinting =
 	{
 		hinting: true,
-    	kerning: true,
+		kerning: true,
 	    features: {
-    	    liga: true,
+	   	    liga: true,
 			rlig: true
-    	},
+	   	},
 		script: 'latn'
 	};
 
@@ -79,14 +79,14 @@ function getCapHeight( font )
 
 	chars = 'HIKLEFJMNTZBDPRAGOQSUVWXY';
 
-    for( a = 0, aZ = chars.length; a < aZ; a++ )
+	for( a = 0, aZ = chars.length; a < aZ; a++ )
 	{
 		idx = font.charToGlyphIndex( chars[ a ] );
 
-        if( idx <= 0 ) continue;
+		if( idx <= 0 ) continue;
 
-        return font.glyphs.get( idx ).getMetrics( ).yMax;
-    }
+		return font.glyphs.get( idx ).getMetrics( ).yMax;
+	}
 }
 
 
@@ -108,7 +108,7 @@ getWidth =
 
 	w = 0;
 
-    for( a = 0, aZ = glyphs.length; a < aZ; a++ )
+	for( a = 0, aZ = glyphs.length; a < aZ; a++ )
 	{
 		glyph = glyphs[ a ];
 
@@ -126,7 +126,7 @@ getWidth =
 				) * fontScale;
 		}
 	}
-	
+
 	return w;
 };
 
@@ -179,11 +179,11 @@ gleam_intern_opentype.drawText =
 		glyphCacheSet = glyphCache[ size ] = { };
 	}
 
-    fontScale = 1 / font_default.unitsPerEm * size;
+	fontScale = 1 / font_default.unitsPerEm * size;
 
 	options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
 
-    glyphs = font_default.stringToGlyphs( text, options );
+	glyphs = font_default.stringToGlyphs( text, options );
 
 	switch( font.align )
 	{
@@ -199,7 +199,7 @@ gleam_intern_opentype.drawText =
 
 			break;
 	}
-	
+
 	switch( font.base )
 	{
 		case 'middle' :
@@ -217,27 +217,27 @@ gleam_intern_opentype.drawText =
 			break;
 	}
 
-    for( a = 0, aZ = glyphs.length; a < aZ; a++ )
+	for( a = 0, aZ = glyphs.length; a < aZ; a++ )
 	{
 		if( glyph )
 		{
 	        if( glyph.advanceWidth )
 			{
-        	    x += glyph.advanceWidth * fontScale;
-        	}
+		   	    x += glyph.advanceWidth * fontScale;
+		   	}
 
-            x +=
+			x +=
 				font_default.getKerningValue(
 					glyph,
 					glyphs[ a ]
 				) * fontScale;
 		}
 
-    	glyph = glyphs[ a ];
+	   	glyph = glyphs[ a ];
 
 		if( size >= shell_settings.glyphCacheLimit )
 		{
-        	path =
+		      	path =
 				glyph.getPath(
 					round( x ),
 					round( y ),
@@ -272,7 +272,7 @@ gleam_intern_opentype.drawText =
 		path = glyph.getPath( 0, 0, size, options, font_default );
 
 		bb = path.getBoundingBox( );
-		
+
 		x1 = Math.floor( bb.x1 );
 
 		y1 = Math.floor( bb.y1 );
@@ -292,9 +292,9 @@ gleam_intern_opentype.drawText =
 			cvx = canvas.getContext( '2d' );
 
 			cvx.translate( -x1, -y1 );
-		
+
 			path.draw( cvx );
-		
+
 			cx.drawImage( canvas, round( x + x1 ), round( y + y1 ) );
 		}
 		else
@@ -310,7 +310,7 @@ gleam_intern_opentype.drawText =
 				x1 : x1,
 				y1 : y1
 			};
-    }
+	}
 };
 
 

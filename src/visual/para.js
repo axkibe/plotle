@@ -145,7 +145,12 @@ prototype._init =
 			this._inheritedGlint = inherit._inheritedGlint;
 		}
 	}
+/**/else if( CHECK && CHECK.noinherit )
+/**/{
+/**/	console.log( 'noinherit', 'visual_para' );
+/**/}
 };
+
 
 
 /*

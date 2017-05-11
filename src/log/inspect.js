@@ -4,7 +4,7 @@
 | FUTURE:
 |   this has hughe overlap with node.util.inspect
 |   historically written since early browsers didn't
-|   have usuful inspections. Maybe be removed, but right
+|   have useful inspections. Maybe be removed, but right
 |   now I want to keep it a little before scrapping it,
 |   in case browser inspect / node.util.inspect have
 |   troubles in some case.
@@ -147,7 +147,7 @@ log_inspect =
 		case 'function' :
 
 			array.push('function ');
-			
+
 			if( o.name ) array.push( o.name );
 
 			return;

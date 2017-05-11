@@ -7,5 +7,6 @@ module.exports =
 	'gleam_line',
 	'gleam_rect',
 	'gleam_roundRect',
-	'gleam_shape'
+	'gleam_shape',
+	'gleam_shapeRay'
 ];

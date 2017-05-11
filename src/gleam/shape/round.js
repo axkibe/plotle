@@ -62,6 +62,63 @@ prototype = gleam_shape_round.prototype;
 
 
 /*
+| Shortcut to create a round to close.
+*/
+gleam_shape_round.close =
+	function( )
+{
+	return gleam_shape_round.create( 'close', true );
+};
+
+
+/*
+| Shortcut to create a count clockwise round to close.
+*/
+gleam_shape_round.closeCcw =
+	function( )
+{
+	return gleam_shape_round.create( 'ccw', true, 'close', true );
+};
+
+
+/*
+| Shortcut to create a counter clockwise round to p.
+*/
+gleam_shape_round.pCcw =
+	function( p )
+{
+	return gleam_shape_round.create( 'ccw', true, 'p', p );
+};
+
+
+/*
+| Shortcut to create a round to p.
+*/
+gleam_shape_round.p =
+	function( p )
+{
+	return gleam_shape_round.create( 'p', p );
+};
+
+
+/*
+| Shortcut to create a round to xy.
+*/
+gleam_shape_round.xy =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		gleam_shape_round.create(
+			'p', gleam_point.create( 'x', x, 'y', y )
+		)
+	);
+};
+
+
+/*
 | Returns a transformed shape section.
 */
 prototype.transform =

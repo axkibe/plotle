@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'action_form',
+		id : 'show_form',
 		attributes :
 		{
 			formName :
@@ -24,7 +24,7 @@ if( JION )
 
 
 var
-	action_form,
+	show_form,
 	jion;
 
 
@@ -43,13 +43,13 @@ var
 
 if( NODE )
 {
-	action_form = require( 'jion' ).this( module, 'source' );
+	show_form = require( 'jion' ).this( module, 'source' );
 
 	return;
 }
 
 
-prototype = action_form.prototype;
+prototype = show_form.prototype;
 
 validForms =
 	{
@@ -100,28 +100,15 @@ prototype._init =
 };
 
 
-
-/*
-| Returns true if an entity with path is affected by this action.
-*/
-prototype.affects =
-	function(
-		path
-	)
-{
-	return path && path.get( 0 ) === this.name;
-};
-
-
 /*jshint -W083 */
 for( formName in validForms )
 {
 	jion.lazyStaticValue(
-		action_form,
+		show_form,
 		formName,
 		function( formName )
 	{
-		return action_form.create( 'formName', formName );
+		return show_form.create( 'formName', formName );
 	}.bind( undefined, formName )
 	);
 }

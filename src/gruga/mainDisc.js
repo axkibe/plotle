@@ -19,6 +19,7 @@ var
 	gruga_iconNormal,
 	gruga_iconRemove,
 	gruga_iconSelect,
+	gruga_iconZoom,
 	gruga_mainDisc,
 	shell_fontPool,
 	widget_button;
@@ -49,7 +50,8 @@ var
 	spaceButtonPos,
 	spaceButtonSize,
 	userButtonPos,
-	userButtonSize;
+	userButtonSize,
+	zoomButtonPos;
 
 pw = gleam_point.xy( 0, 500 );
 
@@ -104,7 +106,7 @@ buttonModel =
 		'shape', 'ellipse'
 	);
 
-buttonSize = gleam_size.create( 'width', 44, 'height', 44 );
+buttonSize = gleam_size.wh( 44, 44 );
 
 loginButtonPos = pw.add( 30, 155 );
 
@@ -128,6 +130,7 @@ userButtonPos = pw.add( 0, 40 );
 
 userButtonSize = gleam_size.wh( 24, 180 );
 
+zoomButtonPos = pw.add( 48, -18 );
 
 gruga_mainDisc =
 	disc_mainDisc.abstract(
@@ -204,6 +207,15 @@ gruga_mainDisc =
 				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize ),
 				'text', 'go',
 				'font', shell_fontPool.get( 13, 'cm' ),
+				'visible', false
+			),
+		'twig:add', 'zoom',
+			buttonModel.abstract(
+				'zone', gleam_rect.posSize( zoomButtonPos, buttonSize ),
+				//'text', 'zoom',
+				//'font', shell_fontPool.get( 13, 'cm' ),
+				'iconShape', gruga_iconZoom.shape,
+				'iconFacet', gruga_iconZoom.facet,
 				'visible', false
 			),
 		'twig:add', 'space',

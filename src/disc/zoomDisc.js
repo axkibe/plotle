@@ -1,5 +1,5 @@
 /*
-| The creation disc.
+| The zoom disc.
 */
 
 
@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'disc_createDisc',
+		id : 'disc_zoomDisc',
 		hasAbstract : true,
 		attributes :
 		{
@@ -94,9 +94,7 @@ if( JION )
 
 
 var
-	action_createGeneric,
-	action_createRelation,
-	disc_createDisc,
+	disc_zoomDisc,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_ray,
@@ -104,10 +102,7 @@ var
 	gleam_rect,
 	gleam_transform,
 	jion,
-	root,
-	visual_label,
-	visual_note,
-	visual_portal;
+	root;
 
 
 /*
@@ -128,7 +123,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = disc_createDisc.prototype;
+prototype = disc_zoomDisc.prototype;
 
 
 /*
@@ -160,7 +155,7 @@ prototype._init =
 					 : this.path.append( 'twig' ).append( wname ),
 				'hover', this.hover,
 				'down',
-					disc_createDisc._isActiveButton( this.action, wname ),
+					disc_zoomDisc._isActiveButton( this.action, wname ),
 				'transform', this.controlTransform
 			);
 	}
@@ -180,62 +175,35 @@ prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
-		case 'createLabel' :
-
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_label
-					)
-			);
+		case 'zoomAll' :
 
 			return;
 
-		case 'createNote' :
+		case 'zoomIn' :
 
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_note
-					)
-			);
+			root.changeSpaceTransformCenter( 1 );
 
 			return;
 
-		case 'createPortal' :
-
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_portal
-					)
-			);
+		case 'zoomOut' :
 
 			return;
 
-		case 'createRelation' :
+		case 'zoomHome' :
 
-			root.create(
-				'action',
-					action_createRelation.create(
-						'relationState', 'start'
-					)
-			);
+			root.changeSpaceTransformHome( );
 
 			return;
 
@@ -433,49 +401,13 @@ prototype.mousewheel =
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-disc_createDisc._isActiveButton =
+disc_zoomDisc._isActiveButton =
 	function(
-		action,  // the action
-		wname    // the widget name
+//		action,  // the action
+//		wname    // the widget name
 	)
 {
-	if( !action )
-	{
-		return false;
-	}
-
-	switch( action.reflect )
-	{
-		case 'action_createGeneric' :
-
-			switch( action.itemType )
-			{
-				case visual_note   : return wname === 'createNote';
-
-				case visual_label  : return wname === 'createLabel';
-
-				case visual_portal : return wname === 'createPortal';
-
-				default : return false;
-			}
-
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'invalid execution point reached'
-/**/			);
-/**/		}
-
-			break;
-
-		case 'action_createRelation' :
-
-			return wname === 'createRelation';
-
-		default :
-
-			return false;
-	}
+	return false;
 };
 
 
