@@ -144,34 +144,6 @@ prototype.focusable = true;
 
 
 /*
-| Mouse hover.
-*/
-prototype.pointingHover =
-	function(
-		p
-	)
-{
-	if(
-		!this.visible
-		|| !this._tZone.within( p )
-		|| !this._tzShape.within(
-			p.sub( this._tZone.pos )
-		)
-	)
-	{
-		return undefined;
-	}
-
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'pointer'
-		)
-	);
-};
-
-
-/*
 | User clicked.
 */
 prototype.click =
@@ -181,16 +153,7 @@ prototype.click =
 		// ctrl
 	)
 {
-	if(
-		!this.visible
-		|| !this._tZone.within( p )
-		|| !this._tzShape.within(
-			p.sub( this._tZone.pos )
-		)
-	)
-	{
-		return undefined;
-	}
+	if( !this.within( p ) ) return;
 
 	root.pushButton( this.path );
 
@@ -199,25 +162,31 @@ prototype.click =
 
 
 /*
-| Any normal key for a button having focus triggers a push.
+| Start an operation with the poiting device button held down.
 */
-prototype.input =
+prototype.dragStart =
 	function(
-		// text
+		p
+		// shift,
+		// ctrl
 	)
 {
-	root.pushButton( this.path );
+	if( !this.within( p ) ) return;
+
+	root.dragStartButton( this.path );
 
 	return true;
 };
 
 
 /*
-| Stops a ReButton action.
+| Stops an operation with the poiting device button held down.
 */
 prototype.dragStop =
 	function( )
 {
+	console.log( 'DSTOP' );
+
 	root.create( 'action', undefined );
 };
 
@@ -248,6 +217,39 @@ jion.lazyValue(
 
 
 /*
+| Any normal key for a button having focus triggers a push.
+*/
+prototype.input =
+	function(
+		// text
+	)
+{
+	root.pushButton( this.path );
+
+	return true;
+};
+
+
+/*
+| Mouse hover.
+*/
+prototype.pointingHover =
+	function(
+		p
+	)
+{
+	if( !this.within( p ) ) return;
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'pointer'
+		)
+	);
+};
+
+
+/*
 | Special keys for buttons having focus
 */
 prototype.specialKey =
@@ -266,6 +268,25 @@ prototype.specialKey =
 		case 'enter' : root.pushButton( this.path ); return;
 	}
 };
+
+
+/*
+| Returns true if p is within
+| the button
+*/
+prototype.within =
+	function(
+		p
+	)
+{
+	return(
+		this.visible
+		&& this._tZone.within( p )
+		&& this._tzShape.within( p.sub( this._tZone.pos ) )
+	);
+};
+
+
 
 
 /*

@@ -111,12 +111,7 @@ jion.lazyValue(
 	'enlarge1',
 	function( )
 {
-	return(
-		this.create(
-			'height', this.height + 1,
-			'width', this.width + 1
-		)
-	);
+	return this.add( 1, 1 );
 }
 );
 
@@ -129,12 +124,7 @@ jion.lazyValue(
 	'shrink1',
 	function( )
 {
-	return(
-		this.create(
-			'height', this.height - 1,
-			'width', this.width - 1
-		)
-	);
+	return this.add( -1, -1 );
 }
 );
 

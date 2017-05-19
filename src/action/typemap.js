@@ -9,5 +9,6 @@ module.exports =
 	'action_pan',
 	'action_resizeItems',
 	'action_scrolly',
-	'action_select'
+	'action_select',
+	'action_zoomButton'
 ];

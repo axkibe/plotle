@@ -683,7 +683,7 @@ jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
 
 /*
 | Calculates the labels zone,
-| possibly altered by action.
+| possibly altered by an action.
 |
 | FUTURE inherit
 */

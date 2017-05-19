@@ -662,7 +662,7 @@ Object.defineProperty(
 |
 | -> p1 = ( py * (1 / z1 - 1 / z0 ) + p0 / z0 ) * z1
 */
-prototype.changeSpaceTransform =
+prototype.changeSpaceTransformPoint =
 	function(
 		de,  // difference of view zoom exponent
 		p    // point to keep constant
@@ -707,6 +707,130 @@ prototype.changeSpaceTransform =
 						'y', ( p.y * e + offset.y / st.zoom ) * zoom
 					),
 				'zoom', zoom
+			)
+	);
+};
+
+
+/*
+| Changes the zoom factor keeping current center
+*/
+prototype.changeSpaceTransformCenter =
+	function(
+		df  // different in factor
+	)
+{
+	root.changeSpaceTransformPoint(
+		df,
+		root.viewSize
+		.pc
+		.detransform( root.spaceTransform )
+	);
+};
+
+
+/*
+| Changed the views so that all items of current space are visible.
+*/
+prototype.changeSpaceTransformAll =
+	function( )
+{
+	var
+		discWidth,
+		exp,
+		cx,
+		cy,
+		item,
+		pos,
+		r,
+		rZ,
+		ex,
+		ny,
+		sy,
+		wx,
+		space,
+		vsx,
+		vsy,
+		vsx2,
+		vsy2,
+		zoomMin,
+		z;
+
+	space = root.spaceVisual;
+
+	rZ = space.length;
+
+	if( rZ === 0 ) return;
+
+	item = space.atRank( 0 );
+
+	pos = item.pos || item.zone.pos;
+
+	wx = pos.x;
+
+	ny = pos.y;
+
+	ex = wx + item.zone.width;
+
+	sy = ny + item.zone.height;
+
+	for( r = 1; r < rZ; r++ )
+	{
+		item = space.atRank( r );
+
+		pos = item.pos || item.zone.pos;
+
+		if( pos.x < wx ) wx = pos.x;
+
+		if( pos.y < ny ) ny = pos.y;
+
+		if( pos.x + item.zone.width > ex ) ex = pos.x + item.zone.width;
+
+		if( pos.y + item.zone.height > sy ) sy = pos.y + item.zone.height;
+	}
+
+	// center
+	cx = ( ex + wx ) / 2;
+
+	cy = ( ny + sy ) / 2;
+
+	discWidth = root.disc.get( 'mainDisc' ).tZone.width;
+
+	vsx = root.viewSize.width - discWidth;
+
+	vsy = root.viewSize.height;
+
+	vsx2 = vsx / 2;
+
+	vsy2 = vsy / 2;
+
+	zoomMin = shell_settings.zoomMin;
+
+	for( exp = shell_settings.zoomMax; exp > zoomMin; exp-- )
+	{
+		z = Math.pow( 1.1, exp );
+
+		if( ex > cx + vsx2 / z ) continue;
+
+		if( wx < cx - vsx2 / z ) continue;
+
+		if( sy > cy + vsy2 / z ) continue;
+
+		if( ny < cy - vsy2 / z ) continue;
+
+		break;
+	}
+
+	root.create(
+		'_transformExponent', exp,
+		'spaceTransform',
+			gleam_transform.create(
+				'offset',
+					gleam_point.xy(
+						vsx2 - cx * z + discWidth,
+						vsy2 - cy * z
+					),
+				'zoom', z
 			)
 	);
 };
@@ -810,14 +934,22 @@ prototype.dragMove =
 	)
 {
 	var
+		bubble,
 		screen;
 
 	screen = root._currentScreen;
 
-	if( screen ) screen.dragMove( p, shift, ctrl );
+	if( !screen ) return;
+
+	if( screen.showDisc )
+	{
+		bubble = root.disc.dragMove( p, shift, ctrl );
+
+		if( bubble !== undefined ) return;
+	}
+
+	screen.dragMove( p, shift, ctrl );
 };
-
-
 
 
 /*
@@ -838,16 +970,38 @@ prototype.dragStart =
 
 	screen = root._currentScreen;
 
-	if( screen && screen.showDisc )
+	if( !screen ) return;
+
+	if( screen.showDisc )
 	{
 		bubble = root.disc.dragStart( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
 
-	if( screen )
+	screen.dragStart( p, shift, ctrl );
+};
+
+
+/*
+| A button has been dragStarted.
+*/
+prototype.dragStartButton =
+	function( path )
+{
+	switch( path.get( 0 ) )
 	{
-		screen.dragStart( p, shift, ctrl );
+		case 'disc' :
+
+			return root.disc.dragStartButton( path, false, false );
+
+		case 'form' :
+
+			return root.form.dragStartButton( path, false, false );
+
+		default :
+
+			throw new Error( 'invalid path' );
 	}
 };
 
@@ -863,11 +1017,21 @@ prototype.dragStop =
 	)
 {
 	var
+		bubble,
 		screen;
 
 	screen = root._currentScreen;
 
-	if( screen ) screen.dragStop( p, shift, ctrl );
+	if( !screen ) return;
+
+	if( screen.showDisc )
+	{
+		bubble = root.disc.dragStop( p, shift, ctrl );
+
+		if( bubble !== undefined ) return;
+	}
+
+	screen.dragStop( p, shift, ctrl );
 };
 
 
@@ -1019,6 +1183,38 @@ prototype.pointingHover =
 	}
 
 	return 'default';
+};
+
+
+/*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype.probeClickDrag =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble,
+		screen;
+
+	screen = root._currentScreen;
+
+	if( screen && screen.showDisc )
+	{
+		bubble = root.disc.probeClickDrag( p, shift, ctrl );
+
+		if( bubble !== undefined ) return bubble;
+	}
+
+//	FUTURE
+//	if( screen ) screen.probeClickDrag( p, shift, ctrl );
+
+	return 'atween';
 };
 
 

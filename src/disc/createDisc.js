@@ -169,6 +169,35 @@ prototype._init =
 };
 
 
+/*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype.probeClickDrag =
+	function(
+		p
+		//shift,
+		//ctrl
+	)
+{
+	var
+		pp,
+		tZone;
+
+	tZone = this._tZone;
+
+	// shortcut if p is not near the panel
+	if( !tZone.within( p ) ) return;
+
+	pp = p.sub( tZone.pos );
+
+	// if p is not on the panel
+	if( !this._tShape.within( pp ) ) return;
+
+	return 'atween';
+};
+
 
 /*
 | A button of the main disc has been pushed.
@@ -180,18 +209,15 @@ prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
@@ -258,9 +284,9 @@ prototype.pointingHover =
 	)
 {
 	var
+		bubble,
 		pp,
 		r,
-		reply,
 		rZ,
 		tZone;
 
@@ -276,9 +302,9 @@ prototype.pointingHover =
 	// it's on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply = this.atRank( r ).pointingHover( pp, shift, ctrl );
+		bubble = this.atRank( r ).pointingHover( pp, shift, ctrl );
 
-		if( reply ) return reply;
+		if( bubble ) return bubble;
 	}
 };
 
@@ -294,8 +320,8 @@ prototype.click =
 	)
 {
 	var
+		bubble,
 		pp,
-		reply,
 		r,
 		rZ,
 		tZone;
@@ -312,12 +338,24 @@ prototype.click =
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply = this.atRank( r ).click( pp, shift, ctrl );
+		bubble = this.atRank( r ).click( pp, shift, ctrl );
 
-		if( reply ) return reply;
+		if( bubble ) return bubble;
 	}
 
 	return false;
+};
+
+
+/*
+| Cycles the focus
+*/
+prototype.cycleFocus =
+	function(
+		// dir
+	)
+{
+	throw new Error( );
 };
 
 
@@ -353,32 +391,6 @@ prototype.input =
 
 
 /*
-| Cycles the focus
-*/
-prototype.cycleFocus =
-	function(
-		// dir
-	)
-{
-	throw new Error( );
-};
-
-
-/*
-| User is pressing a special key.
-*/
-prototype.specialKey =
-	function(
-	//	key,
-	//	shift,
-	//	ctrl
-	)
-{
-	// not implemented
-};
-
-
-/*
 | Start of a dragging operation.
 */
 prototype.dragStart =
@@ -405,6 +417,46 @@ prototype.dragStart =
 
 
 /*
+| A button has been dragStarted.
+*/
+prototype.dragStartButton =
+	function(
+		// path
+	)
+{
+	return false;
+};
+
+
+/*
+| Move during a dragging operation.
+*/
+prototype.dragMove =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return;
+};
+
+
+/*
+| Stop of a dragging operation.
+*/
+prototype.dragStop =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return;
+};
+
+
+/*
 | Mouse wheel.
 */
 prototype.mousewheel =
@@ -427,6 +479,21 @@ prototype.mousewheel =
 
 	return true;
 };
+
+
+/*
+| User is pressing a special key.
+*/
+prototype.specialKey =
+	function(
+	//	key,
+	//	shift,
+	//	ctrl
+	)
+{
+	// not implemented
+};
+
 
 
 /*

@@ -953,6 +953,11 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/action/zoomButton.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/user/creds.js',
 		'hasJion', true,
 		'inBundle', true
@@ -975,7 +980,7 @@ server_resourceRay.create( 'ray:init', [
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'media/fonts/OpenSans-Regular.ttf',
+		'filePath', 'media/fonts/DejaVuSans-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(
@@ -983,7 +988,7 @@ server_resourceRay.create( 'ray:init', [
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'media/fonts/SourceSansPro-Regular.ttf',
+		'filePath', 'media/fonts/OpenSans-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(
@@ -991,7 +996,7 @@ server_resourceRay.create( 'ray:init', [
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'media/fonts/DejaVuSans-Regular.ttf',
+		'filePath', 'media/fonts/SourceSansPro-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(

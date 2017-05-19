@@ -94,6 +94,7 @@ if( JION )
 
 
 var
+	action_zoomButton,
 	disc_zoomDisc,
 	gleam_glint_border,
 	gleam_glint_fill,
@@ -164,7 +165,6 @@ prototype._init =
 };
 
 
-
 /*
 | A button of the main disc has been pushed.
 */
@@ -185,19 +185,15 @@ prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
+	// zoomIn and zoomOut are handled
+	// via "dragging" operations so holding
+	// makes multiple events
+
 	switch( buttonName )
 	{
 		case 'zoomAll' :
 
-			return;
-
-		case 'zoomIn' :
-
-			root.changeSpaceTransformCenter( 1 );
-
-			return;
-
-		case 'zoomOut' :
+			root.changeSpaceTransformAll( );
 
 			return;
 
@@ -226,9 +222,9 @@ prototype.pointingHover =
 	)
 {
 	var
+		bubble,
 		pp,
 		r,
-		reply,
 		rZ,
 		tZone;
 
@@ -244,9 +240,9 @@ prototype.pointingHover =
 	// it's on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply = this.atRank( r ).pointingHover( pp, shift, ctrl );
+		bubble = this.atRank( r ).pointingHover( pp, shift, ctrl );
 
-		if( reply ) return reply;
+		if( bubble ) return bubble;
 	}
 };
 
@@ -262,8 +258,8 @@ prototype.click =
 	)
 {
 	var
+		bubble,
 		pp,
-		reply,
 		r,
 		rZ,
 		tZone;
@@ -280,9 +276,9 @@ prototype.click =
 	// this is on the disc
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		reply = this.atRank( r ).click( pp, shift, ctrl );
+		bubble = this.atRank( r ).click( pp, shift, ctrl );
 
-		if( reply ) return reply;
+		if( bubble ) return bubble;
 	}
 
 	return false;
@@ -333,6 +329,44 @@ prototype.cycleFocus =
 
 
 /*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype.probeClickDrag =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	var
+		pp,
+		tZone;
+
+	tZone = this._tZone;
+
+	// shortcut if p is not near the panel
+	if( !tZone.within( p ) ) return;
+
+	pp = p.sub( tZone.pos );
+
+	// if p is not on the panel
+	if( !this._tShape.within( pp ) ) return;
+
+	if(
+		this.get( 'zoomIn' ).within( pp )
+		|| this.get( 'zoomOut' ).within( pp )
+	)
+	{
+		return 'drag';
+	}
+
+	return 'atween';
+};
+
+
+/*
 | User is pressing a special key.
 */
 prototype.specialKey =
@@ -347,16 +381,41 @@ prototype.specialKey =
 
 
 /*
-| Start of a dragging operation.
+| Move during a dragging operation.
 */
-prototype.dragStart =
+prototype.dragMove =
 	function(
-		p
+		// p,
 		// shift,
 		// ctrl
 	)
 {
 	var
+		action;
+
+	action = this.action;
+
+	if( !action || action.reflect !== 'action_zoomButton' ) return;
+
+	return false;
+};
+
+
+/*
+| Start of a dragging operation.
+*/
+prototype.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble,
+		pp,
+		r,
+		rZ,
 		tZone;
 
 	tZone = this._tZone;
@@ -364,10 +423,87 @@ prototype.dragStart =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
+	pp = p.sub( tZone.pos );
+
+	if( !this._tShape.within( pp ) ) return;
+
+	// it's on the disc
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		bubble = this.atRank( r ).dragStart( pp, shift, ctrl );
+
+		if( bubble ) return bubble;
+	}
 
 	// the dragging operation is on the panel
 	// but it denies it.
+
+	return false;
+};
+
+
+/*
+| A button has been dragStarted.
+*/
+prototype.dragStartButton =
+	function(
+		path
+	)
+{
+	var
+		buttonName;
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
+/**/}
+
+	buttonName = path.get( 4 );
+
+	switch( buttonName )
+	{
+		case 'zoomIn' :
+
+			root.changeSpaceTransformCenter( 1 );
+
+			root.create(
+				'action', action_zoomButton.createZoomIn( )
+			);
+
+			return;
+
+		case 'zoomOut' :
+
+			root.changeSpaceTransformCenter( -1 );
+
+			root.create(
+				'action', action_zoomButton.createZoomOut( )
+			);
+
+			return;
+	}
+};
+
+
+/*
+| Stop of a dragging operation.
+*/
+prototype.dragStop =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	var
+		action;
+
+	action = this.action;
+
+	if( !action || action.reflect !== 'action_zoomButton' ) return;
+
+	action.cancelTimer( );
+
 	return false;
 };
 

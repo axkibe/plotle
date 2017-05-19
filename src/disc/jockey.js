@@ -161,10 +161,7 @@ prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.hover && this.hover.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
 /**/}
 
 	ranks = this._ranks;
@@ -219,6 +216,36 @@ prototype._init =
 
 
 /*
+| Move during a dragging operation.
+*/
+prototype.dragMove =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble;
+
+	bubble = this.get( 'mainDisc' ).dragMove( p, shift, ctrl );
+
+	if( bubble !== undefined ) return bubble;
+
+	switch( this.show.reflect )
+	{
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).dragMove( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).dragMove( p, shift, ctrl );
+	}
+};
+
+
+/*
 | Start of a dragging operation.
 */
 prototype.dragStart =
@@ -235,7 +262,7 @@ prototype.dragStart =
 
 	if( bubble !== undefined ) return bubble;
 
-	switch( this.show )
+	switch( this.show.reflect )
 	{
 		case 'show_create' :
 
@@ -244,6 +271,36 @@ prototype.dragStart =
 		case 'show_zoom' :
 
 			return this.get( 'zoomDisc' ).dragStart( p, shift, ctrl );
+	}
+};
+
+
+/*
+| Stop of a dragging operation.
+*/
+prototype.dragStop =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble;
+
+	bubble = this.get( 'mainDisc' ).dragStop( p, shift, ctrl );
+
+	if( bubble !== undefined ) return bubble;
+
+	switch( this.show.reflect )
+	{
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).dragStop( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).dragStop( p, shift, ctrl );
 	}
 };
 
@@ -353,6 +410,38 @@ prototype.pointingHover =
 
 
 /*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype.probeClickDrag =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble;
+
+	bubble = this.get( 'mainDisc' ).probeClickDrag( p, shift, ctrl );
+
+	if( bubble !== undefined ) return bubble;
+
+	switch( this.show.reflect )
+	{
+		case 'show_create' :
+
+			return this.get( 'createDisc' ).probeClickDrag( p, shift, ctrl );
+
+		case 'show_zoom' :
+
+			return this.get( 'zoomDisc' ).probeClickDrag( p, shift, ctrl );
+	}
+};
+
+
+/*
 | Returns true if point is on this panel.
 */
 prototype.click =
@@ -385,6 +474,26 @@ prototype.click =
 /*
 | A button of the main disc has been pushed.
 */
+prototype.dragStartButton =
+	function(
+		path,
+		shift,
+		ctrl
+	)
+{
+	var
+		discName;
+
+	discName = path.get( 2 );
+
+	return this.get( discName ).dragStartButton( path, shift, ctrl );
+};
+
+
+
+/*
+| A button of the main disc has been pushed.
+*/
 prototype.pushButton =
 	function(
 		path,
@@ -392,24 +501,12 @@ prototype.pushButton =
 		ctrl
 	)
 {
-	switch( path.get( 2 ) )
-	{
-		case 'createDisc' :
+	var
+		discName;
 
-			return this.get( 'createDisc' ).pushButton( path, shift, ctrl );
+	discName = path.get( 2 );
 
-		case 'mainDisc' :
-
-			return this.get( 'mainDisc' ).pushButton( path, shift, ctrl );
-
-		case 'zoomDisc' :
-
-			return this.get( 'zoomDisc' ).pushButton( path, shift, ctrl );
-
-		default :
-
-			throw new Error( );
-	}
+	return this.get( discName ).pushButton( path, shift, ctrl );
 };
 
 

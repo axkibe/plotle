@@ -72,14 +72,14 @@ server_postProcessor.opentype =
 */
 server_postProcessor.opentypeMin =
 	function(
-		resource       // the resource 
+		resource       // the resource
 	)
 {
 	opentypeMinHash = hash_sha1( resource.data + '' );
 
 	root.create(
 		'inventory',
-			root.inventory.updateResource( 
+			root.inventory.updateResource(
 				resource.create(
 					'aliases',
 						jion.stringRay.stringRay(
@@ -151,7 +151,7 @@ server_postProcessor.develHtml =
 				+ '/target/target-script-min.js"></script>'
 			);
 	}
-		
+
 	data =
 		data.replace(
 			/<!--OPENTYPE.*>/,
@@ -162,7 +162,7 @@ server_postProcessor.develHtml =
 
 	root.create(
 		'inventory',
-			root.inventory.updateResource( 
+			root.inventory.updateResource(
 				resource.create( 'data', data )
 			)
 	);
@@ -174,7 +174,7 @@ server_postProcessor.develHtml =
 */
 server_postProcessor.testPadHtml =
 	function(
-		resource       // the resource 
+		resource       // the resource
 		//bundleFilePath, // the file path of the bundle resource
 	)
 {
@@ -226,7 +226,7 @@ server_postProcessor.testPadHtml =
 
 	root.create(
 		'inventory',
-			root.inventory.updateResource( 
+			root.inventory.updateResource(
 				resource.create( 'data', data )
 			)
 	);
@@ -238,7 +238,7 @@ server_postProcessor.testPadHtml =
 */
 server_postProcessor.indexHtml =
 	function(
-		resource,       // the resource 
+		resource,       // the resource
 		bundleFilePath  // the file path of the bundle resource
 	)
 {
@@ -255,6 +255,16 @@ server_postProcessor.indexHtml =
 			+ '" type="text/javascript"></script>'
 		);
 
+	/*
+	data =
+		data.replace(
+			/<!--OPENTYPE.*>/,
+			'<script src="import-opentype-'
+			+ opentypeHash
+			+ '.js" type="text/javascript"></script>'
+		);
+	*/
+
 	data =
 		data.replace(
 			/<!--OPENTYPE.*>/,
@@ -262,10 +272,10 @@ server_postProcessor.indexHtml =
 			+ opentypeMinHash
 			+ '.js" type="text/javascript"></script>'
 		);
-	
+
 	root.create(
 		'inventory',
-			root.inventory.updateResource( 
+			root.inventory.updateResource(
 				resource.create( 'data', data )
 			)
 	);

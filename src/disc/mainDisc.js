@@ -114,6 +114,7 @@ var
 	show_normal,
 	show_zoom;
 
+
 /*
 | Capsule
 */
@@ -460,48 +461,11 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'rect', this._tZone.enlarge1
+			'rect', this.tZone.enlarge1
 		)
 	);
 }
 );
-
-
-/*
-| Returns true if point is on the disc panel.
-*/
-prototype.pointingHover =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		pp,
-		r,
-		reply,
-		rZ;
-
-	// shortcut if p is not near the panel
-	if( !this._tZone.within( p ) ) return;
-
-	pp = p.sub( this._tZone.pos );
-
-	if( !this._tShape.within( pp ) ) return;
-
-	// this is on the disc
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		reply =
-			this.atRank( r )
-			.pointingHover( pp, shift, ctrl );
-
-		if( reply ) return reply;
-	}
-
-	return result_hover.create( 'cursor', 'default' );
-};
 
 
 /*
@@ -521,11 +485,11 @@ prototype.click =
 		rZ;
 
 	// shortcut if p is not near the panel
-	if( !this._tZone.within( p ) ) return;
+	if( !this.tZone.within( p ) ) return;
 
 	display = this._display;
 
-	pp = p.sub( this._tZone.pos );
+	pp = p.sub( this.tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
@@ -537,6 +501,63 @@ prototype.click =
 
 	return true;
 };
+
+
+/*
+| Start of a dragging operation.
+*/
+prototype.dragStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if( !this.tZone.within( p ) ) return;
+
+	if(
+		!this._tShape.within(
+			p.sub( this.tZone.pos )
+		)
+	)
+	{
+		return;
+	}
+
+	// the dragging operation is on the panel
+	// but it denies it.
+	return false;
+};
+
+
+/*
+| Move during a dragging operation.
+*/
+prototype.dragMove =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return;
+};
+
+
+/*
+| Stop of a dragging operation.
+*/
+prototype.dragStop =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return;
+};
+
 
 
 /*
@@ -563,11 +584,11 @@ prototype.mousewheel =
 	)
 {
 	// shortcut if p is not near the panel
-	if( !this._tZone.within( p ) ) return;
+	if( !this.tZone.within( p ) ) return;
 
 	if(
 		!this._tShape.within(
-			p.sub( this._tZone.pos )
+			p.sub( this.tZone.pos )
 		)
 	)
 	{
@@ -575,6 +596,67 @@ prototype.mousewheel =
 	}
 
 	return true;
+};
+
+
+/*
+| Returns true if point is on the disc panel.
+*/
+prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble,
+		pp,
+		r,
+		rZ;
+
+	// shortcut if p is not near the panel
+	if( !this.tZone.within( p ) ) return;
+
+	pp = p.sub( this.tZone.pos );
+
+	if( !this._tShape.within( pp ) ) return;
+
+	// this is on the disc
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		bubble =
+			this.atRank( r )
+			.pointingHover( pp, shift, ctrl );
+
+		if( bubble ) return bubble;
+	}
+
+	return result_hover.create( 'cursor', 'default' );
+};
+
+
+/*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype.probeClickDrag =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if( !this.tZone.within( p ) ) return;
+
+	if( !this._tShape.within( p.sub( this.tZone.pos ) ) )
+	{
+		return;
+	}
+
+	return 'atween';
 };
 
 
@@ -589,34 +671,6 @@ prototype.specialKey =
 	)
 {
 	// nothing
-};
-
-
-/*
-| Start of a dragging operation.
-*/
-prototype.dragStart =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this._tZone.within( p ) ) return;
-
-	if(
-		!this._tShape.within(
-			p.sub( this._tZone.pos )
-		)
-	)
-	{
-		return;
-	}
-
-	// the dragging operation is on the panel
-	// but it denies it.
-	return false;
 };
 
 
@@ -669,7 +723,7 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'_tZone',
+	'tZone',
 	function( )
 {
 	var

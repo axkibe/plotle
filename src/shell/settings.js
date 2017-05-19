@@ -59,7 +59,12 @@ shell_settings =
 	/*
 	| Pixels to scroll on a wheel event
 	*/
-	textWheelSpeed : 12 * 5
+	textWheelSpeed : 12 * 5,
+
+	/*
+	| Milliseconds of the zoom button repeat.
+	*/
+	zoomButtonTime : 250
 };
 
 

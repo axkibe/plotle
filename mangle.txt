@@ -1,3 +1,24 @@
+. _probeClickDrag
+. _timer
+> cancelInterval
+. changeSpaceTransformAll
+. changeSpaceTransformCenter
+. changeSpaceTransformHome
+. changeSpaceTransformPoint
+> clearInterval
+. closeCcw
+. createZoomIn
+. createZoomOut
+. direction
+. dragStartButton
+. nogrid
+. normalButtonDown
+. pCcw
+. pFly
+. probeClickDrag
+> setInterval
+. show
+. zoomButtonTime
 . _sketchLine
 . blackStroke
 . closeFly
@@ -85,7 +106,6 @@
 . _captureEvents
 . _caretGlint
 . _changeMarkNode
-. _changeZoom
 . _checkIcon
 . _clipsize
 . _colorStyle
@@ -314,7 +334,6 @@
 > change
 . changeMarkText
 > changeRay
-. changeSpaceTransform
 . changeTree
 . changeTreeReverse
 > changeWrapRay
@@ -331,7 +350,6 @@
 . clearLocalStorage
 > clearRect
 . clearRetainX
-> clearTimeout
 . click
 > clip
 . clipboard
@@ -534,9 +552,7 @@
 . isAbstract
 > isArray
 . isBlank
-. isCreate
 . isEmpty
-. isHand
 > isNaN
 > isPointInPath
 . isString
@@ -778,7 +794,6 @@
 > scale
 . scaleX
 . scaleY
-. scaled
 . scrollMarkIntoView
 . scrollPos
 > scrollTo

@@ -593,7 +593,7 @@ prototype.mousewheel =
 		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
 	}
 
-	root.changeSpaceTransform( dir > 0 ? 1 : -1, p );
+	root.changeSpaceTransformPoint( dir > 0 ? 1 : -1, p );
 
 	return true;
 };
@@ -1134,9 +1134,9 @@ prototype.specialKey =
 
 			case 'y' : root.doTracker.redo( ); return true;
 
-			case ',' : this._changeZoom(  1 ); return true;
+			case ',' : root.changeSpaceTransformCenter( 1 ); return true;
 
-			case '.' : this._changeZoom( -1 ); return true;
+			case '.' : root.changeSpaceTransformCenter( -1 ); return true;
 		}
 	}
 
@@ -1182,26 +1182,6 @@ prototype.specialKey =
 
 		return true;
 	}
-};
-
-
-/*
-| Changes the zoom factor ( around center )
-*/
-prototype._changeZoom =
-	function(
-		df
-	)
-{
-	var
-		pm;
-
-	pm =
-		this.viewSize
-		.pc
-		.detransform( this.transform );
-
-	root.changeSpaceTransform( df, pm );
 };
 
 

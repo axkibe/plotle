@@ -221,6 +221,18 @@ prototype.cycleFocus =
 
 
 /*
+| A button has been dragStarted.
+*/
+prototype.dragStartButton =
+	function(
+		// path
+	)
+{
+	return false;
+};
+
+
+/*
 | A button has been pushed.
 */
 prototype.pushButton =

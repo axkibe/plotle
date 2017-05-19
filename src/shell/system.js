@@ -152,6 +152,7 @@ var
 	mainWindowHeight,
 	pointingState,
 	prototype,
+	_resetAtweenState,
 	settings,
 	systemTransmitter;
 
@@ -207,6 +208,7 @@ keyCodeNames =
 		46 : 'del'
 	};
 
+
 keyCodeNamesCtrl =
 	{
 		16 : 'shift',
@@ -218,6 +220,7 @@ keyCodeNamesCtrl =
 		190 : '.'
 	};
 
+
 /**/if( FREEZE )
 /**/{
 /**/	Object.freeze( keyCodeNames );
@@ -228,6 +231,7 @@ keyCodeNamesCtrl =
 
 /*
 | Default system behavior settings
+| FIXME move to shell_settings
 */
 settings =
 	{
@@ -241,10 +245,7 @@ settings =
 		dragbox : 10
 	};
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( settings );
-/**/}
+/**/if( FREEZE ) Object.freeze( settings );
 
 
 /*
@@ -363,10 +364,7 @@ prototype.failScreen =
 		divMessage,
 		divWrap;
 
-	if( console )
-	{
-		console.log( 'failScreen', message );
-	}
+	if( console ) console.log( 'failScreen', message );
 
 	if( failScreen ) return;
 
@@ -423,10 +421,10 @@ prototype.failScreen =
 /*
 | Cancels a timer
 */
-prototype.cancelTimer =
+prototype.cancelInterval =
 	function( id )
 {
-	return window.clearTimeout( id );
+	return window.clearInterval( id );
 };
 
 
@@ -469,7 +467,11 @@ prototype.setInput =
 
 
 /*
-| Sets a timer with an error catcher
+| Sets a timer.
+|
+| Handles error catching.
+|
+| Return the timer id.
 */
 prototype.setTimer =
 	function(
@@ -478,6 +480,23 @@ prototype.setTimer =
 	)
 {
 	return window.setTimeout( transmitter( callback, true ), time );
+};
+
+
+/*
+| Sets an interval timer.
+|
+| Handles error catching.
+|
+| Return the timer id.
+*/
+prototype.setInterval =
+	function(
+		time,
+		callback
+	)
+{
+	return window.setInterval( transmitter( callback, true ), time );
 };
 
 
@@ -498,7 +517,6 @@ prototype._blink =
 };
 
 
-var
 _resetAtweenState =
 	function( )
 {
@@ -513,6 +531,7 @@ _resetAtweenState =
 	atweenMove = undefined;
 };
 
+
 /*
 | timeout after mouse down so dragging starts
 */
@@ -522,10 +541,7 @@ prototype._onAtweenTime =
 
 /**/if( CHECK )
 /**/{
-/**/	if( pointingState !== 'atween' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( pointingState !== 'atween' ) throw new Error( );
 /**/}
 
 	pointingState = 'drag';
@@ -538,7 +554,6 @@ prototype._onAtweenTime =
 
 	system._repeatHover( );
 };
-
 
 
 /*
@@ -735,48 +750,77 @@ prototype._onMouseDown =
 
 	event.preventDefault( );
 
-	if(
-		event.button !== undefined
-		&&
-		event.button !== 0
-	)
-	{
-		return;
-	}
+	if( event.button !== undefined && event.button !== 0 ) return;
 
 	// Opera requires focusing the window first
 	//window.focus( );
 
 	p =
-		gleam_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey,
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	pointingState = 'atween';
-
-	atweenPos = p;
-
-	atweenMove = p;
-
-	atweenShift = shift;
-
-	atweenCtrl = ctrl;
-
-	atweenTimer =
-		this.setTimer(
-			settings.dragtime,
-			this._onAtweenTimeTransmitter
-		);
+	this._probeClickDrag( p, shift, ctrl );
 
 	this._pointingHover( p, shift, ctrl );
 
 	return false;
 };
+
+
+/*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+prototype._probeClickDrag =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	pointingState = root.probeClickDrag( p, shift, ctrl );
+
+	switch( pointingState )
+	{
+		case 'atween' :
+
+			atweenPos = p;
+
+			atweenMove = p;
+
+			atweenShift = shift;
+
+			atweenCtrl = ctrl;
+
+			atweenTimer =
+				this.setTimer(
+					settings.dragtime,
+					this._onAtweenTimeTransmitter
+				);
+
+			return;
+
+		case 'drag' :
+
+			root.dragStart( p, shift, ctrl );
+
+			return;
+
+		case false :
+
+			return;
+
+		default : throw new Error( );
+	}
+};
+
 
 
 /*
@@ -789,19 +833,15 @@ prototype._pointingHover =
 		ctrl
 	)
 {
-	var
-		cursor;
-
 	hoverP = p;
 
 	hoverShift = shift;
 
 	hoverCtrl = ctrl;
 
-	cursor = root.pointingHover( p, shift, ctrl );
-
-	this._setCursor( cursor );
-
+	this._setCursor(
+		root.pointingHover( p, shift, ctrl )
+	);
 };
 
 
@@ -874,9 +914,9 @@ prototype._onMouseMove =
 		shift;
 
 	p =
-		gleam_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
@@ -936,7 +976,6 @@ prototype._onMouseMove =
 		default :
 
 			throw new Error( );
-
 	}
 
 	this._setCursor( cursor );
@@ -963,9 +1002,9 @@ prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		gleam_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
@@ -1008,6 +1047,10 @@ prototype._onMouseUp =
 
 			break;
 
+		case false :
+
+			break;
+
 		default :
 
 			throw new Error( );
@@ -1032,9 +1075,9 @@ prototype._onMouseWheel =
 	event.preventDefault( );
 
 	p =
-		gleam_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
 		);
 
 	if( event.wheelDelta !== undefined )
@@ -1078,26 +1121,16 @@ prototype._onTouchStart =
 	}
 
 	p =
-		gleam_point.create(
-			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
-			'y', event.touches[ 0 ].pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.touches[ 0 ].pageX - canvas.offsetLeft,
+			event.touches[ 0 ].pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	pointingState = 'atween';
-
-	atweenPos = p;
-
-	atweenMove = p;
-
-	atweenShift = shift;
-
-	atweenCtrl = ctrl;
-
-	atweenTimer = this.setTimer( settings.dragtime, this._onAtweenTimeTransmitter );
+	this._probeClickDrag( p, shift, ctrl );
 
 	return false;
 };
@@ -1123,9 +1156,9 @@ prototype._onTouchMove =
 	if( event.touches.length !== 1 ) return false;
 
 	p =
-		gleam_point.create(
-			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
-			'y', event.touches[ 0 ].pageY - canvas.offsetTop
+		gleam_point.xy(
+			event.touches[ 0 ].pageX - canvas.offsetLeft,
+			event.touches[ 0 ].pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
@@ -1215,13 +1248,9 @@ prototype._onTouchEnd =
 	this._releaseEvents( );
 
 	p =
-		gleam_point.create(
-			'x',
-				event.changedTouches[ 0 ].pageX -
-				canvas.offsetLeft,
-			'y',
-				event.changedTouches[ 0 ].pageY -
-				canvas.offsetTop
+		gleam_point.xy(
+			event.changedTouches[ 0 ].pageX - canvas.offsetLeft,
+			event.changedTouches[ 0 ].pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
@@ -1306,14 +1335,10 @@ prototype._specialKey =
 	var
 		key;
 
-	if( ctrl )
-	{
-		key = keyCodeNamesCtrl[ keyCode ];
-	}
-	else
-	{
-		key = keyCodeNames[ keyCode ];
-	}
+	key =
+		ctrl
+		? keyCodeNamesCtrl[ keyCode ]
+		: keyCodeNames[ keyCode ];
 
 	if( !key ) return true;
 
@@ -1340,14 +1365,10 @@ prototype._releaseSpecialKey =
 	var
 		key;
 
-	if( ctrl )
-	{
-		key = keyCodeNamesCtrl[ keyCode ];
-	}
-	else
-	{
-		key = keyCodeNames[ keyCode ];
-	}
+	key =
+		ctrl
+		? keyCodeNamesCtrl[ keyCode ]
+		: keyCodeNames[ keyCode ];
 
 	if( !key ) return;
 
