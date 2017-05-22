@@ -147,14 +147,6 @@ config.debug.weinre = false;
 /*
 | If set, accept only connections from these addresses
 */
-config.whiteList =
-	{
-		'127.0.0.1' : true,
-		'::ffff:127.0.0.1' : true,
-		'131.130.188.200' : true,
-		'::ffff:131.130.188.224' : true
-	};
-
 config.whiteList = false;
 
 /*
