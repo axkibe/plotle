@@ -116,7 +116,7 @@ prototype._init =
 	{
 		this._timer =
 			system.setInterval(
-				shell_settings.zoomButtonTime,
+				shell_settings.animationZoomStepTime,
 				onZoomTime.bind( this )
 			);
 	}

@@ -549,7 +549,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/disc/jockey.js',
+		'filePath', 'src/disc/root.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -608,7 +608,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/form/jockey.js',
+		'filePath', 'src/form/root.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -954,6 +954,16 @@ server_resourceRay.create( 'ray:init', [
 	),
 	server_resource.create(
 		'filePath', 'src/action/zoomButton.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/animation/transform.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/animation/root.js',
 		'hasJion', true,
 		'inBundle', true
 	),

@@ -1,5 +1,5 @@
 /*
-| The disc jockey is the master of all discs.
+| The disc root is the master of all discs.
 */
 
 
@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'disc_jockey',
+		id : 'disc_root',
 		attributes :
 		{
 			access :
@@ -37,7 +37,7 @@ if( JION )
 			mark :
 			{
 				comment : 'the users mark',
-				prepare : 'disc_jockey.concernsMark( mark )',
+				prepare : 'disc_root.concernsMark( mark )',
 				type :
 					require( '../visual/mark/typemap' )
 					.concat( [ 'undefined' ] )
@@ -83,7 +83,7 @@ if( JION )
 
 
 var
-	disc_jockey,
+	disc_root,
 	gleam_glint_ray,
 	jion;
 
@@ -105,13 +105,13 @@ if( NODE )
 var
 	prototype;
 
-prototype = disc_jockey.prototype;
+prototype = disc_root.prototype;
 
 
 /*
-| Returns the mark if the disc jockey concerns a mark.
+| Returns the mark if the disc root concerns a mark.
 */
-disc_jockey.concernsMark =
+disc_root.concernsMark =
 	function(
 		mark
 	)
@@ -124,9 +124,9 @@ disc_jockey.concernsMark =
 
 
 /*
-| Returns the hover path if the disc jockey concerns about it.
+| Returns the hover path if the disc root concerns about it.
 */
-disc_jockey.concernsHover =
+disc_root.concernsHover =
 	function(
 		hover
 	)
@@ -140,7 +140,7 @@ disc_jockey.concernsHover =
 
 
 /*
-| Initializes the disc jockey.
+| Initializes the disc root.
 */
 prototype._init =
 	function(

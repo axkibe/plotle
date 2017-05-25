@@ -1,5 +1,5 @@
 /*
-| The form jockey is the master of all discs
+| The form root is the master of all forms.
 */
 
 
@@ -9,14 +9,14 @@
 if( JION )
 {
 	throw{
-		id : 'form_jockey',
+		id : 'form_root',
 		attributes :
 		{
 			hover :
 			{
 				comment : 'the widget hovered upon',
 				type : [ 'undefined', 'jion$path' ],
-				prepare : 'form_jockey.concernsHover( hover )'
+				prepare : 'form_root.concernsHover( hover )'
 			},
 			mark :
 			{
@@ -27,7 +27,7 @@ if( JION )
 			},
 			path :
 			{
-				comment : 'the path of the form jockey',
+				comment : 'the path of the form root',
 				type : 'jion$path'
 			},
 			spaceRef :
@@ -65,7 +65,7 @@ if( JION )
 
 
 var
-	form_jockey,
+	form_root,
 	jion;
 
 
@@ -87,7 +87,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = form_jockey.prototype;
+prototype = form_root.prototype;
 
 
 /*
@@ -166,15 +166,15 @@ prototype._init =
 
 
 /*
-| Returns the mark if the form jockey concerns a mark.
+| Returns the mark if the form root concerns a mark.
 */
-form_jockey.concernsMark =
+form_root.concernsMark =
 	function(
 		mark
 	)
 {
 	return(
-		mark.containsPath( form_jockey.path )
+		mark.containsPath( form_root.path )
 		? mark
 		: undefined
 	);
@@ -182,9 +182,9 @@ form_jockey.concernsMark =
 
 
 /*
-| Returns the hover path if the form jockey concerns about it.
+| Returns the hover path if the form root concerns about it.
 */
-form_jockey.concernsHover =
+form_root.concernsHover =
 	function(
 		hover
 	)

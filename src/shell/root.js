@@ -30,10 +30,15 @@ if( JION )
 				comment : 'the ajax communication',
 				type : 'net_ajax'
 			},
+			animation :
+			{
+				comment : 'the animations',
+				type : 'animation_root'
+			},
 			disc :
 			{
-				comment : 'the master of discs',
-				type : 'disc_jockey'
+				comment : 'the discs',
+				type : 'disc_root'
 			},
 			display :
 			{
@@ -52,8 +57,8 @@ if( JION )
 			},
 			form :
 			{
-				comment : 'the master of forms',
-				type : 'form_jockey'
+				comment : 'the forms',
+				type : 'form_root'
 			},
 			hover :
 			{
@@ -151,12 +156,14 @@ if( JION )
 
 var
 	action_select,
+	animation_root,
+	animation_transform,
 	change_grow,
 	change_join,
 	change_ray,
 	change_remove,
 	change_wrap,
-	disc_jockey,
+	disc_root,
 	gleam_connect,
 	gleam_glint_ray,
 	gleam_measure,
@@ -167,7 +174,7 @@ var
 	fabric_para,
 	fabric_relation,
 	fabric_spaceRef,
-	form_jockey,
+	form_root,
 	gruga_controls,
 	gruga_createDisc,
 	gruga_loading,
@@ -332,9 +339,9 @@ shell_root.startup =
 	var
 		ajaxPath,
 		canvas,
-		dj,
-		djPath,
-		djTwPath,
+		disc,
+		discPath,
+		discTwPath,
 		show,
 		user,
 		viewSize;
@@ -369,27 +376,27 @@ shell_root.startup =
 		user = user_creds.createVisitor( );
 	}
 
-	djPath = jion$path.empty.append( 'disc' );
+	discPath = jion$path.empty.append( 'disc' );
 
-	djTwPath = djPath.append( 'twig' );
+	discTwPath = discPath.append( 'twig' );
 
-	dj =
-		disc_jockey.create(
+	disc =
+		disc_root.create(
 			'controlTransform', gleam_transform.normal,
-			'path', djPath,
+			'path', discPath,
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
 				gruga_mainDisc.abstract(
-					'path', djTwPath.append( 'mainDisc' )
+					'path', discTwPath.append( 'mainDisc' )
 				),
 			'twig:add', 'createDisc',
 				gruga_createDisc.abstract(
-					'path', djTwPath.append( 'createDisc' )
+					'path', discTwPath.append( 'createDisc' )
 				),
 			'twig:add', 'zoomDisc',
 				gruga_zoomDisc.abstract(
-					'path', djTwPath.append( 'zoomDisc' )
+					'path', discTwPath.append( 'zoomDisc' )
 				)
 		);
 
@@ -402,6 +409,7 @@ shell_root.startup =
 				'twig:add', 'update',
 					net_channel.create( 'path', ajaxPath.append( 'update' ) )
 			),
+		'animation', animation_root.create( ),
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
@@ -409,8 +417,8 @@ shell_root.startup =
 		'spaceTransform', gleam_transform.normal,
 		'systemFocus', true,
 		'viewSize', display.size,
-		'disc', dj,
-		'form', shell_root._createFormJockey( viewSize ),
+		'disc', disc,  // FIXME also make a createDiscRoot
+		'form', shell_root._createFormRoot( viewSize ),
 		'_drawn', false
 	);
 
@@ -697,17 +705,17 @@ prototype.changeSpaceTransformPoint =
 
 	e = ( 1 / zoom - 1 / st.zoom );
 
-	this.create(
-		'_transformExponent', e1,
-		'spaceTransform',
-			st.create(
-				'offset',
-					gleam_point.create(
-						'x', ( p.x * e + offset.x / st.zoom ) * zoom,
-						'y', ( p.y * e + offset.y / st.zoom ) * zoom
-					),
-				'zoom', zoom
-			)
+	this._changeTransformTo(
+		e1,
+		st.create(
+			'offset',
+				gleam_point.create(
+					'x', ( p.x * e + offset.x / st.zoom ) * zoom,
+					'y', ( p.y * e + offset.y / st.zoom ) * zoom
+				),
+			'zoom', zoom
+		),
+		shell_settings.animationZoomStepTime
 	);
 };
 
@@ -805,7 +813,6 @@ prototype.changeSpaceTransformAll =
 	vsy2 = vsy / 2;
 
 	zoomMin = shell_settings.zoomMin;
-
 	for( exp = shell_settings.zoomMax; exp > zoomMin; exp-- )
 	{
 		z = Math.pow( 1.1, exp );
@@ -821,17 +828,17 @@ prototype.changeSpaceTransformAll =
 		break;
 	}
 
-	root.create(
-		'_transformExponent', exp,
-		'spaceTransform',
-			gleam_transform.create(
-				'offset',
-					gleam_point.xy(
-						vsx2 - cx * z + discWidth,
-						vsy2 - cy * z
-					),
-				'zoom', z
-			)
+	root._changeTransformTo(
+		exp,
+		gleam_transform.create(
+			'offset',
+				gleam_point.xy(
+					vsx2 - cx * z + discWidth,
+					vsy2 - cy * z
+				),
+			'zoom', z
+		),
+		shell_settings.animationZoomAllHomeTime
 	);
 };
 
@@ -842,9 +849,10 @@ prototype.changeSpaceTransformAll =
 prototype.changeSpaceTransformHome =
 	function( )
 {
-	this.create(
-		'_transformExponent', 0,
-		'spaceTransform', gleam_transform.normal
+	root._changeTransformTo(
+		0,
+		gleam_transform.normal,
+		shell_settings.animationZoomAllHomeTime
 	);
 };
 
@@ -1805,9 +1813,9 @@ prototype.draw =
 
 
 /*
-| Creates the form jockey.
+| Creates the form root.
 */
-shell_root._createFormJockey =
+shell_root._createFormRoot =
 	function(
 		viewSize
 	)
@@ -1816,8 +1824,8 @@ shell_root._createFormJockey =
 		a,
 		aZ,
 		form,
+		formRoot,
 		forms,
-		jockey,
 		key,
 		keys,
 		name,
@@ -1864,8 +1872,8 @@ shell_root._createFormJockey =
 		forms[ name ] = form;
 	}
 
-	jockey =
-		form_jockey.create(
+	formRoot =
+		form_root.create(
 			'path', jion$path.empty.append( 'form' ),
 			'viewSize', viewSize
 		);
@@ -1877,8 +1885,8 @@ shell_root._createFormJockey =
 	{
 		key = keys[ a ];
 
-		jockey =
-			jockey.create(
+		formRoot =
+			formRoot.create(
 				'twig:add',
 				key,
 				forms[ key ].create(
@@ -1887,7 +1895,7 @@ shell_root._createFormJockey =
 			);
 	}
 
-	return jockey;
+	return formRoot;
 };
 
 
@@ -1930,6 +1938,38 @@ prototype._markLostNotifications =
 		item.markLost( );
 	}
 
+};
+
+
+/*
+| Changes the space transform to transform.
+| Possibly with an animation.
+*/
+prototype._changeTransformTo =
+	function(
+		exp,         // exponent of destination transform
+		transform,   // destination transform
+		time         // time of animation
+	)
+{
+	if( shell_settings.animation )
+	{
+		root.create(
+			'_transformExponent', exp,
+			'animation',
+				root.animation.create(
+					'twig:set+', 'transform',
+						animation_transform.createNow( transform, time )
+				)
+		);
+	}
+	else
+	{
+		root.create(
+			'_transformExponent', exp,
+			'spaceTransform', transform
+		);
+	}
 };
 
 

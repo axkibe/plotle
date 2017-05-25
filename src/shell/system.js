@@ -113,6 +113,10 @@ transmitter =
 
 
 var
+	// if true there is currently one or more animations
+	// to be processed
+	animating,
+
 	// atween is the state where the mouse button went down,
 	// and its yet unsure if this is a click or drag.
 	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
@@ -156,6 +160,7 @@ var
 	settings,
 	systemTransmitter;
 
+animating = false;
 
 atweenCtrl = false;
 
@@ -342,11 +347,37 @@ shell_system =
 	// the blink (and check input) timer
 	this._blinkTimer = undefined;
 
+	this._animationTransmitter = systemTransmitter( '_animation' );
+
 	this.restartBlinker( );
 };
 
 
 prototype = shell_system.prototype;
+
+
+/*
+| Cancels a timer
+*/
+prototype.cancelInterval =
+	function( id )
+{
+	return window.clearInterval( id );
+};
+
+
+/*
+| If not already animating, start doing so.
+*/
+prototype.doAnimation =
+	function( )
+{
+	if( animating ) return;
+
+	animating = true;
+
+	window.requestAnimationFrame( this._animationTransmitter );
+};
 
 
 /*
@@ -419,16 +450,6 @@ prototype.failScreen =
 
 
 /*
-| Cancels a timer
-*/
-prototype.cancelInterval =
-	function( id )
-{
-	return window.clearInterval( id );
-};
-
-
-/*
 | (Re)Starts the blink timer
 */
 prototype.restartBlinker =
@@ -467,6 +488,23 @@ prototype.setInput =
 
 
 /*
+| Sets an interval timer.
+|
+| Handles error catching.
+|
+| Return the timer id.
+*/
+prototype.setInterval =
+	function(
+		time,
+		callback
+	)
+{
+	return window.setInterval( transmitter( callback, true ), time );
+};
+
+
+/*
 | Sets a timer.
 |
 | Handles error catching.
@@ -484,23 +522,32 @@ prototype.setTimer =
 
 
 /*
-| Sets an interval timer.
-|
-| Handles error catching.
-|
-| Return the timer id.
+| Stops animating.
 */
-prototype.setInterval =
-	function(
-		time,
-		callback
-	)
+prototype.stopAnimation =
+	function( )
 {
-	return window.setInterval( transmitter( callback, true ), time );
+	animating = false;
 };
 
 
 // ---------------------------
+
+
+/*
+| Does an animation frame.
+*/
+prototype._animation =
+	function(
+		time
+	)
+{
+	if( !animating ) return;
+
+	root.animation.frame( time );
+
+	window.requestAnimationFrame( this._animationTransmitter );
+};
 
 
 /*

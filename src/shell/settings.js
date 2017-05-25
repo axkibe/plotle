@@ -16,7 +16,22 @@ var
 shell_settings =
 {
 	/*
-	| Factor to add to the bottom of font height
+	| If false don't do any animations.
+	*/
+	animation : false,
+
+	/*
+	| Milliseconds for zoom animation to all/home.
+	*/
+	animationZoomAllHomeTime : 300,
+
+	/*
+	| Milliseconds for zoom animation in single in or out steps.
+	*/
+	animationZoomStepTime : 150,
+
+	/*
+	| Factor to add to the bottom of font height.
 	*/
 	bottombox : 0.25,
 
@@ -60,11 +75,6 @@ shell_settings =
 	| Pixels to scroll on a wheel event
 	*/
 	textWheelSpeed : 12 * 5,
-
-	/*
-	| Milliseconds of the zoom button repeat.
-	*/
-	zoomButtonTime : 250
 };
 
 
