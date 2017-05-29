@@ -655,11 +655,28 @@ Object.defineProperty(
 
 
 /*
-| Changed the views zoom factor
-| and pans it, so p stays in the same spot.
+| Changes the space transform so p stays in the same spot
+| on screen.
 |
-| new pan (p1) calculates as:
+| new offset (ox1, oy1) calculates as:
 |
+| A: py = y * z0 + oy0
+| B: py = y * z1 + oy1
+|
+| A: py / z0 = y + oy0 / z0
+| B: py / z1 = y + oy1 / z1
+|
+| A - B: py / z0 - py / z1 = oy0 / z0 - oy1 / z1
+|
+| -> py * ( 1 / z0 - 1 / z1  ) = oy0 / z0 - oy1 / z1
+|
+| -> oy1 / z1 = oy0 / z0 - py * ( 1 / z0 - 1 / z1  )
+|
+| -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
+|
+
+
+| xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 | A: py = y0 * z1 + p0
 | B: py = y0 * z0 + p1
 |
@@ -669,6 +686,7 @@ Object.defineProperty(
 | A - B: py / z1 - py / z0 = p1 / z1 - p0 / z0
 |
 | -> p1 = ( py * (1 / z1 - 1 / z0 ) + p0 / z0 ) * z1
+| xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 */
 prototype.changeSpaceTransformPoint =
 	function(
@@ -677,8 +695,8 @@ prototype.changeSpaceTransformPoint =
 	)
 {
 	var
-		e,
 		e1,
+		h,
 		offset,
 		st,
 		zoom;
@@ -687,31 +705,26 @@ prototype.changeSpaceTransformPoint =
 
 	offset = st.offset;
 
-	if( de === 0 )
-	{
-		e1 = 0;
-	}
-	else
-	{
-		e1 =
-			math_limit(
-				shell_settings.zoomMin,
-				this._transformExponent + de,
-				shell_settings.zoomMax
-			);
-	}
+	e1 =
+		math_limit(
+			shell_settings.zoomMin,
+			this._transformExponent + de,
+			shell_settings.zoomMax
+		);
 
 	zoom = Math.pow( 1.1, e1 );
 
-	e = ( 1 / zoom - 1 / st.zoom );
+	h = 1 / st.zoom - 1 / zoom;
+
+// | -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
 
 	this._changeTransformTo(
 		e1,
 		st.create(
 			'offset',
-				gleam_point.create(
-					'x', ( p.x * e + offset.x / st.zoom ) * zoom,
-					'y', ( p.y * e + offset.y / st.zoom ) * zoom
+				gleam_point.xy(
+					( offset.x / st.zoom - p.x * h ) * zoom,
+					( offset.y / st.zoom - p.y * h ) * zoom
 				),
 			'zoom', zoom
 		),
@@ -728,12 +741,7 @@ prototype.changeSpaceTransformCenter =
 		df  // different in factor
 	)
 {
-	root.changeSpaceTransformPoint(
-		df,
-		root.viewSize
-		.pc
-		.detransform( root.spaceTransform )
-	);
+	root.changeSpaceTransformPoint( df, root.viewSize.pc );
 };
 
 

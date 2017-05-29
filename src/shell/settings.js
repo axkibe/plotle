@@ -18,7 +18,7 @@ shell_settings =
 	/*
 	| If false don't do any animations.
 	*/
-	animation : false,
+	animation : true,
 
 	/*
 	| Milliseconds for zoom animation to all/home.

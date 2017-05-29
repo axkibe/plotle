@@ -86,8 +86,6 @@ prototype.frame =
 
 	aroot = this;
 
-	console.log( 'animation frame', time );
-
 	for( a = 0, aZ = aroot.length; a < aZ; a++ )
 	{
 		key = aroot.getKey( a );
