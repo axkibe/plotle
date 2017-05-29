@@ -158,12 +158,7 @@ prototype._init =
 
 		ranks[ a ] = key;
 
-		pos =
-			gleam_point.xy(
-				innerMargin.w,
-				//Math.round( y - this.scrollPos.y )
-				y - this.scrollPos.y // FIXME?
-			);
+		pos = gleam_point.xy( innerMargin.w, y - this.scrollPos.y );
 
 		para =
 		twig[ key ] =

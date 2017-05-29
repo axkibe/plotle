@@ -150,29 +150,48 @@ prototype._init =
 	var
 		a,
 		access,
+		action,
 		aZ,
 		b,
 		bZ,
+		controlTransform,
 		disc,
+		hover,
+		mark,
 		key,
 		ranks,
 		show,
-		twig;
+		spaceRef,
+		twig,
+		user,
+		viewSize;
+
+	hover = this.hover;
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
+/**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
 
 	ranks = this._ranks;
 
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
+	action = this.action;
+
 	access = this.access;
 
 	show = this.show;
 
-	// FIXME lift other this. variables from loop
+	controlTransform = this.controlTransform;
+
+	mark = this.mark;
+
+	spaceRef = this.spaceRef;
+
+	user = this.user;
+
+	viewSize = this.viewSize;
 
 	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
@@ -189,7 +208,7 @@ prototype._init =
 						'twig:set',
 						disc.getKey( b ),
 						disc.atRank( b ).create(
-							'transform', this.controlTransform
+							'transform', controlTransform
 						)
 					);
 			}
@@ -198,14 +217,14 @@ prototype._init =
 		twig[ key ] =
 			disc.create(
 				'access', access,
-				'action', this.action,
-				'controlTransform', this.controlTransform,
-				'hover', this.hover,
-				'mark', this.mark,
+				'action', action,
+				'controlTransform', controlTransform,
+				'hover', hover,
+				'mark', mark,
 				'show', show,
-				'spaceRef', this.spaceRef,
-				'user', this.user,
-				'viewSize', this.viewSize
+				'spaceRef', spaceRef,
+				'user', user,
+				'viewSize', viewSize
 			);
 	}
 

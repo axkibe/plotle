@@ -35,6 +35,17 @@ shell_settings =
 	*/
 	bottombox : 0.25,
 
+	// blink speed of the caret.
+	// Note currently not blinking, but used to check
+	// the input box.
+	caretBlinkSpeed : 530,
+
+	// milliseconds after mouse down, dragging starts
+	dragtime : 400,
+
+	// pixels after mouse down and move, dragging starts
+	dragbox : 10,
+
 	/*
 	| Zooming settings.
 	*/

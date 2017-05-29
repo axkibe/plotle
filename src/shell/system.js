@@ -14,6 +14,7 @@ var
 	math_limit,
 	root,
 	shell_root,
+	shell_settings,
 	shell_system,
 	startup,
 	swatch,
@@ -157,7 +158,6 @@ var
 	pointingState,
 	prototype,
 	_resetAtweenState,
-	settings,
 	systemTransmitter;
 
 animating = false;
@@ -226,31 +226,7 @@ keyCodeNamesCtrl =
 	};
 
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( keyCodeNames );
-/**/
-/**/	Object.freeze( keyCodeNamesCtrl );
-/**/}
-
-
-/*
-| Default system behavior settings
-| FIXME move to shell_settings
-*/
-settings =
-	{
-		// blink speed of the caret.
-		caretBlinkSpeed : 530,
-
-		// milliseconds after mouse down, dragging starts
-		dragtime : 400,
-
-		// pixels after mouse down and move, dragging starts
-		dragbox : 10
-	};
-
-/**/if( FREEZE ) Object.freeze( settings );
+/**/if( FREEZE ) Object.freeze( keyCodeNames, keyCodeNamesCtrl );
 
 
 /*
@@ -466,7 +442,7 @@ prototype.restartBlinker =
 	this._blinkTimer =
 		setInterval(
 			this._blinkTransmitter,
-			settings.caretBlinkSpeed
+			shell_settings.caretBlinkSpeed
 		);
 };
 
@@ -848,7 +824,7 @@ prototype._probeClickDrag =
 
 			atweenTimer =
 				this.setTimer(
-					settings.dragtime,
+					shell_settings.dragtime,
 					this._onAtweenTimeTransmitter
 				);
 
@@ -982,7 +958,7 @@ prototype._onMouseMove =
 
 		case 'atween' :
 
-			dragbox = settings.dragbox;
+			dragbox = shell_settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
@@ -1222,7 +1198,7 @@ prototype._onTouchMove =
 
 		case 'atween':
 
-			dragbox = settings.dragbox;
+			dragbox = shell_settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )

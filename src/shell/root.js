@@ -674,19 +674,6 @@ Object.defineProperty(
 |
 | -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
 |
-
-
-| xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-| A: py = y0 * z1 + p0
-| B: py = y0 * z0 + p1
-|
-| A: py / z1 = y0 + p1 / z1
-| B: py / z0 = y0 + p0 / z0
-|
-| A - B: py / z1 - py / z0 = p1 / z1 - p0 / z0
-|
-| -> p1 = ( py * (1 / z1 - 1 / z0 ) + p0 / z0 ) * z1
-| xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 */
 prototype.changeSpaceTransformPoint =
 	function(
@@ -756,6 +743,7 @@ prototype.changeSpaceTransformAll =
 		exp,
 		cx,
 		cy,
+		extra,
 		item,
 		pos,
 		r,
@@ -825,13 +813,15 @@ prototype.changeSpaceTransformAll =
 	{
 		z = Math.pow( 1.1, exp );
 
-		if( ex > cx + vsx2 / z ) continue;
+		extra = 10 / z;
 
-		if( wx < cx - vsx2 / z ) continue;
+		if( ex + extra > cx + vsx2 / z ) continue;
 
-		if( sy > cy + vsy2 / z ) continue;
+		if( wx - extra < cx - vsx2 / z ) continue;
 
-		if( ny < cy - vsy2 / z ) continue;
+		if( sy + extra > cy + vsy2 / z ) continue;
+
+		if( ny - extra < cy - vsy2 / z ) continue;
 
 		break;
 	}
