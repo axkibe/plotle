@@ -220,6 +220,7 @@ root = undefined;
 
 var
 	loadingSpaceTextPath,
+	notAnimationFinish,
 	prototype;
 
 
@@ -703,8 +704,6 @@ prototype.changeSpaceTransformPoint =
 
 	h = 1 / st.zoom - 1 / zoom;
 
-// | -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
-
 	this._changeTransformTo(
 		e1,
 		st.create(
@@ -725,10 +724,10 @@ prototype.changeSpaceTransformPoint =
 */
 prototype.changeSpaceTransformCenter =
 	function(
-		df  // different in factor
+		dir    // direction of zoom change (+/- 1)
 	)
 {
-	root.changeSpaceTransformPoint( df, root.viewSize.pc );
+	root.changeSpaceTransformPoint( dir, root.viewSize.pc );
 };
 
 
@@ -1728,6 +1727,25 @@ prototype.spawnRelation =
 };
 
 
+/*
+| When animations are turned of, but the action has
+| an finishAnimation a time is used instead an this
+| is the callback.
+*/
+notAnimationFinish =
+	function( )
+{
+	var
+		action;
+
+	action = root.action;
+
+	if( !action ) return;
+
+	if( !action.finishAnimation ) return;
+
+	action.finishAnimation( );
+};
 
 
 /*
@@ -1967,6 +1985,14 @@ prototype._changeTransformTo =
 			'_transformExponent', exp,
 			'spaceTransform', transform
 		);
+
+		if( root.action.finishAnimation )
+		{
+			system.setTimer(
+				time,
+				notAnimationFinish
+			);
+		}
 	}
 };
 

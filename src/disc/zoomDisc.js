@@ -464,21 +464,21 @@ prototype.dragStartButton =
 	{
 		case 'zoomIn' :
 
-			root.changeSpaceTransformCenter( 1 );
-
 			root.create(
-				'action', action_zoomButton.createZoomIn( )
+				'action', action_zoomButton.createZoom( 'in' )
 			);
+
+			root.changeSpaceTransformCenter( 1 );
 
 			return;
 
 		case 'zoomOut' :
 
-			root.changeSpaceTransformCenter( -1 );
-
 			root.create(
-				'action', action_zoomButton.createZoomOut( )
+				'action', action_zoomButton.createZoom( 'out' )
 			);
+
+			root.changeSpaceTransformCenter( -1 );
 
 			return;
 	}
@@ -502,7 +502,7 @@ prototype.dragStop =
 
 	if( !action || action.reflect !== 'action_zoomButton' ) return;
 
-	action.cancelTimer( );
+	root.create( 'action', action.create( 'refire', false ) );
 
 	return false;
 };

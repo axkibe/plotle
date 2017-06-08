@@ -461,7 +461,7 @@ prototype.probeClickDrag =
 
 
 /*
-| Returns true if point is on this panel.
+| Returns true if some disc accepted the click.
 */
 prototype.click =
 	function(
@@ -471,11 +471,11 @@ prototype.click =
 	)
 {
 	var
-		start;
+		bubble;
 
-	start = this.get( 'mainDisc' ).click( p, shift, ctrl );
+	bubble = this.get( 'mainDisc' ).click( p, shift, ctrl );
 
-	if( start ) return start;
+	if( bubble ) return bubble;
 
 	switch( this.show.reflect )
 	{

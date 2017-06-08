@@ -152,11 +152,27 @@ prototype.frame =
 		time
 	)
 {
+	var
+		action,
+		going;
+
 	root.create(
 		'spaceTransform', this.getTransform( time )
 	);
 
-	return time < this.end;
+	going = time < this.end;
+
+	if( !going )
+	{
+		action = root.action;
+
+		if( action && action.finishAnimation )
+		{
+			going = action.finishAnimation( );
+		}
+	}
+
+	return going;
 };
 
 

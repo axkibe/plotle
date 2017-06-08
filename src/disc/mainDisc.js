@@ -651,10 +651,7 @@ prototype.probeClickDrag =
 	// shortcut if p is not near the panel
 	if( !this.tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( this.tZone.pos ) ) )
-	{
-		return;
-	}
+	if( !this._tShape.within( p.sub( this.tZone.pos ) ) ) return;
 
 	return 'atween';
 };

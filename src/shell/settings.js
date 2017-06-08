@@ -23,12 +23,12 @@ shell_settings =
 	/*
 	| Milliseconds for zoom animation to all/home.
 	*/
-	animationZoomAllHomeTime : 300,
+	animationZoomAllHomeTime : 120,
 
 	/*
 	| Milliseconds for zoom animation in single in or out steps.
 	*/
-	animationZoomStepTime : 150,
+	animationZoomStepTime : 40,
 
 	/*
 	| Factor to add to the bottom of font height.

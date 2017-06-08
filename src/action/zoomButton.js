@@ -15,23 +15,20 @@ if( JION )
 			direction :
 			{
 				comment : '"in" or "out"',
-				type : 'string'
+				type : 'string'   // FIXME change in +1/-1 number
 			},
-			_timer :
+			refire :
 			{
-				comment : 'the interval timer ID for continueing',
-				type : [ 'undefined' , 'number' ]
+				comment : 'make further zoom steps',
+				type : 'boolean'
 			}
-		},
-		init : [ ]
+		}
 	};
 }
 
 
 var
-	action_zoomButton,
-	shell_settings,
-	system;
+	action_zoomButton;
 
 
 /*
@@ -42,7 +39,6 @@ var
 
 
 var
-	onZoomTime,
 	prototype;
 
 
@@ -61,75 +57,26 @@ prototype = action_zoomButton.prototype;
 /*
 | Shortcut to create an zoom in button action.
 */
-action_zoomButton.createZoomIn =
-	function( )
+action_zoomButton.createZoom =
+	function(
+		dir
+	)
 {
-	return(
-		action_zoomButton.create(
-			'direction', 'in'
-		)
-	);
-};
-
-
-/*
-| Shortcut to create an zoom in button action.
-*/
-action_zoomButton.createZoomOut =
-	function( )
-{
-	return(
-		action_zoomButton.create(
-			'direction', 'out'
-		)
-	);
-};
-
-
-/*
-| A zoom button interval timer fired
-*/
-onZoomTime =
-	function( )
-{
-	root.changeSpaceTransformCenter( this.direction === 'in' ? 1 : -1 );
-};
-
-
-
-/*
-| Initializer.
-*/
-prototype._init =
-	function( )
-{
+	var
+		action;
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.direction !== 'in' && this.direction !== 'out' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( dir !== 'in' && dir !== 'out' ) throw new Error( );
 /**/}
 
-	if( !this._timer )
-	{
-		this._timer =
-			system.setInterval(
-				shell_settings.animationZoomStepTime,
-				onZoomTime.bind( this )
-			);
-	}
-};
+	action =
+		action_zoomButton.create(
+			'direction', dir,
+			'refire', true
+		);
 
-
-/*
-| Cancels the timer for this zoomButton action.
-*/
-prototype.cancelTimer =
-	function( )
-{
-	system.cancelInterval( this._timer );
+	return action;
 };
 
 
@@ -141,6 +88,25 @@ prototype.affects =
 		// path
 	)
 {
+	return false;
+};
+
+
+/*
+| A zoom animation finished.
+*/
+prototype.finishAnimation =
+	function( )
+{
+	if( this.refire )
+	{
+		root.changeSpaceTransformCenter(
+			this.direction === 'in' ? 1 : -1
+		);
+
+		return true;
+	}
+
 	return false;
 };
 

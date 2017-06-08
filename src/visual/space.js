@@ -1134,9 +1134,17 @@ prototype.specialKey =
 
 			case 'y' : root.doTracker.redo( ); return true;
 
-			case ',' : root.changeSpaceTransformCenter( 1 ); return true;
+			case ',' :
 
-			case '.' : root.changeSpaceTransformCenter( -1 ); return true;
+				root.changeSpaceTransformCenter( 1 );
+
+				return true;
+
+			case '.' :
+
+				root.changeSpaceTransformCenter( -1 );
+
+				return true;
 		}
 	}
 
