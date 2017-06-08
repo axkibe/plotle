@@ -340,9 +340,6 @@ shell_root.startup =
 	var
 		ajaxPath,
 		canvas,
-		disc,
-		discPath,
-		discTwPath,
 		show,
 		user,
 		viewSize;
@@ -372,34 +369,7 @@ shell_root.startup =
 
 	user = user_creds.createFromLocalStorage( );
 
-	if( !user )
-	{
-		user = user_creds.createVisitor( );
-	}
-
-	discPath = jion$path.empty.append( 'disc' );
-
-	discTwPath = discPath.append( 'twig' );
-
-	disc =
-		disc_root.create(
-			'controlTransform', gleam_transform.normal,
-			'path', discPath,
-			'show', show,
-			'viewSize', viewSize,
-			'twig:add', 'mainDisc',
-				gruga_mainDisc.abstract(
-					'path', discTwPath.append( 'mainDisc' )
-				),
-			'twig:add', 'createDisc',
-				gruga_createDisc.abstract(
-					'path', discTwPath.append( 'createDisc' )
-				),
-			'twig:add', 'zoomDisc',
-				gruga_zoomDisc.abstract(
-					'path', discTwPath.append( 'zoomDisc' )
-				)
-		);
+	if( !user ) user = user_creds.createVisitor( );
 
 	shell_root.create(
 		'ajax',
@@ -418,7 +388,7 @@ shell_root.startup =
 		'spaceTransform', gleam_transform.normal,
 		'systemFocus', true,
 		'viewSize', display.size,
-		'disc', disc,  // FIXME also make a createDiscRoot
+		'disc', shell_root._createDiscRoot( viewSize, show ),
 		'form', shell_root._createFormRoot( viewSize ),
 		'_drawn', false
 	);
@@ -1825,6 +1795,46 @@ prototype.draw =
 			'display', display,
 			'_drawn', true
 		);
+};
+
+
+/*
+| Creates the disc root.
+*/
+shell_root._createDiscRoot =
+	function(
+		viewSize,
+		show
+	)
+{
+	var
+		twPath,
+		path;
+
+	path = jion$path.empty.append( 'disc' );
+
+	twPath = path.append( 'twig' );
+
+	return(
+		disc_root.create(
+			'controlTransform', gleam_transform.normal,
+			'path', path,
+			'show', show,
+			'viewSize', viewSize,
+			'twig:add', 'mainDisc',
+				gruga_mainDisc.abstract(
+					'path', twPath.append( 'mainDisc' )
+				),
+			'twig:add', 'createDisc',
+				gruga_createDisc.abstract(
+					'path', twPath.append( 'createDisc' )
+				),
+			'twig:add', 'zoomDisc',
+				gruga_zoomDisc.abstract(
+					'path', twPath.append( 'zoomDisc' )
+				)
+		)
+	);
 };
 
 
