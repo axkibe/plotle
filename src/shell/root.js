@@ -482,7 +482,6 @@ prototype._init =
 	if( !spaceFabric ) this.spaceVisual = undefined;
 
 	// skips recreating children when no need
-	// FIXME use alike
 	if(
 		!inherit
 		|| access !== inherit.access

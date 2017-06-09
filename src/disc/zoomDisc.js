@@ -465,7 +465,7 @@ prototype.dragStartButton =
 		case 'zoomIn' :
 
 			root.create(
-				'action', action_zoomButton.createZoom( 'in' )
+				'action', action_zoomButton.createZoom( 1 )
 			);
 
 			root.changeSpaceTransformCenter( 1 );
@@ -475,7 +475,7 @@ prototype.dragStartButton =
 		case 'zoomOut' :
 
 			root.create(
-				'action', action_zoomButton.createZoom( 'out' )
+				'action', action_zoomButton.createZoom( -1 )
 			);
 
 			root.changeSpaceTransformCenter( -1 );

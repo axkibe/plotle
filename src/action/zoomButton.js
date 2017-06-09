@@ -12,10 +12,10 @@ if( JION )
 		id : 'action_zoomButton',
 		attributes :
 		{
-			direction :
+			dir :
 			{
-				comment : '"in" or "out"',
-				type : 'string'   // FIXME change in +1/-1 number
+				comment : '+/- 1',
+				type : 'number'
 			},
 			refire :
 			{
@@ -67,12 +67,12 @@ action_zoomButton.createZoom =
 
 /**/if( CHECK )
 /**/{
-/**/	if( dir !== 'in' && dir !== 'out' ) throw new Error( );
+/**/	if( dir !== 1 && dir !== -1 ) throw new Error( );
 /**/}
 
 	action =
 		action_zoomButton.create(
-			'direction', dir,
+			'dir', dir,
 			'refire', true
 		);
 
@@ -100,9 +100,7 @@ prototype.finishAnimation =
 {
 	if( this.refire )
 	{
-		root.changeSpaceTransformCenter(
-			this.direction === 'in' ? 1 : -1
-		);
+		root.changeSpaceTransformCenter( this.dir );
 
 		return true;
 	}
