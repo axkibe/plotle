@@ -65,9 +65,9 @@ if( JION )
 
 var
 	change_insert,
+	change_list,
 	change_join,
 	change_remove,
-	change_ray,
 	change_split,
 	change_wrap,
 	jion,
@@ -278,8 +278,8 @@ testpad_root.prototype.alter =
 	changeWrap =
 		change_wrap.create(
 			'cid', session_uid( ),
-			'changeRay',
-				change_ray.create( 'ray:set', 0, change )
+			'changeList',
+				change_list.create( 'list:set', 0, change )
 		);
 
 	root.repository.alter( changeWrap );

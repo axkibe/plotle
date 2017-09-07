@@ -16,7 +16,7 @@ var
 	jion,
 	server_resource,
 	server_resourceRay,
-	stringRay;
+	stringList;
 
 
 jion = require( 'jion' );
@@ -25,10 +25,10 @@ server_resource = require( './resource' );
 
 server_resourceRay = require( './resourceRay' );
 
-stringRay = jion.stringRay.stringRay; // FUTURE
+stringList = jion.stringList.stringList; // FUTURE
 
 module.exports =
-server_resourceRay.create( 'ray:init', [
+server_resourceRay.create( 'list:init', [
 	server_resource.create(
 		'filePath', 'import/webfont.js',   // FUTURE add version info
 		'maxage', 'long'
@@ -44,24 +44,24 @@ server_resourceRay.create( 'ray:init', [
 		'postProcessor', 'opentypeMin'
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'ideoloom.html', 'index.html', '' ] ),
+		'aliases', stringList( [ 'ideoloom.html', 'index.html', '' ] ),
 		'filePath', 'media/ideoloom.html',
 		'maxage', 'short',
 		'postProcessor', 'indexHtml'
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'devel.html' ] ),
+		'aliases', stringList( [ 'devel.html' ] ),
 		'filePath', 'media/devel.html',
 		'devel', true,
 		'postProcessor', 'develHtml'
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'favicon.ico', 'media-favicon.ico' ] ),
+		'aliases', stringList( [ 'favicon.ico', 'media-favicon.ico' ] ),
 		'filePath', 'media/favicon.ico',
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'jion-proto.js' ] ),
+		'aliases', stringList( [ 'jion-proto.js' ] ),
 		'coding', 'utf-8',
 		'data', jion.proto.source,
 		'mime', 'text/javascript',
@@ -69,7 +69,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'jioncode-path.js' ] ),
+		'aliases', stringList( [ 'jioncode-path.js' ] ),
 		'coding', 'utf-8',
 		'data', jion.path.jionCode,
 		'mime', 'text/javascript',
@@ -77,7 +77,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'jion-path.js' ] ),
+		'aliases', stringList( [ 'jion-path.js' ] ),
 		'coding', 'utf-8',
 		'data', jion.path.source,
 		'mime', 'text/javascript',
@@ -85,17 +85,17 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'jioncode-pathRay.js' ] ),
+		'aliases', stringList( [ 'jioncode-pathList.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.pathRay.jionCode,
+		'data', jion.pathList.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringRay( [ 'jion-pathRay.js' ] ),
+		'aliases', stringList( [ 'jion-pathList.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.pathRay.source,
+		'data', jion.pathList.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -169,7 +169,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/change/ray.js',
+		'filePath', 'src/change/list.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -199,7 +199,7 @@ server_resourceRay.create( 'ray:init', [
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/change/wrapRay.js',
+		'filePath', 'src/change/wrapList.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -435,7 +435,27 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/fabric/spaceRef.js',
+		'filePath', 'src/ref/space.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/ref/dynamic/space.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/ref/dynamic/anyList.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/ref/spaceList.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/dynamic/refSpacesList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -505,7 +525,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/net/requestWrapRay.js',
+		'filePath', 'src/net/requestWrapList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -863,7 +883,7 @@ server_resourceRay.create( 'ray:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/visual/itemRay.js',
+		'filePath', 'src/visual/itemList.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -1080,7 +1100,7 @@ server_resourceRay.create( 'ray:init', [
 
 	// --- TestPad ---
 	server_resource.create(
-		'aliases', stringRay( [ 'testpad.html' ] ),
+		'aliases', stringList( [ 'testpad.html' ] ),
 		'filePath', 'media/testpad.html',
 		'devel', true,
 		'postProcessor', 'testPadHtml'

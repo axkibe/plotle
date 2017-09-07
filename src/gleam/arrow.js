@@ -188,7 +188,7 @@ gleam_arrow.getArrowShape =
 
 	return(
 		gleam_shape.create(
-			'ray:init', sections,
+			'list:init', sections,
 			'pc', line.pc
 		)
 	);

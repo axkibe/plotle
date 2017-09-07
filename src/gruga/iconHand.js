@@ -122,7 +122,7 @@ pp = qp.add( -3, 2 );
 
 gruga_iconHand.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.create( 'p', ap ), // A
 			gleam_shape_round.create( 'p', bp ), // B

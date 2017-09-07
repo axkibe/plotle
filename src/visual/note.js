@@ -429,7 +429,7 @@ jion.lazyValue(
 
 	if( sbary ) gRay[ gLen++ ] = sbary.glint;
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 
@@ -784,7 +784,7 @@ jion.lazyValue(
 
 	return(
 		gleam_glint_ray.create(
-			'ray:init',
+			'list:init',
 			[
 				gleam_glint_fill.create(
 					'facet', facet,

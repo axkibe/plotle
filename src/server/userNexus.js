@@ -14,9 +14,9 @@ if( JION )
 		id : 'server_userNexus',
 		attributes :
 		{
-			_cache :
+			cache :
 			{
-				comment : 'table of all cached user credentials',
+				comment : 'table of all cached user infos',
 				type : 'user_infoGroup',
 				defaultValue : 'user_infoGroup.create( )'
 			}
@@ -33,83 +33,90 @@ if( JION )
 
 
 var
+	change_listAppend,
 	database_userSkid,
-	fabric_spaceRef,
-	user_info,
+	dynamic_refSpacesList,
 	prototype,
+	ref_space,
+	ref_spaceList,
 	resume,
-	server_userNexus;
+	server_userNexus,
+	user_info;
 
 
 server_userNexus = require( 'jion' ).this( module );
 
 prototype = server_userNexus.prototype;
 
+change_listAppend = require( '../change/listAppend' );
+
+dynamic_refSpacesList = require( '../dynamic/refSpacesList' );
+
 user_info = require( '../user/info' );
 
 database_userSkid = require( '../database/userSkid' );
 
-fabric_spaceRef = require( '../fabric/spaceRef' );
+ref_space = require( '../ref/space' );
+
+ref_spaceList = require( '../ref/spaceList' );
 
 resume = require( 'suspend' ).resume;
 
 
 /*
-| Tests if a user is in the cache.
+| Adds the reference of a space being owned by an user.
+|
+| The user must be loaded in cache for this to work.
 */
-prototype.testInCache =
+prototype.addUserSpaceRef =
 	function(
-		user
+		spaceRef
 	)
 {
 	var
-		cUser;
+		a,
+		aZ,
+		cSpaces,  // current space list
+		dSpaces,  // dynamic space list
+		username,
+		userInfo;
 
-	cUser = this._cache.get( user.name );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
 
-	if( !cUser ) return false;
+	username = spaceRef.username;
 
-	return cUser.passhash === user.passhash;
-};
+	userInfo = this.cache.get( username );
 
+/**/if( CHECK )
+/**/{
+/**/	if( !userInfo ) throw new Error( );
+/**/}
 
+	dSpaces = userInfo.spaces;
 
-/*
-| Tests if the user creds are ok.
-*/
-prototype.testUserCreds =
-	function*(
-		user
-	)
-{
-	var
-		cUser,
-		val;
+	cSpaces = dSpaces.current;
 
-	cUser = this._cache.get( user.name );
-
-	if( cUser )
+	for( a = 0, aZ = cSpaces.length; a < aZ; a++ )
 	{
-		return cUser.passhash === user.passhash;
+		if( cSpaces.get( a ).equals( spaceRef ) ) throw new Error( );
 	}
 
-	// else load it from the database
-	val =
-		yield root.repository.users.findOne(
-			{ _id : user.name },
-			resume( )
+	dSpaces =
+		dSpaces.alter(
+			change_listAppend.create( 'val', spaceRef )
 		);
 
-	if( !val ) return;
-
-	cUser = database_userSkid.createFromJSON( val ).asUser;
+	userInfo = userInfo.create( 'spaces', dSpaces );
 
 	root.create(
 		'userNexus',
-			this.create( '_cache', this._cache.set( cUser.name, cUser ) )
+			this.create(
+				'cache', this.cache.create( 'group:set', username, userInfo )
+			)
 	);
-
-	return cUser.passhash === user.passhash;
 };
 
 
@@ -118,7 +125,7 @@ prototype.testUserCreds =
 */
 prototype.createVisitor =
 	function(
-		user
+		userCreds
 	)
 {
 	var
@@ -127,10 +134,7 @@ prototype.createVisitor =
 
 /**/if( CHECK )
 /**/{
-/**/	if( user.name !== 'visitor' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( userCreds.name !== 'visitor' ) throw new Error( );
 /**/}
 
 	nextVisitor = root.nextVisitor;
@@ -139,25 +143,96 @@ prototype.createVisitor =
 	{
 		name = 'visitor-' + ( ++nextVisitor );
 	}
-	while( this._cache.get( name ) );
+	while( this.cache.get( name ) );
 
 	root.create(
 		'nextVisitor', nextVisitor,
 		'userNexus',
 			this.create(
-				'_cache',
-				this._cache.set(
+				'cache',
+				this.cache.set(
 					name,
 					user_info.create(
 						'name', name,
-						'passhash', user.passhash,
+						'passhash', userCreds.passhash,
 						'news', false
 					)
 				)
 			)
 	);
 
-	return user.create( 'name', name );
+	return userCreds.create( 'name', name );
+};
+
+
+/*
+| Gets the list of spaces of a user.
+*/
+prototype.getUserSpaces =
+	function*(
+		userInfo
+	)
+{
+	var
+		arr,
+		cursor,
+		o,
+		spaces,
+		userSpaces;
+
+/**/if( CHECK )
+/**/{
+/**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
+/**/}
+
+	spaces = userInfo.spaces;
+
+	if( spaces ) return spaces;
+
+	arr = [ ];
+
+	cursor =
+		yield root.repository.spaces.find(
+			{ },
+			{ sort: '_id' },
+			resume( )
+		);
+
+	for(
+		o = yield cursor.nextObject( resume( ) );
+		o;
+		o = yield cursor.nextObject( resume( ) )
+	)
+	{
+		if( o.username !== userInfo.name ) continue;
+
+		arr.push( 
+			ref_space.create(
+				'username', o.username,
+				'tag', o.tag
+			)
+		);
+	}
+
+	userSpaces =
+		dynamic_refSpacesList.create(
+			'current', ref_spaceList.create( 'list:init', arr )
+		);
+
+	root.create(
+		'userNexus',
+			root.userNexus.create(
+				'cache',
+					root.userNexus.cache.set(
+						userInfo.name,
+						userInfo.create(
+							'spaces', userSpaces
+						)
+					)
+			)
+	);
+
+	return userSpaces;
 };
 
 
@@ -166,46 +241,122 @@ prototype.createVisitor =
 */
 prototype.register =
 	function*(
-		user
+		userInfo
 	)
 {
 	var
 		val;
 
-	if( this._cache.get( user.name ) )
+/**/if( CHECK )
+/**/{
+/**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
+/**/}
+
+	if( userInfo.spaces )
 	{
-		return false;
+		throw new Error( 'registered user had "spaces" set' );
 	}
+
+	// user already registered and in cache
+	if( this.cache.get( userInfo.name ) ) return false;
 
 	val =
 		yield root.repository.users.findOne(
-			{ _id : user.name },
+			{ _id : userInfo.name },
 			resume( )
 		);
 
-	if( val )
-	{
-		return false;
-	}
+	// user already registered
+	if( val ) return false;
 
+	userInfo = userInfo.create( 'spaces', dynamic_refSpacesList.create( ) );
+	
 	root.create(
 		'userNexus',
-		this.create( '_cache', this._cache.set( user.name, user ) )
+		this.create( 'cache', this.cache.set( userInfo.name, userInfo ) )
 	);
 
 	yield root.repository.users.insert(
 		JSON.parse( JSON.stringify(
-			database_userSkid.createFromUser( user )
+			database_userSkid.createFromUser( userInfo )
 		) ),
 		resume( )
 	);
 
 	yield* root.createSpace(
-		fabric_spaceRef.create( 'username', user.name, 'tag', 'home' )
+		ref_space.create( 'username', userInfo.name, 'tag', 'home' )
 	);
 
 	return true;
 };
+
+
+/*
+| Tests if a user is already the cache.
+|
+| If so returns the matching user info.
+*/
+prototype.testInCache =
+	function(
+		userCreds
+	)
+{
+	var
+		userInfo;
+
+	userInfo = this.cache.get( userCreds.name );
+
+	if( !userInfo || userInfo.passhash !== userCreds.passhash ) return false;
+
+	return userInfo;
+};
+
+
+/*
+| Tests if the user creds are ok.
+|
+| If so loads and returns the matching user info.
+*/
+prototype.testUserCreds =
+	function*(
+		userCreds
+	)
+{
+	var
+		userInfo,
+		val;
+
+	userInfo = this.cache.get( userCreds.name );
+
+	// if in cache answer directly
+	if( userInfo )
+	{
+		if( userInfo.passhash !== userCreds.passhash ) return false;
+
+		return userInfo;
+	}
+
+	// else the user is to be loaded from the database
+	val =
+		yield root.repository.users.findOne(
+			{ _id : userCreds.name },
+			resume( )
+		);
+
+	if( !val ) return false;
+
+	userInfo = database_userSkid.createFromJSON( val ).asUser;
+
+	root.create(
+		'userNexus',
+			this.create( 'cache', this.cache.set( userInfo.name, userInfo ) )
+	);
+
+	if( userInfo.passhash !== userCreds.passhash ) return false;
+
+	return userInfo;
+};
+
 
 
 } )( );

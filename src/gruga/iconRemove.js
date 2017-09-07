@@ -76,7 +76,7 @@ gruga_iconRemove.facet =
 
 gruga_iconRemove.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.create(
 				'p', pnw                  // A

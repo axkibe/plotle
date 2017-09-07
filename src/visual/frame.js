@@ -15,7 +15,7 @@ if( JION )
 			content :
 			{
 				comment : 'content of the frame',
-				type : 'visual_itemRay'
+				type : 'visual_itemList'
 			},
 			transform :
 			{
@@ -330,7 +330,7 @@ jion.lazyValue(
 		arr[ an++ ] = ca.tShape.border( -12 );
 	}
 
-	return gleam_shapeRay.create( 'ray:init', arr );
+	return gleam_shapeRay.create( 'list:init', arr );
 }
 );
 
@@ -500,7 +500,7 @@ jion.lazyValue(
 			];
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 

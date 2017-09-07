@@ -46,7 +46,7 @@ if( JION )
 			ref :
 			{
 				comment : 'reference to this space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			transform :
 			{
@@ -76,7 +76,7 @@ var
 	action_createRelation,
 	action_pan,
 	action_select,
-	change_ray,
+	change_list,
 	gleam_arrow,
 	gleam_glint_paint,
 	gleam_glint_ray,
@@ -87,11 +87,11 @@ var
 	gruga_select,
 	jion,
 	jion$path,
-	jion$pathRay,
+	jion$pathList,
 	result_hover,
 	root,
 	visual_frame,
-	visual_itemRay,
+	visual_itemList,
 	visual_label,
 	visual_mark_items,
 	visual_note,
@@ -171,7 +171,7 @@ jion.lazyStaticValue(
 {
 	return(
 		jion$path.create(
-			'ray:init', [ 'spaceVisual', ':transient' ]
+			'list:init', [ 'spaceVisual', ':transient' ]
 		)
 	);
 }
@@ -521,7 +521,7 @@ jion.lazyValue(
 			break;
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 
@@ -543,7 +543,7 @@ prototype.getRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( paths.reflect === 'jion$pathRay' ) throw new Error( );
+/**/	if( paths.reflect === 'jion$pathList' ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
@@ -566,7 +566,7 @@ prototype.getRay =
 		items[ iZ++ ] = this.get( path.get( 2 ) );
 	}
 
-	return visual_itemRay.create( 'ray:init', items );
+	return visual_itemList.create( 'list:init', items );
 };
 
 
@@ -910,14 +910,14 @@ prototype.dragStop =
 				}
 				else
 				{
-					if( changes.reflect !== 'change_ray' )
+					if( changes.reflect !== 'change_list' )
 					{
-						changes = change_ray.create( 'ray:append', changes );
+						changes = change_list.create( 'list:append', changes );
 					}
 
-					if( chi.reflect !== 'change_ray' )
+					if( chi.reflect !== 'change_list' )
 					{
-						changes = changes.create( 'ray:append', chi );
+						changes = changes.create( 'list:append', chi );
 					}
 					else
 					{
@@ -957,14 +957,14 @@ prototype.dragStop =
 				}
 				else
 				{
-					if( changes.reflect !== 'change_ray' )
+					if( changes.reflect !== 'change_list' )
 					{
-						changes = change_ray.create( 'ray:append', changes );
+						changes = change_list.create( 'list:append', changes );
 					}
 
-					if( chi.reflect !== 'change_ray' )
+					if( chi.reflect !== 'change_list' )
 					{
-						changes = changes.create( 'ray:append', chi );
+						changes = changes.create( 'list:append', chi );
 					}
 					else
 					{
@@ -1179,7 +1179,7 @@ prototype.specialKey =
 					paths[ pZ++ ] = this.atRank( r ).path;
 				}
 
-				paths = jion$pathRay.create( 'ray:init', paths );
+				paths = jion$pathList.create( 'list:init', paths );
 
 				mark = visual_mark_items.create( 'itemPaths', paths );
 
@@ -1682,7 +1682,7 @@ prototype._startCreateGeneric =
 			{
 				fabric =
 					fabric.create(
-						'spaceUser', root.user.name,
+						'spaceUser', root.userCreds.name,
 						'spaceTag', 'home'
 					);
 			}
@@ -1881,7 +1881,7 @@ prototype._stopSelect =
 	}
 	else
 	{
-		paths = jion$pathRay.create( 'ray:init', paths );
+		paths = jion$pathList.create( 'list:init', paths );
 
 		if( !ctrl || !this.mark )
 		{

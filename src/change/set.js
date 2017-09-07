@@ -82,16 +82,9 @@ prototype.changeTree =
 	// Stores the old value for history tracking.
 	prev = tree.getPath( this.path );
 
-	if( !this.val )
-	{
-		throw new Error( );
-	}
+	if( !this.val ) throw new Error( );
 
-	if(
-		prev !== this.prev
-		&&
-		!prev.equalsJSON( this.prev )
-	)
+	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{
 		console.log( 'set.prev mismatch', prev, this.prev );
 
@@ -117,21 +110,21 @@ jion.lazyValue(
 	prototype,
 	'reverse',
 	function( )
-	{
-		var
-			inv;
+{
+	var
+		inv;
 
-		inv =
-			change_set.create(
-				'path', this.path,
-				'val', this.prev,
-				'prev', this.val
-			);
+	inv =
+		change_set.create(
+			'path', this.path,
+			'val', this.prev,
+			'prev', this.val
+		);
 
-		jion.aheadValue( inv, 'reverse', this );
+	jion.aheadValue( inv, 'reverse', this );
 
-		return inv;
-	}
+	return inv;
+}
 );
 
 
@@ -162,17 +155,17 @@ prototype.transform =
 
 			return this._transformChangeSet( cx );
 
-		case 'change_ray' :
+		case 'change_list' :
 
-			return this._transformChangeRay( cx );
+			return this._transformChangeList( cx );
 
 		case 'change_wrap' :
 
 			return this._transformChangeWrap( cx );
 
-		case 'change_wrapRay' :
+		case 'change_wrapList' :
 
-			return this._transformChangeWrapRay( cx );
+			return this._transformChangeWrapList( cx );
 
 		default :
 
@@ -205,9 +198,9 @@ prototype._transformChangeSet =
 
 
 /*
-| Returns a change ray transformed by this change.
+| Returns a change list transformed by this change.
 */
-prototype._transformChangeRay = change_generic.transformChangeRay;
+prototype._transformChangeList = change_generic.transformChangeList;
 
 
 /*
@@ -217,10 +210,9 @@ prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
-| Returns a change wrap transformed by this change.
+| Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 

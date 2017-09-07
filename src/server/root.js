@@ -88,7 +88,7 @@ var
 
 config = require( '../../config' );
 
-config.database_version = 14;
+config.database_version = 15;
 
 /*
 | Globals.
@@ -122,7 +122,7 @@ global.root = undefined;
 
 var
 	database_repository,
-	fabric_spaceRef,
+	ref_space,
 	fs,
 	http,
 	isString,
@@ -209,7 +209,7 @@ url = require( 'url' );
 
 util = require( 'util' );
 
-fabric_spaceRef = require( '../fabric/spaceRef' );
+ref_space = require( '../ref/space' );
 
 zlib = require( 'zlib' );
 
@@ -279,9 +279,9 @@ startup =
 			request,
 			result
 		)
-		{
-			suspend( root.requestListener ).call( root, request, result );
-		}
+	{
+		suspend( root.requestListener ).call( root, request, result );
+	}
 	).listen( config.port, config.ip, resume( ) );
 
 	log_start( 'server running' );
@@ -315,7 +315,7 @@ prototype.loadSpaces =
 	)
 	{
 		spaceRef =
-			fabric_spaceRef.create(
+			ref_space.create(
 				'username', o.username,
 				'tag', o.tag
 			);
@@ -869,55 +869,55 @@ prototype.extraMangle =
 	// walks the syntax tree
 	ast.walk( new uglify.TreeWalker(
 		function( node )
+	{
+		var k, p;
+
+		for( k in astProps )
 		{
-			var k, p;
+			p = node[ k ];
 
-			for( k in astProps )
+			if( p !== undefined )
 			{
-				p = node[ k ];
-
-				if( p !== undefined )
-				{
-					break;
-				}
+				break;
 			}
+		}
 
-			if( !k )
-			{
-				return false;
-			}
+		if( !k )
+		{
+			return false;
+		}
 
-			if( !isString( node[ k ] ) )
-			{
-				return false;
-			}
+		if( !isString( node[ k ] ) )
+		{
+			return false;
+		}
 
-			// checks if this property will not be mangled
-			if( noMangle[ p ] !== undefined )
-			{
-				delete useNoMangle[ p ];
-
-				return false;
-			}
-
-			// checks if this property will be mangled
-			if( mangle[ p ] !== undefined )
-			{
-				delete useMangle[ p ];
-
-				node[ k ] = mangle[ p ];
-
-				return false;
-			}
-
-			// if this is a property it is marked as missed
-			if( astProps[ k ] === 'p' )
-			{
-				missed[ p ] = true;
-			}
+		// checks if this property will not be mangled
+		if( noMangle[ p ] !== undefined )
+		{
+			delete useNoMangle[ p ];
 
 			return false;
 		}
+
+		// checks if this property will be mangled
+		if( mangle[ p ] !== undefined )
+		{
+			delete useMangle[ p ];
+
+			node[ k ] = mangle[ p ];
+
+			return false;
+		}
+
+		// if this is a property it is marked as missed
+		if( astProps[ k ] === 'p' )
+		{
+			missed[ p ] = true;
+		}
+
+		return false;
+	}
 	));
 
 	// turns check lists into arrays and sorts them
@@ -968,18 +968,16 @@ prototype.createSpace =
 
 /**/if( CHECK )
 /**/{
-/**/	if( spaceRef.reflect !== 'fabric_spaceRef' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( spaceRef.reflect !== 'ref_space' ) throw new Error( );
 /**/}
 
 	spaceBox = yield* server_spaceBox.createSpace( spaceRef );
 
 	root.create(
-		'spaces',
-			root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
+		'spaces', root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
 	);
+
+	root.userNexus.addUserSpaceRef( spaceRef );
 
 	return spaceBox;
 };
@@ -998,10 +996,7 @@ prototype.closeSleep =
 	sleep = root.upSleeps.get( sleepID );
 
 	// maybe it just had expired at the same time
-	if( !sleep )
-	{
-		return;
-	}
+	if( !sleep ) return;
 
 	clearTimeout( sleep.timer );
 
@@ -1016,20 +1011,26 @@ prototype.closeSleep =
 */
 prototype.wake =
 	function(
-		spaceRef
+		ref // reference to wake for
 	)
 {
 	var
 		a,
 		asw,
 		aZ,
+		b,
+		bZ,
+		dynRefs,
 		modified,
 		result,
 		key,
 		sleep,
-		sleepKeys;
+		sleepKeys,
+		upSleeps;
 
-	sleepKeys = root.upSleeps.keys;
+	upSleeps = root.upSleeps;
+
+	sleepKeys = upSleeps.keys;
 
 	modified = false;
 
@@ -1039,12 +1040,19 @@ prototype.wake =
 	{
 		key = sleepKeys[ a ];
 
-		sleep = root.upSleeps.get( key );
+		sleep = upSleeps.get( key );
 
-		if( !spaceRef.equals( sleep.spaceRef ) )
+		dynRefs = sleep.dynRefs;
+
+		for( b = 0, bZ = sleep.length; b < bZ; b++ )
 		{
-			continue;
+			if( ref.equals( dynRefs.get( b ) ) ) break;
 		}
+
+		// none of the dynRefs matched
+		if( b >= bZ ) continue;
+
+		// this sleep needs to be waked
 
 		clearTimeout( sleep.timer );
 
@@ -1052,7 +1060,7 @@ prototype.wake =
 			'upSleeps', root.upSleeps.remove( key )
 		);
 
-		asw = server_requestHandler.conveyUpdate( sleep.seq, sleep.spaceRef );
+		asw = server_requestHandler.conveyUpdate( sleep.dynRefs );
 
 		result = sleep.result;
 
@@ -1274,20 +1282,20 @@ prototype.webAjax =
 	request.on(
 		'close',
 		function( )
+	{
+		if( result.sleepID )
 		{
-			if( result.sleepID )
-			{
-				root.closeSleep( result.sleepID );
-			}
+			root.closeSleep( result.sleepID );
 		}
+	}
 	);
 
 	request.on(
 		'data',
 		function( chunk )
-		{
-			data.push( chunk );
-		}
+	{
+		data.push( chunk );
+	}
 	);
 
 	handler =
@@ -1349,9 +1357,9 @@ prototype.webAjax =
 	request.on(
 		'end',
 		function( )
-		{
-			suspend( handler )( );
-		}
+	{
+		suspend( handler )( );
+	}
 	);
 };
 

@@ -28,17 +28,17 @@ gruga_note = { };
 
 gruga_note.facets =
 	gleam_facetRay.create(
-		'ray:append',
+		'list:append',
 		// default
 		gleam_facet.create(
 			'fill',
 				gleam_gradient_askew.create(
-					'ray:append',
+					'list:append',
 					gleam_gradient_colorStop.create(
 						'offset', 0,
 						'color', gleam_color.rgba( 255, 255, 248, 0.955 )
 					),
-					'ray:append',
+					'list:append',
 					gleam_gradient_colorStop.create(
 						'offset', 1,
 						'color', gleam_color.rgba( 255, 255, 160, 0.955 )
@@ -46,16 +46,16 @@ gruga_note.facets =
 				),
 			'border',
 				gleam_borderRay.create(
-					'ray:append',
+					'list:append',
 					gleam_border.create(
 						'distance', 1,
 						'color', gleam_color.rgb( 255, 188, 87 )
 					),
-					'ray:append',
+					'list:append',
 					gleam_border.simpleBlack
 				)
 		),
-		'ray:append', gruga_highlight
+		'list:append', gruga_highlight
 	);
 
 

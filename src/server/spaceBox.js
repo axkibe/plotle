@@ -25,7 +25,7 @@ if( JION )
 			'spaceRef' :
 			{
 				comment : 'reference to the space',
-				type : 'fabric_spaceRef',
+				type : 'ref_space',
 			},
 			'_changesDB' :
 			{
@@ -35,12 +35,12 @@ if( JION )
 			'_changeWraps' :
 			{
 				comment : 'changeWraps cached in RAM',
-				type : 'change_wrapRay'
+				type : 'change_wrapList'
 			},
 			'_changesOffset' :
 			{
 				comment : 'the offset of the stored changeWraps',
-				// one server load the past isn't kept in memory
+				// on server load the past isn't kept in memory
 				type : 'integer'
 			}
 		}
@@ -56,20 +56,20 @@ if( JION )
 
 
 var
-	change_wrapRay,
+	change_wrapList,
 	database_changeSkid,
-	database_changeSkidRay,
+	database_changeSkidList,
 	resume,
 	server_spaceBox,
 	fabric_space;
 
 server_spaceBox = require( 'jion' ).this( module );
 
-change_wrapRay = require( '../change/wrapRay' );
+change_wrapList = require( '../change/wrapList' );
 
 database_changeSkid = require( '../database/changeSkid' );
 
-database_changeSkidRay = require( '../database/changeSkidRay' );
+database_changeSkidList = require( '../database/changeSkidList' );
 
 resume = require( 'suspend' ).resume;
 
@@ -130,7 +130,7 @@ server_spaceBox.loadSpace =
 			'spaceRef', spaceRef,
 			'seqZ', seqZ,
 			'_changesDB', changesDB,
-			'_changeWraps', change_wrapRay.create( 'ray:init', [ ] ),
+			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', seqZ
 		)
 	);
@@ -163,8 +163,7 @@ server_spaceBox.createSpace =
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'_changeWraps',
-				change_wrapRay.create( 'ray:init', [ ] ),
+			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', 1
 		)
 	);
@@ -179,50 +178,47 @@ server_spaceBox.createSpace =
 */
 server_spaceBox.prototype.appendChanges =
 	function(
-		changeWrapRay,
+		changeWrapList,
 		user
 	)
 {
 	var
-		changeSkidRay,
+		changeSkidList,
 		tree;
 
 /**/if( CHECK )
 /**/{
-/**/	if( changeWrapRay.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( changeWrapList.length === 0 ) throw new Error( );
 /**/}
 
-	tree = changeWrapRay.changeTree( this.space );
+	tree = changeWrapList.changeTree( this.space );
 
-	changeSkidRay =
-		database_changeSkidRay.createFromChangeWrapRay(
-			changeWrapRay,
+	changeSkidList =
+		database_changeSkidList.createFromChangeWrapList(
+			changeWrapList,
 			user,
 			this.seqZ
 		);
 
 	// saves the changeSkid in the database
 	this._changesDB.insert(
-		JSON.parse( JSON.stringify( changeSkidRay ) ).ray,
-		function( error /*, count */ )
-		{
-			if( error )
-			{
-				throw new Error( 'Database error' );
-			}
-		}
+		JSON.parse( JSON.stringify( changeSkidList ) ).list,
+		function(
+			error
+			// count
+		)
+	{
+		if( error ) throw new Error( 'Database error' );
+	}
 	);
 
 	return(
 		this.create(
-			'seqZ', this.seqZ + changeSkidRay.length,
+			'seqZ', this.seqZ + changeSkidList.length,
 			'space', tree,
 			'_changeWraps',
 				this._changeWraps
-				.appendRay( changeSkidRay.asChangeWrapRay )
+				.appendList( changeSkidList.asChangeWrapList )
 		)
 	);
 };

@@ -2,7 +2,8 @@
 | An ajax channel.
 |
 | Multiple calls into one channel are stacked.
-| Requests to multiple channel are send in parallel.
+|
+| Requests to multiple channels are send parallel.
 */
 
 
@@ -23,8 +24,8 @@ if( JION )
 			_fifo :
 			{
 				comment : 'the fifo of requests',
-				type : 'net_requestWrapRay',
-				defaultValue : 'net_requestWrapRay.create( )'
+				type : 'net_requestWrapList',
+				defaultValue : 'net_requestWrapList.create( )'
 			}
 		},
 		init : [ ]
@@ -35,7 +36,7 @@ if( JION )
 var
 	net_channel,
 	net_requestWrap,
-	net_requestWrapRay,
+	net_requestWrapList,
 	root;
 
 /*
@@ -113,15 +114,11 @@ net_channel.prototype.abortAll =
 			fifo.get( f ).abort( );
 		}
 
-		fifo = net_requestWrapRay.create( );
+		fifo = net_requestWrapList.create( );
 	}
 	else
 	{
-		for(
-			f = 0, fZ = fifo.length;
-			f < fZ;
-			f++
-		)
+		for( f = 0, fZ = fifo.length; f < fZ; f++ )
 		{
 			r = fifo.get( f ) ;
 

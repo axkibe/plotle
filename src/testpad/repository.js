@@ -18,10 +18,10 @@ if( JION )
 				type : 'integer',
 				defaultValue : '0'
 			},
-			_changeWrapRay :
+			_changeWrapList :
 			{
 				comment : 'history of all changes',
-				type : [ 'undefined', 'change_wrapRay' ]
+				type : [ 'undefined', 'change_wrapList' ]
 			},
 			_note :
 			{
@@ -35,7 +35,7 @@ if( JION )
 
 
 var
-	change_wrapRay,
+	change_wrapList,
 	fabric_doc,
 	fabric_note,
 	fabric_para,
@@ -113,12 +113,12 @@ testpad_repository.prototype._init =
 			);
 	}
 
-	if( !this._changeWrapRay )
+	if( !this._changeWrapList )
 	{
-		this._changeWrapRay = change_wrapRay.create( );
+		this._changeWrapList = change_wrapList.create( );
 	}
 
-	this.seq = math_limit( 0, this.seq, this._changeWrapRay.length );
+	this.seq = math_limit( 0, this.seq, this._changeWrapList.length );
 };
 
 
@@ -133,15 +133,15 @@ testpad_repository.prototype.get =
 {
 	var
 		a,
-		cwRay,
-		changeRay,
+		cwList,
+		changeList,
 		cZ,
 		note,
 		seq;
 
-	cwRay = this._changeWrapRay;
+	cwList = this._changeWrapList;
 
-	cZ = cwRay.length;
+	cZ = cwList.length;
 
 	seq = this.seq;
 
@@ -156,9 +156,9 @@ testpad_repository.prototype.get =
 	// rewinds stuff
 	for( a = cZ - 1; a >= seq; a-- )
 	{
-		changeRay = cwRay.get( a ).changeRay;
+		changeList = cwList.get( a ).changeList;
 
-		note = changeRay.changeTreeReverse( note );
+		note = changeList.changeTreeReverse( note );
 	}
 
 	// returns the path requested
@@ -175,28 +175,24 @@ testpad_repository.prototype.alter =
 	)
 {
 	var
-		cwRay,
+		cwList,
 		s,
 		sZ,
 		seq;
 
-	cwRay = this._changeWrapRay;
+	cwList = this._changeWrapList;
 
 	seq = this.seq;
 
-	for(
-		s = seq, sZ = cwRay.length;
-		s < sZ;
-		s++
-	)
+	for( s = seq, sZ = cwList.length; s < sZ; s++ )
 	{
-		cw = cwRay.get( s ).transform( cw );
+		cw = cwList.get( s ).transform( cw );
 	}
 
 	root.create(
 		'repository',
 			this.create(
-				'_changeWrapRay', cwRay.append( cw ),
+				'_changeWrapList', cwList.append( cw ),
 				'_note', cw.changeTree( this._note )
 			)
 	);

@@ -56,10 +56,10 @@ c = gleam_point.xy( 2, -3 );
 
 gruga_iconZoom.shape =
 	gleam_shapeRay.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape.create(
-				'ray:init',
+				'list:init',
 				[
 					gleam_shape_start.p(    c.add( -12.0, 12 ) ),
 					gleam_shape_line.p(     c.add(  -7.5,  6 ) ),
@@ -75,7 +75,7 @@ gruga_iconZoom.shape =
 				'nogrid', true
 			),
 			gleam_shape.create(
-				'ray:init',
+				'list:init',
 				[
 					gleam_shape_start.p(    c.add( -8.5,  0.0 ) ),
 					gleam_shape_round.pCcw( c.add(  0.0,  8.5 ) ),

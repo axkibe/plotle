@@ -271,7 +271,7 @@ form_form.glint =
 		if( sg ) gRay[ gLen++ ] = sg;
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 };
 
 

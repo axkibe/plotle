@@ -72,7 +72,6 @@ var
 	change_insert,
 	change_remove,
 	fabric_portal,
-	fabric_spaceRef,
 	gleam_ellipse,
 	gleam_facet,
 	gleam_glint_border,
@@ -89,10 +88,11 @@ var
 	gleam_transform,
 	gruga_portal,
 	jion,
-	jion$pathRay,
+	jion$pathList,
 	visual_mark_caret,
 	visual_mark_items,
 	result_hover,
+	ref_space,
 	root,
 	session_uid,
 	shell_fontPool,
@@ -418,8 +418,8 @@ prototype.click =
 		setMark =
 			visual_mark_items.create(
 				'itemPaths',
-					jion$pathRay.create(
-						'ray:init', [ this.path ]
+					jion$pathList.create(
+						'list:init', [ this.path ]
 					)
 			);
 	}
@@ -503,7 +503,7 @@ jion.lazyValue(
 			);
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 
@@ -859,9 +859,9 @@ prototype._locateOffset =
 
 
 /*
-| The space the portals references as fabric_spaceRef jion.
+| The space the portals references.
 |
-| FUTURE make this the primer data.
+| FIXME make this the primer data.
 */
 jion.lazyValue(
 	prototype,
@@ -869,7 +869,7 @@ jion.lazyValue(
 	function( )
 {
 	return(
-		fabric_spaceRef.create(
+		ref_space.create(
 			'username', this.fabric.spaceUser,
 			'tag', this.fabric.spaceTag
 		)
@@ -1542,7 +1542,7 @@ jion.lazyValue(
 
 	return(
 		gleam_glint_ray.create(
-			'ray:init',
+			'list:init',
 			[
 				gleam_glint_fill.create(
 					'facet', facet,
@@ -1550,7 +1550,7 @@ jion.lazyValue(
 				),
 				// masks the portals content
 				gleam_glint_mask.create(
-					'glint', gleam_glint_ray.create( 'ray:init', cRay ),
+					'glint', gleam_glint_ray.create( 'list:init', cRay ),
 					'shape', tzs
 				),
 				// puts the border on top of everything else

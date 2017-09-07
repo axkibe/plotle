@@ -1,5 +1,7 @@
 /*
 | A user on a skid for database storage.
+|
+| FIXME rename userInfoSkid
 */
 
 

@@ -56,7 +56,7 @@ gruga_iconNormal.facet =
 
 gruga_iconNormal.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.create( 'p', ap ), // A
 			gleam_shape_line.create( 'p', ap.add(  11,  10 ) ), // B

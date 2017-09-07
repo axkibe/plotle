@@ -1,7 +1,7 @@
 /*
-| A client requests updates to a space.
+| A client requests updates on dynamics.
 |
-| The server might hold the answer back until something happens.
+| The server might hold back the answer until something happens.
 */
 
 
@@ -14,19 +14,13 @@ if( JION )
 		id : 'request_update',
 		attributes :
 		{
-			seq :
+			dynRefs :
 			{
-				comment : 'sequence number the client is at',
+				comment : 'the references to dynamics to get updates of',
 				json : true,
-				type : 'integer'
+				type : 'ref_dynamic_anyList',
 			},
-			spaceRef :
-			{
-				comment : 'reference of space to get updates of',
-				json : true,
-				type : 'fabric_spaceRef'
-			},
-			user :
+			userCreds :
 			{
 				comment : 'user creds',
 				json : true,

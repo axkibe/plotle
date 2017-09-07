@@ -172,7 +172,7 @@ jion.lazyValue(
 
 
 /*
-| Returns a change, changeRay, changeWrap or changeWrapRay
+| Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
 prototype.transform =
@@ -206,17 +206,17 @@ prototype.transform =
 
 			return this._transformInsertRemove( cx );
 
-		case 'change_ray' :
+		case 'change_list' :
 
-			return this._transformChangeRay( cx );
+			return this._transformChangeList( cx );
 
 		case 'change_wrap' :
 
 			return this._transformChangeWrap( cx );
 
-		case 'change_wrapRay' :
+		case 'change_wrapList' :
 
-			return this._transformChangeWrapRay( cx );
+			return this._transformChangeWrapList( cx );
 
 		default :
 
@@ -226,9 +226,9 @@ prototype.transform =
 
 
 /*
-| Returns a change ray transformed by this change.
+| Returns a change list transformed by this change.
 */
-prototype._transformChangeRay = change_generic.transformChangeRay;
+prototype._transformChangeList = change_generic.transformChangeList;
 
 
 /*
@@ -238,9 +238,9 @@ prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
-| Returns a change wrap transformed by this change.
+| Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapRay = change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 

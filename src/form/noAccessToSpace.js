@@ -29,7 +29,7 @@ if( JION )
 			nonSpaceRef :
 			{
 				comment : 'the deniead space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			path :
 			{
@@ -39,7 +39,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'the reference to the current space',
-				type : [ 'undefined', 'fabric_spaceRef' ],
+				type : [ 'undefined', 'ref_space' ],
 				assign : ''
 			},
 			user :

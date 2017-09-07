@@ -16,13 +16,13 @@ if( JION )
 			{
 				comment : 'sequence the update starts at',
 				json : true,
-				type : 'integer'
+				type : [ 'undefined', 'integer' ]
 			},
-			changeWrapRay :
+			changeWrapList :
 			{
 				comment : 'the changes',
 				json : true,
-				type : 'change_wrapRay'
+				type : [ 'undefined', 'change_wrapList' ]
 			}
 		}
 	};

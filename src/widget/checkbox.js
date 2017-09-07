@@ -195,7 +195,7 @@ jion.lazyValue(
 
 	glint =
 		gleam_glint_ray.create(
-			'ray:append',
+			'list:append',
 				gleam_glint_paint.create(
 					'facet', facet,
 					'shape', this._tZone
@@ -206,7 +206,7 @@ jion.lazyValue(
 	{
 		glint =
 			glint.create(
-				'ray:append',
+				'list:append',
 					gleam_glint_paint.create(
 						'facet', gruga_iconCheck.facet,
 						'shape', this._checkIcon

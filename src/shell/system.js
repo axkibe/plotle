@@ -333,7 +333,7 @@ prototype = shell_system.prototype;
 
 
 /*
-| Cancels a timer
+| Cancels an interval timer.
 */
 prototype.cancelInterval =
 	function( id )
@@ -341,6 +341,15 @@ prototype.cancelInterval =
 	return window.clearInterval( id );
 };
 
+
+/*
+| Cancels a single timer.
+*/
+prototype.cancelTimer =
+   	function( id )
+{
+	return window.clearTimeout( id );
+};
 
 /*
 | If not already animating, start doing so.

@@ -78,7 +78,7 @@ z = 1;
 
 gruga_iconZoomAll.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.p( c.add( -s, -s ) ),
 			gleam_shape_line.p(  c.add( -p, -s ) ),

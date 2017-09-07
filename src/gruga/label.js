@@ -23,7 +23,7 @@ gruga_label = { };
 
 gruga_label.facets =
 	gleam_facetRay.create(
-		'ray:append',
+		'list:append',
 		// default
 		gleam_facet.create(
 		// 'border',
@@ -31,7 +31,7 @@ gruga_label.facets =
 		//			'color', gleam_color.rgba( 100, 100, 0, 0.1 )
 		//		)
 		),
-		'ray:append', gruga_highlight
+		'list:append', gruga_highlight
 	);
 
 

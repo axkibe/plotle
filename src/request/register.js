@@ -24,7 +24,7 @@ if( JION )
 				json : true,
 				type : 'boolean'
 			},
-			user :
+			userCreds :
 			{
 				comment : 'user/pass credentials to be registered',
 				json : true,

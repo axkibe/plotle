@@ -24,7 +24,7 @@ gruga_genericButton = { };
 
 gruga_genericButton.facets =
 	gleam_facetRay.create(
-		'ray:init',
+		'list:init',
 		[
 			// default state.
 			gleam_facet.create(
@@ -53,13 +53,13 @@ gruga_genericButton.facets =
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
 					gleam_borderRay.create(
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 1,
 							'width', 2,
@@ -73,13 +73,13 @@ gruga_genericButton.facets =
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
 					gleam_borderRay.create(
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 1,
 							'width', 2,

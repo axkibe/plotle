@@ -24,20 +24,20 @@ gruga_genericInput = { };
 
 gruga_genericInput.facets =
 	gleam_facetRay.create(
-		'ray:init',
+		'list:init',
 		[
 			// default state.
 			gleam_facet.create(
 				'fill', gleam_color.white,
 				'border',
 					gleam_borderRay.create(
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 1,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 188, 87 )
 						),
-						'ray:append',
+						'list:append',
 						gleam_border.simpleBlack
 					)
 			),
@@ -47,13 +47,13 @@ gruga_genericInput.facets =
 				'fill', gleam_color.white,
 				'border',
 					gleam_borderRay.create(
-						'ray:append',
+						'list:append',
 						gleam_border.create(
 							'distance', 1,
 							'width', 2,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
-						'ray:append',
+						'list:append',
 						gleam_border.simpleBlack
 					)
 			)

@@ -20,7 +20,7 @@ if( JION )
 			ref :
 			{
 				comment : 'reference to this space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			}
 		},
 		json : true,

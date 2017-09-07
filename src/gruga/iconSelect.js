@@ -102,7 +102,7 @@ gruga_iconSelect.facet =
 	gleam_facet.create(
 		'border',
 			gleam_borderRay.create(
-				'ray:init',
+				'list:init',
 				[
 					gleam_border.create(
 						'color', gleam_color.rgb( 0, 0, 0 )
@@ -119,7 +119,7 @@ gruga_iconSelect.facet =
 
 gruga_iconSelect.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			start.create( 'p', pnw.add(   0 ,  ce ) ),
 			line.create(  'p', pnw.add(   0,   cs ) ),

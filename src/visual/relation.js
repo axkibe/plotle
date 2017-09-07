@@ -181,15 +181,15 @@ Object.defineProperty(
 		function( )
 	{
 		var
+			arr,
 			arrShape,
 			cache,
 			cg,
 			conShape,
 			facet,
-			gLen,
-			gRay,
 			item1,
 			item2,
+			len,
 			shape1,
 			shape2,
 			tZone,
@@ -236,35 +236,26 @@ Object.defineProperty(
 				'rect', tZone.enlarge1
 			);
 
-		gRay = [ wg ];
+		arr = [ wg ];
 
-		gLen = 1;
+		len = 1;
 
 		if( this.highlight )
 		{
 			facet = gruga_label.facets.getFacet( 'highlight', true );
 
-			gRay[ gLen++ ] =
+			arr[ len++ ] =
 				gleam_glint_paint.create(
 					'facet', facet,
 					'shape', this.tShape
 				);
 		}
 
-		if( shape1 )
-		{
-			gRay[ gLen++ ] = this._getConnectionGlint( shape1 );
-		}
+		if( shape1 ) arr[ len++ ] = this._getConnectionGlint( shape1 );
 
-		if( shape2 )
-		{
-			gRay[ gLen++ ] = this._getArrowGlint( shape2 );
-		}
+		if( shape2 ) arr[ len++ ] = this._getArrowGlint( shape2 );
 
-		return(
-			cache.glint =
-				gleam_glint_ray.create( 'ray:init', gRay )
-		);
+		return ( cache.glint = gleam_glint_ray.create( 'list:init', arr ) );
 	}
 }
 );

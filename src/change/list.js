@@ -1,5 +1,5 @@
 /*
-| An array of changes.
+| A list of changes.
 */
 
 
@@ -9,12 +9,14 @@
 if( JION )
 {
 	throw{
-		id : 'change_ray',
+		id : 'change_list',
 		json : true,
-		ray :
+		list :
 		[
 			'change_grow',
 			'change_insert',
+			'change_listAppend',
+			'change_listShorten',
 			'change_join',
 			'change_remove',
 			'change_set',
@@ -27,7 +29,7 @@ if( JION )
 
 var
 	change_generic,
-	change_ray,
+	change_list,
 	jion;
 
 
@@ -46,17 +48,17 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	change_ray = jion.this( module, 'source' );
+	change_list = jion.this( module, 'source' );
 
 	change_generic = require( './generic' );
 }
 
 
-prototype = change_ray.prototype;
+prototype = change_list.prototype;
 
 
 /*
-| Returns a change ray with reversed changes.
+| Returns a change list with reversed changes.
 */
 jion.lazyValue(
 	prototype,
@@ -66,17 +68,17 @@ jion.lazyValue(
 	var
 		a,
 		aZ,
-		iRay,
+		arr,
 		result;
 
-	iRay = [ ];
+	arr = [ ];
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		iRay[ a ] = this.get( aZ - 1 - a ).reverse;
+		arr[ a ] = this.get( aZ - 1 - a ).reverse;
 	}
 
-	result = change_ray.create( 'ray:init', iRay );
+	result = change_list.create( 'list:init', arr );
 
 	jion.aheadValue( result, 'reverse', this );
 
@@ -87,10 +89,10 @@ jion.lazyValue(
 
 /*
 | Returns the result of a change
-| transformed by this change_ray as if it
+| transformed by this change_list as if it
 | actually came first.
 |
-| The result can be a change or a change_ray.
+| The result can be a change or a change_list.
 */
 prototype._transformSingle =
 	function(
@@ -118,32 +120,25 @@ prototype._transformSingle =
 
 /*
 | Returns the result of a changeray
-| transformed by this change_ray.
+| transformed by this change_list.
 |
-| The result is a change_ray.
+| The result is a change_list.
 */
-prototype._transformChangeRay =
+prototype._transformChangeList =
 	function(
-		cRay
+		cList
 	)
 {
 	var
 		a,
-		aZ,
-		y;
+		aZ;
 
-	y = [ ];
-
-	for(
-		a = 0, aZ = this.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		cRay = this.get( a ).transform( cRay );
+		cList = this.get( a ).transform( cList );
 	}
 
-	return cRay;
+	return cList;
 };
 
 
@@ -155,43 +150,39 @@ prototype._transformChangeWrap =
 		cw
 	)
 {
-	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
+	return cw.create( 'changeList', this.transform( cw.changeList ) );
 };
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrapRay =
+prototype._transformChangeWrapList =
 	function(
-		cwRay
+		cwList
 	)
 {
 	var
 		r,
 		rZ,
-		tRay;
+		tList;
 
-	tRay = [ ];
+	tList = [ ];
 
-	for(
-		r = 0, rZ = cwRay.length;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = cwList.length; r < rZ; r++ )
 	{
-		tRay[ r ] = this._transformChangeWrap( cwRay.get( r ) );
+		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
 	}
 
 
-	return cwRay.create( 'ray:init', tRay );
+	return cwList.create( 'list:init', tList );
 };
 
 
 /*
 | Returns the result of a
-| change, change_ray, change_wrap or change_wrapRay
-| transformed by this change_ray.
+| change, change_list, change_wrap or change_wrapList
+| transformed by this change_list.
 */
 prototype.transform =
 	function(
@@ -200,17 +191,17 @@ prototype.transform =
 {
 	switch( co.reflect )
 	{
-		case 'change_ray' :
+		case 'change_list' :
 
-			return this._transformChangeRay( co );
+			return this._transformChangeList( co );
 
 		case 'change_wrap' :
 
 			return this._transformChangeWrap( co );
 
-		case 'change_wrapRay' :
+		case 'change_wrapList' :
 
-			return this._transformChangeWrapRay( co );
+			return this._transformChangeWrapList( co );
 
 		default :
 
@@ -220,19 +211,18 @@ prototype.transform =
 
 
 /*
-| Performes this change-ray on a tree.
+| Performes this change list on a tree.
 */
 prototype.changeTree =
 	function(
 		tree
 	)
 {
-	// the ray with the changes applied
 	var
 		a,
 		aZ;
 
-	// iterates through the change ray
+	// iterates through the change list
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		// the tree returned by op-handler is the new tree
@@ -244,7 +234,7 @@ prototype.changeTree =
 
 
 /*
-| Reversevly performes this change-ray on a tree.
+| Reversevly performes this change list on a tree.
 */
 prototype.changeTreeReverse =
 	function(

@@ -46,7 +46,7 @@ c = gleam_point.zero;
 
 gruga_iconZoomOut.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.p( c.add( -7, -1 ) ),
 			gleam_shape_line.p(  c.add(  7, -1 ) ),

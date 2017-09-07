@@ -29,12 +29,12 @@ gruga_frame.facet =
 			gleam_color.rgba( 255, 245, 200, 0.9 ),
 			/*
 			gleam_gradient_radial.create(
-				'ray:append',
+				'list:append',
 				gleam_gradient_colorStop.create(
 					'offset', 0,
 					'color', gleam_color.rgba( 255, 245, 200, 0.9 )
 				),
-				'ray:append',
+				'list:append',
 				gleam_gradient_colorStop.create(
 					'offset', 1,
 					'color', gleam_color.rgba( 255, 235, 180, 0.9 )

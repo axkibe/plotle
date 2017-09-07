@@ -55,7 +55,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'currently loaded space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			user :
 			{
@@ -358,7 +358,7 @@ jion.lazyValue(
 
 	gRay[ gLen++ ] = this.get( 'mainDisc' ).glint;
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 

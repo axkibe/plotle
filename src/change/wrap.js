@@ -18,11 +18,11 @@ if( JION )
 				json : true,
 				type : 'string'
 			},
-			changeRay :
+			changeList :
 			{
-				comment : 'change or change ray',
+				comment : 'change list',
 				json : true,
-				type : 'change_ray'
+				type : 'change_list'
 			},
 			seq :
 			{
@@ -74,7 +74,7 @@ prototype.createReverse =
 	return(
 		change_wrap.create(
 			'cid', session_uid( ),
-			'changeRay', this.changeRay.reverse
+			'changeList', this.changeList.reverse
 		)
 	);
 };
@@ -83,39 +83,39 @@ prototype.createReverse =
 /*
 | Transform cx on this wrapped change.
 |
-| cx can be a change, changeRay, changeWrap or changeWrapRay.
+| cx can be a change, changeList, changeWrap or changeWrapList.
 */
 prototype.transform =
 	function(
 		cx
 	)
 {
-	return this.changeRay.transform( cx );
+	return this.changeList.transform( cx );
 };
 
 
 
 /*
-| Performes the wrapped changeRay on a tree.
+| Performes the wrapped changeList on a tree.
 */
 prototype.changeTree =
 	function(
 		tree
 	)
 {
-	return this.changeRay.changeTree( tree );
+	return this.changeList.changeTree( tree );
 };
 
 
 /*
-| Reversevly performes the wrapped changeRay on a tree.
+| Reversevly performes the wrapped changeList on a tree.
 */
 prototype.changeTreeReverse =
 	function(
 		tree
 	)
 {
-	return this.changeRay.changeTreeReverse( tree );
+	return this.changeList.changeTreeReverse( tree );
 };
 
 

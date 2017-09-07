@@ -365,7 +365,7 @@ jion.lazyValue(
 		gRay[ gLen++ ] = s.glint;
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 
@@ -637,7 +637,7 @@ jion.lazyValue(
 
 		return(
 			gleam_shape.create(
-				'ray:init', sections,
+				'list:init', sections,
 				'pc',
 					gleam_point.xy(
 						( fp.x + bp.x ) / 2,
@@ -684,7 +684,7 @@ jion.lazyValue(
 		shapes =
 		[
 			gleam_shape.create(
-				'ray:init', sections,
+				'list:init', sections,
 				'pc',
 					gleam_point.xy(
 						( fp.x + rx ) / 2,
@@ -692,7 +692,7 @@ jion.lazyValue(
 					)
 			),
 			gleam_shape.create(
-				'ray:init', sections2,
+				'list:init', sections2,
 				'pc',
 					gleam_point.xy(
 						( fp.x + rx ) / 2,
@@ -701,7 +701,7 @@ jion.lazyValue(
 			)
 		];
 
-		return gleam_shapeRay.create( 'ray:init', shapes );
+		return gleam_shapeRay.create( 'list:init', shapes );
 	}
 	else
 	{
@@ -757,7 +757,7 @@ jion.lazyValue(
 
 			return(
 				gleam_shape.create(
-					'ray:init', sections,
+					'list:init', sections,
 					'pc',
 						gleam_point.xy(
 							( rx + lx ) / 2,
@@ -781,7 +781,7 @@ jion.lazyValue(
 
 			return(
 				gleam_shape.create(
-					'ray:init', sections,
+					'list:init', sections,
 					'pc',
 						gleam_point.xy(
 							( rx + lx ) / 2,

@@ -1,5 +1,5 @@
 /*
-| A reference to a space.
+| References a space.
 */
 
 
@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'fabric_spaceRef',
+		id : 'ref_space',
 		attributes :
 		{
 			username :
@@ -30,7 +30,7 @@ if( JION )
 
 
 var
-	fabric_spaceRef,
+	ref_space,
 	jion;
 
 
@@ -49,11 +49,11 @@ if( NODE )
 {
 	jion = require( 'jion' );
 
-	fabric_spaceRef = jion.this( module, 'source' );
+	ref_space = jion.this( module, 'source' );
 }
 
 
-prototype = fabric_spaceRef.prototype;
+prototype = ref_space.prototype;
 
 
 /*
@@ -72,8 +72,8 @@ jion.lazyValue(
 /*
 | Reference to ideolooms home space.
 */
-fabric_spaceRef.ideoloomHome =
-	fabric_spaceRef.create(
+ref_space.ideoloomHome =
+	ref_space.create(
 		'username', 'ideoloom',
 		'tag', 'home'
 	);
@@ -81,12 +81,11 @@ fabric_spaceRef.ideoloomHome =
 /*
 | Reference to ideolooms sandbox space.
 */
-fabric_spaceRef.ideoloomSandbox =
-	fabric_spaceRef.create(
+ref_space.ideoloomSandbox =
+	ref_space.create(
 		'username', 'ideoloom',
 		'tag', 'sandbox'
 	);
-
 
 
 } )( );

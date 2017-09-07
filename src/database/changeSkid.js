@@ -24,11 +24,11 @@ if( JION )
 				json : true,
 				type : 'string'
 			},
-			changeRay :
+			changeList :
 			{
-				comment : 'change or change ray',
+				comment : 'change list',
 				json : true,
-				type : 'change_ray'
+				type : 'change_list'
 			},
 			user :
 			{
@@ -79,13 +79,13 @@ changeSkid.createFromChangeWrap =
 	var
 		cs;
 
-	if( !changeWrap.changeRay ) return;
+	if( !changeWrap.changeList ) return;
 
 	cs =
 		changeSkid.create(
 			'_id', seq === undefined ? changeWrap.seq : seq,
 			'cid', changeWrap.cid,
-			'changeRay', changeWrap.changeRay,
+			'changeList', changeWrap.changeList,
 			'user', user,
 			'date', Date.now( )
 		);
@@ -106,7 +106,7 @@ jion.lazyValue(
 {
 	return(
 		change_wrap.create(
-			'changeRay', this.changeRay,
+			'changeList', this.changeList,
 			'cid', this.cid,
 			'seq', this._id
 		)
@@ -121,10 +121,10 @@ jion.lazyValue(
 */
 changeSkid.prototype.transform =
 	function(
-		cyt // a changy thing ( change, changeRay, changeWrap, etc. )
+		cyt // a changy thing ( change, changeList, changeWrap, etc. )
 	)
 {
-	return this.changeRay.transform( cyt );
+	return this.changeList.transform( cyt );
 };
 
 
@@ -136,7 +136,7 @@ changeSkid.prototype.changeTree =
 		tree
 	)
 {
-	return this.changeRay.changeTree( tree );
+	return this.changeList.changeTree( tree );
 };
 
 

@@ -39,9 +39,9 @@ change_generic.changeTreeReverse =
 
 
 /*
-| Returns a change ray transformed by this change.
+| Returns a change list transformed by this change.
 */
-change_generic.transformChangeRay =
+change_generic.transformChangeList =
 	function(
 		cRay
 	)
@@ -57,23 +57,19 @@ change_generic.transformChangeRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cRay.reflect !== 'change_ray' ) throw new Error( );
+/**/	if( cRay.reflect !== 'change_list' ) throw new Error( );
 /**/}
 
 	tRay = [ ];
 
-	for(
-		r = 0, rZ = cRay.length, tZ = 0;
-		r < rZ;
-		r++
-	)
+	for( r = 0, rZ = cRay.length, tZ = 0; r < rZ; r++ )
 	{
 		c = this.transform( cRay.get( r ) );
 
 		// changes that transformed away are sliced out.
 		if( !c ) continue;
 
-		if( c.reflect === 'change_ray' )
+		if( c.reflect === 'change_list' )
 		{
 			for( a = 0, aZ = c.length; a < aZ; a++ )
 			{
@@ -86,7 +82,7 @@ change_generic.transformChangeRay =
 		}
 	}
 
-	return cRay.create( 'ray:init', tRay );
+	return cRay.create( 'list:init', tRay );
 };
 
 
@@ -98,14 +94,14 @@ change_generic.transformChangeWrap =
 		cw
 	)
 {
-	return cw.create( 'changeRay', this._transformChangeRay( cw.changeRay ) );
+	return cw.create( 'changeList', this._transformChangeList( cw.changeList ) );
 };
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_generic.transformChangeWrapRay =
+change_generic.transformChangeWrapList =
 	function(
 		cwRay
 	)
@@ -123,7 +119,7 @@ change_generic.transformChangeWrapRay =
 	}
 
 
-	return cwRay.create( 'ray:init', tRay );
+	return cwRay.create( 'list:init', tRay );
 };
 
 

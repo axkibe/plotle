@@ -15,12 +15,12 @@ if( JION )
 			_undo :
 			{
 				comment : 'the undo stack',
-				type : [ 'undefined', 'change_wrapRay' ]
+				type : [ 'undefined', 'change_wrapList' ]
 			},
 			_redo :
 			{
 				comment : 'the redo stack',
-				type : [ 'undefined', 'change_wrapRay' ]
+				type : [ 'undefined', 'change_wrapList' ]
 			}
 		}
 	};
@@ -28,7 +28,7 @@ if( JION )
 
 
 var
-	change_wrapRay,
+	change_wrapList,
 	root,
 	shell_doTracker,
 	shell_settings;
@@ -66,8 +66,8 @@ shell_doTracker.flush =
 	root.create(
 		'doTracker',
 			shell_doTracker.create(
-				'_undo', change_wrapRay.create( ),
-				'_redo', change_wrapRay.create( )
+				'_undo', change_wrapList.create( ),
+				'_redo', change_wrapList.create( )
 			)
 	);
 };
@@ -99,7 +99,7 @@ prototype.track =
 		'doTracker',
 			this.create(
 				'_undo', undo,
-				'_redo', change_wrapRay.create( )
+				'_redo', change_wrapList.create( )
 			)
 	);
 };
@@ -114,7 +114,7 @@ prototype.track =
 */
 prototype.update =
 	function(
-		changeWrapRay
+		changeWrapList
 	)
 {
 	var
@@ -132,7 +132,7 @@ prototype.update =
 /**/	}
 /**/}
 
-	if( changeWrapRay.length === 0 )
+	if( changeWrapList.length === 0 )
 	{
 		// nothing to do
 
@@ -153,7 +153,7 @@ prototype.update =
 	{
 		cw = undo.get( a );
 
-		cw = changeWrapRay.transform( cw );
+		cw = changeWrapList.transform( cw );
 
 		// the change vanished by transformation
 		if( !cw )
@@ -176,7 +176,7 @@ prototype.update =
 	{
 		cw = redo.get( a );
 
-		cw = changeWrapRay.transform( cw );
+		cw = changeWrapList.transform( cw );
 
 		// the change vanished by transformation
 		if( !cw )

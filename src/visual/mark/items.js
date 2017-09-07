@@ -15,7 +15,7 @@ if( JION )
 			itemPaths :
 			{
 				comment : 'paths of the items',
-				type : 'jion$pathRay'
+				type : 'jion$pathList'
 			}
 		},
 		init : [ ]
@@ -113,7 +113,7 @@ prototype.createTransformed =
 
 	return(
 		this.create(
-			'itemPaths', this.itemPaths.create( 'ray:init', arr )
+			'itemPaths', this.itemPaths.create( 'list:init', arr )
 		)
 	);
 };
@@ -211,7 +211,7 @@ prototype.togglePath =
 			return(
 				this.create(
 					'itemPaths',
-						this.itemPaths.create( 'ray:remove', a )
+						this.itemPaths.create( 'list:remove', a )
 				)
 			);
 		}
@@ -220,7 +220,7 @@ prototype.togglePath =
 	return(
 		this.create(
 			'itemPaths',
-				this.itemPaths.create( 'ray:append', path )
+				this.itemPaths.create( 'list:append', path )
 		)
 	);
 };

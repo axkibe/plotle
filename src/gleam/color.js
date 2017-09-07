@@ -1,7 +1,7 @@
 /*
 | A color.
 |
-| Optinally including alpha channel.
+| Optionally including an alpha value.
 */
 
 

@@ -327,7 +327,7 @@ jion.lazyValue(
 		}
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 
@@ -436,7 +436,7 @@ jion.lazyValue(
 				// soft break
 				lines.push(
 					flow_line.create(
-						'ray:init', currentLineRay,
+						'list:init', currentLineRay,
 						'y', y,
 						'offset', currentLineOffset
 					)
@@ -473,7 +473,7 @@ jion.lazyValue(
 
 	lines.push(
 		flow_line.create(
-			'ray:init', currentLineRay,
+			'list:init', currentLineRay,
 			'offset', currentLineOffset,
 			'y', y
 		)
@@ -481,7 +481,7 @@ jion.lazyValue(
 
 	return(
 		flow_block.create(
-			'ray:init', lines,
+			'list:init', lines,
 			'height', y,
 			'width', width
 		)

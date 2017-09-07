@@ -12,25 +12,19 @@ if( JION )
 		id : 'request_alter',
 		attributes :
 		{
-			changeWrapRay :
+			changeWrapList :
 			{
 				comment : 'the changes to be applied',
 				json : true,
-				type : 'change_wrapRay'
+				type : 'change_wrapList'
 			},
-			seq :
+			refDynSpace :
 			{
-				comment : 'sequence number',
+				comment : 'reference to the space dynamic',
 				json : true,
-				type : 'integer'
+				type : 'ref_dynamic_space'
 			},
-			spaceRef :
-			{
-				comment : 'reference to space to alter',
-				json : true,
-				type : 'fabric_spaceRef'
-			},
-			user :
+			userCreds :
 			{
 				comment : 'user requesting the change',
 				json : true,

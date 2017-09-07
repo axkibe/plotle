@@ -13,7 +13,7 @@ if( JION )
 		attributes :
 		{
 		},
-		ray :
+		list :
 		[
 			'gleam_glint_border',
 			'gleam_glint_fill',

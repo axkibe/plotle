@@ -39,9 +39,9 @@ if( JION )
 var
 	change_generic,
 	change_error,
-	change_ray,
-	change_split,
 	change_join,
+	change_list,
+	change_split,
 	jion;
 
 
@@ -69,7 +69,7 @@ if( NODE )
 
 	change_error = require( './error' );
 
-	change_ray = require( './ray' );
+	change_list = require( './list' );
 
 	change_join = require( './remove' );
 }
@@ -84,10 +84,7 @@ prototype = change_split.prototype;
 prototype._init =
 	function ( )
 {
-	if( this.at1 < 0 )
-	{
-		throw change_error( 'split.at1 negative' );
-	}
+	if( this.at1 < 0 ) throw change_error( 'split.at1 negative' );
 };
 
 
@@ -207,7 +204,7 @@ jion.lazyValue(
 
 
 /*
-| Returns a change, changeRay, changeWrap or changeWrapRay
+| Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
 prototype.transform =
@@ -246,21 +243,21 @@ prototype.transform =
 
 			return this._transformInsert( cx );
 
+		case 'change_list' :
+
+			return this._transformChangeList( cx );
+
 		case 'change_remove' :
 
 			return this._transformRemove( cx );
-
-		case 'change_ray' :
-
-			return this._transformChangeRay( cx );
 
 		case 'change_wrap' :
 
 			return this._transformChangeWrap( cx );
 
-		case 'change_wrapRay' :
+		case 'change_wrapList' :
 
-			return this._transformChangeWrapRay( cx );
+			return this._transformChangeWrapList( cx );
 
 		default :
 
@@ -270,9 +267,9 @@ prototype.transform =
 
 
 /*
-| Returns a change ray transformed by this change.
+| Returns a change list transformed by this change.
 */
-prototype._transformChangeRay = change_generic.transformChangeRay;
+prototype._transformChangeList = change_generic.transformChangeList;
 
 
 /*
@@ -282,9 +279,9 @@ prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
-| Returns a change wrap transformed by this change.
+| Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapRay = change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*
@@ -300,16 +297,10 @@ prototype._transformInsert =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cx.reflect !== 'change_insert' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( cx.reflect !== 'change_insert' ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
 	if( cx.at1 <= this.at1 )
 	{
@@ -445,20 +436,22 @@ prototype._transformRemove =
 	else
 	{
 		// case 1, the remove is split into two removes
-		return change_ray.create(
-			'ray:init',
-			[
-				cx.create(
-					'at2', this.at1,
-					'val', cx.val.substring( 0, this.at1 - cx.at1 )
-				),
-				cx.create(
-					'at1', 0,
-					'at2', cx.at2 - this.at1,
-					'path', this.path2,
-					'val', cx.val.substring( this.at1 - cx.at1 )
-				)
-			]
+		return(
+			change_list.create(
+				'list:init',
+				[
+					cx.create(
+						'at2', this.at1,
+						'val', cx.val.substring( 0, this.at1 - cx.at1 )
+					),
+					cx.create(
+						'at1', 0,
+						'at2', cx.at2 - this.at1,
+						'path', this.path2,
+						'val', cx.val.substring( this.at1 - cx.at1 )
+					)
+				]
+			)
 		);
 	}
 };

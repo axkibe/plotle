@@ -10,5 +10,6 @@ module.exports =
 	'fabric_relation',
 	'gleam_point',
 	'gleam_rect',
-	'number'
+	'number',
+	'ref_space'
 ];

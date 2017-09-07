@@ -14,7 +14,7 @@ if( JION )
 		{
 			// FUTURE specify something
 		},
-		ray : [ 'gleam_gradient_colorStop' ]
+		list : [ 'gleam_gradient_colorStop' ]
 	};
 }
 

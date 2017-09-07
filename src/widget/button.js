@@ -400,7 +400,7 @@ jion.lazyValue(
 			);
 	}
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', gRay );
 }
 );
 

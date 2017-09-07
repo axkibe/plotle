@@ -11,12 +11,12 @@
 
 
 var
-	change_wrapRay,
+	change_wrapList,
 	config,
 	database_userSkid,
-	fabric_spaceRef,
 	log_ajax,
 	log_warn,
+	ref_space,
 	replyError,
 	reply_acquire,
 	reply_alter,
@@ -50,7 +50,7 @@ log_ajax = require( '../log/ajax' );
 
 log_warn = require( '../log/warn' );
 
-change_wrapRay = require( '../change/wrapRay' );
+change_wrapList = require( '../change/wrapList' );
 
 database_userSkid = require( '../database/userSkid' );
 
@@ -78,7 +78,7 @@ request_update = require( '../request/update' );
 
 resume = require( 'suspend' ).resume;
 
-fabric_spaceRef = require( '../fabric/spaceRef' );
+ref_space = require( '../ref/space' );
 
 server_spaceNexus = require( './spaceNexus' );
 
@@ -118,12 +118,13 @@ serveAlter =
 {
 	var
 		a,
-		changeWrapRay,
+		changeWrapList,
+		refDynSpace,
 		seq,
 		seqZ,
 		spaceBox,
 		spaceRef,
-		user;
+		userCreds;
 
 	if( !config.server_devel )
 	{
@@ -140,21 +141,23 @@ serveAlter =
 	{
 		request = request_alter.createFromJSON( request );
 	}
+	
+	userCreds = request.userCreds;
 
-	seq = request.seq;
-
-	changeWrapRay = request.changeWrapRay;
-
-	spaceRef = request.spaceRef;
-
-	user = request.user;
-
-	if( !root.userNexus.testInCache( user ) )
+	if( !root.userNexus.testInCache( userCreds ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
 
-	if( server_spaceNexus.testAccess( user, spaceRef ) !== 'rw' )
+	refDynSpace = request.refDynSpace;
+
+	seq = refDynSpace.seq;
+
+	changeWrapList = request.changeWrapList;
+
+	spaceRef = refDynSpace.ref;
+
+	if( server_spaceNexus.testAccess( userCreds, spaceRef ) !== 'rw' )
 	{
 		return replyError( 'no access' );
 	}
@@ -163,27 +166,21 @@ serveAlter =
 
 	seqZ = spaceBox.seqZ;
 
-	if( seq === -1 )
-	{
-		seq = seqZ;
-	}
+	if( seq === -1 ) seq = seqZ;
 
-	if( seq < 0 || seq > seqZ )
-	{
-		return replyError( 'invalid seq' );
-	}
+	if( seq < 0 || seq > seqZ ) return replyError( 'invalid seq' );
 
 	try
 	{
 		// translates the changes if not most recent
 		for( a = seq; a < seqZ; a++ )
 		{
-			changeWrapRay =
-				spaceBox.getChangeWrap( a ).transform( changeWrapRay );
+			changeWrapList =
+				spaceBox.getChangeWrap( a ).transform( changeWrapList );
 		}
 
 		// this does not yield, its write and forget.
-		spaceBox = spaceBox.appendChanges( changeWrapRay, user.name );
+		spaceBox = spaceBox.appendChanges( changeWrapList, userCreds.name );
 
 		root.create(
 			'spaces',
@@ -219,7 +216,9 @@ serveAuth =
 	)
 {
 	var
-		user;
+		userCreds,
+		userInfo,
+		userSpaces;
 
 	try
 	{
@@ -232,21 +231,27 @@ serveAuth =
 		return replyError( 'Command not valid jion' );
 	}
 
-	user = request.user;
+	userCreds = request.userCreds;
 
-	if( user.isVisitor )
+	if( userCreds.isVisitor )
 	{
-		user = root.userNexus.createVisitor( user );
+		userCreds = root.userNexus.createVisitor( userCreds );
 
-		return reply_auth.create( 'user', user );
+		return reply_auth.create( 'userCreds', userCreds );
 	}
 
-	if( !( yield* root.userNexus.testUserCreds( user ) ) )
-	{
-		return replyError( 'Invalid password' );
-	}
+	userInfo = yield* root.userNexus.testUserCreds( userCreds );
 
-	return reply_auth.create( 'user', user );
+	if( !userInfo ) return replyError( 'Invalid password' );
+
+	userSpaces = yield* root.userNexus.getUserSpaces( userInfo );
+
+	return(
+		reply_auth.create(
+			'userCreds', userCreds,
+			'userSpaces', userSpaces
+		)
+	);
 };
 
 
@@ -261,7 +266,7 @@ serveRegister =
 	var
 		mail,
 		news,
-		user,
+		userCreds,
 		sUser;
 
 	try
@@ -276,18 +281,18 @@ serveRegister =
 	}
 
 
-	user = request.user;
+	userCreds = request.userCreds;
 
 	mail = request.mail;
 
 	news = request.news;
 
-	if( user.isVisitor )
+	if( userCreds.isVisitor )
 	{
 		return replyError( 'Username must not start with "visitor"' );
 	}
 
-	if( user.name.length < 4 )
+	if( userCreds.name.length < 4 )
 	{
 		return replyError( 'Username too short, min. 4 characters' );
 	}
@@ -295,17 +300,14 @@ serveRegister =
 	sUser =
 		yield* root.userNexus.register(
 			user_info.create(
-				'name', user.name,
-				'passhash', user.passhash,
+				'name', userCreds.name,
+				'passhash', userCreds.passhash,
 				'mail', mail,
 				'news', news
 			)
 		);
 
-	if( !sUser )
-	{
-		return replyError( 'Username already taken' );
-	}
+	if( !sUser ) return replyError( 'Username already taken' );
 
 	return reply_register.create( );
 };
@@ -322,12 +324,10 @@ serveUpdate =
 {
 	var
 		asw,
-		seq,
+		dynRefs,
 		sleepID,
-		spaceBox,
-		spaceRef,
 		timer,
-		user;
+		userInfo;
 
 	try
 	{
@@ -340,45 +340,28 @@ serveUpdate =
 		return replyError( 'Command not valid jion' );
 	}
 
-	user = request.user;
+	userInfo = root.userNexus.testInCache( request.userCreds );
 
-	spaceRef = request.spaceRef;
+	if( !userInfo ) return replyError( 'Invalid creds' );
 
-	seq = request.seq;
+	dynRefs = request.dynRefs;
 
-	if( !root.userNexus.testInCache( user ) )
-	{
-		return replyError( 'Invalid creds' );
-	}
+	asw = server_requestHandler.testUpdate( userInfo, dynRefs );
 
-	spaceBox = root.spaces.get( spaceRef.fullname );
+	if( asw ) return asw;
 
-	if( !spaceBox )
-	{
-		return replyError( 'Unknown space' );
-	}
-
-	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
-	{
-		return replyError( 'Invalid or missing seq: ' + seq );
-	}
-
-	asw = server_requestHandler.conveyUpdate( seq, spaceRef );
+	asw = server_requestHandler.conveyUpdate( dynRefs );
 
 	// immediate answer?
-	if( asw.changeWrapRay.length > 0 )
-	{
-		return asw;
-	}
+	if( asw.changeWrapList.length > 0 ) return asw;
 
-	// if not an immediate anwwer, the request is put to sleep
+	// if not an immediate answer, the request is put to sleep
 	sleepID = '' + root.nextSleepID;
 
 	timer =
 		setTimeout(
 			server_requestHandler.expireUpdateSleep,
 			60000,
-			// 1000,
 			sleepID
 		);
 
@@ -388,10 +371,9 @@ serveUpdate =
 			root.upSleeps.set(
 				sleepID,
 				server_upSleep.create(
-					'seq', seq,
-					'timer', timer,
+					'dynRefs', dynRefs,
 					'result', result,
-					'spaceRef', spaceRef
+					'timer', timer
 				)
 			)
 	);
@@ -411,7 +393,7 @@ serveAcquire =
 	var
 		access,
 		spaceBox,
-		user;
+		userCreds;
 
 	try
 	{
@@ -424,14 +406,14 @@ serveAcquire =
 		return replyError( 'Command not valid jion' );
 	}
 
-	user = request.user;
+	userCreds = request.userCreds;
 
-	if( !root.userNexus.testInCache( user ) )
+	if( !root.userNexus.testInCache( userCreds ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
 
-	access = server_spaceNexus.testAccess( user, request.spaceRef );
+	access = server_spaceNexus.testAccess( userCreds, request.spaceRef );
 
 	if( access === 'no' )
 	{
@@ -478,15 +460,23 @@ serveAcquire =
 */
 server_requestHandler.conveyUpdate =
 	function(
-		seq,     // get updates since this sequence
-		spaceRef // reference of space
+		dynRefs   // dynamic references to get updates for
 	)
 {
 	var
 		c,
 		chgA,
+		refDynSpace,
+		seq,
 		seqZ,
-		spaceBox;
+		spaceBox,
+		spaceRef;
+
+	refDynSpace = dynRefs.get( 0 );
+
+	spaceRef = refDynSpace.ref;
+
+	seq = refDynSpace.seq;
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
 
@@ -502,10 +492,48 @@ server_requestHandler.conveyUpdate =
 	return(
 		reply_update.create(
 			'seq', seq,
-			'changeWrapRay',
-				change_wrapRay.create( 'ray:init', chgA )
+			'changeWrapList',
+				change_wrapList.create( 'list:init', chgA )
 		)
 	);
+};
+	
+
+/*
+| Tests if an update request is legitimate.
+*/
+server_requestHandler.testUpdate =
+	function(
+		userInfo, // user info
+		dynRefs   // dynamic references to get updates for
+	)
+{
+	var
+		refDynSpace,
+		spaceBox,
+		spaceRef,
+		seq;
+
+	if( dynRefs.length !== 1 ) throw new Error( ); // FIXME
+
+	refDynSpace = dynRefs.get( 0 );
+
+	if( refDynSpace.reflect !== 'ref_dynamic_space' ) throw new Error( );
+
+	spaceRef = refDynSpace.ref;
+
+	seq = refDynSpace.seq;
+
+	spaceBox = root.spaces.get( spaceRef.fullname );
+
+	// FIXME check userRights
+
+	if( !spaceBox ) return replyError( 'Unknown space' );
+
+	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
+	{
+		return replyError( 'Invalid or missing seq: ' + seq );
+	}
 };
 
 
@@ -520,31 +548,18 @@ server_requestHandler.expireUpdateSleep =
 	var
 		asw,
 		result,
-		seqZ,
-		sleep,
-		spaceBox;
+		sleep;
 
 	sleep = root.upSleeps.get( sleepID );
 
-	// maybe it just had expired at the same time
-	if( !sleep )
-	{
-		return;
-	}
-
-	spaceBox = root.spaces.get( sleep.spaceRef.fullname );
-
-	seqZ = spaceBox.seqZ;
+	// maybe it just had expired already
+	if( !sleep ) return;
 
 	root.create(
 		'upSleeps', root.upSleeps.remove( sleepID )
 	);
 
-	asw =
-		reply_update.create(
-			'seq', sleep.seq,
-			'changeWrapRay', change_wrapRay.create( )
-		);
+	asw = reply_update.create( );
 
 	log_ajax( '->', asw );
 

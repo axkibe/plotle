@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'server_resourceRay',
-		ray : [ 'server_resource' ]
+		list : [ 'server_resource' ]
 	};
 }
 

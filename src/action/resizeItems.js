@@ -15,7 +15,7 @@ if( JION )
 			itemPaths:
 			{
 				comment : 'the paths of the items to drag',
-				type : [ 'undefined', 'jion$pathRay' ]
+				type : [ 'undefined', 'jion$pathList' ]
 			},
 			startPoint :
 			{

@@ -33,7 +33,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'the reference of current space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			user :
 			{

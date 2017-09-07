@@ -39,7 +39,7 @@ if( JION )
 
 var
 	jion,
-	jion$pathRay,
+	jion$pathList,
 	visual_mark_range;
 
 
@@ -189,7 +189,7 @@ jion.lazyValue(
 /*
 | The item path.
 |
-| This is either undefined or an pathRay of length === 1
+| This is either undefined or an pathList of length === 1
 */
 jion.lazyValue(
 	prototype,
@@ -209,7 +209,7 @@ jion.lazyValue(
 		return;
 	}
 
-	return jion$pathRay.create( 'ray:append', beginPath.limit( 3 ) );
+	return jion$pathList.create( 'list:append', beginPath.limit( 3 ) );
 }
 );
 

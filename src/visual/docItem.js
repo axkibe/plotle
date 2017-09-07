@@ -5,7 +5,7 @@
 
 var
 	action_scrolly,
-	jion$pathRay,
+	jion$pathList,
 	math_limit,
 	result_hover,
 	root,
@@ -100,7 +100,7 @@ visual_docItem.dragStart =
 			'action',
 				action_scrolly.create(
 					'itemPaths',
-						jion$pathRay.create( 'ray:append', this.path ),
+						jion$pathList.create( 'list:append', this.path ),
 					'startPoint', p,
 					'startPos', sbary.scrollpos
 				)

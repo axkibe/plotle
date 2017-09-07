@@ -43,7 +43,7 @@ if( JION )
 var
 	checkRepository,
 	database_repository,
-	fabric_spaceRef,
+	ref_space,
 	initRepository,
 	mongodb,
 	resume;
@@ -54,7 +54,7 @@ mongodb = require( 'mongodb' );
 
 resume = require( 'suspend' ).resume;
 
-fabric_spaceRef = require( '../fabric/spaceRef' );
+ref_space = require( '../ref/space' );
 
 /*
 | Returns a repository object with
@@ -200,21 +200,17 @@ initRepository =
 
 	initSpaces =
 		[
-			fabric_spaceRef.create(
+			ref_space.create(
 				'username', 'ideoloom',
 				'tag', 'home'
 			),
-			fabric_spaceRef.create(
+			ref_space.create(
 				'username', 'ideoloom',
 				'tag', 'sandbox'
 			)
 		];
 
-	for(
-		s = 0, sZ = initSpaces.length;
-		s < sZ;
-		s++
-	)
+	for( s = 0, sZ = initSpaces.length; s < sZ; s++ )
 	{
 		sr = initSpaces[ s ];
 

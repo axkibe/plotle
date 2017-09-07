@@ -12,30 +12,30 @@ if( JION )
 		id : 'net_link',
 		attributes :
 		{
-			spaceRef :
+			refDynSpace :
 			{
-				comment : 'reference to the current space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				comment : 'reference to dynamic space',
+				type : [ 'undefined', 'ref_dynamic_space' ]
 			},
-			user :
+			refDynUserSpacesList :
 			{
-				comment : 'currently logged in user',
+				comment : 'reference to users spaces list',
+				type : [ 'undefined', 'ref_dynamic_userSpacesList' ]
+			},
+			userCreds :
+			{
+				comment : 'currently logged in user credentials',
 				type : [ 'undefined', 'user_creds' ]
 			},
 			_outbox :
 			{
 				comment : 'changes to be send to the server',
-				type : [ 'undefined', 'change_wrapRay' ]
+				type : [ 'undefined', 'change_wrapList' ]
 			},
 			_postbox :
 			{
 				comment : 'changes that are currently on the way',
-				type : [ 'undefined', 'change_wrapRay' ]
-			},
-			_rSeq :
-			{
-				comment : 'the remote sequence number',
-				type : [ 'undefined', 'integer' ]
+				type : [ 'undefined', 'change_wrapList' ]
 			},
 			_startTimer :
 			{
@@ -48,7 +48,7 @@ if( JION )
 
 
 var
-	change_wrapRay,
+	change_wrapList,
 	jion$path,
 	net_link,
 	reply_auth,
@@ -56,6 +56,8 @@ var
 	reply_error,
 	reply_register,
 	reply_update,
+	ref_dynamic_anyList,
+	ref_dynamic_space,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -107,16 +109,22 @@ prototype.acquireSpace =
 	}
 
 	// aborts the current running update.
-	root.ajax.get( 'update' ).abortAll( );
+	root.ajax
+	.get( 'update' )
+	.abortAll( );
 
 	// aborts any previous acquireSpace requests.
-	root.ajax.get( 'command' ).abortAll( '_onAcquireSpace' );
+	root.ajax
+	.get( 'command' )
+	.abortAll( '_onAcquireSpace' );
 
-	root.ajax.get( 'command' ).request(
+	root.ajax
+	.get( 'command' )
+	.request(
 		request_acquire.create(
 			'createMissing', createMissing,
 			'spaceRef', spaceRef,
-			'user', root.link.user
+			'userCreds', root.link.userCreds
 		),
 		'_onAcquireSpace'
 	);
@@ -136,10 +144,7 @@ prototype.alter =
 
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.link !== this ) throw new Error( );
 /**/}
 
 	space = changeWrap.changeTree( root.spaceFabric );
@@ -163,11 +168,13 @@ prototype.alter =
 */
 prototype.auth =
 	function(
-		user
+		userCreds
 	)
 {
-	root.ajax.get( 'command' ).request(
-		request_auth.create( 'user', user ),
+	root.ajax
+	.get( 'command' )
+	.request(
+		request_auth.create( 'userCreds', userCreds ),
 		'_onAuth'
 	);
 };
@@ -178,14 +185,16 @@ prototype.auth =
 */
 prototype.register =
 	function(
-		user,
+		userCreds,
 		mail,
 		news
 	)
 {
-	root.ajax.get( 'command' ).request(
+	root.ajax
+	.get( 'command' )
+	.request(
 		request_register.create(
-			'user', user,
+			'userCreds', userCreds,
 			'mail', mail,
 			'news', news
 		),
@@ -260,10 +269,13 @@ prototype._onAcquireSpace =
 			),
 		'link',
 			root.link.create(
-				'spaceRef', request.spaceRef,
-				'_outbox', change_wrapRay.create( ),
-				'_postbox', change_wrapRay.create( ),
-				'_rSeq', reply.seq,
+				'refDynSpace',
+					ref_dynamic_space.create(
+						'ref', request.spaceRef,
+						'seq', reply.seq
+					),
+				'_outbox', change_wrapList.create( ),
+				'_postbox', change_wrapList.create( ),
 				'_startTimer', startTimer
 			)
 	);
@@ -297,6 +309,8 @@ prototype._onAuth =
 
 		default : throw new Error( );
 	}
+
+	console.log( 'XXX', reply );
 
 	root.onAuth( request, reply );
 };
@@ -343,40 +357,32 @@ prototype._sendChanges =
 
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.link !== this ) throw new Error( );
 /**/}
 
 	// already sending?
-	if( root.link._postbox.length > 0 )
-	{
-		return;
-	}
+	if( root.link._postbox.length > 0 ) return;
 
 	// nothing to send?
-	if( root.link._outbox.length === 0 )
-	{
-		return;
-	}
+	if( root.link._outbox.length === 0 ) return;
 
 	outbox = root.link._outbox;
 
 	root.create(
 		'link',
 			root.link.create(
-				'_outbox', change_wrapRay.create( ),
+				'_outbox', change_wrapList.create( ),
 				'_postbox', outbox
 			)
 	);
 
-	root.ajax.get( 'command' ).request(
+	root.ajax
+	.get( 'command' )
+	.request(
 		request_alter.create(
-			'changeWrapRay', outbox,
-			'seq', root.link._rSeq,
-			'spaceRef', root.link.spaceRef,
-			'user', root.link.user
+			'changeWrapList', outbox,
+			'refDynSpace', root.link.refDynSpace,
+			'userCreds', root.link.userCreds
 		),
 		'_onSendChanges'
 	);
@@ -412,7 +418,7 @@ prototype._onUpdate =
 		a,
 		aZ,
 		changeWrap,
-		changeWrapRay,
+		changeWrapList,
 		gotOwnChgs,
 		outbox,
 		postbox,
@@ -422,10 +428,7 @@ prototype._onUpdate =
 
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.link !== this ) throw new Error( );
 /**/}
 
 	if( reply.type !== 'reply_update' )
@@ -437,9 +440,9 @@ prototype._onUpdate =
 
 	reply = reply_update.createFromJSON( reply );
 
-	changeWrapRay = reply.changeWrapRay;
+	changeWrapList = reply.changeWrapList;
 
-	report = change_wrapRay.create( );
+	report = change_wrapList.create( );
 
 	gotOwnChgs = false;
 
@@ -448,7 +451,7 @@ prototype._onUpdate =
 	space = root.spaceFabric;
 
 	// if this wasn't an empty timeout
-	if( changeWrapRay && changeWrapRay.length > 0 )
+	if( changeWrapList && changeWrapList.length > 0 )
 	{
 		// first undos from the clients space the changes
 		// it had done so far.
@@ -461,9 +464,9 @@ prototype._onUpdate =
 
 		space = postbox.changeTreeReverse( space );
 
-		for( a = 0, aZ = changeWrapRay.length; a < aZ; a++ )
+		for( a = 0, aZ = changeWrapList.length; a < aZ; a++ )
 		{
-			changeWrap = changeWrapRay.get( a );
+			changeWrap = changeWrapList.get( a );
 
 			// applies changes to the space
 			space = changeWrap.changeTree( space );
@@ -486,10 +489,10 @@ prototype._onUpdate =
 			report = report.append( changeWrap );
 		}
 
-		// FUTURE why is it once changeWrapRay then report??
+		// FUTURE why is it once changeWrapList then report??
 
 		// transforms the postbox by the updated stuff
-		postbox = changeWrapRay.transform( postbox );
+		postbox = changeWrapList.transform( postbox );
 
 		// transforms the outbox by the foreign changes
 		outbox = report.transform( outbox );
@@ -499,35 +502,34 @@ prototype._onUpdate =
 		space = postbox.changeTree( space );
 
 		space = outbox.changeTree( space );
-	}
 
-	root.create(
-		'link',
-			root.link.create(
-				// FUTURE
-				// check why this gets zero in case of timeout
-				'_outbox', outbox || change_wrapRay.create( ),
-				'_postbox', postbox || change_wrapRay.create( ),
-				'_rSeq', reply.seq + changeWrapRay.length
-			),
-		'spaceFabric', space
-	);
+		root.create(
+			'link',
+				root.link.create(
+					'_outbox', outbox || change_wrapList.create( ),
+					'_postbox', postbox || change_wrapList.create( ),
+					'refDynSpace',
+						root.link.refDynSpace.create(
+							'seq', reply.seq + changeWrapList.length
+						)
+				),
+			'spaceFabric', space
+		);
+	}
 
 	// FUTURE move to "markJockey"
-	if( report.length > 0 ) root.update( report );
-
-	root.create( 'doTracker', root.doTracker.update( report ) );
-
-	if( gotOwnChgs )
+	if( report.length > 0 )
 	{
-		root.link._sendChanges( );
+		root.update( report );
+
+		root.create( 'doTracker', root.doTracker.update( report ) );
 	}
 
-	// issues the following update
+	if( gotOwnChgs ) root.link._sendChanges( );
 
+	// issues the following update
 	root.link._update( );
 };
-
 
 
 /*
@@ -536,19 +538,26 @@ prototype._onUpdate =
 prototype._update =
 	function( )
 {
-	root.ajax.get( 'update' ).request(
+	var
+		refUserSpacesList,
+		list;
+
+	list = [ this.refDynSpace ];
+
+	refUserSpacesList = this.refUserSpacesList;
+
+	if( refUserSpacesList ) list.push( refUserSpacesList );
+
+	root.ajax
+	.get( 'update' )
+	.request(
 		request_update.create(
-			'spaceRef', this.spaceRef,
-			'seq',
-				this._rSeq !== undefined
-				? this._rSeq
-				: -1,
-			'user', this.user
+			'dynRefs', ref_dynamic_anyList.create( 'list:init', list ),
+			'userCreds', this.userCreds
 		),
 		'_onUpdate'
 	);
 };
-
 
 
 } )( );

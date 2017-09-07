@@ -34,7 +34,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'the reference to the current space',
-				type : [ 'undefined', 'fabric_spaceRef' ],
+				type : [ 'undefined', 'ref_space' ],
 				assign : ''
 			},
 			user :
@@ -56,10 +56,10 @@ if( JION )
 
 
 var
-	fabric_spaceRef,
 	form_form,
 	form_signUp,
 	jion,
+	ref_space,
 	show_form,
 	user_creds,
 	user_passhash,
@@ -253,7 +253,7 @@ prototype.onRegister =
 
 	this.clear( );
 
-	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+	root.moveToSpace( ref_space.ideoloomHome, false );
 
 	root.create( 'show', show_form.welcome, 'user', request.user );
 };

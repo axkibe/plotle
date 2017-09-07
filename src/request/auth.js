@@ -13,7 +13,7 @@ if( JION )
 		id : 'request_auth',
 		attributes :
 		{
-			user :
+			userCreds :
 			{
 				comment : 'user creds to be authenticated',
 				json : true,

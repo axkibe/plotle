@@ -49,14 +49,14 @@ config.database_port = 27017;
 /*
 | Name of the mongodb database
 */
-config.database_name = 'ideoloom-14';
+config.database_name = 'ideoloom-15';
 
 
 /*
 | Runs in devel mode.
 */
 config.devel = true;
-config.devel = false;
+//config.devel = false;
 
 
 /*

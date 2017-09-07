@@ -1,5 +1,5 @@
 /*
-| An array of wraped change(rays).
+| A list of wraped change(lists).
 */
 
 
@@ -9,15 +9,15 @@
 if( JION )
 {
 	throw{
-		id : 'change_wrapRay',
+		id : 'change_wrapList',
 		json : true,
-		ray : [ 'change_wrap' ]
+		list : [ 'change_wrap' ]
 	};
 }
 
 
 var
-	change_wrapRay;
+	change_wrapList;
 
 
 /*
@@ -33,15 +33,15 @@ var
 
 if( NODE )
 {
-	change_wrapRay = require( 'jion' ).this( module, 'source' );
+	change_wrapList = require( 'jion' ).this( module, 'source' );
 }
 
 
-prototype = change_wrapRay.prototype;
+prototype = change_wrapList.prototype;
 
 
 /*
-| Creates an invertes changeWrapRay
+| Creates an invertes changeWrapList
 */
 prototype.createReverse =
 	function( )
@@ -49,16 +49,16 @@ prototype.createReverse =
 	var
 		a,
 		aZ,
-		iRay;
+		iList;
 
-	iRay = [ ];
+	iList = [ ];
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		iRay[ a ] = this.get( aZ - 1 - a ).createReverse( );
+		iList[ a ] = this.get( aZ - 1 - a ).createReverse( );
 	}
 
-	return change_wrapRay.create( 'ray:init', iRay );
+	return change_wrapList.create( 'list:init', iList );
 };
 
 
@@ -74,7 +74,7 @@ prototype.changeTree =
 		a,
 		aZ;
 
-	// iterates through the change ray
+	// iterates through the change list
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		tree = this.get( a ).changeTree( tree );
@@ -105,9 +105,9 @@ prototype.changeTreeReverse =
 
 
 /*
-| Transform cx on this ray of wrapped changes.
+| Transform cx on this list of wrapped changes.
 |
-| cx can be a change, changeRay, changeWrap or changeWrapRay, sign
+| cx can be a change, changeList, changeWrap or changeWrapList.
 */
 prototype.transform =
 	function(

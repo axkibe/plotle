@@ -12,25 +12,20 @@ if( JION )
 		id : 'server_upSleep',
 		attributes :
 		{
-			'seq' :
+			dynRefs :
 			{
-				comment : 'the sequence number the client is sleeping at',
-				type : 'integer'
+				comment : 'the references to dynamics the client is sleeping for',
+				type : 'ref_dynamic_anyList',
 			},
-			'timer' :
-			{
-				comment : 'the timer associated with this sleep',
-				type : 'protean',
-			},
-			'result' :
+			result :
 			{
 				comment : 'the node result handler of the clients request',
 				type : 'protean'
 			},
-			'spaceRef' :
+			timer :
 			{
-				comment : 'the space the update is sleeping for',
-				type : 'fabric_spaceRef'
+				comment : 'the timer associated with this sleep',
+				type : 'protean',
 			}
 		}
 	};
@@ -38,4 +33,3 @@ if( JION )
 
 
 require( 'jion' ).this( module );
-

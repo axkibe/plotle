@@ -31,7 +31,12 @@ if( JION )
 			news :
 			{
 				comment : 'if the user checked okay with news emails',
-				type : [ 'boolean', 'string' ],
+				type : [ 'boolean', 'string' ]
+			},
+			spaces :
+			{
+				comment : 'if loaded/defined, the spaces the user has',
+				type : [ 'undefined', 'dynamic_refSpacesList' ]
 			}
 		}
 	};

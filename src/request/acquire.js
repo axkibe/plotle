@@ -22,9 +22,9 @@ if( JION )
 			{
 				comment : 'reference of the space to acquire',
 				json : true,
-				type : 'fabric_spaceRef'
+				type : 'ref_space'
 			},
-			user :
+			userCreds :
 			{
 				comment : 'user requesting the space',
 				json : true,

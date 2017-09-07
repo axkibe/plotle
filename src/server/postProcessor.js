@@ -51,7 +51,7 @@ server_postProcessor.opentype =
 			root.inventory.updateResource( 
 				resource.create(
 					'aliases',
-						jion.stringRay.stringRay(
+						jion.stringList.stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )
@@ -82,7 +82,7 @@ server_postProcessor.opentypeMin =
 			root.inventory.updateResource(
 				resource.create(
 					'aliases',
-						jion.stringRay.stringRay(
+						jion.stringList.stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )

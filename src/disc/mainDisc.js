@@ -71,7 +71,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'reference to current space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			user :
 			{
@@ -680,13 +680,13 @@ jion.lazyValue(
 	function( )
 {
 	var
+		arr,
 		g,
-		gLen,
-		gRay,
+		len,
 		r,
 		rZ;
 
-	gRay =
+	arr =
 		[
 			gleam_glint_fill.create(
 				'facet', this.facet,
@@ -694,23 +694,23 @@ jion.lazyValue(
 			)
 		];
 
-	gLen = 1;
+	len = 1;
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		g = this.atRank( r ).glint;
 
-		if( g ) gRay[ gLen++ ] = g;
+		if( g ) arr[ len++ ] = g;
 	}
 
 
-	gRay[ gLen++ ] =
+	arr[ len++ ] =
 		gleam_glint_border.create(
 			'facet', this.facet,
 			'shape', this._tShape
 		);
 
-	return gleam_glint_ray.create( 'ray:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 

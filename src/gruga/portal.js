@@ -26,17 +26,17 @@ gruga_portal = { };
 
 gruga_portal.facets =
 	gleam_facetRay.create(
-		'ray:append',
+		'list:append',
 		// default
 		gleam_facet.create(
 			'fill',
 				gleam_gradient_radial.create(
-					'ray:append',
+					'list:append',
 					gleam_gradient_colorStop.create(
 						'offset', 0,
 						'color', gleam_color.rgba( 255, 255, 248, 0.955 )
 					),
-					'ray:append',
+					'list:append',
 					gleam_gradient_colorStop.create(
 						'offset', 1,
 						'color', gleam_color.rgba( 255, 255, 160, 0.955 )
@@ -44,17 +44,17 @@ gruga_portal.facets =
 				),
 			'border',
 				gleam_borderRay.create(
-					'ray:append',
+					'list:append',
 					gleam_border.create(
 						'distance', 3,
 						'width', 6,
 						'color', gleam_color.rgb( 255, 220, 128 )
 					),
-					'ray:append',
+					'list:append',
 					gleam_border.simpleBlack
 				)
 		),
-		'ray:append', gruga_highlight
+		'list:append', gruga_highlight
 	);
 
 
@@ -64,7 +64,7 @@ gruga_portal.facets =
 */
 gruga_portal.buttonFacets =
 	gleam_facetRay.create(
-		'ray:init',
+		'list:init',
 		[
 			// default state.
 			gleam_facet.create(
@@ -116,7 +116,7 @@ gruga_portal.buttonFacets =
 */
 gruga_portal.inputFacets =
 	gleam_facetRay.create(
-		'ray:init',
+		'list:init',
 		[
 			// default state.
 			gleam_facet.create(

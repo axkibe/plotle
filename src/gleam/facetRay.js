@@ -12,7 +12,7 @@ if( JION )
 {
 	throw{
 		id : 'gleam_facetRay',
-		ray : [ 'gleam_facet' ]
+		list : [ 'gleam_facet' ]
 	};
 }
 

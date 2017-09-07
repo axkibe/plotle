@@ -60,7 +60,7 @@ gruga_iconMoveTo.facet =
 
 arrow =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.create( 'p', ap ), // A
 			gleam_shape_line.create( 'p', ap.add(   6,   8 ) ), // B
@@ -92,14 +92,7 @@ base2 =
 
 
 gruga_iconMoveTo.shape =
-	gleam_shapeRay.create(
-		'ray:init',
-		[
-			arrow,
-			base1,
-			base2
-		]
-	);
+	gleam_shapeRay.create( 'list:init', [ arrow, base1, base2 ] );
 
 
 if( FREEZE ) Object.freeze( gruga_iconMoveTo );

@@ -48,7 +48,7 @@ gruga_iconCheck.facet =
 
 gruga_iconCheck.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.create(
 				'p', pc.add( -5, -3 )            // A

@@ -151,7 +151,7 @@ function( )
 {
 	return(
 		gleam_shape.create(
-			'ray:init',
+			'list:init',
 			[
 				gleam_shape_start.create( 'p', this.pw ),
 				gleam_shape_round.create( 'p', this.pn ),

@@ -15,7 +15,7 @@ if( JION )
 			aliases :
 			{
 				comment : 'the list of aliases this is served under',
-				type : [ 'undefined', 'jion$stringRay' ]
+				type : [ 'undefined', 'jion$stringList' ]
 				// by default determined from filePath
 			},
 			coding :
@@ -150,8 +150,8 @@ prototype._init =
 	if( !this.aliases )
 	{
 		this.aliases =
-			jion.stringRay.create(
-				'ray:init',
+			jion.stringList.create(
+				'list:init',
 				[ filePath.replace( /\//g, '-' ) ]
 			);
 	}

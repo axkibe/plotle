@@ -12,11 +12,17 @@ if( JION )
 		id : 'reply_auth',
 		attributes :
 		{
-			user :
+			userCreds :
 			{
 				comment : 'the user jion. visitors get their real id here',
 				json : true,
 				type : 'user_creds'
+			},
+			userSpaces :
+			{
+				comment : 'the list of spaces the user has',
+				json : true,
+				type : [ 'undefined', 'dynamic_refSpacesList' ]
 			}
 		}
 	};

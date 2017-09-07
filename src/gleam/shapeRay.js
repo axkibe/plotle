@@ -1,5 +1,5 @@
 /*
-| A ray of geometric shapes.
+| A list of geometric shapes.
 */
 
 
@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'gleam_shapeRay',
-		ray : require( './typemap-shape' )
+		list : require( './typemap-shape' )
 	};
 }
 
@@ -62,7 +62,7 @@ prototype.border =
 		arr[ a ] = this.get( a ).border( d );
 	}
 
-	return( this.create( 'ray:init', arr ) );
+	return( this.create( 'list:init', arr ) );
 };
 
 
@@ -83,21 +83,21 @@ prototype.transform =
 	var
 		a,
 		aZ,
-		ray;
+		list;
 
-	ray = [ ];
+	list = [ ];
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		ray[ a ] = this.get( a ).transform( transform );
+		list[ a ] = this.get( a ).transform( transform );
 	}
 
-	return this.create( 'ray:init', ray );
+	return this.create( 'list:init', list );
 };
 
 
 /*
-| Returns true if point is within the shape ray.
+| Returns true if point is within the shape list.
 */
 prototype.within =
 	function(

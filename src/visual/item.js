@@ -5,10 +5,10 @@
 
 var
 	action_dragItems,
-	change_ray,
+	change_list,
 	change_set,
 	gleam_point,
-	jion$pathRay,
+	jion$pathList,
 	root,
 	visual_item,
 	visual_mark_items;
@@ -122,8 +122,8 @@ visual_item.dragStart =
 	{
 		// also makes the user mark to this item
 		paths =
-			jion$pathRay.create(
-				'ray:init', [ this.path ]
+			jion$pathList.create(
+				'list:init', [ this.path ]
 			);
 
 		root.create(
@@ -257,14 +257,14 @@ visual_item.getResizeItemChangePosFs =
 /**/}
 
 	return(
-		change_ray.create(
-			'ray:append',
+		change_list.create(
+			'list:append',
 			change_set.create(
 				'path', this.path.chop.append( 'pos' ),
 				'val', this.pos,
 				'prev', this.fabric.pos
 			),
-			'ray:append',
+			'list:append',
 			change_set.create(
 				'path', this.path.chop.append( 'fontsize' ),
 				'val', this.fontsize,
@@ -319,7 +319,7 @@ visual_item.ctrlClick =
 			'mark',
 				visual_mark_items.create(
 					'itemPaths',
-						jion$pathRay.create( 'ray:init', [ this.path ] )
+						jion$pathList.create( 'list:init', [ this.path ] )
 				)
 		);
 
@@ -344,7 +344,7 @@ visual_item.ctrlClick =
 					visual_mark_items.create(
 						'itemPaths',
 							mark.itemPaths.create(
-								'ray:append',
+								'list:append',
 								this.path
 							)
 					)

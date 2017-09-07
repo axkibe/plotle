@@ -23,7 +23,7 @@ if( JION )
 				type : 'number'
 			}
 		},
-		ray : [ 'flow_line' ]
+		list : [ 'flow_line' ]
 	};
 }
 

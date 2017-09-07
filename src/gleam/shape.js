@@ -28,7 +28,7 @@ if( JION )
 				type : [ 'undefined', 'number' ]
 			}
 		},
-		ray : require( './typemap-shapeSection' )
+		list : require( './typemap-shapeSection' )
 	};
 }
 
@@ -102,7 +102,7 @@ prototype.border =
 			);
 	}
 
-	return( this.create( 'ray:init', arr ) );
+	return( this.create( 'list:init', arr ) );
 };
 
 
@@ -184,21 +184,21 @@ prototype.transform =
 	var
 		a,
 		aZ,
-		ray;
+		arr;
 
 /**/if( CHECK )
 /**/{
 /**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
-	ray = [ ];
+	arr = [ ];
 
 	for( a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		ray[ a ] = this.get( a ).transform( transform );
+		arr[ a ] = this.get( a ).transform( transform );
 	}
 
-	return this.create( 'ray:init', ray );
+	return this.create( 'list:init', arr );
 };
 
 

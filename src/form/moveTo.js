@@ -34,7 +34,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'the reference to the current space',
-				type : [ 'undefined', 'fabric_spaceRef' ],
+				type : [ 'undefined', 'ref_space' ],
 				assign : ''
 			},
 			user :
@@ -55,10 +55,10 @@ if( JION )
 
 
 var
-	fabric_spaceRef,
 	form_form,
 	form_moveTo,
 	jion,
+	ref_space,
 	show_form;
 
 
@@ -248,20 +248,20 @@ prototype.pushButton =
 	{
 		case 'ideoloomHomeButton' :
 
-			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+			root.moveToSpace( ref_space.ideoloomHome, false );
 
 			break;
 
 		case 'ideoloomSandboxButton' :
 
-			root.moveToSpace( fabric_spaceRef.ideoloomSandbox, false );
+			root.moveToSpace( ref_space.ideoloomSandbox, false );
 
 			break;
 
 		case 'userHomeButton' :
 
 			root.moveToSpace(
-				fabric_spaceRef.create(
+				ref_space.create(
 					'username', this.user.name,
 					'tag', 'home'
 				),

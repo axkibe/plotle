@@ -182,7 +182,7 @@ function( )
 	{
 		return(
 			gleam_shape.create(
-				'ray:init',
+				'list:init',
 				[
 					gleam_shape_start.create(
 						'p', p.add( 0 , b )
@@ -213,7 +213,7 @@ function( )
 
 	return(
 		gleam_shape.create(
-			'ray:init',
+			'list:init',
 			[
 				gleam_shape_start.create(
 					'p', p.add( 0 , b )

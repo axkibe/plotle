@@ -1,5 +1,5 @@
 /*
-| A ray of visual items.
+| A list of visual items.
 */
 
 
@@ -9,8 +9,8 @@
 if( JION )
 {
 	throw{
-		id : 'visual_itemRay',
-		ray : require( './typemap-item' )
+		id : 'visual_itemList',
+		list : require( './typemap-item' )
 	};
 }
 
@@ -18,8 +18,8 @@ if( JION )
 var
 	gleam_rectGroup,
 	jion,
-	jion$pathRay,
-	visual_itemRay;
+	jion$pathList,
+	visual_itemList;
 
 
 /*
@@ -41,7 +41,7 @@ if( NODE )
 }
 
 
-prototype = visual_itemRay.prototype;
+prototype = visual_itemList.prototype;
 
 
 /*
@@ -70,7 +70,7 @@ jion.lazyValue(
 		arr[ arrZ++ ] = item.path;
 	}
 
-	return jion$pathRay.create( 'ray:init', arr );
+	return jion$pathList.create( 'list:init', arr );
 }
 );
 

@@ -15,7 +15,7 @@ if( JION )
 			itemPaths :
 			{
 				comment : 'path to the item being scrolled',
-				type : 'jion$pathRay'
+				type : 'jion$pathList'
 			},
 			startPoint :
 			{

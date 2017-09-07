@@ -50,7 +50,7 @@ c = gleam_point.zero;
 
 gruga_iconZoomIn.shape =
 	gleam_shape.create(
-		'ray:init',
+		'list:init',
 		[
 			gleam_shape_start.p( c.add( -1, -7 ) ),
 			gleam_shape_line.p(  c.add(  1, -7 ) ),

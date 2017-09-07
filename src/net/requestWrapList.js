@@ -1,5 +1,5 @@
 /*
-| A ray of request wrappings.
+| A list of wrapped requests.
 */
 
 
@@ -9,8 +9,8 @@
 if( JION )
 {
 	throw{
-		id : 'net_requestWrapRay',
-		ray : [ 'net_requestWrap' ]
+		id : 'net_requestWrapList',
+		list : [ 'net_requestWrap' ]
 	};
 }
 

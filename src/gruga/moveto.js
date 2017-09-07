@@ -26,7 +26,7 @@ var
 
 portalButtonFacets =
 	gleam_facetRay.create(
-		'ray:init',
+		'list:init',
 		[
 			// default state.
 			gleam_facet.create(

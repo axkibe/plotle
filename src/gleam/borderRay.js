@@ -1,5 +1,5 @@
 /*
-| A border ray.
+| A border list.
 */
 
 
@@ -10,7 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'gleam_borderRay',
-		ray : [ 'gleam_border' ]
+		list : [ 'gleam_border' ]
 	};
 }
 

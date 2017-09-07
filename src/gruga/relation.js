@@ -29,12 +29,12 @@ gruga_relation.facet =
 		'fill', gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
 			gleam_borderRay.create(
-				'ray:append',
+				'list:append',
 				gleam_border.create(
 					'width', 3,
 					'color', gleam_color.rgba( 255, 225, 80, 0.4 )
 				),
-				'ray:append',
+				'list:append',
 				gleam_border.create(
 					'color', gleam_color.rgba( 200, 100, 0,  0.8 )
 				)

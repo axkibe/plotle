@@ -22,7 +22,7 @@ if( JION )
 			},
 			glint :
 			{
-				comment : 'the glint ray to display',
+				comment : 'the glint list to display',
 				type : [ 'undefined', 'gleam_glint_ray' ]
 			},
 			size :
@@ -552,7 +552,7 @@ prototype._colorStyle =
 */
 prototype._renderGlintRay =
 	function(
-		glint,  // the glint ray to render
+		glint,  // the glint list to render
 		offset  // offset all rendering by this
 	)
 {

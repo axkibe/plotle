@@ -53,7 +53,7 @@ if( JION )
 			fallbackSpaceRef :
 			{
 				comment : 'fallback to this space if loading another failed.',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			form :
 			{
@@ -90,7 +90,7 @@ if( JION )
 			spaceRef :
 			{
 				comment : 'reference to current space',
-				type : [ 'undefined', 'fabric_spaceRef' ]
+				type : [ 'undefined', 'ref_space' ]
 			},
 			spaceTransform :
 			{
@@ -107,10 +107,15 @@ if( JION )
 				comment : 'shell has system focus',
 				type : 'boolean'
 			},
-			user :
+			userCreds :
 			{
-				comment : 'current user',
+				comment : 'current user credentials',
 				type : [ 'undefined', 'user_creds' ]
+			},
+			userSpaces :
+			{
+				comment : 'the list of space references the user has',
+				type : [ 'undefined', 'dynamic_refSpacesList' ]
 			},
 			viewSize :
 			{
@@ -128,7 +133,7 @@ if( JION )
 				comment : 'this root has been drawn on display',
 				type : 'boolean'
 			},
-			_visitor :
+			_visitorCreds :
 			{
 				// remembers an acquired visitor user name and
 				// passhash so when logging out from a real user
@@ -160,7 +165,7 @@ var
 	animation_transform,
 	change_grow,
 	change_join,
-	change_ray,
+	change_list,
 	change_remove,
 	change_wrap,
 	disc_root,
@@ -173,7 +178,6 @@ var
 	fabric_doc,
 	fabric_para,
 	fabric_relation,
-	fabric_spaceRef,
 	form_root,
 	gruga_controls,
 	gruga_createDisc,
@@ -191,11 +195,12 @@ var
 	gruga_zoomDisc,
 	jion,
 	jion$path,
-	jion$pathRay,
+	jion$pathList,
 	math_limit,
 	net_ajax,
 	net_channel,
 	net_link,
+	ref_space,
 	root,
 	session_uid,
 	shell_doTracker,
@@ -316,7 +321,7 @@ shell_root.prepareAction =
 					return(
 						action.create(
 							'itemPaths',
-							jion$pathRay.create( 'ray:init', nPaths )
+							jion$pathList.create( 'list:init', nPaths )
 						)
 					);
 				}
@@ -341,7 +346,7 @@ shell_root.startup =
 		ajaxPath,
 		canvas,
 		show,
-		user,
+		userCreds,
 		viewSize;
 
 /**/if( CHECK )
@@ -367,9 +372,9 @@ shell_root.startup =
 
 	ajaxPath = jion$path.empty.append( 'ajax' );
 
-	user = user_creds.createFromLocalStorage( );
+	userCreds = user_creds.createFromLocalStorage( );
 
-	if( !user ) user = user_creds.createVisitor( );
+	if( !userCreds ) userCreds = user_creds.createVisitor( );
 
 	shell_root.create(
 		'ajax',
@@ -393,7 +398,7 @@ shell_root.startup =
 		'_drawn', false
 	);
 
-	root.link.auth( user );
+	root.link.auth( userCreds );
 };
 
 
@@ -414,7 +419,7 @@ prototype._init =
 		spaceFabric,
 		spaceRef,
 		spaceTransform,
-		user,
+		userCreds,
 		viewSize;
 
 
@@ -438,7 +443,7 @@ prototype._init =
 
 	hover = this.hover;
 
-	user = this.user;
+	userCreds = this.userCreds;
 
 	spaceRef = this.spaceRef;
 
@@ -450,13 +455,13 @@ prototype._init =
 /**/}
 
 	if(
-		user
-		&& ( !inherit || !user.equals( inherit.user ) )
+		userCreds
+		&& ( !inherit || !userCreds.equals( inherit.userCreds ) )
 	)
 	{
-		if( !user.isVisitor )
+		if( !userCreds.isVisitor )
 		{
-			user.saveToLocalStorage( );
+			userCreds.saveToLocalStorage( );
 		}
 		else
 		{
@@ -465,12 +470,12 @@ prototype._init =
 				&& root.spaceRef.username !== 'ideoloom'
 			)
 			{
-				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+				root.moveToSpace( ref_space.ideoloomHome, false );
 			}
 
 			user_creds.clearLocalStorage( );
 
-			this._visitor = user;
+			this._visitorCreds = userCreds;
 		}
 	}
 
@@ -488,7 +493,7 @@ prototype._init =
 		|| action !== inherit.action
 		|| hover !== inherit.hover
 		|| mark !== inherit.mark
-		|| user !== inherit.user
+		|| userCreds !== inherit.userCreds
 		|| show !== inherit.show
 		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
@@ -515,7 +520,7 @@ prototype._init =
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
-				'user', user,
+				'user', userCreds,
 				'viewSize', viewSize
 			);
 
@@ -536,12 +541,12 @@ prototype._init =
 				'mark', mark,
 				'show', show,
 				'spaceRef', spaceRef,
-				'user', user,
+				'user', userCreds,
 				'viewSize', viewSize
 			);
 	}
 
-	this.link = this.link.create( 'user', user );
+	this.link = this.link.create( 'userCreds', userCreds );
 
 	root = this;
 
@@ -564,22 +569,22 @@ prototype.alter =
 	)
 {
 	var
-		changeRay,
+		changeList,
 		changeWrap;
 
-	if( a1.reflect === 'change_ray' )
+	if( a1.reflect === 'change_list' )
 	{
-		changeRay = a1;
+		changeList = a1;
 	}
 	else if( Array.isArray( a1 ) )
 	{
-		changeRay = change_ray.create( 'ray:init', a1 );
+		changeList = change_list.create( 'list:init', a1 );
 	}
 	else
 	{
-		changeRay =
-			change_ray.create(
-				'ray:init',
+		changeList =
+			change_list.create(
+				'list:init',
 				Array.prototype.slice.apply( arguments )
 			);
 	}
@@ -587,7 +592,7 @@ prototype.alter =
 	changeWrap =
 		change_wrap.create(
 			'cid', session_uid( ),
-			'changeRay', changeRay
+			'changeList', changeList
 		);
 
 	root.link.alter( changeWrap );
@@ -1037,11 +1042,11 @@ prototype.input =
 prototype.logout =
 	function( )
 {
-	if( root._visitor )
+	if( root._visitorCreds )
 	{
-		root.create( 'user', root._visitor );
+		root.create( 'userCreds', root._visitorCreds );
 
-		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+		root.moveToSpace( ref_space.ideoloomHome, false );
 
 		return;
 	}
@@ -1085,7 +1090,7 @@ prototype.mousewheel =
 */
 prototype.moveToSpace =
 	function(
-		spaceRef,     // reference of type fabric_spaceRef
+		spaceRef,     // reference of type ref_space
 		createMissing // if true, non-existing spaces are to be created
 	)
 {
@@ -1482,7 +1487,7 @@ prototype.onAuth =
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
-		if( !request.user.isVisitor )
+		if( !request.userCreds.isVisitor )
 		{
 			root.link.auth( user_creds.createVisitor( ) );
 
@@ -1495,9 +1500,12 @@ prototype.onAuth =
 		return;
 	}
 
-	root.create( 'user', reply.user );
+	root.create(
+		'userCreds', reply.userCreds,
+		'userSpaces', reply.userSpaces || pass
+	);
 
-	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+	root.moveToSpace( ref_space.ideoloomHome, false );
 };
 
 
@@ -1784,7 +1792,7 @@ prototype.draw =
 
 	display =
 		display.create(
-			'glint', gleam_glint_ray.create( 'ray:init', gRay )
+			'glint', gleam_glint_ray.create( 'list:init', gRay )
 		);
 
 	display.render( );
