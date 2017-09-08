@@ -425,9 +425,9 @@ jion.lazyValue(
 		frame,
 		fromItem,
 		fromJoint,
-		gLen,
-		gRay,
+		len,
 		r,
+		ray,
 		s,
 		toItem,
 		toJoint,
@@ -437,26 +437,26 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	gRay = [ ];
+	ray = [ ];
 
-	gLen = 0;
+	len = 0;
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
-		gRay[ gLen++ ] = s.glint;
+		ray[ len++ ] = s.glint;
 	}
 
 	frame = this.frame;
 
-	if( frame ) gRay[ gLen++ ] = frame.glint;
+	if( frame ) ray[ len++ ] = frame.glint;
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.startPoint ) gRay[ gLen++ ] = action.transItem.glint;
+			if( action.startPoint ) ray[ len++ ] = action.transItem.glint;
 
 			break;
 
@@ -497,7 +497,7 @@ jion.lazyValue(
 							'end2', 'arrow'
 						);
 
-					gRay[ gLen++ ] =
+					ray[ len++ ] =
 						gleam_glint_paint.create(
 							'facet', gruga_relation.facet,
 							'shape', arrow.shape.transform( transform )
@@ -511,7 +511,7 @@ jion.lazyValue(
 
 			if( action.zone )
 			{
-				gRay[ gLen++ ] =
+				ray[ len++ ] =
 					gleam_glint_paint.create(
 						'facet', gruga_select.facet,
 						'shape', action.zone.transform( transform )
@@ -521,7 +521,7 @@ jion.lazyValue(
 			break;
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', ray );
 }
 );
 

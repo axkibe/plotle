@@ -24,7 +24,7 @@ if( JION )
 				comment : 'the shape to draw',
 				type :
 					require( '../typemap-shape' )
-					.concat( [ 'gleam_shapeRay' ] )
+					.concat( [ 'gleam_shapeList' ] )
 			}
 		}
 	};

@@ -27,7 +27,7 @@ if( JION )
 				comment : 'the shape(ray) to mask to',
 				type :
 					require( '../typemap-shape' )
-					.concat( [ 'gleam_shapeRay' ] )
+					.concat( [ 'gleam_shapeList' ] )
 			}
 		}
 	};

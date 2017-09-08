@@ -82,7 +82,7 @@ var
 	gleam_line,
 	gleam_point,
 	gleam_shape,
-	gleam_shapeRay,
+	gleam_shapeList,
 	gleam_shape_line,
 	gleam_shape_start,
 	gleam_size,
@@ -323,16 +323,16 @@ jion.lazyValue(
 	function( )
 {
 	var
-		gLen,
-		gRay,
+		len,
 		mark,
 		r,
+		ray,
 		rZ,
 		s;
 
-	gRay = [ ];
+	ray = [ ];
 
-	gLen = 0;
+	len = 0;
 
 	mark = this.mark;
 
@@ -342,7 +342,7 @@ jion.lazyValue(
 		&& mark.containsPath( this.path.limit( 3 ) )
 	)
 	{
-		gRay[ gLen++ ] =
+		ray[ len++ ] =
 			gleam_glint_paint.create(
 				'facet', gruga_selection,
 				'shape', this._rangeShape.transform( this.transform.ortho )
@@ -354,7 +354,7 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		gRay[ gLen++ ] = this._caretGlint;
+		ray[ len++ ] = this._caretGlint;
 	}
 
 
@@ -362,10 +362,10 @@ jion.lazyValue(
 	{
 		s = this.atRank( r );
 
-		gRay[ gLen++ ] = s.glint;
+		ray[ len++ ] = s.glint;
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', ray );
 }
 );
 
@@ -701,7 +701,7 @@ jion.lazyValue(
 			)
 		];
 
-		return gleam_shapeRay.create( 'list:init', shapes );
+		return gleam_shapeList.create( 'list:init', shapes );
 	}
 	else
 	{

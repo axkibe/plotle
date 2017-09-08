@@ -9,14 +9,14 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_shapeRay',
+		id : 'gleam_shapeList',
 		list : require( './typemap-shape' )
 	};
 }
 
 
 var
-	gleam_shapeRay;
+	gleam_shapeList;
 
 
 /*
@@ -37,11 +37,11 @@ if( NODE )
 var
 	prototype;
 
-prototype = gleam_shapeRay.prototype;
+prototype = gleam_shapeList.prototype;
 
 
 /*
-| Returns a shapeRay bordering this shape by
+| Returns a shapeList bordering this shape by
 | +/- distance. See gleam_shape.border for further
 | explanation.
 */
@@ -67,7 +67,7 @@ prototype.border =
 
 
 /*
-| Returns a transformed shapeRay.
+| Returns a transformed shapeList.
 */
 prototype.transform =
 	function(

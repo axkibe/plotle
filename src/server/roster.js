@@ -367,7 +367,7 @@ server_resourceRay.create( 'list:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/shapeRay.js',
+		'filePath', 'src/gleam/shapeList.js',
 		'hasJion', true,
 		'inBundle', true
 	),

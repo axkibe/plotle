@@ -333,32 +333,32 @@ jion.lazyValue(
 	function( )
 {
 	var
-		gLen,
-		gRay;
+		arr,
+		len;
 
-	gRay = [ ];
+	arr = [ ];
 
-	gLen = 0;
+	len = 0;
 
 	switch( this.show.reflect )
 	{
 		case 'show_create' :
 
-			gRay[ gLen++ ] = this.get( 'createDisc' ).glint;
+			arr[ len++ ] = this.get( 'createDisc' ).glint;
 
 			break;
 
 		case 'show_zoom' :
 
-			gRay[ gLen++ ] = this.get( 'zoomDisc' ).glint;
+			arr[ len++ ] = this.get( 'zoomDisc' ).glint;
 
 			break;
 	}
 
 
-	gRay[ gLen++ ] = this.get( 'mainDisc' ).glint;
+	arr[ len++ ] = this.get( 'mainDisc' ).glint;
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 

@@ -37,7 +37,7 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
-	gleam_shapeRay,
+	gleam_shapeList,
 	gruga_frame,
 	jion,
 	result_hover,
@@ -330,7 +330,7 @@ jion.lazyValue(
 		arr[ an++ ] = ca.tShape.border( -12 );
 	}
 
-	return gleam_shapeRay.create( 'list:init', arr );
+	return gleam_shapeList.create( 'list:init', arr );
 }
 );
 

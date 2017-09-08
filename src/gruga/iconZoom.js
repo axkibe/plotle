@@ -25,7 +25,7 @@ var
 	gleam_color,
 	gleam_facet,
 	gleam_shape,
-	gleam_shapeRay,
+	gleam_shapeList,
 	gruga_iconZoom;
 
 
@@ -55,7 +55,7 @@ gruga_iconZoom.facet =
 c = gleam_point.xy( 2, -3 );
 
 gruga_iconZoom.shape =
-	gleam_shapeRay.create(
+	gleam_shapeList.create(
 		'list:init',
 		[
 			gleam_shape.create(

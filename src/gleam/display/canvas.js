@@ -202,7 +202,7 @@ prototype.within =
 /**/	if( p.reflect !== 'gleam_point' ) throw new Error( );
 /**/}
 
-	if( shape.reflect === 'gleam_shapeRay' )
+	if( shape.reflect === 'gleam_shapeList' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
@@ -745,7 +745,7 @@ prototype._renderMask =
 
 	shape = glint.shape;
 
-	if( shape.reflect === 'gleam_shapeRay' )
+	if( shape.reflect === 'gleam_shapeList' )
 	{
 		for( a = 0, aZ = shape.length; a < aZ; a++ )
 		{
@@ -1179,7 +1179,7 @@ prototype._sketch =
 
 			return;
 
-		case 'gleam_shapeRay' :
+		case 'gleam_shapeList' :
 
 			for( a = 0, aZ = shape.length; a < aZ; a++ )
 			{

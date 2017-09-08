@@ -26,7 +26,7 @@ var
 	gleam_facet,
 	gleam_rect,
 	gleam_shape,
-	gleam_shapeRay,
+	gleam_shapeList,
 	gleam_shape_line,
 	gleam_shape_start,
 	gruga_iconMoveTo;
@@ -92,7 +92,7 @@ base2 =
 
 
 gruga_iconMoveTo.shape =
-	gleam_shapeRay.create( 'list:init', [ arrow, base1, base2 ] );
+	gleam_shapeList.create( 'list:init', [ arrow, base1, base2 ] );
 
 
 if( FREEZE ) Object.freeze( gruga_iconMoveTo );

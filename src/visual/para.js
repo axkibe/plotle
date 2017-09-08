@@ -277,14 +277,14 @@ jion.lazyValue(
 {
 	var
 		a,
+		arr,
 		aZ,
 		b,
 		bZ,
 		flow,
 		tFont,
-		gLen,
-		gRay,
 		line,
+		len,
 		lineKey,
 		mark,
 		token,
@@ -296,9 +296,9 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	gRay = [ ];
+	arr = [ ];
 
-	gLen = 0;
+	len = 0;
 
 	transform = this.transform.ortho;
 
@@ -314,7 +314,7 @@ jion.lazyValue(
 		{
 			token = line.get( b );
 
-			gRay[ gLen++ ] =
+			arr[ len++ ] =
 				gleam_glint_text.create(
 					'font', tFont,
 					'p',
@@ -327,7 +327,7 @@ jion.lazyValue(
 		}
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 

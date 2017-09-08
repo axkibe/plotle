@@ -8,5 +8,5 @@ module.exports =
 	'gleam_rect',
 	'gleam_roundRect',
 	'gleam_shape',
-	'gleam_shapeRay'
+	'gleam_shapeList'
 ];
