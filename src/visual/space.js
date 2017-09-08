@@ -373,7 +373,7 @@ jion.lazyValue(
 	{
 		if( mark.itemPaths )
 		{
-			content = this.getRay( mark.itemPaths );
+			content = this.getList( mark.itemPaths );
 		}
 
 		if( content )
@@ -527,9 +527,9 @@ jion.lazyValue(
 
 
 /*
-| Returns a ray of visual item by a ray of paths
+| Returns a ray of visual items by a list of paths
 */
-prototype.getRay =
+prototype.getList =
 	function(
 		paths
 	)

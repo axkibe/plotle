@@ -478,13 +478,13 @@ jion.lazyValue(
 	function( )
 {
 	var
+		arr,
 		facet,
-		gRay,
 		tZone;
 
 	tZone = this.tZone;
 
-	gRay =
+	arr =
 		[
 			gleam_glint_window.create(
 				'glint', this._glint,
@@ -496,14 +496,14 @@ jion.lazyValue(
 	{
 		facet = gruga_portal.facets.getFacet( 'highlight', true );
 
-		gRay[ 1 ] =
+		arr[ 1 ] =
 			gleam_glint_paint.create(
 				'facet', facet,
 				'shape', this.tShape
 			);
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 

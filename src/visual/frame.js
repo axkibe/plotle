@@ -408,6 +408,7 @@ jion.lazyValue(
 	function( )
 {
 	var
+		arr,
 		glintFrameBody,
 		glintHandleE,
 		glintHandleN,
@@ -416,8 +417,7 @@ jion.lazyValue(
 		glintHandleS,
 		glintHandleSe,
 		glintHandleSw,
-		glintHandleW,
-		gRay;
+		glintHandleW;
 
 	glintFrameBody =
 		gleam_glint_paint.create(
@@ -451,7 +451,7 @@ jion.lazyValue(
 
 	if( this.proportional )
 	{
-		gRay =
+		arr =
 			[
 				glintFrameBody,
 				glintHandleNw,
@@ -486,7 +486,7 @@ jion.lazyValue(
 				'shape', this._shapeHandleW
 			);
 
-		gRay =
+		arr =
 			[
 				glintFrameBody,
 				glintHandleNw,
@@ -500,7 +500,7 @@ jion.lazyValue(
 			];
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 
