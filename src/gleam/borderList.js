@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_borderRay',
+		id : 'gleam_borderList',
 		list : [ 'gleam_border' ]
 	};
 }

@@ -5,7 +5,7 @@
 
 var
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_facet,
 	gleam_point,
@@ -28,7 +28,7 @@ gruga_relation.facet =
 	gleam_facet.create(
 		'fill', gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
-			gleam_borderRay.create(
+			gleam_borderList.create(
 				'list:append',
 				gleam_border.create(
 					'width', 3,

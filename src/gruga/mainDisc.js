@@ -6,7 +6,7 @@
 var
 	disc_mainDisc,
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_ellipse,
 	gleam_facet,
@@ -142,7 +142,7 @@ gruga_mainDisc =
 		'facet',
 			gleam_facet.create(
 				'border',
-					gleam_borderRay.create(
+					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
 							'distance', 1,

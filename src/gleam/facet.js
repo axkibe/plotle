@@ -20,7 +20,7 @@ if( JION )
 				type :
 					[
 						'gleam_border',
-						'gleam_borderRay',
+						'gleam_borderList',
 						'undefined'
 					]
 

@@ -413,7 +413,7 @@ prototype._borders  =
 
 	switch( border.reflect )
 	{
-		case 'gleam_borderRay' :
+		case 'gleam_borderList' :
 
 			for( a = 0, aZ = border.length; a < aZ; a++ )
 			{

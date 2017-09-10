@@ -5,7 +5,7 @@
 
 var
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -30,7 +30,7 @@ gruga_genericInput.facets =
 			gleam_facet.create(
 				'fill', gleam_color.white,
 				'border',
-					gleam_borderRay.create(
+					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
 							'distance', 1,
@@ -46,7 +46,7 @@ gruga_genericInput.facets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.white,
 				'border',
-					gleam_borderRay.create(
+					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
 							'distance', 1,

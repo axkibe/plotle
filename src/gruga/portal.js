@@ -5,7 +5,7 @@
 
 var
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -43,7 +43,7 @@ gruga_portal.facets =
 					)
 				),
 			'border',
-				gleam_borderRay.create(
+				gleam_borderList.create(
 					'list:append',
 					gleam_border.create(
 						'distance', 3,

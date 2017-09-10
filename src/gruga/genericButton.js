@@ -5,7 +5,7 @@
 
 var
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_facet,
 	gleam_facetRay,
@@ -52,7 +52,7 @@ gruga_genericButton.facets =
 				'group:init', { 'focus' : true },
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
-					gleam_borderRay.create(
+					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
 							'distance', 2,
@@ -72,7 +72,7 @@ gruga_genericButton.facets =
 				'group:init', { 'focus' : true, 'hover' : true },
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
-					gleam_borderRay.create(
+					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
 							'distance', 2,

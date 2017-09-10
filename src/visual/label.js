@@ -385,18 +385,18 @@ jion.lazyValue(
 {
 	// FUTURE GLINT inherit
 	var
+		arr,
 		facet,
-		gLen,
-		gRay,
+		len,
 		tZone;
 
 	tZone = this.tZone;
 
-	gRay = [ ];
+	arr = [ ];
 
-	gLen = 0;
+	len = 0;
 
-	gRay[ gLen++ ] =
+	arr[ len++ ] =
 		gleam_glint_window.create(
 			'glint', this.doc.glint,
 			'rect', tZone.enlarge1
@@ -406,14 +406,14 @@ jion.lazyValue(
 	{
 		facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		gRay[ gLen++ ] =
+		arr[ len++ ] =
 			gleam_glint_paint.create(
 				'facet', facet,
 				'shape', this.tShape
 			);
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 

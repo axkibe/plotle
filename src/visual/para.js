@@ -375,8 +375,8 @@ jion.lazyValue(
 {
 	var
 		ca,
+		currentLineList,
 		currentLineOffset,
-		currentLineRay,
 		lines,
 		flowWidth,
 		font,
@@ -417,7 +417,7 @@ jion.lazyValue(
 
 	currentLineOffset = 0;
 
-	currentLineRay = [ ];
+	currentLineList = [ ];
 
 	reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 	// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
@@ -436,7 +436,7 @@ jion.lazyValue(
 				// soft break
 				lines.push(
 					flow_line.create(
-						'list:init', currentLineRay,
+						'list:init', currentLineList,
 						'y', y,
 						'offset', currentLineOffset
 					)
@@ -444,7 +444,7 @@ jion.lazyValue(
 
 				x = 0;
 
-				currentLineRay = [ ];
+				currentLineList = [ ];
 
 				y += font.size * ( 1 + shell_settings.bottombox );
 
@@ -457,7 +457,7 @@ jion.lazyValue(
 			}
 		}
 
-		currentLineRay.push(
+		currentLineList.push(
 			flow_token.create(
 				'x', x,
 				'width', w,
@@ -473,7 +473,7 @@ jion.lazyValue(
 
 	lines.push(
 		flow_line.create(
-			'list:init', currentLineRay,
+			'list:init', currentLineList,
 			'offset', currentLineOffset,
 			'y', y
 		)

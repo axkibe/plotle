@@ -21,7 +21,7 @@
 
 var
 	gleam_border,
-	gleam_borderRay,
+	gleam_borderList,
 	gleam_color,
 	gleam_facet,
 	gleam_point,
@@ -101,7 +101,7 @@ gruga_iconSelect = { };
 gruga_iconSelect.facet =
 	gleam_facet.create(
 		'border',
-			gleam_borderRay.create(
+			gleam_borderList.create(
 				'list:init',
 				[
 					gleam_border.create(

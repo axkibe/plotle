@@ -225,7 +225,7 @@ server_resourceRay.create( 'list:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/borderRay.js',
+		'filePath', 'src/gleam/borderList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
