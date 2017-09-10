@@ -246,13 +246,13 @@ form_form.glint =
 	function( )
 {
 	var
-		gLen,
-		gRay,
+		arr,
+		len,
 		r,
 		s,
 		sg;
 
-	gRay =
+	arr =
 		[
 			gleam_glint_paint.create(
 				'facet', gruga_formFacet,
@@ -260,7 +260,7 @@ form_form.glint =
 			)
 		];
 
-	gLen = 1;
+	len = 1;
 
 	for( r = this.length - 1; r >= 0; r-- )
 	{
@@ -268,10 +268,10 @@ form_form.glint =
 
 		sg = s.glint;
 
-		if( sg ) gRay[ gLen++ ] = sg;
+		if( sg ) arr[ len++ ] = sg;
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 };
 
 

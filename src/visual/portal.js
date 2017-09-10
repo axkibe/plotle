@@ -1464,8 +1464,8 @@ jion.lazyValue(
 	function( )
 {
 	var
+		arr,
 		glintCaret,
-		cRay,
 		facet,
 		fieldSpaceUser,
 		fieldSpaceTag,
@@ -1496,7 +1496,7 @@ jion.lazyValue(
 			'focus', false
 		);
 
-	cRay =
+	arr =
 		[
 			gleam_glint_paint.create(
 				'facet', this._facetMoveToButton,
@@ -1535,7 +1535,7 @@ jion.lazyValue(
 	{
 		glintCaret = this._glintCaret;
 
-		if( glintCaret ) cRay[ 6 ] = this._glintCaret;
+		if( glintCaret ) arr[ 6 ] = this._glintCaret;
 	}
 
 	tzs = this._zeroShape.transform( ot );
@@ -1550,7 +1550,7 @@ jion.lazyValue(
 				),
 				// masks the portals content
 				gleam_glint_mask.create(
-					'glint', gleam_glint_ray.create( 'list:init', cRay ),
+					'glint', gleam_glint_ray.create( 'list:init', arr ),
 					'shape', tzs
 				),
 				// puts the border on top of everything else
