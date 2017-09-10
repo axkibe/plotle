@@ -43,7 +43,7 @@ change_generic.changeTreeReverse =
 */
 change_generic.transformChangeList =
 	function(
-		cRay
+		cList
 	)
 {
 	var
@@ -52,19 +52,19 @@ change_generic.transformChangeList =
 		c,
 		r,
 		rZ,
-		tZ,
-		tRay;
+		tList,
+		tZ;
 
 /**/if( CHECK )
 /**/{
-/**/	if( cRay.reflect !== 'change_list' ) throw new Error( );
+/**/	if( cList.reflect !== 'change_list' ) throw new Error( );
 /**/}
 
-	tRay = [ ];
+	tList = [ ];
 
-	for( r = 0, rZ = cRay.length, tZ = 0; r < rZ; r++ )
+	for( r = 0, rZ = cList.length, tZ = 0; r < rZ; r++ )
 	{
-		c = this.transform( cRay.get( r ) );
+		c = this.transform( cList.get( r ) );
 
 		// changes that transformed away are sliced out.
 		if( !c ) continue;
@@ -73,16 +73,16 @@ change_generic.transformChangeList =
 		{
 			for( a = 0, aZ = c.length; a < aZ; a++ )
 			{
-				tRay[ tZ++ ] = c.get( a );
+				tList[ tZ++ ] = c.get( a );
 			}
 		}
 		else
 		{
-			tRay[ tZ++ ] = c;
+			tList[ tZ++ ] = c;
 		}
 	}
 
-	return cRay.create( 'list:init', tRay );
+	return cList.create( 'list:init', tList );
 };
 
 
@@ -103,23 +103,23 @@ change_generic.transformChangeWrap =
 */
 change_generic.transformChangeWrapList =
 	function(
-		cwRay
+		cwList
 	)
 {
 	var
 		r,
 		rZ,
-		tRay;
+		tList;
 
-	tRay = [ ];
+	tList = [ ];
 
-	for( r = 0, rZ = cwRay.length; r < rZ; r++ )
+	for( r = 0, rZ = cwList.length; r < rZ; r++ )
 	{
-		tRay[ r ] = this._transformChangeWrap( cwRay.get( r ) );
+		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
 	}
 
 
-	return cwRay.create( 'list:init', tRay );
+	return cwList.create( 'list:init', tList );
 };
 
 

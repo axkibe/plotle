@@ -465,10 +465,10 @@ jion.lazyValue(
 {
 	var
 		a,
+		arr,
 		aZ,
 		font,
-		gLen,
-		gRay,
+		len,
 		mark,
 		pitch,
 		pm,
@@ -480,7 +480,7 @@ jion.lazyValue(
 
 	mark = this.mark;
 
-	gRay =
+	arr =
 		[
 			gleam_glint_fill.create(
 				'facet', this._facet,
@@ -488,7 +488,7 @@ jion.lazyValue(
 			)
 		];
 
-	gLen = 1;
+	len = 1;
 
 	font = this.font;
 
@@ -498,7 +498,7 @@ jion.lazyValue(
 
 		for( a = 0, aZ = pm.length; a < aZ; a++ )
 		{
-			gRay[ gLen++ ] =
+			arr[ len++ ] =
 				gleam_glint_fill.create(
 					'facet', gleam_facet.blackFill,
 					'shape', pm[ a ]
@@ -507,7 +507,7 @@ jion.lazyValue(
 	}
 	else
 	{
-		gRay[ gLen++ ] =
+		arr[ len++ ] =
 			gleam_glint_text.create(
 				'font', font,
 				'p',
@@ -525,16 +525,16 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		gRay[ gLen++ ] = this._caretGlint;
+		arr[ len++ ] = this._caretGlint;
 	}
 
-	gRay[ gLen++ ] =
+	arr[ len++ ] =
 		gleam_glint_border.create(
 			'facet', this._facet,
 			'shape', this._tzShape
 		);
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_ray.create( 'list:init', arr );
 }
 );
 
