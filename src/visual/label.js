@@ -70,8 +70,8 @@ if( JION )
 var
 	change_grow,
 	change_shrink,
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_glint_window,
 	gleam_point,
 	gleam_rect,
@@ -413,7 +413,7 @@ jion.lazyValue(
 			);
 	}
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

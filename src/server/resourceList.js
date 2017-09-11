@@ -1,5 +1,5 @@
 /*
-| A ray of resources.
+| A list of resources.
 */
 
 
@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'server_resourceRay',
+		id : 'server_resourceList',
 		list : [ 'server_resource' ]
 	};
 }

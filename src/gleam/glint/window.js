@@ -17,7 +17,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glints to draw in the window',
-				type : [ 'gleam_glint_mask', 'gleam_glint_ray' ]
+				type : [ 'gleam_glint_list', 'gleam_glint_mask' ]
 			},
 			rect :
 			{

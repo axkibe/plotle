@@ -15,7 +15,7 @@
 var
 	jion,
 	server_resource,
-	server_resourceRay,
+	server_resourceList,
 	stringList;
 
 
@@ -23,12 +23,14 @@ jion = require( 'jion' );
 
 server_resource = require( './resource' );
 
-server_resourceRay = require( './resourceRay' );
+server_resourceList = require( './resourceList' );
 
 stringList = jion.stringList.stringList; // FUTURE
 
 module.exports =
-server_resourceRay.create( 'list:init', [
+server_resourceList.create(
+	'list:init',
+	[
 	server_resource.create(
 		'filePath', 'import/webfont.js',   // FUTURE add version info
 		'maxage', 'long'
@@ -338,7 +340,7 @@ server_resourceRay.create( 'list:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/glint/ray.js',
+		'filePath', 'src/gleam/glint/list.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -401,7 +403,7 @@ server_resourceRay.create( 'list:init', [
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/facetRay.js',
+		'filePath', 'src/gleam/facetList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -1123,7 +1125,8 @@ server_resourceRay.create( 'list:init', [
 		'hasJion', true,
 		'inTestPad', true
 	)
-] );
+	]
+);
 
 
 } )( );

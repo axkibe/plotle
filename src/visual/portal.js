@@ -76,9 +76,9 @@ var
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
+	gleam_glint_list,
 	gleam_glint_mask,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
@@ -503,7 +503,7 @@ jion.lazyValue(
 			);
 	}
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 
@@ -1541,7 +1541,7 @@ jion.lazyValue(
 	tzs = this._zeroShape.transform( ot );
 
 	return(
-		gleam_glint_ray.create(
+		gleam_glint_list.create(
 			'list:init',
 			[
 				gleam_glint_fill.create(
@@ -1550,7 +1550,7 @@ jion.lazyValue(
 				),
 				// masks the portals content
 				gleam_glint_mask.create(
-					'glint', gleam_glint_ray.create( 'list:init', arr ),
+					'glint', gleam_glint_list.create( 'list:init', arr ),
 					'shape', tzs
 				),
 				// puts the border on top of everything else

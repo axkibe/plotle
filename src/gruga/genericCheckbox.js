@@ -5,7 +5,7 @@
 
 var
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_border,
 	gleam_borderList,
 	gleam_color,
@@ -23,7 +23,7 @@ gruga_genericCheckbox = { };
 
 
 gruga_genericCheckbox.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

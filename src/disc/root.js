@@ -84,7 +84,7 @@ if( JION )
 
 var
 	disc_root,
-	gleam_glint_ray,
+	gleam_glint_list,
 	jion;
 
 /*
@@ -358,7 +358,7 @@ jion.lazyValue(
 
 	arr[ len++ ] = this.get( 'mainDisc' ).glint;
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

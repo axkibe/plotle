@@ -5,7 +5,7 @@
 
 var
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_margin,
 	gruga_highlight,
 	gruga_label;
@@ -22,7 +22,7 @@ gruga_label = { };
 
 
 gruga_label.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:append',
 		// default
 		gleam_facet.create(

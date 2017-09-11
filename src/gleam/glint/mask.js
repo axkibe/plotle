@@ -15,7 +15,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glints to draw',
-				type : 'gleam_glint_ray'
+				type : 'gleam_glint_list'
 			},
 			reverse :
 			{
@@ -24,7 +24,7 @@ if( JION )
 			},
 			shape :
 			{
-				comment : 'the shape(ray) to mask to',
+				comment : 'the shape(list) to mask to',
 				type :
 					require( '../typemap-shape' )
 					.concat( [ 'gleam_shapeList' ] )

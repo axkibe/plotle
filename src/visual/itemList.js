@@ -45,7 +45,7 @@ prototype = visual_itemList.prototype;
 
 
 /*
-| Returns the ray of paths of the items
+| Returns the list of paths of the items.
 */
 jion.lazyValue(
 	prototype,
@@ -76,7 +76,7 @@ jion.lazyValue(
 
 
 /*
-| Returns the ray of zones of the items
+| Returns the list of zones of the items.
 */
 jion.lazyValue(
 	prototype,

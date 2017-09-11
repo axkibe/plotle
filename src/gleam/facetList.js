@@ -1,5 +1,5 @@
 /*
-| A ray of facets.
+| A list of facets.
 |
 | Priotiy is from length - 1 to 0.
 */
@@ -11,14 +11,14 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_facetRay',
+		id : 'gleam_facetList',
 		list : [ 'gleam_facet' ]
 	};
 }
 
 
 var
-	gleam_facetRay;
+	gleam_facetList;
 
 /*
 | Capsule
@@ -38,7 +38,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = gleam_facetRay.prototype;
+prototype = gleam_facetList.prototype;
 
 
 /*

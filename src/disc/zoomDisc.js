@@ -98,7 +98,7 @@ var
 	disc_zoomDisc,
 	gleam_glint_border,
 	gleam_glint_fill,
-	gleam_glint_ray,
+	gleam_glint_list,
 	gleam_glint_window,
 	gleam_rect,
 	gleam_transform,
@@ -588,7 +588,7 @@ jion.lazyValue(
 			'shape', this._tShape
 		);
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

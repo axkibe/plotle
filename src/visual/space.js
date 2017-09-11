@@ -78,8 +78,8 @@ var
 	action_select,
 	change_list,
 	gleam_arrow,
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_point,
 	gleam_rect,
 	gruga_label,
@@ -421,13 +421,13 @@ jion.lazyValue(
 {
 	var
 		action,
+		arr,
 		arrow,
 		frame,
 		fromItem,
 		fromJoint,
 		len,
 		r,
-		ray,
 		s,
 		toItem,
 		toJoint,
@@ -437,7 +437,7 @@ jion.lazyValue(
 
 	transform = this.transform;
 
-	ray = [ ];
+	arr = [ ];
 
 	len = 0;
 
@@ -445,18 +445,18 @@ jion.lazyValue(
 	{
 		s = this.atRank( r );
 
-		ray[ len++ ] = s.glint;
+		arr[ len++ ] = s.glint;
 	}
 
 	frame = this.frame;
 
-	if( frame ) ray[ len++ ] = frame.glint;
+	if( frame ) arr[ len++ ] = frame.glint;
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.startPoint ) ray[ len++ ] = action.transItem.glint;
+			if( action.startPoint ) arr[ len++ ] = action.transItem.glint;
 
 			break;
 
@@ -497,7 +497,7 @@ jion.lazyValue(
 							'end2', 'arrow'
 						);
 
-					ray[ len++ ] =
+					arr[ len++ ] =
 						gleam_glint_paint.create(
 							'facet', gruga_relation.facet,
 							'shape', arrow.shape.transform( transform )
@@ -511,7 +511,7 @@ jion.lazyValue(
 
 			if( action.zone )
 			{
-				ray[ len++ ] =
+				arr[ len++ ] =
 					gleam_glint_paint.create(
 						'facet', gruga_select.facet,
 						'shape', action.zone.transform( transform )
@@ -521,13 +521,13 @@ jion.lazyValue(
 			break;
 	}
 
-	return gleam_glint_ray.create( 'list:init', ray );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 
 
 /*
-| Returns a ray of visual items by a list of paths
+| Returns a list of visual items by a list of paths.
 */
 prototype.getList =
 	function(
@@ -921,7 +921,7 @@ prototype.dragStop =
 					}
 					else
 					{
-						changes = changes.appendRay( chi );
+						changes = changes.appendList( chi );
 					}
 
 				}
@@ -968,7 +968,7 @@ prototype.dragStop =
 					}
 					else
 					{
-						changes = changes.appendRay( chi );
+						changes = changes.appendList( chi );
 					}
 
 				}

@@ -23,7 +23,7 @@ if( JION )
 			glint :
 			{
 				comment : 'the glint list to display',
-				type : [ 'undefined', 'gleam_glint_ray' ]
+				type : [ 'undefined', 'gleam_glint_list' ]
 			},
 			size :
 			{
@@ -398,7 +398,7 @@ prototype._border =
 
 
 /*
-| Draws a border or borderRay.
+| Draws a border or borderList.
 */
 prototype._borders  =
 	function(
@@ -550,7 +550,7 @@ prototype._colorStyle =
 /*
 | Renders a glint twig.
 */
-prototype._renderGlintRay =
+prototype._renderGlintList =
 	function(
 		glint,  // the glint list to render
 		offset  // offset all rendering by this
@@ -596,6 +596,12 @@ prototype._renderGlint =
 
 			break;
 
+		case 'gleam_glint_list' :
+
+			this._renderGlintList( glint, offset );
+
+			break;
+
 		case 'gleam_glint_paint' :
 
 			this._paint( glint.facet, glint.shape, offset );
@@ -607,12 +613,6 @@ prototype._renderGlint =
 			shell_settings.opentype
 			? this._renderTextOpenType( glint, offset )
 			: this._renderTextCanvas( glint, offset );
-
-			break;
-
-		case 'gleam_glint_ray' :
-
-			this._renderGlintRay( glint, offset );
 
 			break;
 
@@ -793,7 +793,7 @@ prototype._renderMask =
 		cx.clip( );
 	}
 
-	this._renderGlintRay( glint.glint, offset );
+	this._renderGlintList( glint.glint, offset );
 
 	cx.restore( );
 };
@@ -959,7 +959,7 @@ prototype._renderWindow =
 
 		cx.clip( );
 
-		this._renderGlintRay( glint.glint, offset.add( pos ) );
+		this._renderGlintList( glint.glint, offset.add( pos ) );
 
 		cx.restore( );
 	}

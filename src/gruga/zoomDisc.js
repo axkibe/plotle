@@ -10,7 +10,7 @@ var
 	gleam_color,
 	gleam_ellipse,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
 	gleam_point,
@@ -55,7 +55,7 @@ zoomHomeButtonPos = pw.add( 100, 56 );
 genericButtonSize = gleam_size.wh( 44, 44 );
 
 genericButtonFacets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

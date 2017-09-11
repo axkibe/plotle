@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'gleam_glint_ray',
+		id : 'gleam_glint_list',
 		attributes :
 		{
 		},
@@ -20,7 +20,7 @@ if( JION )
 			'gleam_glint_mask',
 			'gleam_glint_paint',
 			'gleam_glint_text',
-			'gleam_glint_ray',
+			'gleam_glint_list',
 			'gleam_glint_window'
 		]
 	};
@@ -28,7 +28,7 @@ if( JION )
 
 
 var
-	gleam_glint_ray;
+	gleam_glint_list;
 
 /*
 | Capsule
@@ -48,7 +48,7 @@ if( NODE )
 	return;
 }
 
-prototype = gleam_glint_ray.prototype;
+prototype = gleam_glint_list.prototype;
 
 
 } )( );

@@ -8,7 +8,7 @@ var
 	gleam_borderList,
 	gleam_color,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gruga_genericButton;
 
 
@@ -23,7 +23,7 @@ gruga_genericButton = { };
 
 
 gruga_genericButton.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

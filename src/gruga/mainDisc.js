@@ -10,7 +10,7 @@ var
 	gleam_color,
 	gleam_ellipse,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_gradient_colorStop,
 	gleam_gradient_radial,
 	gleam_point,
@@ -57,7 +57,7 @@ pw = gleam_point.xy( 0, 500 );
 
 
 buttonFacets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

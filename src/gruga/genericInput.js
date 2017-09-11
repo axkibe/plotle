@@ -8,7 +8,7 @@ var
 	gleam_borderList,
 	gleam_color,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gruga_genericInput;
 
 
@@ -23,7 +23,7 @@ gruga_genericInput = { };
 
 
 gruga_genericInput.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

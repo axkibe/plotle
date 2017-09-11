@@ -73,7 +73,7 @@ var
 	change_join,
 	change_remove,
 	change_split,
-	gleam_glint_ray,
+	gleam_glint_list,
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
@@ -327,7 +327,7 @@ jion.lazyValue(
 		}
 	}
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

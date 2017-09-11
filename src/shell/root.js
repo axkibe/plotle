@@ -170,7 +170,7 @@ var
 	change_wrap,
 	disc_root,
 	gleam_connect,
-	gleam_glint_ray,
+	gleam_glint_list,
 	gleam_measure,
 	gleam_point,
 	gleam_size,
@@ -257,7 +257,7 @@ loadingSpaceTextPath =
 | Prepares the current action.
 |
 | Makes sure the action has not any removed items in them.
-| If so the paths are removed from its itemPathsRay.
+| If so the paths are removed from its itemPathsList.
 |
 | If no item is left, action is set to undefined.
 */
@@ -1765,8 +1765,8 @@ prototype.draw =
 	function( )
 {
 	var
+		arr,
 		disc,
-		gRay,
 		display,
 		screen;
 
@@ -1781,18 +1781,18 @@ prototype.draw =
 
 	screen = root._currentScreen;
 
-	gRay = [ screen.glint ];
+	arr = [ screen.glint ];
 
 	if( screen.showDisc )
 	{
 		disc = root.disc;
 
-		gRay[ 1 ] = disc.glint;
+		arr[ 1 ] = disc.glint;
 	}
 
 	display =
 		display.create(
-			'glint', gleam_glint_ray.create( 'list:init', gRay )
+			'glint', gleam_glint_list.create( 'list:init', arr )
 		);
 
 	display.render( );

@@ -5,8 +5,8 @@
 
 var
 	form_form,
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_transform,
 	gruga_formFacet,
 	jion,
@@ -271,7 +271,7 @@ form_form.glint =
 		if( sg ) arr[ len++ ] = sg;
 	}
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 };
 
 

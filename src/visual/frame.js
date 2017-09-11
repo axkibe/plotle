@@ -31,9 +31,9 @@ var
 	action_dragItems,
 	action_resizeItems,
 	gleam_ellipse,
-	gleam_glint_paint,
-	gleam_glint_ray,
+	gleam_glint_list,
 	gleam_glint_mask,
+	gleam_glint_paint,
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
@@ -500,7 +500,7 @@ jion.lazyValue(
 			];
 	}
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

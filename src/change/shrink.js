@@ -259,7 +259,7 @@ prototype._transformMark =
 
 
 /*
-| Returns a change ray transformed by this change.
+| Returns a change list transformed by this change.
 */
 prototype._transformChangeList = change_generic.transformChangeList;
 

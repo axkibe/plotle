@@ -62,10 +62,9 @@ if( JION )
 
 var
 	gleam_arrow,
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_glint_window,
-	gleam_glint_paint,
 	gruga_label,
 	gruga_relation,
 	jion,
@@ -255,7 +254,7 @@ Object.defineProperty(
 
 		if( shape2 ) arr[ len++ ] = this._getArrowGlint( shape2 );
 
-		return ( cache.glint = gleam_glint_ray.create( 'list:init', arr ) );
+		return ( cache.glint = gleam_glint_list.create( 'list:init', arr ) );
 	}
 }
 );

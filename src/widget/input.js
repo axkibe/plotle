@@ -16,7 +16,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'gleam_facetRay'
+				type : 'gleam_facetList'
 			},
 			hover :
 			{
@@ -85,7 +85,7 @@ var
 	gleam_facet,
 	gleam_glint_border,
 	gleam_glint_fill,
-	gleam_glint_ray,
+	gleam_glint_list,
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_measure,
@@ -534,7 +534,7 @@ jion.lazyValue(
 			'shape', this._tzShape
 		);
 
-	return gleam_glint_ray.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

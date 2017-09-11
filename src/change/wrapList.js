@@ -63,7 +63,7 @@ prototype.createReverse =
 
 
 /*
-| Performes the wraped-change-(rays) on a tree.
+| Performes the wrapped change-(lists) on a tree.
 */
 prototype.changeTree =
 	function(
@@ -85,7 +85,7 @@ prototype.changeTree =
 
 /*
 | Performes the reversion of the
-| wraped-change-(rays) on a tree.
+| wrapped-change (lists) on a tree.
 */
 prototype.changeTreeReverse =
 	function(

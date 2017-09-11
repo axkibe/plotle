@@ -8,7 +8,7 @@ var
 	gleam_borderList,
 	gleam_color,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_gradient_askew,
 	gleam_gradient_colorStop,
 	gleam_margin,
@@ -27,7 +27,7 @@ gruga_note = { };
 
 
 gruga_note.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:append',
 		// default
 		gleam_facet.create(

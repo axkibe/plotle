@@ -7,7 +7,7 @@ var
 	gleam_border,
 	gleam_color,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_point,
 	gleam_rect,
 	form_moveTo,
@@ -25,7 +25,7 @@ var
 
 
 portalButtonFacets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

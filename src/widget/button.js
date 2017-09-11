@@ -22,7 +22,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'gleam_facetRay'
+				type : 'gleam_facetList'
 			},
 			font :
 			{
@@ -104,8 +104,8 @@ if( JION )
 
 var
 	gleam_ellipse,
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_glint_text,
 	gleam_glint_window,
 	gleam_point,
@@ -326,10 +326,10 @@ jion.lazyValue(
 	function( )
 {
 	var
+		arr,
 		facet,
 		font,
-		gLen,
-		gRay,
+		len,
 		newline,
 		text,
 		t,
@@ -343,7 +343,7 @@ jion.lazyValue(
 			'focus', !!this.mark
 		);
 
-	gRay =
+	arr =
 		[
 			gleam_glint_paint.create(
 				'facet', facet,
@@ -351,7 +351,7 @@ jion.lazyValue(
 			)
 		];
 
-	gLen = 1;
+	len = 1;
 
 	if( this.text )
 	{
@@ -361,7 +361,7 @@ jion.lazyValue(
 
 		if( newline === undefined )
 		{
-			gRay[ gLen++ ] =
+			arr[ len++ ] =
 				gleam_glint_text.create(
 					'font', font,
 					'p', this._pc,
@@ -381,7 +381,7 @@ jion.lazyValue(
 
 			for( t = 0; t < tZ; t++, y += newline )
 			{
-				gRay[ gLen++ ] =
+				arr[ len++ ] =
 					gleam_glint_text.create(
 						'font', font,
 						'p', this._pc.add( 0, y ),
@@ -393,14 +393,14 @@ jion.lazyValue(
 
 	if( this.iconShape )
 	{
-		gRay[ gLen++ ] =
+		arr[ len++ ] =
 			gleam_glint_paint.create(
 				'facet', this.iconFacet,
 				'shape', this._iconShape
 			);
 	}
 
-	return gleam_glint_ray.create( 'list:init', gRay );
+	return gleam_glint_list.create( 'list:init', arr );
 }
 );
 

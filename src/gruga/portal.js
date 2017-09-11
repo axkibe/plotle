@@ -8,7 +8,7 @@ var
 	gleam_borderList,
 	gleam_color,
 	gleam_facet,
-	gleam_facetRay,
+	gleam_facetList,
 	gleam_gradient_radial,
 	gleam_gradient_colorStop,
 	gruga_highlight,
@@ -25,7 +25,7 @@ var
 gruga_portal = { };
 
 gruga_portal.facets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:append',
 		// default
 		gleam_facet.create(
@@ -63,7 +63,7 @@ gruga_portal.facets =
 | and on the portal.
 */
 gruga_portal.buttonFacets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.
@@ -115,7 +115,7 @@ gruga_portal.buttonFacets =
 | Facet design of input fields on the portal.
 */
 gruga_portal.inputFacets =
-	gleam_facetRay.create(
+	gleam_facetList.create(
 		'list:init',
 		[
 			// default state.

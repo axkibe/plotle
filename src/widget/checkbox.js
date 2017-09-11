@@ -22,7 +22,7 @@ if( JION )
 			facets :
 			{
 				comment : 'style facets',
-				type : 'gleam_facetRay'
+				type : 'gleam_facetList'
 			},
 			hover :
 			{
@@ -65,8 +65,8 @@ if( JION )
 
 
 var
+	gleam_glint_list,
 	gleam_glint_paint,
-	gleam_glint_ray,
 	gleam_transform,
 	gruga_iconCheck,
 	jion,
@@ -194,7 +194,7 @@ jion.lazyValue(
 		);
 
 	glint =
-		gleam_glint_ray.create(
+		gleam_glint_list.create(
 			'list:append',
 				gleam_glint_paint.create(
 					'facet', facet,
