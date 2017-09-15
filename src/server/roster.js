@@ -206,6 +206,11 @@ server_resourceList.create(
 		'inBundle', true,
 		'inTestPad', true
 	),
+	server_resource.create(
+		'filePath', 'src/change/dynamic.js',
+		'hasJion', true,
+		'inBundle', true
+	),
 //	server_resource.create(
 //		'filePath', 'src/cache/pool.js',
 //		'hasJion', true,
@@ -442,17 +447,22 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/ref/dynamic/space.js',
+		'filePath', 'src/ref/moment.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/ref/dynamic/anyList.js',
+		'filePath', 'src/ref/momentList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/ref/spaceList.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/ref/userSpacesList.js',
 		'hasJion', true,
 		'inBundle', true
 	),

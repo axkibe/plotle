@@ -12,15 +12,15 @@ if( JION )
 		id : 'net_link',
 		attributes :
 		{
-			refDynSpace :
+			refMomentSpace :
 			{
-				comment : 'reference to dynamic space',
-				type : [ 'undefined', 'ref_dynamic_space' ]
+				comment : 'reference to the current moment of dynamic space',
+				type : [ 'undefined', 'ref_moment' ]
 			},
-			refDynUserSpacesList :
+			refMomentUserSpacesList :
 			{
 				comment : 'reference to users spaces list',
-				type : [ 'undefined', 'ref_dynamic_userSpacesList' ]
+				type : [ 'undefined', 'ref_moment' ]
 			},
 			userCreds :
 			{
@@ -56,8 +56,8 @@ var
 	reply_error,
 	reply_register,
 	reply_update,
-	ref_dynamic_anyList,
-	ref_dynamic_space,
+	ref_moment,
+	ref_momentList,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -269,9 +269,9 @@ prototype._onAcquireSpace =
 			),
 		'link',
 			root.link.create(
-				'refDynSpace',
-					ref_dynamic_space.create(
-						'ref', request.spaceRef,
+				'refMomentSpace',
+					ref_moment.create(
+						'dynRef', request.spaceRef,
 						'seq', reply.seq
 					),
 				'_outbox', change_wrapList.create( ),
@@ -381,7 +381,7 @@ prototype._sendChanges =
 	.request(
 		request_alter.create(
 			'changeWrapList', outbox,
-			'refDynSpace', root.link.refDynSpace,
+			'refMomentSpace', root.link.refMomentSpace,
 			'userCreds', root.link.userCreds
 		),
 		'_onSendChanges'
@@ -417,6 +417,7 @@ prototype._onUpdate =
 	var
 		a,
 		aZ,
+		changeDynamic,
 		changeWrap,
 		changeWrapList,
 		gotOwnChgs,
@@ -433,20 +434,26 @@ prototype._onUpdate =
 
 	if( reply.type !== 'reply_update' )
 	{
-		system.failScreen( reply.message );
+		system.failScreen( reply.message || 'invalid server reply' );
 
 		return;
 	}
 
 	reply = reply_update.createFromJSON( reply );
 
-	changeWrapList = reply.changeWrapList;
+	if( reply.length !== 1 ) throw new Error( 'XXX TODO' );
+
+	changeDynamic = reply.get( 0 );
+
+	if( !changeDynamic.refDynamic.equals( this.refMomentSpace.dynRef ) ) throw new Error( );
+
+	changeWrapList = changeDynamic.changeWrapList;
 
 	report = change_wrapList.create( );
 
 	gotOwnChgs = false;
 
-	seq = reply.seq;
+	seq = changeDynamic.seq;
 
 	space = root.spaceFabric;
 
@@ -508,9 +515,9 @@ prototype._onUpdate =
 				root.link.create(
 					'_outbox', outbox || change_wrapList.create( ),
 					'_postbox', postbox || change_wrapList.create( ),
-					'refDynSpace',
-						root.link.refDynSpace.create(
-							'seq', reply.seq + changeWrapList.length
+					'refMomentSpace',
+						root.link.refMomentSpace.create(
+							'seq', seq + changeWrapList.length
 						)
 				),
 			'spaceFabric', space
@@ -539,20 +546,20 @@ prototype._update =
 	function( )
 {
 	var
-		refUserSpacesList,
+		refMomentUserSpacesList,
 		list;
 
-	list = [ this.refDynSpace ];
+	list = [ this.refMomentSpace ];
 
-	refUserSpacesList = this.refUserSpacesList;
+	refMomentUserSpacesList = this.refMomentUserSpacesList;
 
-	if( refUserSpacesList ) list.push( refUserSpacesList );
+	if( refMomentUserSpacesList ) list.push( refMomentUserSpacesList );
 
 	root.ajax
 	.get( 'update' )
 	.request(
 		request_update.create(
-			'dynRefs', ref_dynamic_anyList.create( 'list:init', list ),
+			'moments', ref_momentList.create( 'list:init', list ),
 			'userCreds', this.userCreds
 		),
 		'_onUpdate'

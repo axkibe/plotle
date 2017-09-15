@@ -14,11 +14,11 @@ if( JION )
 		id : 'request_update',
 		attributes :
 		{
-			dynRefs :
+			moments :
 			{
-				comment : 'the references to dynamics to get updates of',
+				comment : 'the references to moments in dynamics to get updates for',
 				json : true,
-				type : 'ref_dynamic_anyList',
+				type : 'ref_momentList',
 			},
 			userCreds :
 			{

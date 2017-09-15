@@ -1020,8 +1020,8 @@ prototype.wake =
 		aZ,
 		b,
 		bZ,
-		dynRefs,
 		modified,
+		moments,
 		result,
 		key,
 		sleep,
@@ -1042,14 +1042,14 @@ prototype.wake =
 
 		sleep = upSleeps.get( key );
 
-		dynRefs = sleep.dynRefs;
+		moments = sleep.moments;
 
 		for( b = 0, bZ = sleep.length; b < bZ; b++ )
 		{
-			if( ref.equals( dynRefs.get( b ) ) ) break;
+			if( ref.equals( moments.get( b ).dynRef ) ) break;
 		}
 
-		// none of the dynRefs matched
+		// none of the moments matched
 		if( b >= bZ ) continue;
 
 		// this sleep needs to be waked
@@ -1060,7 +1060,7 @@ prototype.wake =
 			'upSleeps', root.upSleeps.remove( key )
 		);
 
-		asw = server_requestHandler.conveyUpdate( sleep.dynRefs );
+		asw = server_requestHandler.conveyUpdate( sleep.moments );
 
 		result = sleep.result;
 

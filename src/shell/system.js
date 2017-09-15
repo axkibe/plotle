@@ -380,8 +380,6 @@ prototype.failScreen =
 		divMessage,
 		divWrap;
 
-	if( console ) console.log( 'failScreen', message );
-
 	if( failScreen ) return;
 
 	failScreen = true;

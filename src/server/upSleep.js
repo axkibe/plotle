@@ -12,10 +12,10 @@ if( JION )
 		id : 'server_upSleep',
 		attributes :
 		{
-			dynRefs :
+			moments :
 			{
-				comment : 'the references to dynamics the client is sleeping for',
-				type : 'ref_dynamic_anyList',
+				comment : 'the list of moment of a dynamics the client is sleeping for',
+				type : 'ref_momentList',
 			},
 			result :
 			{

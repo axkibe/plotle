@@ -10,21 +10,8 @@ if( JION )
 {
 	throw{
 		id : 'reply_update',
-		attributes :
-		{
-			seq :
-			{
-				comment : 'sequence the update starts at',
-				json : true,
-				type : [ 'undefined', 'integer' ]
-			},
-			changeWrapList :
-			{
-				comment : 'the changes',
-				json : true,
-				type : [ 'undefined', 'change_wrapList' ]
-			}
-		}
+		list : [ 'change_dynamic' ],
+		json : true
 	};
 }
 

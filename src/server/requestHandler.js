@@ -11,6 +11,7 @@
 
 
 var
+	change_dynamic,
 	change_wrapList,
 	config,
 	database_userSkid,
@@ -49,6 +50,8 @@ config = require( '../../config' );
 log_ajax = require( '../log/ajax' );
 
 log_warn = require( '../log/warn' );
+
+change_dynamic = require( '../change/dynamic' );
 
 change_wrapList = require( '../change/wrapList' );
 
@@ -119,7 +122,7 @@ serveAlter =
 	var
 		a,
 		changeWrapList,
-		refDynSpace,
+		refMomentSpace,
 		seq,
 		seqZ,
 		spaceBox,
@@ -149,13 +152,13 @@ serveAlter =
 		return replyError( 'Invalid creds' );
 	}
 
-	refDynSpace = request.refDynSpace;
+	refMomentSpace = request.refMomentSpace;
 
-	seq = refDynSpace.seq;
+	seq = refMomentSpace.seq;
 
 	changeWrapList = request.changeWrapList;
 
-	spaceRef = refDynSpace.ref;
+	spaceRef = refMomentSpace.dynRef;
 
 	if( server_spaceNexus.testAccess( userCreds, spaceRef ) !== 'rw' )
 	{
@@ -324,7 +327,7 @@ serveUpdate =
 {
 	var
 		asw,
-		dynRefs,
+		moments,
 		sleepID,
 		timer,
 		userInfo;
@@ -344,16 +347,17 @@ serveUpdate =
 
 	if( !userInfo ) return replyError( 'Invalid creds' );
 
-	dynRefs = request.dynRefs;
+	moments = request.moments;
 
-	asw = server_requestHandler.testUpdate( userInfo, dynRefs );
+	asw = server_requestHandler.testUpdate( userInfo, moments );
 
+	// if testUpdate failed return the error
 	if( asw ) return asw;
 
-	asw = server_requestHandler.conveyUpdate( dynRefs );
+	asw = server_requestHandler.conveyUpdate( moments );
 
 	// immediate answer?
-	if( asw.changeWrapList.length > 0 ) return asw;
+	if( asw ) return asw;
 
 	// if not an immediate answer, the request is put to sleep
 	sleepID = '' + root.nextSleepID;
@@ -371,7 +375,7 @@ serveUpdate =
 			root.upSleeps.set(
 				sleepID,
 				server_upSleep.create(
-					'dynRefs', dynRefs,
+					'moments', moments,
 					'result', result,
 					'timer', timer
 				)
@@ -460,42 +464,52 @@ serveAcquire =
 */
 server_requestHandler.conveyUpdate =
 	function(
-		dynRefs   // dynamic references to get updates for
+		moments   // references to moments in dynamics to get updates for
 	)
 {
 	var
+		arr,
 		c,
 		chgA,
-		refDynSpace,
+		moment,
 		seq,
 		seqZ,
 		spaceBox,
 		spaceRef;
 
-	refDynSpace = dynRefs.get( 0 );
+	arr = [ ];
 
-	spaceRef = refDynSpace.ref;
+	moment = moments.get( 0 );
 
-	seq = refDynSpace.seq;
+	spaceRef = moment.dynRef;
+
+/**/if( spaceRef.reflect !== 'ref_space' ) throw new Error( );
+
+	seq = moment.seq;
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
 
 	seqZ = spaceBox.seqZ;
 
-	chgA = [ ];
-
-	for( c = seq; c < seqZ; c++ )
+	if( seq < seqZ )
 	{
-		chgA.push( spaceBox.getChangeWrap( c ) );
+		chgA = [ ];
+
+		for( c = seq; c < seqZ; c++ )
+		{
+			chgA.push( spaceBox.getChangeWrap( c ) );
+		}
+
+		arr.push( 
+			change_dynamic.create(
+				'seq', seq,
+				'changeWrapList', change_wrapList.create( 'list:init', chgA ),
+				'refDynamic', spaceRef
+			)
+		);
 	}
 
-	return(
-		reply_update.create(
-			'seq', seq,
-			'changeWrapList',
-				change_wrapList.create( 'list:init', chgA )
-		)
-	);
+	return arr.length > 0 ? reply_update.create( 'list:init', arr ) : undefined;
 };
 	
 
@@ -505,24 +519,29 @@ server_requestHandler.conveyUpdate =
 server_requestHandler.testUpdate =
 	function(
 		userInfo, // user info
-		dynRefs   // dynamic references to get updates for
+		moments   // references to space dynamics to get updates for
 	)
 {
 	var
-		refDynSpace,
+		refMomentSpace,
 		spaceBox,
 		spaceRef,
 		seq;
 
-	if( dynRefs.length !== 1 ) throw new Error( ); // FIXME
+	if( moments.length !== 1 ) throw new Error( ); // FIXME
 
-	refDynSpace = dynRefs.get( 0 );
+	refMomentSpace = moments.get( 0 );
 
-	if( refDynSpace.reflect !== 'ref_dynamic_space' ) throw new Error( );
+/**/if( CHECK )
+/**/{
+/**/	if( refMomentSpace.reflect !== 'ref_moment' ) throw new Error( );
+/**/
+/**/	if( refMomentSpace.dynRef.reflect !== 'ref_space' ) throw new Error( );
+/**/}
 
-	spaceRef = refDynSpace.ref;
+	spaceRef = refMomentSpace.dynRef;
 
-	seq = refDynSpace.seq;
+	seq = refMomentSpace.seq;
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
 

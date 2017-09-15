@@ -1,5 +1,5 @@
 /*
-| A list of references to dynamics.
+| A list of references to moments in dyamics.
 */
 
 
@@ -9,12 +9,8 @@
 if( JION )
 {
 	throw{
-		id : 'ref_dynamic_anyList',
-		list :
-			[
-				'ref_dynamic_space',
-				'ref_dynamic_userSpacesList'
-			],
+		id : 'ref_momentList',
+		list : [ 'ref_moment' ],
 		json : true
 	};
 }

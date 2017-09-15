@@ -18,11 +18,11 @@ if( JION )
 				json : true,
 				type : 'change_wrapList'
 			},
-			refDynSpace :
+			refMomentSpace :
 			{
 				comment : 'reference to the space dynamic',
 				json : true,
-				type : 'ref_dynamic_space'
+				type : 'ref_moment'
 			},
 			userCreds :
 			{
