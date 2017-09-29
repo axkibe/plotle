@@ -25,19 +25,25 @@ if( JION )
 				defaultValue : '1',
 				json : true
 			},
-			_changeWraps :
+			changeWraps :
 			{
 				comment : 'changeWraps cached in RAM',
-				type : 'change_wrapList',
-				defaultValue : 'change_wrapList.create( )'
+				type : [ 'undefined', 'change_wrapList' ]
 			}
-		}
+		},
+		init : [ ]
 	};
 }
 	
 
 var
-	dynamic_refSpacesList;
+	change_list,
+	change_wrap,
+	change_wrapList,
+	dynamic_refSpacesList,
+	ref_moment,
+	ref_userSpacesList,
+	session_uid;
 
 
 /*
@@ -48,10 +54,7 @@ var
 
 
 var
-	change_list,
-	change_wrap,
-	prototype,
-	session_uid;
+	prototype;
 
 
 if( NODE )
@@ -62,11 +65,28 @@ if( NODE )
 
 	change_wrap = require( '../change/wrap' );
 
+	change_wrapList = require( '../change/wrapList' );
+
 	session_uid = require( '../session/uid' );
 }
 
 
 prototype = dynamic_refSpacesList.prototype;
+
+
+/*
+| Initializer.
+*/
+prototype._init =
+	function( )
+{
+	if( !this.changeWraps )
+	{
+		// defaultValue is not user when coming from createFromJSON
+		this.changeWraps = change_wrapList.create( );
+	}
+};
+
 
 
 /*
@@ -108,7 +128,57 @@ prototype.alter =
 	return(
 		this.create(
 			'current', changeWrap.changeTree( this.current ),
-			'_changeWraps', this._changeWraps.append( changeWrap ) 
+			'changeWraps', this.changeWraps.append( changeWrap ),
+			'seq', this.seq + 1
+		)
+	);
+};
+
+
+/*
+| Applies a changeDynamic
+*/
+prototype.applyChangeDynamic =
+	function(
+		changeDynamic
+	)
+{
+	var
+		changeWrapList;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.seq !== changeDynamic.seq ) throw new Error( );
+/**/}
+
+	changeWrapList = changeDynamic.changeWrapList;
+
+	return(
+		this.create(
+			'current', changeWrapList.changeTree( this.current ),
+			'changeWraps', this.changeWraps.appendList( changeWrapList ),
+			'seq', this.seq + changeWrapList.length
+		)
+	);
+};
+
+
+/*
+| The current state of the dynamic
+| as reference to this moment.
+*/
+prototype.refMoment =
+	function(
+		username
+	)
+{
+	return(
+		ref_moment.create(
+			'dynRef',
+				ref_userSpacesList.create(
+					'username', username
+				),
+			'seq', this.seq
 		)
 	);
 };

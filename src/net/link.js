@@ -19,7 +19,9 @@ if( JION )
 			},
 			refMomentUserSpacesList :
 			{
-				comment : 'reference to users spaces list',
+				comment : ''
+					+ 'reference to the current moment '
+					+ 'of the users spaces list',
 				type : [ 'undefined', 'ref_moment' ]
 			},
 			userCreds :
@@ -293,6 +295,9 @@ prototype._onAuth =
 		reply
 	)
 {
+	var
+		userSpaces;
+
 	switch( reply.type )
 	{
 		case 'reply_error' :
@@ -310,7 +315,16 @@ prototype._onAuth =
 		default : throw new Error( );
 	}
 
-	console.log( 'XXX', reply );
+	userSpaces = reply.userSpaces;
+
+	root.create(
+		'userSpaces', userSpaces,
+		'link',
+			root.link.create(
+				'refMomentUserSpacesList',
+					userSpaces.refMoment( reply.userCreds.name )
+			)
+	);
 
 	root.onAuth( request, reply );
 };
@@ -415,9 +429,66 @@ prototype._onUpdate =
 	)
 {
 	var
+		changeDynamic,
+		gotOwnChgs,
+		r,
+		rZ;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== this ) throw new Error( );
+/**/}
+
+	if( reply.type !== 'reply_update' )
+	{
+		system.failScreen( reply.message );
+
+		return;
+	}
+
+	reply = reply_update.createFromJSON( reply );
+
+	gotOwnChgs = false;
+
+	for( r = 0, rZ = reply.length; r < rZ; r++ )
+	{
+		changeDynamic = reply.get( 0 );
+
+		if( changeDynamic.refDynamic.equals( this.refMomentSpace.dynRef ) )
+		{
+			if( this._gotUpdateSpace( changeDynamic ) ) gotOwnChgs = true;
+		}
+		else if(
+			changeDynamic.refDynamic.equals(
+				this.refMomentUserSpacesList.dynRef )
+		)
+		{
+			this._gotUpdateUserSpacesList( changeDynamic );
+		}
+		else
+		{
+			throw new Error( 'unexpected update dynamic from server' );
+		}
+	}
+
+	if( gotOwnChgs ) root.link._sendChanges( );
+
+	// issues the following update
+	root.link._update( );
+};
+
+
+/*
+| Updates the current space dynamic.
+*/
+prototype._gotUpdateSpace =
+	function(
+		changeDynamic  // the dynamic change instructions
+	)
+{
+	var
 		a,
 		aZ,
-		changeDynamic,
 		changeWrap,
 		changeWrapList,
 		gotOwnChgs,
@@ -427,103 +498,87 @@ prototype._onUpdate =
 		seq,
 		space;
 
-/**/if( CHECK )
-/**/{
-/**/	if( root.link !== this ) throw new Error( );
-/**/}
-
-	if( reply.type !== 'reply_update' )
-	{
-		system.failScreen( reply.message || 'invalid server reply' );
-
-		return;
-	}
-
-	reply = reply_update.createFromJSON( reply );
-
-	if( reply.length !== 1 ) throw new Error( 'XXX TODO' );
-
-	changeDynamic = reply.get( 0 );
-
-	if( !changeDynamic.refDynamic.equals( this.refMomentSpace.dynRef ) ) throw new Error( );
-
 	changeWrapList = changeDynamic.changeWrapList;
 
 	report = change_wrapList.create( );
 
-	gotOwnChgs = false;
-
 	seq = changeDynamic.seq;
 
 	space = root.spaceFabric;
+		
+	gotOwnChgs = false;
 
-	// if this wasn't an empty timeout
-	if( changeWrapList && changeWrapList.length > 0 )
+/**/if( CHECK )
+/**/{
+/**/	if( !changeWrapList || changeWrapList.length === 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	// first undos from the clients space the changes
+	// it had done so far.
+
+	postbox = this._postbox;
+
+	outbox = this._outbox;
+
+	space = outbox.changeTreeReverse( space );
+
+	space = postbox.changeTreeReverse( space );
+
+	for( a = 0, aZ = changeWrapList.length; a < aZ; a++ )
 	{
-		// first undos from the clients space the changes
-		// it had done so far.
+		changeWrap = changeWrapList.get( a );
 
-		postbox = this._postbox;
+		// applies changes to the space
+		space = changeWrap.changeTree( space );
 
-		outbox = this._outbox;
-
-		space = outbox.changeTreeReverse( space );
-
-		space = postbox.changeTreeReverse( space );
-
-		for( a = 0, aZ = changeWrapList.length; a < aZ; a++ )
+		// if the cid is the one in the postbox the client
+		// received the update of its own change.
+		if(
+			postbox.length > 0
+			&& postbox.get( 0 ).cid === changeWrap.cid
+		)
 		{
-			changeWrap = changeWrapList.get( a );
+			postbox = postbox.remove( 0 );
 
-			// applies changes to the space
-			space = changeWrap.changeTree( space );
+			gotOwnChgs = true;
 
-			// if the cid is the one in the postbox the client
-			// received the update of its own change.
-			if(
-				postbox.length > 0
-				&& postbox.get( 0 ).cid === changeWrap.cid
-			)
-			{
-				postbox = postbox.remove( 0 );
-
-				gotOwnChgs = true;
-
-				continue;
-			}
-
-			// otherwise it was a foreign change
-			report = report.append( changeWrap );
+			continue;
 		}
 
-		// FUTURE why is it once changeWrapList then report??
-
-		// transforms the postbox by the updated stuff
-		postbox = changeWrapList.transform( postbox );
-
-		// transforms the outbox by the foreign changes
-		outbox = report.transform( outbox );
-
-		// rebuilds the space by own changes
-
-		space = postbox.changeTree( space );
-
-		space = outbox.changeTree( space );
-
-		root.create(
-			'link',
-				root.link.create(
-					'_outbox', outbox || change_wrapList.create( ),
-					'_postbox', postbox || change_wrapList.create( ),
-					'refMomentSpace',
-						root.link.refMomentSpace.create(
-							'seq', seq + changeWrapList.length
-						)
-				),
-			'spaceFabric', space
-		);
+		// otherwise it was a foreign change
+		report = report.append( changeWrap );
 	}
 
+	// FUTURE why is it once changeWrapList then report??
+
+	// transforms the postbox by the updated stuff
+	postbox = changeWrapList.transform( postbox );
+
+	// transforms the outbox by the foreign changes
+	outbox = report.transform( outbox );
+
+	// rebuilds the space by own changes
+
+	space = postbox.changeTree( space );
+
+	space = outbox.changeTree( space );
+
+	root.create(
+		'link',
+			root.link.create(
+				'_outbox', outbox || change_wrapList.create( ),
+				'_postbox', postbox || change_wrapList.create( ),
+				'refMomentSpace',
+					root.link.refMomentSpace.create(
+						'seq', seq + changeWrapList.length
+					)
+			),
+		'spaceFabric', space
+	);
+	
 	// FUTURE move to "markJockey"
 	if( report.length > 0 )
 	{
@@ -532,10 +587,34 @@ prototype._onUpdate =
 		root.create( 'doTracker', root.doTracker.update( report ) );
 	}
 
-	if( gotOwnChgs ) root.link._sendChanges( );
+	return gotOwnChgs;
+};
 
-	// issues the following update
-	root.link._update( );
+
+/*
+| Updates the current space dynamic.
+*/
+prototype._gotUpdateUserSpacesList =
+	function(
+		changeDynamic  // the dynamic change instructions
+	)
+{
+	var
+		rmusl,
+		userSpaces;
+
+	rmusl = root.link.refMomentUserSpacesList;
+
+	userSpaces = root.userSpaces.applyChangeDynamic( changeDynamic );
+
+	root.create(
+		'userSpaces', userSpaces,
+		'link',
+			root.link.create(
+				'refMomentUserSpacesList',
+					rmusl.create( 'seq', userSpaces.seq )
+			)
+	);
 };
 
 

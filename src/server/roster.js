@@ -177,6 +177,16 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
+		'filePath', 'src/change/listAppend.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/change/listShorten.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/change/set.js',
 		'hasJion', true,
 		'inBundle', true,

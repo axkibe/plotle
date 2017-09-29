@@ -468,48 +468,93 @@ server_requestHandler.conveyUpdate =
 	)
 {
 	var
+		a,
 		arr,
+		aZ,
 		c,
+		changeWraps,
 		chgA,
+		dynRef,
 		moment,
 		seq,
 		seqZ,
 		spaceBox,
-		spaceRef;
+		userInfo;
 
 	arr = [ ];
-
-	moment = moments.get( 0 );
-
-	spaceRef = moment.dynRef;
-
-/**/if( spaceRef.reflect !== 'ref_space' ) throw new Error( );
-
-	seq = moment.seq;
-
-	spaceBox = root.spaces.get( spaceRef.fullname );
-
-	seqZ = spaceBox.seqZ;
-
-	if( seq < seqZ )
+				
+	for( a = 0, aZ = moments.length; a < aZ; a++ )
 	{
-		chgA = [ ];
+		moment = moments.get( a );
 
-		for( c = seq; c < seqZ; c++ )
+		dynRef = moment.dynRef;
+	
+		seq = moment.seq;
+
+		switch( dynRef.reflect )
 		{
-			chgA.push( spaceBox.getChangeWrap( c ) );
-		}
+			case 'ref_space' :
 
-		arr.push( 
-			change_dynamic.create(
-				'seq', seq,
-				'changeWrapList', change_wrapList.create( 'list:init', chgA ),
-				'refDynamic', spaceRef
-			)
-		);
+				spaceBox = root.spaces.get( dynRef.fullname );
+
+				if( !spaceBox ) continue;
+
+				seqZ = spaceBox.seqZ;
+
+				if( seq >= seqZ ) continue;
+
+				chgA = [ ];
+
+				// FIXME make a getChangeWraps function to spaceBox
+				for( c = seq; c < seqZ; c++ )
+				{
+					chgA.push( spaceBox.getChangeWrap( c ) );
+				}
+
+				arr.push( 
+					change_dynamic.create(
+						'seq', seq,
+						'changeWrapList',
+							change_wrapList.create( 'list:init', chgA ),
+						'refDynamic', dynRef
+					)
+				);
+
+				continue;
+
+			case 'ref_userSpacesList' :
+
+				userInfo = root.userNexus.getInCache( dynRef.username );
+
+				if( !userInfo ) continue;
+
+				changeWraps = userInfo.spaces.changeWraps;
+
+				if( seq - 1 < changeWraps.length )
+				{
+					arr.push(
+						change_dynamic.create(
+							'seq', seq,
+							'changeWrapList', changeWraps.slice( seq - 1 ),
+							'refDynamic', dynRef
+						)
+					);
+				}
+
+				continue;
+
+			default :
+
+				// invalid request behind server checks should never be possible to happen.
+				throw new Error( );
+		}
 	}
 
-	return arr.length > 0 ? reply_update.create( 'list:init', arr ) : undefined;
+	return(
+		arr.length > 0
+		? reply_update.create( 'list:init', arr )
+		: undefined
+	);
 };
 	
 
@@ -523,35 +568,57 @@ server_requestHandler.testUpdate =
 	)
 {
 	var
-		refMomentSpace,
+		a,
+		aZ,
+		dynRef,
+		moment,
 		spaceBox,
-		spaceRef,
 		seq;
 
-	if( moments.length !== 1 ) throw new Error( ); // FIXME
-
-	refMomentSpace = moments.get( 0 );
-
-/**/if( CHECK )
-/**/{
-/**/	if( refMomentSpace.reflect !== 'ref_moment' ) throw new Error( );
-/**/
-/**/	if( refMomentSpace.dynRef.reflect !== 'ref_space' ) throw new Error( );
-/**/}
-
-	spaceRef = refMomentSpace.dynRef;
-
-	seq = refMomentSpace.seq;
-
-	spaceBox = root.spaces.get( spaceRef.fullname );
-
-	// FIXME check userRights
-
-	if( !spaceBox ) return replyError( 'Unknown space' );
-
-	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
+	for( a = 0, aZ = moments.length; a < aZ; a++ )
 	{
-		return replyError( 'Invalid or missing seq: ' + seq );
+		moment = moments.get( a );
+
+		dynRef = moment.dynRef;
+	
+		seq = moment.seq;
+
+		switch( dynRef.reflect )
+		{
+			case 'ref_space' :
+
+				if(
+					dynRef.username !== 'ideoloom'
+					&& dynRef.username !== userInfo.name
+				)
+				{
+					return replyError( 'not allowed' );
+				}
+
+				spaceBox = root.spaces.get( dynRef.fullname );
+
+				if( !spaceBox ) return replyError( 'Unknown space' );
+
+				if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
+				{
+					return replyError( 'Invalid or missing seq: ' + seq );
+				}
+
+				break;
+
+			case 'ref_userSpacesList' :
+
+				if( dynRef.username !== userInfo.name )
+				{
+					return replyError( 'not allowed' );
+				}
+
+				break;
+
+			default :
+
+				return replyError( 'Invalid dynamic reference' );
+		}
 	}
 };
 

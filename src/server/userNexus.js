@@ -14,7 +14,7 @@ if( JION )
 		id : 'server_userNexus',
 		attributes :
 		{
-			cache :
+			_cache :
 			{
 				comment : 'table of all cached user infos',
 				type : 'user_infoGroup',
@@ -88,7 +88,7 @@ prototype.addUserSpaceRef =
 
 	username = spaceRef.username;
 
-	userInfo = this.cache.get( username );
+	userInfo = this._cache.get( username );
 
 /**/if( CHECK )
 /**/{
@@ -114,7 +114,7 @@ prototype.addUserSpaceRef =
 	root.create(
 		'userNexus',
 			this.create(
-				'cache', this.cache.create( 'group:set', username, userInfo )
+				'_cache', this._cache.create( 'group:set', username, userInfo )
 			)
 	);
 };
@@ -143,14 +143,14 @@ prototype.createVisitor =
 	{
 		name = 'visitor-' + ( ++nextVisitor );
 	}
-	while( this.cache.get( name ) );
+	while( this._cache.get( name ) );
 
 	root.create(
 		'nextVisitor', nextVisitor,
 		'userNexus',
 			this.create(
-				'cache',
-				this.cache.set(
+				'_cache',
+				this._cache.set(
 					name,
 					user_info.create(
 						'name', name,
@@ -222,8 +222,8 @@ prototype.getUserSpaces =
 	root.create(
 		'userNexus',
 			root.userNexus.create(
-				'cache',
-					root.userNexus.cache.set(
+				'_cache',
+					root.userNexus._cache.set(
 						userInfo.name,
 						userInfo.create(
 							'spaces', userSpaces
@@ -258,7 +258,7 @@ prototype.register =
 	}
 
 	// user already registered and in cache
-	if( this.cache.get( userInfo.name ) ) return false;
+	if( this._cache.get( userInfo.name ) ) return false;
 
 	val =
 		yield root.repository.users.findOne(
@@ -273,7 +273,7 @@ prototype.register =
 	
 	root.create(
 		'userNexus',
-		this.create( 'cache', this.cache.set( userInfo.name, userInfo ) )
+		this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
 	);
 
 	yield root.repository.users.insert(
@@ -296,6 +296,20 @@ prototype.register =
 |
 | If so returns the matching user info.
 */
+prototype.getInCache =
+	function(
+		username
+	)
+{
+	return this._cache.get( username );
+};
+
+
+/*
+| Tests if a user is already in the cache.
+|
+| If so returns the matching user info.
+*/
 prototype.testInCache =
 	function(
 		userCreds
@@ -304,7 +318,7 @@ prototype.testInCache =
 	var
 		userInfo;
 
-	userInfo = this.cache.get( userCreds.name );
+	userInfo = this._cache.get( userCreds.name );
 
 	if( !userInfo || userInfo.passhash !== userCreds.passhash ) return false;
 
@@ -326,7 +340,7 @@ prototype.testUserCreds =
 		userInfo,
 		val;
 
-	userInfo = this.cache.get( userCreds.name );
+	userInfo = this._cache.get( userCreds.name );
 
 	// if in cache answer directly
 	if( userInfo )
@@ -349,7 +363,7 @@ prototype.testUserCreds =
 
 	root.create(
 		'userNexus',
-			this.create( 'cache', this.cache.set( userInfo.name, userInfo ) )
+			this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
 	);
 
 	if( userInfo.passhash !== userCreds.passhash ) return false;
