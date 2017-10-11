@@ -35,7 +35,7 @@ if( JION )
 var
 	change_listAppend,
 	database_userSkid,
-	dynamic_refSpacesList,
+	dynamic_refSpaceList,
 	prototype,
 	ref_space,
 	ref_spaceList,
@@ -50,7 +50,7 @@ prototype = server_userNexus.prototype;
 
 change_listAppend = require( '../change/listAppend' );
 
-dynamic_refSpacesList = require( '../dynamic/refSpacesList' );
+dynamic_refSpaceList = require( '../dynamic/refSpaceList' );
 
 user_info = require( '../user/info' );
 
@@ -76,8 +76,8 @@ prototype.addUserSpaceRef =
 	var
 		a,
 		aZ,
-		cSpaces,  // current space list
-		dSpaces,  // dynamic space list
+		csl,  // current space list
+		dsl,  // dynamic space list
 		username,
 		userInfo;
 
@@ -95,21 +95,21 @@ prototype.addUserSpaceRef =
 /**/	if( !userInfo ) throw new Error( );
 /**/}
 
-	dSpaces = userInfo.spaces;
+	dsl = userInfo.spaces;
 
-	cSpaces = dSpaces.current;
+	csl = dsl.current;
 
-	for( a = 0, aZ = cSpaces.length; a < aZ; a++ )
+	for( a = 0, aZ = csl.length; a < aZ; a++ )
 	{
-		if( cSpaces.get( a ).equals( spaceRef ) ) throw new Error( );
+		if( csl.get( a ).equals( spaceRef ) ) throw new Error( );
 	}
 
-	dSpaces =
-		dSpaces.alter(
+	dsl =
+		dsl.alter(
 			change_listAppend.create( 'val', spaceRef )
 		);
 
-	userInfo = userInfo.create( 'spaces', dSpaces );
+	userInfo = userInfo.create( 'spaceList', dsl );
 
 	root.create(
 		'userNexus',
@@ -168,7 +168,7 @@ prototype.createVisitor =
 /*
 | Gets the list of spaces of a user.
 */
-prototype.getUserSpaces =
+prototype.getUserSpaceList =
 	function*(
 		userInfo
 	)
@@ -178,7 +178,7 @@ prototype.getUserSpaces =
 		cursor,
 		o,
 		spaces,
-		userSpaces;
+		userSpaceList;
 
 /**/if( CHECK )
 /**/{
@@ -214,8 +214,8 @@ prototype.getUserSpaces =
 		);
 	}
 
-	userSpaces =
-		dynamic_refSpacesList.create(
+	userSpaceList =
+		dynamic_refSpaceList.create(
 			'current', ref_spaceList.create( 'list:init', arr )
 		);
 
@@ -226,13 +226,13 @@ prototype.getUserSpaces =
 					root.userNexus._cache.set(
 						userInfo.name,
 						userInfo.create(
-							'spaces', userSpaces
+							'spaceList', userSpaceList
 						)
 					)
 			)
 	);
 
-	return userSpaces;
+	return userSpaceList;
 };
 
 
@@ -269,7 +269,7 @@ prototype.register =
 	// user already registered
 	if( val ) return false;
 
-	userInfo = userInfo.create( 'spaces', dynamic_refSpacesList.create( ) );
+	userInfo = userInfo.create( 'spaces', dynamic_refSpaceList.create( ) );
 	
 	root.create(
 		'userNexus',

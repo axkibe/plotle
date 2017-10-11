@@ -206,7 +206,8 @@ gleam_intern_opentype.drawText =
 
 			capheight = font_default.capheight;
 
-			if( !capheight ) {
+			if( !capheight )
+			{
 				font_default.capheight =
 				capheight =
 					getCapHeight( font_default );

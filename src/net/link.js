@@ -17,7 +17,7 @@ if( JION )
 				comment : 'reference to the current moment of dynamic space',
 				type : [ 'undefined', 'ref_moment' ]
 			},
-			refMomentUserSpacesList :
+			refMomentUserSpaceList :
 			{
 				comment : ''
 					+ 'reference to the current moment '
@@ -296,7 +296,7 @@ prototype._onAuth =
 	)
 {
 	var
-		userSpaces;
+		userSpaceList;
 
 	switch( reply.type )
 	{
@@ -315,14 +315,14 @@ prototype._onAuth =
 		default : throw new Error( );
 	}
 
-	userSpaces = reply.userSpaces;
+	userSpaceList = reply.userSpaceList;
 
 	root.create(
-		'userSpaces', userSpaces,
+		'userSpaceList', userSpaceList,
 		'link',
 			root.link.create(
-				'refMomentUserSpacesList',
-					userSpaces.refMoment( reply.userCreds.name )
+				'refMomentUserSpaceList',
+					userSpaceList.refMoment( reply.userCreds.name )
 			)
 	);
 
@@ -460,10 +460,10 @@ prototype._onUpdate =
 		}
 		else if(
 			changeDynamic.refDynamic.equals(
-				this.refMomentUserSpacesList.dynRef )
+				this.refMomentUserSpaceList.dynRef )
 		)
 		{
-			this._gotUpdateUserSpacesList( changeDynamic );
+			this._gotUpdateUserSpaceList( changeDynamic );
 		}
 		else
 		{
@@ -594,25 +594,25 @@ prototype._gotUpdateSpace =
 /*
 | Updates the current space dynamic.
 */
-prototype._gotUpdateUserSpacesList =
+prototype._gotUpdateUserSpaceList =
 	function(
 		changeDynamic  // the dynamic change instructions
 	)
 {
 	var
 		rmusl,
-		userSpaces;
+		userSpaceList;
 
-	rmusl = root.link.refMomentUserSpacesList;
+	rmusl = root.link.refMomentUserSpaceList;
 
-	userSpaces = root.userSpaces.applyChangeDynamic( changeDynamic );
+	userSpaceList = root.userSpaceList.applyChangeDynamic( changeDynamic );
 
 	root.create(
-		'userSpaces', userSpaces,
+		'userSpaceList', userSpaceList,
 		'link',
 			root.link.create(
-				'refMomentUserSpacesList',
-					rmusl.create( 'seq', userSpaces.seq )
+				'refMomentUserSpaceList',
+					rmusl.create( 'seq', userSpaceList.seq )
 			)
 	);
 };
@@ -625,14 +625,14 @@ prototype._update =
 	function( )
 {
 	var
-		refMomentUserSpacesList,
+		refMomentUserSpaceList,
 		list;
 
 	list = [ this.refMomentSpace ];
 
-	refMomentUserSpacesList = this.refMomentUserSpacesList;
+	refMomentUserSpaceList = this.refMomentUserSpaceList;
 
-	if( refMomentUserSpacesList ) list.push( refMomentUserSpacesList );
+	if( refMomentUserSpaceList ) list.push( refMomentUserSpaceList );
 
 	root.ajax
 	.get( 'update' )

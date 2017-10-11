@@ -16,7 +16,7 @@ if( JION )
 			{
 				comment : 'the dynamic referenced',
 				json : true,
-				type : [ 'ref_space', 'ref_userSpacesList' ]
+				type : [ 'ref_space', 'ref_userSpaceList' ]
 			},
 			seq :
 			{

@@ -18,11 +18,11 @@ if( JION )
 				json : true,
 				type : 'user_creds'
 			},
-			userSpaces :
+			userSpaceList :
 			{
 				comment : 'the list of spaces the user has',
 				json : true,
-				type : [ 'undefined', 'dynamic_refSpacesList' ]
+				type : [ 'undefined', 'dynamic_refSpaceList' ]
 			}
 		}
 	};

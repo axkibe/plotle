@@ -22,7 +22,7 @@ if( JION )
 			{
 				comment : 'the dynamic to be changed',
 				json : true,
-				type : [ 'ref_space', 'ref_userSpacesList' ]
+				type : [ 'ref_space', 'ref_userSpaceList' ]
 			},
 			seq :
 			{

@@ -221,7 +221,7 @@ serveAuth =
 	var
 		userCreds,
 		userInfo,
-		userSpaces;
+		userSpaceList;
 
 	try
 	{
@@ -247,12 +247,12 @@ serveAuth =
 
 	if( !userInfo ) return replyError( 'Invalid password' );
 
-	userSpaces = yield* root.userNexus.getUserSpaces( userInfo );
+	userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
 
 	return(
 		reply_auth.create(
 			'userCreds', userCreds,
-			'userSpaces', userSpaces
+			'userSpaceList', userSpaceList
 		)
 	);
 };
@@ -522,13 +522,13 @@ server_requestHandler.conveyUpdate =
 
 				continue;
 
-			case 'ref_userSpacesList' :
+			case 'ref_userSpaceList' :
 
 				userInfo = root.userNexus.getInCache( dynRef.username );
 
 				if( !userInfo ) continue;
 
-				changeWraps = userInfo.spaces.changeWraps;
+				changeWraps = userInfo.spaceList.changeWraps;
 
 				if( seq - 1 < changeWraps.length )
 				{
@@ -606,7 +606,7 @@ server_requestHandler.testUpdate =
 
 				break;
 
-			case 'ref_userSpacesList' :
+			case 'ref_userSpaceList' :
 
 				if( dynRef.username !== userInfo.name )
 				{

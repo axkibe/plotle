@@ -133,7 +133,7 @@ var
 	log_web,
 	mongodb,
 	prototype,
-	ref_userSpacesList,
+	ref_userSpaceList,
 	resume,
 	server_inventory,
 	server_maxAge,
@@ -180,7 +180,7 @@ server_postProcessor = require( './postProcessor' );
 
 database_repository = require( '../database/repository' );
 
-ref_userSpacesList = require( '../ref/userSpacesList' );
+ref_userSpaceList = require( '../ref/userSpaceList' );
 
 server_requestHandler = require( './requestHandler' );
 
@@ -982,7 +982,7 @@ prototype.createSpace =
 
 	root.userNexus.addUserSpaceRef( spaceRef );
 
-	root.wake( ref_userSpacesList.create( 'username', spaceRef.username ) );
+	root.wake( ref_userSpaceList.create( 'username', spaceRef.username ) );
 
 	return spaceBox;
 };

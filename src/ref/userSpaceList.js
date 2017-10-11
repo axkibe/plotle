@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'ref_userSpacesList',
+		id : 'ref_userSpaceList',
 		attributes :
 		{
 			username :

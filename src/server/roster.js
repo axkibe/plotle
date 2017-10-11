@@ -472,12 +472,12 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/ref/userSpacesList.js',
+		'filePath', 'src/ref/userSpaceList.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/dynamic/refSpacesList.js',
+		'filePath', 'src/dynamic/refSpaceList.js',
 		'hasJion', true,
 		'inBundle', true
 	),

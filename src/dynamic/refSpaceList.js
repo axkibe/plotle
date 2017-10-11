@@ -9,7 +9,7 @@
 if( JION )
 {
 	throw{
-		id : 'dynamic_refSpacesList',
+		id : 'dynamic_refSpaceList',
 		attributes :
 		{
 			current :
@@ -40,9 +40,9 @@ var
 	change_list,
 	change_wrap,
 	change_wrapList,
-	dynamic_refSpacesList,
+	dynamic_refSpaceList,
 	ref_moment,
-	ref_userSpacesList,
+	ref_userSpaceList,
 	session_uid;
 
 
@@ -59,7 +59,7 @@ var
 
 if( NODE )
 {
-	dynamic_refSpacesList = require( 'jion' ).this( module, 'source' );
+	dynamic_refSpaceList = require( 'jion' ).this( module, 'source' );
 
 	change_list = require( '../change/list' );
 
@@ -71,7 +71,7 @@ if( NODE )
 }
 
 
-prototype = dynamic_refSpacesList.prototype;
+prototype = dynamic_refSpaceList.prototype;
 
 
 /*
@@ -174,10 +174,7 @@ prototype.refMoment =
 {
 	return(
 		ref_moment.create(
-			'dynRef',
-				ref_userSpacesList.create(
-					'username', username
-				),
+			'dynRef', ref_userSpaceList.create( 'username', username ),
 			'seq', this.seq
 		)
 	);

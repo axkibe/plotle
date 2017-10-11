@@ -112,10 +112,10 @@ if( JION )
 				comment : 'current user credentials',
 				type : [ 'undefined', 'user_creds' ]
 			},
-			userSpaces :
+			userSpaceList :
 			{
 				comment : 'the list of space references the user has',
-				type : [ 'undefined', 'dynamic_refSpacesList' ]
+				type : [ 'undefined', 'dynamic_refSpaceList' ] // FIXME should not have dynamic here
 			},
 			viewSize :
 			{
@@ -420,6 +420,7 @@ prototype._init =
 		spaceRef,
 		spaceTransform,
 		userCreds,
+		userSpaceList,
 		viewSize;
 
 
@@ -444,6 +445,8 @@ prototype._init =
 	hover = this.hover;
 
 	userCreds = this.userCreds;
+
+	userSpaceList = this.userSpaceList;
 
 	spaceRef = this.spaceRef;
 
@@ -494,6 +497,7 @@ prototype._init =
 		|| hover !== inherit.hover
 		|| mark !== inherit.mark
 		|| userCreds !== inherit.userCreds
+		|| userSpaceList !== inherit.userSpaceList
 		|| show !== inherit.show
 		|| spaceTransform !== inherit.spaceTransform
 		|| spaceFabric !== inherit.spaceFabric
@@ -521,6 +525,7 @@ prototype._init =
 				'mark', mark,
 				'spaceRef', spaceRef,
 				'user', userCreds,
+				'userSpaceList', userSpaceList && userSpaceList.current, // FIXME no current
 				'viewSize', viewSize
 			);
 
@@ -1502,7 +1507,7 @@ prototype.onAuth =
 
 	root.create(
 		'userCreds', reply.userCreds,
-		'userSpaces', reply.userSpaces || pass
+		'userSpaceList', reply.userSpaceList || pass
 	);
 
 	root.moveToSpace( ref_space.ideoloomHome, false );
