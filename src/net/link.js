@@ -317,16 +317,21 @@ prototype._onAuth =
 
 	userSpaceList = reply.userSpaceList;
 
-	root.create(
-		'userSpaceList', userSpaceList,
-		'link',
-			userSpaceList
-				? root.link.create(
+	if( userSpaceList )
+	{
+		root.create(
+			'userSpaceList', userSpaceList,
+			'link',
+				root.link.create(
 					'refMomentUserSpaceList',
 					userSpaceList.refMoment( reply.userCreds.name )
 				)
-				: pass
-	);
+		);
+	}
+	else
+	{
+		root.create( 'userSpaceList', undefined );
+	}
 
 	root.onAuth( request, reply );
 };
