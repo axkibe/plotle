@@ -18,7 +18,7 @@ if( JION )
 			{
 				comment : 'the references to moments in dynamics to get updates for',
 				json : true,
-				type : 'ref_momentList',
+				type : 'ref_momentList'
 			},
 			userCreds :
 			{
