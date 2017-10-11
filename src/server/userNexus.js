@@ -95,7 +95,7 @@ prototype.addUserSpaceRef =
 /**/	if( !userInfo ) throw new Error( );
 /**/}
 
-	dsl = userInfo.spaces;
+	dsl = userInfo.spaceList;
 
 	csl = dsl.current;
 
@@ -177,7 +177,7 @@ prototype.getUserSpaceList =
 		arr,
 		cursor,
 		o,
-		spaces,
+		spaceList,
 		userSpaceList;
 
 /**/if( CHECK )
@@ -185,9 +185,9 @@ prototype.getUserSpaceList =
 /**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
 /**/}
 
-	spaces = userInfo.spaces;
+	spaceList = userInfo.spaceList;
 
-	if( spaces ) return spaces;
+	if( spaceList ) return spaceList;
 
 	arr = [ ];
 
@@ -252,9 +252,9 @@ prototype.register =
 /**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
 /**/}
 
-	if( userInfo.spaces )
+	if( userInfo.spaceList )
 	{
-		throw new Error( 'registered user had "spaces" set' );
+		throw new Error( 'registered user had "spaceList" set' );
 	}
 
 	// user already registered and in cache
@@ -269,7 +269,7 @@ prototype.register =
 	// user already registered
 	if( val ) return false;
 
-	userInfo = userInfo.create( 'spaces', dynamic_refSpaceList.create( ) );
+	userInfo = userInfo.create( 'spaceList', dynamic_refSpaceList.create( ) );
 	
 	root.create(
 		'userNexus',
