@@ -320,10 +320,12 @@ prototype._onAuth =
 	root.create(
 		'userSpaceList', userSpaceList,
 		'link',
-			root.link.create(
-				'refMomentUserSpaceList',
+			userSpaceList
+				? root.link.create(
+					'refMomentUserSpaceList',
 					userSpaceList.refMoment( reply.userCreds.name )
-			)
+				)
+				: pass
 	);
 
 	root.onAuth( request, reply );
