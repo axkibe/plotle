@@ -21,7 +21,7 @@ if( JION )
 			{
 				comment : ''
 					+ 'reference to the current moment '
-					+ 'of the users spaces list',
+					+ 'of the userSpaceList',
 				type : [ 'undefined', 'ref_moment' ]
 			},
 			userCreds :
@@ -517,10 +517,9 @@ prototype._gotUpdateSpace =
 
 /**/if( CHECK )
 /**/{
-/**/	if( !changeWrapList || changeWrapList.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	// the server never should say, there are updates for a space
+/**/	// and then don't have any
+/**/	if( !changeWrapList || changeWrapList.length === 0 ) throw new Error( );
 /**/}
 
 	// first undos from the clients space the changes
@@ -561,8 +560,12 @@ prototype._gotUpdateSpace =
 
 	// FUTURE why is it once changeWrapList then report??
 
+	// FIXME changing this now, check if async edits still
+	// are okay
+
 	// transforms the postbox by the updated stuff
-	postbox = changeWrapList.transform( postbox );
+	// postbox = changeWrapList.transform( postbox );
+	postbox = report.transform( postbox );
 
 	// transforms the outbox by the foreign changes
 	outbox = report.transform( outbox );

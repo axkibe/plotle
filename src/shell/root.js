@@ -1047,13 +1047,30 @@ prototype.input =
 prototype.logout =
 	function( )
 {
+	var
+		link;
+
+	// clears the user spaces list
+	link = root.link.create( 'refMomentUserSpaceList', undefined )
+	
 	if( root._visitorCreds )
 	{
-		root.create( 'userCreds', root._visitorCreds );
+		root.create(
+			'userCreds', root._visitorCreds,
+			'userSpaceList', undefined,
+			'link', link
+		);
 
 		root.moveToSpace( ref_space.ideoloomHome, false );
 
 		return;
+	}
+	else
+	{
+		root.create(
+			'userSpaceList', undefined,
+			'link', link
+		);
 	}
 
 	root.link.auth( user_creds.createVisitor( ) );

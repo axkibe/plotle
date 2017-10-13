@@ -592,7 +592,7 @@ server_requestHandler.testUpdate =
 					&& dynRef.username !== userInfo.name
 				)
 				{
-					return replyError( 'not allowed' );
+					return replyError( 'update not allowed' );
 				}
 
 				spaceBox = root.spaces.get( dynRef.fullname );
@@ -610,7 +610,7 @@ server_requestHandler.testUpdate =
 
 				if( dynRef.username !== userInfo.name )
 				{
-					return replyError( 'not allowed' );
+					return replyError( 'userSpaceList not allowed' );
 				}
 
 				break;
