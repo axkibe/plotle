@@ -124,8 +124,7 @@ prototype = widget_input.prototype;
 /*
 | Default distance of text
 */
-widget_input._pitch =
-	gleam_point.create( 'x', 8, 'y', 3 );
+widget_input._pitch = gleam_point.xy( 8, 3 );
 
 
 /*
@@ -245,8 +244,7 @@ prototype.input =
 	// cuts of text if larger than this maxlen
 	if(
 		maxlen > 0
-		&&
-		value.length + text.length > maxlen
+		&& value.length + text.length > maxlen
 	)
 	{
 		text = text.substring( 0, maxlen - value.length );
@@ -344,7 +342,7 @@ prototype.maskWidth =
 		size
 	)
 {
-	return Math.round( size * 0.4 );
+	return Math.round( size * 0.5 );
 };
 
 
@@ -849,9 +847,10 @@ jion.lazyValue(
 
 	y =	pitch.y + Math.round( size * 0.7 );
 
-	h = size * 0.32,
-
 	w = this.maskWidth( size );
+	
+	//h = size * 0.32,
+	h = w;
 
 	k = this.maskKern( size );
 
@@ -859,9 +858,9 @@ jion.lazyValue(
 	{
 		pm[ a ] =
 			gleam_ellipse.create(
-				'pos', gleam_point.xy( x, y - h),
+				'pos', gleam_point.xy( x, y - h / 2 ),
 				'width', w,
-				'height', 2 * h
+				'height', h
 			);
 	}
 
