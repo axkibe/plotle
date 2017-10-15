@@ -115,7 +115,7 @@ if( JION )
 			userSpaceList :
 			{
 				comment : 'the list of space references the user has',
-				type : [ 'undefined', 'dynamic_refSpaceList' ] // FIXME should not have dynamic here
+				type : [ 'undefined', 'ref_spaceList' ] 
 			},
 			viewSize :
 			{
@@ -525,7 +525,7 @@ prototype._init =
 				'mark', mark,
 				'spaceRef', spaceRef,
 				'user', userCreds,
-				'userSpaceList', userSpaceList && userSpaceList.current, // FIXME no current
+				'userSpaceList', userSpaceList,
 				'viewSize', viewSize
 			);
 
@@ -1051,7 +1051,7 @@ prototype.logout =
 		link;
 
 	// clears the user spaces list
-	link = root.link.create( 'refMomentUserSpaceList', undefined )
+	link = root.link.create( 'refMomentUserSpaceList', undefined );
 	
 	if( root._visitorCreds )
 	{
@@ -1485,19 +1485,39 @@ prototype.onAcquireSpace =
 */
 prototype.onAuth =
 	function(
-		request,
+		wasVisitor,   // if true this was a visitor account requested
 		reply
 	)
 {
 	var
-		show;
+		show,
+		userSpaceList;
+
+	userSpaceList = reply.userSpaceList;
+
+	if( userSpaceList )
+	{
+		root.create(
+			'userSpaceList', userSpaceList,
+			'link',
+				root.link.create(
+					'refMomentUserSpaceList',
+					userSpaceList.refMoment( reply.userCreds.name )
+				)
+		);
+	}
+	else
+	{
+		root.create( 'userSpaceList', undefined );
+	}
+
 
 	show = root.show;
 
 	// if in login form this is a tempted login
 	if( show.reflect === 'show_form' && show.formName === 'login' )
 	{
-		root.form.get( 'login' ).onAuth( request, reply );
+		root.form.get( 'login' ).onAuth( reply );
 
 		return;
 	}
@@ -1508,24 +1528,21 @@ prototype.onAuth =
 	if( reply.reflect !== 'reply_auth' )
 	{
 		// when logging in with a real user failed
-		// takes a visitor instead
-		if( !request.userCreds.isVisitor )
+		// take a visitor instead
+		if( !wasVisitor )
 		{
 			root.link.auth( user_creds.createVisitor( ) );
 
 			return;
 		}
 
-		// if even that failed, bailing to failScreen
+		// if even that failed, bail to failScreen
 		system.failScreen( reply.message );
 
 		return;
 	}
 
-	root.create(
-		'userCreds', reply.userCreds,
-		'userSpaceList', reply.userSpaceList || pass
-	);
+	root.create( 'userCreds', reply.userCreds );
 
 	root.moveToSpace( ref_space.ideoloomHome, false );
 };

@@ -295,9 +295,6 @@ prototype._onAuth =
 		reply
 	)
 {
-	var
-		userSpaceList;
-
 	switch( reply.type )
 	{
 		case 'reply_error' :
@@ -315,25 +312,7 @@ prototype._onAuth =
 		default : throw new Error( );
 	}
 
-	userSpaceList = reply.userSpaceList;
-
-	if( userSpaceList )
-	{
-		root.create(
-			'userSpaceList', userSpaceList,
-			'link',
-				root.link.create(
-					'refMomentUserSpaceList',
-					userSpaceList.refMoment( reply.userCreds.name )
-				)
-		);
-	}
-	else
-	{
-		root.create( 'userSpaceList', undefined );
-	}
-
-	root.onAuth( request, reply );
+	root.onAuth( request.userCreds.isVisitor, reply );
 };
 
 

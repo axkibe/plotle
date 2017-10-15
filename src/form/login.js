@@ -43,6 +43,13 @@ if( JION )
 				type : [ 'undefined', 'user_creds' ],
 				assign : ''
 			},
+			/*
+			userSpaceList :
+			{
+				comment : 'space list of current user',
+				type : [ 'undefined', '' ]
+			},
+			*/
 			viewSize :
 			{
 				comment : 'current view size',
@@ -285,7 +292,6 @@ prototype.mousewheel =
 */
 prototype.onAuth =
 	function(
-		request,
 		reply
 	)
 {

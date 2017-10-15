@@ -1,5 +1,5 @@
 /*
-| The move to form.
+| The moveTo or 'go' form.
 */
 
 
@@ -88,7 +88,7 @@ prototype = form_moveTo.prototype;
 */
 prototype._init =
 	function(
-		twigDup
+		twigDup  // if false this._twig has not yet been duplicated
 	)
 {
 	var
@@ -234,10 +234,7 @@ prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
 	buttonName = path.get( 4 );
