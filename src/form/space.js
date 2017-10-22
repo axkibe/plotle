@@ -42,6 +42,12 @@ if( JION )
 				type : [ 'user_creds', 'undefined' ],
 				assign : ''
 			},
+			userSpaceList :
+			{
+				comment : 'list of spaces belonging to user',
+				type : [ 'undefined', 'ref_spaceList' ],
+				assign : ''
+			},
 			viewSize :
 			{
 				comment : 'current view size',

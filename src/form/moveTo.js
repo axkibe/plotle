@@ -42,6 +42,11 @@ if( JION )
 				comment : 'currently logged in user',
 				type : [ 'undefined', 'user_creds' ]
 			},
+			userSpaceList :
+			{
+				comment : 'list of spaces belonging to user',
+				type : [ 'undefined', 'ref_spaceList' ]
+			},
 			viewSize :
 			{
 				comment : 'current view size',

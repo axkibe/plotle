@@ -133,17 +133,10 @@ prototype._init =
 
 		form = twig[ name ];
 
-		if( !form.path )
-		{
-			path =
-				this.path
-				.append( 'twig' )
-				.append( name );
-		}
-		else
-		{
-			path = pass;
-		}
+		path =
+			form.path
+			? pass
+			: this.path.append( 'twig' ).append( name );
 
 		twig[ name ] =
 			form.create(
@@ -152,15 +145,13 @@ prototype._init =
 				'path', path,
 				'spaceRef', this.spaceRef,
 				'user', this.user,
+				'userSpaceList', this.userSpaceList,
 				'viewSize', this.viewSize
 			);
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( twig[ name ].reflectName !== name )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		if( twig[ name ].reflectName !== name ) throw new Error( );
 /**/	}
 	}
 
