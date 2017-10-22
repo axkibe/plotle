@@ -1498,7 +1498,7 @@ prototype.onAuth =
 	if( userSpaceList )
 	{
 		root.create(
-			'userSpaceList', userSpaceList,
+			'userSpaceList', userSpaceList.current,
 			'link',
 				root.link.create(
 					'refMomentUserSpaceList',
