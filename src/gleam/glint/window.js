@@ -23,6 +23,11 @@ if( JION )
 			{
 				comment : 'the position and size of the window',
 				type : 'gleam_rect'
+			},
+			offset :
+			{
+				comment : 'offset all glints by this',
+				type : 'gleam_point'
 			}
 		},
 		init : [ 'inherit' ]

@@ -203,7 +203,8 @@ jion.lazyValue(
 					'pos', this.pos.transform( transform.ortho ),
 					'height', transform.scale( this.height ) + 1,
 					'width', transform.scale( this.flow.width ) + 1
-				)
+				),
+			'offset', gleam_point.zero
 		)
 	);
 }

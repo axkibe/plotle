@@ -65,6 +65,7 @@ var
 	gleam_glint_list,
 	gleam_glint_paint,
 	gleam_glint_window,
+	gleam_point,
 	gruga_label,
 	gruga_relation,
 	jion,
@@ -232,7 +233,8 @@ Object.defineProperty(
 		wg =
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
-				'rect', tZone.enlarge1
+				'rect', tZone.enlarge1,
+				'offset', gleam_point.zero
 			);
 
 		arr = [ wg ];

@@ -399,7 +399,8 @@ jion.lazyValue(
 	arr[ len++ ] =
 		gleam_glint_window.create(
 			'glint', this.doc.glint,
-			'rect', tZone.enlarge1
+			'rect', tZone.enlarge1,
+			'offset', gleam_point.zero
 		);
 
 	if( this.highlight )

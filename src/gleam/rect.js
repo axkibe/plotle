@@ -10,6 +10,7 @@ if( JION )
 {
 	throw{
 		id : 'gleam_rect',
+		hasAbstract : true,
 		attributes :
 		{
 			pos :

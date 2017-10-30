@@ -127,6 +127,8 @@ prototype._init =
 
 	ranks = this._ranks;
 
+	// FIXME make this somehow lazy
+
 	for( a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
 		name = ranks[ a ];

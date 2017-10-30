@@ -324,15 +324,11 @@ jion.lazyValue(
 {
 	var
 		arr,
-		len,
 		mark,
 		r,
-		rZ,
-		s;
+		rZ;
 
 	arr = [ ];
-
-	len = 0;
 
 	mark = this.mark;
 
@@ -342,11 +338,12 @@ jion.lazyValue(
 		&& mark.containsPath( this.path.limit( 3 ) )
 	)
 	{
-		arr[ len++ ] =
+		arr.push(
 			gleam_glint_paint.create(
 				'facet', gruga_selection,
 				'shape', this._rangeShape.transform( this.transform.ortho )
-			);
+			)
+		);
 	}
 	else if(
 		mark
@@ -354,15 +351,13 @@ jion.lazyValue(
 		&& mark.focus
 	)
 	{
-		arr[ len++ ] = this._caretGlint;
+		arr.push( this._caretGlint );
 	}
 
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		s = this.atRank( r );
-
-		arr[ len++ ] = s.glint;
+		arr.push( this.atRank( r ).glint );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );

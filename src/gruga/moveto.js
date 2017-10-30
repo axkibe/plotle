@@ -12,6 +12,7 @@ var
 	gleam_rect,
 	form_moveTo,
 	gruga_moveTo,
+	gruga_moveToSpaceButtonTemplate,
 	portalButtonFacets,
 	shell_fontPool,
 	widget_button,
@@ -81,17 +82,17 @@ gruga_moveTo =
 		'twig:add',
 		'headline',
 			widget_label.abstract(
-				'text', 'move to another space',
+				'text', 'go to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -150 )
+				'pos', gleam_point.xy( 20, -150 )
 			),
 		'twig:add',
-		'ideoloomHomeButton',
+		'ideoloom:home',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -145, -100 ),
+						'pos', gleam_point.xy( -125, -100 ),
 						'width', 130,
 						'height', 130
 					),
@@ -101,12 +102,12 @@ gruga_moveTo =
 				'shape', 'ellipse'
 			),
 		'twig:add',
-		'ideoloomSandboxButton',
+		'ideoloom:sandbox',
 			widget_button.abstract(
 				'facets', portalButtonFacets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 15, -100 ),
+						'pos', gleam_point.xy( 35, -100 ),
 						'width', 130,
 						'height', 130
 					),
@@ -114,26 +115,34 @@ gruga_moveTo =
 				'textNewline', 25,
 				'font', shell_fontPool.get( 14, 'cm' ),
 				'shape', 'ellipse'
-			),
-		'twig:add',
-		'userHomeButton',
-			widget_button.abstract(
-				'facets', portalButtonFacets,
-				'zone',
-					gleam_rect.create(
-						'pos', gleam_point.xy( -145, 60 ),
-						'width', 130,
-						'height', 130
-					),
-				'text', 'your\nhome',
-				'textNewline', 25,
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', 'ellipse'
 			)
+	);
+	
+
+/*
+| template of the user space list buttons.
+*/
+gruga_moveToSpaceButtonTemplate =
+	widget_button.abstract(
+		'facets', portalButtonFacets,
+		'zone',
+			gleam_rect.abstract(
+				'width', 130,
+				'height', 130
+			),
+		'textNewline', 25,
+		'font', shell_fontPool.get( 14, 'cm' ),
+		'shape', 'ellipse'
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_moveTo );
+
+if( FREEZE )
+{
+	Object.freeze( gruga_moveTo );
+
+	Object.freeze( gruga_moveToSpaceButtonTemplate );
+}
 
 
 } )( );

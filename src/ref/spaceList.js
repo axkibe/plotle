@@ -1,5 +1,5 @@
 /*
-| A lift of references to spaces.
+| A list of references to spaces.
 */
 
 

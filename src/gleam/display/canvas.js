@@ -618,7 +618,7 @@ prototype._renderGlint =
 
 		case 'gleam_glint_window' :
 
-			this._renderWindow( glint, offset );
+			this._renderWindow( glint, offset.add( glint.offset ) );
 
 			break;
 

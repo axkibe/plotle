@@ -101,6 +101,7 @@ var
 	gleam_glint_fill,
 	gleam_glint_list,
 	gleam_glint_window,
+	gleam_point,
 	gleam_rect,
 	gleam_transform,
 	jion,
@@ -371,7 +372,8 @@ jion.lazyValue(
 	return(
 		gleam_glint_window.create(
 			'glint', this._glint,
-			'rect', this._tZone.enlarge1
+			'rect', this._tZone.enlarge1,
+			'offset', gleam_point.zero
 		)
 	);
 }

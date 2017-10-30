@@ -398,7 +398,6 @@ jion.lazyValue(
 	var
 		arr,
 		facet,
-		len,
 		sbary,
 		tZone;
 
@@ -406,28 +405,28 @@ jion.lazyValue(
 
 	tZone = this.tZone;
 
-	arr = [ ];
-
-	len = 0;
-
-	arr[ len++ ] =
-		gleam_glint_window.create(
-			'glint', this._glint,
-			'rect', tZone.add1_5
-		);
+	arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._glint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
 
 	if( this.highlight )
 	{
 		facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		arr[ len++ ] =
+		arr.push(
 			gleam_glint_paint.create(
 				'facet', facet,
 				'shape', this.tShape
-			);
+			)
+		);
 	}
 
-	if( sbary ) arr[ len++ ] = sbary.glint;
+	if( sbary ) arr.push( sbary.glint );
 
 	return gleam_glint_list.create( 'list:init', arr );
 }
@@ -786,18 +785,9 @@ jion.lazyValue(
 		gleam_glint_list.create(
 			'list:init',
 			[
-				gleam_glint_fill.create(
-					'facet', facet,
-					'shape', tOrthoShape
-				),
-				gleam_glint_mask.create(
-					'glint', doc.glint,
-					'shape', tOrthoShape
-				),
-				gleam_glint_border.create(
-					'facet', facet,
-					'shape', tOrthoShape
-				)
+				gleam_glint_fill.create( 'facet', facet, 'shape', tOrthoShape ),
+				gleam_glint_mask.create( 'glint', doc.glint, 'shape', tOrthoShape ),
+				gleam_glint_border.create( 'facet', facet, 'shape', tOrthoShape )
 			]
 		)
 	);

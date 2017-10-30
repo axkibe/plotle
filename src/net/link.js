@@ -24,6 +24,11 @@ if( JION )
 					+ 'of the userSpaceList',
 				type : [ 'undefined', 'ref_moment' ]
 			},
+			userSpaceList :
+			{
+				comment : 'user space list dynamic',
+				type : [ 'undefined', 'dynamic_refSpaceList' ]
+			},
 			userCreds :
 			{
 				comment : 'currently logged in user credentials',
@@ -445,8 +450,7 @@ prototype._onUpdate =
 			if( this._gotUpdateSpace( changeDynamic ) ) gotOwnChgs = true;
 		}
 		else if(
-			changeDynamic.refDynamic.equals(
-				this.refMomentUserSpaceList.dynRef )
+			changeDynamic.refDynamic.equals( this.refMomentUserSpaceList.dynRef )
 		)
 		{
 			this._gotUpdateUserSpaceList( changeDynamic );

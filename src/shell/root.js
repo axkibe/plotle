@@ -1836,11 +1836,10 @@ prototype.draw =
 
 	display.render( );
 
-	root =
-		root.create(
-			'display', display,
-			'_drawn', true
-		);
+	root.create(
+		'display', display,
+		'_drawn', true
+	);
 };
 
 

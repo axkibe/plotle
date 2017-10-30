@@ -1,5 +1,10 @@
 /*
 | Stuff to show.
+|
+| WARNING, this likely isn't working in the moment.
+|
+| After some tests, PIXI didn't proof to be any faster than
+| traditional canvas in the context of ideoolooms typical usage
 */
 
 

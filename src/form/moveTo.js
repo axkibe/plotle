@@ -53,7 +53,7 @@ if( JION )
 				type : 'gleam_size'
 			}
 		},
-		init : [ 'twigDup' ],
+		init : [ ],
 		twig : require( '../form/typemap-widget' )
 	};
 }
@@ -62,6 +62,9 @@ if( JION )
 var
 	form_form,
 	form_moveTo,
+	gleam_point,
+	gruga_mainDisc,
+	gruga_moveToSpaceButtonTemplate,
 	jion,
 	ref_space,
 	show_form;
@@ -92,26 +95,123 @@ prototype = form_moveTo.prototype;
 | The moveto form.
 */
 prototype._init =
-	function(
-		twigDup  // if false this._twig has not yet been duplicated
-	)
+	function( )
 {
 	var
-		twig;
+		a,
+		aZ,
+		button,
+		c,
+		cLen,
+		cols,
+		colx,
+		fullname,
+		height,
+		r,
+		ranks,
+		rows,
+		rSpace,
+		twig,
+		userSpaceList,
+		vh,
+		vw,
+		zy;
 
 	if( !this.path ) return;
 
-	twig = twigDup ? this._twig : jion.copy( this._twig );
+	ranks = [
+		'headline',
+		'ideoloom:home',
+		'ideoloom:sandbox'
+	];
 
-	twig.userHomeButton =
-		twig.userHomeButton.create(
-			'visible', this.user ? !this.user.isVisitor : false,
-			'text', this.user ? this.user.name + '\n' + 'home' : ''
-		);
+	twig = {
+		'headline'         : this._twig.headline,
+		'ideoloom:home'    : this._twig[ 'ideoloom:home' ],
+		'ideoloom:sandbox' : this._twig[ 'ideoloom:sandbox' ]
+	};
+
+	userSpaceList = this.userSpaceList;
+
+	if( userSpaceList )
+	{
+		vw = this.viewSize.width - gruga_mainDisc.size.width;
+
+		vh = this.viewSize.height;
+
+		c = 0; r = 0;
+
+		cols = Math.floor( vw / 160 );
+
+		cLen = cols;
+
+		colx = gruga_mainDisc.size.width - 65 - cLen * 80;  // * 160 / 2
+
+		rows = Math.ceil( userSpaceList.length / cols );
+
+		height = 150 + rows * 160;
+
+		zy = Math.round( 0 - height / 2 );
+
+		twig.headline =
+			twig.headline.create( 'pos', twig.headline.pos.create( 'y', zy ) );
+
+		zy += 50;
+	
+		button = twig[ 'ideoloom:home' ];
+
+		twig[ 'ideoloom:home' ] =
+			button.create( 'zone', button.zone.create( 'pos', button.zone.pos.create( 'y', zy ) ) );
+
+		button = twig[ 'ideoloom:sandbox' ];
+
+		twig[ 'ideoloom:sandbox' ] =
+			button.create( 'zone', button.zone.create( 'pos', button.zone.pos.create( 'y', zy ) ) );
+
+		zy += 160;
+
+		for( a = 0, aZ = userSpaceList.length; a < aZ; a++ )
+		{
+			rSpace = userSpaceList.get( a );
+
+			fullname = rSpace.fullname;
+
+			button = this._twig[ fullname ];
+
+			if( !button ) button = gruga_moveToSpaceButtonTemplate;
+
+			ranks.push( fullname );
+
+			twig[ fullname ] =
+				button.abstract(
+					'zone',
+						button.zone.create(
+							'pos', gleam_point.xy( colx + 160 * c, zy + 160 * r )
+						),
+					'text', rSpace.username + '\n' + rSpace.tag
+				);
+
+			if( ++c >= cols )
+			{
+				c = 0;
+
+				r++;
+
+				if( r + 1 >= rows )
+				{
+					cLen = aZ % cols;
+
+					colx = gruga_mainDisc.size.width - 65 - cLen * 80;  // * 160 / 2
+				}
+			}
+		}
+	}
 
 	this._twig = twig;
 
-	form_form.init.call( this, twigDup );
+	this._ranks = ranks;
+
+	form_form.init.call( this, true /* twigDup always true */ );
 };
 
 
