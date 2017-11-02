@@ -26,7 +26,7 @@ form_form = { };
 
 
 /*
-| Constructor
+| Initializer.
 */
 form_form.init =
 	function(
@@ -34,8 +34,8 @@ form_form.init =
 	)
 {
 	var
-		a,
-		aZ,
+		r,
+		rZ,
 		mark,
 		name,
 		path,
@@ -56,22 +56,22 @@ form_form.init =
 	mark = this.mark;
 
 	ranks = this._ranks;
+		
+	transform =
+		gleam_transform.create(
+			'zoom', 1,
+			'offset', this.area.pc
+		);
 
-	for( a = 0, aZ = ranks.length; a < aZ; a++ )
+	for( r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
-		name = ranks[ a ];
+		name = ranks[ r ];
 
 		widgetProto = twig[ name ];
 
 		path =
 			widgetProto.path
 			|| this.path.append( 'twig' ).append( name );
-
-		transform =
-			gleam_transform.create(
-				'zoom', 1,
-				'offset', this.area.pc
-			);
 
 		twig[ name ] =
 			widgetProto.create(
@@ -124,10 +124,7 @@ form_form.concernsMark =
 		path
 	)
 {
-	if( !mark )
-	{
-		return mark;
-	}
+	if( !mark ) return mark;
 
 	return(
 		mark.containsPath( path )
@@ -218,10 +215,7 @@ form_form.getFocusedWidget =
 
 	mark = this.mark;
 
-	if( !mark )
-	{
-		return undefined;
-	}
+	if( !mark ) return undefined;
 
 	path = mark.widgetPath;
 
@@ -229,10 +223,7 @@ form_form.getFocusedWidget =
 /**/{
 /**/	if( path.length === 0 ) throw new Error( );
 /**/
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
 	return this.get( path.get( 4 ) );
@@ -247,7 +238,6 @@ form_form.glint =
 {
 	var
 		arr,
-		len,
 		r,
 		s,
 		sg;
@@ -260,15 +250,13 @@ form_form.glint =
 			)
 		];
 
-	len = 1;
-
 	for( r = this.length - 1; r >= 0; r-- )
 	{
 		s = this.atRank( r );
 
 		sg = s.glint;
 
-		if( sg ) arr[ len++ ] = sg;
+		if( sg ) arr.push( sg );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );

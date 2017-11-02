@@ -53,7 +53,7 @@ if( JION )
 				type : 'gleam_size'
 			}
 		},
-		init : [ ],
+		init : [ 'twigDup' ],
 		twig : require( '../form/typemap-widget' )
 	};
 }
@@ -63,11 +63,11 @@ var
 	form_form,
 	form_moveTo,
 	gleam_point,
+	gleam_rect,
 	gruga_mainDisc,
 	gruga_moveToSpaceButtonTemplate,
 	jion,
-	ref_space,
-	show_form;
+	ref_space;
 
 
 /*
@@ -95,80 +95,105 @@ prototype = form_moveTo.prototype;
 | The moveto form.
 */
 prototype._init =
-	function( )
+	function(
+		twigDup
+	)
 {
 	var
 		a,
 		aZ,
 		button,
 		c,
+		cOff,
 		cLen,
 		cols,
-		colx,
+		dw, // disc width
 		fullname,
+		gleam_transform,
 		height,
 		r,
-		ranks,
+		sb,
+		sbRanks,
+		sbTwig,
 		rows,
 		rSpace,
 		twig,
 		userSpaceList,
 		vh,
 		vw,
+		vw2,
 		zy;
 
 	if( !this.path ) return;
 
-	ranks = [
-		'headline',
-		'ideoloom:home',
-		'ideoloom:sandbox'
-	];
+	sb = this._twig.scrollbox;
 
-	twig = {
-		'headline'         : this._twig.headline,
-		'ideoloom:home'    : this._twig[ 'ideoloom:home' ],
-		'ideoloom:sandbox' : this._twig[ 'ideoloom:sandbox' ]
+	sbRanks = [ 'ideoloom:home', 'ideoloom:sandbox' ];
+
+	sbTwig = {
+		'ideoloom:home'    : sb.get( 'ideoloom:home' ),
+		'ideoloom:sandbox' : sb.get( 'ideoloom:sandbox' )
 	};
 
 	userSpaceList = this.userSpaceList;
+		
+	twig = twigDup ? this._twig :  jion.copy( this._twig );
+
+	dw = root ? root.disc.get( 'mainDisc' ).tZone.width : gruga_mainDisc.size.width;
+
+	vw = this.viewSize.width - dw;
+
+	vw2 = Math.round( vw / 2 );
+
+	vh = this.viewSize.height;
+
+	cols = Math.floor( ( vw - 20 ) / 160 );
+
+	cLen = cols;
+
+	rows =
+		userSpaceList
+		? Math.ceil( userSpaceList.length / cols )
+		: 0;
+
+	height = Math.min( 150 + rows * 160, vh - twig.headline.font.size * 2 );
+
+	zy = Math.round( - height / 2 );
+
+	twig.headline =
+		twig.headline.create(
+			'pos', gleam_point.xy( ( cols - 1 ) * 80 - vw2 + dw + 65, zy )
+		);
+
+	zy += 50;
+	
+	button = sbTwig[ 'ideoloom:home' ];
+
+	sbTwig[ 'ideoloom:home' ] =
+		button.create( 
+			'zone',
+				button.zone.create(
+					'pos', gleam_point.xy( 160 * ( cols - 2 ) / 2, 0 )
+				)
+		);
+
+	button = sbTwig[ 'ideoloom:sandbox' ];
+
+	sbTwig[ 'ideoloom:sandbox' ] =
+		button.create(
+			'zone',
+				button.zone.create(
+					'pos', gleam_point.xy( 160 * ( cols ) / 2, 0 )
+				)
+		);
 
 	if( userSpaceList )
 	{
-		vw = this.viewSize.width - gruga_mainDisc.size.width;
-
-		vh = this.viewSize.height;
-
-		c = 0; r = 0;
-
-		cols = Math.floor( vw / 160 );
-
-		cLen = cols;
-
-		colx = gruga_mainDisc.size.width - 65 - cLen * 80;  // * 160 / 2
-
-		rows = Math.ceil( userSpaceList.length / cols );
-
-		height = 150 + rows * 160;
-
-		zy = Math.round( 0 - height / 2 );
-
-		twig.headline =
-			twig.headline.create( 'pos', twig.headline.pos.create( 'y', zy ) );
-
-		zy += 50;
-	
-		button = twig[ 'ideoloom:home' ];
-
-		twig[ 'ideoloom:home' ] =
-			button.create( 'zone', button.zone.create( 'pos', button.zone.pos.create( 'y', zy ) ) );
-
-		button = twig[ 'ideoloom:sandbox' ];
-
-		twig[ 'ideoloom:sandbox' ] =
-			button.create( 'zone', button.zone.create( 'pos', button.zone.pos.create( 'y', zy ) ) );
-
-		zy += 160;
+		c = 0; // current column
+		
+		cOff = 0; // column offset (for last row)
+		
+		r = 1; // current row
 
 		for( a = 0, aZ = userSpaceList.length; a < aZ; a++ )
 		{
@@ -180,15 +205,16 @@ prototype._init =
 
 			if( !button ) button = gruga_moveToSpaceButtonTemplate;
 
-			ranks.push( fullname );
+			sbRanks.push( fullname );
 
-			twig[ fullname ] =
-				button.abstract(
+			sbTwig[ fullname ] =
+				button.create(
 					'zone',
 						button.zone.create(
-							'pos', gleam_point.xy( colx + 160 * c, zy + 160 * r )
+							'pos', gleam_point.xy( 160 * ( cOff + c ), 160 * r )
 						),
-					'text', rSpace.username + '\n' + rSpace.tag
+					'text', rSpace.username + '\n' + rSpace.tag,
+					'transform', gleam_transform.normal
 				);
 
 			if( ++c >= cols )
@@ -197,21 +223,32 @@ prototype._init =
 
 				r++;
 
-				if( r + 1 >= rows )
+				if( r >= rows )
 				{
 					cLen = aZ % cols;
 
-					colx = gruga_mainDisc.size.width - 65 - cLen * 80;  // * 160 / 2
+					if( cLen === 0 ) cLen = cols;
+
+					cOff = ( cols - cLen ) / 2;
 				}
 			}
 		}
 	}
 
+	twig.scrollbox =
+		sb.create(
+			'zone',
+				gleam_rect.create(
+					'pos', gleam_point.xy( -vw2 + dw, zy ),
+					'width', vw,
+					'height', vh - zy
+				),
+			'twig:init', sbTwig, sbRanks
+		);
+
 	this._twig = twig;
 
-	this._ranks = ranks;
-
-	form_form.init.call( this, true /* twigDup always true */ );
+	form_form.init.call( this, true /* twigDup always set to true */ );
 };
 
 
@@ -335,7 +372,8 @@ prototype.pushButton =
 	)
 {
 	var
-		buttonName;
+		buttonName,
+		parts;
 
 /**/if( CHECK )
 /**/{
@@ -344,36 +382,15 @@ prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
-	root.create( 'show', show_form.loading );
+	parts = buttonName.split( ':' );
 
-	switch( buttonName )
-	{
-		case 'ideoloomHomeButton' :
-
-			root.moveToSpace( ref_space.ideoloomHome, false );
-
-			break;
-
-		case 'ideoloomSandboxButton' :
-
-			root.moveToSpace( ref_space.ideoloomSandbox, false );
-
-			break;
-
-		case 'userHomeButton' :
-
-			root.moveToSpace(
-				ref_space.create(
-					'username', this.user.name,
-					'tag', 'home'
-				),
-				false
-			);
-
-			break;
-
-		default : throw new Error( );
-	}
+	root.moveToSpace(
+		ref_space.create(
+			'username', parts[ 0 ],
+			'tag',  parts[ 1 ]
+		),
+		false
+	);
 };
 
 

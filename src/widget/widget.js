@@ -57,7 +57,7 @@ widget_widget.concernsHover =
 	)
 {
 	return(
-		hover && hover.equals( path )
+		hover && path.subPathOf( hover )
 		? hover
 		: undefined
 	);

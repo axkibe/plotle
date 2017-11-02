@@ -10,13 +10,15 @@ var
 	gleam_facetList,
 	gleam_point,
 	gleam_rect,
+	gleam_transform,
 	form_moveTo,
 	gruga_moveTo,
 	gruga_moveToSpaceButtonTemplate,
 	portalButtonFacets,
 	shell_fontPool,
 	widget_button,
-	widget_label;
+	widget_label,
+	widget_scrollbox;
 
 /*
 | Capsule
@@ -25,6 +27,24 @@ var
 'use strict';
 
 
+var
+	buttonSize;
+
+
+/*
+| Size of a button.
+*/
+buttonSize =
+	gleam_rect.create(
+		'pos', gleam_point.zero, // dummy
+		'width', 130,
+		'height', 130
+	);
+
+
+/*
+| TODO
+*/
 portalButtonFacets =
 	gleam_facetList.create(
 		'list:init',
@@ -84,38 +104,42 @@ gruga_moveTo =
 			widget_label.abstract(
 				'text', 'go to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 20, -150 )
+				'pos', gleam_point.zero
 			),
 		'twig:add',
-		'ideoloom:home',
-			widget_button.abstract(
-				'facets', portalButtonFacets,
+		'scrollbox',
+			widget_scrollbox.abstract(
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -125, -100 ),
-						'width', 130,
-						'height', 130
+						// this are all dummy values overridden
+						// by moveTo initializer
+						'pos', gleam_point.zero,
+						'width', 100,
+						'height', 100
 					),
-				'text', 'ideoloom\nhome',
-				'textNewline', 25,
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', 'ellipse'
-			),
-		'twig:add',
-		'ideoloom:sandbox',
-			widget_button.abstract(
-				'facets', portalButtonFacets,
-				'zone',
-					gleam_rect.create(
-						'pos', gleam_point.xy( 35, -100 ),
-						'width', 130,
-						'height', 130
-					),
-				'text', 'ideoloom\nsandbox',
-				'textNewline', 25,
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', 'ellipse'
-			)
+				'twig:add',
+				'ideoloom:home',
+					widget_button.create(
+						'facets', portalButtonFacets,
+						'zone', buttonSize,
+						'text', 'ideoloom\nhome',
+						'textNewline', 25,
+						'font', shell_fontPool.get( 14, 'cm' ),
+						'shape', 'ellipse',
+						'transform', gleam_transform.normal
+				),
+				'twig:add',
+				'ideoloom:sandbox',
+					widget_button.create(
+						'facets', portalButtonFacets,
+						'zone', buttonSize,
+						'text', 'ideoloom\nsandbox',
+						'textNewline', 25,
+						'font', shell_fontPool.get( 14, 'cm' ),
+						'shape', 'ellipse',
+						'transform', gleam_transform.normal
+					)
+		)
 	);
 	
 
@@ -125,11 +149,7 @@ gruga_moveTo =
 gruga_moveToSpaceButtonTemplate =
 	widget_button.abstract(
 		'facets', portalButtonFacets,
-		'zone',
-			gleam_rect.abstract(
-				'width', 130,
-				'height', 130
-			),
+		'zone', buttonSize,
 		'textNewline', 25,
 		'font', shell_fontPool.get( 14, 'cm' ),
 		'shape', 'ellipse'

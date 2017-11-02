@@ -17,7 +17,7 @@ if( JION )
 			{
 				comment : 'component hovered upon',
 				type : [ 'undefined', 'jion$path' ],
-				assign : ''
+				prepare : 'widget_widget.concernsHover( hover, path )'
 			},
 			mark :
 			{
@@ -32,26 +32,29 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
-			pos :
-			{
-				comment : 'designed pos',
-				type : 'gleam_point'
-			},
 			transform :
 			{
 				comment : 'the transform',
 				type : 'gleam_transform'
-			}
+			},
+			zone :
+			{
+				comment : 'designed zone',
+				type : 'gleam_rect'
+			},
 		},
+		init : [ 'twigDup' ],
 		twig : require( '../form/typemap-widget' )
 	};
 }
 
 
 var
-	gleam_glint_text,
+	gleam_glint_list,
+	gleam_glint_window,
+	gleam_point,
 	jion,
-	widget_label;
+	widget_scrollbox;
 
 
 /*
@@ -72,18 +75,67 @@ if( NODE )
 var
 	prototype;
 
-prototype = widget_label.prototype;
+prototype = widget_scrollbox.prototype;
 
 
 /*
-| The transformed position of the label.
+| Initializer.
+*/
+prototype._init =
+	function(
+		twigDup
+	)
+{
+	var
+		mark,
+		name,
+		path,
+		r,
+		ranks,
+		rZ,
+		twig,
+		w;
+
+	if( !this.path ) return;
+
+	// all components of the form
+	twig = twigDup ? this._twig :  jion.copy( this._twig );
+
+	mark = this.mark;
+
+	ranks = this._ranks;
+	
+	for( r = 0, rZ = ranks.length; r < rZ; r++ )
+	{
+		name = ranks[ r ];
+
+		w = twig[ name ];
+
+		path = w.path || this.path.append( 'twig' ).append( name );
+
+		twig[ name ] =
+			w.create(
+				'path', path,
+				'hover', this.hover,
+				'mark', this.mark
+			);
+	}
+
+	if( FREEZE ) Object.freeze( twig );
+
+	this._twig = twig;
+};
+
+
+/*
+| The transformed zone.
 */
 jion.lazyValue(
 	prototype,
-	'_pos',
+	'_zone',
 	function( )
 {
-	return this.pos.transform( this.transform );
+	return this.zone.transform( this.transform );
 }
 );
 
@@ -96,13 +148,28 @@ jion.lazyValue(
 	'glint',
 	function( )
 {
-	if( !this.visible ) return undefined;
+	var
+		arr,
+		r,
+		sg,
+		w;
+
+	arr = [ ];
+
+	for( r = this.length - 1; r >= 0; r-- )
+	{
+		w = this.atRank( r );
+
+		sg = w.glint;
+
+		if( sg ) arr.push( sg );
+	}
 
 	return(
-		gleam_glint_text.create(
-			'font', this.font,
-			'p', this._pos,
-			'text', this.text
+		gleam_glint_window.create(
+			'glint', gleam_glint_list.create( 'list:init', arr ),
+			'rect', this._zone,
+			'offset', gleam_point.zero
 		)
 	);
 }
@@ -114,11 +181,25 @@ jion.lazyValue(
 */
 prototype.pointingHover =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
+	var
+		r,
+		rZ,
+		res;
+	
+	p = p.sub( this._zone.pos );
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).pointingHover( p, shift, ctrl );
+
+		if( res ) return res;
+	}
+
 	return undefined;
 };
 

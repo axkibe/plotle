@@ -598,14 +598,14 @@ prototype._gotUpdateUserSpaceList =
 
 	rmusl = root.link.refMomentUserSpaceList;
 
-	userSpaceList = root.userSpaceList.applyChangeDynamic( changeDynamic );
+	userSpaceList = root.link.userSpaceList.applyChangeDynamic( changeDynamic );
 
 	root.create(
-		'userSpaceList', userSpaceList,
+		'userSpaceList', userSpaceList.current,
 		'link',
 			root.link.create(
-				'refMomentUserSpaceList',
-					rmusl.create( 'seq', userSpaceList.seq )
+				'refMomentUserSpaceList', rmusl.create( 'seq', userSpaceList.seq ),
+				'userSpaceList', userSpaceList
 			)
 	);
 };

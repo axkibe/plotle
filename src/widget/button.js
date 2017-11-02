@@ -185,8 +185,6 @@ prototype.dragStart =
 prototype.dragStop =
 	function( )
 {
-	console.log( 'DSTOP' );
-
 	root.create( 'action', undefined );
 };
 

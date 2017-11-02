@@ -452,6 +452,11 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/widget/scrollbox.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/ref/space.js',
 		'hasJion', true,
 		'inBundle', true

@@ -1501,14 +1501,21 @@ prototype.onAuth =
 			'userSpaceList', userSpaceList.current,
 			'link',
 				root.link.create(
-					'refMomentUserSpaceList',
-					userSpaceList.refMoment( reply.userCreds.name )
+					'refMomentUserSpaceList', userSpaceList.refMoment( reply.userCreds.name ),
+					'userSpaceList', userSpaceList
 				)
 		);
 	}
 	else
 	{
-		root.create( 'userSpaceList', undefined );
+		root.create(
+			'userSpaceList', undefined,
+			'link',
+				root.link.create(
+					'refMomentUserSpaceList', undefined,
+					'userSpaceList', undefined
+				)
+		);
 	}
 
 
@@ -1933,9 +1940,7 @@ shell_root._createFormRoot =
 					form.abstract(
 						'twig:set',
 						key,
-						widget.create(
-							'transform', gleam_transform.normal
-						)
+						widget.create( 'transform', gleam_transform.normal )
 					);
 			}
 		}
@@ -2029,8 +2034,7 @@ prototype._changeTransformTo =
 			'_transformExponent', exp,
 			'animation',
 				root.animation.create(
-					'twig:set+', 'transform',
-						animation_transform.createNow( transform, time )
+					'twig:set+', 'transform', animation_transform.createNow( transform, time )
 				)
 		);
 	}
