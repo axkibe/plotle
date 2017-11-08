@@ -1,7 +1,7 @@
 /*
 | A scrollbar.
 |
-| Used by note.
+| Used by note and scrollbox.
 |
 | Currently there are only vertical scrollbars.
 */
@@ -13,12 +13,12 @@
 if( JION )
 {
 	throw{
-		id : 'visual_scrollbar',
+		id : 'widget_scrollbar',
 		attributes :
 		{
 			scrollpos :
 			{
-				comment : 'scrollposition',
+				comment : 'scroll position',
 				type : 'number'
 			},
 			aperture :
@@ -28,7 +28,8 @@ if( JION )
 			},
 			max :
 			{
-				comment : 'maximum position',
+				comment : 'maximum scroll position',
+				// minimum is always zero
 				type : 'number'
 			},
 			pos :
@@ -56,7 +57,7 @@ var
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
-	visual_scrollbar;
+	widget_scrollbar;
 
 
 /*
@@ -77,7 +78,7 @@ if( NODE )
 var
 	prototype;
 
-prototype = visual_scrollbar.prototype;
+prototype = widget_scrollbar.prototype;
 
 
 /*

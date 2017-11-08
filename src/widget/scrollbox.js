@@ -37,6 +37,12 @@ if( JION )
 				comment : 'the transform',
 				type : 'gleam_transform'
 			},
+			yScrollbarOffset :
+			{
+				comment : 'offset of the scrollbar',
+				type : 'gleam_point',
+				defaultValue : 'gleam_point.zero'
+			},
 			zone :
 			{
 				comment : 'designed zone',
@@ -50,10 +56,12 @@ if( JION )
 
 
 var
+	jion,
 	gleam_glint_list,
 	gleam_glint_window,
 	gleam_point,
-	jion,
+	gleam_size,
+	widget_scrollbar,
 	widget_scrollbox;
 
 
@@ -128,6 +136,94 @@ prototype._init =
 
 
 /*
+| The widget's glint.
+*/
+jion.lazyValue(
+	prototype,
+	'glint',
+	function( )
+{
+	var
+		arr,
+		glint,
+		r,
+		sg,
+		w,
+		yScrollbar;
+
+	arr = [ ];
+
+	for( r = this.length - 1; r >= 0; r-- )
+	{
+		w = this.atRank( r );
+
+		sg = w.glint;
+
+		if( sg ) arr.push( sg );
+	}
+
+	glint =
+		gleam_glint_window.create(
+			'glint', gleam_glint_list.create( 'list:init', arr ),
+			'rect', this._zone,
+			'offset', gleam_point.zero
+		);
+
+	yScrollbar = this._yScrollbar;
+
+	if( yScrollbar )
+	{
+		glint =
+			gleam_glint_list.create(
+				'list:init',
+				[
+					glint,
+					yScrollbar.glint
+				]
+			);
+	}
+
+	return glint;
+}
+);
+
+
+/*
+| The widget's inner height and width
+*/
+jion.lazyValue(
+	prototype,
+	'innerSize',
+	function( )
+{
+	var
+		h,
+		pse,
+		r,
+		widget,
+		w;
+
+	w = 0;
+
+	h = 0;
+
+	for( r = this.length - 1; r >= 0; r-- )
+	{
+		widget = this.atRank( r );
+
+		pse = widget.zone.pse;
+
+		if( pse.x > w ) w = pse.x;
+
+		if( pse.y > h ) h = pse.y;
+	}
+
+	return gleam_size.wh( w, h ); 
+}
+);
+
+
+/*
 | The transformed zone.
 */
 jion.lazyValue(
@@ -141,35 +237,50 @@ jion.lazyValue(
 
 
 /*
-| The widget's glint.
+| Is true when the scrollbox has a vertical bar.
 */
 jion.lazyValue(
 	prototype,
-	'glint',
+	'hasYScrollbar',
+	function( )
+{
+	return this.innerSize.height > this.zone.height;
+}
+);
+
+
+
+jion.lazyValue(
+	prototype,
+	'_yScrollbar',
 	function( )
 {
 	var
-		arr,
-		r,
-		sg,
-		w;
+		innerSize,
+		yScrollbarOffset,
+		zone;
 
-	arr = [ ];
+	if( !this.hasYScrollbar ) return undefined;
 
-	for( r = this.length - 1; r >= 0; r-- )
-	{
-		w = this.atRank( r );
+	innerSize = this.innerSize;
 
-		sg = w.glint;
+	yScrollbarOffset = this.yScrollbarOffset;
 
-		if( sg ) arr.push( sg );
-	}
+	zone = this.zone;
 
 	return(
-		gleam_glint_window.create(
-			'glint', gleam_glint_list.create( 'list:init', arr ),
-			'rect', this._zone,
-			'offset', gleam_point.zero
+		widget_scrollbar.create(
+			'aperture', zone.height,
+			'max', innerSize.height,
+			'pos',
+				zone.pos.add(
+					zone.width + yScrollbarOffset.x,
+					yScrollbarOffset.y
+				),
+//			'scrollpos', this.scrollPos.y,
+			'scrollpos', 0,
+			'size', zone.height,
+			'transform', this.transform
 		)
 	);
 }
@@ -177,7 +288,7 @@ jion.lazyValue(
 
 
 /*
-| User is hovering his/her pointer ( mouse move )
+| User is hovering his/her pointer (mouse move).
 */
 prototype.pointingHover =
 	function(
@@ -197,7 +308,7 @@ prototype.pointingHover =
 	{
 		res = this.atRank( r ).pointingHover( p, shift, ctrl );
 
-		if( res ) return res;
+		if( res !== undefined ) return res;
 	}
 
 	return undefined;
@@ -209,11 +320,25 @@ prototype.pointingHover =
 */
 prototype.click =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
+	var
+		r,
+		rZ,
+		res;
+	
+	p = p.sub( this._zone.pos );
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).click( p, shift, ctrl );
+
+		if( res !== undefined ) return res;
+	}
+
 	return undefined;
 };
 

@@ -78,7 +78,10 @@ form_form.init =
 				'path', path,
 				'hover', this.hover,
 				'mark', this.mark,
-				'transform', transform
+				'transform',
+					path.get( 2 ) !== 'moveTo'
+					? transform
+					: gleam_transform.normal
 			);
 	}
 

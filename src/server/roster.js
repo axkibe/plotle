@@ -827,7 +827,7 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/visual/scrollbar.js',
+		'filePath', 'src/widget/scrollbar.js',
 		'hasJion', true,
 		'inBundle', true
 	),

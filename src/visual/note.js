@@ -100,7 +100,7 @@ var
 	visual_item,
 	visual_mark_caret,
 	visual_note,
-	visual_scrollbar;
+	widget_scrollbar;
 
 
 /*
@@ -290,7 +290,7 @@ prototype._init =
 		}
 
 		this.scrollbarY =
-			visual_scrollbar.create(
+			widget_scrollbar.create(
 				'aperture', aperture,
 				'max', dHeight,
 				'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),

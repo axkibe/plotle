@@ -64,8 +64,10 @@ var
 	form_moveTo,
 	gleam_point,
 	gleam_rect,
+	gleam_transform,
 	gruga_mainDisc,
 	gruga_moveToSpaceButtonTemplate,
+	gruga_scrollbar,
 	jion,
 	ref_space;
 
@@ -102,15 +104,18 @@ prototype._init =
 	var
 		a,
 		aZ,
+		avw,
 		button,
 		c,
+		ch,
+		center,
 		cOff,
 		cLen,
 		cols,
+		cy,
+		discDistance,
 		dw, // disc width
 		fullname,
-		gleam_transform,
-		height,
 		r,
 		sb,
 		sbRanks,
@@ -120,9 +125,8 @@ prototype._init =
 		twig,
 		userSpaceList,
 		vh,
-		vw,
-		vw2,
-		zy;
+		x0,
+		y0;
 
 	if( !this.path ) return;
 
@@ -137,18 +141,30 @@ prototype._init =
 
 	userSpaceList = this.userSpaceList;
 		
-	twig = twigDup ? this._twig :  jion.copy( this._twig );
+	twig = twigDup ? this._twig : jion.copy( this._twig );
 
 	dw = root ? root.disc.get( 'mainDisc' ).tZone.width : gruga_mainDisc.size.width;
 
-	vw = this.viewSize.width - dw;
+	discDistance = 20;
 
-	vw2 = Math.round( vw / 2 );
+	// available width
+	avw = this.viewSize.width - dw - discDistance - gruga_scrollbar.strength;
+
+	x0 = dw + discDistance;
+	
+	y0 = 10 + twig.headline.font.size;
 
 	vh = this.viewSize.height;
 
-	cols = Math.floor( ( vw - 20 ) / 160 );
+	center =
+		gleam_point.xy(
+			x0 + Math.round( avw / 2 ),
+			Math.round( vh / 2 )
+		);
 
+	cols = Math.floor( ( avw + 30 ) / 160 );
+
+	// cols in currnt row
 	cLen = cols;
 
 	rows =
@@ -156,17 +172,30 @@ prototype._init =
 		? Math.ceil( userSpaceList.length / cols )
 		: 0;
 
-	height = Math.min( 150 + rows * 160, vh - twig.headline.font.size * 2 );
+	// content height
+	ch = twig.headline.font.size * 2 + 160 + rows * 160;
 
-	zy = Math.round( - height / 2 );
+	/*
+	height =
+		Math.min(
+			150 + rows * 160,
+			vh - twig.headline.font.size * 2
+		);
+	*/
+
+	cy = vh / 2 - ch / 2;
+
+	// no longer vertical centered and need to start scrolling
+	if( cy < y0 ) cy = y0;
 
 	twig.headline =
 		twig.headline.create(
-			'pos', gleam_point.xy( ( cols - 1 ) * 80 - vw2 + dw + 65, zy )
+			'pos', gleam_point.xy( x0 + ( cols - 0.5 ) * 80 + 30, cy )
 		);
 
-	zy += 50;
-	
+	cy += 50;
+
+	// buttons are in the scrollbox
 	button = sbTwig[ 'ideoloom:home' ];
 
 	sbTwig[ 'ideoloom:home' ] =
@@ -237,11 +266,12 @@ prototype._init =
 
 	twig.scrollbox =
 		sb.create(
+			'yScrollbarOffset', form_moveTo.yScrollbarOffset,
 			'zone',
 				gleam_rect.create(
-					'pos', gleam_point.xy( -vw2 + dw, zy ),
-					'width', vw,
-					'height', vh - zy
+					'pos', gleam_point.xy( x0, cy ),
+					'width', avw + gruga_scrollbar.strength,
+					'height', vh - cy
 				),
 			'twig:init', sbTwig, sbRanks
 		);
@@ -250,6 +280,24 @@ prototype._init =
 
 	form_form.init.call( this, true /* twigDup always set to true */ );
 };
+
+
+/*
+| Offset of the vertical scrollbar, set so it's within the scrollbox.
+*/
+jion.lazyStaticValue(
+	form_moveTo,
+	'yScrollbarOffset',
+	function( )
+{
+	return(
+		gleam_point.xy(
+			Math.ceil( -gruga_scrollbar.strength / 2 ) - 1,
+			0
+		)
+	);
+}
+);
 
 
 /*
@@ -380,7 +428,7 @@ prototype.pushButton =
 /**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	buttonName = path.get( 4 );
+	buttonName = path.get( -1 );
 
 	parts = buttonName.split( ':' );
 
