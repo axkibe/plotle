@@ -130,6 +130,34 @@ jion.lazyValue(
 
 
 /*
+| User clicked.
+*/
+prototype.click =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return undefined;
+};
+
+
+/*
+| Mouse wheel is being turned.
+*/
+prototype.mousewheel =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return undefined;
+};
+
+
+/*
 | User is hovering his/her pointer ( mouse move )
 */
 prototype.pointingHover =
@@ -142,19 +170,6 @@ prototype.pointingHover =
 	return undefined;
 };
 
-
-/*
-| User clicked.
-*/
-prototype.click =
-	function(
-		// p,
-		// shift,
-		// ctrl
-	)
-{
-	return undefined;
-};
 
 
 } ) ( );

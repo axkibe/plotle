@@ -32,6 +32,12 @@ if( JION )
 				comment : 'the path of the widget',
 				type : [ 'undefined', 'jion$path' ]
 			},
+			scrollPos :
+			{
+				comment : 'scroll position',
+				type : [ 'undefined', 'gleam_point' ]
+				// is force defined in _init
+			},
 			transform :
 			{
 				comment : 'the transform',
@@ -61,6 +67,7 @@ var
 	gleam_glint_window,
 	gleam_point,
 	gleam_size,
+	shell_settings,
 	widget_scrollbar,
 	widget_scrollbox;
 
@@ -95,6 +102,7 @@ prototype._init =
 	)
 {
 	var
+		innerSize,
 		mark,
 		name,
 		path,
@@ -102,7 +110,8 @@ prototype._init =
 		ranks,
 		rZ,
 		twig,
-		w;
+		w,
+		zone;
 
 	if( !this.path ) return;
 
@@ -126,6 +135,31 @@ prototype._init =
 				'path', path,
 				'hover', this.hover,
 				'mark', this.mark
+			);
+	}
+
+	if( this.scrollPos === undefined )
+	{
+		this.scrollPos = gleam_point.zero;
+	}
+	else if( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
+	{
+		this.scrollPos =
+			this.scrollPos.create(
+				'x', Math.max( 0, this.scrollPos.x ),
+				'y', Math.max( 0, this.scrollPos.y )
+			);
+	}
+
+	innerSize = this.innerSize;
+
+	zone = this.zone;
+
+	if( this.scrollPos.y > innerSize.height - zone.height )
+	{
+		this.scrollPos =
+			this.scrollPos.create(
+				'y', innerSize.height - zone.height
 			);
 	}
 
@@ -166,7 +200,7 @@ jion.lazyValue(
 		gleam_glint_window.create(
 			'glint', gleam_glint_list.create( 'list:init', arr ),
 			'rect', this._zone,
-			'offset', gleam_point.zero
+			'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
 		);
 
 	yScrollbar = this._yScrollbar;
@@ -277,42 +311,13 @@ jion.lazyValue(
 					zone.width + yScrollbarOffset.x,
 					yScrollbarOffset.y
 				),
-//			'scrollpos', this.scrollPos.y,
-			'scrollpos', 0,
+			'scrollpos', this.scrollPos.y,
 			'size', zone.height,
 			'transform', this.transform
 		)
 	);
 }
 );
-
-
-/*
-| User is hovering his/her pointer (mouse move).
-*/
-prototype.pointingHover =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		r,
-		rZ,
-		res;
-	
-	p = p.sub( this._zone.pos );
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		res = this.atRank( r ).pointingHover( p, shift, ctrl );
-
-		if( res !== undefined ) return res;
-	}
-
-	return undefined;
-};
 
 
 /*
@@ -330,7 +335,11 @@ prototype.click =
 		rZ,
 		res;
 	
-	p = p.sub( this._zone.pos );
+	p =
+		gleam_point.xy(
+			p.x - this._zone.pos.x + this.scrollPos.x,
+			p.y - this._zone.pos.y + this.scrollPos.y
+		);
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -340,6 +349,80 @@ prototype.click =
 	}
 
 	return undefined;
+};
+
+
+/*
+| User is hovering his/her pointer (mouse move).
+*/
+prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+	
+	p =
+		gleam_point.xy(
+			p.x - this._zone.pos.x + this.scrollPos.x,
+			p.y - this._zone.pos.y + this.scrollPos.y
+		);
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).pointingHover( p, shift, ctrl );
+
+		if( res !== undefined ) return res;
+	}
+
+	return undefined;
+};
+
+
+/*
+| Mouse wheel is being turned.
+*/
+prototype.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+
+	if( !this._zone.within( p ) ) return;
+
+	p =
+		gleam_point.xy(
+			p.x - this._zone.pos.x + this.scrollPos.x,
+			p.y - this._zone.pos.y + this.scrollPos.y
+		);
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+
+		if( res ) return res;
+	}
+
+	root.setPath(
+		this.path.append( 'scrollPos' ),
+		this.scrollPos.create(
+			'y',
+				this.scrollPos.y
+				- dir * shell_settings.textWheelSpeed
+		)
+	);
 };
 
 

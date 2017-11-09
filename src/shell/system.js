@@ -1099,8 +1099,10 @@ prototype._onMouseWheel =
 	)
 {
 	var
+		ctrl,
 		dir,
-		p;
+		p,
+		shift;
 
 	event.preventDefault( );
 
@@ -1124,8 +1126,16 @@ prototype._onMouseWheel =
 
 		return;
 	}
+	
+	shift = event.shiftKey;
 
-	root.mousewheel( p, dir, event.shiftKey, event.ctrlKey || event.metaKey );
+	ctrl = event.ctrlKey || event.metaKey;
+
+	root.mousewheel( p, dir, shift, ctrl );
+			
+	this._pointingHover( p, shift, ctrl );
+
+	this._steerAttention( );
 };
 
 

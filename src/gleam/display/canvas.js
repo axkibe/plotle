@@ -106,6 +106,7 @@ else
 	};
 }
 
+
 if( ratio === 1 )
 {
 	noround = function( val ) { return val; };
@@ -132,14 +133,10 @@ get2dContext =
 
 	//canvas.style['text-rendering'] = 'geometricPrecision';
 
-	if( opaque )
-	{
-		cx = canvas.getContext( '2d', { alpha: false } );
-	}
-	else
-	{
-		cx = canvas.getContext( '2d' );
-	}
+	cx =
+		opaque
+		? canvas.getContext( '2d', { alpha: false } )
+		: canvas.getContext( '2d' );
 
 	cx.imageSmoothingEnabled =
 	cx.mozImageSmoothingEnabled =
@@ -149,8 +146,6 @@ get2dContext =
 
 	return cx;
 };
-
-
 
 
 /*
@@ -618,7 +613,7 @@ prototype._renderGlint =
 
 		case 'gleam_glint_window' :
 
-			this._renderWindow( glint, offset.add( glint.offset ) );
+			this._renderWindow( glint, offset );
 
 			break;
 
@@ -959,7 +954,13 @@ prototype._renderWindow =
 
 		cx.clip( );
 
-		this._renderGlintList( glint.glint, offset.add( pos ) );
+		this._renderGlintList(
+			glint.glint,
+			gleam_point.xy(
+				offset.x + pos.x + glint.offset.x,
+				offset.y + pos.y + glint.offset.y
+			)
+		);
 
 		cx.restore( );
 	}
@@ -969,7 +970,7 @@ prototype._renderWindow =
 
 		cd.render( );
 
-		cx.drawImage( cd._cv, round( x ), round( y ) );
+		cx.drawImage( cd._cv, round( x + glint.offset.x ), round( y + glint.offset.y ) );
 	}
 };
 

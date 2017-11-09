@@ -230,6 +230,20 @@ prototype.input =
 
 
 /*
+| Mouse wheel is being turned.
+*/
+prototype.mousewheel =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return undefined;
+};
+
+
+/*
 | Mouse hover.
 */
 prototype.pointingHover =

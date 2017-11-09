@@ -284,6 +284,33 @@ form_form.input =
 
 
 /*
+| Mouse wheel is being turned.
+*/
+form_form.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+
+		if( res ) return res;
+	}
+
+	return false;
+};
+
+
+/*
 | If point is on the form returns its hovering state.
 */
 form_form.pointingHover =

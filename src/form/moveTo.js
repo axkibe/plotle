@@ -391,16 +391,7 @@ prototype.input = form_form.input;
 /*
 | Mouse wheel.
 */
-prototype.mousewheel =
-	function(
-		// p,
-		// dir,
-		// shift,
-		// ctrl
-	)
-{
-	return true;
-};
+prototype.mousewheel = form_form.mousewheel;
 
 
 /*

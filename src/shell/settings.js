@@ -32,6 +32,7 @@ shell_settings =
 
 	/*
 	| Factor to add to the bottom of font height.
+	| FUTURE remove
 	*/
 	bottombox : 0.25,
 
