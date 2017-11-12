@@ -144,6 +144,20 @@ prototype.click =
 
 
 /*
+| Handles a potential dragStart event.
+*/
+prototype.dragStart =
+	function(
+		//p,       // point where dragging starts
+		//shift,   // true if shift key was held down
+		//ctrl     // true if ctrl or meta key was held down
+	)
+{
+	return undefined;
+};
+
+
+/*
 | Mouse wheel is being turned.
 */
 prototype.mousewheel =

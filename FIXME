@@ -1,1 +1,3 @@
 FIXME: remove '_assign' renames
+FIXME: rename pointingHover to hover
+FIXME: scrollpos vs. scrollPos

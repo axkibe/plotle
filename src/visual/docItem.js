@@ -4,8 +4,6 @@
 
 
 var
-	action_scrolly,
-	jion$pathList,
 	math_limit,
 	result_hover,
 	root,
@@ -70,7 +68,9 @@ visual_docItem.click =
 
 
 /*
-| Handles a potential dragStart event for this item.
+| Handles a potential dragStart event.
+|
+| FIXME access and action should be needed to handed...
 */
 visual_docItem.dragStart =
 	function(
@@ -83,6 +83,7 @@ visual_docItem.dragStart =
 {
 	var
 		aType,
+		bubble,
 		mark,
 		sbary;
 
@@ -90,23 +91,11 @@ visual_docItem.dragStart =
 
 	aType = action && action.reflect;
 
-	if(
-		!this.action
-		&& sbary
-		&& sbary.within( p )
-	)
+	if( !this.action && sbary )
 	{
-		root.create(
-			'action',
-				action_scrolly.create(
-					'itemPaths',
-						jion$pathList.create( 'list:append', this.path ),
-					'startPoint', p,
-					'startPos', sbary.scrollpos
-				)
-		);
+		bubble = sbary.dragStart( p, shift, ctrl );
 
-		return true;
+		if( bubble !== undefined ) return bubble;
 	}
 
 	if( aType === 'action_select' )
@@ -235,21 +224,19 @@ visual_docItem.pointingHover =
 	)
 {
 	var
+		bubble,
 		cursor,
 		sbary;
 
 	sbary = this.scrollbarY;
 
-	if( sbary && sbary.within( p ) )
+	if( sbary )
 	{
-		return(
-			result_hover.create(
-				'path', this.path,
-				'cursor', 'ns-resize'
-			)
-		);
-	}
+		bubble = sbary.pointingHover( p );
 
+		if( bubble ) return bubble;
+	}
+			
 	if( !this.tShape.within( p ) ) return;
 
 	cursor = 'default';

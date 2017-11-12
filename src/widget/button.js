@@ -171,7 +171,7 @@ prototype.dragStart =
 		// ctrl
 	)
 {
-	if( !this.within( p ) ) return;
+	if( !this.within( p ) ) return undefined;
 
 	root.dragStartButton( this.path );
 

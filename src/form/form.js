@@ -186,6 +186,102 @@ form_form.cycleFocus =
 
 
 /*
+| User clicked.
+*/
+form_form.click =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).click( p, shift, ctrl );
+
+		if( res ) return res;
+	}
+
+	return false;
+};
+
+
+/*
+| Moving during an operation with the pointing device button held down.
+*/
+form_form.dragMove =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action;
+
+	action = this.action;
+	
+	if( !action ) return 'pointer';
+
+	switch( action.reflect )
+	{
+		case 'action_scrolly' :
+
+			form_form._moveScrollY.call( this, p, shift, ctrl );
+
+			return;
+
+		default : throw new Error( );
+	}
+};
+
+
+/*
+| Starts an operation with the pointing device held down.
+*/
+form_form.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).dragStart( p, shift, ctrl );
+
+		if( res ) return res;
+	}
+
+	return false;
+};
+
+
+/*
+| Stops an operation with the poiting device button held down.
+*/
+form_form.dragStop =
+	function(
+		//p,     // cursor point
+		//shift, // true if shift key was pressed
+		//ctrl   // true if ctrl key was pressed
+	)
+{
+	root.create( 'action', undefined );
+};
+
+
+/*
 | Returns the attention center.
 |
 | To be used as lazyValue getter.
@@ -366,5 +462,42 @@ form_form.specialKey =
 	widget.specialKey( key, shift, ctrl );
 };
 
+
+/*
+| Moves during scrolling.
+*/
+form_form._moveScrollY =
+	function(
+		p         // point of stop
+		// shift, // true if shift key was pressed
+		// ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		action,
+		dy,
+		sbary,
+		spos,
+		widget,
+		wPath;
+
+	action = this.action;
+
+	wPath = action.scrollPath;
+
+	widget = root.getPath( wPath );
+
+	//dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
+	dy = p.y - action.startPoint.y;
+
+	sbary = widget.scrollbarY;
+
+	spos = action.startPos + sbary.scale( dy );
+
+	root.setPath(
+		wPath.append( 'scrollPos' ),
+		widget.scrollPos.create( 'y', spos )
+	);
+};
 
 } )( );

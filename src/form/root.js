@@ -12,6 +12,13 @@ if( JION )
 		id : 'form_root',
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../action/typemap' )
+					.concat( [ 'undefined' ] )
+			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
@@ -142,6 +149,7 @@ prototype._init =
 
 		twig[ name ] =
 			form.create(
+				'action', this.action,
 				'hover', this.hover,
 				'mark', this.mark,
 				'path', path,

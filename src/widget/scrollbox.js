@@ -43,7 +43,7 @@ if( JION )
 				comment : 'the transform',
 				type : 'gleam_transform'
 			},
-			yScrollbarOffset :
+			scrollbarYOffset :
 			{
 				comment : 'offset of the scrollbar',
 				type : 'gleam_point',
@@ -183,7 +183,7 @@ jion.lazyValue(
 		r,
 		sg,
 		w,
-		yScrollbar;
+		sbary;
 
 	arr = [ ];
 
@@ -203,18 +203,11 @@ jion.lazyValue(
 			'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
 		);
 
-	yScrollbar = this._yScrollbar;
+	sbary = this.scrollbarY;
 
-	if( yScrollbar )
+	if( sbary )
 	{
-		glint =
-			gleam_glint_list.create(
-				'list:init',
-				[
-					glint,
-					yScrollbar.glint
-				]
-			);
+		glint = gleam_glint_list.create( 'list:init', [ glint, sbary.glint ] );
 	}
 
 	return glint;
@@ -275,7 +268,7 @@ jion.lazyValue(
 */
 jion.lazyValue(
 	prototype,
-	'hasYScrollbar',
+	'hasScrollbarY',
 	function( )
 {
 	return this.innerSize.height > this.zone.height;
@@ -286,19 +279,19 @@ jion.lazyValue(
 
 jion.lazyValue(
 	prototype,
-	'_yScrollbar',
+	'scrollbarY',
 	function( )
 {
 	var
 		innerSize,
-		yScrollbarOffset,
+		scrollbarYOffset,
 		zone;
 
-	if( !this.hasYScrollbar ) return undefined;
+	if( !this.hasScrollbarY ) return undefined;
 
 	innerSize = this.innerSize;
 
-	yScrollbarOffset = this.yScrollbarOffset;
+	scrollbarYOffset = this.scrollbarYOffset;
 
 	zone = this.zone;
 
@@ -306,10 +299,11 @@ jion.lazyValue(
 		widget_scrollbar.create(
 			'aperture', zone.height,
 			'max', innerSize.height,
+			'path', this.path.append( 'scrollbarY' ),
 			'pos',
 				zone.pos.add(
-					zone.width + yScrollbarOffset.x,
-					yScrollbarOffset.y
+					zone.width + scrollbarYOffset.x,
+					scrollbarYOffset.y
 				),
 			'scrollpos', this.scrollPos.y,
 			'size', zone.height,
@@ -353,6 +347,49 @@ prototype.click =
 
 
 /*
+| Starts an operation with the pointing device held down.
+*/
+prototype.dragStart =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	var
+		bubble,
+		r,
+		rZ,
+		res,
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	if( sbary )
+	{
+		bubble = sbary.dragStart( p, shift, ctrl );
+
+		if( bubble !== undefined ) return bubble;
+	}
+	
+	p =
+		gleam_point.xy(
+			p.x - this._zone.pos.x + this.scrollPos.x,
+			p.y - this._zone.pos.y + this.scrollPos.y
+		);
+
+	for( r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		res = this.atRank( r ).click( p, shift, ctrl );
+
+		if( res !== undefined ) return res;
+	}
+
+	return undefined;
+};
+
+
+/*
 | User is hovering his/her pointer (mouse move).
 */
 prototype.pointingHover =
@@ -363,9 +400,19 @@ prototype.pointingHover =
 	)
 {
 	var
+		bubble,
 		r,
 		rZ,
-		res;
+		sbary;
+
+	sbary = this.scrollbarY;
+
+	if( sbary )
+	{
+		bubble = sbary.pointingHover( p, shift, ctrl );
+
+		if( bubble !== undefined ) return bubble;
+	}
 	
 	p =
 		gleam_point.xy(
@@ -375,9 +422,9 @@ prototype.pointingHover =
 
 	for( r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).pointingHover( p, shift, ctrl );
+		bubble = this.atRank( r ).pointingHover( p, shift, ctrl );
 
-		if( res !== undefined ) return res;
+		if( bubble !== undefined ) return bubble;
 	}
 
 	return undefined;

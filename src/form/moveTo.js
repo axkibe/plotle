@@ -13,6 +13,13 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../action/typemap' )
+					.concat( [ 'undefined' ] )
+			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
@@ -143,7 +150,10 @@ prototype._init =
 		
 	twig = twigDup ? this._twig : jion.copy( this._twig );
 
-	dw = root ? root.disc.get( 'mainDisc' ).tZone.width : gruga_mainDisc.size.width;
+	dw =
+		root
+		? root.disc.get( 'mainDisc' ).tZone.width
+		: gruga_mainDisc.size.width;
 
 	discDistance = 20;
 
@@ -152,8 +162,6 @@ prototype._init =
 
 	x0 = dw + discDistance;
 	
-	y0 = 10 + twig.headline.font.size;
-
 	vh = this.viewSize.height;
 
 	center =
@@ -175,15 +183,9 @@ prototype._init =
 	// content height
 	ch = twig.headline.font.size * 2 + 160 + rows * 160;
 
-	/*
-	height =
-		Math.min(
-			150 + rows * 160,
-			vh - twig.headline.font.size * 2
-		);
-	*/
-
 	cy = vh / 2 - ch / 2;
+
+	y0 = 10 + twig.headline.font.size;
 
 	// no longer vertical centered and need to start scrolling
 	if( cy < y0 ) cy = y0;
@@ -266,7 +268,7 @@ prototype._init =
 
 	twig.scrollbox =
 		sb.create(
-			'yScrollbarOffset', form_moveTo.yScrollbarOffset,
+			'scrollbarYOffset', form_moveTo.scrollbarYOffset,
 			'zone',
 				gleam_rect.create(
 					'pos', gleam_point.xy( x0, cy ),
@@ -287,7 +289,7 @@ prototype._init =
 */
 jion.lazyStaticValue(
 	form_moveTo,
-	'yScrollbarOffset',
+	'scrollbarYOffset',
 	function( )
 {
 	return(
@@ -325,15 +327,7 @@ prototype.cycleFocus = form_form.cycleFocus;
 /*
 | Moving during an operation with the mouse button held down.
 */
-prototype.dragMove =
-	function(
-		// p
-		// shift,
-		// ctrl
-	)
-{
-	return true;
-};
+prototype.dragMove = form_form.dragMove;
 
 
 /*
@@ -341,29 +335,13 @@ prototype.dragMove =
 |
 | Mouse down or finger on screen.
 */
-prototype.dragStart =
-	function(
-		// p,
-		// shift,
-		// ctrl
-	)
-{
-	return false;
-};
+prototype.dragStart = form_form.dragStart;
 
 
 /*
 | Stops an operation with the mouse button held down.
 */
-prototype.dragStop =
-	function(
-		//p,
-		//shift,
-		//ctrl
-	)
-{
-	return true;
-};
+prototype.dragStop = form_form.dragStop;
 
 
 /*

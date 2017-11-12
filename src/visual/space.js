@@ -1608,7 +1608,6 @@ prototype._moveSelect =
 };
 
 
-
 /*
 | Moves during scrolling.
 */
@@ -1628,7 +1627,7 @@ prototype._moveScrollY =
 
 	action = this.action;
 
-	item = this.get( action.itemPaths.get( 0 ).get( -1 ) );
+	item = this.get( action.scrollPath.get( -1 ) );
 
 	dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
 

@@ -521,6 +521,7 @@ prototype._init =
 
 		this.form =
 			this.form.create(
+				'action', action,
 				'hover', hover,
 				'mark', mark,
 				'spaceRef', spaceRef,
@@ -1131,7 +1132,7 @@ prototype.moveToSpace =
 
 
 /*
-| User is hovering his/her pointing device ( mouse move )
+| User is hovering his/her pointing device.
 */
 prototype.pointingHover =
 	function(

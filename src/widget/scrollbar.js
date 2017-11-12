@@ -32,6 +32,11 @@ if( JION )
 				// minimum is always zero
 				type : 'number'
 			},
+			path :
+			{
+				comment : 'path',
+				type : [ 'undefined', 'jion$path' ]
+			},
 			pos :
 			{
 				comment : 'position',
@@ -53,10 +58,12 @@ if( JION )
 
 
 var
+	action_scrolly,
 	gleam_roundRect,
 	gleam_glint_paint,
 	gruga_scrollbar,
 	jion,
+	result_hover,
 	widget_scrollbar;
 
 
@@ -152,6 +159,51 @@ jion.lazyValue(
 );
 
 
+/*
+| Handles a potential dragStart event.
+*/
+prototype.dragStart =
+	function(
+		p          // point where dragging starts
+		//shift,   // true if shift key was held down
+		//ctrl     // true if ctrl or meta key was held down
+	)
+{
+	if( !this._tShape.within( p ) ) return undefined;
+
+	root.create(
+		'action',
+			action_scrolly.create(
+				'scrollPath', this.path.shorten,
+				'startPoint', p,
+				'startPos', this.scrollpos
+			)
+	);
+
+	return true;
+};
+
+
+/*
+| User is hovering his/her pointing device.
+*/
+prototype.pointingHover =
+	function(
+		p
+		//shift,
+		//ctrl
+	)
+{
+	if( !this._tShape.within( p ) ) return undefined;
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'ns-resize'
+		)
+	);
+};
+
 
 /*
 | Returns the value of pos change for d pixels in the current zone.
@@ -168,14 +220,16 @@ prototype.scale =
 
 /*
 | Returns true if p is within the scrollbar.
+| FIXME remove
 */
-prototype.within =
+/*prototype.within =
 	function(
 		p
 	)
 {
 	return this._tShape.within( p );
 };
+*/
 
 
 } )( );

@@ -293,6 +293,7 @@ prototype._init =
 			widget_scrollbar.create(
 				'aperture', aperture,
 				'max', dHeight,
+				'path', path && path.append( 'scrollbarY' ),
 				'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
 				'scrollpos', this.scrollPos.y,
 				'size', zone.height - gruga_note.vScrollbarDis * 2,

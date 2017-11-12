@@ -501,7 +501,6 @@ prototype.prepareInventory =
 
 			if( !resource.inBundle ) continue;
 
-
 			try{
 				ast =
 					uglify.parse(
@@ -510,7 +509,6 @@ prototype.prepareInventory =
 							filename :
 								resource.filePath
 								|| resource.aliases.get( 0 ),
-							strict : true,
 							toplevel : ast
 						}
 					);
@@ -528,10 +526,7 @@ prototype.prepareInventory =
 			}
 		}
 
-		if( config.extraMangle )
-		{
-			root.extraMangle( ast, jionIDs );
-		}
+		if( config.extraMangle ) root.extraMangle( ast, jionIDs );
 
 		if( config.uglify )
 		{
@@ -777,11 +772,7 @@ prototype.extraMangle =
 	}
 
 	// creates associativs and lists
-	for(
-		a = 0, aZ = mangleDefs.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = mangleDefs.length; a < aZ; a++ )
 	{
 		at = mangleDefs[ a ];
 
@@ -794,31 +785,19 @@ prototype.extraMangle =
 			( at[ 0 ] !== '.' && at[ 0 ] !== '>' )
 		)
 		{
-			throw new Error(
-				'malformed mangle entry "' + at + '"'
-			);
+			throw new Error( 'malformed mangle entry "' + at + '"' );
 		}
 
 		if( mangle[ e ] || noMangle[ e ] )
 		{
-			throw new Error(
-				'double entry: "' + e + '"'
-			);
+			throw new Error( 'double entry: "' + e + '"' );
 		}
 
 		switch( at[ 0 ] )
 		{
-			case '.' :
+			case '.' : mangle[ e ] = true; break;
 
-				mangle[ e ] = true;
-
-				break;
-
-			case '>' :
-
-				noMangle[ e ] = true;
-
-				break;
+			case '>' : noMangle[ e ] = true; break;
 		}
 
 	}
@@ -839,11 +818,7 @@ prototype.extraMangle =
 	mangleList = Object.keys( mangle ).sort( );
 
 	// allots all mangles a value
-	for(
-		a = 0, aZ = mangleList.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = mangleList.length; a < aZ; a++ )
 	{
 		at = mangleList[ a ];
 
@@ -852,10 +827,7 @@ prototype.extraMangle =
 
 	if( !config.noWrite )
 	{
-		fs.writeFileSync(
-			'report/manglemap.txt',
-			util.inspect( mangle )
-		);
+		fs.writeFileSync( 'report/manglemap.txt', util.inspect( mangle ) );
 	}
 
 	// marks all mangles and no-mangles as unused so far
@@ -879,21 +851,12 @@ prototype.extraMangle =
 		{
 			p = node[ k ];
 
-			if( p !== undefined )
-			{
-				break;
-			}
+			if( p !== undefined ) break;
 		}
 
-		if( !k )
-		{
-			return false;
-		}
+		if( !k ) return false;
 
-		if( !isString( node[ k ] ) )
-		{
-			return false;
-		}
+		if( !isString( node[ k ] ) ) return false;
 
 		// checks if this property will not be mangled
 		if( noMangle[ p ] !== undefined )

@@ -56,6 +56,7 @@ config.database_name = 'ideoloom-15';
 | Runs in devel mode.
 */
 config.devel = true;
+//config.devel = false;
 
 
 /*

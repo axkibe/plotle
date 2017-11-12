@@ -1,3 +1,11 @@
+. _zone
+. hasScrollbarY
+> ideoloom:home
+> ideoloom:sandbox
+. innerSize
+. scrollPath
+. scrollbarYOffset
+. scrollbox
 . _gotUpdateSpace
 . _gotUpdateUserSpaceList
 . _list
@@ -540,9 +548,7 @@
 . iconShape
 . id
 . ideoloomHome
-. ideoloomHomeButton
 . ideoloomSandbox
-. ideoloomSandboxButton
 . ignores
 > imageSmoothingEnabled
 > index
@@ -924,7 +930,6 @@
 . up
 > update
 > user
-. userHomeButton
 . userInput
 > username
 . usernameLabel

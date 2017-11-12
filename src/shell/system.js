@@ -264,8 +264,8 @@ shell_system =
 			canvas,
 			'root',
 			gleam_size.create(
-				'height', window.innerHeight - 1,
-				'width', window.innerWidth - 1
+				'height', window.innerHeight,
+				'width', window.innerWidth
 			)
 		);
 
@@ -636,8 +636,8 @@ prototype._onResize =
 
 	root.resize(
 		gleam_size.create(
-			'width', window.innerWidth - 1,
-			'height', window.innerHeight - 1
+			'width', window.innerWidth,
+			'height', window.innerHeight
 		)
 	);
 };

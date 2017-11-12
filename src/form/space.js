@@ -13,6 +13,13 @@ if( JION )
 		hasAbstract : true,
 		attributes :
 		{
+			action :
+			{
+				comment : 'current action',
+				type :
+					require( '../action/typemap' )
+					.concat( [ 'undefined' ] )
+			},
 			hover :
 			{
 				comment : 'the widget hovered upon',
