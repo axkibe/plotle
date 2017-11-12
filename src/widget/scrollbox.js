@@ -138,7 +138,14 @@ prototype._init =
 			);
 	}
 
-	if( this.scrollPos === undefined )
+	innerSize = this.innerSize;
+
+	zone = this.zone;
+
+	if(
+		this.scrollPos === undefined
+		|| innerSize.height <= zone.height
+	)
 	{
 		this.scrollPos = gleam_point.zero;
 	}
@@ -151,11 +158,10 @@ prototype._init =
 			);
 	}
 
-	innerSize = this.innerSize;
-
-	zone = this.zone;
-
-	if( this.scrollPos.y > innerSize.height - zone.height )
+	if(
+		innerSize.height > zone.height
+		&& this.scrollPos.y > innerSize.height - zone.height
+	)
 	{
 		this.scrollPos =
 			this.scrollPos.create(
