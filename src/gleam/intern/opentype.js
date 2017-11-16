@@ -17,12 +17,6 @@ var
 'use strict';
 
 
-/*
-| Only define this file when opentype is to be used.
-*/
-if( !shell_settings.opentype ) return;
-
-
 var
 	getWidth,
 	opentypeOptions,

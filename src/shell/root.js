@@ -171,7 +171,6 @@ var
 	disc_root,
 	gleam_connect,
 	gleam_glint_list,
-	gleam_measure,
 	gleam_point,
 	gleam_size,
 	gleam_transform,
@@ -359,8 +358,6 @@ shell_root.startup =
 /**/}
 
 	canvas = document.createElement( 'canvas' );
-
-	gleam_measure.init( canvas );
 
 	viewSize =
 		gleam_size.create(

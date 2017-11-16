@@ -62,13 +62,6 @@ shell_settings =
 	maxUndo : 1000,
 
 	/*
-	| If true uses opentype font rendering, if false
-	| canvas.fillText()
-	*/
-	opentype : true,
-	//opentype : false,
-
-	/*
 	| Do not cache the glyph for fonts larger than this.
 	| Only applicable if opentype is true
 	*/

@@ -1,14 +1,13 @@
 /*
 | Measures texts.
 |
-| FIXME tim-ize
+| FIXME move this to font object
 */
 
 
 var
 	font_default,
-	gleam_measure,
-	shell_settings;
+	gleam_measure;
 
 
 /*
@@ -23,19 +22,6 @@ var
 */
 gleam_measure =
 {
-
-	/*
-	| Initialize is called once by shell
-	*/
-	init :
-		function( canvas )
-	{
-		gleam_measure._cx = canvas.getContext( '2d' );
-
-		/**/if( FREEZE ) Object.freeze( gleam_measure );
-	},
-
-
 	/*
 	| Returns the width of text with the specified font.
 	*/
@@ -45,21 +31,7 @@ gleam_measure =
 			text
 		)
 	{
-		var
-			cx;
-
-		if( shell_settings.opentype )
-		{
-			return font_default.getAdvanceWidth(text, font.size);
-		}
-		else
-		{
-			cx = gleam_measure._cx;
-
-			if( cx.font !== font.css ) cx.font = font.css;
-
-			return cx.measureText( text ).width;
-		}
+		return font_default.getAdvanceWidth(text, font.size);
 	}
 };
 

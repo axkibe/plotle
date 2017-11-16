@@ -605,9 +605,7 @@ prototype._renderGlint =
 
 		case 'gleam_glint_text' :
 
-			shell_settings.opentype
-			? this._renderTextOpenType( glint, offset )
-			: this._renderTextCanvas( glint, offset );
+			this._renderText( glint, offset );
 
 			break;
 
@@ -624,86 +622,6 @@ prototype._renderGlint =
 			break;
 
 		default : throw new Error( );
-	}
-};
-
-
-/*
-| Renders a text using canvas buildin.
-*/
-prototype._renderTextCanvas =
-	function(
-		glint,
-		offset
-	)
-{
-	var
-		cx,
-		det,
-		font,
-		p,
-		rotate,
-		t1,
-		t2,
-		text,
-		x,
-		y;
-
-/**/if( CHECK ) {
-/**/	if( shell_settings.opentype ) throw new Error();
-/**/
-/**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
-/**/}
-
-	cx = this._cx;
-
-	font = glint.font;
-
-	rotate = glint.rotate;
-
-	text = glint.text;
-
-	p = glint.p;
-
-	this._setFont( font );
-
-	if( rotate === undefined )
-	{
-		cx.fillText(
-			text,
-			round( p.x + offset.x ),
-			round( p.y + offset.y )
-		);
-	}
-	else
-	{
-		t1 = Math.cos( rotate );
-
-		t2 = Math.sin( rotate );
-
-		det = t1 * t1 + t2 * t2;
-
-		cx.setTransform(
-			t1, t2,
-			-t2, t1,
-			0, 0
-		);
-
-		x = round( p.x + offset.x );
-
-		y = round( p.y + offset.y );
-
-		cx.fillText(
-			text,
-			( x * t1 + y * t2 ) / det,
-			( y * t1 - x * t2 ) / det
-		);
-
-		cx.setTransform(
-			1, 0,
-			0, 1,
-			0, 0
-		);
 	}
 };
 
@@ -795,9 +713,9 @@ prototype._renderMask =
 
 
 /*
-| Renders a text using opentype
+| Renders a text using opentype.
 */
-prototype._renderTextOpenType =
+prototype._renderText =
 	function(
 		glint,
 		offset
@@ -814,8 +732,6 @@ prototype._renderTextOpenType =
 		y;
 
 /**/if( CHECK ) {
-/**/	if( !shell_settings.opentype ) throw new Error();
-/**/
 /**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
 /**/}
 
