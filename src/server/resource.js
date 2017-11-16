@@ -35,11 +35,6 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
-			jionHolder :
-			{
-				comment : 'the resource a jion is genereated from',
-				type : [ 'undefined', 'server_resource' ]
-			},
 			filePath :
 			{
 				comment : 'path of the resources file',
@@ -50,9 +45,16 @@ if( JION )
 				comment : 'cached or auto generated zip data',
 				type : [ 'undefined', 'protean' ]
 			},
+			// FIXME remove
 			hasJion :
 			{
 				comment : 'true if this resource has a jion def.',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			hasTim :
+			{
+				comment : 'true if this resource is a typed immutable',
 				type : 'boolean',
 				defaultValue : 'false'
 			},
@@ -74,9 +76,14 @@ if( JION )
 				type : 'boolean',
 				defaultValue : 'false'
 			},
+			jionHolder :
+			{
+				comment : 'the resource a jion is genereated from',
+				type : [ 'undefined', 'server_resource' ]
+			},
 			jionId :
 			{
-				comment : 'if hasJion or isJion the jion id string',
+				comment : 'if hasJion the jion id string',
 				type : [ 'undefined', 'string' ]
 			},
 			maxage :
@@ -105,7 +112,17 @@ if( JION )
 			{
 				comment : 'on devel mode timestamp when resource cached',
 				type : [ 'undefined', 'date' ]
-			}
+			},
+			timHolder :
+			{
+				comment : 'the resource a tim is genereated from',
+				type : [ 'undefined', 'server_resource' ]
+			},
+			timId :
+			{
+				comment : 'if hasTim the tim id string',
+				type : [ 'undefined', 'string' ]
+			},
 		},
 		init : [ ]
 	};
@@ -151,8 +168,7 @@ prototype._init =
 	{
 		this.aliases =
 			jion.stringList.create(
-				'list:init',
-				[ filePath.replace( /\//g, '-' ) ]
+				'list:init', [ filePath.replace( /\//g, '-' ) ]
 			);
 	}
 

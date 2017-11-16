@@ -1,5 +1,7 @@
 /*
 | Measures texts.
+|
+| FIXME tim-ize
 */
 
 

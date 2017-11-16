@@ -63,6 +63,22 @@ server_resourceList.create(
 		'maxage', 'long'
 	),
 	server_resource.create(
+		'aliases', stringList( [ 'tim-browser.js' ] ),
+		'coding', 'utf-8',
+		'data', tim.browserSource,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
+		'aliases', stringList( [ 'tim-proto.js' ] ),
+		'coding', 'utf-8',
+		'data', tim.proto.source,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'aliases', stringList( [ 'jion-proto.js' ] ),
 		'coding', 'utf-8',
 		'data', jion.proto.source,
@@ -221,14 +237,9 @@ server_resourceList.create(
 		'hasJion', true,
 		'inBundle', true
 	),
-//	server_resource.create(
-//		'filePath', 'src/cache/pool.js',
-//		'hasJion', true,
-//		'inBundle', true
-//	),
 	server_resource.create(
 		'filePath', 'src/gleam/color.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -248,7 +259,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/point.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -259,13 +270,13 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/rect.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/rectGroup.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -390,12 +401,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/roundRect.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/ellipse.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -414,7 +425,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/facet.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

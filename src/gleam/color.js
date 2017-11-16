@@ -3,72 +3,69 @@
 |
 | Optionally including an alpha value.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_color',
-		attributes :
-		{
-			alpha :
-			{
-				comment : 'alpha value',
-				type : [ 'undefined', 'number' ]
-			},
-			red :
-			{
-				comment : 'red value',
-				type : 'integer'
-			},
-			green :
-			{
-				comment : 'green value',
-				type : 'integer'
-			},
-			blue :
-			{
-				comment : 'blue value',
-				type : 'integer'
-			}
-		}
-	};
-}
-
-
-var
-	gleam_color,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'gleam_color', ( def, gleam_color ) => {
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
 {
-	require( 'jion' ).this( module, 'source' );
+	alpha :
+	{
+		type : [ 'undefined', 'number' ]
+	},
+	red :
+	{
+		type : 'integer'
+	},
+	green :
+	{
+		type : 'integer'
+	},
+	blue :
+	{
+		type : 'integer'
+	}
+};
 
-	return;
-}
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static lazy values  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+/*
+| Black.
+*/
+def.staticLazy.black = () => gleam_color.rgb( 0, 0, 0 );
 
 
-var
-	prototype;
+/*
+| Red.
+*/
+def.staticLazy.red = () => gleam_color.rgb( 255, 0, 0 );
 
-prototype = gleam_color.prototype;
+
+/*
+| White.
+*/
+def.staticLazy.white = () => gleam_color.rgb( 255, 255, 255 );
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static functions  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 
 /*
 | Shortcut creator.
 */
-gleam_color.rgb =
+def.static.rgb =
 	function(
 		red,
 		green,
@@ -88,7 +85,7 @@ gleam_color.rgb =
 /*
 | Shortcut creator.
 */
-gleam_color.rgba =
+def.static.rgba =
 	function(
 		red,
 		green,
@@ -107,74 +104,39 @@ gleam_color.rgba =
 };
 
 
+// ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy values ~
+// ~ ~ ~ ~ ~ ~ ~ ~
+
+
 /*
 | Color text understood by browser.
 */
-jion.lazyValue(
-	prototype,
-	'css',
+def.lazy.css =
 	function( )
+{
+	if( this.alpha )
 	{
-		if( this.alpha )
-		{
-			return(
-				'rgba( '
-				+ this.red + ', '
-				+ this.green + ', '
-				+ this.blue + ', '
-				+ this.alpha
-				+ ' )'
-			);
-		}
-		else
-		{
-			return(
-				'rgb( '
-				+ this.red + ', '
-				+ this.green + ', '
-				+ this.blue
-				+ ' )'
-			);
-		}
+		return(
+			'rgba( '
+			+ this.red + ', '
+			+ this.green + ', '
+			+ this.blue + ', '
+			+ this.alpha
+			+ ' )'
+		);
 	}
-);
+	else
+	{
+		return(
+			'rgb( '
+			+ this.red + ', '
+			+ this.green + ', '
+			+ this.blue
+			+ ' )'
+		);
+	}
+};
 
 
-/*-----------------
-| precreated colors
-*-----------------*/
-
-/*
-| Black.
-*/
-gleam_color.black =
-	gleam_color.create(
-		'red', 0,
-		'green', 0,
-		'blue', 0
-	);
-
-
-/*
-| Red.
-*/
-gleam_color.red =
-	gleam_color.create(
-		'red', 255,
-		'green', 0,
-		'blue', 0
-	);
-
-/*
-| White.
-*/
-gleam_color.white =
-	gleam_color.create(
-		'red', 255,
-		'green', 255,
-		'blue', 255
-	);
-
-
-
-} )( );
+} );

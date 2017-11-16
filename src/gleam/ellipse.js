@@ -1,90 +1,66 @@
 /*
 | An ellipse.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_ellipse',
-		attributes :
-		{
-			pos :
-			{
-				comment : 'position',
-				type : 'gleam_point'
-			},
-			width :
-			{
-				comment : 'width',
-				type : 'number'
-			},
-			height :
-			{
-				comment : 'height',
-				type : 'number'
-			},
-			gradientPC :
-			{
-				comment : 'center for gradient',
-				type : [ 'undefined', 'gleam_point' ],
-				assign : '_gradientPC'
-			},
-			gradientR0 :
-			{
-				comment : 'inner radius for circle gradients',
-				type : [ 'undefined', 'number' ],
-				assign : '_gradientR0'
-			},
-			gradientR1 :
-			{
-				comment : 'outer radius for circle gradients',
-				type : [ 'undefined', 'number' ],
-				assign : '_gradientR1'
-			}
-		}
-	};
-}
-
-
-var
-	gleam_ellipse,
-	gleam_point,
-	gleam_shape_round,
-	gleam_shape,
-	gleam_shape_start,
-	jion,
-	swatch;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
+// FIXME
 var
-	prototype;
+	gleam_shape_round,
+	gleam_shape,
+	gleam_shape_start,
+	swatch;
 
-prototype = gleam_ellipse.prototype;
+
+tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
+{
+	pos :   // position
+	{
+		type : 'gleam_point'
+	},
+	width :
+	{
+		type : 'number'
+	},
+	height :
+	{
+		type : 'number'
+	},
+	gradientPC : // center for gradient
+	{
+		type : [ 'undefined', 'gleam_point' ],
+		assign : '_gradientPC'
+	},
+	gradientR0 : // inner radius for circle gradients
+	{
+		type : [ 'undefined', 'number' ],
+		assign : '_gradientR0'
+	},
+	gradientR1 : // outer radius for circle gradients
+	{
+		type : [ 'undefined', 'number' ],
+		assign : '_gradientR1'
+	}
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static functions  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 
 /*
 | Shortcut to create an ellipse by specifying p and size.
 */
-gleam_ellipse.posSize =
+def.static.posSize =
 	function(
 		pos,
 		size
@@ -100,10 +76,128 @@ gleam_ellipse.posSize =
 };
 
 
+// ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy values ~
+// ~ ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| The center point of gradient.
+*/
+def.lazy.gradientPC =
+	function( )
+{
+	if( this._gradientPC ) return this._gradientPC;
+
+	return this.pc;
+};
+
+
+/*
+| Gradient inner radius.
+*/
+def.lazy.gradientR1 =
+	function( )
+{
+	if( this._gradientR1 ) { return this._gradientR1; }
+
+	return Math.max( this.width, this.height );
+};
+
+
+/*
+| Gradient inner radius.
+*/
+def.lazy.gradientR0 =
+	function( )
+{
+	if( this._gradientR0 ) return this._gradientR0;
+
+	return 0;
+};
+
+
+/*
+| Center point of an ellipse.
+*/
+def.lazy.pc =
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height / 2 );
+};
+
+
+/*
+| East point.
+*/
+def.lazy.pe =
+	function( )
+{
+	return this.pos.add( this.width, this.height / 2 );
+};
+
+
+/*
+| North point.
+*/
+def.lazy.pn =
+	function( )
+{
+	return this.pos.add( this.width / 2, 0 );
+};
+
+
+/*
+| South point.
+*/
+def.lazy.ps =
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height );
+};
+
+
+/*
+| West point.
+*/
+def.lazy.pw =
+	function( )
+{
+	return this.pos.add( 0, this.height / 2 );
+};
+
+
+/*
+| The shape of the ellipse.
+*/
+def.lazy.shape =
+	function( )
+{
+	return(
+		gleam_shape.create(
+			'list:init',
+			[
+				gleam_shape_start.p( this.pw ),
+				gleam_shape_round.p( this.pn ),
+				gleam_shape_round.p( this.pe ),
+				gleam_shape_round.p( this.ps ),
+				gleam_shape_round.close( )
+			],
+			'pc', this.pc
+		)
+	);
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~
+// ~ Functions ~
+// ~ ~ ~ ~ ~ ~ ~
+
+
 /*
 | Returns a moved ellipse.
 */
-prototype.add =
+def.func.add =
 	function(
 		p
 	)
@@ -119,7 +213,7 @@ prototype.add =
 /*
 | Returns a shape bordering this shape by d.
 */
-prototype.border =
+def.func.border =
 	function(
 		d // distance to border
 	)
@@ -131,90 +225,17 @@ prototype.border =
 /*
 | Gets the source of a projection to p.
 */
-prototype.getProjection =
-	function
-	(
-		// ...
-	)
+def.func.getProjection =
+	function( /*...*/ )
 {
 	return this.shape.getProjection.apply( this.shape, arguments );
 };
 
 
 /*
-| The shape of the ellipse.
-*/
-jion.lazyValue(
-	prototype,
-	'shape',
-function( )
-{
-	return(
-		gleam_shape.create(
-			'list:init',
-			[
-				gleam_shape_start.create( 'p', this.pw ),
-				gleam_shape_round.create( 'p', this.pn ),
-				gleam_shape_round.create( 'p', this.pe ),
-				gleam_shape_round.create( 'p', this.ps ),
-				gleam_shape_round.create( 'close', true )
-			],
-			'pc', this.pc
-		)
-	);
-}
-);
-
-
-/*
-| The center point.
-*/
-jion.lazyValue(
-	prototype,
-	'gradientPC',
-function( )
-{
-	if( this._gradientPC ) return this._gradientPC;
-
-	return this.pc;
-}
-);
-
-
-/*
-| Gradient inner radius.
-*/
-jion.lazyValue(
-	prototype,
-	'gradientR1',
-	function( )
-{
-	if( this._gradientR1 ) { return this._gradientR1; }
-
-	return Math.max( this.width, this.height );
-}
-);
-
-
-/*
-| Gradient inner radius.
-*/
-jion.lazyValue(
-	prototype,
-	'gradientR0',
-	function( )
-{
-	if( this._gradientR0 ) return this._gradientR0;
-
-	return 0;
-}
-);
-
-
-/*
 | Returns a transformed roundRect.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -225,6 +246,8 @@ prototype.transform =
 /**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
+	// FUTURE, this creates gradientSettings even if there were none...
+	//         since they fall back on defaults
 	return(
 		transform.zoom === 1
 		? this.add( transform.offset )
@@ -250,84 +273,9 @@ prototype.transform =
 
 
 /*
-| Center point of an ellipse.
-*/
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
-{
-	return(
-		gleam_point.create(
-			'x', this.pos.x + this.width / 2,
-			'y', this.pos.y + this.height / 2
-		)
-	);
-}
-);
-
-
-/*
-| East point.
-*/
-jion.lazyValue(
-	prototype,
-	'pe',
-	function( )
-{
-	return this.pos.add( this.width, this.height / 2 );
-}
-);
-
-
-/*
-| North point.
-*/
-jion.lazyValue(
-	prototype,
-	'pn',
-	function( )
-{
-	return this.pos.add( this.width / 2, 0 );
-}
-);
-
-
-/*
-| South point.
-*/
-jion.lazyValue(
-	prototype,
-	'ps',
-	function( )
-{
-	return this.pos.add( this.width / 2, this.height );
-}
-);
-
-
-/*
-| West point.
-*/
-jion.lazyValue(
-	prototype,
-	'pw',
-	function( )
-{
-	var
-		pos;
-
-	pos = this.pos;
-
-	return gleam_point.xy( pos.x, pos.y + this.height / 2 );
-}
-);
-
-
-/*
 | Returns true if p is within the ellipse.
 */
-prototype.within =
+def.func.within =
 	function(
 		p
 	)
@@ -341,6 +289,5 @@ prototype.within =
 };
 
 
-
-} )( );
+} );
 

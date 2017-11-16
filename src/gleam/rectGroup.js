@@ -1,43 +1,16 @@
 /*
 | A group of rects.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_rectGroup',
-		group : [ 'gleam_rect' ]
-	};
-}
-
-
-var
-	gleam_rectGroup;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
+tim.define( module, 'gleam_rectGroup', ( def, gleam_rectGroup ) => {
 
 
-var
-	prototype;
+/*
+| Tim group.
+*/
+def.group = [ 'gleam_rect' ];
 
-prototype = gleam_rectGroup.prototype;
 
-
-})( );
+} );

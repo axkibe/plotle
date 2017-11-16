@@ -1,5 +1,3 @@
-// configuration for jshint
-//	"unused"    : "paramsignore"
 {
 	"esnext" : true,
 	"newcap" : false,
@@ -12,7 +10,7 @@
 	"laxbreak" : true,
 	"laxcomma" : true,
 	"strict" : true,
-	"unused" : true,
+	"unused" : "vars",
 	"globals"  :
 	{
 		"CHECK" : true,
@@ -21,6 +19,7 @@
 		"NODE" : true,
 		"SHELL" : true,
 		"pass" : true,
-		"root" : true
+		"root" : true,
+		"tim" : true
 	}
 }

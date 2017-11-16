@@ -11,86 +11,135 @@
 |      |                    |             |
 |      |                    |             |
 |      |                    |             |
-|      '.                  .'             | 
+|      '.                  .'             |
 |        `----------------' + - - - - - - V
 |      |                    |
 |      <--------------------> width
 */
+'use strict';
 
 
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_roundRect',
-		attributes :
-		{
-			pos :
-			{
-				comment : 'position',
-				type : 'gleam_point'
-			},
-			width :
-			{
-				comment : 'width',
-				type : 'number'
-			},
-			height :
-			{
-				comment : 'height',
-				type : 'number'
-			},
-			a :
-			{
-				comment : 'horizonal rounding',
-				type : 'number'
-			},
-			b :
-			{
-				comment : 'vertical rounding',
-				type : 'number'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
-	gleam_point,
-	gleam_roundRect,
 	gleam_shape,
 	gleam_shape_line,
 	gleam_shape_round,
 	gleam_shape_start,
-	jion,
 	swatch;
 
 
-/*
-| Capsule
-*/
-( function() {
-'use strict';
+tim.define( module, 'gleam_roundRect', ( def, gleam_roundRect ) => {
 
 
-if( NODE )
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
 {
-	require( 'jion' ).this( module, 'source' );
+	pos : // position
+	{
+		type : 'gleam_point'
+	},
+	width :
+	{
+		type : 'number'
+	},
+	height :
+	{
+		type : 'number'
+	},
+	a : // horizonal rounding
+	{
+		type : 'number'
+	},
+	b : // vertical rounding
+	{
+		type : 'number'
+	}
+};
 
-	return;
-}
+
+// ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy values ~
+// ~ ~ ~ ~ ~ ~ ~ ~
 
 
-var
-	prototype = gleam_roundRect.prototype;
+/*
+| Point in the center.
+*/
+def.lazy.pc =
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height / 2 );
+};
+
+
+/*
+| The shape of the roundRect.
+*/
+def.lazy.shape =
+	function( )
+{
+	const a = this.a;
+
+	const b = this.b;
+
+	const h = this.height;
+
+	const p = this.pos;
+
+	const w = this.width;
+
+	if( b * 2 + 0.1 >= h )
+	{
+		return(
+			gleam_shape.create(
+				'list:init',
+				[
+					gleam_shape_start.p( p.add( 0 , b ) ),
+					gleam_shape_round.p( p.add( a , 0 ) ),
+					gleam_shape_line .p( p.add( w - a , 0 ) ),
+					gleam_shape_round.p( p.add( w , b ) ),
+					gleam_shape_round.p( p.add( w - a , h ) ),
+					gleam_shape_line .p( p.add( a , h ) ),
+					gleam_shape_round.close( )
+				],
+				'pc', this.pc
+			)
+		);
+	}
+
+	return(
+		gleam_shape.create(
+			'list:init',
+			[
+				gleam_shape_start.p( p.add( 0 , b ) ),
+				gleam_shape_round.p( p.add( a , 0 ) ),
+				gleam_shape_line .p( p.add( w - a , 0 ) ),
+				gleam_shape_round.p( p.add( w , b ) ),
+				gleam_shape_line .p( p.add( w , h - b ) ),
+				gleam_shape_round.p( p.add( w - a , h ) ),
+				gleam_shape_line .p( p.add( a , h ) ),
+				gleam_shape_round.p( p.add( 0 , h - b ) ),
+				gleam_shape_line .close( )
+			],
+			'pc', this.pc
+		)
+	);
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~
+// ~ Functions ~
+// ~ ~ ~ ~ ~ ~ ~
 
 
 /*
 | Returns a round rect moved by x/y
 */
-prototype.add =
+def.func.add =
 	function(
 		x,
 		y
@@ -105,7 +154,7 @@ prototype.add =
 /*
 | Returns a shape bordering this shape by d.
 */
-prototype.border =
+def.func.border =
 	function(
 		d // distance to border
 	)
@@ -115,145 +164,19 @@ prototype.border =
 
 
 /*
-| point in the center
-*/
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
-	{
-		return(
-			gleam_point.create(
-				'x', this.pos.x + this.width / 2,
-				'y', this.pos.y + this.height / 2
-			)
-		);
-	}
-);
-
-
-/*
 | Gets the source of a projection to p.
 */
-prototype.getProjection =
-	function
-	(
-		// ...
-	)
+def.func.getProjection =
+	function( /* ... */ )
 {
-	return(
-		this.shape.getProjection.apply(
-			this.shape,
-			arguments
-		)
-	);
+	return this.shape.getProjection.apply( this.shape, arguments );
 };
-
-
-/*
-| The shape of the roundRect.
-*/
-jion.lazyValue(
-	prototype,
-	'shape',
-function( )
-{
-	var
-		a,
-		b,
-		b2,
-		h,
-		p,
-		w;
-
-	a = this.a;
-
-	b = this.b;
-
-	h = this.height;
-
-	p = this.pos;
-
-	w = this.width;
-
-	b2 = b * 2;
-
-	if( b2 + 0.1 >= h )
-	{
-		return(
-			gleam_shape.create(
-				'list:init',
-				[
-					gleam_shape_start.create(
-						'p', p.add( 0 , b )
-					),
-					gleam_shape_round.create(
-						'p', p.add( a , 0 )
-					),
-					gleam_shape_line.create(
-						'p', p.add( w - a , 0 )
-					),
-					gleam_shape_round.create(
-						'p', p.add( w , b )
-					),
-					gleam_shape_round.create(
-						'p', p.add( w - a , h )
-					),
-					gleam_shape_line.create(
-						'p', p.add( a , h )
-					),
-					gleam_shape_round.create(
-						'close', true
-					)
-				],
-				'pc', this.pc
-			)
-		);
-	}
-
-	return(
-		gleam_shape.create(
-			'list:init',
-			[
-				gleam_shape_start.create(
-					'p', p.add( 0 , b )
-				),
-				gleam_shape_round.create(
-					'p', p.add( a , 0 )
-				),
-				gleam_shape_line.create(
-					'p', p.add( w - a , 0 )
-				),
-				gleam_shape_round.create(
-					'p', p.add( w , b )
-				),
-				gleam_shape_line.create(
-					'p', p.add( w , h - b )
-				),
-				gleam_shape_round.create(
-					'p', p.add( w - a , h )
-				),
-				gleam_shape_line.create(
-					'p', p.add( a , h )
-				),
-				gleam_shape_round.create(
-					'p', p.add( 0 , h - b )
-				),
-				gleam_shape_line.create(
-					'close', true
-				)
-			],
-			'pc', this.pc
-		)
-	);
-}
-);
 
 
 /*
 | Returns a transformed roundRect.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -281,7 +204,7 @@ prototype.transform =
 /*
 | Returns true if p is within the shape.
 */
-prototype.within =
+def.func.within =
 	function(
 		p
 	)
@@ -295,4 +218,4 @@ prototype.within =
 };
 
 
-} )( );
+} );

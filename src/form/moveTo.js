@@ -152,7 +152,7 @@ prototype._init =
 
 	dw =
 		root
-		? root.disc.get( 'mainDisc' ).tZone.width
+		? root.disc.get( 'mainDisc' ).size.width
 		: gruga_mainDisc.size.width;
 
 	discDistance = 20;
@@ -172,7 +172,7 @@ prototype._init =
 
 	cols = Math.floor( ( avw + 30 ) / 160 );
 
-	// cols in currnt row
+	// cols in current row
 	cLen = cols;
 
 	rows =
@@ -228,6 +228,15 @@ prototype._init =
 
 		for( a = 0, aZ = userSpaceList.length; a < aZ; a++ )
 		{
+			if( r >= rows )
+			{
+				cLen = aZ % cols;
+
+				if( cLen === 0 ) cLen = cols;
+
+				cOff = ( cols - cLen ) / 2;
+			}
+
 			rSpace = userSpaceList.get( a );
 
 			fullname = rSpace.fullname;
@@ -253,15 +262,6 @@ prototype._init =
 				c = 0;
 
 				r++;
-
-				if( r >= rows )
-				{
-					cLen = aZ % cols;
-
-					if( cLen === 0 ) cLen = cols;
-
-					cOff = ( cols - cLen ) / 2;
-				}
 			}
 		}
 	}

@@ -3,6 +3,10 @@
 |
 | for example hover, focus or down.
 */
+'use strict';
+
+
+tim.define( module, 'gleam_facet', ( def, gleam_facet ) => {
 
 
 /*

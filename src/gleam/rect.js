@@ -1,79 +1,83 @@
 /*
 | A rectangle.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_rect',
-		hasAbstract : true,
-		attributes :
-		{
-			pos :
-			{
-				comment : 'position',
-				json : true,
-				type : 'gleam_point'
-			},
-			height :
-			{
-				comment : 'height',
-				json : true,
-				type : 'number'
-			},
-			width :
-			{
-				comment : 'width',
-				json : true,
-				type : 'number'
-			}
-		}
-	};
-}
-
-
-var
-	gleam_point,
-	gleam_rect,
-	gleam_size,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
+// FIXME
 var
-	prototype;
+	gleam_point,
+	gleam_size;
 
 
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	gleam_rect = jion.this( module, 'source' );
-
 	gleam_point = require( './point' );
 }
 
 
-prototype = gleam_rect.prototype;
+tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
 
 
 /*
-| Creates a rect by two arbitrary corner points
+| This tim has an abstract form.
 */
-gleam_rect.createArbitrary =
+def.hasAbstract = true;
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
+{
+	pos : // position
+	{
+		json : true,
+		type : 'gleam_point'
+	},
+	height :
+	{
+		json : true,
+		type : 'number'
+	},
+	width :
+	{
+		json : true,
+		type : 'number'
+	}
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static lazy values  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| A zero rect.
+*/
+def.staticLazy.zero =
+	() => gleam_rect.create(
+		'pos', gleam_point.zero,
+		'width', 0,
+		'height', 0
+	);
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static functions  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| Creates a rect by two arbitrary corner points.
+*/
+def.static.createArbitrary =
 	function(
-		p1,
-		p2
+		p1,  // one point
+		p2   // another point
 	)
 {
 	if( p2.x >= p1.x && p2.y >= p1.y )
@@ -116,17 +120,16 @@ gleam_rect.createArbitrary =
 			)
 		);
 	}
-	else
-	{
-		throw new Error( );
-	}
+
+	// this should never happen
+	throw new Error( );
 };
 
 
 /*
 | Shortcut to create a rect by specifying position and size.
 */
-gleam_rect.posSize =
+def.static.posSize =
 	function(
 		pos,
 		size
@@ -142,13 +145,186 @@ gleam_rect.posSize =
 };
 
 
+// ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy values ~
+// ~ ~ ~ ~ ~ ~ ~ ~
+
+
 /*
-| returns a rect moved by a point or x/y
+| Point in the center.
+*/
+def.lazy.pc = function( )
+{
+	return this.pos.add( this.width / 2, this.height / 2 );
+};
+
+
+/*
+| North point.
+*/
+def.lazy.pn =
+	function( )
+{
+	return this.pos.add( this.width / 2, 0 );
+};
+
+
+/*
+| East point.
+*/
+def.lazy.pe =
+	function( )
+{
+	return this.pos.add( this.width, this.height / 2 );
+};
+
+
+/*
+| South point.
+*/
+def.lazy.ps =
+	function( )
+{
+	return this.pos.add( this.width / 2, this.height );
+};
+
+
+/*
+| North east point.
+*/
+def.lazy.pne =
+	function( )
+{
+	return this.pos.add( this.width, 0 );
+};
+
+
+// North west point
+// is not to be used, since this is 'pos'.
+
+
+/*
+| South east point.
+*/
+def.lazy.pse =
+	function( )
+{
+	return this.pos.add( this.width, this.height );
+};
+
+
+/*
+| South west point.
+*/
+def.lazy.psw =
+	function( )
+{
+	return this.pos.add( 0, this.height );
+};
+
+
+/*
+| West point.
+*/
+def.lazy.pw =
+	function( )
+{
+	return this.pos.add( 0, this.height / 2 );
+};
+
+
+/*
+| A size tim matching this rect.
+*/
+def.lazy.size =
+	function( )
+{
+	const size = gleam_size.wh( this.width, this.height );
+
+	if( this.pos.equals( gleam_point.zero ) )
+	{
+		tim.aheadValue( size, 'zeroRect', this );
+	}
+
+	return size;
+};
+
+
+/*
+| A rectangle of same size with pnw at 0/0
+*/
+def.lazy.zeroPos =
+	function( )
+{
+	if( this.pos.equals( gleam_point.zero ) ) return this;
+
+	return this.create( 'pos', gleam_point.zero );
+};
+
+
+/*
+| A rect larger by 1.
+*/
+def.lazy.enlarge1 =
+	function( )
+{
+	const enlarge1 =
+		this.create(
+			'width', this.width + 1,
+			'height', this.height + 1
+		);
+
+	tim.aheadValue( enlarge1, 'shrink1', this );
+
+	return enlarge1;
+};
+
+
+/*
+| A rect larger by 1.5.
+*/
+def.lazy.add1_5 =
+	function( )
+{
+	return(
+		this.create(
+			'width', this.width + 1.5,
+			'height', this.height + 1.5
+		)
+	);
+};
+
+
+/*
+| A rect smaller by 1.
+*/
+def.lazy.shrink1 =
+	function( )
+{
+	const shrink1 =
+		this.create(
+			'width', this.width - 1,
+			'height', this.height - 1
+		);
+
+	tim.aheadValue( shrink1, 'enlarge1', this );
+
+	return shrink1;
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~
+// ~ Functions ~
+// ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| Returns a rect moved by a point or x/y.
 |
 | add( point )   -or-
 | add( x, y  )
 */
-prototype.add =
+def.func.add =
 	function(
 		a1,
 		a2
@@ -161,7 +337,7 @@ prototype.add =
 /*
 | Returns a shape bordering this shape by d.
 */
-prototype.border =
+def.func.border =
 	function(
 		d // distance to border
 	)
@@ -177,103 +353,10 @@ prototype.border =
 
 
 /*
-| North point.
-*/
-jion.lazyValue(
-	prototype,
-	'pn',
-	function( )
-{
-	return this.pos.add( this.width / 2, 0 );
-}
-);
-
-
-/*
-| East point.
-*/
-jion.lazyValue(
-	prototype,
-	'pe',
-	function( )
-{
-	return this.pos.add( this.width, this.height / 2 );
-}
-);
-
-
-/*
-| South point.
-*/
-jion.lazyValue(
-	prototype,
-	'ps',
-	function( )
-{
-	return this.pos.add( this.width / 2, this.height );
-}
-);
-
-
-/*
-| North east point.
-*/
-jion.lazyValue(
-	prototype,
-	'pne',
-	function( )
-{
-	return this.pos.add( this.width, 0 );
-}
-);
-
-
-/*
-| North west point.
-*/
-/*
-jion.lazyValue(
-	prototype,
-	'pnw',
-	function( )
-{
-	return this.pos;
-}
-);
-*/
-
-
-/*
-| South east point.
-*/
-jion.lazyValue(
-	prototype,
-	'pse',
-	function( )
-{
-	return this.pos.add( this.width, this.height );
-}
-);
-
-
-/*
-| South west point.
-*/
-jion.lazyValue(
-	prototype,
-	'psw',
-	function( )
-{
-	return this.pos.add( 0, this.height );
-}
-);
-
-
-/*
 | Returns a rect which has at least
 | minHeight / minWidth
 */
-prototype.ensureMinSize =
+def.func.ensureMinSize =
 	function(
 		minHeight,
 		minWidth
@@ -294,7 +377,7 @@ prototype.ensureMinSize =
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
-prototype.baseScale =
+def.func.baseScale =
 	function(
 		action,
 		ax,
@@ -323,35 +406,9 @@ prototype.baseScale =
 
 
 /*
-| Returns this transformed rect.
-*/
-prototype.transform =
-	function(
-		transform
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
-/**/}
-
-	return(
-		transform.zoom === 1
-		? this.add( transform.offset )
-		: this.create(
-			'pos', this.pos.transform( transform ),
-			'width', transform.scale( this.width ),
-			'height', transform.scale( this.height )
-		)
-	);
-};
-
-
-/*
 | Returns this detransformed rect.
 */
-prototype.detransform =
+def.func.detransform =
 	function(
 		transform
 	)
@@ -375,14 +432,97 @@ prototype.detransform =
 
 
 /*
+| Returns the point where a ray going from
+| center of the rect (pc) to p intersects with the rect.
+*/
+def.func.getProjection =
+	function(
+		p     // point to project to
+	)
+{
+	const pos = this.pos;
+
+	const pc = this.pc;
+
+	const ny = pos.y;
+
+	const wx = pos.x;
+
+	const ex = pos.x + this.width;
+
+	const sy = pos.y + this.height;
+
+	const k = ( p.y - pc.y ) / ( p.x - pc.x );
+
+	// y = (x - pc.x) * k + pc.y
+	// x = (y - pc.y) / k + pc.x
+
+	if( p.y <= ny )
+	{
+		const x = ( ny - pc.y ) / k + pc.x;
+
+		if ( x >= wx && x <= ex ) return gleam_point.xy( x, ny );
+	}
+
+	if( p.y >= sy )
+	{
+		const x = ( sy - pc.y ) / k + pc.x;
+
+		if( x >= wx && x <= ex ) return gleam_point.xy( x, sy );
+	}
+
+	if( p.x >= ex )
+	{
+		const y = ( ex - pc.x ) * k + pc.y;
+
+		if( y >= ny && y <= sy ) return gleam_point.xy( ex, y );
+	}
+
+	if( p.x <= wx )
+	{
+		const y = ( wx - pc.x ) * k + pc.y;
+
+		if( y >= ny && y <= sy ) return gleam_point.xy( wx, y );
+	}
+
+	return pc;
+};
+
+
+/*
+| Returns this transformed rect.
+*/
+def.func.transform =
+	function(
+		transform
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.add( transform.offset )
+		: this.create(
+			'pos', this.pos.transform( transform ),
+			'width', transform.scale( this.width ),
+			'height', transform.scale( this.height )
+		)
+	);
+};
+
+
+/*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-prototype.reduce =
+def.func.reduce =
 	function(
 		margin
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( margin.reflect !== 'gleam_margin' ) throw new Error( );
@@ -401,174 +541,9 @@ prototype.reduce =
 
 
 /*
-| A rectangle of same size with pnw at 0/0
-*/
-jion.lazyValue(
-	prototype,
-	'zeroPos',
-	function( )
-{
-	if( this.pos.x === 0 && this.pos.y === 0 )
-	{
-		return this;
-	}
-	else
-	{
-		return this.create( 'pos', gleam_point.zero );
-	}
-}
-);
-
-
-/*
-| Returns the point where a ray going from
-| center of the rect (pc) to p intersects with the rect.
-*/
-prototype.getProjection =
-	function(
-		p
-	)
-{
-	var
-		pc,
-		pos,
-		ny,
-		ex,
-		sy,
-		wx,
-		k,
-		x,
-		y;
-
-	pos = this.pos;
-
-	pc = this.pc;
-
-	ny = pos.y;
-
-	wx = pos.x;
-
-	ex = pos.x + this.width;
-
-	sy = pos.y + this.height;
-
-	k = ( p.y - pc.y ) / ( p.x - pc.x );
-
-	// y = (x - pc.x) * k + pc.y
-	// x = (y - pc.y) / k + pc.x
-
-	if( p.y <= ny )
-	{
-		x = ( ny - pc.y ) / k + pc.x;
-
-		if ( x >= wx && x <= ex )
-		{
-			return gleam_point.xy( x, ny );
-		}
-	}
-
-	if( p.y >= sy )
-	{
-		x = ( sy - pc.y ) / k + pc.x;
-
-		if( x >= wx && x <= ex )
-		{
-			return gleam_point.xy( x, sy );
-		}
-	}
-
-	if( p.x >= ex )
-	{
-		y = ( ex - pc.x ) * k + pc.y;
-
-		if( y >= ny && y <= sy )
-		{
-			return gleam_point.xy( ex, y );
-		}
-	}
-
-	if( p.x <= wx )
-	{
-		y = ( wx - pc.x ) * k + pc.y;
-
-		if( y >= ny && y <= sy )
-		{
-			return gleam_point.xy( wx, y );
-		}
-	}
-
-	return pc;
-};
-
-
-/*
-| Point in the center.
-*/
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
-{
-	var
-		pos;
-
-	pos = this.pos;
-
-	return(
-		gleam_point.xy(
-			pos.x + this.width / 2,
-			pos.y + this.height / 2
-		)
-	);
-}
-);
-
-
-/*
-| West point.
-*/
-jion.lazyValue(
-	prototype,
-	'pw',
-	function( )
-{
-	var
-		pos;
-
-	pos = this.pos;
-
-	return gleam_point.xy( pos.x, pos.y + this.height / 2 );
-}
-);
-
-
-/*
-| A size jion matching this rect.
-*/
-jion.lazyValue(
-	prototype,
-	'size',
-	function( )
-{
-	var
-		size;
-
-	size = gleam_size.wh( this.width, this.height );
-
-	if( this.pos.equals( gleam_point.zero ) )
-	{
-		jion.aheadValue( size, 'zeroRect', this );
-	}
-
-	return size;
-}
-);
-
-
-/*
 | Returns a rect moved by -x/-y.
 */
-prototype.sub =
+def.func.sub =
 	function(
 		x,
 		y
@@ -579,93 +554,23 @@ prototype.sub =
 
 
 /*
-| A rect larger by 1.
-*/
-jion.lazyValue(
-	prototype,
-	'enlarge1',
-	function( )
-{
-	var enlarge1;
-
-	enlarge1 =
-		this.create(
-			'width', this.width + 1,
-			'height', this.height + 1
-		);
-
-	jion.aheadValue( enlarge1, 'shrink1', this );
-
-	return enlarge1;
-}
-);
-
-
-/*
-| A rect larger by 1.5.
-*/
-jion.lazyValue(
-	prototype,
-	'add1_5',
-	function( )
-{
-	var add1_5;
-
-	add1_5 =
-		this.create(
-			'width', this.width + 1.5,
-			'height', this.height + 1.5
-		);
-
-	return add1_5;
-}
-);
-
-
-/*
-| A rect smaller by 1.
-*/
-jion.lazyValue(
-	prototype,
-	'shrink1',
-	function( )
-{
-	var shrink1;
-
-	shrink1 =
-		this.create(
-			'width', this.width - 1,
-			'height', this.height - 1
-		);
-
-	jion.aheadValue( shrink1, 'enlarge1', this );
-
-	return shrink1;
-}
-);
-
-
-/*
 | Returns true if point is within this rect.
+|
+| FIXME check if this border stuff can be removed.
 */
-prototype.within =
+def.func.within =
 	function(
 		p,      // point
 		border  // additional border
 	)
 {
-	var
-		x,
-		y,
-		pos;
-
 	border = border || 0;
 
-	x = p.x;
+	const x = p.x;
 
-	y = p.y;
+	const y = p.y;
 
-	pos = this.pos;
+	const pos = this.pos;
 
 	return(
 		x >= pos.x + border
@@ -676,16 +581,4 @@ prototype.within =
 };
 
 
-/*
-| A zero rect.
-*/
-gleam_rect.zero =
-	gleam_rect.create(
-		'pos', gleam_point.zero,
-		'width', 0,
-		'height', 0
-	);
-
-
-
-} )( );
+} );

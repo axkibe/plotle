@@ -519,17 +519,6 @@ prototype._init =
 				);
 		}
 
-		this.form =
-			this.form.create(
-				'action', action,
-				'hover', hover,
-				'mark', mark,
-				'spaceRef', spaceRef,
-				'user', userCreds,
-				'userSpaceList', userSpaceList,
-				'viewSize', viewSize
-			);
-
 		this.disc =
 			this.disc.create(
 				'access', access,
@@ -548,6 +537,17 @@ prototype._init =
 				'show', show,
 				'spaceRef', spaceRef,
 				'user', userCreds,
+				'viewSize', viewSize
+			);
+
+		this.form =
+			this.form.create(
+				'action', action,
+				'hover', hover,
+				'mark', mark,
+				'spaceRef', spaceRef,
+				'user', userCreds,
+				'userSpaceList', userSpaceList,
 				'viewSize', viewSize
 			);
 	}
@@ -1579,9 +1579,7 @@ prototype.onRegister =
 	{
 /**/	if( CHECK )
 /**/	{
-/**/		console.log(
-/**/			'ignoring a register reply, since out of signup form'
-/**/		);
+/**/		console.log( 'ignoring a register reply, since out of signup form' );
 /**/	}
 
 		return;

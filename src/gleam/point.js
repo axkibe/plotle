@@ -1,72 +1,138 @@
 /*
 | A point in a 2D plane.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_point',
-		attributes :
-		{
-			x :
-			{
-				comment : 'x coordinate',
-				json : true,
-				type : 'number'
-			},
-			y :
-			{
-				comment : 'y coordinate',
-				json : true,
-				type : 'number'
-			}
-		}
-	};
-}
-
-
-var
-	gleam_point,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var prototype;
+tim.define( module, 'gleam_point', ( def, gleam_point ) => {
 
 
-if( NODE )
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
 {
-	jion = require( 'jion' );
+	x : // x coordinate
+	{
+		json : true,
+		type : 'number',
+	},
+	y : // y coordinate
+	{
+		json : true,
+		type : 'number',
+	}
+};
 
-	gleam_point = jion.this( module, 'source' );
-}
 
-prototype = gleam_point.prototype;
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy static values  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 
 /*
-| Shortcut to create x/y.
+| Shortcut for point at 0/0.
 */
-gleam_point.xy =
+def.staticLazy.zero =
+	() => gleam_point.create( 'x', 0, 'y', 0 );
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static functions  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| Shortcut to create a point by x/y values.
+*/
+def.static.xy =
 	function(
 		x,
 		y
 	)
 {
+	return gleam_point.create( 'x', x, 'y', y);
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~
+// ~ Functions ~
+// ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| Adds a points or x/y values, returns a new point.
+*/
+def.func.add =
+	function(
+		a1,
+		a2
+	)
+{
+	if( typeof( a1 ) === 'object' )
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( a2 !== undefined ) throw new Error( );
+/**/	}
+
+		return this.create(
+			'x', this.x + a1.x,
+			'y', this.y + a1.y
+		);
+	}
+	else
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( arguments.length !== 2 ) throw new Error( );
+/**/	}
+
+		return this.create(
+			'x', this.x + a1,
+			'y', this.y + a2
+		);
+	}
+};
+
+
+/*
+| Returns a point scaled by action.scaleX, action.scaleY
+| relative to the action.bPoint.
+|
+| ax / ay are added afterward.
+*/
+def.func.baseScale =
+	function(
+		action,  // action that scales the point
+		ax,      // x value to be added
+		ay       // y value to be added
+	)
+{
+	const pBase = action.pBase;
+
+	const scaleX = action.scaleX;
+
+	const scaleY = action.scaleY;
+
+	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
+
+	const x = this.x;
+
+	const y = this.y;
+
+	const bx = pBase.x;
+
+	const by = pBase.y;
+
+	if( x === bx && y === by ) return this.add( ax, ay );
+
 	return(
-		gleam_point.create(
-			'x', x,
-			'y', y
+		this.create(
+			'x', ( x - bx ) * scaleX + bx + ax,
+			'y', ( y - by ) * scaleY + by + ay
 		)
 	);
 };
@@ -74,27 +140,22 @@ gleam_point.xy =
 
 /*
 | Returns a border bordering this point.
+|
 | See gleam_shape.border for further explanation.
 */
-prototype.border =
+def.func.border =
 	function(
 		pc,  // center point to border relatively to
 		d    // distance to border
 	)
 {
-	var
-		cx,
-		cy,
-		x,
-		y;
+	const x = this.x;
 
-	x = this.x;
+	const y = this.y;
 
-	y = this.y;
+	const cx = pc.x;
 
-	cx = pc.x;
-
-	cy = pc.y;
+	const cy = pc.y;
 
 	return(
 		this.create(
@@ -118,95 +179,11 @@ prototype.border =
 
 
 /*
-| Adds two points or x/y values, returns a new point.
-*/
-prototype.add =
-	function(
-		a1,
-		a2
-	)
-{
-	if( typeof( a1 ) === 'object' )
-	{
-		if( a1.x === 0 && a1.y === 0 ) return this;
-
-		return gleam_point.create(
-			'x', this.x + a1.x,
-			'y', this.y + a1.y
-		);
-	}
-	else
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( arguments.length !== 2 ) throw new Error( );
-/**/	}
-
-		if( a1 === 0 && a2 === 0 ) return this;
-
-		return gleam_point.create(
-			'x', this.x + a1,
-			'y', this.y + a2
-		);
-	}
-};
-
-
-/*
-| Returns a point scaled by
-| action.scaleX, action.scaleY relative to the action.bPoint.
-|
-| ax / ay are added afterward.
-*/
-prototype.baseScale =
-	function(
-		action,
-		ax,
-		ay
-	)
-{
-	var
-		pBase,
-		scaleX,
-		scaleY,
-		x,
-		y,
-		bx,
-		by;
-
-	pBase = action.pBase;
-
-	scaleX = action.scaleX;
-
-	scaleY = action.scaleY;
-
-	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
-
-	x = this.x;
-
-	y = this.y;
-
-	bx = pBase.x;
-
-	by = pBase.y;
-
-	if( x === bx && y === by ) return this.add( ax, ay );
-
-	return(
-		this.create(
-			'x', ( x - bx ) * scaleX + bx + ax,
-			'y', ( y - by ) * scaleY + by + ay
-		)
-	);
-};
-
-
-/*
 | Returns a transformed point.
 */
-prototype.transform =
+def.func.transform =
 	function(
-		transform
+		transform  // transform to apply
 	)
 {
 
@@ -229,9 +206,9 @@ prototype.transform =
 /*
 | Returns a detransformed point.
 */
-prototype.detransform =
+def.func.detransform =
 	function(
-		transform
+		transform   // transform to apply reversely.
 	)
 {
 	return(
@@ -244,9 +221,9 @@ prototype.detransform =
 
 
 /*
-| Subtracts a points (or x/y from this), returns new point
+| Subtracts a point (or x/y from this), returns new point.
 */
-prototype.sub =
+def.func.sub =
 	function(
 		a1,
 		a2
@@ -254,18 +231,26 @@ prototype.sub =
 {
 	if( typeof( a1 ) === 'object' )
 	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( a2 !== undefined ) throw new Error( );
+/**/	}
+
 		if( a1.x === 0 && a1.y === 0 ) return this;
 
-		return gleam_point.create(
+		return this.create(
 			'x', this.x - a1.x,
 			'y', this.y - a1.y
 		);
 	}
 	else
 	{
-		if( a1 === 0 && a2 === 0 ) return this;
+/**/	if( CHECK )
+/**/	{
+/**/		if( arguments.length !== 2 ) throw new Error( );
+/**/	}
 
-		return gleam_point.create(
+		return this.create(
 			'x', this.x - a1,
 			'y', this.y - a2
 		);
@@ -273,11 +258,5 @@ prototype.sub =
 };
 
 
-/*
-| Shortcut for point at 0/0.
-*/
-gleam_point.zero =
-	gleam_point.create( 'x', 0, 'y', 0 );
+} );
 
-
-} )( );

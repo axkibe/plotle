@@ -110,7 +110,6 @@ prototype.prepareResource =
 	)
 {
 	var
-		jionCodeResource,
 		mtime,
 		realpath,
 		that;
@@ -156,7 +155,7 @@ prototype.prepareResource =
 				'realpath', realpath
 			);
 
-		jionCodeResource =
+		const jionCodeResource =
 			resource.create(
 				'aliases', undefined,
 				'data', that.jionCode,
@@ -169,7 +168,45 @@ prototype.prepareResource =
 			'inventory', root.inventory.updateResource( jionCodeResource )
 		);
 	}
-	else if( resource.filePath )
+	
+	if( resource.hasTim )
+	{
+		if( config.devel ) delete require.cache[ realpath ];
+
+		that = require( realpath );
+
+		if( !that.source )
+		{
+			throw new Error(
+				'tim source did not export its source: '
+				+ resource.filePath
+			);
+		}
+
+		resource =
+			resource.create(
+				'data', that.source,
+				'hasTim', that.hasTim,
+				'timId', that.timId,
+				'timestamp', mtime,
+				'realpath', realpath
+			);
+
+		const timcodeResource =
+			resource.create(
+				'aliases', undefined,
+				'data', that.timcode,
+				'filePath', that.timcodeFilename,
+				'hasTim', false,
+				'timHolder', resource
+			);
+
+		root.create(
+			'inventory', root.inventory.updateResource( timcodeResource )
+		);
+	}
+	
+	if( !resource.hasJion && !resource.hasTim && resource.filePath )
 	{
 		resource =
 			resource.create(

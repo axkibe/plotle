@@ -77,16 +77,12 @@ if( JION )
 
 
 // FUTURE remove
-var DELAY_ALTER = 5000;
-var DELAY_ACQUIRE = 5000;
-DELAY_ALTER = false;
-DELAY_ACQUIRE = false;
-//Error.stackTraceLimit = 99999;
+//const DELAY_ALTER = 5000;
+//const DELAY_ACQUIRE = 5000;
+const DELAY_ALTER = false;
+const DELAY_ACQUIRE = false;
 
-var
-	config;
-
-config = require( '../../config' );
+const config = require( '../../config' );
 
 config.database_version = 15;
 
@@ -120,105 +116,73 @@ global.NODE = true;
 global.root = undefined;
 
 
-var
-	database_repository,
-	ref_space,
-	fs,
-	http,
-	isString,
-	jion,
-	log_ajax,
-	log_fail,
-	log_start,
-	log_web,
-	mongodb,
-	prototype,
-	ref_userSpaceList,
-	resume,
-	server_inventory,
-	server_maxAge,
-	server_postProcessor,
-	server_requestHandler,
-	server_resource,
-	server_root,
-	server_upSleepGroup,
-	server_roster,
-	server_spaceBox,
-	server_spaceNexus,
-	server_tools,
-	server_userNexus,
-	serverDir,
-	hash_sha1,
-	startup,
-	suspend,
-	uglify,
-	url,
-	util,
-	zlib;
+/*
+| Root directory of server.
+*/
+let serverDir;
 
-jion = require( 'jion' );
+GLOBAL.tim = require( 'tim.js' );
 
-fs = require( 'fs' );
+// FIXME?
+require( 'jion' );
 
-http = require( 'http' );
+const fs = require( 'fs' );
 
-isString = jion.isString;
+const http = require( 'http' );
 
-log_ajax = require( '../log/ajax' );
+const isString = tim.isString;
 
-log_fail = require( '../log/fail' );
+const log_ajax = require( '../log/ajax' );
 
-log_start = require( '../log/start' );
+const log_start = require( '../log/start' );
 
-log_web = require( '../log/web' );
+const log_web = require( '../log/web' );
 
-server_maxAge = require( './maxAge' );
+const server_maxAge = require( './maxAge' );
 
-mongodb = require( 'mongodb' );
+const server_postProcessor = require( './postProcessor' );
 
-server_postProcessor = require( './postProcessor' );
+const database_repository = require( '../database/repository' );
 
-database_repository = require( '../database/repository' );
+const ref_userSpaceList = require( '../ref/userSpaceList' );
 
-ref_userSpaceList = require( '../ref/userSpaceList' );
+const server_requestHandler = require( './requestHandler' );
 
-server_requestHandler = require( './requestHandler' );
+const server_roster = require( './roster' );
 
-server_roster = require( './roster' );
+const server_inventory = require( './inventory' );
 
-server_inventory = require( './inventory' );
+const server_resource = require( './resource' );
 
-server_resource = require( './resource' );
+const server_spaceBox = require( './spaceBox' );
 
-server_spaceBox = require( './spaceBox' );
+const server_spaceNexus = require( './spaceNexus' );
 
-server_spaceNexus = require( './spaceNexus' );
+const server_userNexus = require( './userNexus' );
 
-server_userNexus = require( './userNexus' );
+const server_tools = require( './tools' );
 
-server_tools = require( './tools' );
+const server_upSleepGroup = require( './upSleepGroup' );
 
-server_upSleepGroup = require( './upSleepGroup' );
+const hash_sha1 = require( '../hash/sha1' );
 
-hash_sha1 = require( '../hash/sha1' );
+const suspend = require( 'suspend' );
 
-suspend = require( 'suspend' );
+const resume = suspend.resume;
 
-resume = suspend.resume;
+const uglify = require( 'uglify-js' );
 
-uglify = require( 'uglify-js' );
+const url = require( 'url' );
 
-url = require( 'url' );
+const util = require( 'util' );
 
-util = require( 'util' );
+const ref_space = require( '../ref/space' );
 
-ref_space = require( '../ref/space' );
+const zlib = require( 'zlib' );
 
-zlib = require( 'zlib' );
+const server_root = require( 'jion' ).this( module );
 
-server_root = require( 'jion' ).this( module );
-
-prototype = server_root.prototype;
+const prototype = server_root.prototype;
 
 /*
 | Calculates the server root directory.
@@ -253,8 +217,7 @@ prototype._init =
 /*
 | Sets up the server.
 |*/
-startup =
-	function*( )
+const startup = function*( )
 {
 
 	server_root.create(
