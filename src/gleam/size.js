@@ -1,78 +1,47 @@
 /*
 | A size.
+|
+| Positionless dimensions.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_size',
-		attributes :
-		{
-			height :
-			{
-				comment : 'the height',
-				type : 'number'
-			},
-			width :
-			{
-				comment : 'the width',
-				type : 'number'
-			}
-		}
-	};
-}
-
-
-var
-	gleam_point,
-	gleam_rect,
-	gleam_size,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
+// FIXME
 var
-	prototype;
+	gleam_point,
+	gleam_rect;
 
 
-if( NODE )
+tim.define( module, 'gleam_size', ( def, gleam_size ) => {
+
+
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// Typed immutable attributes  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+
+def.attributes =
 {
-	jion = require( 'jion' );
+	height :
+	{
+		type : 'number'
+	},
+	width :
+	{
+		type : 'number'
+	}
+};
 
-	gleam_size = jion.this( module, 'source' );
-}
 
-
-prototype = gleam_size.prototype;
-
-
-/*
-| Point in the center.
-*/
-jion.lazyValue(
-	prototype,
-	'pc',
-	function( )
-{
-	return gleam_point.xy( this.width / 2, this.height / 2 );
-}
-);
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Static functions  ~
+// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 
 /*
 | Shortcut to create an gleam_size jion.
 */
-gleam_size.wh =
+def.static.wh =
 	function(
 		width,
 		height
@@ -87,12 +56,77 @@ gleam_size.wh =
 };
 
 
+// ~ ~ ~ ~ ~ ~ ~ ~
+// ~ Lazy values ~
+// ~ ~ ~ ~ ~ ~ ~ ~
+
+
+/*
+| Point in the center.
+*/
+def.lazy.pc =
+	function( )
+{
+	return gleam_point.xy( this.width / 2, this.height / 2 );
+};
+
+
+/*
+| A size tim increased by one height and width.
+|
+| FIXME aheadValue
+*/
+def.lazy.enlarge1 =
+	function( )
+{
+	return this.add( 1, 1 );
+};
+
+
+/*
+| A size tim decreased by one height and width.
+|
+| FIXME aheadValue
+*/
+def.lazy.shrink1 =
+	function( )
+{
+	return this.add( -1, -1 );
+};
+
+
+/*
+| A rectangle of same size with p at 0/0
+*/
+def.lazy.zeroRect =
+	function( )
+{
+	const rect =
+		gleam_rect.create(
+			'pos', gleam_point.zero,
+			'width', this.width,
+			'height', this.height
+		);
+
+	tim.aheadValue( rect, 'size', this );
+
+	return rect;
+};
+
+
+// ~ ~ ~ ~ ~ ~ ~
+// ~ Functions ~
+// ~ ~ ~ ~ ~ ~ ~
+
+
 /*
 | Returns a size jion enlarged by w/h.
-| Or reduced by -w/-h
 */
-prototype.add =
-	function( w, h )
+def.func.add =
+	function(
+		w,
+		h
+	)
 {
 	return(
 		this.create(
@@ -103,55 +137,4 @@ prototype.add =
 };
 
 
-/*
-| A size jion increased by one, height and width.
-*/
-jion.lazyValue(
-	prototype,
-	'enlarge1',
-	function( )
-{
-	return this.add( 1, 1 );
-}
-);
-
-
-/*
-| A size jion increased by one, height and width.
-*/
-jion.lazyValue(
-	prototype,
-	'shrink1',
-	function( )
-{
-	return this.add( -1, -1 );
-}
-);
-
-
-/*
-| A rectangle of same size with p at 0/0
-*/
-jion.lazyValue(
-	prototype,
-	'zeroRect',
-	function( )
-{
-	var
-		rect;
-
-	rect =
-		gleam_rect.create(
-			'pos', gleam_point.zero,
-			'width', this.width,
-			'height', this.height
-		);
-
-	jion.aheadValue( rect, 'size', this );
-
-	return rect;
-}
-);
-
-
-} )( );
+} );
