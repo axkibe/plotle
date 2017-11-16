@@ -2,4 +2,5 @@ package-lock.json
 node_modules/
 report/*
 jioncode/*
+timcode/*
 .jshint.stamp
