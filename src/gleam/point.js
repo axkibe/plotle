@@ -35,8 +35,8 @@ def.attributes =
 /*
 | Shortcut for point at 0/0.
 */
-def.staticLazy.zero =
-	() => gleam_point.create( 'x', 0, 'y', 0 );
+def.staticLazy.zero = () =>
+	gleam_point.create( 'x', 0, 'y', 0 );
 
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~

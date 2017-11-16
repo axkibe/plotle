@@ -58,8 +58,8 @@ def.attributes =
 /*
 | A zero rect.
 */
-def.staticLazy.zero =
-	() => gleam_rect.create(
+def.staticLazy.zero = () =>
+	gleam_rect.create(
 		'pos', gleam_point.zero,
 		'width', 0,
 		'height', 0

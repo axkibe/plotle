@@ -42,19 +42,22 @@ def.attributes =
 /*
 | Black.
 */
-def.staticLazy.black = () => gleam_color.rgb( 0, 0, 0 );
+def.staticLazy.black = () =>
+	gleam_color.rgb( 0, 0, 0 );
 
 
 /*
 | Red.
 */
-def.staticLazy.red = () => gleam_color.rgb( 255, 0, 0 );
+def.staticLazy.red = () =>
+	gleam_color.rgb( 255, 0, 0 );
 
 
 /*
 | White.
 */
-def.staticLazy.white = () => gleam_color.rgb( 255, 255, 255 );
+def.staticLazy.white = () =>
+	gleam_color.rgb( 255, 255, 255 );
 
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
