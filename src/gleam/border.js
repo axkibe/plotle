@@ -1,78 +1,54 @@
 /*
 | A border.
 */
+'use strict'
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_border',
-		attributes :
-		{
-			distance :
-			{
-				comment : 'distance from shape',
-				type : 'number',
-				defaultValue : '0'
-			},
-			width :
-			{
-				comment : 'border width',
-				type : 'number',
-				defaultValue : '1'
-			},
-			color :
-			{
-				comment : 'color',
-				type : 'gleam_color',
-				defaultValue : 'gleam_color.black'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	gleam_color,
-	gleam_border;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'gleam_border', ( def, gleam_border ) => {
 
 
-if( NODE )
+/*:::::::::::::::::::::::::::::
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+def.attributes =
 {
-	require( 'jion' ).this( module, 'source' );
+	distance : // distance from shape
+	{
+		type : 'number',
+		defaultValue : '0'
+	},
+	width : // border width
+	{
+		type : 'number',
+		defaultValue : '1'
+	},
+	color :
+	{
+		type : 'gleam_color',
+		defaultValue : 'gleam_color.black'
+	}
+};
 
-	return;
-}
 
-
-var
-	prototype;
-
-prototype = gleam_border.prototype;
-
-
-/*::::::::::::::::
-| default values
-::::::::::::::::*/
+/*:::::::::::::::::::::
+| Static lazy values
+::::::::::::::::::::::*/
 
 
 /*
-| A simple black border
+| A simple blaick border.
 */
-gleam_border.simpleBlack =
+def.staticLazy.simpleBlack () =>
 	gleam_border.create(
 		'color', gleam_color.black
 	);
 
 
-} )( );
+} );

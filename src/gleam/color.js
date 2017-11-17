@@ -9,9 +9,9 @@
 tim.define( module, 'gleam_color', ( def, gleam_color ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::::::::::::
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -35,9 +35,10 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static lazy values  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::::
+:: Static lazy values
+':::::::::::::::::::::*/
+
 
 /*
 | Black.
@@ -60,9 +61,9 @@ def.staticLazy.white = () =>
 	gleam_color.rgb( 255, 255, 255 );
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static functions  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
@@ -107,9 +108,9 @@ def.static.rgba =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy values ~
-// ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::
+:: Lazy values
+'::::::::::::::*/
 
 
 /*

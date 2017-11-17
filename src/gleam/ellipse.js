@@ -15,9 +15,9 @@ var
 tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -52,9 +52,9 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static functions  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::.
+:: Static functions
+::::::::::::::::::::*/
 
 
 /*
@@ -76,9 +76,9 @@ def.static.posSize =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy values ~
-// ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
@@ -189,9 +189,9 @@ def.lazy.shape =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~
-// ~ Functions ~
-// ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -290,4 +290,3 @@ def.func.within =
 
 
 } );
-

@@ -15,9 +15,9 @@ var
 tim.define( module, 'gleam_facet', ( def, gleam_facet ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::::::::::::
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -47,9 +47,9 @@ def.attributes =
 def.group = [ 'boolean' ];
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy static values  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::::
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*

@@ -15,9 +15,9 @@ var
 tim.define( module, 'gleam_size', ( def, gleam_size ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -33,9 +33,9 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static functions  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
@@ -56,9 +56,9 @@ def.static.wh =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy values ~
-// ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
@@ -114,9 +114,9 @@ def.lazy.zeroRect =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~
-// ~ Functions ~
-// ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*

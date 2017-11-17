@@ -31,9 +31,9 @@ var
 tim.define( module, 'gleam_roundRect', ( def, gleam_roundRect ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::::::::::::::::::
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -61,9 +61,9 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy values ~
-// ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
@@ -131,9 +131,9 @@ def.lazy.shape =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~
-// ~ Functions ~
-// ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::
+:: Functions
+'::::::::::::*/
 
 
 /*

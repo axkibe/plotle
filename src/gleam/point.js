@@ -7,9 +7,9 @@
 tim.define( module, 'gleam_point', ( def, gleam_point ) => {
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -27,9 +27,9 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy static values  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
@@ -39,9 +39,9 @@ def.staticLazy.zero = () =>
 	gleam_point.create( 'x', 0, 'y', 0 );
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static functions  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
@@ -57,9 +57,9 @@ def.static.xy =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~
-// ~ Functions ~
-// ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -259,4 +259,3 @@ def.func.sub =
 
 
 } );
-

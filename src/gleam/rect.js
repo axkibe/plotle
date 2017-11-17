@@ -25,9 +25,9 @@ tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
 def.hasAbstract = true;
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// Typed immutable attributes  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 def.attributes =
@@ -50,9 +50,9 @@ def.attributes =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static lazy values  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
@@ -66,9 +66,9 @@ def.staticLazy.zero = () =>
 	);
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Static functions  ~
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
@@ -145,9 +145,9 @@ def.static.posSize =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~ ~
-// ~ Lazy values ~
-// ~ ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
@@ -313,9 +313,9 @@ def.lazy.shrink1 =
 };
 
 
-// ~ ~ ~ ~ ~ ~ ~
-// ~ Functions ~
-// ~ ~ ~ ~ ~ ~ ~
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
