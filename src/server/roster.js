@@ -343,17 +343,17 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/glint/fill.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/glint/paint.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/glint/text.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
