@@ -1,61 +1,40 @@
 /*
 | Masked glints.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_glint_mask',
-		attributes :
-		{
-			glint :
-			{
-				comment : 'the glints to draw',
-				type : 'gleam_glint_list'
-			},
-			reverse :
-			{
-				comment : 'true if reversing mask',
-				type : [ 'undefined', 'boolean' ]
-			},
-			shape :
-			{
-				comment : 'the shape(list) to mask to',
-				type :
-					require( '../typemap-shape' )
-					.concat( [ 'gleam_shapeList' ] )
-			}
-		}
-	};
-}
-
-
-var
-	gleam_glint_mask;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var prototype;
+tim.define( module, 'gleam_glint_mask', ( def, gleam_glint_mask ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	def.attributes =
+	{
+		glint :
+		{
+			// the glints to draw
+			type : 'gleam_glint_list'
+		},
+		reverse :
+		{
+			// true if reversing mask
+			type : [ 'undefined', 'boolean' ]
+		},
+		shape :
+		{
+			// the shape(list) to mask to
+			type :
+				require( '../typemap-shape' )
+				.concat( [ 'gleam_shapeList' ] )
+		}
+	}
 }
 
-prototype = gleam_glint_mask.prototype;
 
-
-} )( );
+} );

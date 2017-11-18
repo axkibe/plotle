@@ -333,7 +333,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/glint/mask.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
