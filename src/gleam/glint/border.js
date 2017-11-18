@@ -1,56 +1,34 @@
 /*
 | The border of a shape.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'gleam_glint_border', ( def, gleam_glint_border ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_glint_border',
-		attributes :
+	def.attributes =
+	{
+		facet :
 		{
-			facet :
-			{
-				comment : 'the facet to draw the border with',
-				type : 'gleam_facet'
-			},
-			shape :
-			{
-				comment : 'the shape to draw',
-				type :
-					require( '../typemap-shape' )
-					.concat( [ 'gleam_shapeList' ] )
-			}
+			// the facet to draw the border with
+			type : 'gleam_facet'
+		},
+		shape :
+		{
+			// the shape to draw
+			type :
+				require( '../typemap-shape' )
+				.concat( [ 'gleam_shapeList' ] )
 		}
 	};
 }
 
-
-var
-	gleam_glint_border;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var prototype;
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-prototype = gleam_glint_border.prototype;
-
-
-} )( );
+} );

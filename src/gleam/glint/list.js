@@ -1,19 +1,20 @@
 /*
 | A list of stuff to display.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'gleam_glint_list', ( def, gleam_glint_list ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_glint_list',
-		attributes :
-		{
-		},
-		list :
+	def.list =
 		[
 			'gleam_glint_border',
 			'gleam_glint_fill',
@@ -22,33 +23,8 @@ if( JION )
 			'gleam_glint_text',
 			'gleam_glint_list',
 			'gleam_glint_window'
-		]
-	};
+		];
 }
 
 
-var
-	gleam_glint_list;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-prototype = gleam_glint_list.prototype;
-
-
-} )( );
+} );
