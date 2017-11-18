@@ -69,7 +69,7 @@ gruga_iconZoom.shape =
 					gleam_shape_round.p(    c.add(   0.0,  9 ) ),
 					gleam_shape_round.p(    c.add(  -5.0,  8 ) ),
 					gleam_shape_line.p(     c.add(  -9.0, 13 ) ),
-					gleam_shape_round.close( )
+					gleam_shape_round.close
 				],
 				'pc', c,
 				'nogrid', true
@@ -81,7 +81,7 @@ gruga_iconZoom.shape =
 					gleam_shape_round.pCcw( c.add(  0.0,  8.5 ) ),
 					gleam_shape_round.pCcw( c.add(  8.5,  0.0 ) ),
 					gleam_shape_round.pCcw( c.add(  0.0, -8.5 ) ),
-					gleam_shape_round.closeCcw( )
+					gleam_shape_round.closeCcw
 				],
 				'pc', c,
 				'nogrid', true

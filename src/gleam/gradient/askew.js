@@ -1,35 +1,28 @@
 /*
 | An askew gradient.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_gradient_askew',
-		attributes :
-		{
-			// FUTURE specify degree
-		},
-		list : [ 'gleam_gradient_colorStop' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'gleam_gradient_askew', ( def, gleam_gradient_askew ) => {
+
+
+/*:::::::::::::::::.
+:: Typed immutable
+'::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	/*
+	def.attributes =
+	{
+		// FUTURE specify degree
+	};
+	*/
+
+	def.list = [ 'gleam_gradient_colorStop' ];
 }
 
 
-})( );
+} );

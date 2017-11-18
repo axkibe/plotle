@@ -20,31 +20,33 @@ tim.define( module, 'gleam_facet', ( def, gleam_facet ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	border :
+	def.attributes =
 	{
-		type :
-		[
-			'gleam_border',
-			'gleam_borderList',
-			'undefined'
-		]
-	},
-	fill :
-	{
-		type :
-		[
-			'gleam_color',
-			'gleam_gradient_askew',
-			'gleam_gradient_radial',
-			'undefined'
-		]
-	}
-};
+		border :
+		{
+			type :
+			[
+				'gleam_border',
+				'gleam_borderList',
+				'undefined'
+			]
+		},
+		fill :
+		{
+			type :
+			[
+				'gleam_color',
+				'gleam_gradient_askew',
+				'gleam_gradient_radial',
+				'undefined'
+			]
+		}
+	};
 
-
-def.group = [ 'boolean' ];
+	def.group = [ 'boolean' ];
+}
 
 
 /*:::::::::::::::::::::

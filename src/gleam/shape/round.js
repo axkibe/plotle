@@ -3,125 +3,98 @@
 |
 | Used by shape.
 */
+'use strict';
 
 
-/*
-| The jion definition
-*/
-if( JION )
+var gleam_point; // FIXME
+
+
+tim.define( module, 'gleam_shape_round', ( def, gleam_shape_round ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_shape_round',
-		attributes :
+	def.attributes =
+	{
+		p :
 		{
-			p :
-			{
-				comment : 'connect to',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			ccw :
-			{
-				comment : 'if true do it counter-clockwise',
-				type : [ 'undefined', 'boolean' ]
-			},
-			close :
-			{
-				comment : 'true if this closes the shape',
-				type : [ 'undefined', 'boolean' ]
-			}
+			// connect to
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		ccw :
+		{
+			// if true do it counter-clockwise
+			type : [ 'undefined', 'boolean' ]
+		},
+		close :
+		{
+			// true if this closes the shape
+			type : [ 'undefined', 'boolean' ]
 		}
 	};
 }
 
 
-var
-	gleam_point,
-	gleam_shape_round;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = gleam_shape_round.prototype;
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
 | Shortcut to create a round to close.
 */
-gleam_shape_round.close =
-	function( )
-{
-	return gleam_shape_round.create( 'close', true );
-};
+def.staticLazy.close = ( ) =>
+	gleam_shape_round.create( 'close', true );
 
 
 /*
 | Shortcut to create a count clockwise round to close.
 */
-gleam_shape_round.closeCcw =
-	function( )
-{
-	return gleam_shape_round.create( 'ccw', true, 'close', true );
-};
+def.staticLazy.closeCcw = ( ) =>
+	gleam_shape_round.create( 'ccw', true, 'close', true );
 
 
-/*
-| Shortcut to create a counter clockwise round to p.
-*/
-gleam_shape_round.pCcw =
-	function( p )
-{
-	return gleam_shape_round.create( 'ccw', true, 'p', p );
-};
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Shortcut to create a round to p.
 */
-gleam_shape_round.p =
-	function( p )
-{
-	return gleam_shape_round.create( 'p', p );
-};
+def.static.p = p =>
+	gleam_shape_round.create( 'p', p );
+
+/*
+| Shortcut to create a counter clockwise round to p.
+*/
+def.static.pCcw = p =>
+	gleam_shape_round.create( 'ccw', true, 'p', p );
 
 
 /*
 | Shortcut to create a round to xy.
 */
-gleam_shape_round.xy =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		gleam_shape_round.create(
-			'p', gleam_point.create( 'x', x, 'y', y )
-		)
+def.static.xy = ( x, y ) =>
+	gleam_shape_round.create(
+		'p', gleam_point.xy( x, y )
 	);
-};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns a transformed shape section.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -147,7 +120,7 @@ prototype.transform =
 | case it intersects with this sectioin
 | or undefined otherwise
 */
-prototype.getProjection =
+def.func.getProjection =
 	function(
 		p,   // point to project to
 		pn,  // next point in shape( === this.p when not closing )
@@ -155,27 +128,15 @@ prototype.getProjection =
 		pc   // central point of shape
 	)
 {
-	var
-		a,
-		b,
-		cx,
-		cy,
-		d,
-		dx,
-		dy,
-		dxy,
-		k,
-		qa,
-		qb,
-		qc,
-		x,
-		y;
+	const dx = pn.x - pp.x;
 
-	dx = pn.x - pp.x;
+	const dy = pn.y - pp.y;
 
-	dy = pn.y - pp.y;
+	const dxy = dx * dy;
 
-	dxy = dx * dy;
+	let a, b;
+
+	let cx, cy;
 
 	if( dxy > 0 )
 	{
@@ -211,22 +172,22 @@ prototype.getProjection =
 	{
 		if( p.y > cy )
 		{
-			return gleam_point.create( 'x', cx, 'y', cy + b );
+			return gleam_point.xy( cx, cy + b );
 		}
 		else if( p.y < cy )
 		{
-			return gleam_point.create( 'x', cx, 'y', cy - b );
+			return gleam_point.xy( cx, cy - b );
 		}
 		else if( p.y === cy )
 		{
-			return gleam_point.create( 'x', cx, 'y', cy );
+			return gleam_point.xy( cx, cy );
 		}
 	}
 	else
 	{
-		k = ( p.y - pc.y ) / ( p.x - pc.x );
+		const k = ( p.y - pc.y ) / ( p.x - pc.x );
 
-		d = ( pc.y - cy ) - k * ( pc.x - cx );
+		const d = ( pc.y - cy ) - k * ( pc.x - cx );
 
 		// x^2 / a^2 + y^2 / b^2 = 1
 		// y = k * x + d
@@ -234,25 +195,25 @@ prototype.getProjection =
 		// x^2 / a^2 + k^2 * x^2 / b^2 + 2 * k * x * d / b^2 + d^2 / b^2 = 1
 		// x^2 ( 1 / a^2 + k^2 / b^2 ) + x ( 2 * k * d / b^2 ) + d^2 / b^2 - 1 = 0
 
-		qa = 1 / (a * a) + k * k / ( b * b );
+		const qa = 1 / (a * a) + k * k / ( b * b );
 
-		qb = 2 * k * d / ( b * b );
+		const qb = 2 * k * d / ( b * b );
 
-		qc = d * d / ( b * b ) - 1;
+		const qc = d * d / ( b * b ) - 1;
+
+		let x, y;
 
 		if ( p.x > cx )
 		{
 			x =
 				( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) )
-				/
-				( 2 * qa );
+				/ ( 2 * qa );
 		}
 		else
 		{
 			x =
 				( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) )
-				/
-				( 2 * qa );
+				/ ( 2 * qa );
 		}
 		// x =
 		//      Math.sqrt(
@@ -266,19 +227,15 @@ prototype.getProjection =
 		y += cy;
 
 		if(
-			(
-				( y >= cy && p.y >= cy ) || ( y <= cy && p.y <= cy )
-			)
+			( ( y >= cy && p.y >= cy ) || ( y <= cy && p.y <= cy ) )
 			&&
-			(
-				( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx )
-			)
+			( ( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx ) )
 		)
 		{
-			return gleam_point.create( 'x', x, 'y', y );
+			return gleam_point.xy( x, y );
 		}
 	}
 };
 
 
-})( );
+} );

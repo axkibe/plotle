@@ -20,17 +20,20 @@ tim.define( module, 'gleam_size', ( def, gleam_size ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	height :
+	def.attributes =
 	{
-		type : 'number'
-	},
-	width :
-	{
-		type : 'number'
-	}
-};
+		height :
+		{
+			type : 'number'
+		},
+		width :
+		{
+			type : 'number'
+		}
+	};
+}
 
 
 /*::::::::::::::::::.

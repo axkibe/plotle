@@ -3,88 +3,57 @@
 |
 | Used by shape.
 */
+'use strict';
 
 
-/*
-| The jion definition
-*/
-if( JION )
+// FIXME
+var
+	gleam_point;
+
+
+tim.define( module, 'gleam_shape_start', ( def, gleam_shape_start ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_shape_start',
-		attributes :
+	def.attributes =
+	{
+		p :
 		{
-			p :
-			{
-				comment : 'start here',
-				type : [ 'gleam_point' ]
-			}
+			// start here
+			type : [ 'gleam_point' ]
 		}
 	};
 }
 
 
-var
-	gleam_point,
-	gleam_shape_start;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	gleam_shape_start = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = gleam_shape_start.prototype;
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
-| Shortcut to create a start at ü.
+| Shortcut to create a start at p.
 */
-gleam_shape_start.p =
-	function( p )
-{
-	return gleam_shape_start.create( 'p', p );
-};
+def.static.p = p => gleam_shape_start.create( 'p', p );
 
 
 /*
 | Shortcut to create a start at xy.
 */
-gleam_shape_start.xy =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		gleam_shape_start.create(
-			'p',
-				gleam_point.create(
-					'x', x,
-					'y', y
-				)
-		)
-	);
-};
+def.static.xy = ( x, y ) =>
+	gleam_shape_start.create( 'p', gleam_point.xy( x, y ) );
 
 
 /*
 | Returns the shape section repositioned to a view.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -99,4 +68,4 @@ prototype.transform =
 };
 
 
-})( );
+} );

@@ -20,36 +20,39 @@ tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	pos :   // position
+	def.attributes =
 	{
-		type : 'gleam_point'
-	},
-	width :
-	{
-		type : 'number'
-	},
-	height :
-	{
-		type : 'number'
-	},
-	gradientPC : // center for gradient
-	{
-		type : [ 'undefined', 'gleam_point' ],
-		assign : '_gradientPC'
-	},
-	gradientR0 : // inner radius for circle gradients
-	{
-		type : [ 'undefined', 'number' ],
-		assign : '_gradientR0'
-	},
-	gradientR1 : // outer radius for circle gradients
-	{
-		type : [ 'undefined', 'number' ],
-		assign : '_gradientR1'
-	}
-};
+		pos :   // position
+		{
+			type : 'gleam_point'
+		},
+		width :
+		{
+			type : 'number'
+		},
+		height :
+		{
+			type : 'number'
+		},
+		gradientPC : // center for gradient
+		{
+			type : [ 'undefined', 'gleam_point' ],
+				assign : '_gradientPC'
+		},
+		gradientR0 : // inner radius for circle gradients
+		{
+			type : [ 'undefined', 'number' ],
+			assign : '_gradientR0'
+		},
+		gradientR1 : // outer radius for circle gradients
+		{
+			type : [ 'undefined', 'number' ],
+			assign : '_gradientR1'
+		}
+	};
+}
 
 
 /*::::::::::::::::::.
@@ -181,7 +184,7 @@ def.lazy.shape =
 				gleam_shape_round.p( this.pn ),
 				gleam_shape_round.p( this.pe ),
 				gleam_shape_round.p( this.ps ),
-				gleam_shape_round.close( )
+				gleam_shape_round.close
 			],
 			'pc', this.pc
 		)

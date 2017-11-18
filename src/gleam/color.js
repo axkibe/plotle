@@ -14,25 +14,28 @@ tim.define( module, 'gleam_color', ( def, gleam_color ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	alpha :
+	def.attributes =
 	{
-		type : [ 'undefined', 'number' ]
-	},
-	red :
-	{
-		type : 'integer'
-	},
-	green :
-	{
-		type : 'integer'
-	},
-	blue :
-	{
-		type : 'integer'
-	}
-};
+		alpha :
+		{
+			type : [ 'undefined', 'number' ]
+		},
+		red :
+		{
+			type : 'integer'
+		},
+		green :
+		{
+			type : 'integer'
+		},
+		blue :
+		{
+			type : 'integer'
+		}
+	};
+}
 
 
 /*:::::::::::::::::::::

@@ -10,6 +10,12 @@ global.JION = false;
 
 
 /*
+| Running node normally, TIM is false.
+*/
+global.TIM = false;
+
+
+/*
 | The jion definition.
 */
 if( JION )
@@ -121,7 +127,7 @@ global.root = undefined;
 */
 let serverDir;
 
-GLOBAL.tim = require( 'tim.js' );
+global.tim = require( 'tim.js' );
 
 // FIXME?
 require( 'jion' );

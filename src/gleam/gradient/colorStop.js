@@ -1,43 +1,33 @@
 /*
 | A gradient color stop.
 */
+'use strict';
 
 
-/*
-| The jion definition
-*/
-if( JION )
+tim.define( module, 'gleam_gradient_colorStop', ( def, gleam_gradient_colorStop ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_gradient_colorStop',
-		attributes :
+	def.attributes =
+	{
+		offset :
 		{
-			offset :
-			{
-				comment : 'color stop offset (0-1)',
-				type : 'number'
-			},
-			color :
-			{
-				comment : 'color stop color',
-				type : 'gleam_color'
-			}
+			// color stop offset ( from 0 to 1 )
+			type : 'number'
+		},
+		color :
+		{
+			// color at stop
+			type : 'gleam_color'
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-})( );
+} );

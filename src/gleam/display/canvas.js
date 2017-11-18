@@ -2,119 +2,82 @@
 | Displays stuff using a HTML5 canvas renderer.
 |
 | FUTURE: Remove the 'border' stuff
+|
+| FIXME shift and border should be affected by window.ratio as well
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_display_canvas',
-		attributes :
-		{
-			background :
-			{
-				comment : 'if set the canvas is opaque and has background',
-				type : [ 'undefined', 'string' ]
-
-			},
-			glint :
-			{
-				comment : 'the glint list to display',
-				type : [ 'undefined', 'gleam_glint_list' ]
-			},
-			size :
-			{
-				comment : 'the size of the display',
-				type : [ 'gleam_size' ]
-			},
-			_cv :
-			{
-				comment : 'the html canvas',
-				type : [ 'undefined', 'protean' ]
-			},
-			_cx :
-			{
-				comment : 'the html canvas context',
-				type : [ 'undefined', 'protean' ]
-			}
-		},
-		init : [ 'inherit' ]
-	};
-}
-
-
-var
-	get2dContext,
-	gleam_constants,
-	gleam_display_canvas,
-	gleam_intern_opentype,
-	gleam_point,
-	jion,
-	shell_settings;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+// FIXME
+var
+	gleam_constants,
+	gleam_intern_opentype,
+	gleam_point,
+	shell_settings;
 
-	return;
+
+tim.define( module, 'gleam_display_canvas', ( def, gleam_display_canvas ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		background :
+		{
+			// if set the canvas is opaque and has a background
+			type : [ 'undefined', 'string' ]
+		},
+		glint :
+		{
+			// the glint list to display
+			type : [ 'undefined', 'gleam_glint_list' ]
+		},
+		size :
+		{
+			// the size of the display
+			type : [ 'gleam_size' ]
+		},
+		_cv :
+		{
+			// the html canvas
+			type : [ 'undefined', 'protean' ]
+		},
+		_cx :
+		{
+			// the html canvas context
+			type : [ 'undefined', 'protean' ]
+		}
+	};
+
+	def.init = [ 'inherit' ];
 }
 
-
-var
-	prototype,
-	noround,
-	ratio,
-	round,
-	_round;
 
 /*
 | Ratio of canvas backing store to display.
 | In case hiDPI canvas this can be > 1.
 */
-ratio = window.devicePixelRatio || 1;
+// FIXME window might change this..
+let ratio;
 
-prototype = gleam_display_canvas.prototype;
-
+if( !NODE )
+{
+	ratio = window.devicePixelRatio || 1;
+}
 
 
 /*
 | Rounds a value and adapts it to screen ratio.
 */
-if( ratio === 1 )
-{
-	round = Math.round;
-}
-else
-{
-	_round = Math.round;
+const round = val => Math.round( val * ratio );
 
-	round =
-		function( val )
-	{
-		return _round( val * ratio );
-	};
-}
-
-
-if( ratio === 1 )
-{
-	noround = function( val ) { return val; };
-}
-else
-{
-	noround = function( val ) { return val * ratio; };
-}
+const noround = val => val * ratio;
 
 
 /*
@@ -122,173 +85,47 @@ else
 |
 | This turns on performance vs. quality settings.
 */
-get2dContext =
+const get2dContext =
 	function(
 		canvas,
 		opaque
 	)
 {
-	var
-		cx;
-
-	//canvas.style['text-rendering'] = 'geometricPrecision';
-
-	cx =
+	const cx =
 		opaque
 		? canvas.getContext( '2d', { alpha: false } )
 		: canvas.getContext( '2d' );
 
-	cx.imageSmoothingEnabled =
-	cx.mozImageSmoothingEnabled =
-	cx.oImageSmoothingEnabled =
-	cx.msImageSmoothingEnabled =
-		false;
+	cx.imageSmoothingEnabled = false;
 
 	return cx;
 };
 
 
 /*
-| Creates a display around an existing HTML canvas.
-*/
-gleam_display_canvas.createAroundHTMLCanvas =
-	function(
-		canvas,  // the canvas to create around
-		name,    // the name(id) of the display
-		size     // the size of the canvas
-	)
-{
-	var
-		cx;
-
-	cx = get2dContext( canvas, true );
-
-	return(
-		gleam_display_canvas.create(
-			'_cv', canvas,
-			'_cx', cx,
-			'background', 'rgb( 251, 251, 251 )',
-			'size', size
-		)
-	);
-};
-
-
-/*
-| Returns true if p is within the shape.
-*/
-prototype.within =
-	function(
-		p,
-		shape
-	)
-{
-	var
-		a,
-		aZ,
-		ps,
-		x,
-		y;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 2 ) throw new Error( );
-/**/
-/**/	if( p.reflect !== 'gleam_point' ) throw new Error( );
-/**/}
-
-	if( shape.reflect === 'gleam_shapeList' )
-	{
-		for( a = 0, aZ = shape.length; a < aZ; a++ )
-		{
-			if( this.within( p, shape.get( a ) ) ) return true;
-		}
-
-		return false;
-	}
-
-	switch( shape.reflect )
-	{
-		case 'gleam_ellipse' :
-		case 'gleam_roundRect' :
-
-			this._cx.beginPath( );
-
-			this._sketchGenericShape(
-				shape.shape,
-				0,
-				gleam_point.zero,
-				0
-			);
-
-			break;
-
-		case 'gleam_rect' :
-
-			x = p.x;
-
-			y = p.y;
-
-			ps = shape.p;
-
-			return(
-				x >= ps.x
-				&& y >= ps.y
-				&& x <= ps.x + shape.width
-				&& y <= ps.y + shape.height
-			);
-
-		case 'gleam_shape' :
-
-			this._cx.beginPath( );
-
-			this._sketchGenericShape(
-				shape,
-				0,
-				gleam_point.zero,
-				0
-			);
-
-			break;
-
-		default : throw new Error( );
-	}
-
-	return this._cx.isPointInPath( round( p.x ), round( p.y ) );
-};
-
-
-/*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
 {
-	var
-		cv,
-		height,
-		width;
 
 /**/if( CHECK )
 /**/{
 /**/	if( inherit )
 /**/	{
-/**/		if( jion.hasLazyValueSet( inherit, '_expired' ) )
-/**/    	{
-/**/        	throw new Error( );
-/**/    	}
+/**/		if( tim.hasLazyValueSet( inherit, '_expired' ) ) throw new Error( );
 /**/
 /**/    	inherit._expired;
 /**/	}
 /**/}
 
-	cv = this._cv;
+	let cv = this._cv;
 
-	height = this.size.height;
+	let height = this.size.height;
 
-	width = this.size.width;
+	let width = this.size.width;
 
 	if( !cv )
 	{
@@ -303,55 +140,154 @@ prototype._init =
 		cv.style.width = width + 'px';
 	}
 
-	if( cv.width !== round( width ) ) cv.width = round( width );
+	width = round( width );
 
-	if( cv.height !== round( height ) ) cv.height = round( height );
+	height = round( height );
+
+	if( cv.width !== width ) cv.width = width;
+
+	if( cv.height !== height ) cv.height = height;
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| FIXME describe
+*/
 /**/if( CHECK )
 /**/{
-/**/	jion.lazyValue(
-/**/		prototype,
-/**/		'_expired',
-/**/		function( )
-/**/	{
-/**/		return true;
-/**/	}
-/**/	);
+/**/	def.lazy._expired = () => true;
 /**/}
+
+
+/*
+| Set when the canvas has been rendered.
+*/
+def.lazy._rendered = () => true;
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Creates a display around an existing HTML canvas.
+*/
+def.static.createAroundHTMLCanvas =
+	function(
+		canvas,  // the canvas to create around
+		name,    // the name(id) of the display
+		size     // the size of the canvas
+	)
+{
+	return(
+		gleam_display_canvas.create(
+			'_cv', canvas,
+			'_cx', get2dContext( canvas, true ),
+			'background', 'rgb( 251, 251, 251 )',
+			'size', size
+		)
+	);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Returns true if p is within the shape.
+*/
+def.func.within =
+	function(
+		p,
+		shape
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/
+/**/	if( p.reflect !== 'gleam_point' ) throw new Error( );
+/**/}
+
+	if( shape.reflect === 'gleam_shapeList' )
+	{
+		for( let a = 0, aZ = shape.length; a < aZ; a++ )
+		{
+			if( this.within( p, shape.get( a ) ) ) return true;
+		}
+
+		return false;
+	}
+
+	switch( shape.reflect )
+	{
+		case 'gleam_ellipse' :
+		case 'gleam_roundRect' :
+
+			this._cx.beginPath( );
+
+			this._sketchGenericShape( shape.shape, 0, gleam_point.zero, 0 );
+
+			break;
+
+		case 'gleam_rect' :
+
+			const x = p.x;
+
+			const y = p.y;
+
+			const ps = shape.p;
+
+			return(
+				x >= ps.x
+				&& y >= ps.y
+				&& x <= ps.x + shape.width
+				&& y <= ps.y + shape.height
+			);
+
+		case 'gleam_shape' :
+
+			this._cx.beginPath( );
+
+			this._sketchGenericShape( shape, 0, gleam_point.zero, 0 );
+
+			break;
+
+		default : throw new Error( );
+	}
+
+	return this._cx.isPointInPath( round( p.x ), round( p.y ) );
+};
 
 
 /*
 | Renders the display.
 */
-prototype.render =
+def.func.render =
 	function( )
 {
-	var
-		size;
+	const size = this.size;
 
-	size = this.size;
-
-	if( jion.hasLazyValueSet( this, '_rendered' ) ) return;
+	if( tim.hasLazyValueSet( this, '_rendered' ) ) return;
 
 	if( this.background )
 	{
 		this._cx.fillStyle = this.background;
 
-		this._cx.fillRect(
-			0, 0,
-			round( size.width ),
-			round( size.height )
-		);
+		this._cx.fillRect( 0, 0, round( size.width ), round( size.height ) );
 	}
 	else
 	{
-		this._cx.clearRect(
-			0, 0,
-			round( size.width ),
-			round( size.height )
-		);
+		this._cx.clearRect( 0, 0, round( size.width ), round( size.height ) );
 	}
 
 	this._renderGlint( this.glint, gleam_point.zero );
@@ -360,25 +296,17 @@ prototype.render =
 };
 
 
-/*::::::::::::
-| Private
-:::::::::::::*/
-
-
 /*
 | Draws a single border.
 */
-prototype._border =
+def.func._border =
 	function(
 		border, // the gleam_border
 		shape,  // an object to draw
 		offset  // offset
 	)
 {
-	var
-		cx;
-
-	cx = this._cx;
+	const cx = this._cx;
 
 	cx.beginPath( );
 
@@ -395,22 +323,18 @@ prototype._border =
 /*
 | Draws a border or borderList.
 */
-prototype._borders  =
+def.func._borders  =
 	function(
 		border, // the gleam_border
 		shape,  // the shape to draw the border in
 		offset  // offset everything by this
 	)
 {
-	var
-		a,
-		aZ;
-
 	switch( border.reflect )
 	{
 		case 'gleam_borderList' :
 
-			for( a = 0, aZ = border.length; a < aZ; a++ )
+			for( let a = 0, aZ = border.length; a < aZ; a++ )
 			{
 				this._border( border.get( a ), shape, offset );
 			}
@@ -433,17 +357,14 @@ prototype._borders  =
 /*
 | Draws a fill.
 */
-prototype._fill  =
+def.func._fill  =
 	function(
 		fill,   // the gleam_border
 		shape,  // a shape to sketch
 		offset
 	)
 {
-	var
-		cx;
-
-	cx = this._cx;
+	const cx = this._cx;
 
 	this._sketch( shape, 0, offset, 0 );
 
@@ -456,21 +377,15 @@ prototype._fill  =
 /*
 | Returns a HTML5 color style.
 */
-prototype._colorStyle =
+def.func._colorStyle =
 	function(
 		style,
 		shape,
 		offset
 	)
 {
-	var
-		a,
-		aZ,
-		cs,
-		grad,
-		pc,
-		r0,
-		r1;
+	// gradient
+	let grad;
 
 	switch( style.reflect )
 	{
@@ -497,19 +412,16 @@ prototype._colorStyle =
 
 		case 'gleam_gradient_radial' :
 
-			r0 = shape.gradientR0 || 0;
+			const r0 = shape.gradientR0 || 0;
 
-			r1 = shape.gradientR1;
+			const r1 = shape.gradientR1;
 
-			pc = shape.gradientPC || shape.pc;
+			const pc = shape.gradientPC || shape.pc;
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !pc || !r1 )
-/**/			{
-/**/				// gradient misses gradient[PC|R0|R1]
-/**/				throw new Error( );
-/**/			}
+/**/			// gradient misses gradient[PC|R0|R1]
+/**/			if( !pc || !r1 ) throw new Error( );
 /**/		}
 
 			grad =
@@ -530,9 +442,9 @@ prototype._colorStyle =
 			throw new Error( );
 	}
 
-	for( a = 0, aZ = style.length; a < aZ; a++ )
+	for( let a = 0, aZ = style.length; a < aZ; a++ )
 	{
-		cs = style.get( a );
+		const cs = style.get( a );
 
 		grad.addColorStop( cs.offset, cs.color.css );
 	}
@@ -541,33 +453,26 @@ prototype._colorStyle =
 };
 
 
-
 /*
 | Renders a glint twig.
 */
-prototype._renderGlintList =
+def.func._renderGlintList =
 	function(
 		glint,  // the glint list to render
 		offset  // offset all rendering by this
 	)
 {
-	var
-		a,
-		aZ;
-
-	for( a = 0, aZ = glint.length; a < aZ; a++ )
+	for( let a = 0, aZ = glint.length; a < aZ; a++ )
 	{
 		this._renderGlint( glint.get( a ), offset );
 	}
 };
 
 
-
-
 /*
 | Renders a glint
 */
-prototype._renderGlint =
+def.func._renderGlint =
 	function(
 		glint,
 		offset
@@ -629,38 +534,30 @@ prototype._renderGlint =
 /*
 | Renders masked stuff.
 */
-prototype._renderMask =
+def.func._renderMask =
 	function(
 		glint,
 		offset
 	)
 {
-	var
-		a,
-		aZ,
-		cx,
-		h,
-		sa,
-		shape,
-		w;
 
 /**/if( CHECK ) {
 /**/	if( glint.reflect !== 'gleam_glint_mask' ) throw new Error();
 /**/}
 
-	cx = this._cx;
+	const cx = this._cx;
 
-	h = round( this.size.height );
+	const h = round( this.size.height );
 
-	w = round( this.size.width );
+	const w = round( this.size.width );
 
 	cx.save( );
 
-	shape = glint.shape;
+	const shape = glint.shape;
 
 	if( shape.reflect === 'gleam_shapeList' )
 	{
-		for( a = 0, aZ = shape.length; a < aZ; a++ )
+		for( let a = 0, aZ = shape.length; a < aZ; a++ )
 		{
 			cx.beginPath( );
 
@@ -677,7 +574,7 @@ prototype._renderMask =
 				cx.lineTo( 0, 0 );
 			}
 
-			sa = shape.get( a );
+			const sa = shape.get( a );
 
 			this._sketch( sa, 0, offset, 0.5 );
 
@@ -715,29 +612,20 @@ prototype._renderMask =
 /*
 | Renders a text using opentype.
 */
-prototype._renderText =
+def.func._renderText =
 	function(
 		glint,
 		offset
 	)
 {
-	var
-		cx,
-		det,
-		p,
-		rotate,
-		t1,
-		t2,
-		x,
-		y;
 
 /**/if( CHECK ) {
 /**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
 /**/}
 
-	p = glint.p;
+	const p = glint.p;
 
-	rotate = glint.rotate;
+	const rotate = glint.rotate;
 
 	if( rotate === undefined )
 	{
@@ -753,13 +641,13 @@ prototype._renderText =
 		return;
 	}
 
-	cx = this._cx;
+	const cx = this._cx;
 
-	t1 = Math.cos( rotate );
+	const t1 = Math.cos( rotate );
 
-	t2 = Math.sin( rotate );
+	const t2 = Math.sin( rotate );
 
-	det = t1 * t1 + t2 * t2;
+	const det = t1 * t1 + t2 * t2;
 
 	cx.setTransform(
 		t1, t2,
@@ -767,9 +655,9 @@ prototype._renderText =
 		0, 0
 	);
 
-	x = p.x + offset.x;
+	const x = p.x + offset.x;
 
-	y = p.y + offset.y;
+	const y = p.y + offset.y;
 
 	gleam_intern_opentype.drawText(
 		glint.text,
@@ -791,47 +679,34 @@ prototype._renderText =
 /*
 | Renders a window.
 */
-prototype._renderWindow =
+def.func._renderWindow =
 	function(
 		glint,
 		offset
 	)
 {
-	var
-		cd,
-		cx,
-		h,
-		pos,
-		rect,
-		rh,
-		rw,
-		w,
-		x,
-		x2,
-		y,
-		y2;
 
 /**/if( CHECK ) {
 /**/	if( glint.reflect !== 'gleam_glint_window' ) throw new Error( );
 /**/}
 
-	cx = this._cx;
+	const cx = this._cx;
 
-	rect = glint.rect;
+	const rect = glint.rect;
 
-	pos = rect.pos;
+	const pos = rect.pos;
 
-	h = this.size.height;
+	const h = this.size.height;
 
-	w = this.size.width;
+	const w = this.size.width;
 
-	x = offset.x + pos.x;
+	let x = offset.x + pos.x;
 
-	y = offset.y + pos.y;
+	let y = offset.y + pos.y;
 
-	rw = rect.width;
+	const rw = rect.width;
 
-	rh = rect.height;
+	const rh = rect.height;
 
 	if( x > w || y > h || x + rw < 0 || y + rh < 0 )
 	{
@@ -842,17 +717,13 @@ prototype._renderWindow =
 
 	if( rh * rw > shell_settings.glintCacheLimit )
 	{
-		x2 = x + rw;
+		const x2 = round( x + rw );
 
-		y2 = y + rh;
+		const y2 = round( y + rh );
 
 		x = round( x );
 
 		y = round( y );
-
-		x2 = round( x2 );
-
-		y2 = round( y2 );
 
 		cx.save( );
 
@@ -882,7 +753,7 @@ prototype._renderWindow =
 	}
 	else
 	{
-		cd = glint._canvasDisplay;
+		const cd = glint._canvasDisplay;
 
 		cd.render( );
 
@@ -894,7 +765,7 @@ prototype._renderWindow =
 /*
 | Sketches a line.
 */
-prototype._sketchLine =
+def.func._sketchLine =
 	function(
 		line,
 		border,
@@ -902,27 +773,21 @@ prototype._sketchLine =
 		shift
 	)
 {
-	var
-		cx,
-		ox,
-		oy,
-		p1,
-		p2;
 
 /**/if( CHECK )
 /**/{
 /**/	if( line.reflect !== 'gleam_line' ) throw new Error( );
 /**/}
 
-	cx = this._cx;
+	const cx = this._cx;
 
-	ox = offset.x;
+	const ox = offset.x;
 
-	oy = offset.y;
+	const oy = offset.y;
 
-	p1 = line.p1;
+	const p1 = line.p1;
 
-	p2 = line.p2;
+	const p2 = line.p2;
 
 	cx.moveTo(
 		round( p1.x + ox ) + shift,
@@ -939,7 +804,7 @@ prototype._sketchLine =
 /*
 | Sketches a rectangle.
 */
-prototype._sketchRect =
+def.func._sketchRect =
 	function(
 		rect,
 		border,
@@ -947,25 +812,17 @@ prototype._sketchRect =
 		shift
 	)
 {
-	var
-		pos,
-		cx,
-		wx,
-		ny,
-		ex,
-		sy;
+	const cx = this._cx;
 
-	cx = this._cx;
+	const pos = rect.pos;
 
-	pos = rect.pos;
+	const wx = round( pos.x + offset.x ) + border + shift;
 
-	wx = round( pos.x + offset.x ) + border + shift;
+	const ny = round( pos.y + offset.y ) + border + shift;
 
-	ny = round( pos.y + offset.y ) + border + shift;
+	const ex = round( pos.x + rect.width + offset.x ) - border + shift;
 
-	ex = round( pos.x + rect.width + offset.x ) - border + shift;
-
-	sy = round( pos.y + rect.height + offset.y ) - border + shift;
+	const sy = round( pos.y + rect.height + offset.y ) - border + shift;
 
 	cx.moveTo( wx, ny );
 
@@ -982,28 +839,24 @@ prototype._sketchRect =
 /*
 | Fills a shape and draws its borders.
 */
-prototype._paint =
+def.func._paint =
 	function(
 		facet,  // paint in this facet
 		shape,  // paint this shape
 		offset  // offset everything by this
 	)
 {
-	var
-		border,
-		cx,
-		fill;
 
 /**/if( CHECK )
 /**/{
 /**/	if( facet.reflect !== 'gleam_facet' ) throw new Error( );
 /**/}
 
-	border = facet.border;
+	const border = facet.border;
 
-	fill = facet.fill;
+	const fill = facet.fill;
 
-	cx = this._cx;
+	const cx = this._cx;
 
 	cx.beginPath( );
 
@@ -1014,46 +867,9 @@ prototype._paint =
 
 
 /*
-| Set when the canvas has been rendered.
-*/
-jion.lazyValue(
-	prototype,
-	'_rendered',
-	function( )
-{
-	return true;
-}
-);
-
-
-
-/*
-| Sets the context to the font.
-*/
-prototype._setFont =
-	function(
-		font
-	)
-{
-	var
-		cx;
-
-	cx = this._cx;
-
-	cx.font = font.css;
-
-	cx.fillStyle = font.fill.css;
-
-	cx.textAlign = font.align;
-
-	cx.textBaseline = font.base;
-};
-
-
-/*
 | Sketches a shape.
 */
-prototype._sketch =
+def.func._sketch =
 	function(
 		shape,  // shape to sketch
 		border, // additional border
@@ -1061,8 +877,6 @@ prototype._sketch =
 		shift   // possibly shift by 0.5
 	)
 {
-	var
-		a, aZ;
 
 /**/if( CHECK )
 /**/{
@@ -1098,7 +912,7 @@ prototype._sketch =
 
 		case 'gleam_shapeList' :
 
-			for( a = 0, aZ = shape.length; a < aZ; a++ )
+			for( let a = 0, aZ = shape.length; a < aZ; a++ )
 			{
 				this._sketch( shape.get( a ), border, offset, shift );
 			}
@@ -1114,7 +928,7 @@ prototype._sketch =
 /*
 | Sketches a generic shape.
 */
-prototype._sketchGenericShape =
+def.func._sketchGenericShape =
 	function(
 		shape,  // shape to sketch
 		border, // additional border
@@ -1122,31 +936,9 @@ prototype._sketchGenericShape =
 		shift   // possibly shift by 0.5
 	)
 {
-	var
-		cpx, // current point x
-		cpy, // current point y
-		cx,
-		dx,
-		dxy,
-		dy,
-		a,
-		aZ,
-		magic,
-		ox,  // offset x
-		oy,  // offset y
-		p,
-		pc,  // center point
-		pnx, // next point x
-		pny, // next point y
-		psx, // start point x
-		psy, // start point y
-		r,   // rounding function
-		section,
-		nextSect;
+	const cx = this._cx;
 
-	cx = this._cx;
-
-	magic = gleam_constants.magic;
+	const magic = gleam_constants.magic;
 
 /**/if( CHECK )
 /**/{
@@ -1155,19 +947,21 @@ prototype._sketchGenericShape =
 /**/	if( shape.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
 /**/}
 
-	ox = offset.x;
+	const ox = offset.x;
 
-	oy = offset.y;
+	const oy = offset.y;
 
-	pc = shape.pc;
+	const pc = shape.pc;
 
-	section = shape.get( 0 );
+	let section = shape.get( 0 );
 
-	p = section.p;
+	let p = section.p;
 
-	r = shape.nogrid ? noround : round;
+	const r = shape.nogrid ? noround : round;
 
-	psx =
+	// start point x/y
+
+	let psx =
 		r( p.x + ox )
 		+ (
 			p.x > pc.x
@@ -1176,7 +970,7 @@ prototype._sketchGenericShape =
 		)
 		+ shift;
 
-	psy =
+	let psy =
 		r( p.y + oy )
 		+ (
 			p.y > pc.y
@@ -1185,7 +979,7 @@ prototype._sketchGenericShape =
 		)
 		+ shift;
 
-	aZ = shape.length;
+	const aZ = shape.length;
 
 	if(
 		shift
@@ -1193,19 +987,24 @@ prototype._sketchGenericShape =
 		&& shape.get( aZ - 1 ).reflect === 'gleam_shape_round'
 	)
 	{
+		// FUTURE might not be needed anymore
 		// workaround gap bug in chrome
 		psx += 0.1;
 		psy += 0.1;
 	}
 
-	cpx = psx;
-	cpy = psy;
+	// current point x/y
+	let cpx = psx;
+	let cpy = psy;
+
+	// next point
+	let pnx, pny;
 
 	cx.moveTo( psx, psy );
 
-	nextSect = shape.get( 1 );
+	let nextSect = shape.get( 1 );
 
-	for( a = 1; a < aZ; a++ )
+	for( let a = 1; a < aZ; a++ )
 	{
 
 /**/	if( CHECK )
@@ -1283,11 +1082,11 @@ prototype._sketchGenericShape =
 					pny += 0.1;
 				}
 
-				dx = pnx - cpx;
+				let dx = pnx - cpx;
 
-				dy = pny - cpy;
+				let dy = pny - cpy;
 
-				dxy = dx * dy;
+				let dxy = dx * dy;
 
 				if( !section.ccw )
 				{
@@ -1327,4 +1126,4 @@ prototype._sketchGenericShape =
 
 
 
-} )( );
+} );

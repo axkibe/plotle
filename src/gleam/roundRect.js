@@ -36,29 +36,32 @@ tim.define( module, 'gleam_roundRect', ( def, gleam_roundRect ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	pos : // position
+	def.attributes =
 	{
-		type : 'gleam_point'
-	},
-	width :
-	{
-		type : 'number'
-	},
-	height :
-	{
-		type : 'number'
-	},
-	a : // horizonal rounding
-	{
-		type : 'number'
-	},
-	b : // vertical rounding
-	{
-		type : 'number'
-	}
-};
+		pos : // position
+		{
+			type : 'gleam_point'
+		},
+		width :
+		{
+			type : 'number'
+		},
+		height :
+		{
+			type : 'number'
+		},
+		a : // horizonal rounding
+		{
+			type : 'number'
+		},
+		b : // vertical rounding
+		{
+			type : 'number'
+		}
+	};
+}
 
 
 /*::::::::::::::
@@ -104,7 +107,7 @@ def.lazy.shape =
 					gleam_shape_round.p( p.add( w , b ) ),
 					gleam_shape_round.p( p.add( w - a , h ) ),
 					gleam_shape_line .p( p.add( a , h ) ),
-					gleam_shape_round.close( )
+					gleam_shape_round.close
 				],
 				'pc', this.pc
 			)
@@ -123,7 +126,7 @@ def.lazy.shape =
 				gleam_shape_round.p( p.add( w - a , h ) ),
 				gleam_shape_line .p( p.add( a , h ) ),
 				gleam_shape_round.p( p.add( 0 , h - b ) ),
-				gleam_shape_line .close( )
+				gleam_shape_line .close
 			],
 			'pc', this.pc
 		)

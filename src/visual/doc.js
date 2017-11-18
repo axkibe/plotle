@@ -627,7 +627,7 @@ jion.lazyValue(
 			gleam_shape_line.p( fp.add( 0, -ascend ) ),
 			gleam_shape_line.p( bp.add( 0, -ascend ) ),
 			gleam_shape_line.p( bp.add( 0, descend ) ),
-			gleam_shape_line.close( )
+			gleam_shape_line.close
 		];
 
 		return(
@@ -664,7 +664,7 @@ jion.lazyValue(
 			gleam_shape_line.xy( fp.x, fp.y - ascend ),
 			gleam_shape_line.xy( fp.x, fp.y + descend ),
 			gleam_shape_line.xy( rx, fp.y + descend ),
-			gleam_shape_line.closeFly( )
+			gleam_shape_line.closeFly
 		];
 
 		sections2 =
@@ -673,7 +673,7 @@ jion.lazyValue(
 			gleam_shape_line.xy( bp.x, bp.y - ascend ),
 			gleam_shape_line.xy( bp.x, bp.y + descend ),
 			gleam_shape_line.xy( lx, bp.y + descend ),
-			gleam_shape_line.closeFly( )
+			gleam_shape_line.closeFly
 		];
 
 		shapes =
@@ -747,7 +747,7 @@ jion.lazyValue(
 				gleam_shape_line.xy( fp.x, f2y - ascend ),    // 6
 				gleam_shape_line.xy( fp.x, fp.y - ascend ),   // 7
 				gleam_shape_line.xy( rx, fp.y - ascend ),     // 8
-				gleam_shape_line.closeFly( )
+				gleam_shape_line.closeFly
 			];
 
 			return(
@@ -771,7 +771,7 @@ jion.lazyValue(
 					gleam_shape_line.xy( lx, bp.y + descend ),   // 4
 					gleam_shape_line.xyFly( lx, fp.y - ascend ), // 7
 					gleam_shape_line.xy( rx, fp.y - ascend ),    // 8
-					gleam_shape_line.closeFly( )
+					gleam_shape_line.closeFly
 				];
 
 			return(

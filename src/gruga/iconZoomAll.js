@@ -128,7 +128,7 @@ gruga_iconZoomAll.shape =
 			gleam_shape_line.p(  c.add( -n, -u ) ),
 			gleam_shape_line.p(  c.add( -t, -p ) ),
 			gleam_shape_line.p(  c.add( -s, -p ) ),
-			gleam_shape_line.close( )
+			gleam_shape_line.close
 		],
 		'pc', c
 	);

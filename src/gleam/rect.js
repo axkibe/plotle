@@ -19,35 +19,35 @@ if( NODE )
 tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
 
 
-/*
-| This tim has an abstract form.
-*/
-def.hasAbstract = true;
-
-
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	pos : // position
+	// This tim has an abstract form.
+	def.hasAbstract = true;
+
+	def.attributes =
 	{
-		json : true,
-		type : 'gleam_point'
-	},
-	height :
-	{
-		json : true,
-		type : 'number'
-	},
-	width :
-	{
-		json : true,
-		type : 'number'
-	}
-};
+		pos : // position
+		{
+			json : true,
+			type : 'gleam_point'
+		},
+		height :
+		{
+			json : true,
+			type : 'number'
+		},
+		width :
+		{
+			json : true,
+			type : 'number'
+		}
+	};
+}
 
 
 /*::::::::::::::::::::.

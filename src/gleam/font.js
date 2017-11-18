@@ -1,88 +1,68 @@
 /*
-| A font face style.
+| A font style.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_font',
-		hasAbstract : true,
-		attributes :
-		{
-			size :
-			{
-				comment : 'font size',
-				type : 'number'
-			},
-			family :
-			{
-				comment : 'font family',
-				type : 'string'
-			},
-			align :
-			{
-				comment : 'horizonal alignment',
-				type : 'string'
-			},
-			fill :
-			{
-				comment : 'font color',
-				type : 'gleam_color'
-			},
-			base :
-			{
-				comment : 'vertical alignment',
-				type : 'string'
-			}
-		},
-		init : [ 'inherit' ],
-		alike :
-		{
-			alikeWithoutSize :
-			{
-				ignores :
-				{
-					size : true
-				}
-			}
-		}
-	};
-}
-
-
-var
-	gleam_font,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'gleam_font', ( def, gleam_font ) => {
+
+
+/*
+| This tim has an abstract form.
+*/
+def.hasAbstract = true;
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		size :
+		{
+			type : 'number'
+		},
+		family :
+		{
+			type : 'string'
+		},
+		align : // horizonal alignment
+		{
+			type : 'string'
+		},
+		fill : // font color
+		{
+			type : 'gleam_color'
+		},
+		base : // vertical alignment
+		{
+			type : 'string'
+		}
+	};
 
-	return;
+	/*
+	| Tim alike functions.
+	*/
+	def.alike =
+	{
+		alikeWithoutSize :
+		{
+			ignores : { size : true }
+		}
+	};
+
+	def.init = [ 'inherit' ];
 }
-
-var
-	prototype;
-
-prototype = gleam_font.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
@@ -102,35 +82,37 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
 
 /*
 | The CSS-string for this font.
+|
+| FIXME: remove?
 */
-jion.lazyValue(
-	prototype,
-	'css',
+def.lazy.css =
 	function( )
 {
 	return Math.round( this.size ) + 'px ' + 'Ideoloom-' + this.family;
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Applies a transformation to this font.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
 {
-	var
-		tp;
-
-	if( this._tPool )
-	{
-		tp = this._tPool[ transform.zoom ];
-	}
+	let tp = this._tPool && this._tPool[ transform.zoom ];
 
 	if( tp ) return tp;
 
@@ -146,4 +128,4 @@ prototype.transform =
 };
 
 
-})( );
+} );

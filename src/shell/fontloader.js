@@ -8,8 +8,7 @@
 var
 	font_default,
 	opentype,
-	startup,
-	WebFont;
+	startup;
 
 
 /*
@@ -19,7 +18,6 @@ var
 'use strict';
 
 var openTypeLoad;
-var	webFontLoad;
 
 
 /*
@@ -55,31 +53,7 @@ openTypeLoad =
 
 
 
-/*
-| Loads web fonts.
-*/
-webFontLoad =
-	function( )
-{
-	WebFont.load(
-	{
-		custom:
-		{
-			families:
-			[
-				'Ideoloom-DejaVuSans'
-			]
-			//urls: [ '/fonts/dejavu.css' ], already in CSS
-		},
-
-		active: function() { openTypeLoad( ); }
-	}
-	);
-};
-
-
 window.onload = openTypeLoad;
-//window.onload = webFontLoad;
 
 
 } )( );

@@ -1,43 +1,26 @@
 /*
 | A list of geometric shapes.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_shapeList',
-		list : require( './typemap-shape' )
-	};
-}
-
-
-var
-	gleam_shapeList;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+tim.define( module, 'gleam_shapeList', ( def, gleam_shapeList ) => {
 
-	return;
+
+/*:::::::::::::::::.
+:: Typed immutable
+'::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.list = require( './typemap-shape' );
 }
 
 
-var
-	prototype;
-
-prototype = gleam_shapeList.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -45,19 +28,14 @@ prototype = gleam_shapeList.prototype;
 | +/- distance. See gleam_shape.border for further
 | explanation.
 */
-prototype.border =
+def.func.border =
 	function(
 		d // distance to border
 	)
 {
-	var
-		a,
-		arr,
-		aZ;
+	const arr = [ ];
 
-	arr = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		arr[ a ] = this.get( a ).border( d );
 	}
@@ -69,7 +47,7 @@ prototype.border =
 /*
 | Returns a transformed shapeList.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -80,14 +58,9 @@ prototype.transform =
 /**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
-	var
-		a,
-		aZ,
-		list;
+	const list = [ ];
 
-	list = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		list[ a ] = this.get( a ).transform( transform );
 	}
@@ -99,16 +72,12 @@ prototype.transform =
 /*
 | Returns true if point is within the shape list.
 */
-prototype.within =
+def.func.within =
 	function(
 		p
 	)
 {
-	var
-		a,
-		aZ;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		if( this.get( a ).within( p ) ) return true;
 	}
@@ -117,4 +86,4 @@ prototype.within =
 };
 
 
-})( );
+} );

@@ -12,19 +12,22 @@ tim.define( module, 'gleam_point', ( def, gleam_point ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	x : // x coordinate
+	def.attributes =
 	{
-		json : true,
-		type : 'number',
-	},
-	y : // y coordinate
-	{
-		json : true,
-		type : 'number',
-	}
-};
+		x : // x coordinate
+		{
+			json : true,
+			type : 'number',
+		},
+		y : // y coordinate
+		{
+			json : true,
+			type : 'number',
+		}
+	};
+}
 
 
 /*::::::::::::::::::::.

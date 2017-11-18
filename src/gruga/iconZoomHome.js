@@ -76,7 +76,7 @@ gruga_iconZoomHome.shape =
 					gleam_shape_line.p( c.add(  -2, -4 ) ),
 					gleam_shape_line.p( c.add(  -2,  4 ) ),
 
-					gleam_shape_line.close( )
+					gleam_shape_line.close
 				],
 				'pc', c,
 				'nogrid', true
@@ -96,7 +96,7 @@ gruga_iconZoomHome.shape =
 					gleam_shape_line.p( c.add(    8,  -3 ) ),
 					gleam_shape_line.p( c.add(   10,  -3 ) ),
 					gleam_shape_line.p( c.add(    0, -14 ) ),
-					gleam_shape_line.close( )
+					gleam_shape_line.close
 				],
 				'pc', c,
 				'nogrid', true

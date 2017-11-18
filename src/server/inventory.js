@@ -168,7 +168,7 @@ prototype.prepareResource =
 			'inventory', root.inventory.updateResource( jionCodeResource )
 		);
 	}
-	
+
 	if( resource.hasTim )
 	{
 		if( config.devel ) delete require.cache[ realpath ];

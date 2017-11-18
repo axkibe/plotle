@@ -1,12 +1,12 @@
 /*
 | A border.
 */
-'use strict'
+'use strict';
 
 
 // FIXME
 var
-	gleam_color,
+	gleam_color;
 
 
 tim.define( module, 'gleam_border', ( def, gleam_border ) => {
@@ -17,24 +17,27 @@ tim.define( module, 'gleam_border', ( def, gleam_border ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-def.attributes =
+if( TIM )
 {
-	distance : // distance from shape
+	def.attributes =
 	{
-		type : 'number',
-		defaultValue : '0'
-	},
-	width : // border width
-	{
-		type : 'number',
-		defaultValue : '1'
-	},
-	color :
-	{
-		type : 'gleam_color',
-		defaultValue : 'gleam_color.black'
-	}
-};
+		distance : // distance from shape
+		{
+			type : 'number',
+			defaultValue : '0'
+		},
+		width : // border width
+		{
+			type : 'number',
+			defaultValue : '1'
+		},
+		color :
+		{
+			type : 'gleam_color',
+			defaultValue : 'gleam_color.black'
+		}
+	};
+}
 
 
 /*:::::::::::::::::::::
@@ -45,7 +48,7 @@ def.attributes =
 /*
 | A simple blaick border.
 */
-def.staticLazy.simpleBlack () =>
+def.staticLazy.simpleBlack = () =>
 	gleam_border.create(
 		'color', gleam_color.black
 	);

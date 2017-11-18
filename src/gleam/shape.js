@@ -1,91 +1,69 @@
 /*
 | A generic geometric shape.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_shape',
-		attributes :
-		{
-			nogrid :
-			{
-				comment : 'do not to grid fitting',
-				type : [ 'undefined', 'boolean']
-			},
-			pc :
-			{
-				comment : 'center point',
-				type : 'gleam_point'
-			},
-			gradientR1 :
-			{
-				comment : 'radial gradient radius',
-				type : [ 'undefined', 'number' ]
-			}
-		},
-		list : require( './typemap-shapeSection' )
-	};
-}
-
-
-var
-	gleam_shape,
-	swatch;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+// FIXME
+var
+	swatch;
 
-	return;
+
+tim.define( module, 'gleam_shape', ( def, gleam_shape ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		nogrid : // don't do grid fitting
+		{
+			type : [ 'undefined', 'boolean']
+		},
+		pc : // center point
+		{
+			type : 'gleam_point'
+		},
+		gradientR1 :  // radial gradient radius
+		{
+			type : [ 'undefined', 'number' ]
+		}
+	};
+
+	def.list = require( './typemap-shapeSection' );
 }
 
 
-var
-	prototype;
-
-prototype = gleam_shape.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns a shape bordering this shape by
-| +/- distance. It is kind of a zoom to or from
-| central point, but it isn't a real scale/zoom, since
-| the border distance is from example always 1 regardless
-| how far from central point away.
+| +/- distance.
+
+| It is kind of a zoom to or from central point, but it isn't
+| a real scale/zoom, since the border distance is for example
+| always 1 regardless how far from central point away.
 */
-prototype.border =
+def.func.border =
 	function(
 		d // distance to border
 	)
 {
-	var
-		a,
-		arr,
-		aZ,
-		pc,
-		p,
-		section;
+	const arr = [ ];
 
-	arr = [ ];
+	const pc = this.pc;
 
-	pc = this.pc;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		section = this.get( a );
+		const section = this.get( a );
 
 		if( section.close )
 		{
@@ -94,7 +72,7 @@ prototype.border =
 			continue;
 		}
 
-		p = section.p;
+		const p = section.p;
 
 		arr[ a ] =
 			section.create(
@@ -102,29 +80,20 @@ prototype.border =
 			);
 	}
 
-	return( this.create( 'list:init', arr ) );
+	return this.create( 'list:init', arr );
 };
 
 
 /*
-| Gets the source of a projection to p.
+| Gets the intersection of a projection from this central point
+| to point p.
 */
-prototype.getProjection =
+def.func.getProjection =
 	function(
 		p
 	)
 {
-	var
-		pc,
-		pi,
-		pn,
-		pp,
-		pstart,
-		r,
-		rZ,
-		section;
-
-	pc = this.pc;
+	const pc = this.pc;
 
 /**/if( CHECK )
 /**/{
@@ -132,22 +101,21 @@ prototype.getProjection =
 /**/	if( this.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
 /**/}
 
-	pstart = this.get( 0 ).p;
+	let pstart = this.get( 0 ).p;
 
-	pp = pstart;
+	let pp = pstart;
 
-	for( r = 1, rZ = this.length; r < rZ; r++ )
+	let pn;
+
+	for( let r = 1, rZ = this.length; r < rZ; r++ )
 	{
 /**/	if( CHECK )
 /**/	{
-/**/		if( !pstart )
-/**/		{
-/**/			// closed prematurely
-/**/			throw new Error( );
-/**/		}
+/**/		// closed prematurely
+/**/		if( !pstart ) throw new Error( );
 /**/	}
 
-		section = this.get( r );
+		const section = this.get( r );
 
 		if( section.close )
 		{
@@ -160,7 +128,7 @@ prototype.getProjection =
 			pn = section.p;
 		}
 
-		pi = section.getProjection( p, pn, pp, pc );
+		const pi = section.getProjection( p, pn, pp, pc );
 
 		if( pi ) return pi;
 
@@ -176,24 +144,19 @@ prototype.getProjection =
 /*
 | Returns a transformed shape.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
 {
-	var
-		a,
-		aZ,
-		arr;
-
 /**/if( CHECK )
 /**/{
 /**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
 /**/}
 
-	arr = [ ];
+	const arr = [ ];
 
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		arr[ a ] = this.get( a ).transform( transform );
 	}
@@ -205,7 +168,7 @@ prototype.transform =
 /*
 | Returns true if p is within the shape.
 */
-prototype.within =
+def.func.within =
 	function(
 		p
 	)
@@ -219,4 +182,4 @@ prototype.within =
 };
 
 
-})( );
+} );

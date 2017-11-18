@@ -1,86 +1,64 @@
 /*
 | Holds information of inner or outer distances.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'gleam_margin', ( def, gleam_margin ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_margin',
-		attributes :
+	def.attributes =
+	{
+		n : // north
 		{
-			n :
-			{
-				comment : 'n margin',
-				type : 'number'
-			},
-			e :
-			{
-				comment : 'e margin',
-				type : 'number'
-			},
-			s :
-			{
-				comment : 's margin',
-				type : 'number'
-			},
-			w :
-			{
-				comment : 'w margin',
-				type : 'number'
-			}
+			type : 'number'
+		},
+		e : // east
+		{
+			type : 'number'
+		},
+		s : // south
+		{
+			type : 'number'
+		},
+		w : // west
+		{
+			type : 'number'
 		}
 	};
 }
 
 
-var
-	gleam_margin,
-	jion;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| Capsule
+| east + west margin = x margin
 */
-(function() {
-'use strict';
-
-
-if( NODE )
+def.lazy.x =
+	function( )
 {
-	jion = require( 'jion' );
-
-	gleam_margin = jion.this( module, 'source' );
-}
+	return this.e + this.w;
+};
 
 
 /*
-| east + west margin = x
+| north + south margin = y margin
 */
-jion.lazyValue(
-	gleam_margin.prototype,
-	'x',
+def.lazy.y =
 	function( )
-	{
-		return this.e + this.w;
-	}
-);
+{
+	return this.n + this.s;
+};
 
 
-/*
-| north + south margin = y
-*/
-jion.lazyValue(
-	gleam_margin.prototype,
-	'y',
-	function( )
-	{
-		return this.n + this.s;
-	}
-);
-
-
-} )( );
+} );

@@ -3,161 +3,115 @@
 |
 | Used by shape.
 */
+'use strict';
 
 
-/*
-| The jion definition
-*/
-if( JION )
+var // FIXME
+	gleam_constants,
+	gleam_point;
+
+
+if( NODE )
 {
-	throw{
-		id : 'gleam_shape_line',
-		attributes :
+	gleam_constants = require( '../constants' );
+}
+
+
+tim.define( module, 'gleam_shape_line', ( def, gleam_shape_line ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		p :
 		{
-			p :
-			{
-				comment : 'connect to',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			close :
-			{
-				comment : 'true if this closes the shape',
-				type : [ 'undefined', 'boolean' ]
-			},
-			fly :
-			{
-				comment : 'true if this line does not draw a border',
-				type : [ 'undefined', 'boolean' ]
-			}
+			comment : 'connect to',
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		close :
+		{
+			comment : 'true if this closes the shape',
+			type : [ 'undefined', 'boolean' ]
+		},
+		fly :
+		{
+			comment : 'true if this line does not draw a border',
+			type : [ 'undefined', 'boolean' ]
 		}
 	};
 }
 
 
-var
-	gleam_constants,
-	gleam_point,
-	gleam_shape_line;
+const e = gleam_constants.epsilon;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
 
-
-var
-	e,
-	prototype;
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = gleam_shape_line.prototype;
-
-e = gleam_constants.epsilon;
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
 | Shortcut to create a closing line.
 */
-gleam_shape_line.close =
-	function( )
-{
-	return(
-		gleam_shape_line.create(
-			'close', true
-		)
-	);
-};
+def.staticLazy.close = () => gleam_shape_line.create( 'close', true );
 
 
 /*
 | Shortcut to create a fyling, closing line.
 */
-gleam_shape_line.closeFly =
-	function( )
-{
-	return(
-		gleam_shape_line.create(
-			'close', true,
-			'fly', true
-		)
+def.staticLazy.closeFly = () =>
+	gleam_shape_line.create(
+		'close', true,
+		'fly', true
 	);
-};
 
 
-/*
-| Shortcut to create a fly-line to xy.
-*/
-gleam_shape_line.xyFly =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		gleam_shape_line.create(
-			'fly', true,
-			'p',
-				gleam_point.create(
-					'x', x,
-					'y', y
-				)
-		)
-	);
-};
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Shortcut to create a line to p.
 */
-gleam_shape_line.p =
-	function( p )
-{
-	return(
-		gleam_shape_line.create( 'p', p )
-	);
-};
+def.static.p = p =>
+	gleam_shape_line.create( 'p', p );
 
 
 /*
 | Shortcut to create a fly-line to p.
 */
-gleam_shape_line.pFly =
-	function( p )
-{
-	return(
-		gleam_shape_line.create( 'fly', true, 'p', p )
-	);
-};
+def.static.pFly = p =>
+	gleam_shape_line.create( 'fly', true, 'p', p );
+
 
 /*
 | Shortcut to create a line to xy.
 */
-gleam_shape_line.xy =
-	function(
-		x,
-		y
-	)
-{
-	return(
-		gleam_shape_line.create(
-			'p',
-				gleam_point.create(
-					'x', x,
-					'y', y
-				)
-		)
+def.static.xy = ( x, y ) =>
+	gleam_shape_line.create( 'p', gleam_point.xy( x, y ) );
+
+
+/*
+| Shortcut to create a fly-line to xy.
+*/
+def.static.xyFly = ( x, y ) =>
+	gleam_shape_line.create(
+		'fly', true,
+		'p', gleam_point.xy( x, y )
 	);
-};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -167,7 +121,7 @@ gleam_shape_line.xy =
 | case it intersects with this sectioin
 | or undefined otherwise
 */
-prototype.getProjection =
+def.func.getProjection =
 	function(
 		p,   // point to project to
 		pn,  // next point in shape( === this.p when not closing )
@@ -226,7 +180,7 @@ prototype.getProjection =
 /*
 | Returns a transformed shape section.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		transform
 	)
@@ -245,4 +199,4 @@ prototype.transform =
 };
 
 
-})( );
+} );

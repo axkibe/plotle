@@ -1,17 +1,26 @@
 /*
 | A coordinate transformation.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	gleam_point;
+
+
+tim.define( module, 'gleam_transform', ( def, gleam_transform ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_transform',
-		attributes :
-		{
+	def.attributes =
+	{
 			offset :
 			{
 				comment : 'coordinate offset',
@@ -22,40 +31,45 @@ if( JION )
 				comment : 'the zoom factor',
 				type : 'number'
 			}
-		}
 	};
 }
 
 
-var
-	gleam_point,
-	gleam_transform,
-	jion;
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
-| Capsule
+| The normal transform is a transform that doesn't transform.
 */
-( function( ) {
-'use strict';
+def.staticLazy.normal = () =>
+	gleam_transform.create(
+		'offset', gleam_point.zero,
+		'zoom', 1
+	);
 
 
-var
-	prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| Node includes.
+| Returns a transform with the same zoom like this,
+| but with a zeroOffset.
 */
-if( NODE )
+def.lazy.ortho =
+	function( )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
+	return this.create( 'offset', gleam_point.zero );
+};
 
 
-prototype = gleam_transform.prototype;
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -63,25 +77,25 @@ prototype = gleam_transform.prototype;
 | as the combination of
 | t applied after this transform.
 */
-prototype.combine =
+def.func.combine =
 	function(
 		t
 	)
 {
-	var
-		tzoom;
+	const offset = this.offset;
 
-	tzoom = t.zoom;
+	const toffset = t.offset;
+
+	const tzoom = t.zoom;
 
 	return(
 		gleam_transform.create(
 			'offset',
-				gleam_point.create(
-					'x', this.offset.x * tzoom + t.offset.x,
-					'y', this.offset.y * tzoom + t.offset.y
+				gleam_point.create.xy(
+					offset.x * tzoom + toffset.x,
+					offset.y * tzoom + toffset.y
 				),
-			'zoom',
-				this.zoom * tzoom
+			'zoom', this.zoom * tzoom
 		)
 	);
 };
@@ -90,18 +104,14 @@ prototype.combine =
 /*
 | Returns a reverse transformed x value.
 */
-prototype.dex =
+def.func.dex =
 	function(
 		x
 	)
 {
-
 /**/if( CHECK )
 /**/{
-/**/	if( typeof( x ) !== 'number' || arguments.length !== 1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( typeof( x ) !== 'number' || arguments.length !== 1 ) throw new Error( );
 /**/}
 
 	return ( x  - this.offset.x ) / this.zoom;
@@ -111,18 +121,14 @@ prototype.dex =
 /*
 | Returns the reverse transformed y value.
 */
-prototype.dey =
+def.func.dey =
 	function(
 		y
 	)
 {
-
 /**/if( CHECK )
 /**/{
-/**/	if( typeof( y ) !== 'number' || arguments.length !== 1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( typeof( y ) !== 'number' || arguments.length !== 1 ) throw new Error( );
 /**/}
 
 	return ( y - this.offset.y ) / this.zoom;
@@ -130,41 +136,24 @@ prototype.dey =
 
 
 /*
-| Returns a transform with the same zoom like this,
-| but with a zeroOffset.
-*/
-jion.lazyValue(
-	prototype,
-	'ortho',
-	function( )
-{
-	return this.create( 'offset', gleam_point.zero );
-}
-);
-
-
-/*
 | Creates a transformed point.
 */
-prototype.point =
+def.func.point =
 	function(
 		x,
 		y
 	)
 {
-	return(
-		gleam_point.create(
-			'x', this.x( x ),
-			'y', this.y( y )
-		)
-	);
+	return gleam_point.xy( this.x( x ), this.y( y ) );
 };
 
 
 /*
 | Returns a transformed distance.
+|
+| FIXME this should be called 'd' then
 */
-prototype.scale =
+def.func.scale =
 	function(
 		d
 	)
@@ -176,21 +165,14 @@ prototype.scale =
 /*
 | Returns a transformed x value.
 */
-prototype.x =
+def.func.x =
 	function(
 		x
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		typeof( x ) !== 'number'
-/**/		||
-/**/		arguments.length !== 1
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( typeof( x ) !== 'number' || arguments.length !== 1	) throw new Error( );
 /**/}
 
 	return x * this.zoom + this.offset.x;
@@ -200,35 +182,18 @@ prototype.x =
 /*
 | Returns a transformed y value.
 */
-prototype.y =
+def.func.y =
 	function(
 		y
 	)
 {
-
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		typeof( y ) !== 'number'
-/**/		|| arguments.length !== 1
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( typeof( y ) !== 'number' || arguments.length !== 1) throw new Error( );
 /**/}
 
 	return y * this.zoom + this.offset.y;
 };
 
 
-/*
-| The normal transform is a transform that doesn't transform.
-*/
-gleam_transform.normal =
-	gleam_transform.create(
-		'offset', gleam_point.zero,
-		'zoom', 1
-	);
-
-
-} )( );
+} );

@@ -1,97 +1,71 @@
 /*
 | A line.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	gleam_point,
+	gleam_rect;
+
+
+tim.define( module, 'gleam_line', ( def, gleam_line ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'gleam_line',
-		attributes :
+	def.attributes =
+	{
+		p1 :
 		{
-			p1 :
-			{
-				comment : 'first point',
-				type : 'gleam_point'
-			},
-			p2 :
-			{
-				comment : 'second point',
-				type : 'gleam_point'
-			}
+			type : 'gleam_point'
+		},
+		p2 :
+		{
+			type : 'gleam_point'
 		}
 	};
 }
 
 
-var
-	gleam_line,
-	gleam_point,
-	gleam_rect,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function(){
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-var
-	prototype;
-
-prototype = gleam_line.prototype;
-
-
-/*
-| The zone of the line.
-*/
-jion.lazyValue(
-	prototype,
-	'zone',
-	function( )
-	{
-		return gleam_rect.createArbitrary( this.p1, this.p2 );
-	}
-);
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The point at center.
 */
-jion.lazyValue(
-	prototype,
-	'pc',
+def.lazy.pc =
 	function( )
-	{
-		var
-			p1,
-			p2;
+{
+	const p1 = this.p1;
 
-		p1 = this.p1;
+	const p2 = this.p2;
 
-		p2 = this.p2;
-
-		return(
-			gleam_point.create(
-				'x', ( p1.x + p2.x ) / 2,
-				'y', ( p1.y + p2.y ) / 2
-			)
-		);
-	}
-);
+	return(
+		gleam_point.create(
+			'x', ( p1.x + p2.x ) / 2,
+			'y', ( p1.y + p2.y ) / 2
+		)
+	);
+};
 
 
-} )( );
+/*
+| The zone of the line.
+*/
+def.lazy.zone =
+	function( )
+{
+	return gleam_rect.createArbitrary( this.p1, this.p2 );
+};
+
+
+} );

@@ -32,10 +32,6 @@ server_resourceList.create(
 	'list:init',
 	[
 	server_resource.create(
-		'filePath', 'import/webfont.js',   // FUTURE add version info
-		'maxage', 'long'
-	),
-	server_resource.create(
 		'filePath', 'import/opentype.js',
 		'maxage', 'long',
 		'postProcessor', 'opentype'
@@ -249,7 +245,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/border.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -282,17 +278,17 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/gradient/colorStop.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/gradient/askew.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/gradient/radial.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -321,18 +317,18 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/margin.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/font.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/display/canvas.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -376,27 +372,27 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/shape/line.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/shape/round.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/shape/start.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/shape.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/shapeList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -411,7 +407,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/line.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -420,7 +416,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/arrow.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -435,7 +431,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/transform.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

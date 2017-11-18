@@ -17,9 +17,9 @@
 		"FREEZE" : true,
 		"JION" : true,
 		"NODE" : true,
-		"SHELL" : true,
 		"pass" : true,
 		"root" : true,
-		"tim" : true
+		"tim" : true,
+		"TIM" : true
 	}
 }

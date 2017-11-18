@@ -1,35 +1,22 @@
 /*
 | A radial gradient.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_gradient_radial',
-		attributes :
-		{
-			// FUTURE specify something
-		},
-		list : [ 'gleam_gradient_colorStop' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'gleam_gradient_radial', ( def, gleam_gradient_radial ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+
+	def.list = [ 'gleam_gradient_colorStop' ];
 }
 
 
-})( );
+} );
