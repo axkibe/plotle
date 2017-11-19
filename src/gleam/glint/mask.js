@@ -33,7 +33,7 @@ if( TIM )
 				require( '../typemap-shape' )
 				.concat( [ 'gleam_shapeList' ] )
 		}
-	}
+	};
 }
 
 

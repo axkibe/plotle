@@ -1,44 +1,28 @@
 /*
 | A list of facets.
 |
-| Priotiy is from length - 1 to 0.
+| Display prioritiy is from last to first ( actually zeroth ).
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_facetList',
-		list : [ 'gleam_facet' ]
-	};
-}
-
-
-var
-	gleam_facetList;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+tim.define( module, 'gleam_facetList', ( def, gleam_facetList ) => {
 
-	return;
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.list = [ 'gleam_facet' ];
 }
 
 
-var
-	prototype;
-
-prototype = gleam_facetList.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -47,27 +31,20 @@ prototype = gleam_facetList.prototype;
 |
 | 'name', value pairs
 */
-prototype.getFacet =
+def.func.getFacet =
 	function(
 		// ...
 	)
 {
-	var
-		a,
-		aZ,
-		matches,
-		f,
-		r;
+	const aZ = arguments.length;
 
-	aZ = arguments.length;
-
-	for( r = this.length - 1; r >= 0; r-- )
+	for( let r = this.length - 1; r >= 0; r-- )
 	{
-		f = this.get( r );
+		const f = this.get( r );
 
-		matches = 0;
+		let matches = 0;
 
-		for( a = 0; a < aZ; a += 2 )
+		for( let a = 0; a < aZ; a += 2 )
 		{
 			if( f.get( arguments[ a ] ) === arguments[ a + 1 ] )
 			{
@@ -75,12 +52,9 @@ prototype.getFacet =
 			}
 		}
 
-		if( matches === f.size )
-		{
-			return f;
-		}
+		if( matches === f.size ) return f;
 	}
 };
 
 
-})( );
+} );

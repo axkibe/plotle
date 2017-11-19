@@ -358,7 +358,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/glint/window.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -426,7 +426,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/facetList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

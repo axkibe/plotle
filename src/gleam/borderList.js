@@ -1,33 +1,21 @@
 /*
 | A border list.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'gleam_borderList',
-		list : [ 'gleam_border' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+tim.define( module, 'gleam_borderList', ( def, gleam_borderList ) => {
 
-	return;
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.list = 'gleam_border';
 }
 
 
-} )( );
+} );
