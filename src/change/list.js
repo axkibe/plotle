@@ -1,90 +1,76 @@
 /*
 | A list of changes.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_list',
-		json : true,
-		list :
-		[
-			'change_grow',
-			'change_insert',
-			'change_listAppend',
-			'change_listShorten',
-			'change_join',
-			'change_remove',
-			'change_set',
-			'change_shrink',
-			'change_split'
-		]
-	};
-}
-
-
+// FIXME
 var
-	change_generic,
-	change_list,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
+	change_generic;
 
 
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_list = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
 }
 
 
-prototype = change_list.prototype;
+tim.define( module, 'change_list', ( def, change_list ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.list =
+	[
+		'change_grow',
+		'change_insert',
+		'change_listAppend',
+		'change_listShorten',
+		'change_join',
+		'change_remove',
+		'change_set',
+		'change_shrink',
+		'change_split'
+	];
+
+	def.json = true;
+}
+
+
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | Returns a change list with reversed changes.
 */
-jion.lazyValue(
-	prototype,
-	'reverse',
+def.lazy.reverse =
 	function( )
 {
-	var
-		a,
-		aZ,
-		arr,
-		result;
+	const arr = [ ];
 
-	arr = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		arr[ a ] = this.get( aZ - 1 - a ).reverse;
 	}
 
-	result = change_list.create( 'list:init', arr );
+	const result = change_list.create( 'list:init', arr );
 
-	jion.aheadValue( result, 'reverse', this );
+	tim.aheadValue( result, 'reverse', this );
 
 	return result;
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -94,22 +80,14 @@ jion.lazyValue(
 |
 | The result can be a change or a change_list.
 */
-prototype._transformSingle =
+def.func._transformSingle =
 	function(
 		c
 	)
 {
-	var
-		a,
-		aZ,
-		cx;
+	let cx = c;
 
-	cx = c;
-
-	for(
-		a = 0, aZ = this.length;
-		a < aZ;
-		a++)
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		cx = this.get( a ).transform( cx );
 	}
@@ -124,16 +102,12 @@ prototype._transformSingle =
 |
 | The result is a change_list.
 */
-prototype._transformChangeList =
+def.func._transformChangeList =
 	function(
 		cList
 	)
 {
-	var
-		a,
-		aZ;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		cList = this.get( a ).transform( cList );
 	}
@@ -145,7 +119,7 @@ prototype._transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap =
+def.func._transformChangeWrap =
 	function(
 		cw
 	)
@@ -157,23 +131,17 @@ prototype._transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrapList =
+def.func._transformChangeWrapList =
 	function(
 		cwList
 	)
 {
-	var
-		r,
-		rZ,
-		tList;
+	const tList = [ ];
 
-	tList = [ ];
-
-	for( r = 0, rZ = cwList.length; r < rZ; r++ )
+	for( let r = 0, rZ = cwList.length; r < rZ; r++ )
 	{
 		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
 	}
-
 
 	return cwList.create( 'list:init', tList );
 };
@@ -184,7 +152,7 @@ prototype._transformChangeWrapList =
 | change, change_list, change_wrap or change_wrapList
 | transformed by this change_list.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		co
 	)
@@ -213,17 +181,13 @@ prototype.transform =
 /*
 | Performes this change list on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		a,
-		aZ;
-
 	// iterates through the change list
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		// the tree returned by op-handler is the new tree
 		tree = this.get( a ).changeTree( tree );
@@ -236,15 +200,12 @@ prototype.changeTree =
 /*
 | Reversevly performes this change list on a tree.
 */
-prototype.changeTreeReverse =
+def.func.changeTreeReverse =
 	function(
 		tree
 	)
 {
-	var
-		a;
-
-	for( a = this.length - 1; a >= 0; a-- )
+	for( let a = this.length - 1; a >= 0; a-- )
 	{
 		tree = this.get( a ).changeTreeReverse( tree );
 	}
@@ -253,4 +214,4 @@ prototype.changeTreeReverse =
 };
 
 
-}( ) );
+} );

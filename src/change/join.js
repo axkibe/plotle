@@ -1,87 +1,67 @@
 /*
 | A text ( para ) is joined.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_join',
-		attributes :
-		{
-			path :
-			{
-				comment : 'join at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			at1 :
-			{
-				comment : 'join at this place ',
-				// must be length of text
-				json : true,
-				type : 'integer'
-			},
-			path2 :
-			{
-				comment : 'join this',
-				// must be after path
-				json : true,
-				type : 'jion$path'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_generic,
 	change_error,
-	change_split,
-	change_join,
-	jion;
+	change_split;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_join = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
-
 	change_split = require( './remove' );
 }
 
 
-prototype = change_join.prototype;
+tim.define( module, 'change_join', ( def, change_join ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
+		{
+			// join at this path
+			type : 'jion$path',
+			json : true,
+		},
+		at1 :
+		{
+			// join at this place
+			// must be length of text
+			type : 'integer',
+			json : true,
+		},
+		path2 :
+		{
+			comment : 'join this',
+			// must be after path
+			type : 'jion$path',
+			json : true,
+		}
+	};
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
-	function ( )
+def.func._init =
+	function( )
 {
 	if( this.at1 < 0 )
 	{
@@ -90,49 +70,64 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns the inversion to this change.
+*/
+def.lazy.reverse =
+	function( )
+{
+	const inv =
+		change_split.create(
+			'path', this.path,
+			'at1', this.at1,
+			'path2', this.path2
+		);
+
+	tim.aheadValue( inv, 'reverse', this );
+
+	return inv;
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Performs the insertion change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		at1,
-		key,
-		key2,
-		path,
-		path2,
-		para1,
-		para2,
-		pivot,
-		rank1,
-		rank2,
-		text,
-		text2;
+	const at1 = this.at1;
 
-	at1 = this.at1;
+	const path = this.path;
 
-	path = this.path;
+	const path2 = this.path2;
 
-	path2 = this.path2;
+	const text = tree.getPath( path );
 
-	text = tree.getPath( path );
+	const text2 = tree.getPath( path2 );
 
-	text2 = tree.getPath( path2 );
-
-	if( !jion.isString( text ) )
+	if( typeof( text ) !== 'string' )
 	{
 		throw change_error( 'join.path signates no string' );
 	}
 
-	if( !jion.isString( text2 ) )
+	if( typeof( text2 ) !== 'string' )
 	{
 		throw change_error( 'join.path2 signates no string' );
 	}
 
-	pivot = tree.getPath( path.shorten.shorten.shorten );
+	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
 	if( !pivot.getKey ) throw change_error( 'join.pivot not ranked' );
 
@@ -146,17 +141,17 @@ prototype.changeTree =
 		throw change_error( 'join.path2 not a subPath' );
 	}
 
-	key = path.get( -2 );
+	const key = path.get( -2 );
 
-	key2 = path2.get( -2 );
+	const key2 = path2.get( -2 );
 
-	para1 = pivot.get( key );
+	let para1 = pivot.get( key );
 
-	para2 = pivot.get( key2 );
+	const para2 = pivot.get( key2 );
 
-	rank1 = pivot.rankOf( key );
+	const rank1 = pivot.rankOf( key );
 
-	rank2 = pivot.rankOf( key2 );
+	const rank2 = pivot.rankOf( key2 );
 
 	if( rank1 < 0 )
 	{
@@ -181,48 +176,21 @@ prototype.changeTree =
 			'twig:remove', key2
 		);
 
-	tree = tree.setPath( path.shorten.shorten.shorten, pivot );
-
-	return tree;
+	return tree.setPath( path.shorten.shorten.shorten, pivot );
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-	{
-		var
-			inv;
-
-		inv =
-			change_split.create(
-				'path', this.path,
-				'at1', this.at1,
-				'path2', this.path2
-			);
-
-		jion.aheadValue( inv, 'reverse', this );
-
-		return inv;
-	}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -281,26 +249,26 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*
 | Transforms an insert/remove change
 | considering this join actually came first.
 */
-prototype._transformInsertRemove =
+def.func._transformInsertRemove =
 	function(
 		cx
 	)
@@ -308,19 +276,13 @@ prototype._transformInsertRemove =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_insert'
-/**/		&& cx.reflect !== 'change_remove'
-/**/	)
+/**/	if( cx.reflect !== 'change_insert' && cx.reflect !== 'change_remove' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path2.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path2.equals( cx.path ) ) return cx;
 
 	return(
 		cx.create(
@@ -336,7 +298,7 @@ prototype._transformInsertRemove =
 | Transforms an join/split change
 | considering this join actually came first.
 */
-prototype._transformJoinSplit =
+def.func._transformJoinSplit =
 	function(
 		cx
 	)
@@ -344,19 +306,13 @@ prototype._transformJoinSplit =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_join'
-/**/		&& cx.reflect !== 'change_split'
-/**/	)
+/**/	if( cx.reflect !== 'change_join' && cx.reflect !== 'change_split' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path2.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path2.equals( cx.path ) ) return cx;
 
 	return(
 		cx.create(
@@ -370,7 +326,7 @@ prototype._transformJoinSplit =
 /*
 | Transforms a mark by this join.
 */
-prototype._transformTextMark =
+def.func._transformTextMark =
 	function(
 		mark
 	)
@@ -389,8 +345,7 @@ prototype._transformTextMark =
 /*
 | Transforms a range mark by this join.
 */
-prototype._transformRangeMark =
-	change_generic.transformRangeMark;
+def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
-}( ) );
+} );

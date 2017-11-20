@@ -172,7 +172,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/join.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -184,7 +184,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/list.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -206,7 +206,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/shrink.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -230,7 +230,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/dynamic.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -250,7 +250,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/borderList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

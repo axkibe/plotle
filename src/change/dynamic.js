@@ -1,52 +1,41 @@
 /*
 | A wrapped changed list to be applied on a dynamic.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'change_dynamic', ( def, change_dynamic ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'change_dynamic',
-		attributes :
+	def.attributes =
+	{
+		changeWrapList :
 		{
-			changeWrapList :
-			{
-				comment : 'the changes',
-				json : true,
-				type : [ 'undefined', 'change_wrapList' ]
-			},
-			refDynamic :
-			{
-				comment : 'the dynamic to be changed',
-				json : true,
-				type : [ 'ref_space', 'ref_userSpaceList' ]
-			},
-			seq :
-			{
-				comment : 'sequence the update starts at',
-				json : true,
-				type : [ 'undefined', 'integer' ]
-			}
+			// the changes
+			type : [ 'undefined', 'change_wrapList' ],
+			json : true,
 		},
-		json : true
+		refDynamic :
+		{
+			// the dynamic to be changed
+			type : [ 'ref_space', 'ref_userSpaceList' ],
+			json : true,
+		},
+		seq :
+		{
+			// sequence the update starts at
+			type : [ 'undefined', 'integer' ],
+			json : true,
+		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );
