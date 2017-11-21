@@ -26,7 +26,7 @@ tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
 
 if( TIM )
 {
-	// This tim has an abstract form.
+	// this tim has an abstract form.
 	def.hasAbstract = true;
 
 	def.attributes =

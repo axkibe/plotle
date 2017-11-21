@@ -1,82 +1,64 @@
 /*
 | Sets a tree node.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_grow',
-		attributes :
-		{
-			path :
-			{
-				comment : 'grow at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			val :
-			{
-				comment : 'value to grow',
-				json : true,
-				type : require( './typemap-value' )
-			},
-			rank :
-			{
-				comment : 'rank of new node',
-				json : true,
-				type : 'integer'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_generic,
-	change_grow,
 	change_error,
-	change_shrink,
-	jion;
+	change_shrink;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_grow = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
 }
 
 
-prototype = change_grow.prototype;
+tim.define( module, 'change_grow', ( def, change_grow ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
+		{
+			// grow at this path',
+			type : 'jion$path',
+			json : true,
+		},
+		val :
+		{
+			// value to grow
+			type : require( './typemap-value' ),
+			json : true,
+		},
+		rank :
+		{
+			//comment : 'rank of new node',
+			type : 'integer',
+			json : true,
+		}
+	};
+
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function ( )
 {
 	if( this.rank !== undefined && this.rank < 0 )
@@ -86,29 +68,50 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+def.lazy.reverse =
+	function( )
+{
+	const inv =
+		change_shrink.create(
+			'path', this.path,
+			'prev', this.val,
+			'rank', this.rank
+		);
+
+	tim.aheadValue( inv, 'reverse', this );
+
+	return inv;
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Performs the growth change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		key,
-		pivot,
-		rank;
-
 	if( this.path.get( -2 ) !== 'twig' )
 	{
 		throw change_error( 'grow.path( -2 ) not a twig' );
 	}
 
-	pivot = tree.getPath( this.path.shorten.shorten );
+	let pivot = tree.getPath( this.path.shorten.shorten );
 
-	key = this.path.get( -1 );
+	const key = this.path.get( -1 );
 
-	rank = this.rank;
+	const rank = this.rank;
 
 	if( rank > pivot.length )
 	{
@@ -117,54 +120,25 @@ prototype.changeTree =
 
 	pivot = pivot.create( 'twig:insert', key, rank, this.val );
 
-	if( this.path.length > 2 )
-	{
-		tree = tree.setPath( this.path.shorten.shorten, pivot );
-	}
-	else
-	{
-		tree = pivot;
-	}
-
-	return tree;
+	return(
+		this.path.length > 2
+		? tree.setPath( this.path.shorten.shorten, pivot )
+		: pivot
+	);
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-{
-	var
-		inv;
-
-	inv =
-		change_shrink.create(
-			'path', this.path,
-			'prev', this.val,
-			'rank', this.rank
-		);
-
-	jion.aheadValue( inv, 'reverse', this );
-
-	return inv;
-}
-);
 
 
 /*
 | Returns a change* transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -214,20 +188,19 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
-
-}( ) );
+} );

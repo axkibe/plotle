@@ -1,86 +1,95 @@
 /*
 | Sets a tree node.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	change_generic,
+	change_error;
+
+
+if( NODE )
 {
-	throw{
-		id : 'change_set',
-		attributes :
+	change_generic = require( './generic' );
+	change_error = require( './error' );
+}
+
+
+tim.define( module, 'change_set', ( def, change_set ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
 		{
-			path :
-			{
-				comment : 'set at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			val :
-			{
-				comment : 'value to set',
-				json : true,
-				type : require( './typemap-value' )
-			},
-			prev :
-			{
-				comment : 'value tree had',
-				json : true,
-				type : require( './typemap-value' )
-			}
+			// set at this path
+			type : 'jion$path',
+			json : true,
+		},
+		val :
+		{
+			// value to set
+			type : require( './typemap-value' ),
+			json : true,
+		},
+		prev :
+		{
+			// the value tree had
+			type : require( './typemap-value' ),
+			json : true,
 		}
 	};
 }
 
 
-var
-	change_generic,
-	change_error,
-	change_set,
-	jion;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| Capsule
+| Returns the inversion to this change.
 */
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-if( NODE )
+def.lazy.reverse =
+	function( )
 {
-	jion = require( 'jion' );
+	const inv =
+		change_set.create(
+			'path', this.path,
+			'val', this.prev,
+			'prev', this.val
+		);
 
-	change_set = jion.this( module, 'source' );
+	tim.aheadValue( inv, 'reverse', this );
 
-	change_generic = require( './generic' );
-
-	change_error = require( './error' );
-}
+	return inv;
+};
 
 
-prototype = change_set.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Performs the insertion change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		prev;
-
 	// Stores the old value for history tracking.
-	prev = tree.getPath( this.path );
+	const prev = tree.getPath( this.path );
 
 	if( !this.val ) throw new Error( );
 
@@ -91,47 +100,20 @@ prototype.changeTree =
 		throw change_error( 'set.prev doesn\'t match' );
 	}
 
-	tree = tree.setPath( this.path, this.val );
-
-	return tree;
+	return tree.setPath( this.path, this.val );
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-{
-	var
-		inv;
-
-	inv =
-		change_set.create(
-			'path', this.path,
-			'val', this.prev,
-			'prev', this.val
-		);
-
-	jion.aheadValue( inv, 'reverse', this );
-
-	return inv;
-}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change* transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -178,20 +160,14 @@ prototype.transform =
 | Transforms a set by this set actually
 | happening first.
 */
-prototype._transformChangeSet =
+def.func._transformChangeSet =
 	function(
 		cx
 	)
 {
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
-	if( cx.prev.equalsJSON( this.prev ) )
-	{
-		return cx.create( 'prev', this.val );
-	}
+	if( cx.prev.equalsJSON( this.prev ) ) return cx.create( 'prev', this.val );
 
 	return cx;
 };
@@ -200,20 +176,18 @@ prototype._transformChangeSet =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
-
-
-}( ) );
+} );

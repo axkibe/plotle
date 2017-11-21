@@ -1,68 +1,45 @@
 /*
 | A node mark.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_mark_node',
-		attributes :
-		{
-			path :
-			{
-				comment : 'path of the mark',
-				type : 'jion$path'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-var
-	change_mark_node;
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
-var
-	prototype;
+tim.define( module, 'change_mark_node', ( def, change_mark_node ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	change_mark_node = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		path :
+		{
+			// path of the mark
+			type : 'jion$path'
+		}
+	};
+
+	def.init = [ ];
 }
-
-
-prototype = change_mark_node.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.path.isEmpty ) throw new Error( );
 /**/}
 
 };
 
 
-} )( );
+} );

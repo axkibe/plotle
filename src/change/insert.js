@@ -1,66 +1,14 @@
 /*
 | A text insertion change.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_insert',
-		attributes :
-		{
-			path :
-			{
-				comment : 'insert at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			val :
-			{
-				comment : 'source sign',
-				json : true,
-				type : 'string'
-			},
-			at1 :
-			{
-				comment : 'insert at this place begin',
-				json : true,
-				type : 'integer'
-			},
-			at2 :
-			{
-				comment : 'insert ends here',
-				// must be at1 + val.length
-				// FUTURE have it lazyEval
-				json : true,
-				type : 'integer'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_generic,
 	change_error,
-	change_insert,
-	change_remove,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
+	change_remove;
 
 
 /*
@@ -68,25 +16,61 @@ var
 */
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_insert = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
-
 	change_remove = require( './remove' );
 }
 
 
-prototype = change_insert.prototype;
+tim.define( module, 'change_insert', ( def, change_insert ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+
+	def.attributes =
+	{
+		path :
+		{
+			// insert at this path
+			type : 'jion$path',
+			json : true,
+		},
+		val :
+		{
+			// source sign
+			type : 'string',
+			json : true,
+		},
+		at1 :
+		{
+			// insert at this place begin
+			type : 'integer',
+			json : true,
+		},
+		at2 :
+		{
+			// insert ends here
+			// must be at1 + val.length
+			// FUTURE have this be a lazy
+			type : 'integer',
+			json : true,
+		}
+	};
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function ( )
 {
 	if( this.at1 + this.val.length !== this.at2 )
@@ -104,20 +88,47 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns the inversion to this change.
+*/
+def.lazy.reverse =
+	function( )
+{
+	const inv =
+		change_remove.create(
+			'path', this.path,
+			'val', this.val,
+			'at1', this.at1,
+			'at2', this.at2
+		);
+
+	tim.aheadValue( inv, 'reverse', this );
+
+	return inv;
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Performs the insertion change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		text;
+	const text = tree.getPath( this.path );
 
-	text = tree.getPath( this.path );
-
-	if( !jion.isString( text ) )
+	if( typeof( text ) !== 'string' )
 	{
 		throw change_error( 'insert.path signates no string' );
 	}
@@ -127,55 +138,28 @@ prototype.changeTree =
 		throw change_error( 'insert.at1 invalid' );
 	}
 
-	tree =
+	return(
 		tree.setPath(
 			this.path,
 			text.substring( 0, this.at1 )
 			+ this.val
 			+ text.substring( this.at1 )
-		);
-
-	return tree;
+		)
+	);
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-{
-	var
-		inv;
-
-	inv =
-		change_remove.create(
-			'path', this.path,
-			'val', this.val,
-			'at1', this.at1,
-			'at2', this.at2
-		);
-
-	jion.aheadValue( inv, 'reverse', this );
-
-	return inv;
-}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -228,19 +212,19 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 
@@ -248,58 +232,44 @@ prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
 | Transforms another insert/remove change
 | considering this insert actually came first.
 */
-prototype._transformInsertRemove =
+def.func._transformInsertRemove =
 	function(
 		cx
 	)
 {
-	var
-		len;
-
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_insert'
-/**/		&& cx.reflect !== 'change_remove'
-/**/	)
+/**/	if( cx.reflect !== 'change_insert' && cx.reflect !== 'change_remove' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
-	if( cx.at1 < this.at1 )
-	{
-		return cx;
-	}
-	else
-	{
-		len = this.val.length;
+	if( cx.at1 < this.at1 ) return cx;
 
-		return(
-			cx.create(
-				'at1', cx.at1 + len,
-				'at2', cx.at2 + len
-			)
-		);
-	}
+	const len = this.val.length;
+
+	return(
+		cx.create(
+			'at1', cx.at1 + len,
+			'at2', cx.at2 + len
+		)
+	);
 };
 
 
 /*
 | Transforms a range mark by this insert.
 */
-prototype._transformRangeMark = change_generic.transformRangeMark;
+def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
 /*
 | Transforms a text mark by this insert.
 */
-prototype._transformTextMark =
+def.func._transformTextMark =
 	function(
 		mark
 	)
@@ -319,29 +289,21 @@ prototype._transformTextMark =
 | Transforms a join or split change.
 | considering this insert actually came first.
 */
-prototype._transformJoinSplit =
+def.func._transformJoinSplit =
 	function(
 		cx
 	)
 {
-	var
-		len;
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_join'
-/**/		&& cx.reflect !== 'change_split'
-/**/	)
+/**/	if( cx.reflect !== 'change_join' && cx.reflect !== 'change_split' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
 	if( this.at1 > cx.at1 )
 	{
@@ -352,13 +314,9 @@ prototype._transformJoinSplit =
 
 		return cx;
 	}
-	else
-	{
-		len = this.val.length;
 
-		return cx.create( 'at1', cx.at1 + len );
-	}
+	return cx.create( 'at1', cx.at1 + this.val.length );
 };
 
 
-}( ) );
+} );

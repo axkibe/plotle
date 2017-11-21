@@ -1,59 +1,39 @@
 /*
 | A list of wraped change(lists).
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'change_wrapList', ( def, change_wrapList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'change_wrapList',
-		json : true,
-		list : [ 'change_wrap' ]
-	};
+	def.list = [ 'change_wrap' ];
+
+	def.json = true;
 }
 
 
-var
-	change_wrapList;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	change_wrapList = require( 'jion' ).this( module, 'source' );
-}
-
-
-prototype = change_wrapList.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Creates an invertes changeWrapList
 */
-prototype.createReverse =
+def.func.createReverse =
 	function( )
 {
-	var
-		a,
-		aZ,
-		iList;
+	const iList = [ ];
 
-	iList = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		iList[ a ] = this.get( aZ - 1 - a ).createReverse( );
 	}
@@ -65,17 +45,13 @@ prototype.createReverse =
 /*
 | Performes the wrapped change-(lists) on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		a,
-		aZ;
-
 	// iterates through the change list
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		tree = this.get( a ).changeTree( tree );
 	}
@@ -87,15 +63,12 @@ prototype.changeTree =
 | Performes the reversion of the
 | wrapped-change (lists) on a tree.
 */
-prototype.changeTreeReverse =
+def.func.changeTreeReverse =
 	function(
 		tree
 	)
 {
-	var
-		a;
-
-	for( a = this.length - 1; a >= 0; a-- )
+	for( let a = this.length - 1; a >= 0; a-- )
 	{
 		tree = this.get( a ).changeTreeReverse( tree );
 	}
@@ -109,16 +82,12 @@ prototype.changeTreeReverse =
 |
 | cx can be a change, changeList, changeWrap or changeWrapList.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
 {
-	var
-		r,
-		rZ;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		cx = this.get( r ).transform( cx );
 	}
@@ -127,4 +96,4 @@ prototype.transform =
 };
 
 
-}( ) );
+} );

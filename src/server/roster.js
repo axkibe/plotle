@@ -149,7 +149,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/mark/node.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -160,13 +160,13 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/grow.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/change/insert.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -178,7 +178,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/remove.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -200,7 +200,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/set.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -212,19 +212,19 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/split.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/change/wrap.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/change/wrapList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),

@@ -1,92 +1,72 @@
 /*
-| A text insertion change.
+| A text removal change.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_remove',
-		attributes :
-		{
-			path :
-			{
-				comment : 'insert at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			val :
-			{
-				comment : 'source sign',
-				json : true,
-				type : 'string'
-			},
-			at1 :
-			{
-				comment : 'insert at this place begin',
-				json : true,
-				type : 'integer'
-			},
-			at2 :
-			{
-				comment : 'insert ends here',
-				// must be at1 + val.length
-				// FUTURE have it lazyEval
-				json : true,
-				type : 'integer'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_generic,
 	change_error,
-	change_insert,
-	change_remove,
-	jion;
+	change_insert;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_remove = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
-
 	change_insert = require( './insert' );
 }
 
 
-prototype = change_remove.prototype;
+tim.define( module, 'change_remove', ( def, change_remove ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
+		{
+			comment : 'insert at this path',
+			json : true,
+			type : 'jion$path'
+		},
+		val :
+		{
+			comment : 'source sign',
+			json : true,
+			type : 'string'
+		},
+		at1 :
+		{
+			comment : 'insert at this place begin',
+			json : true,
+			type : 'integer'
+		},
+		at2 :
+		{
+			comment : 'insert ends here',
+			// must be at1 + val.length
+			// FUTURE have it lazyEval
+			json : true,
+			type : 'integer'
+		}
+	};
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function ( )
 {
 	if( this.at1 + this.val.length !== this.at2 )
@@ -103,81 +83,75 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns the inversion to this change.
+*/
+def.lazy.reverse =
+	function( )
+{
+	const inv =
+		change_insert.create(
+			'path', this.path,
+			'val', this.val,
+			'at1', this.at1,
+			'at2', this.at2
+		);
+
+	tim.aheadValue( inv, 'reverse', this );
+
+	return inv;
+};
+
+
+
 /*
 | Performs the insertion change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		text,
-		val;
+	const text = tree.getPath( this.path );
 
-	text = tree.getPath( this.path );
-
-	if( !jion.isString( text ) )
+	if( typeof( text ) !== 'string' )
 	{
 		throw change_error( 'remove.path signates no string' );
 	}
 
-	val = text.substring( this.at1, this.at2 );
+	const val = text.substring( this.at1, this.at2 );
 
 	if( val !== this.val )
 	{
 		throw change_error( 'remove.val wrong: ' + val + ' !== ' + this.val );
 	}
 
-
-	tree =
+	return(
 		tree.setPath(
 			this.path,
 			text.substring( 0, this.at1 )
 			+ text.substring( this.at2 )
-		);
-
-	return tree;
+		)
+	);
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-	{
-		var
-			inv;
-
-		inv =
-			change_insert.create(
-				'path', this.path,
-				'val', this.val,
-				'at1', this.at1,
-				'at2', this.at2
-			);
-
-		jion.aheadValue( inv, 'reverse', this );
-
-		return inv;
-	}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -232,39 +206,33 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*
 | Transforms an insert change
 | considering this remove actually came first.
 */
-prototype._transformInsert =
+def.func._transformInsert =
 	function(
 		cx
 	)
 {
-	var
-		len;
-
 /**/if( CHECK )
 /**/{
-/**/	if( cx.reflect !== 'change_insert' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( cx.reflect !== 'change_insert' ) throw new Error( );
 /**/}
 
 	if( !this.path.equals( cx.path ) )
@@ -281,7 +249,7 @@ prototype._transformInsert =
 		return cx.create( 'at1', this.at1, 'at2', this.at1 + cx.val.length );
 	}
 	{
-		len = this.val.length;
+		const len = this.val.length;
 
 		return cx.create( 'at1', cx.at1 - len, 'at2', cx.at2 - len );
 	}
@@ -291,13 +259,13 @@ prototype._transformInsert =
 /*
 | Transforms a range mark by this remove.
 */
-prototype._transformRangeMark = change_generic.transformRangeMark;
+def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
 /*
 | Transforms a text mark by this insert.
 */
-prototype._transformTextMark =
+def.func._transformTextMark =
 	function(
 		mark
 	)
@@ -323,13 +291,11 @@ prototype._transformTextMark =
 | Transforms another remove change.
 | considering this remove actually came first.
 */
-prototype._transformRemove =
+def.func._transformRemove =
 	function(
 		cx
 	)
 {
-	var
-		len;
 
 /**/if( CHECK )
 /**/{
@@ -344,7 +310,7 @@ prototype._transformRemove =
 		return cx;
 	}
 
-	len = this.at2 - this.at1;
+	const len = this.at2 - this.at1;
 
 	// text            tttttttttttt
 	// this remove        ######
@@ -414,10 +380,9 @@ prototype._transformRemove =
 			)
 		);
 	}
-	else
-	{
-		throw new Error( );
-	}
+
+	// one of the above cases should have been applied
+	throw new Error( );
 };
 
 
@@ -425,31 +390,22 @@ prototype._transformRemove =
 | Transforms a join or split change.
 | considering this remove actually came first.
 */
-prototype._transformJoinSplit =
+def.func._transformJoinSplit =
 	function(
 		cx
 	)
 {
-	var
-		len;
-
 	// console.log( 'transform join/split by remove' );
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_join'
-/**/		&& cx.reflect !== 'change_split'
-/**/	)
+/**/	if( cx.reflect !== 'change_join' && cx.reflect !== 'change_split' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
 	// text    ttttttttttttt
 	// remove     ' xxxx '
@@ -481,12 +437,11 @@ prototype._transformJoinSplit =
 		// the remove shifts the split by its length
 		// joins are always case 2 since join.at1 == text.length
 
-		len = this.val.length;
+		const len = this.val.length;
 
 		return cx.create( 'at1', cx.at1 - len );
 	}
 };
 
 
-
-}( ) );
+} );

@@ -1,66 +1,51 @@
 /*
 | A change wrapped for transport.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	session_uid;
+
+
+tim.define( module, 'change_wrap', ( def, change_wrap ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'change_wrap',
-		attributes :
+	def.attributes =
+	{
+		cid :
 		{
-			cid :
-			{
-				comment : 'change id',
-				json : true,
-				type : 'string'
-			},
-			changeList :
-			{
-				comment : 'change list',
-				json : true,
-				type : 'change_list'
-			},
-			seq :
-			{
-				comment : 'sequence number',
-				json : true,
-				type : [ 'undefined', 'number' ]
-			}
+			comment : 'change id',
+			json : true,
+			type : 'string'
+		},
+		changeList :
+		{
+			comment : 'change list',
+			json : true,
+			type : 'change_list'
+		},
+		seq :
+		{
+			comment : 'sequence number',
+			json : true,
+			type : [ 'undefined', 'number' ]
 		}
 	};
 }
 
 
-var
-	change_wrap,
-	jion,
-	session_uid;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	change_wrap = jion.this( module, 'source' );
-}
-
-
-prototype = change_wrap.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -68,7 +53,7 @@ prototype = change_wrap.prototype;
 |
 | This one has a distinct change id and no sequence id yet
 */
-prototype.createReverse =
+def.func.createReverse =
 	function( )
 {
 	return(
@@ -85,7 +70,7 @@ prototype.createReverse =
 |
 | cx can be a change, changeList, changeWrap or changeWrapList.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -98,7 +83,7 @@ prototype.transform =
 /*
 | Performes the wrapped changeList on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
@@ -110,7 +95,7 @@ prototype.changeTree =
 /*
 | Reversevly performes the wrapped changeList on a tree.
 */
-prototype.changeTreeReverse =
+def.func.changeTreeReverse =
 	function(
 		tree
 	)
@@ -119,4 +104,4 @@ prototype.changeTreeReverse =
 };
 
 
-}( ) );
+} );

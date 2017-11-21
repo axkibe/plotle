@@ -1,127 +1,123 @@
 /*
 | A text ( para ) is splited.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_split',
-		attributes :
-		{
-			path :
-			{
-				comment : 'split at this path',
-				json : true,
-				type : 'jion$path'
-			},
-			at1 :
-			{
-				comment : 'insert at this place begin',
-				json : true,
-				type : 'integer'
-			},
-			path2 :
-			{
-				comment : 'split created this new/next path',
-				json : true,
-				type : 'jion$path'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_generic,
 	change_error,
 	change_join,
-	change_list,
-	change_split,
-	jion;
+	change_list;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
 if( NODE )
 {
-	jion = require( 'jion' );
-
-	change_split = jion.this( module, 'source' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
-
 	change_list = require( './list' );
-
 	change_join = require( './remove' );
 }
 
 
-prototype = change_split.prototype;
+tim.define( module, 'change_split', ( def, change_split ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
+		{
+			// split at this path
+			type : 'jion$path',
+			json : true,
+		},
+		at1 :
+		{
+			// insert at this place begin
+			type : 'integer',
+			json : true,
+		},
+		path2 :
+		{
+			// split created this new/next path
+			type : 'jion$path',
+			json : true,
+		}
+	};
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function ( )
 {
 	if( this.at1 < 0 ) throw change_error( 'split.at1 negative' );
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns the inversion to this change.
+*/
+def.lazy.reverse =
+	function( )
+{
+	const inv =
+		change_join.create(
+			'path', this.path,
+			'at1', this.at1,
+			'path2', this.path2
+		);
+
+	tim.aheadValue( inv, 'reverse', this );
+
+	return inv;
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Performs the insertion change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
 {
-	var
-		at1,
-		key,
-		key2,
-		path,
-		path2,
-		para1,
-		para2,
-		pivot,
-		rank1,
-		text;
+	const at1 = this.at1;
 
-	at1 = this.at1;
+	const path = this.path;
 
-	path = this.path;
+	const path2 = this.path2;
 
-	path2 = this.path2;
+	const text = tree.getPath( path );
 
-	text = tree.getPath( path );
-
-	if( !jion.isString( text ) )
+	if( typeof( text ) !== 'string' )
 	{
 		throw change_error( 'split.path signates no string' );
 	}
 
-	pivot = tree.getPath( path.shorten.shorten.shorten );
+	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
 	if( !pivot.getKey )
 	{
@@ -138,18 +134,18 @@ prototype.changeTree =
 		throw change_error( 'split.path2 not a subPath' );
 	}
 
-	key = path.get( -2 );
+	const key = path.get( -2 );
 
-	key2 = path2.get( -2 );
+	const key2 = path2.get( -2 );
 
 	if( pivot.get( key2 ) )
 	{
 		throw change_error( 'split.path2 already exists' );
 	}
 
-	para1 = pivot.get( key );
+	let para1 = pivot.get( key );
 
-	rank1 = pivot.rankOf( key );
+	const rank1 = pivot.rankOf( key );
 
 	if( rank1 < 0 )
 	{
@@ -158,7 +154,7 @@ prototype.changeTree =
 
 	para1 = para1.create( 'text', text.substring( 0, at1 ) );
 
-	para2 = para1.create( 'text', text.substring( at1 ) );
+	const para2 = para1.create( 'text', text.substring( at1 ) );
 
 	pivot =
 		pivot.create(
@@ -166,48 +162,21 @@ prototype.changeTree =
 			'twig:insert', key2, rank1 + 1, para2
 		);
 
-	tree = tree.setPath( path.shorten.shorten.shorten, pivot );
-
-	return tree;
+	return tree.setPath( path.shorten.shorten.shorten, pivot );
 };
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-	{
-		var
-			inv;
-
-		inv =
-			change_join.create(
-				'path', this.path,
-				'at1', this.at1,
-				'path2', this.path2
-			);
-
-		jion.aheadValue( inv, 'reverse', this );
-
-		return inv;
-	}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -269,26 +238,26 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*
 | Transforms an insert change
 | considering this split actually came first.
 */
-prototype._transformInsert =
+def.func._transformInsert =
 	function(
 		cx
 	)
@@ -302,22 +271,17 @@ prototype._transformInsert =
 
 	if( !this.path.equals( cx.path ) ) return cx;
 
-	if( cx.at1 <= this.at1 )
-	{
-		return cx;
-	}
-	else
-	{
-		// insert is changed to happen
-		// in the splitted line
-		return(
-			cx.create(
-				'path', this.path2,
-				'at1', cx.at1 - this.at1,
-				'at2', cx.at2 - this.at1
-			)
-		);
-	}
+	if( cx.at1 <= this.at1 ) return cx;
+
+	// insert is changed to happen
+	// in the splitted line
+	return(
+		cx.create(
+			'path', this.path2,
+			'at1', cx.at1 - this.at1,
+			'at2', cx.at2 - this.at1
+		)
+	);
 };
 
 
@@ -325,7 +289,7 @@ prototype._transformInsert =
 | Transforms a join/split change
 | considering this split actually came first.
 */
-prototype._transformJoinSplit =
+def.func._transformJoinSplit =
 	function(
 		cx
 	)
@@ -334,42 +298,31 @@ prototype._transformJoinSplit =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_join'
-/**/		&& cx.reflect !== 'change_split'
-/**/	)
+/**/	if( cx.reflect !== 'change_join' && cx.reflect !== 'change_split' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
-	if( cx.at1 <= this.at1 )
-	{
-		return cx;
-	}
-	else
-	{
-		// join/split is changed to happen
-		// in the splitted line
-		return(
-			cx.create(
-				'path', this.path2,
-				'at1', cx.at1 - this.at1
-			)
-		);
-	}
+	if( cx.at1 <= this.at1 ) return cx;
+
+	// join/split is changed to happen
+	// in the splitted line
+	return(
+		cx.create(
+			'path', this.path2,
+			'at1', cx.at1 - this.at1
+		)
+	);
 };
 
 
 /*
 | Transforms a text mark by this split.
 */
-prototype._transformTextMark =
+def.func._transformTextMark =
 	function(
 		mark
 	)
@@ -391,7 +344,7 @@ prototype._transformTextMark =
 | Transforms a remove change
 | considering this split actually came first.
 */
-prototype._transformRemove =
+def.func._transformRemove =
 	function(
 		cx
 	)
@@ -400,10 +353,7 @@ prototype._transformRemove =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cx.reflect !== 'change_remove' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( cx.reflect !== 'change_remove' ) throw new Error( );
 /**/}
 
 	// text    ttttttttttttt
@@ -412,10 +362,7 @@ prototype._transformRemove =
 	// case 1      xxxxx        remove is split
 	// case 2        ' xxxx     remove right
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
 	if( cx.at2 <= this.at1 )
 	{
@@ -457,4 +404,4 @@ prototype._transformRemove =
 };
 
 
-}( ) );
+} );
