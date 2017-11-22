@@ -5,76 +5,56 @@
 |
 | Requests to multiple channels are send parallel.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'net_channel',
-		attributes :
-		{
-			path :
-			{
-				comment : 'the channels path in data tree',
-				type : 'jion$path'
-			},
-			_fifo :
-			{
-				comment : 'the fifo of requests',
-				type : 'net_requestWrapList',
-				defaultValue : 'net_requestWrapList.create( )'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-var
-	net_channel,
-	net_requestWrap,
-	net_requestWrapList,
-	root;
-
-/*
-| Capsule.
-*/
-(function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+// FIXME
+var
+	net_requestWrap,
+	net_requestWrapList;
 
-	return;
+
+tim.define( module, 'net_channel', ( def, net_channel ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		path :
+		{
+			comment : 'the channels path in data tree',
+			type : 'jion$path'
+		},
+		_fifo :
+		{
+			comment : 'the fifo of requests',
+			type : 'net_requestWrapList',
+			defaultValue : 'net_requestWrapList.create( )'
+		}
+	};
+
+	def.init = [ ];
 }
 
 
 /*
 | Initializer.
 */
-net_channel.prototype._init =
+def.func._init =
 	function( )
 {
-	var
-		channelName;
-
-	channelName =
-	this.channelName =
-		this.path.get( -1 );
+	this.channelName = this.path.get( -1 );
 
 /**/if( CHECK )
 /**/{
-/**/	if(	this.path.get( 0 ) !== 'ajax' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if(	this.path.get( 0 ) !== 'ajax' ) throw new Error( );
 /**/}
-
 };
 
 
@@ -84,32 +64,19 @@ net_channel.prototype._init =
 | If receiverFuncName is not undefined only aborts requests
 | with this receiverFuncName
 */
-net_channel.prototype.abortAll =
+def.func.abortAll =
 	function(
 		receiverFuncName // if not undefined aborts these
 	)
 {
-	var
-		f,
-		fZ,
-		fifo,
-		r;
+	let fifo = this._fifo;
 
-	fifo = this._fifo;
-
-	if( fifo.length === 0 )
-	{
-		// nothing pending
-		return;
-	}
+	// nothing pending?
+	if( fifo.length === 0 ) return;
 
 	if( receiverFuncName === undefined )
 	{
-		for(
-			f = 0, fZ = fifo.length;
-			f < fZ;
-			f++
-		)
+		for( let f = 0, fZ = fifo.length; f < fZ; f++ )
 		{
 			fifo.get( f ).abort( );
 		}
@@ -118,9 +85,9 @@ net_channel.prototype.abortAll =
 	}
 	else
 	{
-		for( f = 0, fZ = fifo.length; f < fZ; f++ )
+		for( let f = 0, fZ = fifo.length; f < fZ; f++ )
 		{
-			r = fifo.get( f ) ;
+			const r = fifo.get( f ) ;
 
 			if( r.receiverFuncName === receiverFuncName )
 			{
@@ -128,9 +95,7 @@ net_channel.prototype.abortAll =
 
 				fifo = fifo.remove( f );
 
-				fZ--;
-
-				f--;
+				f--; fZ--;
 			}
 		}
 	}
@@ -148,30 +113,21 @@ net_channel.prototype.abortAll =
 
 /*
 | Issues a request.
-|
-| FUTURE currently the receiver is hardcoded to be 'root.link'.
-|    when the root became a JION allow receiverPaths
 */
-net_channel.prototype.request =
+def.func.request =
 	function(
 		request,         // request
 		receiverFuncName // the receivers func name to call
 	)
 {
-	var
-		reqWrap;
-
-	reqWrap =
+	let reqWrap =
 		net_requestWrap.create(
 			'channelName', this.channelName,
 			'receiverFuncName', receiverFuncName,
 			'request', request
 		);
 
-	if( this._fifo.length === 0 )
-	{
-		reqWrap = reqWrap.send( );
-	}
+	if( this._fifo.length === 0 ) reqWrap = reqWrap.send( );
 
 	root.create(
 		'ajax',
@@ -187,19 +143,15 @@ net_channel.prototype.request =
 /*
 | The top request on the channel has received a reply
 */
-net_channel.prototype.onReply =
+def.func.onReply =
 	function(
 		wrap,
 		reply
 	)
 {
-	var
-		channel,
-		fifo;
+	let channel = this;
 
-	channel = this;
-
-	fifo = channel._fifo;
+	let fifo = channel._fifo;
 
 	fifo = fifo.remove( 0 );
 
@@ -223,4 +175,4 @@ net_channel.prototype.onReply =
 };
 
 
-} )( );
+} );

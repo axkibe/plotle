@@ -550,17 +550,17 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/net/requestWrap.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/net/requestWrapList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/net/channel.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -570,7 +570,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/net/link.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -825,7 +825,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/frame.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -868,12 +868,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/para.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/doc.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

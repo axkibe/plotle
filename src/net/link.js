@@ -1,63 +1,13 @@
 /*
 | The link talks asynchronously with the server.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'net_link',
-		attributes :
-		{
-			refMomentSpace :
-			{
-				comment : 'reference to the current moment of dynamic space',
-				type : [ 'undefined', 'ref_moment' ]
-			},
-			refMomentUserSpaceList :
-			{
-				comment : ''
-					+ 'reference to the current moment '
-					+ 'of the userSpaceList',
-				type : [ 'undefined', 'ref_moment' ]
-			},
-			userSpaceList :
-			{
-				comment : 'user space list dynamic',
-				type : [ 'undefined', 'dynamic_refSpaceList' ]
-			},
-			userCreds :
-			{
-				comment : 'currently logged in user credentials',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			_outbox :
-			{
-				comment : 'changes to be send to the server',
-				type : [ 'undefined', 'change_wrapList' ]
-			},
-			_postbox :
-			{
-				comment : 'changes that are currently on the way',
-				type : [ 'undefined', 'change_wrapList' ]
-			},
-			_startTimer :
-			{
-				comment : 'the timer on startup',
-				type : [ 'undefined', 'integer' ]
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	change_wrapList,
 	jion$path,
-	net_link,
 	reply_auth,
 	reply_acquire,
 	reply_error,
@@ -75,32 +25,65 @@ var
 	system;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'net_link', ( def, net_link ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+def.attributes =
 {
-	require( 'jion' ).this( module, 'source' );
+	refMomentSpace :
+	{
+		// reference to the current moment of dynamic space
+		type : [ 'undefined', 'ref_moment' ]
+	},
+	refMomentUserSpaceList :
+	{
+		// reference to the current moment
+		// of the userSpaceList
+		type : [ 'undefined', 'ref_moment' ]
+	},
+	userSpaceList :
+	{
+		// user space list dynamic
+		type : [ 'undefined', 'dynamic_refSpaceList' ]
+	},
+	userCreds :
+	{
+		// currently logged in user credentials
+		type : [ 'undefined', 'user_creds' ]
+	},
+	_outbox :
+	{
+		// changes to be send to the server
+		type : [ 'undefined', 'change_wrapList' ]
+	},
+	_postbox :
+	{
+		// changes that are currently on the way
+		type : [ 'undefined', 'change_wrapList' ]
+	},
+	_startTimer :
+	{
+		// the timer on startup
+		type : [ 'undefined', 'integer' ]
+	}
+};
 
-	return;
-}
 
-
-var
-	prototype;
-
-prototype = net_link.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Aquires a space from the server
 | and starts receiving updates for it.
 */
-prototype.acquireSpace =
+def.func.acquireSpace =
 	function(
 		spaceRef,
 		createMissing
@@ -141,20 +124,17 @@ prototype.acquireSpace =
 /*
 | Alters the tree.
 */
-prototype.alter =
+def.func.alter =
 	function(
 		changeWrap // the changeWrap to apply to tree
 	)
 {
-	var
-		space;
-
 /**/if( CHECK )
 /**/{
 /**/	if( root.link !== this ) throw new Error( );
 /**/}
 
-	space = changeWrap.changeTree( root.spaceFabric );
+	const space = changeWrap.changeTree( root.spaceFabric );
 
 	root.create(
 		'link',
@@ -173,7 +153,7 @@ prototype.alter =
 /*
 | Checks with server if user creds are valid.
 */
-prototype.auth =
+def.func.auth =
 	function(
 		userCreds
 	)
@@ -190,7 +170,7 @@ prototype.auth =
 /*
 | Tries to registers a new user.
 */
-prototype.register =
+def.func.register =
 	function(
 		userCreds,
 		mail,
@@ -213,7 +193,7 @@ prototype.register =
 /*
 | A space has been acquired.
 */
-prototype._onAcquireSpace =
+def.func._onAcquireSpace =
 	function(
 		request,
 		reply
@@ -294,7 +274,7 @@ prototype._onAcquireSpace =
 /*
 | Received an auth reply.
 */
-prototype._onAuth =
+def.func._onAuth =
 	function(
 		request,
 		reply
@@ -324,7 +304,7 @@ prototype._onAuth =
 /*
 | Received a register reply.
 */
-prototype._onRegister =
+def.func._onRegister =
 	function(
 		request,
 		reply
@@ -354,12 +334,9 @@ prototype._onRegister =
 /*
 | Sends the stored changes to server.
 */
-prototype._sendChanges =
+def.func._sendChanges =
 	function( )
 {
-	var
-		outbox;
-
 /**/if( CHECK )
 /**/{
 /**/	if( root.link !== this ) throw new Error( );
@@ -371,7 +348,7 @@ prototype._sendChanges =
 	// nothing to send?
 	if( root.link._outbox.length === 0 ) return;
 
-	outbox = root.link._outbox;
+	const outbox = root.link._outbox;
 
 	root.create(
 		'link',
@@ -397,7 +374,7 @@ prototype._sendChanges =
 /*
 | Received a reply of a sendChanges request.
 */
-prototype._onSendChanges =
+def.func._onSendChanges =
 	function(
 		request,
 		reply
@@ -413,7 +390,7 @@ prototype._onSendChanges =
 /*
 | Received an update.
 */
-prototype._onUpdate =
+def.func._onUpdate =
 	function(
 		request,
 		reply
@@ -471,32 +448,20 @@ prototype._onUpdate =
 /*
 | Updates the current space dynamic.
 */
-prototype._gotUpdateSpace =
+def.func._gotUpdateSpace =
 	function(
 		changeDynamic  // the dynamic change instructions
 	)
 {
-	var
-		a,
-		aZ,
-		changeWrap,
-		changeWrapList,
-		gotOwnChgs,
-		outbox,
-		postbox,
-		report,
-		seq,
-		space;
+	const changeWrapList = changeDynamic.changeWrapList;
 
-	changeWrapList = changeDynamic.changeWrapList;
+	let report = change_wrapList.create( );
 
-	report = change_wrapList.create( );
+	const seq = changeDynamic.seq;
 
-	seq = changeDynamic.seq;
+	let space = root.spaceFabric;
 
-	space = root.spaceFabric;
-		
-	gotOwnChgs = false;
+	let gotOwnChgs = false;
 
 /**/if( CHECK )
 /**/{
@@ -508,17 +473,17 @@ prototype._gotUpdateSpace =
 	// first undos from the clients space the changes
 	// it had done so far.
 
-	postbox = this._postbox;
+	let postbox = this._postbox;
 
-	outbox = this._outbox;
+	let outbox = this._outbox;
 
 	space = outbox.changeTreeReverse( space );
 
 	space = postbox.changeTreeReverse( space );
 
-	for( a = 0, aZ = changeWrapList.length; a < aZ; a++ )
+	for( let a = 0, aZ = changeWrapList.length; a < aZ; a++ )
 	{
-		changeWrap = changeWrapList.get( a );
+		const changeWrap = changeWrapList.get( a );
 
 		// applies changes to the space
 		space = changeWrap.changeTree( space );
@@ -571,7 +536,7 @@ prototype._gotUpdateSpace =
 			),
 		'spaceFabric', space
 	);
-	
+
 	// FUTURE move to "markJockey"
 	if( report.length > 0 )
 	{
@@ -587,18 +552,14 @@ prototype._gotUpdateSpace =
 /*
 | Updates the current space dynamic.
 */
-prototype._gotUpdateUserSpaceList =
+def.func._gotUpdateUserSpaceList =
 	function(
 		changeDynamic  // the dynamic change instructions
 	)
 {
-	var
-		rmusl,
-		userSpaceList;
+	const rmusl = root.link.refMomentUserSpaceList;
 
-	rmusl = root.link.refMomentUserSpaceList;
-
-	userSpaceList = root.link.userSpaceList.applyChangeDynamic( changeDynamic );
+	const userSpaceList = root.link.userSpaceList.applyChangeDynamic( changeDynamic );
 
 	root.create(
 		'userSpaceList', userSpaceList.current,
@@ -614,16 +575,12 @@ prototype._gotUpdateUserSpaceList =
 /*
 | Sends an update request to the server and computes its answer.
 */
-prototype._update =
+def.func._update =
 	function( )
 {
-	var
-		refMomentUserSpaceList,
-		list;
+	const list = [ this.refMomentSpace ];
 
-	list = [ this.refMomentSpace ];
-
-	refMomentUserSpaceList = this.refMomentUserSpaceList;
+	const refMomentUserSpaceList = this.refMomentUserSpaceList;
 
 	if( refMomentUserSpaceList ) list.push( refMomentUserSpaceList );
 
@@ -639,4 +596,4 @@ prototype._update =
 };
 
 
-} )( );
+} );

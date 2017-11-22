@@ -1,73 +1,10 @@
 /*
 | A paragraph.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_para',
-		attributes :
-		{
-			fabric :
-			{
-				comment : 'the para fabric',
-				type : 'fabric_para'
-			},
-			flowWidth :
-			{
-				comment : 'width the flow can fill',
-				type : [ 'undefined', 'number' ]
-			},
-			fontsize :
-			{
-				comment : 'size of the font',
-				type : [ 'undefined', 'number' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'visual_para.concernsMark( mark, path )',
-				type :
-					require( './mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'the path of the para',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			pos :
-			{
-				comment : 'point in north west',
-				type : 'gleam_point'
-			},
-			transform :
-			{
-				comment : 'the current space transform',
-				type : 'gleam_transform'
-			}
-		},
-		alike :
-		{
-			alikeVisually :
-			{
-				ignores :
-				{
-					'pos' : true,
-					'transform' : true,
-					'mark' : true
-				}
-			}
-		},
-		init : [ 'inherit' ]
-	};
-}
-
-
+// FIXME
 var
 	change_insert,
 	change_join,
@@ -82,45 +19,87 @@ var
 	flow_block,
 	flow_line,
 	flow_token,
-	jion,
 	visual_mark_caret,
 	visual_mark_range,
-	root,
 	session_uid,
 	shell_fontPool,
 	shell_settings,
-	visual_mark_text,
-	visual_para;
+	visual_mark_text;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'visual_para', ( def, visual_para ) => {
 
 
-var
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-if( NODE )
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		fabric :
+		{
+			// the para fabric
+			type : 'fabric_para'
+		},
+		flowWidth :
+		{
+			// width the flow can fill
+			type : [ 'undefined', 'number' ]
+		},
+		fontsize :
+		{
+			// size of the font
+			type : [ 'undefined', 'number' ]
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'visual_para.concernsMark( mark, path )',
+			type :
+				require( './mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// the path of the para',
+			type : [ 'undefined', 'jion$path' ]
+		},
+		pos :
+		{
+			// point in north west
+			type : 'gleam_point'
+		},
+		transform :
+		{
+			// the current space transform
+			type : 'gleam_transform'
+		}
+	};
 
-	visual_para = jion.this( module, 'source' );
+	def.alike =
+	{
+		alikeVisually :
+		{
+			ignores :
+			{
+				'pos' : true,
+				'transform' : true,
+				'mark' : true
+			}
+		}
+	};
 
-	return;
+	def.init = [ 'inherit' ];
 }
-
-
-prototype = visual_para.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
@@ -131,12 +110,12 @@ prototype._init =
 		&& inherit.transform.zoom === this.transform.zoom
 	)
 	{
-		if( jion.hasLazyValueSet( inherit, 'flow' ) )
+		if( tim.hasLazyValueSet( inherit, 'flow' ) )
 		{
-			jion.aheadValue( this, 'flow', inherit.flow );
+			tim.aheadValue( this, 'flow', inherit.flow );
 		}
 
-		if( jion.hasLazyValueSet( inherit, 'glint' ) )
+		if( tim.hasLazyValueSet( inherit, 'glint' ) )
 		{
 			this._inheritedGlint = inherit.glint;
 		}
@@ -145,19 +124,19 @@ prototype._init =
 			this._inheritedGlint = inherit._inheritedGlint;
 		}
 	}
-/**/else if( CHECK && CHECK.noinherit )
-/**/{
-/**/	console.log( 'noinherit', 'visual_para' );
-/**/}
 };
 
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-visual_para.concernsMark =
+def.static.concernsMark =
 	function(
 		mark,
 		path
@@ -182,214 +161,37 @@ visual_para.concernsMark =
 };
 
 
-/*
-| The para's glint.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var transform;
-
-	transform = this.transform;
-
-	return(
-		( this._inheritedGlint || gleam_glint_window )
-		.create(
-			'glint', this._glint,
-			'rect',
-				gleam_rect.create(
-					'pos', this.pos.transform( transform.ortho ),
-					'height', transform.scale( this.height ) + 1,
-					'width', transform.scale( this.flow.width ) + 1
-				),
-			'offset', gleam_point.zero
-		)
-	);
-}
-);
-
-
-/*
-| Shortcut to the para's key.
-| It is the last path entry.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
-
-
-/*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'text',
-	function( )
-{
-	return this.fabric.text;
-}
-);
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The attention center.
 */
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
+def.lazy.attentionCenter =
 	function( )
 {
-	var
-		descend,
-		fs,
-		n,
-		p,
-		s;
+	const fs = this.fontsize;
 
-	fs = this.fontsize;
+	const descend = fs * shell_settings.bottombox;
 
-	descend = fs * shell_settings.bottombox;
+	const p = this.locateOffsetPoint( this.mark.caret.at );
 
-	p = this.locateOffsetPoint( this.mark.caret.at );
+	const s = Math.round( p.y + descend );
 
-	s = Math.round( p.y + descend );
-
-	n = s - Math.round( fs + descend );
+	const n = s - Math.round( fs + descend );
 
 	return this.pos.y + n;
-}
-);
-
-
-/*
-| The para's glint without window.
-*/
-jion.lazyValue(
-	prototype,
-	'_glint',
-	function( )
-{
-	var
-		a,
-		arr,
-		aZ,
-		b,
-		bZ,
-		flow,
-		tFont,
-		line,
-		len,
-		lineKey,
-		mark,
-		token,
-		transform;
-
-	flow = this.flow;
-
-	tFont = this.tFont;
-
-	mark = this.mark;
-
-	arr = [ ];
-
-	len = 0;
-
-	transform = this.transform.ortho;
-
-	// draws text into the display
-
-	for( a = 0, aZ = flow.length; a < aZ; a++ )
-	{
-		line = flow.get( a );
-
-		lineKey = '' + a + '_';
-
-		for( b = 0, bZ = line.length; b < bZ; b++ )
-		{
-			token = line.get( b );
-
-			arr[ len++ ] =
-				gleam_glint_text.create(
-					'font', tFont,
-					'p',
-						gleam_point.create(
-							'x', transform.x( token.x ),
-							'y', transform.y( line.y )
-						),
-					'text', token.text
-				);
-		}
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The font for this para.
-*/
-jion.lazyValue(
-	prototype,
-	'font',
-	function( )
-{
-	return(
-		shell_fontPool.get( this.fontsize, 'la' )
-	);
-}
-);
-
-
-/*
-| The font for current transform.
-*/
-jion.lazyValue(
-	prototype,
-	'tFont',
-	function( )
-{
-	return(
-		shell_fontPool.get(
-			this.transform.scale( this.fontsize ),
-			'la'
-		)
-	);
-}
-);
+};
 
 
 /*
 | The para's flow, the position of all chunks.
 */
-jion.lazyValue(
-	prototype,
-	'flow',
+def.lazy.flow =
 	function( )
 {
-	var
-		ca,
-		currentLineList,
-		currentLineOffset,
-		lines,
-		flowWidth,
-		font,
-		reg,
-		space,
-		width,
-		text,
-		tokenText,
-		w,
-		x,
-		y;
-
 /**/if( CHECK )
 /**/{
 /**/	if( !this.fontsize ) throw new Error( );
@@ -397,38 +199,38 @@ jion.lazyValue(
 
 	// width the flow can fill
 	// 0 means infinite
-	flowWidth = this.flowWidth;
+	const flowWidth = this.flowWidth;
 
-	font = this.font;
+	const font = this.font;
 
 	// FUTURE go into subnodes
-	text = this.text;
+	const text = this.text;
 
 	// width really used.
-	width = 0;
+	let width = 0;
 
 	// current x positon, and current x including last tokens width
-	x = 0;
+	let x = 0;
 
-	y = font.size;
+	let y = font.size;
 
-	space = gleam_measure.width( font, ' ' );
+	const space = gleam_measure.width( font, ' ' );
 
-	lines = [ ];
+	const lines = [ ];
 
-	currentLineOffset = 0;
+	let currentLineOffset = 0;
 
-	currentLineList = [ ];
+	let currentLineList = [ ];
 
-	reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
+	const reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 	// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
-	for( ca = reg.exec( text ); ca; ca = reg.exec( text ) )
+	for( let ca = reg.exec( text ); ca; ca = reg.exec( text ) )
 	{
 		// a token is a word plus following hard spaces
-		tokenText = ca[ 1 ] + ca[ 3 ];
+		const tokenText = ca[ 1 ] + ca[ 3 ];
 
-		w = gleam_measure.width( font, tokenText );
+		const w = gleam_measure.width( font, tokenText );
 
 		if( flowWidth > 0 && x + w > flowWidth )
 		{
@@ -487,55 +289,204 @@ jion.lazyValue(
 			'width', width
 		)
 	);
-}
-);
+};
+
+
+/*
+| The font for this para.
+*/
+def.lazy.font =
+	function( )
+{
+	return shell_fontPool.get( this.fontsize, 'la' );
+};
+
+
+/*
+| Path to a text value.
+*/
+def.lazy.textPath =
+	function( )
+{
+	return this.path.append( 'text' );
+};
+
+
+/*
+| The font for current transform.
+*/
+def.lazy.tFont =
+	function( )
+{
+	return(
+		shell_fontPool.get(
+			this.transform.scale( this.fontsize ),
+			'la'
+		)
+	);
+};
+
+
+/*
+| The para's glint.
+*/
+def.lazy.glint =
+	function( )
+{
+	const transform = this.transform;
+
+	return(
+		( this._inheritedGlint || gleam_glint_window )
+		.create(
+			'glint', this._glint,
+			'rect',
+				gleam_rect.create(
+					'pos', this.pos.transform( transform.ortho ),
+					'height', transform.scale( this.height ) + 1,
+					'width', transform.scale( this.flow.width ) + 1
+				),
+			'offset', gleam_point.zero
+		)
+	);
+};
 
 
 /*
 | The height of the para.
 */
-jion.lazyValue(
-	prototype,
-	'height',
+def.lazy.height =
 	function( )
 {
-	return(
-		this.flow.height
-		+ Math.round( this.fontsize * shell_settings.bottombox )
-	);
-}
-);
+	return this.flow.height + Math.round( this.fontsize * shell_settings.bottombox );
+};
+
+
+/*
+| Shortcut to the para's key.
+| It is the last path entry.
+| FIXME remove
+*/
+def.lazy.key =
+	function( )
+{
+	return this.path.get( -1 );
+};
+
+
+/*
+| Forwards fabric settings.
+*/
+def.lazy.text =
+	function( )
+{
+	return this.fabric.text;
+};
+
+
+/*
+| The para's glint without window.
+*/
+def.lazy._glint =
+	function( )
+{
+	const flow = this.flow;
+
+	const tFont = this.tFont;
+
+	const arr = [ ];
+
+	const transform = this.transform.ortho;
+
+	// draws text into the display
+
+	for( let a = 0, aZ = flow.length; a < aZ; a++ )
+	{
+		const line = flow.get( a );
+
+		for( let b = 0, bZ = line.length; b < bZ; b++ )
+		{
+			const token = line.get( b );
+
+			arr.push(
+				gleam_glint_text.create(
+					'font', tFont,
+					'p',
+						gleam_point.create(
+							'x', transform.x( token.x ),
+							'y', transform.y( line.y )
+						),
+					'text', token.text
+				)
+			);
+		}
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*::::::::::::::::.
+:: Lazy Functions
+':::::::::::::::::*/
+
+
+/*
+| Locates the line number of a given offset.
+*/
+def.lazyFuncInt.locateOffsetPoint =
+	function(
+		offset
+	)
+{
+	this._locateOffset( offset );
+
+	// this is not recursive, it returns
+	// the aheaded value set by _locateOffset
+
+	return this.locateOffsetPoint( offset );
+};
+
+
+/*
+| Locates the line number of a given offset.
+*/
+def.lazyFuncInt.locateOffsetLine =
+	function(
+		offset
+	)
+{
+	this._locateOffset( offset );
+
+	// this is not recursive, it returns
+	// the aheaded value set by _locateOffset
+
+	return this.locateOffsetLine( offset );
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-prototype.getOffsetAt =
+def.func.getOffsetAt =
 	function(
 		ln,  // line number
 		x    // x coordinate
 	)
 {
-	var
-		a,
-		dx,
-		flow,
-		font,
-		line,
-		lZ,
-		token,
-		text,
-		tn,
-		x1,
-		x2;
+	const font = this.font;
 
-	font = this.font;
+	const flow = this.flow;
 
-	flow = this.flow;
+	const line = flow.get( ln );
 
-	line = flow.get( ln );
+	const lZ = line.length;
 
-	lZ = line.length;
+	let token, tn;
 
 	for( tn = 0; tn < lZ; tn++ )
 	{
@@ -551,13 +502,15 @@ prototype.getOffsetAt =
 
 	if( !token ) return 0;
 
-	dx = x - token.x;
+	const dx = x - token.x;
 
-	text = token.text;
+	const text = token.text;
 
-	x1 = 0;
+	let x1 = 0;
 
-	x2 = 0;
+	let x2 = 0;
+
+	let a;
 
 	for( a = 0; a <= text.length; a++ )
 	{
@@ -568,15 +521,9 @@ prototype.getOffsetAt =
 		if( x2 >= dx ) break;
 	}
 
-	if( a > text.length )
-	{
-		a = text.length;
-	}
+	if( a > text.length ) a = text.length;
 
-	if( dx - x1 < x2 - dx && a > 0 )
-	{
-		a--;
-	}
+	if( dx - x1 < x2 - dx && a > 0 ) a--;
 
 	return token.offset + a;
 };
@@ -585,18 +532,16 @@ prototype.getOffsetAt =
 /*
 | Returns the offset closest to a point.
 */
-prototype.getPointOffset =
+def.func.getPointOffset =
 	function(
 		point     // the point to look for
 	)
 {
-	var
-		flow,
-		line;
-
-	flow = this.flow;
+	const flow = this.flow;
 
 	if( point.y < 0 ) return 0;
+
+	let line;
 
 	for( line = 0; line < flow.length; line++ )
 	{
@@ -612,31 +557,22 @@ prototype.getPointOffset =
 /*
 | A text has been inputed.
 */
-prototype.input =
+def.func.input =
 	function(
 		text   // text inputed
 	)
 {
-	var
-		at,
-		changes,
-		line,
-		textPath,
-		textPath2,
-		reg,
-		rx;
+	const changes = [ ];
 
-	changes = [ ];
+	const reg = /([^\n]+)(\n?)/g;
 
-	reg = /([^\n]+)(\n?)/g;
+	let textPath = this.textPath;
 
-	textPath = this.textPath;
+	let at = this.mark.caret.at;
 
-	at = this.mark.caret.at;
-
-	for( rx = reg.exec( text ); rx; rx = reg.exec( text ) )
+	for( let rx = reg.exec( text ); rx; rx = reg.exec( text ) )
 	{
-		line = rx[ 1 ];
+		const line = rx[ 1 ];
 
 		changes.push(
 			change_insert.create(
@@ -649,7 +585,7 @@ prototype.input =
 
 		if( rx[ 2 ] )
 		{
-			textPath2 = textPath.set( -2, session_uid( ) );
+			const textPath2 = textPath.set( -2, session_uid( ) );
 
 			changes.push(
 				change_split.create(
@@ -672,49 +608,9 @@ prototype.input =
 
 
 /*
-| Locates the line number of a given offset.
-*/
-jion.lazyFunctionInteger(
-	prototype,
-	'locateOffsetLine',
-	function(
-		offset
-	)
-{
-	this._locateOffset( offset );
-
-	// this is not recursive, it returns
-	// the aheaded value set by _locateOffset
-
-	return this.locateOffsetLine( offset );
-}
-);
-
-
-/*
-| Locates the line number of a given offset.
-*/
-jion.lazyFunctionInteger(
-	prototype,
-	'locateOffsetPoint',
-	function(
-		offset
-	)
-{
-	this._locateOffset( offset );
-
-	// this is not recursive, it returns
-	// the aheaded value set by _locateOffset
-
-	return this.locateOffsetPoint( offset );
-}
-);
-
-
-/*
 | Handles a special key.
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
 		key,
 		doc,
@@ -722,16 +618,9 @@ prototype.specialKey =
 		ctrl
 	)
 {
-	var
-		at,
-		beginMark,
-		keyHandler,
-		mark,
-		retainx,
-		v0,
-		v1;
+	const mark = this.mark;
 
-	mark = this.mark;
+	let at, beginMark, retainx;
 
 	if( ctrl )
 	{
@@ -739,9 +628,9 @@ prototype.specialKey =
 		{
 			case 'a' :
 
-				v0 = doc.atRank( 0 );
+				const v0 = doc.atRank( 0 );
 
-				v1 = doc.atRank( doc.length - 1 );
+				const v1 = doc.atRank( doc.length - 1 );
 
 				root.create(
 					'mark',
@@ -763,8 +652,6 @@ prototype.specialKey =
 				return true;
 		}
 	}
-
-	keyHandler = _keyMap[ key ];
 
 	switch( mark.reflect )
 	{
@@ -805,6 +692,8 @@ prototype.specialKey =
 			break;
 	}
 
+	const keyHandler = _keyMap[ key ];
+
 	if( keyHandler )
 	{
 		this[ keyHandler ]( doc, at, retainx, beginMark );
@@ -812,48 +701,29 @@ prototype.specialKey =
 };
 
 
-/*
-| Path to a text value.
-*/
-jion.lazyValue(
-	prototype,
-	'textPath',
-	function( )
+// FIXME
+const _keyMap =
 {
-	return this.path.append( 'text' );
-}
-);
-
-
-/*
-+----------- private --------------
-*/
-
-
-var
-	_keyMap;
-
-_keyMap =
-	{
-		'backspace' : '_keyBackspace',
-		'del' : '_keyDel',
-		'down' : '_keyDown',
-		'end' : '_keyEnd',
-		'enter' : '_keyEnter',
-		'left' : '_keyLeft',
-		'pagedown' : '_keyPageDown',
-		'pageup' : '_keyPageUp',
-		'pos1' : '_keyPos1',
-		'right' : '_keyRight',
-		'up' : '_keyUp'
-	};
+	'backspace' : '_keyBackspace',
+	'del' : '_keyDel',
+	'down' : '_keyDown',
+	'end' : '_keyEnd',
+	'enter' : '_keyEnter',
+	'left' : '_keyLeft',
+	'pagedown' : '_keyPageDown',
+	'pageup' : '_keyPageUp',
+	'pos1' : '_keyPos1',
+	'right' : '_keyRight',
+	'up' : '_keyUp'
+};
 
 if( FREEZE ) Object.freeze( _keyMap );
+
 
 /*
 | Backspace pressed.
 */
-prototype._keyBackspace =
+def.func_keyBackspace =
 	function(
 		doc,
 		at
@@ -861,10 +731,6 @@ prototype._keyBackspace =
 		// beginMark
 	)
 {
-	var
-		r,
-		ve;
-
 	if( at > 0 )
 	{
 		root.alter(
@@ -881,11 +747,11 @@ prototype._keyBackspace =
 		return;
 	}
 
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r === 0 ) return;
 
-	ve = doc.atRank( r - 1 );
+	const ve = doc.atRank( r - 1 );
 
 	root.alter(
 		change_join.create(
@@ -902,7 +768,7 @@ prototype._keyBackspace =
 /*
 | Del-key pressed.
 */
-prototype._keyDel =
+def.func._keyDel =
 	function(
 		doc,
 		at
@@ -910,9 +776,6 @@ prototype._keyDel =
 		// beginMark
 	)
 {
-	var
-		r;
-
 	if( at < this.text.length )
 	{
 		root.alter(
@@ -929,7 +792,7 @@ prototype._keyDel =
 		return;
 	}
 
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r >= doc.length - 1 ) return;
 
@@ -948,7 +811,7 @@ prototype._keyDel =
 /*
 | Down arrow pressed.
 */
-prototype._keyDown =
+def.func._keyDown =
 	function(
 		doc,
 		at,
@@ -956,21 +819,13 @@ prototype._keyDown =
 		beginMark
 	)
 {
-	var
-		cPosLine,
-		cPosP,
-		flow,
-		r,
-		ve,
-		x;
+	const flow = this.flow;
 
-	flow = this.flow;
+	const cPosLine = this.locateOffsetLine( at );
 
-	cPosLine = this.locateOffsetLine( at );
+	const cPosP = this.locateOffsetPoint( at );
 
-	cPosP = this.locateOffsetPoint( at );
-
-	x = retainx !== undefined ? retainx : cPosP.x;
+	const x = retainx !== undefined ? retainx : cPosP.x;
 
 	if( cPosLine < flow.length - 1 )
 	{
@@ -986,11 +841,11 @@ prototype._keyDown =
 	}
 
 	// goto next para
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r < doc.length - 1 )
 	{
-		ve = doc.atRank( r + 1 );
+		const ve = doc.atRank( r + 1 );
 
 		at = ve.getOffsetAt( 0, x );
 
@@ -1002,7 +857,7 @@ prototype._keyDown =
 /*
 | End-key pressed.
 */
-prototype._keyEnd =
+def.func._keyEnd =
 	function(
 		doc,
 		at,
@@ -1017,7 +872,7 @@ prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-prototype._keyEnter =
+def.func._keyEnter =
 	function(
 		doc,
 		at
@@ -1025,10 +880,7 @@ prototype._keyEnter =
 		// beginMark
 	)
 {
-	var
-		tpc;
-
-	tpc = this.textPath.chop;
+	const tpc = this.textPath.chop;
 
 	root.alter(
 		change_split.create(
@@ -1043,7 +895,7 @@ prototype._keyEnter =
 /*
 | Left arrow pressed.
 */
-prototype._keyLeft =
+def.func._keyLeft =
 	function(
 		doc,
 		at,
@@ -1051,10 +903,6 @@ prototype._keyLeft =
 		beginMark
 	)
 {
-	var
-		r,
-		ve;
-
 	if( at > 0 )
 	{
 		this._setMark( at - 1, undefined, beginMark, doc );
@@ -1062,11 +910,11 @@ prototype._keyLeft =
 		return;
 	}
 
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
-		ve = doc.atRank( r - 1 );
+		const ve = doc.atRank( r - 1 );
 
 		ve._setMark( ve.text.length, undefined, beginMark, doc );
 	}
@@ -1082,7 +930,7 @@ prototype._keyLeft =
 |
 | FUTURE maintain relative scroll pos
 */
-prototype._pageUpDown =
+def.func._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		doc,
@@ -1091,36 +939,26 @@ prototype._pageUpDown =
 		beginMark
 	)
 {
-	var
-		p,
-		size,
-		tp,
-		tpara,
-		tpos;
-
 /**/if( CHECK )
 /**/{
 /**/	if( dir !== 1 && dir !== -1 ) throw new Error( );
 /**/}
 
-	p = this.locateOffsetPoint( at );
+	const p = this.locateOffsetPoint( at );
 
-	size = doc.clipsize;
+	const size = doc.clipsize;
 
-	tp =
+	const tp =
 		this.pos.add(
 			retainx !== undefined ? retainx : p.x,
 			p.y + size.height * dir
 		);
 
-	tpara = doc.getParaAtPoint( tp );
+	const tpara =
+		doc.getParaAtPoint( tp )
+		|| doc.atRank( dir > 0 ? doc.length - 1 : 0 );
 
-	if( !tpara )
-	{
-		tpara = doc.atRank( dir > 0 ? doc.length - 1 : 0 );
-	}
-
-	tpos = doc.get( tpara.key ).pos;
+	const tpos = doc.get( tpara.key ).pos;
 
 	at = tpara.getPointOffset( tp.sub( tpos ) );
 
@@ -1131,7 +969,7 @@ prototype._pageUpDown =
 /*
 | PageDown key pressed.
 */
-prototype._keyPageDown =
+def.func._keyPageDown =
 	function(
 		doc,
 		at,
@@ -1146,7 +984,7 @@ prototype._keyPageDown =
 /*
 | PageUp key pressed.
 */
-prototype._keyPageUp =
+def.func._keyPageUp =
 	function(
 		doc,
 		at,
@@ -1161,7 +999,7 @@ prototype._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-prototype._keyPos1 =
+def.func._keyPos1 =
 	function(
 		doc,
 		at,
@@ -1176,7 +1014,7 @@ prototype._keyPos1 =
 /*
 | Right arrow pressed.
 */
-prototype._keyRight =
+def.func._keyRight =
 	function(
 		doc,
 		at,
@@ -1184,10 +1022,6 @@ prototype._keyRight =
 		beginMark
 	)
 {
-	var
-		r,
-		ve;
-
 	if( at < this.text.length )
 	{
 		this._setMark( at + 1, undefined, beginMark, doc );
@@ -1195,11 +1029,11 @@ prototype._keyRight =
 		return;
 	}
 
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r < doc.length - 1 )
 	{
-		ve = doc.atRank( r + 1 );
+		const ve = doc.atRank( r + 1 );
 
 		ve._setMark( 0, undefined, beginMark, doc );
 	}
@@ -1209,7 +1043,7 @@ prototype._keyRight =
 /*
 | Up arrow pressed.
 */
-prototype._keyUp =
+def.func._keyUp =
 	function(
 		doc,
 		at,
@@ -1217,18 +1051,11 @@ prototype._keyUp =
 		beginMark
 	)
 {
-	var
-		cPosLine,
-		cPosP,
-		r,
-		ve,
-		x;
+	const cPosLine = this.locateOffsetLine( at );
 
-	cPosLine = this.locateOffsetLine( at );
+	const cPosP = this.locateOffsetPoint( at );
 
-	cPosP = this.locateOffsetPoint( at );
-
-	x = retainx !== undefined ? retainx : cPosP.x;
+	const x = retainx !== undefined ? retainx : cPosP.x;
 
 	if( cPosLine > 0 )
 	{
@@ -1241,11 +1068,11 @@ prototype._keyUp =
 	}
 
 	// goto prev para
-	r = doc.rankOf( this.key );
+	const r = doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
-		ve = doc.atRank( r - 1 );
+		const ve = doc.atRank( r - 1 );
 
 		at = ve.getOffsetAt( ve.flow.length - 1, x );
 
@@ -1257,52 +1084,44 @@ prototype._keyUp =
 /*
 | Sets the aheadValues for point and line of a given offset.
 */
-prototype._locateOffset =
+def.func._locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
 {
-	var
-		aZ,
-		flow,
-		font,
-		line,
-		lineN,
-		p,
-		text,
-		token,
-		tokenN;
+	const font = this.font;
 
-	font = this.font;
+	const text = this.text;
 
-	text = this.text;
-
-	flow = this.flow;
+	const flow = this.flow;
 
 	// determines which line this offset belongs to
-	for(
-		lineN = 0, aZ = flow.length - 1;
-		lineN < aZ;
-		lineN++
-	)
+
+	let lineN;
+
+	const fLen = flow.length - 1;
+
+	for( lineN = 0; lineN < fLen; lineN++ )
 	{
 		if( flow.get( lineN + 1 ).offset > offset ) break;
 	}
 
-	line = flow.get( lineN );
+	const line = flow.get( lineN );
 
-	for(
-		tokenN = 0, aZ = line.length - 1;
-		tokenN < aZ;
-		tokenN++
-	)
+	let tokenN;
+
+	const lLen = line.length - 1;
+
+	for( tokenN = 0; tokenN < lLen; tokenN++ )
 	{
 		if( line.get( tokenN + 1 ).offset > offset ) break;
 	}
 
+	let p;
+
 	if( tokenN < line.length )
 	{
-		token = line.get( tokenN );
+		const token = line.get( tokenN );
 
 		p =
 			gleam_point.create(
@@ -1322,26 +1141,16 @@ prototype._locateOffset =
 		p = gleam_point.create( 'x', 0, 'y', line.y );
 	}
 
-	jion.aheadFunctionInteger(
-		this,
-		'locateOffsetLine',
-		offset,
-		lineN
-	);
+	tim.aheadFunctionInteger( this, 'locateOffsetLine', offset, lineN );
 
-	jion.aheadFunctionInteger(
-		this,
-		'locateOffsetPoint',
-		offset,
-		p
-	);
+	tim.aheadFunctionInteger( this, 'locateOffsetPoint', offset, p );
 };
 
 
 /*
 | Sets the users caret or range
 */
-prototype._setMark =
+def.func._setMark =
 	function(
 		at,        // position to mark caret (or endMark of range)
 		retainx,   // retains this x position when moving up/down
@@ -1371,4 +1180,4 @@ prototype._setMark =
 };
 
 
-} )( );
+} );

@@ -1,32 +1,10 @@
 /*
 | The alteration frame.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_frame',
-		attributes :
-		{
-			content :
-			{
-				comment : 'content of the frame',
-				type : 'visual_itemList'
-			},
-			transform :
-			{
-				comment : 'current transform of the frame',
-				type : 'gleam_transform'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	action_dragItems,
 	action_resizeItems,
@@ -39,90 +17,117 @@ var
 	gleam_roundRect,
 	gleam_shapeList,
 	gruga_frame,
-	jion,
-	result_hover,
-	visual_frame;
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+	result_hover;
 
 
-if( NODE )
+tim.define( module, 'visual_frame', ( def, visual_frame ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	def.attributes =
+	{
+		content :
+		{
+			// content of the frame
+			type : 'visual_itemList'
+		},
+		transform :
+		{
+			// current transform of the frame
+			type : 'gleam_transform'
+		}
+	};
 }
 
 
-var
-	handleSize,
-	handleSize2,
-	prototype;
+// FIXME this is a dirty hack
+const handleSize = NODE || gruga_frame.handleSize;
 
-prototype = visual_frame.prototype;
+const handleSize2 = handleSize / 2;
 
-handleSize = gruga_frame.handleSize;
 
-handleSize2 = handleSize / 2;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+/*
+| The frames glint
+*/
+def.lazy.glint =
+	function( )
+{
+	return(
+		gleam_glint_mask.create(
+			'glint', this._glintFrame,
+			'shape', this._shapeMask,
+			'reverse', true
+		)
+	);
+};
+
+
+
+/*
+| If true resize content proportional only.
+*/
+def.lazy.proportional =
+	function( )
+{
+	const content = this.content;
+
+	for( let a = 0, aZ = content.length; a < aZ; a++ )
+	{
+		if( content.get( a ).proportional ) return true;
+	}
+
+	return false;
+};
 
 
 /*
 | Zone.
 */
-jion.lazyValue(
-	prototype,
-	'zone',
-function( )
+def.lazy.zone =
+	function( )
 {
-	var
-		a,
-		cex,
-		csy,
-		content,
-		cLen,
-		cZone,
-		ex,
-		ny,
-		pos,
-		sy,
-		wx;
+	const content = this.content;
 
-	content = this.content;
-
-	cLen = content.length;
+	const cLen = content.length;
 
 /**/if( CHECK )
 /**/{
 /**/	if ( cLen === 0 ) throw new Error( );
 /**/}
 
-	cZone = content.get( 0 ).zone;
+	let cZone = content.get( 0 ).zone;
 
 	if( cLen === 1 ) return cZone;
 
-	pos = cZone.pos;
+	let pos = cZone.pos;
 
-	ny = pos.y;
+	let ny = pos.y;
 
-	wx = pos.x;
+	let wx = pos.x;
 
-	sy = pos.y + cZone.height;
+	let sy = pos.y + cZone.height;
 
-	ex = pos.x + cZone.width;
+	let ex = pos.x + cZone.width;
 
-	for( a = 1; a < cLen; a++ )
+	for( let a = 1; a < cLen; a++ )
 	{
 		cZone = content.get( a ).zone;
 
 		pos = cZone.pos;
 
-		cex = pos.x + cZone.width;
+		const cex = pos.x + cZone.width;
 
-		csy = pos.y + cZone.height;
+		const csy = pos.y + cZone.height;
 
 		if( pos.x < wx ) wx = pos.x;
 
@@ -140,40 +145,338 @@ function( )
 			'height', sy - ny
 		)
 	);
-}
-);
+};
 
 
 /*
-| If true resize content proportional only.
+| The shape used as mask for the inner contents of the frame.
 */
-jion.lazyValue(
-	prototype,
-	'proportional',
+def.lazy._shapeMask =
 	function( )
 {
-	var
-		a,
-		aZ,
-		content;
+	const content = this.content;
 
-	content = this.content;
+/**/if( CHECK )
+/**/{
+/**/	if( content.length === 0 ) throw new Error( );
+/**/}
 
-	for( a = 0, aZ = content.length; a < aZ; a++ )
+	const arr = [ ];
+
+	for( let a = 0, aZ = content.length; a < aZ; a++ )
 	{
-		if( content.get( a ).proportional ) return true;
+		const ca = content.get( a );
+
+		arr.push( ca.tShape.border( -12 ) );
 	}
 
-	return false;
-}
-);
+	return gleam_shapeList.create( 'list:init', arr );
+};
 
+
+
+/*
+| The frame glint holding all stuff unmasked.
+*/
+def.lazy._glintFrame =
+	function( )
+{
+	const glintFrameBody =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.facet,
+			'shape', this._frameBodyShape
+		);
+
+	const glintHandleNe =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleNe
+		);
+
+	const glintHandleNw =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleNw
+		);
+
+	const glintHandleSe =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleSe
+		);
+
+	const glintHandleSw =
+		gleam_glint_paint.create(
+			'facet', gruga_frame.handleFacet,
+			'shape', this._shapeHandleSw
+		);
+
+	let arr;
+
+	if( this.proportional )
+	{
+		arr =
+			[
+				glintFrameBody,
+				glintHandleNw,
+				glintHandleNe,
+				glintHandleSe,
+				glintHandleSw
+			];
+	}
+	else
+	{
+		const glintHandleE =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleE
+			);
+
+		const glintHandleN =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleN
+			);
+
+		const glintHandleS =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleS
+			);
+
+		const glintHandleW =
+			gleam_glint_paint.create(
+				'facet', gruga_frame.handleFacet,
+				'shape', this._shapeHandleW
+			);
+
+		arr =
+			[
+				glintFrameBody,
+				glintHandleNw,
+				glintHandleNe,
+				glintHandleSe,
+				glintHandleSw,
+				glintHandleN,
+				glintHandleE,
+				glintHandleS,
+				glintHandleW
+			];
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The shape of the frame body.
+*/
+def.lazy._frameBodyShape =
+	function( )
+{
+	const oZone = this._outerZone;
+
+	return(
+		gleam_roundRect.create(
+			'pos', oZone.pos,
+			'width', oZone.width,
+			'height', oZone.height,
+			'a', handleSize / 2,
+			'b', handleSize / 2
+		)
+	);
+};
+
+
+/*
+| Handle glint in N.
+*/
+def.lazy._shapeHandleN =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.proportional ) throw new Error( );
+/**/}
+
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pn.add( -handleSize2, 0 ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in Ne.
+*/
+def.lazy._shapeHandleNe =
+	function( )
+{
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pne.add( -handleSize, 0 ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in Nw.
+*/
+def.lazy._shapeHandleNw =
+	function( )
+{
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pos,
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in E.
+*/
+def.lazy._shapeHandleE =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.proportional ) throw new Error( );
+/**/}
+
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pe.add( -handleSize, -handleSize2 ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in S.
+*/
+def.lazy._shapeHandleS =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.proportional ) throw new Error( );
+/**/}
+
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.ps.add( -handleSize2, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in Se.
+*/
+def.lazy._shapeHandleSe =
+	function( )
+{
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pse.add( -handleSize, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in Sw.
+*/
+def.lazy._shapeHandleSw =
+	function( )
+{
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.psw.add( 0, -handleSize ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Handle glint in W.
+*/
+def.lazy._shapeHandleW =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.proportional ) throw new Error( );
+/**/}
+
+	return(
+		gleam_ellipse.create(
+			'pos', this._outerZone.pw.add( 0, -handleSize2 ),
+			'width', handleSize,
+			'height', handleSize
+		)
+	);
+};
+
+
+/*
+| Outer zone.
+|
+| Framed objects plus frame width.
+*/
+def.lazy._outerZone =
+	function( )
+{
+	const fw = gruga_frame.width;
+
+	const tZone = this.zone.transform( this.transform );
+
+	const hw = tZone.width / 2;
+
+	const hh = tZone.height / 2;
+
+	const min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
+
+	return(
+		gleam_rect.create(
+			'pos',
+				tZone.pc.add(
+					Math.min( -hw - fw, -min ),
+					Math.min( -hh - fw, -min )
+				),
+			'width', 2 * Math.max( hw + fw, min ),
+			'height', 2 * Math.max( hh + fw, min )
+		)
+	);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Checks if the frame has been clicked.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,        // cursor point
 		shift,    // true if shift key was pressed
@@ -198,7 +501,7 @@ prototype.click =
 /*
 | Starts an operation with the pointing device held down.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p,      // cursor point
 		shift,  // true if shift key was pressed
@@ -206,20 +509,16 @@ prototype.dragStart =
 		access  // rights the current user has for current space
 	)
 {
-	var
-		com,
-		dp,
-		pBase,
-		zone;
-
 	if( access !== 'rw' ) return;
 
-	zone = this.zone;
+	const zone = this.zone;
 
 	if(
 		!this._frameBodyShape.within( p )
 		|| this._shapeMask.within( p )
 	) return;
+
+	let com, pBase;
 
 	if( this._shapeHandleNw.within( p ) )
 	{
@@ -265,7 +564,7 @@ prototype.dragStart =
 		}
 	}
 
-	dp = p.detransform( this.transform );
+	const dp = p.detransform( this.transform );
 
 	if( com )
 	{
@@ -298,75 +597,17 @@ prototype.dragStart =
 };
 
 
-
-jion.lazyValue(
-	prototype,
-	'_shapeMask',
-	function( )
-{
-	var
-		a,
-		an,
-		arr,
-		aZ,
-		ca,
-		content;
-
-	content = this.content;
-
-/**/if( CHECK )
-/**/{
-/**/	if( content.length === 0 ) throw new Error( );
-/**/}
-
-	arr = [ ];
-
-	an = 0;
-
-	for( a = 0, aZ = content.length; a < aZ; a++ )
-	{
-		ca = content.get( a );
-
-		arr[ an++ ] = ca.tShape.border( -12 );
-	}
-
-	return gleam_shapeList.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The frames glint
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	return(
-		gleam_glint_mask.create(
-			'glint', this._glintFrame,
-			'shape', this._shapeMask,
-			'reverse', true
-		)
-	);
-}
-);
-
-
-
 /*
 | Mouse hover.
 |
 | Returns true if the pointing device hovers over anything.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p
 	)
 {
-	var
-		com;
+	let com;
 
 	if(
 		!this._frameBodyShape.within( p )
@@ -394,355 +635,4 @@ prototype.pointingHover =
 };
 
 
-/*::::::::::.
-:  Private  :
-':::::::::::*/
-
-
-/*
-| The frame glint holding all stuff unmasked.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintFrame',
-	function( )
-{
-	var
-		arr,
-		glintFrameBody,
-		glintHandleE,
-		glintHandleN,
-		glintHandleNe,
-		glintHandleNw,
-		glintHandleS,
-		glintHandleSe,
-		glintHandleSw,
-		glintHandleW;
-
-	glintFrameBody =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.facet,
-			'shape', this._frameBodyShape
-		);
-
-	glintHandleNe =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleNe
-		);
-
-	glintHandleNw =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleNw
-		);
-
-	glintHandleSe =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleSe
-		);
-
-	glintHandleSw =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleSw
-		);
-
-	if( this.proportional )
-	{
-		arr =
-			[
-				glintFrameBody,
-				glintHandleNw,
-				glintHandleNe,
-				glintHandleSe,
-				glintHandleSw
-			];
-	}
-	else
-	{
-		glintHandleE =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleE
-			);
-
-		glintHandleN =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleN
-			);
-
-		glintHandleS =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleS
-			);
-
-		glintHandleW =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleW
-			);
-
-		arr =
-			[
-				glintFrameBody,
-				glintHandleNw,
-				glintHandleNe,
-				glintHandleSe,
-				glintHandleSw,
-				glintHandleN,
-				glintHandleE,
-				glintHandleS,
-				glintHandleW
-			];
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The shape of the frame body.
-*/
-jion.lazyValue(
-	prototype,
-	'_frameBodyShape',
-	function( )
-{
-	var
-		oZone;
-
-	oZone = this._outerZone;
-
-	return(
-		gleam_roundRect.create(
-			'pos', oZone.pos,
-			'width', oZone.width,
-			'height', oZone.height,
-			'a', handleSize / 2,
-			'b', handleSize / 2
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in N.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleN',
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
-
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pn.add( -handleSize2, 0 ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in Ne.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleNe',
-	function( )
-{
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pne.add( -handleSize, 0 ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in Nw.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleNw',
-	function( )
-{
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pos,
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in E.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleE',
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
-
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pe.add( -handleSize, -handleSize2 ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in S.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleS',
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
-
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.ps.add( -handleSize2, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in Se.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleSe',
-	function( )
-{
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pse.add( -handleSize, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in Sw.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleSw',
-	function( )
-{
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.psw.add( 0, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Handle glint in W.
-*/
-jion.lazyValue(
-	prototype,
-	'_shapeHandleW',
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
-
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pw.add( 0, -handleSize2 ),
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
-}
-);
-
-
-/*
-| Outer zone.
-|
-| Framed objects plus frame width.
-*/
-jion.lazyValue(
-	prototype,
-	'_outerZone',
-	function( )
-{
-	var
-		hw,
-		hh,
-		fw,
-		min,
-		tZone;
-
-	fw = gruga_frame.width;
-
-	tZone = this.zone.transform( this.transform );
-
-	hw = tZone.width / 2;
-
-	hh = tZone.height / 2;
-
-	min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
-
-	return(
-		gleam_rect.create(
-			'pos',
-				tZone.pc.add(
-					Math.min( -hw - fw, -min ),
-					Math.min( -hh - fw, -min )
-				),
-			'width', 2 * Math.max( hw + fw, min ),
-			'height', 2 * Math.max( hh + fw, min )
-		)
-	);
-}
-);
-
-
-} )( );
+} );

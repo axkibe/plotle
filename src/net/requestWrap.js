@@ -1,72 +1,57 @@
 /*
 | A wrapper for ajax request.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	transmitter;
+
+
+tim.define( module, 'net_requestWrap', ( def, net_requestWrap ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'net_requestWrap',
-		attributes :
+	def.attributes =
+	{
+		channelName :
 		{
-			channelName :
-			{
-				comment : 'name of the channel the request belongs to',
-				type : 'string'
-			},
-			request :
-			{
-				comment : 'the actual request',
-				type : require( '../request/typemap' )
-			},
-			receiverFuncName :
-			{
-				comment : 'name of the receiver function to call',
-				type : 'string'
-			},
-			_xhr :
-			{
-				comment : 'the underlaying "XMLHttpRequest"',
-				type : [ 'undefined', 'protean' ]
-			}
+			comment : 'name of the channel the request belongs to',
+			type : 'string'
+		},
+		request :
+		{
+			comment : 'the actual request',
+			type : require( '../request/typemap' )
+		},
+		receiverFuncName :
+		{
+			comment : 'name of the receiver function to call',
+			type : 'string'
+		},
+		_xhr :
+		{
+			comment : 'the underlaying "XMLHttpRequest"',
+			type : [ 'undefined', 'protean' ]
 		}
 	};
 }
 
 
-var
-	net_requestWrap,
-	root,
-	transmitter;
+// FIXME
+let onReplyTransmitter;
 
 
-/*
-| Capsule.
-*/
-(function( ) {
-'use strict';
-
-
-var
-	onReply,
-	onReplyTransmitter;
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-var
-	prototype;
-
-prototype = net_requestWrap.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -74,7 +59,7 @@ prototype = net_requestWrap.prototype;
 |
 | Returns true if the request has been aborted.
 */
-prototype.abort =
+def.func.abort =
 	function( )
 {
 	if( this._xhr )
@@ -95,24 +80,16 @@ prototype.abort =
 |
 | 'this' is the _xhr ajax request.
 */
-onReply =
+const onReply =
 	function( )
 {
-	var
-		channel,
-		reply,
-		wrap;
+	if( this.readyState !== 4 || this.aborted ) return;
 
-	if( this.readyState !== 4 || this.aborted )
-	{
-		return;
-	}
-
-	wrap = this.wrap;
+	const wrap = this.wrap;
 
 	this.onreadystatechange = undefined;
 
-	channel = root.ajax.get( wrap.channelName );
+	const channel = root.ajax.get( wrap.channelName );
 
 	if( this.status !== 200 )
 	{
@@ -126,6 +103,8 @@ onReply =
 
 		return;
 	}
+
+	let reply;
 
 	try
 	{
@@ -151,18 +130,15 @@ onReply =
 /*
 | Sends the wrapped request.
 */
-prototype.send =
+def.func.send =
 	function( )
 {
-	var
-		xhr;
+/**/if( CHECK )
+/**/{
+/**/	if( this._xhr ) throw new Error( );
+/**/}
 
-	if( this._xhr )
-	{
-		throw new Error( );
-	}
-
-	xhr = new XMLHttpRequest( );
+	const xhr = new XMLHttpRequest( );
 
 	xhr.wrap = this;
 
@@ -186,4 +162,4 @@ prototype.send =
 };
 
 
-} )( );
+} );

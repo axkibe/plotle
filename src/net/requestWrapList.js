@@ -1,33 +1,21 @@
 /*
 | A list of wrapped requests.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'net_requestWrapList', ( def, net_requestWrapList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'net_requestWrapList',
-		list : [ 'net_requestWrap' ]
-	};
+	def.list = [ 'net_requestWrap' ];
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-}( ) );
+} );

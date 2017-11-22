@@ -270,7 +270,7 @@ prototype.register =
 	if( val ) return false;
 
 	userInfo = userInfo.create( 'spaceList', dynamic_refSpaceList.create( ) );
-	
+
 	root.create(
 		'userNexus',
 		this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
