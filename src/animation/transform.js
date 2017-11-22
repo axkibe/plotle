@@ -1,37 +1,40 @@
 /*
 | The current transform is being animated.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'animation_transform', ( def, animation_transform ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'animation_transform',
-		attributes :
+	def.attributes =
+	{
+		begin :
 		{
-			begin :
-			{
-				comment : 'begin time of animation',
-				type : 'number'
-			},
-			beginTransform :
-			{
-				comment : 'transformation at begin of animation',
-				type : 'gleam_transform'
-			},
-			end :
-			{
-				comment : 'end time of animation',
-				type : 'number'
-			},
-			endTransform :
-			{
-				comment : 'transformation at end of animation',
-				type : 'gleam_transform'
-			}
+			// begin time of animation
+			type : 'number'
+		},
+		beginTransform :
+		{
+			// transformation at begin of animation
+			type : 'gleam_transform'
+		},
+		end :
+		{
+			// end time of animation
+			type : 'number'
+		},
+		endTransform :
+		{
+			// transformation at end of animation
+			type : 'gleam_transform'
 		}
 	};
 }
@@ -43,41 +46,22 @@ var
 	gleam_transform;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	animation_transform = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = animation_transform.prototype;
 
 
 /*
 | Helper for creating a transform animation.
 */
-animation_transform.createNow =
+def.static.createNow =
 	function(
 		endTransform,
 		time
 	)
 {
-	var
-		now;
-
-	now = window.performance.now( );
+	const now = window.performance.now( );
 
 	return(
 		animation_transform.create(
@@ -90,10 +74,13 @@ animation_transform.createNow =
 };
 
 
+XXX FUNCTIONS
+
+
 /*
 | Gets the transformation for a frame at time.
 */
-prototype.getTransform =
+def.func.getTransform =
 	function(
 		time
 	)

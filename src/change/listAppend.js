@@ -1,71 +1,75 @@
 /*
 | Appends to a list.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	change_generic,
+	change_error,
+	change_listShorten;
+
+
+if( NODE )
 {
-	throw{
-		id : 'change_listAppend',
-		attributes :
+	change_listShorten = require( './listShorten' );
+	change_generic = require( './generic' );
+	change_error = require( './error' );
+}
+
+
+
+tim.define( module, 'change_listAppend', ( def, change_listAppend ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		val :
 		{
-			val :
-			{
-				comment : 'value to grow',
-				json : true,
-				type : require( './typemap-value' )
-			}
+			// value to append
+			type : require( './typemap-value' ),
+			json : true,
 		}
 	};
 }
 
 
-var
-	change_generic,
-	change_error,
-	change_listAppend,
-	change_listShorten,
-	jion;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| Capsule
+| Returns the inversion to this change.
 */
-( function( ) {
-"use strict";
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
-if( NODE )
+def.lazy.reverse =
+	function( )
 {
-	jion = require( 'jion' );
+	const inv = change_listShorten.create( 'val', this.val );
 
-	change_listAppend = jion.this( module, 'source' );
+	tim.aheadValue( inv, 'reverse', this );
 
-	change_listShorten = require( './listShorten' );
-
-	change_generic = require( './generic' );
-
-	change_error = require( './error' );
-}
+	return inv;
+};
 
 
-prototype = change_listAppend.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Performs the list app change on a tree.
 */
-prototype.changeTree =
+def.func.changeTree =
 	function(
 		list
 	)
@@ -77,33 +81,13 @@ prototype.changeTree =
 /*
 | Reversivly performs this change on a tree.
 */
-prototype.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
-| Returns the inversion to this change.
-*/
-jion.lazyValue(
-	prototype,
-	'reverse',
-	function( )
-{
-	var
-		inv;
-
-	inv = change_listShorten.create( 'val', this.val );
-
-	jion.aheadValue( inv, 'reverse', this );
-
-	return inv;
-}
-);
+def.func.changeTreeReverse = change_generic.changeTreeReverse;
 
 
 /*
 | Returns a change* transformed on this change.
 */
-prototype.transform =
+def.func.transform =
 	function(
 		cx
 	)
@@ -115,20 +99,19 @@ prototype.transform =
 /*
 | Returns a change list transformed by this change.
 */
-prototype._transformChangeList = change_generic.transformChangeList;
+def.func._transformChangeList = change_generic.transformChangeList;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-prototype._transformChangeWrap = change_generic.transformChangeWrap;
+def.func._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap list transformed by this change.
 */
-prototype._transformChangeWrapList = change_generic.transformChangeWrapList;
+def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
-
-}( ) );
+} );

@@ -1,81 +1,53 @@
 /*
 | A sequence of paragraphs.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'fabric_doc',
-		attributes :
-		{
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			}
-		},
-		init : [ 'twigDup' ],
-		json : true,
-		twig : [ 'fabric_para' ]
-	};
-}
-
-
-var
-	fabric_doc,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'fabric_doc', ( def, fabric_doc ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		path :
+		{
+			// the path of the doc
+			type : [ 'undefined', 'jion$path' ]
+		}
+	};
 
-	fabric_doc = jion.this( module, 'source' );
+	def.twig = [ 'fabric_para' ];
+
+	def.init = [ 'twigDup' ];
+
+	def.json = true;
 }
-
-
-var
-	prototype;
-
-prototype = fabric_doc.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		key,
-		twig,
-		twigPath,
-		r,
-		ranks,
-		rZ;
+	const ranks = this._ranks;
 
-	ranks = this._ranks;
+	let twig = twigDup ? this._twig : tim.copy( this._twig );
 
-	twig = twigDup ? this._twig : jion.copy( this._twig );
+	const twigPath = this.path && this.path.append( 'twig' );
 
-	twigPath = this.path && this.path.append( 'twig' );
-
-	for( r = 0, rZ = ranks.length; r < rZ; r++ )
+	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
-		key = ranks[ r ];
+		const key = ranks[ r ];
 
 		twig[ key ] =
 			twig[ key ].create(
@@ -89,31 +61,26 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| True if the para is effectively empty or has only blank characters.
+| True if all paras are effectively empty or has only blank characters.
 */
-jion.lazyValue(
-	prototype,
-	'isBlank',
+def.lazy.isBlank =
 	function( )
 {
-	var
-		para,
-		r,
-		rZ;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		para = this.atRank( r );
+		const para = this.atRank( r );
 
 		if( !para.isBlank ) return false;
 	}
 
 	return true;
-}
-);
+};
 
 
-} )( );
+} );

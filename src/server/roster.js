@@ -93,7 +93,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'jion-path.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.path.source,
+		'data', tim.path.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -143,7 +143,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/mark/text.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -190,12 +190,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/listAppend.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/change/listShorten.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -490,11 +490,6 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/dynamic/refSpaceList.js',
-		'hasJion', true,
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/fabric/pointGroup.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -824,7 +819,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/para.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -840,34 +835,34 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/doc.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/note.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/label.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/relation.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/portal.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/fabric/space.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -1018,7 +1013,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/animation/root.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

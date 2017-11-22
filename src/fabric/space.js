@@ -1,99 +1,68 @@
 /*
 | A space.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'fabric_space',
-		attributes :
-		{
-			path :
-			{
-				comment : 'the path of the space',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			ref :
-			{
-				comment : 'reference to this space',
-				type : [ 'undefined', 'ref_space' ]
-			}
-		},
-		json : true,
-		init : [ 'inherit', 'twigDup' ],
-		twig :
-		[
-			'fabric_note',
-			'fabric_label',
-			'fabric_relation',
-			'fabric_portal'
-		]
-	};
-}
-
-
-var
-	fabric_space,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	prototype;
+tim.define( module, 'fabric_space', ( def, fabric_space ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	fabric_space = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		path :
+		{
+			comment : 'the path of the space',
+			type : [ 'undefined', 'jion$path' ]
+		},
+		ref :
+		{
+			comment : 'reference to this space',
+			type : [ 'undefined', 'ref_space' ]
+		}
+	};
 
-	fabric_space.prototype._init = function( ){ };
+	def.twig =
+	[
+		'fabric_note',
+		'fabric_label',
+		'fabric_relation',
+		'fabric_portal'
+	];
 
-	return;
+	def.json = true;
+
+	def.init = [ 'inherit', 'twigDup' ];
 }
-
-
-prototype = fabric_space.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit,
 		twigDup
 	)
 {
-	var
-		k,
-		path,
-		twig;
-
 	if( !this.path )
 	{
-		this.path = jion.path.empty.append( 'space' );
+		this.path = tim.path.empty.append( 'space' );
 	}
 
-	twig = twigDup ? this._twig : jion.copy( this._twig );
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
 
-	for( k in twig )
+	for( let k in twig )
 	{
-		path = twig[ k ].path;
+		let path = twig[ k ].path;
 
-		if( !path )
-		{
-			path = this.path.append( 'twig' ).appendNC( k );
-		}
+		if( !path ) path = this.path.append( 'twig' ).appendNC( k );
 
 		twig[ k ] = twig[ k ].create( 'path', path );
 	}
@@ -104,5 +73,5 @@ prototype._init =
 };
 
 
-} )( );
+} );
 

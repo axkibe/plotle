@@ -1,64 +1,40 @@
 /*
 | The animation root is the master of all animations.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'animation_root',
-		attributes :
-		{ },
-		twig :
-		[
-			'animation_transform'
-		],
-		init : [ ]
-	};
-}
-
-
-var
-	animation_root,
-	system;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
+// FIXME
 var
-	prototype;
+	system;
 
-prototype = animation_root.prototype;
+
+tim.define( module, 'animation_root', ( def, animation_root ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.twig =
+	[
+		'animation_transform'
+	];
+
+	def.init = [ ];
+}
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
-	var
-		len;
-
-	len = this.length;
-
-	if( len === 0 )
+	if( this.length === 0 )
 	{
 		system.stopAnimation( );
 
@@ -69,41 +45,35 @@ prototype._init =
 };
 
 
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Handles a frame for all animations.
 */
-prototype.frame =
+def.func.frame =
 	function(
 		time
 	)
 {
-	var
-		a,
-		anim,
-		aroot,
-		aZ,
-		key;
+	let aroot = this;
 
-	aroot = this;
-
-	for( a = 0, aZ = aroot.length; a < aZ; a++ )
+	for( let a = 0, aZ = aroot.length; a < aZ; a++ )
 	{
-		key = aroot.getKey( a );
+		const key = aroot.getKey( a );
 
-		anim = aroot.get( key );
+		const anim = aroot.get( key );
 
 		if( !anim.frame( time ) )
 		{
 			aroot = aroot.create( 'twig:remove', key );
 
-			aZ--;
-
-			a--;
-
-			continue;
+			a--; aZ--;
 		}
 	}
 };
 
 
-} )( );
+} );

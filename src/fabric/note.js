@@ -3,82 +3,54 @@
 |
 | Has potentionaly a scrollbar.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'fabric_note',
-		attributes :
-		{
-			doc :
-			{
-				comment : 'the notes document',
-				type : 'fabric_doc',
-				json : true
-			},
-			fontsize :
-			{
-				comment : 'the fontsize of the note',
-				type : 'number',
-				json : true
-			},
-			path :
-			{
-				comment : 'the path of the note',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			zone :
-			{
-				comment : 'the notes zone',
-				type : 'gleam_rect',
-				json : true
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-var
-	fabric_note,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	prototype;
+tim.define( module, 'fabric_note', ( def, fabric_note ) => {
 
 
-/*
-| Node includes.
-*/
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	fabric_note = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		doc :
+		{
+			// the notes document
+			type : 'fabric_doc',
+			json : true
+		},
+		fontsize :
+		{
+			// the fontsize of the note
+			type : 'number',
+			json : true
+		},
+		path :
+		{
+			// the path of the note
+			type : [ 'undefined', 'jion$path' ]
+		},
+		zone :
+		{
+			// the notes zone
+			type : 'gleam_rect',
+			json : true
+		}
+	};
 
-	fabric_note.prototype._init = function( ) { };
-
-	return;
+	def.init = [ ];
 }
-
-
-prototype = fabric_note.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 	this.doc =
@@ -88,17 +60,23 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | Forwards zone pnw.
+|
+| FIXME remove
 */
-jion.lazyValue(
-	prototype,
-	'pnw',
+/*
+def.lazy.pnw =
 	function( )
 {
 	return this.zone.pnw;
-}
-);
+};
+*/
 
 
-} )( );
+} );

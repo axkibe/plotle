@@ -1,81 +1,54 @@
 /*
 | An item with resizing text.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'fabric_label',
-		attributes :
-		{
-			doc :
-			{
-				comment : 'the labels document',
-				type : 'fabric_doc',
-				json : true
-			},
-			fontsize :
-			{
-				comment : 'the fontsize of the label',
-				type : 'number',
-				json : true
-			},
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			pos :
-			{
-				comment : 'position',
-				type : 'gleam_point',
-				json : true
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-var
-	fabric_label,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	prototype;
+tim.define( module, 'fabric_label', ( def, fabric_label ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		doc :
+		{
+			comment : 'the labels document',
+			type : 'fabric_doc',
+			json : true
+		},
+		fontsize :
+		{
+			comment : 'the fontsize of the label',
+			type : 'number',
+			json : true
+		},
+		path :
+		{
+			comment : 'the path of the doc',
+			type : [ 'undefined', 'jion$path' ]
+		},
+		pos :
+		{
+			comment : 'position',
+			type : 'gleam_point',
+			json : true
+		}
+	};
 
-	fabric_label = jion.this( module, 'source' );
-
-	fabric_label.prototype._init = function( ) { };
-
-	return;
+	def.init = [ ];
 }
-
-
-prototype = fabric_label.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 	this.doc =
@@ -85,4 +58,4 @@ prototype._init =
 };
 
 
-} )( );
+} );

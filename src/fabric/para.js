@@ -1,100 +1,70 @@
 /*
 | A paragraph.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'fabric_para', ( def, fabric_para ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'fabric_para',
-		attributes :
+	def.attributes =
+	{
+		path :
 		{
-			path :
-			{
-				comment : 'the path of the para',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			text :
-			{
-				comment : 'the paragraphs text',
-				json : true,
-				type : 'string'
-			}
+			// the path of the para
+			type : [ 'undefined', 'jion$path' ]
+		},
+		text :
+		{
+			// the paragraphs text
+			type : 'string',
+			json : true,
 		}
 	};
 }
 
 
-var
-	fabric_para,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	fabric_para = jion.this( module, 'source' );
-
-	return;
-}
-
-
-prototype = fabric_para.prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | Shortcut to the para's key.
 | It is the last path entry.
 */
-jion.lazyValue(
-	prototype,
-	'key',
+def.lazy.key =
 	function( )
 {
 	return this.path.get( -1 );
-}
-);
+};
 
 
 /*
 | The path to the .text attribute
 */
-jion.lazyValue(
-	prototype,
-	'textPath',
+def.lazy.textPath =
 	function( )
 {
 	return this.path && this.path.append( 'text' );
-}
-);
+};
 
 
 /*
 | True if the para is effectively empty or has only blank characters.
 */
-jion.lazyValue(
-	prototype,
-	'isBlank',
+def.lazy.isBlank =
 	function( )
 {
 	return /^\s*$/.test( this.text );
-}
-);
+};
 
 
-} )( );
+} );

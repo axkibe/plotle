@@ -1,80 +1,53 @@
 /*
 | A portal to another space.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'fabric_portal', ( def, fabric_portal ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'fabric_portal',
-		attributes :
+	def.attributes =
+	{
+		path :
 		{
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			spaceUser :
-			{
-				comment : 'owner of the space the portal goes to',
-				type : 'string',
-				json : true
-			},
-			spaceTag :
-			{
-				comment : 'tag of the space the portal goes to',
-				type : 'string',
-				json : true
-			},
-			zone :
-			{
-				comment : 'the portals zone',
-				type : 'gleam_rect',
-				json : true
-			}
+			// the path of the doc
+			type : [ 'undefined', 'jion$path' ]
+		},
+		spaceUser :
+		{
+			// owner of the space the portal goes to
+			type : 'string',
+			json : true
+		},
+		spaceTag :
+		{
+			// tag of the space the portal goes to
+			type : 'string',
+			json : true
+		},
+		zone :
+		{
+			// the portals zone
+			type : 'gleam_rect',
+			json : true
 		}
 	};
 }
 
 
-var
-	fabric_portal,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-/*
-| Node includes.
-*/
-if( NODE )
-{
-	fabric_portal = require( 'jion' ).this( module, 'source' );
-
-	fabric_portal.prototype._init = function( ) { };
-
-	return;
-}
-
-
-prototype = fabric_portal.prototype;
-
-
 /*
 | Forwards zone pnw.
 */
+/*
+FIXME remove
 jion.lazyValue(
 	prototype,
 	'pnw',
@@ -83,6 +56,7 @@ jion.lazyValue(
 	return this.zone.pnw;
 }
 );
+*/
 
 
-} )( );
+} );

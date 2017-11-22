@@ -1,78 +1,52 @@
 /*
 | A position in a text.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'change_mark_text',
-		attributes :
-		{
-			path :
-			{
-				comment : 'path of the mark',
-				type : 'jion$path'
-			},
-			at :
-			{
-				comment : 'offset of the mark',
-				type : 'integer'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-var
-	change_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
-var
-	prototype;
+tim.define( module, 'change_mark_text', ( def, change_mark_text ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	change_mark_text = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		path :
+		{
+			// path of the mark
+			type : 'jion$path'
+		},
+		at :
+		{
+			// offset of the mark
+			type : 'integer'
+		}
+	};
+
+	def.init = [ ];
 }
-
-
-prototype = change_mark_text.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.path.isEmpty ) throw new Error( );
 /**/
-/**/	if( this.at < 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.at < 0 ) throw new Error( );
 /**/}
 
 };
 
 
-} )( );
+} );
