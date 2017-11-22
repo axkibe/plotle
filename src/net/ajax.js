@@ -1,41 +1,31 @@
 /*
 | Provides AJAX communications with the server.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'net_ajax',
-		attributes :
-		{
-			'path' :
-			{
-				comment : 'the ajax path',
-				type : 'jion$path'
-			}
-		},
-		twig : [ 'net_channel' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+tim.define( module, 'net_ajax', ( def, net_ajax ) => {
 
-	return;
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		'path' :
+		{
+			comment : 'the ajax path',
+			type : 'jion$path'
+		}
+	};
+
+
+	def.twig = [ 'net_channel' ];
 }
 
 
-} )( );
+} );

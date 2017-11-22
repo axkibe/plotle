@@ -565,7 +565,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/net/ajax.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1008,7 +1008,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/animation/transform.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

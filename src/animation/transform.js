@@ -4,6 +4,12 @@
 'use strict';
 
 
+// FIXME
+var
+	gleam_point,
+	gleam_transform;
+
+
 tim.define( module, 'animation_transform', ( def, animation_transform ) => {
 
 
@@ -40,12 +46,6 @@ if( TIM )
 }
 
 
-var
-	animation_transform,
-	gleam_point,
-	gleam_transform;
-
-
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
@@ -74,7 +74,9 @@ def.static.createNow =
 };
 
 
-XXX FUNCTIONS
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -85,38 +87,27 @@ def.func.getTransform =
 		time
 	)
 {
-	var
-		begin,
-		beginOffset,
-		beginZoom,
-		beginTransform,
-		end,
-		endOffset,
-		endZoom,
-		endTransform,
-		ratio;
+	const end = this.end;
 
-	end = this.end;
-
-	endTransform = this.endTransform;
+	const endTransform = this.endTransform;
 
 	if( time >= end ) return endTransform;
 
-	begin = this.begin;
+	const begin = this.begin;
 
-	beginTransform = this.beginTransform;
+	const beginTransform = this.beginTransform;
 
 	if( time <= begin ) return beginTransform;
 
-	ratio = ( time - begin ) / ( end - begin );
+	const ratio = ( time - begin ) / ( end - begin );
 
-	beginOffset = beginTransform.offset;
+	const beginOffset = beginTransform.offset;
 
-	endOffset = endTransform.offset;
+	const endOffset = endTransform.offset;
 
-	beginZoom = beginTransform.zoom;
+	const beginZoom = beginTransform.zoom;
 
-	endZoom = endTransform.zoom;
+	const endZoom = endTransform.zoom;
 
 	return(
 		gleam_transform.create(
@@ -134,24 +125,20 @@ def.func.getTransform =
 /*
 | Handles a frame for this animation.
 */
-prototype.frame =
+def.func.frame =
 	function(
 		time
 	)
 {
-	var
-		action,
-		going;
-
 	root.create(
 		'spaceTransform', this.getTransform( time )
 	);
 
-	going = time < this.end;
+	let going = time < this.end;
 
 	if( !going )
 	{
-		action = root.action;
+		const action = root.action;
 
 		if( action && action.finishAnimation )
 		{
@@ -163,4 +150,4 @@ prototype.frame =
 };
 
 
-} )( );
+} );
