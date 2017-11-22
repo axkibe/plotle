@@ -913,7 +913,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/itemList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),

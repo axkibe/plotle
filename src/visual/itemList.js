@@ -1,102 +1,63 @@
 /*
 | A list of visual items.
 */
-
-
-/*
-| The jion definition
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_itemList',
-		list : require( './typemap-item' )
-	};
-}
-
-
-var
-	gleam_rectGroup,
-	jion,
-	jion$pathList,
-	visual_itemList;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
 var
-	prototype;
+	gleam_rectGroup,
+	jion$pathList;
 
 
-if( NODE )
+tim.define( module, 'visual_itemList', ( def, visual_itemList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	def.list = require( './typemap-item' );
 }
 
 
-prototype = visual_itemList.prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | Returns the list of paths of the items.
 */
-jion.lazyValue(
-	prototype,
-	'itemPaths',
+def.lazy.itemPaths =
 	function( )
 {
-	var
-		a,
-		arr,
-		arrZ,
-		aZ,
-		item;
+	const arr = [ ];
 
-	arr = [ ];
-
-	arrZ = 0;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.get( a );
-
-		arr[ arrZ++ ] = item.path;
+		arr.push( this.get( a ).path );
 	}
 
 	return jion$pathList.create( 'list:init', arr );
-}
-);
+};
 
 
 /*
 | Returns the list of zones of the items.
 */
-jion.lazyValue(
-	prototype,
-	'zones',
+def.lazy.zones =
 	function( )
 {
-	var
-		a,
-		key,
-		aZ,
-		group,
-		item;
+	const group = { };
 
-	group = { };
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.get( a );
+		const item = this.get( a );
 
-		key = item.path.get( 2 );
+		const key = item.path.get( 2 );
 
 /**/	if( CHECK )
 /**/	{
@@ -107,8 +68,7 @@ jion.lazyValue(
 	}
 
 	return gleam_rectGroup.create( 'group:init', group );
-}
-);
+};
 
 
-})( );
+} );
