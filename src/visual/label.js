@@ -1,72 +1,10 @@
 /*
 | An item with resizing text.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_label',
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'visual_item.concernsAction( action, path )'
-			},
-			fabric :
-			{
-				comment : 'the labels fabric',
-				type : 'fabric_label'
-			},
-			highlight :
-			{
-				comment : 'the item is highlighted',
-				type : 'boolean'
-			},
-			hover :
-			{
-				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				assign : ''
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'visual_item.concernsMark( mark, path )',
-				type :
-					require( './mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			transform :
-			{
-				comment : 'the current space transform',
-				type : 'gleam_transform'
-			}
-		},
-		init : [ 'inherit' ],
-		alike :
-		{
-			alikeIgnoringTransform :
-			{
-				ignores : { 'transform' : true }
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	change_grow,
 	change_shrink,
@@ -80,84 +18,137 @@ var
 	fabric_label,
 	fabric_para,
 	gruga_label,
-	jion,
 	session_uid,
 	visual_doc,
 	visual_docItem,
 	visual_item,
-	visual_label,
 	visual_mark_caret;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'visual_label', ( def, visual_label ) => {
 
 
-var
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
-/*
-| Node includes.
-*/
-if( NODE )
+
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'visual_item.concernsAction( action, path )'
+		},
+		fabric :
+		{
+			// the labels fabric
+			type : 'fabric_label'
+		},
+		highlight :
+		{
+			// the item is highlighted
+			type : 'boolean'
+		},
+		hover :
+		{
+			// node currently hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			assign : ''
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'visual_item.concernsMark( mark, path )',
+			type :
+				require( './mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// the path of the doc
+			type : [ 'undefined', 'jion$path' ]
+		},
+		transform :
+		{
+			// the current space transform
+			type : 'gleam_transform'
+		}
+	};
 
-	visual_label = jion.this( module, 'source' );
+	def.init = [ 'inherit' ];
 
-	visual_label.prototype._init = function( ) { };
-
-	return;
+	def.alike =
+	{
+		alikeIgnoringTransform :
+		{
+			ignores : { 'transform' : true }
+		}
+	};
 }
 
-visual_label.reflect = 'visual_note:static';
 
-prototype = visual_label.prototype;
-
-
-/*
-| Hack to fix visual_note:static references
-*/
-visual_label.equals =
-	function( o )
-{
-	return o === this;
-};
+/*::::::::::::::::::::::.
+:: Static (lazy) values
+':::::::::::::::::::::::*/
 
 
 /*
 | Labels resize proportional only.
 */
-prototype.proportional = true;
+def.static.proportional = true;
+
+
+/*
+| The label model.
+*/
+def.staticLazy.model =
+	function( )
+{
+	return(
+		visual_label.create(
+			'fabric',
+				fabric_label.create(
+					'pos', gleam_point.zero,
+					'fontsize', gruga_label.defaultFontsize,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1',
+							fabric_para.create( 'text', 'Label' )
+						)
+				),
+			'highlight', false,
+			'transform', gleam_transform.normal
+		)
+	);
+};
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | User wants to create a new label.
 */
-visual_label.createGeneric =
+def.static.createGeneric =
 	function(
 		action, // the create action
 		dp      // the detransform point the createGeneric
 		//      // stoped at.
 	)
 {
-	var
-		fs,
-		key,
-		label,
-		model,
-		pos,
-		resized,
-		zone;
+	const model = visual_label.model;
 
-	model = visual_label.model;
+	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	zone = gleam_rect.createArbitrary( action.startPoint, dp );
-
-	fs =
+	const fs =
 		Math.max(
 			model.doc.fontsize
 			* zone.height
@@ -165,12 +156,12 @@ visual_label.createGeneric =
 			gruga_label.minSize
 		);
 
-	resized =
+	const resized =
 		model.create(
 			'fabric', model.fabric.create( 'fontsize', fs )
 		);
 
-	pos =
+	const pos =
 		( dp.x > action.startPoint.x )
 		? zone.pos
 		: gleam_point.create(
@@ -178,9 +169,9 @@ visual_label.createGeneric =
 			'y', zone.pos.y
 		);
 
-	label = resized.create( 'fabric', resized.fabric.create( 'pos', pos ) );
+	const label = resized.create( 'fabric', resized.fabric.create( 'pos', pos ) );
 
-	key = session_uid( );
+	const key = session_uid( );
 
 /**/if( CHECK )
 /**/{
@@ -199,7 +190,7 @@ visual_label.createGeneric =
 		change_grow.create(
 			'val', label.fabric,
 			'path',
-				jion.path.empty
+				tim.path.empty
 				.append( 'twig' )
 				.append( key ),
 			'rank', 0
@@ -221,45 +212,14 @@ visual_label.createGeneric =
 
 
 /*
-| The label model.
-*/
-jion.lazyStaticValue(
-	visual_label,
-	'model',
-	function( )
-{
-	return(
-		visual_label.create(
-			'fabric',
-				fabric_label.create(
-					'pos', gleam_point.zero,
-					'fontsize', gruga_label.defaultFontsize,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1',
-							fabric_para.create( 'text', 'Label' )
-						)
-				),
-			'highlight', false,
-			'transform', gleam_transform.normal
-		)
-	);
-}
-);
-
-
-/*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
 {
-	var
-		fabric;
-
-	fabric = this.fabric;
+	const fabric = this.fabric;
 
 	this.doc =
 		( inherit && inherit.doc || visual_doc ).create(
@@ -277,255 +237,79 @@ prototype._init =
 	if(
 		inherit
 		&& inherit.equals( this )
-		&& jion.hasLazyValueSet( inherit, 'glint' )
+		&& tim.hasLazyValueSet( inherit, 'glint' )
 	)
 	{
-		jion.aheadValue( this, 'glint', inherit.glint );
+		tim.aheadValue( this, 'glint', inherit.glint );
 	}
-/**/else if( CHECK && CHECK.noinherit )
-/**/{
-/**/	console.log( 'noinherit', 'visual_label' );
-/**/}
 
 };
+
+
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The attention center.
 */
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
-	visual_docItem.attentionCenter
-);
-
-
-/*
-| Reacts on clicks.
-*/
-prototype.click = visual_docItem.click;
-
-
-/*
-| Reacts on ctrl-clicks.
-*/
-prototype.ctrlClick = visual_item.ctrlClick;
-
-
-/*
-| A create relation action moves.
-*/
-prototype.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-prototype.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-prototype.dragStart = visual_docItem.dragStart;
-
-
-/*
-| The fontsize of the label.
-*/
-visual_label.fontsize =
-	function( )
-{
-	var
-		action,
-		fs;
-
-	action = this.action;
-
-	fs = this.fabric.fontsize;
-
-	if( action && action.reflect === 'action_resizeItems' )
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( action.scaleX !== action.scaleY ) throw new Error( );
-/**/	}
-
-		fs *= action.scaleY;
-
-		fs = Math.max( fs, gruga_label.minSize );
-	}
-
-	return fs;
-};
-
-
-jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
-
-
-/*
-| Returns the change for dragging this item.
-*/
-prototype.getDragItemChange = visual_item.getDragItemChangePosFs;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-prototype.getResizeItemChange = visual_item.getResizeItemChangePosFs;
+// FIXME
+def.lazy.attentionCenter = NODE || visual_docItem.attentionCenter;
 
 
 /*
 | The items glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
-	// FUTURE GLINT inherit
-	var
-		arr,
-		facet,
-		len,
-		tZone;
+	const tZone = this.tZone;
 
-	tZone = this.tZone;
-
-	arr = [ ];
-
-	len = 0;
-
-	arr[ len++ ] =
-		gleam_glint_window.create(
-			'glint', this.doc.glint,
-			'rect', tZone.enlarge1,
-			'offset', gleam_point.zero
-		);
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this.doc.glint,
+				'rect', tZone.enlarge1,
+				'offset', gleam_point.zero
+			)
+		];
 
 	if( this.highlight )
 	{
-		facet = gruga_label.facets.getFacet( 'highlight', true );
+		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr[ len++ ] =
+		arr.push(
 			gleam_glint_paint.create(
 				'facet', facet,
 				'shape', this.tShape
-			);
+			)
+		);
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| A text has been inputed.
-*/
-prototype.input = visual_docItem.input;
+};
 
 
 /*
 | The key of this item.
 */
-jion.lazyValue(
-	prototype,
-	'key',
+def.lazy.key =
 	function( )
 {
 	return this.path.get( -1 );
-}
-);
-
-
-/*
-| Returns the mark for a point
-*/
-prototype.markForPoint = visual_docItem.markForPoint;
-
-
-/*
-| Nofication when the item lost the users mark.
-*/
-prototype.markLost =
-	function( )
-{
-	var
-		pc;
-
-	if( this.doc.fabric.isBlank )
-	{
-		pc = this.path.chop;
-
-		root.alter(
-			change_shrink.create(
-				'path', pc,
-				'prev', root.spaceFabric.getPath( pc ),
-				'rank', root.spaceFabric.rankOf( pc.get( 1 ) )
-			)
-		);
-	}
 };
-
-
-/*
-| Returns the minimum x-scale factor this item could go through.
-*/
-visual_label.minScaleX =
-prototype.minScaleX =
-	function(
-		zone  // original zone
-	)
-{
-	return this.minScaleY( zone );
-};
-
-
-/*
-| Returns the minimum y-scale factor this item could go through.
-*/
-visual_label.minScaleY =
-prototype.minScaleY =
-	function(
-//		zone  // original zone
-	)
-{
-	return gruga_label.minSize / this.fabric.fontsize;
-};
-
-
-/*
-| The mouse wheel turned.
-*/
-prototype.mousewheel =
-	function(
-		// p
-		// dir
-	)
-{
-	//return this.tShape.within( p );
-	// the label lets wheel events pass through it.
-	return false;
-};
-
-
-/*
-| A move during a text select on this item.
-*/
-prototype.moveSelect = visual_docItem.moveSelect;
 
 
 /*
 | The labels position possibly altered by actions
 */
-visual_label.pos =
+// FIXME
+def.static.pos =
+def.lazy.pos =
 	function( )
 {
-	var
-		action,
-		zone;
-
-	action = this.action;
+	const action = this.action;
 
 	switch( action && action.reflect )
 	{
@@ -535,7 +319,7 @@ visual_label.pos =
 
 		case 'action_resizeItems' :
 
-			zone = action.startZones.get( this.path.get( 2 ) );
+			const zone = action.startZones.get( this.path.get( 2 ) );
 
 			switch( action.resizeDir )
 			{
@@ -579,55 +363,24 @@ visual_label.pos =
 };
 
 
-/*
-| The labels position, possibly altered by an action.
-*/
-jion.lazyValue( prototype, 'pos', visual_label.pos );
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-prototype.pointingHover = visual_docItem.pointingHover;
-
-
-/*
-| Labels use pos/fontsize for positioning
-*/
-visual_label.positioning =
-prototype.positioning =
-	'pos/fontsize';
 
 
 /*
 | The item's shape.
 */
-jion.lazyValue(
-	prototype,
-	'shape',
+def.lazy.shape =
 	function( )
 {
 	return this.zone.shrink1;
-}
-);
-
-
-/*
-| Handles a special key.
-*/
-prototype.specialKey = visual_docItem.specialKey;
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-prototype.scrollMarkIntoView = function( ){ };
+};
 
 
 /*
 | The item's shape in current transform.
 */
-visual_label.tShape =
+// FIXME
+def.static.tShape =
+def.lazy.tShape =
 	function( )
 {
 	return this.shape.transform( this.transform );
@@ -635,40 +388,32 @@ visual_label.tShape =
 
 
 /*
-| The item's shape in current transform.
-*/
-jion.lazyValue( prototype, 'tShape', visual_label.tShape );
-
-
-/*
 | Zone in current transform.
 */
-visual_label.tZone =
+// FIXME
+def.static.tZone =
+def.lazy.tZone =
 	function( )
 {
 	return this.zone.transform( this.transform );
 };
 
-
-jion.lazyValue( prototype, 'tZone', visual_label.tZone );
-
-
 /*
 | Returns the zone height.
 */
-visual_label._zoneHeight =
+def.static._zoneHeight =
+def.lazy._zoneHeight =
 	function( )
 {
 	return this.doc.fullsize.height + 2;
 };
 
-jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
-
 
 /*
 | Returns the zone width.
 */
-visual_label._zoneWidth =
+def.static._zoneWidth =
+def.lazy._zoneWidth =
 	function( )
 {
 	return(
@@ -679,16 +424,14 @@ visual_label._zoneWidth =
 	);
 };
 
-jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
-
-
 /*
 | Calculates the labels zone,
 | possibly altered by an action.
 |
 | FUTURE inherit
 */
-visual_label.zone =
+def.static.zone =
+def.lazy.zone =
 	function( )
 {
 	return(
@@ -701,7 +444,198 @@ visual_label.zone =
 };
 
 
-jion.lazyValue( prototype, 'zone', visual_label.zone );
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
-} )( );
+/*
+| Reacts on clicks.
+*/
+// FIXME
+def.func.click = NODE || visual_docItem.click;
+
+
+/*
+| Reacts on ctrl-clicks.
+*/
+// FIXME
+def.func.ctrlClick = NODE || visual_item.ctrlClick;
+
+
+/*
+| A create relation action moves.
+*/
+// FIXME
+def.func.createRelationMove = NODE || visual_item.createRelationMove;
+
+
+/*
+| A create relation action stops.
+*/
+// FIXME
+def.func.createRelationStop = NODE || visual_item.createRelationStop;
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+// FIXME
+def.func.dragStart = NODE || visual_docItem.dragStart;
+
+
+/*
+| The fontsize of the label.
+*/
+// FIXME
+def.static.fontsize =
+def.lazy.fontsize =
+	function( )
+{
+	const action = this.action;
+
+	let fs = this.fabric.fontsize;
+
+	if( action && action.reflect === 'action_resizeItems' )
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( action.scaleX !== action.scaleY ) throw new Error( );
+/**/	}
+
+		fs *= action.scaleY;
+
+		fs = Math.max( fs, gruga_label.minSize );
+	}
+
+	return fs;
+};
+
+
+/*
+| Returns the change for dragging this item.
+*/
+// FIXME
+def.func.getDragItemChange = NODE || visual_item.getDragItemChangePosFs;
+
+
+/*
+| Returns the change for resizing this item.
+*/
+// FIXME
+def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangePosFs;
+
+
+/*
+| A text has been inputed.
+*/
+// FIXME
+def.func.input = NODE || visual_docItem.input;
+
+
+/*
+| Returns the mark for a point
+// FIXME
+*/
+def.func.markForPoint = NODE || visual_docItem.markForPoint;
+
+
+/*
+| Nofication when the item lost the users mark.
+*/
+def.func.markLost =
+	function( )
+{
+	if( this.doc.fabric.isBlank )
+	{
+		const pc = this.path.chop;
+
+		root.alter(
+			change_shrink.create(
+				'path', pc,
+				'prev', root.spaceFabric.getPath( pc ),
+				'rank', root.spaceFabric.rankOf( pc.get( 1 ) )
+			)
+		);
+	}
+};
+
+
+/*
+| Returns the minimum x-scale factor this item could go through.
+*/
+// FIXME
+def.static.minScaleX =
+def.func.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minScaleY( zone );
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+// FIXME
+def.static.minScaleY =
+def.func.minScaleY =
+	function(
+		// zone  // original zone
+	)
+{
+	return gruga_label.minSize / this.fabric.fontsize;
+};
+
+
+/*
+| The mouse wheel turned.
+*/
+def.func.mousewheel =
+	function(
+		// p
+		// dir
+	)
+{
+	//return this.tShape.within( p );
+	// the label lets wheel events pass through it.
+	return false;
+};
+
+
+/*
+| A move during a text select on this item.
+*/
+// FIXME
+def.func.moveSelect = NODE || visual_docItem.moveSelect;
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+// FIXME
+def.func.pointingHover = NODE || visual_docItem.pointingHover;
+
+
+/*
+| Labels use pos/fontsize for positioning
+*/
+def.static.positioning =
+def.func.positioning =
+	'pos/fontsize';
+
+
+/*
+| Handles a special key.
+*/
+def.func.specialKey = NODE || visual_docItem.specialKey;
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+def.func.scrollMarkIntoView = function( ){ };
+
+
+} );

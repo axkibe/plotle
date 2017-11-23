@@ -723,7 +723,7 @@ if( FREEZE ) Object.freeze( _keyMap );
 /*
 | Backspace pressed.
 */
-def.func_keyBackspace =
+def.func._keyBackspace =
 	function(
 		doc,
 		at

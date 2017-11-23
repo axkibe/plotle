@@ -1,65 +1,10 @@
 /*
 | Relates two items (including other relations).
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_relation',
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'visual_item.concernsAction( action, path )'
-			},
-			fabric :
-			{
-				comment : 'the relations fabric',
-				type : 'fabric_relation'
-			},
-			highlight :
-			{
-				comment : 'the item is highlighted',
-				type : 'boolean'
-			},
-			hover :
-			{
-				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				assign : ''
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'visual_item.concernsMark( mark, path )',
-				type :
-					require( './mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'the path of the doc',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			transform :
-			{
-				comment : 'the current space transform',
-				type : 'gleam_transform'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	gleam_arrow,
 	gleam_glint_list,
@@ -68,53 +13,75 @@ var
 	gleam_point,
 	gruga_label,
 	gruga_relation,
-	jion,
-	root,
 	visual_docItem,
 	visual_item,
-	visual_label,
-	visual_relation;
+	visual_label;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'visual_relation', ( def, visual_relation ) => {
 
 
-var
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-/*
-| Node includes.
-*/
-if( NODE )
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'visual_item.concernsAction( action, path )'
+		},
+		fabric :
+		{
+			// the relations fabric
+			type : 'fabric_relation'
+		},
+		highlight :
+		{
+			// the item is highlighted
+			type : 'boolean'
+		},
+		hover :
+		{
+			// node currently hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			assign : ''
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'visual_item.concernsMark( mark, path )',
+			type :
+				require( './mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// the path of the doc
+			type : [ 'undefined', 'jion$path' ]
+		},
+		transform :
+		{
+			// the current space transform
+			type : 'gleam_transform'
+		}
+	};
 
-	visual_relation = jion.this( module, 'source' );
-
-	visual_relation.prototype._init = function( ) { };
-
-	return;
+	def.init = [ ];
 }
-
-
-prototype = visual_relation.prototype;
-
-
-/*
-| Relations resize proportional only.
-*/
-prototype.proportional = true;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 	visual_label.prototype._init.call( this );
@@ -123,46 +90,121 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | The attention center.
 */
-jion.lazyValue( prototype, 'attentionCenter', visual_docItem.attentionCenter );
-
-
-/*
-| Reacts on clicks.
-*/
-prototype.click = visual_docItem.click;
-
-
-/*
-| Reacts on ctrl-clicks.
-*/
-prototype.ctrlClick = visual_item.ctrlClick;
-
-
-/*
-| A create relation action moves.
-*/
-prototype.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-prototype.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-prototype.dragStart = visual_docItem.dragStart;
+// FIXME
+def.lazy.attentionCenter = NODE || visual_docItem.attentionCenter;
 
 
 /*
 | Fontsize of the relations label.
 */
-jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
+// FIXME
+def.lazy.fontsize = NODE || visual_label.fontsize;
+
+
+/*
+| The key of this item.
+*/
+def.lazy.key =
+	function( )
+{
+	return this.path.get( -1 );
+};
+
+
+/*
+| The labels position possibly altered by an action.
+*/
+// FIXME
+def.lazy.pos = NODE ||  visual_label.pos;
+
+
+/*
+| The item's shape.
+*/
+def.lazy.shape =
+	function( )
+{
+	return this.zone.shrink1;
+};
+
+
+/*
+| The relations shape for current transform.
+*/
+// FIXME
+def.lazy.tShape = NODE || visual_label.tShape;
+
+
+/*
+| The relations zone for current transform.
+*/
+// FIXME
+def.lazy.tZone = NODE || visual_label.tZone;
+
+
+/*
+| The relations zone.
+*/
+def.lazy.zone = NODE || visual_label.zone;
+
+// FIXME
+def.lazy._zoneHeight = NODE || visual_label._zoneHeight;
+
+def.lazy._zoneWidth = NODE || visual_label._zoneWidth;
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Relations resize proportional only.
+*/
+def.func.proportional = true;
+
+
+/*
+| Reacts on clicks.
+*/
+// FIXME
+def.func.click = NODE || visual_docItem.click;
+
+
+/*
+| Reacts on ctrl-clicks.
+*/
+// FIXME
+def.func.ctrlClick = NODE || visual_item.ctrlClick;
+
+
+/*
+| A create relation action moves.
+*/
+// FIXME
+def.func.createRelationMove = NODE || visual_item.createRelationMove;
+
+
+/*
+| A create relation action stops.
+*/
+// FIXME
+def.func.createRelationStop = NODE || visual_item.createRelationStop;
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+// FIXME
+def.func.dragStart = NODE || visual_docItem.dragStart;
 
 
 /*
@@ -173,242 +215,176 @@ jion.lazyValue( prototype, 'fontsize', visual_label.fontsize );
 | points to is moved the arrows are moved
 | too.
 */
-Object.defineProperty(
-	prototype,
-	'glint',
+def.func.glint =
+	function( )
 {
-	get:
-		function( )
+	const cache = this._cache;
+
+	const item1 = root.spaceVisual.get( this.fabric.item1key );
+
+	const item2 = root.spaceVisual.get( this.fabric.item2key );
+
+	let shape1, shape2;
+
+	if( item1 ) shape1 = item1.shape;
+
+	if( item2 ) shape2 = item2.shape;
+
+	const cg = cache.glint;
+
+	if( cg )
 	{
-		var
-			arr,
-			arrShape,
-			cache,
-			cg,
-			conShape,
-			facet,
-			item1,
-			item2,
-			len,
-			shape1,
-			shape2,
-			tZone,
-			wg;
+		const arrShape = cache.arrShape;
 
-		cache = this._cache;
+		const conShape = cache.conShape;
 
-		item1 = root.spaceVisual.get( this.fabric.item1key );
-
-		item2 = root.spaceVisual.get( this.fabric.item2key );
-
-		if( item1 ) shape1 = item1.shape;
-
-		if( item2 ) shape2 = item2.shape;
-
-		cg = cache.glint;
-
-		if( cg )
-		{
-			arrShape = cache.arrShape;
-
-			conShape = cache.conShape;
-
-			if(
-				(
-					( !conShape && !shape1 )
-					|| ( conShape && conShape.equals( shape1 ) )
-				)
-				&& (
-					( !arrShape && !shape2 )
-					|| ( arrShape && arrShape.equals( shape2 ) )
-				)
+		if(
+			(
+				( !conShape && !shape1 )
+				|| ( conShape && conShape.equals( shape1 ) )
 			)
-			{
-				return cg;
-			}
-		}
-
-		tZone = this.tZone;
-
-		wg =
-			gleam_glint_window.create(
-				'glint', this.doc.glint,
-				'rect', tZone.enlarge1,
-				'offset', gleam_point.zero
-			);
-
-		arr = [ wg ];
-
-		len = 1;
-
-		if( this.highlight )
+			&& (
+				( !arrShape && !shape2 )
+				|| ( arrShape && arrShape.equals( shape2 ) )
+			)
+		)
 		{
-			facet = gruga_label.facets.getFacet( 'highlight', true );
-
-			arr[ len++ ] =
-				gleam_glint_paint.create(
-					'facet', facet,
-					'shape', this.tShape
-				);
+			return cg;
 		}
-
-		if( shape1 ) arr[ len++ ] = this._getConnectionGlint( shape1 );
-
-		if( shape2 ) arr[ len++ ] = this._getArrowGlint( shape2 );
-
-		return ( cache.glint = gleam_glint_list.create( 'list:init', arr ) );
 	}
-}
-);
+
+	const tZone = this.tZone;
+
+	const wg =
+		gleam_glint_window.create(
+			'glint', this.doc.glint,
+			'rect', tZone.enlarge1,
+			'offset', gleam_point.zero
+		);
+
+	const arr = [ wg ];
+
+	if( this.highlight )
+	{
+		const facet = gruga_label.facets.getFacet( 'highlight', true );
+
+		arr.push(
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this.tShape
+			)
+		);
+	}
+
+	if( shape1 ) arr.push( this._getConnectionGlint( shape1 ) );
+
+	if( shape2 ) arr.push( this._getArrowGlint( shape2 ) );
+
+	return( cache.glint = gleam_glint_list.create( 'list:init', arr ) );
+};
 
 
 /*
 | A text has been inputed.
 */
-prototype.input = visual_docItem.input;
+// FIXME
+def.func.input = NODE || visual_docItem.input;
 
 
 /*
 | Returns the change for dragging this item.
 */
-prototype.getDragItemChange = visual_item.getDragItemChangePosFs;
+// FIXME
+def.func.getDragItemChange = NODE || visual_item.getDragItemChangePosFs;
 
 
 /*
 | Returns the change for resizing this item.
 */
-prototype.getResizeItemChange = visual_item.getResizeItemChangePosFs;
-
-
-/*
-| The key of this item.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
+// FIXME
+def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangePosFs;
 
 
 /*
 | Returns the mark for a point
 */
-prototype.markForPoint = visual_docItem.markForPoint;
+// FIXME
+def.func.markForPoint = NODE || visual_docItem.markForPoint;
 
 
 /*
 | Mouse wheel turned.
 */
-prototype.mousewheel = visual_label.prototype.mousewheel;
-
-
-/*
-| The labels position possibly altered by an action.
-*/
-jion.lazyValue( prototype, 'pos', visual_label.pos );
+// FIXME
+def.func.mousewheel = NODE || visual_label.prototype.mousewheel;
 
 
 /*
 | User is hovering their pointing device over something.
 */
-prototype.pointingHover = visual_docItem.pointingHover;
+// FIXME
+def.func.pointingHover = NODE || visual_docItem.pointingHover;
 
 
 /*
 | Relations use pos/fontsize for positioning
 */
-prototype.positioning = 'pos/fontsize';
-
-
-/*
-| The item's shape.
-*/
-jion.lazyValue(
-	prototype,
-	'shape',
-	function( )
-{
-	return this.zone.shrink1;
-}
-);
+def.func.positioning = 'pos/fontsize';
 
 
 /*
 | Handles a special key.
 */
-prototype.specialKey = visual_docItem.specialKey;
+// FIXME
+def.func.specialKey = NODE || visual_docItem.specialKey;
 
 
 /*
 | Nofication when the item lost the users mark.
 */
-prototype.markLost = visual_label.prototype.markLost;
+// FIXME
+def.func.markLost = NODE || visual_label.prototype.markLost;
 
 
 /*
 | Returns the minimum scale factor this item could go through.
 */
-prototype.minScaleX = visual_label.minScaleX;
+// FIXME
+def.func.minScaleX = NODE || visual_label.minScaleX;
 
-prototype.minScaleY = visual_label.minScaleY;
+def.func.minScaleY = NODE || visual_label.minScaleY;
 
 
 /*
 | A move during a text select on this item.
 */
-prototype.moveSelect = visual_docItem.moveSelect;
+// FIXME
+def.func.moveSelect = NODE || visual_docItem.moveSelect;
 
 
 /*
 | Dummy since a relation does not scroll.
 */
-prototype.scrollMarkIntoView = function( ){ };
-
-
-/*
-| The relations shape for current transform.
-*/
-jion.lazyValue( prototype, 'tShape', visual_label.tShape );
-
-
-/*
-| The relations zone for current transform.
-*/
-jion.lazyValue( prototype, 'tZone', visual_label.tZone );
-
-
-/*
-| The relations zone.
-*/
-jion.lazyValue( prototype, 'zone', visual_label.zone );
-
+def.func.scrollMarkIntoView = function( ){ };
 
 /*
 | Returns the glint of a connection to a shape.
 */
-prototype._getConnectionGlint =
+def.func._getConnectionGlint =
 	function(
 		shape
 	)
 {
-	var
-		cache,
-		conGlint,
-		conShape;
+	const cache = this._cache;
 
-	cache = this._cache;
-
-	conShape = cache.conShape;
+	const conShape = cache.conShape;
 
 	if( conShape && conShape.equals( shape ) )
 	{
 		return cache.conGlint;
 	}
 
-	conGlint =
+	const conGlint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
@@ -432,26 +408,21 @@ prototype._getConnectionGlint =
 /*
 | Returns the glint of an arrow to a shape.
 */
-prototype._getArrowGlint =
+def.func._getArrowGlint =
 	function(
 		shape
 	)
 {
-	var
-		arrShape,
-		arrGlint,
-		cache;
+	const cache = this._cache;
 
-	cache = this._cache;
-
-	arrShape = cache.arrShape;
+	const arrShape = cache.arrShape;
 
 	if( arrShape && arrShape.equals( shape ) )
 	{
 		return cache.arrGlint;
 	}
 
-	arrGlint =
+	const arrGlint =
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
@@ -472,11 +443,5 @@ prototype._getArrowGlint =
 };
 
 
-jion.lazyValue( prototype, '_zoneHeight', visual_label._zoneHeight );
-
-
-jion.lazyValue( prototype, '_zoneWidth', visual_label._zoneWidth );
-
-
-} )( );
+} );
 

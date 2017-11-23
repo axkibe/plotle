@@ -445,7 +445,11 @@ jion.lazyValue(
 	{
 		s = this.atRank( r );
 
-		arr[ len++ ] = s.glint;
+		let g = s.glint;
+
+		if( typeof( g ) === 'function' ) g = g.call( s );
+
+		arr[ len++ ] = g;
 	}
 
 	frame = this.frame;

@@ -893,12 +893,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/label.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/note.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -908,7 +908,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/relation.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

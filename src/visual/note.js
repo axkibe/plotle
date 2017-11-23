@@ -3,78 +3,10 @@
 |
 | Potentionally has a scrollbar.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_note',
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'visual_item.concernsAction( action, path )'
-			},
-			fabric :
-			{
-				comment : 'the notes fabric',
-				type : 'fabric_note'
-			},
-			highlight :
-			{
-				comment : 'the item is highlighted',
-				type : 'boolean'
-			},
-			hover :
-			{
-				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				assign : ''
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'visual_item.concernsMark( mark, path )',
-				type :
-					require( './mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'the path of the note',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			scrollPos :
-			{
-				comment : 'scroll position',
-				type : [ 'undefined', 'gleam_point' ]
-				// is force defined in _init
-			},
-			transform :
-			{
-				comment : 'the current space transform',
-				type : 'gleam_transform'
-			}
-		},
-		init : [ 'inherit' ],
-		alike :
-		{
-			alikeIgnoringTransform :
-			{
-				ignores : { 'transform' : true }
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	change_grow,
 	fabric_doc,
@@ -91,88 +23,164 @@ var
 	gleam_roundRect,
 	gleam_transform,
 	gruga_note,
-	jion,
-	root,
 	session_uid,
 	shell_settings,
 	visual_doc,
 	visual_docItem,
 	visual_item,
 	visual_mark_caret,
-	visual_note,
 	widget_scrollbar;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'visual_note', ( def, visual_note ) => {
 
 
-var
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-/*
-| Node.
-*/
-if( NODE )
+if( TIM )
 {
-	visual_note = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'visual_item.concernsAction( action, path )'
+		},
+		fabric :
+		{
+			// the notes fabric
+			type : 'fabric_note'
+		},
+		highlight :
+		{
+			// the item is highlighted
+			type : 'boolean'
+		},
+		hover :
+		{
+			// node currently hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			assign : ''
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'visual_item.concernsMark( mark, path )',
+			type :
+				require( './mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// the path of the note
+			type : [ 'undefined', 'jion$path' ]
+		},
+		scrollPos :
+		{
+			// scroll position
+			type : [ 'undefined', 'gleam_point' ]
+			// is force defined in _init
+		},
+		transform :
+		{
+			// the current space transform
+			type : 'gleam_transform'
+		}
+	};
 
-	visual_note.prototype._init = function( ) { };
+	def.init = [ 'inherit' ];
 
-	return;
+	def.alike =
+	{
+		alikeIgnoringTransform :
+		{
+			ignores : { 'transform' : true }
+		}
+	};
 }
 
-visual_note.reflect = 'visual_note:static';
 
-prototype = visual_note.prototype;
-
+// FIXME?
+//visual_note.reflect = 'visual_note:static';
 
 /*
 | Hack to fix visual_note:static references.
 */
-visual_note.equals =
-	function( o )
+// FIXME?
+//visual_note.equals =
+//	function( o )
+//{
+//	return o === this;
+//};
+
+
+/*::::::::::::::::::::::.
+:: Static (lazy) values
+':::::::::::::::::::::::*/
+
+
+/*
+| The note model.
+*/
+def.staticLazy.model =
+	function( )
 {
-	return o === this;
+	return(
+		visual_note.create(
+			'fabric',
+				fabric_note.create(
+					'fontsize', gruga_note.defaultFontsize,
+					'zone', gleam_rect.zero,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1', fabric_para.create( 'text', '' )
+						)
+				),
+			'highlight', false,
+			'transform', gleam_transform.normal
+		)
+	);
 };
 
 
 /*
 | Notes do not need to be resized proportionally.
 */
-prototype.proportional = false;
+def.static.proportional = false;
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | User wants to create a new note.
 */
-visual_note.createGeneric =
+def.static.createGeneric =
 	function(
 		action, // the create action
 		dp      // the detransform point the createGeneric
 		//      // stoped at.
 	)
 {
-	var
-		key,
-		note,
-		zone;
+	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	zone = gleam_rect.createArbitrary( action.startPoint, dp );
+	const note = action.transItem.fabric.create( 'zone', zone );
 
-	note = action.transItem.fabric.create( 'zone', zone );
-
-	key = session_uid( );
+	const key = session_uid( );
 
 	root.alter(
 		change_grow.create(
 			'val', note,
 			'path',
-				jion.path.empty
+				tim.path.empty
 				.append( 'twig' )
 				.append( key ),
 			'rank', 0
@@ -193,54 +201,234 @@ visual_note.createGeneric =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
-| The note model.
+| The attention center.
 */
-jion.lazyStaticValue(
-	visual_note,
-	'model',
+// FIXME
+def.lazy.attentionCenter = NODE || visual_docItem.attentionCenter;
+
+
+/*
+| Forwards fabric settings.
+*/
+def.lazy.fontsize =
 	function( )
 {
+	return this.fabric.fontsize;
+};
+
+
+/*
+| The item's glint.
+*/
+def.lazy.glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._glint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_note.facets.getFacet( 'highlight', true );
+
+		arr.push(
+			gleam_glint_paint.create(
+				'facet', facet,
+				'shape', this.tShape
+			)
+		);
+	}
+
+	const sbary = this.scrollbarY;
+
+	if( sbary ) arr.push( sbary.glint );
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The key of this item.
+*/
+def.lazy.key =
+	function( )
+{
+	return this.path.get( -1 );
+};
+
+
+/*
+| The notes shape
+*/
+def.lazy.shape =
+	function( )
+{
+	const zone = this.zone;
+
+	const cr = gruga_note.cornerRadius;
+
 	return(
-		visual_note.create(
-			'fabric',
-				fabric_note.create(
-					'fontsize', gruga_note.defaultFontsize,
-					'zone', gleam_rect.zero,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1', fabric_para.create( 'text', '' )
-						)
-				),
-			'highlight', false,
-			'transform', gleam_transform.normal
+		gleam_roundRect.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
 		)
 	);
-}
-);
+};
+
+
+/*
+| The transformed shape.
+*/
+def.lazy.tShape =
+	function( )
+{
+	return this.shape.transform( this.transform );
+};
+
+
+/*
+| Zone in current transform.
+*/
+def.lazy.tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
+};
+
+
+/*
+| The items zone possibly altered by action.
+*/
+def.lazy.zone =
+	function( )
+{
+	const action = this.action;
+
+	let zone;
+
+	switch( action && action.reflect )
+	{
+		case 'action_dragItems' :
+
+			const moveBy = action.moveBy;
+
+			zone = this.fabric.zone;
+
+			return(
+				moveBy
+				? zone.add( moveBy )
+				: zone
+			);
+
+		case 'action_resizeItems' :
+
+			const pBase = action.pBase;
+
+			zone = action.startZones.get( this.path.get( 2 ) );
+
+			if( !pBase ) return zone;
+
+			zone = zone.baseScale( action, 0, 0 );
+
+			if( zone.height < this.minHeight || zone.width < this.minWidth )
+			{
+				zone =
+					zone.create(
+						'width', Math.max( zone.width, this.minWidth ),
+						'height', Math.max( zone.height, this.minHeight )
+					);
+			}
+
+			return zone;
+
+		default :
+
+			return this.fabric.zone;
+	}
+};
+
+
+/*
+| The notes shape anchored at zero.
+*/
+def.lazy._zeroShape =
+	function( )
+{
+	const zone = this.zone;
+
+	const cr = gruga_note.cornerRadius;
+
+	return(
+		gleam_roundRect.create(
+			'pos', gleam_point.zero,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
+		)
+	);
+};
+
+
+/*
+| The notes inner glint.
+*/
+def.lazy._glint =
+	function( )
+{
+	const doc = this.doc;
+
+	const facet = gruga_note.facets.getFacet( );
+
+	const tOrthoShape = this._zeroShape.transform( this.transform.ortho );
+
+	return(
+		gleam_glint_list.create(
+			'list:init',
+			[
+				gleam_glint_fill.create( 'facet', facet, 'shape', tOrthoShape ),
+				gleam_glint_mask.create( 'glint', doc.glint, 'shape', tOrthoShape ),
+				gleam_glint_border.create( 'facet', facet, 'shape', tOrthoShape )
+			]
+		)
+	);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
 {
-	var
-		aperture,
-		doc,
-		dHeight,
-		fabric,
-		path,
-		zone;
+	const fabric = this.fabric;
 
-	fabric = this.fabric;
+	const path = this.path;
 
-	path = this.path;
-
-	zone = this.zone;
+	const zone = this.zone;
 
 	if( this.scrollPos === undefined )
 	{
@@ -255,7 +443,7 @@ prototype._init =
 			);
 	}
 
-	doc =
+	let doc =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
@@ -271,9 +459,9 @@ prototype._init =
 			'transform', this.transform
 		);
 
-	dHeight = doc.fullsize.height;
+	const dHeight = doc.fullsize.height;
 
-	aperture = this.zone.height - gruga_note.innerMargin.y;
+	const aperture = this.zone.height - gruga_note.innerMargin.y;
 
 	if( dHeight > aperture )
 	{
@@ -309,186 +497,116 @@ prototype._init =
 		inherit
 		&& inherit.alikeIgnoringTransform( this )
 		&& inherit.transform.zoom === this.transform.zoom
-		&& jion.hasLazyValueSet( inherit, '_glint' )
+		&& tim.hasLazyValueSet( inherit, '_glint' )
 	)
 	{
-		jion.aheadValue( this, '_glint', inherit._glint );
+		tim.aheadValue( this, '_glint', inherit._glint );
 	}
 };
 
 
 /*
-| The attention center.
-*/
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
-	visual_docItem.attentionCenter
-);
-
-
-/*
 | Reacts on clicks.
 */
-prototype.click = visual_docItem.click;
+// FIXME
+def.func.click = NODE || visual_docItem.click;
 
 
 /*
 | Reacts on ctrl-clicks.
 */
-prototype.ctrlClick = visual_item.ctrlClick;
+// FIXME
+def.func.ctrlClick = NODE || visual_item.ctrlClick;
 
 
 /*
 | A create relation action moves.
 */
-prototype.createRelationMove = visual_item.createRelationMove;
+// FIXME
+def.func.createRelationMove = NODE || visual_item.createRelationMove;
 
 
 /*
 | A create relation action stops.
 */
-prototype.createRelationStop = visual_item.createRelationStop;
+// FIXME
+def.func.createRelationStop = NODE || visual_item.createRelationStop;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-prototype.dragStart = visual_docItem.dragStart;
-
-
-/*
-| Forwards fabric settings.
-*/
-jion.lazyValue(
-	prototype,
-	'fontsize',
-function( )
-{
-	return this.fabric.fontsize;
-}
-);
+// FIXME
+def.func.dragStart = NODE || visual_docItem.dragStart;
 
 
 /*
 | A text has been inputed.
 */
-prototype.input = visual_docItem.input;
+// FIXME
+def.func.input = NODE || visual_docItem.input;
 
 
 /*
 | Returns the change for dragging this item.
 */
-prototype.getDragItemChange = visual_item.getDragItemChangeZone;
+// FIXME
+def.func.getDragItemChange = NODE || visual_item.getDragItemChangeZone;
 
 
 /*
 | Returns the change for resizing this item.
 */
-prototype.getResizeItemChange = visual_item.getResizeItemChangeZone;
-
-
-/*
-| The item's glint.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var
-		arr,
-		facet,
-		sbary,
-		tZone;
-
-	sbary = this.scrollbarY;
-
-	tZone = this.tZone;
-
-	arr =
-		[
-			gleam_glint_window.create(
-				'glint', this._glint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		facet = gruga_note.facets.getFacet( 'highlight', true );
-
-		arr.push(
-			gleam_glint_paint.create(
-				'facet', facet,
-				'shape', this.tShape
-			)
-		);
-	}
-
-	if( sbary ) arr.push( sbary.glint );
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The key of this item.
-*/
-jion.lazyValue(
-	prototype,
-	'key',
-	function( )
-{
-	return this.path.get( -1 );
-}
-);
+// FIXME
+def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangeZone;
 
 
 /*
 | User is hovering their pointing device over something.
 */
-prototype.pointingHover = visual_docItem.pointingHover;
+// FIXME
+def.func.pointingHover = NODE || visual_docItem.pointingHover;
 
 
 /*
 | Notes use zone for positioning
 */
-visual_note.positioning =
-prototype.positioning =
+def.static.positioning =
+def.func.positioning =
 	'zone';
 
 
 /*
 | Nofication when the item lost the users mark.
 */
-prototype.markLost = function( ){ };
+def.func.markLost = function( ){ };
 
 
 /*
 | Returns the mark for a point
 */
-prototype.markForPoint = visual_docItem.markForPoint;
+// FIXME
+def.func.markForPoint = NODE || visual_docItem.markForPoint;
 
 
 /*
 | Minimum height.
 */
-prototype.minHeight = gruga_note.minHeight;
+// FIXME
+def.func.minHeight = NODE || gruga_note.minHeight;
 
 
 /*
 | Minimum width.
 */
-prototype.minWidth = gruga_note.minWidth;
+// FIXME
+def.func.minWidth = NODE || gruga_note.minWidth;
 
 
 /*
 | Mouse wheel turned.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
 		p,
 		dir
@@ -514,57 +632,45 @@ prototype.mousewheel =
 /*
 | A move during a text select on this item.
 */
-prototype.moveSelect = visual_docItem.moveSelect;
+// FIXME
+def.func.moveSelect = NODE || visual_docItem.moveSelect;
 
 
 /*
 | Scrolls the note so the caret comes into view.
 */
-prototype.scrollMarkIntoView =
+def.func.scrollMarkIntoView =
 	function( )
 {
-	var
-		descend,
-		imargin,
-		fs,
-		mark,
-		n,
-		p,
-		para,
-		ppos,
-		s,
-		sy,
-		zone;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( !mark || !mark.hasCaret ) return;
 
-	sy = this.scrollPos.y;
+	const sy = this.scrollPos.y;
 
 	// FUTURE, more elegant path getting
-	para = this.doc.get( mark.caret.path.get( 5 ) );
+	const para = this.doc.get( mark.caret.path.get( 5 ) );
 
 /**/if( CHECK )
 /**/{
 /**/	if( para.reflect !== 'visual_para' ) throw new Error( );
 /**/}
 
-	zone = this.zone;
+	const zone = this.zone;
 
-	imargin = this.doc.innerMargin;
+	const imargin = this.doc.innerMargin;
 
-	fs = this.doc.font.size;
+	const fs = this.doc.font.size;
 
-	descend = fs * shell_settings.bottombox;
+	const descend = fs * shell_settings.bottombox;
 
-	p = para.locateOffsetPoint( mark.caret.at );
+	const p = para.locateOffsetPoint( mark.caret.at );
 
-	ppos = para.pos;
+	const ppos = para.pos;
 
-	s = ppos.y + p.y + descend + imargin.s;
+	const s = ppos.y + p.y + descend + imargin.s;
 
-	n = ppos.y + p.y - fs - imargin.n;
+	const n = ppos.y + p.y - fs - imargin.n;
 
 	if( n < 0 )
 	{
@@ -588,44 +694,16 @@ prototype.scrollMarkIntoView =
 
 
 /*
-| The notes shape
-*/
-jion.lazyValue(
-	prototype,
-	'shape',
-	function( )
-{
-	var
-		zone,
-		cr;
-
-	zone = this.zone;
-
-	cr = gruga_note.cornerRadius;
-
-	return(
-		gleam_roundRect.create(
-			'pos', zone.pos,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
-}
-);
-
-
-/*
 | Handles a special key.
 */
-prototype.specialKey = visual_docItem.specialKey;
+// FIXME
+def.func.specialKey = NODE || visual_docItem.specialKey;
 
 
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-prototype.minScaleX =
+def.func.minScaleX =
 	function(
 		zone  // original zone
 	)
@@ -637,7 +715,7 @@ prototype.minScaleX =
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-prototype.minScaleY =
+def.func.minScaleY =
 	function(
 		zone  // original zone
 	)
@@ -646,154 +724,5 @@ prototype.minScaleY =
 };
 
 
-/*
-| The transformed shape.
-*/
-jion.lazyValue(
-	prototype,
-	'tShape',
-function( )
-{
-	return this.shape.transform( this.transform );
-}
-);
 
-
-/*
-| Zone in current transform.
-*/
-jion.lazyValue(
-	prototype,
-	'tZone',
-function( )
-{
-	return this.zone.transform( this.transform );
-}
-);
-
-
-/*
-| The items zone possibly altered by action.
-*/
-jion.lazyValue(
-	prototype,
-	'zone',
-function( )
-{
-	var
-		action,
-		moveBy,
-		pBase,
-		zone;
-
-	action = this.action;
-
-	switch( action && action.reflect )
-	{
-		case 'action_dragItems' :
-
-			moveBy = action.moveBy;
-
-			zone = this.fabric.zone;
-
-			return(
-				moveBy
-				? zone.add( moveBy )
-				: zone
-			);
-
-		case 'action_resizeItems' :
-
-			pBase = action.pBase;
-
-			zone = action.startZones.get( this.path.get( 2 ) );
-
-			if( !pBase ) return zone;
-
-			zone = zone.baseScale( action, 0, 0 );
-
-			if( zone.height < this.minHeight || zone.width < this.minWidth )
-			{
-				zone =
-					zone.create(
-						'width', Math.max( zone.width, this.minWidth ),
-						'height', Math.max( zone.height, this.minHeight )
-					);
-			}
-
-			return zone;
-
-		default :
-
-			return this.fabric.zone;
-	}
-}
-);
-
-
-/*
-| The notes shape anchored at zero.
-*/
-jion.lazyValue(
-	prototype,
-	'_zeroShape',
-	function( )
-{
-	var
-		zone,
-		cr;
-
-	zone = this.zone;
-
-	cr = gruga_note.cornerRadius;
-
-	return(
-		gleam_roundRect.create(
-			'pos', gleam_point.zero,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
-}
-);
-
-
-/*
-| The notes inner glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glint',
-	function( )
-{
-	var
-		doc,
-		facet,
-		tOrthoShape,
-		tZone;
-
-	doc = this.doc;
-
-	tZone = this.tZone;
-
-	facet = gruga_note.facets.getFacet( );
-
-	tOrthoShape = this._zeroShape.transform( this.transform.ortho );
-
-	return(
-		gleam_glint_list.create(
-			'list:init',
-			[
-				gleam_glint_fill.create( 'facet', facet, 'shape', tOrthoShape ),
-				gleam_glint_mask.create( 'glint', doc.glint, 'shape', tOrthoShape ),
-				gleam_glint_border.create( 'facet', facet, 'shape', tOrthoShape )
-			]
-		)
-	);
-}
-);
-
-
-} )( );
+} );
