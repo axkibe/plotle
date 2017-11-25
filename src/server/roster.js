@@ -888,7 +888,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/space.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -903,7 +903,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/portal.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -923,27 +923,27 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/visual/mark/text.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/mark/caret.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/mark/items.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/mark/range.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/mark/widget.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

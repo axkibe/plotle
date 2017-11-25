@@ -1,70 +1,52 @@
 /*
 | One or several items marked ( without caret or range )
 */
+'use strict';
+
+// FIXME
+var
+	change_mark_node;
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+tim.define( module, 'visual_mark_items', ( def, visual_mark_items ) => {
 
 
 /*
 | The jion definition.
 */
-if( JION )
+if( TIM )
 {
-	throw{
-		id : 'visual_mark_items',
-		attributes :
+	def.attributes =
+	{
+		itemPaths :
 		{
-			itemPaths :
-			{
-				comment : 'paths of the items',
-				type : 'jion$pathList'
-			}
-		},
-		init : [ ]
+			// paths of the items
+			type : 'jion$pathList'
+		}
 	};
+
+
+	def.init = [ ];
 }
-
-
-var
-	change_mark_node,
-	jion,
-	visual_mark_items;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	visual_mark_items = jion.this( module, 'source' );
-}
-
-
-prototype = visual_mark_items.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 
 /**/if( CHECK )
 /**/{
-/**/	var c, cZ, paths;
+/**/	const paths = this.itemPaths;
 /**/
-/**/	paths = this.itemPaths;
-/**/
-/**/	for( c = 0, cZ = paths.length; c < cZ; c++ )
+/**/	for( let c = 0, cZ = paths.length; c < cZ; c++ )
 /**/	{
 /**/		if( paths.get( c ).isEmpty ) throw new Error( );
 /**/
@@ -75,41 +57,43 @@ prototype._init =
 
 
 /*
+| The change engine's nodemark.
+*/
+def.lazyFuncInt._changeMarkNode =
+	function( i )
+{
+	return change_mark_node.create( 'path', this.itemPaths.get( i ).chop );
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
 | Recreates this mark with a change set applied.
 */
-prototype.createTransformed =
+def.func.createTransformed =
 	function(
 		changes
 	)
 {
-	var
-		a,
-		arr,
-		arrZ,
-		aZ,
-		path,
-		paths,
-		tm;
+	const paths = this.itemPaths;
 
-	paths = this.itemPaths;
+	const arr = [ ];
 
-	arr = [ ];
-
-	arrZ = 0;
-
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
-		path = paths.get( a );
-
-		tm = changes.transform( this._changeMarkNode( a ) );
+		const tm = changes.transform( this._changeMarkNode( a ) );
 
 		if( tm )
 		{
-			arr[ arrZ++ ] = tm.path.prepend( 'spaceVisual' );
+			arr.push( tm.path.prepend( 'spaceVisual' ) );
 		}
 	}
 
-	if( arrZ === 0 ) return undefined;
+	if( arr.length === 0 ) return undefined;
 
 	return(
 		this.create(
@@ -120,28 +104,15 @@ prototype.createTransformed =
 
 
 /*
-| The change engine's nodemark.
-*/
-jion.lazyFunctionInteger(
-	prototype,
-	'_changeMarkNode',
-	function( i )
-{
-	return change_mark_node.create( 'path', this.itemPaths.get( i ).chop );
-}
-);
-
-
-/*
 | Item marks do not have a caret.
 */
-prototype.hasCaret = false;
+def.func.hasCaret = false;
 
 
 /*
 | The widget's path.
 */
-prototype.widgetPath = undefined;
+def.func.widgetPath = undefined;
 
 
 /*
@@ -149,31 +120,26 @@ prototype.widgetPath = undefined;
 |
 | FUTURE write something
 */
-prototype.clipboard = '';
+def.func.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-prototype.containsPath =
+def.func.containsPath =
 	function(
 		path
 	)
 {
-	var
-		a,
-		aZ,
-		paths;
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
-	paths = this.itemPaths;
+	const paths = this.itemPaths;
 
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
 		if( path.subPathOf( paths.get( a ) ) ) return true;
 	}
@@ -187,24 +153,19 @@ prototype.containsPath =
 | when it isn't part of this mark, or the
 | path removed when it is.
 */
-prototype.togglePath =
+def.func.togglePath =
 	function(
 		path
 	)
 {
-	var
-		a,
-		aZ,
-		paths;
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.empty ) throw new Error( );
 /**/}
 
-	paths = this.itemPaths;
+	const paths = this.itemPaths;
 
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
 		if( path.subPathOf( paths.get( a ) ) )
 		{
@@ -230,24 +191,19 @@ prototype.togglePath =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-prototype.containsPath =
+def.func.containsPath =
 	function(
 		path
 	)
 {
-	var
-		a,
-		aZ,
-		paths;
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.empty ) throw new Error( );
 /**/}
 
-	paths = this.itemPaths;
+	const paths = this.itemPaths;
 
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
 		if( path.subPathOf( paths.get( a ) ) ) return true;
 	}
@@ -255,4 +211,5 @@ prototype.containsPath =
 	return false;
 };
 
-} )( );
+
+} );

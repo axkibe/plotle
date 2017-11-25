@@ -1,88 +1,82 @@
 /*
 | A change on a skid for database storage.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'database_changeSkid', ( def, database_changeSkid ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'database_changeSkid',
-		attributes :
+	def.attributes =
+	{
+		_id :
 		{
-			_id :
-			{
-				comment : 'sequence number',
-				json : true,
-				type : 'number',
-			},
-			cid :
-			{
-				comment : 'change id',
-				json : true,
-				type : 'string'
-			},
-			changeList :
-			{
-				comment : 'change list',
-				json : true,
-				type : 'change_list'
-			},
-			user :
-			{
-				comment : 'the user that issued the change',
-				json : true,
-				type : 'string'
-			},
-			date :
-			{
-				comment : 'the date the change was issued',
-				json : true,
-				type : 'integer'
-			}
+			// sequence number
+			type : 'number',
+			json : true,
+		},
+		cid :
+		{
+			// change id
+			type : 'string',
+			json : true,
+		},
+		changeList :
+		{
+			// change list
+			type : 'change_list',
+			json : true,
+		},
+		user :
+		{
+			// the user that issued the change
+			type : 'string',
+			json : true,
+		},
+		date :
+		{
+			// the date the change was issued
+			type : 'integer',
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
+/*:::::::::.
+:: Imports
+'::::::::::*/
 
 
-var
-	change_wrap,
-	changeSkid,
-	jion;
+const change_wrap = require( '../change/wrap' );
 
-jion = require( 'jion' );
 
-changeSkid = jion.this( module );
-
-change_wrap = require( '../change/wrap' );
+/*:::::::::::::::::::.
+:: Static functions
+'::::::::::::::::::::*/
 
 
 /*
 | Creates a changeSkid from a changeWrap.
 */
-changeSkid.createFromChangeWrap =
+def.static.createFromChangeWrap =
 	function(
 		changeWrap, // the change wrap to turn into a skid
 		user,       // the user that sent the changeWrap
 		seq         // if undefined assign this seq to changeWrap.
 	)
 {
-	var
-		cs;
-
 	if( !changeWrap.changeList ) return;
 
-	cs =
-		changeSkid.create(
+	const cs =
+		database_changeSkid.create(
 			'_id', seq === undefined ? changeWrap.seq : seq,
 			'cid', changeWrap.cid,
 			'changeList', changeWrap.changeList,
@@ -90,18 +84,21 @@ changeSkid.createFromChangeWrap =
 			'date', Date.now( )
 		);
 
-	jion.aheadValue( cs, 'asChangeWrap', changeWrap );
+	tim.aheadValue( cs, 'asChangeWrap', changeWrap );
 
 	return cs;
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | Transforms the change skid to a change wrap.
 */
-jion.lazyValue(
-	changeSkid.prototype,
-	'asChangeWrap',
+def.lazy.asChangeWrap =
 	function( )
 {
 	return(
@@ -111,15 +108,19 @@ jion.lazyValue(
 			'seq', this._id
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns a changy thing
 | transformed on this changeSkid
 */
-changeSkid.prototype.transform =
+def.func.transform =
 	function(
 		cyt // a changy thing ( change, changeList, changeWrap, etc. )
 	)
@@ -129,9 +130,9 @@ changeSkid.prototype.transform =
 
 
 /*
-| changes a data tree.
+| Changes a data tree.
 */
-changeSkid.prototype.changeTree =
+def.func.changeTree =
 	function(
 		tree
 	)
@@ -140,4 +141,4 @@ changeSkid.prototype.changeTree =
 };
 
 
-}( ) );
+} );

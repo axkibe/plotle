@@ -1,96 +1,73 @@
 /*
 | A single widget marked ( without caret or range )
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'visual_widget', ( def, visual_widget ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'visual_mark_widget',
-		attributes :
+	def.attributes =
+	{
+		path :
 		{
-			path :
-			{
-				comment : 'path of the item',
-				type : 'jion$path'
-			}
+			// path of the item
+			type : 'jion$path'
 		}
 	};
 }
 
 
-var
-	jion,
-	visual_mark_widget;
-
-
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	visual_mark_widget = jion.this( module, 'source' );
-}
-
-
-var
-	prototype;
-
-prototype = visual_mark_widget.prototype;
-
-
-/*
-| Widget marks have no carets.
-*/
-prototype.hasCaret = false;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | A widget has no item paths.
 */
-jion.lazyValue(
-	prototype,
-	'paths',
-	function( )
-{
-	return;
-}
-);
+def.lazy.paths = () => undefined;
 
 
 /*
 | The widget's path.
 */
-jion.lazyValue(
-	prototype,
-	'widgetPath',
+def.lazy.widgetPath =
 	function( )
 {
 	return this.path;
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Widget marks have no carets.
+*/
+def.func.hasCaret = false;
 
 
 /*
 | The content the mark puts into the clipboard.
 */
-prototype.clipboard = '';
+def.func.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-prototype.containsPath =
+def.func.containsPath =
 	function(
 		path
 	)
@@ -98,14 +75,11 @@ prototype.containsPath =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.length === 0 ) throw new Error( );
 /**/}
 
 	return path.subPathOf( this.path );
 };
 
 
-} )( );
+} );

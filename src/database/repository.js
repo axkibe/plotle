@@ -2,185 +2,61 @@
 | Ideoloom connector using the mongodb driver
 | to access an ideoloom repository.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'database_repository', ( def, database_repository ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'database_repository',
-		attributes :
+	def.attributes =
+	{
+		_connection :
 		{
-			'_connection' :
-			{
-				comment : 'the mongoDB connection',
-				type : 'protean'
-			},
-			'users' :
-			{
-				comment : 'the users collection',
-				type : 'protean'
-			},
-			'spaces' :
-			{
-				comment : 'the spaces collection',
-				type : 'protean'
-			}
+			// the mongoDB connection
+			type : 'protean'
+		},
+		users :
+		{
+			// the users collection
+			type : 'protean'
+		},
+		spaces :
+		{
+			// the spaces collection
+			type : 'protean'
 		}
 	};
 }
 
 
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
+/*:::::::::.
+:: Imports
+'::::::::::*/
 
 
-var
-	checkRepository,
-	database_repository,
-	ref_space,
-	initRepository,
-	mongodb,
-	resume;
+const ref_space = require( '../ref/space' );
 
-database_repository = require( 'jion' ).this( module );
+const mongodb = require( 'mongodb' );
 
-mongodb = require( 'mongodb' );
-
-resume = require( 'suspend' ).resume;
-
-ref_space = require( '../ref/space' );
-
-/*
-| Returns a repository object with
-| an active connection.
-*/
-database_repository.connect =
-	function*(
-		config
-	)
-{
-	var
-		connection,
-		connector,
-		server,
-		spaces,
-		users;
-
-	console.log(
-		'start',
-		'connecting to database',
-		config.database_host + ':' + config.database_port,
-		config.database_name
-	);
-
-	server =
-		new mongodb.Server(
-			config.database_host,
-			config.database_port,
-			{ }
-		);
-
-	connector =
-		new mongodb.Db(
-			config.database_name,
-			server,
-			{ w : 1 }
-		);
-
-	connection = yield connector.open( resume( ) );
-
-	users = yield connection.collection( 'users', resume( ) );
-
-	spaces = yield connection.collection( 'spaces', resume( ) );
-
-	// checking repo version:
-
-	yield* checkRepository( connection, config );
-
-	return(
-		database_repository.create(
-			'_connection', connection,
-			'users', users,
-			'spaces', spaces
-		)
-	);
-};
+const resume = require( 'suspend' ).resume;
 
 
-/*
-| Returns a collection.
-|
-| FUTURE let it return a jion.
-*/
-database_repository.prototype.collection =
-	function*(
-		name
-	)
-{
-	return yield this._connection.collection( name, resume( ) );
-};
-
-
-/*
-| Closes the connection.
-*/
-database_repository.prototype.close =
-	function( )
-{
-	this._connection.close( );
-};
-
-
-/*
-| Ensures the repository schema version fits this server.
-*/
-checkRepository =
-	function*(
-		connection,
-		config
-	)
-{
-	var
-		global,
-		version;
-
-	console.log( 'start', 'checking repository schema version' );
-
-	global = yield connection.collection( 'global', resume( ) ),
-
-	version = yield global.findOne( { _id : 'version' }, resume( ) );
-
-	if( version )
-	{
-		if( version.version !== config.database_version )
-		{
-			throw new Error(
-				'Wrong repository schema version, expected '
-				+ config.database_version +
-				', but got ' +
-				version.version
-			);
-		}
-	}
-	else
-	{
-		// otherwise initializes the database repository
-
-		yield* initRepository( connection, config );
-	}
-};
+/*:::::::::::::::::::.
+:: Static functions
+'::::::::::::::::::::*/
 
 
 /*
 | Initializes a new repository.
 */
-initRepository =
+const initRepository =
 	function*(
 		connection,
 		config
@@ -240,4 +116,119 @@ initRepository =
 };
 
 
-} )( );
+/*
+| Ensures the repository schema version fits this server.
+*/
+const checkRepository =
+	function*(
+		connection,
+		config
+	)
+{
+	console.log( 'start', 'checking repository schema version' );
+
+	const global = yield connection.collection( 'global', resume( ) );
+
+	const version = yield global.findOne( { _id : 'version' }, resume( ) );
+
+	if( version )
+	{
+		if( version.version !== config.database_version )
+		{
+			throw new Error(
+				'Wrong repository schema version, expected '
+				+ config.database_version +
+				', but got ' +
+				version.version
+			);
+		}
+	}
+	else
+	{
+		// otherwise initializes the database repository
+
+		yield* initRepository( connection, config );
+	}
+};
+
+
+/*
+| Returns a repository object with
+| an active connection.
+*/
+def.static.connect =
+	function*(
+		config
+	)
+{
+	console.log(
+		'start',
+		'connecting to database',
+		config.database_host + ':' + config.database_port,
+		config.database_name
+	);
+
+	const server =
+		new mongodb.Server(
+			config.database_host,
+			config.database_port,
+			{ }
+		);
+
+	const connector =
+		new mongodb.Db(
+			config.database_name,
+			server,
+			{ w : 1 }
+		);
+
+	const connection = yield connector.open( resume( ) );
+
+	const users = yield connection.collection( 'users', resume( ) );
+
+	const spaces = yield connection.collection( 'spaces', resume( ) );
+
+	// checking repo version:
+
+	yield* checkRepository( connection, config );
+
+	return(
+		database_repository.create(
+			'_connection', connection,
+			'users', users,
+			'spaces', spaces
+		)
+	);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Returns a collection.
+|
+| FUTURE let it return a tim.
+*/
+def.func.collection =
+	function*(
+		name
+	)
+{
+	return yield this._connection.collection( name, resume( ) );
+};
+
+
+/*
+| Closes the connection.
+*/
+def.func.close =
+	function( )
+{
+	this._connection.close( );
+};
+
+
+} );

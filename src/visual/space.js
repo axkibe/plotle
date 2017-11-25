@@ -1,76 +1,10 @@
 /*
 | A space visualisation.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_space',
-		attributes :
-		{
-			access :
-			{
-				comment : 'rights the current user has for this space',
-				type : [ 'undefined', 'string' ]
-			},
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			fabric :
-			{
-				comment : 'space fabric data',
-				type : 'fabric_space'
-			},
-			hover :
-			{
-				comment : 'node currently hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'visual_space.concernsHover( hover )'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( './mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'visual_space.concernsMark( mark )'
-			},
-			ref :
-			{
-				comment : 'reference to this space',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			transform :
-			{
-				comment : 'the current transform of space',
-				type : 'gleam_transform'
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'inherit' ],
-		twig :
-		[
-			'visual_label',
-			'visual_note',
-			'visual_portal',
-			'visual_relation'
-		]
-	};
-}
-
-
+// FIXME
 var
 	action_createGeneric,
 	action_createRelation,
@@ -85,60 +19,144 @@ var
 	gruga_label,
 	gruga_relation,
 	gruga_select,
-	jion,
-	jion$path,
 	jion$pathList,
 	result_hover,
-	root,
 	visual_frame,
 	visual_itemList,
 	visual_label,
 	visual_mark_items,
 	visual_note,
 	visual_portal,
-	visual_relation,
-	visual_space;
+	visual_relation;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'visual_space', ( def, visual_space ) => {
 
 
-var
-	prototype,
-	spacePath;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-if( NODE )
+if( TIM )
 {
-	visual_space = require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		access :
+		{
+			// rights the current user has for this space
+			type : [ 'undefined', 'string' ]
+		},
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		fabric :
+		{
+			// space fabric data
+			type : 'fabric_space'
+		},
+		hover :
+		{
+			// node currently hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'visual_space.concernsHover( hover )'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( './mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'visual_space.concernsMark( mark )'
+		},
+		ref :
+		{
+			// reference to this space
+			type : [ 'undefined', 'ref_space' ]
+		},
+		transform :
+		{
+			// the current transform of space
+			type : 'gleam_transform'
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
 
-	visual_space.prototype._init = function( ){ };
+	def.init = [ 'inherit' ];
 
-	visual_space.concernsMark = function( o ){ return o; };
 
-	return;
+	def.twig =
+	[
+		'visual_label',
+		'visual_note',
+		'visual_portal',
+		'visual_relation'
+	];
 }
 
 
-prototype = visual_space.prototype;
 
-spacePath = jion.path.empty.append( 'spaceVisual' );
+
+/*::::::::::::::::::::::.
+:: Static (lazy) values
+':::::::::::::::::::::::*/
+/*
+| Path of the visual space.
+*/
+def.staticLazy.spacePath =
+	() => tim.path.empty.append( 'spaceVisual' );
+
+
+/*
+| The path for transientItems
+*/
+def.staticLazy.transPath =
+	() => tim.path.empty.append( 'spaceVisual' ).append( ':transient' );
+
+
+/*
+| Mapping of fabric item name to visual items.
+*/
+def.staticLazy.visualMap =
+	function( )
+{
+	const map =
+	{
+		'fabric_label' : visual_label,
+		'fabric_note' : visual_note,
+		'fabric_portal' : visual_portal,
+		'fabric_relation' : visual_relation
+	};
+
+	if( FREEZE ) Object.freeze( map );
+
+	return map;
+};
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Returns the mark if the space concerns about a mark.
 */
-visual_space.concernsMark =
+def.static.concernsMark =
 	function(
 		mark
 	)
 {
 	return(
-		( mark && mark.containsPath( spacePath ) )
+		( mark && mark.containsPath( visual_space.spacePath ) )
 		? mark
 		: undefined
 	);
@@ -148,7 +166,7 @@ visual_space.concernsMark =
 /*
 | Returns the hover path if the space concerns about a hover.
 */
-visual_space.concernsHover =
+def.static.concernsHover =
 	function(
 		hover
 	)
@@ -162,97 +180,40 @@ visual_space.concernsHover =
 
 
 /*
-| The path for transientItems
-*/
-jion.lazyStaticValue(
-	visual_space,
-	'transPath',
-	function( )
-{
-	return(
-		jion$path.create(
-			'list:init', [ 'spaceVisual', ':transient' ]
-		)
-	);
-}
-);
-
-
-/*
-| Mapping of fabric item name to visual items.
-*/
-jion.lazyStaticValue(
-	visual_space,
-	'visualMap',
-	function( )
-{
-	var
-		map;
-
-	map =
-	{
-		'fabric_label' : visual_label,
-		'fabric_note' : visual_note,
-		'fabric_portal' : visual_portal,
-		'fabric_relation' : visual_relation
-	};
-
-	if( FREEZE ) Object.freeze( map );
-
-	return map;
-}
-);
-
-
-/*
 | Initializer.
 |
 | FUTURE inherit optimizations.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
 {
-	var
-		a,
-		action,
-		aZ,
-		fabric,
-		highlight,
-		hover,
-		item,
-		iItem,
-		k,
-		mark,
-		path,
-		ranks,
-		transform,
-		twig;
+	const action = this.action;
 
-	action = this.action;
+	const fabric = this.fabric;
 
-	fabric = this.fabric;
+	const hover = this.hover;
 
-	hover = this.hover;
+	const mark = this.mark;
 
-	mark = this.mark;
+	const transform = this.transform;
 
-	transform = this.transform;
+	const twig = { };
 
-	twig = { };
+	const ranks = [ ];
 
-	ranks = [ ];
+	let path;
 
-	for( a = 0, aZ = fabric.length; a < aZ; a++ )
+	for( let a = 0, aZ = fabric.length; a < aZ; a++ )
 	{
-		k = fabric.getKey( a );
+		const k = fabric.getKey( a );
 
 		ranks[ a ] = k;
 
-		item = fabric.get( k );
+		const item = fabric.get( k );
 
-		iItem = this._twig[ k ];
+		let iItem = this._twig[ k ];
 
 		if( !iItem )
 		{
@@ -263,14 +224,14 @@ prototype._init =
 /**/			if( !iItem ) throw new Error( );
 /**/		}
 
-			path = spacePath.append( 'twig' ).appendNC( k );
+			path = visual_space.spacePath.append( 'twig' ).appendNC( k );
 		}
 		else
 		{
 			path = iItem.path;
 		}
 
-		highlight =
+		const highlight =
 			(
 				action
 				&& (
@@ -312,155 +273,112 @@ prototype._init =
 
 	this._twig = twig;
 
-	if( inherit && jion.hasLazyValueSet( inherit, 'frame' ) )
+	if( inherit && tim.hasLazyValueSet( inherit, 'frame' ) )
 	{
 		this._inheritFrame = inherit.frame;
 	}
 };
 
 
-/*
-| The disc is shown while a space is shown.
-*/
-prototype.showDisc = true;
-
-
-/*
-| Determines the focused item.
-*/
-jion.lazyValue(
-	prototype,
-	'focus',
-	function( )
-{
-	var
-		mark,
-		path,
-		paths;
-
-	mark = this.mark;
-
-	if( !mark ) return undefined;
-
-	paths = mark.itemPaths;
-
-	if( !paths || paths.length !== 1 ) return undefined;
-
-	path = paths.get( 0 );
-
-	if( path.length <= 2 ) return undefined; // FUTURE shouldn't be necessary
-
-	return this.get( path.get( 2 ) );
-}
-);
-
-
-/*
-| Determines the current alteration frame.
-*/
-jion.lazyValue(
-	prototype,
-	'frame',
-	function( )
-{
-	var
-		content,
-		mark;
-
-	mark = this.mark;
-
-	if( mark )
-	{
-		if( mark.itemPaths )
-		{
-			content = this.getList( mark.itemPaths );
-		}
-
-		if( content )
-		{
-			return(
-				( this._inheritFrame || visual_frame )
-				.create(
-					'content', content,
-					'transform', this.transform
-				)
-			);
-		}
-	}
-}
-);
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The attention center.
 */
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
+def.lazy.attentionCenter =
 	function( )
 {
-	var
-		focus;
+	const focus = this.focus;
 
-	focus = this.focus;
-
-	if( !focus ) return undefined;
+	if( !focus ) return;
 
 	return this.transform.y( focus.attentionCenter );
-}
-);
+};
+
+
+/*
+| Determines the focused item.
+*/
+def.lazy.focus =
+	function( )
+{
+	const mark = this.mark;
+
+	if( !mark ) return undefined;
+
+	const paths = mark.itemPaths;
+
+	if( !paths || paths.length !== 1 ) return undefined;
+
+	const path = paths.get( 0 );
+
+	if( path.length <= 2 ) return undefined; // FUTURE shouldn't be necessary
+
+	return this.get( path.get( 2 ) );
+};
+
+
+/*
+| The current alteration frame.
+*/
+def.lazy.frame =
+	function( )
+{
+	const mark = this.mark;
+
+	if( !mark ) return;
+
+	if( !mark.itemPaths ) return;
+
+	const content = this.getList( mark.itemPaths );
+
+	if( !content ) return;
+
+	return(
+		( this._inheritFrame || visual_frame )
+		.create(
+			'content', content,
+			'transform', this.transform
+		)
+	);
+};
 
 
 /*
 | Return the space glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
-	var
-		action,
-		arr,
-		arrow,
-		frame,
-		fromItem,
-		fromJoint,
-		len,
-		r,
-		s,
-		toItem,
-		toJoint,
-		transform;
+	const action = this.action;
 
-	action = this.action;
+	const transform = this.transform;
 
-	transform = this.transform;
+	const arr = [ ];
 
-	arr = [ ];
-
-	len = 0;
-
-	for( r = this.length - 1; r >= 0; r-- )
+	for( let r = this.length - 1; r >= 0; r-- )
 	{
-		s = this.atRank( r );
+		const s = this.atRank( r );
 
 		let g = s.glint;
 
 		if( typeof( g ) === 'function' ) g = g.call( s );
 
-		arr[ len++ ] = g;
+		arr.push( g );
 	}
 
-	frame = this.frame;
+	const frame = this.frame;
 
-	if( frame ) arr[ len++ ] = frame.glint;
+	if( frame ) arr.push( frame.glint );
 
 	switch( action && action.reflect )
 	{
 		case 'action_createGeneric' :
 
-			if( action.startPoint ) arr[ len++ ] = action.transItem.glint;
+			if( action.startPoint ) arr.push( action.transItem.glint );
 
 			break;
 
@@ -468,14 +386,16 @@ jion.lazyValue(
 
 			if( action.fromItemPath )
 			{
-				fromItem = this.get( action.fromItemPath.get( -1 ) );
+				const fromItem = this.get( action.fromItemPath.get( -1 ) );
+
+				let toItem, toJoint;
 
 				if( action.toItemPath )
 				{
 					toItem = this.get( action.toItemPath.get( -1 ) );
 				}
 
-				fromJoint = fromItem.shape;
+				const fromJoint = fromItem.shape;
 
 				if(
 					action.toItemPath
@@ -493,7 +413,7 @@ jion.lazyValue(
 
 				if( toJoint )
 				{
-					arrow =
+					const arrow =
 						gleam_arrow.create(
 							'joint1', fromJoint,
 							'joint2', toJoint,
@@ -501,11 +421,12 @@ jion.lazyValue(
 							'end2', 'arrow'
 						);
 
-					arr[ len++ ] =
+					arr.push(
 						gleam_glint_paint.create(
 							'facet', gruga_relation.facet,
 							'shape', arrow.shape.transform( transform )
-						);
+						)
+					);
 				}
 			}
 
@@ -515,36 +436,40 @@ jion.lazyValue(
 
 			if( action.zone )
 			{
-				arr[ len++ ] =
+				arr.push(
 					gleam_glint_paint.create(
 						'facet', gruga_select.facet,
 						'shape', action.zone.transform( transform )
-					);
+					)
+				);
 			}
 
 			break;
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| The disc is shown while a space is shown.
+*/
+def.func.showDisc = true;
 
 
 /*
 | Returns a list of visual items by a list of paths.
 */
-prototype.getList =
+def.func.getList =
 	function(
 		paths
 	)
 {
-	var
-		a,
-		aZ,
-		path,
-		items,
-		iZ;
-
 /**/if( CHECK )
 /**/{
 /**/	if( paths.reflect === 'jion$pathList' ) throw new Error( );
@@ -552,13 +477,11 @@ prototype.getList =
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
 
-	items = [ ];
+	const items = [ ];
 
-	iZ = 0;
-
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
-		path = paths.get( a );
+		const path = paths.get( a );
 
 /**/	if( CHECK )
 /**/	{
@@ -567,7 +490,7 @@ prototype.getList =
 /**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
 /**/	}
 
-		items[ iZ++ ] = this.get( path.get( 2 ) );
+		items.push( this.get( path.get( 2 ) ) );
 	}
 
 	return visual_itemList.create( 'list:init', items );
@@ -577,7 +500,7 @@ prototype.getList =
 /*
 | Mouse wheel.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
 		p,     // cursor point
 		dir,   // wheel direction, >0 for down, <0 for up
@@ -585,14 +508,9 @@ prototype.mousewheel =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		item,
-		r,
-		rZ;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		item = this.atRank( r );
+		const item = this.atRank( r );
 
 		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
 	}
@@ -608,30 +526,18 @@ prototype.mousewheel =
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
-		p         // cursor point
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		a,
-		action,
-		aType,
-		aZ,
-		item,
-		focus,
-		frame,
-		result;
+	const action = this.action;
 
-	action = this.action;
+	const frame = this.frame;
 
-	focus = this.focus;
-
-	frame = this.frame;
-
-	aType = action && action.reflect;
+	const aType = action && action.reflect;
 
 	switch( aType )
 	{
@@ -639,9 +545,9 @@ prototype.pointingHover =
 
 			if( action.relationState === 'start' )
 			{
-				for( a = 0, aZ = this.length; a < aZ; a++ )
+				for( let a = 0, aZ = this.length; a < aZ; a++ )
 				{
-					item = this.atRank( a );
+					const item = this.atRank( a );
 
 					if( item.tZone.within( p ) )
 					{
@@ -682,16 +588,14 @@ prototype.pointingHover =
 
 	if( frame && aType !== 'action_select' )
 	{
-		result = frame.pointingHover( p );
+		const result = frame.pointingHover( p );
 
 		if( result ) return result;
 	}
 
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRank( a );
-
-		result = item.pointingHover( p, action );
+		const result = this.atRank( a ).pointingHover( p, action );
 
 		if( result ) return result;
 	}
@@ -707,39 +611,25 @@ prototype.pointingHover =
 /*
 | Starts an operation with the pointing device held down.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		a,
-		access,
-		aType,
-		aZ,
-		action,
-		dp,
-		focus,
-		frame,
-		item,
-		transform;
+	const access = this.access;
 
-	access = this.access;
+	const frame = this.frame;
 
-	focus = this.focus;
-
-	frame = this.frame;
-
-	transform = this.transform;
+	const transform = this.transform;
 
 	// resizing
-	dp = p.detransform( transform );
+	const dp = p.detransform( transform );
 
-	action = this.action;
+	const action = this.action;
 
-	aType = action && action.reflect;
+	const aType = action && action.reflect;
 
 	// see if the frame was targeted
 	if( access == 'rw' && frame && aType !== 'action_select' )
@@ -755,9 +645,9 @@ prototype.dragStart =
 	}
 
 	// see if one item was targeted
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRank( a );
+		const item = this.atRank( a );
 
 		if( item.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
@@ -808,33 +698,25 @@ prototype.dragStart =
 /*
 | A click.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		a,
-		aZ,
-		access,
-		frame,
-		item,
-		mark;
+	const access = this.access;
 
-	access = this.access;
+	const mark = this.mark;
 
-	mark = this.mark;
-
-	frame = this.frame;
+	const frame = this.frame;
 
 	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
 
 	// clicked some item?
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		item = this.atRank( a );
+		const item = this.atRank( a );
 
 		if( ctrl )
 		{
@@ -857,30 +739,24 @@ prototype.click =
 /*
 | Stops an operation with the poiting device button held down.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		a,
-		action,
-		aZ,
-		changes,
-		chi,
-		paths,
-		item;
 
 /**/if( CHECK )
 /**/{
 /**/	if( root.spaceVisual !== this ) throw new Error( );
 /**/}
 
-	action = this.action;
+	const action = this.action;
 
 	if( !action ) return;
+
+	let changes, paths;
 
 	switch( action.reflect )
 	{
@@ -900,11 +776,11 @@ prototype.dragStop =
 
 			paths = action.itemPaths;
 
-			for( a = 0, aZ = paths.length; a < aZ; a++ )
+			for( let a = 0, aZ = paths.length; a < aZ; a++ )
 			{
-				item = root.getPath( paths.get( a ) );
+				const item = root.getPath( paths.get( a ) );
 
-				chi = item.getDragItemChange( );
+				const chi = item.getDragItemChange( );
 
 				if( !chi ) continue;
 
@@ -947,11 +823,11 @@ prototype.dragStop =
 
 			paths = action.itemPaths;
 
-			for( a = 0, aZ = paths.length; a < aZ; a++ )
+			for( let a = 0, aZ = paths.length; a < aZ; a++ )
 			{
-				item = root.getPath( paths.get( a ) );
+				const item = root.getPath( paths.get( a ) );
 
-				chi = item.getResizeItemChange( );
+				const chi = item.getResizeItemChange( );
 
 				if( !chi ) continue;
 
@@ -1008,17 +884,14 @@ prototype.dragStop =
 /*
 | Moving during an operation with the pointing device button held down.
 */
-prototype.dragMove =
+def.func.dragMove =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action;
-
-	action = this.action;
+	const action = this.action;
 
 	if( !action ) return 'pointer';
 
@@ -1074,23 +947,18 @@ prototype.dragMove =
 /*
 | Text input
 */
-prototype.input =
+def.func.input =
 	function(
 		text
 	)
 {
-	var
-		item,
-		mark,
-		path;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( !mark || !mark.hasCaret ) return false;
 
-	path = mark.caret.path;
+	const path = mark.caret.path;
 
-	item = this.get( path.get( 2 ) );
+	const item = this.get( path.get( 2 ) );
 
 	if( item ) item.input( text );
 };
@@ -1100,13 +968,10 @@ prototype.input =
 | Tries to scrolls the focused item to move
 | the mark into view.
 */
-prototype.scrollMarkIntoView =
+def.func.scrollMarkIntoView =
 	function( )
 {
-	var
-		focus;
-
-	focus =  this.focus;
+	const focus =  this.focus;
 
 	if( focus && focus.scrollMarkIntoView ) focus.scrollMarkIntoView( );
 };
@@ -1115,21 +980,13 @@ prototype.scrollMarkIntoView =
 /*
 | User pressed a special key.
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
 		key,   // key being pressed
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		item,
-		mark,
-		paths,
-		r,
-		rZ,
-		pZ;
-
 	if( ctrl )
 	{
 		switch( key )
@@ -1152,11 +1009,11 @@ prototype.specialKey =
 		}
 	}
 
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( mark && mark.hasCaret )
 	{
-		item = this.get( mark.caret.path.get( 2 ) );
+		const item = this.get( mark.caret.path.get( 2 ) );
 
 		if( item )
 		{
@@ -1174,20 +1031,16 @@ prototype.specialKey =
 
 				// selects all items in this space
 
-				paths = [ ];
+				let paths = [ ];
 
-				pZ = 0;
-
-				for( r = 0, rZ = this.length; r < rZ; r++ )
+				for( let r = 0, rZ = this.length; r < rZ; r++ )
 				{
-					paths[ pZ++ ] = this.atRank( r ).path;
+					paths.push( this.atRank( r ).path );
 				}
 
 				paths = jion$pathList.create( 'list:init', paths );
 
-				mark = visual_mark_items.create( 'itemPaths', paths );
-
-				root.create( 'mark', mark );
+				root.create( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
 
 				return true;
 		}
@@ -1200,38 +1053,27 @@ prototype.specialKey =
 /*
 | Moves during creating a generic item.
 */
-prototype._moveCreateGeneric =
+def.func._moveCreateGeneric =
 	function(
 		p         // point, viewbased point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		dp,
-		fs,
-		model,
-		pos,
-		resized,
-		transform,
-		transItem,
-		zone;
-
-	action = this.action;
+	const action = this.action;
 
 	// there isn't really a creation going on?
 	if( !action.startPoint ) return;
 
-	transform = this.transform;
+	const transform = this.transform;
 
-	dp = p.detransform( transform );
+	const dp = p.detransform( transform );
 
-	zone = gleam_rect.createArbitrary( action.startPoint, dp );
+	let zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	model = action.itemType.model;
+	const model = action.itemType.model;
 
-	transItem = action.transItem;
+	let transItem = action.transItem;
 
 	switch( action.itemType )
 	{
@@ -1250,7 +1092,7 @@ prototype._moveCreateGeneric =
 
 		case visual_label :
 
-			fs =
+			const fs =
 				Math.max(
 					model.doc.fontsize
 					* zone.height
@@ -1258,12 +1100,12 @@ prototype._moveCreateGeneric =
 					gruga_label.minSize
 				);
 
-			resized =
+			const resized =
 				transItem.create(
 					'fabric', model.fabric.create( 'fontsize', fs )
 				);
 
-			pos =
+			const pos =
 				( dp.x > action.startPoint.x )
 				? zone.pos
 				: gleam_point.create(
@@ -1291,29 +1133,22 @@ prototype._moveCreateGeneric =
 /*
 | Moves during creating a relation.
 */
-prototype._moveCreateRelation =
+def.func._moveCreateRelation =
 	function(
 		p         // point, viewbased point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		pd,
-		r,
-		rZ,
-		transform;
+	const action = this.action;
 
-	action = this.action;
-
-	transform = this.transform;
+	const transform = this.transform;
 
 	if( action.relationState === 'pan' )
 	{
 		// panning while creating a relation
 
-		pd = p.sub( action.startPoint );
+		const pd = p.sub( action.startPoint );
 
 		root.create(
 			'spaceTransform',
@@ -1326,7 +1161,7 @@ prototype._moveCreateRelation =
 	}
 
 	// Looks if the action is dragging to an item
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		if( this.atRank( r ).createRelationMove( p, action ) ) return;
 	}
@@ -1344,34 +1179,25 @@ prototype._moveCreateRelation =
 /*
 | Moves during creating.
 */
-prototype._moveCreate =
+def.func._moveCreate =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		pd,
-		transform;
+	const action = this.action;
 
-	action = this.action;
-
-	transform = this.transform;
+	const transform = this.transform;
 
 	if( action.offset )
 	{
 		// panning while creating a relation
 
-		pd = p.sub( action.startPoint );
+		const pd = p.sub( action.startPoint );
 
 		root.create(
-			'spaceTransform',
-				this.transform.create(
-					'offset',
-						action.offset.add( pd )
-				)
+			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
 		);
 	}
 };
@@ -1380,23 +1206,18 @@ prototype._moveCreate =
 /*
 | Moves during item dragging.
 */
-prototype._moveDragItems =
+def.func._moveDragItems =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		startPoint,
-		transform;
+	const action = this.action;
 
-	action = this.action;
+	const startPoint = action.startPoint;
 
-	startPoint = action.startPoint;
-
-	transform = this.transform;
+	const transform = this.transform;
 
 	root.create(
 		'action',
@@ -1414,43 +1235,26 @@ prototype._moveDragItems =
 /*
 | Moves during item resizing.
 */
-prototype._moveResizeItems =
+def.func._moveResizeItems =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		a,
-		action,
-		aZ,
-		dx,
-		dy,
-		item,
-		key,
-		path,
-		paths,
-		pBase,
-		startPoint,
-		min,
-		scaleX,
-		scaleY,
-		startZone,
-		startZones,
-		transform;
+	const action = this.action;
 
-	action = this.action;
+	const transform = this.transform;
 
-	transform = this.transform;
+	const pBase = action.pBase;
 
-	pBase = action.pBase;
+	const startPoint = action.startPoint;
 
-	startPoint = action.startPoint;
+	const dx = transform.dex( p.x );
 
-	dx = transform.dex( p.x );
+	const dy = transform.dey( p.y );
 
-	dy = transform.dey( p.y );
+	let scaleX, scaleY;
 
 	switch( action.resizeDir )
 	{
@@ -1509,21 +1313,21 @@ prototype._moveResizeItems =
 		if( scaleY === undefined ) scaleY = 1;
 	}
 
-	paths = action.itemPaths;
+	const paths = action.itemPaths;
 
-	startZones = action.startZones;
+	const startZones = action.startZones;
 
-	for( a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, aZ = paths.length; a < aZ; a++ )
 	{
-		path = paths.get( a );
+		const path = paths.get( a );
 
-		key = path.get( 2 );
+		const key = path.get( 2 );
 
-		item = this.get( path.get( 2 ) );
+		const item = this.get( path.get( 2 ) );
 
-		startZone = startZones.get( key );
+		const startZone = startZones.get( key );
 
-		min = item.minScaleX( startZone );
+		let min = item.minScaleX( startZone );
 
 		if( scaleX < min ) scaleX = min;
 
@@ -1534,18 +1338,12 @@ prototype._moveResizeItems =
 
 	if( action.proportional )
 	{
-		scaleX =
-		scaleY =
-			Math.max( scaleX, scaleY );
+		scaleX = scaleY = Math.max( scaleX, scaleY );
 	}
 
 
 	root.create(
-		'action',
-			action.create(
-				'scaleX', scaleX,
-				'scaleY', scaleY
-			)
+		'action', action.create( 'scaleX', scaleX, 'scaleY', scaleY )
 	);
 };
 
@@ -1553,23 +1351,18 @@ prototype._moveResizeItems =
 /*
 | Moves during panning.
 */
-prototype._movePan =
+def.func._movePan =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		pd,
-		transform;
+	const action = this.action;
 
-	action = this.action;
+	const transform = this.transform;
 
-	transform = this.transform;
-
-	pd = p.sub( action.startPoint );
+	const pd = p.sub( action.startPoint );
 
 	root.create(
 		'spaceTransform',
@@ -1583,31 +1376,24 @@ prototype._movePan =
 /*
 | Moves during selecting.
 */
-prototype._moveSelect =
+def.func._moveSelect =
 	function(
 		p         // point
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		item;
-
-	action = this.action;
+	const action = this.action;
 
 	if( action.itemPath )
 	{
-		item = this.get( action.itemPath.get( 2 ) );
+		const item = this.get( action.itemPath.get( 2 ) );
 
 		return item.moveSelect( p );
 	}
 
 	root.create(
-		'action',
-			action.create(
-				'toPoint', p.detransform( this.transform )
-			)
+		'action', action.create( 'toPoint', p.detransform( this.transform ) )
 	);
 };
 
@@ -1615,29 +1401,22 @@ prototype._moveSelect =
 /*
 | Moves during scrolling.
 */
-prototype._moveScrollY =
+def.func._moveScrollY =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		dy,
-		item,
-		sbary,
-		spos;
+	const action = this.action;
 
-	action = this.action;
+	const item = this.get( action.scrollPath.get( -1 ) );
 
-	item = this.get( action.scrollPath.get( -1 ) );
+	const dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
 
-	dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
+	const sbary = item.scrollbarY;
 
-	sbary = item.scrollbarY;
-
-	spos = action.startPos + sbary.scale( dy );
+	const spos = action.startPos + sbary.scale( dy );
 
 	root.setPath(
 		item.path.append( 'scrollPos' ),
@@ -1649,29 +1428,24 @@ prototype._moveScrollY =
 /*
 | Starts creating a generic item.
 */
-prototype._startCreateGeneric =
+def.func._startCreateGeneric =
 	function(
 		dp   // depoint, non-viewbased point of start
 	)
 {
-	var
-		action,
-		fabric,
-		itemType,
-		model,
-		transItem;
+	const action = this.action;
 
-	action = this.action;
+	const itemType = action.itemType;
 
-	itemType = action.itemType;
+	const model = itemType.model;
 
-	model = itemType.model;
+	let transItem;
 
 	switch( itemType.positioning )
 	{
 		case 'zone' :
 
-			fabric  =
+			let fabric  =
 				model.fabric.create(
 					'zone',
 						gleam_rect.create(
@@ -1715,11 +1489,7 @@ prototype._startCreateGeneric =
 	}
 
 	root.create(
-		'action',
-			action.create(
-				'startPoint', dp,
-				'transItem', transItem
-			)
+		'action', action.create( 'startPoint', dp, 'transItem', transItem )
 	);
 };
 
@@ -1727,17 +1497,14 @@ prototype._startCreateGeneric =
 /*
 | Stops creating a generic item.
 */
-prototype._stopCreateGeneric =
+def.func._stopCreateGeneric =
 	function(
 		p,     // point of stop
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action;
-
-	action = this.action;
+	const action = this.action;
 
 	if( !action.startPoint ) return;
 
@@ -1755,7 +1522,7 @@ prototype._stopCreateGeneric =
 /*
 | Stops creating.
 */
-prototype._stopCreate =
+def.func._stopCreate =
 	function(
 		// p      // point of stop
 		// shift, // true if shift key was pressed
@@ -1763,11 +1530,7 @@ prototype._stopCreate =
 	)
 {
 	root.create(
-		'action',
-			this.action.create(
-				'offset', undefined,
-				'startPoint', undefined
-			)
+		'action', this.action.create( 'offset', undefined, 'startPoint', undefined )
 	);
 };
 
@@ -1775,18 +1538,14 @@ prototype._stopCreate =
 /*
 | Stops creating a relation.
 */
-prototype._stopCreateRelation =
+def.func._stopCreateRelation =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		item;
-
-	action = this.action;
+	const action = this.action;
 
 	switch( action.relationState )
 	{
@@ -1794,7 +1553,7 @@ prototype._stopCreateRelation =
 
 			if( action.toItemPath )
 			{
-				item = this.get( action.toItemPath.get( -1 ) );
+				const item = this.get( action.toItemPath.get( -1 ) );
 
 				item.createRelationStop( p );
 			}
@@ -1831,24 +1590,14 @@ prototype._stopCreateRelation =
 /*
 | Stops selecting.
 */
-prototype._stopSelect =
+def.func._stopSelect =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		item,
-		mark,
-		path,
-		paths,
-		pZ,
-		r,
-		rZ;
-
-	action = this.action;
+	let action = this.action;
 
 /**/if( CHECK )
 /**/{
@@ -1857,20 +1606,15 @@ prototype._stopSelect =
 
 	action = action.create( 'toPoint', p.detransform( this.transform ) );
 
-	paths = [ ];
+	let paths = [ ];
 
-	pZ = 0;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		item = this.atRank( r );
+		const item = this.atRank( r );
 
-		path = item.path;
+		const path = item.path;
 
-		if( action.affects( path ) )
-		{
-			paths[ pZ++ ] = path;
-		}
+		if( action.affects( path ) ) paths.push( path );
 	}
 
 	action =
@@ -1878,11 +1622,9 @@ prototype._stopSelect =
 		? action_select.create( )
 		: undefined;
 
-	if( pZ === 0 )
-	{
-		mark = pass;
-	}
-	else
+	let mark = pass;
+
+	if( paths.length > 0 )
 	{
 		paths = jion$pathList.create( 'list:init', paths );
 
@@ -1906,5 +1648,5 @@ prototype._stopSelect =
 };
 
 
-} )( );
+} );
 

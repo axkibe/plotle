@@ -1,143 +1,74 @@
 /*
 | A text range.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	jion$pathList;
+
+
+tim.define( module, 'visual_mark_range', ( def, visual_mark_range ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'visual_mark_range',
-		attributes :
+	def.attributes =
+	{
+		beginMark :
 		{
-			beginMark :
-			{
-				comment : 'begin of the range',
-				type : 'visual_mark_text'
-			},
-			doc :
-			{
-				comment : 'the document the range belongs to',
-				type : 'fabric_doc'
-			},
-			endMark :
-			{
-				comment : 'end of the range',
-				type : 'visual_mark_text'
-			},
-			retainx :
-			{
-				comment : 'x-position of the caret kept',
-				type : [ 'undefined', 'number' ]
-			}
+			// begin of the range
+			type : 'visual_mark_text'
+		},
+		doc :
+		{
+			// the document the range belongs to
+			type : 'fabric_doc'
+		},
+		endMark :
+		{
+			// end of the range
+			type : 'visual_mark_text'
+		},
+		retainx :
+		{
+			// x-position of the caret kept
+			type : [ 'undefined', 'number' ]
 		}
 	};
 }
 
 
-var
-	jion,
-	jion$pathList,
-	visual_mark_range;
-
-
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	visual_mark_range = jion.this( module, 'source' );
-}
-
-
-prototype = visual_mark_range.prototype;
-
-
-/*
-| The beginMark or endMark
-| dependening on which comes first in the doc.
-*/
-jion.lazyValue(
-	prototype,
-	'frontMark',
-	function( )
-{
-	this._normalize( );
-
-	return this.frontMark;
-}
-);
-
-
-/*
-| The beginMark or endMark
-| dependening on which comes last in the doc.
-*/
-jion.lazyValue(
-	prototype,
-	'backMark',
-	function( )
-{
-	this._normalize( );
-
-	return this.backMark;
-}
-);
-
-
-/*
-| Ranges also have caret capabilities.
-|
-| The caretMark is identical to endMark.
-*/
-prototype.hasCaret = true;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | Returns the mark where the caret should show up.
 */
-jion.lazyValue(
-	prototype,
-	'caret',
+def.lazy.caret =
 	function( )
 {
 	return this.endMark;
-}
-);
+};
 
 
 /*
 | The doc path.
 */
-jion.lazyValue(
-	prototype,
-	'docPath',
+def.lazy.docPath =
 	function( )
 {
-	var
-		beginPath;
+	const beginPath = this.beginMark.path;
 
-	beginPath = this.beginMark.path;
-
-	if(
-		beginPath.length < 4
-		|| beginPath.get( 0 ) !== 'spaceVisual'
-	)
-	{
-		return;
-	}
+	if( beginPath.length < 4 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
 
 /**/if( CHECK )
 /**/{
@@ -145,36 +76,53 @@ jion.lazyValue(
 /**/}
 
 	return beginPath.limit( 4 );
-}
-);
+};
+
+
+/*
+| The beginMark or endMark
+| dependening on which comes first in the doc.
+*/
+def.lazy.frontMark =
+	function( )
+{
+	this._normalize( );
+
+	return this.frontMark;
+};
+
+
+/*
+| The beginMark or endMark
+| dependening on which comes last in the doc.
+*/
+def.lazy.backMark =
+	function( )
+{
+	this._normalize( );
+
+	return this.backMark;
+};
 
 
 /*
 | The common path this is the part that begin
 | and share in common
 */
-jion.lazyValue(
-	prototype,
-	'commonPath',
+def.lazy.commonPath =
 	function( )
 {
-	var
-		a,
-		bP,
-		bZ,
-		eP,
-		eZ,
-		mZ;
+	const bP = this.beginMark.path;
 
-	bP = this.beginMark.path;
+	const eP = this.endMark.path;
 
-	eP = this.endMark.path;
+	const bZ = bP.length;
 
-	bZ = bP.length;
+	const eZ = eP.length;
 
-	eZ = eP.length;
+	const mZ = Math.min( bZ, eZ );
 
-	mZ = Math.min( bZ, eZ );
+	let a;
 
 	for( a = 0; a < mZ; a++ )
 	{
@@ -182,8 +130,21 @@ jion.lazyValue(
 	}
 
 	return bP.limit( a );
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Ranges also have caret capabilities.
+|
+| The caretMark is identical to endMark.
+*/
+def.func.hasCaret = true;
+
 
 
 /*
@@ -191,73 +152,45 @@ jion.lazyValue(
 |
 | This is either undefined or an pathList of length === 1
 */
-jion.lazyValue(
-	prototype,
-	'itemPaths',
+def.lazy.itemPaths =
 	function( )
 {
-	var
-		beginPath;
+	const beginPath = this.beginMark.path;
 
-	beginPath = this.beginMark.path;
-
-	if(
-		beginPath.length < 3
-		|| beginPath.get( 0 ) !== 'spaceVisual'
-	)
-	{
-		return;
-	}
+	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
 
 	return jion$pathList.create( 'list:append', beginPath.limit( 3 ) );
-}
-);
+};
 
 
 /*
 | The content the mark puts into the clipboard.
 */
-jion.lazyValue(
-	prototype,
-	'clipboard',
+def.lazy.clipboard =
 	function( )
 {
-	var
-		backKey,
-		backMark,
-		backText,
-		buf,
-		doc,
-		frontKey,
-		frontMark,
-		frontText,
-		r, rZ,
-		text;
+	const frontMark = this.frontMark;
 
-	frontMark = this.frontMark;
+	const backMark = this.backMark;
 
-	backMark = this.backMark;
+	const doc = this.doc;
 
-	doc = this.doc;
+	const frontKey = frontMark.path.get( -2 );
 
-	frontKey = frontMark.path.get( -2 );
-
-	backKey = backMark.path.get( -2 );
+	const backKey = backMark.path.get( -2 );
 
 	if( frontMark.path.equals( backMark.path ) )
 	{
-		text = doc.get( frontKey ).text;
+		const text = doc.get( frontKey ).text;
 
-		return(
-			text.substring( frontMark.at, backMark.at )
-		);
+		return text.substring( frontMark.at, backMark.at );
 	}
 
-	frontText = doc.get( frontKey ).text;
+	const frontText = doc.get( frontKey ).text;
 
-	backText = doc.get( backKey ).text;
+	const backText = doc.get( backKey ).text;
 
-	buf =
+	const buf =
 	[
 		frontText.substring(
 			frontMark.at, frontText.length
@@ -265,7 +198,7 @@ jion.lazyValue(
 	];
 
 	for(
-		r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
+		let r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
 		r < rZ;
 		r++
 	)
@@ -276,34 +209,25 @@ jion.lazyValue(
 	buf.push( '\n', backText.substring( 0, backMark.at ) );
 
 	return buf.join( '' );
-}
-);
+};
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-prototype.containsPath =
+def.func.containsPath =
 	function(
 		path
 	)
 {
-	var
-		bp,
-		br,
-		doc,
-		dp,
-		fp,
-		fr,
-		r;
 
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
-	dp = this.docPath;
+	const dp = this.docPath;
 
 	if( path.length <= dp.length )
 	{
@@ -315,24 +239,21 @@ prototype.containsPath =
 		|| path.subPathOf( this.endMark.path )
 	) return true;
 
-	fp = this.frontMark.path;
+	const fp = this.frontMark.path;
 
-	bp = this.backMark.path;
+	const bp = this.backMark.path;
 
-	doc = this.doc;
+	const doc = this.doc;
 
-	fr = doc.rankOf( fp.get( -2 ) );
+	const fr = doc.rankOf( fp.get( -2 ) );
 
-	br = doc.rankOf( bp.get( -2 ) );
+	const br = doc.rankOf( bp.get( -2 ) );
 
 	// NOTE: this code is untested.
 
-	for( r = fr + 1; r < br; r++ )
+	for( let r = fr + 1; r < br; r++ )
 	{
-		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) )
-		{
-			return true;
-		}
+		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) ) return true;
 	}
 
 	return false;
@@ -343,15 +264,12 @@ prototype.containsPath =
 | Recreates this mark with a transformation
 | applied.
 */
-prototype.createTransformed =
+def.func.createTransformed =
 	function(
 		changes,
 		doc
 	)
 {
-	var
-		bm,
-		em;
 
 /**/if( CHECK )
 /**/{
@@ -360,11 +278,11 @@ prototype.createTransformed =
 
 	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
-	bm = this.beginMark.createTransformed( changes );
+	const bm = this.beginMark.createTransformed( changes );
 
 	if( bm === undefined ) return;
 
-	em = this.endMark.createTransformed( changes );
+	const em = this.endMark.createTransformed( changes );
 
 	if( em === undefined ) return;
 
@@ -382,81 +300,67 @@ prototype.createTransformed =
 /*
 | True if beginMark equals endMark
 */
-jion.lazyValue(
-	prototype,
-	'empty',
+def.lazy.empty =
 	function( )
 {
 	return this.beginMark.equals( this.endMark );
-}
-);
+};
 
 
 /*
 | Sets frontMark/backMark so frontMark is before backMark.
 */
-prototype._normalize =
+def.func._normalize =
 	function( )
 {
-	var
-		beginMark,
-		bk,
-		br,
-		endMark,
-		ek,
-		er;
+	const beginMark = this.beginMark;
 
-	beginMark = this.beginMark;
-
-	endMark = this.endMark;
+	const endMark = this.endMark;
 
 	if( beginMark.path.equals( endMark.path ) )
 	{
 		if( beginMark.at <= endMark.at )
 		{
-			jion.aheadValue( this, 'frontMark', beginMark );
+			tim.aheadValue( this, 'frontMark', beginMark );
 
-			jion.aheadValue( this, 'backMark', endMark );
+			tim.aheadValue( this, 'backMark', endMark );
 		}
 		else
 		{
-			jion.aheadValue( this, 'frontMark', endMark );
+			tim.aheadValue( this, 'frontMark', endMark );
 
-			jion.aheadValue( this, 'backMark', beginMark );
+			tim.aheadValue( this, 'backMark', beginMark );
 		}
 
 		return;
 	}
 
-	bk = beginMark.path.get( -2 );
+	const bk = beginMark.path.get( -2 );
 
-	ek = endMark.path.get( -2 );
+	const ek = endMark.path.get( -2 );
 
 /**/if( CHECK )
 /**/{
-/**/	if( bk === ek )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( bk === ek )	throw new Error( );
 /**/}
 
-	br = this.doc.rankOf( bk );
+	const br = this.doc.rankOf( bk );
 
-	er = this.doc.rankOf( ek );
+	const er = this.doc.rankOf( ek );
 
 	if( br < er )
 	{
-		jion.aheadValue( this, 'frontMark', beginMark );
+		tim.aheadValue( this, 'frontMark', beginMark );
 
-		jion.aheadValue( this, 'backMark', endMark );
+		tim.aheadValue( this, 'backMark', endMark );
 	}
 	else
 	{
-		jion.aheadValue( this, 'frontMark', endMark );
+		tim.aheadValue( this, 'frontMark', endMark );
 
-		jion.aheadValue( this, 'backMark', beginMark );
+		tim.aheadValue( this, 'backMark', beginMark );
 	}
 };
 
 
-})( );
+} );

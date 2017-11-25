@@ -1,90 +1,70 @@
 /*
 | The virtual caret.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_mark_caret',
-		attributes :
-		{
-			at :
-			{
-				comment : 'offset of the caret',
-				type : [ 'undefined', 'integer' ],
-				assign : ''
-			},
-			focus :
-			{
-				comment : 'the shell has the system focus',
-				type : 'boolean',
-				defaultValue : 'true'
-			},
-			path :
-			{
-				comment : 'path of the caret',
-				type : [ 'undefined', 'jion$path' ],
-				assign : ''
-			},
-			retainx :
-			{
-				comment : 'x-position of the caret kept',
-				type : [ 'undefined', 'number' ]
-			},
-			textMark :
-			{
-				comment : 'the text mark',
-				type : [ 'undefined', 'visual_mark_text' ]
-			}
-		},
-		init : [ 'path', 'at' ]
-	};
-}
-
-
-var
-	jion,
-	jion$pathList,
-	visual_mark_caret,
-	visual_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
+// FIXME
 var
-	prototype;
+	jion$pathList,
+	visual_mark_text;
 
 
-if( NODE )
+tim.define( module, 'visual_mark_caret', ( def, visual_mark_caret ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		at :
+		{
+			// offset of the caret
+			type : [ 'undefined', 'integer' ],
+			assign : ''
+		},
+		focus :
+		{
+			// the shell has the system focus
+			type : 'boolean',
+			defaultValue : 'true'
+		},
+		path :
+		{
+			// path of the caret
+			type : [ 'undefined', 'jion$path' ],
+			assign : ''
+		},
+		retainx :
+		{
+			// x-position of the caret kept
+			type : [ 'undefined', 'number' ]
+		},
+		textMark :
+		{
+			// the text mark
+			type : [ 'undefined', 'visual_mark_text' ]
+		}
+	};
 
-	visual_mark_caret = jion.this( module, 'source' );
+	def.init = [ 'path', 'at' ];
 }
-
-
-prototype = visual_mark_caret.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		path,
 		at
 	)
 {
-
 	if( path )
 	{
 		this.textMark =
@@ -96,34 +76,68 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | The textMark where the caret is.
 */
-jion.lazyValue(
-	prototype,
-	'caret',
+def.lazy.caret =
 	function( )
 {
 	return this.textMark;
-}
-);
+};
+
+
+/*
+| The item path.
+|
+| This is either undefined or an pathList of length === 1
+*/
+def.lazy.itemPaths =
+	function( )
+{
+	const path = this.textMark.path;
+
+	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
+
+	return jion$pathList.create( 'list:append', path.limit( 3 ) );
+};
+
+
+/*
+| The widget's path.
+*/
+def.lazy.widgetPath =
+	function( )
+{
+	const path = this.textMark.path;
+
+	if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
+
+	return path.limit( 5 );
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Recreates this mark with a transformation
 | applied.
 */
-prototype.createTransformed =
+def.func.createTransformed =
 	function(
 		changes
 	)
 {
-	var
-		tm;
-
 	if( this.textMark.path.get( 0 ) !== 'spaceVisual' ) return this;
 
-	tm = this.textMark.createTransformed( changes );
+	const tm = this.textMark.createTransformed( changes );
 
 	if( !tm ) return undefined;
 
@@ -137,44 +151,20 @@ prototype.createTransformed =
 | (the text range is the other mark
 |  which has this too )
 */
-prototype.hasCaret = true;
-
-
-/*
-| The item path.
-|
-| This is either undefined or an pathList of length === 1
-*/
-jion.lazyValue(
-	prototype,
-	'itemPaths',
-	function( )
-{
-	var
-		path;
-
-	path = this.textMark.path;
-
-	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
-
-	return(
-		jion$pathList.create( 'list:append', path.limit( 3 ) )
-	);
-}
-);
+def.func.hasCaret = true;
 
 
 /*
 | The content the mark puts into the clipboard.
 */
-prototype.clipboard = '';
+def.func.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-prototype.containsPath =
+def.func.containsPath =
 	function(
 		path
 	)
@@ -182,34 +172,11 @@ prototype.containsPath =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.length === 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
 	return path.subPathOf( this.textMark.path );
 };
 
 
-/*
-| The widget's path.
-*/
-jion.lazyValue(
-	prototype,
-	'widgetPath',
-	function( )
-{
-	var
-		path;
-
-	path = this.textMark.path;
-
-	if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
-
-	return path.limit( 5 );
-}
-);
-
-
-} )( );
+} );

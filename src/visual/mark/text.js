@@ -1,71 +1,52 @@
 /*
 | The visual text mark.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'visual_mark_text',
-		attributes :
-		{
-			at :
-			{
-				comment : 'offset of the caret',
-				type : 'integer'
-			},
-			path :
-			{
-				comment : 'path of the caret',
-				type : 'jion$path'
-			},
-			changeMarkText :
-			{
-				comment : 'the text mark',
-				type : [ 'undefined', 'change_mark_text' ],
-				assign : ''
-			}
-		},
-		init : [ 'changeMarkText' ]
-	};
-}
-
-
-var
-	jion,
-	visual_mark_text,
-	change_mark_text;
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
+// FIXME
 var
-	prototype;
+	change_mark_text;
 
 
-if( NODE )
+tim.define( module, 'visual_mark_text', ( def, visual_mark_text ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		at :
+		{
+			// offset of the caret
+			type : 'integer'
+		},
+		path :
+		{
+			// path of the caret
+			type : 'jion$path'
+		},
+		changeMarkText :
+		{
+			// the text mark
+			type : [ 'undefined', 'change_mark_text' ],
+			assign : ''
+		}
+	};
 
-	visual_mark_text = jion.this( module, 'source' );
+	def.init = [ 'changeMarkText' ];
 }
-
-
-prototype = visual_mark_text.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		changeMarkText  // mark for the change engine
 	)
@@ -77,7 +58,7 @@ prototype._init =
 
 		this.at = changeMarkText.at;
 
-		jion.aheadValue( this, 'changeMarkText', changeMarkText ); 
+		tim.aheadValue( this, 'changeMarkText', changeMarkText );
 	}
 
 /**/if( CHECK )
@@ -90,35 +71,15 @@ prototype._init =
 };
 
 
-/*
-| Recreates this mark with a transformation
-| applied.
-*/
-prototype.createTransformed =
-	function(
-		changes
-	)
-{
-	var
-		tm;
-
-	if( this.path.get( 0 ) !== 'spaceVisual' ) return this;
-
-	tm = changes.transform( this.changeMarkText );
-
-	if( !tm ) return undefined;
-
-	return this.create( 'changeMarkText', tm );
-};
-
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The change engine's textmark.
 */
-jion.lazyValue(
-	prototype,
-	'changeMarkText',
+def.lazy.changeMarkText =
 	function( )
 {
 	if( this.path.get( 0 ) !== 'spaceVisual' ) return;
@@ -129,8 +90,31 @@ jion.lazyValue(
 			'path', this.path.chop
 		)
 	);
-}
-);
+};
 
 
-} )( );
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Recreates this mark with a transformation
+| applied.
+*/
+def.func.createTransformed =
+	function(
+		changes
+	)
+{
+	if( this.path.get( 0 ) !== 'spaceVisual' ) return this;
+
+	const tm = changes.transform( this.changeMarkText );
+
+	if( !tm ) return undefined;
+
+	return this.create( 'changeMarkText', tm );
+};
+
+
+} );
