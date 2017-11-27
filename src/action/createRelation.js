@@ -1,83 +1,65 @@
 /*
 | A user is creating a new relation.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_createRelation', ( def, action_createRelation ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_createRelation',
-		attributes :
+	def.attributes =
+	{
+		fromItemPath :
 		{
-			fromItemPath :
-			{
-				comment : 'the item the relation goes from',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			offset :
-			{
-				comment : 'offset when panning during creation',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			toItemPath :
-			{
-				comment : 'the item the relation goes to',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			toPoint :
-			{
-				comment : 'the arrow destination while its floating',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			// FUTURE make a defined state list
-			relationState :
-			{
-				comment : 'the state of the relation creation',
-				type : 'string'
-			},
-			startPoint :
-			{
-				comment : 'mouse down point on drag creation',
-				type : [ 'undefined', 'gleam_point' ]
-			}
+			// the item the relation goes from
+			type : [ 'undefined', 'jion$path' ]
+		},
+		offset :
+		{
+			// offset when panning during creation
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		toItemPath :
+		{
+			// the item the relation goes to
+			type : [ 'undefined', 'jion$path' ]
+		},
+		toPoint :
+		{
+			// the arrow destination while its floating
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		// FUTURE make a defined state list
+		relationState :
+		{
+			// the state of the relation creation
+			type : 'string'
+		},
+		startPoint :
+		{
+			// mouse down point on drag creation
+			type : [ 'undefined', 'gleam_point' ]
 		}
 	};
 }
 
 
-var
-	action_createRelation;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_createRelation = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_createRelation.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		path
 	)
@@ -89,4 +71,4 @@ prototype.affects =
 };
 
 
-} )( );
+} );

@@ -5,72 +5,54 @@
 | Creating a new label.
 | Creating a new portal.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_createGeneric', ( def, action_createGeneric ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_createGeneric',
-		attributes :
+	def.attributes =
+	{
+		itemType :
 		{
-			itemType :
-			{
-				comment : 'item type to be created',
-				type : 'protean'
-				// 'visual_note:static',
-				// 'visual_label:static',
-				// 'visual_portal:static'
-			},
-			transItem :
-			{
-				comment : 'the transient item in creation',
-				type :
-					require( '../visual/typemap-item' )
-					.concat( [ 'undefined' ] )
-			},
-			startPoint :
-			{
-				comment : 'start point of drag creation',
-				type : [ 'undefined', 'gleam_point' ]
-			}
+			// item type to be created
+			type : 'protean'
+			// 'visual_note:static',
+			// 'visual_label:static',
+			// 'visual_portal:static'
+		},
+		transItem :
+		{
+			// the transient item in creation
+			type :
+				require( '../visual/typemap-item' )
+				.concat( [ 'undefined' ] )
+		},
+		startPoint :
+		{
+			// start point of drag creation
+			type : [ 'undefined', 'gleam_point' ]
 		}
 	};
 }
 
 
-var
-	action_createGeneric;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_createGeneric = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_createGeneric.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		// path
 	)
@@ -79,4 +61,4 @@ prototype.affects =
 };
 
 
-} )( );
+} );

@@ -1,91 +1,68 @@
 /*
 | The user is holding the zoomIn or zoomOut button.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_zoomButton', ( def, action_zoomButton ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_zoomButton',
-		attributes :
+	def.attributes =
+	{
+		dir :
 		{
-			dir :
-			{
-				comment : '+/- 1',
-				type : 'number'
-			},
-			refire :
-			{
-				comment : 'make further zoom steps',
-				type : 'boolean'
-			}
+			// direction, +/- 1
+			type : 'number'
+		},
+		refire :
+		{
+			// make further zoom steps
+			type : 'boolean'
 		}
 	};
 }
 
 
-var
-	action_zoomButton;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_zoomButton = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_zoomButton.prototype;
-
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Shortcut to create an zoom in button action.
 */
-action_zoomButton.createZoom =
+def.static.createZoom =
 	function(
-		dir
+		dir   // direction
 	)
 {
-	var
-		action;
-
 /**/if( CHECK )
 /**/{
 /**/	if( dir !== 1 && dir !== -1 ) throw new Error( );
 /**/}
 
-	action =
-		action_zoomButton.create(
-			'dir', dir,
-			'refire', true
-		);
-
-	return action;
+	return action_zoomButton.create( 'dir', dir, 'refire', true );
 };
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
-		// path
+		path
 	)
 {
 	return false;
@@ -95,7 +72,7 @@ prototype.affects =
 /*
 | A zoom animation finished.
 */
-prototype.finishAnimation =
+def.func.finishAnimation =
 	function( )
 {
 	if( this.refire )
@@ -112,7 +89,7 @@ prototype.finishAnimation =
 /*
 | 'Normal' button ought to be down during this action.
 */
-prototype.normalButtonDown = true;
+def.func.normalButtonDown = true;
 
 
-} )( );
+} );

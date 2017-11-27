@@ -968,12 +968,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/action/createGeneric.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/action/createRelation.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1003,7 +1003,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/action/zoomButton.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
