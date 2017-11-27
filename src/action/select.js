@@ -1,91 +1,89 @@
 /*
 | The user is selecting stuff via a rectangle.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	gleam_rect;
+
+
+tim.define( module, 'action_select', ( def, action_select ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_select',
-		attributes :
+	def.attributes =
+	{
+		itemPath :
 		{
-			itemPath :
-			{
-				comment : 'if selecting ranges, item to path',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			startPoint :
-			{
-				comment : 'point at start of operation',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			toPoint :
-			{
-				comment : 'point the rectangle goes to',
-				type : [ 'undefined', 'gleam_point' ]
-			}
+			// if selecting ranges (text block), item to path
+			type : [ 'undefined', 'jion$path' ]
+		},
+		startPoint :
+		{
+			// point at start of operation
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		toPoint :
+		{
+			// point the rectangle goes to
+			type : [ 'undefined', 'gleam_point' ]
 		}
 	};
 }
 
 
-var
-	action_select,
-	gleam_rect,
-	jion;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
-| Capsule
+| Zone of the action.
 */
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
+def.lazy.zone =
+	function( )
 {
-	action_select = require( 'jion' ).this( module, 'source' );
+	console.log( 'FIXME: is this used?' );
 
-	return;
-}
+	return(
+		this.startPoint
+		&& gleam_rect.createArbitrary( this.startPoint, this.toPoint )
+	);
+};
 
 
-prototype = action_select.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		path
 	)
 {
-	var
-		item,
-		iPos,
-		iZone,
-		tPos,
-		tZone;
-
-	tZone = this.zone;
+	const tZone = this.zone;
 
 	if( !tZone ) return false;
 
-	item = root.getPath( path );
+	const item = root.getPath( path );
 
-	tPos = tZone.pos;
+	const tPos = tZone.pos;
 
-	iZone = item.zone;
+	const iZone = item.zone;
 
-	iPos = iZone.pos;
+	const iPos = iZone.pos;
 
 	return(
 		iPos.x >= tPos.x
@@ -96,21 +94,4 @@ prototype.affects =
 };
 
 
-jion.lazyValue(
-	prototype,
-	'zone',
-	function( )
-{
-	return(
-		this.startPoint
-		&& gleam_rect.createArbitrary(
-			this.startPoint,
-			this.toPoint
-		)
-	);
-}
-);
-
-
-
-} )( );
+} );

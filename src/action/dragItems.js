@@ -1,82 +1,58 @@
 /*
 | The user is dragging an item.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_dragItems', ( def, action_dragItems ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_dragItems',
-		attributes :
+	def.attributes =
+	{
+		moveBy :
 		{
-			moveBy :
-			{
-				comment : 'drag the item to this pnw',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			itemPaths :
-			{
-				comment : 'the paths of the items to drag',
-				type : [ 'undefined', 'jion$pathList' ]
-			},
-			startPoint :
-			{
-				comment : 'mouse down point on drag creation',
-				type : 'gleam_point'
-			}
+			// drags the items by this x/y
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		itemPaths :
+		{
+			// the paths of the items to drag
+			type : [ 'undefined', 'jion$pathList' ]
+		},
+		startPoint :
+		{
+			// mouse down point on drag creation
+			type : 'gleam_point'
 		}
 	};
 }
 
 
-var
-	action_dragItems;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_dragItems = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_dragItems.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		path
 	)
 {
-	var
-		a,
-		pa,
-		paths,
-		pLen;
+	const paths = this.itemPaths;
 
-	paths = this.itemPaths;
-
-	for( a = 0, pLen = paths.length; a < pLen; a++ )
+	for( let a = 0, pLen = paths.length; a < pLen; a++ )
 	{
-		pa = paths.get( a );
+		const pa = paths.get( a );
 
 		if( pa.equals( path ) ) return true;
 	}
@@ -88,7 +64,7 @@ prototype.affects =
 /*
 | 'Normal' button ought to be down during this action.
 */
-prototype.normalButtonDown = true;
+def.func.normalButtonDown = true;
 
 
-} )( );
+} );

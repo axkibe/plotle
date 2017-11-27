@@ -1,67 +1,49 @@
 /*
 | The user is scrolling a note.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_scrolly', ( def, action_scrolly ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_scrolly',
-		attributes :
+	def.attributes =
+	{
+		scrollPath :
 		{
-			scrollPath :
-			{
-				comment : 'path to the item or widget being scrolled',
-				type : 'jion$path'
-			},
-			startPoint :
-			{
-				comment : 'mouse down point on start of scrolling',
-				type : 'gleam_point'
-			},
-			startPos :
-			{
-				comment : 'position of the scrollbar on start of scrolling',
-				type : 'number'
-			}
+			// path to the item or widget being scrolled
+			type : 'jion$path'
+		},
+		startPoint :
+		{
+			// mouse down point on start of scrolling
+			type : 'gleam_point'
+		},
+		startPos :
+		{
+			// position of the scrollbar on start of scrolling
+			type : 'number'
 		}
 	};
 }
 
 
-var
-	action_scrolly;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_scrolly = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_scrolly.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		path
 	)
@@ -73,7 +55,7 @@ prototype.affects =
 /*
 | 'Normal' button ought to be down during this action.
 */
-prototype.normalButtonDown = true;
+def.func.normalButtonDown = true;
 
 
-} )( );
+} );

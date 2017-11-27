@@ -1,62 +1,44 @@
 /*
 | The user is panning the background.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'action_pan', ( def, action_pan ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'action_pan',
-		attributes :
+	def.attributes =
+	{
+		startPoint :
 		{
-			startPoint :
-			{
-				comment : 'mouse down point on start of scrolling',
-				type : 'gleam_point'
-			},
-			offset :
-			{
-				comment : 'offset',
-				type : 'gleam_point'
-			}
+			// mouse down point on start of scrolling
+			type : 'gleam_point'
+		},
+		offset :
+		{
+			// offset
+			type : 'gleam_point'
 		}
 	};
 }
 
 
-var
-	action_pan;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_pan = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_pan.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		// path
 	)
@@ -65,10 +47,4 @@ prototype.affects =
 };
 
 
-/*
-| 'Normal' button ought to be down during this action.
-*/
-prototype.normalButtonDown = true;
-
-
-} )( );
+} );

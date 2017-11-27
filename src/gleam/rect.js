@@ -384,16 +384,12 @@ def.func.baseScale =
 		ay
 	)
 {
-	var
-		pos,
-		pse;
-
 	if( action.scaleX === 1 && action.scaleY === 1 )
 		return this.add( ax, ay );
 
-	pos = this.pos.baseScale( action, ax, ay );
+	const pos = this.pos.baseScale( action, ax, ay );
 
-	pse = this.pse.baseScale( action, ax, ay );
+	const pse = this.pse.baseScale( action, ax, ay );
 
 	return(
 		this.create(

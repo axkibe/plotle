@@ -1,108 +1,86 @@
 /*
 | The user is resizing an item.
 */
+'use strict';
+
+
+tim.define( module, 'action_resizeItems', ( def, action_resizeItems ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
 /*
 | The jion definition.
 */
-if( JION )
 {
-	throw{
-		id : 'action_resizeItems',
-		attributes :
+	def.attributes =
+	{
+		itemPaths:
 		{
-			itemPaths:
-			{
-				comment : 'the paths of the items to drag',
-				type : [ 'undefined', 'jion$pathList' ]
-			},
-			startPoint :
-			{
-				comment : 'mouseDown point on drag creation',
-				type : 'gleam_point'
-			},
-			pBase :
-			{
-				comment : 'base the resize to this point',
-				type : [ 'undefined', 'gleam_point' ]
-			},
-			proportional :
-			{
-				comment : 'if true resize proportinal',
-				// scaleX must be === scaleY
-				type : [ 'undefined', 'boolean' ]
-			},
-			resizeDir :
-			{
-				comment : 'resize to this direction',
-				type : [ 'undefined', 'string' ]
-			},
-			scaleX :
-			{
-				comment : 'scale x by this factor',
-				type : [ 'undefined', 'number' ]
-			},
-			scaleY :
-			{
-				comment : 'scale y by this factor',
-				type : [ 'undefined', 'number' ]
-			},
-			startZones :
-			{
-				comment : 'the zones as the resize started',
-				type : [ 'undefined', 'gleam_rectGroup' ]
-			}
+			// the paths of the items to drag
+			type : [ 'undefined', 'jion$pathList' ]
+		},
+		startPoint :
+		{
+			// mouseDown point on drag creation
+			type : 'gleam_point'
+		},
+		pBase :
+		{
+			// base the resize to this point
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		proportional :
+		{
+			// if true resize proportionally
+			// scaleX must be === scaleY
+			type : [ 'undefined', 'boolean' ]
+		},
+		resizeDir :
+		{
+			// resize to this direction
+			type : [ 'undefined', 'string' ]
+		},
+		scaleX :
+		{
+			// scale x by this factor
+			type : [ 'undefined', 'number' ]
+		},
+		scaleY :
+		{
+			// scale y by this factor
+			type : [ 'undefined', 'number' ]
+		},
+		startZones :
+		{
+			// the zones as the resize started
+			type : [ 'undefined', 'gleam_rectGroup' ]
 		}
 	};
 }
 
 
-var
-	action_resizeItems;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	action_resizeItems = require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-prototype = action_resizeItems.prototype;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns true if an entity with path is affected by this action.
 */
-prototype.affects =
+def.func.affects =
 	function(
 		path
 	)
 {
-	var
-		a,
-		pa,
-		paths,
-		pLen;
+	const paths = this.itemPaths;
 
-	paths = this.itemPaths;
-
-	for( a = 0, pLen = paths.length; a < pLen; a++ )
+	for( let a = 0, pLen = paths.length; a < pLen; a++ )
 	{
-		pa = paths.get( a );
+		const pa = paths.get( a );
 
 		if( pa.equals( path ) ) return true;
 	}
@@ -114,7 +92,7 @@ prototype.affects =
 /*
 | 'Normal' button ought to be down during this action.
 */
-prototype.normalButtonDown = true;
+def.func.normalButtonDown = true;
 
 
-} )( );
+} );
