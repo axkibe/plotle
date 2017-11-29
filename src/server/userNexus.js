@@ -73,33 +73,27 @@ prototype.addUserSpaceRef =
 		spaceRef
 	)
 {
-	var
-		a,
-		aZ,
-		csl,  // current space list
-		dsl,  // dynamic space list
-		username,
-		userInfo;
-
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	username = spaceRef.username;
+	const username = spaceRef.username;
 
-	userInfo = this._cache.get( username );
+	let userInfo = this._cache.get( username );
 
 /**/if( CHECK )
 /**/{
 /**/	if( !userInfo ) throw new Error( );
 /**/}
 
-	dsl = userInfo.spaceList;
+	// dynamic space list
+	let dsl = userInfo.spaceList;
 
-	csl = dsl.current;
+	// current space list
+	const csl = dsl.current;
 
-	for( a = 0, aZ = csl.length; a < aZ; a++ )
+	for( let a = 0, aZ = csl.length; a < aZ; a++ )
 	{
 		if( csl.get( a ).equals( spaceRef ) ) throw new Error( );
 	}
@@ -128,16 +122,14 @@ prototype.createVisitor =
 		userCreds
 	)
 {
-	var
-		nextVisitor,
-		name;
-
 /**/if( CHECK )
 /**/{
 /**/	if( userCreds.name !== 'visitor' ) throw new Error( );
 /**/}
 
-	nextVisitor = root.nextVisitor;
+	let nextVisitor = root.nextVisitor;
+
+	let name;
 
 	do
 	{
@@ -173,25 +165,18 @@ prototype.getUserSpaceList =
 		userInfo
 	)
 {
-	var
-		arr,
-		cursor,
-		o,
-		spaceList,
-		userSpaceList;
-
 /**/if( CHECK )
 /**/{
 /**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
 /**/}
 
-	spaceList = userInfo.spaceList;
+	const spaceList = userInfo.spaceList;
 
 	if( spaceList ) return spaceList;
 
-	arr = [ ];
+	const arr = [ ];
 
-	cursor =
+	const cursor =
 		yield root.repository.spaces.find(
 			{ },
 			{ sort: '_id' },
@@ -199,14 +184,14 @@ prototype.getUserSpaceList =
 		);
 
 	for(
-		o = yield cursor.nextObject( resume( ) );
+		let o = yield cursor.nextObject( resume( ) );
 		o;
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
 		if( o.username !== userInfo.name ) continue;
 
-		arr.push( 
+		arr.push(
 			ref_space.create(
 				'username', o.username,
 				'tag', o.tag
@@ -214,7 +199,7 @@ prototype.getUserSpaceList =
 		);
 	}
 
-	userSpaceList =
+	const userSpaceList =
 		dynamic_refSpaceList.create(
 			'current', ref_spaceList.create( 'list:init', arr )
 		);
@@ -269,7 +254,10 @@ prototype.register =
 	// user already registered
 	if( val ) return false;
 
-	userInfo = userInfo.create( 'spaceList', dynamic_refSpaceList.create( ) );
+	userInfo =
+		userInfo.create(
+			'spaceList', dynamic_refSpaceList.create( 'current', ref_spaceList.create( ) )
+		);
 
 	root.create(
 		'userNexus',

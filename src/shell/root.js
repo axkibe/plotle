@@ -115,7 +115,7 @@ if( JION )
 			userSpaceList :
 			{
 				comment : 'the list of space references the user has',
-				type : [ 'undefined', 'ref_spaceList' ] 
+				type : [ 'undefined', 'ref_spaceList' ]
 			},
 			viewSize :
 			{
@@ -1562,22 +1562,16 @@ prototype.onRegister =
 		reply
 	)
 {
-	var
-		action;
-
-	action = root.action;
+	const show = root.show;
 
 	// if not in signup form this came out of band.
 	if(
-		!action
-		|| action.reflect !== 'show_form'
-		|| action.formName !== 'signUp'
+		!show
+		|| show.reflect !== 'show_form'
+		|| show.formName !== 'signUp'
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		console.log( 'ignoring a register reply, since out of signup form' );
-/**/	}
+		console.log( 'ignoring a register reply, since out of signup form' );
 
 		return;
 	}

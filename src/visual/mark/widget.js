@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_widget', ( def, visual_widget ) => {
+tim.define( module, 'visual_mark_widget', ( def, visual_mark_widget ) => {
 
 
 /*::::::::::::::::::::::::::::.

@@ -1,56 +1,49 @@
 /*
 | Extended user info.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'user_info', ( def, user_info ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'user_info',
-		attributes :
+	def.attributes =
+	{
+		name :
 		{
-			name :
-			{
-				comment : 'the username',
-				type : 'string',
-			},
-			passhash :
-			{
-				comment : 'password hash',
-				type : 'string'
-			},
-			mail :
-			{
-				comment : 'the users email',
-				type : 'string',
-				defaultValue : '""'
-			},
-			news :
-			{
-				comment : 'if the user checked okay with news emails',
-				type : [ 'boolean', 'string' ]
-			},
-			spaceList :
-			{
-				comment : 'if loaded/defined, the spaces the user has',
-				type : [ 'undefined', 'dynamic_refSpaceList' ]
-			}
+			// the username
+			type : 'string',
+		},
+		passhash :
+		{
+			// password hash
+			type : 'string'
+		},
+		mail :
+		{
+			// the users email address
+			type : 'string',
+			defaultValue : '""'
+		},
+		news :
+		{
+			// if the user checked okay with news emails
+			type : [ 'boolean', 'string' ]
+		},
+		spaceList :
+		{
+			// if loaded/defined, the spaces the user has
+			type : [ 'undefined', 'dynamic_refSpaceList' ]
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-require( 'jion' ).this( module );
-
-
-}( ) );
+} );

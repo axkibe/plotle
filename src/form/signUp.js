@@ -268,7 +268,7 @@ prototype.onRegister =
 
 	root.moveToSpace( ref_space.ideoloomHome, false );
 
-	root.create( 'show', show_form.welcome, 'user', request.user );
+	root.create( 'show', show_form.welcome, 'userCreds', request.userCreds );
 };
 
 
@@ -339,22 +339,15 @@ prototype.setErrorMessage =
 prototype.signup =
 	function( )
 {
-	var
-		email,
-		newsletter,
-		pass,
-		pass2,
-		username;
+	const username = this.get( 'userInput' ).value;
 
-	username = this.get( 'userInput' ).value;
+	const email = this.get( 'emailInput' ).value;
 
-	email = this.get( 'emailInput' ).value;
+	const pass = this.get( 'passwordInput' ).value;
 
-	pass = this.get( 'passwordInput' ).value;
+	const pass2 = this.get( 'password2Input' ).value;
 
-	pass2 = this.get( 'password2Input' ).value;
-
-	newsletter = this.get( 'newsletterCheckBox' ).checked;
+	const newsletter = this.get( 'newsletterCheckBox' ).checked;
 
 	if( username.length < 4 )
 	{

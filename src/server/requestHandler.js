@@ -10,91 +10,54 @@
 'use strict';
 
 
-var
-	change_dynamic,
-	change_wrapList,
-	config,
-	database_userSkid,
-	log_ajax,
-	log_warn,
-	ref_space,
-	replyError,
-	reply_acquire,
-	reply_alter,
-	reply_auth,
-	reply_error,
-	reply_register,
-	reply_update,
-	request_acquire,
-	request_alter,
-	request_auth,
-	request_register,
-	request_update,
-	resume,
-	server_requestHandler,
-	server_spaceNexus,
-	server_upSleep,
-	serveAcquire,
-	serveAlter,
-	serveAuth,
-	serveRegister,
-	serveUpdate,
-	user_info;
-
-server_requestHandler =
+const server_requestHandler =
 module.exports =
 	{ };
 
-config = require( '../../config' );
+const config = require( '../../config' );
 
-log_ajax = require( '../log/ajax' );
+const log_ajax = require( '../log/ajax' );
 
-log_warn = require( '../log/warn' );
+const log_warn = require( '../log/warn' );
 
-change_dynamic = require( '../change/dynamic' );
+const change_dynamic = require( '../change/dynamic' );
 
-change_wrapList = require( '../change/wrapList' );
+const change_wrapList = require( '../change/wrapList' );
 
-database_userSkid = require( '../database/userSkid' );
+const reply_acquire = require( '../reply/acquire' );
 
-reply_acquire = require( '../reply/acquire' );
+const reply_alter = require( '../reply/alter' );
 
-reply_alter = require( '../reply/alter' );
+const reply_auth = require( '../reply/auth' );
 
-reply_auth = require( '../reply/auth' );
+const reply_error = require( '../reply/error' );
 
-reply_error = require( '../reply/error' );
+const reply_register = require( '../reply/register' );
 
-reply_register = require( '../reply/register' );
+const reply_update = require( '../reply/update' );
 
-reply_update = require( '../reply/update' );
+const request_acquire = require( '../request/acquire' );
 
-request_acquire = require( '../request/acquire' );
+const request_alter = require( '../request/alter' );
 
-request_alter = require( '../request/alter' );
+const request_auth = require( '../request/auth' );
 
-request_auth = require( '../request/auth' );
+const request_register = require( '../request/register' );
 
-request_register = require( '../request/register' );
+const request_update = require( '../request/update' );
 
-request_update = require( '../request/update' );
+const server_spaceNexus = require( './spaceNexus' );
 
-resume = require( 'suspend' ).resume;
+const server_upSleep = require( './upSleep' );
 
-ref_space = require( '../ref/space' );
-
-server_spaceNexus = require( './spaceNexus' );
-
-server_upSleep = require( './upSleep' );
-
-user_info = require( '../user/info' );
+const user_info = require( '../user/info' );
 
 
 /*
 | Creates a reject error for all
 | serve* functions
 */
-replyError =
+const replyError =
 	function(
 		message
 	)
@@ -114,21 +77,11 @@ replyError =
 /*
 | Serves an alter request.
 */
-serveAlter =
+const serveAlter =
 	function(
 		request
 	)
 {
-	var
-		a,
-		changeWrapList,
-		refMomentSpace,
-		seq,
-		seqZ,
-		spaceBox,
-		spaceRef,
-		userCreds;
-
 	if( !config.server_devel )
 	{
 		try
@@ -144,30 +97,30 @@ serveAlter =
 	{
 		request = request_alter.createFromJSON( request );
 	}
-	
-	userCreds = request.userCreds;
+
+	const userCreds = request.userCreds;
 
 	if( !root.userNexus.testInCache( userCreds ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
 
-	refMomentSpace = request.refMomentSpace;
+	const refMomentSpace = request.refMomentSpace;
 
-	seq = refMomentSpace.seq;
+	let seq = refMomentSpace.seq;
 
-	changeWrapList = request.changeWrapList;
+	let changeWrapList = request.changeWrapList;
 
-	spaceRef = refMomentSpace.dynRef;
+	const spaceRef = refMomentSpace.dynRef;
 
 	if( server_spaceNexus.testAccess( userCreds, spaceRef ) !== 'rw' )
 	{
 		return replyError( 'no access' );
 	}
 
-	spaceBox = root.spaces.get( spaceRef.fullname );
+	let spaceBox = root.spaces.get( spaceRef.fullname );
 
-	seqZ = spaceBox.seqZ;
+	const seqZ = spaceBox.seqZ;
 
 	if( seq === -1 ) seq = seqZ;
 
@@ -176,7 +129,7 @@ serveAlter =
 	try
 	{
 		// translates the changes if not most recent
-		for( a = seq; a < seqZ; a++ )
+		for( let a = seq; a < seqZ; a++ )
 		{
 			changeWrapList =
 				spaceBox.getChangeWrap( a ).transform( changeWrapList );
@@ -213,7 +166,7 @@ serveAlter =
 /*
 | Serves an auth request.
 */
-serveAuth =
+const serveAuth =
 	function*(
 		request
 	)
@@ -261,17 +214,11 @@ serveAuth =
 /*
 | Serves a register request.
 */
-serveRegister =
+const serveRegister =
 	function*(
 		request
 	)
 {
-	var
-		mail,
-		news,
-		userCreds,
-		sUser;
-
 	try
 	{
 		request = request_register.createFromJSON( request );
@@ -283,12 +230,11 @@ serveRegister =
 		return replyError( 'Command not valid jion' );
 	}
 
+	const userCreds = request.userCreds;
 
-	userCreds = request.userCreds;
+	const mail = request.mail;
 
-	mail = request.mail;
-
-	news = request.news;
+	const news = request.news;
 
 	if( userCreds.isVisitor )
 	{
@@ -300,7 +246,7 @@ serveRegister =
 		return replyError( 'Username too short, min. 4 characters' );
 	}
 
-	sUser =
+	const sUser =
 		yield* root.userNexus.register(
 			user_info.create(
 				'name', userCreds.name,
@@ -319,7 +265,7 @@ serveRegister =
 /*
 | Gets new changes or waits for them.
 */
-serveUpdate =
+const serveUpdate =
 	function (
 		request,
 		result
@@ -389,7 +335,7 @@ serveUpdate =
 /*
 | Serves a get request.
 */
-serveAcquire =
+const serveAcquire =
 	function*(
 		request
 	)
@@ -467,46 +413,32 @@ server_requestHandler.conveyUpdate =
 		moments   // references to moments in dynamics to get updates for
 	)
 {
-	var
-		a,
-		arr,
-		aZ,
-		c,
-		changeWraps,
-		chgA,
-		dynRef,
-		moment,
-		seq,
-		seqZ,
-		spaceBox,
-		userInfo;
+	const arr = [ ];
 
-	arr = [ ];
-				
-	for( a = 0, aZ = moments.length; a < aZ; a++ )
+	for( let a = 0, aZ = moments.length; a < aZ; a++ )
 	{
-		moment = moments.get( a );
+		const moment = moments.get( a );
 
-		dynRef = moment.dynRef;
-	
-		seq = moment.seq;
+		const dynRef = moment.dynRef;
+
+		const seq = moment.seq;
 
 		switch( dynRef.reflect )
 		{
 			case 'ref_space' :
 
-				spaceBox = root.spaces.get( dynRef.fullname );
+				const spaceBox = root.spaces.get( dynRef.fullname );
 
 				if( !spaceBox ) continue;
 
-				seqZ = spaceBox.seqZ;
+				const seqZ = spaceBox.seqZ;
 
 				if( seq >= seqZ ) continue;
 
-				chgA = [ ];
+				const chgA = [ ];
 
 				// FIXME make a getChangeWraps function to spaceBox
-				for( c = seq; c < seqZ; c++ )
+				for( let c = seq; c < seqZ; c++ )
 				{
 					chgA.push( spaceBox.getChangeWrap( c ) );
 				}
@@ -524,11 +456,11 @@ server_requestHandler.conveyUpdate =
 
 			case 'ref_userSpaceList' :
 
-				userInfo = root.userNexus.getInCache( dynRef.username );
+				const userInfo = root.userNexus.getInCache( dynRef.username );
 
 				if( !userInfo ) continue;
 
-				changeWraps = userInfo.spaceList.changeWraps;
+				const changeWraps = userInfo.spaceList.changeWraps;
 
 				if( seq - 1 < changeWraps.length )
 				{
@@ -556,7 +488,7 @@ server_requestHandler.conveyUpdate =
 		: undefined
 	);
 };
-	
+
 
 /*
 | Tests if an update request is legitimate.

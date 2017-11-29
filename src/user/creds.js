@@ -1,72 +1,50 @@
 /*
 | User credentials.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	session_uid;
+
+
+tim.define( module, 'user_creds', ( def, user_creds ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'user_creds',
-		attributes :
+	def.attributes =
+	{
+		name :
 		{
-			name :
-			{
-				comment : 'the username',
-				type : 'string',
-				json : true
-			},
-			passhash :
-			{
-				comment : 'password hash',
-				type : 'string',
-				json : true
-			}
+			// the username
+			type : 'string',
+			json : true
+		},
+		passhash :
+		{
+			// password hash
+			type : 'string',
+			json : true
 		}
 	};
 }
 
-
-var
-	jion,
-	session_uid,
-	user_creds;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-if( NODE )
-{
-	user_creds = require( 'jion' ).this( module, 'source' );
-
-	jion = require( 'jion' );
-}
-
-
-/*
-| Returns true if this user is a visitor
-*/
-jion.lazyValue(
-	user_creds.prototype,
-	'isVisitor',
-	function( )
-	{
-		return this.name.substr( 0, 7 ) === 'visitor';
-	}
-);
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Creates a user jion from the local storage.
 */
-user_creds.createFromLocalStorage =
+def.static.createFromLocalStorage =
 	function( )
 {
 	var
@@ -83,17 +61,13 @@ user_creds.createFromLocalStorage =
 			)
 		);
 	}
-	else
-	{
-		return;
-	}
 };
 
 
 /*
 | Clears the user jion from local storage.
 */
-user_creds.clearLocalStorage =
+def.static.clearLocalStorage =
 	function( )
 {
 	window.localStorage.setItem( 'username', undefined );
@@ -105,7 +79,7 @@ user_creds.clearLocalStorage =
 /*
 | Creates a visitor user.
 */
-user_creds.createVisitor =
+def.static.createVisitor =
 	function( )
 {
 	return(
@@ -117,10 +91,30 @@ user_creds.createVisitor =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns true if this user is a visitor
+*/
+def.lazy.isVisitor =
+	function( )
+{
+	return this.name.substr( 0, 7 ) === 'visitor';
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Saves this user jion to local storage.
 */
-user_creds.prototype.saveToLocalStorage =
+def.func.saveToLocalStorage =
 	function( )
 {
 	window.localStorage.setItem( 'username', this.name );
@@ -129,4 +123,4 @@ user_creds.prototype.saveToLocalStorage =
 };
 
 
-}( ) );
+} );

@@ -1,28 +1,20 @@
 /*
 | A group of user infos.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'user_infoGroup',
-		group : [ 'user_info' ]
-	};
-}
-
-
-/*
-| Capsule.
-*/
-( function( ) {
 'use strict';
 
 
-require( 'jion' ).this( module );
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+tim.define( module, 'user_infoGroup', ( def, user_infoGroup ) => {
 
 
-} )( );
+if( TIM )
+{
+	def.group = [ 'user_info' ];
+}
+
+
+} );

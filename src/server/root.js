@@ -898,15 +898,13 @@ prototype.createSpace =
 		spaceRef
 	)
 {
-	var
-		spaceBox;
 
 /**/if( CHECK )
 /**/{
 /**/	if( spaceRef.reflect !== 'ref_space' ) throw new Error( );
 /**/}
 
-	spaceBox = yield* server_spaceBox.createSpace( spaceRef );
+	const spaceBox = yield* server_spaceBox.createSpace( spaceRef );
 
 	root.create(
 		'spaces', root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
@@ -951,36 +949,21 @@ prototype.wake =
 		ref // reference to wake for
 	)
 {
-	var
-		a,
-		asw,
-		aZ,
-		b,
-		bZ,
-		modified,
-		moments,
-		result,
-		key,
-		sleep,
-		sleepKeys,
-		upSleeps;
+	const upSleeps = root.upSleeps;
 
-	upSleeps = root.upSleeps;
-
-	sleepKeys = upSleeps.keys;
-
-	modified = false;
+	const sleepKeys = upSleeps.keys;
 
 	// FUTURE cache change lists
 	// to answer the same to multiple clients.
-	for( a = 0, aZ = sleepKeys.length; a < aZ; a++ )
+	for( let a = 0, aZ = sleepKeys.length; a < aZ; a++ )
 	{
-		key = sleepKeys[ a ];
+		const key = sleepKeys[ a ];
 
-		sleep = upSleeps.get( key );
+		const sleep = upSleeps.get( key );
 
-		moments = sleep.moments;
+		const moments = sleep.moments;
 
+		let b, bZ;
 		for( b = 0, bZ = sleep.length; b < bZ; b++ )
 		{
 			if( ref.equals( moments.get( b ).dynRef ) ) break;
@@ -990,6 +973,9 @@ prototype.wake =
 		if( b >= bZ ) continue;
 
 		// this sleep needs to be waked
+		const asw = server_requestHandler.conveyUpdate( sleep.moments );
+
+		if( !asw ) continue;
 
 		clearTimeout( sleep.timer );
 
@@ -997,9 +983,7 @@ prototype.wake =
 			'upSleeps', root.upSleeps.remove( key )
 		);
 
-		asw = server_requestHandler.conveyUpdate( sleep.moments );
-
-		result = sleep.result;
+		const result = sleep.result;
 
 		log_ajax( '->', asw );
 

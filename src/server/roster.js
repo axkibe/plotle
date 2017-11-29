@@ -515,7 +515,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/reply/register.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1018,7 +1018,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/user/creds.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

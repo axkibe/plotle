@@ -2,4 +2,4 @@ FIXME: remove '_assign' renames
 FIXME: rename pointingHover to hover
 FIXME: scrollpos vs. scrollPos
 FIXME: instead of tim.aheadValue make the attributes setable
-FIXME: signup fails
+FIXME: after signup the new own homespace is not in the 'go' spaces list

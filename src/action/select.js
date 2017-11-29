@@ -51,8 +51,6 @@ if( TIM )
 def.lazy.zone =
 	function( )
 {
-	console.log( 'FIXME: is this used?' );
-
 	return(
 		this.startPoint
 		&& gleam_rect.createArbitrary( this.startPoint, this.toPoint )
