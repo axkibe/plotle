@@ -1,78 +1,46 @@
 /*
 | References a space.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'ref_space', ( def, ref_space ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'ref_space',
-		attributes :
+	def.attributes =
+	{
+		username :
 		{
-			username :
-			{
-				comment : 'name of the user the space belongs to',
-				json : true,
-				type : 'string'
-			},
-			tag :
-			{
-				comment : 'tag of the space',
-				json : true,
-				type : 'string'
-			}
+			// name of the user the space belongs to
+			type : 'string',
+			json : true,
+		},
+		tag :
+		{
+			// tag of the space
+			type : 'string',
+			json : true,
 		}
 	};
 }
 
 
-var
-	ref_space,
-	jion;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-var
-	prototype;
-
-
-if( NODE )
-{
-	jion = require( 'jion' );
-
-	ref_space = jion.this( module, 'source' );
-}
-
-
-prototype = ref_space.prototype;
-
-
-/*
-| Returns the space's full name.
-*/
-jion.lazyValue(
-	prototype,
-	'fullname',
-	function( )
-{
-	return this.username + ':' + this.tag;
-}
-);
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 
 /*
 | Reference to ideolooms home space.
 */
-ref_space.ideoloomHome =
+def.staticLazy.ideoloomHome = ( ) =>
 	ref_space.create(
 		'username', 'ideoloom',
 		'tag', 'home'
@@ -81,11 +49,22 @@ ref_space.ideoloomHome =
 /*
 | Reference to ideolooms sandbox space.
 */
-ref_space.ideoloomSandbox =
+def.staticLazy.ideoloomSandbox = ( ) =>
 	ref_space.create(
 		'username', 'ideoloom',
 		'tag', 'sandbox'
 	);
 
 
-} )( );
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+def.lazy.fullname =
+	function( )
+{
+	return this.username + ':' + this.tag;
+};
+
+
+} );

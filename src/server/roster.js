@@ -465,7 +465,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/ref/space.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -480,7 +480,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/ref/spaceList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -948,22 +948,22 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/show/create.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/show/form.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/show/zoom.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/show/normal.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

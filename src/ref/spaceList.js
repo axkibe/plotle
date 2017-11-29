@@ -1,34 +1,23 @@
 /*
 | A list of references to spaces.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'ref_spaceList', ( def, ref_spaceList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'ref_spaceList',
-		json : true,
-		list : [ 'ref_space' ]
-	};
+	def.json = true;
+
+	def.list = [ 'ref_space' ];
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-}( ) );
+} );

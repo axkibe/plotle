@@ -33,18 +33,18 @@ if( TIM )
 	{
 		pos : // position
 		{
+			type : 'gleam_point',
 			json : true,
-			type : 'gleam_point'
 		},
 		height :
 		{
+			type : 'number',
 			json : true,
-			type : 'number'
 		},
 		width :
 		{
+			type : 'number',
 			json : true,
-			type : 'number'
 		}
 	};
 }
