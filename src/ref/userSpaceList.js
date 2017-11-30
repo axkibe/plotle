@@ -1,39 +1,29 @@
 /*
 | A reference to a dynamic list of space references belonging to a user.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'ref_userSpaceList', ( def, ref_userSpaceList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'ref_userSpaceList',
-		attributes :
+	def.attributes =
+	{
+		username :
 		{
-			username :
-			{
-				comment : 'the username for the list',
-				json : true,
-				type : 'string'
-			}
+			// the username for the list
+			type : 'string',
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );

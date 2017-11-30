@@ -470,12 +470,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/ref/moment.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/ref/momentList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -485,7 +485,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/ref/userSpaceList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -599,7 +599,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/disc/root.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

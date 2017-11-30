@@ -1,34 +1,23 @@
 /*
 | A list of references to moments in dyamics.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'ref_momentList', ( def, ref_momentList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'ref_momentList',
-		list : [ 'ref_moment' ],
-		json : true
-	};
+	def.list = [ 'ref_moment' ];
+
+	def.json = true;
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-}( ) );
+} );

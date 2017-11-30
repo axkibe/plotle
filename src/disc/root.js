@@ -1,117 +1,106 @@
 /*
 | The disc root is the master of all discs.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'disc_root',
-		attributes :
-		{
-			access :
-			{
-				comment : 'users access to current space',
-				type : [ 'undefined', 'string' ]
-			},
-			action :
-			{
-				comment : 'currently active action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			controlTransform :
-			{
-				comment : 'the current transform of controls',
-				type : 'gleam_transform'
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'disc_root.concernsMark( mark )',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'path of the disc',
-				type : 'jion$path'
-			},
-			show :
-			{
-				comment : 'currently form/disc shown',
-				type : require ( '../show/typemap' )
-			},
-			spaceRef :
-			{
-				comment : 'currently loaded space',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'twigDup' ],
-		twig :
-		[
-			'disc_mainDisc',
-			'disc_mainDisc:abstract',
-			'disc_createDisc',
-			'disc_createDisc:abstract',
-			'disc_zoomDisc',
-			'disc_zoomDisc:abstract'
-		]
-	};
-}
-
-
-var
-	disc_root,
-	gleam_glint_list,
-	jion;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
+// FIXME
+var
+	gleam_glint_list;
 
-	return;
+
+tim.define( module, 'disc_root', ( def, disc_root ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		access :
+		{
+			// users access to current space
+			type : [ 'undefined', 'string' ]
+		},
+		action :
+		{
+			// currently active action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		controlTransform :
+		{
+			// the current transform of controls
+			type : 'gleam_transform'
+		},
+		hover :
+		{
+			// the widget hovered upon
+			type : [ 'undefined', 'jion$path' ]
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'disc_root.concernsMark( mark )',
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// path of the disc
+			type : 'jion$path'
+		},
+		show :
+		{
+			// currently form/disc shown
+			type : require ( '../show/typemap' )
+		},
+		spaceRef :
+		{
+			// currently loaded space
+			type : [ 'undefined', 'ref_space' ]
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'undefined', 'user_creds' ]
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig =
+	[
+		'disc_mainDisc',
+		'disc_mainDisc:abstract',
+		'disc_createDisc',
+		'disc_createDisc:abstract',
+		'disc_zoomDisc',
+		'disc_zoomDisc:abstract'
+	];
 }
 
 
-var
-	prototype;
-
-prototype = disc_root.prototype;
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Returns the mark if the disc root concerns a mark.
 */
-disc_root.concernsMark =
+def.static.concernsMark =
 	function(
 		mark
 	)
@@ -126,11 +115,12 @@ disc_root.concernsMark =
 /*
 | Returns the hover path if the disc root concerns about it.
 */
-disc_root.concernsHover =
+def.static.concernsHover =
 	function(
 		hover
 	)
 {
+	// FUTURE beautify
 	return(
 		hover && hover.get( 0 ) === 'disc'
 		? hover
@@ -142,66 +132,47 @@ disc_root.concernsHover =
 /*
 | Initializes the disc root.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		a,
-		access,
-		action,
-		aZ,
-		b,
-		bZ,
-		controlTransform,
-		disc,
-		hover,
-		mark,
-		key,
-		ranks,
-		show,
-		spaceRef,
-		twig,
-		user,
-		viewSize;
-
-	hover = this.hover;
+	const hover = this.hover;
 
 /**/if( CHECK )
 /**/{
 /**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
 
-	ranks = this._ranks;
+	const ranks = this._ranks;
 
-	twig = twigDup ? this._twig : jion.copy( this._twig );
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
 
-	action = this.action;
+	const action = this.action;
 
-	access = this.access;
+	const access = this.access;
 
-	show = this.show;
+	const show = this.show;
 
-	controlTransform = this.controlTransform;
+	const controlTransform = this.controlTransform;
 
-	mark = this.mark;
+	const mark = this.mark;
 
-	spaceRef = this.spaceRef;
+	const spaceRef = this.spaceRef;
 
-	user = this.user;
+	const user = this.user;
 
-	viewSize = this.viewSize;
+	const viewSize = this.viewSize;
 
-	for( a = 0, aZ = ranks.length; a < aZ; a++ )
+	for( let a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
-		key = ranks[ a ];
+		const key = ranks[ a ];
 
-		disc = twig[ key ];
+		let disc = twig[ key ];
 
 		if( disc.isAbstract )
 		{
-			for( b = 0, bZ = disc.length; b < bZ; b++ )
+			for( let b = 0, bZ = disc.length; b < bZ; b++ )
 			{
 				disc =
 					disc.abstract(
@@ -234,20 +205,57 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Updates the glint twig.
+*/
+def.lazy.glint =
+	function( )
+{
+	const arr = [ ];
+
+	switch( this.show.reflect )
+	{
+		case 'show_create' :
+
+			arr.push( this.get( 'createDisc' ).glint );
+
+			break;
+
+		case 'show_zoom' :
+
+			arr.push( this.get( 'zoomDisc' ).glint );
+
+			break;
+	}
+
+
+	arr.push( this.get( 'mainDisc' ).glint );
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Move during a dragging operation.
 */
-prototype.dragMove =
+def.func.dragMove =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).dragMove( p, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).dragMove( p, shift, ctrl );
 
 	if( bubble !== undefined ) return bubble;
 
@@ -267,17 +275,14 @@ prototype.dragMove =
 /*
 | Start of a dragging operation.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).dragStart( p, shift, ctrl );
 
 	if( bubble !== undefined ) return bubble;
 
@@ -297,17 +302,14 @@ prototype.dragStart =
 /*
 | Stop of a dragging operation.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).dragStop( p, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).dragStop( p, shift, ctrl );
 
 	if( bubble !== undefined ) return bubble;
 
@@ -324,50 +326,11 @@ prototype.dragStop =
 };
 
 
-/*
-| Updates the glint twig.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var
-		arr,
-		len;
-
-	arr = [ ];
-
-	len = 0;
-
-	switch( this.show.reflect )
-	{
-		case 'show_create' :
-
-			arr[ len++ ] = this.get( 'createDisc' ).glint;
-
-			break;
-
-		case 'show_zoom' :
-
-			arr[ len++ ] = this.get( 'zoomDisc' ).glint;
-
-			break;
-	}
-
-
-	arr[ len++ ] = this.get( 'mainDisc' ).glint;
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
 
 /*
 | Mouse wheel.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
 		p,
 		dir,
@@ -375,10 +338,7 @@ prototype.mousewheel =
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).mousewheel( p, dir, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).mousewheel( p, dir, shift, ctrl );
 
 	if( bubble ) return bubble;
 
@@ -392,26 +352,20 @@ prototype.mousewheel =
 
 			return this.get( 'zoomDisc' ).mousewheel( p, dir, shift, ctrl );
 	}
-
-
-	return;
 };
 
 
 /*
 | Returns true if point is on the disc panel.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		hover;
-
-	hover = this.get( 'mainDisc' ).pointingHover( p, shift, ctrl );
+	let hover = this.get( 'mainDisc' ).pointingHover( p, shift, ctrl );
 
 	if( hover ) return hover;
 
@@ -433,17 +387,14 @@ prototype.pointingHover =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-prototype.probeClickDrag =
+def.func.probeClickDrag =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).probeClickDrag( p, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).probeClickDrag( p, shift, ctrl );
 
 	if( bubble !== undefined ) return bubble;
 
@@ -463,17 +414,14 @@ prototype.probeClickDrag =
 /*
 | Returns true if some disc accepted the click.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble;
-
-	bubble = this.get( 'mainDisc' ).click( p, shift, ctrl );
+	let bubble = this.get( 'mainDisc' ).click( p, shift, ctrl );
 
 	if( bubble ) return bubble;
 
@@ -493,17 +441,14 @@ prototype.click =
 /*
 | A button of the main disc has been pushed.
 */
-prototype.dragStartButton =
+def.func.dragStartButton =
 	function(
 		path,
 		shift,
 		ctrl
 	)
 {
-	var
-		discName;
-
-	discName = path.get( 2 );
+	const discName = path.get( 2 );
 
 	return this.get( discName ).dragStartButton( path, shift, ctrl );
 };
@@ -513,20 +458,17 @@ prototype.dragStartButton =
 /*
 | A button of the main disc has been pushed.
 */
-prototype.pushButton =
+def.func.pushButton =
 	function(
 		path,
 		shift,
 		ctrl
 	)
 {
-	var
-		discName;
-
-	discName = path.get( 2 );
+	const discName = path.get( 2 );
 
 	return this.get( discName ).pushButton( path, shift, ctrl );
 };
 
 
-} )( );
+} );

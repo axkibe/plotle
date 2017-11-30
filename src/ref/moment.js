@@ -1,46 +1,35 @@
 /*
 | A reference to a moment of a dynamic.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'ref_moment', ( def, ref_moment ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'ref_moment',
-		attributes :
+	def.attributes =
+	{
+		dynRef :
 		{
-			dynRef :
-			{
-				comment : 'the dynamic referenced',
-				json : true,
-				type : [ 'ref_space', 'ref_userSpaceList' ]
-			},
-			seq :
-			{
-				comment : 'sequence number the dynamic is at',
-				json : true,
-				type : 'integer'
-			}
+			// the dynamic referenced
+			type : [ 'ref_space', 'ref_userSpaceList' ],
+			json : true,
+		},
+		seq :
+		{
+			// sequence number the dynamic is at
+			type : 'integer',
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-
-} )( );
+} );
