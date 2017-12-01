@@ -584,17 +584,17 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/disc/createDisc.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/disc/mainDisc.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/disc/zoomDisc.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -623,7 +623,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/signUp.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -658,7 +658,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/root.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

@@ -1,102 +1,13 @@
 /*
 | The creation disc.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'disc_createDisc',
-		hasAbstract : true,
-		attributes :
-		{
-			access :
-			{
-				comment : 'users access to current space',
-				type : [ 'undefined', 'string' ]
-			},
-			action :
-			{
-				comment : 'currently active action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			controlTransform :
-			{
-				comment : 'the current transform of controls',
-				type : 'gleam_transform'
-			},
-			facet :
-			{
-				comment : 'facet of the disc',
-				type : 'gleam_facet'
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'disc_disc.concernsHover( hover, path )'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'path of the disc',
-				type : 'jion$path'
-			},
-			shape :
-			{
-				comment : 'shape of the disc',
-				type : 'gleam_ellipse'
-			},
-			show :
-			{
-				comment : 'currently form/disc shown',
-				type : require ( '../show/typemap' ),
-				assign: ''
-			},
-			size :
-			{
-				comment : 'designed size',
-				type : 'gleam_size'
-			},
-			spaceRef :
-			{
-				comment : 'reference to current space',
-				type : [ 'undefined', 'ref_space' ],
-				assign : ''
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'undefined', 'user_creds' ],
-				assign : ''
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'inherit', 'twigDup' ],
-		twig : require( '../form/typemap-widget' )
-	};
-}
-
-
+// FIXME
 var
 	action_createGeneric,
 	action_createRelation,
-	disc_createDisc,
 	gleam_glint_border,
 	gleam_glint_fill,
 	gleam_glint_list,
@@ -104,54 +15,120 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_transform,
-	jion,
-	root,
 	visual_label,
 	visual_note,
 	visual_portal;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'disc_createDisc', ( def, disc_createDisc ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.hasAbstract = true;
 
-	return;
+	def.attributes =
+	{
+		access :
+		{
+			// users access to current space
+			type : [ 'undefined', 'string' ]
+		},
+		action :
+		{
+			// currently active action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		controlTransform :
+		{
+			// the current transform of controls
+			type : 'gleam_transform'
+		},
+		facet :
+		{
+			// facet of the disc
+			type : 'gleam_facet'
+		},
+		hover :
+		{
+			// the widget hovered upon',
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'disc_disc.concernsHover( hover, path )'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// path of the disc
+			type : 'jion$path'
+		},
+		shape :
+		{
+			// shape of the disc
+			type : 'gleam_ellipse'
+		},
+		show :
+		{
+			// currently form/disc shown
+			type : require ( '../show/typemap' ),
+			assign: ''
+		},
+		size :
+		{
+			// designed size
+			type : 'gleam_size'
+		},
+		spaceRef :
+		{
+			// reference to current space
+			type : [ 'undefined', 'ref_space' ],
+			assign : ''
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'undefined', 'user_creds' ],
+			assign : ''
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
+
+	def.init = [ 'inherit', 'twigDup' ];
+
+	def.twig = require( '../form/typemap-widget' );
 }
-
-
-var
-	prototype;
-
-prototype = disc_createDisc.prototype;
 
 
 /*
 | Initializes the create disc.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit,
 		twigDup
 	)
 {
-	var
-		r,
-		rZ,
-		twig,
-		wname;
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
 
-	twig = twigDup ? this._twig : jion.copy( this._twig );
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		wname = this.getKey( r );
+		const wname = this.getKey( r );
 
 		twig[ wname ] =
 			twig[ wname ].create(
@@ -170,28 +147,176 @@ prototype._init =
 };
 
 
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Returns true if the button called 'wname'
+| should be highlighted for current 'action'
+*/
+def.static._isActiveButton =
+	function(
+		action,  // the action
+		wname    // the widget name
+	)
+{
+	if( !action ) return false;
+
+	switch( action.reflect )
+	{
+		case 'action_createGeneric' :
+
+			switch( action.itemType )
+			{
+				case visual_note   : return wname === 'createNote';
+
+				case visual_label  : return wname === 'createLabel';
+
+				case visual_portal : return wname === 'createPortal';
+
+				default : return false;
+			}
+
+/**/		if( CHECK )
+/**/		{
+/**/			throw new Error(
+/**/				'invalid execution point reached'
+/**/			);
+/**/		}
+
+			break;
+
+		case 'action_createRelation' :
+
+			return wname === 'createRelation';
+
+		default :
+
+			return false;
+	}
+};
+
+
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| The discs glint.
+*/
+def.lazy.glint =
+	function( )
+{
+	// FUTURE GLINT inherit
+	return(
+		gleam_glint_window.create(
+			'glint', this._glint,
+			'rect', this._tZone.enlarge1,
+			'offset', gleam_point.zero
+		)
+	);
+};
+
+
+/*
+| The disc's inner glint.
+*/
+def.lazy._glint =
+	function( )
+{
+	const arr =
+		[
+			gleam_glint_fill.create(
+				'facet', this.facet,
+				'shape', this._tShape
+			)
+		];
+
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		const g = this.atRank( r ).glint;
+
+		if( g ) arr.push( g );
+	}
+
+	arr.push(
+		gleam_glint_border.create(
+			'facet', this.facet,
+			'shape', this._tShape
+		)
+	);
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The disc's transformed zone.
+*/
+def.lazy._tZone =
+	function( )
+{
+	const ctz = this.controlTransform.zoom;
+
+	const size = this.size;
+
+	const vsr = this.viewSize.zeroRect;
+
+	return(
+		gleam_rect.create(
+			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
+			'width', size.width * ctz + 1,
+			'height', size.height * ctz + 1
+		)
+	);
+};
+
+
+/*
+| The disc's transformed shape.
+*/
+def.lazy._tShape =
+	function( )
+{
+	return(
+		this.shape
+		.transform(
+			gleam_transform.create(
+				'offset', this.size.zeroRect.pw,
+				'zoom', 1
+			)
+		)
+		.transform( this.controlTransform )
+	);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | The pointing device just went down.
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-prototype.probeClickDrag =
+def.func.probeClickDrag =
 	function(
-		p
-		//shift,
-		//ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
-	var
-		pp,
-		tZone;
-
-	tZone = this._tZone;
+	const tZone = this._tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	pp = p.sub( tZone.pos );
+	const pp = p.sub( tZone.pos );
 
 	// if p is not on the panel
 	if( !this._tShape.within( pp ) ) return;
@@ -203,22 +328,19 @@ prototype.probeClickDrag =
 /*
 | A button of the main disc has been pushed.
 */
-prototype.pushButton =
+def.func.pushButton =
 	function(
-		path
-		// shift,
-		// ctrl
+		path,
+		shift,
+		ctrl
 	)
 {
-	var
-		buttonName;
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	buttonName = path.get( 4 );
+	const buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
@@ -277,33 +399,26 @@ prototype.pushButton =
 /*
 | Returns true if point is on the disc panel.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		pp,
-		r,
-		rZ,
-		tZone;
-
-	tZone = this._tZone;
+	const tZone = this._tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	pp = p.sub( tZone.pos );
+	const pp = p.sub( tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
 	// it's on the disc
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		bubble = this.atRank( r ).pointingHover( pp, shift, ctrl );
+		const bubble = this.atRank( r ).pointingHover( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -313,33 +428,26 @@ prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		pp,
-		r,
-		rZ,
-		tZone;
-
-	tZone = this._tZone;
+	const tZone = this._tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	pp = p.sub( tZone.pos );
+	const pp = p.sub( tZone.pos );
 
 	if( !this._tShape.within( pp ) ) return;
 
 	// this is on the disc
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		bubble = this.atRank( r ).click( pp, shift, ctrl );
+		const bubble = this.atRank( r ).click( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -351,9 +459,9 @@ prototype.click =
 /*
 | Cycles the focus
 */
-prototype.cycleFocus =
+def.func.cycleFocus =
 	function(
-		// dir
+		dir
 	)
 {
 	throw new Error( );
@@ -361,31 +469,11 @@ prototype.cycleFocus =
 
 
 /*
-| The discs glint.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'glint', this._glint,
-			'rect', this._tZone.enlarge1,
-			'offset', gleam_point.zero
-		)
-	);
-}
-);
-
-
-/*
 | User is inputing text.
 */
-prototype.input =
+def.func.input =
 	function(
-		// text
+		text
 	)
 {
 	return;
@@ -395,17 +483,14 @@ prototype.input =
 /*
 | Start of a dragging operation.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
-		p
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
-	var
-		tZone;
-
-	tZone = this._tZone;
+	const tZone = this._tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -421,9 +506,9 @@ prototype.dragStart =
 /*
 | A button has been dragStarted.
 */
-prototype.dragStartButton =
+def.func.dragStartButton =
 	function(
-		// path
+		path
 	)
 {
 	return false;
@@ -433,11 +518,11 @@ prototype.dragStartButton =
 /*
 | Move during a dragging operation.
 */
-prototype.dragMove =
+def.func.dragMove =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return;
@@ -447,11 +532,11 @@ prototype.dragMove =
 /*
 | Stop of a dragging operation.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return;
@@ -461,18 +546,15 @@ prototype.dragStop =
 /*
 | Mouse wheel.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
-		p
-		// dir,
-		// shift,
-		// ctrl
+		p,
+		dir,
+		shift,
+		ctrl
 	)
 {
-	var
-		tZone;
-
-	tZone = this._tZone;
+	const tZone = this._tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -486,11 +568,11 @@ prototype.mousewheel =
 /*
 | User is pressing a special key.
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
-	//	key,
-	//	shift,
-	//	ctrl
+		key,
+		shift,
+		ctrl
 	)
 {
 	// not implemented
@@ -498,152 +580,5 @@ prototype.specialKey =
 
 
 
-/*
-| Returns true if the button called 'wname'
-| should be highlighted for current 'action'
-*/
-disc_createDisc._isActiveButton =
-	function(
-		action,  // the action
-		wname    // the widget name
-	)
-{
-	if( !action )
-	{
-		return false;
-	}
 
-	switch( action.reflect )
-	{
-		case 'action_createGeneric' :
-
-			switch( action.itemType )
-			{
-				case visual_note   : return wname === 'createNote';
-
-				case visual_label  : return wname === 'createLabel';
-
-				case visual_portal : return wname === 'createPortal';
-
-				default : return false;
-			}
-
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'invalid execution point reached'
-/**/			);
-/**/		}
-
-			break;
-
-		case 'action_createRelation' :
-
-			return wname === 'createRelation';
-
-		default :
-
-			return false;
-	}
-};
-
-
-/*
-| The disc's inner glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glint',
-	function( )
-{
-	var
-		arr,
-		g,
-		len,
-		r,
-		rZ,
-		tZone;
-
-	tZone = this._tZone;
-
-	arr =
-		[
-			gleam_glint_fill.create(
-				'facet', this.facet,
-				'shape', this._tShape
-			)
-		];
-
-	len = 1;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		g = this.atRank( r ).glint;
-
-		if( g ) arr[ len++ ] = g;
-	}
-
-	arr[ len++ ] =
-		gleam_glint_border.create(
-			'facet', this.facet,
-			'shape', this._tShape
-		);
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The disc's transformed zone.
-*/
-jion.lazyValue(
-	prototype,
-	'_tZone',
-	function( )
-{
-	var
-		ctz,
-		size,
-		vsr;
-
-	ctz = this.controlTransform.zoom;
-
-	size = this.size;
-
-	vsr = this.viewSize.zeroRect;
-
-	return(
-		gleam_rect.create(
-			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
-			'width', size.width * ctz + 1,
-			'height', size.height * ctz + 1
-		)
-	);
-}
-);
-
-
-/*
-| The disc's transformed shape.
-*/
-jion.lazyValue(
-	prototype,
-	'_tShape',
-	function( )
-{
-	return(
-		this.shape
-		.transform(
-			gleam_transform.create(
-				'offset', this.size.zeroRect.pw,
-				'zoom', 1
-			)
-		)
-		.transform( this.controlTransform )
-	);
-}
-);
-
-
-} )( );
+} );

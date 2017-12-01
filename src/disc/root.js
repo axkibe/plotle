@@ -80,6 +80,7 @@ if( TIM )
 
 	def.init = [ 'twigDup' ];
 
+	// FUTURE make a group instead of a twig
 	def.twig =
 	[
 		'disc_mainDisc',

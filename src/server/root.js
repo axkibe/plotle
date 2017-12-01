@@ -1,85 +1,70 @@
 /*
 | The root of the server.
 */
-
-
-/*
-| Running node normally, JION is false.
-*/
-global.JION = false;
-
-
-/*
-| Running node normally, TIM is false.
-*/
-global.TIM = false;
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'server_root',
-		attributes :
-		{
-			bundleFilePath :
-			{
-				comment : 'file path of the bundle',
-				type : [ 'undefined', 'string' ]
-			},
-			inventory :
-			{
-				comment : 'the servers inventory of resources',
-				type : 'server_inventory'
-			},
-			nextSleepID :
-			{
-				comment : 'ID for next upsleep',
-				type : 'integer'
-			},
-			nextVisitor :
-			{
-				comment : 'next visitors ID',
-				type : 'integer'
-			},
-			repository :
-			{
-				comment : 'the database backend',
-				type : 'database_repository'
-			},
-			serverDir :
-			{
-				comment : 'server directory',
-				type : 'string'
-			},
-			spaces :
-			{
-				comment : 'all spaces',
-				type : 'server_spaceNexus'
-			},
-			userNexus :
-			{
-				comment : 'manages users',
-				type : 'server_userNexus'
-			},
-			upSleeps :
-			{
-				comment : 'a table of all clients waiting for an update',
-				type : 'server_upSleepGroup'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
-/*
-| Capsule.
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'server_root', ( def, server_root ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		bundleFilePath :
+		{
+			// file path of the bundle
+			type : [ 'undefined', 'string' ]
+		},
+		inventory :
+		{
+			// the servers inventory of resources
+			type : 'server_inventory'
+		},
+		nextSleepID :
+		{
+			// ID for next upsleep
+			type : 'integer'
+		},
+		nextVisitor :
+		{
+			// next visitors ID
+			type : 'integer'
+		},
+		repository :
+		{
+			// the database backend
+			type : 'database_repository'
+		},
+		serverDir :
+		{
+			// server directory
+			type : 'string'
+		},
+		spaces :
+		{
+			// all spaces
+			type : 'server_spaceNexus'
+		},
+		userNexus :
+		{
+			// manages users
+			type : 'server_userNexus'
+		},
+		upSleeps :
+		{
+			// a table of all clients waiting for an update
+			type : 'server_upSleepGroup'
+		}
+	};
+	
+	def.init = [ ];
+}
 
 
 // FUTURE remove
@@ -90,51 +75,7 @@ const DELAY_ACQUIRE = false;
 
 const config = require( '../../config' );
 
-config.database_version = 15;
-
-/*
-| Globals.
-*/
-
-/*
-| Server checking.
-*/
-global.CHECK = config.server_check;
-
-/*
-| Server object freezing.
-*/
-global.FREEZE = config.server_freeze;
-
-/*
-| This is not a jion creation call.
-*/
-global.JION = false;
-
-/*
-| This is node.
-*/
-global.NODE = true;
-
-/*
-| Sets root as global variable.
-*/
-global.root = undefined;
-
-
-/*
-| Root directory of server.
-*/
-let serverDir;
-
-global.tim = require( 'tim.js' );
-
-// FIXME?
-require( 'jion' );
-
 const fs = require( 'fs' );
-
-const http = require( 'http' );
 
 const isString = tim.isString;
 
@@ -148,27 +89,17 @@ const server_maxAge = require( './maxAge' );
 
 const server_postProcessor = require( './postProcessor' );
 
-const database_repository = require( '../database/repository' );
-
 const ref_userSpaceList = require( '../ref/userSpaceList' );
 
 const server_requestHandler = require( './requestHandler' );
 
 const server_roster = require( './roster' );
 
-const server_inventory = require( './inventory' );
-
 const server_resource = require( './resource' );
 
 const server_spaceBox = require( './spaceBox' );
 
-const server_spaceNexus = require( './spaceNexus' );
-
-const server_userNexus = require( './userNexus' );
-
 const server_tools = require( './tools' );
-
-const server_upSleepGroup = require( './upSleepGroup' );
 
 const hash_sha1 = require( '../hash/sha1' );
 
@@ -186,34 +117,10 @@ const ref_space = require( '../ref/space' );
 
 const zlib = require( 'zlib' );
 
-const server_root = require( 'jion' ).this( module );
-
-const prototype = server_root.prototype;
-
-/*
-| Calculates the server root directory.
-*/
-( function( )
-{
-	var
-		a;
-
-	serverDir = module.filename;
-
-	for( a = 0; a < 3; a++ )
-	{
-		serverDir = serverDir.substr( 0, serverDir.lastIndexOf( '/' ) );
-	}
-
-	serverDir += '/';
-}
-)( );
-
-
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 	root = this;
@@ -221,49 +128,9 @@ prototype._init =
 
 
 /*
-| Sets up the server.
-|*/
-const startup = function*( )
-{
-
-	server_root.create(
-		'inventory', server_inventory.create( ),
-		'nextSleepID', 1,
-		'repository', yield* database_repository.connect( config ),
-		'spaces', server_spaceNexus.create( ),
-		'upSleeps', server_upSleepGroup.create( ),
-		'nextVisitor', 1000,
-		'userNexus', server_userNexus.create( ),
-		'serverDir', serverDir
-	);
-
-	yield* root.prepareInventory( );
-
-	yield* root.loadSpaces( );
-
-	log_start(
-		'starting server @ http://' +
-			( config.ip || '*' ) + '/:' + config.port
-	);
-
-	yield http.createServer(
-		function(
-			request,
-			result
-		)
-	{
-		suspend( root.requestListener ).call( root, request, result );
-	}
-	).listen( config.port, config.ip, resume( ) );
-
-	log_start( 'server running' );
-};
-
-
-/*
 | loads all spaces and playbacks all changes from the database.
 */
-prototype.loadSpaces =
+def.func.loadSpaces =
 	function*( )
 {
 	var
@@ -309,7 +176,7 @@ prototype.loadSpaces =
 /*
 | Create the shell's config.js resource.
 */
-prototype.createShellConfig =
+def.func.createShellConfig =
 	function( )
 {
 	var
@@ -380,7 +247,7 @@ prototype.createShellConfig =
 | Registers and prepares the inventory.
 | Also builds the bundle.
 */
-prototype.prepareInventory =
+def.func.prepareInventory =
 	function*( )
 {
 	var
@@ -515,6 +382,7 @@ prototype.prepareInventory =
 							'CHECK' : config.shell_check,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
+							'TIM' : false,
 							'NODE' : false
 						}
 					}
@@ -647,7 +515,7 @@ prototype.prepareInventory =
 |
 | Used by development.
 */
-prototype.prependConfigFlags =
+def.func.prependConfigFlags =
 	function( )
 {
 	var
@@ -675,7 +543,7 @@ prototype.prependConfigFlags =
 /*
 | Makes additional mangles
 */
-prototype.extraMangle =
+def.func.extraMangle =
 	function(
 		ast,
 		jionIDs
@@ -893,7 +761,7 @@ prototype.extraMangle =
 /*
 | Creates a new space.
 */
-prototype.createSpace =
+def.func.createSpace =
 	function*(
 		spaceRef
 	)
@@ -921,7 +789,7 @@ prototype.createSpace =
 /*
 | A sleeping update closed prematurely.
 */
-prototype.closeSleep =
+def.func.closeSleep =
 	function(
 		sleepID
 	)
@@ -944,7 +812,7 @@ prototype.closeSleep =
 /*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-prototype.wake =
+def.func.wake =
 	function(
 		ref // reference to wake for
 	)
@@ -1004,7 +872,7 @@ prototype.wake =
 /*
 | Logs and returns a web error
 */
-prototype.webError =
+def.func.webError =
 	function(
 		result,
 		code,
@@ -1031,7 +899,7 @@ prototype.webError =
 /*
 | Listens to http requests
 */
-prototype.requestListener =
+def.func.requestListener =
 	function*(
 		request,
 		result
@@ -1180,7 +1048,7 @@ prototype.requestListener =
 /*
 | Handles ajax requests.
 */
-prototype.webAjax =
+def.func.webAjax =
 	function(
 		request,
 		red,
@@ -1284,13 +1152,4 @@ prototype.webAjax =
 	);
 };
 
-
-suspend(
-	function*( )
-{
-	yield* startup( );
-}
-)( );
-
-
-} )( );
+} );

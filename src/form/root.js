@@ -1,124 +1,94 @@
 /*
 | The form root is the master of all forms.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'form_root',
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'form_root.concernsHover( hover )'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			path :
-			{
-				comment : 'the path of the form root',
-				type : 'jion$path'
-			},
-			spaceRef :
-			{
-				comment : 'the reference of current space',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			userSpaceList :
-			{
-				comment : 'list of spaces belonging to user',
-				type : [ 'undefined', 'ref_spaceList' ]
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'twigDup' ],
-		// FUTURE make a group instead of twig
-		twig :
-			[
-				'form_loading',
-				'form_login',
-				'form_moveTo',
-				'form_noAccessToSpace',
-				'form_nonExistingSpace',
-				'form_signUp',
-				'form_space',
-				'form_user',
-				'form_welcome'
-			]
-	};
-}
-
-
-var
-	form_root,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'form_root', ( def, form_root ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		hover :
+		{
+			// the widget hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'form_root.concernsHover( hover )'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		path :
+		{
+			// the path of the form root
+			type : 'jion$path'
+		},
+		spaceRef :
+		{
+			// the reference of current space
+			type : [ 'undefined', 'ref_space' ]
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'undefined', 'user_creds' ]
+		},
+		userSpaceList :
+		{
+			// list of spaces belonging to user
+			type : [ 'undefined', 'ref_spaceList' ]
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
 
-	return;
+	def.init = [ 'twigDup' ];
+
+	// FUTURE make a group instead of twig
+	def.twig =
+	[
+		'form_loading',
+		'form_login',
+		'form_moveTo',
+		'form_noAccessToSpace',
+		'form_nonExistingSpace',
+		'form_signUp',
+		'form_space',
+		'form_user',
+		'form_welcome'
+	];
 }
-
-
-var
-	prototype;
-
-prototype = form_root.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		a,
-		aZ,
-		form,
-		name,
-		path,
-		ranks,
-		twig;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.hover && this.hover.isEmpty )
@@ -127,22 +97,22 @@ prototype._init =
 /**/	}
 /**/}
 
-	twig =
+	const twig =
 		twigDup
 		? this._twig
-		: jion.copy( this._twig );
+		: tim.copy( this._twig );
 
-	ranks = this._ranks;
+	const ranks = this._ranks;
 
 	// FIXME make this somehow lazy
 
-	for( a = 0, aZ = ranks.length; a < aZ; a++ )
+	for( let a = 0, aZ = ranks.length; a < aZ; a++ )
 	{
-		name = ranks[ a ];
+		const name = ranks[ a ];
 
-		form = twig[ name ];
+		const form = twig[ name ];
 
-		path =
+		const path =
 			form.path
 			? pass
 			: this.path.append( 'twig' ).append( name );
@@ -171,51 +141,50 @@ prototype._init =
 };
 
 
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
 /*
 | Returns the mark if the form root concerns a mark.
 */
-form_root.concernsMark =
-	function(
-		mark
-	)
-{
-	return(
+def.static.concernsMark =
+	mark =>
+	(
 		mark.containsPath( form_root.path )
 		? mark
 		: undefined
 	);
-};
 
 
 /*
 | Returns the hover path if the form root concerns about it.
 */
-form_root.concernsHover =
-	function(
-		hover
-	)
-{
-	return(
+def.static.concernsHover =
+	hover =>
+	(
 		hover && hover.get( 0 ) === 'form'
 		? hover
 		: undefined
 	);
-};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Cycles the focus in a form
 */
-prototype.cycleFocus =
+def.func.cycleFocus =
 	function(
 		formName,
 		dir
 	)
 {
-	var
-		form;
-
-	form = this.get( formName );
+	const form = this.get( formName );
 
 /**/if( CHECK )
 /**/{
@@ -229,9 +198,9 @@ prototype.cycleFocus =
 /*
 | A button has been dragStarted.
 */
-prototype.dragStartButton =
+def.func.dragStartButton =
 	function(
-		// path
+		path
 	)
 {
 	return false;
@@ -241,7 +210,7 @@ prototype.dragStartButton =
 /*
 | A button has been pushed.
 */
-prototype.pushButton =
+def.func.pushButton =
 	function(
 		path
 	)
@@ -270,4 +239,4 @@ prototype.pushButton =
 };
 
 
-} )( );
+} );
