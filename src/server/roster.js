@@ -643,7 +643,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/welcome.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
