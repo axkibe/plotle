@@ -1,115 +1,102 @@
 /*
 | The space form.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'form_space',
-		hasAbstract : true,
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'form_form.concernsMark( mark, path )'
-			},
-			path :
-			{
-				comment : 'the path of the form',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			spaceRef :
-			{
-				comment : 'the reference to the current space',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'user_creds', 'undefined' ],
-				assign : ''
-			},
-			userSpaceList :
-			{
-				comment : 'list of spaces belonging to user',
-				type : [ 'undefined', 'ref_spaceList' ],
-				assign : ''
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'twigDup' ],
-		twig : require( '../form/typemap-widget' )
-	};
-}
-
-
-var
-	form_form,
-	form_space,
-	jion;
-
-
-/*
-| Capsule
-*/
-(function( ) {
 'use strict';
+
+
+// FIXME
+var
+	form_form;
+
+
+tim.define( module, 'form_space', ( def, form_space ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		hover :
+		{
+			// the widget hovered upon
+			type : [ 'undefined', 'jion$path' ]
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'form_form.concernsMark( mark, path )'
+		},
+		path :
+		{
+			// the path of the form
+			type : [ 'undefined', 'jion$path' ]
+		},
+		spaceRef :
+		{
+			// the reference to the current space
+			type : [ 'undefined', 'ref_space' ]
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'user_creds', 'undefined' ],
+			assign : ''
+		},
+		userSpaceList :
+		{
+			// list of spaces belonging to user
+			type : [ 'undefined', 'ref_spaceList' ],
+			assign : ''
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig = require( '../form/typemap-widget' );
+}
 
 
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	form_form = require( './form' );
 }
 
 
-var
-	prototype;
-
-prototype = form_space.prototype;
-
-
 /*
-| The space form.
+| Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		twig;
-
 	if( !this.path ) return;
 
 	if( this.spaceRef )
 	{
-		twig = twigDup ? this._twig : jion.copy( this._twig );
+		const twig = twigDup ? this._twig : tim.copy( this._twig );
 
 		twigDup = true;
 
@@ -125,34 +112,56 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
 /*
 | The attention center.
 */
-jion.lazyValue( prototype, 'attentionCenter', form_form.getAttentionCenter );
+def.lazy.attentionCenter = form_form.getAttentionCenter;
+
+
+/*
+| The form's glint.
+*/
+def.lazy.glint = form_form.glint;
+
+
+/*
+| The focused widget.
+*/
+def.lazy.focusedWidget = form_form.getFocusedWidget;
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | User clicked.
 */
-prototype.click = form_form.click;
+def.func.click = form_form.click;
 
 
 /*
 | Cycles the focus.
 */
-prototype.cycleFocus = form_form.cycleFocus;
+def.func.cycleFocus = form_form.cycleFocus;
 
 
 /*
 | Moving during an operation with the mouse button held down.
 */
-prototype.dragMove =
+def.func.dragMove =
 	function(
-		// p
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
+	return;
 };
 
 
@@ -161,11 +170,11 @@ prototype.dragMove =
 |
 | Mouse down or finger on screen.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return false;
@@ -175,11 +184,11 @@ prototype.dragStart =
 /*
 | Stops an operation with the mouse button held down.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function(
-		//p,
-		//shift,
-		//ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return true;
@@ -187,32 +196,20 @@ prototype.dragStop =
 
 
 /*
-| The form's glint.
-*/
-jion.lazyValue( prototype, 'glint', form_form.glint );
-
-
-/*
-| The focused widget.
-*/
-jion.lazyValue( prototype, 'focusedWidget', form_form.getFocusedWidget );
-
-
-/*
 | User is inputing text.
 */
-prototype.input = form_form.input;
+def.func.input = form_form.input;
 
 
 /*
 | Mouse wheel.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
-		// p,
-		// dir,
-		// shift,
-		// ctrl
+		p,
+		dir,
+		shift,
+		ctrl
 	)
 {
 	return true;
@@ -222,43 +219,31 @@ prototype.mousewheel =
 /*
 | If point is on the form returns its hovering state.
 */
-prototype.pointingHover = form_form.pointingHover;
+def.func.pointingHover = form_form.pointingHover;
 
 
 /*
 | A button of the form has been pushed.
 */
-prototype.pushButton =
+def.func.pushButton =
 	function(
-		path
-		// shift,
-		// ctrl
+		path,
+		shift,
+		ctrl
 	)
 {
-	var
-		buttonName;
-
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	buttonName = path.get( 4 );
+	const buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
-		case 'closeButton' :
+		case 'closeButton' : root.showHome( ); break;
 
-			root.showHome( );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -266,13 +251,13 @@ prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-prototype.showDisc = true;
+def.func.showDisc = true;
 
 
 /*
 | User is pressing a special key.
 */
-prototype.specialKey = form_form.specialKey;
+def.func.specialKey = form_form.specialKey;
 
 
-} )( );
+} );

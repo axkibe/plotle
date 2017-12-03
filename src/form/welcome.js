@@ -3,76 +3,81 @@
 |
 | Shown only after successfully signing up.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'form_welcome',
-		hasAbstract : true,
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'form_form.concernsMark( mark, path )'
-			},
-			path :
-			{
-				comment : 'the path of the form',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			spaceRef :
-			{
-				comment : 'the reference to the current space',
-				type : [ 'undefined', 'ref_space' ],
-				assign : ''
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			userSpaceList :
-			{
-				comment : 'list of spaces belonging to user',
-				type : [ 'undefined', 'ref_spaceList' ],
-				assign : ''
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'twigDup' ],
-		twig : require( '../form/typemap-widget' )
-	};
-}
-
-
+// FIXME
 var
-	form_form,
-	form_welcome,
-	jion;
+	form_form;
+
+
+tim.define( module, 'form_welcome', ( def, form_welcome ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes :
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		hover :
+		{
+			// the widget hovered upon
+			type : [ 'undefined', 'jion$path' ]
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'form_form.concernsMark( mark, path )'
+		},
+		path :
+		{
+			// the path of the form
+			type : [ 'undefined', 'jion$path' ]
+		},
+		spaceRef :
+		{
+			// the reference to the current space
+			type : [ 'undefined', 'ref_space' ],
+			assign : ''
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'undefined', 'user_creds' ]
+		},
+		userSpaceList :
+		{
+			// list of spaces belonging to user
+			type : [ 'undefined', 'ref_spaceList' ],
+			assign : ''
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig = require( '../form/typemap-widget' );
+}
 
 
 /*

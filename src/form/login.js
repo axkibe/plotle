@@ -109,6 +109,23 @@ def.lazy.attentionCenter = form_form.getAttentionCenter;
 
 
 /*
+| The form's glint.
+*/
+def.lazy.glint = form_form.glint;
+
+
+/*
+| The focused widget.
+*/
+def.lazy.focusedWidget = form_form.getFocusedWidget;
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
 | Clears all fields.
 */
 def.func.clear =
@@ -179,18 +196,6 @@ def.func.dragStop =
 {
 	return true;
 };
-
-
-/*
-| The form's glint.
-*/
-def.lazy.glint = form_form.glint;
-
-
-/*
-| The focused widget.
-*/
-def.lazy.focusedWidget = form_form.getFocusedWidget;
 
 
 /*
