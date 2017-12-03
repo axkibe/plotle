@@ -618,7 +618,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/login.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
