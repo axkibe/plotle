@@ -613,7 +613,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/loading.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -633,7 +633,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/moveTo.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -648,7 +648,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/noAccessToSpace.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

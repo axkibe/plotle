@@ -1,191 +1,150 @@
 /*
 | The moveTo or 'go' form.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'form_moveTo',
-		hasAbstract : true,
-		attributes :
-		{
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			hover :
-			{
-				comment : 'the widget hovered upon',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'form_form.concernsMark( mark, path )'
-			},
-			path :
-			{
-				comment : 'the path of the form',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			spaceRef :
-			{
-				comment : 'the reference to the current space',
-				type : [ 'undefined', 'ref_space' ],
-				assign : ''
-			},
-			user :
-			{
-				comment : 'currently logged in user',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			userSpaceList :
-			{
-				comment : 'list of spaces belonging to user',
-				type : [ 'undefined', 'ref_spaceList' ]
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			}
-		},
-		init : [ 'twigDup' ],
-		twig : require( '../form/typemap-widget' )
-	};
-}
-
-
+// FIXME
 var
 	form_form,
-	form_moveTo,
 	gleam_point,
 	gleam_rect,
 	gleam_transform,
 	gruga_mainDisc,
 	gruga_moveToSpaceButtonTemplate,
 	gruga_scrollbar,
-	jion,
 	ref_space;
 
 
-/*
-| Capsule
-*/
-(function( ) {
-'use strict';
+
+tim.define( module, 'form_moveTo', ( def, form_moveTo ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		hover :
+		{
+			// the widget hovered upon
+			type : [ 'undefined', 'jion$path' ]
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'form_form.concernsMark( mark, path )'
+		},
+		path :
+		{
+			// the path of the form
+			type : [ 'undefined', 'jion$path' ]
+		},
+		spaceRef :
+		{
+			// the reference to the current space
+			type : [ 'undefined', 'ref_space' ],
+			assign : ''
+		},
+		user :
+		{
+			// currently logged in user
+			type : [ 'undefined', 'user_creds' ]
+		},
+		userSpaceList :
+		{
+			// list of spaces belonging to user
+			type : [ 'undefined', 'ref_spaceList' ]
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		}
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig = require( '../form/typemap-widget' );
+}
 
 
 if( NODE )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	form_form = require( './form' );
 }
 
 
-var
-	prototype;
-
-prototype = form_moveTo.prototype;
-
-
 /*
-| The moveto form.
+| Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		a,
-		aZ,
-		avw,
-		button,
-		c,
-		ch,
-		center,
-		cOff,
-		cLen,
-		cols,
-		cy,
-		discDistance,
-		dw, // disc width
-		fullname,
-		r,
-		sb,
-		sbRanks,
-		sbTwig,
-		rows,
-		rSpace,
-		twig,
-		userSpaceList,
-		vh,
-		x0,
-		y0;
-
 	if( !this.path ) return;
 
-	sb = this._twig.scrollbox;
+	const sb = this._twig.scrollbox;
 
-	sbRanks = [ 'ideoloom:home', 'ideoloom:sandbox' ];
+	const sbRanks = [ 'ideoloom:home', 'ideoloom:sandbox' ];
 
-	sbTwig = {
+	const sbTwig = {
 		'ideoloom:home'    : sb.get( 'ideoloom:home' ),
 		'ideoloom:sandbox' : sb.get( 'ideoloom:sandbox' )
 	};
 
-	userSpaceList = this.userSpaceList;
-		
-	twig = twigDup ? this._twig : jion.copy( this._twig );
+	const userSpaceList = this.userSpaceList;
 
-	dw =
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
+
+	// disc width
+	const dw =
 		root
 		? root.disc.get( 'mainDisc' ).size.width
 		: gruga_mainDisc.size.width;
 
-	discDistance = 20;
+	const discDistance = 20;
 
 	// available width
-	avw = this.viewSize.width - dw - discDistance - gruga_scrollbar.strength;
+	const avw = this.viewSize.width - dw - discDistance - gruga_scrollbar.strength;
 
-	x0 = dw + discDistance;
-	
-	vh = this.viewSize.height;
+	const x0 = dw + discDistance;
 
-	center =
-		gleam_point.xy(
-			x0 + Math.round( avw / 2 ),
-			Math.round( vh / 2 )
-		);
+	const vh = this.viewSize.height;
 
-	cols = Math.floor( ( avw + 30 ) / 160 );
+	const cols = Math.floor( ( avw + 30 ) / 160 );
 
 	// cols in current row
-	cLen = cols;
+	let cLen = cols;
 
-	rows =
+	const rows =
 		userSpaceList
 		? Math.ceil( userSpaceList.length / cols )
 		: 0;
 
 	// content height
-	ch = twig.headline.font.size * 2 + 160 + rows * 160;
+	const ch = twig.headline.font.size * 2 + 160 + rows * 160;
 
-	cy = vh / 2 - ch / 2;
+	let cy = vh / 2 - ch / 2;
 
-	y0 = 10 + twig.headline.font.size;
+	const y0 = 10 + twig.headline.font.size;
 
 	// no longer vertical centered and need to start scrolling
 	if( cy < y0 ) cy = y0;
@@ -198,10 +157,10 @@ prototype._init =
 	cy += 50;
 
 	// buttons are in the scrollbox
-	button = sbTwig[ 'ideoloom:home' ];
+	let button = sbTwig[ 'ideoloom:home' ];
 
 	sbTwig[ 'ideoloom:home' ] =
-		button.create( 
+		button.create(
 			'zone',
 				button.zone.create(
 					'pos', gleam_point.xy( 160 * ( cols - 2 ) / 2, 0 )
@@ -220,13 +179,13 @@ prototype._init =
 
 	if( userSpaceList )
 	{
-		c = 0; // current column
-		
-		cOff = 0; // column offset (for last row)
-		
-		r = 1; // current row
+		let c = 0; // current column
 
-		for( a = 0, aZ = userSpaceList.length; a < aZ; a++ )
+		let cOff = 0; // column offset (for last row)
+
+		let r = 1; // current row
+
+		for( let a = 0, aZ = userSpaceList.length; a < aZ; a++ )
 		{
 			if( r >= rows )
 			{
@@ -237,9 +196,9 @@ prototype._init =
 				cOff = ( cols - cLen ) / 2;
 			}
 
-			rSpace = userSpaceList.get( a );
+			const rSpace = userSpaceList.get( a );
 
-			fullname = rSpace.fullname;
+			const fullname = rSpace.fullname;
 
 			button = this._twig[ fullname ];
 
@@ -284,12 +243,15 @@ prototype._init =
 };
 
 
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
+
+
 /*
 | Offset of the vertical scrollbar, set so it's within the scrollbox.
 */
-jion.lazyStaticValue(
-	form_moveTo,
-	'scrollbarYOffset',
+def.staticLazy.scrollbarYOffset =
 	function( )
 {
 	return(
@@ -298,36 +260,53 @@ jion.lazyStaticValue(
 			0
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The attention center.
 */
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
-	form_form.getAttentionCenter
-);
+def.lazy.attentionCenter = form_form.getAttentionCenter;
 
 
 /*
 | User clicked.
 */
-prototype.click = form_form.click;
+def.func.click = form_form.click;
 
 
 /*
 | Cycles the focus.
 */
-prototype.cycleFocus = form_form.cycleFocus;
+def.func.cycleFocus = form_form.cycleFocus;
+
+
+/*
+| The form's glint.
+*/
+def.lazy.glint = form_form.glint;
+
+
+/*
+| The focused widget.
+*/
+def.lazy.focusedWidget = form_form.getFocusedWidget;
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Moving during an operation with the mouse button held down.
 */
-prototype.dragMove = form_form.dragMove;
+def.func.dragMove = form_form.dragMove;
 
 
 /*
@@ -335,71 +314,51 @@ prototype.dragMove = form_form.dragMove;
 |
 | Mouse down or finger on screen.
 */
-prototype.dragStart = form_form.dragStart;
+def.func.dragStart = form_form.dragStart;
 
 
 /*
 | Stops an operation with the mouse button held down.
 */
-prototype.dragStop = form_form.dragStop;
-
-
-/*
-| The form's glint.
-*/
-jion.lazyValue( prototype, 'glint', form_form.glint );
-
-
-/*
-| The focused widget.
-*/
-jion.lazyValue(
-	prototype,
-	'focusedWidget',
-	form_form.getFocusedWidget
-);
+def.func.dragStop = form_form.dragStop;
 
 
 /*
 | User is inputing text.
 */
-prototype.input = form_form.input;
+def.func.input = form_form.input;
 
 
 /*
 | Mouse wheel.
 */
-prototype.mousewheel = form_form.mousewheel;
+def.func.mousewheel = form_form.mousewheel;
 
 
 /*
 | If point is on the form returns its hovering state.
 */
-prototype.pointingHover = form_form.pointingHover;
+def.func.pointingHover = form_form.pointingHover;
 
 
 /*
 | A button of the form has been pushed.
 */
-prototype.pushButton =
+def.func.pushButton =
 	function(
-		path
-		// shift,
-		// ctrl
+		path,
+		shift,
+		ctrl
 	)
 {
-	var
-		buttonName,
-		parts;
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
-	buttonName = path.get( -1 );
+	const buttonName = path.get( -1 );
 
-	parts = buttonName.split( ':' );
+	const parts = buttonName.split( ':' );
 
 	root.moveToSpace(
 		ref_space.create(
@@ -414,14 +373,14 @@ prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-prototype.showDisc = true;
+def.func.showDisc = true;
 
 
 /*
 | User is pressing a special key.
 */
-prototype.specialKey = form_form.specialKey;
+def.func.specialKey = form_form.specialKey;
 
 
-})( );
+} );
 
