@@ -1,32 +1,23 @@
 /*
 | The servers replies to a clients update request.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'reply_update',
-		list : [ 'change_dynamic' ],
-		json : true
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'reply_update', ( def, reply_update ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.list = [ 'change_dynamic' ];
+
+	def.json = true;
 }
 
 
-} )( );
+} );

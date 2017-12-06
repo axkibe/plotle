@@ -3,45 +3,35 @@
 |
 | The server might hold back the answer until something happens.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'request_update', ( def, request_update ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'request_update',
-		attributes :
+	def.attributes =
+	{
+		moments :
 		{
-			moments :
-			{
-				comment : 'the references to moments in dynamics to get updates for',
-				json : true,
-				type : 'ref_momentList'
-			},
-			userCreds :
-			{
-				comment : 'user creds',
-				json : true,
-				type : 'user_creds'
-			}
+			// the references to moments in dynamics to get updates for
+			type : 'ref_momentList',
+			json : true,
+		},
+		userCreds :
+		{
+			// user creds
+			type : 'user_creds',
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );

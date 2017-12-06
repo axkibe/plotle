@@ -99,7 +99,7 @@ def.func._init =
 {
 	if( !this.path ) return;
 
-	const twig = twigDup ? this._twig : jion.copy( this._twig );
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
 
 	twig.headline =
 		twig.headline.create(

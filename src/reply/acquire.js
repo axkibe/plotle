@@ -1,57 +1,47 @@
 /*
 | The servers replies to a clients (space-)acquire request.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'reply_acquire', ( def, reply_acquire ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'reply_acquire',
-		attributes :
+	def.attributes =
+	{
+		status :
 		{
-			status :
-			{
-				comment : 'the acquire result',
-				json : true,
-				type : 'string'
-			},
-			access :
-			{
-				comment : 'access level, readonly(r) or read-write(rw)',
-				json : true,
-				type : [ 'undefined', 'string' ]
-			},
-			seq :
-			{
-				comment : 'sequence the space is at',
-				json : true,
-				type : [ 'undefined', 'integer' ]
-			},
-			space :
-			{
-				comment : 'the space',
-				json : true,
-				type : [ 'undefined', 'fabric_space' ]
-			}
+			// the acquire result
+			type : 'string',
+			json : true,
+		},
+		access :
+		{
+			// access level, readonly(r) or read-write(rw)
+			type : [ 'undefined', 'string' ],
+			json : true,
+		},
+		seq :
+		{
+			// sequence the space is at
+			type : [ 'undefined', 'integer' ],
+			json : true,
+		},
+		space :
+		{
+			// the space
+			type : [ 'undefined', 'fabric_space' ],
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );

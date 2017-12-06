@@ -1,45 +1,35 @@
 /*
 | The servers replies to a succesfull clients auth request.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'reply_auth', ( def, reply_auth ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'reply_auth',
-		attributes :
+	def.attributes =
+	{
+		userCreds :
 		{
-			userCreds :
-			{
-				comment : 'the user jion. visitors get their real id here',
-				json : true,
-				type : 'user_creds'
-			},
-			userSpaceList :
-			{
-				comment : 'the list of spaces the user has',
-				json : true,
-				type : [ 'undefined', 'dynamic_refSpaceList' ]
-			}
+			// visitors get their real id here
+			type : 'user_creds',
+			json : true,
+		},
+		userSpaceList :
+		{
+			// the list of spaces the user has
+			type : [ 'undefined', 'dynamic_refSpaceList' ],
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );

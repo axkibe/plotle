@@ -1,39 +1,29 @@
 /*
 | The servers encountered an error with the request.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'reply_error', ( def, reply_error ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'reply_error',
-		attributes :
+	def.attributes =
+	{
+		message :
 		{
-			message :
-			{
-				comment : 'the error message',
-				json : true,
-				type : 'string'
-			}
+			// the error message
+			type : 'string',
+			json : true
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );

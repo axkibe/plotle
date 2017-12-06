@@ -2,39 +2,29 @@
 | A client request authentication to be checked,
 | or to be assigned a visitor-id.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'request_auth', ( def, request_auth ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'request_auth',
-		attributes :
+	def.attributes =
+	{
+		userCreds :
 		{
-			userCreds :
-			{
-				comment : 'user creds to be authenticated',
-				json : true,
-				type : 'user_creds'
-			}
+			// user credentials to be authenticated
+			type : 'user_creds',
+			json : true,
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );
