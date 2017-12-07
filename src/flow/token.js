@@ -1,53 +1,43 @@
 /*
 | A flow token.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'flow_token', ( def, flow_token ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'flow_token',
-		attributes :
+	def.attributes =
+	{
+		x :
 		{
-			x :
-			{
-				comment : 'x position',
-				type : 'number'
-			},
-			width :
-			{
-				comment : 'width of the token',
-				type : 'number'
-			},
-			offset :
-			{
-				comment : 'offset in text',
-				type : 'integer'
-			},
-			text :
-			{
-				comment : 'token text',
-				type : 'string'
-			}
+			// x position
+			type : 'number'
+		},
+		width :
+		{
+			// width of the token
+			type : 'number'
+		},
+		offset :
+		{
+			// offset in text
+			type : 'integer'
+		},
+		text :
+		{
+			// token text
+			type : 'string'
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-(function() {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-}
-
-
-} )( );
+} );
