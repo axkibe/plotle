@@ -298,12 +298,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/flow/line.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/flow/block.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -440,7 +440,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/widget/button.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -604,7 +604,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/result/hover.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

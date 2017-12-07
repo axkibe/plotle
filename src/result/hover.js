@@ -4,45 +4,33 @@
 | Containts the path of the component being hovered over
 | As well the shape the cursor should get.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'result_hover', ( def, result_hover ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'result_hover',
-		attributes :
+	def.attributes =
+	{
+		cursor :
 		{
-			cursor :
-			{
-				comment : 'the cursor to display',
-				type : 'string'
-			},
-			path :
-			{
-				comment : 'the path to the thing being hovered upon',
-				type : [ 'undefined', 'jion$path' ]
-			}
+			// the cursor to display
+			type : 'string'
+		},
+		path :
+		{
+			// the path to the thing being hovered upon
+			type : [ 'undefined', 'jion$path' ]
 		}
 	};
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-} )( );
+} );

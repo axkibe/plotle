@@ -1,107 +1,10 @@
 /*
 | A button.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'widget_button',
-		hasAbstract : true,
-		attributes :
-		{
-			down :
-			{
-				comment : 'true if the button is down',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			facets :
-			{
-				comment : 'style facets',
-				type : 'gleam_facetList'
-			},
-			font :
-			{
-				comment : 'font of the text',
-				type : [ 'undefined', 'gleam_font' ]
-			},
-			hover :
-			{
-				comment : 'component hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'widget_widget.concernsHover( hover, path )'
-			},
-			iconShape :
-			{
-				comment : 'icon shape',
-				type :
-					require( '../gleam/typemap-shape' )
-					.concat( [ 'undefined' ] )
-			},
-			iconFacet :
-			{
-				comment : 'icon facet',
-				type : [ 'undefined', 'gleam_facet' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'widget_widget.concernsMark( mark, path )'
-			},
-			path :
-			{
-				comment : 'the path of the widget',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			shape :
-			{
-				comment : 'shape of the button',
-				type : [ 'string', 'gleam_ellipse' ]
-			},
-			text :
-			{
-				comment : 'the text written in the button',
-				type : 'string',
-				defaultValue : '""'
-			},
-			textNewline :
-			{
-				comment : 'vertical distance of newline',
-				type : [ 'undefined', 'number' ]
-			},
-			textRotation :
-			{
-				comment : 'rotation of the text',
-				type : [ 'undefined', 'number' ]
-			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'gleam_transform'
-			},
-			visible :
-			{
-				comment : 'if false the button is hidden',
-				type : 'boolean',
-				defaultValue : 'true'
-			},
-			zone :
-			{
-				comment : 'designed zone',
-				type : 'gleam_rect'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	gleam_ellipse,
 	gleam_glint_list,
@@ -110,47 +13,310 @@ var
 	gleam_glint_window,
 	gleam_point,
 	gleam_transform,
-	jion,
-	result_hover,
-	root,
-	widget_button;
+	result_hover;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'widget_button', ( def, widget_button ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.hasAbstract = true;
 
-	return;
+	def.attributes =
+	{
+		down :
+		{
+			// true if the button is down
+			type : 'boolean',
+			defaultValue : 'false'
+		},
+		facets :
+		{
+			// style facets
+			type : 'gleam_facetList'
+		},
+		font :
+		{
+			// font of the text
+			type : [ 'undefined', 'gleam_font' ]
+		},
+		hover :
+		{
+			// component hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'widget_widget.concernsHover( hover, path )'
+		},
+		iconShape :
+		{
+			// icon shape
+			type :
+				require( '../gleam/typemap-shape' )
+				.concat( [ 'undefined' ] )
+		},
+		iconFacet :
+		{
+			// icon facet
+			type : [ 'undefined', 'gleam_facet' ]
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'widget_widget.concernsMark( mark, path )'
+		},
+		path :
+		{
+			// the path of the widget
+			type : [ 'undefined', 'jion$path' ]
+		},
+		shape :
+		{
+			// shape of the button
+			type : [ 'string', 'gleam_ellipse' ]
+		},
+		text :
+		{
+			// the text written in the button
+			type : 'string',
+			defaultValue : '""'
+		},
+		textNewline :
+		{
+			// vertical distance of newline
+			type : [ 'undefined', 'number' ]
+		},
+		textRotation :
+		{
+			// rotation of the text
+			type : [ 'undefined', 'number' ]
+		},
+		transform :
+		{
+			// the transform
+			type : 'gleam_transform'
+		},
+		visible :
+		{
+			// if false the button is hidden
+			type : 'boolean',
+			defaultValue : 'true'
+		},
+		zone :
+		{
+			// designed zone
+			type : 'gleam_rect'
+		}
+	};
 }
 
 
-var
-	prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
-prototype = widget_button.prototype;
+
+/*
+| The widget's glint.
+*/
+def.lazy.glint =
+	function( )
+{
+	if( !this.visible ) return undefined;
+
+	const tZone = this._tZone;
+
+	return(
+		gleam_glint_window.create(
+			'glint', this._glint,
+			'rect', tZone.enlarge1,
+			'offset', gleam_point.zero
+		)
+	);
+};
+
+
+/*
+| The font of the button label.
+*/
+def.lazy._font =
+	function( )
+{
+	return this.font.create( 'size', this.transform.scale( this.font.size ) );
+};
+
+
+/*
+| The button's inner glint.
+*/
+def.lazy._glint =
+	function( )
+{
+	const facet =
+		this.facets.getFacet(
+			'down', this.down,
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	const arr =
+	[
+		gleam_glint_paint.create(
+			'facet', facet,
+			'shape', this._tzShape
+		)
+	];
+
+	let text = this.text;
+
+	if( text )
+	{
+		let newline = this.textNewline;
+
+		const font = this._font;
+
+		if( newline === undefined )
+		{
+			arr.push(
+				gleam_glint_text.create(
+					'font', font,
+					'p', this._pc,
+					'rotate', this.textRotation,
+					'text', text
+				)
+			);
+		}
+		else
+		{
+			newline = this.transform.scale( newline );
+
+			text = text.split( '\n' );
+
+			const tZ = text.length;
+
+			let y = -( tZ - 1 ) / 2 * newline;
+
+			for( let t = 0; t < tZ; t++, y += newline )
+			{
+				arr.push(
+					gleam_glint_text.create(
+						'font', font,
+						'p', this._pc.add( 0, y ),
+						'text', text[ t ]
+					)
+				);
+			}
+		}
+	}
+
+	if( this.iconShape )
+	{
+		arr.push(
+			gleam_glint_paint.create(
+				'facet', this.iconFacet,
+				'shape', this._iconShape
+			)
+		);
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The transformed zone of the button.
+*/
+def.lazy._tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
+};
+
+
+
+/*
+| The transformed iconShape.
+*/
+def.lazy._iconShape =
+	function( )
+{
+	return(
+		this.iconShape
+		.transform(
+			gleam_transform.create(
+				'offset', this.zone.zeroPos.pc,
+				'zoom', 1
+			)
+		)
+		.transform( this.transform )
+	);
+};
+
+
+/*
+| The shape of the button
+| transformed and zero positioned.
+*/
+def.lazy._tzShape =
+	function( )
+{
+	switch( this.shape )
+	{
+		case 'ellipse' :
+
+			const tZone = this._tZone;
+
+			return(
+				gleam_ellipse.create(
+					'pos', gleam_point.zero,
+					'width', tZone.width - 1,
+					'height', tZone.height - 1
+				)
+			);
+
+		default :
+
+			return this.shape.transform( this.transform );
+	}
+};
+
+
+/*
+| The key of this widget.
+*/
+def.lazy._pc =
+	function( )
+{
+	return this._tZone.zeroPos.pc;
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Buttons are focusable.
 */
-prototype.focusable = true;
+def.func.focusable = true;
 
 
 /*
 | User clicked.
 */
-prototype.click =
+def.func.click =
 	function(
-		p
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	if( !this.within( p ) ) return;
@@ -164,11 +330,11 @@ prototype.click =
 /*
 | Start an operation with the poiting device button held down.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
-		p
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	if( !this.within( p ) ) return undefined;
@@ -182,7 +348,7 @@ prototype.dragStart =
 /*
 | Stops an operation with the poiting device button held down.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function( )
 {
 	root.create( 'action', undefined );
@@ -190,37 +356,11 @@ prototype.dragStop =
 
 
 /*
-| The widget's glint.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var
-		tZone;
-
-	if( !this.visible ) return undefined;
-
-	tZone = this._tZone;
-
-	return(
-		gleam_glint_window.create(
-			'glint', this._glint,
-			'rect', tZone.enlarge1,
-			'offset', gleam_point.zero
-		)
-	);
-}
-);
-
-
-/*
 | Any normal key for a button having focus triggers a push.
 */
-prototype.input =
+def.func.input =
 	function(
-		// text
+		text
 	)
 {
 	root.pushButton( this.path );
@@ -232,11 +372,11 @@ prototype.input =
 /*
 | Mouse wheel is being turned.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return undefined;
@@ -246,7 +386,7 @@ prototype.mousewheel =
 /*
 | Mouse hover.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p
 	)
@@ -265,11 +405,11 @@ prototype.pointingHover =
 /*
 | Special keys for buttons having focus
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
-		key
-		// shift
-		// ctrl
+		key,
+		shift,
+		ctrl
 	)
 {
 	switch( key )
@@ -287,7 +427,7 @@ prototype.specialKey =
 | Returns true if p is within
 | the button
 */
-prototype.within =
+def.func.within =
 	function(
 		p
 	)
@@ -300,204 +440,4 @@ prototype.within =
 };
 
 
-
-
-/*
-| The transformed zone of the button.
-*/
-jion.lazyValue(
-	prototype,
-	'_tZone',
-	function( )
-{
-	return this.zone.transform( this.transform );
-}
-);
-
-
-/*
-| The font of the button label.
-*/
-jion.lazyValue(
-	prototype,
-	'_font',
-	function( )
-{
-	return(
-		this.font.create( 'size', this.transform.scale( this.font.size ) )
-	);
-}
-);
-
-
-/*
-| The button's inner glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glint',
-	function( )
-{
-	var
-		arr,
-		facet,
-		font,
-		len,
-		newline,
-		text,
-		t,
-		tZ,
-		y;
-
-	facet =
-		this.facets.getFacet(
-			'down', this.down,
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.mark
-		);
-
-	arr =
-		[
-			gleam_glint_paint.create(
-				'facet', facet,
-				'shape', this._tzShape
-			)
-		];
-
-	len = 1;
-
-	if( this.text )
-	{
-		newline = this.textNewline;
-
-		font = this._font;
-
-		if( newline === undefined )
-		{
-			arr[ len++ ] =
-				gleam_glint_text.create(
-					'font', font,
-					'p', this._pc,
-					'rotate', this.textRotation,
-					'text', this.text
-				);
-		}
-		else
-		{
-			newline = this.transform.scale( newline );
-
-			text = this.text.split( '\n' );
-
-			tZ = text.length;
-
-			y = - ( tZ - 1 ) / 2 * newline;
-
-			for( t = 0; t < tZ; t++, y += newline )
-			{
-				arr[ len++ ] =
-					gleam_glint_text.create(
-						'font', font,
-						'p', this._pc.add( 0, y ),
-						'text', text[ t ]
-					);
-			}
-		}
-	}
-
-	if( this.iconShape )
-	{
-		arr[ len++ ] =
-			gleam_glint_paint.create(
-				'facet', this.iconFacet,
-				'shape', this._iconShape
-			);
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The shape glint.
-*/
-jion.lazyValue(
-	prototype,
-	'_glintPaintShape',
-	function( )
-{
-}
-);
-
-
-/*
-| The transformed iconShape.
-*/
-jion.lazyValue(
-	prototype,
-	'_iconShape',
-	function( )
-{
-	return(
-		this.iconShape
-		.transform(
-			gleam_transform.create(
-				'offset', this.zone.zeroPos.pc,
-				'zoom', 1
-			)
-		)
-		.transform( this.transform )
-	);
-}
-);
-
-
-/*
-| The shape of the button
-| transformed and zero positioned.
-*/
-jion.lazyValue(
-	prototype,
-	'_tzShape',
-	function( )
-{
-	var
-		tZone;
-
-	switch( this.shape )
-	{
-		case 'ellipse' :
-
-			tZone = this._tZone;
-
-			return(
-				gleam_ellipse.create(
-					'pos', gleam_point.zero,
-					'width', tZone.width - 1,
-					'height', tZone.height - 1
-				)
-			);
-
-		default :
-
-			return this.shape.transform( this.transform );
-	}
-}
-);
-
-
-/*
-| The key of this widget.
-*/
-jion.lazyValue(
-	prototype,
-	'_pc',
-	function( )
-{
-	return this._tZone.zeroPos.pc;
-}
-);
-
-
-
-} )( );
+} );

@@ -1,44 +1,35 @@
 /*
 | A flow line of tokens.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'flow_line',
-		attributes :
-		{
-			offset :
-			{
-				comment : 'offset in text',
-				type : 'integer'
-			},
-			y :
-			{
-				comment : 'y position of line',
-				type : 'number'
-			}
-		},
-		list : [ 'flow_token' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
-if( NODE )
+tim.define( module, 'flow_line', ( def, flow_line ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		offset :
+		{
+			// offset in text
+			type : 'integer'
+		},
+		y :
+		{
+			// y position of line
+			type : 'number'
+		}
+	};
+
+	def.list = [ 'flow_token' ];
 }
 
 
-} )( );
+} );
