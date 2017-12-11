@@ -490,7 +490,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/dynamic/refSpaceList.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1069,19 +1069,19 @@ server_resourceList.create(
 	server_resource.create(
 		'filePath', 'src/testpad/repository.js',
 		'devel', true,
-		'hasJion', true,
+		'hasTim', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/testpad/action.js',
 		'devel', true,
-		'hasJion', true,
+		'hasTim', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/testpad/root.js',
 		'devel', true,
-		'hasJion', true,
+		'hasTim', true,
 		'inTestPad', true
 	)
 	]

@@ -1,39 +1,10 @@
 /*
 | The repository simulator does not talk to a server.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'testpad_repository',
-		attributes :
-		{
-			seq :
-			{
-				comment : 'current sequence numer',
-				type : 'integer',
-				defaultValue : '0'
-			},
-			_changeWrapList :
-			{
-				comment : 'history of all changes',
-				type : [ 'undefined', 'change_wrapList' ]
-			},
-			_note :
-			{
-				comment : 'the note',
-				type : [ 'undefined', 'fabric_note' ]
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_wrapList,
 	fabric_doc,
@@ -41,36 +12,47 @@ var
 	fabric_para,
 	gleam_point,
 	gleam_rect,
-	math_limit,
-	root,
-	testpad_repository;
+	math_limit;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
+tim.define( module, 'testpad_repository', ( def, testpad_repository ) => {
 
 
-var
-	nextcid;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-if( NODE )
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		seq :
+		{
+			// current sequence numer
+			type : 'integer',
+			defaultValue : '0'
+		},
+		_changeWrapList :
+		{
+			// history of all changes
+			type : [ 'undefined', 'change_wrapList' ]
+		},
+		_note :
+		{
+			// the note
+			type : [ 'undefined', 'fabric_note' ]
+		}
+	};
 
-	return;
+	def.init = [ ];
 }
 
-
-nextcid = 1001;
 
 /*
 | Initializer.
 */
-testpad_repository.prototype._init =
+def.func._init =
 	function( )
 {
 	// the current note;
@@ -125,27 +107,19 @@ testpad_repository.prototype._init =
 /*
 | Gets a twig.
 */
-testpad_repository.prototype.get =
+def.func.get =
 	function(
 		path,
 		len
 	)
 {
-	var
-		a,
-		cwList,
-		changeList,
-		cZ,
-		note,
-		seq;
+	const cwList = this._changeWrapList;
 
-	cwList = this._changeWrapList;
+	const cZ = cwList.length;
 
-	cZ = cwList.length;
+	const seq = this.seq;
 
-	seq = this.seq;
-
-	note = this._note;
+	let note = this._note;
 
 	if( seq < 0 || seq > cZ )
 	{
@@ -154,9 +128,9 @@ testpad_repository.prototype.get =
 
 	// if the requested seq is not latest,
 	// rewinds stuff
-	for( a = cZ - 1; a >= seq; a-- )
+	for( let a = cZ - 1; a >= seq; a-- )
 	{
-		changeList = cwList.get( a ).changeList;
+		const changeList = cwList.get( a ).changeList;
 
 		note = changeList.changeTreeReverse( note );
 	}
@@ -169,22 +143,16 @@ testpad_repository.prototype.get =
 /*
 | Alters the tree.
 */
-testpad_repository.prototype.alter =
+def.func.alter =
 	function(
 		cw  // changeWrap
 	)
 {
-	var
-		cwList,
-		s,
-		sZ,
-		seq;
+	const cwList = this._changeWrapList;
 
-	cwList = this._changeWrapList;
+	const seq = this.seq;
 
-	seq = this.seq;
-
-	for( s = seq, sZ = cwList.length; s < sZ; s++ )
+	for( let s = seq, sZ = cwList.length; s < sZ; s++ )
 	{
 		cw = cwList.get( s ).transform( cw );
 	}
@@ -199,4 +167,4 @@ testpad_repository.prototype.alter =
 };
 
 
-} )( );
+} );

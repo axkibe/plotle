@@ -1,66 +1,57 @@
 /*
 | A dynamic list of references to spaces.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'dynamic_refSpaceList',
-		attributes :
-		{
-			current :
-			{
-				comment : 'the reference to the entity',
-				type : 'ref_spaceList',
-				json : true
-			},
-			seq :
-			{
-				comment : 'sequence number the dynamic is at',
-				type : 'integer',
-				defaultValue : '1',
-				json : true
-			},
-			changeWraps :
-			{
-				comment : 'changeWraps cached in RAM',
-				type : [ 'undefined', 'change_wrapList' ]
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_list,
 	change_wrap,
 	change_wrapList,
-	dynamic_refSpaceList,
 	ref_moment,
 	ref_userSpaceList,
 	session_uid;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
+tim.define( module, 'dynamic_refSpaceList', ( def, dynamic_refSpaceList ) => {
 
 
-var
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		current :
+		{
+			// the reference to the entity
+			type : 'ref_spaceList',
+			json : true
+		},
+		seq :
+		{
+			// sequence number the dynamic is at
+			type : 'integer',
+			defaultValue : '1',
+			json : true
+		},
+		changeWraps :
+		{
+			// cached changeWraps
+			type : [ 'undefined', 'change_wrapList' ]
+		}
+	};
+
+	def.init = [ ];
+}
 
 
 if( NODE )
 {
-	dynamic_refSpaceList = require( 'jion' ).this( module, 'source' );
-
 	change_list = require( '../change/list' );
 
 	change_wrap = require( '../change/wrap' );
@@ -71,13 +62,11 @@ if( NODE )
 }
 
 
-prototype = dynamic_refSpaceList.prototype;
-
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function( )
 {
 	if( !this.changeWraps )
@@ -92,15 +81,13 @@ prototype._init =
 /*
 | Returns the altered dynamic.
 */
-prototype.alter =
+def.func.alter =
 	function(
 		a1 // change, several changes or array of changes
 		// // ...
 	)
 {
-	var
-		changeList,
-		changeWrap;
+	let changeList;
 
 	if( a1.reflect === 'change_list' )
 	{
@@ -119,7 +106,7 @@ prototype.alter =
 			);
 	}
 
-	changeWrap =
+	const changeWrap =
 		change_wrap.create(
 			'cid', session_uid( ),
 			'changeList', changeList
@@ -138,20 +125,17 @@ prototype.alter =
 /*
 | Applies a changeDynamic
 */
-prototype.applyChangeDynamic =
+def.func.applyChangeDynamic =
 	function(
 		changeDynamic
 	)
 {
-	var
-		changeWrapList;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.seq !== changeDynamic.seq ) throw new Error( );
 /**/}
 
-	changeWrapList = changeDynamic.changeWrapList;
+	const changeWrapList = changeDynamic.changeWrapList;
 
 	return(
 		this.create(
@@ -167,7 +151,7 @@ prototype.applyChangeDynamic =
 | The current state of the dynamic
 | as reference to this moment.
 */
-prototype.refMoment =
+def.func.refMoment =
 	function(
 		username
 	)
@@ -181,4 +165,4 @@ prototype.refMoment =
 };
 
 
-}( ) );
+} );

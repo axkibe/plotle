@@ -1,68 +1,9 @@
 /*
 | A testing pad for the CC/OT engine.
 */
+'use strict';
 
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'testpad_root',
-		attributes :
-		{
-			action :
-			{
-				comment : 'the action the user is preparing',
-				type : [ 'undefined', 'testpad_action' ]
-			},
-			beepTimer :
-			{
-				comment : 'removes the beep',
-				type : [ 'undefined', 'protean' ]
-			},
-			cursorAt :
-			{
-				comment : 'offset cursor is at',
-				type : 'integer',
-				defaultValue : '0'
-			},
-			cursorLine :
-			{
-				comment : 'line cursor is in',
-				type : 'integer',
-				defaultValue : '0'
-			},
-			elements :
-			{
-				comment : 'DOM elements',
-				type : [ 'undefined', 'protean' ]
-			},
-			haveFocus :
-			{
-				comment : 'true when having focus',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			mouseDown :
-			{
-				comment : 'true when mouse button is held down',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			repository :
-			{
-				comment : 'the testing repository',
-				type : 'testpad_repository',
-				defaultValue : 'testpad_repository.create( )'
-			}
-		},
-		init : [ ]
-	};
-}
-
-
+// FIXME
 var
 	change_insert,
 	change_list,
@@ -70,37 +11,77 @@ var
 	change_remove,
 	change_split,
 	change_wrap,
-	jion,
-	jion$path,
 	math_limit,
 	math_maxInteger,
-	root,
 	session_uid,
-	testpad_action,
-	testpad_root;
+	testpad_action;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'testpad_root', ( def, testpad_root ) => {
 
 
-var
-	isSpecialKey,
-	noteDocPath;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-if( NODE )
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.attributes =
+	{
+		action :
+		{
+			// the action the user is preparing
+			type : [ 'undefined', 'testpad_action' ]
+		},
+		beepTimer :
+		{
+			// removes the beep
+			type : [ 'undefined', 'protean' ]
+		},
+		cursorAt :
+		{
+			// offset cursor is at
+			type : 'integer',
+			defaultValue : '0'
+		},
+		cursorLine :
+		{
+			// line cursor is in
+			type : 'integer',
+			defaultValue : '0'
+		},
+		elements :
+		{
+			// DOM elements
+			type : [ 'undefined', 'protean' ]
+		},
+		haveFocus :
+		{
+			// true when having focus
+			type : 'boolean',
+			defaultValue : 'false'
+		},
+		mouseDown :
+		{
+			// true when mouse button is held down
+			type : 'boolean',
+			defaultValue : 'false'
+		},
+		repository :
+		{
+			// the testing repository
+			type : 'testpad_repository',
+			defaultValue : 'testpad_repository.create( )'
+		}
+	};
 
-	return;
+	def.init = [ ];
 }
 
 
-noteDocPath = jion$path.empty.append( 'note' ).append( 'doc' );
+const noteDocPath =
+	tim.path.empty.append( 'note' ).append( 'doc' );
 
 
 /*
@@ -124,22 +105,10 @@ var _bind =
 /*
 | Initializer.
 */
-testpad_root.prototype._init =
+def.func._init =
 	function( )
 {
-	var
-		cancel,
-		doc,
-		down,
-		elements,
-		id,
-		input,
-		pad,
-		send,
-		up,
-		upnow;
-
-	elements = this.elements;
+	let elements = this.elements;
 
 	if( !elements )
 	{
@@ -158,24 +127,24 @@ testpad_root.prototype._init =
 				down : undefined
 			};
 
-		for( id in elements )
+		for( let id in elements )
 		{
 			elements[ id ] = document.getElementById( id );
 		}
 
-		pad = elements.pad;
+		const pad = elements.pad;
 
-		input = elements.input;
+		const input = elements.input;
 
-		send = elements.send;
+		const send = elements.send;
 
-		cancel = elements.cancel;
+		const cancel = elements.cancel;
 
-		down = elements.down;
+		const down = elements.down;
 
-		up = elements.up;
+		const up = elements.up;
 
-		upnow = elements.upnow;
+		const upnow = elements.upnow;
 
 		pad.onmousedown = _bind( 'onMouseDown' );
 
@@ -210,7 +179,7 @@ testpad_root.prototype._init =
 	elements.cancel.disabled =
 		!this.action;
 
-	doc =
+	const doc =
 	this._doc =
 		this.repository.get( noteDocPath.chop );
 
@@ -240,8 +209,9 @@ testpad_root.prototype._init =
 
 /*
 | Returns true if a keyCode is known to be a "special key".
+| FUTURE make this a table.
 */
-isSpecialKey =
+const isSpecialKey =
 	function( keyCode )
 {
 	switch( keyCode )
@@ -264,18 +234,53 @@ isSpecialKey =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Generates the noDataScreen.
+*/
+def.lazy.noDataScreen =
+	function( )
+{
+	let line = [ ];
+
+	for( let a = 0; a < 100; a++ )
+	{
+		line.push( '{}  ' );
+	}
+
+	line = line.join( '' );
+
+	const line2 = '  ' + line;
+
+	const lines = [ ];
+
+	for( let a = 0; a < 50; a++ )
+	{
+		lines.push( line, line2 );
+	}
+
+	return lines.join( '\n' );
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Alters the tree.
 */
-testpad_root.prototype.alter =
+def.func.alter =
 	function(
 		change
 	)
 {
-	var
-		changeWrap;
-
-	changeWrap =
+	const changeWrap =
 		change_wrap.create(
 			'cid', session_uid( ),
 			'changeList',
@@ -289,25 +294,12 @@ testpad_root.prototype.alter =
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-testpad_root.prototype.onMouseDown =
+def.func.onMouseDown =
 	function(
 		event
 	)
 {
-	var
-		cLine,
-		cText,
-		doc,
-		pad,
-		measure,
-		x,
-		y;
-
-
-	if( event.button !== 0 )
-	{
-		return;
-	}
+	if( event.button !== 0 ) return;
 
 	event.preventDefault( );
 
@@ -317,31 +309,26 @@ testpad_root.prototype.onMouseDown =
 
 	root.elements.input.focus( );
 
-	pad = root.elements.pad;
+	const pad = root.elements.pad;
 
-	measure = root.elements.measure;
+	const measure = root.elements.measure;
 
-	doc = root._doc;
+	const doc = root._doc;
 
-	x = event.pageX - pad.offsetLeft;
+	const x = event.pageX - pad.offsetLeft;
 
-	y = event.pageY - pad.offsetTop;
+	const y = event.pageY - pad.offsetTop;
 
-	if( !doc )
-	{
-		root.beep( );
+	if( !doc ) { root.beep( ); return; }
 
-		return;
-	}
-
-	cLine =
+	const cLine =
 		math_limit(
 			0,
 			Math.floor( y / measure.offsetHeight ),
 			doc.length - 1
 		);
 
-	cText = doc.atRank( cLine ).text;
+	const cText = doc.atRank( cLine ).text;
 
 	root.create(
 		'cursorLine', cLine,
@@ -358,13 +345,10 @@ testpad_root.prototype.onMouseDown =
 /*
 | Captures all mouse events.
 */
-testpad_root.prototype.captureEvents =
+def.func.captureEvents =
 	function( )
 {
-	var
-		pad;
-
-	pad = root.elements.pad;
+	const pad = root.elements.pad;
 
 	if( pad.setCapture )
 	{
@@ -382,12 +366,10 @@ testpad_root.prototype.captureEvents =
 /*
 | Stops capturing all mouse events.
 */
-testpad_root.prototype.releaseEvents =
+def.func.releaseEvents =
 	function( )
 {
-	var
-		pad =
-			this.elements.pad;
+	const pad = this.elements.pad;
 
 	if( pad.setCapture )
 	{
@@ -405,7 +387,7 @@ testpad_root.prototype.releaseEvents =
 /*
 | Mouse button released.
 */
-testpad_root.prototype.onMouseUp =
+def.func.onMouseUp =
 	function(
 		event
 	)
@@ -424,7 +406,7 @@ testpad_root.prototype.onMouseUp =
 /*
 | Mouse clicked on pad.
 */
-testpad_root.prototype.onMouseClick =
+def.func.onMouseClick =
 	function(
 		event
 	)
@@ -437,7 +419,7 @@ testpad_root.prototype.onMouseClick =
 | Mouse moved over pad
 | (or while dragging around it).
 */
-testpad_root.prototype.onMouseMove =
+def.func.onMouseMove =
 	function(
 		event
 	)
@@ -452,7 +434,7 @@ testpad_root.prototype.onMouseMove =
 /*
 | Key down event to ( hidden ) input.
 */
-testpad_root.prototype.onKeyDown =
+def.func.onKeyDown =
 	function(
 		event
 	)
@@ -473,7 +455,7 @@ testpad_root.prototype.onKeyDown =
 /*
 | Press event to (hidden) input.
 */
-testpad_root.prototype.onKeyPress =
+def.func.onKeyPress =
 	function(
 		// event
 	)
@@ -485,7 +467,7 @@ testpad_root.prototype.onKeyPress =
 /*
 | Up event to (hidden) input.
 */
-testpad_root.prototype.onKeyUp =
+def.func.onKeyUp =
 	function(
 		// event
 	)
@@ -497,7 +479,7 @@ testpad_root.prototype.onKeyUp =
 /*
 | Hidden input got focus.
 */
-testpad_root.prototype.onFocus =
+def.func.onFocus =
 	function( )
 {
 	root.create( 'haveFocus', true );
@@ -507,7 +489,7 @@ testpad_root.prototype.onFocus =
 /*
 | Hidden input lost focus.
 */
-testpad_root.prototype.onBlur =
+def.func.onBlur =
 	function( )
 {
 	root.create( 'haveFocus', false );
@@ -517,18 +499,14 @@ testpad_root.prototype.onBlur =
 /*
 | Sends the current action.
 */
-testpad_root.prototype.send =
+def.func.send =
 	function( )
 {
-	var
-		action,
-		cursorAt,
-		doc,
-		linePath;
+	const action = this.action;
 
-	action = this.action;
+	let cursorAt;
 
-	doc = this._doc;
+	const doc = this._doc;
 
 	if( !action )
 	{
@@ -537,7 +515,7 @@ testpad_root.prototype.send =
 		return;
 	}
 
-	linePath =
+	const linePath =
 		noteDocPath
 		.append( 'twig' )
 		.append( doc.getKey( action.line ) )
@@ -626,7 +604,7 @@ testpad_root.prototype.send =
 /*
 | Cancels the current action.
 */
-testpad_root.prototype.onCancelButton =
+def.func.onCancelButton =
 	function( )
 {
 	root.create( 'action', undefined );
@@ -636,7 +614,7 @@ testpad_root.prototype.onCancelButton =
 /*
 | Displays a beep message.
 */
-testpad_root.prototype.beep =
+def.func.beep =
 	function( )
 {
 	root.elements.beep.innerHTML = 'BEEP!';
@@ -656,7 +634,7 @@ testpad_root.prototype.beep =
 /*
 | Clears the beep message.
 */
-testpad_root.prototype.clearBeep =
+def.func.clearBeep =
 	function( )
 {
 	root.elements.beep.innerHTML = '';
@@ -670,39 +648,24 @@ testpad_root.prototype.clearBeep =
 /*
 | Aquires non-special input from (hidden) input.
 */
-testpad_root.prototype.testInput =
+def.func.testInput =
 	function( )
 {
-	var
-		action,
-		cursorLine,
-		cursorAt,
-		elements,
-		text;
+	const action = root.action;
 
-	action = root.action;
+	const cursorLine = root.cursorLine;
 
-	cursorLine = root.cursorLine;
+	const cursorAt = root.cursorAt;
 
-	cursorAt = root.cursorAt;
+	const elements = root.elements;
 
-	elements = root.elements;
-
-	text = elements.input.value;
+	const text = elements.input.value;
 
 	elements.input.value = '';
 
-	if( text === '' )
-	{
-		return;
-	}
+	if( text === '' ) return;
 
-	if( !root._doc )
-	{
-		root.beep( );
-
-		return;
-	}
+	if( !root._doc ) { root.beep( ); return; }
 
 	if( !action )
 	{
@@ -745,51 +708,29 @@ testpad_root.prototype.testInput =
 /*
 | Handles all kind of special keys.
 */
-testpad_root.prototype.inputSpecialKey =
+def.func.inputSpecialKey =
 	function(
 		keyCode,
 		ctrl
 	)
 {
-	var
-		action,
-		cursorAt,
-		cursorLine,
-		doc,
-		text;
+	const action = root.action;
 
-	action = root.action;
+	const cursorLine = root.cursorLine;
 
-	cursorLine = root.cursorLine;
+	const cursorAt = root.cursorAt;
 
-	cursorAt = root.cursorAt;
-
-	doc = root._doc;
+	const doc = root._doc;
 
 	switch( keyCode )
 	{
-		case  8 :
-			// backspace
+		case  8 : // backspace
 
-			if( !doc )
-			{
-				root.beep( );
-
-				return;
-			}
+			if( !doc ) { root.beep( ); return; }
 
 			if( cursorAt <= 0 )
 			{
-				if(
-					action
-					||
-					cursorLine <= 0
-				)
-				{
-					root.beep( );
-
-					return;
-				}
+				if( action || cursorLine <= 0 ) { root.beep( ); return; }
 
 				root.create(
 					'action',
@@ -818,11 +759,7 @@ testpad_root.prototype.inputSpecialKey =
 				return;
 			}
 
-			if(
-				action.command !== 'remove'
-				||
-				cursorAt !== action.at
-			)
+			if( action.command !== 'remove' || cursorAt !== action.at )
 			{
 				root.beep( );
 
@@ -836,29 +773,13 @@ testpad_root.prototype.inputSpecialKey =
 
 			return;
 
-		case 13 :
-			// return
+		case 13 : // return
 
-			if( !doc )
-			{
-				root.beep( );
+			if( !doc ) { root.beep( ); return; }
 
-				return;
-			}
+			if( ctrl ) { root.send( ); return; }
 
-			if( ctrl )
-			{
-				root.send( );
-
-				return;
-			}
-
-			if( action )
-			{
-				root.beep( );
-
-				return;
-			}
+			if( action ) { root.beep( ); return; }
 
 			root.create(
 				'action',
@@ -871,22 +792,15 @@ testpad_root.prototype.inputSpecialKey =
 
 			return;
 
-		case 27 :
-			// esc
+		case 27 : // esc
 
 			root.create( 'action', undefined );
 
 			return;
 
-		case 35 :
-			// end
+		case 35 : // end
 
-			if( !doc )
-			{
-				this.beep( );
-
-				return;
-			}
+			if( !doc ) { this.beep( ); return; }
 
 			root.create(
 				'cursorAt', doc.atRank( cursorLine ).text.length
@@ -894,78 +808,41 @@ testpad_root.prototype.inputSpecialKey =
 
 			return;
 
-		case 36 :
-			// pos1
+		case 36 : // pos1
 
-			if( !doc )
-			{
-				this.beep( );
+			if( !doc ) { this.beep( ); return; }
 
-				return;
-			}
-
-			root.create(
-				'cursorAt',
-					0
-			);
+			root.create( 'cursorAt', 0 );
 
 			return;
 
-		case 37 :
-			// left
+		case 37 : // left
 
-			if( !doc )
-			{
-				this.beep( );
+			if( !doc ) { this.beep( ); return; }
 
-				return;
-			}
-
-			if( cursorAt <= 0 )
-			{
-				this.beep( );
-
-				return;
-			}
+			if( cursorAt <= 0 ) { this.beep( ); return; }
 
 			root.create( 'cursorAt', cursorAt - 1 );
 
 			return;
 
-		case 38 :
-			// up
+		case 38 : // up
 
-			if(
-				!doc
-				||
-				cursorLine <= 0
-			)
-			{
-				this.beep( );
-
-				return;
-			}
+			if( !doc || cursorLine <= 0) { this.beep( ); return; }
 
 			root.create( 'cursorLine', cursorLine - 1 );
 
 			return;
 
-		case 39 :
-			// right
+		case 39 : // right
 
-			if( !doc )
-			{
-				this.beep( );
-
-				return;
-			}
+			if( !doc ) { this.beep( ); return; }
 
 			root.create( 'cursorAt', cursorAt + 1 );
 
 			return;
 
-		case 40 :
-			// down
+		case 40 : // down
 
 			if( !doc || cursorLine >= doc.length - 1 )
 			{
@@ -978,24 +855,13 @@ testpad_root.prototype.inputSpecialKey =
 
 			return;
 
-		case 46 :
-			// del
+		case 46 : // del
 
-			if( !doc )
-			{
-				this.beep( );
+			if( !doc ) { this.beep( ); return; }
 
-				return;
-			}
+			const text = doc.atRank( cursorLine ).text;
 
-			text = doc.atRank( cursorLine ).text;
-
-			if( cursorAt >= text.length )
-			{
-				this.beep( );
-
-				return;
-			}
+			if( cursorAt >= text.length ) { this.beep( ); return; }
 
 			if( !action )
 			{
@@ -1014,11 +880,7 @@ testpad_root.prototype.inputSpecialKey =
 				return;
 			}
 
-			if(
-				action.command !== 'remove'
-				||
-				cursorAt !== action.at2
-			)
+			if( action.command !== 'remove' || cursorAt !== action.at2 )
 			{
 				this.beep( );
 
@@ -1038,7 +900,7 @@ testpad_root.prototype.inputSpecialKey =
 /*
 | Button update-to-now has been clicked.
 */
-testpad_root.prototype.onUpNowButton =
+def.func.onUpNowButton =
 	function( )
 {
 	root.create(
@@ -1053,7 +915,7 @@ testpad_root.prototype.onUpNowButton =
 /*
 | Button one-up-the-sequence has been clicked.
 */
-testpad_root.prototype.onUpButton =
+def.func.onUpButton =
 	function( )
 {
 	root.create(
@@ -1068,7 +930,7 @@ testpad_root.prototype.onUpButton =
 /*
 | Button one-down-the-sequence has been clicked.
 */
-testpad_root.prototype.onDownButton =
+def.func.onDownButton =
 	function( )
 {
 	root.create(
@@ -1083,42 +945,29 @@ testpad_root.prototype.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-testpad_root.prototype.makeScreen =
+def.func.makeScreen =
 	function(
 		doc
 	)
 {
-	var
-		a,
-		action,
-		aZ,
-		b,
-		bZ,
-		cAt,
-		cLen,
-		cLine,
-		cText,
-		line,
-		lines;
+	const action = this.action;
 
-	action = this.action;
-
-	lines = [ ];
+	const lines = [ ];
 
 	// splits up the doc into
 	// an array of lines which are
 	// an array of chars
-	for( a = 0, aZ = doc.length; a < aZ; a++ )
+	for( let a = 0, aZ = doc.length; a < aZ; a++ )
 	{
 		lines.push( doc.atRank( a ).text.split( '' ) );
 	}
 
 	// replaces HTML entities
-	for( a = 0, aZ = lines.length; a < aZ; a++ )
+	for( let a = 0, aZ = lines.length; a < aZ; a++ )
 	{
-		line = lines[ a ];
+		const line = lines[ a ];
 
-		for( b = 0, bZ = line.length; b < bZ; b++ )
+		for( let b = 0, bZ = line.length; b < bZ; b++ )
 		{
 			switch( line[ b ] )
 			{
@@ -1136,13 +985,13 @@ testpad_root.prototype.makeScreen =
 	// inserts the cursor
 	if( this.haveFocus )
 	{
-		cLine = this.cursorLine;
+		const cLine = this.cursorLine;
 
-		cText = lines[ cLine ];
+		const cText = lines[ cLine ];
 
-		cAt = this.cursorAt;
+		let cAt = this.cursorAt;
 
-		cLen = lines[ cLine ].length;
+		const cLen = lines[ cLine ].length;
 
 		if( cAt >= cText.length )
 		{
@@ -1228,11 +1077,7 @@ testpad_root.prototype.makeScreen =
 
 	// transforms lines to a HTML string
 
-	for(
-		a = 0, aZ = lines.length;
-		a < aZ;
-		a++
-	)
+	for( let a = 0, aZ = lines.length; a < aZ; a++ )
 	{
 		lines[ a ] = lines[ a ].join( '' );
 	}
@@ -1242,52 +1087,18 @@ testpad_root.prototype.makeScreen =
 
 
 /*
-| Generates the noDataScreen.
-*/
-jion.lazyValue(
-	testpad_root.prototype,
-	'noDataScreen',
-	function( )
-	{
-		var
-			a,
-			line,
-			line2,
-			lines;
-
-		line = [ ];
-
-		lines = [ ];
-
-		for( a = 0; a < 100; a++ )
-		{
-			line.push( '{}  ' );
-		}
-
-		line = line.join( '' );
-
-		line2 = '  ' + line;
-
-		for( a = 0; a < 50; a++ )
-		{
-			lines.push( line, line2 );
-		}
-
-		return lines.join( '\n' );
-	}
-);
-
-
-/*
 | Window.
 */
-window.onload =
-	function( )
+if( !NODE )
 {
-	testpad_root.create( );
+	window.onload =
+		function( )
+	{
+		testpad_root.create( );
 
-	root.elements.input.focus( );
-};
+		root.elements.input.focus( );
+	};
+}
 
 
-} )( );
+} );
