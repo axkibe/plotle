@@ -5,95 +5,75 @@
 |
 | Currently there are only vertical scrollbars.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'widget_scrollbar',
-		attributes :
-		{
-			scrollpos :
-			{
-				comment : 'scroll position',
-				type : 'number'
-			},
-			aperture :
-			{
-				comment : 'the size of the bar',
-				type : 'number'
-			},
-			max :
-			{
-				comment : 'maximum scroll position',
-				// minimum is always zero
-				type : 'number'
-			},
-			path :
-			{
-				comment : 'path',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			pos :
-			{
-				comment : 'position',
-				type : 'gleam_point'
-			},
-			size :
-			{
-				comment : 'size',
-				type : 'number'
-			},
-			transform :
-			{
-				comment : 'transform',
-				type : 'gleam_transform'
-			}
-		}
-	};
-}
-
-
+// FIXME;
 var
 	action_scrolly,
 	gleam_roundRect,
 	gleam_glint_paint,
 	gruga_scrollbar,
-	jion,
-	result_hover,
-	widget_scrollbar;
+	result_hover;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'widget_scrollbar', ( def, widget_scrollbar ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
-
-	return;
+	def.attributes =
+	{
+		scrollpos :
+		{
+			// scroll position
+			type : 'number'
+		},
+		aperture :
+		{
+			// the size of the bar
+			type : 'number'
+		},
+		max :
+		{
+			// maximum scroll position
+			// minimum is always zero
+			type : 'number'
+		},
+		path :
+		{
+			type : [ 'undefined', 'jion$path' ]
+		},
+		pos :
+		{
+			type : 'gleam_point'
+		},
+		size :
+		{
+			type : 'number'
+		},
+		transform :
+		{
+			type : 'gleam_transform'
+		}
+	};
 }
 
 
-var
-	prototype;
-
-prototype = widget_scrollbar.prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The scrollbar's glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
 	return(
@@ -102,46 +82,32 @@ jion.lazyValue(
 			'shape', this._tShape
 		)
 	);
-}
-);
+};
 
 
 /*
 | Returns the transformed shape of the scrollbar.
 */
-jion.lazyValue(
-	prototype,
-	'_tShape',
+def.lazy._tShape =
 	function( )
 {
-	var
-		pos,
-		scrollpos,
-		size,
-		max,
-		ap,
-		map,
-		sy,
-		st,
-		transform;
+	const pos = this.pos;
 
-	pos = this.pos;
+	const size = this.size;
 
-	size = this.size;
+	const scrollpos = this.scrollpos;
 
-	scrollpos = this.scrollpos;
+	const max = this.max;
 
-	max = this.max;
+	const ap = this.aperture * size / max;
 
-	ap = this.aperture * size / max;
+	const map = Math.max( ap, gruga_scrollbar.minHeight );
 
-	map = Math.max( ap, gruga_scrollbar.minHeight );
+	const sy = scrollpos * ( ( size - map + ap ) / max );
 
-	sy = scrollpos * ( ( size - map + ap ) / max );
+	const st = gruga_scrollbar.strength;
 
-	st = gruga_scrollbar.strength;
-
-	transform = this.transform;
+	const transform = this.transform;
 
 	return(
 		gleam_roundRect.create(
@@ -155,14 +121,13 @@ jion.lazyValue(
 			'b', gruga_scrollbar.ellipseB
 		)
 	);
-}
-);
+};
 
 
 /*
 | Handles a potential dragStart event.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p          // point where dragging starts
 		//shift,   // true if shift key was held down
@@ -187,11 +152,11 @@ prototype.dragStart =
 /*
 | User is hovering his/her pointing device.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
-		p
-		//shift,
-		//ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	if( !this._tShape.within( p ) ) return undefined;
@@ -208,7 +173,7 @@ prototype.pointingHover =
 /*
 | Returns the value of pos change for d pixels in the current zone.
 */
-prototype.scale =
+def.func.scale =
 	function(
 		d
 	)
@@ -217,19 +182,4 @@ prototype.scale =
 };
 
 
-
-/*
-| Returns true if p is within the scrollbar.
-| FIXME remove
-*/
-/*prototype.within =
-	function(
-		p
-	)
-{
-	return this._tShape.within( p );
-};
-*/
-
-
-} )( );
+} );

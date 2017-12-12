@@ -1,119 +1,101 @@
 /*
 | A label.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	gleam_glint_text;
+
+
+tim.define( module, 'widget_label', ( def, widget_label ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'widget_label',
-		hasAbstract : true,
-		attributes :
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		hover :
 		{
-			hover :
-			{
-				comment : 'component hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				assign : ''
-			},
-			font :
-			{
-				comment : 'font of the text',
-				type : [ 'undefined', 'gleam_font' ]
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( ['undefined' ] ),
-				assign : ''
-			},
-			newline :
-			{
-				comment : 'vertical distance of newline',
-				type : [ 'undefined', 'number' ]
-			},
-			path :
-			{
-				comment : 'the path of the widget',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			pos :
-			{
-				comment : 'designed pos',
-				type : 'gleam_point'
-			},
-			text :
-			{
-				comment : 'the label text',
-				type : 'string'
-			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'gleam_transform'
-			},
-			visible :
-			{
-				comment : 'if false the button is hidden',
-				type : 'boolean',
-				defaultValue : 'true'
-			}
+			// component hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			assign : ''
+		},
+		font :
+		{
+			// font of the text
+			type : [ 'undefined', 'gleam_font' ]
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( ['undefined' ] ),
+			assign : ''
+		},
+		newline :
+		{
+			// vertical distance of newline
+			type : [ 'undefined', 'number' ]
+		},
+		path :
+		{
+			// the path of the widget
+			type : [ 'undefined', 'jion$path' ]
+		},
+		pos :
+		{
+			// designed position
+			type : 'gleam_point'
+		},
+		text :
+		{
+			// the label text
+			type : 'string'
+		},
+		transform :
+		{
+			// the transform
+			type : 'gleam_transform'
+		},
+		visible :
+		{
+			// if false the button is hidden
+			type : 'boolean',
+			defaultValue : 'true'
 		}
 	};
 }
 
 
-var
-	gleam_glint_text,
-	jion,
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-var
-	prototype;
-
-prototype = widget_label.prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
 
 /*
 | The transformed position of the label.
 */
-jion.lazyValue(
-	prototype,
-	'_pos',
+def.lazy._pos =
 	function( )
 {
 	return this.pos.transform( this.transform );
-}
-);
+};
 
 
 /*
 | The widget's glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
 	if( !this.visible ) return undefined;
@@ -125,18 +107,22 @@ jion.lazyValue(
 			'text', this.text
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | User clicked.
 */
-prototype.click =
+def.func.click =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return undefined;
@@ -146,11 +132,11 @@ prototype.click =
 /*
 | Handles a potential dragStart event.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
-		//p,       // point where dragging starts
-		//shift,   // true if shift key was held down
-		//ctrl     // true if ctrl or meta key was held down
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl     // true if ctrl or meta key was held down
 	)
 {
 	return undefined;
@@ -160,11 +146,11 @@ prototype.dragStart =
 /*
 | Mouse wheel is being turned.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return undefined;
@@ -174,11 +160,11 @@ prototype.mousewheel =
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return undefined;
@@ -186,4 +172,4 @@ prototype.pointingHover =
 
 
 
-} ) ( );
+} );

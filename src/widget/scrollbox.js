@@ -1,134 +1,104 @@
 /*
 | A scrollbox.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'widget_scrollbox',
-		hasAbstract : true,
-		attributes :
-		{
-			hover :
-			{
-				comment : 'component hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'widget_widget.concernsHover( hover, path )'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( ['undefined' ] ),
-				assign : ''
-			},
-			path :
-			{
-				comment : 'the path of the widget',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			scrollPos :
-			{
-				comment : 'scroll position',
-				type : [ 'undefined', 'gleam_point' ]
-				// is force defined in _init
-			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'gleam_transform'
-			},
-			scrollbarYOffset :
-			{
-				comment : 'offset of the scrollbar',
-				type : 'gleam_point',
-				defaultValue : 'gleam_point.zero'
-			},
-			zone :
-			{
-				comment : 'designed zone',
-				type : 'gleam_rect'
-			},
-		},
-		init : [ 'twigDup' ],
-		twig : require( '../form/typemap-widget' )
-	};
-}
-
-
+// FIXME
 var
-	jion,
 	gleam_glint_list,
 	gleam_glint_window,
 	gleam_point,
 	gleam_size,
 	shell_settings,
-	widget_scrollbar,
-	widget_scrollbox;
+	widget_scrollbar;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'widget_scrollbox', ( def, widget_scrollbox ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.hasAbstract = true;
 
-	return;
+	def.attributes =
+	{
+		hover :
+		{
+			// component hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'widget_widget.concernsHover( hover, path )'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( ['undefined' ] ),
+			assign : ''
+		},
+		path :
+		{
+			// the path of the widget
+			type : [ 'undefined', 'jion$path' ]
+		},
+		scrollPos :
+		{
+			// scroll position
+			// is defined by force in _init
+			type : [ 'undefined', 'gleam_point' ]
+		},
+		transform :
+		{
+			// the transform
+			type : 'gleam_transform'
+		},
+		scrollbarYOffset :
+		{
+			// offset of the scrollbar
+			type : 'gleam_point',
+			defaultValue : 'gleam_point.zero'
+		},
+		zone :
+		{
+			// designed zone
+			type : 'gleam_rect'
+		},
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig = require( '../form/typemap-widget' );
 }
-
-
-var
-	prototype;
-
-prototype = widget_scrollbox.prototype;
 
 
 /*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		twigDup
 	)
 {
-	var
-		innerSize,
-		mark,
-		name,
-		path,
-		r,
-		ranks,
-		rZ,
-		twig,
-		w,
-		zone;
-
 	if( !this.path ) return;
 
 	// all components of the form
-	twig = twigDup ? this._twig :  jion.copy( this._twig );
+	const twig = twigDup ? this._twig : tim.copy( this._twig );
 
-	mark = this.mark;
+	const ranks = this._ranks;
 
-	ranks = this._ranks;
-	
-	for( r = 0, rZ = ranks.length; r < rZ; r++ )
+	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
-		name = ranks[ r ];
+		const name = ranks[ r ];
 
-		w = twig[ name ];
+		const w = twig[ name ];
 
-		path = w.path || this.path.append( 'twig' ).append( name );
+		const path = w.path || this.path.append( 'twig' ).append( name );
 
 		twig[ name ] =
 			w.create(
@@ -138,9 +108,9 @@ prototype._init =
 			);
 	}
 
-	innerSize = this.innerSize;
+	const innerSize = this.innerSize;
 
-	zone = this.zone;
+	const zone = this.zone;
 
 	if(
 		this.scrollPos === undefined
@@ -175,41 +145,36 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | The widget's glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
-	var
-		arr,
-		glint,
-		r,
-		sg,
-		w,
-		sbary;
+	const arr = [ ];
 
-	arr = [ ];
-
-	for( r = this.length - 1; r >= 0; r-- )
+	for( let r = this.length - 1; r >= 0; r-- )
 	{
-		w = this.atRank( r );
+		const w = this.atRank( r );
 
-		sg = w.glint;
+		const sg = w.glint;
 
 		if( sg ) arr.push( sg );
 	}
 
-	glint =
+	let glint =
 		gleam_glint_window.create(
 			'glint', gleam_glint_list.create( 'list:init', arr ),
 			'rect', this._zone,
 			'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
 		);
 
-	sbary = this.scrollbarY;
+	const sbary = this.scrollbarY;
 
 	if( sbary )
 	{
@@ -217,89 +182,64 @@ jion.lazyValue(
 	}
 
 	return glint;
-}
-);
+};
 
 
 /*
 | The widget's inner height and width
 */
-jion.lazyValue(
-	prototype,
-	'innerSize',
+def.lazy.innerSize =
 	function( )
 {
-	var
-		h,
-		pse,
-		r,
-		widget,
-		w;
+	let w = 0;
 
-	w = 0;
+	let h = 0;
 
-	h = 0;
-
-	for( r = this.length - 1; r >= 0; r-- )
+	for( let r = this.length - 1; r >= 0; r-- )
 	{
-		widget = this.atRank( r );
+		const widget = this.atRank( r );
 
-		pse = widget.zone.pse;
+		const pse = widget.zone.pse;
 
 		if( pse.x > w ) w = pse.x;
 
 		if( pse.y > h ) h = pse.y;
 	}
 
-	return gleam_size.wh( w, h ); 
-}
-);
+	return gleam_size.wh( w, h );
+};
 
 
 /*
 | The transformed zone.
 */
-jion.lazyValue(
-	prototype,
-	'_zone',
+def.lazy._zone =
 	function( )
 {
 	return this.zone.transform( this.transform );
-}
-);
+};
 
 
 /*
 | Is true when the scrollbox has a vertical bar.
 */
-jion.lazyValue(
-	prototype,
-	'hasScrollbarY',
+def.lazy.hasScrollbarY =
 	function( )
 {
 	return this.innerSize.height > this.zone.height;
-}
-);
+};
 
 
-
-jion.lazyValue(
-	prototype,
-	'scrollbarY',
+def.lazy.scrollbarY =
 	function( )
 {
-	var
-		innerSize,
-		scrollbarYOffset,
-		zone;
-
 	if( !this.hasScrollbarY ) return undefined;
 
-	innerSize = this.innerSize;
+	const innerSize = this.innerSize;
 
-	scrollbarYOffset = this.scrollbarYOffset;
+	const scrollbarYOffset = this.scrollbarYOffset;
 
-	zone = this.zone;
+	const zone = this.zone;
 
 	return(
 		widget_scrollbar.create(
@@ -316,34 +256,33 @@ jion.lazyValue(
 			'transform', this.transform
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | User clicked.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-	
 	p =
 		gleam_point.xy(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).click( p, shift, ctrl );
+		const res = this.atRank( r ).click( p, shift, ctrl );
 
 		if( res !== undefined ) return res;
 	}
@@ -355,38 +294,31 @@ prototype.click =
 /*
 | Starts an operation with the pointing device held down.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		bubble,
-		r,
-		rZ,
-		res,
-		sbary;
-
-	sbary = this.scrollbarY;
+	const sbary = this.scrollbarY;
 
 	if( sbary )
 	{
-		bubble = sbary.dragStart( p, shift, ctrl );
+		const bubble = sbary.dragStart( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
-	
+
 	p =
 		gleam_point.xy(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).click( p, shift, ctrl );
+		const res = this.atRank( r ).click( p, shift, ctrl );
 
 		if( res !== undefined ) return res;
 	}
@@ -398,37 +330,31 @@ prototype.dragStart =
 /*
 | User is hovering his/her pointer (mouse move).
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		r,
-		rZ,
-		sbary;
-
-	sbary = this.scrollbarY;
+	const sbary = this.scrollbarY;
 
 	if( sbary )
 	{
-		bubble = sbary.pointingHover( p, shift, ctrl );
+		const bubble = sbary.pointingHover( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
-	
+
 	p =
 		gleam_point.xy(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		bubble = this.atRank( r ).pointingHover( p, shift, ctrl );
+		const bubble = this.atRank( r ).pointingHover( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
@@ -440,7 +366,7 @@ prototype.pointingHover =
 /*
 | Mouse wheel is being turned.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
 		p,
 		dir,
@@ -448,11 +374,6 @@ prototype.mousewheel =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
 	if( !this._zone.within( p ) ) return;
 
 	p =
@@ -461,9 +382,9 @@ prototype.mousewheel =
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+		const res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -479,4 +400,4 @@ prototype.mousewheel =
 };
 
 
-} ) ( );
+} );

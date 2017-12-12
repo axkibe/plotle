@@ -455,12 +455,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/widget/label.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/widget/scrollbox.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -830,7 +830,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/widget/scrollbar.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
