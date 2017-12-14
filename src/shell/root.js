@@ -1,164 +1,10 @@
 /*
 | The root of the user shell.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'shell_root',
-		attributes :
-		{
-			access :
-			{
-				comment : 'access level to current space',
-				type : [ 'undefined', 'string' ]
-			},
-			action :
-			{
-				comment : 'current action',
-				type :
-					require( '../action/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'shell_root.prepareAction( action )'
-			},
-			ajax :
-			{
-				comment : 'the ajax communication',
-				type : 'net_ajax'
-			},
-			animation :
-			{
-				comment : 'the animations',
-				type : 'animation_root'
-			},
-			disc :
-			{
-				comment : 'the discs',
-				type : 'disc_root'
-			},
-			display :
-			{
-				comment : 'the display within everything happens',
-				type : 'gleam_display_canvas'
-			},
-			doTracker :
-			{
-				comment : 'the un/re/do tracker',
-				type : 'shell_doTracker'
-			},
-			fallbackSpaceRef :
-			{
-				comment : 'fallback to this space if loading another failed.',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			form :
-			{
-				comment : 'the forms',
-				type : 'form_root'
-			},
-			hover :
-			{
-				comment : 'current hovered item',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			link :
-			{
-				comment : 'the link to the server',
-				type : 'net_link'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			show :
-			{
-				comment : 'currently form/disc shown',
-				type : require ( '../show/typemap' )
-			},
-			spaceFabric :
-			{
-				comment : 'current space data',
-				type : [ 'undefined', 'fabric_space' ]
-			},
-			spaceRef :
-			{
-				comment : 'reference to current space',
-				type : [ 'undefined', 'ref_space' ]
-			},
-			spaceTransform :
-			{
-				comment : 'current space transform',
-				type : 'gleam_transform'
-			},
-			spaceVisual :
-			{
-				comment : 'current space visualisation',
-				type : [ 'undefined', 'visual_space' ]
-			},
-			systemFocus :
-			{
-				comment : 'shell has system focus',
-				type : 'boolean'
-			},
-			userCreds :
-			{
-				comment : 'current user credentials',
-				type : [ 'undefined', 'user_creds' ]
-			},
-			userSpaceList :
-			{
-				comment : 'the list of space references the user has',
-				type : [ 'undefined', 'ref_spaceList' ]
-			},
-			viewSize :
-			{
-				comment : 'current view size',
-				type : 'gleam_size'
-			},
-			_transformExponent :
-			{
-				comment : 'transform zoom as power of 1.1',
-				type : 'number',
-				defaultValue : '0'
-			},
-			_drawn :
-			{
-				comment : 'this root has been drawn on display',
-				type : 'boolean'
-			},
-			_visitorCreds :
-			{
-				// remembers an acquired visitor user name and
-				// passhash so when logging out from a real user
-				// the previous visitor id is regained.
-				comment : 'last acquired visitor credentials',
-				type : [ 'undefined', 'user_creds' ]
-			}
-		},
-		init : [ 'inherit' ],
-		alike :
-		{
-			lookAlike :
-			{
-				ignores :
-				{
-					'ajax' : true,
-					'link' : true,
-					'_drawn' : true
-				}
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	action_select,
 	animation_root,
@@ -192,9 +38,6 @@ var
 	gruga_user,
 	gruga_welcome,
 	gruga_zoomDisc,
-	jion,
-	jion$path,
-	jion$pathList,
 	math_limit,
 	net_ajax,
 	net_channel,
@@ -203,7 +46,6 @@ var
 	root,
 	session_uid,
 	shell_doTracker,
-	shell_root,
 	shell_settings,
 	show_form,
 	show_normal,
@@ -215,41 +57,179 @@ var
 root = undefined;
 
 
-/*
-| Capsule
-*/
-( function() {
-'use strict';
+tim.define( module, 'shell_root', ( def, shell_root ) => {
 
 
-var
-	loadingSpaceTextPath,
-	notAnimationFinish,
-	prototype;
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
 
-if( NODE )
+if( TIM )
 {
-	jion = require( 'jion' );
+	def.attributes =
+	{
+		access :
+		{
+			// access level to current space
+			type : [ 'undefined', 'string' ]
+		},
+		action :
+		{
+			// current action
+			type :
+				require( '../action/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'shell_root.prepareAction( action )'
+		},
+		ajax :
+		{
+			// the ajax communication
+			type : 'net_ajax'
+		},
+		animation :
+		{
+			// the animations
+			type : 'animation_root'
+		},
+		disc :
+		{
+			// the discs
+			type : 'disc_root'
+		},
+		display :
+		{
+			// the display within everything happens
+			type : 'gleam_display_canvas'
+		},
+		doTracker :
+		{
+			// the un/re/do tracker
+			type : 'shell_doTracker'
+		},
+		fallbackSpaceRef :
+		{
+			// fallback to this space if loading another failed
+			type : [ 'undefined', 'ref_space' ]
+		},
+		form :
+		{
+			// the forms
+			type : 'form_root'
+		},
+		hover :
+		{
+			// current hovered item
+			type : [ 'undefined', 'tim$path' ]
+		},
+		link :
+		{
+			// the link to the server
+			type : 'net_link'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		show :
+		{
+			// currently form/disc shown
+			type : require ( '../show/typemap' )
+		},
+		spaceFabric :
+		{
+			// current space data
+			type : [ 'undefined', 'fabric_space' ]
+		},
+		spaceRef :
+		{
+			// reference to current space
+			type : [ 'undefined', 'ref_space' ]
+		},
+		spaceTransform :
+		{
+			// current space transform
+			type : 'gleam_transform'
+		},
+		spaceVisual :
+		{
+			// current space visualisation
+			type : [ 'undefined', 'visual_space' ]
+		},
+		systemFocus :
+		{
+			// shell has system focus
+			type : 'boolean'
+		},
+		userCreds :
+		{
+			// current user credentials
+			type : [ 'undefined', 'user_creds' ]
+		},
+		userSpaceList :
+		{
+			// the list of space references the user has
+			type : [ 'undefined', 'ref_spaceList' ]
+		},
+		viewSize :
+		{
+			// current view size
+			type : 'gleam_size'
+		},
+		_transformExponent :
+		{
+			// transform zoom as power of 1.1
+			type : 'number',
+			defaultValue : '0'
+		},
+		_drawn :
+		{
+			// this root has been drawn on display
+			type : 'boolean'
+		},
+		_visitorCreds :
+		{
+			// remembers an acquired visitor user name and
+			// passhash so when logging out from a real user
+			// the previous visitor id is regained.
+			// last acquired visitor credentials
+			type : [ 'undefined', 'user_creds' ]
+		}
+	};
 
-	jion.this( module, 'source' );
+	def.init = [ 'inherit' ];
 
-	return;
+	def.alike =
+	{
+		lookAlike :
+		{
+			ignores :
+			{
+				'ajax' : true,
+				'link' : true,
+				'_drawn' : true
+			}
+		}
+	};
 }
 
 
-
-
-prototype = shell_root.prototype;
-
-loadingSpaceTextPath =
-	jion$path.empty
+const loadingSpaceTextPath =
+	tim.path.empty
 	.append( 'form' )
 	.append( 'twig' )
 	.append( 'loading' )
 	.append( 'twig' )
 	.append( 'spaceText' )
 	.append( 'text' );
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
@@ -260,7 +240,7 @@ loadingSpaceTextPath =
 |
 | If no item is left, action is set to undefined.
 */
-shell_root.prepareAction =
+def.static.prepareAction =
 	function(
 		action
 	)
@@ -320,7 +300,7 @@ shell_root.prepareAction =
 					return(
 						action.create(
 							'itemPaths',
-							jion$pathList.create( 'list:init', nPaths )
+							tim.pathList.create( 'list:init', nPaths )
 						)
 					);
 				}
@@ -336,7 +316,7 @@ shell_root.prepareAction =
 /*
 | Startup of shell.
 */
-shell_root.startup =
+def.static.startup =
 	function(
 		display
 	)
@@ -367,7 +347,7 @@ shell_root.startup =
 
 	show = show_form.loading;
 
-	ajaxPath = jion$path.empty.append( 'ajax' );
+	ajaxPath = tim.path.empty.append( 'ajax' );
 
 	userCreds = user_creds.createFromLocalStorage( );
 
@@ -400,9 +380,119 @@ shell_root.startup =
 
 
 /*
+| Creates the disc root.
+*/
+def.static._createDiscRoot =
+	function(
+		viewSize,
+		show
+	)
+{
+	const path = tim.path.empty.append( 'disc' );
+
+	const twPath = path.append( 'twig' );
+
+	return(
+		disc_root.create(
+			'controlTransform', gleam_transform.normal,
+			'path', path,
+			'show', show,
+			'viewSize', viewSize,
+			'twig:add', 'mainDisc',
+				gruga_mainDisc.abstract(
+					'path', twPath.append( 'mainDisc' )
+				),
+			'twig:add', 'createDisc',
+				gruga_createDisc.abstract(
+					'path', twPath.append( 'createDisc' )
+				),
+			'twig:add', 'zoomDisc',
+				gruga_zoomDisc.abstract(
+					'path', twPath.append( 'zoomDisc' )
+				)
+		)
+	);
+};
+
+
+/*
+| Creates the form root.
+*/
+def.static._createFormRoot =
+	function(
+		viewSize
+	)
+{
+	const forms =
+		{
+			loading : gruga_loading,
+			login : gruga_login,
+			moveTo : gruga_moveTo,
+			noAccessToSpace : gruga_noAccessToSpace,
+			nonExistingSpace : gruga_nonExistingSpace,
+			signUp : gruga_signUp,
+			space : gruga_space,
+			user : gruga_user,
+			welcome : gruga_welcome
+		};
+
+	for( let name in forms )
+	{
+		let form = forms[ name ];
+
+		for( let w = 0, wZ = form.length; w < wZ; w++ )
+		{
+			const key = form.getKey( w );
+
+			const widget = form.get( key );
+
+			if( widget.isAbstract )
+			{
+				form =
+					form.abstract(
+						'twig:set',
+						key,
+						widget.create( 'transform', gleam_transform.normal )
+					);
+			}
+		}
+
+		forms[ name ] = form;
+	}
+
+	let formRoot =
+		form_root.create(
+			'path', tim.path.empty.append( 'form' ),
+			'viewSize', viewSize
+		);
+
+	const keys = Object.keys( forms );
+
+	// FUTURE do a twig:init instead
+	for( let a = 0, aZ = keys.length; a < aZ; a++ )
+	{
+		const key = keys[ a ];
+
+		formRoot =
+			formRoot.create(
+				'twig:add',
+				key,
+				forms[ key ].create(
+					'viewSize', viewSize
+				)
+			);
+	}
+
+	return formRoot;
+};
+
+
+
+
+/*
 | Initializer.
 */
-prototype._init =
+def.func._init =
 	function(
 		inherit
 	)
@@ -560,20 +650,88 @@ prototype._init =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+/*
+| Returns the attention center.
+|
+| That is the horiziontal offset of the caret.
+|
+| Used for example on the iPad so
+| the caret is scrolled into view
+| when the keyboard is visible.
+*/
+def.lazy.attentionCenter =
+	function( )
+{
+	var
+		screen;
+
+	screen = root._currentScreen;
+
+	return screen && screen.attentionCenter;
+};
+
+
+/*
+| Returns the what the clipboard should hold.
+*/
+def.lazy.clipboard =
+	function( )
+{
+	const mark = this.mark;
+
+	return mark ? mark.clipboard : '';
+};
+
+
+/*
+| Returns current screen
+|
+| This is either a fabric space or a form
+*/
+def.lazy._currentScreen =
+	function( )
+{
+	const show = this.show;
+
+	switch( show.reflect )
+	{
+		case 'show_create' :
+		case 'show_normal' :
+		case 'show_zoom' :
+
+			return root.spaceVisual;
+
+		case 'show_form' :
+
+			return root.form.get( show.formName );
+
+		default : throw new Error( );
+	}
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Alters the tree.
 |
 | Feeds the doTracker.
 */
-prototype.alter =
+def.func.alter =
 	function(
 		a1 // change, several changes or array of changes
 		// // ...
 	)
 {
-	var
-		changeList,
-		changeWrap;
+	let changeList;
 
 	if( a1.reflect === 'change_list' )
 	{
@@ -592,7 +750,7 @@ prototype.alter =
 			);
 	}
 
-	changeWrap =
+	const changeWrap =
 		change_wrap.create(
 			'cid', session_uid( ),
 			'changeList', changeList
@@ -602,34 +760,6 @@ prototype.alter =
 
 	root.doTracker.track( changeWrap );
 };
-
-
-
-/*
-| Returns the attention center.
-|
-| That is the horiziontal offset of the caret.
-|
-| Used for example on the iPad so
-| the caret is scrolled into view
-| when the keyboard is visible.
-*/
-Object.defineProperty(
-	prototype,
-	'attentionCenter',
-	{
-		get :
-			function( )
-		{
-			var
-				screen;
-
-			screen = root._currentScreen;
-
-			return screen && screen.attentionCenter;
-		}
-	}
-);
 
 
 /*
@@ -653,33 +783,26 @@ Object.defineProperty(
 | -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
 |
 */
-prototype.changeSpaceTransformPoint =
+def.func.changeSpaceTransformPoint =
 	function(
 		de,  // difference of view zoom exponent
 		p    // point to keep constant
 	)
 {
-	var
-		e1,
-		h,
-		offset,
-		st,
-		zoom;
+	const st = this.spaceTransform;
 
-	st = this.spaceTransform;
+	const offset = st.offset;
 
-	offset = st.offset;
-
-	e1 =
+	const e1 =
 		math_limit(
 			shell_settings.zoomMin,
 			this._transformExponent + de,
 			shell_settings.zoomMax
 		);
 
-	zoom = Math.pow( 1.1, e1 );
+	const zoom = Math.pow( 1.1, e1 );
 
-	h = 1 / st.zoom - 1 / zoom;
+	const h = 1 / st.zoom - 1 / zoom;
 
 	this._changeTransformTo(
 		e1,
@@ -699,7 +822,7 @@ prototype.changeSpaceTransformPoint =
 /*
 | Changes the zoom factor keeping current center
 */
-prototype.changeSpaceTransformCenter =
+def.func.changeSpaceTransformCenter =
 	function(
 		dir    // direction of zoom change (+/- 1)
 	)
@@ -711,50 +834,28 @@ prototype.changeSpaceTransformCenter =
 /*
 | Changed the views so that all items of current space are visible.
 */
-prototype.changeSpaceTransformAll =
+def.func.changeSpaceTransformAll =
 	function( )
 {
-	var
-		discWidth,
-		exp,
-		cx,
-		cy,
-		extra,
-		item,
-		pos,
-		r,
-		rZ,
-		ex,
-		ny,
-		sy,
-		wx,
-		space,
-		vsx,
-		vsy,
-		vsx2,
-		vsy2,
-		zoomMin,
-		z;
+	const space = root.spaceVisual;
 
-	space = root.spaceVisual;
-
-	rZ = space.length;
+	const rZ = space.length;
 
 	if( rZ === 0 ) return;
 
-	item = space.atRank( 0 );
+	let item = space.atRank( 0 );
 
-	pos = item.pos || item.zone.pos;
+	let pos = item.pos || item.zone.pos;
 
-	wx = pos.x;
+	let wx = pos.x;
 
-	ny = pos.y;
+	let ny = pos.y;
 
-	ex = wx + item.zone.width;
+	let ex = wx + item.zone.width;
 
-	sy = ny + item.zone.height;
+	let sy = ny + item.zone.height;
 
-	for( r = 1; r < rZ; r++ )
+	for( let r = 1; r < rZ; r++ )
 	{
 		item = space.atRank( r );
 
@@ -770,26 +871,31 @@ prototype.changeSpaceTransformAll =
 	}
 
 	// center
-	cx = ( ex + wx ) / 2;
+	const cx = ( ex + wx ) / 2;
 
-	cy = ( ny + sy ) / 2;
+	const cy = ( ny + sy ) / 2;
 
-	discWidth = root.disc.get( 'mainDisc' ).tZone.width;
+	const discWidth = root.disc.get( 'mainDisc' ).tZone.width;
 
-	vsx = root.viewSize.width - discWidth;
+	const vsx = root.viewSize.width - discWidth;
 
-	vsy = root.viewSize.height;
+	const vsy = root.viewSize.height;
 
-	vsx2 = vsx / 2;
+	const vsx2 = vsx / 2;
 
-	vsy2 = vsy / 2;
+	const vsy2 = vsy / 2;
 
-	zoomMin = shell_settings.zoomMin;
+	const zoomMin = shell_settings.zoomMin;
+
+	let exp;
+
+	let z;
+
 	for( exp = shell_settings.zoomMax; exp > zoomMin; exp-- )
 	{
 		z = Math.pow( 1.1, exp );
 
-		extra = 10 / z;
+		const extra = 10 / z;
 
 		if( ex + extra > cx + vsx2 / z ) continue;
 
@@ -820,7 +926,7 @@ prototype.changeSpaceTransformAll =
 /*
 | Changed the views zoom to 1 and pans to home.
 */
-prototype.changeSpaceTransformHome =
+def.func.changeSpaceTransformHome =
 	function( )
 {
 	root._changeTransformTo(
@@ -834,20 +940,16 @@ prototype.changeSpaceTransformHome =
 /*
 | User clicked.
 */
-prototype.click =
+def.func.click =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
+	const screen = root._currentScreen;
 
-	screen = root._currentScreen;
-
-	bubble = root.disc.click( p, shift, ctrl );
+	const bubble = root.disc.click( p, shift, ctrl );
 
 	// if bubble === false do not bubble
 	if( bubble !== undefined ) return bubble;
@@ -857,33 +959,12 @@ prototype.click =
 
 
 /*
-| Returns the what the clipboard should hold.
-*/
-jion.lazyValue(
-	prototype,
-	'clipboard',
-	function( )
-{
-	var
-		mark;
-
-	mark = this.mark;
-
-	return mark ? mark.clipboard : '';
-}
-);
-
-
-/*
 | Clears the carets retainx info.
 */
-prototype.clearRetainX =
+def.func.clearRetainX =
 	function( )
 {
-	var
-		mark;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( mark.retainx !== undefined )
 	{
@@ -895,7 +976,7 @@ prototype.clearRetainX =
 /*
 | Cycles focus in a form.
 */
-prototype.cycleFormFocus =
+def.func.cycleFormFocus =
 	function(
 		name,
 		dir
@@ -908,24 +989,20 @@ prototype.cycleFormFocus =
 /*
 | Moving during an operation with the mouse button held down.
 */
-prototype.dragMove =
+def.func.dragMove =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( !screen ) return;
 
 	if( screen.showDisc )
 	{
-		bubble = root.disc.dragMove( p, shift, ctrl );
+		const bubble = root.disc.dragMove( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -939,24 +1016,20 @@ prototype.dragMove =
 |
 | Mouse down or finger on screen.
 */
-prototype.dragStart =
+def.func.dragStart =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( !screen ) return;
 
 	if( screen.showDisc )
 	{
-		bubble = root.disc.dragStart( p, shift, ctrl );
+		const bubble = root.disc.dragStart( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -968,7 +1041,7 @@ prototype.dragStart =
 /*
 | A button has been dragStarted.
 */
-prototype.dragStartButton =
+def.func.dragStartButton =
 	function( path )
 {
 	switch( path.get( 0 ) )
@@ -991,24 +1064,20 @@ prototype.dragStartButton =
 /*
 | Stops an operation with the mouse button held down.
 */
-prototype.dragStop =
+def.func.dragStop =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( !screen ) return;
 
 	if( screen.showDisc )
 	{
-		bubble = root.disc.dragStop( p, shift, ctrl );
+		const bubble = root.disc.dragStop( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -1020,15 +1089,12 @@ prototype.dragStop =
 /*
 | User entered normal text (one character or more).
 */
-prototype.input =
+def.func.input =
 	function(
 		text
 	)
 {
-	var
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( screen )
 	{
@@ -1042,15 +1108,12 @@ prototype.input =
 /*
 | Logs out the current user
 */
-prototype.logout =
+def.func.logout =
 	function( )
 {
-	var
-		link;
-
 	// clears the user spaces list
-	link = root.link.create( 'refMomentUserSpaceList', undefined );
-	
+	const link = root.link.create( 'refMomentUserSpaceList', undefined );
+
 	if( root._visitorCreds )
 	{
 		root.create(
@@ -1078,7 +1141,7 @@ prototype.logout =
 /*
 | Mouse wheel is being turned.
 */
-prototype.mousewheel =
+def.func.mousewheel =
 	function(
 		p,
 		dir,
@@ -1086,15 +1149,11 @@ prototype.mousewheel =
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root.disc.mousewheel( p, dir, shift, ctrl );
+		const bubble = root.disc.mousewheel( p, dir, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -1108,13 +1167,12 @@ prototype.mousewheel =
 |
 | if spaceRef is undefined reloads current space
 */
-prototype.moveToSpace =
+def.func.moveToSpace =
 	function(
 		spaceRef,     // reference of type ref_space
 		createMissing // if true, non-existing spaces are to be created
 	)
 {
-
 	root.create(
 		'fallbackSpaceRef', this.spaceRef,
 		'show', show_form.loading,
@@ -1131,22 +1189,18 @@ prototype.moveToSpace =
 /*
 | User is hovering his/her pointing device.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		result,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
-		result = root.disc.pointingHover( p, shift, ctrl );
+		const result = root.disc.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
@@ -1166,7 +1220,7 @@ prototype.pointingHover =
 
 	if( screen )
 	{
-		result = screen.pointingHover( p, shift, ctrl );
+		const result = screen.pointingHover( p, shift, ctrl );
 
 /**/	if( CHECK )
 /**/	{
@@ -1190,22 +1244,18 @@ prototype.pointingHover =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-prototype.probeClickDrag =
+def.func.probeClickDrag =
 	function(
 		p,
 		shift,
 		ctrl
 	)
 {
-	var
-		bubble,
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	if( screen && screen.showDisc )
 	{
-		bubble = root.disc.probeClickDrag( p, shift, ctrl );
+		const bubble = root.disc.probeClickDrag( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
@@ -1220,22 +1270,18 @@ prototype.probeClickDrag =
 /*
 | A button has been pushed.
 */
-prototype.pushButton =
-	function( path )
+def.func.pushButton =
+	function(
+		path   // path of the button pushed
+	)
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' :
+		case 'disc' : return root.disc.pushButton( path, false, false );
 
-			return root.disc.pushButton( path, false, false );
+		case 'form' : return root.form.pushButton( path, false, false );
 
-		case 'form' :
-
-			return root.form.pushButton( path, false, false );
-
-		default :
-
-			throw new Error( 'invalid path' );
+		default : throw new Error( 'invalid path' );
 	}
 };
 
@@ -1246,7 +1292,7 @@ prototype.pushButton =
 | When a space is loaded, this is space/normal
 | otherwise it is the loading screen.
 */
-prototype.showHome =
+def.func.showHome =
 	function( )
 {
 	root.create(
@@ -1262,23 +1308,16 @@ prototype.showHome =
 /*
 | User is pressing a special key.
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
 		key,
 		shift,
 		ctrl
 	)
 {
-	var
-		action,
-		result,
-		screen;
-
-	screen = root._currentScreen;
-
 	if( key === 'shift' )
 	{
-		action = this.action;
+		const action = this.action;
 
 		if( !action )
 		{
@@ -1288,10 +1327,9 @@ prototype.specialKey =
 		return true;
 	}
 
-	if( screen )
-	{
-		result = screen.specialKey( key, shift, ctrl );
-	}
+	const screen = root._currentScreen;
+
+	const result = screen && screen.specialKey( key, shift, ctrl );
 
 	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
 
@@ -1302,19 +1340,16 @@ prototype.specialKey =
 /*
 | User is releasing a special key.
 */
-prototype.releaseSpecialKey =
+def.func.releaseSpecialKey =
 	function(
 		key
 //		shift,
 //		ctrl
 	)
 {
-	var
-		action;
-
 	if( key !== 'shift' ) return;
 
-	action = this.action;
+	const action = this.action;
 
 	if(
 		action
@@ -1331,7 +1366,7 @@ prototype.releaseSpecialKey =
 | Returns true if the iPad ought to showy
 | the virtual keyboard
 */
-prototype.suggestingKeyboard =
+def.func.suggestingKeyboard =
 	function( )
 {
 	return this.mark && this.mark.hasCaret;
@@ -1341,15 +1376,12 @@ prototype.suggestingKeyboard =
 /*
 | The link is reporting updates.
 */
-prototype.update =
+def.func.update =
 	function(
 		changes
 	)
 {
-	var
-		mark;
-
-	mark = this.mark;
+	let mark = this.mark;
 
 	if( !mark ) return;
 
@@ -1379,16 +1411,13 @@ prototype.update =
 /*
 | The window has been resized.
 */
-prototype.resize =
+def.func.resize =
 	function(
-		size    // a gleam_size jion
+		size    // of type gleam_size
 	)
 {
 	root.create(
-		'display',
-			this.display.create(
-				'size', size
-			),
+		'display', this.display.create( 'size', size ),
 		'viewSize', size
 	);
 };
@@ -1397,16 +1426,12 @@ prototype.resize =
 /*
 | Receiving a moveTo event
 */
-prototype.onAcquireSpace =
+def.func.onAcquireSpace =
 	function(
 		request,
 		reply
 	)
 {
-	var
-		access,
-		show;
-
 	if( reply.reflect === 'reply_error' )
 	{
 		system.failScreen( 'Error on acquire space: ' + reply.message );
@@ -1416,9 +1441,7 @@ prototype.onAcquireSpace =
 
 	switch( reply.status )
 	{
-		case 'served' :
-
-			break;
+		case 'served' : break;
 
 		case 'nonexistent' :
 
@@ -1461,9 +1484,9 @@ prototype.onAcquireSpace =
 			return;
 	}
 
-	access = reply.access;
+	const access = reply.access;
 
-	show = root.show;
+	const show = root.show;
 
 	root.create(
 		'access', access,
@@ -1481,7 +1504,7 @@ prototype.onAcquireSpace =
 /*
 | Received an 'auth' reply.
 */
-prototype.onAuth =
+def.func.onAuth =
 	function(
 		wasVisitor,   // if true this was a visitor account requested
 		reply
@@ -1556,7 +1579,7 @@ prototype.onAuth =
 /*
 | Received a 'register' reply.
 */
-prototype.onRegister =
+def.func.onRegister =
 	function(
 		request,
 		reply
@@ -1583,27 +1606,14 @@ prototype.onRegister =
 /*
 | Removes a text spawning over several entities.
 */
-prototype.removeRange =
+def.func.removeRange =
 	function(
 		range
 	)
 {
-	var
-		backMark,
-		changes,
-		frontMark,
-		k1,
-		k2,
-		pivot,
-		r,
-		r1,
-		r2,
-		text,
-		ve;
+	const frontMark = range.frontMark;
 
-	frontMark = range.frontMark;
-
-	backMark = range.backMark;
+	const backMark = range.backMark;
 
 /**/if( CHECK )
 /**/{
@@ -1634,27 +1644,29 @@ prototype.removeRange =
 		return;
 	}
 
-	changes = [ ];
+	const changes = [ ];
 
-	k1 = frontMark.path.get( -2 );
+	const k1 = frontMark.path.get( -2 );
 
-	k2 = backMark.path.get( -2 );
+	const k2 = backMark.path.get( -2 );
 
-	pivot =
+	const pivot =
 		root.spaceFabric.getPath(
 			frontMark.path.chop.shorten.shorten.shorten
 		);
 
-	r1 = pivot.rankOf( k1 );
+	const r1 = pivot.rankOf( k1 );
 
-	r2 = pivot.rankOf( k2 );
+	const r2 = pivot.rankOf( k2 );
 
-	text =
+	let text =
 		root.spaceFabric.getPath(
 			frontMark.path.chop
 		);
 
-	for( r = r1; r < r2; r++ )
+	let ve;
+
+	for( let r = r1; r < r2; r++ )
 	{
 		ve = pivot.atRank( r + 1 );
 
@@ -1691,23 +1703,17 @@ prototype.removeRange =
 /*
 | Creates a new relation by specifing its relates.
 */
-prototype.spawnRelation =
+def.func.spawnRelation =
 	function(
 		item1,
 		item2
 	)
 {
-	var
-		line,
-		key,
-		pos,
-		val;
+	const line = gleam_connect.line( item1.shape, item2.shape );
 
-	line = gleam_connect.line( item1.shape, item2.shape );
+	const pos = line.pc.sub( gruga_relation.spawnOffset );
 
-	pos = line.pc.sub( gruga_relation.spawnOffset );
-
-	val =
+	const val =
 		fabric_relation.create(
 			'pos', pos,
 			'doc',
@@ -1720,12 +1726,12 @@ prototype.spawnRelation =
 			'item2key', item2.path.get( -1 )
 		);
 
-	key = session_uid( );
+	const key = session_uid( );
 
 	root.alter(
 		change_grow.create(
 			'val', val,
-			'path', jion$path.empty.append( 'twig' ).append( key ),
+			'path', tim.path.empty.append( 'twig' ).append( key ),
 			'rank', 0
 		)
 	);
@@ -1745,13 +1751,10 @@ prototype.spawnRelation =
 | an finishAnimation a time is used instead an this
 | is the callback.
 */
-notAnimationFinish =
+const notAnimationFinish =
 	function( )
 {
-	var
-		action;
-
-	action = root.action;
+	const action = root.action;
 
 	if( !action ) return;
 
@@ -1762,50 +1765,11 @@ notAnimationFinish =
 
 
 /*
-| Returns current screen
-|
-| This is either a fabric space or a form
-*/
-jion.lazyValue(
-	prototype,
-	'_currentScreen',
-	function( )
-{
-	var
-		show;
-
-	show = this.show;
-
-	switch( show.reflect )
-	{
-		case 'show_create' :
-		case 'show_normal' :
-		case 'show_zoom' :
-
-			return root.spaceVisual;
-
-		case 'show_form' :
-
-			return root.form.get( show.formName );
-
-		default : throw new Error( );
-	}
-}
-);
-
-
-/*
 | Draws everything.
 */
-prototype.draw =
+def.func.draw =
 	function( )
 {
-	var
-		arr,
-		disc,
-		display,
-		screen;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this !== root ) throw new Error( );
@@ -1813,15 +1777,15 @@ prototype.draw =
 
 	if( root._drawn ) return;
 
-	display = root.display;
+	let display = root.display;
 
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
-	arr = [ screen.glint ];
+	const arr = [ screen.glint ];
 
 	if( screen.showDisc )
 	{
-		disc = root.disc;
+		const disc = root.disc;
 
 		arr[ 1 ] = disc.glint;
 	}
@@ -1841,169 +1805,35 @@ prototype.draw =
 
 
 /*
-| Creates the disc root.
-*/
-shell_root._createDiscRoot =
-	function(
-		viewSize,
-		show
-	)
-{
-	var
-		twPath,
-		path;
-
-	path = jion$path.empty.append( 'disc' );
-
-	twPath = path.append( 'twig' );
-
-	return(
-		disc_root.create(
-			'controlTransform', gleam_transform.normal,
-			'path', path,
-			'show', show,
-			'viewSize', viewSize,
-			'twig:add', 'mainDisc',
-				gruga_mainDisc.abstract(
-					'path', twPath.append( 'mainDisc' )
-				),
-			'twig:add', 'createDisc',
-				gruga_createDisc.abstract(
-					'path', twPath.append( 'createDisc' )
-				),
-			'twig:add', 'zoomDisc',
-				gruga_zoomDisc.abstract(
-					'path', twPath.append( 'zoomDisc' )
-				)
-		)
-	);
-};
-
-
-/*
-| Creates the form root.
-*/
-shell_root._createFormRoot =
-	function(
-		viewSize
-	)
-{
-	var
-		a,
-		aZ,
-		form,
-		formRoot,
-		forms,
-		key,
-		keys,
-		name,
-		w,
-		widget,
-		wZ;
-
-	forms =
-		{
-			loading : gruga_loading,
-			login : gruga_login,
-			moveTo : gruga_moveTo,
-			noAccessToSpace : gruga_noAccessToSpace,
-			nonExistingSpace : gruga_nonExistingSpace,
-			signUp : gruga_signUp,
-			space : gruga_space,
-			user : gruga_user,
-			welcome : gruga_welcome
-		};
-
-	for( name in forms )
-	{
-		form = forms[ name ];
-
-		for( w = 0, wZ = form.length; w < wZ; w++ )
-		{
-			key = form.getKey( w );
-
-			widget = form.get( key );
-
-			if( widget.isAbstract )
-			{
-				form =
-					form.abstract(
-						'twig:set',
-						key,
-						widget.create( 'transform', gleam_transform.normal )
-					);
-			}
-		}
-
-		forms[ name ] = form;
-	}
-
-	formRoot =
-		form_root.create(
-			'path', jion$path.empty.append( 'form' ),
-			'viewSize', viewSize
-		);
-
-	keys = Object.keys( forms );
-
-	// FUTURE do a twig:init instead
-	for( a = 0, aZ = keys.length; a < aZ; a++ )
-	{
-		key = keys[ a ];
-
-		formRoot =
-			formRoot.create(
-				'twig:add',
-				key,
-				forms[ key ].create(
-					'viewSize', viewSize
-				)
-			);
-	}
-
-	return formRoot;
-};
-
-
-/*
 | Sends out update/check notifications when an item
 | is no longer in the user marked.
 */
-prototype._markLostNotifications =
+def.func._markLostNotifications =
 	function(
 		nMark,  // new mark
 		oMark   // old mark
 	)
 {
-	var
-		a,
-		aZ,
-		item,
-		nip,
-		oip,
-		op;
-
 	if( !oMark ) return;
 
-	oip = oMark.itemPaths;
+	const oip = oMark.itemPaths;
 
 	if( !oip ) return;
 
-	nip = nMark && nMark.itemPaths;
+	const nip = nMark && nMark.itemPaths;
 
-	for( a = 0, aZ = oip.length; a < aZ; a++ )
+	for( let a = 0, aZ = oip.length; a < aZ; a++ )
 	{
-		op = oip.get( a );
+		const op = oip.get( a );
 
 		if( nip && nip.contains( op ) ) continue;
 
-		item = root.getPath( op );
+		const item = root.getPath( op );
 
 		if( !item ) continue;
 
 		item.markLost( );
 	}
-
 };
 
 
@@ -2011,7 +1841,7 @@ prototype._markLostNotifications =
 | Changes the space transform to transform.
 | Possibly with an animation.
 */
-prototype._changeTransformTo =
+def.func._changeTransformTo =
 	function(
 		exp,         // exponent of destination transform
 		transform,   // destination transform
@@ -2046,4 +1876,4 @@ prototype._changeTransformTo =
 };
 
 
-} )( );
+} );

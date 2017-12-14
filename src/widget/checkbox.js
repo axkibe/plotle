@@ -1,120 +1,140 @@
 /*
 | A checkbox.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'widget_checkbox',
-		hasAbstract : true,
-		attributes :
-		{
-			checked :
-			{
-				comment : 'true if the checkbox is checked',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			facets :
-			{
-				comment : 'style facets',
-				type : 'gleam_facetList'
-			},
-			hover :
-			{
-				comment : 'component hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'widget_widget.concernsHover( hover, path )'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] ),
-				prepare : 'widget_widget.concernsMark( mark, path )'
-			},
-			path :
-			{
-				comment : 'the path of the widget',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'gleam_transform'
-			},
-			visible :
-			{
-				comment : 'if false the button is hidden',
-				type : 'boolean',
-				defaultValue : 'true'
-			},
-			zone :
-			{
-				comment : 'designed zone',
-				type : 'gleam_rect'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	gleam_glint_list,
 	gleam_glint_paint,
 	gleam_transform,
 	gruga_iconCheck,
-	jion,
-	result_hover,
-	root,
-	widget_checkbox;
+	result_hover;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'widget_checkbox', ( def, widget_checkbox ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.hasAbstract = true;
 
-	return;
+	def.attributes =
+	{
+		checked :
+		{
+			// true if the checkbox is checked
+			type : 'boolean',
+			defaultValue : 'false'
+		},
+		facets :
+		{
+			// style facets
+			type : 'gleam_facetList'
+		},
+		hover :
+		{
+			// component hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'widget_widget.concernsHover( hover, path )'
+		},
+		mark :
+		{
+			// the users mark
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] ),
+			prepare : 'widget_widget.concernsMark( mark, path )'
+		},
+		path :
+		{
+			// the path of the widget
+			type : [ 'undefined', 'jion$path' ]
+		},
+		transform :
+		{
+			// the transform
+			type : 'gleam_transform'
+		},
+		visible :
+		{
+			// if false the button is hidden
+			type : 'boolean',
+			defaultValue : 'true'
+		},
+		zone :
+		{
+			// designed zone
+			type : 'gleam_rect'
+		}
+	};
 }
 
 
-var
-	prototype;
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
 
-prototype = widget_checkbox.prototype;
+
+/*
+| The widget's glint.
+*/
+def.lazy.glint =
+	function( )
+{
+	if( !this.visible ) return undefined;
+
+	const facet =
+		this.facets.getFacet(
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.mark
+		);
+
+	let glint =
+		gleam_glint_list.create(
+			'list:append',
+				gleam_glint_paint.create(
+					'facet', facet,
+					'shape', this._tZone
+				)
+		);
+
+	if( this.checked )
+	{
+		glint =
+			glint.create(
+				'list:append',
+					gleam_glint_paint.create(
+						'facet', gruga_iconCheck.facet,
+						'shape', this._checkIcon
+					)
+			);
+	}
+
+	return glint;
+};
 
 
 /*
 | The transformed zone.
 */
-jion.lazyValue(
-	prototype,
-	'_tZone',
+def.lazy._tZone =
 	function( )
 {
 	return this.zone.transform( this.transform );
-}
-);
+};
 
 
 /*
 | The check icon of the check box.
 */
-jion.lazyValue(
-	prototype,
-	'_checkIcon',
+def.lazy._checkIcon =
 	function( )
 {
 	return(
@@ -125,25 +145,30 @@ jion.lazyValue(
 			)
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | CheckBoxes are focusable.
 */
-prototype.focusable = true;
+def.func.focusable = true;
 
 
 /*
 | checkbox is being changed.
 */
-prototype.change =
+def.func.change =
 	function(
 		// shift,
 		// ctrl
 	)
 {
+	console.log( 'FIXME is this ever used?' );
 	// no default
 };
 
@@ -151,7 +176,7 @@ prototype.change =
 /*
 | User clicked.
 */
-prototype.click =
+def.func.click =
 	function(
 		p
 		// shift,
@@ -174,59 +199,14 @@ prototype.click =
 
 
 /*
-| The widget's glint.
-*/
-jion.lazyValue(
-	prototype,
-	'glint',
-	function( )
-{
-	var
-		facet,
-		glint;
-
-	if( !this.visible ) return undefined;
-
-	facet =
-		this.facets.getFacet(
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.mark
-		);
-
-	glint =
-		gleam_glint_list.create(
-			'list:append',
-				gleam_glint_paint.create(
-					'facet', facet,
-					'shape', this._tZone
-				)
-		);
-
-	if( this.checked )
-	{
-		glint =
-			glint.create(
-				'list:append',
-					gleam_glint_paint.create(
-						'facet', gruga_iconCheck.facet,
-						'shape', this._checkIcon
-					)
-			);
-	}
-
-	return glint;
-}
-);
-
-
-/*
 | Any normal key for a checkbox triggers it to flip
 */
-prototype.input =
+def.func.input =
 	function(
-		// text
+		text
 	)
 {
+	console.log( 'INPUT', text );
 	root.setPath( this.path.append( 'checked' ), !this.checked );
 
 	return true;
@@ -236,7 +216,7 @@ prototype.input =
 /*
 | Mouse hover.
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p
 	)
@@ -255,11 +235,11 @@ prototype.pointingHover =
 /*
 | Special keys for buttons having focus
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
-		key
-		// shift
-		// ctrl
+		key,
+		shift,
+		ctrl
 	)
 {
 	switch( key )
@@ -288,4 +268,4 @@ prototype.specialKey =
 };
 
 
-} )( );
+} );

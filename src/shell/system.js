@@ -1427,15 +1427,11 @@ prototype._releaseSpecialKey =
 prototype._testInput =
 	function( )
 {
-	var
-		text;
+	if( !root ) return;
 
-	text = hiddenInput.value;
+	let text = hiddenInput.value;
 
-	if( text === '__' + inputVal || !root )
-	{
-		return;
-	}
+	if( text === '__' + inputVal ) return;
 
 	// works around opera quirks inserting CR characters
 	text = text.replace( /\r/g, '' );
@@ -1458,11 +1454,7 @@ prototype._testInput =
 prototype._steerAttention =
 	function( )
 {
-	var
-		ac,
-		clipboard;
-
-	ac = root.attentionCenter;
+	let ac = root.attentionCenter;
 
 	if( ac === undefined )
 	{
@@ -1478,7 +1470,7 @@ prototype._steerAttention =
 
 		hiddenInput.style.top = ac + 'px';
 
-		clipboard = root.clipboard;
+		const clipboard = root.clipboard;
 
 		system.setInput( clipboard );
 
@@ -1492,10 +1484,7 @@ prototype._steerAttention =
 */
 startup = function( )
 {
-	var
-		start;
-
-	start =
+	const start =
 		transmitter(
 			function( )
 			{
@@ -1505,10 +1494,7 @@ startup = function( )
 					gleam_display_canvas.createAroundHTMLCanvas(
 						canvas,
 						'swatch',
-						gleam_size.create(
-							'height', 10,
-							'width', 10
-						),
+						gleam_size.create( 'height', 10, 'width', 10 ),
 						undefined
 					);
 

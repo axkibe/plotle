@@ -1,85 +1,10 @@
 /*
 | An input field.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'widget_input',
-		hasAbstract : true,
-		attributes :
-		{
-			facets :
-			{
-				comment : 'style facets',
-				type : 'gleam_facetList'
-			},
-			hover :
-			{
-				comment : 'component hovered upon',
-				type : [ 'undefined', 'jion$path' ],
-				prepare : 'widget_widget.concernsHover( hover, path )'
-			},
-			font :
-			{
-				comment : 'font of the text',
-				type : 'gleam_font'
-			},
-			mark :
-			{
-				comment : 'the users mark',
-				prepare : 'widget_widget.concernsMark( mark, path )',
-				type :
-					require( '../visual/mark/typemap' )
-					.concat( [ 'undefined' ] )
-			},
-			maxlen :
-			{
-				comment : 'maximum input length',
-				type : 'integer'
-			},
-			password :
-			{
-				comment : 'true for password input',
-				type : 'boolean',
-				defaultValue : 'false'
-			},
-			path :
-			{
-				comment : 'the path of the widget',
-				type : [ 'undefined', 'jion$path' ]
-			},
-			transform :
-			{
-				comment : 'the transform',
-				type : 'gleam_transform'
-			},
-			value :
-			{
-				comment : 'the value in the input box',
-				type : 'string',
-				defaultValue : '""'
-			},
-			visible :
-			{
-				comment : 'if false the button is hidden',
-				type : 'boolean',
-				defaultValue : 'true'
-			},
-			zone :
-			{
-				comment : 'designed zone',
-				type : 'gleam_rect'
-			}
-		}
-	};
-}
-
-
+// FIXME
 var
 	gleam_ellipse,
 	gleam_facet,
@@ -92,119 +17,125 @@ var
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
-	jion,
 	result_hover,
-	root,
 	shell_settings,
-	visual_mark_caret,
-	widget_input;
+	visual_mark_caret;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'widget_input', ( def, widget_input ) => {
 
 
-if( NODE )
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	require( 'jion' ).this( module, 'source' );
+	def.hasAbstract = true;
 
-	return;
+	def.attributes =
+	{
+		facets :
+		{
+			// style facets
+			type : 'gleam_facetList'
+		},
+		hover :
+		{
+			// component hovered upon
+			type : [ 'undefined', 'jion$path' ],
+			prepare : 'widget_widget.concernsHover( hover, path )'
+		},
+		font :
+		{
+			// font of the text
+			type : 'gleam_font'
+		},
+		mark :
+		{
+			// the users mark
+			prepare : 'widget_widget.concernsMark( mark, path )',
+			type :
+				require( '../visual/mark/typemap' )
+				.concat( [ 'undefined' ] )
+		},
+		maxlen :
+		{
+			// maximum input length
+			type : 'integer'
+		},
+		password :
+		{
+			// true for password input
+			type : 'boolean',
+			defaultValue : 'false'
+		},
+		path :
+		{
+			// the path of the widget
+			type : [ 'undefined', 'jion$path' ]
+		},
+		transform :
+		{
+			// the transform
+			type : 'gleam_transform'
+		},
+		value :
+		{
+			// the value in the input box
+			type : 'string',
+			defaultValue : '""'
+		},
+		visible :
+		{
+			// if false the button is hidden
+			type : 'boolean',
+			defaultValue : 'true'
+		},
+		zone :
+		{
+			// designed zone
+			type : 'gleam_rect'
+		}
+	};
 }
 
 
-var
-	prototype;
-
-prototype = widget_input.prototype;
-
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
 
 /*
 | Default distance of text
 */
-widget_input._pitch = gleam_point.xy( 8, 3 );
+def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
 
 
-/*
-| The attention center.
-*/
-jion.lazyValue(
-	prototype,
-	'attentionCenter',
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
+def.lazy.attentionCenter =
 	function( )
 {
-	var
-		descend,
-		fs,
-		p,
-		s;
+	const fs = this.font.size;
 
-	fs = this.font.size;
+	const descend = fs * shell_settings.bottombox;
 
-	descend = fs * shell_settings.bottombox;
+	const p = this.locateOffsetPoint( this.mark.caret.at );
 
-	p = this.locateOffsetPoint( this.mark.caret.at );
+	const s = Math.round( p.y + descend + 1 );
 
-	s = Math.round( p.y + descend + 1 );
-
-	return(
-		this._tZone.pos.y + s - Math.round( fs + descend )
-	);
-}
-);
-
-
-/*
-| Inputs can hold a caret.
-*/
-prototype.caretable = true;
-
-
-/*
-| Inputs are focusable
-*/
-prototype.focusable = true;
-
-
-/*
-| User clicked.
-*/
-prototype.click =
-	function(
-		p
-		// shift
-		// ctrl
-	)
-{
-	var
-		pp;
-
-	if( !p || !this._tZone.within( p ) ) return undefined;
-
-	pp = p.sub( this._tZone.pos );
-
-	if( !this._tzShape.within( pp ) ) return undefined;
-
-	root.create(
-		'mark',
-			visual_mark_caret.create(
-				'path', this.path,
-				'at', this._getOffsetAt( pp )
-			)
-	);
-
-	return false;
+	return this._tZone.pos.y + s - Math.round( fs + descend );
 };
 
 
 /*
 | The widget's glint.
 */
-jion.lazyValue(
-	prototype,
-	'glint',
+def.lazy.glint =
 	function( )
 {
 	if( !this.visible ) return;
@@ -216,54 +147,148 @@ jion.lazyValue(
 			'offset', gleam_point.zero
 		)
 	);
-}
-);
+};
 
 
 /*
-| User input.
+| The transformed zone of the button.
 */
-prototype.input =
-	function(
-		text
-	)
+def.lazy._tZone =
+	function( )
 {
-	var
-		at,
-		mark,
-		value,
-		maxlen;
+	return this.zone.transform( this.transform );
+};
 
-	mark = this.mark;
 
-	value = this.value;
+/*
+| Glint for the caret.
+*/
+def.lazy._caretGlint =
+	function( )
+{
+	const fs = this.font.size;
 
-	at = mark.caret.at;
+	const descend = fs * shell_settings.bottombox;
 
-	maxlen = this.maxlen;
+	const p = this.locateOffsetPoint( this.mark.caret.at );
 
-	// cuts of text if larger than this maxlen
-	if(
-		maxlen > 0
-		&& value.length + text.length > maxlen
-	)
+	return(
+		gleam_glint_fill.create(
+			'facet', gleam_facet.blackFill,
+			'shape',
+				gleam_rect.create(
+					'pos', p.add( 0, 1 - fs ),
+					'width', 1,
+					'height', fs + descend
+				)
+		)
+	);
+};
+
+
+/*
+| Returns the inner glint of the input field.
+*/
+def.lazy._glint =
+	function( )
+{
+	const pitch = widget_input._pitch;
+
+	const value = this.value;
+
+	const mark = this.mark;
+
+	const arr =
+		[
+			gleam_glint_fill.create(
+				'facet', this._facet,
+				'shape', this._tzShape
+			)
+		];
+
+	const font = this.font;
+
+	if( this.password )
 	{
-		text = text.substring( 0, maxlen - value.length );
+		const pm = this._passMask;
+
+		for( let a = 0, aZ = pm.length; a < aZ; a++ )
+		{
+			arr.push(
+				gleam_glint_fill.create(
+					'facet', gleam_facet.blackFill,
+					'shape', pm[ a ]
+				)
+			);
+		}
+	}
+	else
+	{
+		arr.push(
+			gleam_glint_text.create(
+				'font', font,
+				'p',
+					gleam_point.create(
+						'x', pitch.x,
+						'y', font.size + pitch.y
+					),
+				'text', value
+			)
+		);
 	}
 
-	root.setPath(
-		this.path.append( 'value' ),
-		value.substring( 0, at ) +
-			text +
-			value.substring( at )
+	if(
+		mark
+		&& mark.reflect === 'visual_mark_caret'
+		&& mark.focus
+	)
+	{
+		arr.push( this._caretGlint );
+	}
+
+	arr.push(
+		gleam_glint_border.create(
+			'facet', this._facet,
+			'shape', this._tzShape
+		)
 	);
 
-	root.create(
-		'mark',
-			visual_mark_caret.create(
-				'path', mark.caret.path,
-				'at', at + text.length
-			)
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The widget's facet.
+*/
+def.lazy._facet =
+	function( )
+{
+	return(
+		this.facets.getFacet(
+			'hover', false, // FUTURE
+			'focus', !!this.mark
+		)
+	);
+};
+
+
+/*
+| The transformed shape of the button
+| positioned at zero.
+*/
+def.lazy._tzShape =
+	function( )
+{
+	const tZone = this._tZone;
+
+	return(
+		gleam_roundRect.create(
+			'pos', gleam_point.zero,
+			'width', tZone.width,
+			'height', tZone.height,
+			'a', 7,
+			'b', 3
+		)
 	);
 };
 
@@ -271,23 +296,16 @@ prototype.input =
 /*
 | Returns the point of a given offset.
 */
-jion.lazyFunctionInteger(
-	prototype,
-	'locateOffsetPoint',
+def.lazyFuncInt.locateOffsetPoint =
 	function(
 		offset // the offset to get the point from.
 	)
 {
-	var
-		font,
-		pitch,
-		value;
+	const font = this.font;
 
-	font = this.font;
+	const pitch = widget_input._pitch;
 
-	pitch = widget_input._pitch;
-
-	value = this.value;
+	const value = this.value;
 
 	if( this.password )
 	{
@@ -319,14 +337,100 @@ jion.lazyFunctionInteger(
 			'y', Math.round( pitch.y + font.size )
 		)
 	);
-}
-);
+};
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
+/*
+| Inputs can hold a caret.
+*/
+def.func.caretable = true;
+
+
+/*
+| User clicked.
+*/
+def.func.click =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	if( !p || !this._tZone.within( p ) ) return undefined;
+
+	const pp = p.sub( this._tZone.pos );
+
+	if( !this._tzShape.within( pp ) ) return undefined;
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path', this.path,
+				'at', this._getOffsetAt( pp )
+			)
+	);
+
+	return false;
+};
+
+
+/*
+| User input.
+*/
+def.func.input =
+	function(
+		text
+	)
+{
+	const mark = this.mark;
+
+	const value = this.value;
+
+	const at = mark.caret.at;
+
+	const maxlen = this.maxlen;
+
+	// cuts of text if larger than this maxlen
+	if(
+		maxlen > 0
+		&& value.length + text.length > maxlen
+	)
+	{
+		text = text.substring( 0, maxlen - value.length );
+	}
+
+	root.setPath(
+		this.path.append( 'value' ),
+		value.substring( 0, at ) +
+			text +
+			value.substring( at )
+	);
+
+	root.create(
+		'mark',
+			visual_mark_caret.create(
+				'path', mark.caret.path,
+				'at', at + text.length
+			)
+	);
+};
+
+
+/*
+| Inputs are focusable
+*/
+def.func.focusable = true;
 
 
 /*
 | Returns the kerning of characters for password masks.
 */
-prototype.maskKern =
+def.func.maskKern =
 	function(
 		size
 	)
@@ -338,7 +442,7 @@ prototype.maskKern =
 /*
 | Returns the width of a character for password masks.
 */
-prototype.maskWidth =
+def.func.maskWidth =
 	function(
 		size
 	)
@@ -350,7 +454,7 @@ prototype.maskWidth =
 /*
 | Mouse hover
 */
-prototype.pointingHover =
+def.func.pointingHover =
 	function(
 		p
 		// shift,
@@ -365,23 +469,18 @@ prototype.pointingHover =
 		return undefined;
 	}
 
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'text'
-		)
-	);
+	return result_hover.create( 'path', this.path, 'cursor', 'text');
 };
 
 
 /*
 | User pressed a special key
 */
-prototype.specialKey =
+def.func.specialKey =
 	function(
-		key
-		// shift
-		// ctrl
+		key,
+		shift,
+		ctrl
 	)
 {
 	switch( key )
@@ -408,191 +507,35 @@ prototype.specialKey =
 
 
 /*
-| The transformed zone of the button.
-*/
-jion.lazyValue(
-	prototype,
-	'_tZone',
-	function( )
-{
-	return this.zone.transform( this.transform );
-}
-);
-
-
-/*
-| Glint for the caret.
-*/
-jion.lazyValue(
-	prototype,
-	'_caretGlint',
-	function( )
-{
-	var
-		descend,
-		fs,
-		p;
-
-	fs = this.font.size;
-
-	descend = fs * shell_settings.bottombox;
-
-	p = this.locateOffsetPoint( this.mark.caret.at );
-
-	return(
-		gleam_glint_fill.create(
-			'facet', gleam_facet.blackFill,
-			'shape',
-				gleam_rect.create(
-					'pos', p.add( 0, 1 - fs ),
-					'width', 1,
-					'height', fs + descend
-				)
-		)
-	);
-}
-);
-
-
-/*
-| Returns the inner glint of the input field.
-*/
-jion.lazyValue(
-	prototype,
-	'_glint',
-	function( )
-{
-	var
-		a,
-		arr,
-		aZ,
-		font,
-		len,
-		mark,
-		pitch,
-		pm,
-		value;
-
-	pitch = widget_input._pitch;
-
-	value = this.value;
-
-	mark = this.mark;
-
-	arr =
-		[
-			gleam_glint_fill.create(
-				'facet', this._facet,
-				'shape', this._tzShape
-			)
-		];
-
-	len = 1;
-
-	font = this.font;
-
-	if( this.password )
-	{
-		pm = this._passMask;
-
-		for( a = 0, aZ = pm.length; a < aZ; a++ )
-		{
-			arr[ len++ ] =
-				gleam_glint_fill.create(
-					'facet', gleam_facet.blackFill,
-					'shape', pm[ a ]
-				);
-		}
-	}
-	else
-	{
-		arr[ len++ ] =
-			gleam_glint_text.create(
-				'font', font,
-				'p',
-					gleam_point.create(
-						'x', pitch.x,
-						'y', font.size + pitch.y
-					),
-				'text', value
-			);
-	}
-
-	if(
-		mark
-		&& mark.reflect === 'visual_mark_caret'
-		&& mark.focus
-	)
-	{
-		arr[ len++ ] = this._caretGlint;
-	}
-
-	arr[ len++ ] =
-		gleam_glint_border.create(
-			'facet', this._facet,
-			'shape', this._tzShape
-		);
-
-	return gleam_glint_list.create( 'list:init', arr );
-}
-);
-
-
-/*
-| The widget's facet.
-*/
-jion.lazyValue(
-	prototype,
-	'_facet',
-	function( )
-{
-	return(
-		this.facets.getFacet(
-			'hover', false, // FUTURE
-			'focus', !!this.mark
-		)
-	);
-}
-);
-
-
-/*
 | Returns the offset nearest to point p.
 */
-prototype._getOffsetAt =
+def.func._getOffsetAt =
 	function(
 		p
 	)
 {
-	var
-		a,
-		dx,
-		font,
-		mw,
-		password,
-		pitch,
-		value,
-		x1,
-		x2;
+	let mw;
 
-	pitch = widget_input._pitch;
+	const pitch = widget_input._pitch;
 
-	dx = p.x - pitch.x;
+	const dx = p.x - pitch.x;
 
-	value = this.value,
+	const value = this.value;
 
-	x1 = 0;
+	let x1 = 0;
 
-	x2 = 0;
+	let x2 = 0;
 
-	password = this.password,
+	const password = this.password;
 
-	font = this.font;
+	const font = this.font;
 
 	if( password )
 	{
 		mw = this.maskWidth( font.size ) + this.maskKern( font.size );
 	}
+
+	let a;
 
 	for( a = 0; a < value.length; a++ )
 	{
@@ -606,10 +549,7 @@ prototype._getOffsetAt =
 		if( x2 >= dx ) break;
 	}
 
-	if( dx - x1 < x2 - dx && a > 0 )
-	{
-		a--;
-	}
+	if( dx - x1 < x2 - dx && a > 0 ) a--;
 
 	return a;
 };
@@ -618,16 +558,12 @@ prototype._getOffsetAt =
 /*
 | User pressed backspace.
 */
-prototype._keyBackspace =
+def.func._keyBackspace =
 	function( )
 {
-	var
-		at,
-		mark;
+	const mark = this.mark;
 
-	mark = this.mark;
-
-	at = mark.caret.at;
+	const at = mark.caret.at;
 
 	if( at <= 0 ) return;
 
@@ -650,13 +586,10 @@ prototype._keyBackspace =
 /*
 | User pressed del.
 */
-prototype._keyDel =
+def.func._keyDel =
 	function( )
 {
-	var
-		at;
-
-	at = this.mark.caret.at;
+	const at = this.mark.caret.at;
 
 	if( at >= this.value.length ) return;
 
@@ -672,8 +605,8 @@ prototype._keyDel =
 | User pressed return key.
 | User pressed down key.
 */
-prototype._keyEnter =
-prototype._keyDown =
+def.func._keyEnter =
+def.func._keyDown =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), 1 );
@@ -683,16 +616,12 @@ prototype._keyDown =
 /*
 | User pressed end key.
 */
-prototype._keyEnd =
+def.func._keyEnd =
 	function( )
 {
-	var
-		at,
-		mark;
+	const mark = this.mark;
 
-	mark = this.mark;
-
-	at = mark.caret.at;
+	const at = mark.caret.at;
 
 	if( at >= this.value.length ) return;
 
@@ -709,13 +638,10 @@ prototype._keyEnd =
 /*
 | User pressed left key.
 */
-prototype._keyLeft =
+def.func._keyLeft =
 	function( )
 {
-	var
-		mark;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( mark.caret.at <= 0 ) return;
 
@@ -732,13 +658,10 @@ prototype._keyLeft =
 /*
 | User pressed pos1 key
 */
-prototype._keyPos1 =
+def.func._keyPos1 =
 	function( )
 {
-	var
-		mark;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( mark.caret.at <= 0 ) return;
 
@@ -755,13 +678,10 @@ prototype._keyPos1 =
 /*
 | User pressed right key
 */
-prototype._keyRight =
+def.func._keyRight =
 	function( )
 {
-	var
-		mark;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( mark.caret.at >= this.value.length ) return;
 
@@ -778,7 +698,7 @@ prototype._keyRight =
 /*
 | User pressed up key.
 */
-prototype._keyUp =
+def.func._keyUp =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), -1 );
@@ -787,75 +707,34 @@ prototype._keyUp =
 };
 
 
-/*
-| The transformed shape of the button
-| positioned at zero.
-*/
-jion.lazyValue(
-	prototype,
-	'_tzShape',
-	function( )
-{
-	var
-		tZone;
-
-	tZone = this._tZone;
-
-	return(
-		gleam_roundRect.create(
-			'pos', gleam_point.zero,
-			'width', tZone.width,
-			'height', tZone.height,
-			'a', 7,
-			'b', 3
-		)
-	);
-}
-);
-
 
 /*
 | Returns an array of ellipses
 | representing the password mask.
 */
-jion.lazyValue(
-	prototype,
-	'_passMask',
+def.lazy._passMask =
 	function( )
 {
-	var
-		a,
-		aZ,
-		h,
-		k,
-		pitch,
-		pm,
-		size,
-		value,
-		w,
-		x,
-		y;
+	const value = this.value;
 
-	value = this.value;
+	const size = this.font.size;
 
-	size = this.font.size;
+	const pm = [ ];
 
-	pm = [ ];
+	const pitch = widget_input._pitch;
 
-	pitch = widget_input._pitch;
+	let x = pitch.x;
 
-	x = pitch.x;
+	const y = pitch.y + Math.round( size * 0.7 );
 
-	y =	pitch.y + Math.round( size * 0.7 );
+	const w = this.maskWidth( size );
 
-	w = this.maskWidth( size );
-	
 	//h = size * 0.32,
-	h = w;
+	const h = w;
 
-	k = this.maskKern( size );
+	const k = this.maskKern( size );
 
-	for( a = 0, aZ = value.length; a < aZ; a++, x += w + k )
+	for( let a = 0, aZ = value.length; a < aZ; a++, x += w + k )
 	{
 		pm[ a ] =
 			gleam_ellipse.create(
@@ -866,8 +745,7 @@ jion.lazyValue(
 	}
 
 	return pm;
-}
-);
+};
 
 
-})( );
+} );

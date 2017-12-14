@@ -445,12 +445,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/widget/input.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/widget/checkbox.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1027,7 +1027,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/root.js',
-		'hasJion', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

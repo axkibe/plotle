@@ -1,7 +1,7 @@
 /*
 | A form.
 */
-
+'use strict';
 
 var
 	form_form,
@@ -15,13 +15,6 @@ var
 	visual_mark_widget;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
 form_form = { };
 
 
@@ -33,17 +26,6 @@ form_form.init =
 		twigDup
 	)
 {
-	var
-		r,
-		rZ,
-		mark,
-		name,
-		path,
-		ranks,
-		transform,
-		twig,
-		widgetProto;
-
 	// this is an abstract design form
 	// FUTURE use abstract( )
 	if( !this.path ) return;
@@ -51,25 +33,23 @@ form_form.init =
 	this.area = this.viewSize.zeroRect;
 
 	// all components of the form
-	twig = twigDup ? this._twig :  jion.copy( this._twig );
+	const twig = twigDup ? this._twig :  jion.copy( this._twig );
 
-	mark = this.mark;
+	const ranks = this._ranks;
 
-	ranks = this._ranks;
-		
-	transform =
+	const transform =
 		gleam_transform.create(
 			'zoom', 1,
 			'offset', this.area.pc
 		);
 
-	for( r = 0, rZ = ranks.length; r < rZ; r++ )
+	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
 	{
-		name = ranks[ r ];
+		const name = ranks[ r ];
 
-		widgetProto = twig[ name ];
+		const widgetProto = twig[ name ];
 
-		path =
+		const path =
 			widgetProto.path
 			|| this.path.append( 'twig' ).append( name );
 
@@ -101,14 +81,9 @@ form_form.click =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).click( p, shift, ctrl );
+		const res = this.atRank( r ).click( p, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -145,22 +120,15 @@ form_form.cycleFocus =
 		dir
 	)
 {
-	var
-		length,
-		path,
-		rank,
-		rs,
-		ve;
+	const length = this.length;
 
-	length = this.length;
-
-	path = this.mark.widgetPath;
+	const path = this.mark.widgetPath;
 
 	if( path.isEmpty ) return;
 
-	rank = this.rankOf( path.get( 4 ) );
+	let rank = this.rankOf( path.get( 4 ) );
 
-	rs = rank;
+	const rs = rank;
 
 	while( true )
 	{
@@ -168,7 +136,7 @@ form_form.cycleFocus =
 
 		if( rank === rs ) break;
 
-		ve = this.atRank( rank );
+		const ve = this.atRank( rank );
 
 		if( ve.focusable && ve.visible !== false )
 		{
@@ -195,14 +163,9 @@ form_form.click =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).click( p, shift, ctrl );
+		const res = this.atRank( r ).click( p, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -221,11 +184,8 @@ form_form.dragMove =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action;
+	const action = this.action;
 
-	action = this.action;
-	
 	if( !action ) return 'pointer';
 
 	switch( action.reflect )
@@ -251,14 +211,9 @@ form_form.dragStart =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).dragStart( p, shift, ctrl );
+		const res = this.atRank( r ).dragStart( p, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -289,10 +244,7 @@ form_form.dragStop =
 form_form.getAttentionCenter =
 	function( )
 {
-	var
-		focus;
-
-	focus = this.focusedWidget;
+	const focus = this.focusedWidget;
 
 	return(
 		focus
@@ -308,15 +260,11 @@ form_form.getAttentionCenter =
 form_form.getFocusedWidget =
 	function( )
 {
-	var
-		mark,
-		path;
-
-	mark = this.mark;
+	const mark = this.mark;
 
 	if( !mark ) return undefined;
 
-	path = mark.widgetPath;
+	const path = mark.widgetPath;
 
 /**/if( CHECK )
 /**/{
@@ -335,13 +283,7 @@ form_form.getFocusedWidget =
 form_form.glint =
 	function( )
 {
-	var
-		arr,
-		r,
-		s,
-		sg;
-
-	arr =
+	const arr =
 		[
 			gleam_glint_paint.create(
 				'facet', gruga_formFacet,
@@ -349,11 +291,11 @@ form_form.glint =
 			)
 		];
 
-	for( r = this.length - 1; r >= 0; r-- )
+	for( let r = this.length - 1; r >= 0; r-- )
 	{
-		s = this.atRank( r );
+		const s = this.atRank( r );
 
-		sg = s.glint;
+		const sg = s.glint;
 
 		if( sg ) arr.push( sg );
 	}
@@ -370,10 +312,7 @@ form_form.input =
 		text
 	)
 {
-	var
-		widget;
-
-	widget = this.focusedWidget;
+	const widget = this.focusedWidget;
 
 	if( widget ) widget.input( text );
 };
@@ -390,14 +329,9 @@ form_form.mousewheel =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+		const res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -416,14 +350,9 @@ form_form.pointingHover =
 		ctrl
 	)
 {
-	var
-		r,
-		rZ,
-		res;
-
-	for( r = 0, rZ = this.length; r < rZ; r++ )
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		res = this.atRank( r ).pointingHover( p, shift, ctrl );
+		const res = this.atRank( r ).pointingHover( p, shift, ctrl );
 
 		if( res ) return res;
 	}
@@ -442,15 +371,9 @@ form_form.specialKey =
 		ctrl
 	)
 {
-	var
-		widget;
+	const widget = this.focusedWidget;
 
-	widget = this.focusedWidget;
-
-	if( !widget )
-	{
-		return;
-	}
+	if( !widget ) return;
 
 	if( key === 'tab' )
 	{
@@ -473,26 +396,17 @@ form_form._moveScrollY =
 		// ctrl   // true if ctrl key was pressed
 	)
 {
-	var
-		action,
-		dy,
-		sbary,
-		spos,
-		widget,
-		wPath;
+	const action = this.action;
 
-	action = this.action;
+	const wPath = action.scrollPath;
 
-	wPath = action.scrollPath;
+	const widget = root.getPath( wPath );
 
-	widget = root.getPath( wPath );
+	const dy = p.y - action.startPoint.y;
 
-	//dy = ( p.y - action.startPoint.y ) / this.transform.zoom;
-	dy = p.y - action.startPoint.y;
+	const sbary = widget.scrollbarY;
 
-	sbary = widget.scrollbarY;
-
-	spos = action.startPos + sbary.scale( dy );
+	const spos = action.startPos + sbary.scale( dy );
 
 	root.setPath(
 		wPath.append( 'scrollPos' ),
@@ -500,4 +414,3 @@ form_form._moveScrollY =
 	);
 };
 
-} )( );
