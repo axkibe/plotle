@@ -1,33 +1,21 @@
 /*
 | A list of resources.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'server_resourceList', ( def, server_resourceList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'server_resourceList',
-		list : [ 'server_resource' ]
-	};
+	def.list = [ 'server_resource' ];
 }
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	jion;
-
-jion = require( 'jion' );
-
-jion.this( module );
-
-
-}( ) );
+} );

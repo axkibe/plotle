@@ -1,64 +1,48 @@
 /*
 | The resource inventory of the server.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'server_inventory',
-		twig : [ 'server_resource' ]
-	};
-}
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	config,
-	fs,
-	prototype,
-	server_inventory,
-	resume;
+tim.define( module, 'server_inventory', ( def, server_inventory ) => {
 
-config = require( '../../config' );
 
-server_inventory = require( 'jion' ).this( module );
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
 
-prototype = server_inventory.prototype;
 
-fs = require( 'fs' );
+if( TIM )
+{
+	def.twig = [ 'server_resource' ];
+}
 
-resume = require( 'suspend' ).resume;
+
+const config = require( '../../config' );
+
+const fs = require( 'fs' );
+
+const resume = require( 'suspend' ).resume;
+
+
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
 | Returns an inventory with a resource added/updated.
 */
-prototype.updateResource =
+def.func.updateResource =
 	function(
 		resource
 	)
 {
-	var
-		a,
-		aZ,
-		alias,
-		inv;
+	let inv = this;
 
-	inv = this;
-
-	for( a = 0, aZ = resource.aliases.length; a < aZ; a++ )
+	for( let a = 0, aZ = resource.aliases.length; a < aZ; a++ )
 	{
-		alias = resource.aliases.get( a );
+		const alias = resource.aliases.get( a );
 
 		inv =
 			inv.create(
@@ -75,19 +59,14 @@ prototype.updateResource =
 /*
 | Returns an inventory with a resource removed.
 */
-prototype.removeResource =
+def.func.removeResource =
 	function(
 		resource
 	)
 {
-	var
-		a,
-		aZ,
-		inv;
+	let inv = this;
 
-	inv = this;
-
-	for( a = 0, aZ = resource.aliases.length; a < aZ; a++ )
+	for( let a = 0, aZ = resource.aliases.length; a < aZ; a++ )
 	{
 		inv =
 			inv.create(
@@ -104,15 +83,12 @@ prototype.removeResource =
 /*
 | Prepares a resource.
 */
-prototype.prepareResource =
+def.func.prepareResource =
 	function*(
 		resource
 	)
 {
-	var
-		mtime,
-		realpath,
-		that;
+	let realpath;
 
 	if( resource.filePath )
 	{
@@ -127,6 +103,8 @@ prototype.prepareResource =
 			);
 	}
 
+	let mtime;
+
 	if( config.devel && realpath )
 	{
 		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
@@ -136,7 +114,7 @@ prototype.prepareResource =
 	{
 		if( config.devel ) delete require.cache[ realpath ];
 
-		that = require( realpath );
+		const that = require( realpath );
 
 		if( !that.source )
 		{
@@ -173,7 +151,7 @@ prototype.prepareResource =
 	{
 		if( config.devel ) delete require.cache[ realpath ];
 
-		that = require( realpath );
+		const that = require( realpath );
 
 		if( !that.source )
 		{
@@ -205,7 +183,7 @@ prototype.prepareResource =
 			'inventory', root.inventory.updateResource( timcodeResource )
 		);
 	}
-	
+
 	if( !resource.hasJion && !resource.hasTim && resource.filePath )
 	{
 		resource =
@@ -222,4 +200,4 @@ prototype.prepareResource =
 };
 
 
-} )( );
+} );

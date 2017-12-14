@@ -1,105 +1,88 @@
 /*
 | Holds a space.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'server_spaceBox', ( def, server_spaceBox ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'server_spaceBox',
-		attributes :
+	def.attributes =
+	{
+		'seqZ' :
 		{
-			'seqZ' :
-			{
-				comment : 'latest sequence number',
-				type : 'integer'
-			},
-			'space' :
-			{
-				comment : 'latest space version',
-				type : 'fabric_space'
-			},
-			'spaceRef' :
-			{
-				comment : 'reference to the space',
-				type : 'ref_space',
-			},
-			'_changesDB' :
-			{
-				comment : 'changes database collection',
-				type : 'protean'
-			},
-			'_changeWraps' :
-			{
-				comment : 'changeWraps cached in RAM',
-				type : 'change_wrapList'
-			},
-			'_changesOffset' :
-			{
-				comment : 'the offset of the stored changeWraps',
-				// on server load the past isn't kept in memory
-				type : 'integer'
-			}
+			// latest sequence number
+			type : 'integer'
+		},
+		'space' :
+		{
+			// latest space version
+			type : 'fabric_space'
+		},
+		'spaceRef' :
+		{
+			// reference to the space
+			type : 'ref_space',
+		},
+		'_changesDB' :
+		{
+			// changes database collection
+			type : 'protean'
+		},
+		'_changeWraps' :
+		{
+			// changeWraps cached in RAM
+			type : 'change_wrapList'
+		},
+		'_changesOffset' :
+		{
+			// the offset of the stored changeWraps
+			// on server load the past isn't kept in memory
+			type : 'integer'
 		}
 	};
 }
 
 
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
+const change_wrapList = require( '../change/wrapList' );
+
+const database_changeSkid = require( '../database/changeSkid' );
+
+const database_changeSkidList = require( '../database/changeSkidList' );
+
+const resume = require( 'suspend' ).resume;
+
+const fabric_space = require( '../fabric/space' );
 
 
-var
-	change_wrapList,
-	database_changeSkid,
-	database_changeSkidList,
-	resume,
-	server_spaceBox,
-	fabric_space;
-
-server_spaceBox = require( 'jion' ).this( module );
-
-change_wrapList = require( '../change/wrapList' );
-
-database_changeSkid = require( '../database/changeSkid' );
-
-database_changeSkidList = require( '../database/changeSkidList' );
-
-resume = require( 'suspend' ).resume;
-
-fabric_space = require( '../fabric/space' );
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Loads a space from the db and returns the spaceBox for it.
 */
-server_spaceBox.loadSpace =
+def.static.loadSpace =
 	function*(
 		spaceRef
 	)
 {
-	var
-		changeSkid,
-		changesDB,
-		cursor,
-		o,
-		seqZ,
-		space;
+	let seqZ = 1;
 
-	seqZ = 1;
+	let space = fabric_space.create( );
 
-	space = fabric_space.create( );
-
-	changesDB =
+	const changesDB =
 		yield* root.repository.collection( 'changes:' + spaceRef.fullname );
 
-	cursor =
+	const cursor =
 		( yield changesDB.find(
 			{ },
 			{ sort : '_id' },
@@ -107,12 +90,12 @@ server_spaceBox.loadSpace =
 		) ).batchSize( 100 );
 
 	for(
-		o = yield cursor.nextObject( resume( ) );
+		let o = yield cursor.nextObject( resume( ) );
 		o;
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		changeSkid = database_changeSkid.createFromJSON( o );
+		const changeSkid = database_changeSkid.createFromJSON( o );
 
 		if( changeSkid._id !== seqZ )
 		{
@@ -140,7 +123,7 @@ server_spaceBox.loadSpace =
 /*
 | Creates a new space and returns the spaceBox for it.
 */
-server_spaceBox.createSpace =
+def.static.createSpace =
 	function*(
 		spaceRef
 	)
@@ -171,29 +154,30 @@ server_spaceBox.createSpace =
 };
 
 
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Appends a change.
 |
 | This is currently write and forget to database.
 */
-server_spaceBox.prototype.appendChanges =
+def.func.appendChanges =
 	function(
 		changeWrapList,
 		user
 	)
 {
-	var
-		changeSkidList,
-		tree;
-
 /**/if( CHECK )
 /**/{
 /**/	if( changeWrapList.length === 0 ) throw new Error( );
 /**/}
 
-	tree = changeWrapList.changeTree( this.space );
+	const tree = changeWrapList.changeTree( this.space );
 
-	changeSkidList =
+	const changeSkidList =
 		database_changeSkidList.createFromChangeWrapList(
 			changeWrapList,
 			user,
@@ -227,7 +211,7 @@ server_spaceBox.prototype.appendChanges =
 /*
 | Returns the change skid by its sequence.
 */
-server_spaceBox.prototype.getChangeWrap =
+def.func.getChangeWrap =
 	function(
 		seq
 	)
@@ -236,4 +220,4 @@ server_spaceBox.prototype.getChangeWrap =
 };
 
 
-} )( );
+} );

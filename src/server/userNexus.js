@@ -3,64 +3,49 @@
 |
 | FUTURE move database interaction into here.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'server_userNexus', ( def, server_userNexus ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'server_userNexus',
-		attributes :
+	def.attributes =
+	{
+		_cache :
 		{
-			_cache :
-			{
-				comment : 'table of all cached user infos',
-				type : 'user_infoGroup',
-				defaultValue : 'user_infoGroup.create( )'
-			}
+			// table of all cached user infos
+			type : 'user_infoGroup',
+			defaultValue : 'user_infoGroup.create( )'
 		}
 	};
 }
 
 
-/*
-| Capsule.
-*/
-( function( ) {
-'use strict';
+const change_listAppend = require( '../change/listAppend' );
+
+const dynamic_refSpaceList = require( '../dynamic/refSpaceList' );
+
+const user_info = require( '../user/info' );
+
+const database_userSkid = require( '../database/userSkid' );
+
+const ref_space = require( '../ref/space' );
+
+const ref_spaceList = require( '../ref/spaceList' );
+
+const resume = require( 'suspend' ).resume;
 
 
-var
-	change_listAppend,
-	database_userSkid,
-	dynamic_refSpaceList,
-	prototype,
-	ref_space,
-	ref_spaceList,
-	resume,
-	server_userNexus,
-	user_info;
-
-
-server_userNexus = require( 'jion' ).this( module );
-
-prototype = server_userNexus.prototype;
-
-change_listAppend = require( '../change/listAppend' );
-
-dynamic_refSpaceList = require( '../dynamic/refSpaceList' );
-
-user_info = require( '../user/info' );
-
-database_userSkid = require( '../database/userSkid' );
-
-ref_space = require( '../ref/space' );
-
-ref_spaceList = require( '../ref/spaceList' );
-
-resume = require( 'suspend' ).resume;
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
 
 
 /*
@@ -68,7 +53,7 @@ resume = require( 'suspend' ).resume;
 |
 | The user must be loaded in cache for this to work.
 */
-prototype.addUserSpaceRef =
+def.func.addUserSpaceRef =
 	function(
 		spaceRef
 	)
@@ -117,7 +102,7 @@ prototype.addUserSpaceRef =
 /*
 | Creates a new visitor.
 */
-prototype.createVisitor =
+def.func.createVisitor =
 	function(
 		userCreds
 	)
@@ -160,7 +145,7 @@ prototype.createVisitor =
 /*
 | Gets the list of spaces of a user.
 */
-prototype.getUserSpaceList =
+def.func.getUserSpaceList =
 	function*(
 		userInfo
 	)
@@ -224,14 +209,11 @@ prototype.getUserSpaceList =
 /*
 | Registers a user.
 */
-prototype.register =
+def.func.register =
 	function*(
 		userInfo
 	)
 {
-	var
-		val;
-
 /**/if( CHECK )
 /**/{
 /**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
@@ -245,7 +227,7 @@ prototype.register =
 	// user already registered and in cache
 	if( this._cache.get( userInfo.name ) ) return false;
 
-	val =
+	const val =
 		yield root.repository.users.findOne(
 			{ _id : userInfo.name },
 			resume( )
@@ -284,7 +266,7 @@ prototype.register =
 |
 | If so returns the matching user info.
 */
-prototype.getInCache =
+def.func.getInCache =
 	function(
 		username
 	)
@@ -298,15 +280,12 @@ prototype.getInCache =
 |
 | If so returns the matching user info.
 */
-prototype.testInCache =
+def.func.testInCache =
 	function(
 		userCreds
 	)
 {
-	var
-		userInfo;
-
-	userInfo = this._cache.get( userCreds.name );
+	const userInfo = this._cache.get( userCreds.name );
 
 	if( !userInfo || userInfo.passhash !== userCreds.passhash ) return false;
 
@@ -319,16 +298,12 @@ prototype.testInCache =
 |
 | If so loads and returns the matching user info.
 */
-prototype.testUserCreds =
+def.func.testUserCreds =
 	function*(
 		userCreds
 	)
 {
-	var
-		userInfo,
-		val;
-
-	userInfo = this._cache.get( userCreds.name );
+	let userInfo = this._cache.get( userCreds.name );
 
 	// if in cache answer directly
 	if( userInfo )
@@ -339,7 +314,7 @@ prototype.testUserCreds =
 	}
 
 	// else the user is to be loaded from the database
-	val =
+	const val =
 		yield root.repository.users.findOne(
 			{ _id : userCreds.name },
 			resume( )
@@ -360,5 +335,4 @@ prototype.testUserCreds =
 };
 
 
-
-} )( );
+} );

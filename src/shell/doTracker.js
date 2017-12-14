@@ -1,67 +1,51 @@
 /*
 | The dotracker manages the undo and redo stacks.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+// FIXME
+var
+	change_wrapList,
+	shell_settings;
+
+
+tim.define( module, 'shell_doTracker', ( def, shell_doTracker ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'shell_doTracker',
-		attributes :
+	def.attributes =
+	{
+		_undo :
 		{
-			_undo :
-			{
-				comment : 'the undo stack',
-				type : [ 'undefined', 'change_wrapList' ]
-			},
-			_redo :
-			{
-				comment : 'the redo stack',
-				type : [ 'undefined', 'change_wrapList' ]
-			}
+			// the undo stack
+			type : [ 'undefined', 'change_wrapList' ]
+		},
+		_redo :
+		{
+			// the redo stack
+			type : [ 'undefined', 'change_wrapList' ]
 		}
 	};
 }
 
 
-var
-	change_wrapList,
-	root,
-	shell_doTracker,
-	shell_settings;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-if( NODE )
-{
-	require( 'jion' ).this( module, 'source' );
-
-	return;
-}
-
-
-var
-	prototype;
-
-prototype = shell_doTracker.prototype;
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Flushes the stacks.
 */
-shell_doTracker.flush =
-	function(
-
-	)
+def.static.flush =
+	function( )
 {
 	root.create(
 		'doTracker',
@@ -73,20 +57,22 @@ shell_doTracker.flush =
 };
 
 
+/*:::::::::::.
+:: Functions
+'::::::::::::*/
+
+
 /*
 | Reporting the doTracker something has been altered.
 |
 | It will track it on the undo stack.
 */
-prototype.track =
+def.func.track =
 	function(
 		changeWrap
 	)
 {
-	var
-		undo;
-
-	undo = this._undo;
+	let undo = this._undo;
 
 	undo = undo.append( changeWrap );
 
@@ -112,24 +98,14 @@ prototype.track =
 | now enriched with sequence ids as well as genuine updates
 | from others.
 */
-prototype.update =
+def.func.update =
 	function(
 		changeWrapList
 	)
 {
-	var
-		a,
-		aZ,
-		cw,
-		undo,
-		redo;
-
 /**/if( CHECK )
 /**/{
-/**/	if( root.doTracker !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.doTracker !== this ) throw new Error( );
 /**/}
 
 	if( changeWrapList.length === 0 )
@@ -139,19 +115,15 @@ prototype.update =
 		return this;
 	}
 
-	undo = this._undo;
+	let undo = this._undo;
 
-	redo = this._redo;
+	let redo = this._redo;
 
 	// Adapts the doTracker stacks
 
-	for(
-		a = 0, aZ = undo.length;
-		a < aZ;
-		a++
-	)
+	for( let a = 0, aZ = undo.length; a < aZ; a++ )
 	{
-		cw = undo.get( a );
+		let cw = undo.get( a );
 
 		cw = changeWrapList.transform( cw );
 
@@ -168,13 +140,9 @@ prototype.update =
 		undo = undo.set( a, cw );
 	}
 
-	for(
-		a = 0, aZ = redo.length;
-		a < aZ;
-		a++
-	)
+	for( let a = 0, aZ = redo.length; a < aZ; a++ )
 	{
-		cw = redo.get( a );
+		let cw = redo.get( a );
 
 		cw = changeWrapList.transform( cw );
 
@@ -198,29 +166,19 @@ prototype.update =
 /*
 | Reverts actions from the undo stack.
 */
-prototype.undo =
+def.func.undo =
 	function( )
 {
-	var
-		changeWrap,
-		undo;
-
 /**/if( CHECK )
 /**/{
-/**/	if( root.doTracker !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.doTracker !== this ) throw new Error( );
 /**/}
 
-	undo = this._undo;
+	let undo = this._undo;
 
-	if( undo.length === 0 )
-	{
-		return;
-	}
+	if( undo.length === 0 ) return;
 
-	changeWrap = undo.get( undo.length - 1 );
+	let changeWrap = undo.get( undo.length - 1 );
 
 	undo = undo.remove( undo.length - 1 );
 
@@ -241,29 +199,19 @@ prototype.undo =
 /*
 | Reverts undos from the redo stack.
 */
-prototype.redo =
+def.func.redo =
 	function( )
 {
-	var
-		changeWrap,
-		redo;
-
 /**/if( CHECK )
 /**/{
-/**/	if( root.doTracker !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( root.doTracker !== this ) throw new Error( );
 /**/}
 
-	redo = this._redo;
+	let redo = this._redo;
 
-	if( redo.length === 0 )
-	{
-		return;
-	}
+	if( redo.length === 0 ) return;
 
-	changeWrap = redo.get( redo.length - 1 );
+	let changeWrap = redo.get( redo.length - 1 );
 
 	changeWrap = changeWrap.createReverse( );
 
@@ -281,4 +229,4 @@ prototype.redo =
 };
 
 
-} )( );
+} );

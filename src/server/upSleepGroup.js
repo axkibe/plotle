@@ -1,19 +1,20 @@
 /*
 | A group of update sleeps.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'server_upSleepGroup', ( def, server_upSleepGroup ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'server_upSleepGroup',
-		group : [ 'server_upSleep' ]
-	};
+	def.group = [ 'server_upSleep' ];
 }
 
-
-require( 'jion' ).this( module );
-
+} );

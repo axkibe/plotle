@@ -6,50 +6,39 @@
 |
 | It is used to chache changeSkids in memory.
 */
+'use strict';
 
 
-/*
-| The jion definition.
-*/
-if( JION )
+tim.define( module, 'database_changeSkidList', ( def, database_changeSkidList ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
 {
-	throw{
-		id : 'database_changeSkidList',
-		list : [ 'database_changeSkid', 'undefined' ],
-		json : true,
-	};
+	def.list = [ 'database_changeSkid', 'undefined' ];
+
+	def.json = true;
 }
 
 
-var
-	database_changeSkid,
-	database_changeSkidList;
+const change_wrapList = require( '../change/wrapList' );
+
+const database_changeSkid = require( './changeSkid' );
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
-
-
-var
-	change_wrapList,
-	jion;
-
-jion = require( 'jion' );
-
-change_wrapList = require( '../change/wrapList' );
-
-database_changeSkidList = jion.this( module );
-
-database_changeSkid = require( './changeSkid' );
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Creates a changeSkid from a changeWrap.
 */
-database_changeSkidList.createFromChangeWrapList =
+def.static.createFromChangeWrapList =
 	function(
 		changeWrapList, // the change wrap list to turn into a skid list
 		user,           // the user that sent the changeWrapList
@@ -57,22 +46,15 @@ database_changeSkidList.createFromChangeWrapList =
 		                // as start to changeSkidList
 	)
 {
-	var
-		a,
-		aZ,
-		cw,
-		cs,
-		list;
+	const list = [ ];
 
-	list = [ ];
-
-	for( a = 0, aZ = changeWrapList.length; a < aZ; a++ )
+	for( let a = 0, aZ = changeWrapList.length; a < aZ; a++ )
 	{
-		cw = changeWrapList.get( a );
+		const cw = changeWrapList.get( a );
 
 		if( !cw ) continue;
 
-		cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
+		const cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
 
 		if( !cs ) continue;
 
@@ -83,29 +65,26 @@ database_changeSkidList.createFromChangeWrapList =
 };
 
 
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
 | Transforms the change skid list to a change wrap list.
 */
-jion.lazyValue(
-	database_changeSkidList.prototype,
-	'asChangeWrapList',
+def.lazy.asChangeWrapList =
 	function( )
 {
-	var
-		a,
-		aZ,
-		list;
+	const list = [ ];
 
-	list = [ ];
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
 	{
 		list[ a ] = this.get( a ).asChangeWrap;
 	}
 
 	return change_wrapList.create( 'list:init', list );
-}
-);
+};
 
 
-}( ) );
+} );

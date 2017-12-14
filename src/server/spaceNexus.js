@@ -1,42 +1,35 @@
 /*
 | Holds an manages all spaces.
 */
-
-
-/*
-| The jion definition.
-*/
-if( JION )
-{
-	throw{
-		id : 'server_spaceNexus',
-		group : [ 'server_spaceBox' ]
-	};
-}
-
-
-var
-	server_spaceNexus;
-
-/*
-| Capsule.
-*/
-( function( ) {
 'use strict';
 
 
-var
-	config;
+tim.define( module, 'server_spaceNexus', ( def, server_spaceNexus ) => {
 
-server_spaceNexus = require( 'jion' ).this( module );
 
-config = require( '../../config' );
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.group = [ 'server_spaceBox' ];
+}
+
+
+const config = require( '../../config' );
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
 
 
 /*
 | Tests if the user has access to a space.
 */
-server_spaceNexus.testAccess =
+def.static.testAccess =
 	function(
 		user,
 		spaceRef
@@ -62,4 +55,4 @@ server_spaceNexus.testAccess =
 };
 
 
-} )( );
+} );
