@@ -25,7 +25,7 @@ server_resource = require( './resource' );
 
 server_resourceList = require( './resourceList' );
 
-stringList = jion.stringList.stringList; // FUTURE
+stringList = tim.stringList.stringList; // FUTURE
 
 module.exports =
 server_resourceList.create(
@@ -109,7 +109,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'jion-pathList.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.pathList.source,
+		'data', tim.pathList.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true

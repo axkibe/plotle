@@ -51,7 +51,7 @@ if( TIM )
 		hover :
 		{
 			// node currently hovered upon
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			assign : ''
 		},
 		mark :
@@ -65,7 +65,7 @@ if( TIM )
 		path :
 		{
 			// the path of the doc
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		transform :
 		{

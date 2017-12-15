@@ -42,7 +42,7 @@ if( TIM )
 
 
 /*
-| Creates a user jion from the local storage.
+| Creates a user tim from the local storage.
 */
 def.static.createFromLocalStorage =
 	function( )
@@ -65,7 +65,7 @@ def.static.createFromLocalStorage =
 
 
 /*
-| Clears the user jion from local storage.
+| Clears the user information from local storage.
 */
 def.static.clearLocalStorage =
 	function( )
@@ -112,7 +112,7 @@ def.lazy.isVisitor =
 
 
 /*
-| Saves this user jion to local storage.
+| Saves this user tim to local storage.
 */
 def.func.saveToLocalStorage =
 	function( )

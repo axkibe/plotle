@@ -19,7 +19,6 @@ var
 	gruga_label,
 	gruga_relation,
 	gruga_select,
-	jion$pathList,
 	result_hover,
 	visual_frame,
 	visual_itemList,
@@ -62,7 +61,7 @@ if( TIM )
 		hover :
 		{
 			// node currently hovered upon
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			prepare : 'visual_space.concernsHover( hover )'
 		},
 		mark :
@@ -472,6 +471,7 @@ def.func.getList =
 {
 /**/if( CHECK )
 /**/{
+/**/    // XXX FIXME
 /**/	if( paths.reflect === 'jion$pathList' ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
@@ -1038,7 +1038,7 @@ def.func.specialKey =
 					paths.push( this.atRank( r ).path );
 				}
 
-				paths = jion$pathList.create( 'list:init', paths );
+				paths = tim.pathList.create( 'list:init', paths );
 
 				root.create( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
 
@@ -1626,7 +1626,7 @@ def.func._stopSelect =
 
 	if( paths.length > 0 )
 	{
-		paths = jion$pathList.create( 'list:init', paths );
+		paths = tim.pathList.create( 'list:init', paths );
 
 		if( !ctrl || !this.mark )
 		{

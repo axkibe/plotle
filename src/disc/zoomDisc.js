@@ -55,7 +55,7 @@ if( TIM )
 		hover :
 		{
 			// the widget hovered upon
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			prepare : 'disc_disc.concernsHover( hover, path )'
 		},
 		mark :
@@ -68,7 +68,7 @@ if( TIM )
 		path :
 		{
 			// path of the disc
-			type : 'jion$path'
+			type : 'tim$path'
 		},
 		shape :
 		{

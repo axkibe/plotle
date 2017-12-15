@@ -8,8 +8,6 @@ var
 	change_list,
 	change_set,
 	gleam_point,
-	jion$pathList,
-	root,
 	visual_item,
 	visual_mark_items;
 
@@ -122,7 +120,7 @@ visual_item.dragStart =
 	{
 		// also makes the user mark to this item
 		paths =
-			jion$pathList.create(
+			tim.pathList.create(
 				'list:init', [ this.path ]
 			);
 
@@ -319,7 +317,7 @@ visual_item.ctrlClick =
 			'mark',
 				visual_mark_items.create(
 					'itemPaths',
-						jion$pathList.create( 'list:init', [ this.path ] )
+						tim.pathList.create( 'list:init', [ this.path ] )
 				)
 		);
 

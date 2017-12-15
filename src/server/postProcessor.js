@@ -22,11 +22,8 @@ module.exports =
 var
 	config,
 	hash_sha1,
-	jion,
 	opentypeHash,
 	opentypeMinHash;
-
-jion = require( 'jion' );
 
 config = require( '../../config' );
 
@@ -41,17 +38,17 @@ opentypeMinHash = '';
 */
 server_postProcessor.opentype =
 	function(
-		resource       // the resource 
+		resource       // the resource
 	)
 {
 	opentypeHash = hash_sha1( resource.data + '' );
 
 	root.create(
 		'inventory',
-			root.inventory.updateResource( 
+			root.inventory.updateResource(
 				resource.create(
 					'aliases',
-						jion.stringList.stringList(
+						tim.stringList.stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )
@@ -82,7 +79,7 @@ server_postProcessor.opentypeMin =
 			root.inventory.updateResource(
 				resource.create(
 					'aliases',
-						jion.stringList.stringList(
+						tim.stringList.stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )
@@ -103,7 +100,7 @@ server_postProcessor.opentypeMin =
 */
 server_postProcessor.develHtml =
 	function(
-		resource       // the resource 
+		resource       // the resource
 		//bundleFilePath, // the file path of the bundle resource
 	)
 {

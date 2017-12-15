@@ -6,7 +6,6 @@
 
 // FIXME
 var
-	jion$pathList,
 	visual_mark_text;
 
 
@@ -37,7 +36,7 @@ if( TIM )
 		path :
 		{
 			// path of the caret
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			assign : ''
 		},
 		retainx :
@@ -103,7 +102,7 @@ def.lazy.itemPaths =
 
 	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
 
-	return jion$pathList.create( 'list:append', path.limit( 3 ) );
+	return tim.pathList.create( 'list:append', path.limit( 3 ) );
 };
 
 

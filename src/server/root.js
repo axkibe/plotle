@@ -62,7 +62,7 @@ if( TIM )
 			type : 'server_upSleepGroup'
 		}
 	};
-	
+
 	def.init = [ ];
 }
 
@@ -133,14 +133,9 @@ def.func._init =
 def.func.loadSpaces =
 	function*( )
 {
-	var
-		cursor,
-		o,
-		spaceRef;
-
 	log_start( 'loading and replaying all spaces' );
 
-	cursor =
+	const cursor =
 		yield root.repository.spaces.find(
 			{ },
 			{ sort: '_id' },
@@ -148,12 +143,12 @@ def.func.loadSpaces =
 		);
 
 	for(
-		o = yield cursor.nextObject( resume( ) );
+		let o = yield cursor.nextObject( resume( ) );
 		o;
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		spaceRef =
+		const spaceRef =
 			ref_space.create(
 				'username', o.username,
 				'tag', o.tag
@@ -179,13 +174,7 @@ def.func.loadSpaces =
 def.func.createShellConfig =
 	function( )
 {
-	var
-		cconfig,
-		first,
-		k,
-		val;
-
-	cconfig = [ ];
+	const cconfig = [ ];
 
 	cconfig.push(
 		'var config = {\n',
@@ -193,11 +182,11 @@ def.func.createShellConfig =
 		'\tdebug   : {\n'
 	);
 
-	first = true;
+	let first = true;
 
-	for( k in config.debug )
+	for( let k in config.debug )
 	{
-		val = config.debug[ k ];
+		const val = config.debug[ k ];
 
 		if( !first ) cconfig.push( ',\n' );
 		else first = false;
@@ -219,7 +208,7 @@ def.func.createShellConfig =
 
 	first = true;
 
-	for( k in config.log )
+	for( let k in config.log )
 	{
 		if( !first ) cconfig.push( ',\n' );
 		else first = false;
@@ -250,33 +239,17 @@ def.func.createShellConfig =
 def.func.prepareInventory =
 	function*( )
 {
-	var
-		a,
-		ast,
-		aZ,
-		bundle,
-		bundleFilePath,
-		cconfig,
-		code,
-		codes,
-		compressor,
-		inv,
-		jionIDs,
-		resource,
-		sourceMap,
-		stream;
-
 	log_start( 'preparing inventory' );
 
 	// autogenerates the shell config as resource
-	cconfig = root.createShellConfig( );
+	const cconfig = root.createShellConfig( );
 
 	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
 
 	// takes resource from the the roster
-	for( a = 0, aZ = server_roster.length; a < aZ; a++ )
+	for( let a = 0, aZ = server_roster.length; a < aZ; a++ )
 	{
-		resource = server_roster.get( a );
+		const resource = server_roster.get( a );
 
 		if( resource.devel && !config.shell_devel ) continue;
 
@@ -284,7 +257,7 @@ def.func.prepareInventory =
 	}
 
 	// the bundle itself
-	bundle = [ ];
+	let bundle = [ ];
 
 	// if uglify is turned off
 	// the flags are added before bundle
@@ -293,20 +266,22 @@ def.func.prepareInventory =
 
 	log_start( 'building bundle' );
 
-	jionIDs = { };
+	const timIDs = { };
 
-	codes = [ ];
+	const codes = [ ];
 
 	// loads the files to be bundled
-	for( a = 0, aZ = root.inventory.length; a < aZ; a++ )
+	for( let a = 0, aZ = root.inventory.length; a < aZ; a++ )
 	{
-		resource = root.inventory.atRank( a );
+		let code;
+
+		const resource = root.inventory.atRank( a );
 
 		if( !resource.inBundle ) continue;
 
-		if( resource.jionHolder )
+		if( resource.timHolder )
 		{
-			jionIDs[ resource.jionId ] = resource.hasJson;
+			timIDs[ resource.timId ] = resource.hasJson;
 
 			code = resource.data;
 		}
@@ -327,13 +302,17 @@ def.func.prepareInventory =
 		codes[ a ] = code;
 	}
 
+	let bundleFilePath;
+
 	if( config.shell_bundle )
 	{
+		let ast;
+
 		log_start( 'parsing bundle' );
 
-		for( a = 0, aZ = root.inventory.length; a < aZ; a++ )
+		for( let a = 0, aZ = root.inventory.length; a < aZ; a++ )
 		{
-			resource = root.inventory.atRank( a );
+			const resource = root.inventory.atRank( a );
 
 			if( !resource.inBundle ) continue;
 
@@ -362,7 +341,7 @@ def.func.prepareInventory =
 			}
 		}
 
-		if( config.extraMangle ) root.extraMangle( ast, jionIDs );
+		if( config.extraMangle ) root.extraMangle( ast, timIDs );
 
 		if( config.uglify )
 		{
@@ -370,7 +349,7 @@ def.func.prepareInventory =
 
 			ast.figure_out_scope( );
 
-			compressor =
+			const compressor =
 				uglify.Compressor(
 					{
 						dead_code : true,
@@ -402,9 +381,9 @@ def.func.prepareInventory =
 			);
 		}
 
-		sourceMap = uglify.SourceMap( { } );
+		const sourceMap = uglify.SourceMap( { } );
 
-		stream =
+		const stream =
 			uglify.OutputStream(
 				{
 					beautify : config.beautify,
@@ -451,11 +430,11 @@ def.func.prepareInventory =
 	}
 
 	// post processing
-	inv = root.inventory;
+	let inv = root.inventory;
 
-	for( a = 0, aZ = inv.length; a < aZ; a++ )
+	for( let a = 0, aZ = inv.length; a < aZ; a++ )
 	{
-		resource = inv.atRank( a );
+		const resource = inv.atRank( a );
 
 		if( !resource.postProcessor || !resource.data ) continue;
 
@@ -466,18 +445,16 @@ def.func.prepareInventory =
 			);
 		}
 
-		server_postProcessor[ resource.postProcessor ](
-			resource,
-			bundleFilePath
-		);
+		server_postProcessor[ resource.postProcessor ]( resource, bundleFilePath );
 	}
 
+	// FIXME is this necessary to reassign?
 	inv = root.inventory;
 
 	// prepares the zipped versions
-	for( a = 0, aZ = inv.length; a < aZ; a++ )
+	for( let a = 0, aZ = inv.length; a < aZ; a++ )
 	{
-		resource = inv.atRank( a );
+		const resource = inv.atRank( a );
 
 		//if( resource.inBundle || resource.devel )
 		//{
@@ -546,7 +523,7 @@ def.func.prependConfigFlags =
 def.func.extraMangle =
 	function(
 		ast,
-		jionIDs
+		timIDs
 	)
 {
 	var
@@ -556,7 +533,6 @@ def.func.extraMangle =
 		aZ,
 		at,
 		e,
-		jionID,
 		// associative of all mangles
 		mangle,
 		// mangle definitions:
@@ -639,16 +615,16 @@ def.func.extraMangle =
 
 	}
 
-	// also mangles the jionIDs
-	for( jionID in jionIDs )
+	// also mangles the timIDs
+	for( let id in timIDs )
 	{
 		if(
 			// only mangle those not used in json
-			jionIDs[ jionID ] === false
-			&& !noMangle[ jionID ]
+			timIDs[ id ] === false
+			&& !noMangle[ id ]
 		)
 		{
-			mangle[ jionID ] = true;
+			mangle[ id ] = true;
 		}
 	}
 
@@ -974,9 +950,9 @@ def.func.requestListener =
 
 		if( stat && stat.mtime > resource.timestamp )
 		{
-			// when this is a jion its holder is prepared instead.
+			// when this is a tim its holder is prepared instead.
 			yield* root.inventory.prepareResource(
-				resource.jionHolder || resource
+				resource.timHolder || resource
 			);
 
 			resource = root.inventory.get( pathname );

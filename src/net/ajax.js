@@ -19,7 +19,7 @@ if( TIM )
 		'path' :
 		{
 			comment : 'the ajax path',
-			type : 'jion$path'
+			type : 'tim$path'
 		}
 	};
 

@@ -90,7 +90,7 @@ const serveAlter =
 		}
 		catch( err )
 		{
-			return replyError( 'Command not valid jion' );
+			return replyError( 'Request JSON translation failed' );
 		}
 	}
 	else
@@ -184,7 +184,7 @@ const serveAuth =
 	{
 		console.log( err.stack );
 
-		return replyError( 'Command not valid jion' );
+		return replyError( 'Request JSON translation failed' );
 	}
 
 	userCreds = request.userCreds;
@@ -227,7 +227,7 @@ const serveRegister =
 	{
 		console.log( err.stack );
 
-		return replyError( 'Command not valid jion' );
+		return replyError( 'Request JSON translation failed' );
 	}
 
 	const userCreds = request.userCreds;
@@ -286,7 +286,7 @@ const serveUpdate =
 	{
 		console.log( err.stack );
 
-		return replyError( 'Command not valid jion' );
+		return replyError( 'Request JSON translation failed' );
 	}
 
 	userInfo = root.userNexus.testInCache( request.userCreds );
@@ -353,7 +353,7 @@ const serveAcquire =
 	{
 		console.log( err.stack );
 
-		return replyError( 'Command not valid jion' );
+		return replyError( 'Request JSON translation failed' );
 	}
 
 	userCreds = request.userCreds;

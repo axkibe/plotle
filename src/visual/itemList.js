@@ -5,8 +5,7 @@
 
 
 var
-	gleam_rectGroup,
-	jion$pathList;
+	gleam_rectGroup;
 
 
 tim.define( module, 'visual_itemList', ( def, visual_itemList ) => {
@@ -41,7 +40,7 @@ def.lazy.itemPaths =
 		arr.push( this.get( a ).path );
 	}
 
-	return jion$pathList.create( 'list:init', arr );
+	return tim.pathList.create( 'list:init', arr );
 };
 
 

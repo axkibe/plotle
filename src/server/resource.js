@@ -19,7 +19,7 @@ if( TIM )
 		aliases :
 		{
 			// the list of aliases this is served under
-			type : [ 'undefined', 'jion$stringList' ]
+			type : [ 'undefined', 'tim$stringList' ]
 			// by default determined from filePath
 		},
 		coding :
@@ -49,13 +49,6 @@ if( TIM )
 			// cached or auto generated zip data
 			type : [ 'undefined', 'protean' ]
 		},
-		// FIXME remove
-		hasJion :
-		{
-			// true if this resource has a jion def
-			type : 'boolean',
-			defaultValue : 'false'
-		},
 		hasTim :
 		{
 			// true if this resource is a typed immutable
@@ -64,7 +57,7 @@ if( TIM )
 		},
 		hasJson :
 		{
-			// true if this has jion that has json
+			// true if this has json
 			type : 'boolean',
 			defaultValue : 'false'
 		},
@@ -79,16 +72,6 @@ if( TIM )
 			// true if this resource is in the testpad
 			type : 'boolean',
 			defaultValue : 'false'
-		},
-		jionHolder :
-		{
-			// the resource a jion is genereated from
-			type : [ 'undefined', 'server_resource' ]
-		},
-		jionId :
-		{
-			// if hasJion the jion id string
-			type : [ 'undefined', 'string' ]
 		},
 		maxage :
 		{
@@ -172,10 +155,7 @@ def.func._init =
 def.lazy.fileExt =
 	function( )
 {
-	var
-		fp;
-
-	fp = this.filePath;
+	const fp = this.filePath;
 
 	if( !fp ) return;
 

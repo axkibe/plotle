@@ -25,7 +25,6 @@ var
 	gleam_roundRect,
 	gleam_transform,
 	gruga_portal,
-	jion$pathList,
 	visual_mark_caret,
 	visual_mark_items,
 	result_hover,
@@ -69,7 +68,7 @@ if( TIM )
 		hover :
 		{
 			// node currently hovered upon
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			prepare : 'visual_item.concernsHover( hover, path )'
 		},
 		mark :
@@ -83,7 +82,7 @@ if( TIM )
 		path :
 		{
 			// the path of the portal
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		transform :
 		{
@@ -805,7 +804,7 @@ def.func.click =
 		setMark =
 			visual_mark_items.create(
 				'itemPaths',
-					jion$pathList.create(
+					tim.pathList.create(
 						'list:init', [ this.path ]
 					)
 			);

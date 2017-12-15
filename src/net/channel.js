@@ -29,7 +29,7 @@ if( TIM )
 		path :
 		{
 			comment : 'the channels path in data tree',
-			type : 'jion$path'
+			type : 'tim$path'
 		},
 		_fifo :
 		{

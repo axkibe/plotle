@@ -7,7 +7,6 @@
 // FIXME
 var
 	change_wrapList,
-	jion$path,
 	reply_auth,
 	reply_acquire,
 	reply_error,
@@ -251,7 +250,7 @@ def.func._onAcquireSpace =
 	root.create(
 		'spaceFabric',
 			reply.space.create(
-				'path', jion$path.empty.append( 'spaceFabric' ),
+				'path', tim.path.empty.append( 'spaceFabric' ),
 				'ref', request.spaceRef
 			),
 		'link',

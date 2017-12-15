@@ -29,7 +29,7 @@ if( TIM )
 		path :
 		{
 			// path of the caret
-			type : 'jion$path'
+			type : 'tim$path'
 		},
 		changeMarkText :
 		{
