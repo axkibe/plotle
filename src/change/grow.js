@@ -33,7 +33,7 @@ if( TIM )
 		path :
 		{
 			// grow at this path',
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		},
 		val :

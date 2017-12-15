@@ -31,7 +31,7 @@ if( TIM )
 		path :
 		{
 			comment : 'the path of the doc',
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		pos :
 		{

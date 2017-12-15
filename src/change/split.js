@@ -36,7 +36,7 @@ if( TIM )
 		path :
 		{
 			// split at this path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		},
 		at1 :
@@ -48,7 +48,7 @@ if( TIM )
 		path2 :
 		{
 			// split created this new/next path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		}
 	};

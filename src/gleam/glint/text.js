@@ -12,9 +12,6 @@ tim.define( module, 'gleam_glint_text', ( def, gleam_glint_text ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-/*
-| The jion definition.
-*/
 if( TIM )
 {
 	def.attributes =

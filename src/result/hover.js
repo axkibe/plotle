@@ -27,7 +27,7 @@ if( TIM )
 		path :
 		{
 			// the path to the thing being hovered upon
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		}
 	};
 }

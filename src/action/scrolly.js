@@ -19,7 +19,7 @@ if( TIM )
 		scrollPath :
 		{
 			// path to the item or widget being scrolled
-			type : 'jion$path'
+			type : 'tim$path'
 		},
 		startPoint :
 		{

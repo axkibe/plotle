@@ -31,7 +31,7 @@ if( TIM )
 		hover :
 		{
 			// component hovered upon
-			type : [ 'undefined', 'jion$path' ],
+			type : [ 'undefined', 'tim$path' ],
 			prepare : 'widget_widget.concernsHover( hover, path )'
 		},
 		mark :
@@ -45,7 +45,7 @@ if( TIM )
 		path :
 		{
 			// the path of the widget
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		scrollPos :
 		{

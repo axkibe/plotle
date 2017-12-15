@@ -32,7 +32,7 @@ if( TIM )
 		path :
 		{
 			// set at this path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		},
 		val :

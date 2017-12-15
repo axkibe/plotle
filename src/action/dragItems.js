@@ -24,7 +24,7 @@ if( TIM )
 		itemPaths :
 		{
 			// the paths of the items to drag
-			type : [ 'undefined', 'jion$pathList' ]
+			type : [ 'undefined', 'tim$pathList' ]
 		},
 		startPoint :
 		{

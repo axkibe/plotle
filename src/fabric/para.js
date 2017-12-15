@@ -19,7 +19,7 @@ if( TIM )
 		path :
 		{
 			// the path of the para
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		text :
 		{

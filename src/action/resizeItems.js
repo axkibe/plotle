@@ -10,18 +10,14 @@ tim.define( module, 'action_resizeItems', ( def, action_resizeItems ) => {
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
-
-
-/*
-| The jion definition.
-*/
+if( TIM )
 {
 	def.attributes =
 	{
 		itemPaths:
 		{
 			// the paths of the items to drag
-			type : [ 'undefined', 'jion$pathList' ]
+			type : [ 'undefined', 'tim$pathList' ]
 		},
 		startPoint :
 		{

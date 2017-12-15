@@ -36,7 +36,7 @@ if( TIM )
 		path :
 		{
 			// shrinks at this path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true
 		},
 		prev :
@@ -203,7 +203,7 @@ def.func.transform =
 
 
 /*
-| Transforms a jion/insert/remove/set/split changes
+| Transforms a insert/remove/set/split changes
 | by this shrink
 */
 def.func._transformJIRS =

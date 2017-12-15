@@ -24,7 +24,7 @@ if( TIM )
 		itemPath :
 		{
 			// if selecting ranges (text block), item to path
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		startPoint :
 		{

@@ -78,7 +78,7 @@ if( TIM )
 		path :
 		{
 			// the path of the doc
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		scrollPos :
 		{

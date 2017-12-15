@@ -16,9 +16,6 @@ var
 tim.define( module, 'visual_mark_items', ( def, visual_mark_items ) => {
 
 
-/*
-| The jion definition.
-*/
 if( TIM )
 {
 	def.attributes =
@@ -26,7 +23,7 @@ if( TIM )
 		itemPaths :
 		{
 			// paths of the items
-			type : 'jion$pathList'
+			type : 'tim$pathList'
 		}
 	};
 

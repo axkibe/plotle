@@ -47,7 +47,7 @@ if( TIM )
 		},
 		path :
 		{
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		pos :
 		{

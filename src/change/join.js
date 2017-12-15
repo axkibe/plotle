@@ -34,7 +34,7 @@ if( TIM )
 		path :
 		{
 			// join at this path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		},
 		at1 :
@@ -48,7 +48,7 @@ if( TIM )
 		{
 			comment : 'join this',
 			// must be after path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		}
 	};

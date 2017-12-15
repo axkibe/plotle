@@ -33,7 +33,7 @@ if( TIM )
 		path :
 		{
 			// the path of the note
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		zone :
 		{

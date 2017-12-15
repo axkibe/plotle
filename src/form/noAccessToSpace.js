@@ -34,7 +34,7 @@ if( TIM )
 		hover :
 		{
 			// the widget hovered upon
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		mark :
 		{
@@ -52,7 +52,7 @@ if( TIM )
 		path :
 		{
 			// the path of the form
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		spaceRef :
 		{

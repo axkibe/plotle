@@ -42,7 +42,7 @@ if( TIM )
 
 
 /*
-| Shortcut to create an gleam_size jion.
+| Shortcut to create an gleam_size tim.
 */
 def.static.wh =
 	function(
@@ -123,7 +123,7 @@ def.lazy.zeroRect =
 
 
 /*
-| Returns a size jion enlarged by w/h.
+| Returns a size tim enlarged by w/h.
 */
 def.func.add =
 	function(

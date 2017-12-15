@@ -4,11 +4,6 @@
 'use strict';
 
 
-// FIXME
-var
-	jion$pathList;
-
-
 tim.define( module, 'visual_mark_range', ( def, visual_mark_range ) => {
 
 
@@ -159,7 +154,7 @@ def.lazy.itemPaths =
 
 	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
 
-	return jion$pathList.create( 'list:append', beginPath.limit( 3 ) );
+	return tim.pathList.create( 'list:append', beginPath.limit( 3 ) );
 };
 
 

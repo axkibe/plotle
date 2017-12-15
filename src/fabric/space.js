@@ -19,7 +19,7 @@ if( TIM )
 		path :
 		{
 			comment : 'the path of the space',
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		ref :
 		{

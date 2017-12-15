@@ -19,7 +19,7 @@ if( TIM )
 		path :
 		{
 			// path of the mark
-			type : 'jion$path'
+			type : 'tim$path'
 		}
 	};
 

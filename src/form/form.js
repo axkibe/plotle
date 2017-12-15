@@ -9,7 +9,6 @@ var
 	gleam_glint_paint,
 	gleam_transform,
 	gruga_formFacet,
-	jion,
 	result_hover,
 	visual_mark_caret,
 	visual_mark_widget;
@@ -33,7 +32,7 @@ form_form.init =
 	this.area = this.viewSize.zeroRect;
 
 	// all components of the form
-	const twig = twigDup ? this._twig :  jion.copy( this._twig );
+	const twig = twigDup ? this._twig :  tim.copy( this._twig );
 
 	const ranks = this._ranks;
 

@@ -19,7 +19,7 @@ if( TIM )
 		fromItemPath :
 		{
 			// the item the relation goes from
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		offset :
 		{
@@ -29,7 +29,7 @@ if( TIM )
 		toItemPath :
 		{
 			// the item the relation goes to
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		toPoint :
 		{

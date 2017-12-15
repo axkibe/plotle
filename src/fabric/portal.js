@@ -19,7 +19,7 @@ if( TIM )
 		path :
 		{
 			// the path of the doc
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		spaceUser :
 		{
@@ -41,22 +41,5 @@ if( TIM )
 		}
 	};
 }
-
-
-/*
-| Forwards zone pnw.
-*/
-/*
-FIXME remove
-jion.lazyValue(
-	prototype,
-	'pnw',
-	function( )
-{
-	return this.zone.pnw;
-}
-);
-*/
-
 
 } );

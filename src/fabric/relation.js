@@ -12,9 +12,6 @@ tim.define( module, 'fabric_relation', ( def, fabric_relation ) => {
 ':::::::::::::::::::::::::::::*/
 
 
-/*
-| The jion definition.
-*/
 if( TIM )
 {
 	def.attributes =
@@ -46,7 +43,7 @@ if( TIM )
 		path :
 		{
 			// the path of the doc
-			type : [ 'undefined', 'jion$path' ]
+			type : [ 'undefined', 'tim$path' ]
 		},
 		pos :
 		{

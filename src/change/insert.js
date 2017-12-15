@@ -38,7 +38,7 @@ if( TIM )
 		path :
 		{
 			// insert at this path
-			type : 'jion$path',
+			type : 'tim$path',
 			json : true,
 		},
 		val :
