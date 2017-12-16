@@ -83,15 +83,15 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'jioncode-path.js' ] ),
+		'aliases', stringList( [ 'timcode-path.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.path.jionCode,
+		'data', tim.path.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'jion-path.js' ] ),
+		'aliases', stringList( [ 'tim-path.js' ] ),
 		'coding', 'utf-8',
 		'data', tim.path.source,
 		'mime', 'text/javascript',
@@ -101,13 +101,13 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'jioncode-pathList.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.pathList.jionCode,
+		'data', tim.pathList.jionCode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'jion-pathList.js' ] ),
+		'aliases', stringList( [ 'tim-pathList.js' ] ),
 		'coding', 'utf-8',
 		'data', tim.pathList.source,
 		'mime', 'text/javascript',
