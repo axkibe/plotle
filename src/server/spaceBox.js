@@ -16,32 +16,32 @@ if( TIM )
 {
 	def.attributes =
 	{
-		'seqZ' :
+		seqZ :
 		{
 			// latest sequence number
 			type : 'integer'
 		},
-		'space' :
+		space :
 		{
 			// latest space version
 			type : 'fabric_space'
 		},
-		'spaceRef' :
+		spaceRef :
 		{
 			// reference to the space
 			type : 'ref_space',
 		},
-		'_changesDB' :
+		_changesDB :
 		{
 			// changes database collection
 			type : 'protean'
 		},
-		'_changeWraps' :
+		_changeWraps :
 		{
 			// changeWraps cached in RAM
 			type : 'change_wrapList'
 		},
-		'_changesOffset' :
+		_changesOffset :
 		{
 			// the offset of the stored changeWraps
 			// on server load the past isn't kept in memory
