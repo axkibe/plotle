@@ -13,13 +13,10 @@
 | Imports
 */
 var
-	jion,
 	server_resource,
 	server_resourceList,
 	stringList;
 
-
-jion = require( 'jion' );
 
 server_resource = require( './resource' );
 
@@ -75,9 +72,9 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'jion-proto.js' ] ),
+		'aliases', stringList( [ 'tim-proto.js' ] ),
 		'coding', 'utf-8',
-		'data', jion.proto.source,
+		'data', tim.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -99,9 +96,9 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'jioncode-pathList.js' ] ),
+		'aliases', stringList( [ 'timcode-pathList.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.pathList.jionCode,
+		'data', tim.pathList.timcode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true

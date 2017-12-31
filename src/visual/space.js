@@ -471,8 +471,7 @@ def.func.getList =
 {
 /**/if( CHECK )
 /**/{
-/**/    // XXX FIXME
-/**/	if( paths.reflect === 'jion$pathList' ) throw new Error( );
+/**/	if( paths.reflect !== 'pathList' ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
