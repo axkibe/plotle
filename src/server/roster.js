@@ -85,7 +85,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'timcode-path.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.path.jionCode,
+		'data', tim.path.timcode,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true

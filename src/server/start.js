@@ -9,9 +9,10 @@ const config = require( '../../config' );
 config.database_version = 15;
 
 
-global.tim = require( 'tim.js' );
+require( 'tim.js' );
 
-// FIXME?
+
+// FIXME!
 require( 'jion' );
 
 
