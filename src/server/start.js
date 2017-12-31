@@ -12,10 +12,6 @@ config.database_version = 15;
 require( 'tim.js' );
 
 
-// FIXME!
-require( 'jion' );
-
-
 /*
 | Running node normally, JION is false.
 */
