@@ -411,7 +411,7 @@ def.func.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== this.reflectName ) throw new Error( );
+/**/	if( discname !== 'mainDisc' ) throw new Error( );
 /**/}
 
 	const buttonName = path.get( 4 );

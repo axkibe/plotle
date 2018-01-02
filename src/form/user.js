@@ -246,7 +246,7 @@ def.func.pushButton =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
+/**/	if( path.get( 2 ) !== 'user' ) throw new Error( );
 /**/}
 
 	const buttonName = path.get( 4 );

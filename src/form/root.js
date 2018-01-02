@@ -128,11 +128,6 @@ def.func._init =
 				'userSpaceList', this.userSpaceList,
 				'viewSize', this.viewSize
 			);
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( twig[ name ].reflectName !== name ) throw new Error( );
-/**/	}
 	}
 
 	if( FREEZE ) Object.freeze( twig );

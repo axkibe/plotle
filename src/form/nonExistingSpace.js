@@ -238,7 +238,7 @@ def.func.pushButton =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
+/**/	if( path.get( 2 ) !== 'nonExistingSpace' ) throw new Error( );
 /**/}
 
 	const buttonName = path.get( 4 );

@@ -268,8 +268,6 @@ form_form.getFocusedWidget =
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 ) throw new Error( );
-/**/
-/**/	if( path.get( 2 ) !== this.reflectName ) throw new Error( );
 /**/}
 
 	return this.get( path.get( 4 ) );
