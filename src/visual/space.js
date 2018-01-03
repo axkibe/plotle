@@ -11,6 +11,10 @@ var
 	action_pan,
 	action_select,
 	change_list,
+	fabric_label,
+	fabric_note,
+	fabric_portal,
+	fabric_relation,
 	gleam_arrow,
 	gleam_glint_list,
 	gleam_glint_paint,
@@ -127,13 +131,12 @@ def.staticLazy.transPath =
 def.staticLazy.visualMap =
 	function( )
 {
-	const map =
-	{
-		'fabric_label' : visual_label,
-		'fabric_note' : visual_note,
-		'fabric_portal' : visual_portal,
-		'fabric_relation' : visual_relation
-	};
+	const map = new Map( );
+
+	map.set( fabric_label, visual_label );
+	map.set( fabric_note, visual_note );
+	map.set( fabric_portal, visual_portal );
+	map.set( fabric_relation, visual_relation );
 
 	if( FREEZE ) Object.freeze( map );
 
@@ -216,7 +219,7 @@ def.func._init =
 
 		if( !iItem )
 		{
-			iItem = visual_space.visualMap[ item.reflect ];
+			iItem = visual_space.visualMap.get( item.timtype );
 
 /**/		if( CHECK )
 /**/		{

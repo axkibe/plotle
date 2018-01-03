@@ -6,6 +6,8 @@
 
 // FIXME
 var
+	action_dragItems,
+	action_resizeItems,
 	action_select,
 	animation_root,
 	animation_transform,
@@ -43,15 +45,21 @@ var
 	net_channel,
 	net_link,
 	ref_space,
+	result_hover,
+	reply_auth,
+	reply_error,
 	root,
 	session_uid,
 	shell_doTracker,
 	shell_settings,
+	show_create,
 	show_form,
 	show_normal,
+	show_zoom,
 	system,
 	user_creds,
 	visual_mark_caret,
+	visual_mark_range,
 	visual_space;
 
 root = undefined;
@@ -255,10 +263,10 @@ def.static.prepareAction =
 
 	if( !action ) return undefined;
 
-	switch( action.reflect )
+	switch( action.timtype )
 	{
-		case 'action_dragItems' :
-		case 'action_resizeItems' :
+		case action_dragItems :
+		case action_resizeItems :
 
 			iPaths = action.itemPaths;
 
@@ -330,11 +338,8 @@ def.static.startup =
 
 /**/if( CHECK )
 /**/{
-/**/	if( root )
-/**/	{
-/**/		// singleton
-/**/		throw new Error( );
-/**/	}
+/**/	// singleton
+/**/	if( root ) throw new Error( );
 /**/}
 
 	canvas = document.createElement( 'canvas' );
@@ -569,7 +574,7 @@ def.func._init =
 		}
 	}
 
-	if( mark && mark.reflect === 'visual_mark_caret' )
+	if( mark && mark.timtype === visual_mark_caret )
 	{
 		mark = mark.create( 'focus', this.systemFocus );
 	}
@@ -698,15 +703,15 @@ def.lazy._currentScreen =
 {
 	const show = this.show;
 
-	switch( show.reflect )
+	switch( show.timtype )
 	{
-		case 'show_create' :
-		case 'show_normal' :
-		case 'show_zoom' :
+		case show_create :
+		case show_normal :
+		case show_zoom :
 
 			return root.spaceVisual;
 
-		case 'show_form' :
+		case show_form :
 
 			return root.form.get( show.formName );
 
@@ -733,7 +738,7 @@ def.func.alter =
 {
 	let changeList;
 
-	if( a1.reflect === 'change_list' )
+	if( a1.timtype === change_list )
 	{
 		changeList = a1;
 	}
@@ -1206,10 +1211,7 @@ def.func.pointingHover =
 		{
 /**/		if( CHECK )
 /**/		{
-/**/			if( result.reflect !== 'result_hover' )
-/**/			{
-/**/				throw new Error( );
-/**/			}
+/**/			if( result.timtype !== result_hover ) throw new Error( );
 /**/		}
 
 			root.create( 'hover', result.path );
@@ -1224,10 +1226,7 @@ def.func.pointingHover =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( result.reflect !== 'result_hover' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		if( result.timtype !== result_hover ) throw new Error( );
 /**/	}
 
 		root.create( 'hover', result.path );
@@ -1353,7 +1352,7 @@ def.func.releaseSpecialKey =
 
 	if(
 		action
-		&& action.reflect === 'action_select'
+		&& action.timtype === action_select
 		&& !action.startPoint
 	)
 	{
@@ -1385,9 +1384,9 @@ def.func.update =
 
 	if( !mark ) return;
 
-	switch( mark.reflect )
+	switch( mark.timtype )
 	{
-		case 'visual_mark_range' :
+		case visual_mark_range :
 
 			mark = mark.createTransformed(
 				changes,
@@ -1395,7 +1394,6 @@ def.func.update =
 			);
 
 			break;
-
 
 		default :
 
@@ -1432,7 +1430,7 @@ def.func.onAcquireSpace =
 		reply
 	)
 {
-	if( reply.reflect === 'reply_error' )
+	if( reply.timtype === reply_error )
 	{
 		system.failScreen( 'Error on acquire space: ' + reply.message );
 
@@ -1491,7 +1489,7 @@ def.func.onAcquireSpace =
 	root.create(
 		'access', access,
 		'show',
-			( show.reflect === 'show_form' && show.formName === 'loading' )
+			( show.timtype === show_form && show.formName === 'loading' )
 			? show_normal.create( )
 			: pass,
 		'mark', undefined,
@@ -1543,7 +1541,7 @@ def.func.onAuth =
 	show = root.show;
 
 	// if in login form this is a tempted login
-	if( show.reflect === 'show_form' && show.formName === 'login' )
+	if( show.timtype === show_form && show.formName === 'login' )
 	{
 		root.form.get( 'login' ).onAuth( reply );
 
@@ -1553,7 +1551,7 @@ def.func.onAuth =
 	// otherwise this is an onload login
 	// or logout.
 
-	if( reply.reflect !== 'reply_auth' )
+	if( reply.timtype !== reply_auth )
 	{
 		// when logging in with a real user failed
 		// take a visitor instead
@@ -1590,7 +1588,7 @@ def.func.onRegister =
 	// if not in signup form this came out of band.
 	if(
 		!show
-		|| show.reflect !== 'show_form'
+		|| show.timtype !== show_form
 		|| show.formName !== 'signUp'
 	)
 	{
