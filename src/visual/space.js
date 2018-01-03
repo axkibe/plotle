@@ -8,8 +8,11 @@
 var
 	action_createGeneric,
 	action_createRelation,
+	action_dragItems,
 	action_pan,
+	action_resizeItems,
 	action_select,
+	action_scrolly,
 	change_list,
 	fabric_label,
 	fabric_note,
@@ -237,20 +240,11 @@ def.func._init =
 			(
 				action
 				&& (
-					(
-						action.reflect === 'action_createRelation'
-						&& action.affects( path )
-					)
-					|| (
-						action.reflect === 'action_select'
-						&& action.affects( path )
-					)
+					( action.timtype === action_createRelation && action.affects( path ) )
+					|| ( action.timtype === action_select && action.affects( path ) )
 				)
 			)
-			|| (
-				mark
-				&& mark.containsPath( path )
-			);
+			|| ( mark && mark.containsPath( path ) );
 
 		twig[ k ] =
 			iItem.create(
@@ -376,15 +370,15 @@ def.lazy.glint =
 
 	if( frame ) arr.push( frame.glint );
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_createGeneric' :
+		case action_createGeneric :
 
 			if( action.startPoint ) arr.push( action.transItem.glint );
 
 			break;
 
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			if( action.fromItemPath )
 			{
@@ -434,7 +428,7 @@ def.lazy.glint =
 
 			break;
 
-		case 'action_select' :
+		case action_select :
 
 			if( action.zone )
 			{
@@ -539,11 +533,11 @@ def.func.pointingHover =
 
 	const frame = this.frame;
 
-	const aType = action && action.reflect;
+	const aType = action && action.timtype;
 
 	switch( aType )
 	{
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			if( action.relationState === 'start' )
 			{
@@ -570,25 +564,22 @@ def.func.pointingHover =
 
 			break;
 
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			return result_hover.create( 'cursor', 'grabbing' );
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			return result_hover.create( 'cursor', action.resizeDir + '-resize' );
 
-		case 'action_pan' :
+		case action_pan :
 
-			if( action.startPoint )
-			{
-				return result_hover.create( 'cursor', 'grabbing' );
-			}
+			if( action.startPoint ) return result_hover.create( 'cursor', 'grabbing' );
 
 			break;
 	}
 
-	if( frame && aType !== 'action_select' )
+	if( frame && aType !== action_select )
 	{
 		const result = frame.pointingHover( p );
 
@@ -631,15 +622,15 @@ def.func.dragStart =
 
 	const action = this.action;
 
-	const aType = action && action.reflect;
+	const aType = action && action.timtype;
 
 	// see if the frame was targeted
-	if( access == 'rw' && frame && aType !== 'action_select' )
+	if( access == 'rw' && frame && aType !== action_select )
 	{
 		if( frame.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
-	if( aType === 'action_createGeneric' )
+	if( aType === action_createGeneric )
 	{
 		this._startCreateGeneric( dp );
 
@@ -657,7 +648,7 @@ def.func.dragStart =
 	// otherwise panning is initiated
 	switch( aType )
 	{
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			root.create(
 				'action',
@@ -670,7 +661,7 @@ def.func.dragStart =
 
 			return;
 
-		case 'action_select' :
+		case action_select :
 
 			root.create(
 				'action',
@@ -760,21 +751,21 @@ def.func.dragStop =
 
 	let changes, paths;
 
-	switch( action.reflect )
+	switch( action.timtype )
 	{
-		case 'action_createGeneric' :
+		case action_createGeneric :
 
 			this._stopCreateGeneric( p, shift, ctrl );
 
 			break;
 
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			this._stopCreateRelation( p, shift, ctrl );
 
 			break;
 
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			paths = action.itemPaths;
 
@@ -815,13 +806,13 @@ def.func.dragStop =
 
 			break;
 
-		case 'action_pan' :
+		case action_pan :
 
 			root.create( 'action', undefined );
 
 			break;
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			paths = action.itemPaths;
 
@@ -862,13 +853,13 @@ def.func.dragStop =
 
 			break;
 
-		case 'action_scrolly' :
+		case action_scrolly :
 
 			root.create( 'action', undefined );
 
 			break;
 
-		case 'action_select' :
+		case action_select :
 
 			this._stopSelect( p, shift, ctrl );
 
@@ -897,45 +888,46 @@ def.func.dragMove =
 
 	if( !action ) return 'pointer';
 
-	switch( action.reflect )
+	// FIXME use a map
+	switch( action.timtype )
 	{
-		case 'action_createGeneric' :
+		case action_createGeneric :
 
 			this._moveCreateGeneric( p, shift, ctrl );
 
 			return;
 
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			this._moveCreateRelation( p, shift, ctrl );
 
 			return;
 
-		case 'action_pan' :
+		case action_pan :
 
 			this._movePan( p, shift, ctrl );
 
 			return;
 
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			this._moveDragItems( p, shift, ctrl );
 
 			return;
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			this._moveResizeItems( p, shift, ctrl );
 
 			return;
 
-		case 'action_scrolly' :
+		case action_scrolly :
 
 			this._moveScrollY( p, shift, ctrl );
 
 			return;
 
-		case 'action_select' :
+		case action_select :
 
 			this._moveSelect( p, shift, ctrl );
 
@@ -1603,7 +1595,7 @@ def.func._stopSelect =
 
 /**/if( CHECK )
 /**/{
-/**/	if( action.reflect !== 'action_select' ) throw new Error( );
+/**/	if( action.timtype !== action_select ) throw new Error( );
 /**/}
 
 	action = action.create( 'toPoint', p.detransform( this.transform ) );
@@ -1643,10 +1635,7 @@ def.func._stopSelect =
 		}
 	}
 
-	root.create(
-		'action', action,
-		'mark', mark
-	);
+	root.create( 'action', action, 'mark', mark );
 };
 
 
