@@ -6,6 +6,8 @@
 
 // FIXME
 var
+	action_dragItems,
+	action_resizeItems,
 	change_grow,
 	change_shrink,
 	gleam_glint_list,
@@ -175,15 +177,9 @@ def.static.createGeneric =
 
 /**/if( CHECK )
 /**/{
-/**/	if( label.fabric.fontsize !== label.doc.fontsize )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( label.fabric.fontsize !== label.doc.fontsize ) throw new Error( );
 /**/
-/**/	if( label.fabric.pos !== label.pos )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( label.fabric.pos !== label.pos ) throw new Error( );
 /**/}
 
 	root.alter(
@@ -311,13 +307,13 @@ def.lazy.pos =
 {
 	const action = this.action;
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			return this.fabric.pos.add( action.moveBy );
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			const zone = action.startZones.get( this.path.get( 2 ) );
 
@@ -496,7 +492,7 @@ def.lazy.fontsize =
 
 	let fs = this.fabric.fontsize;
 
-	if( action && action.reflect === 'action_resizeItems' )
+	if( action && action.timtype === action_resizeItems )
 	{
 /**/	if( CHECK )
 /**/	{

@@ -468,7 +468,7 @@ def.func.getList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( paths.reflect !== 'pathList' ) throw new Error( );
+/**/	if( paths.timtype !== tim.pathList ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
@@ -783,12 +783,12 @@ def.func.dragStop =
 				}
 				else
 				{
-					if( changes.reflect !== 'change_list' )
+					if( changes.timtype !== change_list )
 					{
 						changes = change_list.create( 'list:append', changes );
 					}
 
-					if( chi.reflect !== 'change_list' )
+					if( chi.timtype !== change_list )
 					{
 						changes = changes.create( 'list:append', chi );
 					}
@@ -830,12 +830,12 @@ def.func.dragStop =
 				}
 				else
 				{
-					if( changes.reflect !== 'change_list' )
+					if( changes.timtype !== change_list )
 					{
 						changes = change_list.create( 'list:append', changes );
 					}
 
-					if( chi.reflect !== 'change_list' )
+					if( chi.timtype !== change_list )
 					{
 						changes = changes.create( 'list:append', chi );
 					}

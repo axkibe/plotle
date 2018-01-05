@@ -6,8 +6,10 @@
 
 // FIXME
 var
+	gleam_margin,
 	gleam_point,
-	gleam_size;
+	gleam_size,
+	gleam_transform;
 
 
 if( NODE )
@@ -412,7 +414,7 @@ def.func.detransform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	return(
@@ -496,7 +498,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	return(
@@ -521,7 +523,7 @@ def.func.reduce =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( margin.reflect !== 'gleam_margin' ) throw new Error( );
+/**/	if( margin.timtype !== gleam_margin ) throw new Error( );
 /**/}
 
 	// allows margins to reduce the rect to zero size without erroring.

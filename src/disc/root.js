@@ -6,7 +6,9 @@
 
 // FIXME
 var
-	gleam_glint_list;
+	gleam_glint_list,
+	show_create,
+	show_zoom;
 
 
 tim.define( module, 'disc_root', ( def, disc_root ) => {
@@ -219,21 +221,12 @@ def.lazy.glint =
 {
 	const arr = [ ];
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : arr.push( this.get( 'createDisc' ).glint ); break;
 
-			arr.push( this.get( 'createDisc' ).glint );
-
-			break;
-
-		case 'show_zoom' :
-
-			arr.push( this.get( 'zoomDisc' ).glint );
-
-			break;
+		case show_zoom : arr.push( this.get( 'zoomDisc' ).glint ); break;
 	}
-
 
 	arr.push( this.get( 'mainDisc' ).glint );
 
@@ -260,15 +253,11 @@ def.func.dragMove =
 
 	if( bubble !== undefined ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).dragMove( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).dragMove( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).dragMove( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).dragMove( p, shift, ctrl );
 	}
 };
 
@@ -287,15 +276,11 @@ def.func.dragStart =
 
 	if( bubble !== undefined ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).dragStart( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).dragStart( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).dragStart( p, shift, ctrl );
 	}
 };
 
@@ -314,15 +299,11 @@ def.func.dragStop =
 
 	if( bubble !== undefined ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).dragStop( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).dragStop( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).dragStop( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).dragStop( p, shift, ctrl );
 	}
 };
 
@@ -343,15 +324,11 @@ def.func.mousewheel =
 
 	if( bubble ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
 
-			return this.get( 'createDisc' ).mousewheel( p, dir, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).mousewheel( p, dir, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).mousewheel( p, dir, shift, ctrl );
 	}
 };
 
@@ -370,15 +347,11 @@ def.func.pointingHover =
 
 	if( hover ) return hover;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).pointingHover( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).pointingHover( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).pointingHover( p, shift, ctrl );
 	}
 };
 
@@ -399,15 +372,11 @@ def.func.probeClickDrag =
 
 	if( bubble !== undefined ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).probeClickDrag( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).probeClickDrag( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).probeClickDrag( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).probeClickDrag( p, shift, ctrl );
 	}
 };
 
@@ -426,15 +395,11 @@ def.func.click =
 
 	if( bubble ) return bubble;
 
-	switch( this.show.reflect )
+	switch( this.show.timtype )
 	{
-		case 'show_create' :
+		case show_create : return this.get( 'createDisc' ).click( p, shift, ctrl );
 
-			return this.get( 'createDisc' ).click( p, shift, ctrl );
-
-		case 'show_zoom' :
-
-			return this.get( 'zoomDisc' ).click( p, shift, ctrl );
+		case show_zoom : return this.get( 'zoomDisc' ).click( p, shift, ctrl );
 	}
 };
 

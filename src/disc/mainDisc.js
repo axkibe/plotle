@@ -151,7 +151,7 @@ def.func._init =
 
 				visible = this.access === 'rw' && this.spaceRef !== undefined;
 
-				down = show.reflect === 'show_create';
+				down = show.timtype === show_create;
 
 				break;
 
@@ -165,7 +165,7 @@ def.func._init =
 					: 'log\nout';
 
 				down =
-					show.reflect === 'show_form'
+					show.timtype === show_form
 					&& show.formName === 'login';
 
 				break;
@@ -175,7 +175,7 @@ def.func._init =
 				visible = true;
 
 				down =
-					show.reflect === 'show_form'
+					show.timtype === show_form
 					&& show.formName === 'moveTo';
 
 				break;
@@ -184,7 +184,7 @@ def.func._init =
 
 				visible = this.spaceRef !== undefined;
 
-				if( show.reflect !== 'show_normal' )
+				if( show.timtype !== show_normal )
 				{
 					down = false;
 				}
@@ -217,7 +217,7 @@ def.func._init =
 					this.spaceRef !== undefined
 					&& this.access === 'rw';
 
-				down = action && action.reflect === 'action_select';
+				down = action && action.timtype === action_select;
 
 				break;
 
@@ -226,7 +226,7 @@ def.func._init =
 				visible = this.user ? this.user.isVisitor : true;
 
 				down =
-					show.reflect === 'show_form'
+					show.timtype === show_form
 					&& show.formName === 'signUp';
 
 				break;
@@ -245,7 +245,7 @@ def.func._init =
 				}
 
 				down =
-					show.reflect === 'show_form'
+					show.timtype === show_form
 					&& show.formName === 'space';
 
 				break;
@@ -257,7 +257,7 @@ def.func._init =
 				visible = true;
 
 				down =
-					show.reflect === 'show_form'
+					show.timtype === show_form
 					&& show.formName === 'user';
 
 				break;
@@ -266,7 +266,7 @@ def.func._init =
 
 				visible = this.spaceRef !== undefined;
 
-				down = show.reflect === 'show_zoom';
+				down = show.timtype === show_zoom;
 
 				break;
 

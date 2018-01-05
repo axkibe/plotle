@@ -144,7 +144,7 @@ def.static.concernsMark =
 {
 	if( !mark ) return mark;
 
-	if( mark.reflect === 'visual_mark_range' )
+	if( mark.timtype === visual_mark_range )
 	{
 		return(
 			mark.containsPath( path.limit( 3 ) )
@@ -653,16 +653,13 @@ def.func.specialKey =
 		}
 	}
 
-	switch( mark.reflect )
+	switch( mark.timtype )
 	{
-		case 'visual_mark_caret' :
+		case visual_mark_caret :
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !this.path.subPathOf( mark.caret.path ) )
-/**/			{
-/**/				throw new Error( );
-/**/			}
+/**/			if( !this.path.subPathOf( mark.caret.path ) ) throw new Error( );
 /**/		}
 
 			at = mark.caret.at;
@@ -673,14 +670,11 @@ def.func.specialKey =
 
 			break;
 
-		case 'visual_mark_range' :
+		case visual_mark_range :
 
 /**/		if( CHECK )
 /**/		{
-/**/			if( !this.path.subPathOf( mark.caret.path ) )
-/**/			{
-/**/				throw new Error( );
-/**/			}
+/**/			if( !this.path.subPathOf( mark.caret.path ) ) throw new Error( );
 /**/		}
 
 			at = mark.caret.at;

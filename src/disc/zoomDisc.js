@@ -440,7 +440,7 @@ def.func.dragMove =
 {
 	const action = this.action;
 
-	if( !action || action.reflect !== 'action_zoomButton' ) return;
+	if( !action || action.timtype !== action_zoomButton ) return;
 
 	return false;
 };
@@ -532,7 +532,7 @@ def.func.dragStop =
 {
 	const action = this.action;
 
-	if( !action || action.reflect !== 'action_zoomButton' ) return;
+	if( !action || action.timtype !== action_zoomButton ) return;
 
 	root.create( 'action', action.create( 'refire', false ) );
 

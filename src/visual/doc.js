@@ -20,6 +20,8 @@ var
 	gruga_selection,
 	shell_fontPool,
 	shell_settings,
+	visual_mark_caret,
+	visual_mark_range,
 	visual_para;
 
 
@@ -242,7 +244,7 @@ def.lazy.glint =
 
 	if(
 		mark
-		&& mark.reflect === 'visual_mark_range'
+		&& mark.timtype === visual_mark_range
 		&& mark.containsPath( this.path.limit( 3 ) )
 	)
 	{
@@ -255,7 +257,7 @@ def.lazy.glint =
 	}
 	else if(
 		mark
-		&& mark.reflect === 'visual_mark_caret'
+		&& mark.timtype === visual_mark_caret
 		&& mark.focus
 	)
 	{
@@ -357,10 +359,7 @@ def.func.input =
 
 	const path = this.mark.caret.path;
 
-	if(
-		mark.reflect === 'visual_mark_range'
-		&& !mark.empty
-	)
+	if( mark.timtype === visual_mark_range && !mark.empty )
 	{
 		root.removeRange( mark );
 
@@ -393,7 +392,7 @@ def.func.specialKey =
 
 	if( !mark.hasCaret ) return false;
 
-	if( mark.reflect === 'visual_mark_range' && !mark.empty )
+	if( mark.timtype === visual_mark_range && !mark.empty )
 	{
 		switch( key )
 		{
@@ -434,7 +433,7 @@ def.lazy._rangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflect !== 'visual_mark_range' ) throw new Error( );
+/**/	if( mark.timtype !== visual_mark_range ) throw new Error( );
 /**/}
 
 	const frontMark = mark.frontMark;

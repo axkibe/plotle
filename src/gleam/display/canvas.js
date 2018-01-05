@@ -10,9 +10,31 @@
 
 // FIXME
 var
+	gleam_border,
+	gleam_borderList,
+	gleam_color,
 	gleam_constants,
+	gleam_ellipse,
+	gleam_facet,
+	gleam_glint_border,
+	gleam_glint_fill,
+	gleam_glint_list,
+	gleam_glint_mask,
+	gleam_glint_text,
+	gleam_glint_paint,
+	gleam_glint_window,
+	gleam_gradient_askew,
+	gleam_gradient_radial,
 	gleam_intern_opentype,
+	gleam_line,
 	gleam_point,
+	gleam_rect,
+	gleam_roundRect,
+	gleam_shape,
+	gleam_shapeList,
+	gleam_shape_line,
+	gleam_shape_round,
+	gleam_shape_start,
 	shell_settings;
 
 
@@ -215,10 +237,10 @@ def.func.within =
 /**/{
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/
-/**/	if( p.reflect !== 'gleam_point' ) throw new Error( );
+/**/	if( p.timtype !== gleam_point ) throw new Error( );
 /**/}
 
-	if( shape.reflect === 'gleam_shapeList' )
+	if( shape.timtype === gleam_shapeList )
 	{
 		for( let a = 0, aZ = shape.length; a < aZ; a++ )
 		{
@@ -228,10 +250,10 @@ def.func.within =
 		return false;
 	}
 
-	switch( shape.reflect )
+	switch( shape.timtype )
 	{
-		case 'gleam_ellipse' :
-		case 'gleam_roundRect' :
+		case gleam_ellipse :
+		case gleam_roundRect :
 
 			this._cx.beginPath( );
 
@@ -239,7 +261,7 @@ def.func.within =
 
 			break;
 
-		case 'gleam_rect' :
+		case gleam_rect :
 
 			const x = p.x;
 
@@ -254,7 +276,7 @@ def.func.within =
 				&& y <= ps.y + shape.height
 			);
 
-		case 'gleam_shape' :
+		case gleam_shape :
 
 			this._cx.beginPath( );
 
@@ -330,9 +352,9 @@ def.func._borders  =
 		offset  // offset everything by this
 	)
 {
-	switch( border.reflect )
+	switch( border.timtype )
 	{
-		case 'gleam_borderList' :
+		case gleam_borderList :
 
 			for( let a = 0, aZ = border.length; a < aZ; a++ )
 			{
@@ -341,7 +363,7 @@ def.func._borders  =
 
 			break;
 
-		case 'gleam_border' :
+		case gleam_border :
 
 			this._border( border, shape, offset );
 
@@ -387,13 +409,13 @@ def.func._colorStyle =
 	// gradient
 	let grad;
 
-	switch( style.reflect )
+	switch( style.timtype )
 	{
-		case 'gleam_color' :
+		case gleam_color :
 
 			return style.css;
 
-		case 'gleam_gradient_askew' :
+		case gleam_gradient_askew :
 
 /**/		if( CHECK )
 /**/		{
@@ -410,7 +432,7 @@ def.func._colorStyle =
 
 			break;
 
-		case 'gleam_gradient_radial' :
+		case gleam_gradient_radial :
 
 			const r0 = shape.gradientR0 || 0;
 
@@ -478,9 +500,9 @@ def.func._renderGlint =
 		offset
 	)
 {
-	switch( glint.reflect )
+	switch( glint.timtype )
 	{
-		case 'gleam_glint_border' :
+		case gleam_glint_border :
 
 			this._cx.beginPath( );
 
@@ -488,7 +510,7 @@ def.func._renderGlint =
 
 			break;
 
-		case 'gleam_glint_fill' :
+		case gleam_glint_fill :
 
 			this._cx.beginPath( );
 
@@ -496,31 +518,31 @@ def.func._renderGlint =
 
 			break;
 
-		case 'gleam_glint_list' :
+		case gleam_glint_list :
 
 			this._renderGlintList( glint, offset );
 
 			break;
 
-		case 'gleam_glint_paint' :
+		case gleam_glint_paint :
 
 			this._paint( glint.facet, glint.shape, offset );
 
 			break;
 
-		case 'gleam_glint_text' :
+		case gleam_glint_text :
 
 			this._renderText( glint, offset );
 
 			break;
 
-		case 'gleam_glint_window' :
+		case gleam_glint_window :
 
 			this._renderWindow( glint, offset );
 
 			break;
 
-		case 'gleam_glint_mask' :
+		case gleam_glint_mask :
 
 			this._renderMask( glint, offset );
 
@@ -541,8 +563,9 @@ def.func._renderMask =
 	)
 {
 
-/**/if( CHECK ) {
-/**/	if( glint.reflect !== 'gleam_glint_mask' ) throw new Error();
+/**/if( CHECK )
+/**/{
+/**/	if( glint.timtype !== gleam_glint_mask ) throw new Error();
 /**/}
 
 	const cx = this._cx;
@@ -555,7 +578,7 @@ def.func._renderMask =
 
 	const shape = glint.shape;
 
-	if( shape.reflect === 'gleam_shapeList' )
+	if( shape.timtype === gleam_shapeList )
 	{
 		for( let a = 0, aZ = shape.length; a < aZ; a++ )
 		{
@@ -619,8 +642,9 @@ def.func._renderText =
 	)
 {
 
-/**/if( CHECK ) {
-/**/	if( glint.reflect !== 'gleam_glint_text' ) throw new Error();
+/**/if( CHECK )
+/**/{
+/**/	if( glint.timtype !== gleam_glint_text ) throw new Error();
 /**/}
 
 	const p = glint.p;
@@ -686,8 +710,9 @@ def.func._renderWindow =
 	)
 {
 
-/**/if( CHECK ) {
-/**/	if( glint.reflect !== 'gleam_glint_window' ) throw new Error( );
+/**/if( CHECK )
+/**/{
+/**/	if( glint.timtype !== gleam_glint_window ) throw new Error( );
 /**/}
 
 	const cx = this._cx;
@@ -776,7 +801,7 @@ def.func._sketchLine =
 
 /**/if( CHECK )
 /**/{
-/**/	if( line.reflect !== 'gleam_line' ) throw new Error( );
+/**/	if( line.timtype !== gleam_line ) throw new Error( );
 /**/}
 
 	const cx = this._cx;
@@ -849,7 +874,7 @@ def.func._paint =
 
 /**/if( CHECK )
 /**/{
-/**/	if( facet.reflect !== 'gleam_facet' ) throw new Error( );
+/**/	if( facet.timtype !== gleam_facet ) throw new Error( );
 /**/}
 
 	const border = facet.border;
@@ -883,34 +908,34 @@ def.func._sketch =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	switch( shape.reflect )
+	switch( shape.timtype )
 	{
-		case 'gleam_ellipse' :
-		case 'gleam_roundRect' :
+		case gleam_ellipse :
+		case gleam_roundRect :
 
 			this._sketchGenericShape( shape.shape, border, offset, shift );
 
 			return;
 
-		case 'gleam_line' :
+		case gleam_line :
 
 			this._sketchLine( shape, border, offset, shift );
 
 			return;
 
-		case 'gleam_rect' :
+		case gleam_rect :
 
 			this._sketchRect( shape, border, offset, shift );
 
 			return;
 
-		case 'gleam_shape' :
+		case gleam_shape :
 
 			this._sketchGenericShape( shape, border, offset, shift );
 
 			return;
 
-		case 'gleam_shapeList' :
+		case gleam_shapeList :
 
 			for( let a = 0, aZ = shape.length; a < aZ; a++ )
 			{
@@ -944,7 +969,7 @@ def.func._sketchGenericShape =
 /**/{
 /**/	if( shape.length === undefined || shape.length === 0 )	throw new Error( );
 /**/
-/**/	if( shape.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
+/**/	if( shape.get( 0 ).timtype !== gleam_shape_start ) throw new Error( );
 /**/}
 
 	const ox = offset.x;
@@ -983,8 +1008,8 @@ def.func._sketchGenericShape =
 
 	if(
 		shift
-		&& section.reflect === 'gleam_shape_round'
-		&& shape.get( aZ - 1 ).reflect === 'gleam_shape_round'
+		&& section.timtype === gleam_shape_round
+		&& shape.get( aZ - 1 ).timtype === gleam_shape_round
 	)
 	{
 		// FUTURE might not be needed anymore
@@ -1055,9 +1080,9 @@ def.func._sketchGenericShape =
 			}
 		}
 
-		switch( section.reflect )
+		switch( section.timtype )
 		{
-			case 'gleam_shape_line' :
+			case gleam_shape_line :
 
 				if( !section.fly || shift === 0 )
 				{
@@ -1070,12 +1095,9 @@ def.func._sketchGenericShape =
 
 				break;
 
-			case 'gleam_shape_round' :
+			case gleam_shape_round :
 
-				if(
-					shift
-					&& nextSect.reflect === 'gleam_shape_round'
-				)
+				if( shift && nextSect.timtype === gleam_shape_round )
 				{
 					// workaround gap bug in chrome
 					pnx += 0.1;

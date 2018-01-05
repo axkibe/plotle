@@ -4,6 +4,7 @@
 
 
 var
+	action_select,
 	math_limit,
 	result_hover,
 	root,
@@ -52,16 +53,11 @@ visual_docItem.click =
 		access
 	)
 {
-	var
-		mark;
-
 	if( !this.tShape.within( p ) ) return;
 
 	if( access != 'rw' ) return false;
 
-	mark = this.markForPoint( p, shift );
-
-	root.create( 'mark', mark );
+	root.create( 'mark', this.markForPoint( p, shift ) );
 
 	return true;
 };
@@ -81,28 +77,20 @@ visual_docItem.dragStart =
 		action   // current space action
 	)
 {
-	var
-		aType,
-		bubble,
-		mark,
-		sbary;
-
-	sbary = this.scrollbarY;
-
-	aType = action && action.reflect;
+	const sbary = this.scrollbarY;
 
 	if( !this.action && sbary )
 	{
-		bubble = sbary.dragStart( p, shift, ctrl );
+		const bubble = sbary.dragStart( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
 
-	if( aType === 'action_select' )
+	if( action && action.timtype === action_select )
 	{
 		if( !this.tShape.within( p ) ) return false;
 
-		mark = this.markForPoint( p, false );
+		const mark = this.markForPoint( p, false );
 
 		action = action.create( 'itemPath', this.path );
 
@@ -125,24 +113,17 @@ visual_docItem.markForPoint =
 		doRange  // if true possible make a range
 )
 {
-	var
-		at,
-		doc,
-		mark,
-		para,
-		pos,
-		pi,
-		tp;
+	const tp = p.detransform( this.transform );
 
-	tp = p.detransform( this.transform );
+	const pos = this.zone.pos;
 
-	pos = this.zone.pos;
+	const pi = tp.sub( pos );
 
-	pi = tp.sub( pos );
+	const doc = this.doc;
 
-	doc = this.doc;
+	let para = doc.getParaAtPoint( pi );
 
-	para = doc.getParaAtPoint( pi );
+	let at;
 
 	if( para )
 	{
@@ -155,9 +136,9 @@ visual_docItem.markForPoint =
 		at = para.text.length;
 	}
 
-	mark = this.mark;
+	const mark = this.mark;
 
-	if( doRange && mark && mark.reflect === 'visual_mark_caret' )
+	if( doRange && mark && mark.timtype === visual_mark_caret )
 	{
 		return(
 			visual_mark_range.create(
@@ -171,7 +152,7 @@ visual_docItem.markForPoint =
 			)
 		);
 	}
-	else if( doRange && mark && mark.reflect === 'visual_mark_range' )
+	else if( doRange && mark && mark.timtype === visual_mark_range )
 	{
 		return(
 			mark.create(
@@ -203,12 +184,7 @@ visual_docItem.moveSelect =
 		p
 	)
 {
-	var
-		mark;
-
-	mark = this.markForPoint( p, true );
-
-	root.create( 'mark', mark );
+	root.create( 'mark', this.markForPoint( p, true ) );
 
 	this.scrollMarkIntoView( );
 };
@@ -236,14 +212,14 @@ visual_docItem.pointingHover =
 
 		if( bubble ) return bubble;
 	}
-			
+
 	if( !this.tShape.within( p ) ) return;
 
 	cursor = 'default';
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_select' : cursor = 'text'; break;
+		case action_select : cursor = 'text'; break;
 	}
 
 	return(

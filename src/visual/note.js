@@ -8,6 +8,8 @@
 
 // FIXME
 var
+	action_dragItems,
+	action_resizeItems,
 	change_grow,
 	fabric_doc,
 	fabric_note,
@@ -29,6 +31,7 @@ var
 	visual_docItem,
 	visual_item,
 	visual_mark_caret,
+	visual_para,
 	widget_scrollbar;
 
 
@@ -104,20 +107,6 @@ if( TIM )
 		}
 	};
 }
-
-
-// FIXME?
-//visual_note.reflect = 'visual_note:static';
-
-/*
-| Hack to fix visual_note:static references.
-*/
-// FIXME?
-//visual_note.equals =
-//	function( o )
-//{
-//	return o === this;
-//};
 
 
 /*::::::::::::::::::::::.
@@ -322,9 +311,9 @@ def.lazy.zone =
 
 	let zone;
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			const moveBy = action.moveBy;
 
@@ -336,7 +325,7 @@ def.lazy.zone =
 				: zone
 			);
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			const pBase = action.pBase;
 
@@ -357,9 +346,7 @@ def.lazy.zone =
 
 			return zone;
 
-		default :
-
-			return this.fabric.zone;
+		default : return this.fabric.zone;
 	}
 };
 
@@ -653,7 +640,7 @@ def.func.scrollMarkIntoView =
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflect !== 'visual_para' ) throw new Error( );
+/**/	if( para.timtype !== visual_para ) throw new Error( );
 /**/}
 
 	const zone = this.zone;
@@ -722,7 +709,6 @@ def.func.minScaleY =
 {
 	return this.minHeight / zone.height;
 };
-
 
 
 } );

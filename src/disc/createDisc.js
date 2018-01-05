@@ -164,9 +164,9 @@ def.static._isActiveButton =
 {
 	if( !action ) return false;
 
-	switch( action.reflect )
+	switch( action.timtype )
 	{
-		case 'action_createGeneric' :
+		case action_createGeneric :
 
 			switch( action.itemType )
 			{
@@ -175,20 +175,11 @@ def.static._isActiveButton =
 				case visual_label  : return wname === 'createLabel';
 
 				case visual_portal : return wname === 'createPortal';
-
-				default : return false;
 			}
 
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'invalid execution point reached'
-/**/			);
-/**/		}
+			return false;
 
-			break;
-
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			return wname === 'createRelation';
 

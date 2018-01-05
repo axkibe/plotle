@@ -1,22 +1,19 @@
 /*
 | Everything there is in a space.
 */
+'use strict';
 
 
 var
+	action_createRelation,
 	action_dragItems,
 	change_list,
 	change_set,
 	gleam_point,
 	visual_item,
-	visual_mark_items;
-
-
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+	visual_mark_caret,
+	visual_mark_items,
+	visual_mark_range;
 
 
 visual_item = NODE ? module.exports : { };
@@ -86,18 +83,13 @@ visual_item.dragStart =
 		access
 	)
 {
-	var
-		action,
-		mark,
-		paths;
-
-	action = this.action;
+	const action = this.action;
 
 	if( !this.tShape.within( p ) ) return false;
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_createRelation' :
+		case action_createRelation :
 
 			root.create(
 				'action',
@@ -114,12 +106,12 @@ visual_item.dragStart =
 	// dragging
 	if( access !== 'rw' ) return false;
 
-	mark = this.mark;
+	const mark = this.mark;
 
-	if( !mark || mark.reflect !== 'visual_mark_items' )
+	if( !mark || mark.timtype !== visual_mark_items )
 	{
 		// also makes the user mark to this item
-		paths =
+		const paths =
 			tim.pathList.create(
 				'list:init', [ this.path ]
 			);
@@ -158,18 +150,13 @@ visual_item.dragStart =
 visual_item.getDragItemChangeZone =
 	function( )
 {
-	var
-		action,
-		moveBy,
-		zone;
+	const action = this.action;
 
-	action = this.action;
-
-	moveBy = action.moveBy;
+	const moveBy = action.moveBy;
 
 	if( moveBy.equals( gleam_point.zero ) ) return;
 
-	zone = this.fabric.zone;
+	const zone = this.fabric.zone;
 
 	return(
 		change_set.create(
@@ -187,18 +174,13 @@ visual_item.getDragItemChangeZone =
 visual_item.getDragItemChangePosFs =
 	function( )
 {
-	var
-		action,
-		moveBy,
-		pos;
+	const action = this.action;
 
-	action = this.action;
-
-	moveBy = action.moveBy;
+	const moveBy = action.moveBy;
 
 	if( action.moveBy.equals( gleam_point.zero ) ) return;
 
-	pos = this.fabric.pos;
+	const pos = this.fabric.pos;
 
 	return(
 		change_set.create(
@@ -217,11 +199,6 @@ visual_item.getDragItemChangePosFs =
 visual_item.getResizeItemChangeZone =
 	function( )
 {
-	var
-		action;
-
-	action = this.action;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.positioning !== 'zone' ) throw new Error( );
@@ -244,11 +221,6 @@ visual_item.getResizeItemChangeZone =
 visual_item.getResizeItemChangePosFs =
 	function( )
 {
-	var
-		action;
-
-	action = this.action;
-
 /**/if( CHECK )
 /**/{
 /**/	if( this.positioning !== 'pos/fontsize' ) throw new Error( );
@@ -324,9 +296,9 @@ visual_item.ctrlClick =
 		return true;
 	}
 
-	switch( mark.reflect )
+	switch( mark.timtype )
 	{
-		case 'visual_mark_items' :
+		case visual_mark_items :
 
 			root.create(
 				'mark', mark.togglePath( this.path )
@@ -334,8 +306,8 @@ visual_item.ctrlClick =
 
 			return true;
 
-		case 'visual_mark_caret' :
-		case 'visual_mark_range' :
+		case visual_mark_caret :
+		case visual_mark_range :
 
 			root.create(
 				'mark',
@@ -361,14 +333,11 @@ visual_item.createRelationStop =
 		p
 	)
 {
-	var
-		action;
-
-	action = this.action;
+	const action = this.action;
 
 /**/if( CHECK )
 /**/{
-/**/	if( action.reflect !== 'action_createRelation' ) throw new Error( );
+/**/	if( action.timtype !== action_createRelation ) throw new Error( );
 /**/}
 
 	if( !this.tZone.within( p ) ) return false;
@@ -381,5 +350,3 @@ visual_item.createRelationStop =
 	return true;
 };
 
-
-} )( );

@@ -5,7 +5,8 @@
 
 var
 	gleam_connect,
-	gleam_line;
+	gleam_line,
+	gleam_point;
 
 
 /*
@@ -42,16 +43,16 @@ gleam_connect.line =
 /**/}
 
 	pc1 =
-		sp1.reflect === 'gleam_point'
+		sp1.timtype === gleam_point
 		? sp1
 		: sp1.pc;
 
 	pc2 =
-		sp2.reflect === 'gleam_point'
+		sp2.timtype === gleam_point
 		? sp2
 		: sp2.pc;
 
-	if( sp1.reflect === 'gleam_point' )
+	if( sp1.timtype === gleam_point )
 	{
 		p1 = sp1;
 	}
@@ -64,7 +65,7 @@ gleam_connect.line =
 		p1 = sp1.getProjection( pc2 );
 	}
 
-	if( sp2.reflect === 'gleam_point' )
+	if( sp2.timtype === gleam_point )
 	{
 		p2 = sp2;
 	}
