@@ -3,7 +3,8 @@
 */
 
 var
-	change_generic;
+	change_generic,
+	change_list;
 
 
 /*
@@ -19,6 +20,7 @@ var
 if( NODE )
 {
 	change_generic = module.exports;
+	change_list = require( './list' );
 }
 else
 {
@@ -57,7 +59,7 @@ change_generic.transformChangeList =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cList.reflect !== 'change_list' ) throw new Error( );
+/**/	if( cList.timtype !== change_list ) throw new Error( );
 /**/}
 
 	tList = [ ];
@@ -69,7 +71,7 @@ change_generic.transformChangeList =
 		// changes that transformed away are sliced out.
 		if( !c ) continue;
 
-		if( c.reflect === 'change_list' )
+		if( c.timtype === change_list )
 		{
 			for( a = 0, aZ = c.length; a < aZ; a++ )
 			{
