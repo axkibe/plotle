@@ -239,7 +239,7 @@ def.lazy._glint =
 
 	if(
 		mark
-		&& mark.reflect === 'visual_mark_caret'
+		&& mark.timtype === visual_mark_caret
 		&& mark.focus
 	)
 	{

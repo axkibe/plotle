@@ -6,12 +6,16 @@
 
 // FIXME
 var
-	change_generic;
+	change_generic,
+	change_wrap,
+	change_wrapList;
 
 
 if( NODE )
 {
 	change_generic = require( './generic' );
+	change_wrap = require( './wrap' );
+	change_wrapList = require( './wrapList' );
 }
 
 
@@ -157,17 +161,17 @@ def.func.transform =
 		co
 	)
 {
-	switch( co.reflect )
+	switch( co.timtype )
 	{
-		case 'change_list' :
+		case change_list :
 
 			return this._transformChangeList( co );
 
-		case 'change_wrap' :
+		case change_wrap :
 
 			return this._transformChangeWrap( co );
 
-		case 'change_wrapList' :
+		case change_wrapList :
 
 			return this._transformChangeWrapList( co );
 

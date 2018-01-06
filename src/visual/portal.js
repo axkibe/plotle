@@ -6,6 +6,8 @@
 
 // FIXME
 var
+	action_dragItems,
+	action_resizeItems,
 	change_grow,
 	change_insert,
 	change_remove,
@@ -414,13 +416,13 @@ def.lazy.zone =
 
 	const zone = this.fabric.zone;
 
-	switch( action && action.reflect )
+	switch( action && action.timtype )
 	{
-		case 'action_dragItems' :
+		case action_dragItems :
 
 			return zone.add( action.moveBy );
 
-		case 'action_resizeItems' :
+		case action_resizeItems :
 
 			return zone.baseScale( action, 0, 0 );
 
@@ -586,7 +588,7 @@ def.lazy._glint =
 
 	if(
 		mark
-		&& mark.reflect === 'visual_mark_caret'
+		&& mark.timtype === visual_mark_caret
 		&& mark.focus
 	)
 	{

@@ -4,6 +4,7 @@
 'use strict';
 
 var
+	action_scrolly,
 	form_form,
 	gleam_glint_list,
 	gleam_glint_paint,
@@ -187,9 +188,9 @@ form_form.dragMove =
 
 	if( !action ) return 'pointer';
 
-	switch( action.reflect )
+	switch( action.timtype )
 	{
-		case 'action_scrolly' :
+		case action_scrolly :
 
 			form_form._moveScrollY.call( this, p, shift, ctrl );
 

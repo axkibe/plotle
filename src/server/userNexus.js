@@ -152,7 +152,7 @@ def.func.getUserSpaceList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
+/**/	if( userInfo.timtype !== user_info ) throw new Error( );
 /**/}
 
 	const spaceList = userInfo.spaceList;
@@ -216,7 +216,7 @@ def.func.register =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( userInfo.reflect !== 'user_info' ) throw new Error( );
+/**/	if( userInfo.timtype !== user_info ) throw new Error( );
 /**/}
 
 	if( userInfo.spaceList )

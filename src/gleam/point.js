@@ -4,6 +4,10 @@
 'use strict';
 
 
+var
+	gleam_transform;
+
+
 tim.define( module, 'gleam_point', ( def, gleam_point ) => {
 
 
@@ -192,7 +196,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	return(

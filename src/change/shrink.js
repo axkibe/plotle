@@ -8,16 +8,34 @@
 var
 	change_generic,
 	change_grow,
-	change_error;
+	change_error,
+	change_insert,
+	change_join,
+	change_list,
+	change_mark_node,
+	change_mark_text,
+	change_remove,
+	change_set,
+	change_split,
+	change_wrap,
+	change_wrapList;
 
 
 if( NODE )
 {
-	change_grow = require( './grow' );
-
 	change_generic = require( './generic' );
-
 	change_error = require( './error' );
+	change_grow = require( './grow' );
+	change_insert = require( './insert' );
+	change_join = require( './join' );
+	change_list = require( './list' );
+	change_mark_node = require( './mark/node' );
+	change_mark_text = require( './mark/text' );
+	change_remove = require( './remove' );
+	change_set = require( './set' );
+	change_split = require( './split' );
+	change_wrap = require( './wrap' );
+	change_wrapList = require( './wrapList' );
 }
 
 
@@ -162,36 +180,36 @@ def.func.transform =
 {
 	if( !cx ) return cx;
 
-	switch( cx.reflect )
+	switch( cx.timtype )
 	{
-		case 'change_mark_text' :
-		case 'change_mark_node' :
+		case change_mark_text :
+		case change_mark_node :
 
 			return this._transformMark( cx );
 
-		case 'change_grow' :
-		case 'change_shrink' :
+		case change_grow :
+		case change_shrink :
 
 			// FUTURE fix rank
 			return cx;
 
-		case 'change_join' :
-		case 'change_set' :
-		case 'change_split' :
-		case 'change_insert' :
-		case 'change_remove' :
+		case change_join :
+		case change_set :
+		case change_split :
+		case change_insert :
+		case change_remove :
 
 			return this._transformJIRS( cx );
 
-		case 'change_list' :
+		case change_list :
 
 			return this._transformChangeList( cx );
 
-		case 'change_wrap' :
+		case change_wrap :
 
 			return this._transformChangeWrap( cx );
 
-		case 'change_wrapList' :
+		case change_wrapList :
 
 			return this._transformChangeWrapList( cx );
 

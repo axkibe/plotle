@@ -6,6 +6,8 @@
 
 // FIXME
 var
+	gleam_shape_start,
+	gleam_transform,
 	swatch;
 
 
@@ -98,7 +100,7 @@ def.func.getProjection =
 /**/if( CHECK )
 /**/{
 /**/	// must have start at [0]
-/**/	if( this.get( 0 ).reflect !== 'gleam_shape_start' ) throw new Error( );
+/**/	if( this.get( 0 ).timtype !== gleam_shape_start ) throw new Error( );
 /**/}
 
 	let pstart = this.get( 0 ).p;
@@ -151,7 +153,7 @@ def.func.transform =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	const arr = [ ];

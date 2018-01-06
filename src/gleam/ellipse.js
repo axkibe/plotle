@@ -9,6 +9,7 @@ var
 	gleam_shape_round,
 	gleam_shape,
 	gleam_shape_start,
+	gleam_transform,
 	swatch;
 
 
@@ -246,7 +247,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	// FUTURE, this creates gradientSettings even if there were none...

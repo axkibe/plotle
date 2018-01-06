@@ -24,6 +24,10 @@ const change_dynamic = require( '../change/dynamic' );
 
 const change_wrapList = require( '../change/wrapList' );
 
+const ref_space = require( '../ref/space' );
+
+const ref_userSpaceList = require( '../ref/userSpaceList' );
+
 const reply_acquire = require( '../reply/acquire' );
 
 const reply_alter = require( '../reply/alter' );
@@ -423,9 +427,9 @@ server_requestHandler.conveyUpdate =
 
 		const seq = moment.seq;
 
-		switch( dynRef.reflect )
+		switch( dynRef.timtype )
 		{
-			case 'ref_space' :
+			case ref_space :
 
 				const spaceBox = root.spaces.get( dynRef.fullname );
 
@@ -443,7 +447,7 @@ server_requestHandler.conveyUpdate =
 					chgA.push( spaceBox.getChangeWrap( c ) );
 				}
 
-				arr.push( 
+				arr.push(
 					change_dynamic.create(
 						'seq', seq,
 						'changeWrapList',
@@ -454,7 +458,7 @@ server_requestHandler.conveyUpdate =
 
 				continue;
 
-			case 'ref_userSpaceList' :
+			case ref_userSpaceList :
 
 				const userInfo = root.userNexus.getInCache( dynRef.username );
 
@@ -512,12 +516,12 @@ server_requestHandler.testUpdate =
 		moment = moments.get( a );
 
 		dynRef = moment.dynRef;
-	
+
 		seq = moment.seq;
 
-		switch( dynRef.reflect )
+		switch( dynRef.timtype )
 		{
-			case 'ref_space' :
+			case ref_space :
 
 				if(
 					dynRef.username !== 'ideoloom'
@@ -538,7 +542,7 @@ server_requestHandler.testUpdate =
 
 				break;
 
-			case 'ref_userSpaceList' :
+			case ref_userSpaceList :
 
 				if( dynRef.username !== userInfo.name )
 				{

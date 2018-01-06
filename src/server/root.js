@@ -745,7 +745,7 @@ def.func.createSpace =
 
 /**/if( CHECK )
 /**/{
-/**/	if( spaceRef.reflect !== 'ref_space' ) throw new Error( );
+/**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
 /**/}
 
 	const spaceBox = yield* server_spaceBox.createSpace( spaceRef );
