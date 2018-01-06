@@ -8,6 +8,7 @@
 var
 	form_form,
 	ref_space,
+	reply_auth,
 	user_creds,
 	user_passhash,
 	visual_mark_caret;
@@ -291,7 +292,7 @@ def.func.onAuth =
 		reply
 	)
 {
-	if( reply.reflect !== 'reply_auth' )
+	if( reply.timtype !== reply_auth )
 	{
 		const message = reply.message;
 

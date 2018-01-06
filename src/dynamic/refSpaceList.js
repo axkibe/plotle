@@ -89,7 +89,7 @@ def.func.alter =
 {
 	let changeList;
 
-	if( a1.reflect === 'change_list' )
+	if( a1.timtype === change_list )
 	{
 		changeList = a1;
 	}

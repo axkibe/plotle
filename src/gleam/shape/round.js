@@ -6,7 +6,10 @@
 'use strict';
 
 
-var gleam_point; // FIXME
+// FIXME
+var
+	gleam_point,
+	gleam_transform;
 
 
 tim.define( module, 'gleam_shape_round', ( def, gleam_shape_round ) => {
@@ -102,7 +105,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	return(

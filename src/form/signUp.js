@@ -8,6 +8,7 @@
 var
 	form_form,
 	ref_space,
+	reply_error,
 	show_form,
 	user_creds,
 	user_passhash,
@@ -235,7 +236,7 @@ def.func.onRegister =
 		reply
 	)
 {
-	if( reply.reflect === 'reply_error' )
+	if( reply.timtype === reply_error )
 	{
 		const message = reply.message;
 

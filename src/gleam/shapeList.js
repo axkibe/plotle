@@ -4,6 +4,11 @@
 'use strict';
 
 
+// FIXME
+var
+	gleam_transform;
+
+
 tim.define( module, 'gleam_shapeList', ( def, gleam_shapeList ) => {
 
 
@@ -55,7 +60,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	const list = [ ];

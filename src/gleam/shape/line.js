@@ -8,7 +8,8 @@
 
 var // FIXME
 	gleam_constants,
-	gleam_point;
+	gleam_point,
+	gleam_transform;
 
 
 if( NODE )
@@ -188,7 +189,7 @@ def.func.transform =
 
 /**/if( CHECK )
 /**/{
-/**/	if( transform.reflect !== 'gleam_transform' ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
 	return(
