@@ -6,14 +6,19 @@
 
 // FIXME
 var
-	gleam_shape_round,
-	gleam_shape,
-	gleam_shape_start,
-	gleam_transform,
 	swatch;
 
 
 tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
+
+
+const gleam_shape = require( './shape' );
+
+const gleam_shape_round = require( './shape/round' );
+
+const gleam_shape_start = require( './shape/start' );
+
+const gleam_transform = require( './transform' );
 
 
 /*::::::::::::::::::::::::::::.

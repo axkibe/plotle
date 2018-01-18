@@ -2,29 +2,21 @@
 | Opentype.js interface
 | including glyph caching.
 */
-
-
-var
-	font_default,
-	gleam_intern_opentype,
-	shell_settings;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
+//FIXME
 var
-	getWidth,
-	opentypeOptions,
-	opentypeOptionsHinting,
-	round;
+	font_default;
 
 
-opentypeOptions =
+tim.define( module, 'gleam_intern_opentype', ( def, gleam_intern_opentype ) => {
+
+
+const shell_settings = require( '../../shell/settings' );
+
+
+const opentypeOptions =
 	{
 	  	kerning: true,
 	    features: {
@@ -34,7 +26,7 @@ opentypeOptions =
 		script: 'latn'
 	};
 
-opentypeOptionsHinting =
+const opentypeOptionsHinting =
 	{
 		hinting: true,
 		kerning: true,
@@ -46,7 +38,7 @@ opentypeOptionsHinting =
 	};
 
 
-round = Math.round;
+const round = Math.round;
 
 
 /**/if( FREEZE )
@@ -56,26 +48,16 @@ round = Math.round;
 /**/}
 
 
-gleam_intern_opentype = { };
-
-
-
 /*
 | Gets the cap height for a font.
 */
 function getCapHeight( font )
 {
-	var
-		a,
-		aZ,
-		chars,
-		idx;
+	const chars = 'HIKLEFJMNTZBDPRAGOQSUVWXY';
 
-	chars = 'HIKLEFJMNTZBDPRAGOQSUVWXY';
-
-	for( a = 0, aZ = chars.length; a < aZ; a++ )
+	for( let a = 0, al = chars.length; a < al; a++ )
 	{
-		idx = font.charToGlyphIndex( chars[ a ] );
+		const idx = font.charToGlyphIndex( chars[ a ] );
 
 		if( idx <= 0 ) continue;
 
@@ -87,37 +69,24 @@ function getCapHeight( font )
 /*
 | Returns the width of a glyph array.
 */
-getWidth =
+const getWidth =
 	function(
 		glyphs,     // glyph array
 		font,       // font
 		fontScale   // font scale
 	)
 {
-	var
-		a,
-		aZ,
-		glyph,
-		w;
+	let w = 0;
 
-	w = 0;
-
-	for( a = 0, aZ = glyphs.length; a < aZ; a++ )
+	for( let a = 0, aZ = glyphs.length; a < aZ; a++ )
 	{
-		glyph = glyphs[ a ];
+		const glyph = glyphs[ a ];
 
-	    if( glyph.advanceWidth )
-		{
-	        w += glyph.advanceWidth * fontScale;
-	    }
+	    if( glyph.advanceWidth ) w += glyph.advanceWidth * fontScale;
 
 		if( a + 1 < aZ )
 		{
-		    w +=
-				font.getKerningValue(
-					glyph,
-					glyphs[ a + 1 ]
-				) * fontScale;
+		    w += font.getKerningValue( glyph, glyphs[ a + 1 ] ) * fontScale;
 		}
 	}
 
@@ -128,7 +97,7 @@ getWidth =
 /*
 | Draws text.
 */
-gleam_intern_opentype.drawText =
+def.static.drawText =
 	function(
 		text,  // text to draw
 		x,     // x
@@ -139,14 +108,6 @@ gleam_intern_opentype.drawText =
 	)
 {
 	var
-		a,
-		aZ,
-		bb,
-		canvas,
-		capheight,
-		cg,
-		cvx,
-		fontScale,
 		glyph,
 		glyphCache,
 		glyphCacheSet,
@@ -173,7 +134,7 @@ gleam_intern_opentype.drawText =
 		glyphCacheSet = glyphCache[ size ] = { };
 	}
 
-	fontScale = 1 / font_default.unitsPerEm * size;
+	const fontScale = 1 / font_default.unitsPerEm * size;
 
 	options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
 
@@ -198,7 +159,7 @@ gleam_intern_opentype.drawText =
 	{
 		case 'middle' :
 
-			capheight = font_default.capheight;
+			let capheight = font_default.capheight;
 
 			if( !capheight )
 			{
@@ -212,7 +173,7 @@ gleam_intern_opentype.drawText =
 			break;
 	}
 
-	for( a = 0, aZ = glyphs.length; a < aZ; a++ )
+	for( let a = 0, aZ = glyphs.length; a < aZ; a++ )
 	{
 		if( glyph )
 		{
@@ -232,7 +193,7 @@ gleam_intern_opentype.drawText =
 
 		if( size >= shell_settings.glyphCacheLimit )
 		{
-		      	path =
+	      	path =
 				glyph.getPath(
 					round( x ),
 					round( y ),
@@ -248,7 +209,7 @@ gleam_intern_opentype.drawText =
 
 		index = glyph.index;
 
-		cg = glyphCacheSet[ index ];
+		const cg = glyphCacheSet[ index ];
 
 		if( cg )
 		{
@@ -266,7 +227,7 @@ gleam_intern_opentype.drawText =
 
 		path = glyph.getPath( 0, 0, size, options, font_default );
 
-		bb = path.getBoundingBox( );
+		const bb = path.getBoundingBox( );
 
 		x1 = Math.floor( bb.x1 );
 
@@ -276,6 +237,8 @@ gleam_intern_opentype.drawText =
 
 		y2 = Math.ceil( bb.y2 );
 
+		let canvas;
+
 		if( x2 - x1 > 0 && y2 - y1 > 0 )
 		{
 			canvas = document.createElement( 'canvas' );
@@ -284,7 +247,7 @@ gleam_intern_opentype.drawText =
 
 			canvas.height = y2 - y1;
 
-			cvx = canvas.getContext( '2d' );
+			const cvx = canvas.getContext( '2d' );
 
 			cvx.translate( -x1, -y1 );
 
@@ -294,7 +257,7 @@ gleam_intern_opentype.drawText =
 		}
 		else
 		{
-			canvas = undefined;
+			canvas = undefined; // FIXME remove
 
 			x1 = x2 = y1 = y2 = 0;
 		}
@@ -309,4 +272,5 @@ gleam_intern_opentype.drawText =
 };
 
 
-} )( );
+} );
+

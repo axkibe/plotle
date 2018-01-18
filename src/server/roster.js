@@ -80,6 +80,22 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
+		'aliases', stringList( [ 'tim-tree-init.js' ] ),
+		'coding', 'utf-8',
+		'data', undefined,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
+		'aliases', stringList( [ 'tim-tree-browser.js' ] ),
+		'coding', 'utf-8',
+		'data', tim.browserTreeSource,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'aliases', stringList( [ 'timcode-path.js' ] ),
 		'coding', 'utf-8',
 		'data', tim.path.timcode,
@@ -122,6 +138,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/settings.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -238,6 +255,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/intern/opentype.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -310,6 +328,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/constants.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -409,6 +428,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gleam/connect.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -772,6 +792,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/relation.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

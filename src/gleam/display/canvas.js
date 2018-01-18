@@ -10,31 +10,6 @@
 
 // FIXME
 var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_constants,
-	gleam_ellipse,
-	gleam_facet,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_mask,
-	gleam_glint_text,
-	gleam_glint_paint,
-	gleam_glint_window,
-	gleam_gradient_askew,
-	gleam_gradient_radial,
-	gleam_intern_opentype,
-	gleam_line,
-	gleam_point,
-	gleam_rect,
-	gleam_roundRect,
-	gleam_shape,
-	gleam_shapeList,
-	gleam_shape_line,
-	gleam_shape_round,
-	gleam_shape_start,
 	shell_settings;
 
 
@@ -44,6 +19,57 @@ tim.define( module, 'gleam_display_canvas', ( def, gleam_display_canvas ) => {
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
+
+
+const gleam_border = require( '../border' );
+
+const gleam_borderList = require( '../borderList' );
+
+const gleam_color = require( '../color' );
+
+const gleam_constants = require( '../constants' );
+
+const gleam_ellipse = require( '../ellipse' );
+
+const gleam_facet = require( '../facet' );
+
+const gleam_glint_border = require( '../glint/border' );
+
+const gleam_glint_fill = require( '../glint/fill' );
+
+const gleam_glint_list = require( '../glint/list' );
+
+const gleam_glint_mask = require( '../glint/mask' );
+
+const gleam_glint_text = require( '../glint/text' );
+
+const gleam_glint_paint = require( '../glint/paint' );
+
+const gleam_glint_window = require( '../glint/window' );
+
+const gleam_gradient_askew = require( '../gradient/askew' );
+
+const gleam_gradient_radial = require( '../gradient/radial' );
+
+const gleam_intern_opentype = require( '../intern/opentype' );
+
+const gleam_line = require( '../line' );
+
+const gleam_point = require( '../point' );
+
+const gleam_rect = require( '../rect' );
+
+const gleam_roundRect = require( '../roundRect' );
+
+const gleam_shape = require( '../shape' );
+
+const gleam_shapeList = require( '../shapeList' );
+
+const gleam_shape_line = require( '../shape/line' );
+
+const gleam_shape_round = require( '../shape/round' );
+
+const gleam_shape_start = require( '../shape/start' );
 
 
 if( TIM )

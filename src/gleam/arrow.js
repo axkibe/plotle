@@ -4,16 +4,19 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_connect,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_start,
-	gruga_relation;
-
-
 tim.define( module, 'gleam_arrow', ( def, gleam_arrow ) => {
+
+
+const gleam_connect = require( './connect' );
+
+const gleam_shape = require( './shape' );
+
+const gleam_shape_line = require( './shape/line' );
+
+const gleam_shape_start = require( './shape/start' );
+
+const gruga_relation = require( '../gruga/relation' );
+
 
 
 /*::::::::::::::::::::::::::::.
@@ -35,15 +38,11 @@ if( TIM )
 		},
 		joint1 : // connect to this point or shape
 		{
-			type :
-				require( './typemap-shape' )
-				.concat( [ 'gleam_point' ] )
+			type : require( './typemap-shape' ).concat( [ 'gleam_point' ] )
 		},
 		joint2 : // connect to this point or shape
 		{
-			type :
-				require( './typemap-shape' )
-				.concat( [ 'gleam_point' ] )
+			type : require( './typemap-shape' ).concat( [ 'gleam_point' ] )
 		}
 	};
 }
@@ -52,7 +51,6 @@ if( TIM )
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
 
 /*
 | Returns a shape of an arrow

@@ -18,22 +18,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		alpha :
-		{
-			type : [ 'undefined', 'number' ]
-		},
-		red :
-		{
-			type : 'integer'
-		},
-		green :
-		{
-			type : 'integer'
-		},
-		blue :
-		{
-			type : 'integer'
-		}
+		alpha : { type : [ 'undefined', 'number' ] },
+
+		red : { type : 'integer' },
+
+		green : { type : 'integer' },
+
+		blue : { type : 'integer' }
 	};
 }
 
@@ -147,3 +138,4 @@ def.lazy.css =
 
 
 } );
+

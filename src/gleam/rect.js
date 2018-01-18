@@ -4,21 +4,16 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_margin,
-	gleam_point,
-	gleam_size,
-	gleam_transform;
-
-
-if( NODE )
-{
-	gleam_point = require( './point' );
-}
-
-
 tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
+
+
+const gleam_point = require( './point' );
+
+const gleam_size= require( './size' );
+
+const gleam_margin = require( './margin' );
+
+const gleam_transform = require( './transform' );
 
 
 /*::::::::::::::::::::::::::::.

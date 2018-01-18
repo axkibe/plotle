@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_color;
-
-
 tim.define( module, 'gleam_border', ( def, gleam_border ) => {
+
+
+const gleam_color = require( './color' );
 
 
 /*:::::::::::::::::::::::::::::
@@ -49,9 +47,7 @@ if( TIM )
 | A simple blaick border.
 */
 def.staticLazy.simpleBlack = () =>
-	gleam_border.create(
-		'color', gleam_color.black
-	);
+	gleam_border.create( 'color', gleam_color.black );
 
 
 } );

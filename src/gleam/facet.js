@@ -6,13 +6,13 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_border,
-	gleam_color;
-
 
 tim.define( module, 'gleam_facet', ( def, gleam_facet ) => {
+
+
+const gleam_border = require( './border' );
+
+const gleam_color = require( './color' );
 
 
 /*:::::::::::::::::::::::::::::

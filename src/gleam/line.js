@@ -22,14 +22,9 @@ if( TIM )
 {
 	def.attributes =
 	{
-		p1 :
-		{
-			type : 'gleam_point'
-		},
-		p2 :
-		{
-			type : 'gleam_point'
-		}
+		p1 : { type : 'gleam_point' },
+
+		p2 : { type : 'gleam_point' }
 	};
 }
 

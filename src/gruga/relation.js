@@ -1,6 +1,7 @@
 /*
 | Default relation.
 */
+'use strict';
 
 
 var
@@ -8,23 +9,16 @@ var
 	gleam_borderList,
 	gleam_color,
 	gleam_facet,
-	gleam_point,
-	gruga_relation;
+	gleam_point;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-gruga_relation = { };
+tim.define( module, 'gruga_relation', ( def, gruga_relation ) => {
 
 
 /*
 | Default relation arrows facet.
 */
-gruga_relation.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgba( 255, 225, 40, 0.5 ),
 		'border',
@@ -47,18 +41,15 @@ gruga_relation.facet =
 |
 | FUTURE calculate dynamically
 */
-gruga_relation.spawnOffset =
-	gleam_point.create( 'x', 44, 'y', 12 );
+def.staticLazy.spawnOffset = ( ) =>
+	gleam_point.xy( 44, 12 );
 
 
 
 /*
 | Size of the arrow.
 */
-gruga_relation.arrowSize = 12;
+def.static.arrowSize = 12;
 
 
-if( FREEZE ) Object.freeze( gruga_relation );
-
-
-} )( );
+} );

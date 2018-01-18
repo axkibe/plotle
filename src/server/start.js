@@ -9,14 +9,6 @@ const config = require( '../../config' );
 config.database_version = 15;
 
 
-require( 'tim.js' );
-
-
-/*
-| Running node normally, JION is false.
-*/
-global.JION = false;
-
 /*
 | Running node normally, TIM is false.
 */
@@ -33,11 +25,6 @@ global.CHECK = config.server_check;
 global.FREEZE = config.server_freeze;
 
 /*
-| This is not a jion creation call.
-*/
-global.JION = false;
-
-/*
 | This is node.
 */
 global.NODE = true;
@@ -47,6 +34,19 @@ global.NODE = true;
 */
 global.root = undefined;
 
+
+require( 'tim.js' );
+
+
+tim.tree.addTree(
+	( function( ) {
+		var path = module.filename.split( '/' );
+		path.pop( );
+		path.pop( );
+		return path.join( '/' ) + '/';
+	} )( ),
+	'ideoloom'
+);
 
 const database_repository = require( '../database/repository' );
 

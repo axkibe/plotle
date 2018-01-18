@@ -82,6 +82,8 @@ def.func.removeResource =
 
 /*
 | Prepares a resource.
+|
+| Returns the prepared resource, but updates the inventory already.
 */
 def.func.prepareResource =
 	function*(
@@ -95,12 +97,7 @@ def.func.prepareResource =
 		realpath =
 			resource.realpath
 			? resource.realpath
-			: (
-				yield fs.realpath(
-					root.serverDir + resource.filePath,
-					resume( )
-				)
-			);
+			: yield fs.realpath( root.serverDir + resource.filePath, resume( ) );
 	}
 
 	let mtime;
@@ -114,21 +111,17 @@ def.func.prepareResource =
 	{
 		if( config.devel ) delete require.cache[ realpath ];
 
-		const that = require( realpath );
+		const rmod = require( realpath );
 
-		if( !that.source )
-		{
-			throw new Error(
-				'tim source did not export its source: '
-				+ resource.filePath
-			);
-		}
+		// tim source did not export its source?
+		if( !rmod.source ) throw new Error( );
+
+		const preamble = tim.tree.getBrowserPreamble( realpath );
 
 		resource =
 			resource.create(
-				'data', that.source,
-				'hasTim', that.hasTim,
-				'timId', that.timId,
+				'data', preamble + rmod.source,
+				'timId', rmod.timId,
 				'timestamp', mtime,
 				'realpath', realpath
 			);
@@ -136,8 +129,8 @@ def.func.prepareResource =
 		const timcodeResource =
 			resource.create(
 				'aliases', undefined,
-				'data', that.timcode,
-				'filePath', that.timcodeFilename,
+				'data', preamble + rmod.timcode,
+				'filePath', rmod.timcodeFilename,
 				'hasTim', false,
 				'timHolder', resource
 			);
@@ -147,7 +140,7 @@ def.func.prepareResource =
 		);
 	}
 
-	if( !resource.hasJion && !resource.hasTim && resource.filePath )
+	if( !resource.hasTim && resource.filePath )
 	{
 		resource =
 			resource.create(
@@ -157,9 +150,9 @@ def.func.prepareResource =
 			);
 	}
 
-	root.create(
-		'inventory', root.inventory.updateResource( resource )
-	);
+	root.create( 'inventory', root.inventory.updateResource( resource ) );
+
+	return resource;
 };
 
 

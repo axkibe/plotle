@@ -256,6 +256,14 @@ def.func.prepareInventory =
 		yield* root.inventory.prepareResource( resource );
 	}
 
+	root.create(
+		'inventory',
+			root.inventory.updateResource(
+				root.inventory.get( 'tim-tree-init.js' )
+				.create( 'data', tim.tree.getBrowserTreeInitCode( ) )
+			)
+	);
+
 	// the bundle itself
 	let bundle = [ ];
 
@@ -330,12 +338,7 @@ def.func.prepareInventory =
 			}
 			catch ( e )
 			{
-				console.log(
-					'parse error',
-					resource.filePath,
-					'line',
-					e.line
-				);
+				console.log( 'parse error', resource.filePath, 'line', e.line );
 
 				throw e;
 			}
@@ -360,7 +363,6 @@ def.func.prepareInventory =
 						{
 							'CHECK' : config.shell_check,
 							'FREEZE' : config.shell_freeze,
-							'JION' : false,
 							'TIM' : false,
 							'NODE' : false
 						}
@@ -505,8 +507,7 @@ def.func.prependConfigFlags =
 			root.inventory.updateResource(
 				resource.create(
 					'data',
-						'var JION = false;\n'
-						+ 'var CHECK = ' + config.shell_check + ';\n'
+						'var CHECK = ' + config.shell_check + ';\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var NODE = false;\n'
 						+ resource.data
@@ -708,28 +709,17 @@ def.func.extraMangle =
 
 	if( missed.length > 0 )
 	{
-		console.log(
-			'extraMangle missed '
-			+ missed.length
-			+ ' properties: ',
-			missed
-		);
+		console.log( 'extraMangle missed ' + missed.length + ' properties: ', missed );
 	}
 
 	if( useMangle.length > 0 )
 	{
-		console.log(
-			'extraMangle not used mangles: ',
-			useMangle
-		);
+		console.log( 'extraMangle not used mangles: ', useMangle );
 	}
 
 	if( useNoMangle.length > 0 )
 	{
-		console.log(
-			'extraMangle not used no-mangles: ',
-			useNoMangle
-		);
+		console.log( 'extraMangle not used no-mangles: ', useNoMangle );
 	}
 };
 
@@ -881,16 +871,7 @@ def.func.requestListener =
 		result
 	)
 {
-	var
-		aenc,
-		data,
-		header,
-		pathname,
-		resource,
-		red,
-		stat;
-
-	red = url.parse( request.url );
+	const red = url.parse( request.url );
 
 	log_web( request.connection.remoteAddress, red.href );
 
@@ -909,14 +890,11 @@ def.func.requestListener =
 		}
 	}
 
-	pathname = red.pathname.replace( /^[\/]+/g, '' );
+	const pathname = red.pathname.replace( /^[\/]+/g, '' );
 
-	if( pathname === 'mm' )
-	{
-		return root.webAjax( request, red, result );
-	}
+	if( pathname === 'mm' ) return root.webAjax( request, red, result );
 
-	resource = root.inventory.get( pathname );
+	let resource = root.inventory.get( pathname );
 
 	if( !resource )
 	{
@@ -939,48 +917,42 @@ def.func.requestListener =
 	// has been invalidated
 	if( config.devel )
 	{
+		let stat;
+
 		try
 		{
 			stat = yield fs.stat( resource.realpath, resume( ) );
 		}
-		catch( e )
-		{
-			stat = undefined;
-		}
+		catch( e ) { }
 
 		if( stat && stat.mtime > resource.timestamp )
 		{
 			// when this is a tim its holder is prepared instead.
-			yield* root.inventory.prepareResource(
-				resource.timHolder || resource
-			);
-
-			resource = root.inventory.get( pathname );
+			resource =
+				yield* root.inventory.prepareResource(
+					resource.timHolder || resource
+				);
 		}
 
 		if( resource.postProcessor )
 		{
-			if( !server_postProcessor[ resource.postProcessor ] )
-			{
-				throw new Error( 'invalid postProcessor' );
-			}
+			const pp = server_postProcessor[ resource.postProcessor ];
 
-			data =
-				server_postProcessor[ resource.postProcessor ](
-					resource,
-					root.bundleFilePath
-				);
+			if( !pp ) throw new Error( );
+
+			pp( resource, root.bundleFilePath );
 		}
 	}
 
 	// delivers the resource
+	let aenc;
 
 	if( !config.devel && resource.gzip )
 	{
 		aenc = request.headers[ 'accept-encoding' ];
 	}
 
-	header =
+	const header =
 	{
 		'Content-Type' : resource.mime,
 		'Cache-Control' :
@@ -1004,7 +976,7 @@ def.func.requestListener =
 		// delivers uncompressed
 		result.writeHead( 200, header );
 
-		data = resource.data;
+		let data = resource.data;
 
 		// weinre can't cope with strict mode
 		// so its disabled when weinre is enabled
@@ -1031,11 +1003,7 @@ def.func.webAjax =
 		result
 	)
 {
-	var
-		handler,
-		data;
-
-	data = [ ];
+	const data = [ ];
 
 	if( request.method !== 'POST' )
 	{
@@ -1063,7 +1031,7 @@ def.func.webAjax =
 	}
 	);
 
-	handler =
+	const handler =
 		function*( )
 	{
 		var
