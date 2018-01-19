@@ -15,11 +15,6 @@ var
 'use strict';
 
 
-var
-	pushpad,
-	timestamp;
-
-
 if( NODE )
 {
 	log_inspect = require( './inspect' );
@@ -29,17 +24,14 @@ if( NODE )
 /*
 | Pushes a 2-decimal number on an string-array.
 */
-pushpad =
+const pushpad =
 	function(
 		a,   // the array
 		n,   // the number to push
 		s    // the separator
 	)
 {
-	if( n < 10 )
-	{
-		a.push( '0' );
-	}
+	if( n < 10 ) a.push( '0' );
 
 	a.push( n, s );
 
@@ -51,15 +43,12 @@ pushpad =
 | Creates a timestamp
 | which will be returned as joinable array.
 */
-timestamp =
+const timestamp =
 	function(
 		a
 	)
 {
-	var
-		now;
-	
-	now = new Date( );
+	const now = new Date( );
 
 	pushpad( a, now.getMonth( ) + 1, '-' );
 
@@ -85,12 +74,7 @@ log_compose =
 		args       // arguments array(like)
 	)
 {
-	var
-		a,
-		i,
-		iZ;
-
-	a = timestamp( [ ] );
+	const a = timestamp( [ ] );
 
 	if( category !== true )
 	{
@@ -99,7 +83,7 @@ log_compose =
 		a.push( ') ' );
 	}
 
-	for( i = 0, iZ = args.length; i < iZ; i++ )
+	for( let i = 0, il = args.length; i < il; i++ )
 	{
 		if( i > 0 ) a.push(' ');
 

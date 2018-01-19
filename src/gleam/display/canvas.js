@@ -8,11 +8,6 @@
 'use strict';
 
 
-// FIXME
-var
-	shell_settings;
-
-
 tim.define( module, 'gleam_display_canvas', ( def, gleam_display_canvas ) => {
 
 
@@ -70,6 +65,8 @@ const gleam_shape_line = require( '../shape/line' );
 const gleam_shape_round = require( '../shape/round' );
 
 const gleam_shape_start = require( '../shape/start' );
+
+const shell_settings = require( '../../shell/settings' );
 
 
 if( TIM )

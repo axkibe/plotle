@@ -7,11 +7,6 @@
 
 var
 	config,
-	gleam_display_canvas,
-	gleam_impl,
-	gleam_point,
-	gleam_size,
-	math_limit,
 	root,
 	shell_root,
 	shell_settings,
@@ -23,16 +18,22 @@ var
 
 
 /*
-| Currently only canvas is supported as display backend.
+| Capsule
 */
-gleam_impl = gleam_display_canvas;
+( ( ) => {
+'use strict';
 
 
 /*
-| Capsule
+| Currently only canvas is supported as display backend.
 */
-( function( ) {
-'use strict';
+const gleam_impl = require( '../gleam/display/canvas' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_size = require( '../gleam/size' );
+
+const math_limit = require( '../math/limit' );
 
 
 /*
@@ -47,9 +48,6 @@ transmitter =
 {
 	return function( )
 	{
-		var
-			message;
-
 		if( failScreen ) return;
 
 		if( config.devel && !config.debug.weinre )
@@ -84,16 +82,14 @@ transmitter =
 		catch( e )
 		{
 			try {
-				message =
-					[
-						'OOPS! Internal failure, ',
-						e.name, ': ',
-						e.message, '\n\n',
-						'stack: ',
-						e.stack,
-						'\n\n',
-						'Please report to axkibe@gmail.com'
-					].join('');
+				const message =
+					'OOPS! Internal failure, '
+					+ e.name + ': '
+					+ e.message + '\n\n'
+					+ 'stack: '
+					+ e.stack
+					+ '\n\n'
+					+ 'Please report to axkibe@gmail.com';
 
 				if( !config.debug.weinre )
 				{
@@ -114,41 +110,14 @@ transmitter =
 
 
 var
-	// if true there is currently one or more animations
-	// to be processed
-	animating,
-
-	// atween is the state where the mouse button went down,
-	// and its yet unsure if this is a click or drag.
-	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
-	// a drag, if it goes up before either happens, its a click
-
-	// status of ctrl when atween state starts.
-	atweenCtrl,
-	// move position where cursor moved to in atween state.
-	atweenMove,
-	// position where mouse went down.
-	atweenPos,
-	// status of shift when atween state starts.
-	atweenShift,
-	// timer of the atween state
-	atweenTimer,
-
 	// the canvas everything is drawn upon.
 	canvas,
 
-	// if true the system dropped down to show a fail screen
-	failScreen,
 
 	// the hidden input taking text input.
 	hiddenInput,
 
-	// hover is getting repeated by events that change
-	// the root, so it can react properly.
-	hoverCtrl,
 	hoverP,
-	hoverShift,
-	inputVal,
 	keyCodeNames,
 	keyCodeNamesCtrl,
 	lastSpecialKey,
@@ -160,17 +129,57 @@ var
 	_resetAtweenState,
 	systemTransmitter;
 
-animating = false;
 
-atweenCtrl = false;
+// if true there is currently one or more animations
+// to be processed
+let animating = false;
 
-atweenShift = false;
 
-failScreen = false;
+/*
+| Atween is the state where the mouse button went down,
+| and its yet unsure if this is a click or drag.
+| if the mouse moves out of the atweenBox or the atweenTimer ticks its
+| a drag, if it goes up before either happens, its a click
+*/
 
-hoverShift = false;
+/*
+| Status of ctrl when atween state starts.
+*/
+let atweenCtrl = false;
 
-hoverCtrl = false;
+/*
+| Move position where cursor moved to in atween state.
+*/
+let atweenMove;
+
+/*
+| Position where mouse went down.
+*/
+let atweenPos;
+
+/*
+| Status of shift when atween state starts.
+*/
+let atweenShift = false;
+
+/*
+| Timer of the atween state.
+*/
+let atweenTimer;
+
+/*
+| When true the system dropped down to show a fail screen.
+*/
+let failScreen = false;
+
+
+/*
+| Hover is getting repeated by events that change
+| the root, so it can react properly.
+*/
+let hoverShift = false;
+
+let hoverCtrl = false;
 
 
 /*
@@ -178,7 +187,7 @@ hoverCtrl = false;
 | either nothing or the text selection.
 | if it changes the user did something.
 */
-inputVal = '';
+let inputVal = '';
 
 
 /*
@@ -1491,7 +1500,7 @@ startup = function( )
 				system = new shell_system( );
 
 				swatch =
-					gleam_display_canvas.createAroundHTMLCanvas(
+					gleam_impl.createAroundHTMLCanvas(
 						canvas,
 						'swatch',
 						gleam_size.create( 'height', 10, 'width', 10 ),

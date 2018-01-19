@@ -4,28 +4,42 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_facet,
-	gleam_glint_border,
-	gleam_glint_paint,
-	gleam_glint_list,
-	gleam_line,
-	gleam_point,
-	gleam_shape,
-	gleam_shapeList,
-	gleam_shape_line,
-	gleam_shape_start,
-	gleam_size,
-	gruga_selection,
-	shell_fontPool,
-	shell_settings,
-	visual_mark_caret,
-	visual_mark_range,
-	visual_para;
-
-
 tim.define( module, 'visual_doc', ( def, visual_doc ) => {
+
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_line = require( '../gleam/line' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+const gleam_shapeList = require( '../gleam/shapeList' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_size = require( '../gleam/size' );
+
+const gruga_selection = require( '../gruga/selection' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const shell_settings = require( '../shell/settings' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_range = require( '../visual/mark/range' );
+
+const visual_para = require( '../visual/para' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -250,7 +264,7 @@ def.lazy.glint =
 	{
 		arr.push(
 			gleam_glint_paint.create(
-				'facet', gruga_selection,
+				'facet', gruga_selection.facet,
 				'shape', this._rangeShape.transform( this.transform.ortho )
 			)
 		);

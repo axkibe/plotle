@@ -10,21 +10,14 @@ var
 	gruga_selection;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
+tim.define( module, 'gruga_selection', ( def, gruga_selection ) => {
 
 
-gruga_selection =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgba( 243, 203, 255, 0.9 ),
 		'border', gleam_border.simpleBlack
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_selection );
-
-
-} )( );
+} )

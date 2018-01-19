@@ -150,6 +150,15 @@ def.func.prepareResource =
 			);
 	}
 
+	if( !resource.hasTim && resource.isLeaf )
+	{
+		tim.tree.addLeaf( realpath );
+
+		const preamble = tim.tree.getBrowserPreamble( realpath );
+
+		resource = resource.create( 'data', preamble + resource.data );
+	}
+
 	root.create( 'inventory', root.inventory.updateResource( resource ) );
 
 	return resource;

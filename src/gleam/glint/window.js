@@ -6,11 +6,10 @@
 'use strict';
 
 
-// FIXME
-var gleam_display_canvas;
-
-
 tim.define( module, 'gleam_glint_window', ( def, gleam_glint_window ) => {
+
+
+const gleam_display_canvas = require( '../display/canvas' );
 
 
 /*::::::::::::::::::::::::::::.

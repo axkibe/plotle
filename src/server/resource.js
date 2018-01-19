@@ -73,6 +73,12 @@ if( TIM )
 			type : 'boolean',
 			defaultValue : 'false'
 		},
+		isLeaf :
+		{
+			// true if this a timtree leaf but not a tim.
+			type : 'boolean',
+			defaultValue : 'false'
+		},
 		maxage :
 		{
 			// "none", "short" or "long"

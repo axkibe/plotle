@@ -6,13 +6,13 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_point,
-	gleam_transform;
-
 
 tim.define( module, 'gleam_shape_round', ( def, gleam_shape_round ) => {
+
+
+const gleam_point = require( '../point' );
+
+const gleam_transform = require( '../transform' );
 
 
 /*::::::::::::::::::::::::::::.

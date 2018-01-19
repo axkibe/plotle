@@ -937,6 +937,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/system.js',
+		'isLeaf', true,
 		'inBundle', true
 	),
 	server_resource.create(

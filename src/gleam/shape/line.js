@@ -6,19 +6,14 @@
 'use strict';
 
 
-var // FIXME
-	gleam_constants,
-	gleam_point,
-	gleam_transform;
-
-
-if( NODE )
-{
-	gleam_constants = require( '../constants' );
-}
-
-
 tim.define( module, 'gleam_shape_line', ( def, gleam_shape_line ) => {
+
+
+const gleam_constants = require( '../constants' );
+
+const gleam_point = require( '../point' );
+
+const gleam_transform = require( '../transform' );
 
 
 /*::::::::::::::::::::::::::::.
