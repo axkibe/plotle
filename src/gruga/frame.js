@@ -1,29 +1,22 @@
 /*
 | The alteration frame.
 */
+'use strict';
 
 
 var
 	gleam_border,
 	gleam_color,
-	gleam_facet,
-	gruga_frame;
+	gleam_facet;
 
 
-/*
-| Capsule
-*/
-( function( ) {
-'use strict';
-
-
-gruga_frame = { };
+tim.define( module, 'gruga_frame', ( def, gruga_frame ) => {
 
 
 /*
 | The frame main facet.
 */
-gruga_frame.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill',
 			gleam_color.rgba( 255, 245, 200, 0.9 ),
@@ -51,7 +44,7 @@ gruga_frame.facet =
 /*
 | The frame handle facet.
 */
-gruga_frame.handleFacet =
+def.staticLazy.handleFacet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgba( 255, 220, 157, 0.955 )
 	);
@@ -59,16 +52,14 @@ gruga_frame.handleFacet =
 /*
 | The frames width.
 */
-gruga_frame.width = 36;
+def.static.width = 36;
 
 
 /*
 | The handles size
 */
-gruga_frame.handleSize = 53;
+def.static.handleSize = 53;
 
 
-if( FREEZE ) Object.freeze( gruga_frame );
+} );
 
-
-} )( );

@@ -1,13 +1,13 @@
 /*
 | Selection.
 */
+'use strict';
 
 
 var
 	gleam_border,
 	gleam_color,
-	gleam_facet,
-	gruga_selection;
+	gleam_facet;
 
 
 tim.define( module, 'gruga_selection', ( def, gruga_selection ) => {
@@ -20,4 +20,5 @@ def.staticLazy.facet = ( ) =>
 	);
 
 
-} )
+} );
+

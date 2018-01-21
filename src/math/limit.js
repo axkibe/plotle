@@ -26,21 +26,12 @@ math_limit =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( min > max )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( min > max ) throw new Error( );
 /**/}
 
-	if( val < min )
-	{
-		return min;
-	}
+	if( val < min ) return min;
 
-	if( val > max )
-	{
-		return max;
-	}
+	if( val > max ) return max;
 
 	return val;
 };

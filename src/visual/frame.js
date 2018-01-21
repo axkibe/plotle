@@ -4,23 +4,32 @@
 'use strict';
 
 
-// FIXME
-var
-	action_dragItems,
-	action_resizeItems,
-	gleam_ellipse,
-	gleam_glint_list,
-	gleam_glint_mask,
-	gleam_glint_paint,
-	gleam_point,
-	gleam_rect,
-	gleam_roundRect,
-	gleam_shapeList,
-	gruga_frame,
-	result_hover;
-
-
 tim.define( module, 'visual_frame', ( def, visual_frame ) => {
+
+
+const action_dragItems = require( '../action/dragItems' );
+
+const action_resizeItems = require( '../action/resizeItems' );
+
+const gleam_ellipse = require( '../gleam/ellipse' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_mask = require( '../gleam/glint/mask' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const gleam_shapeList = require( '../gleam/shapeList' );
+
+const gruga_frame = require( '../gruga/frame' );
+
+const result_hover = require( '../result/hover' );
 
 
 /*::::::::::::::::::::::::::::.

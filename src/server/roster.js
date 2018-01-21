@@ -764,10 +764,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/selection.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/frame.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

@@ -8,13 +8,12 @@
 var
 	config,
 	root,
-	shell_root,
-	shell_settings,
 	shell_system,
 	startup,
 	swatch,
 	system,
-	transmitter;
+	transmitter,
+	math_limit;
 
 
 /*
@@ -33,7 +32,11 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_size = require( '../gleam/size' );
 
-const math_limit = require( '../math/limit' );
+//const math_limit = require( '../math/limit' );
+
+const shell_root = require( '../shell/root' );
+
+const shell_settings = require( '../shell/settings' );
 
 
 /*
@@ -355,7 +358,7 @@ prototype.cancelInterval =
 | Cancels a single timer.
 */
 prototype.cancelTimer =
-   	function( id )
+	function( id )
 {
 	return window.clearTimeout( id );
 };
@@ -1135,13 +1138,13 @@ prototype._onMouseWheel =
 
 		return;
 	}
-	
+
 	shift = event.shiftKey;
 
 	ctrl = event.ctrlKey || event.metaKey;
 
 	root.mousewheel( p, dir, shift, ctrl );
-			
+
 	this._pointingHover( p, shift, ctrl );
 
 	this._steerAttention( );
@@ -1156,11 +1159,6 @@ prototype._onTouchStart =
 		event
 	)
 {
-	var
-		p,
-		shift,
-		ctrl;
-
 	event.preventDefault( );
 
 	// for now ignore multi-touches
@@ -1169,15 +1167,15 @@ prototype._onTouchStart =
 		return false;
 	}
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.touches[ 0 ].pageX - canvas.offsetLeft,
 			event.touches[ 0 ].pageY - canvas.offsetTop
-		),
+		);
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	this._probeClickDrag( p, shift, ctrl );
 
@@ -1193,26 +1191,20 @@ prototype._onTouchMove =
 		event
 	)
 {
-	var
-		ctrl,
-		dragbox,
-		p,
-		shift;
-
 	event.preventDefault();
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 ) return false;
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.touches[ 0 ].pageX - canvas.offsetLeft,
 			event.touches[ 0 ].pageY - canvas.offsetTop
-		),
+		);
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
@@ -1224,12 +1216,11 @@ prototype._onTouchMove =
 
 		case 'atween':
 
-			dragbox = shell_settings.dragbox;
+			const dragbox = shell_settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
-				||
-				( Math.abs( p.y - atweenPos.y ) > dragbox )
+				|| ( Math.abs( p.y - atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
@@ -1281,11 +1272,6 @@ prototype._onTouchEnd =
 		event
 	)
 {
-	var
-		p,
-		shift,
-		ctrl;
-
 	event.preventDefault( );
 
 	// for now ignore multi-touches
@@ -1296,15 +1282,15 @@ prototype._onTouchEnd =
 
 	this._releaseEvents( );
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.changedTouches[ 0 ].pageX - canvas.offsetLeft,
 			event.changedTouches[ 0 ].pageY - canvas.offsetTop
 		);
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
@@ -1381,10 +1367,7 @@ prototype._specialKey =
 		ctrl
 	)
 {
-	var
-		key;
-
-	key =
+	const key =
 		ctrl
 		? keyCodeNamesCtrl[ keyCode ]
 		: keyCodeNames[ keyCode ];
@@ -1411,10 +1394,7 @@ prototype._releaseSpecialKey =
 		ctrl
 	)
 {
-	var
-		key;
-
-	key =
+	const key =
 		ctrl
 		? keyCodeNamesCtrl[ keyCode ]
 		: keyCodeNames[ keyCode ];
