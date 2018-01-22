@@ -20,8 +20,7 @@ var
 	request_register,
 	request_update,
 	root,
-	shell_doTracker,
-	system;
+	shell_doTracker;
 
 
 tim.define( module, 'net_link', ( def, net_link ) => {

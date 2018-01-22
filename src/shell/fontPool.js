@@ -1,47 +1,29 @@
 /*
 | Creates font objects by size and code.
 */
-
-
-var
-	gruga_fonts,
-	shell_fontPool;
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
+// FIXME
 var
-	pool;
-
-pool = { };
+	gruga_fonts;
 
 
-/*
-| Constructor.
-*/
-shell_fontPool = { };
+tim.define( module, 'shell_fontPool', ( def, shell_fontPool ) => {
 
 
-/*
-| Gets a fontstlye by size and its code
-*/
-shell_fontPool.get =
+const pool = { };
+
+
+def.static.get =
 	function(
 		size,
 		code
 	)
 {
-	var
-		af,
-		c,
-		f;
+	let c = pool[ code ];
 
-	c = pool[ code ];
+	let f;
 
 	if( c )
 	{
@@ -54,7 +36,7 @@ shell_fontPool.get =
 		c = pool[ code ] = { };
 	}
 
-	af = gruga_fonts[ code ];
+	const af = gruga_fonts[ code ];
 
 /**/if( CHECK )
 /**/{
@@ -67,10 +49,5 @@ shell_fontPool.get =
 };
 
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( shell_fontPool );
-/**/}
+} );
 
-
-} )( );

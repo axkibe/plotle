@@ -103,7 +103,7 @@ if( TIM )
 /*
 | Labels resize proportional only.
 */
-def.static.proportional = true;
+def.func.proportional = true;
 
 
 /*

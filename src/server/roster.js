@@ -323,6 +323,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/fontPool.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),

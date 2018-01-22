@@ -4,11 +4,6 @@
 'use strict';
 
 
-// FIXME
-var
-	system;
-
-
 tim.define( module, 'animation_root', ( def, animation_root ) => {
 
 

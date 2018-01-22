@@ -6,9 +6,9 @@
 
 // FIXME
 var
+	gleam_display_canvas,
 	gleam_shape_start,
-	gleam_transform,
-	swatch;
+	gleam_transform;
 
 
 tim.define( module, 'gleam_shape', ( def, gleam_shape ) => {
@@ -180,7 +180,7 @@ def.func.within =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	return swatch.within( p, this );
+	return gleam_display_canvas.helper.within( p, this );
 };
 
 

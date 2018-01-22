@@ -10,8 +10,6 @@ var
 	root,
 	shell_system,
 	startup,
-	swatch,
-	system,
 	transmitter,
 	math_limit;
 
@@ -274,11 +272,7 @@ shell_system =
 	this._display =
 		gleam_impl.createAroundHTMLCanvas(
 			canvas,
-			'root',
-			gleam_size.create(
-				'height', window.innerHeight,
-				'width', window.innerWidth
-			)
+			gleam_size.wh( window.innerWidth, window.innerHeight )
 		);
 
 	// if true browser supports the setCapture() call
@@ -1478,14 +1472,6 @@ startup = function( )
 			function( )
 			{
 				system = new shell_system( );
-
-				swatch =
-					gleam_impl.createAroundHTMLCanvas(
-						canvas,
-						'swatch',
-						gleam_size.create( 'height', 10, 'width', 10 ),
-						undefined
-					);
 
 				shell_root.startup( system._display );
 			},

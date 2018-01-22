@@ -15,10 +15,10 @@
 	{
 		"CHECK" : true,
 		"FREEZE" : true,
-		"JION" : true,
 		"NODE" : true,
 		"pass" : true,
 		"root" : true,
+		"system" : true,
 		"tim" : true,
 		"TIM" : true
 	}

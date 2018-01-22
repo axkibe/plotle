@@ -66,6 +66,8 @@ const gleam_shape_round = require( '../shape/round' );
 
 const gleam_shape_start = require( '../shape/start' );
 
+const gleam_size = require( '../size' );
+
 const shell_settings = require( '../../shell/settings' );
 
 
@@ -195,6 +197,43 @@ def.func._init =
 };
 
 
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Creates a display around an existing HTML canvas.
+*/
+def.static.createAroundHTMLCanvas =
+	function(
+		canvas,  // the canvas to create around
+		size     // the size of the canvas
+	)
+{
+	return(
+		gleam_display_canvas.create(
+			'_cv', canvas,
+			'_cx', get2dContext( canvas, true ),
+			'background', 'rgb( 251, 251, 251 )',
+			'size', size
+		)
+	);
+};
+
+
+/*::::::::::::::::::::.
+:: Static lazy values
+':::::::::::::::::::::*/
+
+
+/*
+| A hidden helper canvas used by within( )
+*/
+def.staticLazy.helper = ( ) =>
+	gleam_display_canvas.create( 'size', gleam_size.wh( 10, 10 ) );
+
+
 /*:::::::::::::.
 :: Lazy values
 '::::::::::::::*/
@@ -213,32 +252,6 @@ def.func._init =
 | Set when the canvas has been rendered.
 */
 def.lazy._rendered = () => true;
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
-/*
-| Creates a display around an existing HTML canvas.
-*/
-def.static.createAroundHTMLCanvas =
-	function(
-		canvas,  // the canvas to create around
-		name,    // the name(id) of the display
-		size     // the size of the canvas
-	)
-{
-	return(
-		gleam_display_canvas.create(
-			'_cv', canvas,
-			'_cx', get2dContext( canvas, true ),
-			'background', 'rgb( 251, 251, 251 )',
-			'size', size
-		)
-	);
-};
 
 
 /*:::::::::::.

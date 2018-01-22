@@ -4,13 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	swatch;
-
-
 tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
 
+
+const gleam_display_canvas = require( './display/canvas' );
 
 const gleam_shape = require( './shape' );
 
@@ -294,7 +291,7 @@ def.func.within =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	return swatch.within( p, this );
+	return gleam_display_canvas.helper.within( p, this );
 };
 
 
