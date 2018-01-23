@@ -284,7 +284,7 @@ form_form.glint =
 	const arr =
 		[
 			gleam_glint_paint.create(
-				'facet', gruga_formFacet,
+				'facet', gruga_formFacet.model,
 				'shape', this.area
 			)
 		];

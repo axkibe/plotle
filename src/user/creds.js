@@ -85,7 +85,7 @@ def.static.createVisitor =
 	return(
 		user_creds.create(
 			'name', 'visitor',
-			'passhash', session_uid( )
+			'passhash', session_uid.newUid( )
 		)
 	);
 };

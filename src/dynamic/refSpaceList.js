@@ -108,7 +108,7 @@ def.func.alter =
 
 	const changeWrap =
 		change_wrap.create(
-			'cid', session_uid( ),
+			'cid', session_uid.newUid( ),
 			'changeList', changeList
 		);
 

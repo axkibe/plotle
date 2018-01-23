@@ -408,7 +408,7 @@ def.static._createDiscRoot =
 					'path', twPath.append( 'mainDisc' )
 				),
 			'twig:add', 'createDisc',
-				gruga_createDisc.abstract(
+				gruga_createDisc.model.abstract(
 					'path', twPath.append( 'createDisc' )
 				),
 			'twig:add', 'zoomDisc',
@@ -757,7 +757,7 @@ def.func.alter =
 
 	const changeWrap =
 		change_wrap.create(
-			'cid', session_uid( ),
+			'cid', session_uid.newUid( ),
 			'changeList', changeList
 		);
 

@@ -4,23 +4,32 @@
 'use strict';
 
 
-// FIXME
-var
-	action_createGeneric,
-	action_createRelation,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_transform,
-	visual_label,
-	visual_note,
-	visual_portal;
-
-
 tim.define( module, 'disc_createDisc', ( def, disc_createDisc ) => {
+
+
+const action_createGeneric = require( '../action/createGeneric' );
+
+const action_createRelation = require( '../action/createRelation' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const visual_label = require( '../visual/label' );
+
+const visual_note = require( '../visual/note' );
+
+const visual_portal = require( '../visual/portal' );
 
 
 /*::::::::::::::::::::::::::::.

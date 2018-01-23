@@ -1,28 +1,20 @@
 /*
 | Shortcuts for fonts.
 */
-
-
-var
-	gleam_color,
-	gleam_font,
-	gruga_fonts;
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
-var
-	defaultFamily;
 
-defaultFamily = 'DejaVuSans,sans-serif';
-
-gruga_fonts = { };
+tim.define( module, 'gruga_fonts', ( def, gruga_fonts ) => {
 
 
-gruga_fonts.ca =
+const gleam_color = require( '../gleam/color' );
+
+const gleam_font = require( '../gleam/font' );
+
+const defaultFamily = 'DejaVuSans,sans-serif';
+
+
+def.staticLazy.ca = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
@@ -31,7 +23,7 @@ gruga_fonts.ca =
 	);
 
 
-gruga_fonts.car =
+def.staticLazy.car = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.red,
@@ -40,7 +32,7 @@ gruga_fonts.car =
 	);
 
 
-gruga_fonts.cm =
+def.staticLazy.cm = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
@@ -49,7 +41,7 @@ gruga_fonts.cm =
 	);
 
 
-gruga_fonts.la =
+def.staticLazy.la = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
@@ -58,7 +50,7 @@ gruga_fonts.la =
 	);
 
 
-gruga_fonts.lm =
+def.staticLazy.lm = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
@@ -67,7 +59,7 @@ gruga_fonts.lm =
 	);
 
 
-gruga_fonts.ra =
+def.staticLazy.ra = ( ) =>
 	gleam_font.abstract(
 		'family', defaultFamily,
 		'fill', gleam_color.black,
@@ -76,7 +68,5 @@ gruga_fonts.ra =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_fonts );
+} );
 
-
-} )( );

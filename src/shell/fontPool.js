@@ -4,13 +4,11 @@
 'use strict';
 
 
-// FIXME
-var
-	gruga_fonts;
-
 
 tim.define( module, 'shell_fontPool', ( def, shell_fontPool ) => {
 
+
+const gruga_fonts = require( '../gruga/fonts' );
 
 const pool = { };
 

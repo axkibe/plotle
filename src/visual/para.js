@@ -585,7 +585,7 @@ def.func.input =
 
 		if( rx[ 2 ] )
 		{
-			const textPath2 = textPath.set( -2, session_uid( ) );
+			const textPath2 = textPath.set( -2, session_uid.newUid( ) );
 
 			changes.push(
 				change_split.create(

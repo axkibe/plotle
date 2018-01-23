@@ -1,41 +1,28 @@
 /*
 | Unique identifier.
 */
-
-
-var
-	session_uid;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'session_uid', ( def, session_uid ) => {
+
+
+const mime = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 
 /*
 | Returns an unique identifier.
 */
-session_uid =
+def.static.newUid =
 	function( )
 {
-	var
-		a,
-		b,
-		mime,
-		ua,
-		r32;
+	const ua = [ ];
 
-	mime = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-	ua = [ ];
-
-	for( a = 0; a < 3; a++ )
+	for( let a = 0; a < 3; a++ )
 	{
-		r32 = Math.floor( 0x100000000 * Math.random( ) );
+		let r32 = Math.floor( 0x100000000 * Math.random( ) );
 
-		for( b = 0; b < 6; b++ )
+		for( let b = 0; b < 6; b++ )
 		{
 			ua.push( mime[ r32 & 0x3F ] );
 
@@ -47,10 +34,5 @@ session_uid =
 };
 
 
-if( NODE )
-{
-	module.exports = session_uid;
-}
+} );
 
-
-} )( );

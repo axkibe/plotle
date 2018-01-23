@@ -4,26 +4,36 @@
 'use strict';
 
 
-// FIXME
-var
-	change_wrapList,
-	reply_auth,
-	reply_acquire,
-	reply_error,
-	reply_register,
-	reply_update,
-	ref_moment,
-	ref_momentList,
-	request_acquire,
-	request_alter,
-	request_auth,
-	request_register,
-	request_update,
-	root,
-	shell_doTracker;
-
-
 tim.define( module, 'net_link', ( def, net_link ) => {
+
+
+const change_wrapList = require( '../change/wrapList' );
+
+const reply_auth = require( '../reply/auth' );
+
+const reply_acquire = require( '../reply/acquire' );
+
+const reply_error = require( '../reply/error' );
+
+const reply_register = require( '../reply/register' );
+
+const reply_update = require( '../reply/update' );
+
+const ref_moment = require( '../ref/moment' );
+
+const ref_momentList = require( '../ref/momentList' );
+
+const request_acquire = require( '../request/acquire' );
+
+const request_alter = require( '../request/alter' );
+
+const request_auth = require( '../request/auth' );
+
+const request_register = require( '../request/register' );
+
+const request_update = require( '../request/update' );
+
+const shell_doTracker = require( '../shell/doTracker' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -197,9 +207,6 @@ def.func._onAcquireSpace =
 		reply
 	)
 {
-	var
-		startTimer;
-
 	shell_doTracker.flush( );
 
 	switch( reply.type )
@@ -233,7 +240,7 @@ def.func._onAcquireSpace =
 
 	// waits a second before going into update cycle, so safari
 	// stops its wheely thing.
-	startTimer =
+	const startTimer =
 		system.setTimer(
 			1000,
 			function( )
@@ -394,12 +401,6 @@ def.func._onUpdate =
 		reply
 	)
 {
-	var
-		changeDynamic,
-		gotOwnChgs,
-		r,
-		rZ;
-
 /**/if( CHECK )
 /**/{
 /**/	if( root.link !== this ) throw new Error( );
@@ -414,11 +415,11 @@ def.func._onUpdate =
 
 	reply = reply_update.createFromJSON( reply );
 
-	gotOwnChgs = false;
+	let gotOwnChgs = false;
 
-	for( r = 0, rZ = reply.length; r < rZ; r++ )
+	for( let r = 0, rl = reply.length; r < rl; r++ )
 	{
-		changeDynamic = reply.get( 0 );
+		const changeDynamic = reply.get( 0 );
 
 		if( changeDynamic.refDynamic.equals( this.refMomentSpace.dynRef ) )
 		{

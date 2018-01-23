@@ -282,7 +282,7 @@ def.func.alter =
 {
 	const changeWrap =
 		change_wrap.create(
-			'cid', session_uid( ),
+			'cid', session_uid.newUid( ),
 			'changeList',
 				change_list.create( 'list:set', 0, change )
 		);
@@ -566,7 +566,7 @@ def.func.send =
 			root.alter(
 				change_split.create(
 					'path', linePath.chop,
-					'path2', linePath.set( -2, session_uid( ) ).chop,
+					'path2', linePath.set( -2, session_uid.newUid( ) ).chop,
 					'at1', action.at
 				)
 			);

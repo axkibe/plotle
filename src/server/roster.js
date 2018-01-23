@@ -147,6 +147,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/session/uid.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -681,10 +682,12 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/fonts.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/controls.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -723,10 +726,6 @@ server_resourceList.create(
 		'filePath', 'src/gruga/iconZoomOut.js',
 		'inBundle', true
 	),
-//	server_resource.create(
-//		'filePath', 'src/gruga/iconHand.js',
-//		'inBundle', true
-//	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconRemove.js',
 		'inBundle', true
@@ -749,6 +748,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/formFacet.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -757,6 +757,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/createDisc.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

@@ -163,7 +163,7 @@ def.static.createGeneric =
 
 	const note = action.transItem.fabric.create( 'zone', zone );
 
-	const key = session_uid( );
+	const key = session_uid.newUid( );
 
 	root.alter(
 		change_grow.create(

@@ -1,56 +1,54 @@
 /*
 | Default design of the creation disc.
 */
-
-
-var
-	disc_createDisc,
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_ellipse,
-	gleam_facet,
-	gleam_facetList,
-	gleam_gradient_colorStop,
-	gleam_gradient_radial,
-	gleam_point,
-	gleam_rect,
-	gleam_size,
-	gruga_createDisc,
-	shell_fontPool,
-	widget_button;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	genericButtonFacets,
-	genericButtonModel,
-	genericButtonSize,
-	labelButtonPnw,
-	noteButtonPnw,
-	portalButtonPnw,
-	pw,
-	relationButtonPnw;
+tim.define( module, 'gruga_createDisc', ( def, gruga_createDisc ) => {
 
 
-pw = gleam_point.xy( 0, 505 );
+const disc_createDisc = require( '../disc/createDisc' );
 
-noteButtonPnw = pw.add( 65, -325 );
+const gleam_border = require( '../gleam/border' );
 
-labelButtonPnw = pw.add( 81, -254 );
+const gleam_borderList = require( '../gleam/borderList' );
 
-relationButtonPnw = pw.add( 92, -183 );
+const gleam_color = require( '../gleam/color' );
 
-portalButtonPnw = pw.add( 99, -112 );
+const gleam_ellipse = require( '../gleam/ellipse' );
 
-genericButtonSize = gleam_size.wh( 70, 70 );
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
 
-genericButtonFacets =
+const gleam_gradient_radial = require( '../gleam/gradient/radial' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_size = require( '../gleam/size' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+
+const pw = gleam_point.xy( 0, 505 );
+
+const noteButtonPnw = pw.add( 65, -325 );
+
+const labelButtonPnw = pw.add( 81, -254 );
+
+const relationButtonPnw = pw.add( 92, -183 );
+
+const portalButtonPnw = pw.add( 99, -112 );
+
+const genericButtonSize = gleam_size.wh( 70, 70 );
+
+const genericButtonFacets =
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -87,7 +85,7 @@ genericButtonFacets =
 	);
 
 
-genericButtonModel =
+const genericButtonModel =
 	widget_button.abstract(
 		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
@@ -95,7 +93,11 @@ genericButtonModel =
 	);
 
 
-gruga_createDisc =
+
+/*
+| The createDisc model.
+*/
+def.staticLazy.model = ( ) =>
 	disc_createDisc.abstract(
 		'size',
 			gleam_size.create(
@@ -171,7 +173,4 @@ gruga_createDisc =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_createDisc );
-
-
-} )( );
+} );

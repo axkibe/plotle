@@ -8,13 +8,12 @@
 'use strict';
 
 
-// FIXME
-var
-	net_requestWrap,
-	net_requestWrapList;
-
-
 tim.define( module, 'net_channel', ( def, net_channel ) => {
+
+
+const net_requestWrap = require( './requestWrap' );
+
+const net_requestWrapList = require( './requestWrapList' );
 
 
 /*::::::::::::::::::::::::::::.

@@ -4,11 +4,6 @@
 'use strict';
 
 
-// FIXME
-var
-	transmitter;
-
-
 tim.define( module, 'net_requestWrap', ( def, net_requestWrap ) => {
 
 
@@ -151,7 +146,7 @@ def.func.send =
 
 	if( !onReplyTransmitter )
 	{
-		onReplyTransmitter = transmitter( onReply );
+		onReplyTransmitter = system.transmitter( onReply );
 	}
 
 	xhr.onreadystatechange = onReplyTransmitter;

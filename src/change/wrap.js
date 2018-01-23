@@ -58,7 +58,7 @@ def.func.createReverse =
 {
 	return(
 		change_wrap.create(
-			'cid', session_uid( ),
+			'cid', session_uid.newUid( ),
 			'changeList', this.changeList.reverse
 		)
 	);

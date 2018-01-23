@@ -10,7 +10,6 @@ var
 	root,
 	shell_system,
 	startup,
-	transmitter,
 	math_limit;
 
 
@@ -41,7 +40,7 @@ const shell_settings = require( '../shell/settings' );
 | Catches all error a function throws
 | and coorects hover and attention steering.
 */
-transmitter =
+const transmitter =
 	function(
 		func,        // event function to wrap
 		nosteering   // if true it won't stear hovering/attention
@@ -332,6 +331,8 @@ shell_system =
 	this._animationTransmitter = systemTransmitter( '_animation' );
 
 	this.restartBlinker( );
+
+	this.transmitter = transmitter;
 };
 
 

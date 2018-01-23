@@ -1,24 +1,22 @@
 /*
 | Default form background.
 */
-
-
-var
-	gleam_color,
-	gleam_facet,
-	gleam_gradient_askew,
-	gleam_gradient_colorStop,
-	gruga_formFacet;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_formFacet =
+tim.define( module, 'gruga_formFacet', ( def, gruga_formFacet ) => {
+
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_gradient_askew = require( '../gleam/gradient/askew' );
+
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+
+
+def.staticLazy.model = ( ) =>
 	gleam_facet.create(
 		'fill',
 			gleam_gradient_askew.create(
@@ -36,7 +34,4 @@ gruga_formFacet =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_formFacet );
-
-
-} )( );
+} );

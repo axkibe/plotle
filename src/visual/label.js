@@ -173,7 +173,7 @@ def.static.createGeneric =
 
 	const label = resized.create( 'fabric', resized.fabric.create( 'pos', pos ) );
 
-	const key = session_uid( );
+	const key = session_uid.newUid( );
 
 /**/if( CHECK )
 /**/{
