@@ -1,32 +1,32 @@
 /*
 | Default note.
 */
-
-
-var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_facet,
-	gleam_facetList,
-	gleam_gradient_askew,
-	gleam_gradient_colorStop,
-	gleam_margin,
-	gruga_highlight,
-	gruga_note;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_note = { };
+tim.define( module, 'gruga_note', ( def, gruga_note ) => {
 
 
-gruga_note.facets =
+const gleam_border = require( '../gleam/border' );
+
+const gleam_borderList = require( '../gleam/borderList' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_gradient_askew = require( '../gleam/gradient/askew' );
+
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+
+const gleam_margin = require( '../gleam/margin' );
+
+const gruga_highlight = require( '../gruga/highlight' );
+
+
+def.staticLazy.facets = ( ) =>
 	gleam_facetList.create(
 		'list:append',
 		// default
@@ -55,14 +55,14 @@ gruga_note.facets =
 					gleam_border.simpleBlack
 				)
 		),
-		'list:append', gruga_highlight
+		'list:append', gruga_highlight.facet
 	);
 
 
 /*
 | Inner distance of note to doc.
 */
-gruga_note.innerMargin =
+def.staticLazy.innerMargin = ( ) =>
 	gleam_margin.create(
 		'n', 4,
 		'e', 5,
@@ -74,30 +74,28 @@ gruga_note.innerMargin =
 /*
 | Minimum note size.
 */
-gruga_note.minWidth = 30;
+def.static.minWidth = 30;
 
-gruga_note.minHeight = 30;
+def.static.minHeight = 30;
 
 
 /*
 | Radius of the corners.
 */
-gruga_note.cornerRadius = 8;
+def.static.cornerRadius = 8;
 
 
 /*
 | Default fontsize.
 */
-gruga_note.defaultFontsize = 13;
+def.static.defaultFontsize = 13;
 
 
 /*
 | Vertical distance of scrollbar from border.
 */
-gruga_note.vScrollbarDis = 5;
+def.static.vScrollbarDis = 5;
 
 
-if( FREEZE ) Object.freeze( gruga_note );
+} );
 
-
-} )( );

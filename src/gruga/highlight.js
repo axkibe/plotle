@@ -1,24 +1,20 @@
 /*
 | Highlighting of items
 */
-
-
-var
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gruga_highlight;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_highlight =
-	// highlight
+tim.define( module, 'gruga_highlight', ( def, gruga_highlight ) => {
+
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'group:init', { highlight : true },
 		'border',
@@ -30,7 +26,5 @@ gruga_highlight =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_highlight );
+} );
 
-
-} )( );

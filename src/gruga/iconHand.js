@@ -18,55 +18,33 @@
 |    .  R          L,
 |    .N           M/
 |     `------------
+|
+| Currently unused.
 */
-
-
-var
-	gleam_point,
-	gleam_shape_line,
-	gleam_shape_round,
-	gleam_shape_start,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_shape,
-	gruga_iconHand;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	ap,
-	bp,
-	cp,
-	dp,
-	ep,
-	fp,
-	gp,
-	hp,
-	ip,
-	jp,
-	kp,
-	lp,
-	mp,
-	np,
-	op,
-	pp,
-	qp,
-	rp,
-	fh,
-	fw,
-	fy;
-
-gruga_iconHand = { };
+tim.define( module, 'gruga_iconHand', ( def, gruga_iconHand ) => {
 
 
-gruga_iconHand.facet =
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_round = require( '../gleam/shape/round' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+
+def.lazyStatic.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgba( 255, 255, 180, 0.4 ),
 		'border',
@@ -76,52 +54,52 @@ gruga_iconHand.facet =
 	);
 
 
-ap = gleam_point.xy( -4, -12 );
+def.staticLazy.shape =
+	function( )
+{
+	const ap = gleam_point.xy( -4, -12 );
 
-fh = 12;
+	const fh = 12;
 
-fw = 3;
+	const fw = 3;
 
-fy = ap.y + fh;
+	const fy = ap.y + fh;
 
-bp = ap.add( fw, 0 );
+	const bp = ap.add( fw, 0 );
 
-cp = bp.create( 'y', fy );
+	const cp = bp.create( 'y', fy );
 
-dp = cp.add( 0, -6 );
+	const dp = cp.add( 0, -6 );
 
-ep = dp.add( fw, 0 );
+	const ep = dp.add( fw, 0 );
 
-fp = ep.create( 'y', fy );
+	const fp = ep.create( 'y', fy );
 
-gp = fp.add( 0, -5 );
+	const gp = fp.add( 0, -5 );
 
-hp = gp.add( fw, 0 );
+	const hp = gp.add( fw, 0 );
 
-ip = hp.create( 'y', fy );
+	const ip = hp.create( 'y', fy );
 
-jp = ip.add( 0, -4 );
+	const jp = ip.add( 0, -4 );
 
-kp = jp.add( fw, 0 );
+	const kp = jp.add( fw, 0 );
 
-lp = ap.create( 'x', kp.x, 'y', ap.y + fh + 8 );
+	const lp = ap.create( 'x', kp.x, 'y', ap.y + fh + 8 );
 
-mp = lp.add( -3, 3 );
+	const mp = lp.add( -3, 3 );
 
-np = mp.add( -4 * fw + 4, 0 );
+	const np = mp.add( -4 * fw + 4, 0 );
 
-op = np.add( -2, -2 );
+	const op = np.add( -2, -2 );
 
-rp = ap.add( 0, fh + 3 );
+	const rp = ap.add( 0, fh + 3 );
 
-qp = rp.add( -3, -6 );
+	const qp = rp.add( -3, -6 );
 
-pp = qp.add( -3, 2 );
+	const pp = qp.add( -3, 2 );
 
-
-
-gruga_iconHand.shape =
-	gleam_shape.create(
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.create( 'p', ap ), // A
@@ -145,10 +123,9 @@ gruga_iconHand.shape =
 			gleam_shape_line.create ( 'close', true )
 		],
 		'pc', gleam_point.zero
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconHand );
+} );
 
-
-} )( );

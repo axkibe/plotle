@@ -1,28 +1,24 @@
 /*
 | Default button.
 */
-
-
-var
-	gleam_facet,
-	gleam_facetList,
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gruga_genericCheckbox;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_genericCheckbox = { };
+tim.define( module, 'gruga_genericCheckbox', ( def, gruga_genericCheckbox ) => {
 
 
-gruga_genericCheckbox.facets =
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_borderList = require( '../gleam/borderList' );
+
+const gleam_color = require( '../gleam/color' );
+
+
+def.staticLazy.facets = ( ) =>
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -85,7 +81,5 @@ gruga_genericCheckbox.facets =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_genericCheckbox );
+} );
 
-
-})( );

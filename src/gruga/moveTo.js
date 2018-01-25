@@ -1,40 +1,41 @@
 /*
 | Default design for the the move-to-form.
 */
-
-
-var
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_facetList,
-	gleam_point,
-	gleam_rect,
-	gleam_transform,
-	form_moveTo,
-	gruga_moveTo,
-	gruga_moveToSpaceButtonTemplate,
-	portalButtonFacets,
-	shell_fontPool,
-	widget_button,
-	widget_label,
-	widget_scrollbox;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	buttonSize;
+tim.define( module, 'gruga_moveTo', ( def, gruga_moveTo ) => {
+
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const form_moveTo = require( '../form/moveTo' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_label = require( '../widget/label' );
+
+const widget_scrollbox = require( '../widget/scrollbox' );
 
 
 /*
 | Size of a button.
 */
-buttonSize =
+def.staticLazy._buttonSize = ( ) =>
 	gleam_rect.create(
 		'pos', gleam_point.zero, // dummy
 		'width', 130,
@@ -45,7 +46,7 @@ buttonSize =
 /*
 | TODO
 */
-portalButtonFacets =
+def.staticLazy._portalButtonFacets = ( ) =>
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -97,7 +98,7 @@ portalButtonFacets =
 /*
 | Layout
 */
-gruga_moveTo =
+def.staticLazy.layout = ( ) =>
 	form_moveTo.abstract(
 		'twig:add',
 		'headline',
@@ -120,8 +121,8 @@ gruga_moveTo =
 				'twig:add',
 				'ideoloom:home',
 					widget_button.create(
-						'facets', portalButtonFacets,
-						'zone', buttonSize,
+						'facets', gruga_moveTo._portalButtonFacets,
+						'zone', gruga_moveTo._buttonSize,
 						'text', 'ideoloom\nhome',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
@@ -131,8 +132,8 @@ gruga_moveTo =
 				'twig:add',
 				'ideoloom:sandbox',
 					widget_button.create(
-						'facets', portalButtonFacets,
-						'zone', buttonSize,
+						'facets', gruga_moveTo._portalButtonFacets,
+						'zone', gruga_moveTo._buttonSize,
 						'text', 'ideoloom\nsandbox',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
@@ -141,15 +142,15 @@ gruga_moveTo =
 					)
 		)
 	);
-	
+
 
 /*
 | template of the user space list buttons.
 */
-gruga_moveToSpaceButtonTemplate =
+def.staticLazy.spaceButtonTemplate = ( ) =>
 	widget_button.abstract(
-		'facets', portalButtonFacets,
-		'zone', buttonSize,
+		'facets', gruga_moveTo._portalButtonFacets,
+		'zone', gruga_moveTo._buttonSize,
 		'textNewline', 25,
 		'font', shell_fontPool.get( 14, 'cm' ),
 		'shape', 'ellipse'
@@ -157,12 +158,5 @@ gruga_moveToSpaceButtonTemplate =
 
 
 
-if( FREEZE )
-{
-	Object.freeze( gruga_moveTo );
+} );
 
-	Object.freeze( gruga_moveToSpaceButtonTemplate );
-}
-
-
-} )( );

@@ -14,41 +14,28 @@
 |  ******   ******            V
 |
 */
-
-
-var
-	gleam_point,
-	gleam_shape_line,
-	gleam_shape_start,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gruga_iconZoomAll,
-	gleam_shape;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	c,
-	n,
-	p,
-	s,
-	t,
-	u,
-	v,
-	w,
-	z;
-
-gruga_iconZoomAll = { };
+tim.define( module, 'gruga_iconZoomAll', ( def, gruga_iconZoomAll ) => {
 
 
-gruga_iconZoomAll.facet =
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
@@ -58,26 +45,28 @@ gruga_iconZoomAll.facet =
 	);
 
 
-c = gleam_point.zero;
+def.staticLazy.shape =
+	function( )
+{
+	const c = gleam_point.zero;
 
-s = 8;
+	const s = 8;
 
-t = s - 1;
+	const t = s - 1;
 
-u = s - 3;
+	const u = s - 3;
 
-n = t - 1;
+	const n = t - 1;
 
-p = 3;
+	const p = 3;
 
-v = 1;
+	const v = 1;
 
-w = 2;
+	const w = 2;
 
-z = 1;
+	const z = 1;
 
-gruga_iconZoomAll.shape =
-	gleam_shape.create(
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.p( c.add( -s, -s ) ),
@@ -131,12 +120,10 @@ gruga_iconZoomAll.shape =
 			gleam_shape_line.close
 		],
 		'pc', c
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconZoomAll );
-
-
-} )( );
+} );
 
 

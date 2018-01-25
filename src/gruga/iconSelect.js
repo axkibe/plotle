@@ -17,88 +17,32 @@
 | psw. `-- ---.   --' . pse
 |
 */
-
-
-var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_facet,
-	gleam_point,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_round,
-	gleam_shape_start,
-	gruga_iconSelect;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	ce,
-	cs,
-	hd,
-	hs,
-	pc,
-	pe,
-	pn,
-	pne,
-	pnw,
-	ps,
-	pse,
-	psw,
-	pw,
-	start,
-	line,
-	round;
+tim.define( module, 'gruga_iconSelect', ( def, gruga_iconSelect ) => {
 
 
-pc = gleam_point.zero;
+const gleam_border = require( '../gleam/border' );
 
-// half dash line
-hd = 2;
+const gleam_borderList = require( '../gleam/borderList' );
 
-// half size
-hs = 8;
+const gleam_color = require( '../gleam/color' );
 
-// corner size
-cs = 3;
+const gleam_facet = require( '../gleam/facet' );
 
-// corner extension
-ce = 4;
+const gleam_point = require( '../gleam/point' );
 
+const gleam_shape = require( '../gleam/shape' );
 
-pn = pc.add( 0, -hs );
+const gleam_shape_line = require( '../gleam/shape/line' );
 
-pe = pc.add( hs, 0 );
+const gleam_shape_round = require( '../gleam/shape/round' );
 
-pnw = pc.add( -hs, -hs );
-
-pne = pc.add(  hs, -hs );
-
-pse = pc.add(  hs,  hs );
-
-psw = pc.add( -hs,  hs );
-
-ps = pc.add( 0, hs );
-
-pw = pc.add( -hs, 0 );
-
-start = gleam_shape_start;
-
-line = gleam_shape_line;
-
-round = gleam_shape_round;
-
-gruga_iconSelect = { };
+const gleam_shape_start = require( '../gleam/shape/start' );
 
 
-gruga_iconSelect.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'border',
 			gleam_borderList.create(
@@ -117,8 +61,46 @@ gruga_iconSelect.facet =
 	);
 
 
-gruga_iconSelect.shape =
-	gleam_shape.create(
+def.staticLazy.shape =
+	function( )
+{
+	const pc = gleam_point.zero;
+
+	// half dash line
+	const hd = 2;
+
+	// half size
+	const hs = 8;
+
+	// corner size
+	const cs = 3;
+
+	// corner extension
+	const ce = 4;
+
+	const pn = pc.add( 0, -hs );
+
+	const pe = pc.add( hs, 0 );
+
+	const pnw = pc.add( -hs, -hs );
+
+	const pne = pc.add(  hs, -hs );
+
+	const pse = pc.add(  hs,  hs );
+
+	const psw = pc.add( -hs,  hs );
+
+	const ps = pc.add( 0, hs );
+
+	const pw = pc.add( -hs, 0 );
+
+	const start = gleam_shape_start;
+
+	const line = gleam_shape_line;
+
+	const round = gleam_shape_round;
+
+	return( gleam_shape.create(
 		'list:init',
 		[
 			start.create( 'p', pnw.add(   0 ,  ce ) ),
@@ -147,10 +129,9 @@ gruga_iconSelect.shape =
 			line.create(  'close', true, 'fly', true )
 		],
 		'pc', pc
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconSelect );
+} );
 
-
-} )( );

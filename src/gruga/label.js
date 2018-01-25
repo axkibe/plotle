@@ -1,27 +1,22 @@
 /*
 | Default label.
 */
-
-
-var
-	gleam_facet,
-	gleam_facetList,
-	gleam_margin,
-	gruga_highlight,
-	gruga_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_label = { };
+tim.define( module, 'gruga_label', ( def, gruga_label ) => {
 
 
-gruga_label.facets =
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_margin = require( '../gleam/margin' );
+
+const gruga_highlight = require( './highlight' );
+
+
+def.staticLazy.facets = ( ) =>
 	gleam_facetList.create(
 		'list:append',
 		// default
@@ -31,21 +26,19 @@ gruga_label.facets =
 		//			'color', gleam_color.rgba( 100, 100, 0, 0.1 )
 		//		)
 		),
-		'list:append', gruga_highlight
+		'list:append', gruga_highlight.facet
 	);
 
 
-gruga_label.defaultFontsize = 13;
+def.static.defaultFontsize = 13;
 
 
-gruga_label.innerMargin =
+def.staticLazy.innerMargin = ( ) =>
 	gleam_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 );
 
 
-gruga_label.minSize = 8;
+def.static.minSize = 8;
 
 
-if( FREEZE ) Object.freeze( gruga_label );
+} );
 
-
-} )( );

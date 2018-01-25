@@ -11,7 +11,7 @@ var
 	gleam_rect,
 	gleam_transform,
 	gruga_mainDisc,
-	gruga_moveToSpaceButtonTemplate,
+	gruga_moveTo,
 	gruga_scrollbar,
 	ref_space;
 
@@ -118,7 +118,7 @@ def.func._init =
 	const dw =
 		root
 		? root.disc.get( 'mainDisc' ).size.width
-		: gruga_mainDisc.size.width;
+		: gruga_mainDisc.layout.size.width;
 
 	const discDistance = 20;
 
@@ -202,7 +202,7 @@ def.func._init =
 
 			button = this._twig[ fullname ];
 
-			if( !button ) button = gruga_moveToSpaceButtonTemplate;
+			if( !button ) button = gruga_moveTo.spaceButtonTemplate;
 
 			sbRanks.push( fullname );
 

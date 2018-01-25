@@ -1,29 +1,23 @@
 /*
 | Scrollbar
 */
-
-
-var
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gruga_scrollbar;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_scrollbar = { };
+tim.define( module, 'gruga_scrollbar', ( def, gruga_scrollbar ) => {
+
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
 
 
 /*
 | The scrollbar facet.
 */
-gruga_scrollbar.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgb( 255, 188, 87 ),
 		'border',
@@ -35,22 +29,20 @@ gruga_scrollbar.facet =
 /*
 | Width of the scrollbar
 */
-gruga_scrollbar.strength = 8;
+def.static.strength = 8;
 
 /*
 | Ellipse cap.
 */
-gruga_scrollbar.ellipseA = 4;
+def.static.ellipseA = 4;
 
-gruga_scrollbar.ellipseB = 4;
+def.static.ellipseB = 4;
 
 /*
 | Minimum height.
 */
-gruga_scrollbar.minHeight = 12;
+def.static.minHeight = 12;
 
 
-if( FREEZE ) Object.freeze( gruga_scrollbar );
+} );
 
-
-} )( );

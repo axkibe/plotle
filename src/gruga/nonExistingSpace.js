@@ -1,30 +1,31 @@
 /*
 | Default design for the non-existing-space form.
 */
-
-
-var
-	form_nonExistingSpace,
-	gleam_point,
-	gleam_rect,
-	gruga_genericButton,
-	gruga_nonExistingSpace,
-	shell_fontPool,
-	widget_button,
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_nonExistingSpace', ( def, gruga_nonExistingSpace ) => {
+
+
+const form_nonExistingSpace = require( '../form/nonExistingSpace' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_genericButton = require( '../gruga/genericButton' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_nonExistingSpace =
+def.staticLazy.layout = ( ) =>
 	form_nonExistingSpace.abstract(
 		'twig:add',
 		'headline',
@@ -71,7 +72,5 @@ gruga_nonExistingSpace =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_nonExistingSpace );
+} );
 
-
-} )( );

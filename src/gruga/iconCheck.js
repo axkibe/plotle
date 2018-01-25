@@ -11,66 +11,49 @@
 |      '***'
 |       'B'
 */
-
-
-var
-	gleam_color,
-	gleam_facet,
-	gleam_point,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_start,
-	gruga_iconCheck;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	pc;
+tim.define( module, 'gruga_iconCheck', ( def, gruga_iconCheck ) => {
 
 
-pc = gleam_point.xy( -2, 0 );
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
 
 
-gruga_iconCheck = { };
 
 
-gruga_iconCheck.facet =
-	gleam_facet.create(
-		'fill', gleam_color.black
+def.staticLazy.facet = ( ) => gleam_facet.create( 'fill', gleam_color.black );
+
+
+def.staticLazy.shape =
+	function( )
+{
+	const pc = gleam_point.xy( -2, 0 );
+
+	return(
+		gleam_shape.create(
+			'list:init',
+			[
+				gleam_shape_start.p( pc.add( -5, -3  ) ), // A
+				gleam_shape_line.p(  pc.add(  2,  5  ) ), // B
+				gleam_shape_line.p(  pc.add( 14, -12 ) ), // C
+				gleam_shape_line.p(  pc.add(  2, -1  ) ), // D
+				gleam_shape_line.close( )                 // A
+			],
+			'pc', pc
+		)
 	);
+};
 
+} );
 
-gruga_iconCheck.shape =
-	gleam_shape.create(
-		'list:init',
-		[
-			gleam_shape_start.create(
-				'p', pc.add( -5, -3 )            // A
-			),
-			gleam_shape_line.create(
-				'p', pc.add( 2, 5 )              // B
-			),
-			gleam_shape_line.create(
-				'p', pc.add( 14, -12 )           // C
-			),
-			gleam_shape_line.create(
-				'p', pc.add( 2, -1 )             // D
-			),
-			gleam_shape_line.create(
-				'close', true                    // A
-			)
-		],
-		'pc', pc
-	);
-
-
-if( FREEZE ) Object.freeze( gruga_iconCheck );
-
-
-} )( );

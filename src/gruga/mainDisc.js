@@ -1,139 +1,132 @@
 /*
 | Default design for the maindisc.
 */
-
-
-var
-	disc_mainDisc,
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_ellipse,
-	gleam_facet,
-	gleam_facetList,
-	gleam_gradient_colorStop,
-	gleam_gradient_radial,
-	gleam_point,
-	gleam_rect,
-	gleam_size,
-	gruga_iconNormal,
-	gruga_iconRemove,
-	gruga_iconSelect,
-	gruga_iconZoom,
-	gruga_mainDisc,
-	shell_fontPool,
-	widget_button;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-/*
-| All important design variables for convenience.
-*/
-var
-	pw,
-	buttonFacets,
-	buttonModel,
-	buttonSize,
-	createButtonPos,
-	loginButtonPos,
-	movetoButtonPos,
-	normalButtonPos,
-	removeButtonPos,
-	selectButtonPos,
-	signupButtonPos,
-	spaceButtonPos,
-	spaceButtonSize,
-	userButtonPos,
-	userButtonSize,
-	zoomButtonPos;
-
-pw = gleam_point.xy( 0, 500 );
+tim.define( module, 'gruga_mainDisc', ( def, gruga_mainDisc ) => {
 
 
-buttonFacets =
-	gleam_facetList.create(
-		'list:init',
-		[
-			// default state.
-			gleam_facet.create(
-				'group:init', { },
-				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			),
-			// hover
-			gleam_facet.create(
-				'group:init', { 'hover' : true },
-				'fill',
-					gleam_color.rgba( 255, 235, 210, 0.7 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			),
-			// down
-			gleam_facet.create(
-				'group:init', { 'down' : true },
-				'fill', gleam_color.rgb( 255, 188, 88 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			),
-			// down and hover
-			gleam_facet.create(
-				'group:init', { 'down' : true, 'hover' : true },
-				'fill', gleam_color.rgb( 255, 188, 88 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			)
-		]
-	);
+const disc_mainDisc = require( '../disc/mainDisc' );
 
-buttonModel =
-	widget_button.abstract(
-		'facets', buttonFacets,
-		'shape', 'ellipse'
-	);
+const gleam_border = require( '../gleam/border' );
 
-buttonSize = gleam_size.wh( 44, 44 );
+const gleam_borderList = require( '../gleam/borderList' );
 
-loginButtonPos = pw.add( 30, 155 );
+const gleam_color = require( '../gleam/color' );
 
-movetoButtonPos = pw.add( 46, -74 );
+const gleam_ellipse = require( '../gleam/ellipse' );
 
-normalButtonPos = pw.add( 5, -324 );
+const gleam_facet = require( '../gleam/facet' );
 
-selectButtonPos = pw.add( 19, -270 );
+const gleam_facetList = require( '../gleam/facetList' );
 
-createButtonPos = pw.add( 31, -216 );
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
 
-removeButtonPos = pw.add( 40, -162 );
+const gleam_gradient_radial = require( '../gleam/gradient/radial' );
 
-signupButtonPos = pw.add( 17, 210 );
+const gleam_point = require( '../gleam/point' );
 
-spaceButtonPos = pw.add( 0, -230 );
+const gleam_rect = require( '../gleam/rect' );
 
-spaceButtonSize = gleam_size.wh( 28, 290 );
+const gleam_size = require( '../gleam/size' );
 
-userButtonPos = pw.add( 0, 40 );
+const gruga_iconNormal = require( '../gruga/iconNormal' );
 
-userButtonSize = gleam_size.wh( 24, 180 );
+const gruga_iconRemove = require( '../gruga/iconRemove' );
 
-zoomButtonPos = pw.add( 48, -18 );
+const gruga_iconSelect = require( '../gruga/iconSelect' );
 
-gruga_mainDisc =
-	disc_mainDisc.abstract(
+const gruga_iconZoom = require( '../gruga/iconZoom' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+
+def.staticLazy.layout =
+	function( )
+{
+	const pw = gleam_point.xy( 0, 500 );
+
+
+	const buttonFacets =
+		gleam_facetList.create(
+			'list:init',
+			[
+				// default state.
+				gleam_facet.create(
+					'group:init', { },
+					'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				),
+				// hover
+				gleam_facet.create(
+					'group:init', { 'hover' : true },
+					'fill',
+						gleam_color.rgba( 255, 235, 210, 0.7 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				),
+				// down
+				gleam_facet.create(
+					'group:init', { 'down' : true },
+					'fill', gleam_color.rgb( 255, 188, 88 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				),
+				// down and hover
+				gleam_facet.create(
+					'group:init', { 'down' : true, 'hover' : true },
+					'fill', gleam_color.rgb( 255, 188, 88 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				)
+			]
+		);
+
+	const buttonModel =
+		widget_button.abstract(
+			'facets', buttonFacets,
+			'shape', 'ellipse'
+		);
+
+	const buttonSize = gleam_size.wh( 44, 44 );
+
+	const loginButtonPos = pw.add( 30, 155 );
+
+	const movetoButtonPos = pw.add( 46, -74 );
+
+	const normalButtonPos = pw.add( 5, -324 );
+
+	const selectButtonPos = pw.add( 19, -270 );
+
+	const createButtonPos = pw.add( 31, -216 );
+
+	const removeButtonPos = pw.add( 40, -162 );
+
+	const signupButtonPos = pw.add( 17, 210 );
+
+	const spaceButtonPos = pw.add( 0, -230 );
+
+	const spaceButtonSize = gleam_size.wh( 28, 290 );
+
+	const userButtonPos = pw.add( 0, 40 );
+
+	const userButtonSize = gleam_size.wh( 24, 180 );
+
+	const zoomButtonPos = pw.add( 48, -18 );
+
+	return( disc_mainDisc.abstract(
 		'size',
 			gleam_size.create(
 				'width', 100,
@@ -258,10 +251,9 @@ gruga_mainDisc =
 				'font', shell_fontPool.get( 13, 'cm' ),
 				'visible', false
 			)
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_mainDisc );
+} );
 
-
-} )( );

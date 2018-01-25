@@ -15,36 +15,29 @@
 |           ED
 |
 */
-
-
-var
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_point,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_start,
-	gruga_iconNormal;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	ap;
-
-ap = gleam_point.xy( -4, -9 );
+tim.define( module, 'gruga_iconNormal', ( def, gruga_iconNormal ) => {
 
 
-gruga_iconNormal = { };
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
 
 
-gruga_iconNormal.facet =
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
@@ -54,8 +47,12 @@ gruga_iconNormal.facet =
 	);
 
 
-gruga_iconNormal.shape =
-	gleam_shape.create(
+def.staticLazy.shape =
+	function( )
+{
+	const ap = gleam_point.xy( -4, -9 );
+
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.create( 'p', ap ), // A
@@ -68,10 +65,9 @@ gruga_iconNormal.shape =
 			gleam_shape_line.create( 'close', true )
 		],
 		'pc', gleam_point.zero
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconNormal );
+} );
 
-
-} )( );

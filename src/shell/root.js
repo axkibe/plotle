@@ -404,11 +404,11 @@ def.static._createDiscRoot =
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
-				gruga_mainDisc.abstract(
+				gruga_mainDisc.layout.abstract(
 					'path', twPath.append( 'mainDisc' )
 				),
 			'twig:add', 'createDisc',
-				gruga_createDisc.model.abstract(
+				gruga_createDisc.layout.abstract(
 					'path', twPath.append( 'createDisc' )
 				),
 			'twig:add', 'zoomDisc',
@@ -430,11 +430,11 @@ def.static._createFormRoot =
 {
 	const forms =
 		{
-			loading : gruga_loading,
-			login : gruga_login,
-			moveTo : gruga_moveTo,
-			noAccessToSpace : gruga_noAccessToSpace,
-			nonExistingSpace : gruga_nonExistingSpace,
+			loading : gruga_loading.layout,
+			login : gruga_login.layout,
+			moveTo : gruga_moveTo.layout,
+			noAccessToSpace : gruga_noAccessToSpace.layout,
+			nonExistingSpace : gruga_nonExistingSpace.layout,
 			signUp : gruga_signUp,
 			space : gruga_space,
 			user : gruga_user,

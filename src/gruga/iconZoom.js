@@ -14,35 +14,32 @@
 |   '.'
 |
 */
-
-
-var
-	gleam_point,
-	gleam_shape_line,
-	gleam_shape_round,
-	gleam_shape_start,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_shape,
-	gleam_shapeList,
-	gruga_iconZoom;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	c;
-
-gruga_iconZoom = { };
+tim.define( module, 'gruga_iconZoom', ( def, gruga_iconZoom ) => {
 
 
-gruga_iconZoom.facet =
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_round = require( '../gleam/shape/round' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+const gleam_shapeList = require( '../gleam/shapeList' );
+
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
@@ -52,10 +49,13 @@ gruga_iconZoom.facet =
 	);
 
 
-c = gleam_point.xy( 2, -3 );
 
-gruga_iconZoom.shape =
-	gleam_shapeList.create(
+def.staticLazy.shape =
+	function ( )
+{
+	const c = gleam_point.xy( 2, -3 );
+
+	return( gleam_shapeList.create(
 		'list:init',
 		[
 			gleam_shape.create(
@@ -87,10 +87,9 @@ gruga_iconZoom.shape =
 				'nogrid', true
 			)
 		]
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconZoom );
+} );
 
-
-} )( );

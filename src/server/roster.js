@@ -692,58 +692,67 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/highlight.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconCheck.js',
+		'hasTim', true,
 		'inBundle', true
 	),
-//	server_resource.create(
-//		'filePath', 'src/gruga/iconMoveTo.js',
-//		'inBundle', true
-//	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconNormal.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconZoom.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconZoomAll.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconZoomHome.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconZoomIn.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconZoomOut.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconRemove.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/iconSelect.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/genericButton.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/genericCheckbox.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/genericInput.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -753,6 +762,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/mainDisc.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -776,22 +786,22 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/scrollbar.js',
-		'inBundle', true
-	),
-	server_resource.create(
-		'filePath', 'src/gruga/handles.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/label.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/note.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/portal.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -801,22 +811,27 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/loading.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/login.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/moveto.js',
+		'filePath', 'src/gruga/moveTo.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/noAccessToSpace.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/nonExistingSpace.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

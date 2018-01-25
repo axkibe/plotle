@@ -10,61 +10,28 @@
 |  M**L   J**SE
 |
 */
-
-
-var
-	gruga_iconRemove,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_point,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_start;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	ah,
-	aw,
-	ch,
-	cw,
-	pc,
-	pne,
-	pnw,
-	pse,
-	psw;
-
-pc = gleam_point.zero;
-
-pnw = pc.add( -6, -6 );
-
-pse = pc.add(  6,  6 );
-
-pne = pc.add( pse.x, pnw.y );
-
-psw = pc.add( pnw.x, pse.y );
+tim.define( module, 'gruga_iconRemove', ( def, gruga_iconRemove ) => {
 
 
-// arm with and height
-aw = 2;
-ah = 2;
+const gleam_border = require( '../gleam/border' );
 
-// center point width/height
-cw = 2;
-ch = 2;
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
 
 
-gruga_iconRemove = { };
-
-
-gruga_iconRemove.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.rgb( 255, 0, 0 ),
 		'border',
@@ -74,8 +41,28 @@ gruga_iconRemove.facet =
 	);
 
 
-gruga_iconRemove.shape =
-	gleam_shape.create(
+def.staticLazy.shape =
+	function( )
+{
+	const pc = gleam_point.zero;
+
+	const pnw = pc.add( -6, -6 );
+
+	const pse = pc.add(  6,  6 );
+
+	const pne = pc.add( pse.x, pnw.y );
+
+	const psw = pc.add( pnw.x, pse.y );
+
+	// arm with and height
+	const aw = 2;
+	const ah = 2;
+
+	// center point width/height
+	const cw = 2;
+	const ch = 2;
+
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.create(
@@ -131,10 +118,9 @@ gruga_iconRemove.shape =
 			)
 		],
 		'pc', pc
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconRemove );
+} );
 
-
-} )( );

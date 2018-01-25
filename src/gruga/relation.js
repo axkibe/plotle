@@ -4,15 +4,18 @@
 'use strict';
 
 
-var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_facet,
-	gleam_point;
-
-
 tim.define( module, 'gruga_relation', ( def, gruga_relation ) => {
+
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_borderList = require( '../gleam/borderList' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_point = require( '../gleam/point' );
 
 
 /*

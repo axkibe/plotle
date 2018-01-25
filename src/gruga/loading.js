@@ -1,27 +1,25 @@
 /*
 | Default design of the loading screen.
 */
-
-
-var
-	form_loading,
-	gleam_point,
-	gruga_loading,
-	shell_fontPool,
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_loading', ( def, gruga_loading ) => {
+
+
+const form_loading = require( '../form/loading' );
+
+const gleam_point = require( '../gleam/point' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_loading =
+def.staticLazy.layout = ( ) =>
 	form_loading.abstract(
 		'twig:add', 'headline',
 			widget_label.abstract(
@@ -38,7 +36,5 @@ gruga_loading =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_loading );
+} );
 
-
-} )( );

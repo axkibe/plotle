@@ -95,9 +95,9 @@ const genericButtonModel =
 
 
 /*
-| The createDisc model.
+| The createDisc layout.
 */
-def.staticLazy.model = ( ) =>
+def.staticLazy.layout = ( ) =>
 	disc_createDisc.abstract(
 		'size',
 			gleam_size.create(

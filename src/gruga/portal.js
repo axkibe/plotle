@@ -1,30 +1,30 @@
 /*
 | Default portal.
 */
-
-
-var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_facet,
-	gleam_facetList,
-	gleam_gradient_radial,
-	gleam_gradient_colorStop,
-	gruga_highlight,
-	gruga_portal;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_portal = { };
+tim.define( module, 'gruga_portal', ( def, gruga_portal ) => {
 
-gruga_portal.facets =
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_borderList = require( '../gleam/borderList' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_gradient_radial = require( '../gleam/gradient/radial' );
+
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+
+const gruga_highlight = require( './highlight' );
+
+
+def.staticLazy.facets = ( ) =>
 	gleam_facetList.create(
 		'list:append',
 		// default
@@ -54,7 +54,7 @@ gruga_portal.facets =
 					gleam_border.simpleBlack
 				)
 		),
-		'list:append', gruga_highlight
+		'list:append', gruga_highlight.facet
 	);
 
 
@@ -62,7 +62,7 @@ gruga_portal.facets =
 | Facet design of buttons for the moveto form
 | and on the portal.
 */
-gruga_portal.buttonFacets =
+def.staticLazy.buttonFacets = ( ) =>
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -114,7 +114,7 @@ gruga_portal.buttonFacets =
 /*
 | Facet design of input fields on the portal.
 */
-gruga_portal.inputFacets =
+def.staticLazy.inputFacets = ( ) =>
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -130,30 +130,27 @@ gruga_portal.inputFacets =
 	);
 
 
-gruga_portal.inputRounding = 3;
+def.static.inputRounding = 3;
 
-gruga_portal.inputPitch = 5;
+def.static.inputPitch = 5;
 
 
 /*
 | Minimum size of the portal.
 */
-gruga_portal.minWidth = 40;
+def.static.minWidth = 40;
 
-gruga_portal.minHeight = 40;
+def.static.minHeight = 40;
 
 
 /*
 | MoveTo button on the portal
 */
-gruga_portal.moveToWidth = 80;
+def.static.moveToWidth = 80;
 
-gruga_portal.moveToHeight = 22;
+def.static.moveToHeight = 22;
 
-gruga_portal.moveToRounding = 11;
-
-
-if( FREEZE ) Object.freeze( gruga_portal );
+def.static.moveToRounding = 11;
 
 
-} )( );
+} );

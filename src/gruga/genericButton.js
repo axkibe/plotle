@@ -1,28 +1,24 @@
 /*
 | Default button.
 */
-
-
-var
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_facet,
-	gleam_facetList,
-	gruga_genericButton;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_genericButton = { };
+tim.define( module, 'gruga_genericButton', ( def, gruga_genericButton ) => {
 
 
-gruga_genericButton.facets =
+const gleam_border = require( '../gleam/border' );
+
+const gleam_borderList = require( '../gleam/borderList' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_facetList = require( '../gleam/facetList' );
+
+
+def.staticLazy.facets = ( ) =>
 	gleam_facetList.create(
 		'list:init',
 		[
@@ -91,7 +87,5 @@ gruga_genericButton.facets =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_genericButton );
+} );
 
-
-} )( );

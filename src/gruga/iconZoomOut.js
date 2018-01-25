@@ -1,38 +1,33 @@
 /*
-| The zoom in icon.
+| The zoom out icon.
 |
 |
 |   **********
 |   **********
 |
 */
-
-
-var
-	gleam_point,
-	gleam_shape_line,
-	gleam_shape_start,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gruga_iconZoomOut,
-	gleam_shape;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	c;
-
-gruga_iconZoomOut = { };
+tim.define( module, 'gruga_iconZoomOut', ( def, gruga_iconZoomOut ) => {
 
 
-gruga_iconZoomOut.facet =
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
@@ -42,10 +37,12 @@ gruga_iconZoomOut.facet =
 	);
 
 
-c = gleam_point.zero;
+def.staticLazy.shape =
+	function( )
+{
+	const c = gleam_point.zero;
 
-gruga_iconZoomOut.shape =
-	gleam_shape.create(
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.p( c.add( -7, -1 ) ),
@@ -55,10 +52,9 @@ gruga_iconZoomOut.shape =
 			gleam_shape_line.close
 		],
 		'pc', c
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconZoomOut );
+} );
 
-
-} )( );

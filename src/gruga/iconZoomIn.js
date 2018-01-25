@@ -10,33 +10,28 @@
 |       **
 |
 */
-
-
-var
-	gleam_point,
-	gleam_shape_line,
-	gleam_shape_start,
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gleam_shape,
-	gruga_iconZoomIn;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	c;
-
-gruga_iconZoomIn = { };
+tim.define( module, 'gruga_iconZoomIn', ( def, gruga_iconZoomIn ) => {
 
 
-gruga_iconZoomIn.facet =
+const gleam_point = require( '../gleam/point' );
+
+const gleam_shape_line = require( '../gleam/shape/line' );
+
+const gleam_shape_start = require( '../gleam/shape/start' );
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_shape = require( '../gleam/shape' );
+
+
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
 		'border',
@@ -46,10 +41,12 @@ gruga_iconZoomIn.facet =
 	);
 
 
-c = gleam_point.zero;
+def.staticLazy.shape =
+	function ( )
+{
+	const c = gleam_point.zero;
 
-gruga_iconZoomIn.shape =
-	gleam_shape.create(
+	return( gleam_shape.create(
 		'list:init',
 		[
 			gleam_shape_start.p( c.add( -1, -7 ) ),
@@ -67,10 +64,9 @@ gruga_iconZoomIn.shape =
 			gleam_shape_line.close
 		],
 		'pc', c
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_iconZoomIn );
+} );
 
-
-} )( );

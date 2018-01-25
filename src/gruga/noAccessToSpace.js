@@ -1,29 +1,31 @@
 /*
 | Default design for no-access-to-space form.
 */
-
-
-var
-	form_noAccessToSpace,
-	gleam_point,
-	gleam_rect,
-	gruga_genericButton,
-	gruga_noAccessToSpace,
-	shell_fontPool,
-	widget_button,
-	widget_label;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_noAccessToSpace', ( def, gruga_noAccessToSpace ) => {
+
+
+const form_noAccessToSpace = require( '../form/noAccessToSpace' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_genericButton = require( '../gruga/genericButton' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_noAccessToSpace =
+def.staticLazy.layout = ( ) =>
 	form_noAccessToSpace.abstract(
 		'twig:add', 'headline',
 			widget_label.abstract(
@@ -53,7 +55,5 @@ gruga_noAccessToSpace =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_noAccessToSpace );
+} );
 
-
-} )( );
