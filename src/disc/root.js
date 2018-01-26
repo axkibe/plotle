@@ -4,14 +4,14 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_glint_list,
-	show_create,
-	show_zoom;
-
-
 tim.define( module, 'disc_root', ( def, disc_root ) => {
+
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const show_create = require( '../show/create' );
+
+const show_zoom = require( '../show/zoom' );
 
 
 /*::::::::::::::::::::::::::::.

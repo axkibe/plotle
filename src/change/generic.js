@@ -1,37 +1,19 @@
 /*
 | Collection of generic change functions.
 */
-
-var
-	change_generic,
-	change_list;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 "use strict";
 
 
-/*
-| Node includes.
-*/
-if( NODE )
-{
-	change_generic = module.exports;
-	change_list = require( './list' );
-}
-else
-{
-	change_generic = { };
-}
+tim.define( module, 'change_generic', ( def, change_generic ) => {
+
+
+const change_list = require( './list' );
 
 
 /*
 | Reversivly performs this change on a tree.
 */
-change_generic.changeTreeReverse =
+def.static.changeTreeReverse =
 	function(
 		tree
 	)
@@ -43,44 +25,35 @@ change_generic.changeTreeReverse =
 /*
 | Returns a change list transformed by this change.
 */
-change_generic.transformChangeList =
+def.static.transformChangeList =
 	function(
 		cList
 	)
 {
-	var
-		a,
-		aZ,
-		c,
-		r,
-		rZ,
-		tList,
-		tZ;
-
 /**/if( CHECK )
 /**/{
 /**/	if( cList.timtype !== change_list ) throw new Error( );
 /**/}
 
-	tList = [ ];
+	const tList = [ ];
 
-	for( r = 0, rZ = cList.length, tZ = 0; r < rZ; r++ )
+	for( let r = 0, rl = cList.length; r < rl; r++ )
 	{
-		c = this.transform( cList.get( r ) );
+		const c = this.transform( cList.get( r ) );
 
 		// changes that transformed away are sliced out.
 		if( !c ) continue;
 
 		if( c.timtype === change_list )
 		{
-			for( a = 0, aZ = c.length; a < aZ; a++ )
+			for( let a = 0, al = c.length; a < al; a++ )
 			{
-				tList[ tZ++ ] = c.get( a );
+				tList.push( c.get( a ) );
 			}
 		}
 		else
 		{
-			tList[ tZ++ ] = c;
+			tList.push( c );
 		}
 	}
 
@@ -91,7 +64,7 @@ change_generic.transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-change_generic.transformChangeWrap =
+def.static.transformChangeWrap =
 	function(
 		cw
 	)
@@ -103,19 +76,14 @@ change_generic.transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-change_generic.transformChangeWrapList =
+def.static.transformChangeWrapList =
 	function(
 		cwList
 	)
 {
-	var
-		r,
-		rZ,
-		tList;
+	const tList = [ ];
 
-	tList = [ ];
-
-	for( r = 0, rZ = cwList.length; r < rZ; r++ )
+	for( let r = 0, rl = cwList.length; r < rl; r++ )
 	{
 		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
 	}
@@ -125,4 +93,5 @@ change_generic.transformChangeWrapList =
 };
 
 
-}( ) );
+} );
+

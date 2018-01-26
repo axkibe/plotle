@@ -4,42 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_error,
-	change_generic,
-	change_grow,
-	change_insert,
-	change_join,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_remove,
-	change_shrink,
-	change_split,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_join = require( './join' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_remove = require( './remove' );
-	change_shrink = require( './shrink' );
-	change_split = require( './split' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_set', ( def, change_set ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_insert = require( './insert' );
+
+const change_join = require( './join' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_remove = require( './remove' );
+
+const change_shrink = require( './shrink' );
+
+const change_split = require( './split' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -119,7 +111,7 @@ def.func.changeTree =
 	{
 		console.log( 'set.prev mismatch', prev, this.prev );
 
-		throw change_error( 'set.prev doesn\'t match' );
+		throw error.make( 'set.prev doesn\'t match' );
 	}
 
 	return tree.setPath( this.path, this.val );

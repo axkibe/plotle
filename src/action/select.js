@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_rect;
-
-
 tim.define( module, 'action_select', ( def, action_select ) => {
+
+
+const gleam_rect = require( '../gleam/rect' );
 
 
 /*::::::::::::::::::::::::::::.

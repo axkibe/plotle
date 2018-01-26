@@ -4,19 +4,24 @@
 'use strict';
 
 
-// FIXME
-var
-	action_zoomButton,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_transform;
-
-
 tim.define( module, 'disc_zoomDisc', ( def, disc_zoomDisc ) => {
+
+
+const action_zoomButton = require( '../action/zoomButton' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
 
 
 /*::::::::::::::::::::::::::::.

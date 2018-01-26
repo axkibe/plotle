@@ -4,47 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_error,
-	change_grow,
-	change_insert,
-	change_list,
-	change_join,
-	change_remove,
-	change_set,
-	change_shrink,
-	change_split,
-	change_mark_node,
-	change_mark_text,
-	change_wrap,
-	change_wrapList;
-
-
-/*
-| Node includes.
-*/
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_list = require( './list' );
-	change_join = require( './join' );
-	change_remove = require( './remove' );
-	change_set = require( './set' );
-	change_shrink = require( './shrink' );
-	change_split = require( './split' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_insert', ( def, change_insert ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_list = require( './list' );
+
+const change_join = require( './join' );
+
+const change_remove = require( './remove' );
+
+const change_set = require( './set' );
+
+const change_shrink = require( './shrink' );
+
+const change_split = require( './split' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -97,15 +84,12 @@ def.func._init =
 {
 	if( this.at1 + this.val.length !== this.at2 )
 	{
-		throw change_error(
-			'insert.at1 + insert.val.length '
-			+ '!== insert.at2'
-		);
+		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
 	}
 
 	if( this.at1 < 0 || this.at2 < 0 )
 	{
-		throw change_error( 'insert.at1|at2 negative' );
+		throw error.make( 'insert.at1|at2 negative' );
 	}
 };
 
@@ -152,12 +136,12 @@ def.func.changeTree =
 
 	if( typeof( text ) !== 'string' )
 	{
-		throw change_error( 'insert.path signates no string' );
+		throw error.make( 'insert.path signates no string' );
 	}
 
 	if( this.at1 > text.length )
 	{
-		throw change_error( 'insert.at1 invalid' );
+		throw error.make( 'insert.at1 invalid' );
 	}
 
 	return(

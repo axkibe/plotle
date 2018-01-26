@@ -4,42 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_error,
-	change_generic,
-	change_insert,
-	change_join,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_remove,
-	change_set,
-	change_shrink,
-	change_split,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_insert = require( './insert' );
-	change_join = require( './join' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_remove = require( './remove' );
-	change_set = require( './set' );
-	change_shrink = require( './shrink' );
-	change_split = require( './split' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_grow', ( def, change_grow ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_insert = require( './insert' );
+
+const change_join = require( './join' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_remove = require( './remove' );
+
+const change_set = require( './set' );
+
+const change_shrink = require( './shrink' );
+
+const change_split = require( './split' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -84,7 +76,7 @@ def.func._init =
 {
 	if( this.rank !== undefined && this.rank < 0 )
 	{
-		throw change_error( 'grow.rank invalid' );
+		throw error.make( 'grow.rank invalid' );
 	}
 };
 
@@ -125,7 +117,7 @@ def.func.changeTree =
 {
 	if( this.path.get( -2 ) !== 'twig' )
 	{
-		throw change_error( 'grow.path( -2 ) not a twig' );
+		throw error.make( 'grow.path( -2 ) not a twig' );
 	}
 
 	let pivot = tree.getPath( this.path.shorten.shorten );
@@ -136,7 +128,7 @@ def.func.changeTree =
 
 	if( rank > pivot.length )
 	{
-		throw change_error( 'grow.rank > pivot.length' );
+		throw error.make( 'grow.rank > pivot.length' );
 	}
 
 	pivot = pivot.create( 'twig:insert', key, rank, this.val );

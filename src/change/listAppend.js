@@ -4,23 +4,12 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_error,
-	change_listShorten;
-
-
-if( NODE )
-{
-	change_listShorten = require( './listShorten' );
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-}
-
-
-
 tim.define( module, 'change_listAppend', ( def, change_listAppend ) => {
+
+	
+const change_listShorten = require( './listShorten' );
+
+const change_generic = require( './generic' );
 
 
 /*::::::::::::::::::::::::::::.

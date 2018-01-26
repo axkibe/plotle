@@ -879,7 +879,7 @@ def.func._keyEnter =
 	root.alter(
 		change_split.create(
 			'path', tpc,
-			'path2', tpc.set( -2, session_uid( ) ),
+			'path2', tpc.set( -2, session_uid.newUid( ) ),
 			'at1', at
 		)
 	);

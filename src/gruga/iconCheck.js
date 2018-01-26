@@ -48,7 +48,7 @@ def.staticLazy.shape =
 				gleam_shape_line.p(  pc.add(  2,  5  ) ), // B
 				gleam_shape_line.p(  pc.add( 14, -12 ) ), // C
 				gleam_shape_line.p(  pc.add(  2, -1  ) ), // D
-				gleam_shape_line.close( )                 // A
+				gleam_shape_line.close                    // A
 			],
 			'pc', pc
 		)

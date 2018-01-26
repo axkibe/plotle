@@ -1,33 +1,39 @@
 /*
 | Default design for the signup form.
 */
-
-
-var
-	shell_fontPool,
-	form_signUp,
-	gleam_point,
-	gleam_rect,
-	gruga_genericButton,
-	gruga_genericCheckbox,
-	gruga_genericInput,
-	gruga_signUp,
-	widget_button,
-	widget_checkbox,
-	widget_input,
-	widget_label;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_signUp', ( def, gruga_signUp ) => {
+
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const form_signUp = require( '../form/signUp' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_genericButton = require( '../gruga/genericButton' );
+
+const gruga_genericCheckbox = require( '../gruga/genericCheckbox' );
+
+const gruga_genericInput = require( '../gruga/genericInput' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_checkbox = require( '../widget/checkbox' );
+
+const widget_input = require( '../widget/input' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_signUp =
+def.staticLazy.layout = ( ) =>
 	form_signUp.abstract(
 		'twig:add',
 		'headline',
@@ -190,5 +196,5 @@ gruga_signUp =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_signUp );
-} )( );
+} );
+

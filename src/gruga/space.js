@@ -1,30 +1,31 @@
 /*
 | Default design for the space form.
 */
-
-
-var
-	form_space,
-	gleam_point,
-	gleam_rect,
-	gruga_genericButton,
-	gruga_space,
-	shell_fontPool,
-	widget_button,
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_space', ( def, gruga_space ) => {
+
+
+const form_space = require( '../form/space' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_genericButton = require( '../gruga/genericButton' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_space =
+def.staticLazy.layout = ( ) =>
 	form_space.abstract(
 		'twig:add', 'headline',
 			widget_label.abstract(
@@ -53,8 +54,5 @@ gruga_space =
 			)
 	);
 
+} );
 
-if( FREEZE ) Object.freeze( gruga_space );
-
-
-} )( );

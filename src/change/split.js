@@ -4,41 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_error,
-	change_grow,
-	change_insert,
-	change_join,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_remove,
-	change_set,
-	change_shrink,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_join = require( './join' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_shrink = require( './shrink' );
-	change_set = require( './set' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_split', ( def, change_split ) => {
+
+
+const error = require( './error' );
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_insert = require( './insert' );
+
+const change_join = require( './join' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_remove = require( './remove' );
+
+const change_shrink = require( './shrink' );
+
+const change_set = require( './set' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -80,7 +73,7 @@ if( TIM )
 def.func._init =
 	function ( )
 {
-	if( this.at1 < 0 ) throw change_error( 'split.at1 negative' );
+	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
 };
 
 
@@ -131,24 +124,24 @@ def.func.changeTree =
 
 	if( typeof( text ) !== 'string' )
 	{
-		throw change_error( 'split.path signates no string' );
+		throw error.make( 'split.path signates no string' );
 	}
 
 	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
 	if( !pivot.getKey )
 	{
-		throw change_error( 'split.pivot not ranked' );
+		throw error.make( 'split.pivot not ranked' );
 	}
 
 	if( at1 > text.length )
 	{
-		throw change_error( 'split.at1 > text.length' );
+		throw error.make( 'split.at1 > text.length' );
 	}
 
 	if( !path2.shorten.shorten.subPathOf( path ) )
 	{
-		throw change_error( 'split.path2 not a subPath' );
+		throw error.make( 'split.path2 not a subPath' );
 	}
 
 	const key = path.get( -2 );
@@ -157,7 +150,7 @@ def.func.changeTree =
 
 	if( pivot.get( key2 ) )
 	{
-		throw change_error( 'split.path2 already exists' );
+		throw error.make( 'split.path2 already exists' );
 	}
 
 	let para1 = pivot.get( key );
@@ -166,7 +159,7 @@ def.func.changeTree =
 
 	if( rank1 < 0 )
 	{
-		throw change_error( 'split has no rank' );
+		throw error.make( 'split has no rank' );
 	}
 
 	para1 = para1.create( 'text', text.substring( 0, at1 ) );
@@ -422,3 +415,4 @@ def.func._transformRemove =
 
 
 } );
+

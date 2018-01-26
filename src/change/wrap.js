@@ -4,12 +4,11 @@
 'use strict';
 
 
-// FIXME
-var
-	session_uid;
-
 
 tim.define( module, 'change_wrap', ( def, change_wrap ) => {
+
+
+const session_uid = require( '../session/uid' );
 
 
 /*::::::::::::::::::::::::::::.

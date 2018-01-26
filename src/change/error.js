@@ -1,31 +1,22 @@
 /*
 | An error in the change engine.
 |
-| This is different from a "Error" in that
-| for the server it ought not to be fatal to receive
+| This is different from an "Error" in the sense
+| for the server it is not fatal to receive
 | a change from a client that doesn't make sense.
 */
-
-var
-	change_error;
+'use strict';
 
 
-/*
-| Capsule
-*/
-( function( ) {
-"use strict";
+tim.define( module, 'change_error', ( def, change_error ) => {
 
 
-change_error =
+def.static.make =
 	function(
 		message
 	)
 {
-	var
-		err;
-
-	err = new Error( message );
+	const err = new Error( message );
 
 	err.nonFatal = true;
 
@@ -33,10 +24,4 @@ change_error =
 };
 
 
-if( NODE )
-{
-	module.exports = change_error;
-}
-
-
-}( ) );
+} );

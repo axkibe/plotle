@@ -6,11 +6,6 @@
 
 // FIXME
 var
-	action_dragItems,
-	action_resizeItems,
-	action_select,
-	animation_root,
-	animation_transform,
 	change_grow,
 	change_join,
 	change_list,
@@ -26,20 +21,6 @@ var
 	fabric_para,
 	fabric_relation,
 	form_root,
-	gruga_controls,
-	gruga_createDisc,
-	gruga_loading,
-	gruga_login,
-	gruga_mainDisc,
-	gruga_moveTo,
-	gruga_noAccessToSpace,
-	gruga_nonExistingSpace,
-	gruga_relation,
-	gruga_signUp,
-	gruga_space,
-	gruga_user,
-	gruga_welcome,
-	gruga_zoomDisc,
 	math_limit,
 	net_ajax,
 	net_channel,
@@ -66,6 +47,47 @@ root = undefined;
 
 
 tim.define( module, 'shell_root', ( def, shell_root ) => {
+
+
+const animation_root = require( '../animation/root' );
+
+const animation_transform = require( '../animation/transform' );
+
+const action_dragItems = require( '../action/dragItems' );
+
+const action_resizeItems = require( '../action/resizeItems' );
+
+const action_select = require( '../action/select' );
+
+const gruga_controls = require( '../gruga/controls' );
+
+const gruga_createDisc = require( '../gruga/createDisc' );
+
+const gruga_loading = require( '../gruga/loading' );
+
+const gruga_login = require( '../gruga/login' );
+
+const gruga_mainDisc = require( '../gruga/mainDisc' );
+
+const gruga_moveTo = require( '../gruga/moveTo' );
+
+const gruga_noAccessToSpace = require( '../gruga/noAccessToSpace' );
+
+const gruga_nonExistingSpace = require( '../gruga/nonExistingSpace' );
+
+const gruga_relation = require( '../gruga/relation' );
+
+const gruga_signUp = require( '../gruga/signUp' );
+
+const gruga_space = require( '../gruga/space' );
+
+const gruga_user = require( '../gruga/user' );
+
+const gruga_welcome = require( '../gruga/welcome' );
+
+const gruga_zoomDisc = require( '../gruga/zoomDisc' );
+
+
 
 
 /*::::::::::::::::::::::::::::.
@@ -289,7 +311,7 @@ def.static.prepareAction =
 
 					for( p2 = 0; p2 < p; p2++ )
 					{
-						nPaths[ p2 ] = iPaths.get( p );
+						nPaths[ p2 ] = iPaths.get( p2 );
 					}
 
 					p++; // the last item was a guaranteed skip
@@ -412,7 +434,7 @@ def.static._createDiscRoot =
 					'path', twPath.append( 'createDisc' )
 				),
 			'twig:add', 'zoomDisc',
-				gruga_zoomDisc.abstract(
+				gruga_zoomDisc.layout.abstract(
 					'path', twPath.append( 'zoomDisc' )
 				)
 		)
@@ -435,10 +457,10 @@ def.static._createFormRoot =
 			moveTo : gruga_moveTo.layout,
 			noAccessToSpace : gruga_noAccessToSpace.layout,
 			nonExistingSpace : gruga_nonExistingSpace.layout,
-			signUp : gruga_signUp,
-			space : gruga_space,
-			user : gruga_user,
-			welcome : gruga_welcome
+			signUp : gruga_signUp.layout,
+			space : gruga_space.layout,
+			user : gruga_user.layout,
+			welcome : gruga_welcome.layout
 		};
 
 	for( let name in forms )
@@ -1724,7 +1746,7 @@ def.func.spawnRelation =
 			'item2key', item2.path.get( -1 )
 		);
 
-	const key = session_uid( );
+	const key = session_uid.newUid( );
 
 	root.alter(
 		change_grow.create(

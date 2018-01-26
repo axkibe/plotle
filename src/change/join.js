@@ -4,42 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_error,
-	change_generic,
-	change_grow,
-	change_insert,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_remove,
-	change_set,
-	change_shrink,
-	change_split,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_remove = require( './remove' );
-	change_set = require( './set' );
-	change_shrink = require( './shrink' );
-	change_split = require( './split' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_join', ( def, change_join ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_insert = require( './insert' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_remove = require( './remove' );
+
+const change_set = require( './set' );
+
+const change_shrink = require( './shrink' );
+
+const change_split = require( './split' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -85,7 +77,7 @@ def.func._init =
 {
 	if( this.at1 < 0 )
 	{
-		throw change_error( 'join.at1 negative' );
+		throw error.make( 'join.at1 negative' );
 	}
 };
 
@@ -139,26 +131,26 @@ def.func.changeTree =
 
 	if( typeof( text ) !== 'string' )
 	{
-		throw change_error( 'join.path signates no string' );
+		throw error.make( 'join.path signates no string' );
 	}
 
 	if( typeof( text2 ) !== 'string' )
 	{
-		throw change_error( 'join.path2 signates no string' );
+		throw error.make( 'join.path2 signates no string' );
 	}
 
 	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
-	if( !pivot.getKey ) throw change_error( 'join.pivot not ranked' );
+	if( !pivot.getKey ) throw error.make( 'join.pivot not ranked' );
 
 	if( at1 !== text.length )
 	{
-		throw change_error( 'join.at1 !== text.length' );
+		throw error.make( 'join.at1 !== text.length' );
 	}
 
 	if( !path2.shorten.shorten.subPathOf( path ) )
 	{
-		throw change_error( 'join.path2 not a subPath' );
+		throw error.make( 'join.path2 not a subPath' );
 	}
 
 	const key = path.get( -2 );
@@ -175,17 +167,17 @@ def.func.changeTree =
 
 	if( rank1 < 0 )
 	{
-		throw change_error( 'join.path has no rank' );
+		throw error.make( 'join.path has no rank' );
 	}
 
 	if( rank2 < 0 )
 	{
-		throw change_error( 'join.path2 has no rank' );
+		throw error.make( 'join.path2 has no rank' );
 	}
 
 	if( rank1 + 1 !== rank2 )
 	{
-		throw change_error( 'join ranks not sequential' );
+		throw error.make( 'join ranks not sequential' );
 	}
 
 	para1 = para1.create( 'text', para1.text + para2.text );

@@ -4,42 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_grow,
-	change_error,
-	change_insert,
-	change_join,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_set,
-	change_shrink,
-	change_split,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_join = require( './join' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_set = require( './set' );
-	change_shrink = require( './shrink' );
-	change_split = require( './split' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_remove', ( def, change_remove ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_insert = require( './insert' );
+
+const change_join = require( './join' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_set = require( './set' );
+
+const change_shrink = require( './shrink' );
+
+const change_split = require( './split' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -91,14 +83,12 @@ def.func._init =
 {
 	if( this.at1 + this.val.length !== this.at2 )
 	{
-		throw change_error(
-			'remove.at1 + remove.val.length !== remove.at2'
-		);
+		throw error.make( 'remove.at1 + remove.val.length !== remove.at2' );
 	}
 
 	if( this.at1 < 0 || this.at2 < 0 )
 	{
-		throw change_error( 'remove.at1|at2 negative' );
+		throw error.make( 'remove.at1|at2 negative' );
 	}
 };
 
@@ -141,14 +131,14 @@ def.func.changeTree =
 
 	if( typeof( text ) !== 'string' )
 	{
-		throw change_error( 'remove.path signates no string' );
+		throw error.make( 'remove.path signates no string' );
 	}
 
 	const val = text.substring( this.at1, this.at2 );
 
 	if( val !== this.val )
 	{
-		throw change_error( 'remove.val wrong: ' + val + ' !== ' + this.val );
+		throw error.make( 'remove.val wrong: ' + val + ' !== ' + this.val );
 	}
 
 	return(

@@ -1,29 +1,23 @@
 /*
 | The select rectangle.
 */
-
-
-var
-	gleam_border,
-	gleam_color,
-	gleam_facet,
-	gruga_select;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-gruga_select = { };
+tim.define( module, 'gruga_select', ( def, gruga_select ) => {
+
+
+const gleam_border = require( '../gleam/border' );
+
+const gleam_color = require( '../gleam/color' );
+
+const gleam_facet = require( '../gleam/facet' );
 
 
 /*
 | The frame main facet.
 */
-gruga_select.facet =
+def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'border',
 			gleam_border.create(
@@ -33,7 +27,5 @@ gruga_select.facet =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_select );
+} );
 
-
-} )( );

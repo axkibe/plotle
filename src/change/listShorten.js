@@ -8,22 +8,12 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_error,
-	change_listAppend;
-
-
-if( NODE )
-{
-	change_listAppend = require( './listAppend' );
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-}
-
-
 tim.define( module, 'change_listShorten', ( def, change_listShorten ) => {
+
+
+const change_generic = require( './generic' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -81,12 +71,12 @@ def.func.changeTree =
 
 	if( llen === 0 )
 	{
-		throw change_error( 'cannot shorten an empty list' );
+		throw error.make( 'cannot shorten an empty list' );
 	}
 
 	if( list.get( llen - 1 ).equals( this.val ) )
 	{
-		throw change_error( 'listShorten not shortening correct value' );
+		throw error.make( 'listShorten not shortening correct value' );
 	}
 
 	return list.remove( llen - 1 );

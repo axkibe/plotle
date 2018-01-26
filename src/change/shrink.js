@@ -4,42 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_grow,
-	change_error,
-	change_insert,
-	change_join,
-	change_list,
-	change_mark_node,
-	change_mark_text,
-	change_remove,
-	change_set,
-	change_split,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_error = require( './error' );
-	change_grow = require( './grow' );
-	change_insert = require( './insert' );
-	change_join = require( './join' );
-	change_list = require( './list' );
-	change_mark_node = require( './mark/node' );
-	change_mark_text = require( './mark/text' );
-	change_remove = require( './remove' );
-	change_set = require( './set' );
-	change_split = require( './split' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_shrink', ( def, change_shrink ) => {
+
+
+const change_generic = require( './generic' );
+
+const change_grow = require( './grow' );
+
+const change_insert = require( './insert' );
+
+const change_join = require( './join' );
+
+const change_list = require( './list' );
+
+const change_mark_node = require( './mark/node' );
+
+const change_mark_text = require( './mark/text' );
+
+const change_remove = require( './remove' );
+
+const change_set = require( './set' );
+
+const change_split = require( './split' );
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
+const error = require( './error' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -83,7 +75,7 @@ def.func._init =
 {
 	if( this.rank !== undefined && this.rank < 0 )
 	{
-		throw change_error( 'set.rank negative' );
+		throw error.make( 'set.rank negative' );
 	}
 };
 
@@ -130,12 +122,12 @@ def.func.changeTree =
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{
-		throw change_error( 'shrink.prev doesn\'t match' );
+		throw error.make( 'shrink.prev doesn\'t match' );
 	}
 
 	if( this.path.get( -2 ) !== 'twig' )
 	{
-		throw change_error( 'shrink.path( -2 ) with rank not twig' );
+		throw error.make( 'shrink.path( -2 ) with rank not twig' );
 	}
 
 	let pivot = tree.getPath( this.path.shorten.shorten );
@@ -146,7 +138,7 @@ def.func.changeTree =
 
 	if( rank !== this.rank )
 	{
-		throw change_error( 'shrink.rank doesn\'t match' );
+		throw error.make( 'shrink.rank doesn\'t match' );
 	}
 
 	pivot = pivot.create( 'twig:remove', key );
@@ -229,10 +221,7 @@ def.func._transformJIRS =
 		cx
 	)
 {
-	if( !this.path.subPathOf( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.subPathOf( cx.path ) ) return cx;
 
 	return undefined;
 };
@@ -246,10 +235,7 @@ def.func._transformMark =
 		mark
 	)
 {
-	if( !this.path.subPathOf( mark.path ) )
-	{
-		return mark;
-	}
+	if( !this.path.subPathOf( mark.path ) ) return mark;
 
 	return undefined;
 };

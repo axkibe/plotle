@@ -4,22 +4,12 @@
 'use strict';
 
 
-// FIXME
-var
-	change_generic,
-	change_wrap,
-	change_wrapList;
-
-
-if( NODE )
-{
-	change_generic = require( './generic' );
-	change_wrap = require( './wrap' );
-	change_wrapList = require( './wrapList' );
-}
-
-
 tim.define( module, 'change_list', ( def, change_list ) => {
+
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
 
 
 /*::::::::::::::::::::::::::::.

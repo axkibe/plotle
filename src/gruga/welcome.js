@@ -1,30 +1,31 @@
 /*
 | Default design for the welcome form.
 */
-
-
-var
-	shell_fontPool,
-	form_welcome,
-	gleam_point,
-	gleam_rect,
-	gruga_genericButton,
-	gruga_welcome,
-	widget_button,
-	widget_label;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'gruga_welcome', ( def, gruga_welcome ) => {
+
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const form_welcome = require( '../form/welcome' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_genericButton = require( './genericButton' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_label = require( '../widget/label' );
 
 
 /*
 | Layout
 */
-gruga_welcome =
+def.staticLazy.layout = ( ) =>
 	form_welcome.abstract(
 		'twig:add', 'headline',
 			widget_label.abstract(
@@ -54,7 +55,5 @@ gruga_welcome =
 	);
 
 
-if( FREEZE ) Object.freeze( gruga_welcome );
+} );
 
-
-} )( );

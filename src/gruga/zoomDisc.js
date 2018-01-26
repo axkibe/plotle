@@ -1,112 +1,109 @@
 /*
 | Default design of the zoom disc.
 */
-
-
-var
-	disc_zoomDisc,
-	gleam_border,
-	gleam_borderList,
-	gleam_color,
-	gleam_ellipse,
-	gleam_facet,
-	gleam_facetList,
-	gleam_gradient_colorStop,
-	gleam_gradient_radial,
-	gleam_point,
-	gleam_rect,
-	gleam_size,
-	gruga_iconZoomAll,
-	gruga_iconZoomHome,
-	gruga_iconZoomIn,
-	gruga_iconZoomOut,
-	gruga_zoomDisc,
-	shell_fontPool,
-	widget_button;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	genericButtonFacets,
-	genericButtonModel,
-	genericButtonSize,
-	pw,
-	zoomAllButtonPos,
-	zoomInButtonPos,
-	zoomOutButtonPos,
-	zoomHomeButtonPos;
+tim.define( module, 'gruga_zoomDisc', ( def, gruga_zoomDisc ) => {
 
 
-pw = gleam_point.xy( 0, 505 );
+const disc_zoomDisc = require( '../disc/zoomDisc' );
 
-zoomAllButtonPos = pw.add( 100, -91 );
+const gleam_border = require( '../gleam/border' );
 
-zoomInButtonPos = pw.add( 102, -42 );
+const gleam_borderList = require( '../gleam/borderList' );
 
-zoomOutButtonPos = pw.add( 102, 7 );
+const gleam_color = require( '../gleam/color' );
 
-zoomHomeButtonPos = pw.add( 100, 56 );
+const gleam_ellipse = require( '../gleam/ellipse' );
 
-genericButtonSize = gleam_size.wh( 44, 44 );
+const gleam_facet = require( '../gleam/facet' );
 
-genericButtonFacets =
-	gleam_facetList.create(
-		'list:init',
-		[
-			// default state.
-			gleam_facet.create(
-//				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
-//				'border',
-//					gleam_border.create(
-//						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-//					)
-			),
-			// hover
-			gleam_facet.create(
-				'group:init', { 'hover' : true },
-				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			),
-			// down
-			gleam_facet.create(
-				'group:init', { 'down' : true },
-				'fill', gleam_color.rgb( 255, 188, 88 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			),
-			// down and hover
-			gleam_facet.create(
-				'group:init', { 'down' : true, 'hover' : true },
-				'fill', gleam_color.rgb( 255, 188, 88 ),
-				'border',
-					gleam_border.create(
-						'color', gleam_color.rgba( 196, 94, 44, 0.4 )
-					)
-			)
-		]
-	);
+const gleam_facetList = require( '../gleam/facetList' );
+
+const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+
+const gleam_gradient_radial = require( '../gleam/gradient/radial' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_size = require( '../gleam/size' );
+
+const gruga_iconZoomAll = require( './iconZoomAll' );
+
+const gruga_iconZoomHome = require( './iconZoomHome' );
+
+const gruga_iconZoomIn = require( './iconZoomIn' );
+
+const gruga_iconZoomOut = require( './iconZoomOut' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const widget_button = require( '../widget/button' );
 
 
-genericButtonModel =
-	widget_button.abstract(
-		'facets', genericButtonFacets,
-		'font', shell_fontPool.get( 16, 'cm' ),
-		'shape', 'ellipse'
-	);
+def.staticLazy.layout =
+	function( )
+{
+	const pw = gleam_point.xy( 0, 505 );
 
+	const zoomAllButtonPos = pw.add( 100, -91 );
 
-gruga_zoomDisc =
-	disc_zoomDisc.abstract(
+	const zoomInButtonPos = pw.add( 102, -42 );
+
+	const zoomOutButtonPos = pw.add( 102, 7 );
+
+	const zoomHomeButtonPos = pw.add( 100, 56 );
+
+	const genericButtonSize = gleam_size.wh( 44, 44 );
+
+	const genericButtonFacets =
+		gleam_facetList.create(
+			'list:init',
+			[
+				// default state.
+				gleam_facet.create(
+				),
+				// hover
+				gleam_facet.create(
+					'group:init', { 'hover' : true },
+					'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				),
+				// down
+				gleam_facet.create(
+					'group:init', { 'down' : true },
+					'fill', gleam_color.rgb( 255, 188, 88 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				),
+				// down and hover
+				gleam_facet.create(
+					'group:init', { 'down' : true, 'hover' : true },
+					'fill', gleam_color.rgb( 255, 188, 88 ),
+					'border',
+						gleam_border.create(
+							'color', gleam_color.rgba( 196, 94, 44, 0.4 )
+						)
+				)
+			]
+		);
+
+	const genericButtonModel =
+		widget_button.abstract(
+			'facets', genericButtonFacets,
+			'font', shell_fontPool.get( 16, 'cm' ),
+			'shape', 'ellipse'
+		);
+
+	return( disc_zoomDisc.abstract(
 		'size',
 			gleam_size.create(
 				'width', 176,
@@ -192,10 +189,9 @@ gruga_zoomDisc =
 						genericButtonSize
 					)
 			)
-	);
+	) );
+};
 
 
-if( FREEZE ) Object.freeze( gruga_zoomDisc );
+} );
 
-
-} )( );

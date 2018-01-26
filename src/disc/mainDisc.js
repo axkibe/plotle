@@ -4,25 +4,36 @@
 'use strict';
 
 
-// FIXME
-var
-	action_select,
-	change_shrink,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_transform,
-	result_hover,
-	show_create,
-	show_form,
-	show_normal,
-	show_zoom;
-
-
 tim.define( module, 'disc_mainDisc', ( def, disc_mainDisc ) => {
+
+
+const action_select = require( '../action/select' );
+
+const change_shrink = require( '../change/shrink' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const result_hover = require( '../result/hover' );
+
+const show_create = require( '../show/create' );
+
+const show_form = require( '../show/form' );
+
+const show_normal = require( '../show/normal' );
+
+const show_zoom = require( '../show/zoom' );
 
 
 /*::::::::::::::::::::::::::::.

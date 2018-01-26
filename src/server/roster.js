@@ -153,6 +153,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/error.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -170,6 +171,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/change/generic.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -772,6 +774,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/zoomDisc.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -836,22 +839,27 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/select.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gruga/signup.js',
+		'filePath', 'src/gruga/signUp.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/space.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/user.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/gruga/welcome.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
