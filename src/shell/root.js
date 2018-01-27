@@ -6,17 +6,7 @@
 
 // FIXME
 var
-	change_grow,
-	change_join,
-	change_list,
-	change_remove,
-	change_wrap,
 	disc_root,
-	gleam_connect,
-	gleam_glint_list,
-	gleam_point,
-	gleam_size,
-	gleam_transform,
 	fabric_doc,
 	fabric_para,
 	fabric_relation,
@@ -58,6 +48,26 @@ const action_dragItems = require( '../action/dragItems' );
 const action_resizeItems = require( '../action/resizeItems' );
 
 const action_select = require( '../action/select' );
+
+const change_grow = require( '../change/grow' );
+
+const change_join = require( '../change/join' );
+
+const change_list = require( '../change/list' );
+
+const change_remove = require( '../change/remove' );
+
+const change_wrap = require( '../change/wrap' );
+
+const gleam_connect = require( '../gleam/connect' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_size = require( '../gleam/size' );
+
+const gleam_transform = require( '../gleam/transform' );
 
 const gruga_controls = require( '../gruga/controls' );
 

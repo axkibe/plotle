@@ -13,7 +13,6 @@ var
 	gleam_glint_list,
 	gleam_glint_text,
 	gleam_glint_window,
-	gleam_measure,
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
@@ -326,14 +325,7 @@ def.lazyFuncInt.locateOffsetPoint =
 
 	return(
 		gleam_point.create(
-			'x',
-				Math.round(
-					pitch.x
-					+ gleam_measure.width(
-						font,
-						value.substring( 0, offset )
-					)
-				),
+			'x', Math.round( pitch.x + font.getAdvanceWidth( value.substring( 0, offset ) ) ),
 			'y', Math.round( pitch.y + font.size )
 		)
 	);
@@ -544,7 +536,7 @@ def.func._getOffsetAt =
 		x2 =
 			password
 			? a * mw
-			: gleam_measure.width( font, value.substr( 0, a ) );
+			: font.getAdvanceWidth( value.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}

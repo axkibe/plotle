@@ -4,13 +4,12 @@
 'use strict';
 
 
-// FIXME
-var
-	change_wrapList,
-	shell_settings;
-
-
 tim.define( module, 'shell_doTracker', ( def, shell_doTracker ) => {
+
+
+const change_wrapList = require( '../change/wrapList' );
+
+const shell_settings = require( '../shell/settings' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -230,3 +229,4 @@ def.func.redo =
 
 
 } );
+

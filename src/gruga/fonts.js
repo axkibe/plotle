@@ -11,12 +11,28 @@ const gleam_color = require( '../gleam/color' );
 
 const gleam_font = require( '../gleam/font' );
 
-const defaultFamily = 'DejaVuSans,sans-serif';
+let defaultOTFont;
+
+/*
+| Sets the opentype default font.
+*/
+def.static.setOpenTypeDefault =
+	function(
+		font
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( defaultOTFont ) throw new Error( );
+/**/}
+
+	defaultOTFont =  font;
+};
 
 
 def.staticLazy.ca = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.black,
 		'align', 'center',
 		'base', 'alphabetic'
@@ -25,7 +41,7 @@ def.staticLazy.ca = ( ) =>
 
 def.staticLazy.car = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.red,
 		'align', 'center',
 		'base', 'alphabetic'
@@ -34,7 +50,7 @@ def.staticLazy.car = ( ) =>
 
 def.staticLazy.cm = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.black,
 		'align', 'center',
 		'base', 'middle'
@@ -43,7 +59,7 @@ def.staticLazy.cm = ( ) =>
 
 def.staticLazy.la = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.black,
 		'align', 'start',
 		'base', 'alphabetic'
@@ -52,7 +68,7 @@ def.staticLazy.la = ( ) =>
 
 def.staticLazy.lm = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.black,
 		'align', 'start',
 		'base', 'middle'
@@ -61,7 +77,7 @@ def.staticLazy.lm = ( ) =>
 
 def.staticLazy.ra = ( ) =>
 	gleam_font.abstract(
-		'family', defaultFamily,
+		'opentype', defaultOTFont,
 		'fill', gleam_color.black,
 		'align', 'end',
 		'base', 'alphabetic'

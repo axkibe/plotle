@@ -4,13 +4,12 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_point,
-	gleam_rect;
-
-
 tim.define( module, 'gleam_line', ( def, gleam_line ) => {
+
+
+const gleam_point = require( './point' );
+
+const gleam_rect = require( './rect' );
 
 
 /*::::::::::::::::::::::::::::.

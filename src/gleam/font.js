@@ -1,5 +1,7 @@
 /*
 | A font style.
+|
+| FIXME family is ignored?
 */
 'use strict';
 
@@ -22,26 +24,18 @@ if( TIM )
 {
 	def.attributes =
 	{
-		size :
-		{
-			type : 'number'
-		},
-		family :
-		{
-			type : 'string'
-		},
-		align : // horizonal alignment
-		{
-			type : 'string'
-		},
-		fill : // font color
-		{
-			type : 'gleam_color'
-		},
-		base : // vertical alignment
-		{
-			type : 'string'
-		}
+		size : { type : 'number' },
+
+		opentype : { type : [ 'undefined', 'protean' ] },
+
+		// horizonal alignment
+		align : { type : 'string' },
+
+		// font color
+		fill : { type : 'gleam_color' },
+
+		// vertical alignment
+		base : { type : 'string' }
 	};
 
 	/*
@@ -82,26 +76,22 @@ def.func._init =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
-/*
-| The CSS-string for this font.
-|
-| FIXME: remove?
-*/
-def.lazy.css =
-	function( )
-{
-	return Math.round( this.size ) + 'px ' + 'Ideoloom-' + this.family;
-};
-
-
 /*:::::::::::.
 :: Functions
 '::::::::::::*/
+
+
+
+/*
+| Measures the advance width of a given text.
+*/
+def.func.getAdvanceWidth =
+	function(
+		text
+	)
+{
+	return this.opentype.getAdvanceWidth( text, this.size );
+};
 
 
 /*

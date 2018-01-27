@@ -263,7 +263,7 @@ def.func.login =
 	root.link.auth(
 		user_creds.create(
 			'name', username,
-			'passhash', user_passhash( pass )
+			'passhash', user_passhash.calc( pass )
 		)
 	);
 };

@@ -143,6 +143,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/hash/sha1.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -387,10 +388,6 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
-		'filePath', 'src/gleam/measure.js',
-		'inBundle', true
-	),
-	server_resource.create(
 		'filePath', 'src/gleam/shape/line.js',
 		'hasTim', true,
 		'inBundle', true
@@ -601,6 +598,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/disc/disc.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1069,6 +1067,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/user/passhash.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

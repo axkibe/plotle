@@ -62,19 +62,11 @@ const initRepository =
 		config
 	)
 {
-	var
-		global,
-		initSpaces,
-		s,
-		spaces,
-		sr,
-		sZ;
-
-	spaces = yield connection.collection( 'spaces', resume( ) );
+	const spaces = yield connection.collection( 'spaces', resume( ) );
 
 	console.log( 'start', 'found no repository, initializing a new one' );
 
-	initSpaces =
+	const initSpaces =
 		[
 			ref_space.create(
 				'username', 'ideoloom',
@@ -86,9 +78,9 @@ const initRepository =
 			)
 		];
 
-	for( s = 0, sZ = initSpaces.length; s < sZ; s++ )
+	for( let s = 0, sl = initSpaces.length; s < sl; s++ )
 	{
-		sr = initSpaces[ s ];
+		const sr = initSpaces[ s ];
 
 		console.log( 'start', '  initializing space ' + sr.fullname );
 
@@ -104,7 +96,7 @@ const initRepository =
 
 	console.log( 'start', '  initializing global.version' );
 
-	global = yield connection.collection( 'global', resume( ) );
+	const global = yield connection.collection( 'global', resume( ) );
 
 	yield global.insert(
 		{

@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	session_uid;
-
-
 tim.define( module, 'user_creds', ( def, user_creds ) => {
+
+
+const session_uid = require( '../session/uid' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -47,10 +45,7 @@ if( TIM )
 def.static.createFromLocalStorage =
 	function( )
 {
-	var
-		name;
-
-	name = window.localStorage.getItem( 'username' );
+	const name = window.localStorage.getItem( 'username' );
 
 	if( name )
 	{

@@ -5,11 +5,6 @@
 'use strict';
 
 
-//FIXME
-var
-	font_default;
-
-
 tim.define( module, 'gleam_intern_opentype', ( def, gleam_intern_opentype ) => {
 
 
@@ -125,7 +120,9 @@ def.static.drawText =
 /**/	if( size !== Math.floor( size ) ) throw new Error();
 /**/}
 
-	glyphCache = font_default.glyphCache;
+	const otFont = font.opentype;
+
+	glyphCache = otFont.glyphCache;
 
 	glyphCacheSet = glyphCache[ size ];
 
@@ -134,23 +131,23 @@ def.static.drawText =
 		glyphCacheSet = glyphCache[ size ] = { };
 	}
 
-	const fontScale = 1 / font_default.unitsPerEm * size;
+	const fontScale = 1 / otFont.unitsPerEm * size;
 
 	options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
 
-	glyphs = font_default.stringToGlyphs( text, options );
+	glyphs = otFont.stringToGlyphs( text, options );
 
 	switch( font.align )
 	{
 		case 'center' :
 
-			x -= getWidth( glyphs, font_default, fontScale ) / 2;
+			x -= getWidth( glyphs, otFont, fontScale ) / 2;
 
 			break;
 
 		case 'end' :
 
-			x -= getWidth( glyphs, font_default, fontScale );
+			x -= getWidth( glyphs, otFont, fontScale );
 
 			break;
 	}
@@ -159,13 +156,11 @@ def.static.drawText =
 	{
 		case 'middle' :
 
-			let capheight = font_default.capheight;
+			let capheight = otFont.capheight;
 
 			if( !capheight )
 			{
-				font_default.capheight =
-				capheight =
-					getCapHeight( font_default );
+				otFont.capheight = capheight = getCapHeight( otFont );
 			}
 
 			y += capheight * fontScale / 2 - 0.5;
@@ -182,25 +177,14 @@ def.static.drawText =
 		   	    x += glyph.advanceWidth * fontScale;
 		   	}
 
-			x +=
-				font_default.getKerningValue(
-					glyph,
-					glyphs[ a ]
-				) * fontScale;
+			x += otFont.getKerningValue( glyph, glyphs[ a ] ) * fontScale;
 		}
 
 	   	glyph = glyphs[ a ];
 
 		if( size >= shell_settings.glyphCacheLimit )
 		{
-	      	path =
-				glyph.getPath(
-					round( x ),
-					round( y ),
-					size,
-					options,
-					font_default
-				);
+	      	path = glyph.getPath( round( x ), round( y ), size, options, otFont );
 
 			path.draw( cx );
 
@@ -225,7 +209,7 @@ def.static.drawText =
 			continue;
 		}
 
-		path = glyph.getPath( 0, 0, size, options, font_default );
+		path = glyph.getPath( 0, 0, size, options, otFont );
 
 		const bb = path.getBoundingBox( );
 

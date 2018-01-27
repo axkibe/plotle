@@ -13,7 +13,6 @@ var
 	gleam_glint_list,
 	gleam_glint_text,
 	gleam_glint_window,
-	gleam_measure,
 	gleam_point,
 	gleam_rect,
 	flow_block,
@@ -214,7 +213,7 @@ def.lazy.flow =
 
 	let y = font.size;
 
-	const space = gleam_measure.width( font, ' ' );
+	const space = font.getAdvanceWidth( ' ' );
 
 	const lines = [ ];
 
@@ -230,7 +229,7 @@ def.lazy.flow =
 		// a token is a word plus following hard spaces
 		const tokenText = ca[ 1 ] + ca[ 3 ];
 
-		const w = gleam_measure.width( font, tokenText );
+		const w = font.getAdvanceWidth( tokenText );
 
 		if( flowWidth > 0 && x + w > flowWidth )
 		{
@@ -516,7 +515,7 @@ def.func.getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = gleam_measure.width( font, text.substr( 0, a ) );
+		x2 = font.getAdvanceWidth( text.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}
@@ -1122,10 +1121,7 @@ def.func._locateOffset =
 				'x',
 					Math.round(
 						token.x
-						+ gleam_measure.width(
-							font,
-							text.substring( token.offset, offset )
-						)
+						+ font.getAdvanceWidth( text.substring( token.offset, offset ) )
 					),
 				'y', line.y
 			);

@@ -175,11 +175,6 @@ const serveAuth =
 		request
 	)
 {
-	var
-		userCreds,
-		userInfo,
-		userSpaceList;
-
 	try
 	{
 		request = request_auth.createFromJSON( request );
@@ -191,7 +186,7 @@ const serveAuth =
 		return replyError( 'Request JSON translation failed' );
 	}
 
-	userCreds = request.userCreds;
+	let userCreds = request.userCreds;
 
 	if( userCreds.isVisitor )
 	{
@@ -200,11 +195,11 @@ const serveAuth =
 		return reply_auth.create( 'userCreds', userCreds );
 	}
 
-	userInfo = yield* root.userNexus.testUserCreds( userCreds );
+	const userInfo = yield* root.userNexus.testUserCreds( userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid password' );
 
-	userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
+	const userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
 
 	return(
 		reply_auth.create(
@@ -275,13 +270,6 @@ const serveUpdate =
 		result
 	)
 {
-	var
-		asw,
-		moments,
-		sleepID,
-		timer,
-		userInfo;
-
 	try
 	{
 		request = request_update.createFromJSON( request );
@@ -293,13 +281,13 @@ const serveUpdate =
 		return replyError( 'Request JSON translation failed' );
 	}
 
-	userInfo = root.userNexus.testInCache( request.userCreds );
+	const userInfo = root.userNexus.testInCache( request.userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid creds' );
 
-	moments = request.moments;
+	const moments = request.moments;
 
-	asw = server_requestHandler.testUpdate( userInfo, moments );
+	let asw = server_requestHandler.testUpdate( userInfo, moments );
 
 	// if testUpdate failed return the error
 	if( asw ) return asw;
@@ -310,9 +298,9 @@ const serveUpdate =
 	if( asw ) return asw;
 
 	// if not an immediate answer, the request is put to sleep
-	sleepID = '' + root.nextSleepID;
+	const sleepID = '' + root.nextSleepID;
 
-	timer =
+	const timer =
 		setTimeout(
 			server_requestHandler.expireUpdateSleep,
 			60000,
@@ -344,11 +332,6 @@ const serveAcquire =
 		request
 	)
 {
-	var
-		access,
-		spaceBox,
-		userCreds;
-
 	try
 	{
 		request = request_acquire.createFromJSON( request );
@@ -360,14 +343,14 @@ const serveAcquire =
 		return replyError( 'Request JSON translation failed' );
 	}
 
-	userCreds = request.userCreds;
+	const userCreds = request.userCreds;
 
 	if( !root.userNexus.testInCache( userCreds ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
 
-	access = server_spaceNexus.testAccess( userCreds, request.spaceRef );
+	const access = server_spaceNexus.testAccess( userCreds, request.spaceRef );
 
 	if( access === 'no' )
 	{
@@ -379,7 +362,7 @@ const serveAcquire =
 		);
 	}
 
-	spaceBox = root.spaces.get( request.spaceRef.fullname );
+	let spaceBox = root.spaces.get( request.spaceRef.fullname );
 
 	if( !spaceBox )
 	{
@@ -419,7 +402,7 @@ server_requestHandler.conveyUpdate =
 {
 	const arr = [ ];
 
-	for( let a = 0, aZ = moments.length; a < aZ; a++ )
+	for( let a = 0, al = moments.length; a < al; a++ )
 	{
 		const moment = moments.get( a );
 
@@ -503,21 +486,13 @@ server_requestHandler.testUpdate =
 		moments   // references to space dynamics to get updates for
 	)
 {
-	var
-		a,
-		aZ,
-		dynRef,
-		moment,
-		spaceBox,
-		seq;
-
-	for( a = 0, aZ = moments.length; a < aZ; a++ )
+	for( let a = 0, al = moments.length; a < al; a++ )
 	{
-		moment = moments.get( a );
+		const moment = moments.get( a );
 
-		dynRef = moment.dynRef;
+		const dynRef = moment.dynRef;
 
-		seq = moment.seq;
+		const seq = moment.seq;
 
 		switch( dynRef.timtype )
 		{
@@ -531,7 +506,7 @@ server_requestHandler.testUpdate =
 					return replyError( 'update not allowed' );
 				}
 
-				spaceBox = root.spaces.get( dynRef.fullname );
+				const spaceBox = root.spaces.get( dynRef.fullname );
 
 				if( !spaceBox ) return replyError( 'Unknown space' );
 
@@ -567,12 +542,7 @@ server_requestHandler.expireUpdateSleep =
 		sleepID
 	)
 {
-	var
-		asw,
-		result,
-		sleep;
-
-	sleep = root.upSleeps.get( sleepID );
+	const sleep = root.upSleeps.get( sleepID );
 
 	// maybe it just had expired already
 	if( !sleep ) return;
@@ -581,11 +551,11 @@ server_requestHandler.expireUpdateSleep =
 		'upSleeps', root.upSleeps.remove( sleepID )
 	);
 
-	asw = reply_update.create( );
+	const asw = reply_update.create( );
 
 	log_ajax( '->', asw );
 
-	result = sleep.result;
+	const result = sleep.result;
 
 	result.writeHead(
 		200,

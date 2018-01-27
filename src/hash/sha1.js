@@ -13,43 +13,27 @@ authors: [Christopher Pitt, Enrique Erne]
 * changed it to not alter String.prototype
 * cleaned from jshint warnings
 * restructured code
+* changed to tim.js structure
+* changed to ES6
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-
-var
-	hash_sha1;
-
-/*
-| Capsule
-*/
-(function( ) {
 'use strict';
 
 
-var
-	rotateLeft,
-	tohex,
-	toUTF8;
+tim.define( module, 'hash_sha1', ( def, hash_sha1 ) => {
 
 
-toUTF8 =
+const toUTF8 =
 	function(
 		str
 	)
 {
-	var
-		a,
-		b,
-		code,
-		result;
+	let result = '';
 
-	result = '';
-
-	code = String.fromCharCode;
+	const code = String.fromCharCode;
 
 	str = str.replace( /\r\n/g, '\n' );
 
-	for( a = 0; ( b = str.charCodeAt( a ) ); a++ )
+	for( let a = 0, b; ( b = str.charCodeAt( a ) ); a++ )
 	{
 		if( b < 128 )
 		{
@@ -74,78 +58,56 @@ toUTF8 =
 };
 
 
-rotateLeft =
+const rotateLeft =
 	function( a, b )
 {
 	return ( a << b ) | ( a >>> ( 32 - b ) );
 };
 
 
-tohex =
+const tohex =
 	function( a )
 {
-	var b, r;
+	let r = '';
 
-	r = '';
-
-	for( b = 7; b >= 0; b-- )
+	for( let b = 7; b >= 0; b-- )
 	{
-		r += ((a >>> (b * 4)) & 0x0f).toString(16);
+		r += ( (a >>> (b * 4) ) & 0x0f ).toString( 16 );
 	}
 
 	return r;
 };
 
 
-hash_sha1 =
+def.static.calc =
 	function( str )
 {
-	var
-		a,
-		assign,
-		b,
-		buffer,
-		code,
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		len,
-		t1,
-		t2,
-		t3,
-		t4,
-		t5,
-		words;
+	let h1 = 0x67452301;
 
-	h1 = 0x67452301;
+	let h2 = 0xEFCDAB89;
 
-	h2 = 0xEFCDAB89;
+	let h3 = 0x98BADCFE;
 
-	h3 = 0x98BADCFE;
+	let h4 = 0x10325476;
 
-	h4 = 0x10325476;
+	let h5 = 0xC3D2E1F0;
 
-	h5 = 0xC3D2E1F0;
+	let t1, t2, t3, t4, t5;
 
 	str = toUTF8(str);
 
-	len = str.length;
+	const len = str.length;
 
-	words = [ ];
+	const words = [ ];
 
-	buffer = new Array( 80 );
+	const buffer = new Array( 80 );
 
-	code = function( a ) { return str.charCodeAt( a ); };
+	const code = function( a ) { return str.charCodeAt( a ); };
 
-	assign =
+	const assign =
 		function( c )
 	{
-		var
-			b5;
-
-		b5 = t5;
+		const b5 = t5;
 
 		t5 = t4;
 
@@ -157,6 +119,8 @@ hash_sha1 =
 
 		t1 = ( rotateLeft( t1, 5 ) + b5 + buffer[ a ] + c ) & 0x0ffffffff;
 	};
+
+	let a;
 
 	for( a = 0; a < len - 3; a += 4 )
 	{
@@ -172,11 +136,11 @@ hash_sha1 =
 	{
 		case 0: a = 0x080000000; break;
 
-		case 1: a = code(len - 1) << 24 | 0x0800000; break;
+		case 1: a = code( len - 1 ) << 24 | 0x0800000; break;
 
-		case 2: a = code(len - 2) << 24 | code(len - 1) << 16 | 0x08000; break;
+		case 2: a = code( len - 2 ) << 24 | code( len - 1 ) << 16 | 0x08000; break;
 
-		case 3: a = code(len - 3) << 24 | code(len - 2) << 16 | code(len - 1) << 8 | 0x80; break;
+		case 3: a = code( len - 3 ) << 24 | code( len - 2 ) << 16 | code( len - 1 ) << 8 | 0x80; break;
 	}
 
 	words.push( a );
@@ -190,7 +154,7 @@ hash_sha1 =
 
 	words.push( ( len << 3 ) & 0x0ffffffff );
 
-	for( b = 0; b < words.length; b += 16 )
+	for( let b = 0; b < words.length; b += 16 )
 	{
 		for( a = 0; a < 16; a++ )
 		{
@@ -199,7 +163,7 @@ hash_sha1 =
 
 		for( a = 16; a <= 79; a++ )
 		{
-			buffer[a] =
+			buffer[ a ] =
 				rotateLeft(
 					buffer[ a - 3 ]
 					^ buffer[ a - 8 ]
@@ -210,11 +174,7 @@ hash_sha1 =
 				);
 		}
 
-		t1 = h1;
-		t2 = h2;
-		t3 = h3;
-		t4 = h4;
-		t5 = h5;
+		t1 = h1; t2 = h2; t3 = h3; t4 = h4; t5 = h5;
 
 		a = 0;
 
@@ -249,22 +209,9 @@ hash_sha1 =
 		h5 = ( h5 + t5 ) & 0x0ffffffff;
 	}
 
-	return(
-		tohex( h1 )
-		+ tohex( h2 )
-		+ tohex( h3 )
-		+ tohex( h4 )
-		+ tohex( h5 )
-	).toLowerCase( );
+	return( tohex( h1 ) + tohex( h2 ) + tohex( h3 ) + tohex( h4 ) + tohex( h5 ) ).toLowerCase( );
 };
 
 
-/*
-| Node export.
-*/
-if( NODE )
-{
-	module.exports = hash_sha1;
-}
+} );
 
-} )( );

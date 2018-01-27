@@ -1,30 +1,17 @@
 /*
 | A disc panel.
 */
-
-
-var
-	disc_disc;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-/*
-| Constructor
-*/
-disc_disc = { };
+tim.define( module, 'disc_disc', ( def, disc_disc ) => {
 
 
 /*
 | Returns the hover path when a disc
 | is concerned about it.
 */
-disc_disc.concernsHover =
+def.static.concernsHover =
 	function(
 		hover,  // hover path
 		path    // path of the disc
@@ -33,13 +20,7 @@ disc_disc.concernsHover =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		path.get( 0 ) !== 'disc'
-/**/		|| path.get( 1 ) !== 'twig'
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( path.get( 0 ) !== 'disc' || path.get( 1 ) !== 'twig' ) throw new Error( );
 /**/}
 
 	return(
@@ -55,4 +36,5 @@ disc_disc.concernsHover =
 };
 
 
-} )( );
+} );
+

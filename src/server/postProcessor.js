@@ -41,7 +41,7 @@ server_postProcessor.opentype =
 		resource       // the resource
 	)
 {
-	opentypeHash = hash_sha1( resource.data + '' );
+	opentypeHash = hash_sha1.calc( resource.data + '' );
 
 	root.create(
 		'inventory',
@@ -72,7 +72,7 @@ server_postProcessor.opentypeMin =
 		resource       // the resource
 	)
 {
-	opentypeMinHash = hash_sha1( resource.data + '' );
+	opentypeMinHash = hash_sha1.calc( resource.data + '' );
 
 	root.create(
 		'inventory',

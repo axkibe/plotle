@@ -21,7 +21,6 @@ var
 	gleam_glint_paint,
 	gleam_glint_text,
 	gleam_glint_window,
-	gleam_measure,
 	gleam_point,
 	gleam_rect,
 	gleam_roundRect,
@@ -1041,7 +1040,7 @@ def.func._locateOffset =
 
 	return(
 		gleam_point.xy(
-			Math.round( gleam_measure.width( font, text.substring( 0, offset ) )),
+			Math.round( font.getAdvanceWidth( text.substring( 0, offset ) ) ),
 			0
 		)
 	);
@@ -1473,7 +1472,7 @@ def.func._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = gleam_measure.width( font, value.substr( 0, a ) );
+		x2 = font.getAdvanceWidth( value.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}
@@ -1524,7 +1523,7 @@ def.func._prepareField =
 
 	const font = this._fontFor( section );
 
-	const width = gleam_measure.width( font, text );
+	const width = font.getAdvanceWidth( text );
 
 	const height = font.size + 2;
 

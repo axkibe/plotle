@@ -407,7 +407,7 @@ def.func.prepareInventory =
 		}
 
 		// calculates the hash for the bundle
-		bundleFilePath = 'ideoloom-' + hash_sha1( bundle ) + '.js';
+		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
 
 		root.create( 'bundleFilePath', bundleFilePath );
 

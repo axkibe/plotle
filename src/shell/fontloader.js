@@ -6,8 +6,8 @@
 
 
 var
-	font_default,
 	opentype,
+	gruga_fonts,
 	startup;
 
 
@@ -43,17 +43,16 @@ openTypeLoad =
 		{
 			font.glyphCache = {};
 
-			font_default = font;
+			gruga_fonts.setOpenTypeDefault( font );
 
 			startup( );
 		}
-	}
-	);
+	} );
 };
-
 
 
 window.onload = openTypeLoad;
 
 
 } )( );
+
