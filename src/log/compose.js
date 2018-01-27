@@ -4,8 +4,7 @@
 
 
 var
-	log_compose,
-	log_inspect;
+	log_compose;
 
 
 /*
@@ -15,10 +14,7 @@ var
 'use strict';
 
 
-if( NODE )
-{
-	log_inspect = require( './inspect' );
-}
+const util = NODE && require( 'util' );
 
 
 /*
@@ -44,10 +40,10 @@ const pushpad =
 | which will be returned as joinable array.
 */
 const timestamp =
-	function(
-		a
-	)
+	function( )
 {
+	const a = [ ];
+
 	const now = new Date( );
 
 	pushpad( a, now.getMonth( ) + 1, '-' );
@@ -65,6 +61,12 @@ const timestamp =
 
 
 /*
+| Inspect options.
+*/
+const inspectOpts = { depth: null };
+
+
+/*
 | Logs a number of inspected argument
 | if category is configured to be logged.
 */
@@ -74,7 +76,7 @@ log_compose =
 		args       // arguments array(like)
 	)
 {
-	const a = timestamp( [ ] );
+	const a = timestamp( );
 
 	if( category !== true )
 	{
@@ -87,7 +89,14 @@ log_compose =
 	{
 		if( i > 0 ) a.push(' ');
 
-		log_inspect( args[ i ], a, 0, [ ] );
+		if( NODE )
+		{
+			a.push( util.inspect( args[ i ], inspectOpts ) );
+		}
+		else
+		{
+			a.push( args[ i ] );
+		}
 	}
 
 	return a.join( '' );
