@@ -79,11 +79,7 @@ const fs = require( 'fs' );
 
 const isString = tim.isString;
 
-const log_ajax = require( '../log/ajax' );
-
-const log_start = require( '../log/start' );
-
-const log_web = require( '../log/web' );
+const log = require( '../log/root' );
 
 const server_maxAge = require( './maxAge' );
 
@@ -133,7 +129,7 @@ def.func._init =
 def.func.loadSpaces =
 	function*( )
 {
-	log_start( 'loading and replaying all spaces' );
+	log.start( 'loading and replaying all spaces' );
 
 	const cursor =
 		yield root.repository.spaces.find(
@@ -154,7 +150,7 @@ def.func.loadSpaces =
 				'tag', o.tag
 			);
 
-		log_start( 'loading and replaying "' + spaceRef.fullname + '"' );
+		log.start( 'loading and replaying "' + spaceRef.fullname + '"' );
 
 		root.create(
 			'spaces',
@@ -239,7 +235,7 @@ def.func.createShellConfig =
 def.func.prepareInventory =
 	function*( )
 {
-	log_start( 'preparing inventory' );
+	log.start( 'preparing inventory' );
 
 	// autogenerates the shell config as resource
 	const cconfig = root.createShellConfig( );
@@ -272,7 +268,7 @@ def.func.prepareInventory =
 	// creation, otherwise afterwards
 	if( !config.uglify ) root.prependConfigFlags( );
 
-	log_start( 'building bundle' );
+	log.start( 'building bundle' );
 
 	const timIDs = { };
 
@@ -316,7 +312,7 @@ def.func.prepareInventory =
 	{
 		let ast;
 
-		log_start( 'parsing bundle' );
+		log.start( 'parsing bundle' );
 
 		for( let a = 0, aZ = root.inventory.length; a < aZ; a++ )
 		{
@@ -348,7 +344,7 @@ def.func.prepareInventory =
 
 		if( config.uglify )
 		{
-			log_start( 'uglifying bundle' );
+			log.start( 'uglifying bundle' );
 
 			ast.figure_out_scope( );
 
@@ -423,7 +419,7 @@ def.func.prepareInventory =
 				)
 		);
 
-		log_start( 'bundle:', bundleFilePath );
+		log.start( 'bundle:', bundleFilePath );
 
 		// if uglify is turned on
 		// the flags are added after bundle
@@ -476,12 +472,12 @@ def.func.prepareInventory =
 
 	if( config.shell_bundle )
 	{
-		log_start(
+		log.start(
 			'uncompressed bundle size is ',
 			root.inventory.get( bundleFilePath ).data.length
 		);
 
-		log_start(
+		log.start(
 			'  compressed bundle size is ',
 			root.inventory.get( bundleFilePath ).gzip.length
 		);
@@ -819,7 +815,7 @@ def.func.wake =
 
 		const result = sleep.result;
 
-		log_ajax( '->', asw );
+		log.ajax( '->', asw );
 
 		result.writeHead(
 			200,
@@ -856,7 +852,7 @@ def.func.webError =
 
 	message = code + ' ' + message;
 
-	log_web( 'error', code, message );
+	log.web( 'error', code, message );
 
 	result.end( message );
 };
@@ -873,13 +869,13 @@ def.func.requestListener =
 {
 	const red = url.parse( request.url );
 
-	log_web( request.connection.remoteAddress, red.href );
+	log.web( request.connection.remoteAddress, red.href );
 
 	if( config.whiteList )
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
 		{
-			log_web(
+			log.web(
 				request.connection.remoteAddress,
 				'not in whitelist!'
 			);
@@ -1045,7 +1041,7 @@ def.func.webAjax =
 		{
 			cmd = JSON.parse( query );
 
-			log_ajax( '<-', cmd );
+			log.ajax( '<-', cmd );
 		}
 		catch( err )
 		{
@@ -1073,7 +1069,7 @@ def.func.webAjax =
 
 		if( !asw ) return;
 
-		log_ajax( '->', asw );
+		log.ajax( '->', asw );
 
 		result.writeHead(
 			200,

@@ -16,9 +16,7 @@ module.exports =
 
 const config = require( '../../config' );
 
-const log_ajax = require( '../log/ajax' );
-
-const log_warn = require( '../log/warn' );
+const log = require( '../log/root' );
 
 const change_dynamic = require( '../change/dynamic' );
 
@@ -72,7 +70,7 @@ const replyError =
 		throw new Error( message );
 	}
 
-	log_warn( 'reject', message );
+	log.warn( 'reject', message );
 
 	return reply_error.create( 'message', message );
 };
@@ -553,7 +551,7 @@ server_requestHandler.expireUpdateSleep =
 
 	const asw = reply_update.create( );
 
-	log_ajax( '->', asw );
+	log.ajax( '->', asw );
 
 	const result = sleep.result;
 
@@ -604,7 +602,7 @@ server_requestHandler.serve =
 
 		default :
 
-			log_warn( 'unknown command', request );
+			log.warn( 'unknown command', request );
 
 			return replyError( 'unknown command' );
 	}

@@ -52,7 +52,7 @@ const database_repository = require( '../database/repository' );
 
 const http = require( 'http' );
 
-const log_start = require( '../log/start' );
+const log = require( '../log/root' );
 
 const server_root = require( './root' );
 
@@ -108,7 +108,7 @@ const startup = function*( )
 
 	yield* root.loadSpaces( );
 
-	log_start(
+	log.start(
 		'starting server @ http://' +
 			( config.ip || '*' ) + '/:' + config.port
 	);
@@ -123,7 +123,7 @@ const startup = function*( )
 	}
 	).listen( config.port, config.ip, resume( ) );
 
-	log_start( 'server running' );
+	log.start( 'server running' );
 };
 
 
