@@ -1,41 +1,24 @@
 /*
 | Various tools for the server.
 */
-
-
-var
-	tools;
-
-tools =
-module.exports =
-	{ };
-
-
-/*
-| Capsule
-*/
-(function() {
 'use strict';
 
 
-var
-	_b64Mask;
+tim.define( module, 'server_tools', ( def, server_tools ) => {
 
-_b64Mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_';
+
+const _b64Mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_';
 
 
 /*
 | Returns a number as base64 string.
 */
-tools.b64Encode =
+def.static.b64Encode =
 	function(
 		num // number to encode
 	)
 {
-	var
-		result;
-
-	result = '';
+	let result = '';
 
 	do
 	{
@@ -49,5 +32,5 @@ tools.b64Encode =
 };
 
 
+} );
 
-} )( );

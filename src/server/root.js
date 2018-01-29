@@ -243,7 +243,7 @@ def.func.prepareInventory =
 	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
 
 	// takes resource from the the roster
-	for( let a = 0, aZ = server_roster.length; a < aZ; a++ )
+	for( let a = 0, al = server_roster.length; a < al; a++ )
 	{
 		const resource = server_roster.get( a );
 
@@ -275,7 +275,7 @@ def.func.prepareInventory =
 	const codes = [ ];
 
 	// loads the files to be bundled
-	for( let a = 0, aZ = root.inventory.length; a < aZ; a++ )
+	for( let a = 0, al = root.inventory.length; a < al; a++ )
 	{
 		let code;
 
@@ -314,7 +314,7 @@ def.func.prepareInventory =
 
 		log.start( 'parsing bundle' );
 
-		for( let a = 0, aZ = root.inventory.length; a < aZ; a++ )
+		for( let a = 0, al = root.inventory.length; a < al; a++ )
 		{
 			const resource = root.inventory.atRank( a );
 
@@ -430,7 +430,7 @@ def.func.prepareInventory =
 	// post processing
 	let inv = root.inventory;
 
-	for( let a = 0, aZ = inv.length; a < aZ; a++ )
+	for( let a = 0, al = inv.length; a < al; a++ )
 	{
 		const resource = inv.atRank( a );
 
@@ -450,7 +450,7 @@ def.func.prepareInventory =
 	inv = root.inventory;
 
 	// prepares the zipped versions
-	for( let a = 0, aZ = inv.length; a < aZ; a++ )
+	for( let a = 0, al = inv.length; a < al; a++ )
 	{
 		const resource = inv.atRank( a );
 
@@ -493,10 +493,7 @@ def.func.prepareInventory =
 def.func.prependConfigFlags =
 	function( )
 {
-	var
-		resource;
-
-	resource = root.inventory.get( 'config.js' );
+	const resource = root.inventory.get( 'config.js' );
 
 	root.create(
 		'inventory',
@@ -524,12 +521,9 @@ def.func.extraMangle =
 	)
 {
 	var
-		a,
 		// ast properties mangled
 		astProps,
-		aZ,
 		at,
-		e,
 		// associative of all mangles
 		mangle,
 		// mangle definitions:
@@ -582,11 +576,11 @@ def.func.extraMangle =
 	}
 
 	// creates associativs and lists
-	for( a = 0, aZ = mangleDefs.length; a < aZ; a++ )
+	for( let a = 0, aZ = mangleDefs.length; a < aZ; a++ )
 	{
 		at = mangleDefs[ a ];
 
-		e = at.substring( 2 );
+		const e = at.substring( 2 );
 
 		if(
 			e.length === 0 ||
@@ -628,7 +622,7 @@ def.func.extraMangle =
 	mangleList = Object.keys( mangle ).sort( );
 
 	// allots all mangles a value
-	for( a = 0, aZ = mangleList.length; a < aZ; a++ )
+	for( let a = 0, al = mangleList.length; a < al; a++ )
 	{
 		at = mangleList[ a ];
 
@@ -641,12 +635,12 @@ def.func.extraMangle =
 	}
 
 	// marks all mangles and no-mangles as unused so far
-	for( a in mangle )
+	for( let a in mangle )
 	{
 		useMangle[ a ] = true;
 	}
 
-	for( a in noMangle )
+	for( let a in noMangle )
 	{
 		useNoMangle[ a ] = true;
 	}
@@ -785,7 +779,7 @@ def.func.wake =
 
 	// FUTURE cache change lists
 	// to answer the same to multiple clients.
-	for( let a = 0, aZ = sleepKeys.length; a < aZ; a++ )
+	for( let a = 0, al = sleepKeys.length; a < al; a++ )
 	{
 		const key = sleepKeys[ a ];
 
