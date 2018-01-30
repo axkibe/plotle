@@ -6,15 +6,6 @@
 
 // FIXME
 var
-	disc_root,
-	fabric_doc,
-	fabric_para,
-	fabric_relation,
-	form_root,
-	math_limit,
-	net_ajax,
-	net_channel,
-	net_link,
 	ref_space,
 	result_hover,
 	reply_auth,
@@ -58,6 +49,24 @@ const change_list = require( '../change/list' );
 const change_remove = require( '../change/remove' );
 
 const change_wrap = require( '../change/wrap' );
+	
+const disc_root = require( '../disc/root' );
+
+const fabric_doc = require( '../fabric/doc' );
+
+const fabric_para = require( '../fabric/para' );
+
+const fabric_relation = require( '../fabric/relation' );
+	
+const form_root = require( '../form/root' );
+
+const limit = require( '../math/root' ).limit;
+
+const net_ajax = require( '../net/ajax' );
+
+const net_channel = require( '../net/channel' );
+
+const net_link = require( '../net/link' );
 
 const gleam_connect = require( '../gleam/connect' );
 
@@ -831,7 +840,7 @@ def.func.changeSpaceTransformPoint =
 	const offset = st.offset;
 
 	const e1 =
-		math_limit(
+		limit(
 			shell_settings.zoomMin,
 			this._transformExponent + de,
 			shell_settings.zoomMax

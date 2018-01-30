@@ -3,25 +3,31 @@
 */
 'use strict';
 
-var
-	action_scrolly,
-	form_form,
-	gleam_glint_list,
-	gleam_glint_paint,
-	gleam_transform,
-	gruga_formFacet,
-	result_hover,
-	visual_mark_caret,
-	visual_mark_widget;
+
+tim.define( module, 'form_form', ( def, form_form ) => {
 
 
-form_form = { };
+const action_scrolly = require( '../action/scrolly' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_formFacet = require( '../gruga/formFacet' );
+
+const result_hover = require( '../result/hover' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_widget = require( '../visual/mark/widget' );
 
 
 /*
 | Initializer.
 */
-form_form.init =
+def.static.init =
 	function(
 		twigDup
 	)
@@ -74,7 +80,7 @@ form_form.init =
 /*
 | User clicked.
 */
-form_form.click =
+def.static.click =
 	function(
 		p,
 		shift,
@@ -96,7 +102,7 @@ form_form.click =
 | Returns the mark if a form with 'path' concerns about
 | 'mark'.
 */
-form_form.concernsMark =
+def.static.concernsMark =
 	function(
 		mark,
 		path
@@ -115,7 +121,7 @@ form_form.concernsMark =
 /*
 | Cycles the focus
 */
-form_form.cycleFocus =
+def.static.cycleFocus =
 	function(
 		dir
 	)
@@ -156,7 +162,7 @@ form_form.cycleFocus =
 /*
 | User clicked.
 */
-form_form.click =
+def.static.click =
 	function(
 		p,
 		shift,
@@ -177,7 +183,7 @@ form_form.click =
 /*
 | Moving during an operation with the pointing device button held down.
 */
-form_form.dragMove =
+def.static.dragMove =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -204,7 +210,7 @@ form_form.dragMove =
 /*
 | Starts an operation with the pointing device held down.
 */
-form_form.dragStart =
+def.static.dragStart =
 	function(
 		p,
 		shift,
@@ -225,7 +231,7 @@ form_form.dragStart =
 /*
 | Stops an operation with the poiting device button held down.
 */
-form_form.dragStop =
+def.static.dragStop =
 	function(
 		//p,     // cursor point
 		//shift, // true if shift key was pressed
@@ -241,7 +247,7 @@ form_form.dragStop =
 |
 | To be used as lazyValue getter.
 */
-form_form.getAttentionCenter =
+def.static.getAttentionCenter =
 	function( )
 {
 	const focus = this.focusedWidget;
@@ -257,7 +263,7 @@ form_form.getAttentionCenter =
 /*
 | Returns the focused widget.
 */
-form_form.getFocusedWidget =
+def.static.getFocusedWidget =
 	function( )
 {
 	const mark = this.mark;
@@ -278,7 +284,7 @@ form_form.getFocusedWidget =
 /*
 | Return the space glint.
 */
-form_form.glint =
+def.static.glint =
 	function( )
 {
 	const arr =
@@ -305,7 +311,7 @@ form_form.glint =
 /*
 | User is inputing text.
 */
-form_form.input =
+def.static.input =
 	function(
 		text
 	)
@@ -319,7 +325,7 @@ form_form.input =
 /*
 | Mouse wheel is being turned.
 */
-form_form.mousewheel =
+def.static.mousewheel =
 	function(
 		p,
 		dir,
@@ -341,7 +347,7 @@ form_form.mousewheel =
 /*
 | If point is on the form returns its hovering state.
 */
-form_form.pointingHover =
+def.static.pointingHover =
 	function(
 		p,
 		shift,
@@ -362,7 +368,7 @@ form_form.pointingHover =
 /*
 | User is pressing a special key.
 */
-form_form.specialKey =
+def.static.specialKey =
 	function(
 		key,
 		shift,
@@ -387,7 +393,7 @@ form_form.specialKey =
 /*
 | Moves during scrolling.
 */
-form_form._moveScrollY =
+def.static._moveScrollY =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
@@ -411,4 +417,6 @@ form_form._moveScrollY =
 		widget.scrollPos.create( 'y', spos )
 	);
 };
+
+} );
 

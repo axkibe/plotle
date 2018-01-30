@@ -4,20 +4,24 @@
 'use strict';
 
 
-// FIXME
-var
-	form_form,
-	gleam_point,
-	gleam_rect,
-	gleam_transform,
-	gruga_mainDisc,
-	gruga_moveTo,
-	gruga_scrollbar,
-	ref_space;
-
-
-
 tim.define( module, 'form_moveTo', ( def, form_moveTo ) => {
+
+
+const form_form = require( './form' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_mainDisc = require( '../gruga/mainDisc' );
+
+const gruga_moveTo = require( '../gruga/moveTo' );
+
+const gruga_scrollbar = require( '../gruga/scrollbar' );
+
+const ref_space = require( '../ref/space' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -82,12 +86,6 @@ if( TIM )
 	def.init = [ 'twigDup' ];
 
 	def.twig = require( '../form/typemap-widget' );
-}
-
-
-if( NODE )
-{
-	form_form = require( './form' );
 }
 
 

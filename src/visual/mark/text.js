@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	change_mark_text;
-
-
 tim.define( module, 'visual_mark_text', ( def, visual_mark_text ) => {
+
+
+const change_mark_text = require( '../../change/mark/text' );
 
 
 /*::::::::::::::::::::::::::::.

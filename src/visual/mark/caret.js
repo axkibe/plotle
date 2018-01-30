@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	visual_mark_text;
-
-
 tim.define( module, 'visual_mark_caret', ( def, visual_mark_caret ) => {
+
+
+const visual_mark_text = require( './text' );
 
 
 /*::::::::::::::::::::::::::::.

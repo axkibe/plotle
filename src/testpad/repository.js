@@ -11,11 +11,13 @@ var
 	fabric_note,
 	fabric_para,
 	gleam_point,
-	gleam_rect,
-	math_limit;
+	gleam_rect;
 
 
 tim.define( module, 'testpad_repository', ( def, testpad_repository ) => {
+
+
+const limit = require( '../math/root' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -100,7 +102,7 @@ def.func._init =
 		this._changeWrapList = change_wrapList.create( );
 	}
 
-	this.seq = math_limit( 0, this.seq, this._changeWrapList.length );
+	this.seq = limit( 0, this.seq, this._changeWrapList.length );
 };
 
 

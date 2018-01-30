@@ -4,26 +4,31 @@
 'use strict';
 
 
-var
-	action_createRelation,
-	action_dragItems,
-	change_list,
-	change_set,
-	gleam_point,
-	visual_item,
-	visual_mark_caret,
-	visual_mark_items,
-	visual_mark_range;
+tim.define( module, 'visual_item', ( def, visual_item ) => {
 
 
-visual_item = NODE ? module.exports : { };
+const action_createRelation = require( '../action/createRelation' );
+
+const action_dragItems = require( '../action/dragItems' );
+
+const change_list = require( '../change/list' );
+
+const change_set = require( '../change/set' );
+
+const gleam_point = require( '../gleam/point' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_items = require( '../visual/mark/items' );
+
+const visual_mark_range = require( '../visual/mark/range' );
 
 
 /*
 | Returns the action if an item with 'path' concerns about
 | the action.
 */
-visual_item.concernsAction =
+def.static.concernsAction =
 	function(
 		action,
 		path
@@ -39,7 +44,7 @@ visual_item.concernsAction =
 | Returns the action if an item with 'path' concerns about
 | the hover.
 */
-visual_item.concernsHover =
+def.static.concernsHover =
 	function(
 		hover,
 		path
@@ -55,7 +60,7 @@ visual_item.concernsHover =
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-visual_item.concernsMark =
+def.static.concernsMark =
 	function(
 		mark,
 		path
@@ -75,7 +80,7 @@ visual_item.concernsMark =
 /*
 | Handles a potential dragStart event for this item.
 */
-visual_item.dragStart =
+def.static.dragStart =
 	function(
 		p,
 		shift,
@@ -147,7 +152,7 @@ visual_item.dragStart =
 | Returns the change-set for a dragging
 | the item, defined by its zone.
 */
-visual_item.getDragItemChangeZone =
+def.static.getDragItemChangeZone =
 	function( )
 {
 	const action = this.action;
@@ -171,7 +176,7 @@ visual_item.getDragItemChangeZone =
 /*
 | An dragItems action stopped.
 */
-visual_item.getDragItemChangePosFs =
+def.static.getDragItemChangePosFs =
 	function( )
 {
 	const action = this.action;
@@ -196,7 +201,7 @@ visual_item.getDragItemChangePosFs =
 | Returns the change-set for a resizing
 | the item, defined by its zone.
 */
-visual_item.getResizeItemChangeZone =
+def.static.getResizeItemChangeZone =
 	function( )
 {
 /**/if( CHECK )
@@ -218,7 +223,7 @@ visual_item.getResizeItemChangeZone =
 | Returns the change-set for a resizing
 | the item, defined by pos/fontsize.
 */
-visual_item.getResizeItemChangePosFs =
+def.static.getResizeItemChangePosFs =
 	function( )
 {
 /**/if( CHECK )
@@ -248,7 +253,7 @@ visual_item.getResizeItemChangePosFs =
 /*
 | A createRelation action moves.
 */
-visual_item.createRelationMove =
+def.static.createRelationMove =
 	function(
 		p,
 		action
@@ -271,7 +276,7 @@ visual_item.createRelationMove =
 |
 | Returns true if it handled the click event.
 */
-visual_item.ctrlClick =
+def.static.ctrlClick =
 	function(
 		p,      // the point clicked
 		shift,  // true if shift key was pressed
@@ -328,7 +333,7 @@ visual_item.ctrlClick =
 /*
 | A createRelation action stops.
 */
-visual_item.createRelationStop =
+def.static.createRelationStop =
 	function(
 		p
 	)
@@ -350,3 +355,5 @@ visual_item.createRelationStop =
 	return true;
 };
 
+
+} );

@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	form_form;
-
-
 tim.define( module, 'form_nonExistingSpace', ( def, form_nonExistingSpace ) => {
+
+
+const form_form = require( './form' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -80,12 +78,6 @@ if( TIM )
 	def.init = [ 'twigDup' ];
 
 	def.twig = require( '../form/typemap-widget' );
-}
-
-
-if( NODE )
-{
-	form_form = require( './form' );
 }
 
 

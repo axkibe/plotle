@@ -1,23 +1,16 @@
 /*
 | maximum integer variable.
 */
-
-
-var
-	math_limit;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
+
+
+tim.define( module, 'math_root', ( def, math_root ) => {
 
 
 /*
 | Limits value to be between min and max
 */
-math_limit =
+def.static.limit =
 	function(
 		min,
 		val,
@@ -37,10 +30,5 @@ math_limit =
 };
 
 
-if( NODE )
-{
-	module.exports = math_limit;
-}
+} );
 
-
-} )( );

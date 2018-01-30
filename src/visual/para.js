@@ -4,29 +4,45 @@
 'use strict';
 
 
-// FIXME
-var
-	change_insert,
-	change_join,
-	change_remove,
-	change_split,
-	gleam_glint_list,
-	gleam_glint_text,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	flow_block,
-	flow_line,
-	flow_token,
-	visual_mark_caret,
-	visual_mark_range,
-	session_uid,
-	shell_fontPool,
-	shell_settings,
-	visual_mark_text;
-
 
 tim.define( module, 'visual_para', ( def, visual_para ) => {
+
+
+const change_insert = require( '../change/insert' );
+
+const change_join = require( '../change/join' );
+
+const change_remove = require( '../change/remove' );
+
+const change_split = require( '../change/split' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_text = require( '../gleam/glint/text' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const flow_block = require( '../flow/block' );
+
+const flow_line = require( '../flow/line' );
+
+const flow_token = require( '../flow/token' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_range = require( '../visual/mark/range' );
+
+const session_uid = require( '../session/uid' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const shell_settings = require( '../shell/settings' );
+
+const visual_mark_text = require( '../visual/mark/text' );
 
 
 /*::::::::::::::::::::::::::::.

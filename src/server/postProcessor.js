@@ -1,36 +1,18 @@
 /*
 | Post processes resources.
 */
-
-
-var
-	server_postProcessor;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-server_postProcessor =
-module.exports =
-		{ };
+tim.define( module, 'server_postProcessor', ( def, server_postProcessor ) => {
 
 
-var
-	config,
-	hash_sha1,
-	opentypeHash,
-	opentypeMinHash;
+const config = require( '../../config' );
 
-config = require( '../../config' );
+const hash_sha1 = require( '../hash/sha1' );
 
-hash_sha1 = require( '../hash/sha1' );
-
-opentypeHash = '';
-opentypeMinHash = '';
+let opentypeHash;
+let opentypeMinHash;
 
 
 /*
@@ -104,23 +86,15 @@ server_postProcessor.develHtml =
 		//bundleFilePath, // the file path of the bundle resource
 	)
 {
-	var
-		a,
-		aZ,
-		data,
-		devels,
-		res,
-		inventory;
+	const devels = [ ];
 
-	devels = [ ];
+	let data = resource.data + '';
 
-	data = resource.data + '';
+	const inventory = root.inventory;
 
-	inventory = root.inventory;
-
-	for( a = 0, aZ = inventory.length; a < aZ; a++ )
+	for( let a = 0, al = inventory.length; a < al; a++ )
 	{
-		res = inventory.atRank( a );
+		const res = inventory.atRank( a );
 
 		if( res.inBundle )
 		{
@@ -175,23 +149,15 @@ server_postProcessor.testPadHtml =
 		//bundleFilePath, // the file path of the bundle resource
 	)
 {
-	var
-		a,
-		aZ,
-		data,
-		devels,
-		inventory,
-		res;
+	const devels = [ ];
 
-	devels = [ ];
+	let data = resource.data + '';
 
-	data = data + '';
+	const inventory = root.inventory;
 
-	inventory = root.inventory;
-
-	for( a = 0, aZ = inventory.length; a < aZ; a++ )
+	for( let a = 0, al = inventory.length; a < al; a++ )
 	{
-		res = inventory.atRank( a );
+		const res = inventory.atRank( a );
 
 		if( res.inTestPad )
 		{
@@ -202,7 +168,6 @@ server_postProcessor.testPadHtml =
 			);
 		}
 	}
-
 
 	data =
 		data.replace(
@@ -239,10 +204,7 @@ server_postProcessor.indexHtml =
 		bundleFilePath  // the file path of the bundle resource
 	)
 {
-	var
-		data;
-
-	data = resource.data + '';
+	let data = resource.data + '';
 
 	data =
 		data.replace(
@@ -279,4 +241,5 @@ server_postProcessor.indexHtml =
 };
 
 
-} )( );
+} );
+

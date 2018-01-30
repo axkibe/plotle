@@ -40,7 +40,7 @@ require( 'tim.js' );
 
 tim.tree.addTree(
 	( function( ) {
-		var path = module.filename.split( '/' );
+		let path = module.filename.split( '/' );
 		path.pop( );
 		path.pop( );
 		return path.join( '/' ) + '/';

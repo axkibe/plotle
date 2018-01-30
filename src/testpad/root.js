@@ -11,13 +11,15 @@ var
 	change_remove,
 	change_split,
 	change_wrap,
-	math_limit,
 	math_maxInteger,
 	session_uid,
 	testpad_action;
 
 
 tim.define( module, 'testpad_root', ( def, testpad_root ) => {
+
+
+const limit = require( '../math/root' ).limit;
 
 
 /*::::::::::::::::::::::::::::.
@@ -185,10 +187,10 @@ def.func._init =
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	this.cursorLine = math_limit( 0, this.cursorLine, doc.length - 1 );
+	this.cursorLine = limit( 0, this.cursorLine, doc.length - 1 );
 
 	this.cursorAt =
-		math_limit(
+		limit(
 			0,
 			this.cursorAt,
 			doc.atRank( this.cursorLine ).text.length
@@ -322,7 +324,7 @@ def.func.onMouseDown =
 	if( !doc ) { root.beep( ); return; }
 
 	const cLine =
-		math_limit(
+		limit(
 			0,
 			Math.floor( y / measure.offsetHeight ),
 			doc.length - 1
@@ -333,7 +335,7 @@ def.func.onMouseDown =
 	root.create(
 		'cursorLine', cLine,
 		'cursorAt',
-			math_limit(
+			limit(
 				0,
 				Math.floor( x / measure.offsetWidth ),
 				cText.length

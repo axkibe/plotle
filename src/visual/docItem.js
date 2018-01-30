@@ -1,42 +1,38 @@
 /*
 | An item with a document.
 */
-
-
-var
-	action_select,
-	math_limit,
-	result_hover,
-	root,
-	visual_item,
-	visual_docItem,
-	visual_mark_caret,
-	visual_mark_range,
-	visual_mark_text;
-
-
-/*
-| Capsule
-*/
-( function() {
 'use strict';
 
 
-visual_docItem = NODE ? module.exports : { };
+tim.define( module, 'visual_docItem', ( def, visual_docItem ) => {
+
+
+const action_select = require( '../action/select' );
+
+const limit = require( '../math/root' ).limit;
+
+const result_hover = require( '../result/hover' );
+
+const visual_item = require( '../visual/item' );
+
+const visual_mark_caret = require( './mark/caret' );
+
+const visual_mark_range = require( './mark/range' );
+
+const visual_mark_text = require( './mark/text' );
 
 
 /*
 | The attention center.
 */
-visual_docItem.attentionCenter =
+def.static.attentionCenter =
 	function( )
 {
 	return(
 		this.zone.pos.y
-		+ math_limit(
+		+ limit(
 			0,
-			this.doc.attentionCenter
-			- ( this.scrollPos ?  this.scrollPos.y : 0 ),
+			this.doc.attentionCenter - ( this.scrollPos ?  this.scrollPos.y : 0 ),
 			this.zone.height
 		)
 	);
@@ -46,7 +42,7 @@ visual_docItem.attentionCenter =
 /*
 | Checks if the item is being clicked and reacts.
 */
-visual_docItem.click =
+def.static.click =
 	function(
 		p,
 		shift,
@@ -68,7 +64,7 @@ visual_docItem.click =
 |
 | FIXME access and action should be needed to handed...
 */
-visual_docItem.dragStart =
+def.static.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
@@ -107,11 +103,11 @@ visual_docItem.dragStart =
 /*
 | Returns the mark for a point
 */
-visual_docItem.markForPoint =
+def.static.markForPoint =
 	function(
 		p,       // the point to mark to
 		doRange  // if true possible make a range
-)
+	)
 {
 	const tp = p.detransform( this.transform );
 
@@ -179,7 +175,7 @@ visual_docItem.markForPoint =
 /*
 | A move during a text select on this item.
 */
-visual_docItem.moveSelect =
+def.static.moveSelect =
 	function(
 		p
 	)
@@ -193,29 +189,24 @@ visual_docItem.moveSelect =
 /*
 | User is hovering their pointing device over something.
 */
-visual_docItem.pointingHover =
+def.static.pointingHover =
 	function(
 		p,     // point hovered upon
 		action // space action
 	)
 {
-	var
-		bubble,
-		cursor,
-		sbary;
-
-	sbary = this.scrollbarY;
+	const sbary = this.scrollbarY;
 
 	if( sbary )
 	{
-		bubble = sbary.pointingHover( p );
+		const bubble = sbary.pointingHover( p );
 
 		if( bubble ) return bubble;
 	}
 
 	if( !this.tShape.within( p ) ) return;
 
-	cursor = 'default';
+	let cursor = 'default';
 
 	switch( action && action.timtype )
 	{
@@ -234,7 +225,7 @@ visual_docItem.pointingHover =
 /*
 | A text has been inputed.
 */
-visual_docItem.input =
+def.static.input =
 	function(
 		text
 	)
@@ -246,7 +237,7 @@ visual_docItem.input =
 /*
 | Handles a special key.
 */
-visual_docItem.specialKey =
+def.static.specialKey =
 	function(
 		key,
 		shift,
@@ -257,4 +248,5 @@ visual_docItem.specialKey =
 };
 
 
-} )( );
+} );
+

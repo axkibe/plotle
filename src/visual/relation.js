@@ -4,21 +4,28 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_arrow,
-	gleam_glint_list,
-	gleam_glint_paint,
-	gleam_glint_window,
-	gleam_point,
-	gruga_label,
-	gruga_relation,
-	visual_docItem,
-	visual_item,
-	visual_label;
-
-
 tim.define( module, 'visual_relation', ( def, visual_relation ) => {
+
+
+const gleam_arrow = require( '../gleam/arrow' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gruga_label = require( '../gruga/label' );
+
+const gruga_relation = require( '../gruga/relation' );
+
+const visual_docItem = require( '../visual/docItem' );
+
+const visual_item = require( '../visual/item' );
+
+const visual_label = require( '../visual/label' );
 
 
 /*::::::::::::::::::::::::::::.

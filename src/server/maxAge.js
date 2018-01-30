@@ -1,30 +1,16 @@
 /*
 | Maps a maxage setting to a cache control.
 */
-
-
-var
-	server_maxAge;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-server_maxAge =
-module.exports =
-	{ };
+tim.define( module, 'server_maxAge', ( def, server_maxAge ) => {
 
-
-var
-	_mapping;
 
 /*
 | cache control mappings for max age
 */
-_mapping =
+const mapping =
 	{
 		none : 'no-cache',
 		short : 'max-age=' + ( 60 * 60 ),
@@ -32,32 +18,23 @@ _mapping =
 	};
 
 
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( _mapping );
-/**/}
+/**/if( FREEZE ) Object.freeze( mapping );
 
 /*
 | Maps a maxage setting to a cache control.
 */
-server_maxAge.map =
+def.static.map =
 	function(
 		desc
 	)
 {
-	var
-		cc;
+	const cc = mapping[ desc ];
 
-	cc = _mapping[ desc ];
-
-	if( !cc )
-	{
-		throw new Error( 'invalid max-age mapping' );
-	}
+	if( !cc ) throw new Error( 'invalid max-age mapping' );
 
 	return cc;
 };
 
 
+} );
 
-} )( );

@@ -520,47 +520,30 @@ def.func.extraMangle =
 		timIDs
 	)
 {
-	var
-		// ast properties mangled
-		astProps,
-		at,
-		// associative of all mangles
-		mangle,
-		// mangle definitions:
-		// a file that looks like this
-		// ". value"  <-- this will be mangled
-		// "> value"  <-- this will not be mangled
-		mangleDefs,
-		// an array of all mangles
-		mangleList,
-		// unknown properties / keys
-		// that are missed in both lists
-		missed,
-		// associative of all no-mangles
-		noMangle,
-		// associative of all mangles not used
-		useMangle,
-		// associative of all no-mangles not used
-		useNoMangle;
+	// unknown properties / keys
+	// that are missed in both lists
+	let missed = { };
 
-	missed = { };
+	// mangle definitions:
+	// a file that looks like this
+	// ". value"  <-- this will be mangled
+	// "> value"  <-- this will not be mangled
+	const mangleDefs = ( fs.readFileSync( './mangle.txt') + '' ).split( '\n' );
 
-	mangleDefs =
-		(
-			fs.readFileSync(
-				'./mangle.txt'
-			) + ''
-		).split( '\n' );
+	// associative of all mangles
+	const mangle = { };
 
-	mangle = { };
+	// associative of all no-mangles
+	const noMangle = { };
 
-	noMangle = { };
+	// associative of all mangles not used
+	let useMangle = { };
 
-	useMangle = { };
+	// associative of all no-mangles not used
+	let useNoMangle = { };
 
-	useNoMangle = { };
-
-	astProps =
+	// ast properties mangled
+	const astProps =
 		{
 			'property' : 'p',
 			'key' : 'p',
@@ -578,7 +561,7 @@ def.func.extraMangle =
 	// creates associativs and lists
 	for( let a = 0, aZ = mangleDefs.length; a < aZ; a++ )
 	{
-		at = mangleDefs[ a ];
+		const at = mangleDefs[ a ];
 
 		const e = at.substring( 2 );
 
@@ -619,12 +602,13 @@ def.func.extraMangle =
 		}
 	}
 
-	mangleList = Object.keys( mangle ).sort( );
+	// an array of all mangles
+	const mangleList = Object.keys( mangle ).sort( );
 
 	// allots all mangles a value
 	for( let a = 0, al = mangleList.length; a < al; a++ )
 	{
-		at = mangleList[ a ];
+		const at = mangleList[ a ];
 
 		mangle[ at ] = '$' + server_tools.b64Encode( a );
 	}
@@ -649,7 +633,7 @@ def.func.extraMangle =
 	ast.walk( new uglify.TreeWalker(
 		function( node )
 	{
-		var k, p;
+		let k, p;
 
 		for( k in astProps )
 		{
@@ -750,9 +734,7 @@ def.func.closeSleep =
 		sleepID
 	)
 {
-	var sleep;
-
-	sleep = root.upSleeps.get( sleepID );
+	const sleep = root.upSleeps.get( sleepID );
 
 	// maybe it just had expired at the same time
 	if( !sleep ) return;
@@ -1024,12 +1006,9 @@ def.func.webAjax =
 	const handler =
 		function*( )
 	{
-		var
-			asw,
-			cmd,
-			query;
+		const query = data.join( '' );
 
-		query = data.join( '' );
+		let cmd;
 
 		try
 		{
@@ -1059,7 +1038,7 @@ def.func.webAjax =
 			yield setTimeout( resume( ), DELAY_ACQUIRE );
 		}
 
-		asw = yield* server_requestHandler.serve( cmd, result );
+		const asw = yield* server_requestHandler.serve( cmd, result );
 
 		if( !asw ) return;
 

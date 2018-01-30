@@ -1,29 +1,16 @@
 /*
 | Maps file types to mimes and encodings.
 */
-
-var
-	server_fileTypes;
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-var
-	_codings,
-	_mimes;
+tim.define( module, 'server_fileTypes', ( def, server_fileTypes ) => {
 
-server_fileTypes =
-module.exports =
-	{ };
 
 /*
-| coding mappings for file types
+| Coding mappings for file types.
 */
-_codings =
+const codings =
 	{
 		// cascading style sheet
 		'css' : 'utf-8',
@@ -54,12 +41,12 @@ _codings =
 
 		// some font
 		'woff' : 'binary'
-	},
+	};
 
 /*
 | mime mappings for file types
 */
-_mimes =
+const mimes =
 	{
 		// cascading style sheet
 		'css' : 'text/css',
@@ -97,20 +84,14 @@ _mimes =
 /*
 | Maps a file extension to a coding.
 */
-server_fileTypes.coding =
+def.static.coding =
 	function(
 		ext
 	)
 {
-	var
-		coding;
+	const coding = codings[ ext ];
 
-	coding = _codings[ ext ];
-
-	if( !coding )
-	{
-		throw new Error( 'unknown file extension: .' + ext );
-	}
+	if( !coding ) throw new Error( 'unknown file extension: .' + ext );
 
 	return coding;
 };
@@ -119,23 +100,18 @@ server_fileTypes.coding =
 /*
 | Maps a file type to a mime.
 */
-server_fileTypes.mime =
+def.static.mime =
 	function(
 		ext
 	)
 {
-	var
-		mime;
+	const mime = mimes[ ext ];
 
-	mime = _mimes[ ext ];
-
-	if( !mime )
-	{
-		throw new Error( 'unknown file extension: ' + ext );
-	}
+	if( !mime ) throw new Error( 'unknown file extension: ' + ext );
 
 	return mime;
 };
 
 
-} )( );
+} );
+

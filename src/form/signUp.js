@@ -4,18 +4,22 @@
 'use strict';
 
 
-// FIXME
-var
-	form_form,
-	ref_space,
-	reply_error,
-	show_form,
-	user_creds,
-	user_passhash,
-	visual_mark_caret;
-
-
 tim.define( module, 'form_signUp', ( def, form_signUp ) => {
+
+
+const form_form = require( './form' );
+
+const ref_space = require( '../ref/space' );
+
+const reply_error = require( '../reply/error' );
+
+const show_form= require( '../show/form' );
+
+const user_creds = require( '../user/creds' );
+
+const user_passhash = require( '../user/passhash' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -82,12 +86,6 @@ if( TIM )
 	def.init = [ 'twigDup' ];
 
 	def.twig = require( '../form/typemap-widget' );
-}
-
-
-if( NODE )
-{
-	form_form = require( './form' );
 }
 
 

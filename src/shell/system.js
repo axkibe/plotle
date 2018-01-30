@@ -9,8 +9,7 @@ var
 	config,
 	root,
 	shell_system,
-	startup,
-	math_limit;
+	startup;
 
 
 /*
@@ -29,7 +28,7 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_size = require( '../gleam/size' );
 
-//const math_limit = require( '../math/limit' );
+const limit = require( '../math/root' ).limit;
 
 const shell_root = require( '../shell/root' );
 
@@ -1450,7 +1449,7 @@ prototype._steerAttention =
 	}
 	else
 	{
-		ac = math_limit( 0, ac, mainWindowHeight - 15 );
+		ac = limit( 0, ac, mainWindowHeight - 15 );
 
 		hiddenInput.style.top = ac + 'px';
 

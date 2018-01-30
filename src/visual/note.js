@@ -6,36 +6,58 @@
 'use strict';
 
 
-// FIXME
-var
-	action_dragItems,
-	action_resizeItems,
-	change_grow,
-	fabric_doc,
-	fabric_note,
-	fabric_para,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_mask,
-	gleam_glint_paint,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_roundRect,
-	gleam_transform,
-	gruga_note,
-	session_uid,
-	shell_settings,
-	visual_doc,
-	visual_docItem,
-	visual_item,
-	visual_mark_caret,
-	visual_para,
-	widget_scrollbar;
-
-
 tim.define( module, 'visual_note', ( def, visual_note ) => {
+
+
+const action_dragItems = require( '../action/dragItems' );
+
+const action_resizeItems = require( '../action/resizeItems' );
+
+const change_grow = require( '../change/grow' );
+
+const fabric_doc = require( '../fabric/doc' );
+
+const fabric_note = require( '../fabric/note' );
+
+const fabric_para = require( '../fabric/para' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_mask = require( '../gleam/glint/mask' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_note = require( '../gruga/note' );
+
+const session_uid = require( '../session/uid' );
+
+const shell_settings = require( '../shell/settings' );
+
+const visual_doc = require( '../visual/doc' );
+
+const visual_docItem = require( '../visual/docItem' );
+
+const visual_item = require( '../visual/item' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_para = require( '../visual/para' );
+
+const widget_scrollbar = require( '../widget/scrollbar' );
 
 
 /*::::::::::::::::::::::::::::.

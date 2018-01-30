@@ -4,39 +4,64 @@
 'use strict';
 
 
-// FIXME
-var
-	action_createGeneric,
-	action_createRelation,
-	action_dragItems,
-	action_pan,
-	action_resizeItems,
-	action_select,
-	action_scrolly,
-	change_list,
-	fabric_label,
-	fabric_note,
-	fabric_portal,
-	fabric_relation,
-	gleam_arrow,
-	gleam_glint_list,
-	gleam_glint_paint,
-	gleam_point,
-	gleam_rect,
-	gruga_label,
-	gruga_relation,
-	gruga_select,
-	result_hover,
-	visual_frame,
-	visual_itemList,
-	visual_label,
-	visual_mark_items,
-	visual_note,
-	visual_portal,
-	visual_relation;
-
-
 tim.define( module, 'visual_space', ( def, visual_space ) => {
+
+
+const action_createGeneric = require( '../action/createGeneric' );
+
+const action_createRelation = require( '../action/createRelation' );
+
+const action_dragItems = require( '../action/dragItems' );
+
+const action_pan = require( '../action/pan' );
+
+const action_resizeItems = require( '../action/resizeItems' );
+
+const action_select = require( '../action/select' );
+
+const action_scrolly = require( '../action/scrolly' );
+
+const change_list = require( '../change/list' );
+
+const fabric_label = require( '../fabric/label' );
+
+const fabric_note = require( '../fabric/note' );
+
+const fabric_portal = require( '../fabric/portal' );
+
+const fabric_relation = require( '../fabric/relation' );
+
+const gleam_arrow = require( '../gleam/arrow' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gruga_label = require( '../gruga/label' );
+
+const gruga_relation = require( '../gruga/relation' );
+
+const gruga_select = require( '../gruga/select' );
+
+const result_hover = require( '../result/hover' );
+
+const visual_frame = require( '../visual/frame' );
+
+const visual_itemList = require( '../visual/itemList' );
+
+const visual_label = require( '../visual/label' );
+
+const visual_mark_items = require( '../visual/mark/items' );
+
+const visual_note = require( '../visual/note' );
+
+const visual_portal = require( '../visual/portal' );
+
+const visual_relation = require( '../visual/relation' );
 
 
 /*::::::::::::::::::::::::::::.

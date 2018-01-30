@@ -128,7 +128,8 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'src/math/limit.js',
+		'filePath', 'src/math/root.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -628,6 +629,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/form/form.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -922,10 +924,12 @@ server_resourceList.create(
 	server_resource.create(
 		'filePath', 'src/visual/item.js',
 		'inBundle', true,
+		'hasTim', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/docItem.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),

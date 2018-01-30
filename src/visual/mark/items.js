@@ -3,17 +3,16 @@
 */
 'use strict';
 
-// FIXME
-var
-	change_mark_node;
+
+tim.define( module, 'visual_mark_items', ( def, visual_mark_items ) => {
+
+
+const change_mark_node = require( '../../change/mark/node' );
 
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
-
-
-tim.define( module, 'visual_mark_items', ( def, visual_mark_items ) => {
 
 
 if( TIM )

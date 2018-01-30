@@ -4,39 +4,64 @@
 'use strict';
 
 
-// FIXME
-var
-	action_dragItems,
-	action_resizeItems,
-	change_grow,
-	change_insert,
-	change_remove,
-	fabric_portal,
-	gleam_ellipse,
-	gleam_facet,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_mask,
-	gleam_glint_paint,
-	gleam_glint_text,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_roundRect,
-	gleam_transform,
-	gruga_portal,
-	visual_mark_caret,
-	visual_mark_items,
-	result_hover,
-	ref_space,
-	session_uid,
-	shell_fontPool,
-	shell_settings,
-	visual_item;
-
-
 tim.define( module, 'visual_portal', ( def, visual_portal ) => {
+
+
+const action_dragItems = require( '../action/dragItems' );
+
+const action_resizeItems = require( '../action/resizeItems' );
+
+const change_grow = require( '../change/grow' );
+
+const change_insert = require( '../change/insert' );
+
+const change_remove = require( '../change/remove' );
+
+const fabric_portal = require( '../fabric/portal' );
+
+const gleam_ellipse = require( '../gleam/ellipse' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_mask = require( '../gleam/glint/mask' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_glint_text = require( '../gleam/glint/text' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_portal = require( '../gruga/portal' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_items = require( '../visual/mark/items' );
+
+const result_hover = require( '../result/hover' );
+
+const ref_space = require( '../ref/space' );
+
+const session_uid = require( '../session/uid' );
+
+const shell_fontPool = require( '../shell/fontPool' );
+
+const shell_settings = require( '../shell/settings' );
+
+const visual_item = require( '../visual/item' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -1573,3 +1598,4 @@ def.func._prepareField =
 
 
 } );
+
