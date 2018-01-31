@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	form_form;
-
-
 tim.define( module, 'form_noAccessToSpace', ( def, form_noAccessToSpace ) => {
+
+
+const form_form = require( './form' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -20,7 +18,6 @@ tim.define( module, 'form_noAccessToSpace', ( def, form_noAccessToSpace ) => {
 if( TIM )
 {
 	def.hasAbstract = true;
-
 
 	def.attributes =
 	{
@@ -82,12 +79,6 @@ if( TIM )
 	def.init = [ 'twigDup' ];
 
 	def.twig = require( '../form/typemap-widget' );
-}
-
-
-if( NODE )
-{
-	form_form = require( './form' );
 }
 
 

@@ -17,6 +17,7 @@
 		"FREEZE" : true,
 		"NODE" : true,
 		"pass" : true,
+		"opentype" : true,
 		"root" : true,
 		"system" : true,
 		"tim" : true,

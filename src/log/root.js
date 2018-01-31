@@ -4,8 +4,7 @@
 'use strict';
 
 
-var
-	config;
+var config;
 
 
 tim.define( module, 'log_root', ( def, log_root ) => {

@@ -4,18 +4,20 @@
 'use strict';
 
 
-// FIXME
-var
-	change_wrapList,
-	fabric_doc,
-	fabric_note,
-	fabric_para,
-	gleam_point,
-	gleam_rect;
-
-
 tim.define( module, 'testpad_repository', ( def, testpad_repository ) => {
 
+
+const change_wrapList = require( '../change/wrapList' );
+
+const fabric_doc = require( '../fabric/doc' );
+
+const fabric_note = require( '../fabric/note' );
+
+const fabric_para = require( '../fabric/para' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
 
 const limit = require( '../math/root' );
 

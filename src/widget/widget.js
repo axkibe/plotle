@@ -1,48 +1,23 @@
 /*
 | A widget.
 */
-
-
-/*
-| Export
-*/
-var
-	widget_widget;
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
-/*
-| Constructor.
-*/
-widget_widget =
-	function( )
-{
-	// initializing abstract
-	throw new Error( );
-};
+tim.define( module, 'widget_widget', ( def, widget_widget ) => {
 
 
 /*
 | Returns the mark if an item with
 | 'path' concerns about the mark.
 */
-widget_widget.concernsMark =
+def.static.concernsMark =
 	function(
 		mark,
 		path
 	)
 {
-	return(
-		mark && mark.containsPath( path )
-		? mark
-		: undefined
-	);
+	return mark && mark.containsPath( path ) ? mark : undefined;
 };
 
 
@@ -50,18 +25,15 @@ widget_widget.concernsMark =
 | Returns the hover path if an item with
 | 'path' concerns about the hover.
 */
-widget_widget.concernsHover =
+def.static.concernsHover =
 	function(
 		hover,
 		path
 	)
 {
-	return(
-		hover && path.subPathOf( hover )
-		? hover
-		: undefined
-	);
+	return hover && path.subPathOf( hover ) ? hover : undefined;
 };
 
 
-} )( );
+} );
+

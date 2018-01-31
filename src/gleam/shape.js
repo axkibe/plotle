@@ -4,14 +4,14 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_display_canvas,
-	gleam_shape_start,
-	gleam_transform;
-
-
 tim.define( module, 'gleam_shape', ( def, gleam_shape ) => {
+
+
+const gleam_display_canvas = require( './display/canvas' );
+
+const gleam_shape_start = require( './shape/start' );
+
+const gleam_transform = require( './transform' );
 
 
 /*::::::::::::::::::::::::::::.

@@ -5,25 +5,22 @@
 */
 
 
-var
-	opentype,
-	gruga_fonts,
-	startup;
-
-
 /*
 | Capsule
 */
 ( function( ) {
 'use strict';
 
-var openTypeLoad;
+
+const gruga_fonts = require( '../gruga/fonts' );
+
+const shell_system = require( './system' );
 
 
 /*
 | Loads open type fonts.
 */
-openTypeLoad =
+const openTypeLoad =
 	function( )
 {
 	opentype.load(
@@ -45,7 +42,7 @@ openTypeLoad =
 
 			gruga_fonts.setOpenTypeDefault( font );
 
-			startup( );
+			shell_system.startup( );
 		}
 	} );
 };

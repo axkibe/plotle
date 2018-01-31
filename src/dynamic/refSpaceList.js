@@ -4,17 +4,20 @@
 'use strict';
 
 
-// FIXME
-var
-	change_list,
-	change_wrap,
-	change_wrapList,
-	ref_moment,
-	ref_userSpaceList,
-	session_uid;
-
-
 tim.define( module, 'dynamic_refSpaceList', ( def, dynamic_refSpaceList ) => {
+
+
+const change_list = require( '../change/list' );
+
+const change_wrap = require( '../change/wrap' );
+
+const change_wrapList = require( '../change/wrapList' );
+
+const ref_moment = require( '../ref/moment' );
+
+const ref_userSpaceList = require( '../ref/userSpaceList' );
+
+const session_uid = require( '../session/uid' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -48,19 +51,6 @@ if( TIM )
 
 	def.init = [ ];
 }
-
-
-if( NODE )
-{
-	change_list = require( '../change/list' );
-
-	change_wrap = require( '../change/wrap' );
-
-	change_wrapList = require( '../change/wrapList' );
-
-	session_uid = require( '../session/uid' );
-}
-
 
 
 /*

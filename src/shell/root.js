@@ -4,29 +4,6 @@
 'use strict';
 
 
-// FIXME
-var
-	ref_space,
-	result_hover,
-	reply_auth,
-	reply_error,
-	root,
-	session_uid,
-	shell_doTracker,
-	shell_settings,
-	show_create,
-	show_form,
-	show_normal,
-	show_zoom,
-	system,
-	user_creds,
-	visual_mark_caret,
-	visual_mark_range,
-	visual_space;
-
-root = undefined;
-
-
 tim.define( module, 'shell_root', ( def, shell_root ) => {
 
 
@@ -49,7 +26,7 @@ const change_list = require( '../change/list' );
 const change_remove = require( '../change/remove' );
 
 const change_wrap = require( '../change/wrap' );
-	
+
 const disc_root = require( '../disc/root' );
 
 const fabric_doc = require( '../fabric/doc' );
@@ -57,16 +34,8 @@ const fabric_doc = require( '../fabric/doc' );
 const fabric_para = require( '../fabric/para' );
 
 const fabric_relation = require( '../fabric/relation' );
-	
+
 const form_root = require( '../form/root' );
-
-const limit = require( '../math/root' ).limit;
-
-const net_ajax = require( '../net/ajax' );
-
-const net_channel = require( '../net/channel' );
-
-const net_link = require( '../net/link' );
 
 const gleam_connect = require( '../gleam/connect' );
 
@@ -106,7 +75,43 @@ const gruga_welcome = require( '../gruga/welcome' );
 
 const gruga_zoomDisc = require( '../gruga/zoomDisc' );
 
+const limit = require( '../math/root' ).limit;
 
+const net_ajax = require( '../net/ajax' );
+
+const net_channel = require( '../net/channel' );
+
+const net_link = require( '../net/link' );
+
+const ref_space = require( '../ref/space' );
+
+const result_hover = require( '../result/hover' );
+
+const reply_auth = require( '../reply/auth' );
+
+const reply_error = require( '../reply/error' );
+
+const session_uid = require( '../session/uid' );
+
+const shell_doTracker = require( './doTracker' );
+
+const shell_settings = require( './settings' );
+
+const show_create = require( '../show/create' );
+
+const show_form = require( '../show/form' );
+
+const show_normal = require( '../show/normal' );
+
+const show_zoom = require( '../show/zoom' );
+
+const user_creds = require( '../user/creds' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_range = require( '../visual/mark/range' );
+
+const visual_space = require( '../visual/space' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -294,14 +299,6 @@ def.static.prepareAction =
 		action
 	)
 {
-	var
-		p,
-		p2,
-		path,
-		pZ,
-		iPaths,
-		nPaths;
-
 	if( !action ) return undefined;
 
 	switch( action.timtype )
@@ -309,24 +306,28 @@ def.static.prepareAction =
 		case action_dragItems :
 		case action_resizeItems :
 
-			iPaths = action.itemPaths;
+			const iPaths = action.itemPaths;
 
 			if( iPaths )
 			{
-				for( p = 0, pZ = iPaths.length; p < pZ; p++ )
+				let p, pl;
+
+				for( p = 0, pl = iPaths.length; p < pl; p++ )
 				{
-					path = iPaths.get( p );
+					const path = iPaths.get( p );
 
 					if( !root.getPath( path ) ) break;
 				}
 
-				if( p < pZ )
+				if( p < pl )
 				{
 					// there is an item missing!
 
-					nPaths = [ ];
+					const nPaths = [ ];
 
 					// first copies over already checked items.
+
+					let p2;
 
 					for( p2 = 0; p2 < p; p2++ )
 					{
@@ -335,9 +336,9 @@ def.static.prepareAction =
 
 					p++; // the last item was a guaranteed skip
 
-					for( ; p < pZ; p++ )
+					for( ; p < pl; p++ )
 					{
-						path = iPaths.get( p );
+						const path = iPaths.get( p );
 
 						if( !root.getPath( path ) ) continue;
 
@@ -370,32 +371,23 @@ def.static.startup =
 		display
 	)
 {
-	var
-		ajaxPath,
-		canvas,
-		show,
-		userCreds,
-		viewSize;
-
 /**/if( CHECK )
 /**/{
 /**/	// singleton
 /**/	if( root ) throw new Error( );
 /**/}
 
-	canvas = document.createElement( 'canvas' );
-
-	viewSize =
+	const viewSize =
 		gleam_size.create(
 			'height', display.size.height,
 			'width', display.size.width
 		);
 
-	show = show_form.loading;
+	const show = show_form.loading;
 
-	ajaxPath = tim.path.empty.append( 'ajax' );
+	const ajaxPath = tim.path.empty.append( 'ajax' );
 
-	userCreds = user_creds.createFromLocalStorage( );
+	let userCreds = user_creds.createFromLocalStorage( );
 
 	if( !userCreds ) userCreds = user_creds.createVisitor( );
 
@@ -543,47 +535,33 @@ def.func._init =
 		inherit
 	)
 {
-	var
-		access,
-		action,
-		hover,
-		mark,
-		show,
-		spaceFabric,
-		spaceRef,
-		spaceTransform,
-		userCreds,
-		userSpaceList,
-		viewSize;
-
-
 	// sets drawn false
 	if( !this.lookAlike( inherit ) )
 	{
 		this._drawn = false;
 	}
 
-	access = this.access;
+	const access = this.access;
 
-	action = this.action;
+	const action = this.action;
 
-	mark = this.mark;
+	let mark = this.mark;
 
-	show = this.show;
+	const show = this.show;
 
-	viewSize = this.viewSize;
+	const viewSize = this.viewSize;
 
-	spaceTransform = this.spaceTransform;
+	const spaceTransform = this.spaceTransform;
 
-	hover = this.hover;
+	const hover = this.hover;
 
-	userCreds = this.userCreds;
+	const userCreds = this.userCreds;
 
-	userSpaceList = this.userSpaceList;
+	const userSpaceList = this.userSpaceList;
 
-	spaceRef = this.spaceRef;
+	const spaceRef = this.spaceRef;
 
-	spaceFabric = this.spaceFabric;
+	const spaceFabric = this.spaceFabric;
 
 /**/if( CHECK )
 /**/{
@@ -713,10 +691,7 @@ def.func._init =
 def.lazy.attentionCenter =
 	function( )
 {
-	var
-		screen;
-
-	screen = root._currentScreen;
+	const screen = root._currentScreen;
 
 	return screen && screen.attentionCenter;
 };
@@ -1549,11 +1524,7 @@ def.func.onAuth =
 		reply
 	)
 {
-	var
-		show,
-		userSpaceList;
-
-	userSpaceList = reply.userSpaceList;
+	const userSpaceList = reply.userSpaceList;
 
 	if( userSpaceList )
 	{
@@ -1579,7 +1550,7 @@ def.func.onAuth =
 	}
 
 
-	show = root.show;
+	const show = root.show;
 
 	// if in login form this is a tempted login
 	if( show.timtype === show_form && show.formName === 'login' )

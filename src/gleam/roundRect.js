@@ -19,17 +19,20 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_display_canvas,
-	gleam_shape,
-	gleam_shape_line,
-	gleam_shape_round,
-	gleam_shape_start,
-	gleam_transform;
-
-
 tim.define( module, 'gleam_roundRect', ( def, gleam_roundRect ) => {
+
+
+const gleam_display_canvas = require( './display/canvas' );
+
+const gleam_shape = require( './shape' );
+
+const gleam_shape_line = require( './shape/line' );
+
+const gleam_shape_round = require( './shape/round' );
+
+const gleam_shape_start = require( './shape/start' );
+
+const gleam_transform = require( './transform' );
 
 
 /*:::::::::::::::::::::::::::::

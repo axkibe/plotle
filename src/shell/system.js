@@ -3,20 +3,13 @@
 | creating a more comfortable interface for
 | the shell.
 */
-
-
-var
-	config,
-	root,
-	shell_system,
-	startup;
-
-
-/*
-| Capsule
-*/
-( ( ) => {
 'use strict';
+
+
+var config;
+
+
+tim.define( module, 'shell_system', ( def, shell_system ) => {
 
 
 /*
@@ -33,6 +26,17 @@ const limit = require( '../math/root' ).limit;
 const shell_root = require( '../shell/root' );
 
 const shell_settings = require( '../shell/settings' );
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.init = [ ];
+}
 
 
 /*
@@ -108,29 +112,10 @@ const transmitter =
 };
 
 
-var
-	// the canvas everything is drawn upon.
-	canvas,
-
-
-	// the hidden input taking text input.
-	hiddenInput,
-
-	hoverP,
-	keyCodeNames,
-	keyCodeNamesCtrl,
-	lastSpecialKey,
-
-	// current height of the main window
-	mainWindowHeight,
-	pointingState,
-	prototype,
-	_resetAtweenState,
-	systemTransmitter;
-
-
-// if true there is currently one or more animations
-// to be processed
+/*
+| If true there is currently one or more animations
+| to be processed.
+*/
 let animating = false;
 
 
@@ -146,30 +131,47 @@ let animating = false;
 */
 let atweenCtrl = false;
 
+
 /*
 | Move position where cursor moved to in atween state.
 */
 let atweenMove;
+
 
 /*
 | Position where mouse went down.
 */
 let atweenPos;
 
+
 /*
 | Status of shift when atween state starts.
 */
 let atweenShift = false;
+
 
 /*
 | Timer of the atween state.
 */
 let atweenTimer;
 
+
+/*
+| The canvas everything is drawn upon.
+*/
+let canvas;
+
+
 /*
 | When true the system dropped down to show a fail screen.
 */
 let failScreen = false;
+
+
+/*
+| The hidden input taking text input.
+*/
+let hiddenInput;
 
 
 /*
@@ -179,6 +181,8 @@ let failScreen = false;
 let hoverShift = false;
 
 let hoverCtrl = false;
+
+let hoverP;
 
 
 /*
@@ -193,16 +197,16 @@ let inputVal = '';
 | Remembers last special key pressed, to hinder double events.
 | Opera is behaving stupid here.
 */
-lastSpecialKey = -1;
+let lastSpecialKey = -1;
 
 
 /*
 | false, 'atween' or 'drag'
 */
-pointingState = false;
+let pointingState = false;
 
 
-keyCodeNames =
+const keyCodeNames =
 	{
 		8 : 'backspace',
 		9 : 'tab',
@@ -222,7 +226,7 @@ keyCodeNames =
 	};
 
 
-keyCodeNamesCtrl =
+const keyCodeNamesCtrl =
 	{
 		16 : 'shift',
 		17 : 'ctrl',
@@ -240,7 +244,7 @@ keyCodeNamesCtrl =
 /*
 | Creates a catcher that calls a system function.
 */
-systemTransmitter =
+const systemTransmitter =
 	function(
 		funcName  // name of the function to call
 	)
@@ -260,11 +264,9 @@ systemTransmitter =
 /*
 | The system.
 */
-shell_system =
+def.func._init =
 	function( )
 {
-	if( system ) throw new Error( );
-
 	canvas = document.getElementById( 'canvas' );
 
 	this._display =
@@ -335,13 +337,10 @@ shell_system =
 };
 
 
-prototype = shell_system.prototype;
-
-
 /*
 | Cancels an interval timer.
 */
-prototype.cancelInterval =
+def.func.cancelInterval =
 	function( id )
 {
 	return window.clearInterval( id );
@@ -351,7 +350,7 @@ prototype.cancelInterval =
 /*
 | Cancels a single timer.
 */
-prototype.cancelTimer =
+def.func.cancelTimer =
 	function( id )
 {
 	return window.clearTimeout( id );
@@ -360,7 +359,7 @@ prototype.cancelTimer =
 /*
 | If not already animating, start doing so.
 */
-prototype.doAnimation =
+def.func.doAnimation =
 	function( )
 {
 	if( animating ) return;
@@ -374,35 +373,28 @@ prototype.doAnimation =
 /*
 | Replaces the shell by a failscreen
 */
-prototype.failScreen =
+def.func.failScreen =
 	function(
 		message
 	)
 {
-	var
-		body,
-		butReload,
-		divContent,
-		divMessage,
-		divWrap;
-
 	if( failScreen ) return;
 
 	failScreen = true;
 
-	body = document.body;
+	const body = document.body;
 
 	body.removeChild( canvas );
 
 	body.removeChild( hiddenInput );
 
-	divWrap = document.createElement( 'div' );
+	const divWrap = document.createElement( 'div' );
 
-	divContent = document.createElement( 'div' ),
+	const divContent = document.createElement( 'div' );
 
-	divMessage = document.createElement( 'div' ),
+	const divMessage = document.createElement( 'div' );
 
-	butReload = document.createElement( 'button' );
+	const butReload = document.createElement( 'button' );
 
 	body.appendChild( divWrap );
 
@@ -441,7 +433,7 @@ prototype.failScreen =
 /*
 | (Re)Starts the blink timer
 */
-prototype.restartBlinker =
+def.func.restartBlinker =
 	function( )
 {
 	// double uses the blink timer
@@ -463,7 +455,7 @@ prototype.restartBlinker =
 /*
 | Sets the hidden input field (text selection)
 */
-prototype.setInput =
+def.func.setInput =
 	function(
 		text
 	)
@@ -483,7 +475,7 @@ prototype.setInput =
 |
 | Return the timer id.
 */
-prototype.setInterval =
+def.func.setInterval =
 	function(
 		time,
 		callback
@@ -500,7 +492,7 @@ prototype.setInterval =
 |
 | Return the timer id.
 */
-prototype.setTimer =
+def.func.setTimer =
 	function(
 		time,
 		callback
@@ -513,7 +505,7 @@ prototype.setTimer =
 /*
 | Stops animating.
 */
-prototype.stopAnimation =
+def.func.stopAnimation =
 	function( )
 {
 	animating = false;
@@ -526,7 +518,7 @@ prototype.stopAnimation =
 /*
 | Does an animation frame.
 */
-prototype._animation =
+def.func._animation =
 	function(
 		time
 	)
@@ -542,7 +534,7 @@ prototype._animation =
 /*
 | Blinks the caret
 */
-prototype._blink =
+def.func._blink =
 	function( )
 {
 	if( failScreen ) return;
@@ -553,7 +545,7 @@ prototype._blink =
 };
 
 
-_resetAtweenState =
+const _resetAtweenState =
 	function( )
 {
 	atweenTimer = undefined;
@@ -571,7 +563,7 @@ _resetAtweenState =
 /*
 | timeout after mouse down so dragging starts
 */
-prototype._onAtweenTime =
+def.func._onAtweenTime =
 	function( )
 {
 
@@ -595,7 +587,7 @@ prototype._onAtweenTime =
 /*
 | Input blur
 */
-prototype._onInputBlur =
+def.func._onInputBlur =
 	function(
 		// event
 	)
@@ -608,7 +600,7 @@ prototype._onInputBlur =
 /*
 | Lost focus.
 */
-prototype._onSystemBlur =
+def.func._onSystemBlur =
 	function(
 		// event
 	)
@@ -621,7 +613,7 @@ prototype._onSystemBlur =
 /*
 | Got focus.
 */
-prototype._onSystemFocus =
+def.func._onSystemFocus =
 	function(
 		// event
 	)
@@ -633,7 +625,7 @@ prototype._onSystemFocus =
 /*
 | Window is being resized.
 */
-prototype._onResize =
+def.func._onResize =
 	function(
 		// event
 	)
@@ -652,7 +644,7 @@ prototype._onResize =
 /*
 | Captures all mouseevents event beyond the canvas (for dragging)
 */
-prototype._captureEvents =
+def.func._captureEvents =
 	function( )
 {
 	if( this._useCapture )
@@ -672,25 +664,14 @@ prototype._captureEvents =
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-prototype._onKeyDown =
+def.func._onKeyDown =
 	function(
 		event
 	)
 {
-	var
-		kcode;
+	const kcode = ( lastSpecialKey = event.keyCode );
 
-	kcode =
-	lastSpecialKey =
-		event.keyCode;
-
-	if(
-		!this._specialKey(
-			kcode,
-			event.shiftKey,
-			event.ctrlKey || event.metaKey
-		)
-	)
+	if( !this._specialKey( kcode, event.shiftKey, event.ctrlKey || event.metaKey ) )
 	{
 		event.preventDefault( );
 	}
@@ -700,24 +681,18 @@ prototype._onKeyDown =
 /*
 | Hidden input key press.
 */
-prototype._onKeyPress =
+def.func._onKeyPress =
 	function(
 		event
 	)
 {
-	var
-		ctrl,
-		ew,
-		kcode,
-		shift;
+	const ew = event.which;
 
-	ew = event.which;
+	const kcode = event.keyCode;
 
-	kcode = event.keyCode;
+	const shift = event.shiftKey;
 
-	shift = event.shiftKey;
-
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	if(
 		( ( kcode > 0 && kcode < 32) || ew === 0)
@@ -742,7 +717,7 @@ prototype._onKeyPress =
 /*
 | Hidden input key up.
 */
-prototype._onKeyUp =
+def.func._onKeyUp =
 	function( event )
 {
 	this._testInput( );
@@ -760,7 +735,7 @@ prototype._onKeyUp =
 /*
 | Disables context menues.
 */
-prototype._onContextMenu =
+def.func._onContextMenu =
 	function(
 		event
 	)
@@ -774,16 +749,11 @@ prototype._onContextMenu =
 /*
 | Mouse down event.
 */
-prototype._onMouseDown =
+def.func._onMouseDown =
 	function(
 		event
 	)
 {
-	var
-		ctrl,
-		p,
-		shift;
-
 	event.preventDefault( );
 
 	if( event.button !== undefined && event.button !== 0 ) return;
@@ -791,15 +761,15 @@ prototype._onMouseDown =
 	// Opera requires focusing the window first
 	//window.focus( );
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
 
-	shift = event.shiftKey,
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	this._probeClickDrag( p, shift, ctrl );
 
@@ -814,7 +784,7 @@ prototype._onMouseDown =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-prototype._probeClickDrag =
+def.func._probeClickDrag =
 	function(
 		p,
 		shift,
@@ -862,7 +832,7 @@ prototype._probeClickDrag =
 /*
 | Handles hovering of the pointing device.
 */
-prototype._pointingHover =
+def.func._pointingHover =
 	function(
 		p,
 		shift,
@@ -884,7 +854,7 @@ prototype._pointingHover =
 /*
 | Sets the cursor
 */
-prototype._setCursor =
+def.func._setCursor =
 	function(
 		cursor
 	)
@@ -925,7 +895,7 @@ prototype._setCursor =
 |
 | Used by asyncEvents so the hoveringState is corrected.
 */
-prototype._repeatHover =
+def.func._repeatHover =
 	function( )
 {
 	if( !hoverP ) return;
@@ -937,29 +907,20 @@ prototype._repeatHover =
 /*
 | Mouse move event.
 */
-prototype._onMouseMove =
+def.func._onMouseMove =
 	function(
 		event
 	)
 {
-	var
-		ctrl,
-		cursor,
-		dragbox,
-		p,
-		shift;
-
-	p =
+	const p =
 		gleam_point.xy(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
-
-	cursor = undefined;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
@@ -971,12 +932,11 @@ prototype._onMouseMove =
 
 		case 'atween' :
 
-			dragbox = shell_settings.dragbox;
+			const dragbox = shell_settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
-				||
-				( Math.abs( p.y - atweenPos.y ) > dragbox )
+				|| ( Math.abs( p.y - atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
@@ -1014,8 +974,6 @@ prototype._onMouseMove =
 			throw new Error( );
 	}
 
-	this._setCursor( cursor );
-
 	return true;
 };
 
@@ -1023,29 +981,24 @@ prototype._onMouseMove =
 /*
 | Mouse up event.
 */
-prototype._onMouseUp =
+def.func._onMouseUp =
 	function(
 		event
 	)
 {
-	var
-		ctrl,
-		p,
-		shift;
-
 	event.preventDefault( );
 
 	this._releaseEvents( );
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
@@ -1099,24 +1052,20 @@ prototype._onMouseUp =
 /*
 | The mouse wheel is being turned.
 */
-prototype._onMouseWheel =
+def.func._onMouseWheel =
 	function(
 		event
 	)
 {
-	var
-		ctrl,
-		dir,
-		p,
-		shift;
-
 	event.preventDefault( );
 
-	p =
+	const p =
 		gleam_point.xy(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
+
+	let dir;
 
 	if( event.wheelDelta !== undefined )
 	{
@@ -1133,9 +1082,9 @@ prototype._onMouseWheel =
 		return;
 	}
 
-	shift = event.shiftKey;
+	const shift = event.shiftKey;
 
-	ctrl = event.ctrlKey || event.metaKey;
+	const ctrl = event.ctrlKey || event.metaKey;
 
 	root.mousewheel( p, dir, shift, ctrl );
 
@@ -1148,7 +1097,7 @@ prototype._onMouseWheel =
 /*
 | The user is touching something ( on mobile devices )
 */
-prototype._onTouchStart =
+def.func._onTouchStart =
 	function(
 		event
 	)
@@ -1156,10 +1105,7 @@ prototype._onTouchStart =
 	event.preventDefault( );
 
 	// for now ignore multi-touches
-	if( event.touches.length !== 1 )
-	{
-		return false;
-	}
+	if( event.touches.length !== 1 ) return false;
 
 	const p =
 		gleam_point.xy(
@@ -1180,7 +1126,7 @@ prototype._onTouchStart =
 /*
 | The use is moving the touch ( on mobile devices )
 */
-prototype._onTouchMove =
+def.func._onTouchMove =
 	function(
 		event
 	)
@@ -1261,7 +1207,7 @@ prototype._onTouchMove =
 /*
 | The using is lifting his/her finger ( on mobile devices)
 */
-prototype._onTouchEnd =
+def.func._onTouchEnd =
 	function(
 		event
 	)
@@ -1335,7 +1281,7 @@ prototype._onTouchEnd =
 /*
 | Stops capturing all mouseevents
 */
-prototype._releaseEvents =
+def.func._releaseEvents =
 	function( )
 {
 	if ( this._useCapture )
@@ -1354,7 +1300,7 @@ prototype._releaseEvents =
 /*
 | A special key is being pressed.
 */
-prototype._specialKey =
+def.func._specialKey =
 	function(
 		keyCode,
 		shift,
@@ -1381,7 +1327,7 @@ prototype._specialKey =
 /*
 | A special key is being released.
 */
-prototype._releaseSpecialKey =
+def.func._releaseSpecialKey =
 	function(
 		keyCode,
 		shift,
@@ -1407,7 +1353,7 @@ prototype._releaseSpecialKey =
 /*
 | Tests if the hidden input field got data
 */
-prototype._testInput =
+def.func._testInput =
 	function( )
 {
 	if( !root ) return;
@@ -1434,7 +1380,7 @@ prototype._testInput =
 | and if takes care the caret is scrolled into
 | visible screen area.
 */
-prototype._steerAttention =
+def.func._steerAttention =
 	function( )
 {
 	let ac = root.attentionCenter;
@@ -1449,7 +1395,7 @@ prototype._steerAttention =
 	}
 	else
 	{
-		ac = limit( 0, ac, mainWindowHeight - 15 );
+		ac = limit( 0, ac, root.viewSize.height - 15 );
 
 		hiddenInput.style.top = ac + 'px';
 
@@ -1465,13 +1411,17 @@ prototype._steerAttention =
 /*
 | System starts up ( pages loades )
 */
-startup = function( )
+def.static.startup = function( )
 {
+	window.root = undefined;
+
+	window.system = undefined;
+
 	const start =
 		transmitter(
 			function( )
 			{
-				system = new shell_system( );
+				system = shell_system.create( );
 
 				shell_root.startup( system._display );
 			},
@@ -1489,4 +1439,6 @@ startup = function( )
 	}
 };
 
-} )( );
+
+} );
+

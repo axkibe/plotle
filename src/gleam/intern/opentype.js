@@ -73,13 +73,13 @@ const getWidth =
 {
 	let w = 0;
 
-	for( let a = 0, aZ = glyphs.length; a < aZ; a++ )
+	for( let a = 0, al = glyphs.length; a < al; a++ )
 	{
 		const glyph = glyphs[ a ];
 
 	    if( glyph.advanceWidth ) w += glyph.advanceWidth * fontScale;
 
-		if( a + 1 < aZ )
+		if( a + 1 < al )
 		{
 		    w += font.getKerningValue( glyph, glyphs[ a + 1 ] ) * fontScale;
 		}
@@ -102,19 +102,6 @@ def.static.drawText =
 		cx     // canvas context to draw it on.
 	)
 {
-	var
-		glyph,
-		glyphCache,
-		glyphCacheSet,
-		glyphs,
-		index,
-		options,
-		path,
-		x1,
-		y1,
-		x2,
-		y2;
-
 /**/if( CHECK )
 /**/{
 /**/	if( size !== Math.floor( size ) ) throw new Error();
@@ -122,20 +109,17 @@ def.static.drawText =
 
 	const otFont = font.opentype;
 
-	glyphCache = otFont.glyphCache;
+	const glyphCache = otFont.glyphCache;
 
-	glyphCacheSet = glyphCache[ size ];
+	let glyphCacheSet = glyphCache[ size ];
 
-	if( !glyphCacheSet )
-	{
-		glyphCacheSet = glyphCache[ size ] = { };
-	}
+	if( !glyphCacheSet ) glyphCacheSet = glyphCache[ size ] = { };
 
 	const fontScale = 1 / otFont.unitsPerEm * size;
 
-	options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
+	const options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
 
-	glyphs = otFont.stringToGlyphs( text, options );
+	const glyphs = otFont.stringToGlyphs( text, options );
 
 	switch( font.align )
 	{
@@ -168,7 +152,9 @@ def.static.drawText =
 			break;
 	}
 
-	for( let a = 0, aZ = glyphs.length; a < aZ; a++ )
+	let glyph;
+
+	for( let a = 0, al = glyphs.length; a < al; a++ )
 	{
 		if( glyph )
 		{
@@ -184,14 +170,14 @@ def.static.drawText =
 
 		if( size >= shell_settings.glyphCacheLimit )
 		{
-	      	path = glyph.getPath( round( x ), round( y ), size, options, otFont );
+	      	const path = glyph.getPath( round( x ), round( y ), size, options, otFont );
 
 			path.draw( cx );
 
 			continue;
 		}
 
-		index = glyph.index;
+		const index = glyph.index;
 
 		const cg = glyphCacheSet[ index ];
 
@@ -209,17 +195,17 @@ def.static.drawText =
 			continue;
 		}
 
-		path = glyph.getPath( 0, 0, size, options, otFont );
+		const path = glyph.getPath( 0, 0, size, options, otFont );
 
 		const bb = path.getBoundingBox( );
 
-		x1 = Math.floor( bb.x1 );
+		let x1 = Math.floor( bb.x1 );
 
-		y1 = Math.floor( bb.y1 );
+		let y1 = Math.floor( bb.y1 );
 
-		x2 = Math.ceil( bb.x2 );
+		let x2 = Math.ceil( bb.x2 );
 
-		y2 = Math.ceil( bb.y2 );
+		let y2 = Math.ceil( bb.y2 );
 
 		let canvas;
 

@@ -4,17 +4,20 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_glint_list,
-	gleam_glint_window,
-	gleam_point,
-	gleam_size,
-	shell_settings,
-	widget_scrollbar;
-
-
 tim.define( module, 'widget_scrollbox', ( def, widget_scrollbox ) => {
+
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_size = require( '../gleam/size' );
+
+const shell_settings = require( '../shell/settings' );
+
+const widget_scrollbar = require( './scrollbar' );
 
 
 /*::::::::::::::::::::::::::::.

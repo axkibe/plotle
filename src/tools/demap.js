@@ -1,15 +1,6 @@
-var
-	a,
-	aZ,
-	fs,
-	fsTrace,
-	io,
-	line,
-	map,
-	r,
-	SourceMap,
-	smc,
-	trace;
+/*
+| Demaps a backtrace from uglified pack.
+*/
 
 if( process.argv.length !== 4 )
 {
@@ -18,21 +9,21 @@ if( process.argv.length !== 4 )
 	return 1;
 }
 
-fs = require( 'fs' );
+const fs = require( 'fs' );
 
-SourceMap = require( 'source-map' );
+const SourceMap = require( 'source-map' );
 
-trace = [ ];
+const trace = [ ];
 
-fsTrace = fs.readFileSync( process.argv[ 3 ] ) + '';
+let fsTrace = fs.readFileSync( process.argv[ 3 ] ) + '';
 
 fsTrace = fsTrace.split( /[ \n]/ );
 
-for( a = 0, aZ = fsTrace.length; a < aZ; a++ )
+for( let a = 0, al = fsTrace.length; a < al; a++ )
 {
-	line = fsTrace[ a ];
+	const line = fsTrace[ a ];
 
-	r = line.match( ':([0-9]*):([0-9]*)' );
+	const r = line.match( ':([0-9]*):([0-9]*)' );
 
 	if( !r ) continue;
 
@@ -44,19 +35,15 @@ for( a = 0, aZ = fsTrace.length; a < aZ; a++ )
 	);
 }
 
-map = fs.readFileSync( process.argv[ 2 ] );
+let map = fs.readFileSync( process.argv[ 2 ] );
 
 map = JSON.parse( map );
 
-smc = new SourceMap.SourceMapConsumer( map );
+const smc = new SourceMap.SourceMapConsumer( map );
 
-for(
-	a = 0, aZ = trace.length;
-	a < aZ;
-	a++
-)
+for( let a = 0, al = trace.length; a < al; a++ )
 {
-	io = smc.originalPositionFor( trace[ a ] );
+	const io = smc.originalPositionFor( trace[ a ] );
 
 	console.log( io.source + ':' + io.line + ':' + io.column );
 }

@@ -4,11 +4,10 @@
 'use strict';
 
 
-var
-	gleam_rectGroup;
-
-
 tim.define( module, 'visual_itemList', ( def, visual_itemList ) => {
+
+
+const gleam_rectGroup = require( '../gleam/rectGroup' );
 
 
 /*::::::::::::::::::::::::::::.

@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_transform;
-
-
 tim.define( module, 'gleam_shapeList', ( def, gleam_shapeList ) => {
+
+
+const gleam_transform = require( './transform' );
 
 
 /*:::::::::::::::::.

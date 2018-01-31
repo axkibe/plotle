@@ -3,23 +3,29 @@
 */
 'use strict';
 
-// FIXME
-var
-	change_insert,
-	change_list,
-	change_join,
-	change_remove,
-	change_split,
-	change_wrap,
-	math_maxInteger,
-	session_uid,
-	testpad_action;
-
 
 tim.define( module, 'testpad_root', ( def, testpad_root ) => {
 
 
+const change_insert = require( '../change/insert' );
+
+const change_list = require( '../change/list' );
+
+const change_join = require( '../change/join' );
+
+const change_remove = require( '../change/remove' );
+
+const change_split = require( '../change/split' );
+
+const change_wrap = require( '../change/wrap' );
+
 const limit = require( '../math/root' ).limit;
+
+const maxInteger = require( '../math/root' ).maxInteger;
+
+const session_uid = require( '../session/uid' );
+
+const testpad_action = require( './action' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -90,7 +96,7 @@ const noteDocPath =
 | Binds an event handler to the
 | latest instance of testpads root.
 */
-var _bind =
+const _bind =
 	function(
 		handler  // the handler of testpad
 	)
@@ -598,7 +604,7 @@ def.func.send =
 	root.create(
 		'action', undefined,
 		'cursorAt', cursorAt,
-		'repository', root.repository.create( 'seq', math_maxInteger )
+		'repository', root.repository.create( 'seq', maxInteger )
 	);
 };
 
@@ -907,7 +913,7 @@ def.func.onUpNowButton =
 {
 	root.create(
 		'repository',
-			root.repository.create( 'seq', math_maxInteger )
+			root.repository.create( 'seq', maxInteger )
 	);
 
 	this.elements.input.focus( );

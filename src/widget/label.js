@@ -4,12 +4,10 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_glint_text;
-
-
 tim.define( module, 'widget_label', ( def, widget_label ) => {
+
+
+const gleam_glint_text = require( '../gleam/glint/text' );
 
 
 /*::::::::::::::::::::::::::::.

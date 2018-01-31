@@ -8,16 +8,18 @@
 'use strict';
 
 
-// FIXME;
-var
-	action_scrolly,
-	gleam_roundRect,
-	gleam_glint_paint,
-	gruga_scrollbar,
-	result_hover;
-
-
 tim.define( module, 'widget_scrollbar', ( def, widget_scrollbar ) => {
+
+
+const action_scrolly = require( '../action/scrolly' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gruga_scrollbar = require( '../gruga/scrollbar' );
+
+const result_hover = require( '../result/hover' );
 
 
 /*::::::::::::::::::::::::::::.

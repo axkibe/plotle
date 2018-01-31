@@ -4,24 +4,34 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_ellipse,
-	gleam_facet,
-	gleam_glint_border,
-	gleam_glint_fill,
-	gleam_glint_list,
-	gleam_glint_text,
-	gleam_glint_window,
-	gleam_point,
-	gleam_rect,
-	gleam_roundRect,
-	result_hover,
-	shell_settings,
-	visual_mark_caret;
-
-
 tim.define( module, 'widget_input', ( def, widget_input ) => {
+
+
+const gleam_ellipse = require( '../gleam/ellipse' );
+
+const gleam_facet = require( '../gleam/facet' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_text = require( '../gleam/glint/text' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const result_hover = require( '../result/hover' );
+
+const shell_settings = require( '../shell/settings' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*::::::::::::::::::::::::::::.

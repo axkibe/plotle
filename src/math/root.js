@@ -29,6 +29,11 @@ def.static.limit =
 	return val;
 };
 
+/*
+| Maximum integer variable.
+*/
+def.static.maxInteger = 9007199254740992;
+
 
 } );
 

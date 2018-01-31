@@ -4,19 +4,25 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_ellipse,
-	gleam_glint_list,
-	gleam_glint_paint,
-	gleam_glint_text,
-	gleam_glint_window,
-	gleam_point,
-	gleam_transform,
-	result_hover;
-
-
 tim.define( module, 'widget_button', ( def, widget_button ) => {
+
+
+const gleam_ellipse = require( '../gleam/ellipse' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_glint_text = require( '../gleam/glint/text' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const result_hover = require( '../result/hover' );
+
 
 
 /*::::::::::::::::::::::::::::.

@@ -4,16 +4,18 @@
 'use strict';
 
 
-// FIXME
-var
-	gleam_glint_list,
-	gleam_glint_paint,
-	gleam_transform,
-	gruga_iconCheck,
-	result_hover;
-
-
 tim.define( module, 'widget_checkbox', ( def, widget_checkbox ) => {
+
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_iconCheck = require( '../gruga/iconCheck' );
+
+const result_hover = require( '../result/hover' );
 
 
 /*::::::::::::::::::::::::::::.

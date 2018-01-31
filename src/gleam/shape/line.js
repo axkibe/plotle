@@ -125,36 +125,25 @@ def.func.getProjection =
 		pc   // central point of shape
 	)
 {
-	var
-		det,
-		la1,
-		lb1,
-		lc1,
-		la2,
-		lb2,
-		lc2,
-		pix,
-		piy;
+	const la1 = p.y - pc.y;
 
-	la1 = p.y - pc.y;
+	const lb1 = pc.x - p.x;
 
-	lb1 = pc.x - p.x;
+	const lc1 = la1 * pc.x + lb1 * pc.y;
 
-	lc1 = la1 * pc.x + lb1 * pc.y;
+	const la2 = pn.y - pp.y;
 
-	la2 = pn.y - pp.y;
+	const lb2 = pp.x - pn.x;
 
-	lb2 = pp.x - pn.x;
+	const lc2 = la2 * pp.x + lb2 * pp.y;
 
-	lc2 = la2 * pp.x + lb2 * pp.y;
-
-	det = la1 * lb2 - la2 * lb1;
+	const det = la1 * lb2 - la2 * lb1;
 
 	if( det === 0 ) return undefined;
 
-	pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
+	const pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
 
-	piy = ( la1 * lc2 - la2 * lc1 ) / det;
+	const piy = ( la1 * lc2 - la2 * lc1 ) / det;
 
 	if(
 		Math.min( pp.x, pn.x ) <= pix + e
@@ -168,7 +157,7 @@ def.func.getProjection =
 		&& Math.max( pc.y, p.y  ) >= piy - e
 	)
 	{
-		return gleam_point.create( 'x', pix, 'y', piy );
+		return gleam_point.xy( pix, piy );
 	}
 };
 

@@ -9,20 +9,12 @@
 'use strict';
 
 
-/*
-| Imports
-*/
-var
-	server_resource,
-	server_resourceList,
-	stringList;
+const server_resource = require( './resource' );
 
+const server_resourceList = require( './resourceList' );
 
-server_resource = require( './resource' );
+const stringList = tim.stringList.stringList; // FUTURE
 
-server_resourceList = require( './resourceList' );
-
-stringList = tim.stringList.stringList; // FUTURE
 
 module.exports =
 server_resourceList.create(
@@ -56,17 +48,17 @@ server_resourceList.create(
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-browser.js' ] ),
+		'aliases', stringList( [ 'tim-proto.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.browserSource,
+		'data', tim.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-proto.js' ] ),
+		'aliases', stringList( [ 'tim-browser.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.proto.source,
+		'data', tim.browserSource,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -96,34 +88,14 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'timcode-path.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.path.timcode,
-		'mime', 'text/javascript',
+		'filePath', 'node_modules/tim.js/src/path.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-path.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.path.source,
-		'mime', 'text/javascript',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	server_resource.create(
-		'aliases', stringList( [ 'timcode-pathList.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.pathList.timcode,
-		'mime', 'text/javascript',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	server_resource.create(
-		'aliases', stringList( [ 'tim-pathList.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.pathList.source,
-		'mime', 'text/javascript',
+		'filePath', 'node_modules/tim.js/src/pathList.js',
+		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -131,10 +103,6 @@ server_resourceList.create(
 		'filePath', 'src/math/root.js',
 		'hasTim', true,
 		'inBundle', true,
-		'inTestPad', true
-	),
-	server_resource.create(
-		'filePath', 'src/math/maxInteger.js',
 		'inTestPad', true
 	),
 	server_resource.create(
@@ -455,6 +423,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/widget/widget.js',
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -966,7 +935,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/system.js',
-		'isLeaf', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
@@ -1081,6 +1050,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/fontloader.js',
+		'isLeaf', true,
 		'inBundle', true
 	),
 	server_resource.create(

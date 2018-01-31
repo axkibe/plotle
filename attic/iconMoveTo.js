@@ -17,9 +17,6 @@
 
 
 var
-	arrow,
-	base1,
-	base2,
 	gleam_point,
 	gleam_border,
 	gleam_color,
@@ -58,7 +55,7 @@ gruga_iconMoveTo.facet =
 	);
 
 
-arrow =
+const arrow =
 	gleam_shape.create(
 		'list:init',
 		[
@@ -75,7 +72,7 @@ arrow =
 	);
 
 
-base1 =
+const base1 =
 	gleam_rect.create(
 		'p', ap.add( -2, 16 ),
 		'width', 4,
@@ -83,7 +80,7 @@ base1 =
 	);
 
 
-base2 =
+const base2 =
 	gleam_rect.create(
 		'p', ap.add( -2, 19 ),
 		'width', 4,
