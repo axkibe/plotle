@@ -9,8 +9,8 @@
     "url": "https://github.com/axkibe/ideoloom"
   },
   "dependencies": {
-    "mongodb": "^2.2.33",
+    "mongodb": "^2.2.34",
     "suspend": "^0.7.0",
-    "uglify-js": "^2.8.29"
+    "uglify-es": "^3.3.9"
   }
 }

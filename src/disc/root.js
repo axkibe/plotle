@@ -86,11 +86,8 @@ if( TIM )
 	def.twig =
 	[
 		'disc_mainDisc',
-		'disc_mainDisc:abstract',
 		'disc_createDisc',
-		'disc_createDisc:abstract',
 		'disc_zoomDisc',
-		'disc_zoomDisc:abstract'
 	];
 }
 

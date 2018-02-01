@@ -437,16 +437,25 @@ def.static._createDiscRoot =
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
-				gruga_mainDisc.layout.abstract(
-					'path', twPath.append( 'mainDisc' )
+				gruga_mainDisc.layout.create(
+					'path', twPath.append( 'mainDisc' ),
+					'controlTransform', gleam_transform.normal,
+					'show', show,
+					'viewSize', viewSize
 				),
 			'twig:add', 'createDisc',
-				gruga_createDisc.layout.abstract(
-					'path', twPath.append( 'createDisc' )
+				gruga_createDisc.layout.create(
+					'path', twPath.append( 'createDisc' ),
+					'controlTransform', gleam_transform.normal,
+					'show', show,
+					'viewSize', viewSize
 				),
 			'twig:add', 'zoomDisc',
-				gruga_zoomDisc.layout.abstract(
-					'path', twPath.append( 'zoomDisc' )
+				gruga_zoomDisc.layout.create(
+					'path', twPath.append( 'zoomDisc' ),
+					'controlTransform', gleam_transform.normal,
+					'show', show,
+					'viewSize', viewSize
 				)
 		)
 	);

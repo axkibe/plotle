@@ -77,8 +77,6 @@ const config = require( '../../config' );
 
 const fs = require( 'fs' );
 
-const isString = tim.isString;
-
 const log = require( '../log/root' );
 
 const server_maxAge = require( './maxAge' );
@@ -103,7 +101,7 @@ const suspend = require( 'suspend' );
 
 const resume = suspend.resume;
 
-const uglify = require( 'uglify-js' );
+const uglify = require( 'uglify-es' );
 
 const url = require( 'url' );
 
@@ -191,9 +189,9 @@ def.func.createShellConfig =
 			'\t\t',
 			k,
 			' : ',
-			isString( val ) ? "'" : '',
+			typeof( val ) === 'string' ? "'" : '',
 			val,
-			isString( val ) ? "'" : ''
+			typeof( val ) === 'string' ? "'" : ''
 		);
 	}
 
@@ -272,7 +270,7 @@ def.func.prepareInventory =
 
 	const timIDs = { };
 
-	const codes = [ ];
+	const codes = { };
 
 	// loads the files to be bundled
 	for( let a = 0, al = root.inventory.length; a < al; a++ )
@@ -293,26 +291,78 @@ def.func.prepareInventory =
 		{
 			if( !resource.data )
 			{
-				code = yield fs.readFile( resource.filePath, resume( ) );
+				code = ( yield fs.readFile( resource.filePath, resume( ) ) ) + '';
 			}
 			else
 			{
-				code = resource.data;
+				code = resource.data + '';
 			}
 		}
 
-		code += '';
-
 		codes[ a ] = code;
 	}
-
+	
 	let bundleFilePath;
 
 	if( config.shell_bundle )
 	{
-		let ast;
+		if( config.uglify )
+		{
+			log.start( 'uglifying bundle' );
 
-		log.start( 'parsing bundle' );
+			const code = { };
+
+			for( let a = 0, al = root.inventory.length; a < al; a++ )
+			{
+				const resource = root.inventory.atRank( a );
+
+				if( !resource.inBundle ) continue;
+
+				code[ resource.filePath || resource.aliases.get( 0 ) ] = codes[ a ];
+			}
+
+			bundle = uglify.minify( code );
+		}
+		else
+		{
+			log.start( 'concating bundle' );
+
+			for( let a = 0, al = root.inventory.length; a < al; a++ )
+			{
+				const resource = root.inventory.atRank( a );
+
+				if( !resource.inBundle ) continue;
+
+				bundle += codes[ a ];
+			}
+		}
+
+		// calculates the hash for the bundle
+		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
+
+		root.create( 'bundleFilePath', bundleFilePath );
+
+		// registers the bundle as resource
+		root.create(
+			'inventory',
+				root.inventory.updateResource(
+					server_resource.create(
+						'filePath', bundleFilePath,
+						'maxage', 'long',
+						'data', bundle
+					)
+				)
+		);
+
+		log.start( 'bundle:', bundleFilePath );
+
+		// if uglify is turned on
+		// the flags are added after bundle
+		// creation, otherwise before
+		if( config.uglify ) root.prependConfigFlags( );
+	}
+
+		/*
 
 		for( let a = 0, al = root.inventory.length; a < al; a++ )
 		{
@@ -325,16 +375,17 @@ def.func.prepareInventory =
 					uglify.parse(
 						codes[ a ],
 						{
-							filename :
-								resource.filePath
-								|| resource.aliases.get( 0 ),
+							filename : resource.filePath || resource.aliases.get( 0 ),
 							toplevel : ast
 						}
 					);
 			}
 			catch ( e )
 			{
-				console.log( 'parse error', resource.filePath, 'line', e.line );
+				console.log(
+					'parse error', resource.filePath || resource.aliases.get( 0 ),
+					'line', e.line
+				);
 
 				throw e;
 			}
@@ -395,37 +446,9 @@ def.func.prepareInventory =
 
 		if( !config.noWrite )
 		{
-			yield fs.writeFile(
-				'report/source.map',
-				sourceMap.toString( ),
-				resume( )
-			);
+			yield fs.writeFile( 'report/source.map', sourceMap.toString( ), resume( ) );
 		}
-
-		// calculates the hash for the bundle
-		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
-
-		root.create( 'bundleFilePath', bundleFilePath );
-
-		// registers the bundle as resource
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					server_resource.create(
-						'filePath', bundleFilePath,
-						'maxage', 'long',
-						'data', bundle
-					)
-				)
-		);
-
-		log.start( 'bundle:', bundleFilePath );
-
-		// if uglify is turned on
-		// the flags are added after bundle
-		// creation, otherwise before
-		if( config.uglify ) root.prependConfigFlags( );
-	}
+		*/
 
 	// post processing
 	let inv = root.inventory;
@@ -438,9 +461,7 @@ def.func.prepareInventory =
 
 		if( !server_postProcessor[ resource.postProcessor ] )
 		{
-			throw new Error(
-				'invalid postProcessor: ' + resource.postProcessor
-			);
+			throw new Error( 'invalid postProcessor: ' + resource.postProcessor );
 		}
 
 		server_postProcessor[ resource.postProcessor ]( resource, bundleFilePath );
@@ -644,7 +665,7 @@ def.func.extraMangle =
 
 		if( !k ) return false;
 
-		if( !isString( node[ k ] ) ) return false;
+		if( typeof( node[ k ] ) !== 'string' ) return false;
 
 		// checks if this property will not be mangled
 		if( noMangle[ p ] !== undefined )

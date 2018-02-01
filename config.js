@@ -69,6 +69,7 @@ config.shell_devel = true;
 | Provide a bundle.
 */
 config.shell_bundle = !config.devel;
+config.shell_bundle = true;
 
 
 /*
@@ -115,12 +116,14 @@ config.noWrite = false;
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify = !config.shell_devel;
+config.uglify = false;
 
 
 /*
 | If true does extra mangles on output compression
 */
 config.extraMangle = config.shell_bundle;
+config.extraMangle = false;
 
 
 /*
