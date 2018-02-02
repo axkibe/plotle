@@ -111,6 +111,7 @@ const ref_space = require( '../ref/space' );
 
 const zlib = require( 'zlib' );
 
+
 /*
 | Initializer.
 */
@@ -227,44 +228,13 @@ def.func.createShellConfig =
 
 
 /*
-| Registers and prepares the inventory.
-| Also builds the bundle.
+| Builds the bundle.
 */
-def.func.prepareInventory =
-	function*( )
+def.func.buildBundle =
+	function( )
 {
-	log.start( 'preparing inventory' );
-
-	// autogenerates the shell config as resource
-	const cconfig = root.createShellConfig( );
-
-	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
-
-	// takes resource from the the roster
-	for( let a = 0, al = server_roster.length; a < al; a++ )
-	{
-		const resource = server_roster.get( a );
-
-		if( resource.devel && !config.shell_devel ) continue;
-
-		yield* root.inventory.prepareResource( resource );
-	}
-
-	root.create(
-		'inventory',
-			root.inventory.updateResource(
-				root.inventory.get( 'tim-tree-init.js' )
-				.create( 'data', tim.tree.getBrowserTreeInitCode( ) )
-			)
-	);
-
 	// the bundle itself
 	let bundle = [ ];
-
-	// if uglify is turned off
-	// the flags are added before bundle
-	// creation, otherwise afterwards
-	if( !config.uglify ) root.prependConfigFlags( );
 
 	log.start( 'building bundle' );
 
@@ -275,94 +245,20 @@ def.func.prepareInventory =
 	// loads the files to be bundled
 	for( let a = 0, al = root.inventory.length; a < al; a++ )
 	{
-		let code;
-
 		const resource = root.inventory.atRank( a );
 
 		if( !resource.inBundle ) continue;
 
-		if( resource.timHolder )
-		{
-			timIDs[ resource.timId ] = resource.hasJson;
+		if( resource.timHolder ) timIDs[ resource.timId ] = resource.hasJson;
 
-			code = resource.data;
-		}
-		else
-		{
-			if( !resource.data )
-			{
-				code = ( yield fs.readFile( resource.filePath, resume( ) ) ) + '';
-			}
-			else
-			{
-				code = resource.data + '';
-			}
-		}
-
-		codes[ a ] = code;
+		codes[ a ] = resource.data + '';
 	}
-	
-	let bundleFilePath;
 
-	if( config.shell_bundle )
+	if( config.uglify )
 	{
-		if( config.uglify )
-		{
-			log.start( 'uglifying bundle' );
+		log.start( 'uglifying bundle' );
 
-			const code = { };
-
-			for( let a = 0, al = root.inventory.length; a < al; a++ )
-			{
-				const resource = root.inventory.atRank( a );
-
-				if( !resource.inBundle ) continue;
-
-				code[ resource.filePath || resource.aliases.get( 0 ) ] = codes[ a ];
-			}
-
-			bundle = uglify.minify( code );
-		}
-		else
-		{
-			log.start( 'concating bundle' );
-
-			for( let a = 0, al = root.inventory.length; a < al; a++ )
-			{
-				const resource = root.inventory.atRank( a );
-
-				if( !resource.inBundle ) continue;
-
-				bundle += codes[ a ];
-			}
-		}
-
-		// calculates the hash for the bundle
-		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
-
-		root.create( 'bundleFilePath', bundleFilePath );
-
-		// registers the bundle as resource
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					server_resource.create(
-						'filePath', bundleFilePath,
-						'maxage', 'long',
-						'data', bundle
-					)
-				)
-		);
-
-		log.start( 'bundle:', bundleFilePath );
-
-		// if uglify is turned on
-		// the flags are added after bundle
-		// creation, otherwise before
-		if( config.uglify ) root.prependConfigFlags( );
-	}
-
-		/*
+		const code = { };
 
 		for( let a = 0, al = root.inventory.length; a < al; a++ )
 		{
@@ -370,58 +266,86 @@ def.func.prepareInventory =
 
 			if( !resource.inBundle ) continue;
 
-			try{
-				ast =
-					uglify.parse(
-						codes[ a ],
-						{
-							filename : resource.filePath || resource.aliases.get( 0 ),
-							toplevel : ast
-						}
-					);
-			}
-			catch ( e )
-			{
-				console.log(
-					'parse error', resource.filePath || resource.aliases.get( 0 ),
-					'line', e.line
-				);
-
-				throw e;
-			}
+			code[ resource.filePath || resource.aliases.get( 0 ) ] = codes[ a ];
 		}
 
-		if( config.extraMangle ) root.extraMangle( ast, timIDs );
 
-		if( config.uglify )
+		// first pass
+		log.start( '  1st pass' );
+
+		let options =
 		{
-			log.start( 'uglifying bundle' );
+			compress :
+			{
+				global_defs :
+				{
+					TIM : false
+				}
+			},
+			mangle: false,
+			output :
+			{
+				ast : true,
+				code : false
+			},
+		};
 
-			ast.figure_out_scope( );
+		let result = uglify.minify( code, options );
 
-			const compressor =
-				uglify.Compressor(
-					{
-						dead_code : true,
-						hoist_vars : true,
-						warnings : false,
-						negate_iife : true,
-						global_defs :
-						{
-							'CHECK' : config.shell_check,
-							'FREEZE' : config.shell_freeze,
-							'TIM' : false,
-							'NODE' : false
-						}
-					}
-				);
+		if( result.error ) throw new Error( 'uglify error: ' + result.error );
 
-			ast = ast.transform( compressor );
+		let ast = result.ast;
 
-			ast.figure_out_scope( );
+		if( config.extraMangle )
+		{
+			// ast is not immutable and changed!
+			root.extraMangle( ast, timIDs );
+		}
 
-			ast.compute_char_frequency( );
+		// second pass
+		log.start( '  2nd pass' );
 
+		options =
+		{
+			compress :
+			{
+				ecma : 6,
+				global_defs :
+				{
+					CHECK   : config.shell_check,
+					FREEZE  : config.shell_freeze,
+					TIM     : false,
+					NODE    : false
+				}
+			},
+			output :
+			{
+				beautify : config.beautify
+			}
+		};
+
+		result = uglify.minify( ast, options );
+
+		if( result.error ) throw new Error( 'uglify error: ' + result.error );
+
+		bundle = result.code;
+	}
+	else
+	{
+		log.start( 'concating bundle' );
+
+		for( let a = 0, al = root.inventory.length; a < al; a++ )
+		{
+			const resource = root.inventory.atRank( a );
+
+			if( !resource.inBundle ) continue;
+
+			bundle += codes[ a ];
+		}
+	}
+
+
+		/*
 			ast.mangle_names(
 				{
 					toplevel : true,
@@ -449,6 +373,80 @@ def.func.prepareInventory =
 			yield fs.writeFile( 'report/source.map', sourceMap.toString( ), resume( ) );
 		}
 		*/
+
+
+	return bundle;
+};
+
+
+/*
+| Registers and prepares the inventory.
+| Also builds the bundle.
+*/
+def.func.prepareInventory =
+	function*( )
+{
+	log.start( 'preparing inventory' );
+
+	// autogenerates the shell config as resource
+	const cconfig = root.createShellConfig( );
+
+	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
+
+	// takes resource from the the roster
+	for( let a = 0, al = server_roster.length; a < al; a++ )
+	{
+		const resource = server_roster.get( a );
+
+		if( resource.devel && !config.shell_devel ) continue;
+
+		yield* root.inventory.prepareResource( resource );
+	}
+
+	// adds the tim tree init
+	root.create(
+		'inventory',
+			root.inventory.updateResource(
+				root.inventory.get( 'tim-tree-init.js' )
+				.create( 'data', tim.tree.getBrowserTreeInitCode( ) )
+			)
+	);
+
+	let bundleFilePath;
+
+	// if uglify is turned off
+	// the flags are added before bundle
+	// creation, otherwise afterwards
+	if( !config.uglify ) root.prependConfigFlags( );
+
+	if( config.shell_bundle )
+	{
+		let bundle = this.buildBundle( );
+
+		// calculates the hash for the bundle
+		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
+
+		root.create( 'bundleFilePath', bundleFilePath );
+
+		// registers the bundle as resource
+		root.create(
+			'inventory',
+				root.inventory.updateResource(
+					server_resource.create(
+						'filePath', bundleFilePath,
+						'maxage', 'long',
+						'data', bundle
+					)
+				)
+		);
+
+		log.start( 'bundle:', bundleFilePath );
+
+		// if uglify is turned on
+		// the flags are added after bundle
+		// creation, otherwise before
+		if( config.uglify ) root.prependConfigFlags( );
+	}
 
 	// post processing
 	let inv = root.inventory;
@@ -483,10 +481,7 @@ def.func.prepareInventory =
 		root.create(
 			'inventory',
 				root.inventory.updateResource(
-					resource.create(
-						'gzip',
-							yield zlib.gzip( resource.data, resume( ) )
-					)
+					resource.create( 'gzip', yield zlib.gzip( resource.data, resume( ) ) )
 				)
 		);
 	}
@@ -538,9 +533,11 @@ def.func.prependConfigFlags =
 def.func.extraMangle =
 	function(
 		ast,
-		timIDs
+		timIDs   // FIXME remove
 	)
 {
+	console.log( '  extra mangling the bundle' );
+
 	// unknown properties / keys
 	// that are missed in both lists
 	let missed = { };
@@ -556,6 +553,9 @@ def.func.extraMangle =
 
 	// associative of all no-mangles
 	const noMangle = { };
+
+	// no mangles for the tim tree
+	const timNoMangle = tim.tree.getBrowserNoMangle( );
 
 	// associative of all mangles not used
 	let useMangle = { };
@@ -672,6 +672,12 @@ def.func.extraMangle =
 		{
 			delete useNoMangle[ p ];
 
+			return false;
+		}
+
+		// checks 
+		if( timNoMangle[ p ] !== undefined )
+		{
 			return false;
 		}
 
@@ -973,7 +979,7 @@ def.func.requestListener =
 
 		// weinre can't cope with strict mode
 		// so its disabled when weinre is enabled
-		if( config.debug.weinre )
+		if( config.weinre )
 		{
 			data =
 				( '' + data )

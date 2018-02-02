@@ -53,7 +53,7 @@ const transmitter =
 	{
 		if( failScreen ) return;
 
-		if( config.devel && !config.debug.weinre )
+		if( config.devel && !config.weinre )
 		{
 			func.apply( this, arguments );
 
@@ -94,7 +94,7 @@ const transmitter =
 					+ '\n\n'
 					+ 'Please report to axkibe@gmail.com';
 
-				if( !config.debug.weinre )
+				if( !config.weinre )
 				{
 					system.failScreen( message );
 				}
@@ -207,35 +207,34 @@ let pointingState = false;
 
 
 const keyCodeNames =
-	{
-		8 : 'backspace',
-		9 : 'tab',
-		13 : 'enter',
-		16 : 'shift',
-		17 : 'ctrl',
-		27 : 'esc',
-		33 : 'pageup',
-		34 : 'pagedown',
-		35 : 'end',
-		36 : 'pos1',
-		37 : 'left',
-		38 : 'up',
-		39 : 'right',
-		40 : 'down',
-		46 : 'del'
-	};
-
+	new Map( [
+		[  8, 'backspace' ],
+		[  9, 'tab'       ],
+		[ 13, 'enter'     ],
+		[ 16, 'shift'     ],
+		[ 17, 'ctrl'      ],
+		[ 27, 'esc'       ],
+		[ 33, 'pageup'    ],
+		[ 34, 'pagedown'  ],
+		[ 35, 'end'       ],
+		[ 36, 'pos1'      ],
+		[ 37, 'left'      ],
+		[ 38, 'up'        ],
+		[ 39, 'right'     ],
+		[ 40, 'down'      ],
+		[ 46, 'del'       ]
+	] );
 
 const keyCodeNamesCtrl =
-	{
-		16 : 'shift',
-		17 : 'ctrl',
-		65 : 'a',
-		89 : 'y',
-		90 : 'z',
-		188 : ',',
-		190 : '.'
-	};
+	new Map( [
+		[  16, 'shift' ],
+		[  17, 'ctrl'  ],
+		[  65, 'a'     ],
+		[  89, 'y'     ],
+		[  90, 'z'     ],
+		[ 188, ','     ],
+		[ 190, '.'     ]
+	] );
 
 
 /**/if( FREEZE ) Object.freeze( keyCodeNames, keyCodeNamesCtrl );
@@ -1309,8 +1308,8 @@ def.func._specialKey =
 {
 	const key =
 		ctrl
-		? keyCodeNamesCtrl[ keyCode ]
-		: keyCodeNames[ keyCode ];
+		? keyCodeNamesCtrl.get( keyCode )
+		: keyCodeNames.get( keyCode  );
 
 	if( !key ) return true;
 
@@ -1336,8 +1335,8 @@ def.func._releaseSpecialKey =
 {
 	const key =
 		ctrl
-		? keyCodeNamesCtrl[ keyCode ]
-		: keyCodeNames[ keyCode ];
+		? keyCodeNamesCtrl.get( keyCode )
+		: keyCodeNames.get( keyCode  );
 
 	if( !key ) return;
 
@@ -1428,7 +1427,7 @@ def.static.startup = function( )
 			true
 		);
 
-	if( !config.debug.weinre )
+	if( !config.weinre )
 	{
 		start( );
 	}

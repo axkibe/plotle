@@ -89,7 +89,6 @@
 . _glint
 . _glintCaret
 . _glintFrame
-. _glintPaintShape
 . _gradientPC
 . _gradientR0
 . _gradientR1
@@ -167,14 +166,11 @@
 . _releaseSpecialKey
 . _renderGlint
 . _renderMask
-. _renderTextCanvas
-. _renderTextOpenType
 . _renderWindow
 . _rendered
 . _repeatHover
 . _sendChanges
 . _setCursor
-. _setFont
 . _setMark
 . _shapeHandleE
 . _shapeHandleN
@@ -236,7 +232,6 @@
 . acquire
 . acquireSpace
 . action
-> active
 . add
 . add1_5
 > addColorStop
@@ -304,7 +299,6 @@
 . bottombox
 > button
 . buttonFacets
-. cDistance
 > ca
 > call
 > cancelInterval
@@ -392,7 +386,6 @@
 . ctrlClick
 > ctrlKey
 > cursor
-> custom
 . cycle
 . cycleFocus
 . cycleFormFocus
@@ -427,7 +420,6 @@
 > drawImage
 > drawText
 > e
-. eDistance
 . ellipse
 . ellipseA
 . ellipseB
@@ -459,14 +451,11 @@
 . fail
 > failScreen
 . fallbackSpaceRef
-> families
-. family
 > features
 . filename
 > fill
 > fillRect
 > fillStyle
-> fillText
 . finishAnimation
 > floor
 . flow
@@ -623,10 +612,8 @@
 . maskKern
 . maskWidth
 > max
-. maxSize
 . maxUndo
 . maxlen
-> measureText
 > message
 . message1
 > metaKey
@@ -647,8 +634,6 @@
 . moveToRounding
 . moveToSpace
 . moveToWidth
-> mozImageSmoothingEnabled
-> msImageSmoothingEnabled
 > n
 > name
 > ne
@@ -661,7 +646,6 @@
 . noAccessToSpace
 . noButton
 . nogrid
-. noinherit
 . nonExistingSpace
 . nonFatal
 . nonSpaceRef
@@ -670,7 +654,6 @@
 > note
 > now
 > nw
-> oImageSmoothingEnabled
 . offset
 > offsetLeft
 > offsetTop
@@ -730,7 +713,6 @@
 > performance
 . pn
 . pne
-> pnw
 > point
 . pointingHover
 > portal
@@ -751,7 +733,6 @@
 . ps
 > pse
 . psw
-. puffed
 > push
 . pushButton
 . pw
@@ -772,7 +753,6 @@
 . ref
 . refire
 . reflect
-. reflectName
 > register
 > relation
 . relationState
@@ -889,15 +869,12 @@
 > tag
 > test
 > text
-> textAlign
-> textBaseline
 > textContent
 . textMark
 . textNewline
 . textPath
 . textRotation
 . textWheelSpeed
-. this
 . toItemPath
 > toJSON
 > toLowerCase
@@ -959,7 +936,6 @@
 > width
 . within
 . wrap
-> writable
 > x
 > x1
 > x2

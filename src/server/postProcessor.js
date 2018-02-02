@@ -112,13 +112,13 @@ server_postProcessor.develHtml =
 			devels.join( '\n' )
 		);
 
-	if( config.debug.weinre )
+	if( config.weinre )
 	{
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
 				'<script src="http://'
-				+ config.debug.weinre
+				+ config.weinre
 				+ '/target/target-script-min.js"></script>'
 			);
 	}
@@ -175,13 +175,13 @@ server_postProcessor.testPadHtml =
 			devels.join( '\n' )
 		);
 
-	if( config.debug.weinre )
+	if( config.weinre )
 	{
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
 				'<script src="http://'
-				+ config.debug.weinre
+				+ config.weinre
 				+ '/target/target-script-min.js"></script>'
 			);
 	}

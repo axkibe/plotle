@@ -4,15 +4,9 @@
 
 
 /*
-| Config infrastructure.
-|
-| Don't change this.
+| Config init.
 */
-var config =
-module.exports =
-	{
-		debug : { }
-	};
+var config = module.exports = { };
 
 
 /*
@@ -116,33 +110,29 @@ config.noWrite = false;
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify = !config.shell_devel;
-config.uglify = false;
+config.uglify = true;
 
 
 /*
 | If true does extra mangles on output compression
 */
 config.extraMangle = config.shell_bundle;
-config.extraMangle = false;
+config.extraMangle = true;
+//config.extraMangle = false;
 
 
 /*
 | If true "beautifies" uglify output.
 */
 config.beautify = false;
-
-
-/*
-| If true formats messages and JSON with whitespace/newlines
-*/
-config.debug.puffed = true;
+config.beautify = true;
 
 
 /*
 | Activates all hacks needed to debug the client with weinre.
 | Set to false/null or the address of the weinre server
 */
-config.debug.weinre = false;
+config.weinre = false;
 //config.debug.weinre = '131.130.188.200:8080';
 //config.debug.weinre = '192.168.1.100:8080';
 
