@@ -120,7 +120,7 @@ def.func.update =
 
 	// Adapts the doTracker stacks
 
-	for( let a = 0, aZ = undo.length; a < aZ; a++ )
+	for( let a = 0, al = undo.length; a < al; a++ )
 	{
 		let cw = undo.get( a );
 
@@ -131,7 +131,7 @@ def.func.update =
 		{
 			undo = undo.remove( a-- );
 
-			aZ--;
+			al--;
 
 			continue;
 		}
@@ -139,7 +139,7 @@ def.func.update =
 		undo = undo.set( a, cw );
 	}
 
-	for( let a = 0, aZ = redo.length; a < aZ; a++ )
+	for( let a = 0, al = redo.length; a < al; a++ )
 	{
 		let cw = redo.get( a );
 
@@ -150,7 +150,7 @@ def.func.update =
 		{
 			redo = redo.remove( a-- );
 
-			aZ--;
+			al--;
 
 			continue;
 		}

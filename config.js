@@ -63,7 +63,6 @@ config.shell_devel = true;
 | Provide a bundle.
 */
 config.shell_bundle = !config.devel;
-config.shell_bundle = true;
 
 
 /*
@@ -110,22 +109,18 @@ config.noWrite = false;
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify = !config.shell_devel;
-config.uglify = true;
 
 
 /*
 | If true does extra mangles on output compression
 */
 config.extraMangle = config.shell_bundle;
-config.extraMangle = true;
-//config.extraMangle = false;
 
 
 /*
 | If true "beautifies" uglify output.
 */
 config.beautify = false;
-config.beautify = true;
 
 
 /*
@@ -133,14 +128,13 @@ config.beautify = true;
 | Set to false/null or the address of the weinre server
 */
 config.weinre = false;
-//config.debug.weinre = '131.130.188.200:8080';
-//config.debug.weinre = '192.168.1.100:8080';
 
 
 /*
 | If set, accept only connections from these addresses
 */
 config.whiteList = false;
+
 
 /*
 | enable specific logging categories

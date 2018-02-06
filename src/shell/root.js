@@ -516,7 +516,7 @@ def.static._createFormRoot =
 	const keys = Object.keys( forms );
 
 	// FUTURE do a twig:init instead
-	for( let a = 0, aZ = keys.length; a < aZ; a++ )
+	for( let a = 0, al = keys.length; a < al; a++ )
 	{
 		const key = keys[ a ];
 
@@ -1841,7 +1841,7 @@ def.func._markLostNotifications =
 
 	const nip = nMark && nMark.itemPaths;
 
-	for( let a = 0, aZ = oip.length; a < aZ; a++ )
+	for( let a = 0, al = oip.length; a < al; a++ )
 	{
 		const op = oip.get( a );
 

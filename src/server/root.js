@@ -536,7 +536,7 @@ def.func.extraMangle =
 		timIDs   // FIXME remove
 	)
 {
-	console.log( '  extra mangling the bundle' );
+	log.start( '  extra mangling the bundle' );
 
 	// unknown properties / keys
 	// that are missed in both lists

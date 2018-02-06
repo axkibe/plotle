@@ -848,43 +848,37 @@ def.func.click =
 /*
 | A create relation action moves.
 */
-// FIXME
-def.func.createRelationMove = NODE || visual_item.createRelationMove;
+def.func.createRelationMove = visual_item.createRelationMove;
 
 
 /*
 | A create relation action stops.
 */
-// FIXME
-def.func.createRelationStop = NODE || visual_item.createRelationStop;
+def.func.createRelationStop = visual_item.createRelationStop;
 
 
 /*
 | Reacts on ctrl-clicks.
 */
-// FIXME
-def.func.ctrlClick = NODE || visual_item.ctrlClick;
+def.func.ctrlClick = visual_item.ctrlClick;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-// FIXME
-def.func.dragStart = NODE || visual_item.dragStart;
+def.func.dragStart = visual_item.dragStart;
 
 
 /*
 | Returns the change for dragging this item.
 */
-// FIXME
-def.func.getDragItemChange = NODE || visual_item.getDragItemChangeZone;
+def.func.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
 | Returns the change for resizing this item.
 */
-// FIXME
-def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangeZone;
+def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
@@ -936,15 +930,13 @@ def.func.markLost = function( ){ };
 /*
 | Minimum height.
 */
-// FIXME
-def.func.minHeight = NODE || gruga_portal.minHeight;
+def.func.minHeight = gruga_portal.minHeight;
 
 
 /*
 | Minimum width.
 */
-// FIXME
-def.func.minWidth = NODE || gruga_portal.minWidth;
+def.func.minWidth = gruga_portal.minWidth;
 
 
 /*
@@ -1491,9 +1483,9 @@ def.func._getOffsetAt =
 
 	let a;
 
-	const aZ = value.length;
+	const al = value.length;
 
-	for( a = 0; a < aZ; a++ )
+	for( a = 0; a < al; a++ )
 	{
 		x1 = x2;
 

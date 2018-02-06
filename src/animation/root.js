@@ -55,7 +55,7 @@ def.func.frame =
 {
 	let aroot = this;
 
-	for( let a = 0, aZ = aroot.length; a < aZ; a++ )
+	for( let a = 0, al = aroot.length; a < al; a++ )
 	{
 		const key = aroot.getKey( a );
 
@@ -65,7 +65,7 @@ def.func.frame =
 		{
 			aroot = aroot.create( 'twig:remove', key );
 
-			a--; aZ--;
+			a--; al--;
 		}
 	}
 };

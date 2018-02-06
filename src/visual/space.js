@@ -235,7 +235,7 @@ def.func._init =
 
 	let path;
 
-	for( let a = 0, aZ = fabric.length; a < aZ; a++ )
+	for( let a = 0, al = fabric.length; a < al; a++ )
 	{
 		const k = fabric.getKey( a );
 
@@ -500,7 +500,7 @@ def.func.getList =
 
 	const items = [ ];
 
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, al = paths.length; a < al; a++ )
 	{
 		const path = paths.get( a );
 
@@ -566,7 +566,7 @@ def.func.pointingHover =
 
 			if( action.relationState === 'start' )
 			{
-				for( let a = 0, aZ = this.length; a < aZ; a++ )
+				for( let a = 0, al = this.length; a < al; a++ )
 				{
 					const item = this.atRank( a );
 
@@ -611,7 +611,7 @@ def.func.pointingHover =
 		if( result ) return result;
 	}
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
 		const result = this.atRank( a ).pointingHover( p, action );
 
@@ -663,7 +663,7 @@ def.func.dragStart =
 	}
 
 	// see if one item was targeted
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
 		const item = this.atRank( a );
 
@@ -732,7 +732,7 @@ def.func.click =
 	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
 
 	// clicked some item?
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
 		const item = this.atRank( a );
 
@@ -794,7 +794,7 @@ def.func.dragStop =
 
 			paths = action.itemPaths;
 
-			for( let a = 0, aZ = paths.length; a < aZ; a++ )
+			for( let a = 0, al = paths.length; a < al; a++ )
 			{
 				const item = root.getPath( paths.get( a ) );
 
@@ -841,7 +841,7 @@ def.func.dragStop =
 
 			paths = action.itemPaths;
 
-			for( let a = 0, aZ = paths.length; a < aZ; a++ )
+			for( let a = 0, al = paths.length; a < al; a++ )
 			{
 				const item = root.getPath( paths.get( a ) );
 
@@ -1336,7 +1336,7 @@ def.func._moveResizeItems =
 
 	const startZones = action.startZones;
 
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, al = paths.length; a < al; a++ )
 	{
 		const path = paths.get( a );
 

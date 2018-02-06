@@ -64,14 +64,6 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-proto.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.proto.source,
-		'mime', 'text/javascript',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	server_resource.create(
 		'aliases', stringList( [ 'tim-tree-init.js' ] ),
 		'coding', 'utf-8',
 		'data', undefined,

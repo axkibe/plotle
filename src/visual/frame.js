@@ -55,8 +55,7 @@ if( TIM )
 }
 
 
-// FIXME this is a dirty hack
-const handleSize = NODE || gruga_frame.handleSize;
+const handleSize = gruga_frame.handleSize;
 
 const handleSize2 = handleSize / 2;
 
@@ -90,7 +89,7 @@ def.lazy.proportional =
 {
 	const content = this.content;
 
-	for( let a = 0, aZ = content.length; a < aZ; a++ )
+	for( let a = 0, al = content.length; a < al; a++ )
 	{
 		if( content.get( a ).proportional ) return true;
 	}
@@ -172,7 +171,7 @@ def.lazy._shapeMask =
 
 	const arr = [ ];
 
-	for( let a = 0, aZ = content.length; a < aZ; a++ )
+	for( let a = 0, al = content.length; a < al; a++ )
 	{
 		const ca = content.get( a );
 

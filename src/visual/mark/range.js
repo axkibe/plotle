@@ -104,6 +104,7 @@ def.lazy.backMark =
 | The common path this is the part that begin
 | and share in common
 */
+/*
 def.lazy.commonPath =
 	function( )
 {
@@ -126,6 +127,7 @@ def.lazy.commonPath =
 
 	return bP.limit( a );
 };
+*/
 
 
 /*:::::::::::.

@@ -278,7 +278,7 @@ def.func.within =
 
 	if( shape.timtype === gleam_shapeList )
 	{
-		for( let a = 0, aZ = shape.length; a < aZ; a++ )
+		for( let a = 0, al = shape.length; a < al; a++ )
 		{
 			if( this.within( p, shape.get( a ) ) ) return true;
 		}
@@ -392,7 +392,7 @@ def.func._borders  =
 	{
 		case gleam_borderList :
 
-			for( let a = 0, aZ = border.length; a < aZ; a++ )
+			for( let a = 0, al = border.length; a < al; a++ )
 			{
 				this._border( border.get( a ), shape, offset );
 			}
@@ -500,7 +500,7 @@ def.func._colorStyle =
 			throw new Error( );
 	}
 
-	for( let a = 0, aZ = style.length; a < aZ; a++ )
+	for( let a = 0, al = style.length; a < al; a++ )
 	{
 		const cs = style.get( a );
 
@@ -520,7 +520,7 @@ def.func._renderGlintList =
 		offset  // offset all rendering by this
 	)
 {
-	for( let a = 0, aZ = glint.length; a < aZ; a++ )
+	for( let a = 0, al = glint.length; a < al; a++ )
 	{
 		this._renderGlint( glint.get( a ), offset );
 	}
@@ -616,7 +616,7 @@ def.func._renderMask =
 
 	if( shape.timtype === gleam_shapeList )
 	{
-		for( let a = 0, aZ = shape.length; a < aZ; a++ )
+		for( let a = 0, al = shape.length; a < al; a++ )
 		{
 			cx.beginPath( );
 
@@ -973,7 +973,7 @@ def.func._sketch =
 
 		case gleam_shapeList :
 
-			for( let a = 0, aZ = shape.length; a < aZ; a++ )
+			for( let a = 0, al = shape.length; a < al; a++ )
 			{
 				this._sketch( shape.get( a ), border, offset, shift );
 			}
@@ -1040,12 +1040,12 @@ def.func._sketchGenericShape =
 		)
 		+ shift;
 
-	const aZ = shape.length;
+	const al = shape.length;
 
 	if(
 		shift
 		&& section.timtype === gleam_shape_round
-		&& shape.get( aZ - 1 ).timtype === gleam_shape_round
+		&& shape.get( al - 1 ).timtype === gleam_shape_round
 	)
 	{
 		// FUTURE might not be needed anymore
@@ -1065,7 +1065,7 @@ def.func._sketchGenericShape =
 
 	let nextSect = shape.get( 1 );
 
-	for( let a = 1; a < aZ; a++ )
+	for( let a = 1; a < al; a++ )
 	{
 
 /**/	if( CHECK )
@@ -1076,7 +1076,7 @@ def.func._sketchGenericShape =
 
 		section = nextSect;
 
-		nextSect = a + 1 < aZ ? shape.get( a + 1 ) : shape.get( 0 );
+		nextSect = a + 1 < al ? shape.get( a + 1 ) : shape.get( 0 );
 
 		if( section.close )
 		{

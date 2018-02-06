@@ -105,15 +105,13 @@ def.func._init =
 /*
 | The attention center.
 */
-// FIXME
-def.lazy.attentionCenter = NODE || visual_docItem.attentionCenter;
+def.lazy.attentionCenter = visual_docItem.attentionCenter;
 
 
 /*
 | Fontsize of the relations label.
 */
-// FIXME
-def.lazy.fontsize = NODE || visual_label.fontsize;
+def.lazy.fontsize = visual_label.fontsize;
 
 
 /*
@@ -129,8 +127,7 @@ def.lazy.key =
 /*
 | The labels position possibly altered by an action.
 */
-// FIXME
-def.lazy.pos = NODE ||  visual_label.pos;
+def.lazy.pos = visual_label.pos;
 
 
 /*
@@ -146,26 +143,23 @@ def.lazy.shape =
 /*
 | The relations shape for current transform.
 */
-// FIXME
-def.lazy.tShape = NODE || visual_label.tShape;
+def.lazy.tShape = visual_label.tShape;
 
 
 /*
 | The relations zone for current transform.
 */
-// FIXME
-def.lazy.tZone = NODE || visual_label.tZone;
+def.lazy.tZone = visual_label.tZone;
 
 
 /*
 | The relations zone.
 */
-def.lazy.zone = NODE || visual_label.zone;
+def.lazy.zone = visual_label.zone;
 
-// FIXME
-def.lazy._zoneHeight = NODE || visual_label._zoneHeight;
+def.lazy._zoneHeight = visual_label._zoneHeight;
 
-def.lazy._zoneWidth = NODE || visual_label._zoneWidth;
+def.lazy._zoneWidth = visual_label._zoneWidth;
 
 
 /*:::::::::::.
@@ -182,36 +176,31 @@ def.func.proportional = true;
 /*
 | Reacts on clicks.
 */
-// FIXME
-def.func.click = NODE || visual_docItem.click;
+def.func.click = visual_docItem.click;
 
 
 /*
 | Reacts on ctrl-clicks.
 */
-// FIXME
-def.func.ctrlClick = NODE || visual_item.ctrlClick;
+def.func.ctrlClick = visual_item.ctrlClick;
 
 
 /*
 | A create relation action moves.
 */
-// FIXME
-def.func.createRelationMove = NODE || visual_item.createRelationMove;
+def.func.createRelationMove = visual_item.createRelationMove;
 
 
 /*
 | A create relation action stops.
 */
-// FIXME
-def.func.createRelationStop = NODE || visual_item.createRelationStop;
+def.func.createRelationStop = visual_item.createRelationStop;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-// FIXME
-def.func.dragStart = NODE || visual_docItem.dragStart;
+def.func.dragStart = visual_docItem.dragStart;
 
 
 /*
@@ -294,43 +283,37 @@ def.func.glint =
 /*
 | A text has been inputed.
 */
-// FIXME
-def.func.input = NODE || visual_docItem.input;
+def.func.input = visual_docItem.input;
 
 
 /*
 | Returns the change for dragging this item.
 */
-// FIXME
-def.func.getDragItemChange = NODE || visual_item.getDragItemChangePosFs;
+def.func.getDragItemChange = visual_item.getDragItemChangePosFs;
 
 
 /*
 | Returns the change for resizing this item.
 */
-// FIXME
-def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangePosFs;
+def.func.getResizeItemChange = visual_item.getResizeItemChangePosFs;
 
 
 /*
 | Returns the mark for a point
 */
-// FIXME
-def.func.markForPoint = NODE || visual_docItem.markForPoint;
+def.func.markForPoint = visual_docItem.markForPoint;
 
 
 /*
 | Mouse wheel turned.
 */
-// FIXME
-def.func.mousewheel = NODE || visual_label.prototype.mousewheel;
+def.func.mousewheel = visual_label.prototype.mousewheel;
 
 
 /*
 | User is hovering their pointing device over something.
 */
-// FIXME
-def.func.pointingHover = NODE || visual_docItem.pointingHover;
+def.func.pointingHover = visual_docItem.pointingHover;
 
 
 /*
@@ -342,31 +325,27 @@ def.func.positioning = 'pos/fontsize';
 /*
 | Handles a special key.
 */
-// FIXME
-def.func.specialKey = NODE || visual_docItem.specialKey;
+def.func.specialKey = visual_docItem.specialKey;
 
 
 /*
 | Nofication when the item lost the users mark.
 */
-// FIXME
-def.func.markLost = NODE || visual_label.prototype.markLost;
+def.func.markLost = visual_label.prototype.markLost;
 
 
 /*
 | Returns the minimum scale factor this item could go through.
 */
-// FIXME
-def.func.minScaleX = NODE || visual_label.minScaleX;
+def.func.minScaleX = visual_label.minScaleX;
 
-def.func.minScaleY = NODE || visual_label.minScaleY;
+def.func.minScaleY = visual_label.minScaleY;
 
 
 /*
 | A move during a text select on this item.
 */
-// FIXME
-def.func.moveSelect = NODE || visual_docItem.moveSelect;
+def.func.moveSelect = visual_docItem.moveSelect;
 
 
 /*
