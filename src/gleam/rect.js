@@ -30,7 +30,7 @@ if( TIM )
 	{
 		pos : // position
 		{
-			type : 'gleam_point',
+			type : './point',
 			json : true,
 		},
 		height :
@@ -44,6 +44,8 @@ if( TIM )
 			json : true,
 		}
 	};
+
+	def.json = 'rect';
 }
 
 

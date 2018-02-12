@@ -37,7 +37,7 @@ if( TIM )
 		}
 	};
 
-	def.list = require( './typemap-shapeSection' );
+	def.list = tim.typemap( module, './shape/section' );
 }
 
 

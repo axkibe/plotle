@@ -30,6 +30,8 @@ if( TIM )
 			type : 'number',
 		}
 	};
+
+	def.json = 'point';
 }
 
 

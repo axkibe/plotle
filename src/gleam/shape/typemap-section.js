@@ -3,7 +3,7 @@
 */
 module.exports =
 [
-	'gleam_shape_line',
-	'gleam_shape_round',
-	'gleam_shape_start'
+	'line',
+	'round',
+	'start'
 ];
