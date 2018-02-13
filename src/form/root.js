@@ -27,7 +27,7 @@ if( TIM )
 		{
 			// the widget hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'form_root.concernsHover( hover )'
+			prepare : 'self.concernsHover( hover )'
 		},
 		mark :
 		{

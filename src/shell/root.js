@@ -134,7 +134,7 @@ if( TIM )
 			type :
 				require( '../action/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'shell_root.prepareAction( action )'
+			prepare : 'self.prepareAction( action )'
 		},
 		ajax :
 		{

@@ -72,7 +72,7 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			prepare : 'visual_para.concernsMark( mark, path )',
+			prepare : 'self.concernsMark( mark, path )',
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )

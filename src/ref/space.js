@@ -16,19 +16,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		username :
-		{
-			// name of the user the space belongs to
-			type : 'string',
-			json : true,
-		},
-		tag :
-		{
-			// tag of the space
-			type : 'string',
-			json : true,
-		}
+		// name of the user the space belongs to
+		username : { type : 'string', json : true },
+
+		// tag of the space
+		tag : { type : 'string', json : true },
 	};
+
+	def.json = 'ref_space';
 }
 
 

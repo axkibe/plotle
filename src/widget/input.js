@@ -33,6 +33,8 @@ const shell_settings = require( '../shell/settings' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
+const widget_widget = require( './widget' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -54,7 +56,7 @@ if( TIM )
 		{
 			// component hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'widget_widget.concernsHover( hover, path )'
+			prepare : 'self.concernsHover( hover, path )'
 		},
 		font :
 		{
@@ -119,6 +121,19 @@ if( TIM )
 | Default distance of text
 */
 def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = widget_widget.concernsHover;
+
+def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*:::::::::::::.

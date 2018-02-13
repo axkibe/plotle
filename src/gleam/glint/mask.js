@@ -30,8 +30,8 @@ if( TIM )
 		{
 			// the shape(list) to mask to
 			type :
-				require( '../typemap-shape' )
-				.concat( [ 'gleam_shapeList' ] )
+				tim.typemap( module, '../shape' )
+				.concat( [ '../shapeList' ] )
 		}
 	};
 }

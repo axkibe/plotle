@@ -39,7 +39,7 @@ if( TIM )
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'form_form.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
 		path :
 		{
@@ -102,6 +102,13 @@ def.func._init =
 
 	form_form.init.call( this, twigDup );
 };
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+def.static.concernsMark = form_form.concernsMark;
 
 
 /*:::::::::::::.

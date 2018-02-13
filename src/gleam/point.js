@@ -19,16 +19,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		x : // x coordinate
-		{
-			json : true,
-			type : 'number',
-		},
-		y : // y coordinate
-		{
-			json : true,
-			type : 'number',
-		}
+		// x coordinate
+		x : { json : true, type : 'number' },
+
+		// y coordinate
+		y : { json : true, type : 'number' },
 	};
 
 	def.json = 'point';

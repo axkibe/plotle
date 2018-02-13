@@ -17,6 +17,8 @@ const gruga_iconCheck = require( '../gruga/iconCheck' );
 
 const result_hover = require( '../result/hover' );
 
+const widget_widget = require( './widget' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -44,7 +46,7 @@ if( TIM )
 		{
 			// component hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'widget_widget.concernsHover( hover, path )'
+			prepare : 'self.concernsHover( hover, path )'
 		},
 		mark :
 		{
@@ -52,7 +54,7 @@ if( TIM )
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'widget_widget.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
 		path :
 		{
@@ -77,6 +79,19 @@ if( TIM )
 		}
 	};
 }
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = widget_widget.concernsHover;
+
+def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*:::::::::::::.

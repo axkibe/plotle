@@ -38,11 +38,11 @@ if( TIM )
 		},
 		joint1 : // connect to this point or shape
 		{
-			type : require( './typemap-shape' ).concat( [ './point' ] )
+			type : tim.typemap( module, './shape' ).concat( [ './point' ] )
 		},
 		joint2 : // connect to this point or shape
 		{
-			type : require( './typemap-shape' ).concat( [ './point' ] )
+			type : tim.typemap( module, './shape' ).concat( [ './point' ] )
 		}
 	};
 }

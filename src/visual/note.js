@@ -75,7 +75,7 @@ if( TIM )
 			type :
 				require( '../action/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'visual_item.concernsAction( action, path )'
+			prepare : 'self.concernsAction( action, path )'
 		},
 		fabric :
 		{
@@ -96,7 +96,7 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			prepare : 'visual_item.concernsMark( mark, path )',
+			prepare : 'self.concernsMark( mark, path )',
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )
@@ -169,6 +169,14 @@ def.static.proportional = false;
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsAction = visual_item.concernsAction;
+
+def.static.concernsMark = visual_item.concernsMark;
 
 
 /*

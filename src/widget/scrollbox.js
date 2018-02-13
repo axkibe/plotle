@@ -19,6 +19,8 @@ const shell_settings = require( '../shell/settings' );
 
 const widget_scrollbar = require( './scrollbar' );
 
+const widget_widget = require( './widget' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -35,7 +37,7 @@ if( TIM )
 		{
 			// component hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'widget_widget.concernsHover( hover, path )'
+			prepare : 'self.concernsHover( hover, path )'
 		},
 		mark :
 		{
@@ -146,6 +148,17 @@ def.func._init =
 
 	this._twig = twig;
 };
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = widget_widget.concernsHover;
 
 
 /*:::::::::::::.

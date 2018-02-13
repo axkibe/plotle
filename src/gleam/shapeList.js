@@ -17,7 +17,7 @@ const gleam_transform = require( './transform' );
 
 if( TIM )
 {
-	def.list = require( './typemap-shape' );
+	def.list = tim.typemap( module, './shape' );
 }
 
 

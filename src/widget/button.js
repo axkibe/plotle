@@ -23,6 +23,7 @@ const gleam_transform = require( '../gleam/transform' );
 
 const result_hover = require( '../result/hover' );
 
+const widget_widget = require( './widget' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -56,13 +57,13 @@ if( TIM )
 		{
 			// component hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'widget_widget.concernsHover( hover, path )'
+			prepare : 'self.concernsHover( hover, path )'
 		},
 		iconShape :
 		{
 			// icon shape
 			type :
-				require( '../gleam/typemap-shape' )
+				tim.typemap( module, '../gleam/shape' )
 				.concat( [ 'undefined' ] )
 		},
 		iconFacet :
@@ -76,7 +77,7 @@ if( TIM )
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'widget_widget.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
 		path :
 		{
@@ -122,6 +123,19 @@ if( TIM )
 		}
 	};
 }
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = widget_widget.concernsHover;
+
+def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*:::::::::::::.

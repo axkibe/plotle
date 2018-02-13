@@ -94,7 +94,7 @@ if( TIM )
 		{
 			// node currently hovered upon
 			type : [ 'undefined', 'tim$path' ],
-			prepare : 'visual_space.concernsHover( hover )'
+			prepare : 'self.concernsHover( hover )'
 		},
 		mark :
 		{
@@ -102,7 +102,7 @@ if( TIM )
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] ),
-			prepare : 'visual_space.concernsMark( mark )'
+			prepare : 'self.concernsMark( mark )'
 		},
 		ref :
 		{

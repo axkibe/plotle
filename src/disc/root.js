@@ -48,7 +48,8 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			prepare : 'disc_root.concernsMark( mark )',
+			// FIXXME
+			prepare : 'self.concernsMark( mark )',
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )

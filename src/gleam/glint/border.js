@@ -25,8 +25,8 @@ if( TIM )
 		{
 			// the shape to draw
 			type :
-				require( '../typemap-shape' )
-				.concat( [ 'gleam_shapeList' ] )
+				tim.typemap( module, '../shape' )
+				.concat( [ '../shapeList' ] )
 		}
 	};
 }
