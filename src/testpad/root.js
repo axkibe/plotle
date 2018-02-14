@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'testpad_root', ( def, testpad_root ) => {
+tim.define( module, ( def, self ) => {
 
 
 const change_insert = require( '../change/insert' );
@@ -40,7 +40,7 @@ if( TIM )
 		action :
 		{
 			// the action the user is preparing
-			type : [ 'undefined', 'testpad_action' ]
+			type : [ 'undefined', './action' ]
 		},
 		beepTimer :
 		{
@@ -79,8 +79,9 @@ if( TIM )
 		repository :
 		{
 			// the testing repository
-			type : 'testpad_repository',
-			defaultValue : 'testpad_repository.create( )'
+			type : './repository',
+			// TODO
+			// defaultValue : 'testpad_repository.create( )'
 		}
 	};
 
@@ -1102,7 +1103,7 @@ if( !NODE )
 	window.onload =
 		function( )
 	{
-		testpad_root.create( );
+		self.create( );
 
 		root.elements.input.focus( );
 	};

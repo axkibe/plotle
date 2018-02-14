@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'testpad_repository', ( def, testpad_repository ) => {
+tim.define( module, ( def, self ) => {
 
 
 const change_wrapList = require( '../change/wrapList' );
@@ -40,12 +40,12 @@ if( TIM )
 		_changeWrapList :
 		{
 			// history of all changes
-			type : [ 'undefined', 'change_wrapList' ]
+			type : [ 'undefined', '../change/wrapList' ]
 		},
 		_note :
 		{
 			// the note
-			type : [ 'undefined', 'fabric_note' ]
+			type : [ 'undefined', '../fabric/note' ]
 		}
 	};
 

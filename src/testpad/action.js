@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'testpad_action', ( def, testpad_action ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -46,3 +46,4 @@ if( TIM )
 
 
 } );
+

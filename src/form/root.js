@@ -20,7 +20,7 @@ if( TIM )
 		{
 			// current action
 			type :
-				require( '../action/typemap' )
+				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
 		hover :
@@ -54,7 +54,7 @@ if( TIM )
 		userSpaceList :
 		{
 			// list of spaces belonging to user
-			type : [ 'undefined', 'ref_spaceList' ]
+			type : [ 'undefined', '../ref/spaceList' ]
 		},
 		viewSize :
 		{

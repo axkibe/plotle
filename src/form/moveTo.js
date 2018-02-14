@@ -39,7 +39,7 @@ if( TIM )
 		{
 			// current action
 			type :
-				require( '../action/typemap' )
+				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
 		hover :

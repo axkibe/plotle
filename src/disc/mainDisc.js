@@ -56,7 +56,7 @@ if( TIM )
 		{
 			// currently active action
 			type :
-				require( '../action/typemap' )
+				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
 		controlTransform :
