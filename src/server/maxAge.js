@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_maxAge', ( def, server_maxAge ) => {
+tim.define( module, ( def ) => {
 
 
 /*

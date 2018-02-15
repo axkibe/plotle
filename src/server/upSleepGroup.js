@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_upSleepGroup', ( def, server_upSleepGroup ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,7 +14,9 @@ tim.define( module, 'server_upSleepGroup', ( def, server_upSleepGroup ) => {
 
 if( TIM )
 {
-	def.group = [ 'server_upSleep' ];
+	def.group = [ './upSleep' ];
 }
 
+
 } );
+

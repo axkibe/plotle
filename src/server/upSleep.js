@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_upSleep', ( def, server_upSleep ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -17,22 +17,17 @@ if( TIM )
 
 	def.attributes =
 	{
-		moments :
-		{
-			// the list of moment of a dynamics the client is sleeping for
-			type : 'ref_momentList',
-		},
-		result :
-		{
-			// the node result handler of the clients request
-			type : 'protean'
-		},
-		timer :
-		{
-			// the timer associated with this sleep
-			type : 'protean',
-		}
+		// the list of moment of a dynamics the client is sleeping for
+		moments : { type : '../ref/momentList' },
+
+		// the node result handler of the clients request
+		result : { type : 'protean' },
+
+		// the timer associated with this sleep
+		timer : { type : 'protean' },
 	};
 }
 
+
 } );
+

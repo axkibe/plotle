@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_root', ( def, server_root ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,51 +16,32 @@ if( TIM )
 {
 	def.attributes =
 	{
-		bundleFilePath :
-		{
-			// file path of the bundle
-			type : [ 'undefined', 'string' ]
-		},
-		inventory :
-		{
-			// the servers inventory of resources
-			type : 'server_inventory'
-		},
-		nextSleepID :
-		{
-			// ID for next upsleep
-			type : 'integer'
-		},
-		nextVisitor :
-		{
-			// next visitors ID
-			type : 'integer'
-		},
-		repository :
-		{
-			// the database backend
-			type : 'database_repository'
-		},
-		serverDir :
-		{
-			// server directory
-			type : 'string'
-		},
-		spaces :
-		{
-			// all spaces
-			type : 'server_spaceNexus'
-		},
-		userNexus :
-		{
-			// manages users
-			type : 'server_userNexus'
-		},
-		upSleeps :
-		{
-			// a table of all clients waiting for an update
-			type : 'server_upSleepGroup'
-		}
+		// file path of the bundle
+		bundleFilePath : { type : [ 'undefined', 'string' ] },
+
+		// the servers inventory of resources
+		inventory : { type : './inventory' },
+
+		// ID for next upsleep
+		nextSleepID : { type : 'integer' },
+
+		// next visitors ID
+		nextVisitor : { type : 'integer' },
+
+		// the database backend
+		repository : { type : '../database/repository' },
+
+		// server directory
+		serverDir : { type : 'string' },
+
+		// all spaces
+		spaces : { type : './spaceNexus' },
+
+		// manages users
+		userNexus : { type : './userNexus' },
+
+		// a table of all clients waiting for an update
+		upSleeps : { type : './upSleepGroup' }
 	};
 
 	def.init = [ ];

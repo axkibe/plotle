@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'server_userNexus', ( def, server_userNexus ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,8 +21,8 @@ if( TIM )
 		_cache :
 		{
 			// table of all cached user infos
-			type : 'user_infoGroup',
-			defaultValue : 'user_infoGroup.create( )'
+			type : '../user/infoGroup',
+			defaultValue : 'require( "../user/infoGroup" ).create( )'
 		}
 	};
 }
@@ -325,8 +325,7 @@ def.func.testUserCreds =
 	userInfo = database_userSkid.createFromJSON( val ).asUser;
 
 	root.create(
-		'userNexus',
-			this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
+		'userNexus', this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
 	);
 
 	if( userInfo.passhash !== userCreds.passhash ) return false;

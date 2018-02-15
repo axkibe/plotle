@@ -4,12 +4,14 @@
 'use strict';
 
 
-tim.define( module, 'server_postProcessor', ( def, server_postProcessor ) => {
+tim.define( module, ( def ) => {
 
 
 const config = require( '../../config' );
 
 const hash_sha1 = require( '../hash/sha1' );
+
+const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
 
 let opentypeHash;
 let opentypeMinHash;
@@ -18,7 +20,7 @@ let opentypeMinHash;
 /*
 | Postprocessor for opentype.
 */
-server_postProcessor.opentype =
+def.static.opentype =
 	function(
 		resource       // the resource
 	)
@@ -30,7 +32,7 @@ server_postProcessor.opentype =
 			root.inventory.updateResource(
 				resource.create(
 					'aliases',
-						tim.stringList.stringList(
+						stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )
@@ -49,7 +51,7 @@ server_postProcessor.opentype =
 /*
 | Postprocessor for minified opentype.
 */
-server_postProcessor.opentypeMin =
+def.static.opentypeMin =
 	function(
 		resource       // the resource
 	)
@@ -61,7 +63,7 @@ server_postProcessor.opentypeMin =
 			root.inventory.updateResource(
 				resource.create(
 					'aliases',
-						tim.stringList.stringList(
+						stringList(
 							[
 							resource.filePath
 							.substr(0, resource.filePath.length - 3 )
@@ -80,7 +82,7 @@ server_postProcessor.opentypeMin =
 /*
 | PostProcessor for devel.html
 */
-server_postProcessor.develHtml =
+def.static.develHtml =
 	function(
 		resource       // the resource
 		//bundleFilePath, // the file path of the bundle resource
@@ -143,7 +145,7 @@ server_postProcessor.develHtml =
 /*
 | PostProcessor for testpad.html
 */
-server_postProcessor.testPadHtml =
+def.static.testPadHtml =
 	function(
 		resource       // the resource
 		//bundleFilePath, // the file path of the bundle resource
@@ -198,7 +200,7 @@ server_postProcessor.testPadHtml =
 /*
 | PostProcessor for index.html
 */
-server_postProcessor.indexHtml =
+def.static.indexHtml =
 	function(
 		resource,       // the resource
 		bundleFilePath  // the file path of the bundle resource

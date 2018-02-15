@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_resourceList', ( def, server_resourceList ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,8 +14,9 @@ tim.define( module, 'server_resourceList', ( def, server_resourceList ) => {
 
 if( TIM )
 {
-	def.list = [ 'server_resource' ];
+	def.list = [ './resource' ];
 }
 
 
 } );
+

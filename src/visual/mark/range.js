@@ -39,6 +39,8 @@ if( TIM )
 	};
 }
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 
 /*:::::::::::::.
 :: Lazy values
@@ -156,7 +158,7 @@ def.lazy.itemPaths =
 
 	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
 
-	return tim.pathList.create( 'list:append', beginPath.limit( 3 ) );
+	return pathList.create( 'list:append', beginPath.limit( 3 ) );
 };
 
 

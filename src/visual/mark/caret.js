@@ -7,6 +7,8 @@
 tim.define( module, 'visual_mark_caret', ( def, visual_mark_caret ) => {
 
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 const visual_mark_text = require( './text' );
 
 
@@ -100,7 +102,7 @@ def.lazy.itemPaths =
 
 	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
 
-	return tim.pathList.create( 'list:append', path.limit( 3 ) );
+	return pathList.create( 'list:append', path.limit( 3 ) );
 };
 
 

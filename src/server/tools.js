@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_tools', ( def, server_tools ) => {
+tim.define( module, ( def ) => {
 
 
 const _b64Mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_';

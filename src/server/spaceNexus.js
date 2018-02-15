@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_spaceNexus', ( def, server_spaceNexus ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,7 +14,7 @@ tim.define( module, 'server_spaceNexus', ( def, server_spaceNexus ) => {
 
 if( TIM )
 {
-	def.group = [ 'server_spaceBox' ];
+	def.group = [ './spaceBox' ];
 }
 
 

@@ -19,7 +19,7 @@ if( TIM )
 		aliases :
 		{
 			// the list of aliases this is served under
-			type : [ 'undefined', 'tim$stringList' ]
+			type : [ 'undefined', 'tim.js/stringList' ]
 			// by default determined from filePath
 		},
 		coding :
@@ -124,6 +124,8 @@ if( TIM )
 
 const server_fileTypes = require( './fileTypes' );
 
+const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
+
 
 /*
 | Initializer.
@@ -137,10 +139,7 @@ def.func._init =
 	// directories are replaced with hypens to ease debugging
 	if( !this.aliases )
 	{
-		this.aliases =
-			tim.stringList.create(
-				'list:init', [ filePath.replace( /\//g, '-' ) ]
-			);
+		this.aliases = stringList( [ filePath.replace( /\//g, '-' ) ] );
 	}
 
 	if( !this.coding )

@@ -9,6 +9,8 @@ tim.define( module, 'visual_itemList', ( def, visual_itemList ) => {
 
 const gleam_rectGroup = require( '../gleam/rectGroup' );
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -39,7 +41,7 @@ def.lazy.itemPaths =
 		arr.push( this.get( a ).path );
 	}
 
-	return tim.pathList.create( 'list:init', arr );
+	return pathList.create( 'list:init', arr );
 };
 
 

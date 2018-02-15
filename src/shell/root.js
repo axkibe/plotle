@@ -83,6 +83,8 @@ const net_channel = require( '../net/channel' );
 
 const net_link = require( '../net/link' );
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 const ref_space = require( '../ref/space' );
 
 const result_hover = require( '../result/hover' );
@@ -350,7 +352,7 @@ def.static.prepareAction =
 					return(
 						action.create(
 							'itemPaths',
-							tim.pathList.create( 'list:init', nPaths )
+							pathList.create( 'list:init', nPaths )
 						)
 					);
 				}

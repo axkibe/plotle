@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'session_uid', ( def, session_uid ) => {
+tim.define( module, ( def ) => {
 
 
 const mime = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

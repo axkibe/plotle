@@ -13,8 +13,7 @@ const server_resource = require( './resource' );
 
 const server_resourceList = require( './resourceList' );
 
-const stringList = tim.stringList.stringList; // FUTURE
-
+const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
 
 module.exports =
 server_resourceList.create(
@@ -86,7 +85,8 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'node_modules/tim.js/src/pathList.js',
+		// FIXME dirty Hack!
+		'filePath', 'node_modules/tim.js/src/export/pathList.js',
 		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true

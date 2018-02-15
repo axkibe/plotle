@@ -17,6 +17,8 @@ const change_set = require( '../change/set' );
 
 const gleam_point = require( '../gleam/point' );
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 const visual_mark_items = require( '../visual/mark/items' );
@@ -116,10 +118,7 @@ def.static.dragStart =
 	if( !mark || mark.timtype !== visual_mark_items )
 	{
 		// also makes the user mark to this item
-		const paths =
-			tim.pathList.create(
-				'list:init', [ this.path ]
-			);
+		const paths = pathList.create( 'list:init', [ this.path ] );
 
 		root.create(
 			'action',
@@ -293,8 +292,7 @@ def.static.ctrlClick =
 		root.create(
 			'mark',
 				visual_mark_items.create(
-					'itemPaths',
-						tim.pathList.create( 'list:init', [ this.path ] )
+					'itemPaths', pathList.create( 'list:init', [ this.path ] )
 				)
 		);
 

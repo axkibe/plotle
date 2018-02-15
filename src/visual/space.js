@@ -47,6 +47,8 @@ const gruga_relation = require( '../gruga/relation' );
 
 const gruga_select = require( '../gruga/select' );
 
+const pathList = tim.import( 'tim.js', 'pathList' );
+
 const result_hover = require( '../result/hover' );
 
 const visual_frame = require( '../visual/frame' );
@@ -493,7 +495,7 @@ def.func.getList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( paths.timtype !== tim.pathList ) throw new Error( );
+/**/	if( paths.timtype !== pathList ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
@@ -1057,7 +1059,7 @@ def.func.specialKey =
 					paths.push( this.atRank( r ).path );
 				}
 
-				paths = tim.pathList.create( 'list:init', paths );
+				paths = pathList.create( 'list:init', paths );
 
 				root.create( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
 
@@ -1645,7 +1647,7 @@ def.func._stopSelect =
 
 	if( paths.length > 0 )
 	{
-		paths = tim.pathList.create( 'list:init', paths );
+		paths = pathList.create( 'list:init', paths );
 
 		if( !ctrl || !this.mark )
 		{

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_inventory', ( def, server_inventory ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,7 +14,7 @@ tim.define( module, 'server_inventory', ( def, server_inventory ) => {
 
 if( TIM )
 {
-	def.twig = [ 'server_resource' ];
+	def.twig = [ './resource' ];
 }
 
 

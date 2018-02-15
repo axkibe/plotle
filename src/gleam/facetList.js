@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_facetList', ( def, gleam_facetList ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,7 +16,7 @@ tim.define( module, 'gleam_facetList', ( def, gleam_facetList ) => {
 
 if( TIM )
 {
-	def.list = [ 'gleam_facet' ];
+	def.list = [ './facet' ];
 }
 
 

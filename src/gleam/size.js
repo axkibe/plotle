@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_size', ( def, gleam_size ) => {
+tim.define( module, ( def, self ) => {
 
 
 const gleam_point = require( './point' );
@@ -23,14 +23,9 @@ if( TIM )
 {
 	def.attributes =
 	{
-		height :
-		{
-			type : 'number'
-		},
-		width :
-		{
-			type : 'number'
-		}
+		height : { type : 'number' },
+
+		width : { type : 'number' }
 	};
 }
 
@@ -49,12 +44,7 @@ def.static.wh =
 		height
 	)
 {
-	return(
-		gleam_size.create(
-			'width', width,
-			'height', height
-		)
-	);
+	return self.create( 'width', width, 'height', height );
 };
 
 
@@ -75,25 +65,29 @@ def.lazy.pc =
 
 /*
 | A size tim increased by one height and width.
-|
-| FIXME aheadValue
 */
 def.lazy.enlarge1 =
 	function( )
 {
-	return this.add( 1, 1 );
+	const result = this.add( 1, 1 );
+
+	tim.aheadValue( result, 'shrink1', this );
+
+	return result;
 };
 
 
 /*
 | A size tim decreased by one height and width.
-|
-| FIXME aheadValue
 */
 def.lazy.shrink1 =
 	function( )
 {
-	return this.add( -1, -1 );
+	const result = this.add( -1, -1 );
+
+	tim.aheadValue( result, 'enlarge1', this );
+
+	return result;
 };
 
 

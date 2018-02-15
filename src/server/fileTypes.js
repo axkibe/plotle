@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_fileTypes', ( def, server_fileTypes ) => {
+tim.define( module, ( def ) => {
 
 
 /*

@@ -47,9 +47,7 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_portal = require( '../gruga/portal' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
-
-const visual_mark_items = require( '../visual/mark/items' );
+const pathList = tim.import( 'tim.js', 'pathList' );
 
 const result_hover = require( '../result/hover' );
 
@@ -62,6 +60,11 @@ const shell_fontPool = require( '../shell/fontPool' );
 const shell_settings = require( '../shell/settings' );
 
 const visual_item = require( '../visual/item' );
+
+const visual_mark_caret = require( '../visual/mark/caret' );
+
+const visual_mark_items = require( '../visual/mark/items' );
+
 
 
 /*::::::::::::::::::::::::::::.
@@ -839,10 +842,7 @@ def.func.click =
 	{
 		setMark =
 			visual_mark_items.create(
-				'itemPaths',
-					tim.pathList.create(
-						'list:init', [ this.path ]
-					)
+				'itemPaths', pathList.create( 'list:init', [ this.path ] )
 			);
 	}
 

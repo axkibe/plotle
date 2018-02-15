@@ -7,7 +7,7 @@
 
 
 
-tim.define( module, 'gleam_facet', ( def, gleam_facet ) => {
+tim.define( module, ( def, self ) => {
 
 
 const gleam_border = require( './border' );
@@ -28,8 +28,8 @@ if( TIM )
 		{
 			type :
 			[
-				'gleam_border',
-				'gleam_borderList',
+				'./border',
+				'./borderList',
 				'undefined'
 			]
 		},
@@ -37,9 +37,9 @@ if( TIM )
 		{
 			type :
 			[
-				'gleam_color',
-				'gleam_gradient_askew',
-				'gleam_gradient_radial',
+				'./color',
+				'./gradient/askew',
+				'./gradient/radial',
 				'undefined'
 			]
 		}
@@ -58,14 +58,14 @@ if( TIM )
 | A simple black fill.
 */
 def.staticLazy.blackFill = () =>
-	gleam_facet.create( 'fill', gleam_color.black );
+	self.create( 'fill', gleam_color.black );
 
 
 /*
 | A simple black stroke.
 */
 def.staticLazy.blackStroke = () =>
-	gleam_facet.create(
+	self.create(
 		'border', gleam_border.create( 'color', gleam_color.black )
 	);
 

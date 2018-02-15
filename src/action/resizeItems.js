@@ -17,7 +17,7 @@ if( TIM )
 		itemPaths:
 		{
 			// the paths of the items to drag
-			type : [ 'undefined', 'tim$pathList' ]
+			type : [ 'undefined', 'tim.js/pathList' ]
 		},
 		startPoint :
 		{

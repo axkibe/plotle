@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_spaceBox', ( def, server_spaceBox ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,37 +16,24 @@ if( TIM )
 {
 	def.attributes =
 	{
-		seqZ :
-		{
-			// latest sequence number
-			type : 'integer'
-		},
-		space :
-		{
-			// latest space version
-			type : 'fabric_space'
-		},
-		spaceRef :
-		{
-			// reference to the space
-			type : 'ref_space',
-		},
-		_changesDB :
-		{
-			// changes database collection
-			type : 'protean'
-		},
-		_changeWraps :
-		{
-			// changeWraps cached in RAM
-			type : 'change_wrapList'
-		},
-		_changesOffset :
-		{
-			// the offset of the stored changeWraps
-			// on server load the past isn't kept in memory
-			type : 'integer'
-		}
+		// latest sequence number
+		seqZ : { type : 'integer' },
+
+		// latest space version
+		space : { type : '../fabric/space' },
+
+		// reference to the space
+		spaceRef : { type : '../ref/space' },
+
+		// changes database collection
+		_changesDB : { type : 'protean' },
+
+		// changeWraps cached in RAM
+		_changeWraps : { type : '../change/wrapList' },
+
+		// the offset of the stored changeWraps
+		// on server load the past isn't kept in memory
+		_changesOffset : { type : 'integer' }
 	};
 }
 
@@ -108,7 +95,7 @@ def.static.loadSpace =
 	}
 
 	return(
-		server_spaceBox.create(
+		self.create(
 			'space', space,
 			'spaceRef', spaceRef,
 			'seqZ', seqZ,
@@ -138,7 +125,7 @@ def.static.createSpace =
 	);
 
 	return(
-		server_spaceBox.create(
+		self.create(
 			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1,
