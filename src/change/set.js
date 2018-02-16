@@ -43,24 +43,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// set at this path
-			type : 'tim$path',
-			json : true,
-		},
-		val :
-		{
-			// value to set
-			type : require( './typemap-value' ),
-			json : true,
-		},
-		prev :
-		{
-			// the value tree had
-			type : require( './typemap-value' ),
-			json : true,
-		}
+		// set at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// value to set
+		val : { type : require( './typemap-value' ), json : true },
+
+		// the value tree had
+		prev : { type : require( './typemap-value' ), json : true }
 	};
 }
 

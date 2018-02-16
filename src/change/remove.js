@@ -43,32 +43,19 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			comment : 'insert at this path',
-			json : true,
-			type : 'tim$path'
-		},
-		val :
-		{
-			comment : 'source sign',
-			json : true,
-			type : 'string'
-		},
-		at1 :
-		{
-			comment : 'insert at this place begin',
-			json : true,
-			type : 'integer'
-		},
-		at2 :
-		{
-			comment : 'insert ends here',
-			// must be at1 + val.length
-			// FUTURE have it lazyEval
-			json : true,
-			type : 'integer'
-		}
+		// removes at this path
+		path : { json : true, type : 'tim.js/path' },
+
+		// source sign
+		val : { json : true, type : 'string' },
+
+		// remove at this place begin
+		at1 : { json : true, type : 'integer' },
+
+		// remove ends here
+		// must be at1 + val.length
+		// FUTURE have it lazyEval
+		at2 : { json : true, type : 'integer' },
 	};
 
 	def.init = [ ];

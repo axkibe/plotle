@@ -19,21 +19,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		itemPath :
-		{
-			// if selecting ranges (text block), item to path
-			type : [ 'undefined', 'tim$path' ]
-		},
-		startPoint :
-		{
-			// point at start of operation
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		toPoint :
-		{
-			// point the rectangle goes to
-			type : [ 'undefined', 'gleam_point' ]
-		}
+		// if selecting ranges (text block), item to path
+		itemPath : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// point at start of operation
+		startPoint : { type : [ 'undefined', 'gleam_point' ] },
+
+		// point the rectangle goes to
+		toPoint : { type : [ 'undefined', 'gleam_point' ] },
 	};
 }
 

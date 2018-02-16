@@ -21,34 +21,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		at :
-		{
-			// offset of the caret
-			type : [ 'undefined', 'integer' ],
-			assign : ''
-		},
-		focus :
-		{
-			// the shell has the system focus
-			type : 'boolean',
-			defaultValue : 'true'
-		},
-		path :
-		{
-			// path of the caret
-			type : [ 'undefined', 'tim$path' ],
-			assign : ''
-		},
-		retainx :
-		{
-			// x-position of the caret kept
-			type : [ 'undefined', 'number' ]
-		},
-		textMark :
-		{
-			// the text mark
-			type : [ 'undefined', 'visual_mark_text' ]
-		}
+		// offset of the caret
+		at : { type : [ 'undefined', 'integer' ], assign : '' },
+
+		// the shell has the system focus
+		focus : { type : 'boolean', defaultValue : 'true' },
+
+		// path of the caret
+		path : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+
+		// x-position of the caret kept
+		retainx : { type : [ 'undefined', 'number' ] },
+
+		// the text mark
+		textMark : { type : [ 'undefined', 'visual_mark_text' ] },
 	};
 
 	def.init = [ 'path', 'at' ];

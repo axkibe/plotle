@@ -9,7 +9,7 @@
 'use strict';
 
 
-tim.define( module, 'database_changeSkidList', ( def, database_changeSkidList ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -19,9 +19,9 @@ tim.define( module, 'database_changeSkidList', ( def, database_changeSkidList ) 
 
 if( TIM )
 {
-	def.list = [ 'database_changeSkid', 'undefined' ];
+	def.list = [ './changeSkid', 'undefined' ];
 
-	def.json = true;
+	def.json = 'database_changeSkidList';
 }
 
 
@@ -61,7 +61,7 @@ def.static.createFromChangeWrapList =
 		list.push( cs );
 	}
 
-	return database_changeSkidList.create( 'list:init', list );
+	return self.create( 'list:init', list );
 };
 
 

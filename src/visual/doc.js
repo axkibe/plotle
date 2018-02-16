@@ -51,61 +51,46 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// the visible size of the doc
+		// if created with undefined,
+		// it is set to equal to fullsize
 		clipsize :
 		{
-			// the visible size of the doc
-			// if created with undefined,
-			// it is set to equal to fullsize
 			type : [ 'undefined', 'gleam_size' ],
 			assign : '_clipsize'
 		},
-		fabric :
-		{
-			// the doc fabric
-			type : 'fabric_doc'
-		},
-		flowWidth :
-		{
-			// width the flow seeks to fill
-			type : 'number'
-		},
-		fontsize :
-		{
-			// size of the font
-			type : 'number'
-		},
-		innerMargin :
-		{
-			// inner margin of the doc
-			type : 'gleam_margin'
-		},
+
+		// the doc fabric
+		fabric : { type : 'fabric_doc' },
+
+		// width the flow seeks to fill
+		flowWidth : { type : 'number' },
+
+		// size of the font
+		fontsize : { type : 'number' },
+
+		// inner margin of the doc
+		innerMargin : { type : 'gleam_margin' },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		paraSep :
-		{
-			// vertical seperation of paragraphs
-			type : 'number'
-		},
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
-		},
-		scrollPos :
-		{
-			// scroll position of the doc
-			type : 'gleam_point'
-		},
-		transform :
-		{
-			// the current space transform
-			type : 'gleam_transform'
-		}
+
+		// vertical seperation of paragraphs
+		paraSep : { type : 'number' },
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// scroll position of the doc
+		scrollPos : { type : 'gleam_point' },
+
+		// the current space transform
+		transform : { type : 'gleam_transform' },
 	};
 
 	def.init = [ 'inherit' ];

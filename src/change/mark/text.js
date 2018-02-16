@@ -16,16 +16,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// path of the mark
-			type : 'tim$path'
-		},
-		at :
-		{
-			// offset of the mark
-			type : 'integer'
-		}
+		// path of the mark
+		path : { type : 'tim.js/path' },
+
+		// offset of the mark
+		at : { type : 'integer' },
 	};
 
 	def.init = [ ];

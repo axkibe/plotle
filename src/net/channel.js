@@ -25,14 +25,12 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			comment : 'the channels path in data tree',
-			type : 'tim$path'
-		},
+		// the channels path in data tree
+		path : { type : 'tim.js/path' },
+
+		// the fifo of requests
 		_fifo :
 		{
-			comment : 'the fifo of requests',
 			type : 'net_requestWrapList',
 			defaultValue : 'net_requestWrapList.create( )'
 		}

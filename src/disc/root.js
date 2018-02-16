@@ -23,28 +23,23 @@ if( TIM )
 {
 	def.attributes =
 	{
-		access :
-		{
-			// users access to current space
-			type : [ 'undefined', 'string' ]
-		},
+		// users access to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// currently active action
 		action :
 		{
-			// currently active action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
-		controlTransform :
-		{
-			// the current transform of controls
-			type : 'gleam_transform'
-		},
-		hover :
-		{
-			// the widget hovered upon
-			type : [ 'undefined', 'tim$path' ]
-		},
+
+		// the current transform of controls
+		controlTransform : { type : 'gleam_transform' },
+
+		// the widget hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
 		mark :
 		{
 			// the users mark
@@ -54,31 +49,21 @@ if( TIM )
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// path of the disc
-			type : 'tim$path'
-		},
-		show :
-		{
-			// currently form/disc shown
-			type : require ( '../show/typemap' )
-		},
-		spaceRef :
-		{
-			// currently loaded space
-			type : [ 'undefined', 'ref_space' ]
-		},
-		user :
-		{
-			// currently logged in user
-			type : [ 'undefined', 'user_creds' ]
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// path of the disc
+		path : { type : 'tim.js/path' },
+
+		// currently form/disc shown
+		show : { type : require ( '../show/typemap' ) },
+
+		// currently loaded space
+		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+
+		// currently logged in user
+		user : { type : [ 'undefined', 'user_creds' ] },
+
+		// current view size
+		viewSize : { type : 'gleam_size' },
 	};
 
 	def.init = [ 'twigDup' ];

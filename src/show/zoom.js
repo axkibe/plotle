@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'show_zoom', ( def, show_zoom ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.

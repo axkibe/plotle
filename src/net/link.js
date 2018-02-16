@@ -35,6 +35,8 @@ const request_update = require( '../request/update' );
 
 const shell_doTracker = require( '../shell/doTracker' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -256,7 +258,7 @@ def.func._onAcquireSpace =
 	root.create(
 		'spaceFabric',
 			reply.space.create(
-				'path', tim.path.empty.append( 'spaceFabric' ),
+				'path', tim_path.empty.append( 'spaceFabric' ),
 				'ref', request.spaceRef
 			),
 		'link',

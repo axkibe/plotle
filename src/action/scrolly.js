@@ -16,21 +16,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		scrollPath :
-		{
-			// path to the item or widget being scrolled
-			type : 'tim$path'
-		},
-		startPoint :
-		{
-			// mouse down point on start of scrolling
-			type : 'gleam_point'
-		},
-		startPos :
-		{
-			// position of the scrollbar on start of scrolling
-			type : 'number'
-		}
+		// path to the item or widget being scrolled
+		scrollPath : { type : 'tim.js/path' },
+
+		// mouse down point on start of scrolling
+		startPoint : { type : 'gleam_point' },
+
+		// position of the scrollbar on start of scrolling
+		startPos : { type : 'number' },
 	};
 }
 

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_borderList', ( def, gleam_borderList ) => {
+tim.define( module, ( def, gleam_borderList ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,8 +14,9 @@ tim.define( module, 'gleam_borderList', ( def, gleam_borderList ) => {
 
 if( TIM )
 {
-	def.list = [ 'gleam_border' ];
+	def.list = [ './border' ];
 }
 
 
 } );
+

@@ -37,48 +37,38 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.concernsAction( action, path )'
 		},
-		fabric :
-		{
-			// the relations fabric
-			type : 'fabric_relation'
-		},
-		highlight :
-		{
-			// the item is highlighted
-			type : 'boolean'
-		},
-		hover :
-		{
-			// node currently hovered upon
-			type : [ 'undefined', 'tim$path' ],
-			assign : ''
-		},
+
+		// the relations fabric
+		fabric : { type : 'fabric_relation' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			prepare : 'self.concernsMark( mark, path )',
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
-		},
-		transform :
-		{
-			// the current space transform
-			type : 'gleam_transform'
-		}
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the current space transform
+		transform : { type : 'gleam_transform' },
 	};
 
 	def.init = [ ];

@@ -27,6 +27,8 @@ const session_uid = require( '../session/uid' );
 
 const testpad_action = require( './action' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -89,8 +91,7 @@ if( TIM )
 }
 
 
-const noteDocPath =
-	tim.path.empty.append( 'note' ).append( 'doc' );
+const noteDocPath = tim_path.empty.append( 'note' ).append( 'doc' );
 
 
 /*

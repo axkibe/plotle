@@ -51,6 +51,8 @@ const pathList = tim.import( 'tim.js', 'pathList' );
 
 const result_hover = require( '../result/hover' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 const visual_frame = require( '../visual/frame' );
 
 const visual_itemList = require( '../visual/itemList' );
@@ -95,7 +97,7 @@ if( TIM )
 		hover :
 		{
 			// node currently hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover )'
 		},
 		mark :
@@ -144,15 +146,13 @@ if( TIM )
 /*
 | Path of the visual space.
 */
-def.staticLazy.spacePath =
-	() => tim.path.empty.append( 'spaceVisual' );
+def.staticLazy.spacePath = () => tim_path.empty.append( 'spaceVisual' );
 
 
 /*
 | The path for transientItems
 */
-def.staticLazy.transPath =
-	() => tim.path.empty.append( 'spaceVisual' ).append( ':transient' );
+def.staticLazy.transPath = () => tim_path.empty.append( 'spaceVisual' ).append( ':transient' );
 
 
 /*

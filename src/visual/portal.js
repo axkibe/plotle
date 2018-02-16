@@ -59,6 +59,8 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 const visual_item = require( '../visual/item' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
@@ -76,48 +78,42 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.concernsAction( action, path )'
 		},
-		fabric :
-		{
-			// portal fabric data
-			type : 'fabric_portal'
-		},
-		highlight :
-		{
-			// the item is highlighted
-			type : 'boolean'
-		},
+
+		// portal fabric data
+		fabric : { type : 'fabric_portal' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
 		hover :
 		{
-			// node currently hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover, path )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			prepare : 'self.concernsMark( mark, path )',
 			type :
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// the path of the portal
-			type : [ 'undefined', 'tim$path' ]
-		},
-		transform :
-		{
-			// current space transform
-			type : 'gleam_transform'
-		}
+
+		// the path of the portal
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// current space transform
+		transform : { type : 'gleam_transform' },
 	};
 
 	def.init = [ 'inherit' ];
@@ -243,10 +239,7 @@ def.static.createGeneric =
 
 	root.alter(
 		change_grow.create(
-			'path',
-				tim.path.empty
-				.append( 'twig' )
-				.append( key ),
+			'path', tim_path.empty.append( 'twig' ).append( key ),
 			'val', portal,
 			'rank', 0
 		)
@@ -255,9 +248,7 @@ def.static.createGeneric =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path',
-					root.spaceVisual.get( key ).path
-					.append( 'spaceUser' ),
+				'path', root.spaceVisual.get( key ).path.append( 'spaceUser' ),
 				'at', 0
 			)
 	);

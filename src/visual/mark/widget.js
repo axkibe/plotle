@@ -16,11 +16,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// path of the item
-			type : 'tim$path'
-		}
+		// path of the item
+		path : { type : 'tim.js/path' }
 	};
 }
 

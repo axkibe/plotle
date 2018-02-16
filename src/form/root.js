@@ -16,51 +16,43 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
+
+		// the widget hovered upon
 		hover :
 		{
-			// the widget hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// the path of the form root
-			type : 'tim$path'
-		},
-		spaceRef :
-		{
-			// the reference of current space
-			type : [ 'undefined', 'ref_space' ]
-		},
-		user :
-		{
-			// currently logged in user
-			type : [ 'undefined', 'user_creds' ]
-		},
-		userSpaceList :
-		{
-			// list of spaces belonging to user
-			type : [ 'undefined', '../ref/spaceList' ]
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// the path of the form root
+		path : { type : 'tim.js/path' },
+
+		// the reference of current space
+		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+
+		// currently logged in user
+		user : { type : [ 'undefined', 'user_creds' ] },
+
+		// list of spaces belonging to user
+		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
+
+		// current view size
+		viewSize : { type : 'gleam_size' }
 	};
 
 	def.init = [ 'twigDup' ];

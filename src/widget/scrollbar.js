@@ -31,38 +31,23 @@ if( TIM )
 {
 	def.attributes =
 	{
-		scrollpos :
-		{
-			// scroll position
-			type : 'number'
-		},
-		aperture :
-		{
-			// the size of the bar
-			type : 'number'
-		},
-		max :
-		{
-			// maximum scroll position
-			// minimum is always zero
-			type : 'number'
-		},
-		path :
-		{
-			type : [ 'undefined', 'tim$path' ]
-		},
-		pos :
-		{
-			type : 'gleam_point'
-		},
-		size :
-		{
-			type : 'number'
-		},
-		transform :
-		{
-			type : 'gleam_transform'
-		}
+		// scroll position
+		scrollpos : { type : 'number' },
+
+		// the size of the bar
+		aperture : { type : 'number' },
+
+		// maximum scroll position
+		// minimum is always zero
+		max : { type : 'number' },
+
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		pos : { type : 'gleam_point' },
+
+		size : { type : 'number' },
+
+		transform : { type : 'gleam_transform' }
 	};
 }
 

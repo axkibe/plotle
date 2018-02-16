@@ -43,26 +43,16 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// join at this path
-			type : 'tim$path',
-			json : true,
-		},
-		at1 :
-		{
-			// join at this place
-			// must be length of text
-			type : 'integer',
-			json : true,
-		},
-		path2 :
-		{
-			comment : 'join this',
-			// must be after path
-			type : 'tim$path',
-			json : true,
-		}
+		// join at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// join at this place
+		// must be length of text
+		at1 : { type : 'integer', json : true },
+
+		// join this
+		// must be after path
+		path2 : { type : 'tim.js/path', json : true }
 	};
 
 	def.init = [ ];

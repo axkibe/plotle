@@ -107,6 +107,8 @@ const show_normal = require( '../show/normal' );
 
 const show_zoom = require( '../show/zoom' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 const user_creds = require( '../user/creds' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
@@ -125,135 +127,91 @@ if( TIM )
 {
 	def.attributes =
 	{
-		access :
-		{
-			// access level to current space
-			type : [ 'undefined', 'string' ]
-		},
+		// access level to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// current action
 		action :
 		{
-			// current action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.prepareAction( action )'
 		},
-		ajax :
-		{
-			// the ajax communication
-			type : 'net_ajax'
-		},
-		animation :
-		{
-			// the animations
-			type : 'animation_root'
-		},
-		disc :
-		{
-			// the discs
-			type : 'disc_root'
-		},
-		display :
-		{
-			// the display within everything happens
-			type : 'gleam_display_canvas'
-		},
-		doTracker :
-		{
-			// the un/re/do tracker
-			type : 'shell_doTracker'
-		},
-		fallbackSpaceRef :
-		{
-			// fallback to this space if loading another failed
-			type : [ 'undefined', 'ref_space' ]
-		},
-		form :
-		{
-			// the forms
-			type : 'form_root'
-		},
-		hover :
-		{
-			// current hovered item
-			type : [ 'undefined', 'tim$path' ]
-		},
-		link :
-		{
-			// the link to the server
-			type : 'net_link'
-		},
+
+		// the ajax communication
+		ajax : { type : 'net_ajax' },
+
+		// the animations
+		animation : { type : 'animation_root' },
+
+		// the discs
+		disc : { type : 'disc_root' },
+
+		// the display within everything happens
+		display : { type : 'gleam_display_canvas' },
+
+		// the un/re/do tracker
+		doTracker : { type : 'shell_doTracker' },
+
+		// fallback to this space if loading another failed
+		fallbackSpaceRef : { type : [ 'undefined', 'ref_space' ] },
+
+		// the forms
+		form : { type : 'form_root' },
+
+		// current hovered item
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the link to the server
+		link : { type : 'net_link' },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		show :
-		{
-			// currently form/disc shown
-			type : require ( '../show/typemap' )
-		},
-		spaceFabric :
-		{
-			// current space data
-			type : [ 'undefined', 'fabric_space' ]
-		},
-		spaceRef :
-		{
-			// reference to current space
-			type : [ 'undefined', 'ref_space' ]
-		},
-		spaceTransform :
-		{
-			// current space transform
-			type : 'gleam_transform'
-		},
-		spaceVisual :
-		{
-			// current space visualisation
-			type : [ 'undefined', 'visual_space' ]
-		},
-		systemFocus :
-		{
-			// shell has system focus
-			type : 'boolean'
-		},
-		userCreds :
-		{
-			// current user credentials
-			type : [ 'undefined', 'user_creds' ]
-		},
-		userSpaceList :
-		{
-			// the list of space references the user has
-			type : [ 'undefined', 'ref_spaceList' ]
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		},
-		_transformExponent :
-		{
-			// transform zoom as power of 1.1
-			type : 'number',
-			defaultValue : '0'
-		},
-		_drawn :
-		{
-			// this root has been drawn on display
-			type : 'boolean'
-		},
-		_visitorCreds :
-		{
-			// remembers an acquired visitor user name and
-			// passhash so when logging out from a real user
-			// the previous visitor id is regained.
-			// last acquired visitor credentials
-			type : [ 'undefined', 'user_creds' ]
-		}
+
+		// currently form/disc shown
+		show : { type : require ( '../show/typemap' ) },
+
+		// current space data
+		spaceFabric : { type : [ 'undefined', 'fabric_space' ] },
+
+		// reference to current space
+		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+
+		// current space transform
+		spaceTransform : { type : 'gleam_transform' },
+
+		// current space visualisation
+		spaceVisual : { type : [ 'undefined', 'visual_space' ] },
+
+		// shell has system focus
+		systemFocus : { type : 'boolean' },
+
+		// current user credentials
+		userCreds : { type : [ 'undefined', 'user_creds' ] },
+
+		// the list of space references the user has
+		userSpaceList : { type : [ 'undefined', 'ref_spaceList' ] },
+
+		// current view size
+		viewSize : { type : 'gleam_size' },
+
+		// transform zoom as power of 1.1
+		_transformExponent : { type : 'number', defaultValue : '0' },
+
+		// this root has been drawn on display
+		_drawn : { type : 'boolean' },
+
+		// remembers an acquired visitor user name and
+		// passhash so when logging out from a real user
+		// the previous visitor id is regained.
+		// last acquired visitor credentials
+		_visitorCreds : { type : [ 'undefined', 'user_creds' ] },
 	};
 
 	def.init = [ 'inherit' ];
@@ -274,7 +232,7 @@ if( TIM )
 
 
 const loadingSpaceTextPath =
-	tim.path.empty
+	tim_path.empty
 	.append( 'form' )
 	.append( 'twig' )
 	.append( 'loading' )
@@ -387,7 +345,7 @@ def.static.startup =
 
 	const show = show_form.loading;
 
-	const ajaxPath = tim.path.empty.append( 'ajax' );
+	const ajaxPath = tim_path.empty.append( 'ajax' );
 
 	let userCreds = user_creds.createFromLocalStorage( );
 
@@ -428,7 +386,7 @@ def.static._createDiscRoot =
 		show
 	)
 {
-	const path = tim.path.empty.append( 'disc' );
+	const path = tim_path.empty.append( 'disc' );
 
 	const twPath = path.append( 'twig' );
 
@@ -511,7 +469,7 @@ def.static._createFormRoot =
 
 	let formRoot =
 		form_root.create(
-			'path', tim.path.empty.append( 'form' ),
+			'path', tim_path.empty.append( 'form' ),
 			'viewSize', viewSize
 		);
 
@@ -1074,21 +1032,17 @@ def.func.dragStart =
 | A button has been dragStarted.
 */
 def.func.dragStartButton =
-	function( path )
+	function(
+		path
+	)
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' :
+		case 'disc' : return root.disc.dragStartButton( path, false, false );
 
-			return root.disc.dragStartButton( path, false, false );
+		case 'form' : return root.form.dragStartButton( path, false, false );
 
-		case 'form' :
-
-			return root.form.dragStartButton( path, false, false );
-
-		default :
-
-			throw new Error( 'invalid path' );
+		default : throw new Error( 'invalid path' );
 	}
 };
 
@@ -1752,7 +1706,7 @@ def.func.spawnRelation =
 	root.alter(
 		change_grow.create(
 			'val', val,
-			'path', tim.path.empty.append( 'twig' ).append( key ),
+			'path', tim_path.empty.append( 'twig' ).append( key ),
 			'rank', 0
 		)
 	);

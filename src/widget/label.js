@@ -21,56 +21,38 @@ if( TIM )
 
 	def.attributes =
 	{
-		hover :
-		{
-			// component hovered upon
-			type : [ 'undefined', 'tim$path' ],
-			assign : ''
-		},
-		font :
-		{
-			// font of the text
-			type : [ 'undefined', 'gleam_font' ]
-		},
+		// component hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+
+		// font of the text
+		font : { type : [ 'undefined', 'gleam_font' ] },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( ['undefined' ] ),
 			assign : ''
 		},
-		newline :
-		{
-			// vertical distance of newline
-			type : [ 'undefined', 'number' ]
-		},
-		path :
-		{
-			// the path of the widget
-			type : [ 'undefined', 'tim$path' ]
-		},
-		pos :
-		{
-			// designed position
-			type : 'gleam_point'
-		},
-		text :
-		{
-			// the label text
-			type : 'string'
-		},
-		transform :
-		{
-			// the transform
-			type : 'gleam_transform'
-		},
-		visible :
-		{
-			// if false the button is hidden
-			type : 'boolean',
-			defaultValue : 'true'
-		}
+
+		// vertical distance of newline
+		newline : { type : [ 'undefined', 'number' ] },
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// designed position
+		pos : { type : 'gleam_point' },
+
+		// the label text
+		text : { type : 'string' },
+
+		// the transform
+		transform : { type : 'gleam_transform' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
 	};
 }
 

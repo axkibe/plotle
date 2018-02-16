@@ -7,7 +7,7 @@
 var config;
 
 
-tim.define( module, 'log_root', ( def, log_root ) => {
+tim.define( module, ( def ) => {
 
 
 if( NODE )

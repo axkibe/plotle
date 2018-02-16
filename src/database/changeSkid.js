@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'database_changeSkid', ( def, database_changeSkid ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,37 +16,23 @@ if( TIM )
 {
 	def.attributes =
 	{
-		_id :
-		{
-			// sequence number
-			type : 'number',
-			json : true,
-		},
-		cid :
-		{
-			// change id
-			type : 'string',
-			json : true,
-		},
-		changeList :
-		{
-			// change list
-			type : 'change_list',
-			json : true,
-		},
-		user :
-		{
-			// the user that issued the change
-			type : 'string',
-			json : true,
-		},
-		date :
-		{
-			// the date the change was issued
-			type : 'integer',
-			json : true,
-		}
+		// sequence number
+		_id : { type : 'number', json : true },
+
+		// change id
+		cid : { type : 'string', json : true },
+
+		// change list
+		changeList : { type : '../change/list', json : true },
+
+		// the user who issued the change
+		user : { type : 'string', json : true },
+
+		// the date the change was issued
+		date : { type : 'integer', json : true }
 	};
+
+	def.json = 'database_changeSkid';
 }
 
 
@@ -76,7 +62,7 @@ def.static.createFromChangeWrap =
 	if( !changeWrap.changeList ) return;
 
 	const cs =
-		database_changeSkid.create(
+		self.create(
 			'_id', seq === undefined ? changeWrap.seq : seq,
 			'cid', changeWrap.cid,
 			'changeList', changeWrap.changeList,

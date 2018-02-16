@@ -16,41 +16,23 @@ if( TIM )
 {
 	def.attributes =
 	{
-		doc :
-		{
-			// the labels document
-			type : 'fabric_doc',
-			json : true,
-		},
-		fontsize :
-		{
-			// the fontsize of the label
-			type : 'number',
-			json : true,
-		},
-		item1key :
-		{
-			// item the relation goes from
-			type : 'string',
-			json : true,
-		},
-		item2key :
-		{
-			// item the relation goes to
-			type : 'string',
-			json : true
-		},
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
-		},
-		pos :
-		{
-			// position
-			type : 'gleam_point',
-			json : true
-		}
+		// the labels document
+		doc : { type : 'fabric_doc', json : true },
+
+		// the fontsize of the label
+		fontsize : { type : 'number', json : true },
+
+		// item the relation goes from
+		item1key : { type : 'string', json : true },
+
+		// item the relation goes to
+		item2key : { type : 'string', json : true },
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// position
+		pos : { type : 'gleam_point', json : true },
 	};
 
 

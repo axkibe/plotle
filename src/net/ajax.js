@@ -16,11 +16,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		'path' :
-		{
-			comment : 'the ajax path',
-			type : 'tim$path'
-		}
+		// the ajax path
+		path : { type : 'tim.js/path' }
 	};
 
 

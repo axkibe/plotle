@@ -54,44 +54,30 @@ if( TIM )
 {
 	def.attributes =
 	{
-		fabric :
-		{
-			// the para fabric
-			type : 'fabric_para'
-		},
-		flowWidth :
-		{
-			// width the flow can fill
-			type : [ 'undefined', 'number' ]
-		},
-		fontsize :
-		{
-			// size of the font
-			type : [ 'undefined', 'number' ]
-		},
+		// the para fabric
+		fabric : { type : 'fabric_para' },
+
+		// width the flow can fill
+		flowWidth : { type : [ 'undefined', 'number' ] },
+
+		// size of the font
+		fontsize : { type : [ 'undefined', 'number' ] },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			prepare : 'self.concernsMark( mark, path )',
-			type :
-				require( './mark/typemap' )
-				.concat( [ 'undefined' ] )
+			type : require( './mark/typemap' ).concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// the path of the para',
-			type : [ 'undefined', 'tim$path' ]
-		},
-		pos :
-		{
-			// point in north west
-			type : 'gleam_point'
-		},
-		transform :
-		{
-			// the current space transform
-			type : 'gleam_transform'
-		}
+
+		// the path of the para',
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// point in north west
+		pos : { type : 'gleam_point' },
+
+		// the current space transform
+		transform : { type : 'gleam_transform' }
 	};
 
 	def.alike =

@@ -35,79 +35,58 @@ if( TIM )
 
 	def.attributes =
 	{
-		access :
-		{
-			// users access to current space
-			type : [ 'undefined', 'string' ]
-		},
+		// users access to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// currently active action
 		action :
 		{
-			// currently active action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] )
 		},
-		controlTransform :
-		{
-			// the current transform of controls
-			type : 'gleam_transform'
-		},
-		facet :
-		{
-			// facet of the disc
-			type : 'gleam_facet'
-		},
+
+		// the current transform of controls
+		controlTransform : { type : 'gleam_transform' },
+
+		// facet of the disc
+		facet : { type : 'gleam_facet' },
+
+		// the widget hovered upon
 		hover :
 		{
-			// the widget hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'disc_disc.concernsHover( hover, path )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// path of the disc
-			type : 'tim$path'
-		},
-		shape :
-		{
-			// shape of the disc',
-			type : 'gleam_ellipse'
-		},
-		show :
-		{
-			// form/disc currently shown
-			type : require ( '../show/typemap' ),
-			assign: ''
-		},
-		size :
-		{
-			// designed size
-			type : 'gleam_size'
-		},
-		spaceRef :
-		{
-			// reference to current space
-			type : [ 'undefined', 'ref_space' ],
-			assign : ''
-		},
-		user :
-		{
-			// currently logged in user
-			type : [ 'undefined', 'user_creds' ],
-			assign : ''
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// path of the disc
+		path : { type : 'tim.js/path' },
+
+		// shape of the disc',
+		shape : { type : 'gleam_ellipse' },
+
+		// form/disc currently shown
+		show : { type : require ( '../show/typemap' ), assign: '' },
+
+		// designed size
+		size : { type : 'gleam_size' },
+
+		// reference to current space
+		spaceRef : { type : [ 'undefined', 'ref_space' ], assign : '' },
+
+		// currently logged in user
+		user : { type : [ 'undefined', 'user_creds' ], assign : '' },
+
+		// current view size
+		viewSize : { type : 'gleam_size' }
 	};
 
 	def.init = [ 'inherit', 'twigDup' ];

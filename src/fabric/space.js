@@ -16,16 +16,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			comment : 'the path of the space',
-			type : [ 'undefined', 'tim$path' ]
-		},
-		ref :
-		{
-			comment : 'reference to this space',
-			type : [ 'undefined', 'ref_space' ]
-		}
+		// the path of the space
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// reference to this space
+		ref : { type : [ 'undefined', 'ref_space' ] },
 	};
 
 	def.twig =
@@ -42,6 +37,9 @@ if( TIM )
 }
 
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
+
 /*
 | Initializer.
 */
@@ -53,7 +51,7 @@ def.func._init =
 {
 	if( !this.path )
 	{
-		this.path = tim.path.empty.append( 'space' );
+		this.path = tim_path.empty.append( 'space' );
 	}
 
 	const twig = twigDup ? this._twig : tim.copy( this._twig );

@@ -79,7 +79,8 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'filePath', 'node_modules/tim.js/src/path.js',
+		// FIXME dirty Hack!
+		'filePath', 'node_modules/tim.js/src/export/path.js',
 		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true

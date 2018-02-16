@@ -43,24 +43,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// shrinks at this path
-			type : 'tim$path',
-			json : true
-		},
-		prev :
-		{
-			// value the tree had
-			type : require( './typemap-value' ),
-			json : true,
-		},
-		rank :
-		{
-			// rank of new node
-			type : 'integer',
-			json : true,
-		}
+		// shrinks at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// value the tree had
+		prev : { type : require( './typemap-value' ), json : true },
+
+		// rank of new node
+		rank : { type : 'integer', json : true },
 	};
 
 	def.init = [ ];

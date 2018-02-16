@@ -47,68 +47,48 @@ if( TIM )
 
 	def.attributes =
 	{
-		facets :
-		{
-			// style facets
-			type : 'gleam_facetList'
-		},
+		// style facets
+		facets : { type : 'gleam_facetList' },
+
+		// component hovered upon
 		hover :
 		{
-			// component hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover, path )'
 		},
-		font :
-		{
-			// font of the text
-			type : 'gleam_font'
-		},
+
+		// font of the text
+		font : { type : 'gleam_font' },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			prepare : 'widget_widget.concernsMark( mark, path )',
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		maxlen :
-		{
-			// maximum input length
-			type : 'integer'
-		},
-		password :
-		{
-			// true for password input
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		path :
-		{
-			// the path of the widget
-			type : [ 'undefined', 'tim$path' ]
-		},
-		transform :
-		{
-			// the transform
-			type : 'gleam_transform'
-		},
-		value :
-		{
-			// the value in the input box
-			type : 'string',
-			defaultValue : '""'
-		},
-		visible :
-		{
-			// if false the button is hidden
-			type : 'boolean',
-			defaultValue : 'true'
-		},
-		zone :
-		{
-			// designed zone
-			type : 'gleam_rect'
-		}
+
+		// maximum input length
+		maxlen : { type : 'integer' },
+
+		// true for password input
+		password : { type : 'boolean', defaultValue : 'false' },
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the transform
+		transform : { type : 'gleam_transform' },
+
+		// the value in the input box
+		value : { type : 'string', defaultValue : '""' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+
+		// designed zone
+		zone : { type : 'gleam_rect' },
 	};
 }
 

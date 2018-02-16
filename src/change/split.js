@@ -43,24 +43,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// split at this path
-			type : 'tim$path',
-			json : true,
-		},
-		at1 :
-		{
-			// insert at this place begin
-			type : 'integer',
-			json : true,
-		},
-		path2 :
-		{
-			// split created this new/next path
-			type : 'tim$path',
-			json : true,
-		}
+		// split at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// insert at this place begin
+		at1 : { type : 'integer', json : true },
+
+		// split created this new/next path
+		path2 : { type : 'tim.js/path', json : true }
 	};
 
 	def.init = [ ];

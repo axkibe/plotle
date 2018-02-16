@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_border', ( def, gleam_border ) => {
+tim.define( module, ( def, self ) => {
 
 
 const gleam_color = require( './color' );
@@ -19,21 +19,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		distance : // distance from shape
-		{
-			type : 'number',
-			defaultValue : '0'
-		},
-		width : // border width
-		{
-			type : 'number',
-			defaultValue : '1'
-		},
-		color :
-		{
-			type : 'gleam_color',
-			defaultValue : 'gleam_color.black'
-		}
+		// distance from shape
+		distance : { type : 'number', defaultValue : '0' },
+
+		// border width
+		width : { type : 'number', defaultValue : '1' },
+
+		color : { type : './color', defaultValue : 'require("./color").black' },
 	};
 }
 
@@ -47,7 +39,7 @@ if( TIM )
 | A simple blaick border.
 */
 def.staticLazy.simpleBlack = () =>
-	gleam_border.create( 'color', gleam_color.black );
+	self.create( 'color', gleam_color.black );
 
 
 } );

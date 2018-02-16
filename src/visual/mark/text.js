@@ -19,22 +19,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		at :
-		{
-			// offset of the caret
-			type : 'integer'
-		},
-		path :
-		{
-			// path of the caret
-			type : 'tim$path'
-		},
-		changeMarkText :
-		{
-			// the text mark
-			type : [ 'undefined', 'change_mark_text' ],
-			assign : ''
-		}
+		// offset of the caret
+		at : { type : 'integer' },
+
+		// path of the caret
+		path : { type : 'tim.js/path' },
+
+		// the text mark
+		changeMarkText : { type : [ 'undefined', 'change_mark_text' ], assign : '' },
 	};
 
 	def.init = [ 'changeMarkText' ];

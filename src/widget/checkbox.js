@@ -45,7 +45,7 @@ if( TIM )
 		hover :
 		{
 			// component hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover, path )'
 		},
 		mark :
@@ -59,7 +59,7 @@ if( TIM )
 		path :
 		{
 			// the path of the widget
-			type : [ 'undefined', 'tim$path' ]
+			type : [ 'undefined', 'tim.js/path' ]
 		},
 		transform :
 		{

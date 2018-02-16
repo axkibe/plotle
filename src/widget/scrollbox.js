@@ -33,47 +33,37 @@ if( TIM )
 
 	def.attributes =
 	{
+		// component hovered upon
 		hover :
 		{
-			// component hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover, path )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( ['undefined' ] ),
 			assign : ''
 		},
-		path :
-		{
-			// the path of the widget
-			type : [ 'undefined', 'tim$path' ]
-		},
-		scrollPos :
-		{
-			// scroll position
-			// is defined by force in _init
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		transform :
-		{
-			// the transform
-			type : 'gleam_transform'
-		},
-		scrollbarYOffset :
-		{
-			// offset of the scrollbar
-			type : 'gleam_point',
-			defaultValue : 'gleam_point.zero'
-		},
-		zone :
-		{
-			// designed zone
-			type : 'gleam_rect'
-		},
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// scroll position
+		// is defined by force in _init
+		scrollPos : { type : [ 'undefined', 'gleam_point' ] },
+
+		// the transform
+		transform : { type : 'gleam_transform' },
+
+		// offset of the scrollbar
+		scrollbarYOffset : { type : 'gleam_point', defaultValue : 'gleam_point.zero' },
+
+		// designed zone
+		zone : { type : 'gleam_rect' },
 	};
 
 	def.init = [ 'twigDup' ];

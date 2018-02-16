@@ -16,29 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
-		},
-		spaceUser :
-		{
-			// owner of the space the portal goes to
-			type : 'string',
-			json : true
-		},
-		spaceTag :
-		{
-			// tag of the space the portal goes to
-			type : 'string',
-			json : true
-		},
-		zone :
-		{
-			// the portals zone
-			type : 'gleam_rect',
-			json : true
-		}
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// owner of the space the portal goes to
+		spaceUser : { type : 'string', json : true },
+
+		// tag of the space the portal goes to
+		spaceTag : { type : 'string', json : true },
+
+		// the portals zone
+		zone : { type : 'gleam_rect', json : true }
 	};
 }
 

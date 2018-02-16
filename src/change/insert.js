@@ -44,32 +44,19 @@ if( TIM )
 
 	def.attributes =
 	{
-		path :
-		{
-			// insert at this path
-			type : 'tim$path',
-			json : true,
-		},
-		val :
-		{
-			// source sign
-			type : 'string',
-			json : true,
-		},
-		at1 :
-		{
-			// insert at this place begin
-			type : 'integer',
-			json : true,
-		},
-		at2 :
-		{
-			// insert ends here
-			// must be at1 + val.length
-			// FUTURE have this be a lazy
-			type : 'integer',
-			json : true,
-		}
+		// insert at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// insert this
+		val : { type : 'string', json : true },
+
+		// insert at this place begin
+		at1 : { type : 'integer', json : true },
+
+		// insert ends here
+		// must be at1 + val.length
+		// FUTURE have this be a lazy
+		at2 : { type : 'integer', json : true },
 	};
 
 	def.init = [ ];

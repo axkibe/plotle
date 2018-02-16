@@ -37,6 +37,8 @@ const gruga_label = require( '../gruga/label' );
 
 const session_uid = require( '../session/uid' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 const visual_doc = require( '../visual/doc' );
 
 const visual_docItem = require( '../visual/docItem' );
@@ -76,7 +78,7 @@ if( TIM )
 		hover :
 		{
 			// node currently hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			assign : ''
 		},
 		mark :
@@ -90,7 +92,7 @@ if( TIM )
 		path :
 		{
 			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
+			type : [ 'undefined', 'tim.js/path' ]
 		},
 		transform :
 		{
@@ -209,10 +211,7 @@ def.static.createGeneric =
 	root.alter(
 		change_grow.create(
 			'val', label.fabric,
-			'path',
-				tim.path.empty
-				.append( 'twig' )
-				.append( key ),
+			'path', tim_path.empty.append( 'twig' ).append( key ),
 			'rank', 0
 		)
 	);
@@ -220,11 +219,7 @@ def.static.createGeneric =
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path',
-					root.spaceVisual
-					.get( key )
-					.doc.atRank( 0 )
-					.textPath,
+				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
 				'at', 0
 			)
 	);

@@ -19,16 +19,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		cursor :
-		{
-			// the cursor to display
-			type : 'string'
-		},
-		path :
-		{
-			// the path to the thing being hovered upon
-			type : [ 'undefined', 'tim$path' ]
-		}
+		// the cursor to display
+		cursor : { type : 'string' },
+
+		// the path to the thing being hovered upon
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 	};
 }
 

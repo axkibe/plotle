@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'server_resource', ( def, server_resource ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,106 +16,62 @@ if( TIM )
 {
 	def.attributes =
 	{
-		aliases :
-		{
-			// the list of aliases this is served under
-			type : [ 'undefined', 'tim.js/stringList' ]
-			// by default determined from filePath
-		},
-		coding :
-		{
-			// "binary" or "utf-8"
-			type : [ 'undefined', 'string' ]
-			// by default determined from file extension
-		},
-		data :
-		{
-			// cached or auto generated data
-			type : [ 'undefined', 'protean' ]
-		},
-		devel :
-		{
-			// if true is only loaded in devel mode
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		filePath :
-		{
-			// path of the resources file
-			type : [ 'undefined', 'string' ]
-		},
-		gzip :
-		{
-			// cached or auto generated zip data
-			type : [ 'undefined', 'protean' ]
-		},
-		hasTim :
-		{
-			// true if this resource is a typed immutable
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		hasJson :
-		{
-			// true if this has json
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		inBundle :
-		{
-			// true if this resource is in the bundle
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		inTestPad :
-		{
-			// true if this resource is in the testpad
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		isLeaf :
-		{
-			// true if this a timtree leaf but not a tim.
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		maxage :
-		{
-			// "none", "short" or "long"
-			type : 'string',
-			defaultValue : '"none"'
-		},
-		mime :
-		{
-			// mime type
-			// by default determined from file extension
-			type : [ 'undefined', 'string' ]
-		},
-		postProcessor :
-		{
-			// post processor replacing stuff
-			type : [ 'undefined', 'string' ]
-		},
-		realpath :
-		{
-			// realpath of the resource base
-			type : [ 'undefined', 'string' ]
-		},
-		timestamp :
-		{
-			// in devel mode timestamp when resource cached
-			type : [ 'undefined', 'date' ]
-		},
-		timHolder :
-		{
-			// the resource a tim is genereated from
-			type : [ 'undefined', 'server_resource' ]
-		},
-		timId :
-		{
-			// if hasTim the tim id string
-			type : [ 'undefined', 'string' ]
-		},
+		// the list of aliases this is served under
+		// by default determined from filePath
+		aliases : { type : [ 'undefined', 'tim.js/stringList' ] },
+
+		// "binary" or "utf-8"
+		// by default determined from file extension
+		coding : { type : [ 'undefined', 'string' ] },
+
+		// cached or auto generated data
+		data : { type : [ 'undefined', 'protean' ] },
+
+		// if true is only loaded in devel mode
+		devel : { type : 'boolean', defaultValue : 'false' },
+
+		// path of the resources file
+		filePath : { type : [ 'undefined', 'string' ] },
+
+		// cached or auto generated zip data
+		gzip : { type : [ 'undefined', 'protean' ] },
+
+		// true if this resource is a typed immutable
+		hasTim : { type : 'boolean', defaultValue : 'false' },
+
+		// true if this has json
+		hasJson : { type : 'boolean', defaultValue : 'false' },
+
+		// true if this resource is in the bundle
+		inBundle : { type : 'boolean', defaultValue : 'false' },
+
+		// true if this resource is in the testpad
+		inTestPad : { type : 'boolean', defaultValue : 'false' },
+
+		// true if this a timtree leaf but not a tim.
+		isLeaf : { type : 'boolean', defaultValue : 'false' },
+
+		// "none", "short" or "long"
+		maxage : { type : 'string', defaultValue : '"none"' },
+
+		// mime type
+		// by default determined from file extension
+		mime : { type : [ 'undefined', 'string' ] },
+
+		// post processor replacing stuff
+		postProcessor : { type : [ 'undefined', 'string' ] },
+
+		// realpath of the resource base
+		realpath : { type : [ 'undefined', 'string' ] },
+
+		// in devel mode timestamp when resource cached
+		timestamp : { type : [ 'undefined', 'date' ] },
+
+		// the resource a tim is genereated from
+		timHolder : { type : [ 'undefined', './resource' ] },
+
+		// if hasTim the tim id string
+		timId : { type : [ 'undefined', 'string' ] },
 	};
 
 	def.init = [ ];
@@ -169,3 +125,4 @@ def.lazy.fileExt =
 
 
 } );
+

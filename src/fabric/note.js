@@ -18,29 +18,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		doc :
-		{
-			// the notes document
-			type : 'fabric_doc',
-			json : true
-		},
-		fontsize :
-		{
-			// the fontsize of the note
-			type : 'number',
-			json : true
-		},
-		path :
-		{
-			// the path of the note
-			type : [ 'undefined', 'tim$path' ]
-		},
-		zone :
-		{
-			// the notes zone
-			type : 'gleam_rect',
-			json : true
-		}
+		// the notes document
+		doc : { type : 'fabric_doc', json : true },
+
+		// the fontsize of the note
+		fontsize : { type : 'number', json : true },
+
+		// the path of the note
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the notes zone
+		zone : { type : 'gleam_rect', json : true },
 	};
 
 	def.init = [ ];

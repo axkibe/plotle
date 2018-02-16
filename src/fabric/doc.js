@@ -16,11 +16,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim$path' ]
-		}
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] }
 	};
 
 	def.twig = [ 'fabric_para' ];

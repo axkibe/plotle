@@ -37,90 +37,65 @@ if( TIM )
 
 	def.attributes =
 	{
-		down :
-		{
-			// true if the button is down
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		facets :
-		{
-			// style facets
-			type : 'gleam_facetList'
-		},
-		font :
-		{
-			// font of the text
-			type : [ 'undefined', 'gleam_font' ]
-		},
+		// true if the button is down
+		down : { type : 'boolean', defaultValue : 'false' },
+
+		// style facets
+		facets : { type : 'gleam_facetList' },
+
+		// font of the text
+		font : { type : [ 'undefined', 'gleam_font' ] },
+
+		// component hovered upon
 		hover :
 		{
-			// component hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover, path )'
 		},
+
+		// icon shape
 		iconShape :
 		{
-			// icon shape
 			type :
 				tim.typemap( module, '../gleam/shape' )
 				.concat( [ 'undefined' ] )
 		},
-		iconFacet :
-		{
-			// icon facet
-			type : [ 'undefined', 'gleam_facet' ]
-		},
+
+		// icon facet
+		iconFacet : { type : [ 'undefined', 'gleam_facet' ] },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type :
 				require( '../visual/mark/typemap' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.concernsMark( mark, path )'
 		},
-		path :
-		{
-			// the path of the widget
-			type : [ 'undefined', 'tim$path' ]
-		},
-		shape :
-		{
-			// shape of the button
-			type : [ 'string', 'gleam_ellipse' ]
-		},
-		text :
-		{
-			// the text written in the button
-			type : 'string',
-			defaultValue : '""'
-		},
-		textNewline :
-		{
-			// vertical distance of newline
-			type : [ 'undefined', 'number' ]
-		},
-		textRotation :
-		{
-			// rotation of the text
-			type : [ 'undefined', 'number' ]
-		},
-		transform :
-		{
-			// the transform
-			type : 'gleam_transform'
-		},
-		visible :
-		{
-			// if false the button is hidden
-			type : 'boolean',
-			defaultValue : 'true'
-		},
-		zone :
-		{
-			// designed zone
-			type : 'gleam_rect'
-		}
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// shape of the button
+		shape : { type : [ 'string', 'gleam_ellipse' ] },
+
+		// the text written in the button
+		text : { type : 'string', defaultValue : '""' },
+
+		// vertical distance of newline
+		textNewline : { type : [ 'undefined', 'number' ] },
+
+		// rotation of the text
+		textRotation : { type : [ 'undefined', 'number' ] },
+
+		// the transform
+		transform : { type : 'gleam_transform' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+
+		// designed zone
+		zone : { type : 'gleam_rect' },
 	};
 }
 

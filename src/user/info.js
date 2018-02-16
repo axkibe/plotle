@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'user_info', ( def, user_info ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,34 +16,23 @@ if( TIM )
 {
 	def.attributes =
 	{
-		name :
-		{
-			// the username
-			type : 'string',
-		},
-		passhash :
-		{
-			// password hash
-			type : 'string'
-		},
-		mail :
-		{
-			// the users email address
-			type : 'string',
-			defaultValue : '""'
-		},
-		news :
-		{
-			// if the user checked okay with news emails
-			type : [ 'boolean', 'string' ]
-		},
-		spaceList :
-		{
-			// if loaded/defined, the spaces the user has
-			type : [ 'undefined', 'dynamic_refSpaceList' ]
-		}
+		// the username
+		name : { type : 'string' },
+
+		// password hash
+		passhash : { type : 'string' },
+
+		// the users email address
+		mail : { type : 'string', defaultValue : '""' },
+
+		// if the user checked okay with news emails
+		news : { type : [ 'boolean', 'string' ] },
+
+		// if loaded/defined, the spaces the user has
+		spaceList : { type : [ 'undefined', '../dynamic/refSpaceList' ] },
 	};
 }
 
 
 } );
+

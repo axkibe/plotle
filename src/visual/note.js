@@ -45,6 +45,8 @@ const gruga_note = require( '../gruga/note' );
 
 const session_uid = require( '../session/uid' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 const shell_settings = require( '../shell/settings' );
 
 const visual_doc = require( '../visual/doc' );
@@ -69,30 +71,28 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
 			type :
 				tim.typemap( module, '../action/action' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.concernsAction( action, path )'
 		},
-		fabric :
-		{
-			// the notes fabric
-			type : 'fabric_note'
-		},
-		highlight :
-		{
-			// the item is highlighted
-			type : 'boolean'
-		},
+
+		// the notes fabric
+		fabric : { type : 'fabric_note' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
 		hover :
 		{
-			// node currently hovered upon
-			type : [ 'undefined', 'tim$path' ],
+			type : [ 'undefined', 'tim.js/path' ],
 			assign : ''
 		},
+
 		mark :
 		{
 			// the users mark
@@ -101,32 +101,23 @@ if( TIM )
 				require( './mark/typemap' )
 				.concat( [ 'undefined' ] )
 		},
-		path :
-		{
-			// the path of the note
-			type : [ 'undefined', 'tim$path' ]
-		},
-		scrollPos :
-		{
-			// scroll position
-			type : [ 'undefined', 'gleam_point' ]
-			// is force defined in _init
-		},
-		transform :
-		{
-			// the current space transform
-			type : 'gleam_transform'
-		}
+
+		// the path of the note
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// scroll position
+		// is force defined in _init
+		scrollPos : { type : [ 'undefined', 'gleam_point' ] },
+
+		// the current space transform
+		transform : { type : 'gleam_transform' },
 	};
 
 	def.init = [ 'inherit' ];
 
 	def.alike =
 	{
-		alikeIgnoringTransform :
-		{
-			ignores : { 'transform' : true }
-		}
+		alikeIgnoringTransform : { ignores : { 'transform' : true } }
 	};
 }
 
@@ -198,22 +189,14 @@ def.static.createGeneric =
 	root.alter(
 		change_grow.create(
 			'val', note,
-			'path',
-				tim.path.empty
-				.append( 'twig' )
-				.append( key ),
-			'rank', 0
+			'path', tim_path.empty.append( 'twig' ).append( key ), 'rank', 0
 		)
 	);
 
 	root.create(
 		'mark',
 			visual_mark_caret.create(
-				'path',
-					root
-					.spaceVisual.get( key )
-					.doc
-					.atRank( 0 ).textPath,
+				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
 				'at', 0
 			)
 	);
