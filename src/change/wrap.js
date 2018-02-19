@@ -5,7 +5,7 @@
 
 
 
-tim.define( module, 'change_wrap', ( def, change_wrap ) => {
+tim.define( module, ( def, change_wrap ) => {
 
 
 const session_uid = require( '../session/uid' );
@@ -20,25 +20,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		cid :
-		{
-			comment : 'change id',
-			json : true,
-			type : 'string'
-		},
-		changeList :
-		{
-			comment : 'change list',
-			json : true,
-			type : 'change_list'
-		},
-		seq :
-		{
-			comment : 'sequence number',
-			json : true,
-			type : [ 'undefined', 'number' ]
-		}
+		// change id
+		cid : { json : true, type : 'string' },
+
+		// change list
+		changeList : { json : true, type : './list' },
+
+		// sequence number
+		seq : { json : true, type : [ 'undefined', 'number' ] },
 	};
+
+	def.json = 'change_wrap';
 }
 
 
@@ -104,3 +96,4 @@ def.func.changeTreeReverse =
 
 
 } );
+

@@ -1,6 +1,5 @@
 /*
 | Typemap of what a set on a space can take.
-| FIXME rename value
 */
 module.exports =
 [

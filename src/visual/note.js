@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_note', ( def, visual_note ) => {
+tim.define( module, ( def, self ) => {
 
 
 const action_dragItems = require( '../action/dragItems' );
@@ -74,32 +74,26 @@ if( TIM )
 		// current action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] ),
-			prepare : 'self.concernsAction( action, path )'
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsAction( action, path )',
 		},
 
 		// the notes fabric
-		fabric : { type : 'fabric_note' },
+		fabric : { type : '../fabric/note' },
 
 		// the item is highlighted
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			assign : ''
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
 
+		// the users mark
 		mark :
 		{
-			// the users mark
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsMark( mark, path )',
-			type :
-				require( './mark/typemap' )
-				.concat( [ 'undefined' ] )
 		},
 
 		// the path of the note
@@ -107,10 +101,10 @@ if( TIM )
 
 		// scroll position
 		// is force defined in _init
-		scrollPos : { type : [ 'undefined', 'gleam_point' ] },
+		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
 
 		// the current space transform
-		transform : { type : 'gleam_transform' },
+		transform : { type : '../gleam/transform' },
 	};
 
 	def.init = [ 'inherit' ];
@@ -134,7 +128,7 @@ def.staticLazy.model =
 	function( )
 {
 	return(
-		visual_note.create(
+		self.create(
 			'fabric',
 				fabric_note.create(
 					'fontsize', gruga_note.defaultFontsize,

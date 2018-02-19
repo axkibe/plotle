@@ -38,9 +38,8 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] ),
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'form_form.concernsMark( mark, path )'
 		},
 		path :

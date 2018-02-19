@@ -77,52 +77,38 @@ if( TIM )
 {
 	def.attributes =
 	{
-		access :
-		{
-			// rights the current user has for this space
-			type : [ 'undefined', 'string' ]
-		},
-		action :
-		{
-			// current action
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
-		},
-		fabric :
-		{
-			// space fabric data
-			type : 'fabric_space'
-		},
+		// rights the current user has for this space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// current action
+		action : { type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ) },
+
+		// space fabric data
+		fabric : { type : 'fabric_space' },
+
+		// node currently hovered upon
 		hover :
 		{
-			// node currently hovered upon
 			type : [ 'undefined', 'tim.js/path' ],
 			prepare : 'self.concernsHover( hover )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
-			type :
-				require( './mark/typemap' )
-				.concat( [ 'undefined' ] ),
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsMark( mark )'
 		},
-		ref :
-		{
-			// reference to this space
-			type : [ 'undefined', 'ref_space' ]
-		},
-		transform :
-		{
-			// the current transform of space
-			type : 'gleam_transform'
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// reference to this space
+		ref : { type : [ 'undefined', 'ref_space' ] },
+
+		// the current transform of space
+		transform : { type : 'gleam_transform' },
+
+		// current view size
+		viewSize : { type : 'gleam_size' }
 	};
 
 	def.init = [ 'inherit' ];

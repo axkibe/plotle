@@ -35,8 +35,9 @@ if( TIM )
 		pos : { type : 'gleam_point', json : true },
 	};
 
-
 	def.init = [ ];
+
+	def.json = 'relation';
 }
 
 

@@ -28,6 +28,8 @@ if( TIM )
 		// the portals zone
 		zone : { type : 'gleam_rect', json : true }
 	};
+
+	def.json = 'portal';
 }
 
 } );

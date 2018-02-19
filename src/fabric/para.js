@@ -22,6 +22,9 @@ if( TIM )
 		// the paragraphs text
 		text : { type : 'string', json : true }
 	};
+
+	// FIXME change to 'para'
+	def.json = 'fabric_para';
 }
 
 

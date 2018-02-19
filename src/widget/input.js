@@ -65,7 +65,7 @@ if( TIM )
 		{
 			prepare : 'widget_widget.concernsMark( mark, path )',
 			type :
-				require( '../visual/mark/typemap' )
+				tim.typemap( module, '../visual/mark/mark' )
 				.concat( [ 'undefined' ] )
 		},
 

@@ -11,6 +11,8 @@ const action_select = require( '../action/select' );
 
 const change_shrink = require( '../change/shrink' );
 
+const disc_disc = require( './disc' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -53,64 +55,66 @@ if( TIM )
 		// currently active action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
 
 		// the current transform of controls
-		controlTransform : { type : 'gleam_transform' },
+		controlTransform : { type : '../gleam/transform' },
 
 		// facet of the disc
-		facet : { type : 'gleam_facet' },
+		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'disc_disc.concernsHover( hover, path )'
+			prepare : 'self.concernsHover( hover, path )',
 		},
 
 		// the users mark
 		mark :
 		{
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
 		},
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
 
 		// shape of the disc
-		shape : { type : 'gleam_ellipse' },
+		shape : { type : '../gleam/ellipse' },
 
 		// currently form/disc shown
-		show : { type : require ( '../show/typemap' ) },
+		show : { type : tim.typemap( module, '../show/show' ) },
 
 		// designed size
-		size : { type : 'gleam_size' },
+		size : { type : '../gleam/size' },
 
 		// reference to current space
 		spaceRef : { type : [ 'undefined', 'ref_space' ] },
 
 		// currently logged in user
-		user : { type : [ 'undefined', 'user_creds' ] },
+		user : { type : [ 'undefined', '../user/creds' ] },
 
 		// current view size
-		viewSize : { type : 'gleam_size' }
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.init = [ 'inherit', 'twigDup' ];
 
 	def.twig =
 	[
-		'widget_button',
-		'widget_checkbox',
-		'widget_input',
-		'widget_label'
+		'../widget/button',
+		'../widget/checkbox',
+		'../widget/input',
+		'../widget/label'
 	];
 }
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = disc_disc.concernsHover;
 
 
 /*

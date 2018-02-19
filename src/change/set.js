@@ -47,10 +47,10 @@ if( TIM )
 		path : { type : 'tim.js/path', json : true },
 
 		// value to set
-		val : { type : require( './typemap-value' ), json : true },
+		val : { type : tim.typemap( module, './val' ), json : true },
 
 		// the value tree had
-		prev : { type : require( './typemap-value' ), json : true }
+		prev : { type : tim.typemap( module, './val' ), json : true }
 	};
 }
 

@@ -31,6 +31,8 @@ if( TIM )
 		zone : { type : 'gleam_rect', json : true },
 	};
 
+	def.json = 'note';
+
 	def.init = [ ];
 }
 

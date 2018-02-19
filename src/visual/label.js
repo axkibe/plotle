@@ -84,10 +84,9 @@ if( TIM )
 		mark :
 		{
 			// the users mark
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsMark( mark, path )',
-			type :
-				require( './mark/typemap' )
-				.concat( [ 'undefined' ] )
 		},
 		path :
 		{

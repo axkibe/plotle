@@ -58,10 +58,7 @@ if( TIM )
 		controlTransform : { type : 'gleam_transform' },
 
 		// facet of the disc
-		facet :
-		{
-			type : 'gleam_facet'
-		},
+		facet : { type : 'gleam_facet' },
 
 		// the widget hovered upon',
 		hover :
@@ -71,12 +68,7 @@ if( TIM )
 		},
 
 		// the users mark
-		mark :
-		{
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
-		},
+		mark : { type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ) },
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
@@ -84,12 +76,8 @@ if( TIM )
 		// shape of the disc
 		shape : { type : 'gleam_ellipse' },
 
-		show :
-		{
-			// currently form/disc shown
-			type : require ( '../show/typemap' ),
-			assign: ''
-		},
+		// currently form/disc shown
+		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
 
 		// designed size
 		size : { type : 'gleam_size' },

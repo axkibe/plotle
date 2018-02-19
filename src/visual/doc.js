@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_doc', ( def, visual_doc ) => {
+tim.define( module, ( def, self ) => {
 
 
 const gleam_facet = require( '../gleam/facet' );
@@ -56,12 +56,12 @@ if( TIM )
 		// it is set to equal to fullsize
 		clipsize :
 		{
-			type : [ 'undefined', 'gleam_size' ],
+			type : [ 'undefined', '../gleam/size' ],
 			assign : '_clipsize'
 		},
 
 		// the doc fabric
-		fabric : { type : 'fabric_doc' },
+		fabric : { type : '../fabric/doc' },
 
 		// width the flow seeks to fill
 		flowWidth : { type : 'number' },
@@ -70,15 +70,10 @@ if( TIM )
 		fontsize : { type : 'number' },
 
 		// inner margin of the doc
-		innerMargin : { type : 'gleam_margin' },
+		innerMargin : { type : '../gleam/margin' },
 
 		// the users mark
-		mark :
-		{
-			type :
-				require( './mark/typemap' )
-				.concat( [ 'undefined' ] )
-		},
+		mark : { type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ) },
 
 		// vertical seperation of paragraphs
 		paraSep : { type : 'number' },
@@ -87,15 +82,15 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position of the doc
-		scrollPos : { type : 'gleam_point' },
+		scrollPos : { type : '../gleam/point' },
 
 		// the current space transform
-		transform : { type : 'gleam_transform' },
+		transform : { type : '../gleam/transform' },
 	};
 
 	def.init = [ 'inherit' ];
 
-	def.twig = [ 'visual_para' ];
+	def.twig = [ './para' ];
 }
 
 

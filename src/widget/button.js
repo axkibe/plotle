@@ -68,7 +68,7 @@ if( TIM )
 		mark :
 		{
 			type :
-				require( '../visual/mark/typemap' )
+				tim.typemap( module, '../visual/mark/mark' )
 				.concat( [ 'undefined' ] ),
 			prepare : 'self.concernsMark( mark, path )'
 		},

@@ -67,7 +67,8 @@ if( TIM )
 		mark :
 		{
 			prepare : 'self.concernsMark( mark, path )',
-			type : require( './mark/typemap' ).concat( [ 'undefined' ] )
+
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
 		},
 
 		// the path of the para',

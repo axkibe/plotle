@@ -24,9 +24,7 @@ if( TIM )
 		// current action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
 
 		// the widget hovered upon
@@ -35,9 +33,8 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] ),
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsMark( mark, path )'
 		},
 

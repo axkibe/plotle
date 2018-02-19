@@ -28,15 +28,14 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
+
 			prepare : 'self.concernsHover( hover )'
 		},
 
 		// the users mark
 		mark :
 		{
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
 		},
 
 		// the path of the form root

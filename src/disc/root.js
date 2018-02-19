@@ -43,18 +43,16 @@ if( TIM )
 		mark :
 		{
 			// the users mark
-			// FIXXME
 			prepare : 'self.concernsMark( mark )',
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
+
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
 		},
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
 
 		// currently form/disc shown
-		show : { type : require ( '../show/typemap' ) },
+		show : { type : tim.typemap( module, '../show/show' ) },
 
 		// currently loaded space
 		spaceRef : { type : [ 'undefined', 'ref_space' ] },

@@ -60,12 +60,7 @@ if( TIM )
 		},
 
 		// the users mark
-		mark :
-		{
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
-		},
+		mark : { type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ) },
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
@@ -74,7 +69,7 @@ if( TIM )
 		shape : { type : 'gleam_ellipse' },
 
 		// form/disc currently shown
-		show : { type : require ( '../show/typemap' ), assign: '' },
+		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
 
 		// designed size
 		size : { type : 'gleam_size' },

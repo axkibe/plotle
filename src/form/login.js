@@ -48,9 +48,7 @@ if( TIM )
 		mark :
 		{
 			prepare : 'form_form.concernsMark( mark, path )',
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
 		},
 
 		// the path of the form

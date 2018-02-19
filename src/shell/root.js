@@ -169,13 +169,11 @@ if( TIM )
 		// the users mark
 		mark :
 		{
-			type :
-				require( '../visual/mark/typemap' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
 		},
 
 		// currently form/disc shown
-		show : { type : require ( '../show/typemap' ) },
+		show : { type : tim.typemap( module, '../show/show' ) },
 
 		// current space data
 		spaceFabric : { type : [ 'undefined', 'fabric_space' ] },
