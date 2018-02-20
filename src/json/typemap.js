@@ -1,5 +1,7 @@
 /*
 | A mapping of json type names.
+|
+| FIXME remove!
 */
 module.exports =
 {

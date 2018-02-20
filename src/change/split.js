@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_split', ( def, change_split ) => {
+tim.define( module, ( def, change_split ) => {
 
 
 const error = require( './error' );
@@ -52,6 +52,8 @@ if( TIM )
 		// split created this new/next path
 		path2 : { type : 'tim.js/path', json : true }
 	};
+
+	def.json = 'change_split';
 
 	def.init = [ ];
 }

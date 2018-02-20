@@ -1,10 +1,16 @@
 /*
 | A rectangle.
+|
+| Theoretically it would be possible to store the "north west" point and the
+| "south east" point instead of "pos" in north-west and width and height.
+|
+| However, then due to floating point discrepancies moving the rectangle
+| would ever so slightly change it size and caching fails.
 */
 'use strict';
 
 
-tim.define( module, 'gleam_rect', ( def, gleam_rect ) => {
+tim.define( module, ( def, gleam_rect ) => {
 
 
 const gleam_point = require( './point' );
@@ -28,21 +34,11 @@ if( TIM )
 
 	def.attributes =
 	{
-		pos : // position
-		{
-			type : './point',
-			json : true,
-		},
-		height :
-		{
-			type : 'number',
-			json : true,
-		},
-		width :
-		{
-			type : 'number',
-			json : true,
-		}
+		pos : { type : './point', json : true },
+
+		height : { type : 'number', json : true },
+
+		width : { type : 'number', json : true }
 	};
 
 	def.json = 'rect';

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'disc_root', ( def, disc_root ) => {
+tim.define( module, ( def, disc_root ) => {
 
 
 const gleam_glint_list = require( '../gleam/glint/list' );
@@ -29,13 +29,11 @@ if( TIM )
 		// currently active action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
 
 		// the current transform of controls
-		controlTransform : { type : 'gleam_transform' },
+		controlTransform : { type : '../gleam/transform' },
 
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -55,13 +53,13 @@ if( TIM )
 		show : { type : tim.typemap( module, '../show/show' ) },
 
 		// currently loaded space
-		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// currently logged in user
-		user : { type : [ 'undefined', 'user_creds' ] },
+		user : { type : [ 'undefined', '../user/creds' ] },
 
 		// current view size
-		viewSize : { type : 'gleam_size' },
+		viewSize : { type : '../gleam/size' },
 	};
 
 	def.init = [ 'twigDup' ];
@@ -69,9 +67,9 @@ if( TIM )
 	// FUTURE make a group instead of a twig
 	def.twig =
 	[
-		'disc_mainDisc',
-		'disc_createDisc',
-		'disc_zoomDisc',
+		'./mainDisc',
+		'./createDisc',
+		'./zoomDisc',
 	];
 }
 

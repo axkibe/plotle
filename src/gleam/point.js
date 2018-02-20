@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_point', ( def, gleam_point ) => {
+tim.define( module, ( def, gleam_point ) => {
 
 
 const gleam_transform = require( './transform' );

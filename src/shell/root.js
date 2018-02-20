@@ -133,38 +133,37 @@ if( TIM )
 		// current action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] ),
-			prepare : 'self.prepareAction( action )'
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.prepareAction( action )',
 		},
 
 		// the ajax communication
-		ajax : { type : 'net_ajax' },
+		ajax : { type : '../net/ajax' },
 
 		// the animations
-		animation : { type : 'animation_root' },
+		animation : { type : '../animation/root' },
 
 		// the discs
-		disc : { type : 'disc_root' },
+		disc : { type : '../disc/root' },
 
 		// the display within everything happens
-		display : { type : 'gleam_display_canvas' },
+		display : { type : '../gleam/display/canvas' },
 
 		// the un/re/do tracker
-		doTracker : { type : 'shell_doTracker' },
+		doTracker : { type : './doTracker' },
 
 		// fallback to this space if loading another failed
-		fallbackSpaceRef : { type : [ 'undefined', 'ref_space' ] },
+		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// the forms
-		form : { type : 'form_root' },
+		form : { type : '../form/root' },
 
 		// current hovered item
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the link to the server
-		link : { type : 'net_link' },
+		link : { type : '../net/link' },
 
 		// the users mark
 		mark :
@@ -176,7 +175,7 @@ if( TIM )
 		show : { type : tim.typemap( module, '../show/show' ) },
 
 		// current space data
-		spaceFabric : { type : [ 'undefined', 'fabric_space' ] },
+		spaceFabric : { type : [ 'undefined', '../fabric/space' ] },
 
 		// reference to current space
 		spaceRef : { type : [ 'undefined', 'ref_space' ] },

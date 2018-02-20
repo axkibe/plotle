@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_insert', ( def, change_insert ) => {
+tim.define( module, ( def, change_insert ) => {
 
 
 const change_generic = require( './generic' );
@@ -58,6 +58,8 @@ if( TIM )
 		// FUTURE have this be a lazy
 		at2 : { type : 'integer', json : true },
 	};
+
+	def.json = 'change_insert';
 
 	def.init = [ ];
 }

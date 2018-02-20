@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_transform', ( def, gleam_transform ) => {
+tim.define( module, ( def, gleam_transform ) => {
 
 
 const gleam_point = require( './point' );
@@ -19,16 +19,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-			offset :
-			{
-				comment : 'coordinate offset',
-				type : 'gleam_point'
-			},
-			zoom :
-			{
-				comment : 'the zoom factor',
-				type : 'number'
-			}
+			// coordinate offset
+			offset : { type : './point' },
+
+			// the zoom factor
+			zoom : { type : 'number' },
 	};
 }
 

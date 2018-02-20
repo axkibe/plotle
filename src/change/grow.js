@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_grow', ( def, change_grow ) => {
+tim.define( module, ( def, change_grow ) => {
 
 
 const change_generic = require( './generic' );
@@ -47,11 +47,13 @@ if( TIM )
 		path : { type : 'tim.js/path', json : true },
 
 		// value to grow
-		val : { type : require( './typemap-value' ), json : true },
+		val : { type : tim.typemap( module, './val' ), json : true },
 
 		// rank of new node
 		rank : { type : 'integer', json : true }
 	};
+
+	def.json = 'change_grow';
 
 	def.init = [ ];
 }

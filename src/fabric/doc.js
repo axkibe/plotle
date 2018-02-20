@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_doc', ( def, fabric_doc ) => {
+tim.define( module, ( def, fabric_doc ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -20,11 +20,11 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] }
 	};
 
-	def.twig = [ 'fabric_para' ];
+	def.json = 'fabric_doc';
+
+	def.twig = [ './para' ];
 
 	def.init = [ 'twigDup' ];
-
-	def.json = true;
 }
 
 

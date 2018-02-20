@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_relation', ( def, fabric_relation ) => {
+tim.define( module, ( def, fabric_relation ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the labels document
-		doc : { type : 'fabric_doc', json : true },
+		doc : { type : './doc', json : true },
 
 		// the fontsize of the label
 		fontsize : { type : 'number', json : true },
@@ -32,7 +32,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// position
-		pos : { type : 'gleam_point', json : true },
+		pos : { type : '../gleam/point', json : true },
 	};
 
 	def.init = [ ];

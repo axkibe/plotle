@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'net_ajax', ( def, net_ajax ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,7 +21,7 @@ if( TIM )
 	};
 
 
-	def.twig = [ 'net_channel' ];
+	def.twig = [ './channel' ];
 }
 
 

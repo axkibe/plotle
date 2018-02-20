@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_remove', ( def, change_remove ) => {
+tim.define( module, ( def, change_remove ) => {
 
 
 const change_generic = require( './generic' );
@@ -57,6 +57,8 @@ if( TIM )
 		// FUTURE have it lazyEval
 		at2 : { json : true, type : 'integer' },
 	};
+
+	def.json = 'change_remove';
 
 	def.init = [ ];
 }

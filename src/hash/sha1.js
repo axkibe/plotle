@@ -7,19 +7,20 @@ authors: [Christopher Pitt, Enrique Erne]
 ...
 [Axel Kittenberger]
 * imported from:
-  https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.SHA-1.js
-  https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.UTF-8.js
+> https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.SHA-1.js
+> https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.UTF-8.js
 * made browser/node shared friendly
 * changed it to not alter String.prototype
 * cleaned from jshint warnings
 * restructured code
 * changed to tim.js structure
 * changed to ES6
+* integrated into tim.js structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 'use strict';
 
 
-tim.define( module, 'hash_sha1', ( def, hash_sha1 ) => {
+tim.define( module, ( def ) => {
 
 
 const toUTF8 =

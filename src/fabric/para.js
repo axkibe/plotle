@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_para', ( def, fabric_para ) => {
+tim.define( module, ( def, fabric_para ) => {
 
 
 /*::::::::::::::::::::::::::::.
