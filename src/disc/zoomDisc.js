@@ -47,10 +47,10 @@ if( TIM )
 		},
 
 		// the current transform of controls
-		controlTransform : { type : 'gleam_transform' },
+		controlTransform : { type : '../gleam/transform' },
 
 		// facet of the disc
-		facet : { type : 'gleam_facet' },
+		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon
 		hover :
@@ -66,7 +66,7 @@ if( TIM )
 		path : { type : 'tim.js/path' },
 
 		// shape of the disc',
-		shape : { type : 'gleam_ellipse' },
+		shape : { type : '../gleam/ellipse' },
 
 		// form/disc currently shown
 		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
@@ -75,10 +75,10 @@ if( TIM )
 		size : { type : 'gleam_size' },
 
 		// reference to current space
-		spaceRef : { type : [ 'undefined', 'ref_space' ], assign : '' },
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', 'user_creds' ], assign : '' },
+		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
 
 		// current view size
 		viewSize : { type : 'gleam_size' }
@@ -86,7 +86,7 @@ if( TIM )
 
 	def.init = [ 'inherit', 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 

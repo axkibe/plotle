@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_moveTo', ( def, form_moveTo ) => {
+tim.define( module, ( def, form_moveTo ) => {
 
 
 const form_form = require( './form' );
@@ -35,56 +35,45 @@ if( TIM )
 
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
+
+		// the widget hovered upon
 		hover :
 		{
-			// the widget hovered upon
 			type : [ 'undefined', 'tim.js/path' ]
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
 
-			prepare : 'form_form.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
-		path :
-		{
-			// the path of the form
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		spaceRef :
-		{
-			// the reference to the current space
-			type : [ 'undefined', 'ref_space' ],
-			assign : ''
-		},
-		user :
-		{
-			// currently logged in user
-			type : [ 'undefined', 'user_creds' ]
-		},
-		userSpaceList :
-		{
-			// list of spaces belonging to user
-			type : [ 'undefined', 'ref_spaceList' ]
-		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// the path of the form
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the reference to the current space
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+
+		// currently logged in user
+		user : { type : [ 'undefined', '../user/creds' ] },
+
+		// list of spaces belonging to user
+		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
+
+		// current view size
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 
@@ -238,6 +227,14 @@ def.func._init =
 
 	form_form.init.call( this, true /* twigDup always set to true */ );
 };
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+def.static.concernsMark = form_form.concernsMark;
 
 
 /*::::::::::::::::::::.

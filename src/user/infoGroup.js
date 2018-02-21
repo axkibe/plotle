@@ -8,13 +8,14 @@
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
 
-tim.define( module, 'user_infoGroup', ( def, user_infoGroup ) => {
+tim.define( module, ( def ) => {
 
 
 if( TIM )
 {
-	def.group = [ 'user_info' ];
+	def.group = [ './info' ];
 }
 
 
 } );
+

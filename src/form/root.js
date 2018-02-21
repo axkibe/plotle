@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_root', ( def, form_root ) => {
+tim.define( module, ( def, form_root ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -19,9 +19,7 @@ if( TIM )
 		// current action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
 
 		// the widget hovered upon
@@ -42,16 +40,16 @@ if( TIM )
 		path : { type : 'tim.js/path' },
 
 		// the reference of current space
-		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// currently logged in user
-		user : { type : [ 'undefined', 'user_creds' ] },
+		user : { type : [ 'undefined', '../user/creds' ] },
 
 		// list of spaces belonging to user
 		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
 
 		// current view size
-		viewSize : { type : 'gleam_size' }
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.init = [ 'twigDup' ];
@@ -59,15 +57,15 @@ if( TIM )
 	// FUTURE make a group instead of twig
 	def.twig =
 	[
-		'form_loading',
-		'form_login',
-		'form_moveTo',
-		'form_noAccessToSpace',
-		'form_nonExistingSpace',
-		'form_signUp',
-		'form_space',
-		'form_user',
-		'form_welcome'
+		'./loading',
+		'./login',
+		'./moveTo',
+		'./noAccessToSpace',
+		'./nonExistingSpace',
+		'./signUp',
+		'./space',
+		'./user',
+		'./welcome'
 	];
 }
 
@@ -82,10 +80,7 @@ def.func._init =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( this.hover && this.hover.isEmpty )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
 /**/}
 
 	const twig =
@@ -134,6 +129,8 @@ def.func._init =
 
 /*
 | Returns the mark if the form root concerns a mark.
+|
+| FIXME this is akward since path is dynamic!!!
 */
 def.static.concernsMark =
 	mark =>
@@ -226,3 +223,4 @@ def.func.pushButton =
 
 
 } );
+

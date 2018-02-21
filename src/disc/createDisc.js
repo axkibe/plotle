@@ -102,7 +102,7 @@ if( TIM )
 
 	def.init = [ 'inherit', 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 

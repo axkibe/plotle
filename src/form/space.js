@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_space', ( def, form_space ) => {
+tim.define( module, ( def ) => {
 
 
 const form_form = require( './form' );
@@ -64,7 +64,7 @@ if( TIM )
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 

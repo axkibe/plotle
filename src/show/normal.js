@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'show_normal', ( def, show_normal ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,3 +16,4 @@ def.attributes = { };
 
 
 } );
+

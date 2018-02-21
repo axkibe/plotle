@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'ref_moment', ( def, ref_moment ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,20 +16,16 @@ if( TIM )
 {
 	def.attributes =
 	{
-		dynRef :
-		{
-			// the dynamic referenced
-			type : [ 'ref_space', 'ref_userSpaceList' ],
-			json : true,
-		},
-		seq :
-		{
-			// sequence number the dynamic is at
-			type : 'integer',
-			json : true,
-		}
+		// the dynamic referenced
+		dynRef : { type : [ './space', './userSpaceList' ], json : true },
+
+		// sequence number the dynamic is at
+		seq : { type : 'integer', json : true }
 	};
+
+	def.json = 'ref_moment';
 }
 
 
 } );
+

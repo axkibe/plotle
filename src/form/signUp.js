@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_signUp', ( def, form_signUp ) => {
+tim.define( module, ( def ) => {
 
 
 const form_form = require( './form' );
@@ -48,7 +48,8 @@ if( TIM )
 		{
 			// the users mark
 			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
-			prepare : 'form_form.concernsMark( mark, path )'
+
+			prepare : 'self.concernsMark( mark, path )'
 		},
 
 		// the path of the form
@@ -57,14 +58,14 @@ if( TIM )
 		// the reference to the current space
 		spaceRef :
 		{
-			type : [ 'undefined', 'ref_space' ],
+			type : [ 'undefined', '../ref/space' ],
 			assign : ''
 		},
 
 		// currently logged in user
 		user :
 		{
-			type : [ 'undefined', 'user_creds' ],
+			type : [ 'undefined', '../user/creds' ],
 			assign : ''
 		},
 
@@ -76,12 +77,12 @@ if( TIM )
 		},
 
 		// current view size
-		viewSize : { type : 'gleam_size' },
+		viewSize : { type : '../gleam/size' },
 	};
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 
@@ -89,6 +90,14 @@ if( TIM )
 | Initializer
 */
 def.func._init = form_form.init;
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+def.static.concernsMark = form_form.concernsMark;
 
 
 /*:::::::::::::.

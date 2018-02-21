@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_nonExistingSpace', ( def, form_nonExistingSpace ) => {
-
-
-const form_form = require( './form' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -36,32 +33,35 @@ if( TIM )
 			// the users mark
 			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
 
-			prepare : 'form_form.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
 
 		// the non-existing-space
-		nonSpaceRef : { type : [ 'undefined', 'ref_space' ] },
+		nonSpaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the reference to the current space
-		spaceRef : { type : [ 'undefined', 'ref_space' ], assign : '' },
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', 'user_creds' ], assign : '' },
+		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
 
 		// list of spaces belonging to user
 		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ], assign : '' },
 
 		// current view size
-		viewSize : { type : 'gleam_size' },
+		viewSize : { type : '../gleam/size' },
 	};
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
+
+
+const form_form = require( './form' );
 
 
 /*
@@ -88,6 +88,14 @@ def.func._init =
 
 	form_form.init.call( this, true );
 };
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+def.static.concernsMark = form_form.concernsMark;
 
 
 /*:::::::::::::.

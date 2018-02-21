@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'net_link', ( def, net_link ) => {
+tim.define( module, ( def ) => {
 
 
 const change_wrapList = require( '../change/wrapList' );
@@ -45,42 +45,27 @@ const tim_path = tim.import( 'tim.js', 'path' );
 
 def.attributes =
 {
-	refMomentSpace :
-	{
-		// reference to the current moment of dynamic space
-		type : [ 'undefined', 'ref_moment' ]
-	},
-	refMomentUserSpaceList :
-	{
-		// reference to the current moment
-		// of the userSpaceList
-		type : [ 'undefined', 'ref_moment' ]
-	},
-	userSpaceList :
-	{
-		// user space list dynamic
-		type : [ 'undefined', 'dynamic_refSpaceList' ]
-	},
-	userCreds :
-	{
-		// currently logged in user credentials
-		type : [ 'undefined', 'user_creds' ]
-	},
-	_outbox :
-	{
-		// changes to be send to the server
-		type : [ 'undefined', 'change_wrapList' ]
-	},
-	_postbox :
-	{
-		// changes that are currently on the way
-		type : [ 'undefined', 'change_wrapList' ]
-	},
-	_startTimer :
-	{
-		// the timer on startup
-		type : [ 'undefined', 'integer' ]
-	}
+	// reference to the current moment of dynamic space
+	refMomentSpace : { type : [ 'undefined', '../ref/moment' ] },
+
+	// reference to the current moment
+	// of the userSpaceList
+	refMomentUserSpaceList : { type : [ 'undefined', '../ref/moment' ] },
+
+	// user space list dynamic
+	userSpaceList : { type : [ 'undefined', '../dynamic/refSpaceList' ] },
+
+	// currently logged in user credentials
+	userCreds : { type : [ 'undefined', '../user/creds' ] },
+
+	// changes to be send to the server
+	_outbox : { type : [ 'undefined', '../change/wrapList' ] },
+
+	// changes that are currently on the way
+	_postbox : { type : [ 'undefined', '../change/wrapList' ] },
+
+	// the timer on startup
+	_startTimer : { type : [ 'undefined', 'integer' ] },
 };
 
 

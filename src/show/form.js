@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'show_form', ( def, show_form ) => {
+tim.define( module, ( def, show_form ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,11 +16,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		formName :
-		{
-			// name of the form
-			type : 'string'
-		}
+		// name of the form
+		formName : { type : 'string' },
 	};
 
 	def.init = [ ];

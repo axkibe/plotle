@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'form_form', ( def, form_form ) => {
+tim.define( module, ( def, form_form ) => {
 
 
 const action_scrolly = require( '../action/scrolly' );

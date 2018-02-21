@@ -53,21 +53,26 @@ if( TIM )
 
 		// scroll position
 		// is defined by force in _init
-		scrollPos : { type : [ 'undefined', 'gleam_point' ] },
+		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
 
 		// the transform
-		transform : { type : 'gleam_transform' },
+		transform : { type : '../gleam/transform' },
 
 		// offset of the scrollbar
-		scrollbarYOffset : { type : 'gleam_point', defaultValue : 'gleam_point.zero' },
+		scrollbarYOffset :
+		{
+			type : '../gleam/point',
+
+			defaultValue : 'require( "../gleam/point" ).zero'
+		},
 
 		// designed zone
-		zone : { type : 'gleam_rect' },
+		zone : { type : '../gleam/rect' },
 	};
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, './widget' );
 }
 
 

@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'form_welcome', ( def, form_welcome ) => {
+tim.define( module, ( def ) => {
 
 
 const form_form = require( './form' );
@@ -23,57 +23,47 @@ if( TIM )
 
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
-		hover :
-		{
-			// the widget hovered upon
-			type : [ 'undefined', 'tim.js/path' ]
-		},
+
+		// the widget hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the users mark
 		mark :
 		{
-			// the users mark
 			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
 
-			prepare : 'form_form.concernsMark( mark, path )'
+			prepare : 'self.concernsMark( mark, path )'
 		},
-		path :
-		{
-			// the path of the form
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		spaceRef :
-		{
-			// the reference to the current space
-			type : [ 'undefined', 'ref_space' ],
-			assign : ''
-		},
-		user :
-		{
-			// currently logged in user
-			type : [ 'undefined', 'user_creds' ]
-		},
+
+		// the path of the form
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the reference to the current space
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+
+		// currently logged in user
+		user : { type : [ 'undefined', '../user/creds' ] },
+
+		// list of spaces belonging to user
 		userSpaceList :
 		{
-			// list of spaces belonging to user
-			type : [ 'undefined', 'ref_spaceList' ],
+			type : [ 'undefined', '../ref/spaceList' ],
+
 			assign : ''
 		},
-		viewSize :
-		{
-			// current view size
-			type : 'gleam_size'
-		}
+
+		// current view size
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = require( '../form/typemap-widget' );
+	def.twig = tim.typemap( module, '../widget/widget' );
 }
 
 
@@ -98,6 +88,14 @@ def.func._init =
 
 	form_form.init.call( this, true );
 };
+
+
+/*::::::::::::::::::.
+:: Static functions
+':::::::::::::::::::*/
+
+
+def.static.concernsMark = form_form.concernsMark;
 
 
 /*:::::::::::::.
