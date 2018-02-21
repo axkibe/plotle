@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'reply_alter', ( def, reply_alter ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,8 +14,13 @@ tim.define( module, 'reply_alter', ( def, reply_alter ) => {
 
 if( TIM )
 {
-	def.json = true;
+	// there aren't any attributes,
+	// the answer is simply an "Okay, I got that"
+	// instead of an error.
+
+	def.json = 'reply_alter';
 }
 
 
 } );
+

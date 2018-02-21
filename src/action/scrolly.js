@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_scrolly', ( def, action_scrolly ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -20,7 +20,7 @@ if( TIM )
 		scrollPath : { type : 'tim.js/path' },
 
 		// mouse down point on start of scrolling
-		startPoint : { type : 'gleam_point' },
+		startPoint : { type : '../gleam/point' },
 
 		// position of the scrollbar on start of scrolling
 		startPos : { type : 'number' },
@@ -52,3 +52,4 @@ def.func.normalButtonDown = true;
 
 
 } );
+

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'ref_userSpaceList', ( def, ref_userSpaceList ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,14 +16,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		username :
-		{
-			// the username for the list
-			type : 'string',
-			json : true,
-		}
+		// the username for the list
+		username : { type : 'string', json : true },
 	};
+
+	def.json = 'ref_userSpaceList';
 }
 
 
 } );
+

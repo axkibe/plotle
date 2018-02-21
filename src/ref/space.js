@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'ref_space', ( def, ref_space ) => {
+tim.define( module, ( def, ref_space ) => {
 
 
 /*::::::::::::::::::::::::::::.

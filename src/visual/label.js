@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_label', ( def, visual_label ) => {
+tim.define( module, ( def, visual_label ) => {
 
 
 const action_dragItems = require( '../action/dragItems' );
@@ -57,30 +57,28 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current action
 		action :
 		{
-			// current action
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] ),
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsAction( action, path )'
 		},
-		fabric :
-		{
-			// the labels fabric
-			type : 'fabric_label'
-		},
-		highlight :
-		{
-			// the item is highlighted
-			type : 'boolean'
-		},
+
+		// the labels fabric
+		fabric : { type : '../fabric/label' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
 		hover :
 		{
-			// node currently hovered upon
 			type : [ 'undefined', 'tim.js/path' ],
+
 			assign : ''
 		},
+
 		mark :
 		{
 			// the users mark
@@ -88,20 +86,17 @@ if( TIM )
 
 			prepare : 'self.concernsMark( mark, path )',
 		},
-		path :
-		{
-			// the path of the doc
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		transform :
-		{
-			// the current space transform
-			type : 'gleam_transform'
-		}
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' }
 	};
 
 	def.init = [ 'inherit' ];
 
+	/*
 	def.alike =
 	{
 		alikeIgnoringTransform :
@@ -109,6 +104,7 @@ if( TIM )
 			ignores : { 'transform' : true }
 		}
 	};
+	*/
 }
 
 

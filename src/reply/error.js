@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'reply_error', ( def, reply_error ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,14 +16,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		message :
-		{
-			// the error message
-			type : 'string',
-			json : true
-		}
+		// the error message
+		message : { type : 'string', json : true },
 	};
+
+	def.json = 'reply_error';
 }
 
 
 } );
+

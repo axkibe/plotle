@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'reply_update', ( def, reply_update ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,10 +14,11 @@ tim.define( module, 'reply_update', ( def, reply_update ) => {
 
 if( TIM )
 {
-	def.list = [ 'change_dynamic' ];
+	def.list = [ '../change/dynamic' ];
 
-	def.json = true;
+	def.json = 'reply_update';
 }
 
 
 } );
+

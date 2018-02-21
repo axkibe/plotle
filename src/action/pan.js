@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_pan', ( def, action_pan ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,16 +16,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		startPoint :
-		{
-			// mouse down point on start of scrolling
-			type : 'gleam_point'
-		},
-		offset :
-		{
-			// offset
-			type : 'gleam_point'
-		}
+		// mouse down point on start of scrolling
+		startPoint : { type : '../gleam/point' },
+
+		// offset
+		offset : { type : '../gleam/point' },
 	};
 }
 
@@ -48,3 +43,4 @@ def.func.affects =
 
 
 } );
+

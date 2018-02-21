@@ -19,7 +19,7 @@ const pathList = tim.import( 'tim.js', 'pathList' );
 
 if( TIM )
 {
-	def.list = require( './typemap-item' );
+	def.list = tim.typemap( module, './item' );
 }
 
 

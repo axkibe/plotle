@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_createRelation', ( def, action_createRelation ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,37 +16,24 @@ if( TIM )
 {
 	def.attributes =
 	{
-		fromItemPath :
-		{
-			// the item the relation goes from
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		offset :
-		{
-			// offset when panning during creation
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		toItemPath :
-		{
-			// the item the relation goes to
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		toPoint :
-		{
-			// the arrow destination while its floating
-			type : [ 'undefined', 'gleam_point' ]
-		},
+		// the item the relation goes from
+		fromItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// offset when panning during creation
+		offset : { type : [ 'undefined', '../gleam/point' ] },
+
+		// the item the relation goes to
+		toItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the arrow destination while its floating
+		toPoint : { type : [ 'undefined', '../gleam/point' ] },
+
 		// FUTURE make a defined state list
-		relationState :
-		{
-			// the state of the relation creation
-			type : 'string'
-		},
-		startPoint :
-		{
-			// mouse down point on drag creation
-			type : [ 'undefined', 'gleam_point' ]
-		}
+		// the state of the relation creation
+		relationState : { type : 'string' },
+
+		// mouse down point on drag creation
+		startPoint : { type : [ 'undefined', '../gleam/point' ] },
 	};
 }
 

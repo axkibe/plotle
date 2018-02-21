@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'ref_spaceList', ( def, ref_spaceList ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,10 +14,11 @@ tim.define( module, 'ref_spaceList', ( def, ref_spaceList ) => {
 
 if( TIM )
 {
-	def.json = true;
+	def.list = [ './space' ];
 
-	def.list = [ 'ref_space' ];
+	def.json = 'ref_spaceList';
 }
 
 
 } );
+

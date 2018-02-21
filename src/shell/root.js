@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'shell_root', ( def, shell_root ) => {
+tim.define( module, ( def, shell_root ) => {
 
 
 const animation_root = require( '../animation/root' );
@@ -178,25 +178,25 @@ if( TIM )
 		spaceFabric : { type : [ 'undefined', '../fabric/space' ] },
 
 		// reference to current space
-		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// current space transform
-		spaceTransform : { type : 'gleam_transform' },
+		spaceTransform : { type : '../gleam/transform' },
 
 		// current space visualisation
-		spaceVisual : { type : [ 'undefined', 'visual_space' ] },
+		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
 
 		// shell has system focus
 		systemFocus : { type : 'boolean' },
 
 		// current user credentials
-		userCreds : { type : [ 'undefined', 'user_creds' ] },
+		userCreds : { type : [ 'undefined', '../user/creds' ] },
 
 		// the list of space references the user has
-		userSpaceList : { type : [ 'undefined', 'ref_spaceList' ] },
+		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
 
 		// current view size
-		viewSize : { type : 'gleam_size' },
+		viewSize : { type : '../gleam/size' },
 
 		// transform zoom as power of 1.1
 		_transformExponent : { type : 'number', defaultValue : '0' },
@@ -208,7 +208,7 @@ if( TIM )
 		// passhash so when logging out from a real user
 		// the previous visitor id is regained.
 		// last acquired visitor credentials
-		_visitorCreds : { type : [ 'undefined', 'user_creds' ] },
+		_visitorCreds : { type : [ 'undefined', '../user/creds' ] },
 	};
 
 	def.init = [ 'inherit' ];

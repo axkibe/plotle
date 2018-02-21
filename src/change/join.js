@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_join', ( def, change_join ) => {
+tim.define( module, ( def, change_join ) => {
 
 
 const change_generic = require( './generic' );
@@ -52,8 +52,10 @@ if( TIM )
 
 		// join this
 		// must be after path
-		path2 : { type : 'tim.js/path', json : true }
+		path2 : { type : 'tim.js/path', json : true },
 	};
+
+	def.json = 'change_join';
 
 	def.init = [ ];
 }

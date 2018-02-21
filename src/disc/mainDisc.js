@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'disc_mainDisc', ( def, disc_mainDisc ) => {
+tim.define( module, ( def ) => {
 
 
 const action_select = require( '../action/select' );
@@ -90,7 +90,7 @@ if( TIM )
 		size : { type : '../gleam/size' },
 
 		// reference to current space
-		spaceRef : { type : [ 'undefined', 'ref_space' ] },
+		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// currently logged in user
 		user : { type : [ 'undefined', '../user/creds' ] },

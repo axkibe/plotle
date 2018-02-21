@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_mark_text', ( def, change_mark_text ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -45,3 +45,4 @@ def.func._init =
 
 
 } );
+

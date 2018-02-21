@@ -4,7 +4,7 @@
 "use strict";
 
 
-tim.define( module, 'change_generic', ( def, change_generic ) => {
+tim.define( module, ( def ) => {
 
 
 const change_list = require( './list' );

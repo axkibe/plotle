@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'user_creds', ( def, user_creds ) => {
+tim.define( module, ( def, user_creds ) => {
 
 
 const session_uid = require( '../session/uid' );
@@ -19,19 +19,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		name :
-		{
-			// the username
-			type : 'string',
-			json : true
-		},
-		passhash :
-		{
-			// password hash
-			type : 'string',
-			json : true
-		}
+		// the username
+		name : { type : 'string', json : true },
+
+		// password hash
+		passhash : { type : 'string', json : true },
 	};
+
+	def.json = 'user_creds';
 }
 
 /*::::::::::::::::::.
@@ -119,3 +114,4 @@ def.func.saveToLocalStorage =
 
 
 } );
+

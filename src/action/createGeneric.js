@@ -8,7 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'action_createGeneric', ( def, action_createGeneric ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -20,26 +20,20 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// item type to be created
 		itemType :
 		{
-			// item type to be created
 			type : 'protean'
 			// 'visual_note:static',
 			// 'visual_label:static',
 			// 'visual_portal:static'
 		},
-		transItem :
-		{
-			// the transient item in creation
-			type :
-				require( '../visual/typemap-item' )
-				.concat( [ 'undefined' ] )
-		},
-		startPoint :
-		{
-			// start point of drag creation
-			type : [ 'undefined', 'gleam_point' ]
-		}
+
+		// the transient item in creation
+		transItem : { type : tim.typemap( module, '../visual/item' ).concat( [ 'undefined' ] ) },
+
+		// start point of drag creation
+		startPoint : { type : [ 'undefined', '../gleam/point' ] }
 	};
 }
 

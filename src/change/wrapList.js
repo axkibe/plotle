@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_wrapList', ( def, change_wrapList ) => {
+tim.define( module, ( def, change_wrapList ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,9 +14,9 @@ tim.define( module, 'change_wrapList', ( def, change_wrapList ) => {
 
 if( TIM )
 {
-	def.list = [ 'change_wrap' ];
+	def.list = [ './wrap' ];
 
-	def.json = true;
+	def.json = 'change_wrapList';
 }
 
 
@@ -97,3 +97,4 @@ def.func.transform =
 
 
 } );
+

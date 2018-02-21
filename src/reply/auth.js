@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'reply_auth', ( def, reply_auth ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,20 +16,21 @@ if( TIM )
 {
 	def.attributes =
 	{
-		userCreds :
-		{
-			// visitors get their real id here
-			type : 'user_creds',
-			json : true,
-		},
+		// visitors get their real id here
+		userCreds : { type : '../user/creds', json : true },
+
+		// the list of spaces the user has
 		userSpaceList :
 		{
-			// the list of spaces the user has
-			type : [ 'undefined', 'dynamic_refSpaceList' ],
+			type : [ 'undefined', '../dynamic/refSpaceList' ],
+
 			json : true,
 		}
 	};
+
+	def.json = 'reply_auth';
 }
 
 
 } );
+

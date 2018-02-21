@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_dragItems', ( def, action_dragItems ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,21 +16,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		moveBy :
-		{
-			// drags the items by this x/y
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		itemPaths :
-		{
-			// the paths of the items to drag
-			type : [ 'undefined', 'tim.js/pathList' ]
-		},
-		startPoint :
-		{
-			// mouse down point on drag creation
-			type : 'gleam_point'
-		}
+		// drags the items by this x/y
+		moveBy : { type : [ 'undefined', '../gleam/point' ] },
+
+		// the paths of the items to drag
+		itemPaths : { type : [ 'undefined', 'tim.js/pathList' ] },
+
+		// mouse down point on drag creation
+		startPoint : { type : '../gleam/point' },
 	};
 }
 
@@ -68,3 +61,4 @@ def.func.normalButtonDown = true;
 
 
 } );
+

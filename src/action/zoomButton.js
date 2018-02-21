@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_zoomButton', ( def, action_zoomButton ) => {
+tim.define( module, ( def, action_zoomButton ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,16 +16,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		dir :
-		{
-			// direction, +/- 1
-			type : 'number'
-		},
-		refire :
-		{
-			// make further zoom steps
-			type : 'boolean'
-		}
+		// direction, +/- 1
+		dir : { type : 'number' },
+
+		// makes further zoom steps
+		refire : { type : 'boolean' }
 	};
 }
 

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'disc_disc', ( def, disc_disc ) => {
+tim.define( module, ( def ) => {
 
 
 /*

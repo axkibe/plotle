@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_select', ( def, action_select ) => {
-
-
-const gleam_rect = require( '../gleam/rect' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -23,12 +20,15 @@ if( TIM )
 		itemPath : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// point at start of operation
-		startPoint : { type : [ 'undefined', 'gleam_point' ] },
+		startPoint : { type : [ 'undefined', '../gleam/point' ] },
 
 		// point the rectangle goes to
-		toPoint : { type : [ 'undefined', 'gleam_point' ] },
+		toPoint : { type : [ 'undefined', '../gleam/point' ] },
 	};
 }
+
+
+const gleam_rect = require( '../gleam/rect' );
 
 
 /*:::::::::::::.
@@ -84,3 +84,4 @@ def.func.affects =
 
 
 } );
+

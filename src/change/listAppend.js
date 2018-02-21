@@ -4,12 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_listAppend', ( def, change_listAppend ) => {
-
-	
-const change_listShorten = require( './listShorten' );
-
-const change_generic = require( './generic' );
+tim.define( module, ( def, change_listAppend ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,14 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		val :
-		{
-			// value to append
-			type : require( './typemap-value' ),
-			json : true,
-		}
+		// value to append
+		val : { type : tim.typemap( module, './val' ), json : true },
 	};
+
+	def.json = 'change_listAppend';
 }
+
+
+const change_listShorten = require( './listShorten' );
+
+const change_generic = require( './generic' );
 
 
 /*:::::::::::::.

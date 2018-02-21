@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_set', ( def, change_set ) => {
+tim.define( module, ( def, change_set ) => {
 
 
 const change_generic = require( './generic' );
@@ -52,6 +52,8 @@ if( TIM )
 		// the value tree had
 		prev : { type : tim.typemap( module, './val' ), json : true }
 	};
+
+	def.json = 'change_set';
 }
 
 

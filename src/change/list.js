@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_list', ( def, change_list ) => {
+tim.define( module, ( def, change_list ) => {
 
 
 const change_wrap = require( './wrap' );
@@ -21,18 +21,18 @@ if( TIM )
 {
 	def.list =
 	[
-		'change_grow',
-		'change_insert',
-		'change_listAppend',
-		'change_listShorten',
-		'change_join',
-		'change_remove',
-		'change_set',
-		'change_shrink',
-		'change_split'
+		'./grow',
+		'./insert',
+		'./listAppend',
+		'./listShorten',
+		'./join',
+		'./remove',
+		'./set',
+		'./shrink',
+		'./split'
 	];
 
-	def.json = true;
+	def.json = 'change_list';
 }
 
 

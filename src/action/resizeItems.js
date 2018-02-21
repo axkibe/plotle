@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'action_resizeItems', ( def, action_resizeItems ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,47 +14,30 @@ if( TIM )
 {
 	def.attributes =
 	{
-		itemPaths:
-		{
-			// the paths of the items to drag
-			type : [ 'undefined', 'tim.js/pathList' ]
-		},
-		startPoint :
-		{
-			// mouseDown point on drag creation
-			type : 'gleam_point'
-		},
-		pBase :
-		{
-			// base the resize to this point
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		proportional :
-		{
-			// if true resize proportionally
-			// scaleX must be === scaleY
-			type : [ 'undefined', 'boolean' ]
-		},
-		resizeDir :
-		{
-			// resize to this direction
-			type : [ 'undefined', 'string' ]
-		},
-		scaleX :
-		{
-			// scale x by this factor
-			type : [ 'undefined', 'number' ]
-		},
-		scaleY :
-		{
-			// scale y by this factor
-			type : [ 'undefined', 'number' ]
-		},
-		startZones :
-		{
-			// the zones as the resize started
-			type : [ 'undefined', 'gleam_rectGroup' ]
-		}
+		// the paths of the items to drag
+		itemPaths: { type : [ 'undefined', 'tim.js/pathList' ] },
+
+		// mouseDown point on drag creation
+		startPoint : { type : '../gleam/point' },
+
+		// base the resize to this point
+		pBase : { type : [ 'undefined', '../gleam/point' ] },
+
+		// if true resize proportionally
+		// scaleX must be === scaleY
+		proportional : { type : [ 'undefined', 'boolean' ] },
+
+		// resize to this direction
+		resizeDir : { type : [ 'undefined', 'string' ] },
+
+		// scale x by this factor
+		scaleX : { type : [ 'undefined', 'number' ] },
+
+		// scale y by this factor
+		scaleY : { type : [ 'undefined', 'number' ] },
+
+		// the zones as the resize started
+		startZones : { type : [ 'undefined', '../gleam/rectGroup' ] },
 	};
 }
 
@@ -92,3 +75,4 @@ def.func.normalButtonDown = true;
 
 
 } );
+

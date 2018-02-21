@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_dynamic', ( def, change_dynamic ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,25 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		changeWrapList :
-		{
-			// the changes
-			type : [ 'undefined', 'change_wrapList' ],
-			json : true,
-		},
-		refDynamic :
-		{
-			// the dynamic to be changed
-			type : [ 'ref_space', 'ref_userSpaceList' ],
-			json : true,
-		},
-		seq :
-		{
-			// sequence the update starts at
-			type : [ 'undefined', 'integer' ],
-			json : true,
-		}
+		// the changes
+		changeWrapList : { type : [ 'undefined', './wrapList' ], json : true },
+
+		// the dynamic to be changed
+		refDynamic : { type : [ '../ref/space', '../ref/userSpaceList' ], json : true },
+
+		// sequence the update starts at
+		seq : { type : [ 'undefined', 'integer' ], json : true },
 	};
+
+	def.json = 'change_dynamic';
 }
 
 

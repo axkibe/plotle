@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'reply_register', ( def, reply_register ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,8 +14,12 @@ tim.define( module, 'reply_register', ( def, reply_register ) => {
 
 if( TIM )
 {
-	def.json = true;
+	// this hasn't any attributes, a json with the type 'reply_register'
+	// simply means all went well instead of returning an error.
+
+	def.json = 'reply_register';
 }
 
 
 } );
+

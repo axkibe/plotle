@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_shrink', ( def, change_shrink ) => {
+tim.define( module, ( def, change_shrink ) => {
 
 
 const change_generic = require( './generic' );
@@ -47,11 +47,13 @@ if( TIM )
 		path : { type : 'tim.js/path', json : true },
 
 		// value the tree had
-		prev : { type : require( './typemap-value' ), json : true },
+		prev : { type : tim.typemap( module, './val' ), json : true },
 
 		// rank of new node
 		rank : { type : 'integer', json : true },
 	};
+
+	def.json = 'change_shrink';
 
 	def.init = [ ];
 }

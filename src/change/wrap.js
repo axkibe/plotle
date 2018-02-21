@@ -8,9 +8,6 @@
 tim.define( module, ( def, change_wrap ) => {
 
 
-const session_uid = require( '../session/uid' );
-
-
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
@@ -32,6 +29,9 @@ if( TIM )
 
 	def.json = 'change_wrap';
 }
+
+
+const session_uid = require( '../session/uid' );
 
 
 /*:::::::::::.

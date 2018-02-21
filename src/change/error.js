@@ -8,7 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'change_error', ( def, change_error ) => {
+tim.define( module, ( def ) => {
 
 
 def.static.make =
@@ -25,3 +25,4 @@ def.static.make =
 
 
 } );
+

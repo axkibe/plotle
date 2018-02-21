@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'change_mark_node', ( def, change_mark_node ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -40,3 +40,4 @@ def.func._init =
 
 
 } );
+

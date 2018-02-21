@@ -8,7 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'change_listShorten', ( def, change_listShorten ) => {
+tim.define( module, ( def, change_listShorten ) => {
 
 
 const change_generic = require( './generic' );
@@ -25,13 +25,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		val :
-		{
-			// value been shortened
-			json : true,
-			type : require( './typemap-value' )
-		}
+		// value been shortened
+		val : { type : tim.typemap( module, './val' ), json : true },
 	};
+
+	def.json = 'change_listShorten';
 }
 
 
