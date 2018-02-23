@@ -19,7 +19,32 @@
 'use strict';
 
 
-tim.define( module, 'gleam_roundRect', ( def, gleam_roundRect ) => {
+tim.define( module, ( def ) => {
+
+
+/*:::::::::::::::::::::::::::::
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// position
+		pos : { type : './point' },
+
+		width : { type : 'number' },
+
+		height : { type : 'number' },
+
+		// horizonal rounding
+		a : { type : 'number' },
+
+		// vertical rounding
+		b : { type : 'number' },
+	};
+}
 
 
 const gleam_display_canvas = require( './display/canvas' );
@@ -33,39 +58,6 @@ const gleam_shape_round = require( './shape/round' );
 const gleam_shape_start = require( './shape/start' );
 
 const gleam_transform = require( './transform' );
-
-
-/*:::::::::::::::::::::::::::::
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		pos : // position
-		{
-			type : 'gleam_point'
-		},
-		width :
-		{
-			type : 'number'
-		},
-		height :
-		{
-			type : 'number'
-		},
-		a : // horizonal rounding
-		{
-			type : 'number'
-		},
-		b : // vertical rounding
-		{
-			type : 'number'
-		}
-	};
-}
 
 
 /*::::::::::::::

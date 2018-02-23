@@ -4,20 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'widget_checkbox', ( def, widget_checkbox ) => {
-
-
-const gleam_glint_list = require( '../gleam/glint/list' );
-
-const gleam_glint_paint = require( '../gleam/glint/paint' );
-
-const gleam_transform = require( '../gleam/transform' );
-
-const gruga_iconCheck = require( '../gruga/iconCheck' );
-
-const result_hover = require( '../result/hover' );
-
-const widget_widget = require( './widget' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -31,54 +18,54 @@ if( TIM )
 
 	def.attributes =
 	{
-		checked :
-		{
-			// true if the checkbox is checked
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		facets :
-		{
-			// style facets
-			type : 'gleam_facetList'
-		},
+		// true if the checkbox is checked
+		checked : { type : 'boolean', defaultValue : 'false' },
+
+		// style facets
+		facets : { type : '../gleam/facetList' },
+
+		// component hovered upon
 		hover :
 		{
-			// component hovered upon
 			type : [ 'undefined', 'tim.js/path' ],
+
 			prepare : 'self.concernsHover( hover, path )'
 		},
+
+		// the users mark
 		mark :
 		{
-			// the users mark
-			type :
-				tim.typemap( module, '../visual/mark/mark' )
-				.concat( [ 'undefined' ] ),
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
+
 			prepare : 'self.concernsMark( mark, path )'
 		},
-		path :
-		{
-			// the path of the widget
-			type : [ 'undefined', 'tim.js/path' ]
-		},
-		transform :
-		{
-			// the transform
-			type : 'gleam_transform'
-		},
-		visible :
-		{
-			// if false the button is hidden
-			type : 'boolean',
-			defaultValue : 'true'
-		},
-		zone :
-		{
-			// designed zone
-			type : 'gleam_rect'
-		}
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the transform
+		transform : { type : '../gleam/transform' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+
+		// designed zone
+		zone : { type : '../gleam/rect' },
 	};
 }
+
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_iconCheck = require( '../gruga/iconCheck' );
+
+const result_hover = require( '../result/hover' );
+
+const widget_widget = require( './widget' );
 
 
 /*::::::::::::::::::.

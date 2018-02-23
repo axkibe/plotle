@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'ref_momentList', ( def, ref_momentList ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,9 +14,9 @@ tim.define( module, 'ref_momentList', ( def, ref_momentList ) => {
 
 if( TIM )
 {
-	def.list = [ 'ref_moment' ];
+	def.list = [ './moment' ];
 
-	def.json = true;
+	def.json = 'ref_momentList';
 }
 
 

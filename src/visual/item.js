@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_item', ( def, visual_item ) => {
+tim.define( module, ( def ) => {
 
 
 const action_createRelation = require( '../action/createRelation' );

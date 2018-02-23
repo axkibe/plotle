@@ -16,26 +16,19 @@ if( TIM )
 {
 	def.attributes =
 	{
-		changeWrapList :
-		{
-			// the changes to be applied
-			type : 'change_wrapList',
-			json : true
-		},
-		refMomentSpace :
-		{
-			// reference to the space dynamic
-			type : 'ref_moment',
-			json : true
-		},
-		userCreds :
-		{
-			// user requesting the change
-			type : 'user_creds',
-			json : true
-		}
+		// the changes to be applied
+		changeWrapList : { type : '../change/wrapList', json : true },
+
+		// reference to the space dynamic
+		refMomentSpace : { type : '../ref/moment', json : true },
+
+		// user requesting the change
+		userCreds : { type : '../user/creds', json : true },
 	};
+
+	def.json = 'request_alter';
 }
 
 
 } );
+

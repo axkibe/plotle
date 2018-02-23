@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'request_acquire', ( def, request_acquire ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,26 +16,19 @@ if( TIM )
 {
 	def.attributes =
 	{
-		createMissing :
-		{
-			// if true the space is to be created if missing
-			type : 'boolean',
-			json : true,
-		},
-		spaceRef :
-		{
-			// reference of the space to acquire
-			type : 'ref_space',
-			json : true,
-		},
-		userCreds :
-		{
-			// user requesting the space
-			type : 'user_creds',
-			json : true,
-		}
+		// if true the space is to be created if missing
+		createMissing : { type : 'boolean', json : true },
+
+		// reference of the space to acquire
+		spaceRef : { type : '../ref/space', json : true },
+
+		// user requesting the space
+		userCreds : { type : '../user/creds', json : true },
 	};
+
+	def.json = 'request_acquire';
 }
 
 
 } );
+

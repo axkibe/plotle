@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_glint_fill', ( def, gleam_glint_fill ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,17 +16,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		facet :
-		{
-			// the facet to draw the fill with
-			type : 'gleam_facet'
-		},
+		// the facet to draw the fill with
+		facet : { type : '../facet' },
+
+		// the shape to draw
 		shape :
 		{
-			// the shape to draw
-			type :
-				tim.typemap( module, '../shape' )
-				.concat( [ '../shapeList' ] )
+			type : tim.typemap( module, '../shape' ).concat( [ '../shapeList' ] )
 		}
 	};
 }

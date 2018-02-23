@@ -4,7 +4,63 @@
 'use strict';
 
 
-tim.define( module, 'visual_space', ( def, visual_space ) => {
+tim.define( module, ( def, visual_space ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// rights the current user has for this space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// current action
+		action : { type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ) },
+
+		// space fabric data
+		fabric : { type : '../fabric/space' },
+
+		// node currently hovered upon
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+			prepare : 'self.concernsHover( hover )'
+		},
+
+		// the users mark
+		mark :
+		{
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsMark( mark )'
+		},
+
+		// reference to this space
+		ref : { type : [ 'undefined', '../ref/space' ] },
+
+		// the current transform of space
+		transform : { type : '../gleam/transform' },
+
+		// current view size
+		viewSize : { type : '../gleam/size' }
+	};
+
+	def.init = [ 'inherit' ];
+
+
+	def.twig =
+	[
+		'./label',
+		'./note',
+		'./portal',
+		'./relation'
+	];
+}
 
 
 const action_createGeneric = require( '../action/createGeneric' );
@@ -67,61 +123,6 @@ const visual_portal = require( '../visual/portal' );
 
 const visual_relation = require( '../visual/relation' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// rights the current user has for this space
-		access : { type : [ 'undefined', 'string' ] },
-
-		// current action
-		action : { type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ) },
-
-		// space fabric data
-		fabric : { type : 'fabric_space' },
-
-		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover )'
-		},
-
-		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark )'
-		},
-
-		// reference to this space
-		ref : { type : [ 'undefined', 'ref_space' ] },
-
-		// the current transform of space
-		transform : { type : 'gleam_transform' },
-
-		// current view size
-		viewSize : { type : 'gleam_size' }
-	};
-
-	def.init = [ 'inherit' ];
-
-
-	def.twig =
-	[
-		'visual_label',
-		'visual_note',
-		'visual_portal',
-		'visual_relation'
-	];
-}
 
 
 

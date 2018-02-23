@@ -4,12 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_mark_caret', ( def, visual_mark_caret ) => {
-
-
-const pathList = tim.import( 'tim.js', 'pathList' );
-
-const visual_mark_text = require( './text' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -34,11 +29,16 @@ if( TIM )
 		retainx : { type : [ 'undefined', 'number' ] },
 
 		// the text mark
-		textMark : { type : [ 'undefined', 'visual_mark_text' ] },
+		textMark : { type : [ 'undefined', './text' ] },
 	};
 
 	def.init = [ 'path', 'at' ];
 }
+
+
+const pathList = tim.import( 'tim.js', 'pathList' );
+
+const visual_mark_text = require( './text' );
 
 
 /*

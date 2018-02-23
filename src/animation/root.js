@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'animation_root', ( def, animation_root ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,10 +14,7 @@ tim.define( module, 'animation_root', ( def, animation_root ) => {
 
 if( TIM )
 {
-	def.twig =
-	[
-		'animation_transform'
-	];
+	def.twig = [ './transform' ];
 
 	def.init = [ ];
 }
@@ -72,3 +69,4 @@ def.func.frame =
 
 
 } );
+

@@ -5,7 +5,7 @@
 'use strict';
 
 
-tim.define( module, 'request_auth', ( def, request_auth ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -17,14 +17,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		userCreds :
-		{
-			// user credentials to be authenticated
-			type : 'user_creds',
-			json : true,
-		}
+		// user credentials to be authenticated
+		userCreds : { type : '../user/creds', json : true },
 	};
+
+	def.json = 'request_auth';
 }
 
 
 } );
+

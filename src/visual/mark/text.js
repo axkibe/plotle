@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_mark_text', ( def, visual_mark_text ) => {
-
-
-const change_mark_text = require( '../../change/mark/text' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -26,11 +23,14 @@ if( TIM )
 		path : { type : 'tim.js/path' },
 
 		// the text mark
-		changeMarkText : { type : [ 'undefined', 'change_mark_text' ], assign : '' },
+		changeMarkText : { type : [ 'undefined', '../../change/mark/text' ], assign : '' },
 	};
 
 	def.init = [ 'changeMarkText' ];
 }
+
+
+const change_mark_text = require( '../../change/mark/text' );
 
 
 /*

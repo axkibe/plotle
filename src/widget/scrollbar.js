@@ -8,18 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'widget_scrollbar', ( def, widget_scrollbar ) => {
-
-
-const action_scrolly = require( '../action/scrolly' );
-
-const gleam_roundRect = require( '../gleam/roundRect' );
-
-const gleam_glint_paint = require( '../gleam/glint/paint' );
-
-const gruga_scrollbar = require( '../gruga/scrollbar' );
-
-const result_hover = require( '../result/hover' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -43,13 +32,24 @@ if( TIM )
 
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		pos : { type : 'gleam_point' },
+		pos : { type : '../gleam/point' },
 
 		size : { type : 'number' },
 
-		transform : { type : 'gleam_transform' }
+		transform : { type : '../gleam/transform' }
 	};
 }
+
+
+const action_scrolly = require( '../action/scrolly' );
+
+const gleam_roundRect = require( '../gleam/roundRect' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gruga_scrollbar = require( '../gruga/scrollbar' );
+
+const result_hover = require( '../result/hover' );
 
 
 /*:::::::::::::.

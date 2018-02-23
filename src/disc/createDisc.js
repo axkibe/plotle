@@ -4,12 +4,78 @@
 'use strict';
 
 
-tim.define( module, 'disc_createDisc', ( def, disc_createDisc ) => {
+tim.define( module, ( def, disc_createDisc ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		// users access to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// currently active action
+		action :
+		{
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
+		},
+
+		// the current transform of controls
+		controlTransform : { type : '../gleam/transform' },
+
+		// facet of the disc
+		facet : { type : '../gleam/facet' },
+
+		// the widget hovered upon',
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+			prepare : 'self.concernsHover( hover, path )'
+		},
+
+		// the users mark
+		mark : { type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ) },
+
+		// path of the disc
+		path : { type : 'tim.js/path' },
+
+		// shape of the disc
+		shape : { type : '../gleam/ellipse' },
+
+		// currently form/disc shown
+		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
+
+		// designed size
+		size : { type : '../gleam/size' },
+
+		// reference to current space
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+
+		// currently logged in user
+		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
+
+		// current view size
+		viewSize : { type : '../gleam/size' },
+	};
+
+	def.init = [ 'inherit', 'twigDup' ];
+
+	def.twig = tim.typemap( module, '../widget/widget' );
+}
 
 
 const action_createGeneric = require( '../action/createGeneric' );
 
 const action_createRelation = require( '../action/createRelation' );
+
+const disc_disc = require( './disc' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
 
@@ -30,80 +96,6 @@ const visual_label = require( '../visual/label' );
 const visual_note = require( '../visual/note' );
 
 const visual_portal = require( '../visual/portal' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.hasAbstract = true;
-
-	def.attributes =
-	{
-		// users access to current space
-		access : { type : [ 'undefined', 'string' ] },
-
-		// currently active action
-		action :
-		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
-		},
-
-		// the current transform of controls
-		controlTransform : { type : 'gleam_transform' },
-
-		// facet of the disc
-		facet : { type : 'gleam_facet' },
-
-		// the widget hovered upon',
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'disc_disc.concernsHover( hover, path )'
-		},
-
-		// the users mark
-		mark : { type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ) },
-
-		// path of the disc
-		path : { type : 'tim.js/path' },
-
-		// shape of the disc
-		shape : { type : 'gleam_ellipse' },
-
-		// currently form/disc shown
-		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
-
-		// designed size
-		size : { type : 'gleam_size' },
-
-		// reference to current space
-		spaceRef :
-		{
-			type : [ 'undefined', 'ref_space' ],
-			assign : ''
-		},
-
-		// currently logged in user
-		user :
-		{
-			type : [ 'undefined', 'user_creds' ],
-			assign : ''
-		},
-
-		// current view size
-		viewSize : { type : 'gleam_size' },
-	};
-
-	def.init = [ 'inherit', 'twigDup' ];
-
-	def.twig = tim.typemap( module, '../widget/widget' );
-}
 
 
 /*
@@ -128,14 +120,19 @@ def.func._init =
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
 				'hover', this.hover,
-				'down',
-					disc_createDisc._isActiveButton( this.action, wname ),
+				'down', disc_createDisc._isActiveButton( this.action, wname ),
 				'transform', this.controlTransform
 			);
 	}
 
 	this._twig = twig;
 };
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = disc_disc.concernsHover;
 
 
 /*::::::::::::::::::.

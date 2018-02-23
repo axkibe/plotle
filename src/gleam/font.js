@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_font', ( def, gleam_font ) => {
+tim.define( module, ( def ) => {
 
 
 /*
@@ -32,7 +32,7 @@ if( TIM )
 		align : { type : 'string' },
 
 		// font color
-		fill : { type : 'gleam_color' },
+		fill : { type : './color' },
 
 		// vertical alignment
 		base : { type : 'string' }
@@ -43,10 +43,7 @@ if( TIM )
 	*/
 	def.alike =
 	{
-		alikeWithoutSize :
-		{
-			ignores : { size : true }
-		}
+		alikeWithoutSize : { ignores : { size : true } }
 	};
 
 	def.init = [ 'inherit' ];

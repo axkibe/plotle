@@ -118,9 +118,11 @@ def.func.prepareResource =
 
 		const preamble = tim.tree.getBrowserPreamble( realpath );
 
+		const postamble = '} )( );';
+
 		resource =
 			resource.create(
-				'data', preamble + rmod.source,
+				'data', preamble + rmod.source + postamble,
 				'timId', rmod.timId,
 				'timestamp', mtime,
 				'realpath', realpath
@@ -129,7 +131,7 @@ def.func.prepareResource =
 		const timcodeResource =
 			resource.create(
 				'aliases', undefined,
-				'data', preamble + rmod.timcode,
+				'data', preamble + rmod.timcode + postamble,
 				'filePath', rmod.timcodeFilename,
 				'hasTim', false,
 				'timHolder', resource
@@ -156,7 +158,9 @@ def.func.prepareResource =
 
 		const preamble = tim.tree.getBrowserPreamble( realpath );
 
-		resource = resource.create( 'data', preamble + resource.data );
+		const postamble = '} )( );';
+
+		resource = resource.create( 'data', preamble + resource.data + postamble );
 	}
 
 	root.create( 'inventory', root.inventory.updateResource( resource ) );

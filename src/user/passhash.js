@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'user_passhash', ( def, user_passhash ) => {
+tim.define( module, ( def ) => {
 
 
 const hash_sha1 = require( '../hash/sha1' );

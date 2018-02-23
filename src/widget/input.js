@@ -4,7 +4,64 @@
 'use strict';
 
 
-tim.define( module, 'widget_input', ( def, widget_input ) => {
+tim.define( module, ( def, widget_input ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		// style facets
+		facets : { type : '../gleam/facetList' },
+
+		// component hovered upon
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+
+			prepare : 'self.concernsHover( hover, path )'
+		},
+
+		// font of the text
+		font : { type : '../gleam/font' },
+
+		// the users mark
+		mark :
+		{
+			prepare : 'self.concernsMark( mark, path )',
+
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
+		},
+
+		// maximum input length
+		maxlen : { type : 'integer' },
+
+		// true for password input
+		password : { type : 'boolean', defaultValue : 'false' },
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the transform
+		transform : { type : '../gleam/transform' },
+
+		// the value in the input box
+		value : { type : 'string', defaultValue : '""' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+
+		// designed zone
+		zone : { type : '../gleam/rect' },
+	};
+}
 
 
 const gleam_ellipse = require( '../gleam/ellipse' );
@@ -34,63 +91,6 @@ const shell_settings = require( '../shell/settings' );
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 const widget_widget = require( './widget' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.hasAbstract = true;
-
-	def.attributes =
-	{
-		// style facets
-		facets : { type : 'gleam_facetList' },
-
-		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
-
-		// font of the text
-		font : { type : 'gleam_font' },
-
-		// the users mark
-		mark :
-		{
-			prepare : 'widget_widget.concernsMark( mark, path )',
-			type :
-				tim.typemap( module, '../visual/mark/mark' )
-				.concat( [ 'undefined' ] )
-		},
-
-		// maximum input length
-		maxlen : { type : 'integer' },
-
-		// true for password input
-		password : { type : 'boolean', defaultValue : 'false' },
-
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the transform
-		transform : { type : 'gleam_transform' },
-
-		// the value in the input box
-		value : { type : 'string', defaultValue : '""' },
-
-		// if false the button is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
-
-		// designed zone
-		zone : { type : 'gleam_rect' },
-	};
-}
 
 
 /*::::::::::::::::::::.

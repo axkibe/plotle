@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_connect', ( def, gleam_connet ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_line = require( './line' );

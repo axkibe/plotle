@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'widget_scrollbox', ( def, widget_scrollbox ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_glint_list = require( '../gleam/glint/list' );
@@ -37,6 +37,7 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
+
 			prepare : 'self.concernsHover( hover, path )'
 		},
 

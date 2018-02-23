@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_note', ( def, fabric_note ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -19,7 +19,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the notes document
-		doc : { type : 'fabric_doc', json : true },
+		doc : { type : './doc', json : true },
 
 		// the fontsize of the note
 		fontsize : { type : 'number', json : true },
@@ -28,7 +28,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the notes zone
-		zone : { type : 'gleam_rect', json : true },
+		zone : { type : '../gleam/rect', json : true },
 	};
 
 	def.json = 'note';
@@ -53,20 +53,6 @@ def.func._init =
 /*:::::::::::::.
 :: Lazy values
 '::::::::::::::*/
-
-
-/*
-| Forwards zone pnw.
-|
-| FIXME remove
-*/
-/*
-def.lazy.pnw =
-	function( )
-{
-	return this.zone.pnw;
-};
-*/
 
 
 } );

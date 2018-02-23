@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_margin', ( def, gleam_margin ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,22 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		n : // north
-		{
-			type : 'number'
-		},
-		e : // east
-		{
-			type : 'number'
-		},
-		s : // south
-		{
-			type : 'number'
-		},
-		w : // west
-		{
-			type : 'number'
-		}
+		// north
+		n : { type : 'number' },
+
+		// east
+		e : { type : 'number' },
+
+		// south
+		s : { type : 'number' },
+
+		// west
+		w : { type : 'number' },
 	};
 }
 
@@ -62,3 +57,4 @@ def.lazy.y =
 
 
 } );
+

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_constants', ( def, gleam_constants ) => {
+tim.define( module, ( def ) => {
 
 
 /*
@@ -20,3 +20,4 @@ def.static.epsilon = 0.0000000001;
 
 
 } );
+

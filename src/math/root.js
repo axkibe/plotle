@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'math_root', ( def, math_root ) => {
+tim.define( module, ( def ) => {
 
 
 /*

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_glint_text', ( def, gleam_glint_text ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,28 +16,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		font :
-		{
-			// the font to display the text in
-			type : 'gleam_font'
-		},
-		p :
-		{
-			// where to draw it
-			type : 'gleam_point'
-		},
-		text :
-		{
-			// text to display
-			type : 'string'
-		},
-		rotate :
-		{
-			// if defined rotation in radiant
-			type : [ 'undefined', 'number' ]
-		}
+		// the font to display the text in
+		font : { type : '../font' },
+
+		// where to draw it
+		p : { type : '../point' },
+
+		// text to display
+		text : { type : 'string' },
+
+		// if defined rotation in radiant
+		rotate : { type : [ 'undefined', 'number' ] },
 	};
 }
 
 
 } );
+

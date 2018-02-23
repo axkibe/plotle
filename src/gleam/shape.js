@@ -4,14 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_shape', ( def, gleam_shape ) => {
-
-
-const gleam_display_canvas = require( './display/canvas' );
-
-const gleam_shape_start = require( './shape/start' );
-
-const gleam_transform = require( './transform' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -23,22 +16,25 @@ if( TIM )
 {
 	def.attributes =
 	{
-		nogrid : // don't do grid fitting
-		{
-			type : [ 'undefined', 'boolean']
-		},
-		pc : // center point
-		{
-			type : 'gleam_point'
-		},
-		gradientR1 :  // radial gradient radius
-		{
-			type : [ 'undefined', 'number' ]
-		}
+		// don't do grid fitting
+		nogrid : { type : [ 'undefined', 'boolean'] },
+
+		// center point
+		pc : { type : '../gleam/point' },
+
+		// radial gradient radius
+		gradientR1 : { type : [ 'undefined', 'number' ] },
 	};
 
 	def.list = tim.typemap( module, './shape/section' );
 }
+
+
+const gleam_display_canvas = require( './display/canvas' );
+
+const gleam_shape_start = require( './shape/start' );
+
+const gleam_transform = require( './transform' );
 
 
 /*:::::::::::.
@@ -185,3 +181,4 @@ def.func.within =
 
 
 } );
+

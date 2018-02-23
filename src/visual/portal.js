@@ -4,7 +4,65 @@
 'use strict';
 
 
-tim.define( module, 'visual_portal', ( def, visual_portal ) => {
+tim.define( module, ( def, visual_portal ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// current action
+		action :
+		{
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsAction( action, path )'
+		},
+
+		// portal fabric data
+		fabric : { type : '../fabric/portal' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+
+			prepare : 'self.concernsHover( hover, path )'
+		},
+
+		// the users mark
+		mark :
+		{
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsMark( mark, path )',
+		},
+
+		// the path of the portal
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// current space transform
+		transform : { type : '../gleam/transform' },
+	};
+
+	def.init = [ 'inherit' ];
+
+	def.alike =
+	{
+		alikeIgnoringTransform :
+		{
+			ignores : { 'transform' : true }
+		}
+	};
+}
 
 
 const action_dragItems = require( '../action/dragItems' );
@@ -69,63 +127,6 @@ const visual_mark_items = require( '../visual/mark/items' );
 
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action :
-		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] ),
-			prepare : 'self.concernsAction( action, path )'
-		},
-
-		// portal fabric data
-		fabric : { type : 'fabric_portal' },
-
-		// the item is highlighted
-		highlight : { type : 'boolean' },
-
-		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
-
-		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark, path )',
-		},
-
-		// the path of the portal
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// current space transform
-		transform : { type : 'gleam_transform' },
-	};
-
-	def.init = [ 'inherit' ];
-
-	def.alike =
-	{
-		alikeIgnoringTransform :
-		{
-			ignores : { 'transform' : true }
-		}
-	};
-}
-
 
 /*
 | List of all space fields of the portal
@@ -133,6 +134,7 @@ if( TIM )
 const spaceFields =
 {
 	spaceUser : '_fieldSpaceUser',
+
 	spaceTag : '_fieldSpaceTag'
 };
 

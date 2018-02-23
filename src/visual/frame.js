@@ -4,7 +4,25 @@
 'use strict';
 
 
-tim.define( module, 'visual_frame', ( def, visual_frame ) => {
+tim.define( module, ( def ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// content of the frame
+		content : { type : './itemList' },
+
+		// current transform of the frame
+		transform : { type : '../gleam/transform' },
+	};
+}
 
 
 const action_dragItems = require( '../action/dragItems' );
@@ -30,29 +48,6 @@ const gleam_shapeList = require( '../gleam/shapeList' );
 const gruga_frame = require( '../gruga/frame' );
 
 const result_hover = require( '../result/hover' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		content :
-		{
-			// content of the frame
-			type : 'visual_itemList'
-		},
-		transform :
-		{
-			// current transform of the frame
-			type : 'gleam_transform'
-		}
-	};
-}
 
 
 const handleSize = gruga_frame.handleSize;
@@ -644,3 +639,4 @@ def.func.pointingHover =
 
 
 } );
+

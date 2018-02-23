@@ -5,7 +5,7 @@
 'use strict';
 
 
-tim.define( module, 'database_repository', ( def, database_repository ) => {
+tim.define( module, ( def, database_repository ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -17,21 +17,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		_connection :
-		{
-			// the mongoDB connection
-			type : 'protean'
-		},
-		users :
-		{
-			// the users collection
-			type : 'protean'
-		},
-		spaces :
-		{
-			// the spaces collection
-			type : 'protean'
-		}
+		// the mongoDB connection
+		_connection : { type : 'protean' },
+
+		// the users collection
+		users : { type : 'protean' },
+
+		// the spaces collection
+		spaces : { type : 'protean' },
 	};
 }
 

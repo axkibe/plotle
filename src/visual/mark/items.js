@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_mark_items', ( def, visual_mark_items ) => {
-
-
-const change_mark_node = require( '../../change/mark/node' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -23,9 +20,11 @@ if( TIM )
 		itemPaths : { type : 'tim.js/pathList' }
 	};
 
-
 	def.init = [ ];
 }
+
+
+const change_mark_node = require( '../../change/mark/node' );
 
 
 /*

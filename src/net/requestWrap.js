@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'net_requestWrap', ( def, net_requestWrap ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,26 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		channelName :
-		{
-			comment : 'name of the channel the request belongs to',
-			type : 'string'
-		},
-		request :
-		{
-			comment : 'the actual request',
-			type : require( '../request/typemap' )
-		},
-		receiverFuncName :
-		{
-			comment : 'name of the receiver function to call',
-			type : 'string'
-		},
-		_xhr :
-		{
-			comment : 'the underlaying "XMLHttpRequest"',
-			type : [ 'undefined', 'protean' ]
-		}
+		// name of the channel the request belongs to
+		channelName : { type : 'string' },
+
+		// the actual request
+		request : { type : tim.typemap( module, '../request/request' ) },
+
+		// name of the receiver function to call
+		receiverFuncName : { type : 'string' },
+
+		// the underlaying "XMLHttpRequest"
+		_xhr : { type : [ 'undefined', 'protean' ] },
 	};
 }
 
@@ -158,3 +149,4 @@ def.func.send =
 
 
 } );
+

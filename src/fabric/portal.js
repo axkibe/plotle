@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_portal', ( def, fabric_portal ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -26,7 +26,7 @@ if( TIM )
 		spaceTag : { type : 'string', json : true },
 
 		// the portals zone
-		zone : { type : 'gleam_rect', json : true }
+		zone : { type : '../gleam/rect', json : true }
 	};
 
 	def.json = 'portal';

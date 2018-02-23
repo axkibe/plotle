@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'widget_label', ( def, widget_label ) => {
-
-
-const gleam_glint_text = require( '../gleam/glint/text' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -25,7 +22,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
 
 		// font of the text
-		font : { type : [ 'undefined', 'gleam_font' ] },
+		font : { type : [ 'undefined', '../gleam/font' ] },
 
 		// the users mark
 		mark :
@@ -42,18 +39,21 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// designed position
-		pos : { type : 'gleam_point' },
+		pos : { type : '../gleam/point' },
 
 		// the label text
 		text : { type : 'string' },
 
 		// the transform
-		transform : { type : 'gleam_transform' },
+		transform : { type : '../gleam/transform' },
 
 		// if false the button is hidden
 		visible : { type : 'boolean', defaultValue : 'true' },
 	};
 }
+
+
+const gleam_glint_text = require( '../gleam/glint/text' );
 
 
 /*:::::::::::::.

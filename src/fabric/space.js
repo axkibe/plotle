@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'fabric_space', ( def, fabric_space ) => {
+tim.define( module, ( def, fabric_space ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -20,18 +20,18 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// reference to this space
-		ref : { type : [ 'undefined', 'ref_space' ] },
+		ref : { type : [ 'undefined', '../ref/space' ] },
 	};
 
 	def.twig =
 	[
-		'fabric_note',
-		'fabric_label',
-		'fabric_relation',
-		'fabric_portal'
+		'./note',
+		'./label',
+		'./relation',
+		'./portal'
 	];
 
-	def.json = true;
+	def.json = 'space';
 
 	def.init = [ 'inherit', 'twigDup' ];
 }

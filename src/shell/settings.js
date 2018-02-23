@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'shell_settings', ( def, shell_settings ) => {
+tim.define( module, ( def ) => {
 
 
 /*

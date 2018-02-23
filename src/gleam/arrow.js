@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_arrow', ( def, gleam_arrow ) => {
+tim.define( module, ( def, gleam_arrow ) => {
 
 
 const gleam_connect = require( './connect' );
@@ -28,22 +28,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		end1 : // "normal" or "arrow"
-		{
-			type : 'string'
-		},
-		end2 : // "normal" or "arrow"
-		{
-			type : 'string'
-		},
-		joint1 : // connect to this point or shape
-		{
-			type : tim.typemap( module, './shape' ).concat( [ './point' ] )
-		},
-		joint2 : // connect to this point or shape
-		{
-			type : tim.typemap( module, './shape' ).concat( [ './point' ] )
-		}
+		// "normal" or "arrow"
+		end1 : { type : 'string' },
+
+		// "normal" or "arrow"
+		end2 : { type : 'string' },
+
+		// connect to this point or shape
+		joint1 : { type : tim.typemap( module, './shape' ).concat( [ './point' ] ) },
+
+		// connect to this point or shape
+		joint2 : { type : tim.typemap( module, './shape' ).concat( [ './point' ] ) },
 	};
 }
 
@@ -177,3 +172,4 @@ def.lazy.shape =
 
 
 } );
+

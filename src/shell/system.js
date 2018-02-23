@@ -6,10 +6,18 @@
 'use strict';
 
 
-var config;
+tim.define( module, ( def, shell_system ) => {
 
 
-tim.define( module, 'shell_system', ( def, shell_system ) => {
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.init = [ ];
+}
 
 
 /*
@@ -26,17 +34,6 @@ const limit = require( '../math/root' ).limit;
 const shell_root = require( '../shell/root' );
 
 const shell_settings = require( '../shell/settings' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.init = [ ];
-}
 
 
 /*

@@ -4,7 +4,52 @@
 'use strict';
 
 
-tim.define( module, 'visual_relation', ( def, visual_relation ) => {
+tim.define( module, ( def ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// current action
+		action :
+		{
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsAction( action, path )'
+		},
+
+		// the relations fabric
+		fabric : { type : '../fabric/relation' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+
+		// the users mark
+		mark :
+		{
+			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsMark( mark, path )',
+		},
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' },
+	};
+
+	def.init = [ ];
+}
 
 
 const gleam_arrow = require( '../gleam/arrow' );
@@ -27,51 +72,6 @@ const visual_item = require( '../visual/item' );
 
 const visual_label = require( '../visual/label' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action :
-		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] ),
-			prepare : 'self.concernsAction( action, path )'
-		},
-
-		// the relations fabric
-		fabric : { type : 'fabric_relation' },
-
-		// the item is highlighted
-		highlight : { type : 'boolean' },
-
-		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
-
-		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark, path )',
-		},
-
-		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the current space transform
-		transform : { type : 'gleam_transform' },
-	};
-
-	def.init = [ ];
-}
 
 
 /*

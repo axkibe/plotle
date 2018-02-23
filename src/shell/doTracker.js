@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'shell_doTracker', ( def, shell_doTracker ) => {
+tim.define( module, ( def, shell_doTracker ) => {
 
 
 const change_wrapList = require( '../change/wrapList' );
@@ -21,16 +21,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		_undo :
-		{
-			// the undo stack
-			type : [ 'undefined', 'change_wrapList' ]
-		},
-		_redo :
-		{
-			// the redo stack
-			type : [ 'undefined', 'change_wrapList' ]
-		}
+		// the undo stack
+		_undo : { type : [ 'undefined', '../change/wrapList' ] },
+
+		// the redo stack
+		_redo : { type : [ 'undefined', '../change/wrapList' ] }
 	};
 }
 

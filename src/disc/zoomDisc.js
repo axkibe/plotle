@@ -4,10 +4,12 @@
 'use strict';
 
 
-tim.define( module, 'disc_zoomDisc', ( def, disc_zoomDisc ) => {
+tim.define( module, ( def, disc_zoomDisc ) => {
 
 
 const action_zoomButton = require( '../action/zoomButton' );
+
+const disc_disc = require( './disc' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
 
@@ -41,9 +43,7 @@ if( TIM )
 		// currently active action
 		action :
 		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
+			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
 		},
 
 		// the current transform of controls
@@ -56,7 +56,8 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'disc_disc.concernsHover( hover, path )'
+
+			prepare : 'self.concernsHover( hover, path )'
 		},
 
 		// the users mark
@@ -72,7 +73,7 @@ if( TIM )
 		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
 
 		// designed size
-		size : { type : 'gleam_size' },
+		size : { type : '../gleam/size' },
 
 		// reference to current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
@@ -81,7 +82,7 @@ if( TIM )
 		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
 
 		// current view size
-		viewSize : { type : 'gleam_size' }
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.init = [ 'inherit', 'twigDup' ];
@@ -112,8 +113,7 @@ def.func._init =
 					 ? pass
 					 : this.path.append( 'twig' ).append( wname ),
 				'hover', this.hover,
-				'down',
-					disc_zoomDisc._isActiveButton( this.action, wname ),
+				'down', disc_zoomDisc._isActiveButton( this.action, wname ),
 				'transform', this.controlTransform
 			);
 	}
@@ -125,6 +125,13 @@ def.func._init =
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = disc_disc.concernsHover;
+
 
 /*
 | Returns true if the button called 'wname'

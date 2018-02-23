@@ -7,7 +7,7 @@
 'use strict';
 
 
-tim.define( module, 'result_hover', ( def, result_hover ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.

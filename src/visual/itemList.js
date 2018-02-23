@@ -4,12 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_itemList', ( def, visual_itemList ) => {
-
-
-const gleam_rectGroup = require( '../gleam/rectGroup' );
-
-const pathList = tim.import( 'tim.js', 'pathList' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,6 +16,11 @@ if( TIM )
 {
 	def.list = tim.typemap( module, './item' );
 }
+
+
+const gleam_rectGroup = require( '../gleam/rectGroup' );
+
+const pathList = tim.import( 'tim.js', 'pathList' );
 
 
 /*:::::::::::::.
@@ -72,3 +72,4 @@ def.lazy.zones =
 
 
 } );
+

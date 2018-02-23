@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'animation_transform', ( def, animation_transform ) => {
+tim.define( module, ( def, animation_transform ) => {
 
 
 const gleam_point = require( '../gleam/point' );
@@ -21,26 +21,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		begin :
-		{
-			// begin time of animation
-			type : 'number'
-		},
-		beginTransform :
-		{
-			// transformation at begin of animation
-			type : 'gleam_transform'
-		},
-		end :
-		{
-			// end time of animation
-			type : 'number'
-		},
-		endTransform :
-		{
-			// transformation at end of animation
-			type : 'gleam_transform'
-		}
+		// begin time of animation
+		begin : { type : 'number' },
+
+		// transformation at begin of animation
+		beginTransform : { type : '../gleam/transform' },
+
+		// end time of animation
+		end : { type : 'number' },
+
+		// transformation at end of animation
+		endTransform : { type : '../gleam/transform' },
 	};
 }
 

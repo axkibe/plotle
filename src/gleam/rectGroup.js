@@ -4,13 +4,17 @@
 'use strict';
 
 
-tim.define( module, 'gleam_rectGroup', ( def, gleam_rectGroup ) => {
+tim.define( module, ( def ) => {
 
 
 /*
 | Tim group.
 */
-def.group = [ 'gleam_rect' ];
+if( TIM )
+{
+	def.group = [ './rect' ];
+}
 
 
 } );
+

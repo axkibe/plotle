@@ -1,12 +1,6 @@
 /*
 | Handles all client requests.
 */
-
-
-/*
-| Capsule.
-*/
-( function( ) {
 'use strict';
 
 
@@ -608,5 +602,3 @@ server_requestHandler.serve =
 	}
 };
 
-
-} )( );

@@ -4,12 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_line', ( def, gleam_line ) => {
-
-
-const gleam_point = require( './point' );
-
-const gleam_rect = require( './rect' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,11 +16,16 @@ if( TIM )
 {
 	def.attributes =
 	{
-		p1 : { type : 'gleam_point' },
+		p1 : { type : './point' },
 
-		p2 : { type : 'gleam_point' }
+		p2 : { type : './point' }
 	};
 }
+
+
+const gleam_point = require( './point' );
+
+const gleam_rect = require( './rect' );
 
 
 /*:::::::::::::.
@@ -63,3 +63,4 @@ def.lazy.zone =
 
 
 } );
+

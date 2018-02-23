@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'widget_widget', ( def, widget_widget ) => {
+tim.define( module, ( def ) => {
 
 
 /*

@@ -4,7 +4,35 @@
 'use strict';
 
 
-tim.define( module, 'gleam_ellipse', ( def, gleam_ellipse ) => {
+tim.define( module, ( def, gleam_ellipse ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// position
+		pos : { type : './point' },
+
+		width : { type : 'number' },
+
+		height : { type : 'number' },
+
+		// center for gradient
+		gradientPC : { type : [ 'undefined', './point' ], assign : '_gradientPC' },
+
+		// inner radius for circle gradients
+		gradientR0 : { type : [ 'undefined', 'number' ], assign : '_gradientR0' },
+
+		// outer radius for circle gradients
+		gradientR1 : { type : [ 'undefined', 'number' ], assign : '_gradientR1' },
+	};
+}
 
 
 const gleam_display_canvas = require( './display/canvas' );
@@ -17,45 +45,6 @@ const gleam_shape_start = require( './shape/start' );
 
 const gleam_transform = require( './transform' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		pos :   // position
-		{
-			type : 'gleam_point'
-		},
-		width :
-		{
-			type : 'number'
-		},
-		height :
-		{
-			type : 'number'
-		},
-		gradientPC : // center for gradient
-		{
-			type : [ 'undefined', 'gleam_point' ],
-				assign : '_gradientPC'
-		},
-		gradientR0 : // inner radius for circle gradients
-		{
-			type : [ 'undefined', 'number' ],
-			assign : '_gradientR0'
-		},
-		gradientR1 : // outer radius for circle gradients
-		{
-			type : [ 'undefined', 'number' ],
-			assign : '_gradientR1'
-		}
-	};
-}
 
 
 /*::::::::::::::::::.

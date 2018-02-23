@@ -5,7 +5,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_intern_opentype', ( def, gleam_intern_opentype ) => {
+tim.define( module, ( def ) => {
 
 
 const shell_settings = require( '../../shell/settings' );

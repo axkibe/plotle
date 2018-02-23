@@ -3,12 +3,6 @@
 |
 | Starts the browser system when finished.
 */
-
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
@@ -49,7 +43,4 @@ const openTypeLoad =
 
 
 window.onload = openTypeLoad;
-
-
-} )( );
 

@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_color', ( def, gleam_color ) => {
+tim.define( module, ( def, gleam_color ) => {
 
 
 /*:::::::::::::::::::::::::::::
@@ -37,21 +37,21 @@ if( TIM )
 /*
 | Black.
 */
-def.staticLazy.black = () =>
+def.staticLazy.black = ( ) =>
 	gleam_color.rgb( 0, 0, 0 );
 
 
 /*
 | Red.
 */
-def.staticLazy.red = () =>
+def.staticLazy.red = ( ) =>
 	gleam_color.rgb( 255, 0, 0 );
 
 
 /*
 | White.
 */
-def.staticLazy.white = () =>
+def.staticLazy.white = ( ) =>
 	gleam_color.rgb( 255, 255, 255 );
 
 

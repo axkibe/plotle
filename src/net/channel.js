@@ -8,12 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'net_channel', ( def, net_channel ) => {
-
-
-const net_requestWrap = require( './requestWrap' );
-
-const net_requestWrapList = require( './requestWrapList' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -31,13 +26,18 @@ if( TIM )
 		// the fifo of requests
 		_fifo :
 		{
-			type : 'net_requestWrapList',
-			defaultValue : 'net_requestWrapList.create( )'
+			type : './requestWrapList',
+			defaultValue : 'require( "./requestWrapList" ).create( )'
 		}
 	};
 
 	def.init = [ ];
 }
+
+
+const net_requestWrap = require( './requestWrap' );
+
+const net_requestWrapList = require( './requestWrapList' );
 
 
 /*

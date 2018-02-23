@@ -4,10 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_shapeList', ( def, gleam_shapeList ) => {
-
-
-const gleam_transform = require( './transform' );
+tim.define( module, ( def ) => {
 
 
 /*:::::::::::::::::.
@@ -19,6 +16,9 @@ if( TIM )
 {
 	def.list = tim.typemap( module, './shape' );
 }
+
+
+const gleam_transform = require( './transform' );
 
 
 /*:::::::::::.
@@ -90,3 +90,4 @@ def.func.within =
 
 
 } );
+

@@ -6,10 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_glint_window', ( def, gleam_glint_window ) => {
-
-
-const gleam_display_canvas = require( '../display/canvas' );
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -21,25 +18,21 @@ if( TIM )
 {
 	def.attributes =
 	{
-		glint :
-		{
-			// the glints to draw in the window
-			type : [ 'gleam_glint_list', 'gleam_glint_mask' ]
-		},
-		rect :
-		{
-			// the position and size of the window
-			type : 'gleam_rect'
-		},
-		offset :
-		{
-			// offset all glints by this
-			type : 'gleam_point'
-		}
+		// the glints to draw in the window
+		glint : { type : [ './list', './mask' ] },
+
+		// the position and size of the window
+		rect : { type : '../rect' },
+
+		// offset all glints by this
+		offset : { type : '../point' }
 	};
 
 	def.init = [ 'inherit' ];
 }
+
+
+const gleam_display_canvas = require( '../display/canvas' );
 
 
 /*

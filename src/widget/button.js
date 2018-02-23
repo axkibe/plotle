@@ -4,7 +4,79 @@
 'use strict';
 
 
-tim.define( module, 'widget_button', ( def, widget_button ) => {
+tim.define( module, ( def ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		// true if the button is down
+		down : { type : 'boolean', defaultValue : 'false' },
+
+		// style facets
+		facets : { type : '../gleam/facetList' },
+
+		// font of the text
+		font : { type : [ 'undefined', '../gleam/font' ] },
+
+		// component hovered upon
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+
+			prepare : 'self.concernsHover( hover, path )'
+		},
+
+		// icon shape
+		iconShape :
+		{
+			type : tim.typemap( module, '../gleam/shape' ).concat( [ 'undefined' ] )
+		},
+
+		// icon facet
+		iconFacet : { type : [ 'undefined', '../gleam/facet' ] },
+
+		// the users mark
+		mark :
+		{
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
+
+			prepare : 'self.concernsMark( mark, path )'
+		},
+
+		// the path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// shape of the button
+		shape : { type : [ 'string', '../gleam/ellipse' ] },
+
+		// the text written in the button
+		text : { type : 'string', defaultValue : '""' },
+
+		// vertical distance of newline
+		textNewline : { type : [ 'undefined', 'number' ] },
+
+		// rotation of the text
+		textRotation : { type : [ 'undefined', 'number' ] },
+
+		// the transform
+		transform : { type : '../gleam/transform' },
+
+		// if false the button is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+
+		// designed zone
+		zone : { type : '../gleam/rect' },
+	};
+}
 
 
 const gleam_ellipse = require( '../gleam/ellipse' );
@@ -24,80 +96,6 @@ const gleam_transform = require( '../gleam/transform' );
 const result_hover = require( '../result/hover' );
 
 const widget_widget = require( './widget' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.hasAbstract = true;
-
-	def.attributes =
-	{
-		// true if the button is down
-		down : { type : 'boolean', defaultValue : 'false' },
-
-		// style facets
-		facets : { type : 'gleam_facetList' },
-
-		// font of the text
-		font : { type : [ 'undefined', 'gleam_font' ] },
-
-		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
-
-		// icon shape
-		iconShape :
-		{
-			type :
-				tim.typemap( module, '../gleam/shape' )
-				.concat( [ 'undefined' ] )
-		},
-
-		// icon facet
-		iconFacet : { type : [ 'undefined', 'gleam_facet' ] },
-
-		// the users mark
-		mark :
-		{
-			type :
-				tim.typemap( module, '../visual/mark/mark' )
-				.concat( [ 'undefined' ] ),
-			prepare : 'self.concernsMark( mark, path )'
-		},
-
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// shape of the button
-		shape : { type : [ 'string', 'gleam_ellipse' ] },
-
-		// the text written in the button
-		text : { type : 'string', defaultValue : '""' },
-
-		// vertical distance of newline
-		textNewline : { type : [ 'undefined', 'number' ] },
-
-		// rotation of the text
-		textRotation : { type : [ 'undefined', 'number' ] },
-
-		// the transform
-		transform : { type : 'gleam_transform' },
-
-		// if false the button is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
-
-		// designed zone
-		zone : { type : 'gleam_rect' },
-	};
-}
 
 
 /*::::::::::::::::::.

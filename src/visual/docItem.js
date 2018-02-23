@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_docItem', ( def, visual_docItem ) => {
+tim.define( module, ( def ) => {
 
 
 const action_select = require( '../action/select' );

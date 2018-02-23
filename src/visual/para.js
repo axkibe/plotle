@@ -5,7 +5,60 @@
 
 
 
-tim.define( module, 'visual_para', ( def, visual_para ) => {
+tim.define( module, ( def ) => {
+
+
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// the para fabric
+		fabric : { type : '../fabric/para' },
+
+		// width the flow can fill
+		flowWidth : { type : [ 'undefined', 'number' ] },
+
+		// size of the font
+		fontsize : { type : [ 'undefined', 'number' ] },
+
+		// the users mark
+		mark :
+		{
+			prepare : 'self.concernsMark( mark, path )',
+
+			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
+		},
+
+		// the path of the para',
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// point in north west
+		pos : { type : '../gleam/point' },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' }
+	};
+
+	def.alike =
+	{
+		alikeVisually :
+		{
+			ignores :
+			{
+				'pos' : true,
+				'transform' : true,
+				'mark' : true
+			}
+		}
+	};
+
+	def.init = [ 'inherit' ];
+}
 
 
 const change_insert = require( '../change/insert' );
@@ -44,58 +97,6 @@ const shell_settings = require( '../shell/settings' );
 
 const visual_mark_text = require( '../visual/mark/text' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// the para fabric
-		fabric : { type : 'fabric_para' },
-
-		// width the flow can fill
-		flowWidth : { type : [ 'undefined', 'number' ] },
-
-		// size of the font
-		fontsize : { type : [ 'undefined', 'number' ] },
-
-		// the users mark
-		mark :
-		{
-			prepare : 'self.concernsMark( mark, path )',
-
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
-		},
-
-		// the path of the para',
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// point in north west
-		pos : { type : 'gleam_point' },
-
-		// the current space transform
-		transform : { type : 'gleam_transform' }
-	};
-
-	def.alike =
-	{
-		alikeVisually :
-		{
-			ignores :
-			{
-				'pos' : true,
-				'transform' : true,
-				'mark' : true
-			}
-		}
-	};
-
-	def.init = [ 'inherit' ];
-}
 
 
 /*

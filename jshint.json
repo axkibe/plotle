@@ -16,6 +16,7 @@
 		"CHECK" : true,
 		"FREEZE" : true,
 		"NODE" : true,
+		"config" : true,
 		"pass" : true,
 		"opentype" : true,
 		"root" : true,

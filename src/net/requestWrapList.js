@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'net_requestWrapList', ( def, net_requestWrapList ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -14,7 +14,7 @@ tim.define( module, 'net_requestWrapList', ( def, net_requestWrapList ) => {
 
 if( TIM )
 {
-	def.list = [ 'net_requestWrap' ];
+	def.list = [ './requestWrap' ];
 }
 
 

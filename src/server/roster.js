@@ -1,11 +1,6 @@
 /*
 | The roster of all resources.
 */
-
-/*
-| Capsule
-*/
-( function( ) {
 'use strict';
 
 
@@ -1099,5 +1094,3 @@ server_resourceList.create(
 	]
 );
 
-
-} )( );

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_glint_mask', ( def, gleam_glint_mask ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,25 +16,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		glint :
-		{
-			// the glints to draw
-			type : 'gleam_glint_list'
-		},
-		reverse :
-		{
-			// true if reversing mask
-			type : [ 'undefined', 'boolean' ]
-		},
+		// the glints to draw
+		glint : { type : './list' },
+
+		// true if reversing mask
+		reverse : { type : [ 'undefined', 'boolean' ] },
+
+		// the shape(list) to mask to
 		shape :
 		{
-			// the shape(list) to mask to
-			type :
-				tim.typemap( module, '../shape' )
-				.concat( [ '../shapeList' ] )
+			type : tim.typemap( module, '../shape' ).concat( [ '../shapeList' ] )
 		}
 	};
 }
 
 
 } );
+
