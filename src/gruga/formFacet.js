@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_formFacet', ( def, gruga_formFacet ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_color = require( '../gleam/color' );
@@ -35,3 +35,4 @@ def.staticLazy.model = ( ) =>
 
 
 } );
+

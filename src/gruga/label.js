@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_label', ( def, gruga_label ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_facet = require( '../gleam/facet' );

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'request_register', ( def, request_register ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,25 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		mail :
-		{
-			// email address of the user, can be empty
-			type : 'string',
-			json : true
-		},
-		news :
-		{
-			// true if the user is okay with the newsletter
-			type : 'boolean',
-			json : true
-		},
-		userCreds :
-		{
-			// user/pass credentials to be registered
-			type : 'user_creds',
-			json : true
-		}
+		// email address of the user, can be empty
+		mail : { type : 'string', json : true },
+
+		// true if the user is okay with the newsletter
+		news : { type : 'boolean', json : true },
+
+		// user/pass credentials to be registered
+		userCreds : { type : '../user/creds', json : true },
 	};
+
+	def.json = 'request_register';
 }
 
 

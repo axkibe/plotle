@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_space', ( def, gruga_space ) => {
+tim.define( module, ( def ) => {
 
 
 const form_space = require( '../form/space' );

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_user', ( def, gruga_user ) => {
+tim.define( module, ( def ) => {
 
 
 const form_user = require( '../form/user' );

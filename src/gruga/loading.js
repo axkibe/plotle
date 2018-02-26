@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_loading', ( def, gruga_loading ) => {
+tim.define( module, ( def ) => {
 
 
 const form_loading = require( '../form/loading' );

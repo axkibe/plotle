@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'request_alter', ( def, request_alter ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.

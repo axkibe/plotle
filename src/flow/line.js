@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'flow_line', ( def, flow_line ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,20 +16,16 @@ if( TIM )
 {
 	def.attributes =
 	{
-		offset :
-		{
-			// offset in text
-			type : 'integer'
-		},
-		y :
-		{
-			// y position of line
-			type : 'number'
-		}
+		// offset in text
+		offset : { type : 'integer' },
+
+		// y position of line
+		y : { type : 'number' },
 	};
 
-	def.list = [ 'flow_token' ];
+	def.list = [ './token' ];
 }
 
 
 } );
+

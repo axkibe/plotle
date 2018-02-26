@@ -24,7 +24,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_iconHand', ( def, gruga_iconHand ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_point = require( '../gleam/point' );

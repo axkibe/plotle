@@ -13,7 +13,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_iconZoomIn', ( def, gruga_iconZoomIn ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_point = require( '../gleam/point' );

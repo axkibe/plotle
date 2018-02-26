@@ -7,7 +7,7 @@
 
 
 
-tim.define( module, 'gleam_shape_round', ( def, gleam_shape_round ) => {
+tim.define( module, ( def, gleam_shape_round ) => {
 
 
 const gleam_point = require( '../point' );
@@ -24,21 +24,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		p :
-		{
-			// connect to
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		ccw :
-		{
-			// if true do it counter-clockwise
-			type : [ 'undefined', 'boolean' ]
-		},
-		close :
-		{
-			// true if this closes the shape
-			type : [ 'undefined', 'boolean' ]
-		}
+		// connect to
+		p : { type : [ 'undefined', '../point' ] },
+
+		// if true do it counter-clockwise
+		ccw : { type : [ 'undefined', 'boolean' ] },
+
+		// true if this closes the shape
+		close : { type : [ 'undefined', 'boolean' ] }
 	};
 }
 

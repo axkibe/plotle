@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_noAccessToSpace', ( def, gruga_noAccessToSpace ) => {
+tim.define( module, ( def ) => {
 
 
 const form_noAccessToSpace = require( '../form/noAccessToSpace' );

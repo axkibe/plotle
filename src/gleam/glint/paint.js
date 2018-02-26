@@ -1,12 +1,12 @@
 /*
-| Draws a shape in a display.
+| A shape in a display.
 |
-| This is first the fill then the border
+| First the fill is drawn then the border.
 */
 'use strict';
 
 
-tim.define( module, 'gleam_glint_paint', ( def, gleam_glint_paint ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -18,20 +18,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		facet :
-		{
-			// the facet to draw the shape with
-			type : 'gleam_facet'
-		},
+		// the facet to draw the shape with
+		facet : { type : '../facet' },
+
+		// the shape to draw
 		shape :
 		{
-			// the shape to draw
-			type :
-				tim.typemap( module, '../shape' )
-				.concat( [ '../shapeList' ] )
+			type : tim.typemap( module, '../shape' ).concat( [ '../shapeList' ] )
 		}
 	};
 }
 
 
 } );
+

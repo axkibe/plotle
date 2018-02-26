@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_shape_line', ( def, gleam_shape_line ) => {
+tim.define( module, ( def, gleam_shape_line ) => {
 
 
 const gleam_constants = require( '../constants' );
@@ -25,21 +25,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		p :
-		{
-			comment : 'connect to',
-			type : [ 'undefined', 'gleam_point' ]
-		},
-		close :
-		{
-			comment : 'true if this closes the shape',
-			type : [ 'undefined', 'boolean' ]
-		},
-		fly :
-		{
-			comment : 'true if this line does not draw a border',
-			type : [ 'undefined', 'boolean' ]
-		}
+		// connect to
+		p : { type : [ 'undefined', '../point' ] },
+
+		// true if this closes the shape
+		close : { type : [ 'undefined', 'boolean' ] },
+
+		// true if this line does not draw a border
+		fly : { type : [ 'undefined', 'boolean' ] },
 	};
 }
 
@@ -185,3 +178,4 @@ def.func.transform =
 
 
 } );
+

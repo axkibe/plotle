@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_createDisc', ( def, gruga_createDisc ) => {
+tim.define( module, ( def ) => {
 
 
 const disc_createDisc = require( '../disc/createDisc' );

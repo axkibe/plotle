@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_mainDisc', ( def, gruga_mainDisc ) => {
+tim.define( module, ( def ) => {
 
 
 const disc_mainDisc = require( '../disc/mainDisc' );

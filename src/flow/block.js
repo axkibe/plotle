@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'flow_block', ( def, flow_block ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,19 +16,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		height :
-		{
-			// height of the flow
-			type : 'number'
-		},
-		width :
-		{
-			// width of the flow
-			type : 'number'
-		}
+		// height of the flow
+		height : { type : 'number' },
+
+		// width of the flow
+		width : { type : 'number' },
 	};
 
-	def.list = [ 'flow_line' ];
+	def.list = [ './line' ];
 }
 
 

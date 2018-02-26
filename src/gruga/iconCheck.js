@@ -14,7 +14,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_iconCheck', ( def, gruga_iconCheck ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_color = require( '../gleam/color' );

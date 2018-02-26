@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_controls', ( def, gruga_controls ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_size = require( '../gleam/size' );
@@ -22,3 +22,4 @@ def.staticLazy.designSize = ( ) =>
 
 
 } );
+

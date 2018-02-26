@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_login', ( def, gruga_login ) => {
+tim.define( module, ( def ) => {
 
 
 const form_login = require( '../form/login' );

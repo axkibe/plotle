@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'dynamic_refSpaceList', ( def, dynamic_refSpaceList ) => {
+tim.define( module, ( def ) => {
 
 
 const change_list = require( '../change/list' );
@@ -29,25 +29,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		current :
-		{
-			// the reference to the entity
-			type : 'ref_spaceList',
-			json : true
-		},
-		seq :
-		{
-			// sequence number the dynamic is at
-			type : 'integer',
-			defaultValue : '1',
-			json : true
-		},
-		changeWraps :
-		{
-			// cached changeWraps
-			type : [ 'undefined', 'change_wrapList' ]
-		}
+		// the reference to the entity
+		current : { type : '../ref/spaceList', json : true },
+
+		// sequence number the dynamic is at
+		seq : { type : 'integer', defaultValue : '1', json : true },
+
+		// cached changeWraps
+		changeWraps : { type : [ 'undefined', '../change/wrapList' ] },
 	};
+
+	def.json = 'dynamic_refSpaceList';
 
 	def.init = [ ];
 }

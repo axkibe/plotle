@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_genericCheckbox', ( def, gruga_genericCheckbox ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_facet = require( '../gleam/facet' );

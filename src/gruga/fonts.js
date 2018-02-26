@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_fonts', ( def, gruga_fonts ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_color = require( '../gleam/color' );

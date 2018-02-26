@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_gradient_radial', ( def, gleam_gradient_radial ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -15,8 +15,9 @@ tim.define( module, 'gleam_gradient_radial', ( def, gleam_gradient_radial ) => {
 if( TIM )
 {
 
-	def.list = [ 'gleam_gradient_colorStop' ];
+	def.list = [ './colorStop' ];
 }
 
 
 } );
+

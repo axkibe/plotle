@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_shape_start', ( def, gleam_shape_start ) => {
+tim.define( module, ( def, gleam_shape_start ) => {
 
 
 const gleam_point = require( '../point' );
@@ -23,11 +23,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		p :
-		{
-			// start here
-			type : [ 'gleam_point' ]
-		}
+		// starts here
+		p : { type : [ '../point' ] }
 	};
 }
 

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'flow_token', ( def, flow_token ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,28 +16,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		x :
-		{
-			// x position
-			type : 'number'
-		},
-		width :
-		{
-			// width of the token
-			type : 'number'
-		},
-		offset :
-		{
-			// offset in text
-			type : 'integer'
-		},
-		text :
-		{
-			// token text
-			type : 'string'
-		}
+		// x position
+		x : { type : 'number' },
+
+		// width of the token
+		width : { type : 'number' },
+
+		// offset in text
+		offset : { type : 'integer' },
+
+		// token text
+		text : { type : 'string' },
 	};
 }
 
 
 } );
+

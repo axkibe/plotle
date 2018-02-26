@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'visual_mark_range', ( def, visual_mark_range ) => {
+tim.define( module, ( def ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,26 +16,17 @@ if( TIM )
 {
 	def.attributes =
 	{
-		beginMark :
-		{
-			// begin of the range
-			type : 'visual_mark_text'
-		},
-		doc :
-		{
-			// the document the range belongs to
-			type : 'fabric_doc'
-		},
-		endMark :
-		{
-			// end of the range
-			type : 'visual_mark_text'
-		},
-		retainx :
-		{
-			// x-position of the caret kept
-			type : [ 'undefined', 'number' ]
-		}
+		// begin of the range
+		beginMark : { type : './text' },
+
+		// the document the range belongs to
+		doc : { type : '../../fabric/doc' },
+
+		// end of the range
+		endMark : { type : './text' },
+
+		// x-position of the caret kept
+		retainx : { type : [ 'undefined', 'number' ] }
 	};
 }
 

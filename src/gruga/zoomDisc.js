@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_zoomDisc', ( def, gruga_zoomDisc ) => {
+tim.define( module, ( def ) => {
 
 
 const disc_zoomDisc = require( '../disc/zoomDisc' );

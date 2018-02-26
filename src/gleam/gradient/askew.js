@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_gradient_askew', ( def, gleam_gradient_askew ) => {
+tim.define( module, ( def ) => {
 
 
 /*:::::::::::::::::.
@@ -14,15 +14,11 @@ tim.define( module, 'gleam_gradient_askew', ( def, gleam_gradient_askew ) => {
 
 if( TIM )
 {
-	/*
-	def.attributes =
-	{
-		// FUTURE specify degree
-	};
-	*/
+	def.attributes = { };
 
-	def.list = [ 'gleam_gradient_colorStop' ];
+	def.list = [ './colorStop' ];
 }
 
 
 } );
+

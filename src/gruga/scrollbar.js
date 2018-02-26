@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_scrollbar', ( def, gruga_scrollbar ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_border = require( '../gleam/border' );

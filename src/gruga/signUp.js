@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_signUp', ( def, gruga_signUp ) => {
+tim.define( module, ( def ) => {
 
 
 const shell_fontPool = require( '../shell/fontPool' );

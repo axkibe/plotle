@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, 'gruga_note', ( def, gruga_note ) => {
+tim.define( module, ( def ) => {
 
 
 const gleam_border = require( '../gleam/border' );

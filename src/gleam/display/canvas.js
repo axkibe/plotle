@@ -8,7 +8,7 @@
 'use strict';
 
 
-tim.define( module, 'gleam_display_canvas', ( def, gleam_display_canvas ) => {
+tim.define( module, ( def, gleam_display_canvas ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -75,31 +75,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		background :
-		{
-			// if set the canvas is opaque and has a background
-			type : [ 'undefined', 'string' ]
-		},
-		glint :
-		{
-			// the glint list to display
-			type : [ 'undefined', 'gleam_glint_list' ]
-		},
-		size :
-		{
-			// the size of the display
-			type : [ 'gleam_size' ]
-		},
-		_cv :
-		{
-			// the html canvas
-			type : [ 'undefined', 'protean' ]
-		},
-		_cx :
-		{
-			// the html canvas context
-			type : [ 'undefined', 'protean' ]
-		}
+		// if set the canvas is opaque and has a background
+		background : { type : [ 'undefined', 'string' ] },
+
+		// the glint list to display
+		glint : { type : [ 'undefined', '../glint/list' ] },
+
+		// the size of the display
+		size : { type : [ '../size' ] },
+
+		// the html canvas
+		_cv : { type : [ 'undefined', 'protean' ] },
+
+		// the html canvas context
+		_cx : { type : [ 'undefined', 'protean' ] },
 	};
 
 	def.init = [ 'inherit' ];
