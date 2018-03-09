@@ -19,8 +19,7 @@ if( TIM )
 		// current action
 		action :
 		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
-
+			type : [ '< ../action/types', 'undefined' ],
 			prepare : 'self.concernsAction( action, path )'
 		},
 
@@ -34,15 +33,13 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-
 			prepare : 'self.concernsHover( hover, path )'
 		},
 
 		// the users mark
 		mark :
 		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
+			type : [ '< ./mark/types', 'undefined' ],
 			prepare : 'self.concernsMark( mark, path )',
 		},
 

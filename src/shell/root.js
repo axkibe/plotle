@@ -7,6 +7,112 @@
 tim.define( module, ( def, shell_root ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// access level to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// current action
+		action :
+		{
+			type : [ '< ../action/types', 'undefined' ],
+			prepare : 'self.prepareAction( action )',
+		},
+
+		// the ajax communication
+		ajax : { type : '../net/ajax' },
+
+		// the animations
+		animation : { type : '../animation/root' },
+
+		// the discs
+		disc : { type : '../disc/root' },
+
+		// the display within everything happens
+		display : { type : '../gleam/display/canvas' },
+
+		// the un/re/do tracker
+		doTracker : { type : './doTracker' },
+
+		// fallback to this space if loading another failed
+		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
+
+		// the forms
+		form : { type : '../form/root' },
+
+		// current hovered item
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the link to the server
+		link : { type : '../net/link' },
+
+		// the users mark
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+
+		// currently form/disc shown
+		show : { type : [ '< ../show/types' ] },
+
+		// current space data
+		spaceFabric : { type : [ 'undefined', '../fabric/space' ] },
+
+		// reference to current space
+		spaceRef : { type : [ 'undefined', '../ref/space' ] },
+
+		// current space transform
+		spaceTransform : { type : '../gleam/transform' },
+
+		// current space visualisation
+		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
+
+		// shell has system focus
+		systemFocus : { type : 'boolean' },
+
+		// current user credentials
+		userCreds : { type : [ 'undefined', '../user/creds' ] },
+
+		// the list of space references the user has
+		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
+
+		// current view size
+		viewSize : { type : '../gleam/size' },
+
+		// transform zoom as power of 1.1
+		_transformExponent : { type : 'number', defaultValue : '0' },
+
+		// this root has been drawn on display
+		_drawn : { type : 'boolean' },
+
+		// remembers an acquired visitor user name and
+		// passhash so when logging out from a real user
+		// the previous visitor id is regained.
+		// last acquired visitor credentials
+		_visitorCreds : { type : [ 'undefined', '../user/creds' ] },
+	};
+
+	def.init = [ 'inherit' ];
+
+	def.alike =
+	{
+		lookAlike :
+		{
+			ignores :
+			{
+				'ajax' : true,
+				'link' : true,
+				'_drawn' : true
+			}
+		}
+	};
+}
+
+
 const animation_root = require( '../animation/root' );
 
 const animation_transform = require( '../animation/transform' );
@@ -117,115 +223,6 @@ const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_space = require( '../visual/space' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// access level to current space
-		access : { type : [ 'undefined', 'string' ] },
-
-		// current action
-		action :
-		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.prepareAction( action )',
-		},
-
-		// the ajax communication
-		ajax : { type : '../net/ajax' },
-
-		// the animations
-		animation : { type : '../animation/root' },
-
-		// the discs
-		disc : { type : '../disc/root' },
-
-		// the display within everything happens
-		display : { type : '../gleam/display/canvas' },
-
-		// the un/re/do tracker
-		doTracker : { type : './doTracker' },
-
-		// fallback to this space if loading another failed
-		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
-
-		// the forms
-		form : { type : '../form/root' },
-
-		// current hovered item
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the link to the server
-		link : { type : '../net/link' },
-
-		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
-		},
-
-		// currently form/disc shown
-		show : { type : tim.typemap( module, '../show/show' ) },
-
-		// current space data
-		spaceFabric : { type : [ 'undefined', '../fabric/space' ] },
-
-		// reference to current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ] },
-
-		// current space transform
-		spaceTransform : { type : '../gleam/transform' },
-
-		// current space visualisation
-		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
-
-		// shell has system focus
-		systemFocus : { type : 'boolean' },
-
-		// current user credentials
-		userCreds : { type : [ 'undefined', '../user/creds' ] },
-
-		// the list of space references the user has
-		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
-
-		// current view size
-		viewSize : { type : '../gleam/size' },
-
-		// transform zoom as power of 1.1
-		_transformExponent : { type : 'number', defaultValue : '0' },
-
-		// this root has been drawn on display
-		_drawn : { type : 'boolean' },
-
-		// remembers an acquired visitor user name and
-		// passhash so when logging out from a real user
-		// the previous visitor id is regained.
-		// last acquired visitor credentials
-		_visitorCreds : { type : [ 'undefined', '../user/creds' ] },
-	};
-
-	def.init = [ 'inherit' ];
-
-	def.alike =
-	{
-		lookAlike :
-		{
-			ignores :
-			{
-				'ajax' : true,
-				'link' : true,
-				'_drawn' : true
-			}
-		}
-	};
-}
 
 
 const loadingSpaceTextPath =

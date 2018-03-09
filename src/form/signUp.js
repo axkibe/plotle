@@ -7,6 +7,52 @@
 tim.define( module, ( def ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.hasAbstract = true;
+
+	def.attributes =
+	{
+		// current action
+		action : { type : [ '< ../action/types', 'undefined' ] },
+
+		// the widget hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
+		mark :
+		{
+			// the users mark
+			type : [ '< ../visual/mark/types', 'undefined' ],
+			prepare : 'self.concernsMark( mark, path )'
+		},
+
+		// the path of the form
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the reference to the current space
+		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+
+		// currently logged in user
+		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
+
+		// list of spaces belonging to user
+		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ], assign : '' },
+
+		// current view size
+		viewSize : { type : '../gleam/size' },
+	};
+
+	def.init = [ 'twigDup' ];
+
+	def.twig = tim.typemap( module, '../widget/widget' );
+}
+
+
 const form_form = require( './form' );
 
 const ref_space = require( '../ref/space' );
@@ -20,70 +66,6 @@ const user_creds = require( '../user/creds' );
 const user_passhash = require( '../user/passhash' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.hasAbstract = true;
-
-	def.attributes =
-	{
-		// current action
-		action :
-		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
-		},
-
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		mark :
-		{
-			// the users mark
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark, path )'
-		},
-
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the reference to the current space
-		spaceRef :
-		{
-			type : [ 'undefined', '../ref/space' ],
-			assign : ''
-		},
-
-		// currently logged in user
-		user :
-		{
-			type : [ 'undefined', '../user/creds' ],
-			assign : ''
-		},
-
-		// list of spaces belonging to user
-		userSpaceList :
-		{
-			type : [ 'undefined', '../ref/spaceList' ],
-			assign : ''
-		},
-
-		// current view size
-		viewSize : { type : '../gleam/size' },
-	};
-
-	def.init = [ 'twigDup' ];
-
-	def.twig = tim.typemap( module, '../widget/widget' );
-}
 
 
 /*

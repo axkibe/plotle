@@ -7,6 +7,58 @@
 tim.define( module, ( def, self ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// the visible size of the doc
+		// if created with undefined,
+		// it is set to equal to fullsize
+		clipsize :
+		{
+			type : [ 'undefined', '../gleam/size' ],
+			assign : '_clipsize'
+		},
+
+		// the doc fabric
+		fabric : { type : '../fabric/doc' },
+
+		// width the flow seeks to fill
+		flowWidth : { type : 'number' },
+
+		// size of the font
+		fontsize : { type : 'number' },
+
+		// inner margin of the doc
+		innerMargin : { type : '../gleam/margin' },
+
+		// the users mark
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
+
+		// vertical seperation of paragraphs
+		paraSep : { type : 'number' },
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// scroll position of the doc
+		scrollPos : { type : '../gleam/point' },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' },
+	};
+
+	def.init = [ 'inherit' ];
+
+	def.twig = [ './para' ];
+}
+
+
 const gleam_facet = require( '../gleam/facet' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
@@ -40,58 +92,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_para = require( '../visual/para' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// the visible size of the doc
-		// if created with undefined,
-		// it is set to equal to fullsize
-		clipsize :
-		{
-			type : [ 'undefined', '../gleam/size' ],
-			assign : '_clipsize'
-		},
-
-		// the doc fabric
-		fabric : { type : '../fabric/doc' },
-
-		// width the flow seeks to fill
-		flowWidth : { type : 'number' },
-
-		// size of the font
-		fontsize : { type : 'number' },
-
-		// inner margin of the doc
-		innerMargin : { type : '../gleam/margin' },
-
-		// the users mark
-		mark : { type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ) },
-
-		// vertical seperation of paragraphs
-		paraSep : { type : 'number' },
-
-		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// scroll position of the doc
-		scrollPos : { type : '../gleam/point' },
-
-		// the current space transform
-		transform : { type : '../gleam/transform' },
-	};
-
-	def.init = [ 'inherit' ];
-
-	def.twig = [ './para' ];
-}
 
 
 /*

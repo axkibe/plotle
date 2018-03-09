@@ -20,7 +20,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// current action
-		action : { type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ) },
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// space fabric data
 		fabric : { type : '../fabric/space' },
@@ -35,8 +35,7 @@ if( TIM )
 		// the users mark
 		mark :
 		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
+			type : [ '< ./mark/types', 'undefined' ],
 			prepare : 'self.concernsMark( mark )'
 		},
 
@@ -51,7 +50,6 @@ if( TIM )
 	};
 
 	def.init = [ 'inherit' ];
-
 
 	def.twig =
 	[

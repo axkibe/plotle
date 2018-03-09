@@ -29,9 +29,8 @@ if( TIM )
 		// the users mark
 		mark :
 		{
-			prepare : 'self.concernsMark( mark, path )',
-
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
+			type : [ '< ./mark/types', 'undefined' ],
+			prepare : 'self.concernsMark( mark, path )'
 		},
 
 		// the path of the para',

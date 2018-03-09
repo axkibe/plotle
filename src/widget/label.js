@@ -27,8 +27,7 @@ if( TIM )
 		// the users mark
 		mark :
 		{
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( ['undefined' ] ),
-
+			type : [ '< ../visual/mark/types', 'undefined' ],
 			assign : ''
 		},
 

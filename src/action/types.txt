@@ -1,0 +1,10 @@
+# Typeset of all actions
+
+./createGeneric
+./createRelation
+./dragItems
+./pan
+./resizeItems
+./scrolly
+./select
+./zoomButton

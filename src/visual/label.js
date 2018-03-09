@@ -7,6 +7,63 @@
 tim.define( module, ( def, visual_label ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// current action
+		action :
+		{
+			type : [ '< ../action/types', 'undefined' ],
+			prepare : 'self.concernsAction( action, path )'
+		},
+
+		// the labels fabric
+		fabric : { type : '../fabric/label' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
+		hover :
+		{
+			type : [ 'undefined', 'tim.js/path' ],
+			assign : ''
+		},
+
+		mark :
+		{
+			// the users mark
+			type : [ '< ./mark/types', 'undefined' ],
+			prepare : 'self.concernsMark( mark, path )',
+		},
+
+		// the path of the doc
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' }
+	};
+
+	def.init = [ 'inherit' ];
+
+	/*
+	def.alike =
+	{
+		alikeIgnoringTransform :
+		{
+			ignores : { 'transform' : true }
+		}
+	};
+	*/
+}
+
+
 const action_dragItems = require( '../action/dragItems' );
 
 const action_resizeItems = require( '../action/resizeItems' );
@@ -48,64 +105,6 @@ const visual_item = require( '../visual/item' );
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action :
-		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsAction( action, path )'
-		},
-
-		// the labels fabric
-		fabric : { type : '../fabric/label' },
-
-		// the item is highlighted
-		highlight : { type : 'boolean' },
-
-		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-
-			assign : ''
-		},
-
-		mark :
-		{
-			// the users mark
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark, path )',
-		},
-
-		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the current space transform
-		transform : { type : '../gleam/transform' }
-	};
-
-	def.init = [ 'inherit' ];
-
-	/*
-	def.alike =
-	{
-		alikeIgnoringTransform :
-		{
-			ignores : { 'transform' : true }
-		}
-	};
-	*/
-}
 
 
 /*::::::::::::::::::::::.

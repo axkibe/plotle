@@ -28,15 +28,13 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-
 			prepare : 'self.concernsHover( hover, path )'
 		},
 
 		// the users mark
 		mark :
 		{
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
-
+			type : [ '< ../visual/mark/types', 'undefined' ],
 			prepare : 'self.concernsMark( mark, path )'
 		},
 

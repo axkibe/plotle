@@ -19,20 +19,15 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type :
-				tim.typemap( module, '../action/action' )
-				.concat( [ 'undefined' ] )
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
 		mark :
 		{
 			// the users mark
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ),
-
+			type : [ '< ../visual/mark/types', 'undefined' ],
 			prepare : 'self.concernsMark( mark, path )'
 		},
 

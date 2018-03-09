@@ -25,7 +25,6 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-
 			prepare : 'self.concernsHover( hover, path )'
 		},
 
@@ -36,8 +35,7 @@ if( TIM )
 		mark :
 		{
 			prepare : 'self.concernsMark( mark, path )',
-
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
+			type : [ '< ../visual/mark/types', 'undefined' ]
 		},
 
 		// maximum input length

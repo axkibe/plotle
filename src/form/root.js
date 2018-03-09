@@ -17,24 +17,17 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the widget hovered upon
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-
 			prepare : 'self.concernsHover( hover )'
 		},
 
 		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] )
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the form root
 		path : { type : 'tim.js/path' },

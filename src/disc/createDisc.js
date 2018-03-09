@@ -22,10 +22,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// currently active action
-		action :
-		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] )
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
@@ -41,7 +38,7 @@ if( TIM )
 		},
 
 		// the users mark
-		mark : { type : tim.typemap( module, '../visual/mark/mark' ).concat( [ 'undefined' ] ) },
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
@@ -50,7 +47,7 @@ if( TIM )
 		shape : { type : '../gleam/ellipse' },
 
 		// currently form/disc shown
-		show : { type : tim.typemap( module, '../show/show' ), assign: '' },
+		show : { type : [ '< ../show/types' ], assign: '' },
 
 		// designed size
 		size : { type : '../gleam/size' },

@@ -9,6 +9,58 @@
 tim.define( module, ( def, self ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// current action
+		action :
+		{
+			type : [ '< ../action/types', 'undefined' ],
+			prepare : 'self.concernsAction( action, path )',
+		},
+
+		// the notes fabric
+		fabric : { type : '../fabric/note' },
+
+		// the item is highlighted
+		highlight : { type : 'boolean' },
+
+		// node currently hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+
+		// the users mark
+		mark :
+		{
+			type : [ '< ./mark/types', 'undefined' ],
+			prepare : 'self.concernsMark( mark, path )',
+		},
+
+		// the path of the note
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// scroll position
+		// is force defined in _init
+		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
+
+		// the current space transform
+		transform : { type : '../gleam/transform' },
+	};
+
+	def.init = [ 'inherit' ];
+
+	def.alike =
+	{
+		alikeIgnoringTransform : { ignores : { 'transform' : true } }
+	};
+}
+
+
 const action_dragItems = require( '../action/dragItems' );
 
 const action_resizeItems = require( '../action/resizeItems' );
@@ -61,59 +113,6 @@ const visual_para = require( '../visual/para' );
 
 const widget_scrollbar = require( '../widget/scrollbar' );
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action :
-		{
-			type : tim.typemap( module, '../action/action' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsAction( action, path )',
-		},
-
-		// the notes fabric
-		fabric : { type : '../fabric/note' },
-
-		// the item is highlighted
-		highlight : { type : 'boolean' },
-
-		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
-
-		// the users mark
-		mark :
-		{
-			type : tim.typemap( module, './mark/mark' ).concat( [ 'undefined' ] ),
-
-			prepare : 'self.concernsMark( mark, path )',
-		},
-
-		// the path of the note
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// scroll position
-		// is force defined in _init
-		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
-
-		// the current space transform
-		transform : { type : '../gleam/transform' },
-	};
-
-	def.init = [ 'inherit' ];
-
-	def.alike =
-	{
-		alikeIgnoringTransform : { ignores : { 'transform' : true } }
-	};
-}
 
 
 /*::::::::::::::::::::::.

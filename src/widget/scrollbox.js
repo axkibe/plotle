@@ -37,15 +37,13 @@ if( TIM )
 		hover :
 		{
 			type : [ 'undefined', 'tim.js/path' ],
-
 			prepare : 'self.concernsHover( hover, path )'
 		},
 
 		// the users mark
 		mark :
 		{
-			type : tim.typemap( module, '../visual/mark/mark' ).concat( ['undefined' ] ),
-
+			type : [ '< ../visual/mark/types', 'undefined' ],
 			assign : ''
 		},
 
@@ -63,7 +61,6 @@ if( TIM )
 		scrollbarYOffset :
 		{
 			type : '../gleam/point',
-
 			defaultValue : 'require( "../gleam/point" ).zero'
 		},
 
