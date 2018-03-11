@@ -1,0 +1,9 @@
+# all gleam shape types.
+
+./ellipse
+./line
+./rect
+./roundRect
+./shape
+./shapeList
+

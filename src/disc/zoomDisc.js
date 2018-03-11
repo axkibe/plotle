@@ -64,7 +64,7 @@ if( TIM )
 
 	def.init = [ 'inherit', 'twigDup' ];
 
-	def.twig = tim.typemap( module, '../widget/widget' );
+	def.twig = [ '< ../widget/types' ];
 }
 
 

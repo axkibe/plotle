@@ -22,10 +22,7 @@ if( TIM )
 		facet : { type : '../facet' },
 
 		// the shape to draw
-		shape :
-		{
-			type : tim.typemap( module, '../shape' ).concat( [ '../shapeList' ] )
-		}
+		shape : { type : [ '< ../shape-types', '../shapeList' ] },
 	};
 }
 

@@ -7,21 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_glint_list = require( '../gleam/glint/list' );
-
-const gleam_glint_window = require( '../gleam/glint/window' );
-
-const gleam_point = require( '../gleam/point' );
-
-const gleam_size = require( '../gleam/size' );
-
-const shell_settings = require( '../shell/settings' );
-
-const widget_scrollbar = require( './scrollbar' );
-
-const widget_widget = require( './widget' );
-
-
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
@@ -70,8 +55,23 @@ if( TIM )
 
 	def.init = [ 'twigDup' ];
 
-	def.twig = tim.typemap( module, './widget' );
+	def.twig = [ '< ./types' ];
 }
+
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_size = require( '../gleam/size' );
+
+const shell_settings = require( '../shell/settings' );
+
+const widget_scrollbar = require( './scrollbar' );
+
+const widget_widget = require( './widget' );
 
 
 /*

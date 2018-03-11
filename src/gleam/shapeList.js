@@ -14,7 +14,7 @@ tim.define( module, ( def ) => {
 
 if( TIM )
 {
-	def.list = tim.typemap( module, './shape' );
+	def.list = [ '< ./shape-types' ];
 }
 
 

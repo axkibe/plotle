@@ -35,10 +35,7 @@ if( TIM )
 		},
 
 		// icon shape
-		iconShape :
-		{
-			type : tim.typemap( module, '../gleam/shape' ).concat( [ 'undefined' ] )
-		},
+		iconShape : { type : [ '< ../gleam/shape-types', 'undefined' ] },
 
 		// icon facet
 		iconFacet : { type : [ 'undefined', '../gleam/facet' ] },

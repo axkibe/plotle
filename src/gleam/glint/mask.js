@@ -23,10 +23,7 @@ if( TIM )
 		reverse : { type : [ 'undefined', 'boolean' ] },
 
 		// the shape(list) to mask to
-		shape :
-		{
-			type : tim.typemap( module, '../shape' ).concat( [ '../shapeList' ] )
-		}
+		shape : { type : [ '< ../shape-types', '../shapeList' ] }
 	};
 }
 

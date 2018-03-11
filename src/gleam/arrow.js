@@ -35,10 +35,10 @@ if( TIM )
 		end2 : { type : 'string' },
 
 		// connect to this point or shape
-		joint1 : { type : tim.typemap( module, './shape' ).concat( [ './point' ] ) },
+		joint1 : { type : [ '< ./shape-types', './point' ] },
 
 		// connect to this point or shape
-		joint2 : { type : tim.typemap( module, './shape' ).concat( [ './point' ] ) },
+		joint2 : { type : [ '< ./shape-types', './point' ] },
 	};
 }
 
