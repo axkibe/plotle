@@ -7,6 +7,29 @@
 tim.define( module, ( def, change_set ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// set at this path
+		path : { type : 'tim.js/path', json : true },
+
+		// value to set
+		val : { type : [ '< ./value-types' ], json : true },
+
+		// the value tree had
+		prev : { type : [ '< ./value-types' ], json : true },
+	};
+
+	def.json = 'change_set';
+}
+
+
 const change_generic = require( './generic' );
 
 const change_grow = require( './grow' );
@@ -32,29 +55,6 @@ const change_wrap = require( './wrap' );
 const change_wrapList = require( './wrapList' );
 
 const error = require( './error' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// set at this path
-		path : { type : 'tim.js/path', json : true },
-
-		// value to set
-		val : { type : tim.typemap( module, './val' ), json : true },
-
-		// the value tree had
-		prev : { type : tim.typemap( module, './val' ), json : true }
-	};
-
-	def.json = 'change_set';
-}
 
 
 /*:::::::::::::.

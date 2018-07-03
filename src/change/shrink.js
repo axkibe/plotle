@@ -47,7 +47,7 @@ if( TIM )
 		path : { type : 'tim.js/path', json : true },
 
 		// value the tree had
-		prev : { type : tim.typemap( module, './val' ), json : true },
+		prev : { type : [ '< ./value-types' ], json : true },
 
 		// rank of new node
 		rank : { type : 'integer', json : true },

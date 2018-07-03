@@ -7,6 +7,31 @@
 tim.define( module, ( def, change_grow ) => {
 
 
+/*::::::::::::::::::::::::::::.
+:: Typed immutable attributes
+':::::::::::::::::::::::::::::*/
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// grow at this path',
+		path : { type : 'tim.js/path', json : true },
+
+		// value to grow
+		val : { type : [ '< ./value-types' ], json : true },
+
+		// rank of new node
+		rank : { type : 'integer', json : true }
+	};
+
+	def.json = 'change_grow';
+
+	def.init = [ ];
+}
+
+
 const change_generic = require( './generic' );
 
 const change_insert = require( './insert' );
@@ -32,31 +57,6 @@ const change_wrap = require( './wrap' );
 const change_wrapList = require( './wrapList' );
 
 const error = require( './error' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// grow at this path',
-		path : { type : 'tim.js/path', json : true },
-
-		// value to grow
-		val : { type : tim.typemap( module, './val' ), json : true },
-
-		// rank of new node
-		rank : { type : 'integer', json : true }
-	};
-
-	def.json = 'change_grow';
-
-	def.init = [ ];
-}
 
 
 /*

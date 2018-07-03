@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// value to append
-		val : { type : tim.typemap( module, './val' ), json : true },
+		val : { type : [ '< ./value-types' ], json : true },
 	};
 
 	def.json = 'change_listAppend';
