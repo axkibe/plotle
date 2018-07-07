@@ -1,0 +1,7 @@
+# client to server requests
+
+./acquire
+./alter
+./auth
+./register
+./update

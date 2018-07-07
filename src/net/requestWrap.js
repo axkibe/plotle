@@ -20,7 +20,7 @@ if( TIM )
 		channelName : { type : 'string' },
 
 		// the actual request
-		request : { type : tim.typemap( module, '../request/request' ) },
+		request : { type : [ '< ../request/request-types' ] },
 
 		// name of the receiver function to call
 		receiverFuncName : { type : 'string' },

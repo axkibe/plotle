@@ -30,7 +30,7 @@ if( TIM )
 		},
 
 		// the transient item in creation
-		transItem : { type : tim.typemap( module, '../visual/item' ).concat( [ 'undefined' ] ) },
+		transItem : { type : [ '< ../visual/item-types', 'undefined' ] },
 
 		// start point of drag creation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] }

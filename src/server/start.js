@@ -4,6 +4,9 @@
 'use strict';
 
 
+Error.stackTraceLimit = 15;
+
+
 const config = require( '../../config' );
 
 config.database_version = 15;

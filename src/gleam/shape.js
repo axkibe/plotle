@@ -26,7 +26,7 @@ if( TIM )
 		gradientR1 : { type : [ 'undefined', 'number' ] },
 	};
 
-	def.list = tim.typemap( module, './shape/section' );
+	def.list = [ '< ./shape/section-types' ];
 }
 
 

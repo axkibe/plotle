@@ -14,7 +14,7 @@ tim.define( module, ( def ) => {
 
 if( TIM )
 {
-	def.list = tim.typemap( module, './item' );
+	def.list = [ '< ./item-types' ];
 }
 
 
