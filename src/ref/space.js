@@ -33,20 +33,20 @@ if( TIM )
 
 
 /*
-| Reference to ideolooms home space.
+| Reference to linklooms home space.
 */
-def.staticLazy.ideoloomHome = ( ) =>
+def.staticLazy.linkloomHome = ( ) =>
 	ref_space.create(
-		'username', 'ideoloom',
+		'username', 'linkloom',
 		'tag', 'home'
 	);
 
 /*
-| Reference to ideolooms sandbox space.
+| Reference to linklooms sandbox space.
 */
-def.staticLazy.ideoloomSandbox = ( ) =>
+def.staticLazy.linkloomSandbox = ( ) =>
 	ref_space.create(
-		'username', 'ideoloom',
+		'username', 'linkloom',
 		'tag', 'sandbox'
 	);
 

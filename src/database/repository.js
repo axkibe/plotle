@@ -1,6 +1,6 @@
 /*
 | Ideoloom connector using the mongodb driver
-| to access an ideoloom repository.
+| to access an linkloom repository.
 */
 'use strict';
 
@@ -62,11 +62,11 @@ const initRepository =
 	const initSpaces =
 		[
 			ref_space.create(
-				'username', 'ideoloom',
+				'username', 'linkloom',
 				'tag', 'home'
 			),
 			ref_space.create(
-				'username', 'ideoloom',
+				'username', 'linkloom',
 				'tag', 'sandbox'
 			)
 		];

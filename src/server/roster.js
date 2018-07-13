@@ -25,8 +25,8 @@ server_resourceList.create(
 		'postProcessor', 'opentypeMin'
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'ideoloom.html', 'index.html', '' ] ),
-		'filePath', 'media/ideoloom.html',
+		'aliases', stringList( [ 'linkloom.html', 'index.html', '' ] ),
+		'filePath', 'media/linkloom.html',
 		'maxage', 'short',
 		'postProcessor', 'indexHtml'
 	),

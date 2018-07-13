@@ -82,11 +82,11 @@ def.func._init =
 
 	const sb = this._twig.scrollbox;
 
-	const sbRanks = [ 'ideoloom:home', 'ideoloom:sandbox' ];
+	const sbRanks = [ 'linkloom:home', 'linkloom:sandbox' ];
 
 	const sbTwig = {
-		'ideoloom:home'    : sb.get( 'ideoloom:home' ),
-		'ideoloom:sandbox' : sb.get( 'ideoloom:sandbox' )
+		'linkloom:home'    : sb.get( 'linkloom:home' ),
+		'linkloom:sandbox' : sb.get( 'linkloom:sandbox' )
 	};
 
 	const userSpaceList = this.userSpaceList;
@@ -136,9 +136,9 @@ def.func._init =
 	cy += 50;
 
 	// buttons are in the scrollbox
-	let button = sbTwig[ 'ideoloom:home' ];
+	let button = sbTwig[ 'linkloom:home' ];
 
-	sbTwig[ 'ideoloom:home' ] =
+	sbTwig[ 'linkloom:home' ] =
 		button.create(
 			'zone',
 				button.zone.create(
@@ -146,9 +146,9 @@ def.func._init =
 				)
 		);
 
-	button = sbTwig[ 'ideoloom:sandbox' ];
+	button = sbTwig[ 'linkloom:sandbox' ];
 
-	sbTwig[ 'ideoloom:sandbox' ] =
+	sbTwig[ 'linkloom:sandbox' ] =
 		button.create(
 			'zone',
 				button.zone.create(

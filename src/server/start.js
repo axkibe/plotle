@@ -48,7 +48,7 @@ tim.tree.addTree(
 		path.pop( );
 		return path.join( '/' ) + '/';
 	} )( ),
-	'ideoloom'
+	'linkloom'
 );
 
 const database_repository = require( '../database/repository' );

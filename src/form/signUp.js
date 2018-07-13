@@ -248,7 +248,7 @@ def.func.onRegister =
 
 	this.clear( );
 
-	root.moveToSpace( ref_space.ideoloomHome, false );
+	root.moveToSpace( ref_space.linkloomHome, false );
 
 	root.create( 'show', show_form.welcome, 'userCreds', request.userCreds );
 };

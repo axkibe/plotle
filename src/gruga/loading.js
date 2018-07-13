@@ -29,7 +29,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add', 'spaceText',
 			widget_label.abstract(
-				'text', 'ideoloom:home',
+				'text', 'linkloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'pos', gleam_point.zero
 			)

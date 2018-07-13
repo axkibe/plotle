@@ -544,10 +544,10 @@ def.func._init =
 		{
 			if(
 				root.spaceRef
-				&& root.spaceRef.username !== 'ideoloom'
+				&& root.spaceRef.username !== 'linkloom'
 			)
 			{
-				root.moveToSpace( ref_space.ideoloomHome, false );
+				root.moveToSpace( ref_space.linkloomHome, false );
 			}
 
 			user_creds.clearLocalStorage( );
@@ -1102,7 +1102,7 @@ def.func.logout =
 			'link', link
 		);
 
-		root.moveToSpace( ref_space.ideoloomHome, false );
+		root.moveToSpace( ref_space.linkloomHome, false );
 
 		return;
 	}
@@ -1541,7 +1541,7 @@ def.func.onAuth =
 
 	root.create( 'userCreds', reply.userCreds );
 
-	root.moveToSpace( ref_space.ideoloomHome, false );
+	root.moveToSpace( ref_space.linkloomHome, false );
 };
 
 

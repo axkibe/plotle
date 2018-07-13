@@ -405,7 +405,7 @@ def.func.prepareInventory =
 		let bundle = this.buildBundle( );
 
 		// calculates the hash for the bundle
-		bundleFilePath = 'ideoloom-' + hash_sha1.calc( bundle ) + '.js';
+		bundleFilePath = 'linkloom-' + hash_sha1.calc( bundle ) + '.js';
 
 		root.create( 'bundleFilePath', bundleFilePath );
 

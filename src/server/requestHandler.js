@@ -491,7 +491,7 @@ server_requestHandler.testUpdate =
 			case ref_space :
 
 				if(
-					dynRef.username !== 'ideoloom'
+					dynRef.username !== 'linkloom'
 					&& dynRef.username !== userInfo.name
 				)
 				{

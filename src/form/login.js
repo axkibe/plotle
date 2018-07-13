@@ -312,7 +312,7 @@ def.func.onAuth =
 
 	this.clear( );
 
-	root.moveToSpace( ref_space.ideoloomHome, false );
+	root.moveToSpace( ref_space.linkloomHome, false );
 };
 
 
