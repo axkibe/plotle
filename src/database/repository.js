@@ -1,5 +1,5 @@
 /*
-| Ideoloom connector using the mongodb driver
+| Linkloom connector using the mongodb driver
 | to access an linkloom repository.
 */
 'use strict';
