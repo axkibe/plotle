@@ -204,8 +204,7 @@ def.static.createGeneric =
 /*
 | The attention center.
 */
-// FIXME
-def.lazy.attentionCenter = NODE || visual_docItem.attentionCenter;
+def.lazy.attentionCenter = visual_docItem.attentionCenter;
 
 
 /*
@@ -501,64 +500,55 @@ def.func._init =
 /*
 | Reacts on clicks.
 */
-// FIXME
-def.func.click = NODE || visual_docItem.click;
+def.func.click = visual_docItem.click;
 
 
 /*
 | Reacts on ctrl-clicks.
 */
-// FIXME
-def.func.ctrlClick = NODE || visual_item.ctrlClick;
+def.func.ctrlClick = visual_item.ctrlClick;
 
 
 /*
 | A create relation action moves.
 */
-// FIXME
-def.func.createRelationMove = NODE || visual_item.createRelationMove;
+def.func.createRelationMove = visual_item.createRelationMove;
 
 
 /*
 | A create relation action stops.
 */
-// FIXME
-def.func.createRelationStop = NODE || visual_item.createRelationStop;
+def.func.createRelationStop = visual_item.createRelationStop;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-// FIXME
-def.func.dragStart = NODE || visual_docItem.dragStart;
+def.func.dragStart = visual_docItem.dragStart;
 
 
 /*
 | A text has been inputed.
 */
-// FIXME
-def.func.input = NODE || visual_docItem.input;
+def.func.input = visual_docItem.input;
 
 
 /*
 | Returns the change for dragging this item.
 */
-// FIXME
-def.func.getDragItemChange = NODE || visual_item.getDragItemChangeZone;
+def.func.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
 | Returns the change for resizing this item.
 */
-// FIXME
-def.func.getResizeItemChange = NODE || visual_item.getResizeItemChangeZone;
+def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
 | User is hovering their pointing device over something.
 */
-// FIXME
-def.func.pointingHover = NODE || visual_docItem.pointingHover;
+def.func.pointingHover = visual_docItem.pointingHover;
 
 
 /*
@@ -578,22 +568,19 @@ def.func.markLost = function( ){ };
 /*
 | Returns the mark for a point
 */
-// FIXME
-def.func.markForPoint = NODE || visual_docItem.markForPoint;
+def.func.markForPoint = visual_docItem.markForPoint;
 
 
 /*
 | Minimum height.
 */
-// FIXME
-def.func.minHeight = NODE || gruga_note.minHeight;
+def.func.minHeight = gruga_note.minHeight;
 
 
 /*
 | Minimum width.
 */
-// FIXME
-def.func.minWidth = NODE || gruga_note.minWidth;
+def.func.minWidth = gruga_note.minWidth;
 
 
 /*
@@ -625,8 +612,7 @@ def.func.mousewheel =
 /*
 | A move during a text select on this item.
 */
-// FIXME
-def.func.moveSelect = NODE || visual_docItem.moveSelect;
+def.func.moveSelect = visual_docItem.moveSelect;
 
 
 /*
@@ -689,8 +675,7 @@ def.func.scrollMarkIntoView =
 /*
 | Handles a special key.
 */
-// FIXME
-def.func.specialKey = NODE || visual_docItem.specialKey;
+def.func.specialKey = visual_docItem.specialKey;
 
 
 /*

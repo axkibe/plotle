@@ -366,7 +366,6 @@ def.lazy.height =
 /*
 | Shortcut to the para's key.
 | It is the last path entry.
-| FIXME remove
 */
 def.lazy.key =
 	function( )
