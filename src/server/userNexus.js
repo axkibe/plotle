@@ -107,10 +107,7 @@ def.func.createVisitor =
 		userCreds
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( userCreds.name !== 'visitor' ) throw new Error( );
-/**/}
+	if( userCreds.name !== 'visitor' ) return;
 
 	let nextVisitor = root.nextVisitor;
 

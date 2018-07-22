@@ -308,6 +308,8 @@ def.func.onAuth =
 		return;
 	}
 
+	reply.userCreds.saveToLocalStorage( );
+
 	root.create( 'action', undefined, 'userCreds', reply.userCreds );
 
 	this.clear( );

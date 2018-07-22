@@ -499,10 +499,7 @@ def.func._init =
 	)
 {
 	// sets drawn false
-	if( !this.lookAlike( inherit ) )
-	{
-		this._drawn = false;
-	}
+	if( !this.lookAlike( inherit ) ) this._drawn = false;
 
 	const access = this.access;
 
@@ -531,30 +528,7 @@ def.func._init =
 /**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
 
-	if(
-		userCreds
-		&& ( !inherit || !userCreds.equals( inherit.userCreds ) )
-	)
-	{
-		if( !userCreds.isVisitor )
-		{
-			userCreds.saveToLocalStorage( );
-		}
-		else
-		{
-			if(
-				root.spaceRef
-				&& root.spaceRef.username !== 'linkloom'
-			)
-			{
-				root.moveToSpace( ref_space.linkloomHome, false );
-			}
-
-			user_creds.clearLocalStorage( );
-
-			this._visitorCreds = userCreds;
-		}
-	}
+// XXX			this._visitorCreds = userCreds;
 
 	if( mark && mark.timtype === visual_mark_caret )
 	{
@@ -1106,13 +1080,13 @@ def.func.logout =
 
 		return;
 	}
-	else
-	{
-		root.create(
-			'userSpaceList', undefined,
-			'link', link
-		);
-	}
+
+	// FIXME i don't get it what happens when there are no _visitorCreds
+	
+	root.create(
+		'userSpaceList', undefined,
+		'link', link
+	);
 
 	root.link.auth( user_creds.createVisitor( ) );
 };
@@ -1511,7 +1485,7 @@ def.func.onAuth =
 
 	const show = root.show;
 
-	// if in login form this is a tempted login
+	// if in login form this is an atempted login
 	if( show.timtype === show_form && show.formName === 'login' )
 	{
 		root.form.get( 'login' ).onAuth( reply );
@@ -1539,8 +1513,15 @@ def.func.onAuth =
 		return;
 	}
 
-	root.create( 'userCreds', reply.userCreds );
+	let userCreds = reply.userCreds;
 
+	root.create(
+		'userCreds', userCreds,
+		'_visitorCreds', userCreds.isVisitor ? userCreds : pass
+	);
+	
+	if( userCreds.isVisitor ) user_creds.clearLocalStorage( );
+	
 	root.moveToSpace( ref_space.linkloomHome, false );
 };
 
@@ -1743,9 +1724,9 @@ def.func.draw =
 /**/{
 /**/	if( this !== root ) throw new Error( );
 /**/}
-
+	
 	if( root._drawn ) return;
-
+	
 	let display = root.display;
 
 	const screen = root._currentScreen;

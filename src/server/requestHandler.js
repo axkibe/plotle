@@ -184,6 +184,8 @@ const serveAuth =
 	{
 		userCreds = root.userNexus.createVisitor( userCreds );
 
+		if( !userCreds ) return replyError( 'invalid visitor request' );
+
 		return reply_auth.create( 'userCreds', userCreds );
 	}
 
