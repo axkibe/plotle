@@ -886,6 +886,40 @@ def.func.dragStop =
 };
 
 
+const dragMoveMap =
+	new Map( [
+		[
+			action_createGeneric,
+			function( ) { this._moveCreateGeneric.apply( this, arguments ) }
+		],
+		[
+			action_createRelation,
+			function( ) { this._moveCreateRelation.apply( this, arguments ) }
+		],
+		[
+			action_pan,
+			function( ) { this._movePan.apply( this, arguments ) }
+		],
+		[
+			action_dragItems,
+			function( ) { this._moveDragItems.apply( this, arguments ) }
+		],
+		[
+			action_resizeItems,
+			function( ) { this._moveResizeItems.apply( this, arguments ) }
+		],
+		[
+			action_scrolly,
+			function( ) { this._moveScrollY.apply( this, arguments ) }
+		],
+		[
+			action_select,
+			function( ) { this._moveSelect.apply( this, arguments ) }
+		],
+	] );
+
+/**/if( FREEZE ) Object.freeze( dragMoveMap );
+
 /*
 | Moving during an operation with the pointing device button held down.
 */
@@ -900,53 +934,7 @@ def.func.dragMove =
 
 	if( !action ) return 'pointer';
 
-	// FIXME use a map
-	switch( action.timtype )
-	{
-		case action_createGeneric :
-
-			this._moveCreateGeneric( p, shift, ctrl );
-
-			return;
-
-		case action_createRelation :
-
-			this._moveCreateRelation( p, shift, ctrl );
-
-			return;
-
-		case action_pan :
-
-			this._movePan( p, shift, ctrl );
-
-			return;
-
-		case action_dragItems :
-
-			this._moveDragItems( p, shift, ctrl );
-
-			return;
-
-		case action_resizeItems :
-
-			this._moveResizeItems( p, shift, ctrl );
-
-			return;
-
-		case action_scrolly :
-
-			this._moveScrollY( p, shift, ctrl );
-
-			return;
-
-		case action_select :
-
-			this._moveSelect( p, shift, ctrl );
-
-			return;
-
-		default : throw new Error( );
-	}
+	dragMoveMap.get( action.timtype ).call( this, p, shift, ctrl );
 };
 
 

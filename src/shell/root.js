@@ -528,8 +528,6 @@ def.func._init =
 /**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
 
-// XXX			this._visitorCreds = userCreds;
-
 	if( mark && mark.timtype === visual_mark_caret )
 	{
 		mark = mark.create( 'focus', this.systemFocus );
