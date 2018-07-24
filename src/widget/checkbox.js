@@ -162,20 +162,6 @@ def.func.focusable = true;
 
 
 /*
-| checkbox is being changed.
-*/
-def.func.change =
-	function(
-		// shift,
-		// ctrl
-	)
-{
-	console.log( 'FIXME is this ever used?' );
-	// no default
-};
-
-
-/*
 | User clicked.
 */
 def.func.click =
