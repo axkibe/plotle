@@ -890,31 +890,31 @@ const dragMoveMap =
 	new Map( [
 		[
 			action_createGeneric,
-			function( ) { this._moveCreateGeneric.apply( this, arguments ) }
+			function( ) { this._moveCreateGeneric.apply( this, arguments ); }
 		],
 		[
 			action_createRelation,
-			function( ) { this._moveCreateRelation.apply( this, arguments ) }
+			function( ) { this._moveCreateRelation.apply( this, arguments ); }
 		],
 		[
 			action_pan,
-			function( ) { this._movePan.apply( this, arguments ) }
+			function( ) { this._movePan.apply( this, arguments ); }
 		],
 		[
 			action_dragItems,
-			function( ) { this._moveDragItems.apply( this, arguments ) }
+			function( ) { this._moveDragItems.apply( this, arguments ); }
 		],
 		[
 			action_resizeItems,
-			function( ) { this._moveResizeItems.apply( this, arguments ) }
+			function( ) { this._moveResizeItems.apply( this, arguments ); }
 		],
 		[
 			action_scrolly,
-			function( ) { this._moveScrollY.apply( this, arguments ) }
+			function( ) { this._moveScrollY.apply( this, arguments ); }
 		],
 		[
 			action_select,
-			function( ) { this._moveSelect.apply( this, arguments ) }
+			function( ) { this._moveSelect.apply( this, arguments ); }
 		],
 	] );
 

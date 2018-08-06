@@ -116,7 +116,9 @@ def.func.prepareResource =
 		// tim source did not export its source?
 		if( !rmod.source ) throw new Error( );
 
-		const preamble = tim.tree.getBrowserPreamble( realpath );
+		const preamble = tim.tree.getBrowserPreamble( realpath, false );
+
+		const timPreamble = tim.tree.getBrowserPreamble( realpath, true );
 
 		const postamble = '} )( );';
 
@@ -131,7 +133,7 @@ def.func.prepareResource =
 		const timcodeResource =
 			resource.create(
 				'aliases', undefined,
-				'data', preamble + rmod.timcode + postamble,
+				'data', timPreamble + rmod.timcode + postamble,
 				'filePath', rmod.timcodeFilename,
 				'hasTim', false,
 				'timHolder', resource
@@ -156,7 +158,7 @@ def.func.prepareResource =
 	{
 		tim.tree.addLeaf( realpath );
 
-		const preamble = tim.tree.getBrowserPreamble( realpath );
+		const preamble = tim.tree.getBrowserPreamble( realpath, false );
 
 		const postamble = '} )( );';
 
