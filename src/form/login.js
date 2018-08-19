@@ -72,6 +72,9 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 def.func._init = form_form.init;
 
 
+def.func._transform = form_form.transform;
+
+
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/

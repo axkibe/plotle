@@ -50,48 +50,49 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
 
 /*
-| Initializer.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		twigDup
+		name,
+		widget
 	)
 {
-	if( !this.path ) return;
-
+	// FIXME make lazy
 	const isVisitor = this.user ? this.user.isVisitor : true;
 
-	const twig = twigDup ?  this._twig : tim.copy( this._twig );
+	switch( name )
+	{
+		case 'headline' :
 
-	twig.headline =
-		twig.headline.create(
-			'text', 'hello ' + ( this.user ? this.user.name : '' )
-		);
+			widget = widget.create( 'text', 'hello ' + ( this.user ? this.user.name : '' ) );
 
-	twig.visitor1 = twig.visitor1.create( 'visible', isVisitor );
+			break;
 
-	twig.visitor2 = twig.visitor2.create( 'visible', isVisitor );
+		case 'visitor1' :
+		case 'visitor2' :
+		case 'visitor3' :
+		case 'visitor4' :
 
-	twig.visitor3 = twig.visitor3.create( 'visible', isVisitor );
+			widget = widget.create( 'visible', isVisitor );
 
-	twig.visitor4 = twig.visitor4.create( 'visible', isVisitor );
+			break;
 
-	twig.greeting1 = twig.greeting1.create( 'visible', !isVisitor );
+		case 'greeting1' :
+		case 'greeting2' :
+		case 'greeting3' :
 
-	twig.greeting2 = twig.greeting2.create( 'visible', !isVisitor );
+			widget = widget.create( 'visible', !isVisitor );
 
-	twig.greeting3 = twig.greeting3.create( 'visible', !isVisitor );
+			break;
+	}
 
-	this._twig = twig;
-
-	form_form.init.call( this, true );
+	return form_form.transform.call( this, name, widget );
 };
 
 

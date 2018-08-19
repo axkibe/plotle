@@ -97,6 +97,9 @@ def.func._init =
 };
 
 
+def.func._transform = form_form.transform;
+
+
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/

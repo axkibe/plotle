@@ -28,52 +28,38 @@ const visual_mark_widget = require( '../visual/mark/widget' );
 | Initializer.
 */
 def.static.init =
+	function( )
+{
+	// FIXME XXX remove
+};
+
+
+/*
+| Transforms widgets.
+*/
+def.static.transform =
 	function(
-		twigDup
+		name,
+		widget
 	)
 {
-	// this is an abstract design form
-	// FUTURE use abstract( )
-	if( !this.path ) return;
-
-	this.area = this.viewSize.zeroRect;
-
-	// all components of the form
-	const twig = twigDup ? this._twig :  tim.copy( this._twig );
-
-	const ranks = this._ranks;
-
+	// FIXME make this some lazy value
 	const transform =
 		gleam_transform.create(
 			'zoom', 1,
-			'offset', this.area.pc
+			'offset', this.viewSize.zeroRect.pc
 		);
 
-	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
-	{
-		const name = ranks[ r ];
+	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-		const widgetProto = twig[ name ];
-
-		const path =
-			widgetProto.path
-			|| this.path.append( 'twig' ).append( name );
-
-		twig[ name ] =
-			widgetProto.create(
-				'path', path,
-				'hover', this.hover,
-				'mark', this.mark,
-				'transform',
-					path.get( 2 ) !== 'moveTo'
-					? transform
-					: gleam_transform.normal
-			);
-	}
-
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return(
+		widget.create(
+			'path', path,
+			'hover', this.hover,
+			'mark', this.mark,
+			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
+		)
+	);
 };
 
 
@@ -291,7 +277,7 @@ def.static.glint =
 		[
 			gleam_glint_paint.create(
 				'facet', gruga_formFacet.model,
-				'shape', this.area
+				'shape', this.viewSize.zeroRect
 			)
 		];
 

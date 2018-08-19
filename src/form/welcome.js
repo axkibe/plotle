@@ -86,6 +86,21 @@ def.func._init =
 };
 
 
+/*
+| Transforms widgets.
+*/
+def.func._transform =
+	function(
+		name,
+		widget
+	)
+{
+	// XXX
+
+	return form_form.transform.call( this, name, widget );
+};
+
+
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/

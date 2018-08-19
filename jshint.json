@@ -20,6 +20,7 @@
 		"pass" : true,
 		"opentype" : true,
 		"root" : true,
+		"self" : true,
 		"system" : true,
 		"tim" : true,
 		"TIM" : true

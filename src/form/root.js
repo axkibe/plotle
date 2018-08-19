@@ -45,7 +45,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'twigDup' ];
 
 	// FUTURE make a group instead of twig
 	def.twig =
@@ -60,58 +59,50 @@ if( TIM )
 		'./user',
 		'./welcome'
 	];
+
+	def.check = true;
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		twigDup
-	)
-{
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.hover && this.hover.isEmpty ) throw new Error( );
+/**/	};
 /**/}
 
-	const twig =
-		twigDup
-		? this._twig
-		: tim.copy( this._twig );
 
-	const ranks = this._ranks;
+/*
+| Transforms forms.
+*/
+def.func._transform =
+	function(
+		name,
+		form
+	)
+{
+	const path =
+		form.path
+		? pass
+		: this.path.append( 'twig' ).append( name );
 
-	// FIXME make this somehow lazy
-
-	for( let a = 0, aZ = ranks.length; a < aZ; a++ )
-	{
-		const name = ranks[ a ];
-
-		const form = twig[ name ];
-
-		const path =
-			form.path
-			? pass
-			: this.path.append( 'twig' ).append( name );
-
-		twig[ name ] =
-			form.create(
-				'action', this.action,
-				'hover', this.hover,
-				'mark', this.mark,
-				'path', path,
-				'spaceRef', this.spaceRef,
-				'user', this.user,
-				'userSpaceList', this.userSpaceList,
-				'viewSize', this.viewSize
-			);
-	}
-
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return(
+		form.create(
+			'action', this.action,
+			'hover', this.hover,
+			'mark', this.mark,
+			'path', path,
+			'spaceRef', this.spaceRef,
+			'user', this.user,
+			'userSpaceList', this.userSpaceList,
+			'viewSize', this.viewSize
+		)
+	);
 };
 
 

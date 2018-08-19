@@ -64,6 +64,9 @@ if( TIM )
 def.func._init = form_form.init;
 
 
+def.func._transform = form_form.transform;
+
+
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
