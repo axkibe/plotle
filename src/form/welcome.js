@@ -57,33 +57,8 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
-
-
-/*
-| Initialize.
-*/
-def.func._init =
-	function(
-		twigDup
-	)
-{
-	if( !this.path ) return;
-
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
-
-	twig.headline =
-		twig.headline.create(
-			'text', 'welcome ' + ( this.user ? this.user.name : '' ) + '!'
-		);
-
-	this._twig = twig;
-
-	form_form.init.call( this, true );
-};
 
 
 /*
@@ -95,7 +70,17 @@ def.func._transform =
 		widget
 	)
 {
-	// XXX
+	switch( name )
+	{
+		case 'headline' :
+
+			widget =
+				widget.create(
+					'text', 'welcome ' + ( this.user ? this.user.name : '' ) + '!'
+				);
+
+			break;
+	}
 
 	return form_form.transform.call( this, name, widget );
 };

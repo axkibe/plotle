@@ -47,8 +47,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
@@ -67,11 +65,8 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*
-| Initializer.
+| Transforms widgets.
 */
-def.func._init = form_form.init;
-
-
 def.func._transform = form_form.transform;
 
 

@@ -47,8 +47,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
@@ -66,12 +64,6 @@ const user_creds = require( '../user/creds' );
 const user_passhash = require( '../user/passhash' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
-
-
-/*
-| Initializer
-*/
-def.func._init = form_form.init;
 
 
 def.func._transform = form_form.transform;

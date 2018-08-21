@@ -15,8 +15,6 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gleam_transform = require( '../gleam/transform' );
 
-const gruga_mainDisc = require( '../gruga/mainDisc' );
-
 const gruga_moveTo = require( '../gruga/moveTo' );
 
 const gruga_scrollbar = require( '../gruga/scrollbar' );
@@ -64,76 +62,70 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
 
 /*
-| Initializer.
+| Distance to left side of screen.
 */
-def.func._init =
+def.lazy._leftDistance = ( ) =>
+	root.disc.get( 'mainDisc' ).size.width
+	+ 20; // == left distance to disc
+
+
+/*
+| Width available to the form.
+*/
+def.lazy._availableWidth =
+	function( )
+{
+	return this.viewSize.width - this._leftDistance - gruga_scrollbar.strength;
+};
+
+
+/*
+| Number of columns used.
+*/
+def.lazy._cols =
+	function( )
+{
+	return Math.floor( ( this._availableWidth + 30 ) / 160 );
+};
+
+
+/*
+| Number of rows used.
+*/
+def.lazy._rows =
+	function( )
+{
+	const userSpaceList = this.userSpaceList;
+
+	if( !userSpaceList ) return 0;
+
+	return Math.ceil( userSpaceList.length / this._cols );
+};
+
+
+/*
+| Transforms the scrollbox.
+*/
+def.func._transformScrollbox =
 	function(
-		twigDup
+		sb       // the scrollbox widget
 	)
 {
-	if( !this.path ) return;
-
-	const sb = this._twig.scrollbox;
-
 	const sbRanks = [ 'linkloom:home', 'linkloom:sandbox' ];
 
-	const sbTwig = {
+	const sbTwig =
+	{
 		'linkloom:home'    : sb.get( 'linkloom:home' ),
 		'linkloom:sandbox' : sb.get( 'linkloom:sandbox' )
 	};
 
-	const userSpaceList = this.userSpaceList;
-
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
-
-	// disc width
-	const dw =
-		root
-		? root.disc.get( 'mainDisc' ).size.width
-		: gruga_mainDisc.layout.size.width;
-
-	const discDistance = 20;
-
-	// available width
-	const avw = this.viewSize.width - dw - discDistance - gruga_scrollbar.strength;
-
-	const x0 = dw + discDistance;
-
-	const vh = this.viewSize.height;
-
-	const cols = Math.floor( ( avw + 30 ) / 160 );
-
 	// cols in current row
-	let cLen = cols;
-
-	const rows =
-		userSpaceList
-		? Math.ceil( userSpaceList.length / cols )
-		: 0;
-
-	// content height
-	const ch = twig.headline.font.size * 2 + 160 + rows * 160;
-
-	let cy = vh / 2 - ch / 2;
-
-	const y0 = 10 + twig.headline.font.size;
-
-	// no longer vertical centered and need to start scrolling
-	if( cy < y0 ) cy = y0;
-
-	twig.headline =
-		twig.headline.create(
-			'pos', gleam_point.xy( x0 + ( cols - 0.5 ) * 80 + 30, cy )
-		);
-
-	cy += 50;
+	let cLen = this._cols;
 
 	// buttons are in the scrollbox
 	let button = sbTwig[ 'linkloom:home' ];
@@ -142,7 +134,7 @@ def.func._init =
 		button.create(
 			'zone',
 				button.zone.create(
-					'pos', gleam_point.xy( 160 * ( cols - 2 ) / 2, 0 )
+					'pos', gleam_point.xy( 160 * ( this._cols - 2 ) / 2, 0 )
 				)
 		);
 
@@ -152,11 +144,11 @@ def.func._init =
 		button.create(
 			'zone',
 				button.zone.create(
-					'pos', gleam_point.xy( 160 * ( cols ) / 2, 0 )
+					'pos', gleam_point.xy( 160 * ( this._cols ) / 2, 0 )
 				)
 		);
 
-	if( userSpaceList )
+	if( this.userSpaceList )
 	{
 		let c = 0; // current column
 
@@ -164,18 +156,18 @@ def.func._init =
 
 		let r = 1; // current row
 
-		for( let a = 0, aZ = userSpaceList.length; a < aZ; a++ )
+		for( let a = 0, aZ = this.userSpaceList.length; a < aZ; a++ )
 		{
-			if( r >= rows )
+			if( r >= this._rows )
 			{
-				cLen = aZ % cols;
+				cLen = aZ % this._cols;
 
-				if( cLen === 0 ) cLen = cols;
+				if( cLen === 0 ) cLen = this._cols;
 
-				cOff = ( cols - cLen ) / 2;
+				cOff = ( this._cols - cLen ) / 2;
 			}
 
-			const rSpace = userSpaceList.get( a );
+			const rSpace = this.userSpaceList.get( a );
 
 			const fullname = rSpace.fullname;
 
@@ -195,34 +187,75 @@ def.func._init =
 					'transform', gleam_transform.normal
 				);
 
-			if( ++c >= cols )
-			{
-				c = 0;
-
-				r++;
-			}
+			if( ++c >= this._cols ) { c = 0; r++; }
 		}
 	}
 
-	twig.scrollbox =
+	const cy = this.get( 'headline' ).pos.y + 50;
+
+	return(
 		sb.create(
 			'scrollbarYOffset', form_moveTo.scrollbarYOffset,
 			'zone',
 				gleam_rect.create(
-					'pos', gleam_point.xy( x0, cy ),
-					'width', avw + gruga_scrollbar.strength,
-					'height', vh - cy
+					'pos', gleam_point.xy( this._leftDistance, cy ),
+					'width', this._availableWidth + gruga_scrollbar.strength,
+					'height', this.viewSize.height - cy
 				),
 			'twig:init', sbTwig, sbRanks
-		);
-
-	this._twig = twig;
-
-	form_form.init.call( this, true /* twigDup always set to true */ );
+		)
+	);
 };
 
 
-def.func._transform = form_form.transform;
+/*
+| Transforms the headline.
+*/
+def.func._transformHeadline =
+	function(
+		headline   // the headline widget
+	)
+{
+	// content height
+	const ch = headline.font.size * 2 + 160 + this._rows * 160;
+
+	// if below minimum content is no longer vertical centered and scrolling is needed.
+	const y =
+		Math.max(
+			this.viewSize.height / 2 - ch / 2,
+			10 + headline.font.size
+		);
+
+	return(
+		headline.create(
+			'pos',
+			gleam_point.xy(
+				this._leftDistance + ( this._cols - 0.5 ) * 80 + 30,
+				y
+			)
+		)
+	);
+};
+
+
+/*
+| Transforms widgets.
+*/
+def.func._transform =
+	function(
+		name,
+		widget
+	)
+{
+	switch( name )
+	{
+		case 'headline' : widget = this._transformHeadline( widget ); break;
+
+		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
+	}
+
+	return form_form.transform.call( this, name, widget );
+};
 
 
 /*::::::::::::::::::.

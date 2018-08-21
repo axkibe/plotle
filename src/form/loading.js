@@ -52,16 +52,8 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
-
-
-/*
-| Initializer.
-*/
-def.func._init = form_form.init;
 
 
 def.func._transform = form_form.transform;
