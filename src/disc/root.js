@@ -58,8 +58,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	// FUTURE make a group instead of a twig
 	def.twig =
 	[
@@ -107,79 +105,58 @@ def.static.concernsHover =
 };
 
 
-/*
-| Initializes the disc root.
-*/
-def.func._init =
-	function(
-		twigDup
-	)
-{
-	const hover = this.hover;
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( hover && hover.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		const hover = this.hover;
+/**/
+/**/		if( hover && hover.isEmpty ) throw new Error( );
+/**/	};
 /**/}
 
-	const ranks = this._ranks;
 
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+/*
+| Transforms the discs.
+*/
+def.func._transform =
+	function(
+		name,
+		disc
+	)
+{
+	const ct = this.controlTransform;
 
-	const action = this.action;
-
-	const access = this.access;
-
-	const show = this.show;
-
-	const controlTransform = this.controlTransform;
-
-	const mark = this.mark;
-
-	const spaceRef = this.spaceRef;
-
-	const user = this.user;
-
-	const viewSize = this.viewSize;
-
-	for( let a = 0, aZ = ranks.length; a < aZ; a++ )
+	if( disc.isAbstract )
 	{
-		const key = ranks[ a ];
-
-		let disc = twig[ key ];
-
-		if( disc.isAbstract )
+		for( let b = 0, bZ = disc.length; b < bZ; b++ )
 		{
-			for( let b = 0, bZ = disc.length; b < bZ; b++ )
-			{
-				disc =
-					disc.abstract(
-						'twig:set',
-						disc.getKey( b ),
-						disc.atRank( b ).create(
-							'transform', controlTransform
-						)
-					);
-			}
+			disc =
+				disc.abstract(
+					'twig:set',
+					disc.getKey( b ),
+					disc.atRank( b ).create( 'transform', ct )
+				);
 		}
-
-		twig[ key ] =
-			disc.create(
-				'access', access,
-				'action', action,
-				'controlTransform', controlTransform,
-				'hover', hover,
-				'mark', mark,
-				'show', show,
-				'spaceRef', spaceRef,
-				'user', user,
-				'viewSize', viewSize
-			);
 	}
 
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return(
+		disc.create(
+			'access', this.access,
+			'action', this.action,
+			'controlTransform', ct,
+			'hover', this.hover,
+			'mark', this.mark,
+			'show', this.show,
+			'spaceRef', this.spaceRef,
+			'user', this.user,
+			'viewSize', this.viewSize
+		)
+	);
 };
 
 

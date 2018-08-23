@@ -19,25 +19,20 @@ if( TIM )
 		// path of the mark
 		path : { type : 'tim.js/path' },
 	};
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.path.isEmpty ) throw new Error( );
+/**/	};
 /**/}
-
-};
 
 
 } );
-

@@ -50,8 +50,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
@@ -60,32 +58,31 @@ const form_form = require( './form' );
 
 
 /*
-| Initializer.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		twigDup
+		name,
+		widget
 	)
 {
-	if( !this.path ) return;
+	switch( name )
+	{
+		case 'headline' :
 
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+			widget =
+				widget.create(
+					'text',
+						this.nonSpaceRef
+						? this.nonSpaceRef.fullname + ' does not exist.'
+						: ''
+				);
 
-	twig.headline =
-		twig.headline.create(
-			'text',
-				this.nonSpaceRef
-				? this.nonSpaceRef.fullname + ' does not exist.'
-				: ''
-		);
+			break;
+	}
 
-	this._twig = twig;
-
-	form_form.init.call( this, true );
+	return form_form.transform.call( this, name, widget );
 };
-
-
-def.func._transform = form_form.transform;
 
 
 /*::::::::::::::::::.
@@ -157,9 +154,9 @@ def.func.dragMove =
 */
 def.func.dragStart =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
 	return false;
@@ -191,10 +188,10 @@ def.func.input = form_form.input;
 */
 def.func.mousewheel =
 	function(
-		// p,
-		// dir,
-		// shift,
-		// ctrl
+		p,
+		dir,
+		shift,
+		ctrl
 	)
 {
 	return true;

@@ -19,8 +19,6 @@ if( TIM )
 		// name of the form
 		formName : { type : 'string' },
 	};
-
-	def.init = [ ];
 }
 
 
@@ -59,20 +57,22 @@ const validForms =
 if( FREEZE ) Object.freeze( validForms );
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( !validForms[ this.formName ] ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( !validForms[ this.formName ] ) throw new Error( );
+/**/	};
 /**/}
-};
 
 
-/*jshint -W083 */
+
+
+/* jshint -W083 */
 for( let formName in validForms )
 {
 	def.staticLazy[ formName ] =

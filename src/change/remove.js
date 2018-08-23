@@ -59,27 +59,28 @@ if( TIM )
 	};
 
 	def.json = 'change_remove';
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function ( )
-{
-	if( this.at1 + this.val.length !== this.at2 )
-	{
-		throw error.make( 'remove.at1 + remove.val.length !== remove.at2' );
-	}
-
-	if( this.at1 < 0 || this.at2 < 0 )
-	{
-		throw error.make( 'remove.at1|at2 negative' );
-	}
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.at1 + this.val.length !== this.at2 )
+/**/		{
+/**/			throw error.make( 'remove.at1 + remove.val.length !== remove.at2' );
+/**/		}
+/**/
+/**/		if( this.at1 < 0 || this.at2 < 0 )
+/**/		{
+/**/			throw error.make( 'remove.at1|at2 negative' );
+/**/		}
+/**/	};
+/**/}
 
 
 /*:::::::::::::.

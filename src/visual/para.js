@@ -117,6 +117,7 @@ def.func._init =
 			tim.aheadValue( this, 'flow', inherit.flow );
 		}
 
+/*
 		if( tim.hasLazyValueSet( inherit, 'glint' ) )
 		{
 			this._inheritedGlint = inherit.glint;
@@ -125,6 +126,7 @@ def.func._init =
 		{
 			this._inheritedGlint = inherit._inheritedGlint;
 		}
+*/
 	}
 };
 
@@ -338,7 +340,7 @@ def.lazy.glint =
 	const transform = this.transform;
 
 	return(
-		( this._inheritedGlint || gleam_glint_window )
+		gleam_glint_window
 		.create(
 			'glint', this._glint,
 			'rect',
@@ -349,6 +351,21 @@ def.lazy.glint =
 				),
 			'offset', gleam_point.zero
 		)
+	);
+};
+
+
+/*
+| Returns true if a glint can be inherited.
+*/
+def.inherit.glint =
+	function(
+		inherit
+	)
+{
+	return(
+		inherit.alikeVisually( this )
+		&& inherit.transform.zoom === this.transform.zoom
 	);
 };
 

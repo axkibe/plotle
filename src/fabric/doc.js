@@ -23,38 +23,23 @@ if( TIM )
 	def.json = 'fabric_doc';
 
 	def.twig = [ './para' ];
-
-	def.init = [ 'twigDup' ];
 }
 
 
+
 /*
-| Initializer.
+| Transforms paras.
 */
-def.func._init =
+def.func._transform =
 	function(
-		twigDup
+		name,
+		para
 	)
 {
-	const ranks = this._ranks;
+	// FIXME, check why undefined paras are requested
+	if( !para || para.path || !this.path ) return para;
 
-	let twig = twigDup ? this._twig : tim.copy( this._twig );
-
-	const twigPath = this.path && this.path.append( 'twig' );
-
-	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
-	{
-		const key = ranks[ r ];
-
-		twig[ key ] =
-			twig[ key ].create(
-				'path', twigPath && twigPath.appendNC( key )
-			);
-	}
-
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return para.create( 'path', this.path.append( 'twig' ).appendNC( name ) );
 };
 
 

@@ -36,8 +36,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position
-		// is defined by force in _init
-		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
+		scrollPos : { type : '../gleam/point' },
 
 		// the transform
 		transform : { type : '../gleam/transform' },
@@ -52,8 +51,6 @@ if( TIM )
 		// designed zone
 		zone : { type : '../gleam/rect' },
 	};
-
-	def.init = [ 'twigDup' ];
 
 	def.twig = [ '< ./types' ];
 }
@@ -74,71 +71,54 @@ const widget_scrollbar = require( './scrollbar' );
 const widget_widget = require( './widget' );
 
 
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		const sp = this.scrollPos;
+/**/
+/**/		const is = this.innerSize;
+/**/
+/**/		const zone = this.zone;
+/**/
+/**/		if( sp.x < 0 || sp.y < 0 ) throw new Error( );
+/**/
+/**/		if( is.height <= zone.height )
+/**/		{
+/**/			if( sp.y > 0 ) throw new Error( );
+/**/		}
+/**/		else
+/**/		{
+/**/			if( sp.y > is.height - zone.height ) throw new Error( );
+/**/		}
+/**/	};
+/**/}
+
+
 /*
-| Initializer.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		twigDup
+		name,
+		widget
 	)
 {
-	if( !this.path ) return;
+	let path = widget.path;
 
-	// all components of the form
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+	if( !path && this.path ) path = this.path.append( 'twig' ).append( name );
 
-	const ranks = this._ranks;
-
-	for( let r = 0, rZ = ranks.length; r < rZ; r++ )
-	{
-		const name = ranks[ r ];
-
-		const w = twig[ name ];
-
-		const path = w.path || this.path.append( 'twig' ).append( name );
-
-		twig[ name ] =
-			w.create(
-				'path', path,
-				'hover', this.hover,
-				'mark', this.mark
-			);
-	}
-
-	const innerSize = this.innerSize;
-
-	const zone = this.zone;
-
-	if(
-		this.scrollPos === undefined
-		|| innerSize.height <= zone.height
-	)
-	{
-		this.scrollPos = gleam_point.zero;
-	}
-	else if( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
-	{
-		this.scrollPos =
-			this.scrollPos.create(
-				'x', Math.max( 0, this.scrollPos.x ),
-				'y', Math.max( 0, this.scrollPos.y )
-			);
-	}
-
-	if(
-		innerSize.height > zone.height
-		&& this.scrollPos.y > innerSize.height - zone.height
-	)
-	{
-		this.scrollPos =
-			this.scrollPos.create(
-				'y', innerSize.height - zone.height
-			);
-	}
-
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return(
+		widget.create(
+			'path', path,
+			'hover', this.hover,
+			'mark', this.mark
+		)
+	);
 };
 
 
@@ -151,6 +131,42 @@ def.func._init =
 | Deriving concerns stuff.
 */
 def.static.concernsHover = widget_widget.concernsHover;
+
+
+/*
+| Prepares the scroll position to fit innerSize/zone parameters
+*/
+def.static.prepareScrollPos =
+	function(
+		scrollPos,
+		innerSize,
+		zone
+	)
+{
+	if( scrollPos === undefined || innerSize.height <= zone.height )
+	{
+		return gleam_point.zero;
+	}
+
+	if( scrollPos.x < 0 || scrollPos.y < 0 )
+	{
+		scrollPos =
+			scrollPos.create(
+				'x', Math.max( 0, this.scrollPos.x ),
+				'y', Math.max( 0, this.scrollPos.y )
+			);
+	}
+
+	if(
+		innerSize.height > zone.height
+		&& scrollPos.y > innerSize.height - zone.height
+	)
+	{
+		scrollPos = scrollPos.create( 'y', innerSize.height - zone.height );
+	}
+
+	return scrollPos;
+};
 
 
 /*:::::::::::::.

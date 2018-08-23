@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the path of the space
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ], transform : '_transformPath' },
 
 		// reference to this space
 		ref : { type : [ 'undefined', '../ref/space' ] },
@@ -32,8 +32,6 @@ if( TIM )
 	];
 
 	def.json = 'space';
-
-	def.init = [ 'inherit', 'twigDup' ];
 }
 
 
@@ -41,33 +39,31 @@ const tim_path = tim.import( 'tim.js', 'path' );
 
 
 /*
-| Initializer.
+| Transforms items.
 */
-def.func._init =
+def.func._transform =
 	function(
-		inherit,
-		twigDup
+		name,
+		item
 	)
 {
-	if( !this.path )
-	{
-		this.path = tim_path.empty.append( 'space' );
-	}
+	if( item.path ) return item;
 
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+	return item.create( 'path', this.path.append( 'twig' ).appendNC( name ) );
+};
 
-	for( let k in twig )
-	{
-		let path = twig[ k ].path;
 
-		if( !path ) path = this.path.append( 'twig' ).appendNC( k );
+/*
+| Transforms the path attribute.
+*/
+def.func._transformPath =
+	function(
+		path
+	)
+{
+	if( path ) return path;
 
-		twig[ k ] = twig[ k ].create( 'path', path );
-	}
-
-	if( FREEZE ) Object.freeze( twig );
-
-	this._twig = twig;
+	return tim_path.empty.append( 'space' );
 };
 
 

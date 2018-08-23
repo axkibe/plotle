@@ -22,27 +22,22 @@ if( TIM )
 		// offset of the mark
 		at : { type : 'integer' },
 	};
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.path.isEmpty ) throw new Error( );
 /**/
-/**/	if( this.at < 0 ) throw new Error( );
+/**/		if( this.at < 0 ) throw new Error( );
+/**/	};
 /**/}
-
-};
 
 
 } );
-

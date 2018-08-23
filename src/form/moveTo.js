@@ -21,6 +21,8 @@ const gruga_scrollbar = require( '../gruga/scrollbar' );
 
 const ref_space = require( '../ref/space' );
 
+const widget_scrollbox = require( '../widget/scrollbox' );
+
 
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
@@ -193,16 +195,20 @@ def.func._transformScrollbox =
 
 	const cy = this.get( 'headline' ).pos.y + 50;
 
+	const zone =
+		gleam_rect.create(
+			'pos', gleam_point.xy( this._leftDistance, cy ),
+			'width', this._availableWidth + gruga_scrollbar.strength,
+			'height', this.viewSize.height - cy
+		);
+
 	return(
 		sb.create(
 			'scrollbarYOffset', form_moveTo.scrollbarYOffset,
-			'zone',
-				gleam_rect.create(
-					'pos', gleam_point.xy( this._leftDistance, cy ),
-					'width', this._availableWidth + gruga_scrollbar.strength,
-					'height', this.viewSize.height - cy
-				),
-			'twig:init', sbTwig, sbRanks
+			'zone', zone,
+			'twig:init', sbTwig, sbRanks,
+			'scrollPos',
+				widget_scrollbox.prepareScrollPos( sb.scrollPos, sb.innerSize, zone )
 		)
 	);
 };

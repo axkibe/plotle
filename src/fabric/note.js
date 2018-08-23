@@ -19,7 +19,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the notes document
-		doc : { type : './doc', json : true },
+		doc : { type : './doc', json : true, transform : '_transformDoc' },
 
 		// the fontsize of the note
 		fontsize : { type : 'number', json : true },
@@ -32,21 +32,22 @@ if( TIM )
 	};
 
 	def.json = 'note';
-
-	def.init = [ ];
 }
 
 
 /*
-| Initializer.
+| Puts in the path to doc child.
 */
-def.func._init =
-	function( )
+def.func._transformDoc =
+	function(
+		doc
+	)
 {
-	this.doc =
-		this.doc.create(
-			'path', this.path && this.path.append( 'doc' )
-		);
+	const path = this.path;
+
+	if( !path ) return doc;
+
+	return doc.create( 'path', path.append( 'doc' ) );
 };
 
 

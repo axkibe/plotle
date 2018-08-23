@@ -115,7 +115,8 @@ const _bind =
 /*
 | Initializer.
 */
-def.func._init =
+/* FIXME
+def.func.init =
 	function( )
 {
 	let elements = this.elements;
@@ -215,6 +216,7 @@ def.func._init =
 
 	root = this;
 };
+*/
 
 
 /*

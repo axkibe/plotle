@@ -59,8 +59,6 @@ if( TIM )
 		'./user',
 		'./welcome'
 	];
-
-	def.check = true;
 }
 
 

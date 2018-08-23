@@ -27,8 +27,6 @@ if( TIM )
 	};
 
 	def.json = 'change_grow';
-
-	def.init = [ ];
 }
 
 
@@ -59,17 +57,20 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function ( )
-{
-	if( this.rank !== undefined && this.rank < 0 )
-	{
-		throw error.make( 'grow.rank invalid' );
-	}
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.rank !== undefined && this.rank < 0 )
+/**/		{
+/**/			throw error.make( 'grow.rank invalid' );
+/**/		}
+/**/	};
+/**/}
 
 
 /*:::::::::::::.

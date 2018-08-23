@@ -62,8 +62,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'inherit', 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
@@ -88,33 +86,24 @@ const gleam_transform = require( '../gleam/transform' );
 
 
 /*
-| Initializes the create disc.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		inherit,
-		twigDup
+		name,
+		widget
 	)
 {
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		const wname = this.getKey( r );
-
-		twig[ wname ] =
-			twig[ wname ].create(
-				'path',
-					 twig[ wname ].path
-					 ? pass
-					 : this.path.append( 'twig' ).append( wname ),
-				'hover', this.hover,
-				'down', disc_zoomDisc._isActiveButton( this.action, wname ),
-				'transform', this.controlTransform
-			);
-	}
-
-	this._twig = twig;
+	return(
+		widget.create(
+			'path', path,
+			'hover', this.hover,
+			'down', disc_zoomDisc._isActiveButton( this.action, name ),
+			'transform', this.controlTransform
+		)
+	);
 };
 
 

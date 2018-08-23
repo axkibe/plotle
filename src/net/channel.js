@@ -30,8 +30,6 @@ if( TIM )
 			defaultValue : 'require( "./requestWrapList" ).create( )'
 		}
 	};
-
-	def.init = [ ];
 }
 
 
@@ -40,18 +38,26 @@ const net_requestWrap = require( './requestWrap' );
 const net_requestWrapList = require( './requestWrapList' );
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	this.channelName = this.path.get( -1 );
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if(	this.path.get( 0 ) !== 'ajax' ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if(	this.path.get( 0 ) !== 'ajax' ) throw new Error( );
+/**/	};
 /**/}
+
+
+/*
+| The channel name.
+*/
+def.lazy.channelName =
+	function( )
+{
+	return this.path.get( -1 );
 };
 
 

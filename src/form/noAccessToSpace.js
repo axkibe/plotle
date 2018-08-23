@@ -65,39 +65,36 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	def.init = [ 'twigDup' ];
-
 	def.twig = [ '< ../widget/types' ];
 }
 
 
 /*
-| Initializer.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		twigDup
+		name,
+		widget
 	)
 {
-	if( !this.path ) return;
+	switch( name )
+	{
+		case 'headline' :
 
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
+			widget =
+				widget.create(
+					'text',
+						this.nonSpaceRef
+						? 'No access to ' + this.nonSpaceRef.fullname
+						: ''
+				);
 
-	twig.headline =
-		twig.headline.create(
-			'text',
-				this.nonSpaceRef
-				? 'No access to ' + this.nonSpaceRef.fullname
-				: ''
-		);
+			break;
+	}
 
-	this._twig = twig;
-
-	form_form.init.call( this, true );
+	return form_form.transform.call( this, name, widget );
 };
-
-
-def.func._transform = form_form.transform;
 
 
 /*::::::::::::::::::.

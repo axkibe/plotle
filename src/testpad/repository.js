@@ -7,19 +7,19 @@
 tim.define( module, ( def, self ) => {
 
 
-const change_wrapList = require( '../change/wrapList' );
+//const change_wrapList = require( '../change/wrapList' );
 
-const fabric_doc = require( '../fabric/doc' );
+//const fabric_doc = require( '../fabric/doc' );
 
-const fabric_note = require( '../fabric/note' );
+//const fabric_note = require( '../fabric/note' );
 
-const fabric_para = require( '../fabric/para' );
+//const fabric_para = require( '../fabric/para' );
 
-const gleam_point = require( '../gleam/point' );
+//const gleam_point = require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+//const gleam_rect = require( '../gleam/rect' );
 
-const limit = require( '../math/root' );
+//const limit = require( '../math/root' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -56,6 +56,7 @@ if( TIM )
 /*
 | Initializer.
 */
+/* FIXME
 def.func._init =
 	function( )
 {
@@ -65,23 +66,6 @@ def.func._init =
 		this._note =
 			fabric_note.create(
 				'doc',
-					/*
-					fabric_doc.create(
-						'twig:add', '1',
-							fabric_para.create(
-								'text', 'Why would I want to know that?'
-							),
-						'twig:add', '2',
-							fabric_para.create(
-								'text', 'Can we have Bender Burgers again?'
-							),
-						'twig:add', '3',
-							fabric_para.create(
-								'text', 'And so we say goodbye to '
-								+ 'our beloved pet, Nibbler.'
-							)
-					),
-					*/
 					fabric_doc.create(
 						'twig:add', '1',
 							fabric_para.create( 'text', 'Ameno' ),
@@ -106,6 +90,7 @@ def.func._init =
 
 	this.seq = limit( 0, this.seq, this._changeWrapList.length );
 };
+*/
 
 
 /*

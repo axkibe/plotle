@@ -93,8 +93,6 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'inherit', 'twigDup' ];
-
 	def.twig =
 	[
 		'../widget/button',
@@ -105,187 +103,156 @@ if( TIM )
 }
 
 
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = disc_disc.concernsHover;
-
 
 /*
-| Initializes the main disc.
+| Transforms widgets.
 */
-def.func._init =
+def.func._transform =
 	function(
-		inherit,
-		twigDup
+		name,
+		widget
 	)
 {
-	const twig = twigDup ? this._twig : tim.copy( this._twig );
-
 	const action = this.action;
 
 	const show = this.show;
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	let text = pass;
+
+	let visible = pass;
+
+	let down;
+
+	switch( name )
 	{
-		const wname = this.getKey( r );
+		case 'create' :
 
-		let text = pass;
+			visible = this.access === 'rw' && this.spaceRef !== undefined;
 
-		let visible = pass;
+			down = show.timtype === show_create;
 
-		let down;
+			break;
 
-		switch( wname )
-		{
-			case 'create' :
+		case 'login' :
 
-				visible = this.access === 'rw' && this.spaceRef !== undefined;
+			visible = true;
 
-				down = show.timtype === show_create;
+			text =
+				!this.user || this.user.isVisitor
+				? 'log\nin'
+				: 'log\nout';
 
-				break;
+			down = show.timtype === show_form && show.formName === 'login';
 
-			case 'login' :
+			break;
 
-				visible = true;
+		case 'moveTo' :
 
-				text =
-					!this.user || this.user.isVisitor
-					? 'log\nin'
-					: 'log\nout';
+			visible = true;
 
-				down =
-					show.timtype === show_form
-					&& show.formName === 'login';
+			down = show.timtype === show_form && show.formName === 'moveTo';
 
-				break;
+			break;
 
-			case 'moveTo' :
+		case 'normal' :
 
-				visible = true;
+			visible = this.spaceRef !== undefined;
 
-				down =
-					show.timtype === show_form
-					&& show.formName === 'moveTo';
+			down =
+				show.timtype !== show_normal
+				? false
+				: ( action ? action.normalButtonDown : true );
 
-				break;
+			break;
 
-			case 'normal' :
+		case 'remove' :
 
-				visible = this.spaceRef !== undefined;
+			visible = !!( this.access === 'rw' && this.mark && this.mark.itemPaths );
 
-				if( show.timtype !== show_normal )
-				{
-					down = false;
-				}
-				else
-				{
-					down =
-						action
-						? action.normalButtonDown
-						: true;
-				}
+			down = false;
 
-				break;
+			break;
 
-			case 'remove' :
+		case 'select' :
 
-				visible =
-					!!(
-						this.access === 'rw'
-						&& this.mark
-						&& this.mark.itemPaths
-					);
+			visible = this.spaceRef !== undefined && this.access === 'rw';
 
-				down = false;
+			down = action && action.timtype === action_select;
 
-				break;
+			break;
 
-			case 'select' :
+		case 'signUp' :
 
-				visible =
-					this.spaceRef !== undefined
-					&& this.access === 'rw';
+			visible = this.user ? this.user.isVisitor : true;
 
-				down = action && action.timtype === action_select;
+			down = show.timtype === show_form && show.formName === 'signUp';
 
-				break;
+			break;
 
-			case 'signUp' :
+		case 'space' :
 
-				visible = this.user ? this.user.isVisitor : true;
-
-				down =
-					show.timtype === show_form
-					&& show.formName === 'signUp';
-
-				break;
-
-			case 'space' :
-
-				if( this.spaceRef )
-				{
-					text = this.spaceRef.fullname;
-
-					visible = true;
-				}
-				else
-				{
-					visible = false;
-				}
-
-				down =
-					show.timtype === show_form
-					&& show.formName === 'space';
-
-				break;
-
-			case 'user' :
-
-				text = this.user ? this.user.name : '';
+			if( this.spaceRef )
+			{
+				text = this.spaceRef.fullname;
 
 				visible = true;
+			}
+			else
+			{
+				visible = false;
+			}
 
-				down =
-					show.timtype === show_form
-					&& show.formName === 'user';
+			down = show.timtype === show_form && show.formName === 'space';
 
-				break;
+			break;
 
-			case 'zoom' :
+		case 'user' :
 
-				visible = this.spaceRef !== undefined;
+			text = this.user ? this.user.name : '';
 
-				down = show.timtype === show_zoom;
+			visible = true;
 
-				break;
+			down = show.timtype === show_form && show.formName === 'user';
 
-			default :
+			break;
 
-				visible = true;
+		case 'zoom' :
 
-				down = false;
+			visible = this.spaceRef !== undefined;
 
-				break;
-		}
+			down = show.timtype === show_zoom;
 
-		twig[ wname ] =
-			twig[ wname ].create(
-				'hover', this.hover,
-				'down', down,
-				'path',
-					twig[ wname ].path
-					? pass
-					: this.path.append( 'twig' ).append( wname ),
-				'text', text,
-				'visible', visible,
-				'transform', this.controlTransform
-			);
+			break;
+
+		default :
+
+			visible = true;
+
+			down = false;
+
+			break;
 	}
 
-	this._twig = twig;
+	return(
+		widget.create(
+			'hover', this.hover,
+			'down', down,
+			'path',
+				widget.path
+				? pass
+				: this.path.append( 'twig' ).append( name ),
+			'text', text,
+			'visible', visible,
+			'transform', this.controlTransform
+		)
+	);
 };
+
+
+/*
+| Deriving concerns stuff.
+*/
+def.static.concernsHover = disc_disc.concernsHover;
 
 
 /*:::::::::::::.

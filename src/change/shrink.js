@@ -54,22 +54,23 @@ if( TIM )
 	};
 
 	def.json = 'change_shrink';
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	if( this.rank !== undefined && this.rank < 0 )
-	{
-		throw error.make( 'set.rank negative' );
-	}
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.rank !== undefined && this.rank < 0 )
+/**/		{
+/**/			throw error.make( 'set.rank negative' );
+/**/		}
+/**/	};
+/**/}
 
 
 /*:::::::::::::.

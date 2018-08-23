@@ -118,6 +118,7 @@ def.staticLazy.layout = ( ) =>
 						'width', 100,
 						'height', 100
 					),
+				'scrollPos', gleam_point.zero,
 				'twig:add',
 				'linkloom:home',
 					widget_button.create(

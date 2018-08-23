@@ -54,19 +54,21 @@ if( TIM )
 	};
 
 	def.json = 'change_split';
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function ( )
-{
-	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
+/**/	};
+/**/}
+
 
 
 /*:::::::::::::.

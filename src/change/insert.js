@@ -60,27 +60,28 @@ if( TIM )
 	};
 
 	def.json = 'change_insert';
-
-	def.init = [ ];
 }
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function ( )
-{
-	if( this.at1 + this.val.length !== this.at2 )
-	{
-		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
-	}
-
-	if( this.at1 < 0 || this.at2 < 0 )
-	{
-		throw error.make( 'insert.at1|at2 negative' );
-	}
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.at1 + this.val.length !== this.at2 )
+/**/		{
+/**/			throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
+/**/		}
+/**/
+/**/		if( this.at1 < 0 || this.at2 < 0 )
+/**/		{
+/**/			throw error.make( 'insert.at1|at2 negative' );
+/**/		}
+/**/	};
+/**/}
 
 
 /*:::::::::::::.
