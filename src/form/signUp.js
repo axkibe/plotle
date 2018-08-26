@@ -230,11 +230,7 @@ def.func.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.create(
-				'mark',
-					visual_mark_caret.create(
-						'path', userInput.path,
-						'at', userInput.value.length
-					)
+				'mark', visual_mark_caret.pathAt( userInput.path, userInput.value.length )
 			);
 		}
 
@@ -325,11 +321,7 @@ def.func.signup =
 		this.setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', this.get( 'userInput' ).path,
-					'at', username.length
-				)
+			'mark', visual_mark_caret.pathAt( this.get( 'userInput' ).path, username.length )
 		);
 
 		return;
@@ -340,11 +332,7 @@ def.func.signup =
 		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', this.get( 'userInput' ).path,
-					'at', 0
-				)
+			'mark', visual_mark_caret.pathAt( this.get( 'userInput' ).path, 0 )
 		);
 
 		return;
@@ -355,11 +343,7 @@ def.func.signup =
 		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', this.get( 'passwordInput' ).path,
-					'at', pass.length
-				)
+			'mark', visual_mark_caret.pathAt( this.get( 'passwordInput' ).path, pass.length )
 		);
 
 		return;
@@ -370,11 +354,7 @@ def.func.signup =
 		this.setErrorMessage( 'Passwords do not match' );
 
 		root.create(
-			'mark',
-				visual_mark_caret.create(
-					'path', this.get( 'password2Input' ).path,
-					'at', pass2.length
-				)
+			'mark', visual_mark_caret.pathAt( this.get( 'password2Input' ).path, pass2.length )
 		);
 
 		return;

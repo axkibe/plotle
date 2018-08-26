@@ -44,7 +44,7 @@ if( TIM )
 		upSleeps : { type : './upSleepGroup' }
 	};
 
-	def.init = [ ];
+	def.global = 'root';
 }
 
 
@@ -91,16 +91,6 @@ const util = require( 'util' );
 const ref_space = require( '../ref/space' );
 
 const zlib = require( 'zlib' );
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	root = this;
-};
 
 
 /*

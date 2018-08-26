@@ -162,12 +162,7 @@ def.static.markForPoint =
 	}
 	else
 	{
-		return(
-			visual_mark_caret.create(
-				'path', para.textPath,
-				'at', at
-			)
-		);
+		return visual_mark_caret.pathAt( para.textPath, at );
 	}
 };
 

@@ -110,6 +110,8 @@ if( TIM )
 			}
 		}
 	};
+
+	def.global = 'root';
 }
 
 
@@ -148,8 +150,6 @@ const gleam_connect = require( '../gleam/connect' );
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const gleam_point = require( '../gleam/point' );
-
-const gleam_size = require( '../gleam/size' );
 
 const gleam_transform = require( '../gleam/transform' );
 
@@ -331,11 +331,7 @@ def.static.startup =
 /**/	if( root ) throw new Error( );
 /**/}
 
-	const viewSize =
-		gleam_size.create(
-			'height', display.size.height,
-			'width', display.size.width
-		);
+	const viewSize = display.size;
 
 	const show = show_form.loading;
 
@@ -488,8 +484,6 @@ def.static._createFormRoot =
 };
 
 
-
-
 /*
 | Initializer.
 */
@@ -600,11 +594,9 @@ def.func._init =
 
 	this.link = this.link.create( 'userCreds', userCreds );
 
-	root = this;
-
 	if( inherit && mark !== inherit.mark )
 	{
-		root._markLostNotifications( root.mark, inherit.mark );
+		this._markLostNotifications( root.mark, inherit.mark );
 	}
 };
 
@@ -1686,9 +1678,9 @@ def.func.spawnRelation =
 
 	root.create(
 		'mark',
-			visual_mark_caret.create(
-				'path', root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
-				'at', 0
+			visual_mark_caret.pathAt(
+				root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
+				0
 			)
 	);
 };

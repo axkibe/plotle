@@ -45,38 +45,12 @@ if( TIM )
 	{
 		alikeWithoutSize : { ignores : { size : true } }
 	};
-
-	def.init = [ 'inherit' ];
 }
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-	if(
-		inherit
-		&& inherit._tPool
-		&& this.alikeWithoutSize( inherit )
-	)
-	{
-		this._tPool = inherit._tPool;
-	}
-	else if( FREEZE )
-	{
-		this._tPool = { };
-	}
-};
 
 
 /*:::::::::::.
 :: Functions
 '::::::::::::*/
-
 
 
 /*
@@ -112,6 +86,29 @@ def.func.transform =
 	// FUTURE clear a too large pool
 
 	return tp;
+};
+
+
+/*
+| The transform pool.
+| This breaks immutability for caching.
+*/
+def.lazy._tPool =
+	function( )
+{
+	return { };
+};
+
+
+/*
+| Inherits the transform pool if alike.
+*/
+def.inherit._tPool =
+	function(
+		inherit
+	)
+{
+	return this.alikeWithoutSize( inherit );
 };
 
 

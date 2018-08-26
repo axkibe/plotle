@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, self ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -16,14 +16,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// offset of the caret
-		at : { type : [ 'undefined', 'integer' ], assign : '' },
-
 		// the shell has the system focus
 		focus : { type : 'boolean', defaultValue : 'true' },
-
-		// path of the caret
-		path : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
 
 		// x-position of the caret kept
 		retainx : { type : [ 'undefined', 'number' ] },
@@ -31,8 +25,6 @@ if( TIM )
 		// the text mark
 		textMark : { type : [ 'undefined', './text' ] },
 	};
-
-	def.init = [ 'path', 'at' ];
 }
 
 
@@ -41,29 +33,23 @@ const pathList = tim.import( 'tim.js', 'pathList' );
 const visual_mark_text = require( './text' );
 
 
+
+/*:::::::::::::.
+:: Lazy values
+'::::::::::::::*/
+
+
 /*
-| Initializer.
+| Creation Shortcut.
 */
-def.func._init =
+def.static.pathAt =
 	function(
 		path,
 		at
 	)
 {
-	if( path )
-	{
-		this.textMark =
-			visual_mark_text.create(
-				'path', path,
-				'at', at
-			);
-	}
+	return self.create( 'textMark', visual_mark_text.create( 'path', path, 'at', at ) );
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

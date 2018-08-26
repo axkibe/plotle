@@ -57,7 +57,7 @@ if( TIM )
 | Initializer.
 */
 /* FIXME
-def.func._init =
+def.func.xinit =
 	function( )
 {
 	// the current note;

@@ -135,7 +135,7 @@ def.static.cycleFocus =
 			root.create(
 				'mark',
 					ve.caretable
-					? visual_mark_caret.create( 'path', ve.path, 'at', 0 )
+					? visual_mark_caret.pathAt( ve.path, 0 )
 					: visual_mark_widget.create( 'path', ve.path )
 			);
 

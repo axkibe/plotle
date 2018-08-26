@@ -55,8 +55,6 @@ if( TIM )
 			}
 		}
 	};
-
-	def.init = [ 'inherit' ];
 }
 
 
@@ -95,40 +93,6 @@ const shell_fontPool = require( '../shell/fontPool' );
 const shell_settings = require( '../shell/settings' );
 
 const visual_mark_text = require( '../visual/mark/text' );
-
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-	if(
-		inherit
-		&& inherit.alikeVisually( this )
-		&& inherit.transform.zoom === this.transform.zoom
-	)
-	{
-		if( tim.hasLazyValueSet( inherit, 'flow' ) )
-		{
-			tim.aheadValue( this, 'flow', inherit.flow );
-		}
-
-/*
-		if( tim.hasLazyValueSet( inherit, 'glint' ) )
-		{
-			this._inheritedGlint = inherit.glint;
-		}
-		else
-		{
-			this._inheritedGlint = inherit._inheritedGlint;
-		}
-*/
-	}
-};
 
 
 /*::::::::::::::::::.
@@ -359,6 +323,7 @@ def.lazy.glint =
 | Returns true if a glint can be inherited.
 */
 def.inherit.glint =
+def.inherit.flow =
 	function(
 		inherit
 	)
@@ -1167,22 +1132,20 @@ def.func._setMark =
 		doc        // range mark need this
 	)
 {
+	// FIXME make a lazyFuncInt for visual_mark_text.
+	const mark = visual_mark_text.create( 'path', this.textPath, 'at', at );
+
 	root.create(
 		'mark',
 			!beginMark
 			? visual_mark_caret.create(
-				'path', this.textPath,
-				'at', at,
+				'textMark', mark,
 				'retainx', retainx
 			)
 			: visual_mark_range.create(
 				'doc', doc.fabric,
 				'beginMark', beginMark,
-				'endMark',
-					visual_mark_text.create(
-						'path', this.textPath,
-						'at', at
-					),
+				'endMark', mark,
 				'retainx', retainx
 			)
 	);

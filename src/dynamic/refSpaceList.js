@@ -11,8 +11,6 @@ const change_list = require( '../change/list' );
 
 const change_wrap = require( '../change/wrap' );
 
-const change_wrapList = require( '../change/wrapList' );
-
 const ref_moment = require( '../ref/moment' );
 
 const ref_userSpaceList = require( '../ref/userSpaceList' );
@@ -36,28 +34,15 @@ if( TIM )
 		seq : { type : 'integer', defaultValue : '1', json : true },
 
 		// cached changeWraps
-		changeWraps : { type : [ 'undefined', '../change/wrapList' ] },
+		changeWraps :
+		{
+			type : [ 'undefined', '../change/wrapList' ],
+			defaultValue : 'require( "../change/wrapList" ).create( )',
+		},
 	};
 
 	def.json = 'dynamic_refSpaceList';
-
-	def.init = [ ];
 }
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	if( !this.changeWraps )
-	{
-		// defaultValue is not user when coming from createFromJSON
-		this.changeWraps = change_wrapList.create( );
-	}
-};
-
 
 
 /*
