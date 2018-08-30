@@ -147,6 +147,8 @@ const form_root = require( '../form/root' );
 
 const gleam_connect = require( '../gleam/connect' );
 
+const gleam_display_canvas = require( '../gleam/display/canvas' );
+
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const gleam_point = require( '../gleam/point' );
@@ -1354,7 +1356,7 @@ def.func.resize =
 	)
 {
 	root.create(
-		'display', this.display.create( 'size', size ),
+		'display', gleam_display_canvas.resize( this.display, size ),
 		'viewSize', size
 	);
 };

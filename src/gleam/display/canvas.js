@@ -85,13 +85,8 @@ if( TIM )
 		size : { type : [ '../size' ] },
 
 		// the html canvas
-		_cv : { type : [ 'undefined', 'protean' ] },
-
-		// the html canvas context
-		_cx : { type : [ 'undefined', 'protean' ] },
+		canvas : { type : [ 'protean' ] },
 	};
-
-	def.init = [ 'inherit' ];
 }
 
 
@@ -116,74 +111,29 @@ const round = val => Math.round( val * ratio );
 const noround = val => val * ratio;
 
 
-/*
-| Internal function to get a 2d context.
-|
-| This turns on performance vs. quality settings.
-*/
-const get2dContext =
-	function(
-		canvas,
-		opaque
-	)
-{
-	const cx =
-		opaque
-		? canvas.getContext( '2d', { alpha: false } )
-		: canvas.getContext( '2d' );
-
-	cx.imageSmoothingEnabled = false;
-
-	return cx;
-};
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( inherit )
+/**/	def.func._check =
+/**/		function( )
 /**/	{
-/**/		if( tim.hasLazyValueSet( inherit, '_expired' ) ) throw new Error( );
+/**/		const canvas = this.canvas;
 /**/
-/**/    	inherit._expired;
-/**/	}
+/**/		const height = this.size.height;
+/**/
+/**/		const width = this.size.width;
+/**/
+/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.001 ) throw new Error( );
+/**/
+/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.001 ) throw new Error( );
+/**/
+/**/		if( canvas.height !== round( height ) ) throw new Error( );
+/**/
+/**/		if( canvas.width !== round( width ) ) throw new Error( );
+/**/	};
 /**/}
-
-	let cv = this._cv;
-
-	let height = this.size.height;
-
-	let width = this.size.width;
-
-	if( !cv )
-	{
-		cv = this._cv = document.createElement( 'canvas' );
-
-		this._cx = get2dContext( cv );
-	}
-	else
-	{
-		cv.style.height = height + 'px';
-
-		cv.style.width = width + 'px';
-	}
-
-	width = round( width );
-
-	height = round( height );
-
-	if( cv.width !== width ) cv.width = width;
-
-	if( cv.height !== height ) cv.height = height;
-};
 
 
 /*::::::::::::::::::.
@@ -196,18 +146,84 @@ def.func._init =
 */
 def.static.createAroundHTMLCanvas =
 	function(
-		canvas,  // the canvas to create around
-		size     // the size of the canvas
+		canvas,    // the canvas to create around
+		size,      // the size of the canvas
+		glint,     // the content
+		background // the background
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	const height = size.height;
+	const width = size.width;
+
+	canvas.style.height = height + 'px';
+	canvas.style.width = width + 'px';
+
+	canvas.height = round( height );
+	canvas.width = round( width );
+
 	return(
 		gleam_display_canvas.create(
-			'_cv', canvas,
-			'_cx', get2dContext( canvas, true ),
-			'background', 'rgb( 251, 251, 251 )',
+			'background', background,
+			'canvas', canvas,
+			'glint', glint,
 			'size', size
 		)
 	);
+};
+
+
+/*
+| Creates a new blank transparent canvas
+*/
+def.static.createNewCanvas =
+	function(
+		size,
+		glint
+	)
+{
+	return(
+		gleam_display_canvas.createAroundHTMLCanvas(
+			document.createElement( 'canvas' ),
+			size,
+			glint,
+			undefined  // transparent background
+		)
+	);
+};
+
+
+def.static.resize =
+	function(
+		canvas,
+		size
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/
+/**/	if( canvas.timtype !== gleam_display_canvas ) throw new Error( );
+/**/
+/**/	if( size.timtype !== gleam_size ) throw new Error( );
+/**/}
+
+	const height = size.height;
+	const width = size.width;
+
+	const cv = canvas.canvas;
+
+	cv.style.height = height + 'px';
+	cv.style.width = width + 'px';
+
+	cv.height = round( height );
+	cv.width = round( width );
+
+	return canvas.create( 'size', size, 'canvas', cv );
 };
 
 
@@ -220,7 +236,7 @@ def.static.createAroundHTMLCanvas =
 | A hidden helper canvas used by within( )
 */
 def.staticLazy.helper = ( ) =>
-	gleam_display_canvas.create( 'size', gleam_size.wh( 10, 10 ) );
+	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass );
 
 
 /*:::::::::::::.
@@ -229,18 +245,46 @@ def.staticLazy.helper = ( ) =>
 
 
 /*
-| FIXME describe
+| Ensures mono causal chain of canvas.
 */
 /**/if( CHECK )
 /**/{
-/**/	def.lazy._expired = () => true;
+/**/	def.lazy._expired = ( ) => true;
+/**/
+/**/	def.inherit._expired =
+/**/		function( inherit )
+/**/	{
+/**/		if( tim.hasLazyValueSet( inherit, '_expired' ) ) throw new Error( );
+/**/
+/**/    	inherit._expired;
+/**/
+/**/		return false;
+/**/	};
 /**/}
+
+
+/*
+| The canvas context
+| Turns on performance vs. quality settings.
+*/
+def.lazy._cx =
+	function( )
+{
+	const cx =
+		this.background
+		? this.canvas.getContext( '2d', { alpha: false } )
+		: this.canvas.getContext( '2d' );
+
+	cx.imageSmoothingEnabled = false;
+
+	return cx;
+};
 
 
 /*
 | Set when the canvas has been rendered.
 */
-def.lazy._rendered = () => true;
+def.lazy._rendered = ( ) => true;
 
 
 /*:::::::::::.
@@ -807,7 +851,7 @@ def.func._renderWindow =
 
 		cd.render( );
 
-		cx.drawImage( cd._cv, round( x + glint.offset.x ), round( y + glint.offset.y ) );
+		cx.drawImage( cd.canvas, round( x + glint.offset.x ), round( y + glint.offset.y ) );
 	}
 };
 

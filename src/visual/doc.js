@@ -53,9 +53,7 @@ if( TIM )
 		transform : { type : '../gleam/transform' },
 	};
 
-	def.init = [ 'inherit' ];
-
-	def.twig = [ './para' ];
+	def.twig = [ 'undefined', './para' ];
 }
 
 
@@ -87,62 +85,65 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = require( './mark/caret' );
 
-const visual_mark_range = require( '../visual/mark/range' );
+const visual_mark_range = require( './mark/range' );
 
-const visual_para = require( '../visual/para' );
+const visual_para = require( './para' );
 
 
 /*
-| Initializer.
+| Transforms content.
 */
-def.func._init =
+def.func._transform =
 	function(
-		inherit
+		key,
+		para
 	)
 {
-	const fabric = this.fabric;
-
-	const twig = { };
-
-	const ranks = [ ];
-
-	const twigPath = this.path && this.path.append( 'twig' );
-
-	const paraSep = this.paraSep;
+	const rank = this.rankOf( key );
 
 	const innerMargin = this.innerMargin;
 
-	let y = innerMargin.n;
+	const twigPath = this.path && this.path.append( 'twig' );
 
-	for( let a = 0, aZ = fabric.length; a < aZ; a++ )
+	let y;
+
+	if( rank > 0 )
 	{
-		const key = fabric.getKey( a );
+		const prev = this.atRank( rank - 1 );
 
-		ranks[ a ] = key;
-
-		const pos = gleam_point.xy( innerMargin.w, y - this.scrollPos.y );
-
-		const para =
-		twig[ key ] =
-			( inherit && inherit._twig[ key ] || visual_para ).create(
-				'fabric', fabric.get( key ),
-				'fontsize', this.fontsize,
-				'path', twigPath && twigPath.appendNC( key ),
-				'pos', pos,
-				'flowWidth', this.flowWidth,
-				'mark', this.mark,
-				'transform', this.transform
-			);
-
-		y += para.flow.height + paraSep;
+		y = prev.pos.y + prev.flow.height + this.paraSep;
+	}
+	else
+	{
+		y = innerMargin.n - this.scrollPos.y;
 	}
 
-	this._ranks = ranks;
+	const pos = gleam_point.xy( innerMargin.w, y );
 
-	this._twig = twig;
+	return(
+		( para || visual_para ).create(
+			'fabric', this.fabric.get( key ),
+			'fontsize', this.fontsize,
+			'path', twigPath && twigPath.appendNC( key ),
+			'pos', pos,
+			'flowWidth', this.flowWidth,
+			'mark', this.mark,
+			'transform', this.transform
+		)
+	);
 };
+
+
+/*
+| This is a proxy object.
+*/
+def.lazy._ranks =
+	function( )
+{
+	return this.fabric._ranks;
+}
 
 
 /*:::::::::::::.

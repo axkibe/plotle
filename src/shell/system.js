@@ -16,7 +16,30 @@ tim.define( module, ( def, shell_system ) => {
 
 if( TIM )
 {
-	def.init = [ ];
+	def.attributes =
+	{
+		// the transmitter creator is used to catch errors.
+		transmitter : { type : 'protean' },
+
+		// used to transmit animation events
+		_animationTransmitter : { type : 'protean' },
+
+		// used for blinking the caret
+		_blinkTransmitter : { type : 'protean' },
+
+		// the display
+		_display : { type : 'protean' },
+
+		// used for starting drags after timeout
+		_onAtweenTimeTransmitter : { type : 'protean' },
+
+		// used to test the hidden input
+		_testInputTransmitter : { type : 'protean' },
+
+		// if true browser supports the setCapture( ) call
+		// if false needs work around
+		_useCapture : { type : 'boolean' },
+	};
 }
 
 
@@ -114,6 +137,12 @@ const transmitter =
 | to be processed.
 */
 let animating = false;
+
+
+/*
+| Timer used for blinking
+*/
+let blinkTimer;
 
 
 /*
@@ -263,73 +292,6 @@ const systemTransmitter =
 def.func._init =
 	function( )
 {
-	canvas = document.getElementById( 'canvas' );
-
-	this._display =
-		gleam_impl.createAroundHTMLCanvas(
-			canvas,
-			gleam_size.wh( window.innerWidth, window.innerHeight )
-		);
-
-	// if true browser supports the setCapture() call
-	// if false needs work around
-	this._useCapture = !!canvas.setCapture;
-
-	// hidden input that forwards all events
-	hiddenInput = document.getElementById( 'input' );
-
-	hiddenInput.onblur = systemTransmitter( '_onInputBlur' );
-
-	hiddenInput.autocomplete = 'off';
-
-	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
-
-	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
-
-	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
-
-	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
-
-	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
-
-	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
-
-	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
-
-	// firefox wheel listening
-	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
-
-	// iPad sometimes starts just somewhere
-	window.scrollTo( 0, 0 );
-
-	window.onresize = systemTransmitter( '_onResize' );
-
-	window.onfocus = systemTransmitter( '_onSystemFocus' );
-
-	window.onblur = systemTransmitter( '_onSystemBlur' );
-
-	document.onkeyup = systemTransmitter( '_onKeyUp' );
-
-	document.onkeydown = systemTransmitter( '_onKeyDown' );
-
-	document.onkeypress = systemTransmitter( '_onKeyPress' );
-
-	this._testInputTransmitter = systemTransmitter( '_testInput' );
-
-	this._onAtweenTimeTransmitter = systemTransmitter( '_onAtweenTime' );
-
-	this._blinkTransmitter = systemTransmitter( '_blink' );
-
-	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
-
-	// the blink (and check input) timer
-	this._blinkTimer = undefined;
-
-	this._animationTransmitter = systemTransmitter( '_animation' );
-
-	this.restartBlinker( );
-
-	this.transmitter = transmitter;
 };
 
 
@@ -435,16 +397,9 @@ def.func.restartBlinker =
 	// double uses the blink timer
 	this._testInput( );
 
-	if( this._blinkTimer )
-	{
-		clearInterval( this._blinkTimer );
-	}
+	if( blinkTimer ) clearInterval( blinkTimer );
 
-	this._blinkTimer =
-		setInterval(
-			this._blinkTransmitter,
-			shell_settings.caretBlinkSpeed
-		);
+	blinkTimer = setInterval( this._blinkTransmitter, shell_settings.caretBlinkSpeed );
 };
 
 
@@ -1405,6 +1360,80 @@ def.func._steerAttention =
 
 
 /*
+| Initializes the system.
+*/
+def.static.init =
+	function( )
+{
+	canvas = document.getElementById( 'canvas' );
+
+	let display =
+		gleam_impl.createAroundHTMLCanvas(
+			canvas,
+			gleam_size.wh( window.innerWidth, window.innerHeight ),
+			pass,
+			'rgb( 251, 251, 251 )'  // background
+		);
+
+	system =
+		shell_system.create(
+			'transmitter', transmitter,
+			'_animationTransmitter', systemTransmitter( '_animation' ),
+			'_blinkTransmitter', systemTransmitter( '_blink' ),
+			'_display', display,
+			'_onAtweenTimeTransmitter', systemTransmitter( '_onAtweenTime' ),
+			'_testInputTransmitter', systemTransmitter( '_testInput' ),
+			'_useCapture', !!canvas.setCapture
+		);
+
+	// hidden input that forwards all events
+	hiddenInput = document.getElementById( 'input' );
+
+	hiddenInput.onblur = systemTransmitter( '_onInputBlur' );
+
+	hiddenInput.autocomplete = 'off';
+
+	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
+
+	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
+
+	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
+
+	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
+
+	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
+
+	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
+
+	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
+
+	// firefox wheel listening
+	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
+
+	// iPad sometimes starts just somewhere
+	window.scrollTo( 0, 0 );
+
+	window.onresize = systemTransmitter( '_onResize' );
+
+	window.onfocus = systemTransmitter( '_onSystemFocus' );
+
+	window.onblur = systemTransmitter( '_onSystemBlur' );
+
+	document.onkeyup = systemTransmitter( '_onKeyUp' );
+
+	document.onkeydown = systemTransmitter( '_onKeyDown' );
+
+	document.onkeypress = systemTransmitter( '_onKeyPress' );
+
+	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
+
+	system.restartBlinker( );
+
+	shell_root.startup( system._display );
+};
+
+
+/*
 | System starts up ( pages loades )
 */
 def.static.startup = function( )
@@ -1413,25 +1442,16 @@ def.static.startup = function( )
 
 	window.system = undefined;
 
-	const start =
-		transmitter(
-			function( )
-			{
-				system = shell_system.create( );
-
-				shell_root.startup( system._display );
-			},
-			true
-		);
+	const init = transmitter( shell_system.init, true );
 
 	if( !config.weinre )
 	{
-		start( );
+		init( );
 	}
 	else
 	{
 		// gives weinre a moment to set itself up
-		window.setTimeout( start, 1500 );
+		window.setTimeout( init, 1500 );
 	}
 };
 

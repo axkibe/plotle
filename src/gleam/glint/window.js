@@ -27,32 +27,10 @@ if( TIM )
 		// offset all glints by this
 		offset : { type : '../point' }
 	};
-
-	def.init = [ 'inherit' ];
 }
 
 
 const gleam_display_canvas = require( '../display/canvas' );
-
-
-/*
-| Initialization.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-	if(
-		inherit
-		&& tim.hasLazyValueSet( inherit, '_canvasDisplay' )
-		&& this.twig === inherit.twig
-		&& this.rect.size.equals( inherit.rect.size )
-	)
-	{
-		tim.aheadValue( this, '_canvasDisplay', inherit._canvasDisplay );
-	}
-};
 
 
 /*:::::::::::::.
@@ -66,11 +44,21 @@ def.func._init =
 def.lazy._canvasDisplay =
 	function( )
 {
+	return gleam_display_canvas.createNewCanvas( this.rect.size, this.glint );
+};
+
+
+/*
+| Inheritance optimization.
+*/
+def.inherit._canvasDisplay =
+	function(
+		inherit
+	)
+{
 	return(
-		gleam_display_canvas.create(
-			'glint', this.glint,
-			'size', this.rect.size
-		)
+		this.glint === inherit.glint
+		&& this.rect.size.equals( inherit.rect.size )
 	);
 };
 
