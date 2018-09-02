@@ -19,33 +19,30 @@ if( TIM )
 		// paths of the items
 		itemPaths : { type : 'tim.js/pathList' }
 	};
-
-	def.init = [ ];
 }
 
 
 const change_mark_node = require( '../../change/mark/node' );
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	const paths = this.itemPaths;
-/**/
-/**/	for( let c = 0, cZ = paths.length; c < cZ; c++ )
+/**/	def.func._check =
+/**/		function( )
 /**/	{
-/**/		if( paths.get( c ).isEmpty ) throw new Error( );
+/**/		const paths = this.itemPaths;
 /**/
-/**/		if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
-/**/	}
+/**/		for( let c = 0, cZ = paths.length; c < cZ; c++ )
+/**/		{
+/**/			if( paths.get( c ).isEmpty ) throw new Error( );
+/**/
+/**/			if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/		}
+/**/	};
 /**/}
-};
 
 
 /*

@@ -23,6 +23,9 @@ if( TIM )
 			prepare : 'self.concernsAction( action, path )'
 		},
 
+		// the document (content)
+		doc : { type : [ './doc', 'undefined' ], transform : '_transformDoc' },
+
 		// the labels fabric
 		fabric : { type : '../fabric/label' },
 
@@ -49,8 +52,6 @@ if( TIM )
 		// the current space transform
 		transform : { type : '../gleam/transform' }
 	};
-
-	def.init = [ 'inherit' ];
 
 	/*
 	def.alike =
@@ -172,9 +173,7 @@ def.static.createGeneric =
 
 	const fs =
 		Math.max(
-			model.doc.fontsize
-			* zone.height
-			/ model.zone.height,
+			model.doc.fontsize * zone.height / model.zone.height,
 			gruga_label.minSize
 		);
 
@@ -221,17 +220,17 @@ def.static.createGeneric =
 
 
 /*
-| Initializer.
+| Transforms the doc.
 */
-def.func._init =
+def.func._transformDoc =
 	function(
-		inherit
+		doc
 	)
 {
 	const fabric = this.fabric;
 
-	this.doc =
-		( inherit && inherit.doc || visual_doc ).create(
+	return(
+		( doc || visual_doc ).create(
 			'fabric', fabric.doc,
 			'flowWidth', 0,
 			'fontsize', this.fontsize,
@@ -241,17 +240,8 @@ def.func._init =
 			'path', this.path && this.path.append( 'doc' ),
 			'scrollPos', gleam_point.zero,
 			'transform', this.transform.ortho
-		);
-
-	if(
-		inherit
-		&& inherit.equals( this )
-		&& tim.hasLazyValueSet( inherit, 'glint' )
-	)
-	{
-		tim.aheadValue( this, 'glint', inherit.glint );
-	}
-
+		)
+	);
 };
 
 
@@ -296,6 +286,20 @@ def.lazy.glint =
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| Inheritance optimization.
+|
+| FIXME shouldn't this be default?
+*/
+def.inherit.glint =
+	function(
+		inherit
+	)
+{
+	return inherit.equals( this );
 };
 
 

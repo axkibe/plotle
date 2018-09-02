@@ -18,11 +18,11 @@ if( TIM )
 	{
 		// the list of aliases this is served under
 		// by default determined from filePath
-		aliases : { type : [ 'undefined', 'tim.js/stringList' ] },
+		aliases : { type : [ 'undefined', 'tim.js/stringList' ], transform : '_transformAliases' },
 
 		// "binary" or "utf-8"
 		// by default determined from file extension
-		coding : { type : [ 'undefined', 'string' ] },
+		coding : { type : [ 'undefined', 'string' ], transform : '_transformCoding' },
 
 		// cached or auto generated data
 		data : { type : [ 'undefined', 'protean' ] },
@@ -56,7 +56,7 @@ if( TIM )
 
 		// mime type
 		// by default determined from file extension
-		mime : { type : [ 'undefined', 'string' ] },
+		mime : { type : [ 'undefined', 'string' ], transform : '_transformMime' },
 
 		// post processor replacing stuff
 		postProcessor : { type : [ 'undefined', 'string' ] },
@@ -73,8 +73,6 @@ if( TIM )
 		// if hasTim the tim id string
 		timId : { type : [ 'undefined', 'string' ] },
 	};
-
-	def.init = [ ];
 }
 
 
@@ -84,29 +82,41 @@ const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
 
 
 /*
-| Initializer.
+| The alias is are the paths the file is served as
+| directories are replaced with hypens to ease debugging
 */
-def.func._init =
-	function( )
+def.func._transformAliases =
+	function(
+		aliases
+	)
 {
-	const filePath = this.filePath;
+	return aliases || stringList( [ this.filePath.replace( /\//g, '-' ) ] );
+};
 
-	// the alias is are the paths the file is served as
-	// directories are replaced with hypens to ease debugging
-	if( !this.aliases )
-	{
-		this.aliases = stringList( [ filePath.replace( /\//g, '-' ) ] );
-	}
 
-	if( !this.coding )
-	{
-		this.coding = server_fileTypes.coding( this.fileExt );
-	}
+/*
+| The file coding is either specified manually
+| or derived from file extension.
+*/
+def.func._transformCoding =
+	function(
+		coding
+	)
+{
+	return coding || server_fileTypes.coding( this.fileExt );
+};
 
-	if( !this.mime )
-	{
-		this.mime = server_fileTypes.mime( this.fileExt );
-	}
+
+/*
+| The mime is either specified manually
+| or derived from file extension
+*/
+def.func._transformMime =
+	function(
+		mime
+	)
+{
+	return mime || server_fileTypes.mime( this.fileExt );
 };
 
 

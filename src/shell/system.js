@@ -287,15 +287,6 @@ const systemTransmitter =
 
 
 /*
-| The system.
-*/
-def.func._init =
-	function( )
-{
-};
-
-
-/*
 | Cancels an interval timer.
 */
 def.func.cancelInterval =

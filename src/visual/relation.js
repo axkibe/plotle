@@ -78,11 +78,14 @@ const visual_label = require( '../visual/label' );
 def.func._init =
 	function( )
 {
-	visual_label.prototype._init.call( this );
-
 	this._cache = { };
 };
 
+
+/*
+| Transforms the doc.
+*/
+def.func._transformDoc = visual_label.prototype._transformDoc;
 
 
 /*::::::::::::::::::.

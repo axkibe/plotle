@@ -21,44 +21,26 @@ if( TIM )
 
 		// path of the caret
 		path : { type : 'tim.js/path' },
-
-		// the text mark
-		changeMarkText : { type : [ 'undefined', '../../change/mark/text' ], assign : '' },
 	};
-
-	def.init = [ 'changeMarkText' ];
 }
 
 
 const change_mark_text = require( '../../change/mark/text' );
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		changeMarkText  // mark for the change engine
-	)
-{
-
-	if( changeMarkText )
-	{
-		this.path = changeMarkText.path.prepend( 'spaceVisual' );
-
-		this.at = changeMarkText.at;
-
-		tim.aheadValue( this, 'changeMarkText', changeMarkText );
-	}
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( this.path.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.path.isEmpty ) throw new Error( );
 /**/
-/**/	if( this.at < 0 ) throw new Error( );
+/**/		if( this.at < 0 ) throw new Error( );
+/**/	};
 /**/}
-
-};
 
 
 /*:::::::::::::.
@@ -69,7 +51,7 @@ def.func._init =
 /*
 | The change engine's textmark.
 */
-def.lazy.changeMarkText =
+def.lazy._changeMarkText =
 	function( )
 {
 	if( this.path.get( 0 ) !== 'spaceVisual' ) return;
@@ -99,11 +81,19 @@ def.func.createTransformed =
 {
 	if( this.path.get( 0 ) !== 'spaceVisual' ) return this;
 
-	const tm = changes.transform( this.changeMarkText );
+	const tm = changes.transform( this._changeMarkText );
 
 	if( !tm ) return undefined;
 
-	return this.create( 'changeMarkText', tm );
+	const vm =
+		this.create(
+			'at', tm.at,
+			'path', tm.path.prepend( 'spaceVisual' )
+		);
+
+	tim.aheadValue( vm, '_changeMarkText', tm );
+
+	return vm;
 };
 
 

@@ -143,7 +143,7 @@ def.lazy._ranks =
 	function( )
 {
 	return this.fabric._ranks;
-}
+};
 
 
 /*:::::::::::::.
