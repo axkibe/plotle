@@ -23,6 +23,9 @@ if( TIM )
 			prepare : 'self.concernsAction( action, path )'
 		},
 
+		// the document (content)
+		doc : { type : [ './doc', 'undefined' ], transform : '_transformDoc' },
+
 		// the relations fabric
 		fabric : { type : '../fabric/relation' },
 

@@ -25,6 +25,9 @@ if( TIM )
 		// space fabric data
 		fabric : { type : '../fabric/space' },
 
+		// the alteration frame
+		frame : { type : [ './frame', 'undefined' ], transform : '_transformFrame' },
+
 		// node currently hovered upon
 		hover :
 		{
@@ -49,10 +52,9 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	def.init = [ 'inherit' ];
-
 	def.twig =
 	[
+		'undefined',
 		'./label',
 		'./note',
 		'./portal',
@@ -197,95 +199,100 @@ def.static.concernsHover =
 
 
 /*
-| Initializer.
-|
-| FUTURE inherit optimizations.
+| Transforms the items into visual items.
 */
-def.func._init =
+def.func._transform =
 	function(
-		inherit
+		key,
+		item
 	)
 {
+	let path;
+
+	let fabric = this.fabric.get( key );
+
+	if( !item )
+	{
+		item = visual_space.visualMap.get( fabric.timtype );
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !item ) throw new Error( );
+/**/	}
+
+		path = visual_space.spacePath.append( 'twig' ).appendNC( key );
+	}
+	else
+	{
+		path = item.path;
+	}
+
 	const action = this.action;
-
-	const fabric = this.fabric;
-
-	const hover = this.hover;
 
 	const mark = this.mark;
 
-	const transform = this.transform;
-
-	const twig = { };
-
-	const ranks = [ ];
-
-	let path;
-
-	for( let a = 0, al = fabric.length; a < al; a++ )
-	{
-		const k = fabric.getKey( a );
-
-		ranks[ a ] = k;
-
-		const item = fabric.get( k );
-
-		let iItem = this._twig[ k ];
-
-		if( !iItem )
-		{
-			iItem = visual_space.visualMap.get( item.timtype );
-
-/**/		if( CHECK )
-/**/		{
-/**/			if( !iItem ) throw new Error( );
-/**/		}
-
-			path = visual_space.spacePath.append( 'twig' ).appendNC( k );
-		}
-		else
-		{
-			path = iItem.path;
-		}
-
-		const highlight =
-			(
-				action
-				&& (
-					( action.timtype === action_createRelation && action.affects( path ) )
-					|| ( action.timtype === action_select && action.affects( path ) )
-				)
+	const highlight =
+		(
+			action
+			&& (
+				( action.timtype === action_createRelation && action.affects( path ) )
+				|| ( action.timtype === action_select && action.affects( path ) )
 			)
-			|| ( mark && mark.containsPath( path ) );
+		)
+		|| ( mark && mark.containsPath( path ) );
 
-		twig[ k ] =
-			iItem.create(
-				'action', action,
-				'highlight', !!highlight,
-				'hover', hover,
-				'fabric', item,
-				'mark', mark,
-				'path', path,
-				'transform', transform
-			);
-	}
-
-	if( FREEZE )
-	{
-		Object.freeze( ranks );
-
-		Object.freeze( twig );
-	}
-
-	this._ranks = ranks;
-
-	this._twig = twig;
-
-	if( inherit && tim.hasLazyValueSet( inherit, 'frame' ) )
-	{
-		this._inheritFrame = inherit.frame;
-	}
+	return(
+		item.create(
+			'action', action,
+			'highlight', !!highlight,
+			'hover', this.hover,
+			'fabric', fabric,
+			'mark', mark,
+			'path', path,
+			'transform', this.transform
+		)
+	);
 };
+
+
+/*
+| Takes the ranks of the fabric.
+*/
+def.lazy._ranks =
+	function( )
+{
+	return this.fabric._ranks;
+};
+
+
+/*
+| The current alteration frame.
+*/
+def.func._transformFrame =
+	function(
+		frame
+	)
+{
+	const mark = this.mark;
+
+	if( !mark ) return;
+
+	if( !mark.itemPaths ) return;
+
+	const content = this.getList( mark.itemPaths );
+
+	if( !content ) return;
+
+	return(
+		( frame || visual_frame )
+		.create(
+			'content', content,
+			'transform', this.transform
+		)
+	);
+};
+
+
 
 
 /*:::::::::::::.
@@ -326,32 +333,6 @@ def.lazy.focus =
 	if( path.length <= 2 ) return undefined; // FUTURE shouldn't be necessary
 
 	return this.get( path.get( 2 ) );
-};
-
-
-/*
-| The current alteration frame.
-*/
-def.lazy.frame =
-	function( )
-{
-	const mark = this.mark;
-
-	if( !mark ) return;
-
-	if( !mark.itemPaths ) return;
-
-	const content = this.getList( mark.itemPaths );
-
-	if( !content ) return;
-
-	return(
-		( this._inheritFrame || visual_frame )
-		.create(
-			'content', content,
-			'transform', this.transform
-		)
-	);
 };
 
 

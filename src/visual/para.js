@@ -726,6 +726,11 @@ def.func._keyBackspace =
 
 	const r = doc.rankOf( this.key );
 
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
+
 	if( r === 0 ) return;
 
 	const ve = doc.atRank( r - 1 );
@@ -770,6 +775,11 @@ def.func._keyDel =
 	}
 
 	const r = doc.rankOf( this.key );
+
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
 
 	if( r >= doc.length - 1 ) return;
 
@@ -819,6 +829,11 @@ def.func._keyDown =
 
 	// goto next para
 	const r = doc.rankOf( this.key );
+
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
 
 	if( r < doc.length - 1 )
 	{
@@ -888,6 +903,11 @@ def.func._keyLeft =
 	}
 
 	const r = doc.rankOf( this.key );
+
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
 
 	if( r > 0 )
 	{
@@ -1008,6 +1028,11 @@ def.func._keyRight =
 
 	const r = doc.rankOf( this.key );
 
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
+
 	if( r < doc.length - 1 )
 	{
 		const ve = doc.atRank( r + 1 );
@@ -1046,6 +1071,11 @@ def.func._keyUp =
 
 	// goto prev para
 	const r = doc.rankOf( this.key );
+
+/**/if( CHECK )
+/**/{
+/**/	if( r < 0 ) throw new Error( );
+/**/}
 
 	if( r > 0 )
 	{

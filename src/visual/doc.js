@@ -103,6 +103,11 @@ def.func._transform =
 {
 	const rank = this.rankOf( key );
 
+/**/if( CHECK )
+/**/{
+/**/	if( rank < 0 ) throw new Error( );
+/**/}
+
 	const innerMargin = this.innerMargin;
 
 	const twigPath = this.path && this.path.append( 'twig' );
