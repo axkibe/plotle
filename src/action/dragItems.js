@@ -17,7 +17,8 @@ if( TIM )
 	def.attributes =
 	{
 		// drags the items by this x/y
-		moveBy : { type : [ 'undefined', '../gleam/point' ] },
+		//moveBy : { type : [ 'undefined', '../gleam/point' ] }, XXX
+		moveBy : { type : '../gleam/point' },
 
 		// the paths of the items to drag
 		itemPaths : { type : [ 'undefined', 'tim.js/pathList' ] },

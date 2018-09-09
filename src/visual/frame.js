@@ -591,8 +591,9 @@ def.func.dragStart =
 	root.create(
 		'action',
 			action_dragItems.create(
-				'startPoint', dp,
-				'itemPaths', this.content.itemPaths
+				'moveBy', gleam_point.zero,
+				'itemPaths', this.content.itemPaths,
+				'startPoint', dp
 			)
 	);
 

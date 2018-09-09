@@ -615,21 +615,22 @@ def.func.specialKey =
 
 				const v1 = doc.atRank( doc.length - 1 );
 
-				root.create(
-					'mark',
-						visual_mark_range.create(
-							'doc', doc.fabric,
-							'beginMark',
-								visual_mark_text.create(
-									'path', v0.textPath,
-									'at', 0
-								),
-							'endMark',
-								visual_mark_text.create(
-									'path', v1.textPath,
-									'at', v1.text.length
-								)
-						)
+				// FIXME make pathAt shortcuts
+
+				root.setUserMark(
+					visual_mark_range.create(
+						'doc', doc.fabric,
+						'beginMark',
+							visual_mark_text.create(
+								'path', v0.textPath,
+								'at', 0
+							),
+						'endMark',
+							visual_mark_text.create(
+								'path', v1.textPath,
+								'at', v1.text.length
+							)
+					)
 				);
 
 				return true;
@@ -1165,19 +1166,18 @@ def.func._setMark =
 	// FIXME make a lazyFuncInt for visual_mark_text.
 	const mark = visual_mark_text.create( 'path', this.textPath, 'at', at );
 
-	root.create(
-		'mark',
-			!beginMark
-			? visual_mark_caret.create(
-				'textMark', mark,
-				'retainx', retainx
-			)
-			: visual_mark_range.create(
-				'doc', doc.fabric,
-				'beginMark', beginMark,
-				'endMark', mark,
-				'retainx', retainx
-			)
+	root.setUserMark(
+		!beginMark
+		? visual_mark_caret.create(
+			'textMark', mark,
+			'retainx', retainx
+		)
+		: visual_mark_range.create(
+			'doc', doc.fabric,
+			'beginMark', beginMark,
+			'endMark', mark,
+			'retainx', retainx
+		)
 	);
 };
 

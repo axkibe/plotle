@@ -48,8 +48,6 @@ if( TIM )
 		// the current space transform
 		transform : { type : '../gleam/transform' },
 	};
-
-	def.init = [ ];
 }
 
 
@@ -72,17 +70,6 @@ const visual_docItem = require( '../visual/docItem' );
 const visual_item = require( '../visual/item' );
 
 const visual_label = require( '../visual/label' );
-
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	this._cache = { };
-};
 
 
 /*
@@ -222,8 +209,6 @@ def.func.dragStart = visual_docItem.dragStart;
 def.func.glint =
 	function( )
 {
-	const cache = this._cache;
-
 	const item1 = root.spaceVisual.get( this.fabric.item1key );
 
 	const item2 = root.spaceVisual.get( this.fabric.item2key );
@@ -233,29 +218,6 @@ def.func.glint =
 	if( item1 ) shape1 = item1.shape;
 
 	if( item2 ) shape2 = item2.shape;
-
-	const cg = cache.glint;
-
-	if( cg )
-	{
-		const arrShape = cache.arrShape;
-
-		const conShape = cache.conShape;
-
-		if(
-			(
-				( !conShape && !shape1 )
-				|| ( conShape && conShape.equals( shape1 ) )
-			)
-			&& (
-				( !arrShape && !shape2 )
-				|| ( arrShape && arrShape.equals( shape2 ) )
-			)
-		)
-		{
-			return cg;
-		}
-	}
 
 	const tZone = this.tZone;
 
@@ -284,8 +246,42 @@ def.func.glint =
 
 	if( shape2 ) arr.push( this._getArrowGlint( shape2 ) );
 
-	return( cache.glint = gleam_glint_list.create( 'list:init', arr ) );
+	return gleam_glint_list.create( 'list:init', arr );
 };
+
+
+/* FUTURE repair caching
+def.inherit.glint =
+	function(
+		inherit
+	)
+{
+	const item1 = root.spaceVisual.get( this.fabric.item1key );
+
+	const item2 = root.spaceVisual.get( this.fabric.item2key );
+
+	let shape1, shape2;
+
+	if( item1 ) shape1 = item1.shape;
+
+	if( item2 ) shape2 = item2.shape;
+
+	const arrShape = cache.arrShape;
+
+	const conShape = cache.conShape;
+
+	return(
+		(
+			( !conShape && !shape1 )
+			|| ( conShape && conShape.equals( shape1 ) )
+		)
+		&& (
+			( !arrShape && !shape2 )
+			|| ( arrShape && arrShape.equals( shape2 ) )
+		)
+	);
+};
+*/
 
 
 /*
@@ -361,6 +357,7 @@ def.func.moveSelect = visual_docItem.moveSelect;
 */
 def.func.scrollMarkIntoView = function( ){ };
 
+
 /*
 | Returns the glint of a connection to a shape.
 */
@@ -369,16 +366,7 @@ def.func._getConnectionGlint =
 		shape
 	)
 {
-	const cache = this._cache;
-
-	const conShape = cache.conShape;
-
-	if( conShape && conShape.equals( shape ) )
-	{
-		return cache.conGlint;
-	}
-
-	const conGlint =
+	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
@@ -389,13 +377,8 @@ def.func._getConnectionGlint =
 					'normal'
 				)
 				.transform( this.transform )
-		);
-
-	cache.conShape = shape;
-
-	cache.conGlint = conGlint;
-
-	return conGlint;
+		)
+	);
 };
 
 
@@ -407,16 +390,7 @@ def.func._getArrowGlint =
 		shape
 	)
 {
-	const cache = this._cache;
-
-	const arrShape = cache.arrShape;
-
-	if( arrShape && arrShape.equals( shape ) )
-	{
-		return cache.arrGlint;
-	}
-
-	const arrGlint =
+	return(
 		gleam_glint_paint.create(
 			'facet', gruga_relation.facet,
 			'shape',
@@ -427,15 +401,9 @@ def.func._getArrowGlint =
 					'arrow'
 				)
 				.transform( this.transform )
-		);
-
-	cache.arrShape = shape;
-
-	cache.arrGlint = arrGlint;
-
-	return arrGlint;
+		)
+	);
 };
 
 
 } );
-

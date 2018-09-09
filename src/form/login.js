@@ -119,7 +119,7 @@ def.func.clear =
 
 	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
 
-	root.create( 'mark', undefined );
+	root.setUserMark( undefined );
 };
 
 
@@ -199,8 +199,8 @@ def.func.login =
 	{
 		this._setErrorMessage( 'Username too short, min. 4 characters' );
 
-		root.create(
-			'mark', visual_mark_caret.pathAt( this.get( 'userInput' ).path, username.length )
+		root.setUserMark(
+			visual_mark_caret.pathAt( this.get( 'userInput' ).path, username.length )
 		);
 
 		return;
@@ -210,9 +210,8 @@ def.func.login =
 	{
 		this._setErrorMessage( 'Username must not start with "visit"' );
 
-		root.create(
-			'mark',
-				visual_mark_caret.pathAt( this.get( 'userInput' ).path, 0 )
+		root.setUserMark(
+			visual_mark_caret.pathAt( this.get( 'userInput' ).path, 0 )
 		);
 
 		return;
@@ -222,9 +221,8 @@ def.func.login =
 	{
 		this._setErrorMessage( 'Password too short, min. 5 characters' );
 
-		root.create(
-			'mark',
-				visual_mark_caret.pathAt( this.get( 'passwordInput' ).path, pass.length )
+		root.setUserMark(
+			visual_mark_caret.pathAt( this.get( 'passwordInput' ).path, pass.length )
 		);
 
 		return;
@@ -272,16 +270,16 @@ def.func.onAuth =
 		{
 			const userInput = this.get( 'userInput' );
 
-			root.create(
-				'mark', visual_mark_caret.pathAt( userInput.path, userInput.value.length )
+			root.setUserMark(
+				visual_mark_caret.pathAt( userInput.path, userInput.value.length )
 			);
 		}
 		else
 		{
 			const passwordInput = this.get( 'passwordInput' );
 
-			root.create(
-				'mark', visual_mark_caret.pathAt( passwordInput.path, passwordInput.value.length )
+			root.setUserMark(
+				visual_mark_caret.pathAt( passwordInput.path, passwordInput.value.length )
 			);
 		}
 

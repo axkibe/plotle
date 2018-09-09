@@ -209,12 +209,8 @@ def.static.createGeneric =
 		)
 	);
 
-	root.create(
-		'mark',
-			visual_mark_caret.pathAt(
-				root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
-				0
-			)
+	root.setUserMark(
+		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
 

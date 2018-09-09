@@ -716,7 +716,7 @@ def.func.click =
 
 	// otherwise ...
 
-	if( !ctrl ) root.create( 'mark', undefined );
+	if( !ctrl ) root.setUserMark( undefined );
 
 	return true;
 };
@@ -990,10 +990,7 @@ def.func.specialKey =
 	{
 		const item = this.get( mark.caret.path.get( 2 ) );
 
-		if( item )
-		{
-			item.specialKey( key, shift, ctrl );
-		}
+		if( item ) item.specialKey( key, shift, ctrl );
 
 		return;
 	}
@@ -1015,7 +1012,7 @@ def.func.specialKey =
 
 				paths = pathList.create( 'list:init', paths );
 
-				root.create( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
+				root.setUserMark( visual_mark_items.create( 'itemPaths', paths ) );
 
 				return true;
 		}
@@ -1616,7 +1613,9 @@ def.func._stopSelect =
 		}
 	}
 
-	root.create( 'action', action, 'mark', mark );
+	root.create( 'action', action );
+
+	root.setUserMark( mark );
 };
 
 

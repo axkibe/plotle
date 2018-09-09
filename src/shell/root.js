@@ -29,9 +29,6 @@ if( TIM )
 		// the ajax communication
 		ajax : { type : '../net/ajax' },
 
-		// the animations
-		animation : { type : '../animation/root' },
-
 		// the discs
 		disc : { type : '../disc/root' },
 
@@ -51,10 +48,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the link to the server
-		link : { type : '../net/link' },
-
-		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		link : { type : '../net/link', transform : '_transformLink' },
 
 		// currently form/disc shown
 		show : { type : [ '< ../show/types' ] },
@@ -69,7 +63,8 @@ if( TIM )
 		spaceTransform : { type : '../gleam/transform' },
 
 		// current space visualisation
-		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
+		spaceVisual : { type : [ 'undefined', '../visual/space' ], transform : '_transformSpaceVisual' },
+		//spaceVisual : { type : [ 'undefined', '../visual/space' ] },
 
 		// shell has system focus
 		systemFocus : { type : 'boolean' },
@@ -83,11 +78,17 @@ if( TIM )
 		// current view size
 		viewSize : { type : '../gleam/size' },
 
-		// transform zoom as power of 1.1
-		_transformExponent : { type : 'number', defaultValue : '0' },
+		// the animations
+		_animation : { type : '../animation/root' },
 
 		// this root has been drawn on display
 		_drawn : { type : 'boolean' },
+
+		// the users mark
+		_mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+
+		// transform zoom as power of 1.1
+		_transformExponent : { type : 'number', defaultValue : '0' },
 
 		// remembers an acquired visitor user name and
 		// passhash so when logging out from a real user
@@ -305,8 +306,7 @@ def.static.prepareAction =
 
 					return(
 						action.create(
-							'itemPaths',
-							pathList.create( 'list:init', nPaths )
+							'itemPaths', pathList.create( 'list:init', nPaths )
 						)
 					);
 				}
@@ -352,7 +352,6 @@ def.static.startup =
 				'twig:add', 'update',
 					net_channel.create( 'path', ajaxPath.append( 'update' ) )
 			),
-		'animation', animation_root.create( ),
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
@@ -362,6 +361,7 @@ def.static.startup =
 		'viewSize', display.size,
 		'disc', shell_root._createDiscRoot( viewSize, show ),
 		'form', shell_root._createFormRoot( viewSize ),
+		'_animation', animation_root.create( ),
 		'_drawn', false
 	);
 
@@ -501,7 +501,7 @@ def.func._init =
 
 	const action = this.action;
 
-	let mark = this.mark;
+	let mark = this._mark;
 
 	const show = this.show;
 
@@ -529,7 +529,7 @@ def.func._init =
 		mark = mark.create( 'focus', this.systemFocus );
 	}
 
-	if( !spaceFabric ) this.spaceVisual = undefined;
+	if( !spaceFabric ) this.__spaceVisual = undefined;
 
 	// skips recreating children when no need
 	if(
@@ -537,7 +537,7 @@ def.func._init =
 		|| access !== inherit.access
 		|| action !== inherit.action
 		|| hover !== inherit.hover
-		|| mark !== inherit.mark
+		|| mark !== inherit._mark
 		|| userCreds !== inherit.userCreds
 		|| userSpaceList !== inherit.userSpaceList
 		|| show !== inherit.show
@@ -548,8 +548,8 @@ def.func._init =
 	{
 		if( spaceFabric )
 		{
-			this.spaceVisual =
-				( this.spaceVisual || visual_space )
+			this.__spaceVisual =
+				( this.__spaceVisual || visual_space )
 				.create(
 					'access', access,
 					'action', action,
@@ -594,13 +594,57 @@ def.func._init =
 			);
 	}
 
-	this.link = this.link.create( 'userCreds', userCreds );
-
 	if( inherit && mark !== inherit.mark )
 	{
 		this._markLostNotifications( root.mark, inherit.mark );
 	}
 };
+
+
+/*
+| Transforms the link.
+*/
+def.func._transformLink =
+	function(
+		link
+	)
+{
+	return link.create( 'userCreds', this.userCreds );
+};
+
+
+/*
+| Transforms the space visualisation.
+*/
+def.func._transformSpaceVisual =
+	function(
+		spaceVisual
+	)
+{
+	return spaceVisual;
+	/*
+	const spaceFabric = this.spaceFabric;
+
+	if( !spaceFabric ) return;
+
+	if( spaceVisual ) return spaceVisual; // XXX
+
+	return(
+		//( spaceVisual || visual_space )
+		visual_space
+		.create(
+			'access', this.access,
+			'action', this.action,
+			'fabric', this.spaceFabric,
+			'hover', this.hover,
+			'mark', this.mark,
+			'transform', this.spaceTransform,
+			'viewSize', this.viewSize
+		)
+	);
+	*/
+};
+
 
 
 /*:::::::::::::.
@@ -632,7 +676,7 @@ def.lazy.attentionCenter =
 def.lazy.clipboard =
 	function( )
 {
-	const mark = this.mark;
+	const mark = this._mark;
 
 	return mark ? mark.clipboard : '';
 };
@@ -709,6 +753,22 @@ def.func.alter =
 	root.link.alter( changeWrap );
 
 	root.doTracker.track( changeWrap );
+};
+
+
+/*
+| Does an animation frame.
+*/
+def.func.animationFrame =
+	function(
+		time // FIXME
+	)
+{
+	const aroot = this._animation.frame( time );
+
+	root = root.create( '_animation', aroot );
+
+	if( aroot.length === 0 ) system.stopAnimation( );
 };
 
 
@@ -914,11 +974,11 @@ def.func.click =
 def.func.clearRetainX =
 	function( )
 {
-	const mark = this.mark;
+	const mark = this._mark;
 
 	if( mark.retainx !== undefined )
 	{
-		this.create( 'mark', mark.create( 'retainx', undefined ) );
+		this.create( '_mark', mark.create( 'retainx', undefined ) );
 	}
 };
 
@@ -1074,7 +1134,7 @@ def.func.logout =
 	}
 
 	// FIXME i don't get it what happens when there are no _visitorCreds
-	
+
 	root.create(
 		'userSpaceList', undefined,
 		'link', link
@@ -1227,6 +1287,23 @@ def.func.pushButton =
 
 
 /*
+| Sets the user mark.
+*/
+def.func.setUserMark =
+	function(
+		mark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	root.create( '_mark', mark );
+};
+
+
+/*
 | Shows the "home" screen.
 |
 | When a space is loaded, this is space/normal
@@ -1303,13 +1380,13 @@ def.func.releaseSpecialKey =
 
 
 /*
-| Returns true if the iPad ought to showy
+| Returns true if the iPad ought to show
 | the virtual keyboard
 */
 def.func.suggestingKeyboard =
 	function( )
 {
-	return this.mark && this.mark.hasCaret;
+	return this._mark && this._mark.hasCaret;
 };
 
 
@@ -1321,7 +1398,7 @@ def.func.update =
 		changes
 	)
 {
-	let mark = this.mark;
+	let mark = this._mark;
 
 	if( !mark ) return;
 
@@ -1343,7 +1420,7 @@ def.func.update =
 			break;
 	}
 
-	root.create( 'mark', mark );
+	root.setUserMark( mark );
 };
 
 
@@ -1433,9 +1510,9 @@ def.func.onAcquireSpace =
 			( show.timtype === show_form && show.formName === 'loading' )
 			? show_normal.create( )
 			: pass,
-		'mark', undefined,
 		'spaceFabric', reply.space,
-		'spaceRef', request.spaceRef
+		'spaceRef', request.spaceRef,
+		'_mark', undefined
 	);
 };
 
@@ -1678,12 +1755,8 @@ def.func.spawnRelation =
 		)
 	);
 
-	root.create(
-		'mark',
-			visual_mark_caret.pathAt(
-				root.spaceVisual.get( key ).doc.atRank( 0 ).textPath,
-				0
-			)
+	root.setUsetMark(
+		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
 
@@ -1794,11 +1867,13 @@ def.func._changeTransformTo =
 	{
 		root.create(
 			'_transformExponent', exp,
-			'animation',
-				root.animation.create(
+			'_animation',
+				root._animation.create(
 					'twig:set+', 'transform', animation_transform.createNow( transform, time )
 				)
 		);
+
+		system.doAnimation( );
 	}
 	else
 	{

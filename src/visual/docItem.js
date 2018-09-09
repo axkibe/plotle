@@ -53,7 +53,7 @@ def.static.click =
 
 	if( access != 'rw' ) return false;
 
-	root.create( 'mark', this.markForPoint( p, shift ) );
+	root.setUserMark( this.markForPoint( p, shift ) );
 
 	return true;
 };
@@ -90,7 +90,9 @@ def.static.dragStart =
 
 		action = action.create( 'itemPath', this.path );
 
-		root.create( 'action', action, 'mark', mark );
+		root.create( 'action', action );
+
+		root.setUserMark( mark );
 
 		return true;
 	}
@@ -175,7 +177,7 @@ def.static.moveSelect =
 		p
 	)
 {
-	root.create( 'mark', this.markForPoint( p, true ) );
+	root.setUserMark( this.markForPoint( p, true ) );
 
 	this.scrollMarkIntoView( );
 };

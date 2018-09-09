@@ -15,26 +15,7 @@ tim.define( module, ( def ) => {
 if( TIM )
 {
 	def.twig = [ './transform' ];
-
-	def.init = [ ];
 }
-
-
-/*
-| Initializer.
-*/
-def.func._init =
-	function( )
-{
-	if( this.length === 0 )
-	{
-		system.stopAnimation( );
-
-		return;
-	}
-
-	system.doAnimation( );
-};
 
 
 /*:::::::::::.
@@ -58,6 +39,7 @@ def.func.frame =
 
 		const anim = aroot.get( key );
 
+		// this animation is finished
 		if( !anim.frame( time ) )
 		{
 			aroot = aroot.create( 'twig:remove', key );
@@ -65,6 +47,8 @@ def.func.frame =
 			a--; al--;
 		}
 	}
+
+	return aroot;
 };
 
 

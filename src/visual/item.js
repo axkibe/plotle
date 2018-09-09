@@ -68,7 +68,6 @@ def.static.concernsMark =
 		path
 	)
 {
-
 	if( !path || !mark ) return undefined;
 
 	return(
@@ -115,33 +114,29 @@ def.static.dragStart =
 
 	const mark = this.mark;
 
+	let paths;
+
 	if( !mark || mark.timtype !== visual_mark_items )
 	{
 		// also makes the user mark to this item
-		const paths = pathList.create( 'list:init', [ this.path ] );
+		paths = pathList.create( 'list:init', [ this.path ] );
 
-		root.create(
-			'action',
-				action_dragItems.create(
-					'startPoint', p.detransform( this.transform ),
-					'itemPaths', paths
-				),
-			'mark',
-				visual_mark_items.create( 'itemPaths', paths )
-		);
+		root.setUserMark( visual_mark_items.create( 'itemPaths', paths ) );
 	}
 	else
 	{
-		// this is already part of a (multi) item mark.
-
-		root.create(
-			'action',
-				action_dragItems.create(
-					'startPoint', p.detransform( this.transform ),
-					'itemPaths', mark.itemPaths
-				)
-		);
+		paths = mark.itemPaths;
 	}
+
+	root.create(
+		'action',
+			action_dragItems.create(
+				'moveBy', gleam_point.zero,
+				'itemPaths', paths,
+				'startPoint', p.detransform( this.transform )
+			)
+	);
+
 
 	return true;
 };
@@ -289,11 +284,10 @@ def.static.ctrlClick =
 
 	if( !mark )
 	{
-		root.create(
-			'mark',
-				visual_mark_items.create(
-					'itemPaths', pathList.create( 'list:init', [ this.path ] )
-				)
+		root.setUserMark(
+			visual_mark_items.create(
+				'itemPaths', pathList.create( 'list:init', [ this.path ] )
+			)
 		);
 
 		return true;
@@ -303,24 +297,17 @@ def.static.ctrlClick =
 	{
 		case visual_mark_items :
 
-			root.create(
-				'mark', mark.togglePath( this.path )
-			);
+			root.setUserMark( mark.togglePath( this.path ) );
 
 			return true;
 
 		case visual_mark_caret :
 		case visual_mark_range :
 
-			root.create(
-				'mark',
-					visual_mark_items.create(
-						'itemPaths',
-							mark.itemPaths.create(
-								'list:append',
-								this.path
-							)
-					)
+			root.setUserMark(
+				visual_mark_items.create(
+					'itemPaths', mark.itemPaths.create( 'list:append', this.path )
+				)
 			);
 
 			return true;

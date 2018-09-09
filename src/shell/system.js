@@ -467,7 +467,7 @@ def.func._animation =
 {
 	if( !animating ) return;
 
-	root.animation.frame( time );
+	root.animationFrame( time );
 
 	window.requestAnimationFrame( this._animationTransmitter );
 };
