@@ -84,7 +84,7 @@ const transmitter =
 				system._steerAttention( );
 			}
 
-			if( root ) root.draw();
+			if( root ) root.draw;
 
 			return;
 		}
@@ -100,7 +100,7 @@ const transmitter =
 				system._steerAttention( );
 			}
 
-			if( root ) root.draw();
+			if( root ) root.draw;
 		}
 		catch( e )
 		{
@@ -547,7 +547,7 @@ def.func._onSystemBlur =
 		// event
 	)
 {
-	root.create( 'systemFocus', false );
+	root.setSystemFocus( false );
 };
 
 
@@ -560,7 +560,7 @@ def.func._onSystemFocus =
 		// event
 	)
 {
-	root.create( 'systemFocus', true );
+	root.setSystemFocus( true );
 };
 
 

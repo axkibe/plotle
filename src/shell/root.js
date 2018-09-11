@@ -23,14 +23,14 @@ if( TIM )
 		action :
 		{
 			type : [ '< ../action/types', 'undefined' ],
-			prepare : 'self.prepareAction( action )',
+			transform : '_transformAction',
 		},
 
 		// the ajax communication
 		ajax : { type : '../net/ajax' },
 
 		// the discs
-		disc : { type : '../disc/root' },
+		disc : { type : '../disc/root', transform : '_transformDisc' },
 
 		// the display within everything happens
 		display : { type : '../gleam/display/canvas' },
@@ -42,7 +42,7 @@ if( TIM )
 		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// the forms
-		form : { type : '../form/root' },
+		form : { type : '../form/root', transform : '_transformForm' },
 
 		// current hovered item
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -63,11 +63,11 @@ if( TIM )
 		spaceTransform : { type : '../gleam/transform' },
 
 		// current space visualisation
-		spaceVisual : { type : [ 'undefined', '../visual/space' ], transform : '_transformSpaceVisual' },
-		//spaceVisual : { type : [ 'undefined', '../visual/space' ] },
-
-		// shell has system focus
-		systemFocus : { type : 'boolean' },
+		spaceVisual :
+		{
+			type : [ 'undefined', '../visual/space' ],
+			transform : '_transformSpaceVisual'
+		},
 
 		// current user credentials
 		userCreds : { type : [ 'undefined', '../user/creds' ] },
@@ -81,11 +81,11 @@ if( TIM )
 		// the animations
 		_animation : { type : '../animation/root' },
 
-		// this root has been drawn on display
-		_drawn : { type : 'boolean' },
-
 		// the users mark
 		_mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+
+		// shell has system focus
+		_systemFocus : { type : 'boolean' },
 
 		// transform zoom as power of 1.1
 		_transformExponent : { type : 'number', defaultValue : '0' },
@@ -97,8 +97,6 @@ if( TIM )
 		_visitorCreds : { type : [ 'undefined', '../user/creds' ] },
 	};
 
-	def.init = [ 'inherit' ];
-
 	def.alike =
 	{
 		lookAlike :
@@ -106,8 +104,8 @@ if( TIM )
 			ignores :
 			{
 				'ajax' : true,
+				'display' : true,
 				'link' : true,
-				'_drawn' : true
 			}
 		}
 	};
@@ -243,81 +241,6 @@ const loadingSpaceTextPath =
 ':::::::::::::::::::*/
 
 
-/*
-| Prepares the current action.
-|
-| Makes sure the action has not any removed items in them.
-| If so the paths are removed from its itemPathsList.
-|
-| If no item is left, action is set to undefined.
-*/
-def.static.prepareAction =
-	function(
-		action
-	)
-{
-	if( !action ) return undefined;
-
-	switch( action.timtype )
-	{
-		case action_dragItems :
-		case action_resizeItems :
-
-			const iPaths = action.itemPaths;
-
-			if( iPaths )
-			{
-				let p, pl;
-
-				for( p = 0, pl = iPaths.length; p < pl; p++ )
-				{
-					const path = iPaths.get( p );
-
-					if( !root.getPath( path ) ) break;
-				}
-
-				if( p < pl )
-				{
-					// there is an item missing!
-
-					const nPaths = [ ];
-
-					// first copies over already checked items.
-
-					let p2;
-
-					for( p2 = 0; p2 < p; p2++ )
-					{
-						nPaths[ p2 ] = iPaths.get( p2 );
-					}
-
-					p++; // the last item was a guaranteed skip
-
-					for( ; p < pl; p++ )
-					{
-						const path = iPaths.get( p );
-
-						if( !root.getPath( path ) ) continue;
-
-						nPaths[ p2++ ] = path;
-					}
-
-					if( p2 === 0 ) return undefined;
-
-					return(
-						action.create(
-							'itemPaths', pathList.create( 'list:init', nPaths )
-						)
-					);
-				}
-
-				return action;
-			}
-	}
-
-	return action;
-};
-
 
 /*
 | Startup of shell.
@@ -357,12 +280,11 @@ def.static.startup =
 		'link', net_link.create( ),
 		'show', show,
 		'spaceTransform', gleam_transform.normal,
-		'systemFocus', true,
 		'viewSize', display.size,
 		'disc', shell_root._createDiscRoot( viewSize, show ),
 		'form', shell_root._createFormRoot( viewSize ),
 		'_animation', animation_root.create( ),
-		'_drawn', false
+		'_systemFocus', true
 	);
 
 	root.link.auth( userCreds );
@@ -486,118 +408,154 @@ def.static._createFormRoot =
 };
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-	// sets drawn false
-	if( !this.lookAlike( inherit ) ) this._drawn = false;
-
-	const access = this.access;
-
-	const action = this.action;
-
-	let mark = this._mark;
-
-	const show = this.show;
-
-	const viewSize = this.viewSize;
-
-	const spaceTransform = this.spaceTransform;
-
-	const hover = this.hover;
-
-	const userCreds = this.userCreds;
-
-	const userSpaceList = this.userSpaceList;
-
-	const spaceRef = this.spaceRef;
-
-	const spaceFabric = this.spaceFabric;
-
+/**
+*** Exta checking
+***/
 /**/if( CHECK )
 /**/{
-/**/	if( hover && hover.isEmpty ) throw new Error( );
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		const hover = this.hover;
+/**/
+/**/		if( hover && hover.isEmpty ) throw new Error( );
+/**/	};
 /**/}
 
-	if( mark && mark.timtype === visual_mark_caret )
-	{
-		mark = mark.create( 'focus', this.systemFocus );
-	}
 
-	if( !spaceFabric ) this.__spaceVisual = undefined;
-
-	// skips recreating children when no need
-	if(
-		!inherit
-		|| access !== inherit.access
-		|| action !== inherit.action
-		|| hover !== inherit.hover
-		|| mark !== inherit._mark
-		|| userCreds !== inherit.userCreds
-		|| userSpaceList !== inherit.userSpaceList
-		|| show !== inherit.show
-		|| spaceTransform !== inherit.spaceTransform
-		|| spaceFabric !== inherit.spaceFabric
-		|| viewSize !== inherit.viewSize
+/*
+| Transforms the current action.
+|
+| Makes sure the action has not any removed items in them.
+| If so the paths are removed from its itemPathsList.
+|
+| If no item is left, action is set to undefined.
+*/
+def.func._transformAction =
+	function(
+		action
 	)
+{
+	if( !action ) return undefined;
+
+	const fabric = this.spaceFabric;
+
+	switch( action.timtype )
 	{
-		if( spaceFabric )
-		{
-			this.__spaceVisual =
-				( this.__spaceVisual || visual_space )
-				.create(
-					'access', access,
-					'action', action,
-					'fabric', spaceFabric,
-					'hover', hover,
-					'mark', mark,
-					'transform', spaceTransform,
-					'viewSize', viewSize
-				);
-		}
+		case action_dragItems :
+		case action_resizeItems :
 
-		this.disc =
-			this.disc.create(
-				'access', access,
-				'action', action,
-				'controlTransform',
-					gleam_transform.create(
-						'zoom',
-							Math.min(
-							  viewSize.height / gruga_controls.designSize.height,
-							  1
-							),
-						'offset', gleam_point.zero
-					),
-				'hover', hover,
-				'mark', mark,
-				'show', show,
-				'spaceRef', spaceRef,
-				'user', userCreds,
-				'viewSize', viewSize
-			);
+			const iPaths = action.itemPaths;
 
-		this.form =
-			this.form.create(
-				'action', action,
-				'hover', hover,
-				'mark', mark,
-				'spaceRef', spaceRef,
-				'user', userCreds,
-				'userSpaceList', userSpaceList,
-				'viewSize', viewSize
-			);
+			if( iPaths )
+			{
+				let p, pl;
+
+				for( p = 0, pl = iPaths.length; p < pl; p++ )
+				{
+					const path = iPaths.get( p );
+
+					if( path.get( 0 ) === 'spaceVisual' &&
+						!fabric.get( path.get( 2 ) )
+					) break;
+				}
+
+				if( p < pl )
+				{
+					// there is an item missing!
+					const nPaths = [ ];
+
+					// first copies over already checked items.
+
+					let p2;
+
+					for( p2 = 0; p2 < p; p2++ )
+					{
+						nPaths[ p2 ] = iPaths.get( p2 );
+					}
+
+					p++; // the last item was a guaranteed skip
+
+					for( ; p < pl; p++ )
+					{
+						const path = iPaths.get( p );
+
+						if( path.get( 0 ) === 'spaceVisual' &&
+							!fabric.get( path.get( 2 ) )
+						) continue;
+
+						nPaths[ p2++ ] = path;
+					}
+
+					if( p2 === 0 ) return undefined;
+
+					return(
+						action.create(
+							'itemPaths', pathList.create( 'list:init', nPaths )
+						)
+					);
+				}
+
+				return action;
+			}
 	}
 
-	if( inherit && mark !== inherit.mark )
-	{
-		this._markLostNotifications( root.mark, inherit.mark );
-	}
+	return action;
+};
+
+
+
+/*
+| Transforms the disc.
+*/
+def.func._transformDisc =
+	function(
+		disc
+	)
+{
+	const zoom = Math.min( this.viewSize.height / gruga_controls.designSize.height, 1 );
+
+	const ctransform =
+		gleam_transform.create(
+			'zoom', zoom,
+			'offset', gleam_point.zero
+		);
+
+	return(
+		disc.create(
+			'access', this.access,
+			'action', this.action,
+			'controlTransform', ctransform,
+			'hover', this.hover,
+			'mark', this._mark,
+			'show', this.show,
+			'spaceRef', this.spaceRef,
+			'user', this.userCreds,
+			'viewSize', this.viewSize
+		)
+	);
+};
+
+
+/*
+| Transforms the form root.
+*/
+def.func._transformForm =
+	function(
+		form
+	)
+{
+	return(
+		form.create(
+			'action', this.action,
+			'hover', this.hover,
+			'mark', this._mark,
+			'spaceRef', this.spaceRef,
+			'user', this.userCreds,
+			'userSpaceList', this.userSpaceList,
+			'viewSize', this.viewSize
+		)
+	);
 };
 
 
@@ -621,28 +579,23 @@ def.func._transformSpaceVisual =
 		spaceVisual
 	)
 {
-	return spaceVisual;
-	/*
+//	return spaceVisual;
 	const spaceFabric = this.spaceFabric;
 
 	if( !spaceFabric ) return;
 
-	if( spaceVisual ) return spaceVisual; // XXX
-
 	return(
-		//( spaceVisual || visual_space )
-		visual_space
+		( spaceVisual || visual_space )
 		.create(
 			'access', this.access,
 			'action', this.action,
 			'fabric', this.spaceFabric,
 			'hover', this.hover,
-			'mark', this.mark,
+			'mark', this._mark,
 			'transform', this.spaceTransform,
 			'viewSize', this.viewSize
 		)
 	);
-	*/
 };
 
 
@@ -1299,7 +1252,33 @@ def.func.setUserMark =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
+	if( mark && mark.timtype === visual_mark_caret )
+	{
+		mark = mark.create( 'focus', this._systemFocus );
+	}
+
+	const omark = root._mark;
+
 	root.create( '_mark', mark );
+
+	if( !omark ) return;
+
+	const oip = omark.itemPaths;
+
+	if( !oip ) return;
+
+	const nip = mark && mark.itemPaths;
+
+	for( let a = 0, al = oip.length; a < al; a++ )
+	{
+		const op = oip.get( a );
+
+		if( nip && nip.contains( op ) ) continue;
+
+		const item = root.getPath( op );
+
+		if( item ) item.markLost( );
+	}
 };
 
 
@@ -1387,6 +1366,35 @@ def.func.suggestingKeyboard =
 	function( )
 {
 	return this._mark && this._mark.hasCaret;
+};
+
+
+/*
+| Sets if the shell got the system focus
+| (that is display the virtual caret)
+*/
+def.func.setSystemFocus =
+	function(
+		focus
+	)
+{
+	if( this._systemFocus === focus ) return;
+
+	let mark = this._mark;
+
+	if( mark && mark.timtype === visual_mark_caret )
+	{
+		mark = mark.create( 'focus', focus );
+	}
+	else
+	{
+		mark = pass;
+	}
+
+	root.create(
+		'_systemFocus', focus,
+		'_mark', mark
+	);
 };
 
 
@@ -1588,9 +1596,9 @@ def.func.onAuth =
 		'userCreds', userCreds,
 		'_visitorCreds', userCreds.isVisitor ? userCreds : pass
 	);
-	
+
 	if( userCreds.isVisitor ) user_creds.clearLocalStorage( );
-	
+
 	root.moveToSpace( ref_space.linkloomHome, false );
 };
 
@@ -1755,7 +1763,7 @@ def.func.spawnRelation =
 		)
 	);
 
-	root.setUsetMark(
+	root.setUserMark(
 		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
@@ -1782,16 +1790,14 @@ const notAnimationFinish =
 /*
 | Draws everything.
 */
-def.func.draw =
+def.lazy.draw =
 	function( )
 {
 /**/if( CHECK )
 /**/{
 /**/	if( this !== root ) throw new Error( );
 /**/}
-	
-	if( root._drawn ) return;
-	
+
 	let display = root.display;
 
 	const screen = root._currentScreen;
@@ -1812,43 +1818,21 @@ def.func.draw =
 
 	display.render( );
 
-	root.create(
-		'display', display,
-		'_drawn', true
-	);
+	root.create( 'display', display );
+
+	return true;
 };
 
 
 /*
-| Sends out update/check notifications when an item
-| is no longer in the user marked.
+| No need to redraw if this root looks alike it's parent
 */
-def.func._markLostNotifications =
+def.inherit.draw =
 	function(
-		nMark,  // new mark
-		oMark   // old mark
+		inherit
 	)
 {
-	if( !oMark ) return;
-
-	const oip = oMark.itemPaths;
-
-	if( !oip ) return;
-
-	const nip = nMark && nMark.itemPaths;
-
-	for( let a = 0, al = oip.length; a < al; a++ )
-	{
-		const op = oip.get( a );
-
-		if( nip && nip.contains( op ) ) continue;
-
-		const item = root.getPath( op );
-
-		if( !item ) continue;
-
-		item.markLost( );
-	}
+	return this.lookAlike( inherit );
 };
 
 

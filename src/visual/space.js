@@ -99,6 +99,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_label = require( '../gruga/label' );
 
+const gruga_note = require( '../gruga/note' );
+
 const gruga_relation = require( '../gruga/relation' );
 
 const gruga_select = require( '../gruga/select' );
@@ -209,7 +211,9 @@ def.func._transform =
 {
 	let path;
 
-	let fabric = this.fabric.get( key );
+	const fabric = this.fabric.get( key );
+
+	if( !fabric ) return;
 
 	if( !item )
 	{
@@ -241,7 +245,7 @@ def.func._transform =
 		)
 		|| ( mark && mark.containsPath( path ) );
 
-	return(
+	item =
 		item.create(
 			'action', action,
 			'highlight', !!highlight,
@@ -250,8 +254,31 @@ def.func._transform =
 			'mark', mark,
 			'path', path,
 			'transform', this.transform
-		)
-	);
+		);
+
+	if( item.timtype === visual_note )
+	{
+		const aperture = item.zone.height - gruga_note.innerMargin.y;
+
+		const dHeight = item.doc.fullsize.height;
+
+		let scrollPos = item.scrollPos;
+
+		if( dHeight < aperture )
+		{
+			scrollPos = scrollPos.create( 'y', 0 );
+
+			item = item.create( 'scrollPos', scrollPos );
+		}
+		else if( scrollPos.y > dHeight - aperture )
+		{
+			scrollPos = scrollPos.create( 'y', dHeight - aperture );
+
+			item = item.create( 'scrollPos', scrollPos );
+		}
+	}
+
+	return item;
 };
 
 

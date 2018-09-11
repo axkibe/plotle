@@ -47,6 +47,8 @@ def.func._transform =
 		item
 	)
 {
+	if( !item ) return;
+
 	if( item.path ) return item;
 
 	return item.create( 'path', this.path.append( 'twig' ).appendNC( name ) );

@@ -399,6 +399,21 @@ def.lazy._glint =
 };
 
 
+/*
+| Inheritance optimization.
+*/
+def.inherit._glint =
+	function(
+		inherit
+	)
+{
+	return(
+		inherit.alikeIgnoringTransform( this )
+		&& inherit.transform.zoom === this.transform.zoom
+	);
+};
+
+
 /*:::::::::::.
 :: Functions
 '::::::::::::*/
@@ -431,7 +446,6 @@ def.func._init =
 			);
 	}
 
-	let doc =
 	this.doc =
 		( inherit && inherit.doc || visual_doc )
 		.create(
@@ -446,50 +460,36 @@ def.func._init =
 			'scrollPos', this.scrollPos,
 			'transform', this.transform
 		);
+};
 
-	const dHeight = doc.fullsize.height;
 
-	const aperture = this.zone.height - gruga_note.innerMargin.y;
+/*
+| The y scrollbar.
+*/
+def.lazy.scrollbarY =
+	function( )
+{
+	const dHeight = this.doc.fullsize.height;
 
-	if( dHeight > aperture )
-	{
-		if( this.scrollPos.y > dHeight - aperture )
-		{
-			this.scrollPos =
-				this.scrollPos.create(
-					'y', dHeight - aperture
-				);
+	const zone = this.zone;
 
-			doc =
-			this.doc =
-				doc.create( 'scrollPos', this.scrollPos );
-		}
+	const aperture = zone.height - gruga_note.innerMargin.y;
 
-		this.scrollbarY =
-			widget_scrollbar.create(
-				'aperture', aperture,
-				'max', dHeight,
-				'path', path && path.append( 'scrollbarY' ),
-				'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
-				'scrollpos', this.scrollPos.y,
-				'size', zone.height - gruga_note.vScrollbarDis * 2,
-				'transform', this.transform
-			);
-	}
-	else if( this.scrollPos.y !== 0 )
-	{
-		this.scrollPos = this.scrollPos.create( 'y', 0 );
-	}
+	const path = this.path;
 
-	if(
-		inherit
-		&& inherit.alikeIgnoringTransform( this )
-		&& inherit.transform.zoom === this.transform.zoom
-		&& tim.hasLazyValueSet( inherit, '_glint' )
-	)
-	{
-		tim.aheadValue( this, '_glint', inherit._glint );
-	}
+	if( dHeight <= aperture ) return;
+
+	return(
+		widget_scrollbar.create(
+			'aperture', aperture,
+			'max', dHeight,
+			'path', path && path.append( 'scrollbarY' ),
+			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
+			'scrollpos', this.scrollPos.y,
+			'size', zone.height - gruga_note.vScrollbarDis * 2,
+			'transform', this.transform
+		)
+	);
 };
 
 
