@@ -203,7 +203,7 @@ def.static.concernsHover =
 /*
 | Transforms the items into visual items.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		key,
 		item

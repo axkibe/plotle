@@ -30,7 +30,7 @@ if( TIM )
 /*
 | Transforms paras.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		para

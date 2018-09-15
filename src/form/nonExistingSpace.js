@@ -60,7 +60,7 @@ const form_form = require( './form' );
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget

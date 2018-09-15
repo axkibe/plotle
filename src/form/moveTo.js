@@ -247,7 +247,7 @@ def.func._transformHeadline =
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget

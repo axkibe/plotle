@@ -102,7 +102,7 @@ const widget_widget = require( './widget' );
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget

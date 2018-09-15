@@ -66,7 +66,7 @@ const user_passhash = require( '../user/passhash' );
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 
-def.func._transform = form_form.transform;
+def.transform.get = form_form.transformGet;
 
 
 /*::::::::::::::::::.

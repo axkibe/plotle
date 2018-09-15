@@ -123,7 +123,7 @@ def.static.concernsHover =
 /*
 | Transforms the discs.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		disc

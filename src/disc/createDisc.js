@@ -96,7 +96,7 @@ const visual_portal = require( '../visual/portal' );
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget

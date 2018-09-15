@@ -78,7 +78,7 @@ if( TIM )
 /*
 | Transforms forms.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		form

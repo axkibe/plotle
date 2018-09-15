@@ -95,7 +95,7 @@ const visual_para = require( './para' );
 /*
 | Transforms content.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		key,
 		para

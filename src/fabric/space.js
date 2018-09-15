@@ -41,7 +41,7 @@ const tim_path = tim.import( 'tim.js', 'path' );
 /*
 | Transforms items.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		item

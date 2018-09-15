@@ -107,7 +107,7 @@ if( TIM )
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget

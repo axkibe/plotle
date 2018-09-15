@@ -67,7 +67,7 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 /*
 | Transforms widgets.
 */
-def.func._transform = form_form.transform;
+def.transform.get = form_form.transformGet;
 
 
 /*::::::::::::::::::.

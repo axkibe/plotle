@@ -88,7 +88,7 @@ const gleam_transform = require( '../gleam/transform' );
 /*
 | Transforms widgets.
 */
-def.func._transform =
+def.transform.get =
 	function(
 		name,
 		widget
