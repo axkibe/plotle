@@ -18,11 +18,11 @@ if( TIM )
 	{
 		// the list of aliases this is served under
 		// by default determined from filePath
-		aliases : { type : [ 'undefined', 'tim.js/stringList' ], transform : '_transformAliases' },
+		aliases : { type : [ 'undefined', 'tim.js/stringList' ] },
 
 		// "binary" or "utf-8"
 		// by default determined from file extension
-		coding : { type : [ 'undefined', 'string' ], transform : '_transformCoding' },
+		coding : { type : [ 'undefined', 'string' ] },
 
 		// cached or auto generated data
 		data : { type : [ 'undefined', 'protean' ] },
@@ -56,7 +56,7 @@ if( TIM )
 
 		// mime type
 		// by default determined from file extension
-		mime : { type : [ 'undefined', 'string' ], transform : '_transformMime' },
+		mime : { type : [ 'undefined', 'string' ] },
 
 		// post processor replacing stuff
 		postProcessor : { type : [ 'undefined', 'string' ] },
@@ -85,7 +85,7 @@ const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
 | The alias is are the paths the file is served as
 | directories are replaced with hypens to ease debugging
 */
-def.func._transformAliases =
+def.transform.aliases =
 	function(
 		aliases
 	)
@@ -98,7 +98,7 @@ def.func._transformAliases =
 | The file coding is either specified manually
 | or derived from file extension.
 */
-def.func._transformCoding =
+def.transform.coding =
 	function(
 		coding
 	)
@@ -111,7 +111,7 @@ def.func._transformCoding =
 | The mime is either specified manually
 | or derived from file extension
 */
-def.func._transformMime =
+def.transform.mime =
 	function(
 		mime
 	)

@@ -24,7 +24,7 @@ if( TIM )
 		},
 
 		// the document (content)
-		doc : { type : [ './doc', 'undefined' ], transform : '_transformDoc' },
+		doc : { type : [ './doc', 'undefined' ] },
 
 		// the labels fabric
 		fabric : { type : '../fabric/label' },
@@ -218,7 +218,7 @@ def.static.createGeneric =
 /*
 | Transforms the doc.
 */
-def.func._transformDoc =
+def.transform.doc =
 	function(
 		doc
 	)

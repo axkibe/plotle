@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the path of the space
-		path : { type : [ 'undefined', 'tim.js/path' ], transform : '_transformPath' },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// reference to this space
 		ref : { type : [ 'undefined', '../ref/space' ] },
@@ -58,7 +58,7 @@ def.func._transform =
 /*
 | Transforms the path attribute.
 */
-def.func._transformPath =
+def.transform.path =
 	function(
 		path
 	)

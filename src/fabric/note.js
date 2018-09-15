@@ -19,7 +19,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the notes document
-		doc : { type : './doc', json : true, transform : '_transformDoc' },
+		doc : { type : './doc', json : true },
 
 		// the fontsize of the note
 		fontsize : { type : 'number', json : true },
@@ -38,7 +38,7 @@ if( TIM )
 /*
 | Puts in the path to doc child.
 */
-def.func._transformDoc =
+def.transform.doc =
 	function(
 		doc
 	)

@@ -26,7 +26,7 @@ if( TIM )
 		fabric : { type : '../fabric/space' },
 
 		// the alteration frame
-		frame : { type : [ './frame', 'undefined' ], transform : '_transformFrame' },
+		frame : { type : [ './frame', 'undefined' ] },
 
 		// node currently hovered upon
 		hover :
@@ -245,16 +245,34 @@ def.func._transform =
 		)
 		|| ( mark && mark.containsPath( path ) );
 
-	item =
-		item.create(
-			'action', action,
-			'highlight', !!highlight,
-			'hover', this.hover,
-			'fabric', fabric,
-			'mark', mark,
-			'path', path,
-			'transform', this.transform
-		);
+	if( item === visual_note || item.timtype === visual_note )
+	{
+		item =
+			item.create(
+				'action', action,
+				'highlight', !!highlight,
+				'hover', this.hover,
+				'fabric', fabric,
+				'mark', mark,
+				'path', path,
+				'scrollPos', item.scrollPos || gleam_point.zero,
+				'transform', this.transform
+			);
+	}
+	else
+	{
+		item =
+			item.create(
+				'action', action,
+				'highlight', !!highlight,
+				'hover', this.hover,
+				'fabric', fabric,
+				'mark', mark,
+				'path', path,
+				'transform', this.transform
+			);
+	}
+
 
 	if( item.timtype === visual_note )
 	{
@@ -295,7 +313,7 @@ def.lazy._ranks =
 /*
 | The current alteration frame.
 */
-def.func._transformFrame =
+def.transform.frame =
 	function(
 		frame
 	)

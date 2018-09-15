@@ -20,17 +20,13 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// current action
-		action :
-		{
-			type : [ '< ../action/types', 'undefined' ],
-			transform : '_transformAction',
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the ajax communication
 		ajax : { type : '../net/ajax' },
 
 		// the discs
-		disc : { type : '../disc/root', transform : '_transformDisc' },
+		disc : { type : '../disc/root' },
 
 		// the display within everything happens
 		display : { type : '../gleam/display/canvas' },
@@ -42,13 +38,13 @@ if( TIM )
 		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// the forms
-		form : { type : '../form/root', transform : '_transformForm' },
+		form : { type : '../form/root' },
 
 		// current hovered item
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the link to the server
-		link : { type : '../net/link', transform : '_transformLink' },
+		link : { type : '../net/link' },
 
 		// currently form/disc shown
 		show : { type : [ '< ../show/types' ] },
@@ -63,11 +59,7 @@ if( TIM )
 		spaceTransform : { type : '../gleam/transform' },
 
 		// current space visualisation
-		spaceVisual :
-		{
-			type : [ 'undefined', '../visual/space' ],
-			transform : '_transformSpaceVisual'
-		},
+		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
 
 		// current user credentials
 		userCreds : { type : [ 'undefined', '../user/creds' ] },
@@ -431,7 +423,7 @@ def.static._createFormRoot =
 |
 | If no item is left, action is set to undefined.
 */
-def.func._transformAction =
+def.transform.action =
 	function(
 		action
 	)
@@ -508,7 +500,7 @@ def.func._transformAction =
 /*
 | Transforms the disc.
 */
-def.func._transformDisc =
+def.transform.disc =
 	function(
 		disc
 	)
@@ -540,7 +532,7 @@ def.func._transformDisc =
 /*
 | Transforms the form root.
 */
-def.func._transformForm =
+def.transform.form =
 	function(
 		form
 	)
@@ -562,7 +554,7 @@ def.func._transformForm =
 /*
 | Transforms the link.
 */
-def.func._transformLink =
+def.transform.link =
 	function(
 		link
 	)
@@ -574,7 +566,7 @@ def.func._transformLink =
 /*
 | Transforms the space visualisation.
 */
-def.func._transformSpaceVisual =
+def.transform.spaceVisual =
 	function(
 		spaceVisual
 	)

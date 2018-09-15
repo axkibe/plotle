@@ -25,6 +25,8 @@ if( TIM )
 			prepare : 'self.concernsAction( action, path )',
 		},
 
+		doc : { type : [ './doc', 'undefined' ] },
+
 		// the notes fabric
 		fabric : { type : '../fabric/note' },
 
@@ -45,14 +47,11 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position
-		// is force defined in _init
-		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
+		scrollPos : { type : [ '../gleam/point' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' },
 	};
-
-	def.init = [ 'inherit' ];
 
 	def.alike =
 	{
@@ -283,6 +282,36 @@ def.lazy.shape =
 
 
 /*
+| Adapts the doc.
+*/
+def.transform.doc =
+	function(
+		doc
+	)
+{
+	const path = this.path;
+
+	const zone = this.zone;
+
+	return(
+		( doc || visual_doc )
+		.create(
+			'clipsize', zone.size,
+			'fabric', this.fabric.doc,
+			'flowWidth', zone.width - gruga_note.innerMargin.x,
+			'fontsize', this.fontsize,
+			'innerMargin', gruga_note.innerMargin,
+			'mark', this.mark,
+			'paraSep', this.fontsize / 2,
+			'path', path && path.append( 'doc' ),
+			'scrollPos', this.scrollPos,
+			'transform', this.transform
+		)
+	);
+};
+
+
+/*
 | The transformed shape.
 */
 def.lazy.tShape =
@@ -419,48 +448,17 @@ def.inherit._glint =
 '::::::::::::*/
 
 
-/*
-| Initializer.
-*/
-def.func._init =
-	function(
-		inherit
-	)
-{
-	const fabric = this.fabric;
-
-	const path = this.path;
-
-	const zone = this.zone;
-
-	if( this.scrollPos === undefined )
-	{
-		this.scrollPos = gleam_point.zero;
-	}
-	else if( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
-	{
-		this.scrollPos =
-			this.scrollPos.create(
-				'x', Math.max( 0, this.scrollPos.x ),
-				'y', Math.max( 0, this.scrollPos.y )
-			);
-	}
-
-	this.doc =
-		( inherit && inherit.doc || visual_doc )
-		.create(
-			'clipsize', zone.size,
-			'fabric', fabric.doc,
-			'flowWidth', zone.width - gruga_note.innerMargin.x,
-			'fontsize', this.fontsize,
-			'innerMargin', gruga_note.innerMargin,
-			'mark', this.mark,
-			'paraSep', this.fontsize / 2,
-			'path', path && path.append( 'doc' ),
-			'scrollPos', this.scrollPos,
-			'transform', this.transform
-		);
-};
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.scrollPos.x < 0 || this.scrollPos.y < 0 ) throw new Error( );
+/**/	};
+/**/}
 
 
 /*
@@ -592,13 +590,13 @@ def.func.mousewheel =
 {
 	if( !this.tShape.within( p ) ) return false;
 
+	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
+
+	if( y < 0 ) y = 0;
+
 	root.setPath(
 		this.path.append( 'scrollPos' ),
-		this.scrollPos.create(
-			'y',
-				this.scrollPos.y
-				- dir * shell_settings.textWheelSpeed
-		)
+		this.scrollPos.create( 'y', y )
 	);
 
 	return true;

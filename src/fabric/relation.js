@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the labels document
-		doc : { type : './doc', json : true, transform : '_transformDoc' },
+		doc : { type : './doc', json : true },
 
 		// the fontsize of the label
 		fontsize : { type : 'number', json : true },
@@ -42,7 +42,7 @@ if( TIM )
 /*
 | Puts in the path to doc child.
 */
-def.func._transformDoc =
+def.transform.doc =
 	function(
 		doc
 	)

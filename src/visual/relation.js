@@ -24,7 +24,7 @@ if( TIM )
 		},
 
 		// the document (content)
-		doc : { type : [ './doc', 'undefined' ], transform : '_transformDoc' },
+		doc : { type : [ './doc', 'undefined' ] },
 
 		// the relations fabric
 		fabric : { type : '../fabric/relation' },
@@ -74,8 +74,9 @@ const visual_label = require( '../visual/label' );
 
 /*
 | Transforms the doc.
+| FIXME this is a dirty workaround.
 */
-def.func._transformDoc = visual_label.prototype._transformDoc;
+def.transform.doc = visual_label.prototype.__transform_doc;
 
 
 /*::::::::::::::::::.

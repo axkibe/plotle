@@ -25,16 +25,6 @@ const visual_mark_widget = require( '../visual/mark/widget' );
 
 
 /*
-| Initializer.
-*/
-def.static.init =
-	function( )
-{
-	// FIXME XXX remove
-};
-
-
-/*
 | Transforms widgets.
 */
 def.static.transform =
