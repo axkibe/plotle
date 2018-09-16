@@ -21,6 +21,8 @@ const gruga_genericCheckbox = require( '../gruga/genericCheckbox' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
 
+const layout_label = require( '../layout/label' );
+
 const widget_button = require( '../widget/button' );
 
 const widget_checkbox = require( '../widget/checkbox' );
@@ -37,49 +39,49 @@ def.staticLazy.layout = ( ) =>
 	form_signUp.abstract(
 		'twig:add',
 		'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Sign Up',
 				'font', shell_fontPool.get( 22, 'la' ),
 				'pos', gleam_point.xy( -245, -165 )
 			),
 		'twig:add',
 		'usernameLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'pos', gleam_point.xy( -98, -102 )
 			),
 		'twig:add',
 		'emailLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'email',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'pos', gleam_point.xy( -98, -62 )
 			),
 		'twig:add',
 		'passwordLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'pos', gleam_point.xy( -98, -22 )
 			),
 		'twig:add',
 		'password2Label',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'repeat password',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'pos', gleam_point.xy( -98, 18 )
 			),
 		'twig:add',
 		'newsletterLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'newsletter',
 				'font', shell_fontPool.get( 16, 'ra' ),
 				'pos', gleam_point.xy( -98, 58 )
 			),
 		'twig:add',
 		'errorLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
 				'pos', gleam_point.xy( -20, -136 )
@@ -160,8 +162,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'newsletter3Label',
 			widget_label.abstract(
-				'text',
-					'Never going to be more than an email a month. For sure!',
+				'text', 'Not going to be more than an email a month.',
 				'font', shell_fontPool.get( 12, 'la' ),
 				'pos', gleam_point.xy( -45, 77 )
 			),

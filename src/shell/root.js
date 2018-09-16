@@ -174,6 +174,8 @@ const gruga_welcome = require( '../gruga/welcome' );
 
 const gruga_zoomDisc = require( '../gruga/zoomDisc' );
 
+const layout_label = require( '../layout/label' );
+
 const limit = require( '../math/root' ).limit;
 
 const net_ajax = require( '../net/ajax' );
@@ -216,6 +218,7 @@ const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_space = require( '../visual/space' );
 
+const widget_label = require( '../widget/label' );
 
 
 const loadingSpaceTextPath =
@@ -336,7 +339,7 @@ def.static._createFormRoot =
 		viewSize
 	)
 {
-	const forms =
+	const formLayouts =
 		{
 			loading : gruga_loading.layout,
 			login : gruga_login.layout,
@@ -349,24 +352,40 @@ def.static._createFormRoot =
 			welcome : gruga_welcome.layout
 		};
 
-	for( let name in forms )
+	let forms = { };
+
+	const formPath = tim_path.empty.append( 'form' );
+
+	for( let name in formLayouts )
 	{
-		let form = forms[ name ];
+		// RENAME layout
+		let form = formLayouts[ name ];
+
+		// FIXME XXX move this from layout creation to form.root
 
 		for( let w = 0, wZ = form.length; w < wZ; w++ )
 		{
 			const key = form.getKey( w );
 
-			const widget = form.get( key );
+			const wLayout = form.get( key );
 
-			if( widget.isAbstract )
+			if( wLayout.isAbstract )
 			{
+				// XXX remove
 				form =
 					form.abstract(
-						'twig:set',
-						key,
-						widget.create( 'transform', gleam_transform.normal )
+						'twig:set', key,
+						wLayout.create( 'transform', gleam_transform.normal )
 					);
+			}
+			else if( wLayout === layout_label )
+			{
+				const path = formPath.append( 'twig' ).append( key );
+
+				const widget =
+					widget_label.createFromLayout( wLayout, path, gleam_transform.normal );
+
+				form = form.abstract( 'twig:set', key, widget );
 			}
 		}
 
@@ -375,7 +394,7 @@ def.static._createFormRoot =
 
 	let formRoot =
 		form_root.create(
-			'path', tim_path.empty.append( 'form' ),
+			'path', formPath,
 			'viewSize', viewSize
 		);
 
@@ -388,11 +407,8 @@ def.static._createFormRoot =
 
 		formRoot =
 			formRoot.create(
-				'twig:add',
-				key,
-				forms[ key ].create(
-					'viewSize', viewSize
-				)
+				'twig:add', key,
+				forms[ key ].create( 'viewSize', viewSize )
 			);
 	}
 

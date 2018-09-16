@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, widget_label ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -46,7 +46,7 @@ if( TIM )
 		// the transform
 		transform : { type : '../gleam/transform' },
 
-		// if false the button is hidden
+		// if false the widget is hidden
 		visible : { type : 'boolean', defaultValue : 'true' },
 	};
 }
@@ -54,10 +54,38 @@ if( TIM )
 
 const gleam_glint_text = require( '../gleam/glint/text' );
 
+const layout_label = require( '../layout/label' );
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
+
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_label
+		path,       // path of the widget
+		transform   // visual transformation
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_label ) throw new Error( );
+/**/}
+
+	return(
+		widget_label.create(
+			'font', layout.font,
+			'newline', layout.newline,
+			'path', path,
+			'pos', layout.pos,
+			'text', layout.text,
+			'transform', transform,
+			'visible', true
+		)
+	);
+};
 
 
 /*
