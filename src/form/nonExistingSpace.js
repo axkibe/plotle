@@ -81,7 +81,7 @@ def.transform.get =
 			break;
 	}
 
-	return form_form.transform.call( this, name, widget );
+	return form_form.transformGet.call( this, name, widget );
 };
 
 

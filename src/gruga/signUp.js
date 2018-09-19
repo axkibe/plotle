@@ -21,15 +21,13 @@ const gruga_genericCheckbox = require( '../gruga/genericCheckbox' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
 
+const layout_input = require( '../layout/input' );
+
 const layout_label = require( '../layout/label' );
 
 const widget_button = require( '../widget/button' );
 
 const widget_checkbox = require( '../widget/checkbox' );
-
-const widget_input = require( '../widget/input' );
-
-const widget_label = require( '../widget/label' );
 
 
 /*
@@ -88,7 +86,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'userInput',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
@@ -101,7 +99,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'emailInput',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
@@ -114,7 +112,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'passwordInput',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
@@ -128,7 +126,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'password2Input',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
@@ -154,14 +152,14 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'newsletter2Label',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Updates and News',
 				'font', shell_fontPool.get( 12, 'la' ),
 				'pos', gleam_point.xy( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Not going to be more than an email a month.',
 				'font', shell_fontPool.get( 12, 'la' ),
 				'pos', gleam_point.xy( -45, 77 )

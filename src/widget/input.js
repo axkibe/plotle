@@ -82,6 +82,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gleam_roundRect = require( '../gleam/roundRect' );
 
+const layout_input = require( '../layout/input' );
+
 const result_hover = require( '../result/hover' );
 
 const shell_settings = require( '../shell/settings' );
@@ -91,9 +93,38 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 const widget_widget = require( './widget' );
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_label
+		path,       // path of the widget
+		transform   // visual transformation
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_input ) throw new Error( );
+/**/}
+
+	return(
+		widget_input.create(
+			'facets', layout.facets,
+			'font', layout.font,
+			'maxlen', layout.maxlen,
+			'password', layout.password,
+			'path', path,
+			'transform', transform,
+			'visible', true,
+			'zone', layout.zone
+		)
+	);
+};
+
+
 
 /*
 | Default distance of text
@@ -355,6 +386,8 @@ def.func.click =
 	const pp = p.sub( this._tZone.pos );
 
 	if( !this._tzShape.within( pp ) ) return undefined;
+
+	console.log( 'CLICK', this.path );
 
 	root.setUserMark( visual_mark_caret.pathAt( this.path, this._getOffsetAt( pp ) ) );
 

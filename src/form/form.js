@@ -27,7 +27,7 @@ const visual_mark_widget = require( '../visual/mark/widget' );
 /*
 | Transforms widgets.
 */
-def.static.transform =
+def.static.transformGet =
 	function(
 		name,
 		widget

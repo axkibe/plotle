@@ -19,6 +19,8 @@ const gruga_genericButton = require( '../gruga/genericButton' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
 
+const layout_input = require( '../layout/input' );
+
 const shell_fontPool = require( '../shell/fontPool' );
 
 const widget_button = require( '../widget/button' );
@@ -63,7 +65,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'userInput',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,

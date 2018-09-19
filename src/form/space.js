@@ -76,7 +76,7 @@ def.transform.get =
 		widget = widget.create( 'text', this.spaceRef.fullname );
 	}
 
-	return form_form.transform.call( this, name, widget );
+	return form_form.transformGet.call( this, name, widget );
 };
 
 

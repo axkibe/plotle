@@ -139,9 +139,7 @@ def.func.prepareResource =
 				'timHolder', resource
 			);
 
-		root.create(
-			'inventory', root.inventory.updateResource( timcodeResource )
-		);
+		root.create( 'inventory', root.inventory.updateResource( timcodeResource ) );
 	}
 
 	if( !resource.hasTim && resource.filePath )

@@ -1433,7 +1433,9 @@ def.func._moveScrollY =
 
 	const sbary = item.scrollbarY;
 
-	const spos = action.startPos + sbary.scale( dy );
+	let spos = action.startPos + sbary.scale( dy );
+
+	if( spos < 0 ) spos = 0;
 
 	root.setPath(
 		item.path.append( 'scrollPos' ),

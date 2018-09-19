@@ -260,7 +260,7 @@ def.transform.get =
 		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
 	}
 
-	return form_form.transform.call( this, name, widget );
+	return form_form.transformGet.call( this, name, widget );
 };
 
 
