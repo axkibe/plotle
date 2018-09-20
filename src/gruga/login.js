@@ -19,15 +19,13 @@ const gruga_genericButton = require( '../gruga/genericButton' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
 
+const layout_button = require( '../layout/button' );
+
 const layout_input = require( '../layout/input' );
 
+const layout_label = require( '../layout/label' );
+
 const shell_fontPool = require( '../shell/fontPool' );
-
-const widget_button = require( '../widget/button' );
-
-const widget_input = require( '../widget/input' );
-
-const widget_label = require( '../widget/label' );
 
 
 /*
@@ -37,28 +35,28 @@ def.staticLazy.layout = ( ) =>
 	form_login.abstract(
 		'twig:add',
 		'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Log In',
 				'font', shell_fontPool.get( 22, 'la' ),
 				'pos', gleam_point.xy( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'username',
 				'font', shell_fontPool.get( 16, 'la' ),
 				'pos', gleam_point.xy( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'password',
 				'font', shell_fontPool.get( 16, 'la' ),
 				'pos', gleam_point.xy( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
-			widget_label.abstract(
+			layout_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
 				'pos', gleam_point.xy( -20, -83 )
@@ -78,7 +76,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'passwordInput',
-			widget_input.abstract(
+			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
 				'font', shell_fontPool.get( 14, 'la' ),
@@ -92,7 +90,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'loginButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.posSize(
@@ -105,7 +103,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'closeButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.posSize(

@@ -125,7 +125,6 @@ def.static.createFromLayout =
 };
 
 
-
 /*
 | Default distance of text
 */
@@ -386,8 +385,6 @@ def.func.click =
 	const pp = p.sub( this._tZone.pos );
 
 	if( !this._tzShape.within( pp ) ) return undefined;
-
-	console.log( 'CLICK', this.path );
 
 	root.setUserMark( visual_mark_caret.pathAt( this.path, this._getOffsetAt( pp ) ) );
 

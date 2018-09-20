@@ -174,6 +174,8 @@ const gruga_welcome = require( '../gruga/welcome' );
 
 const gruga_zoomDisc = require( '../gruga/zoomDisc' );
 
+const layout_button = require( '../layout/button' );
+
 const layout_input = require( '../layout/input' );
 
 const layout_label = require( '../layout/label' );
@@ -219,6 +221,8 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_space = require( '../visual/space' );
+
+const widget_button = require( '../widget/button' );
 
 const widget_label = require( '../widget/label' );
 
@@ -365,7 +369,7 @@ def.static._createFormRoot =
 		// RENAME layout
 		let form = formLayouts[ name ];
 
-		const formPath = formRootPath.append( 'twig' ).append( 'name' );
+		const formPath = formRootPath.append( 'twig' ).append( name );
 
 		// FIXME XXX move this from layout creation to form.root
 
@@ -385,12 +389,12 @@ def.static._createFormRoot =
 						wLayout.create( 'transform', gleam_transform.normal )
 					);
 			}
-			else if( wLayout.timtype === layout_label )
+			else if( wLayout.timtype === layout_button )
 			{
 				const path = formPath.append( 'twig' ).append( key );
 
 				const widget =
-					widget_label.createFromLayout( wLayout, path, gleam_transform.normal );
+					widget_button.createFromLayout( wLayout, path, gleam_transform.normal );
 
 				form = form.abstract( 'twig:set', key, widget );
 			}
@@ -400,6 +404,15 @@ def.static._createFormRoot =
 
 				const widget =
 					widget_input.createFromLayout( wLayout, path, gleam_transform.normal );
+
+				form = form.abstract( 'twig:set', key, widget );
+			}
+			else if( wLayout.timtype === layout_label )
+			{
+				const path = formPath.append( 'twig' ).append( key );
+
+				const widget =
+					widget_label.createFromLayout( wLayout, path, gleam_transform.normal );
 
 				form = form.abstract( 'twig:set', key, widget );
 			}

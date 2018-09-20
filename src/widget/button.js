@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, widget_button ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -88,14 +88,11 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_transform = require( '../gleam/transform' );
 
+const layout_button = require( '../layout/button' );
+
 const result_hover = require( '../result/hover' );
 
 const widget_widget = require( './widget' );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -106,9 +103,39 @@ def.static.concernsHover = widget_widget.concernsHover;
 def.static.concernsMark = widget_widget.concernsMark;
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_label
+		path,       // path of the widget
+		transform   // visual transformation
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_button ) throw new Error( );
+/**/}
+
+	return(
+		widget_button.create(
+			'facets', layout.facets,
+			'font', layout.font,
+			'iconShape', layout.iconShape,
+			'iconFacet', layout.iconFacet,
+			'path', path,
+			'shape', layout.shape,
+			'text', layout.text,
+			'textNewline', layout.textNewline,
+			'textRotation', layout.textRotation,
+			'transform', transform,
+			'zone', layout.zone
+		)
+	);
+};
 
 
 /*
