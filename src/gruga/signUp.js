@@ -21,13 +21,13 @@ const gruga_genericCheckbox = require( '../gruga/genericCheckbox' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
 
+const layout_button = require( '../layout/button' );
+
+const layout_checkbox = require( '../layout/checkbox' );
+
 const layout_input = require( '../layout/input' );
 
 const layout_label = require( '../layout/label' );
-
-const widget_button = require( '../widget/button' );
-
-const widget_checkbox = require( '../widget/checkbox' );
 
 
 /*
@@ -140,9 +140,9 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'newsletterCheckBox',
-			widget_checkbox.abstract(
+			layout_checkbox.create(
 				'facets', gruga_genericCheckbox.facets,
-				'checked', true,
+				'checked', false,
 				'zone',
 					gleam_rect.create(
 						'pos', gleam_point.xy( -75, 45 ),
@@ -166,7 +166,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'signupButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
@@ -180,7 +180,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add',
 		'closeButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(

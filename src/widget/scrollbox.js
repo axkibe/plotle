@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, widget_scrollbox ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -64,6 +64,8 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_size = require( '../gleam/size' );
 
+const layout_scrollbox = require( '../layout/scrollbox' );
+
 const shell_settings = require( '../shell/settings' );
 
 const widget_scrollbar = require( './scrollbar' );
@@ -97,6 +99,54 @@ const widget_widget = require( './widget' );
 /**/		}
 /**/	};
 /**/}
+
+
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_label
+		path,       // path of the widget
+		transform   // visual transformation
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_scrollbox ) throw new Error( );
+/**/}
+
+	const twig = { };
+
+	for( let a = 0, aZ = layout.length; a < aZ; a++ )
+	{
+		const key = layout.getKey( a );
+
+		const iLayout = layout.get( key );
+
+		const item =
+			widget_widget.createFromLayout(
+				iLayout,
+				path.append( 'twig' ).append( key ),
+				transform
+			);
+
+		twig[ key ] = item;
+	}
+
+	return(
+		widget_scrollbox.create(
+			'twig:init', twig, layout._ranks,
+			'path', path,
+			'scrollbarYOffset', layout.scrollbarYOffset,
+			'scrollPos', gleam_point.zero,
+			'transform', transform,
+			'zone', layout.zone
+		)
+	);
+};
 
 
 /*

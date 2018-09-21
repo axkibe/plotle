@@ -645,12 +645,22 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/layout/checkbox.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/layout/input.js',
 		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/layout/label.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/layout/scrollbox.js',
 		'hasTim', true,
 		'inBundle', true
 	),

@@ -15,11 +15,11 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_genericButton = require( './genericButton' );
 
+const layout_button = require( '../layout/button' );
+
+const layout_label = require( '../layout/label' );
+
 const shell_fontPool = require( '../shell/fontPool' );
-
-const widget_button = require( '../widget/button' );
-
-const widget_label = require( '../widget/label' );
 
 
 /*
@@ -29,63 +29,63 @@ def.staticLazy.layout = ( ) =>
 	form_user.abstract(
 		'twig:add',
 		'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Hello',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add',
 		'visitor1',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'You\'re currently an anonymous visitor!',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'visitor2',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Click on "sign up" or "log in"',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.zero
 			),
 		'twig:add',
 		'visitor3',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'on the control disc to the left',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, 20 )
 			),
 		'twig:add',
 		'visitor4',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'to register as an user.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, 40 )
 			),
 		'twig:add',
 		'greeting1',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'This is your profile page!',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
 		'greeting2',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'In future you will be able to do stuff here,',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, -10 )
 			),
 		'twig:add',
 		'greeting3',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'like for example change your password.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, 10 )
 			),
 		'twig:add',
 		'closeButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(

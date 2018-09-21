@@ -11,9 +11,9 @@ const form_loading = require( '../form/loading' );
 
 const gleam_point = require( '../gleam/point' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const layout_label = require( '../layout/label' );
 
-const widget_label = require( '../widget/label' );
+const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -22,13 +22,13 @@ const widget_label = require( '../widget/label' );
 def.staticLazy.layout = ( ) =>
 	form_loading.abstract(
 		'twig:add', 'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'loading',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'pos', gleam_point.xy( 0, -56)
 			),
 		'twig:add', 'spaceText',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'linkloom:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'pos', gleam_point.zero

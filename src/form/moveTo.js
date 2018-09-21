@@ -21,6 +21,8 @@ const gruga_scrollbar = require( '../gruga/scrollbar' );
 
 const ref_space = require( '../ref/space' );
 
+const widget_button = require( '../widget/button' );
+
 const widget_scrollbox = require( '../widget/scrollbox' );
 
 
@@ -150,6 +152,8 @@ def.func._transformScrollbox =
 				)
 		);
 
+	let sbPath = this.path.append( 'twig' ).append( 'scrollbox ' );
+
 	if( this.userSpaceList )
 	{
 		let c = 0; // current column
@@ -175,18 +179,25 @@ def.func._transformScrollbox =
 
 			button = this._twig[ fullname ];
 
-			if( !button ) button = gruga_moveTo.spaceButtonTemplate;
+			if( !button )
+			{
+				button =
+					widget_button.createFromLayout(
+						gruga_moveTo.spaceButtonLayout,
+						sbPath.append( 'twig' ).append( fullname ),
+						gleam_transform.normal
+					);
+			}
 
 			sbRanks.push( fullname );
 
 			sbTwig[ fullname ] =
 				button.create(
+					'text', rSpace.username + '\n' + rSpace.tag,
 					'zone',
 						button.zone.create(
 							'pos', gleam_point.xy( 160 * ( cOff + c ), 160 * r )
-						),
-					'text', rSpace.username + '\n' + rSpace.tag,
-					'transform', gleam_transform.normal
+						)
 				);
 
 			if( ++c >= this._cols ) { c = 0; r++; }
@@ -204,11 +215,11 @@ def.func._transformScrollbox =
 
 	return(
 		sb.create(
+			'path', sbPath,
 			'scrollbarYOffset', form_moveTo.scrollbarYOffset,
-			'zone', zone,
+			'scrollPos', widget_scrollbox.prepareScrollPos( sb.scrollPos, sb.innerSize, zone ),
 			'twig:init', sbTwig, sbRanks,
-			'scrollPos',
-				widget_scrollbox.prepareScrollPos( sb.scrollPos, sb.innerSize, zone )
+			'zone', zone
 		)
 	);
 };
@@ -226,19 +237,11 @@ def.func._transformHeadline =
 	const ch = headline.font.size * 2 + 160 + this._rows * 160;
 
 	// if below minimum content is no longer vertical centered and scrolling is needed.
-	const y =
-		Math.max(
-			this.viewSize.height / 2 - ch / 2,
-			10 + headline.font.size
-		);
+	const y = Math.max( this.viewSize.height / 2 - ch / 2, 10 + headline.font.size );
 
 	return(
 		headline.create(
-			'pos',
-			gleam_point.xy(
-				this._leftDistance + ( this._cols - 0.5 ) * 80 + 30,
-				y
-			)
+			'pos', gleam_point.xy( this._leftDistance + ( this._cols - 0.5 ) * 80 + 30, y )
 		)
 	);
 };
@@ -390,10 +393,7 @@ def.func.pushButton =
 	const parts = buttonName.split( ':' );
 
 	root.moveToSpace(
-		ref_space.create(
-			'username', parts[ 0 ],
-			'tag',  parts[ 1 ]
-		),
+		ref_space.create( 'username', parts[ 0 ], 'tag',  parts[ 1 ] ),
 		false
 	);
 };

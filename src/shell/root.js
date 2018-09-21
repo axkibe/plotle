@@ -176,9 +176,13 @@ const gruga_zoomDisc = require( '../gruga/zoomDisc' );
 
 const layout_button = require( '../layout/button' );
 
+const layout_checkbox = require( '../layout/checkbox' );
+
 const layout_input = require( '../layout/input' );
 
 const layout_label = require( '../layout/label' );
+
+const layout_scrollbox = require( '../layout/scrollbox' );
 
 const limit = require( '../math/root' ).limit;
 
@@ -224,9 +228,13 @@ const visual_space = require( '../visual/space' );
 
 const widget_button = require( '../widget/button' );
 
-const widget_label = require( '../widget/label' );
+const widget_checkbox = require( '../widget/checkbox' );
 
 const widget_input = require( '../widget/input' );
+
+const widget_label = require( '../widget/label' );
+
+const widget_scrollbox = require( '../widget/scrollbox' );
 
 
 const loadingSpaceTextPath =
@@ -398,6 +406,15 @@ def.static._createFormRoot =
 
 				form = form.abstract( 'twig:set', key, widget );
 			}
+			else if( wLayout.timtype === layout_checkbox )
+			{
+				const path = formPath.append( 'twig' ).append( key );
+
+				const widget =
+					widget_checkbox.createFromLayout( wLayout, path, gleam_transform.normal );
+
+				form = form.abstract( 'twig:set', key, widget );
+			}
 			else if( wLayout.timtype === layout_input )
 			{
 				const path = formPath.append( 'twig' ).append( key );
@@ -413,6 +430,15 @@ def.static._createFormRoot =
 
 				const widget =
 					widget_label.createFromLayout( wLayout, path, gleam_transform.normal );
+
+				form = form.abstract( 'twig:set', key, widget );
+			}
+			else if( wLayout.timtype === layout_scrollbox )
+			{
+				const path = formPath.append( 'twig' ).append( key );
+
+				const widget =
+					widget_scrollbox.createFromLayout( wLayout, path, gleam_transform.normal );
 
 				form = form.abstract( 'twig:set', key, widget );
 			}

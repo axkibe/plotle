@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, widget_checkbox ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -61,14 +61,40 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_iconCheck = require( '../gruga/iconCheck' );
 
+const layout_checkbox = require( '../layout/checkbox' );
+
 const result_hover = require( '../result/hover' );
 
 const widget_widget = require( './widget' );
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_label
+		path,       // path of the widget
+		transform   // visual transformation
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_checkbox ) throw new Error( );
+/**/}
+
+	return(
+		widget_checkbox.create(
+			'checked', layout.checked,
+			'facets', layout.facets,
+			'path', path,
+			'transform', transform,
+			'zone', layout.zone
+		)
+	);
+};
 
 
 /*

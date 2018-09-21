@@ -19,17 +19,15 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
-const gleam_transform = require( '../gleam/transform' );
-
 const form_moveTo = require( '../form/moveTo' );
 
+const layout_button = require( '../layout/button' );
+
+const layout_label = require( '../layout/label' );
+
+const layout_scrollbox = require( '../layout/scrollbox' );
+
 const shell_fontPool = require( '../shell/fontPool' );
-
-const widget_button = require( '../widget/button' );
-
-const widget_label = require( '../widget/label' );
-
-const widget_scrollbox = require( '../widget/scrollbox' );
 
 
 /*
@@ -102,14 +100,14 @@ def.staticLazy.layout = ( ) =>
 	form_moveTo.abstract(
 		'twig:add',
 		'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'go to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'pos', gleam_point.zero
 			),
 		'twig:add',
 		'scrollbox',
-			widget_scrollbox.abstract(
+			layout_scrollbox.create(
 				'zone',
 					gleam_rect.create(
 						// this are all dummy values overridden
@@ -118,28 +116,25 @@ def.staticLazy.layout = ( ) =>
 						'width', 100,
 						'height', 100
 					),
-				'scrollPos', gleam_point.zero,
 				'twig:add',
 				'linkloom:home',
-					widget_button.create(
+					layout_button.create(
 						'facets', gruga_moveTo._portalButtonFacets,
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'linkloom\nhome',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
-						'shape', 'ellipse',
-						'transform', gleam_transform.normal
+						'shape', 'ellipse'
 				),
 				'twig:add',
 				'linkloom:sandbox',
-					widget_button.create(
+					layout_button.create(
 						'facets', gruga_moveTo._portalButtonFacets,
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'linkloom\nsandbox',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
-						'shape', 'ellipse',
-						'transform', gleam_transform.normal
+						'shape', 'ellipse'
 					)
 		)
 	);
@@ -148,8 +143,8 @@ def.staticLazy.layout = ( ) =>
 /*
 | template of the user space list buttons.
 */
-def.staticLazy.spaceButtonTemplate = ( ) =>
-	widget_button.abstract(
+def.staticLazy.spaceButtonLayout = ( ) =>
+	layout_button.create(
 		'facets', gruga_moveTo._portalButtonFacets,
 		'zone', gruga_moveTo._buttonSize,
 		'textNewline', 25,
