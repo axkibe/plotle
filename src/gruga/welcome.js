@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const shell_fontPool = require( '../shell/fontPool' );
-
 const form_welcome = require( '../form/welcome' );
 
 const gleam_point = require( '../gleam/point' );
@@ -17,9 +15,11 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_genericButton = require( './genericButton' );
 
-const widget_button = require( '../widget/button' );
+const layout_button = require( '../layout/button' );
 
-const widget_label = require( '../widget/label' );
+const layout_label = require( '../layout/label' );
+
+const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -28,19 +28,19 @@ const widget_label = require( '../widget/label' );
 def.staticLazy.layout = ( ) =>
 	form_welcome.abstract(
 		'twig:add', 'headline',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'welcome',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add', 'message1',
-			widget_label.abstract(
+			layout_label.create(
 				'text', 'Your registration was successful :-)',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add', 'closeButton',
-			widget_button.abstract(
+			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(

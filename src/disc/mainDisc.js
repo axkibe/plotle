@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, disc_mainDisc ) => {
 
 
 const action_select = require( '../action/select' );
@@ -27,6 +27,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gleam_transform = require( '../gleam/transform' );
 
+const layout_disc = require( '../layout/disc' );
+
 const result_hover = require( '../result/hover' );
 
 const show_create = require( '../show/create' );
@@ -36,6 +38,8 @@ const show_form = require( '../show/form' );
 const show_normal = require( '../show/normal' );
 
 const show_zoom = require( '../show/zoom' );
+
+const widget_widget = require( '../widget/widget' );
 
 
 /*::::::::::::::::::::::::::::.
@@ -95,6 +99,8 @@ if( TIM )
 
 	def.twig =
 	[
+		// FIXME XXX remove layouts
+		'../layout/button',
 		'../widget/button',
 		'../widget/checkbox',
 		'../widget/input',
@@ -102,6 +108,57 @@ if( TIM )
 	];
 }
 
+
+/*
+| Creates an actual disc from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_disc
+		path,       // path of the widget
+		transform,  // visual transformation
+		show,       // currently show disc/form
+		viewSize    // viewSize
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 5 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_disc ) throw new Error( );
+/**/}
+
+	const twig = { };
+
+	for( let a = 0, aZ = layout.length; a < aZ; a++ )
+	{
+		const key = layout.getKey( a );
+
+		const iLayout = layout.get( key );
+
+		const item =
+			widget_widget.createFromLayout(
+				iLayout,
+				path.append( 'twig' ).append( key ),
+				transform
+			);
+
+		twig[ key ] = item;
+	}
+
+	return(
+		disc_mainDisc.create(
+			'twig:init', twig, layout._ranks,
+			'controlTransform', transform,
+			'facet', layout.facet,
+			'path', path,
+			'shape', layout.shape,
+			'show', show,
+			'size', layout.size,
+			'viewSize', viewSize
+		)
+	);
+};
 
 
 /*

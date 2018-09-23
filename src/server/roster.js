@@ -665,6 +665,11 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/layout/disc.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gruga/fonts.js',
 		'hasTim', true,
 		'inBundle', true

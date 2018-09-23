@@ -152,7 +152,7 @@ def.func._transformScrollbox =
 				)
 		);
 
-	let sbPath = this.path.append( 'twig' ).append( 'scrollbox ' );
+	let sbPath = this.path.append( 'twig' ).append( 'scrollbox' );
 
 	if( this.userSpaceList )
 	{

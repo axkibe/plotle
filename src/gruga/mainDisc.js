@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const disc_mainDisc = require( '../disc/mainDisc' );
-
 const gleam_border = require( '../gleam/border' );
 
 const gleam_borderList = require( '../gleam/borderList' );
@@ -39,9 +37,11 @@ const gruga_iconSelect = require( '../gruga/iconSelect' );
 
 const gruga_iconZoom = require( '../gruga/iconZoom' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const layout_button = require( '../layout/button' );
 
-const widget_button = require( '../widget/button' );
+const layout_disc = require( '../layout/disc' );
+
+const shell_fontPool = require( '../shell/fontPool' );
 
 
 def.staticLazy.layout =
@@ -94,12 +94,6 @@ def.staticLazy.layout =
 			]
 		);
 
-	const buttonModel =
-		widget_button.abstract(
-			'facets', buttonFacets,
-			'shape', 'ellipse'
-		);
-
 	const buttonSize = gleam_size.wh( 44, 44 );
 
 	const loginButtonPos = pw.add( 30, 155 );
@@ -126,12 +120,8 @@ def.staticLazy.layout =
 
 	const zoomButtonPos = pw.add( 48, -18 );
 
-	return( disc_mainDisc.abstract(
-		'size',
-			gleam_size.create(
-				'width', 100,
-				'height', 1000
-			),
+	return( layout_disc.create(
+		'size', gleam_size.wh( 100, 1000 ),
 		'facet',
 			gleam_facet.create(
 				'border',
@@ -169,87 +159,105 @@ def.staticLazy.layout =
 				'gradientR1', 650
 			),
 		'twig:add', 'normal',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( normalButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
 				'iconShape', gruga_iconNormal.shape,
-				'iconFacet', gruga_iconNormal.facet
+				'iconFacet', gruga_iconNormal.facet,
+				'shape', 'ellipse',
+				'zone', gleam_rect.posSize( normalButtonPos, buttonSize )
 			),
 		'twig:add', 'select',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( selectButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
 				'iconShape', gruga_iconSelect.shape,
 				'iconFacet', gruga_iconSelect.facet,
-				'visible', false
+				'shape', 'ellipse',
+				'visible', false,
+				'zone', gleam_rect.posSize( selectButtonPos, buttonSize )
 			),
 		'twig:add', 'create',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( createButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
 				'font', shell_fontPool.get( 13, 'cm' ),
+				'shape', 'ellipse',
 				'text', 'new',
-				'visible', false
+				'visible', false,
+				'zone', gleam_rect.posSize( createButtonPos, buttonSize )
 			),
 		'twig:add', 'remove',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( removeButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
 				'iconShape', gruga_iconRemove.shape,
 				'iconFacet', gruga_iconRemove.facet,
-				'visible', false
+				'shape', 'ellipse',
+				'visible', false,
+				'zone', gleam_rect.posSize( removeButtonPos, buttonSize )
 			),
 		'twig:add', 'moveTo',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize ),
-				'text', 'go',
+			layout_button.create(
+				'facets', buttonFacets,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'visible', false
+				'shape', 'ellipse',
+				'text', 'go',
+				'visible', false,
+				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize )
 			),
 		'twig:add', 'zoom',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( zoomButtonPos, buttonSize ),
+			layout_button.create(
 				//'text', 'zoom',
 				//'font', shell_fontPool.get( 13, 'cm' ),
+				'facets', buttonFacets,
 				'iconShape', gruga_iconZoom.shape,
 				'iconFacet', gruga_iconZoom.facet,
-				'visible', false
+				'shape', 'ellipse',
+				'visible', false,
+				'zone', gleam_rect.posSize( zoomButtonPos, buttonSize )
 			),
 		'twig:add', 'space',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( spaceButtonPos, spaceButtonSize ),
-				'text', '',
+			layout_button.create(
+				'facets', buttonFacets,
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
 					gleam_ellipse.posSize(
 						gleam_point.xy( -60, 0 ),
 						spaceButtonSize.add( 60 - 1, -1 )
 					),
-				'textRotation', - Math.PI / 2
+				'text', '',
+				'textRotation', - Math.PI / 2,
+				'zone', gleam_rect.posSize( spaceButtonPos, spaceButtonSize )
 			),
 		'twig:add', 'user',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( userButtonPos, userButtonSize ),
-				'text', '',
+			layout_button.create(
+				'facets', buttonFacets,
 				'font', shell_fontPool.get( 12, 'cm' ),
 				'shape',
 					gleam_ellipse.posSize(
 						gleam_point.xy( -70, 0 ),
 						userButtonSize.add( 70 - 1, -1 )
 					),
-				'textRotation', ( -Math.PI / 2 )
+				'text', '',
+				'textRotation', ( -Math.PI / 2 ),
+				'zone', gleam_rect.posSize( userButtonPos, userButtonSize )
 			),
 		'twig:add', 'login',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( loginButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
+				'font', shell_fontPool.get( 13, 'cm' ),
+				'shape', 'ellipse',
 				'text', 'log\nin',
 				'textNewline', 14,
-				'font', shell_fontPool.get( 13, 'cm' ),
-				'visible', false
+				'visible', false,
+				'zone', gleam_rect.posSize( loginButtonPos, buttonSize )
 			),
 		'twig:add', 'signUp',
-			buttonModel.abstract(
-				'zone', gleam_rect.posSize( signupButtonPos, buttonSize ),
+			layout_button.create(
+				'facets', buttonFacets,
+				'shape', 'ellipse',
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'visible', false
+				'visible', false,
+				'zone', gleam_rect.posSize( signupButtonPos, buttonSize )
 			)
 	) );
 };

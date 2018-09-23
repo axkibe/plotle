@@ -84,6 +84,62 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gleam_transform = require( '../gleam/transform' );
 
+const layout_disc = require( '../layout/disc' );
+
+const widget_widget = require( '../widget/widget' );
+
+
+/*
+| Creates an actual disc from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,     // of type layout_disc
+		path,       // path of the widget
+		transform,  // visual transformation
+		show,       // currently show disc/form
+		viewSize    // viewSize
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 5 ) throw new Error( );
+/**/
+/**/	if( layout.timtype !== layout_disc ) throw new Error( );
+/**/}
+
+	const twig = { };
+
+	for( let a = 0, aZ = layout.length; a < aZ; a++ )
+	{
+		const key = layout.getKey( a );
+
+		const iLayout = layout.get( key );
+
+		const item =
+			widget_widget.createFromLayout(
+				iLayout,
+				path.append( 'twig' ).append( key ),
+				transform
+			);
+
+		twig[ key ] = item;
+	}
+
+	return(
+		disc_zoomDisc.create(
+			'twig:init', twig, layout._ranks,
+			'controlTransform', transform,
+			'facet', layout.facet,
+			'path', path,
+			'shape', layout.shape,
+			'show', show,
+			'size', layout.size,
+			'viewSize', viewSize
+		)
+	);
+};
+
 
 /*
 | Transforms widgets.

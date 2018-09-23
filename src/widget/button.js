@@ -132,6 +132,7 @@ def.static.createFromLayout =
 			'textNewline', layout.textNewline,
 			'textRotation', layout.textRotation,
 			'transform', transform,
+			'visible', layout.visible,
 			'zone', layout.zone
 		)
 	);

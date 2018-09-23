@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const disc_zoomDisc = require( '../disc/zoomDisc' );
-
 const gleam_border = require( '../gleam/border' );
 
 const gleam_borderList = require( '../gleam/borderList' );
@@ -39,9 +37,11 @@ const gruga_iconZoomIn = require( './iconZoomIn' );
 
 const gruga_iconZoomOut = require( './iconZoomOut' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const layout_button = require( '../layout/button' );
 
-const widget_button = require( '../widget/button' );
+const layout_disc = require( '../layout/disc' );
+
+const shell_fontPool = require( '../shell/fontPool' );
 
 
 def.staticLazy.layout =
@@ -96,19 +96,9 @@ def.staticLazy.layout =
 			]
 		);
 
-	const genericButtonModel =
-		widget_button.abstract(
-			'facets', genericButtonFacets,
-			'font', shell_fontPool.get( 16, 'cm' ),
-			'shape', 'ellipse'
-		);
 
-	return( disc_zoomDisc.abstract(
-		'size',
-			gleam_size.create(
-				'width', 176,
-				'height', 1010
-			),
+	return( layout_disc.create(
+		'size', gleam_size.wh( 176, 1010 ),
 		'facet',
 			gleam_facet.create(
 				'border',
@@ -119,9 +109,7 @@ def.staticLazy.layout =
 							'color', gleam_color.rgb( 255, 94, 44 )
 						),
 						'list:append',
-						gleam_border.create(
-							'color', gleam_color.rgb( 94, 94, 0 )
-						)
+						gleam_border.create( 'color', gleam_color.rgb( 94, 94, 0 ) )
 					),
 				'fill',
 					gleam_gradient_radial.create(
@@ -147,47 +135,43 @@ def.staticLazy.layout =
 			),
 		'twig:add',
 		'zoomAll',
-			genericButtonModel.abstract(
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
 				'iconShape', gruga_iconZoomAll.shape,
 				'iconFacet', gruga_iconZoomAll.facet,
-				'zone',
-					gleam_rect.posSize(
-						zoomAllButtonPos,
-						genericButtonSize
-					)
+				'shape', 'ellipse',
+				'zone', gleam_rect.posSize( zoomAllButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomIn',
-			genericButtonModel.abstract(
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
 				'iconShape', gruga_iconZoomIn.shape,
 				'iconFacet', gruga_iconZoomIn.facet,
-				'zone',
-					gleam_rect.posSize(
-						zoomInButtonPos,
-						genericButtonSize
-					)
+				'shape', 'ellipse',
+				'zone', gleam_rect.posSize( zoomInButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomOut',
-			genericButtonModel.abstract(
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
 				'iconShape', gruga_iconZoomOut.shape,
 				'iconFacet', gruga_iconZoomOut.facet,
-				'zone',
-					gleam_rect.posSize(
-						zoomOutButtonPos,
-						genericButtonSize
-					)
+				'shape', 'ellipse',
+				'zone', gleam_rect.posSize( zoomOutButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomHome',
-			genericButtonModel.abstract(
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
 				'iconShape', gruga_iconZoomHome.shape,
 				'iconFacet', gruga_iconZoomHome.facet,
-				'zone',
-					gleam_rect.posSize(
-						zoomHomeButtonPos,
-						genericButtonSize
-					)
+				'shape', 'ellipse',
+				'zone', gleam_rect.posSize( zoomHomeButtonPos, genericButtonSize )
 			)
 	) );
 };

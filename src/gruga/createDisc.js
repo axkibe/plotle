@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const disc_createDisc = require( '../disc/createDisc' );
-
 const gleam_border = require( '../gleam/border' );
 
 const gleam_borderList = require( '../gleam/borderList' );
@@ -31,9 +29,11 @@ const gleam_facet = require( '../gleam/facet' );
 
 const gleam_facetList = require( '../gleam/facetList' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const layout_button = require( '../layout/button' );
 
-const widget_button = require( '../widget/button' );
+const layout_disc = require( '../layout/disc' );
+
+const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -90,19 +90,9 @@ def.staticLazy.layout =
 			]
 		);
 
-	const genericButtonModel =
-		widget_button.abstract(
-			'facets', genericButtonFacets,
-			'font', shell_fontPool.get( 16, 'cm' ),
-			'shape', 'ellipse'
-		);
 
-	return( disc_createDisc.abstract(
-		'size',
-			gleam_size.create(
-				'width', 176,
-				'height', 1010
-			),
+	return( layout_disc.create(
+		'size', gleam_size.wh( 176, 1010 ),
 		'facet',
 			gleam_facet.create(
 				'border',
@@ -141,33 +131,40 @@ def.staticLazy.layout =
 			),
 		'twig:add',
 		'createNote',
-			genericButtonModel.abstract(
-				'zone', gleam_rect.posSize( noteButtonPnw, genericButtonSize ),
-				'text', 'Note'
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
+				'shape', 'ellipse',
+				'text', 'Note',
+				'zone', gleam_rect.posSize( noteButtonPnw, genericButtonSize )
 			),
 		'twig:add',
 		'createLabel',
-			genericButtonModel.abstract(
-				'zone', gleam_rect.posSize( labelButtonPnw, genericButtonSize ),
-				'text', 'Label'
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
+				'shape', 'ellipse',
+				'text', 'Label',
+				'zone', gleam_rect.posSize( labelButtonPnw, genericButtonSize )
 			),
 		'twig:add',
 		'createRelation',
-			genericButtonModel.abstract(
-				'zone',
-					gleam_rect.posSize( relationButtonPnw, genericButtonSize ),
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
+				'shape', 'ellipse',
 				'text', 'Rela-\ntion',
-				'textNewline', 20
+				'textNewline', 20,
+				'zone', gleam_rect.posSize( relationButtonPnw, genericButtonSize )
 			),
 		'twig:add',
 		'createPortal',
-			genericButtonModel.abstract(
-				'zone',
-					gleam_rect.posSize(
-						portalButtonPnw,
-						genericButtonSize
-					),
-				'text', 'Portal'
+			layout_button.create(
+				'facets', genericButtonFacets,
+				'font', shell_fontPool.get( 16, 'cm' ),
+				'shape', 'ellipse',
+				'text', 'Portal',
+				'zone', gleam_rect.posSize( portalButtonPnw, genericButtonSize )
 			)
 	) );
 };

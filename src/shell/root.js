@@ -128,6 +128,12 @@ const change_wrap = require( '../change/wrap' );
 
 const disc_root = require( '../disc/root' );
 
+const disc_createDisc = require( '../disc/mainDisc' );
+
+const disc_mainDisc = require( '../disc/mainDisc' );
+
+const disc_zoomDisc = require( '../disc/zoomDisc' );
+
 const fabric_doc = require( '../fabric/doc' );
 
 const fabric_para = require( '../fabric/para' );
@@ -174,16 +180,6 @@ const gruga_welcome = require( '../gruga/welcome' );
 
 const gruga_zoomDisc = require( '../gruga/zoomDisc' );
 
-const layout_button = require( '../layout/button' );
-
-const layout_checkbox = require( '../layout/checkbox' );
-
-const layout_input = require( '../layout/input' );
-
-const layout_label = require( '../layout/label' );
-
-const layout_scrollbox = require( '../layout/scrollbox' );
-
 const limit = require( '../math/root' ).limit;
 
 const net_ajax = require( '../net/ajax' );
@@ -226,16 +222,7 @@ const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_space = require( '../visual/space' );
 
-const widget_button = require( '../widget/button' );
-
-const widget_checkbox = require( '../widget/checkbox' );
-
-const widget_input = require( '../widget/input' );
-
-const widget_label = require( '../widget/label' );
-
-const widget_scrollbox = require( '../widget/scrollbox' );
-
+const widget_widget = require( '../widget/widget' );
 
 const loadingSpaceTextPath =
 	tim_path.empty
@@ -322,25 +309,28 @@ def.static._createDiscRoot =
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'mainDisc',
-				gruga_mainDisc.layout.create(
-					'path', twPath.append( 'mainDisc' ),
-					'controlTransform', gleam_transform.normal,
-					'show', show,
-					'viewSize', viewSize
+				disc_mainDisc.createFromLayout(
+					gruga_mainDisc.layout,
+					twPath.append( 'mainDisc' ),
+					gleam_transform.normal,
+					show,
+					viewSize
 				),
 			'twig:add', 'createDisc',
-				gruga_createDisc.layout.create(
-					'path', twPath.append( 'createDisc' ),
-					'controlTransform', gleam_transform.normal,
-					'show', show,
-					'viewSize', viewSize
+				disc_createDisc.createFromLayout(
+					gruga_createDisc.layout,
+					twPath.append( 'createDisc' ),
+					gleam_transform.normal,
+					show,
+					viewSize
 				),
 			'twig:add', 'zoomDisc',
-				gruga_zoomDisc.layout.create(
-					'path', twPath.append( 'zoomDisc' ),
-					'controlTransform', gleam_transform.normal,
-					'show', show,
-					'viewSize', viewSize
+				disc_zoomDisc.createFromLayout(
+					gruga_zoomDisc.layout,
+					twPath.append( 'zoomDisc' ),
+					gleam_transform.normal,
+					show,
+					viewSize
 				)
 		)
 	);
@@ -397,48 +387,12 @@ def.static._createFormRoot =
 						wLayout.create( 'transform', gleam_transform.normal )
 					);
 			}
-			else if( wLayout.timtype === layout_button )
+			else
 			{
 				const path = formPath.append( 'twig' ).append( key );
 
 				const widget =
-					widget_button.createFromLayout( wLayout, path, gleam_transform.normal );
-
-				form = form.abstract( 'twig:set', key, widget );
-			}
-			else if( wLayout.timtype === layout_checkbox )
-			{
-				const path = formPath.append( 'twig' ).append( key );
-
-				const widget =
-					widget_checkbox.createFromLayout( wLayout, path, gleam_transform.normal );
-
-				form = form.abstract( 'twig:set', key, widget );
-			}
-			else if( wLayout.timtype === layout_input )
-			{
-				const path = formPath.append( 'twig' ).append( key );
-
-				const widget =
-					widget_input.createFromLayout( wLayout, path, gleam_transform.normal );
-
-				form = form.abstract( 'twig:set', key, widget );
-			}
-			else if( wLayout.timtype === layout_label )
-			{
-				const path = formPath.append( 'twig' ).append( key );
-
-				const widget =
-					widget_label.createFromLayout( wLayout, path, gleam_transform.normal );
-
-				form = form.abstract( 'twig:set', key, widget );
-			}
-			else if( wLayout.timtype === layout_scrollbox )
-			{
-				const path = formPath.append( 'twig' ).append( key );
-
-				const widget =
-					widget_scrollbox.createFromLayout( wLayout, path, gleam_transform.normal );
+					widget_widget.createFromLayout( wLayout, path, gleam_transform.normal );
 
 				form = form.abstract( 'twig:set', key, widget );
 			}
@@ -642,7 +596,6 @@ def.transform.spaceVisual =
 		spaceVisual
 	)
 {
-//	return spaceVisual;
 	const spaceFabric = this.spaceFabric;
 
 	if( !spaceFabric ) return;
@@ -1833,7 +1786,7 @@ def.func.spawnRelation =
 
 
 /*
-| When animations are turned of, but the action has
+| When animations are turned off, but the action has
 | an finishAnimation a time is used instead an this
 | is the callback.
 */
@@ -1929,13 +1882,7 @@ def.func._changeTransformTo =
 			'spaceTransform', transform
 		);
 
-		if( root.action.finishAnimation )
-		{
-			system.setTimer(
-				time,
-				notAnimationFinish
-			);
-		}
+		if( root.action.finishAnimation ) system.setTimer( time, notAnimationFinish );
 	}
 };
 
