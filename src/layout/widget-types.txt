@@ -1,0 +1,7 @@
+# All widget types on a form or disc.
+
+./button
+./checkbox
+./input
+./label
+./scrollbox
