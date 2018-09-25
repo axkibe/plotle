@@ -33,8 +33,6 @@ const widget_scrollbox = require( '../widget/scrollbox' );
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// current action

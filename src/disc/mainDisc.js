@@ -49,8 +49,6 @@ const widget_widget = require( '../widget/widget' );
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// users access to current space

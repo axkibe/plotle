@@ -19,9 +19,9 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
-const form_moveTo = require( '../form/moveTo' );
-
 const layout_button = require( '../layout/button' );
+
+const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
 
@@ -94,10 +94,10 @@ def.staticLazy._portalButtonFacets = ( ) =>
 
 
 /*
-| Layout
+| Layout.
 */
 def.staticLazy.layout = ( ) =>
-	form_moveTo.abstract(
+	layout_form.create(
 		'twig:add',
 		'headline',
 			layout_label.create(

@@ -14,8 +14,6 @@ tim.define( module, ( def, widget_button ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// true if the button is down

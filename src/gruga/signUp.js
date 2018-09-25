@@ -9,8 +9,6 @@ tim.define( module, ( def ) => {
 
 const shell_fontPool = require( '../shell/fontPool' );
 
-const form_signUp = require( '../form/signUp' );
-
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -25,6 +23,8 @@ const layout_button = require( '../layout/button' );
 
 const layout_checkbox = require( '../layout/checkbox' );
 
+const layout_form = require( '../layout/form' );
+
 const layout_input = require( '../layout/input' );
 
 const layout_label = require( '../layout/label' );
@@ -34,7 +34,7 @@ const layout_label = require( '../layout/label' );
 | Layout
 */
 def.staticLazy.layout = ( ) =>
-	form_signUp.abstract(
+	layout_form.create(
 		'twig:add',
 		'headline',
 			layout_label.create(

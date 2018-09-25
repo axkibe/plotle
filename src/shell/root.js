@@ -140,7 +140,25 @@ const fabric_para = require( '../fabric/para' );
 
 const fabric_relation = require( '../fabric/relation' );
 
+const form_loading = require( '../form/loading' );
+
+const form_login = require( '../form/login' );
+
+const form_moveTo = require( '../form/moveTo' );
+
+const form_noAccessToSpace = require( '../form/noAccessToSpace' );
+
+const form_nonExistingSpace = require( '../form/nonExistingSpace' );
+
 const form_root = require( '../form/root' );
+
+const form_signUp = require( '../form/signUp' );
+
+const form_space = require( '../form/space' );
+
+const form_user = require( '../form/user' );
+
+const form_welcome = require( '../form/welcome' );
 
 const gleam_connect = require( '../gleam/connect' );
 
@@ -346,59 +364,52 @@ def.static._createFormRoot =
 	)
 {
 	const formLayouts =
-		{
-			loading : gruga_loading.layout,
-			login : gruga_login.layout,
-			moveTo : gruga_moveTo.layout,
-			noAccessToSpace : gruga_noAccessToSpace.layout,
-			nonExistingSpace : gruga_nonExistingSpace.layout,
-			signUp : gruga_signUp.layout,
-			space : gruga_space.layout,
-			user : gruga_user.layout,
-			welcome : gruga_welcome.layout
-		};
+	{
+		loading : [ gruga_loading.layout, form_loading ],
+		login : [ gruga_login.layout, form_login ],
+		moveTo : [ gruga_moveTo.layout, form_moveTo ],
+		noAccessToSpace : [ gruga_noAccessToSpace.layout, form_noAccessToSpace ],
+		nonExistingSpace : [ gruga_nonExistingSpace.layout, form_nonExistingSpace ],
+		signUp : [ gruga_signUp.layout, form_signUp ],
+		space : [ gruga_space.layout, form_space ],
+		user : [ gruga_user.layout, form_user ],
+		welcome : [ gruga_welcome.layout, form_welcome ],
+	};
 
 	let forms = { };
 
 	const formRootPath = tim_path.empty.append( 'form' );
 
+	// FIXME XXX move this from layout creation to form.root
+
 	for( let name in formLayouts )
 	{
-		// RENAME layout
-		let form = formLayouts[ name ];
+		const entry = formLayouts[ name ];
+
+		const layout = entry[ 0 ];
 
 		const formPath = formRootPath.append( 'twig' ).append( name );
 
-		// FIXME XXX move this from layout creation to form.root
+		const twig = { };
 
-		for( let w = 0, wZ = form.length; w < wZ; w++ )
+		for( let w = 0, wZ = layout.length; w < wZ; w++ )
 		{
-			const key = form.getKey( w );
+			const key = layout.getKey( w );
 
-			const wLayout = form.get( key );
+			const wLayout = layout.get( key );
 
-			// XXX FIXME make a map!
-			if( wLayout.isAbstract )
-			{
-				// XXX remove
-				form =
-					form.abstract(
-						'twig:set', key,
-						wLayout.create( 'transform', gleam_transform.normal )
-					);
-			}
-			else
-			{
-				const path = formPath.append( 'twig' ).append( key );
+			const path = formPath.append( 'twig' ).append( key );
 
-				const widget =
-					widget_widget.createFromLayout( wLayout, path, gleam_transform.normal );
+			twig[ key ] =
+				widget_widget.createFromLayout( wLayout, path, gleam_transform.normal );
 
-				form = form.abstract( 'twig:set', key, widget );
-			}
 		}
 
-		forms[ name ] = form;
+		forms[ name ] =
+			entry[ 1 ].create(
+				'twig:init', twig, layout._ranks,
+				'viewSize', viewSize
+			);
 	}
 
 	let formRoot =

@@ -14,8 +14,6 @@ tim.define( module, ( def, widget_checkbox ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// true if the checkbox is checked

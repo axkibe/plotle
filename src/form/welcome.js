@@ -19,8 +19,6 @@ const form_form = require( './form' );
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// current action

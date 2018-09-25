@@ -29,9 +29,6 @@ const gleam_transform = require( './transform' );
 
 if( TIM )
 {
-	// this tim has an abstract form.
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		pos : { type : './point', json : true },

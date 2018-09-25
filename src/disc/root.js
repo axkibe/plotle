@@ -131,19 +131,6 @@ def.transform.get =
 {
 	const ct = this.controlTransform;
 
-	if( disc.isAbstract )
-	{
-		for( let b = 0, bZ = disc.length; b < bZ; b++ )
-		{
-			disc =
-				disc.abstract(
-					'twig:set',
-					disc.getKey( b ),
-					disc.atRank( b ).create( 'transform', ct )
-				);
-		}
-	}
-
 	return(
 		disc.create(
 			'access', this.access,

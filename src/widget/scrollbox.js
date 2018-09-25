@@ -14,8 +14,6 @@ tim.define( module, ( def, widget_scrollbox ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// component hovered upon

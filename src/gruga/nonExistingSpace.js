@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const form_nonExistingSpace = require( '../form/nonExistingSpace' );
-
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -19,6 +17,8 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const layout_button = require( '../layout/button' );
 
+const layout_form = require( '../layout/form' );
+
 const layout_label = require( '../layout/label' );
 
 
@@ -26,7 +26,7 @@ const layout_label = require( '../layout/label' );
 | Layout
 */
 def.staticLazy.layout = ( ) =>
-	form_nonExistingSpace.abstract(
+	layout_form.create(
 		'twig:add',
 		'headline',
 			layout_label.create(

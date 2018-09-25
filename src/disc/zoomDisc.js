@@ -14,8 +14,6 @@ tim.define( module, ( def, disc_zoomDisc ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// users access to current space

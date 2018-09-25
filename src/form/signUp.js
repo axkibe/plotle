@@ -14,8 +14,6 @@ tim.define( module, ( def ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// current action

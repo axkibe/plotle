@@ -7,8 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const form_noAccessToSpace = require( '../form/noAccessToSpace' );
-
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -16,6 +14,8 @@ const gleam_rect = require( '../gleam/rect' );
 const gruga_genericButton = require( '../gruga/genericButton' );
 
 const layout_button = require( '../layout/button' );
+
+const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
 
@@ -26,7 +26,7 @@ const shell_fontPool = require( '../shell/fontPool' );
 | Layout
 */
 def.staticLazy.layout = ( ) =>
-	form_noAccessToSpace.abstract(
+	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
 				'text', '',
@@ -56,4 +56,3 @@ def.staticLazy.layout = ( ) =>
 
 
 } );
-

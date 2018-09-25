@@ -7,9 +7,9 @@
 tim.define( module, ( def ) => {
 
 
-const form_loading = require( '../form/loading' );
-
 const gleam_point = require( '../gleam/point' );
+
+const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
 
@@ -20,7 +20,7 @@ const shell_fontPool = require( '../shell/fontPool' );
 | Layout
 */
 def.staticLazy.layout = ( ) =>
-	form_loading.abstract(
+	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
 				'text', 'loading',

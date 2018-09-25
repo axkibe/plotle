@@ -14,8 +14,6 @@ tim.define( module, ( def, widget_input ) => {
 
 if( TIM )
 {
-	def.hasAbstract = true;
-
 	def.attributes =
 	{
 		// style facets

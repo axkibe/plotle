@@ -9,12 +9,6 @@
 tim.define( module, ( def ) => {
 
 
-/*
-| This tim has an abstract form.
-*/
-def.hasAbstract = true;
-
-
 /*::::::::::::::::::::::::::::.
 :: Typed immutable attributes
 ':::::::::::::::::::::::::::::*/
