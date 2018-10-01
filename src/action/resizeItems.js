@@ -50,11 +50,13 @@ if( TIM )
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affects =
+def.func.affectsItem =
 	function(
-		path
+		item
 	)
 {
+	const path = item.path;
+
 	const paths = this.itemPaths;
 
 	for( let a = 0, pLen = paths.length; a < pLen; a++ )

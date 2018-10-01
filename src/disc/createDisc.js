@@ -346,7 +346,7 @@ def.func.probeClickDrag =
 
 
 /*
-| A button of the main disc has been pushed.
+| A button of the disc has been pushed.
 */
 def.func.pushButton =
 	function(

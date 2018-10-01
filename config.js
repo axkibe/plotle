@@ -49,8 +49,8 @@ config.database_name = 'linkloom-1';
 /*
 | Runs in devel mode.
 */
-config.devel = true;
-//config.devel = false;
+//config.devel = true;
+config.devel = false;
 
 
 /*
@@ -108,7 +108,7 @@ config.noWrite = false;
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
-config.uglify = !config.shell_devel;
+config.uglify = !config.devel;
 
 
 /*

@@ -215,13 +215,7 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr =
-		[
-			gleam_glint_fill.create(
-				'facet', this.facet,
-				'shape', this._tShape
-			)
-		];
+	const arr = [ gleam_glint_fill.createFS( this.facet, this._tShape) ];
 
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -230,16 +224,10 @@ def.lazy._glint =
 		if( g ) arr.push( g );
 	}
 
-	arr.push(
-		gleam_glint_border.create(
-			'facet', this.facet,
-			'shape', this._tShape
-		)
-	);
+	arr.push( gleam_glint_border.createFS( this.facet, this._tShape ) );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
-
 
 
 /*
@@ -281,11 +269,6 @@ def.lazy._tShape =
 		.transform( this.controlTransform )
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

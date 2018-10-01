@@ -113,6 +113,8 @@ const tim_path = tim.import( 'tim.js', 'path' );
 
 const visual_frame = require( '../visual/frame' );
 
+const visual_item = require( '../visual/item' );
+
 const visual_itemList = require( '../visual/itemList' );
 
 const visual_label = require( '../visual/label' );
@@ -231,26 +233,25 @@ def.transform.get =
 		path = item.path;
 	}
 
-	const action = this.action;
+	const action = visual_item.concernsAction( this.action, item );
 
-	const mark = this.mark;
+	const mark = visual_item.concernsMark( this.mark, path );
 
-	const highlight =
-		(
-			action
-			&& (
-				( action.timtype === action_createRelation && action.affects( path ) )
-				|| ( action.timtype === action_select && action.affects( path ) )
-			)
-		)
-		|| ( mark && mark.containsPath( path ) );
+	let highlight = !!( mark && mark.containsPath( path ) );
+
+	if( !highlight && action && item.timtype )
+	{
+		highlight =
+			( action.timtype === action_createRelation && action.affectsItem( item ) )
+			|| ( action.timtype === action_select && action.affectsItem( item ) );
+	}
 
 	if( item === visual_note || item.timtype === visual_note )
 	{
 		item =
 			item.create(
 				'action', action,
-				'highlight', !!highlight,
+				'highlight', highlight,
 				'hover', this.hover,
 				'fabric', fabric,
 				'mark', mark,
@@ -264,7 +265,7 @@ def.transform.get =
 		item =
 			item.create(
 				'action', action,
-				'highlight', !!highlight,
+				'highlight', highlight,
 				'hover', this.hover,
 				'fabric', fabric,
 				'mark', mark,
@@ -272,7 +273,6 @@ def.transform.get =
 				'transform', this.transform
 			);
 	}
-
 
 	if( item.timtype === visual_note )
 	{
@@ -294,6 +294,42 @@ def.transform.get =
 
 			item = item.create( 'scrollPos', scrollPos );
 		}
+	}
+
+	let action2 = action;
+	let highlight2 = highlight;
+
+	// FIXME take scrollPos into redo
+
+	if( !action )
+	{
+		action2 = visual_item.concernsAction( this.action, item );
+	}
+
+	// checks if the highlight feature has changed on the created item
+	if( !highlight && action2 && item.timtype )
+	{
+		switch( action2.timtype )
+		{
+			case action_createRelation :
+			case action_select :
+
+				highlight2 = action2.affectsItem( item );
+
+				break;
+		}
+	}
+
+
+	if(
+		action2 !== action
+		|| highlight2 !== highlight
+	)
+	{
+		item = item.create(
+			'action', action2,
+			'highlight', highlight2
+		);
 	}
 
 	return item;
@@ -1631,9 +1667,7 @@ def.func._stopSelect =
 	{
 		const item = this.atRank( r );
 
-		const path = item.path;
-
-		if( action.affects( path ) ) paths.push( path );
+		if( action.affectsItem( item ) ) paths.push( item.path );
 	}
 
 	action =

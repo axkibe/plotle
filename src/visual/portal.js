@@ -17,11 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type : [ '< ../action/types', 'undefined' ],
-			prepare : 'self.concernsAction( action, path )'
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// portal fabric data
 		fabric : { type : '../fabric/portal' },
@@ -37,11 +33,7 @@ if( TIM )
 		},
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )',
-		},
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the portal
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -170,10 +162,6 @@ def.staticLazy.model =
 /*
 | Deriving concerns stuff.
 */
-def.static.concernsAction = visual_item.concernsAction;
-
-def.static.concernsMark = visual_item.concernsMark;
-
 def.static.concernsHover = visual_item.concernsHover;
 
 

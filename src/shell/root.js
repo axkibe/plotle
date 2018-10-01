@@ -128,7 +128,7 @@ const change_wrap = require( '../change/wrap' );
 
 const disc_root = require( '../disc/root' );
 
-const disc_createDisc = require( '../disc/mainDisc' );
+const disc_createDisc = require( '../disc/createDisc' );
 
 const disc_mainDisc = require( '../disc/mainDisc' );
 
@@ -741,14 +741,26 @@ def.func.alter =
 */
 def.func.animationFrame =
 	function(
-		time // FIXME
+		time // time stamp the animation frame has been fired for
 	)
 {
-	const aroot = this._animation.frame( time );
+	root._animation.frame( time );
+};
 
-	root = root.create( '_animation', aroot );
 
-	if( aroot.length === 0 ) system.stopAnimation( );
+/*
+| Finished an animation
+*/
+def.func.finishAnimation =
+	function(
+		name  // animation name
+	)
+{
+	if( !root._animation.get( name ) ) return;
+
+	root.create( '_animation', root._animation.create( 'twig:remove', name ) );
+
+	if( root._animation.length === 0 ) system.stopAnimation( );
 };
 
 

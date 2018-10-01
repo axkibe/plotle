@@ -103,7 +103,8 @@ def.static.develHtml =
 			devels.push(
 				'<script src="'
 				+ res.aliases.get( 0 )
-				+ '" type="text/javascript"></script>'
+				+ '" type="text/javascript" defer>'
+				+ '</script>'
 			);
 		}
 	}
@@ -121,7 +122,8 @@ def.static.develHtml =
 				/<!--WEINRE.*>/,
 				'<script src="http://'
 				+ config.weinre
-				+ '/target/target-script-min.js"></script>'
+				+ '/target/target-script-min.js" defer>'
+				+ '</script>'
 			);
 	}
 
@@ -130,7 +132,8 @@ def.static.develHtml =
 			/<!--OPENTYPE.*>/,
 			'<script src="import-opentype-'
 			+ opentypeHash
-			+ '.js" type="text/javascript"></script>'
+			+ '.js" type="text/javascript" defer>'
+			+ '</script>'
 		);
 
 	root.create(
@@ -166,7 +169,8 @@ def.static.testPadHtml =
 			devels.push(
 				'<script src="'
 				+ res.aliases.get( 0 )
-				+ '" type="text/javascript"></script>'
+				+ '" type="text/javascript" defer>'
+				+ '</script>'
 			);
 		}
 	}
@@ -184,7 +188,8 @@ def.static.testPadHtml =
 				/<!--WEINRE.*>/,
 				'<script src="http://'
 				+ config.weinre
-				+ '/target/target-script-min.js"></script>'
+				+ '/target/target-script-min.js">'
+				+ '</script>'
 			);
 	}
 
@@ -213,7 +218,8 @@ def.static.indexHtml =
 			/<!--COPACK.*>/,
 			'<script src="'
 			+ bundleFilePath
-			+ '" type="text/javascript"></script>'
+			+ '" type="text/javascript">'
+			+ '</script>'
 		);
 
 	/*
@@ -222,7 +228,8 @@ def.static.indexHtml =
 			/<!--OPENTYPE.*>/,
 			'<script src="import-opentype-'
 			+ opentypeHash
-			+ '.js" type="text/javascript"></script>'
+			+ '.js" type="text/javascript">'
+			+ '</script>'
 		);
 	*/
 
@@ -231,7 +238,8 @@ def.static.indexHtml =
 			/<!--OPENTYPE.*>/,
 			'<script src="import-opentype.min-'
 			+ opentypeMinHash
-			+ '.js" type="text/javascript"></script>'
+			+ '.js" type="text/javascript">'
+			+ '</script>'
 		);
 
 	root.create(

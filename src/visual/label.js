@@ -17,11 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type : [ '< ../action/types', 'undefined' ],
-			prepare : 'self.concernsAction( action, path )'
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the document (content)
 		doc : { type : [ './doc', 'undefined' ] },
@@ -39,12 +35,8 @@ if( TIM )
 			assign : ''
 		},
 
-		mark :
-		{
-			// the users mark
-			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )',
-		},
+		// the users mark
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the doc
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -147,14 +139,6 @@ def.staticLazy.model =
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsAction = visual_item.concernsAction;
-
-def.static.concernsMark = visual_item.concernsMark;
 
 
 /*

@@ -4,7 +4,8 @@
 'use strict';
 
 
-Error.stackTraceLimit = 15;
+//Error.stackTraceLimit = 15;
+Error.stackTraceLimit = Infinity;
 
 
 const config = require( '../../config' );

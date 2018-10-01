@@ -55,9 +55,9 @@ def.static.createZoom =
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affects =
+def.func.affectsItem =
 	function(
-		path
+		item
 	)
 {
 	return false;

@@ -251,13 +251,14 @@ def.func.buildBundle =
 				global_defs :
 				{
 					TIM : false
-				}
+				},
+				evaluate : false,
 			},
 			mangle: false,
 			output :
 			{
 				ast : true,
-				code : false
+				code : false,
 			},
 		};
 

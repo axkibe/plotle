@@ -120,9 +120,7 @@ def.func.frame =
 		time
 	)
 {
-	root.create(
-		'spaceTransform', this.getTransform( time )
-	);
+	root.create( 'spaceTransform', this.getTransform( time ) );
 
 	let going = time < this.end;
 
@@ -136,7 +134,10 @@ def.func.frame =
 		}
 	}
 
-	return going;
+	if( !going )
+	{
+		root.finishAnimation( 'transform' );
+	}
 };
 
 

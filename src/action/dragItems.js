@@ -36,9 +36,9 @@ if( TIM )
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affects =
+def.func.affectsItem =
 	function(
-		path
+		item
 	)
 {
 	const paths = this.itemPaths;
@@ -47,7 +47,7 @@ def.func.affects =
 	{
 		const pa = paths.get( a );
 
-		if( pa.equals( path ) ) return true;
+		if( pa.equals( item.path ) ) return true;
 	}
 
 	return false;

@@ -19,11 +19,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type : [ '< ../action/types', 'undefined' ],
-			prepare : 'self.concernsAction( action, path )',
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		doc : { type : [ './doc', 'undefined' ] },
 
@@ -37,11 +33,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )',
-		},
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the note
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -152,14 +144,6 @@ def.static.proportional = false;
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsAction = visual_item.concernsAction;
-
-def.static.concernsMark = visual_item.concernsMark;
 
 
 /*

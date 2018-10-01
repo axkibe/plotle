@@ -40,15 +40,8 @@ def.func.frame =
 		const anim = aroot.get( key );
 
 		// this animation is finished
-		if( !anim.frame( time ) )
-		{
-			aroot = aroot.create( 'twig:remove', key );
-
-			a--; al--;
-		}
+		anim.frame( time );
 	}
-
-	return aroot;
 };
 
 

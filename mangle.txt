@@ -1,3 +1,4 @@
+. __DEBUG_DEFINER__
 > Label
 > Note
 > PI
@@ -7,12 +8,10 @@
 . _animation
 . _animationTransmitter
 . _blink
-. _blinkTimer
 . _blinkTransmitter
 . _border
 . _borders
 . _buttonSize
-. _cache
 . _canvasDisplay
 . _captureEvents
 . _caretGlint
@@ -24,10 +23,8 @@
 . _createDiscRoot
 . _createFormRoot
 . _currentScreen
-. _cv
 . _cx
 . _display
-. _drawn
 . _expired
 . _facet
 . _facetMoveToButton
@@ -54,8 +51,6 @@
 . _gradientR1
 . _group
 . _iconShape
-. _inheritFrame
-. _inheritedGlint
 . _init
 . _isActiveButton
 . _keyBackspace
@@ -227,9 +222,6 @@
 . appendNC
 > apply
 > applyChangeDynamic
-. area
-. arrGlint
-. arrShape
 . arrowSize
 > at
 > at1
@@ -277,7 +269,6 @@
 > ceil
 > change
 > changeList
-. changeMarkText
 . changeSpaceTransformAll
 . changeSpaceTransformCenter
 . changeSpaceTransformHome
@@ -311,8 +302,6 @@
 > cm
 . combine
 . command
-. conGlint
-. conShape
 > concat
 . concernsAction
 . concernsHover
@@ -399,10 +388,6 @@
 . errorLabel
 > exec
 . exports
-> fabric_label
-> fabric_note
-> fabric_portal
-> fabric_relation
 . facets
 . fail
 > failScreen
@@ -489,11 +474,9 @@
 > home
 . iconFacet
 . iconShape
-> ideoloom
-> ideoloom:home
-> ideoloom:sandbox
-. ideoloomHome
-. ideoloomSandbox
+> linkloom
+> linkloom:home
+> linkloom:sandbox
 > imageSmoothingEnabled
 > index
 > indexOf
@@ -529,7 +512,6 @@
 > keys
 > la
 > label
-. layout
 . lazy
 . lazyFuncInt
 . lazyFuncStr
@@ -713,7 +695,6 @@
 > refMomentSpace
 > refMomentUserSpaceList
 . refire
-. reflect
 > register
 > relation
 . relationState
@@ -782,7 +763,6 @@
 > sort
 . source
 > space
-. spaceButtonTemplate
 . spaceFabric
 . spacePath
 > spaceRef
@@ -820,7 +800,6 @@
 > substring
 . suggestingKeyboard
 > sw
-. systemFocus
 . tFont
 . tShape
 . tZone
@@ -833,7 +812,6 @@
 . textPath
 . textRotation
 . textWheelSpeed
-> timjs
 . timtype
 . toItemPath
 > toJSON

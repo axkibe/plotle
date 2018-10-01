@@ -17,11 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action :
-		{
-			type : [ '< ../action/types', 'undefined' ],
-			prepare : 'self.concernsAction( action, path )'
-		},
+		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the document (content)
 		doc : { type : [ './doc', 'undefined' ] },
@@ -39,7 +35,6 @@ if( TIM )
 		mark :
 		{
 			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )',
 		},
 
 		// the path of the doc
@@ -77,25 +72,6 @@ const visual_label = require( '../visual/label' );
 | FIXME this is a dirty workaround.
 */
 def.transform.doc = visual_label.prototype.__transform_doc;
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsAction = visual_item.concernsAction;
-
-def.static.concernsMark = visual_item.concernsMark;
-
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

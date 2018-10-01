@@ -33,12 +33,12 @@ const visual_mark_range = require( '../visual/mark/range' );
 def.static.concernsAction =
 	function(
 		action,
-		path
+		item
 	)
 {
-	if( !path || !action ) return undefined;
+	if( !item || !item.path || !action ) return undefined;
 
-	return action.affects( path ) ? action : undefined;
+	return action.affectsItem( item ) ? action : undefined;
 };
 
 

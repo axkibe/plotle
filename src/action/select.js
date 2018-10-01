@@ -57,16 +57,14 @@ def.lazy.zone =
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affects =
+def.func.affectsItem =
 	function(
-		path
+		item
 	)
 {
 	const tZone = this.zone;
 
 	if( !tZone ) return false;
-
-	const item = root.getPath( path );
 
 	const tPos = tZone.pos;
 
