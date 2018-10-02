@@ -647,11 +647,8 @@ def.func.extraMangle =
 			return false;
 		}
 
-		// checks 
-		if( timNoMangle[ p ] !== undefined )
-		{
-			return false;
-		}
+		// checks
+		if( timNoMangle[ p ] !== undefined ) return false;
 
 		// checks if this property will be mangled
 		if( mangle[ p ] !== undefined )

@@ -71,7 +71,7 @@ const visual_label = require( '../visual/label' );
 | Transforms the doc.
 | FIXME this is a dirty workaround.
 */
-def.transform.doc = visual_label.prototype.__transform_doc;
+def.transform.doc = visual_label.prototype[ '__transform_' + 'doc' ];
 
 
 /*

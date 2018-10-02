@@ -129,6 +129,7 @@ def.staticLazy.model =
 						)
 				),
 			'highlight', false,
+			'scrollPos', gleam_point.zero,
 			'transform', gleam_transform.normal
 		)
 	);

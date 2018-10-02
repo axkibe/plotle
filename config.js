@@ -49,8 +49,8 @@ config.database_name = 'linkloom-1';
 /*
 | Runs in devel mode.
 */
-//config.devel = true;
-config.devel = false;
+config.devel = true;
+//config.devel = false;
 
 
 /*
@@ -69,7 +69,7 @@ config.shell_bundle = !config.devel;
 | If true checking code is turned on in shell
 */
 config.shell_check = config.devel;
-//config.shell_check = '{ noinherit: true }';
+config.shell_check = true;
 
 
 /*
@@ -115,12 +115,14 @@ config.uglify = !config.devel;
 | If true does extra mangles on output compression
 */
 config.extraMangle = config.shell_bundle;
+config.extraMangle = false;
 
 
 /*
 | If true "beautifies" uglify output.
 */
 config.beautify = false;
+config.beautify = true;
 
 
 /*

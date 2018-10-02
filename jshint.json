@@ -1,28 +1,29 @@
 {
-	"esnext" : true,
-	"newcap" : false,
-	"node" : true,
 	"browser" : true,
+	"esnext" : true,
 	"expr" : true,
-	"trailing" : true,
-	"undef" : true,
-	"onecase" : true,
 	"laxbreak" : true,
 	"laxcomma" : true,
+	"newcap" : false,
+	"node" : true,
+	"onecase" : true,
 	"strict" : true,
+	"sub" : true,
+	"trailing" : true,
+	"undef" : true,
 	"unused" : "vars",
 	"globals"  :
 	{
 		"CHECK" : true,
 		"FREEZE" : true,
 		"NODE" : true,
+		"TIM" : true,
 		"config" : true,
-		"pass" : true,
 		"opentype" : true,
+		"pass" : true,
 		"root" : true,
 		"self" : true,
 		"system" : true,
-		"tim" : true,
-		"TIM" : true
+		"tim" : true
 	}
 }
