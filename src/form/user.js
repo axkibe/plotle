@@ -26,11 +26,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )'
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -92,19 +88,6 @@ def.transform.get =
 
 	return form_form.transformGet.call( this, name, widget );
 };
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
-def.static.concernsMark = form_form.concernsMark;
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

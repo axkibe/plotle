@@ -247,7 +247,6 @@ def.func.dragStop =
 };
 
 
-
 /*
 | Mouse wheel.
 */

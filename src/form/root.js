@@ -62,6 +62,9 @@ if( TIM )
 }
 
 
+const form_form = require( './form' );
+
+
 /**
 *** Exta checking
 ***/
@@ -86,14 +89,16 @@ def.transform.get =
 {
 	const path =
 		form.path
-		? pass
+		? pass  // FIXME maybe set undefined
 		: this.path.append( 'twig' ).append( name );
+
+	const mark = form_form.concernsMark( this.mark, path );
 
 	return(
 		form.create(
 			'action', this.action,
 			'hover', this.hover,
-			'mark', this.mark,
+			'mark', mark,
 			'path', path,
 			'spaceRef', this.spaceRef,
 			'user', this.user,
@@ -113,6 +118,7 @@ def.transform.get =
 | Returns the mark if the form root concerns a mark.
 |
 | FIXME this is akward since path is dynamic!!!
+| FIXME what is it good for anyway???
 */
 def.static.concernsMark =
 	mark =>

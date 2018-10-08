@@ -22,12 +22,8 @@ if( TIM )
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
-		mark :
-		{
-			// the users mark
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )'
-		},
+		// the users mark
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -65,19 +61,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 def.transform.get = form_form.transformGet;
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
-def.static.concernsMark = form_form.concernsMark;
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
