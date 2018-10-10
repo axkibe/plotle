@@ -576,8 +576,8 @@ def.transform.form =
 	return(
 		form.create(
 			'action', this.action,
-			'hover', this.hover,
-			'mark', this._mark,
+			'hover', form_root.concernsHover( this.hover ),
+			'mark', form_root.concernsMark( this._mark ),
 			'spaceRef', this.spaceRef,
 			'user', this.userCreds,
 			'userSpaceList', this.userSpaceList,

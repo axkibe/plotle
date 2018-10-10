@@ -20,11 +20,7 @@ if( TIM )
 		action : { type : [ '< ../action/types', 'undefined' ] },
 
 		// the widget hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
@@ -64,6 +60,8 @@ if( TIM )
 
 const form_form = require( './form' );
 
+const tim_path = tim.import( 'tim.js', 'path' );
+
 
 /**
 *** Exta checking
@@ -87,10 +85,7 @@ def.transform.get =
 		form
 	)
 {
-	const path =
-		form.path
-		? pass  // FIXME maybe set undefined
-		: this.path.append( 'twig' ).append( name );
+	const path = form.path || this.path.append( 'twig' ).append( name );
 
 	const mark = form_form.concernsMark( this.mark, path );
 
@@ -115,18 +110,9 @@ def.transform.get =
 
 
 /*
-| Returns the mark if the form root concerns a mark.
-|
-| FIXME this is akward since path is dynamic!!!
-| FIXME what is it good for anyway???
+| Path of the form root
 */
-def.static.concernsMark =
-	mark =>
-	(
-		mark.containsPath( form_root.path )
-		? mark
-		: undefined
-	);
+def.staticLazy.path = ( ) => tim_path.empty.append( 'form' );
 
 
 /*
@@ -140,6 +126,16 @@ def.static.concernsHover =
 		: undefined
 	);
 
+/*
+| Returns the mark if the form root concerns about it.
+*/
+def.static.concernsMark =
+	mark =>
+	(
+		mark && mark.containsPath( form_root.path )
+		? mark
+		: undefined
+	);
 
 /*:::::::::::.
 :: Functions
