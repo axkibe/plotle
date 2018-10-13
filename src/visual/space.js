@@ -29,11 +29,7 @@ if( TIM )
 		frame : { type : [ './frame', 'undefined' ] },
 
 		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },

@@ -613,13 +613,15 @@ def.transform.spaceVisual =
 
 	const mark = visual_space.concernsMark( this._mark );
 
+	const hover = visual_space.concernsHover( this.hover );
+
 	return(
 		( spaceVisual || visual_space )
 		.create(
 			'access', this.access,
 			'action', this.action,
 			'fabric', this.spaceFabric,
-			'hover', this.hover,
+			'hover', hover,
 			'mark', mark,
 			'transform', this.spaceTransform,
 			'viewSize', this.viewSize
