@@ -27,11 +27,7 @@ if( TIM )
 		fontsize : { type : [ 'undefined', 'number' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )'
-		},
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the para',
 		path : { type : [ 'undefined', 'tim.js/path' ] },

@@ -98,11 +98,12 @@ const visual_item = require( '../visual/item' );
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 
-
-
-/*::::::::::::::::::::::.
-:: Static (lazy) values
-':::::::::::::::::::::::*/
+/*
+| Doesn't care about hovering
+*/
+def.static.concernsHover =
+def.func.concernsHover =
+	( ) => undefined;
 
 
 /*

@@ -11,8 +11,6 @@ const action_select = require( '../action/select' );
 
 const change_shrink = require( '../change/shrink' );
 
-const disc_disc = require( './disc' );
-
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -64,11 +62,7 @@ if( TIM )
 		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )',
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
@@ -288,26 +282,21 @@ def.transform.get =
 			break;
 	}
 
+	const path = widget.path || this.path.append( 'twig' ).append( name );
+
+	const hover = widget_widget.concernsHover( this.hover, path );
+
 	return(
 		widget.create(
-			'hover', this.hover,
+			'hover', hover,
 			'down', down,
-			'path',
-				widget.path
-				? pass
-				: this.path.append( 'twig' ).append( name ),
+			'path', path,
 			'text', text,
 			'visible', visible,
 			'transform', this.controlTransform
 		)
 	);
 };
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = disc_disc.concernsHover;
 
 
 /*:::::::::::::.

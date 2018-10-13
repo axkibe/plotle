@@ -17,11 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark :
@@ -173,12 +169,6 @@ def.transform.get =
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = widget_widget.concernsHover;
 
 
 /*

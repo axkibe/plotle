@@ -20,21 +20,13 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// font of the text
 		font : { type : '../gleam/font' },
 
 		// the users mark
-		mark :
-		{
-			prepare : 'self.concernsMark( mark, path )',
-			type : [ '< ../visual/mark/types', 'undefined' ]
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// maximum input length
 		maxlen : { type : 'integer' },
@@ -88,8 +80,6 @@ const shell_settings = require( '../shell/settings' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
-const widget_widget = require( './widget' );
-
 
 /*
 | Creates an actual widget from a layout.
@@ -132,14 +122,6 @@ def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = widget_widget.concernsHover;
-
-def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*:::::::::::::.

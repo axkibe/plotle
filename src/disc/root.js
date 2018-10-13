@@ -7,6 +7,8 @@
 tim.define( module, ( def, disc_root ) => {
 
 
+const disc_disc = require( './disc' );
+
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const show_create = require( '../show/create' );
@@ -35,12 +37,8 @@ if( TIM )
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
-		mark :
-		{
-			// the users mark
-			prepare : 'self.concernsMark( mark )',
-			type : [ '< ../visual/mark/types', 'undefined' ]
-		},
+		// the users mark
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// path of the disc
 		path : { type : 'tim.js/path' },
@@ -71,21 +69,6 @@ if( TIM )
 /*::::::::::::::::::.
 :: Static functions
 ':::::::::::::::::::*/
-
-
-/*
-| Returns the mark if the disc root concerns a mark.
-*/
-def.static.concernsMark =
-	function(
-		mark
-	)
-{
-	// discs concerns about all, since they provide
-	// additional information.
-
-	return mark;
-};
 
 
 /*
@@ -131,12 +114,14 @@ def.transform.get =
 {
 	const ct = this.controlTransform;
 
+	const hover = disc_disc.concernsHover( this.hover, disc.path );
+
 	return(
 		disc.create(
 			'access', this.access,
 			'action', this.action,
 			'controlTransform', ct,
-			'hover', this.hover,
+			'hover', hover,
 			'mark', this.mark,
 			'show', this.show,
 			'spaceRef', this.spaceRef,

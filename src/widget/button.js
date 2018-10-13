@@ -26,11 +26,7 @@ if( TIM )
 		font : { type : [ 'undefined', '../gleam/font' ] },
 
 		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// icon shape
 		iconShape : { type : [ '< ../gleam/shape-types', 'undefined' ] },
@@ -39,11 +35,7 @@ if( TIM )
 		iconFacet : { type : [ 'undefined', '../gleam/facet' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )'
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -89,16 +81,6 @@ const gleam_transform = require( '../gleam/transform' );
 const layout_button = require( '../layout/button' );
 
 const result_hover = require( '../result/hover' );
-
-const widget_widget = require( './widget' );
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = widget_widget.concernsHover;
-
-def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*

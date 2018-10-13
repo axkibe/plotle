@@ -30,7 +30,8 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+		// FIXME undefined only
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
@@ -176,9 +177,12 @@ def.static.createGeneric =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
+/*
+| Doesn't care about hovering
+*/
+def.static.concernsHover =
+def.func.concernsHover =
+	( ) => undefined;
 
 
 /*

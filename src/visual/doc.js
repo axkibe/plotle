@@ -127,14 +127,18 @@ def.transform.get =
 
 	const pos = gleam_point.xy( innerMargin.w, y );
 
+	const path = twigPath && twigPath.appendNC( key );
+
+	const mark = visual_para.concernsMark( this.mark, path );
+
 	return(
 		( para || visual_para ).create(
 			'fabric', this.fabric.get( key ),
 			'fontsize', this.fontsize,
-			'path', twigPath && twigPath.appendNC( key ),
+			'path', path,
 			'pos', pos,
 			'flowWidth', this.flowWidth,
-			'mark', this.mark,
+			'mark', mark,
 			'transform', this.transform
 		)
 	);

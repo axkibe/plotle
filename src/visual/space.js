@@ -36,11 +36,7 @@ if( TIM )
 		},
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ./mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark )'
-		},
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// reference to this space
 		ref : { type : [ 'undefined', '../ref/space' ] },
@@ -246,16 +242,19 @@ def.transform.get =
 			|| ( action.timtype === action_select && action.affectsItem( item ) );
 	}
 
+	const hover = item.concernsHover( this.hover, path );
+
 	if( item === visual_note || item.timtype === visual_note )
 	{
 		item =
 			item.create(
 				'action', action,
 				'highlight', highlight,
-				'hover', this.hover,
+				'hover', hover,
 				'fabric', fabric,
 				'mark', mark,
 				'path', path,
+				// FIXME why not just defaultValue?
 				'scrollPos', item.scrollPos || gleam_point.zero,
 				'transform', this.transform
 			);
@@ -266,7 +265,7 @@ def.transform.get =
 			item.create(
 				'action', action,
 				'highlight', highlight,
-				'hover', this.hover,
+				'hover', hover,
 				'fabric', fabric,
 				'mark', mark,
 				'path', path,

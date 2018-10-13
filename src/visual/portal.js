@@ -26,11 +26,7 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
@@ -154,15 +150,12 @@ def.staticLazy.model =
 };
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | Deriving concerns stuff.
 */
-def.static.concernsHover = visual_item.concernsHover;
+def.func.concernsHover =
+def.static.concernsHover =
+	visual_item.concernsHover;
 
 
 /*

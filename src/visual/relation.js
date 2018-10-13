@@ -68,6 +68,14 @@ const visual_label = require( '../visual/label' );
 
 
 /*
+| Doesn't care about hovering
+*/
+def.static.concernsHover =
+def.func.concernsHover =
+	( ) => undefined;
+
+
+/*
 | Transforms the doc.
 | FIXME this is a dirty workaround.
 */

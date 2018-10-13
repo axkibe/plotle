@@ -29,11 +29,7 @@ if( TIM )
 		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon',
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
@@ -67,8 +63,6 @@ if( TIM )
 const action_createGeneric = require( '../action/createGeneric' );
 
 const action_createRelation = require( '../action/createRelation' );
-
-const disc_disc = require( './disc' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
 
@@ -156,24 +150,19 @@ def.transform.get =
 		widget
 	)
 {
+	const path = widget.path || this.path.append( 'twig' ).append( name );
+
+	const hover = widget_widget.concernsHover( this.hover, path );
+
 	return(
 		widget.create(
-			'path',
-				 widget.path
-				 ? pass
-				 : this.path.append( 'twig' ).append( name ),
-			'hover', this.hover,
+			'path', path,
+			'hover', hover,
 			'down', disc_createDisc._isActiveButton( this.action, name ),
 			'transform', this.controlTransform
 		)
 	);
 };
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = disc_disc.concernsHover;
 
 
 /*::::::::::::::::::.

@@ -611,6 +611,8 @@ def.transform.spaceVisual =
 
 	if( !spaceFabric ) return;
 
+	const mark = visual_space.concernsMark( this._mark );
+
 	return(
 		( spaceVisual || visual_space )
 		.create(
@@ -618,7 +620,7 @@ def.transform.spaceVisual =
 			'action', this.action,
 			'fabric', this.spaceFabric,
 			'hover', this.hover,
-			'mark', this._mark,
+			'mark', mark,
 			'transform', this.spaceTransform,
 			'viewSize', this.viewSize
 		)

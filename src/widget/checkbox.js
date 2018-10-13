@@ -23,18 +23,10 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			prepare : 'self.concernsHover( hover, path )'
-		},
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			prepare : 'self.concernsMark( mark, path )'
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -62,8 +54,6 @@ const gruga_iconCheck = require( '../gruga/iconCheck' );
 const layout_checkbox = require( '../layout/checkbox' );
 
 const result_hover = require( '../result/hover' );
-
-const widget_widget = require( './widget' );
 
 
 /*
@@ -93,14 +83,6 @@ def.static.createFromLayout =
 		)
 	);
 };
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.static.concernsHover = widget_widget.concernsHover;
-
-def.static.concernsMark = widget_widget.concernsMark;
 
 
 /*:::::::::::::.
