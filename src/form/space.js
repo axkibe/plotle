@@ -31,7 +31,7 @@ if( TIM )
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		// the reference to the current space
+		// the reference of current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// currently logged in user
@@ -54,6 +54,14 @@ if( TIM )
 
 	def.twig = [ '< ../widget/types' ];
 }
+
+
+/*
+| Does(!) care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( spaceRef ) => spaceRef;
 
 
 /*

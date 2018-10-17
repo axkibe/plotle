@@ -12,11 +12,6 @@ tim.define( module, ( def ) => {
 const form_form = require( './form' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -53,9 +48,12 @@ if( TIM )
 def.transform.get = form_form.transformGet;
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
+/*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
 
 
 /*
@@ -74,11 +72,6 @@ def.lazy.glint = form_form.glint;
 | The focused widget.
 */
 def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

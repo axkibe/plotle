@@ -26,11 +26,6 @@ const widget_button = require( '../widget/button' );
 const widget_scrollbox = require( '../widget/scrollbox' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -48,7 +43,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the reference to the current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
 		user : { type : [ 'undefined', '../user/creds' ] },
@@ -62,6 +57,14 @@ if( TIM )
 
 	def.twig = [ '< ../widget/types' ];
 }
+
+
+/*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
 
 
 /*
@@ -90,6 +93,14 @@ def.lazy._cols =
 {
 	return Math.floor( ( this._availableWidth + 30 ) / 160 );
 };
+
+
+/*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
 
 
 /*
@@ -261,11 +272,6 @@ def.transform.get =
 };
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | Offset of the vertical scrollbar, set so it's within the scrollbox.
 */
@@ -279,11 +285,6 @@ def.staticLazy.scrollbarYOffset =
 		)
 	);
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -314,11 +315,6 @@ def.lazy.glint = form_form.glint;
 | The focused widget.
 */
 def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

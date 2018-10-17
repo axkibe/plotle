@@ -24,13 +24,13 @@ if( TIM )
 		height : { type : 'number' },
 
 		// center for gradient
-		gradientPC : { type : [ 'undefined', './point' ], assign : '_gradientPC' },
+		gradientPC : { type : [ 'undefined', './point' ] },
 
 		// inner radius for circle gradients
-		gradientR0 : { type : [ 'undefined', 'number' ], assign : '_gradientR0' },
+		gradientR0 : { type : [ 'undefined', 'number' ] },
 
 		// outer radius for circle gradients
-		gradientR1 : { type : [ 'undefined', 'number' ], assign : '_gradientR1' },
+		gradientR1 : { type : [ 'undefined', 'number' ] },
 	};
 }
 
@@ -79,22 +79,24 @@ def.static.posSize =
 /*
 | The center point of gradient.
 */
-def.lazy.gradientPC =
-	function( )
+def.transform.gradientPC =
+	function(
+		gradientPC
+	)
 {
-	if( this._gradientPC ) return this._gradientPC;
-
-	return this.pc;
+	return gradientPC || this.pc;
 };
 
 
 /*
 | Gradient inner radius.
 */
-def.lazy.gradientR1 =
-	function( )
+def.transform.gradientR1 =
+	function(
+		gradientR1
+	)
 {
-	if( this._gradientR1 ) { return this._gradientR1; }
+	if( gradientR1 !== undefined ) return gradientR1;
 
 	return Math.max( this.width, this.height );
 };
@@ -103,12 +105,12 @@ def.lazy.gradientR1 =
 /*
 | Gradient inner radius.
 */
-def.lazy.gradientR0 =
-	function( )
+def.transform.gradientR0 =
+	function(
+		gradientR0
+	)
 {
-	if( this._gradientR0 ) return this._gradientR0;
-
-	return 0;
+	return gradientR0 || 0;
 };
 
 

@@ -89,24 +89,21 @@ def.transform.get =
 
 	const mark = form_form.concernsMark( this.mark, path );
 
+	const spaceRef = form.concernsSpaceRef( this.spaceRef );
+
 	return(
 		form.create(
 			'action', this.action,
 			'hover', this.hover,
 			'mark', mark,
 			'path', path,
-			'spaceRef', this.spaceRef,
+			'spaceRef', spaceRef,
 			'user', this.user,
 			'userSpaceList', this.userSpaceList,
 			'viewSize', this.viewSize
 		)
 	);
 };
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -136,10 +133,6 @@ def.static.concernsMark =
 		? mark
 		: undefined
 	);
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

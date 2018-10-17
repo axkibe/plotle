@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -29,7 +24,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the reference to the current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
 		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
@@ -59,14 +54,17 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
 | Transforms widgets.
 */
 def.transform.get = form_form.transformGet;
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -85,11 +83,6 @@ def.lazy.glint = form_form.glint;
 | The focused widget.
 */
 def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

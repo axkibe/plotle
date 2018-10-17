@@ -19,11 +19,7 @@ if( TIM )
 		// the visible size of the doc
 		// if created with undefined,
 		// it is set to equal to fullsize
-		clipsize :
-		{
-			type : [ 'undefined', '../gleam/size' ],
-			assign : '_clipsize'
-		},
+		clipsize : { type : [ 'undefined', '../gleam/size' ] },
 
 		// the doc fabric
 		fabric : { type : '../fabric/doc' },
@@ -182,10 +178,12 @@ def.lazy.attentionCenter =
 | If created with undefined,
 | it is set to equal to fullsize
 */
-def.lazy.clipsize =
-	function( )
+def.transform.clipsize =
+	function(
+		clipsize
+	)
 {
-	return this._clipsize || this.fullsize;
+	return clipsize || this.fullsize;
 };
 
 

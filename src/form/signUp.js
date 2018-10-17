@@ -29,7 +29,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the reference to the current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
 		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
@@ -58,6 +58,14 @@ const user_creds = require( '../user/creds' );
 const user_passhash = require( '../user/passhash' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
+
+
+/*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
 
 
 def.transform.get = form_form.transformGet;

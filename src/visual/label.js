@@ -29,11 +29,7 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover :
-		{
-			type : [ 'undefined', 'tim.js/path' ],
-			assign : ''
-		},
+		hover : { type : [ 'undefined' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
