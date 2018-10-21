@@ -25,7 +25,7 @@ if( TIM )
 		coding : { type : [ 'undefined', 'string' ] },
 
 		// cached or auto generated data
-		data : { type : [ 'undefined', 'protean' ] },
+		data : { type : [ 'undefined', 'protean', 'string' ] },
 
 		// if true is only loaded in devel mode
 		devel : { type : 'boolean', defaultValue : 'false' },
