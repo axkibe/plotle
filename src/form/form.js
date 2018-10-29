@@ -23,8 +23,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 const visual_mark_widget = require( '../visual/mark/widget' );
 
-const widget_widget = require( '../widget/widget' );
-
 
 /*
 | Transforms widgets.
@@ -44,9 +42,9 @@ def.static.transformGet =
 
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const mark = widget_widget.concernsMark( this.mark, path );
+	const mark = widget.concernsMark( this.mark, path );
 
-	const hover = widget_widget.concernsHover( this.hover, path );
+	const hover = widget.concernsHover( this.hover, path );
 
 	return(
 		widget.create(

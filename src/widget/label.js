@@ -17,17 +17,13 @@ if( TIM )
 	def.attributes =
 	{
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ], assign : '' },
+		hover : { type : 'undefined' },
 
 		// font of the text
 		font : { type : [ 'undefined', '../gleam/font' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			assign : ''
-		},
+		mark : { type : 'undefined' },
 
 		// vertical distance of newline
 		newline : { type : [ 'undefined', 'number' ] },
@@ -53,6 +49,22 @@ if( TIM )
 const gleam_glint_text = require( '../gleam/glint/text' );
 
 const layout_label = require( '../layout/label' );
+
+
+/*
+| A label doesn't care about marks.
+*/
+def.func.concernsMark =
+def.static.concernsMark =
+	( ) => undefined;
+
+
+/*
+| A label doesn't care about hovering.
+*/
+def.func.concernsHover =
+def.static.concernsHover =
+	( ) => undefined;
 
 
 /*

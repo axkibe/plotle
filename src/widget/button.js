@@ -84,6 +84,34 @@ const result_hover = require( '../result/hover' );
 
 
 /*
+| Returns the mark if the widget with 'path' concerns about the mark.
+*/
+def.static.concernsMark =
+def.func.concernsMark =
+	function(
+		mark,
+		path
+	)
+{
+	return mark && mark.containsPath( path ) ? mark : undefined;
+};
+
+
+/*
+| Returns the hover path if the width with 'path' concerns about the hover.
+*/
+def.static.concernsHover =
+def.func.concernsHover =
+	function(
+		hover,
+		path
+	)
+{
+	return hover && path.subPathOf( hover ) ? hover : undefined;
+};
+
+
+/*
 | Creates an actual widget from a layout.
 */
 def.static.createFromLayout =

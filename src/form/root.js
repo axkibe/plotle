@@ -91,6 +91,8 @@ def.transform.get =
 
 	const spaceRef = form.concernsSpaceRef( this.spaceRef );
 
+	const user = form.concernsUser( this.user );
+
 	return(
 		form.create(
 			'action', this.action,
@@ -98,7 +100,7 @@ def.transform.get =
 			'mark', mark,
 			'path', path,
 			'spaceRef', spaceRef,
-			'user', this.user,
+			'user', user,
 			'userSpaceList', this.userSpaceList,
 			'viewSize', this.viewSize
 		)

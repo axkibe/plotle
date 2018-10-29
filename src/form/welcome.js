@@ -40,12 +40,7 @@ if( TIM )
 		user : { type : [ 'undefined', '../user/creds' ] },
 
 		// list of spaces belonging to user
-		userSpaceList :
-		{
-			type : [ 'undefined', '../ref/spaceList' ],
-
-			assign : ''
-		},
+		userSpaceList : { type : 'undefined' },
 
 		// current view size
 		viewSize : { type : '../gleam/size' }
@@ -60,6 +55,22 @@ if( TIM )
 */
 def.static.concernsSpaceRef =
 def.func.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
+| Does(!) care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( user ) => undefined;
+
+
+/*
+| Doesn't care about userSpaceList.
+*/
+def.static.concernsUserSpaceList =
+def.func.concernsUser =
 	( ) => undefined;
 
 

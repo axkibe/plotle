@@ -57,6 +57,14 @@ def.func.concernsSpaceRef =
 
 
 /*
+| Does(!) care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( user ) => user;
+
+
+/*
 | Transforms widgets.
 */
 def.transform.get =

@@ -46,7 +46,7 @@ if( TIM )
 		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', '../user/creds' ] },
+		user : { type : 'undefined' },
 
 		// list of spaces belonging to user
 		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
@@ -65,6 +65,22 @@ if( TIM )
 def.static.concernsSpaceRef =
 def.func.concernsSpaceRef =
 	( ) => undefined;
+
+
+/*
+| Doesn't care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( ) => undefined;
+
+
+/*
+| Does(!) care about userSpaceList.
+*/
+def.static.concernsUserSpaceList =
+def.func.concernsUser =
+	( userSpaceList ) => userSpaceList;
 
 
 /*

@@ -32,10 +32,10 @@ if( TIM )
 		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
+		user : { type : 'undefined' },
 
 		// list of spaces belonging to user
-		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ], assign : '' },
+		userSpaceList : { type : 'undefined' },
 
 		// current view size
 		viewSize : { type : '../gleam/size' },
@@ -53,6 +53,22 @@ def.transform.get = form_form.transformGet;
 */
 def.static.concernsSpaceRef =
 def.func.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about userSpaceList.
+*/
+def.static.concernsUserSpaceList =
+def.func.concernsUser =
 	( ) => undefined;
 
 

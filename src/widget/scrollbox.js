@@ -20,11 +20,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ../visual/mark/types', 'undefined' ],
-			assign : ''
-		},
+		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -93,6 +89,34 @@ const widget_widget = require( './widget' );
 /**/		}
 /**/	};
 /**/}
+
+
+/*
+| Returns the hover path if the width with 'path' concerns about the hover.
+*/
+def.static.concernsHover =
+def.func.concernsHover =
+	function(
+		hover,
+		path
+	)
+{
+	return hover && path.subPathOf( hover ) ? hover : undefined;
+};
+
+
+/*
+| Returns the mark if the widget with 'path' concerns about the mark.
+*/
+def.func.concernsMark =
+def.static.concernsMark =
+	function(
+		mark,
+		path
+	)
+{
+	return mark && mark.containsPath( path ) ? mark : undefined;
+};
 
 
 /*
@@ -166,11 +190,6 @@ def.transform.get =
 };
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | Prepares the scroll position to fit innerSize/zone parameters
 */
@@ -205,11 +224,6 @@ def.static.prepareScrollPos =
 
 	return scrollPos;
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -319,11 +333,6 @@ def.lazy.scrollbarY =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -451,13 +460,14 @@ def.func.mousewheel =
 		if( res ) return res;
 	}
 
+	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
+
+	if( y < 0 ) y = 0;
+//	else if( y > XXX ) y = XXX;
+
 	root.setPath(
 		this.path.append( 'scrollPos' ),
-		this.scrollPos.create(
-			'y',
-				this.scrollPos.y
-				- dir * shell_settings.textWheelSpeed
-		)
+		this.scrollPos.create( 'y', y )
 	);
 };
 

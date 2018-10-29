@@ -32,7 +32,7 @@ if( TIM )
 		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
+		user : { type : 'undefined' },
 
 		// list of spaces belonging to user
 		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ], assign : '' },
@@ -65,6 +65,14 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 */
 def.static.concernsSpaceRef =
 def.func.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
 	( ) => undefined;
 
 

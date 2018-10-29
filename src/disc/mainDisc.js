@@ -284,7 +284,7 @@ def.transform.get =
 
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget_widget.concernsHover( this.hover, path );
+	const hover = widget.concernsHover( this.hover, path );
 
 	return(
 		widget.create(
