@@ -41,16 +41,16 @@ if( TIM )
 		shape : { type : '../gleam/ellipse' },
 
 		// form/disc currently shown
-		show : { type : [ '< ../show/types' ], assign: '' },
+		show : { type : 'undefined' },
 
 		// designed size
 		size : { type : '../gleam/size' },
 
 		// reference to current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
-		user : { type : [ 'undefined', '../user/creds' ], assign : '' },
+		user : { type : 'undefined' },
 
 		// current view size
 		viewSize : { type : '../gleam/size' }
@@ -79,6 +79,30 @@ const gleam_transform = require( '../gleam/transform' );
 const layout_disc = require( '../layout/disc' );
 
 const widget_widget = require( '../widget/widget' );
+
+
+/*
+| Doesn't care about show.
+*/
+def.static.concernsShow =
+def.func.concernsShow =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( ) => undefined;
 
 
 /*
@@ -125,7 +149,7 @@ def.static.createFromLayout =
 			'facet', layout.facet,
 			'path', path,
 			'shape', layout.shape,
-			'show', show,
+			'show', disc_zoomDisc.concernsShow( show ),
 			'size', layout.size,
 			'viewSize', viewSize
 		)
@@ -144,7 +168,7 @@ def.transform.get =
 {
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget_widget.concernsHover( this.hover, path );
+	const hover = widget.concernsHover( this.hover, path );
 
 	return(
 		widget.create(

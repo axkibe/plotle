@@ -954,9 +954,9 @@ def.func._onMouseUp =
 			// not having moved out of 'dragbox'.
 			clearTimeout( atweenTimer );
 
-			root.click( p, shift, ctrl );
+			root.click( atweenPos, shift, ctrl );
 
-			this._pointingHover( p, shift, ctrl );
+			this._pointingHover( atweenPos, shift, ctrl );
 
 			this._steerAttention( );
 

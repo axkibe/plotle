@@ -79,7 +79,7 @@ def.func.concernsUser =
 | Does(!) care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
-def.func.concernsUser =
+def.func.concernsUserSpaceList =
 	( userSpaceList ) => userSpaceList;
 
 

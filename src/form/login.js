@@ -73,7 +73,7 @@ def.func.concernsUser =
 | Doesn't care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
-def.func.concernsUser =
+def.func.concernsUserSpaceList =
 	( ) => undefined;
 
 

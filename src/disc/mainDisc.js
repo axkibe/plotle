@@ -102,6 +102,30 @@ if( TIM )
 
 
 /*
+| Does(!) care about show.
+*/
+def.static.concernsShow =
+def.func.concernsShow =
+	( show ) => show;
+
+
+/*
+| Does(!) care about spaceRef.
+*/
+def.static.concernsSpaceRef =
+def.func.concernsSpaceRef =
+	( spaceRef ) => spaceRef;
+
+
+/*
+| Does(!) care about user.
+*/
+def.static.concernsUser =
+def.func.concernsUser =
+	( user ) => user;
+
+
+/*
 | Creates an actual disc from a layout.
 */
 def.static.createFromLayout =

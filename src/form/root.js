@@ -93,6 +93,8 @@ def.transform.get =
 
 	const user = form.concernsUser( this.user );
 
+	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
+
 	return(
 		form.create(
 			'action', this.action,
@@ -101,7 +103,7 @@ def.transform.get =
 			'path', path,
 			'spaceRef', spaceRef,
 			'user', user,
-			'userSpaceList', this.userSpaceList,
+			'userSpaceList', userSpaceList,
 			'viewSize', this.viewSize
 		)
 	);

@@ -29,7 +29,7 @@ if( TIM )
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the reference to the current space
-		spaceRef : { type : [ 'undefined', '../ref/space' ], assign : '' },
+		spaceRef : { type : 'undefined' },
 
 		// currently logged in user
 		user : { type : 'undefined' },
@@ -68,7 +68,7 @@ def.func.concernsUser =
 | Doesn't care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
-def.func.concernsUser =
+def.func.concernsUserSpaceList =
 	( ) => undefined;
 
 

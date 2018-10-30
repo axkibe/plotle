@@ -116,6 +116,12 @@ def.transform.get =
 
 	const hover = disc_disc.concernsHover( this.hover, disc.path );
 
+	const show = disc.concernsShow( this.show );
+
+	const spaceRef = disc.concernsSpaceRef( this.spaceRef );
+
+	const user = disc.concernsUser( this.user );
+
 	return(
 		disc.create(
 			'access', this.access,
@@ -123,9 +129,9 @@ def.transform.get =
 			'controlTransform', ct,
 			'hover', hover,
 			'mark', this.mark,
-			'show', this.show,
-			'spaceRef', this.spaceRef,
-			'user', this.user,
+			'show', show,
+			'spaceRef', spaceRef,
+			'user', user,
 			'viewSize', this.viewSize
 		)
 	);

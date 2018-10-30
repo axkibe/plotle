@@ -7,11 +7,6 @@
 tim.define( module, ( def, show_form ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
