@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.twig = [ './resource' ];
@@ -24,10 +19,9 @@ const fs = require( 'fs' );
 
 const resume = require( 'suspend' ).resume;
 
+const readOptions = { encoding : 'utf8' };
 
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
+if( FREEZE ) Object.freeze( readOptions );
 
 
 /*
@@ -68,12 +62,7 @@ def.func.removeResource =
 
 	for( let a = 0, aZ = resource.aliases.length; a < aZ; a++ )
 	{
-		inv =
-			inv.create(
-				'twig:remove',
-				resource.aliases.get( a ),
-				resource
-			);
+		inv = inv.create( 'twig:remove', resource.aliases.get( a ), resource );
 	}
 
 	return inv;
@@ -113,8 +102,8 @@ def.func.prepareResource =
 
 		const rmod = require( realpath );
 
-		// tim source did not export its source?
-		if( !rmod.source ) throw new Error( );
+		const source =
+			yield fs.readFile( realpath, readOptions, resume( ) );
 
 		const preamble = tim.tree.getBrowserPreamble( realpath, false );
 
@@ -124,16 +113,21 @@ def.func.prepareResource =
 
 		resource =
 			resource.create(
-				'data', preamble + rmod.source + postamble,
+				'data', preamble + source + postamble,
 				'timId', rmod.timId,
 				'timestamp', mtime,
 				'realpath', realpath
 			);
 
+		const timcodeRootDir = tim.findTimcodeRootDir( realpath );
+
+		const timcode =
+			yield fs.readFile( timcodeRootDir + rmod.timcodeFilename, readOptions, resume( ) );
+
 		const timcodeResource =
 			resource.create(
 				'aliases', undefined,
-				'data', timPreamble + rmod.timcode + postamble,
+				'data', timPreamble + timcode + postamble,
 				'filePath', rmod.timcodeFilename,
 				'hasTim', false,
 				'timHolder', resource
