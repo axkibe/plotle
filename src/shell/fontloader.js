@@ -6,6 +6,9 @@
 'use strict';
 
 
+tim.define( module, ( def ) => {
+
+
 const gruga_fonts = require( '../gruga/fonts' );
 
 const shell_system = require( './system' );
@@ -42,5 +45,7 @@ const openTypeLoad =
 };
 
 
-window.onload = openTypeLoad;
+if( !NODE ) window.onload = openTypeLoad;
 
+
+} );

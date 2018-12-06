@@ -58,7 +58,7 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-tree-init.js' ] ),
+		'aliases', stringList( [ 'tim-catalog-init.js' ] ),
 		'coding', 'utf-8',
 		'data', undefined,
 		'mime', 'text/javascript',
@@ -66,10 +66,9 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-tree-browser.js' ] ),
-		'coding', 'utf-8',
-		'data', tim.browserTreeSource,
-		'mime', 'text/javascript',
+		'aliases', stringList( [ 'tim-catalog-browser.js' ] ),
+		// FIXME dirty Hack!
+		'filePath', 'node_modules/tim.js/src/export/browserCatalog.js',
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -1073,7 +1072,7 @@ server_resourceList.create(
 	),
 	server_resource.create(
 		'filePath', 'src/shell/fontloader.js',
-		'isLeaf', true,
+		'hasTim', true,
 		'inBundle', true
 	),
 	server_resource.create(

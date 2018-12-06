@@ -375,12 +375,12 @@ def.func.prepareInventory =
 		yield* root.inventory.prepareResource( resource );
 	}
 
-	// adds the tim tree init
+	// adds the tim catalog init
 	root.create(
 		'inventory',
 			root.inventory.updateResource(
-				root.inventory.get( 'tim-tree-init.js' )
-				.create( 'data', tim.tree.getBrowserTreeInitCode( ) )
+				root.inventory.get( 'tim-catalog-init.js' )
+				.create( 'data', tim.catalog.getBrowserInitCode( ) )
 			)
 	);
 
@@ -526,8 +526,8 @@ def.func.extraMangle =
 	// associative of all no-mangles
 	const noMangle = { };
 
-	// no mangles for the tim tree
-	const timNoMangle = tim.tree.getBrowserNoMangle( );
+	// no mangles for the tim catalog
+	const timNoMangle = tim.catalog.getBrowserNoMangle( );
 
 	// associative of all mangles not used
 	let useMangle = { };

@@ -42,7 +42,7 @@ global.root = undefined;
 require( 'tim.js' );
 
 
-tim.tree.addTree(
+tim.catalog.addRootDir(
 	( function( ) {
 		let path = module.filename.split( '/' );
 		path.pop( );

@@ -48,9 +48,6 @@ if( TIM )
 		// true if this resource is in the testpad
 		inTestPad : { type : 'boolean', defaultValue : 'false' },
 
-		// true if this a timtree leaf but not a tim.
-		isLeaf : { type : 'boolean', defaultValue : 'false' },
-
 		// "none", "short" or "long"
 		maxage : { type : 'string', defaultValue : '"none"' },
 

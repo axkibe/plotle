@@ -1,3 +1,6 @@
+. __gradientPC
+. __gradientR0
+. __gradientR1
 > Label
 > Note
 > PI

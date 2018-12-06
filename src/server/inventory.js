@@ -105,9 +105,11 @@ def.func.prepareResource =
 		const source =
 			yield fs.readFile( realpath, readOptions, resume( ) );
 
-		const preamble = tim.tree.getBrowserPreamble( realpath, false );
+		const timspec = tim.catalog.getTimspec( realpath );
 
-		const timPreamble = tim.tree.getBrowserPreamble( realpath, true );
+		const preamble = timspec.getBrowserPreamble( false );
+
+		const timPreamble = timspec.getBrowserPreamble( true );
 
 		const postamble = '} )( );';
 
@@ -144,17 +146,6 @@ def.func.prepareResource =
 				'timestamp', mtime,
 				'realpath', realpath
 			);
-	}
-
-	if( !resource.hasTim && resource.isLeaf )
-	{
-		tim.tree.addLeaf( realpath );
-
-		const preamble = tim.tree.getBrowserPreamble( realpath, false );
-
-		const postamble = '} )( );';
-
-		resource = resource.create( 'data', preamble + resource.data + postamble );
 	}
 
 	root.create( 'inventory', root.inventory.updateResource( resource ) );
