@@ -1,17 +1,31 @@
-. __gradientPC
-. __gradientR0
-. __gradientR1
+. concernsSpaceRef
+. concernsUser
+. concernsUserSpaceList
+. createGeneric
+. doTracker
+> endsWith
+. extends
+> hover
+. insert
+. listAppend
+. size
+. system
+. wrap
+. zoom
 > Label
 > Note
 > PI
 > Portal
 . __DEBUG_DEFINER__
 . __action
+. __clipsize
 . __disc
 . __doc
 . __form
 . __frame
-. __have_lazy
+. __gradientPC
+. __gradientR0
+. __gradientR1
 . __lazy
 . __link
 . __path
@@ -32,7 +46,6 @@
 . _changeTransformTo
 . _check
 . _checkIcon
-. _clipsize
 . _colorStyle
 . _cols
 . _createDiscRoot
@@ -61,9 +74,6 @@
 . _glintFrame
 . _gotUpdateSpace
 . _gotUpdateUserSpaceList
-. _gradientPC
-. _gradientR0
-. _gradientR1
 . _group
 . _iconShape
 . _isActiveButton
@@ -214,7 +224,6 @@
 . abortAll
 . aborted
 > abs
-. abstract
 > access
 . acquireSpace
 . add
@@ -247,7 +256,6 @@
 > apply
 > applyChangeDynamic
 . arrowSize
-> assign
 > at
 > at1
 > at2
@@ -277,6 +285,7 @@
 . blue
 > blur
 > body
+. border
 . bottombox
 > button
 . buttonFacets
@@ -288,6 +297,7 @@
 > canvas
 > capheight
 . car
+. caret
 . caretBlinkSpeed
 . caretable
 . ccw
@@ -325,12 +335,14 @@
 . closeCcw
 . closeFly
 > cm
+> color
 . combine
 . command
 > concat
 . concernsAction
 . concernsHover
 . concernsMark
+. concernsShow
 . contains
 . containsPath
 > content
@@ -339,6 +351,7 @@
 . copy2
 . cornerRadius
 > cos
+. create
 . createArbitrary
 . createAroundHTMLCanvas
 > createElement
@@ -419,6 +432,7 @@
 . errorLabel
 > exec
 . exports
+. facet
 . facets
 . fail
 > failScreen
@@ -439,6 +453,7 @@
 > font
 > fontsize
 . formName
+. frame
 > freeze
 > fromCharCode
 . fromItemPath
@@ -502,6 +517,7 @@
 . headline
 > height
 . helper
+. highlight
 > hinting
 > home
 . iconFacet
@@ -555,8 +571,10 @@
 > length
 > liga
 . limit
+. line
 > lineTo
 > lineWidth
+. link
 > linkloom
 > linkloom:home
 > linkloom:sandbox
@@ -577,6 +595,7 @@
 . locateOffsetLine
 . locateOffsetPoint
 > log
+. login
 . loginButton
 . logout
 . lookAlike
@@ -626,10 +645,13 @@
 . newsletterCheckBox
 . newsletterLabel
 > next
+. noAccessToSpace
 . noButton
 . nogrid
+. nonExistingSpace
 . nonFatal
 . nonSpaceRef
+. normal
 . normalButtonDown
 > note
 > now
@@ -663,7 +685,6 @@
 > open
 > opentype
 . ortho
-. ouroboros
 > p
 . p1
 . p2
@@ -674,7 +695,6 @@
 > pageY
 . pagedown
 . pageup
-> para
 . paraSep
 > parse
 . pass
@@ -702,7 +722,6 @@
 . posSize
 . positioning
 > pow
-. prepare
 . prepareScrollPos
 . prepend
 > prev
@@ -741,6 +760,7 @@
 > releaseCapture
 . releaseSpecialKey
 > reload
+. remove
 > removeChild
 . removeRange
 > render
@@ -757,6 +777,7 @@
 . rgba
 . right
 > rlig
+. root
 . rotate
 > round
 > s
@@ -803,6 +824,7 @@
 . showDisc
 . showHome
 . shrink1
+. signUp
 . signup
 . signupButton
 . simpleBlack
@@ -873,6 +895,7 @@
 . track
 . transItem
 . transPath
+> transform
 . transformChangeList
 . transformChangeWrap
 . transformChangeWrapList
@@ -919,6 +942,7 @@
 . warn
 . web
 . weinre
+. welcome
 . wh
 > wheelDelta
 > which

@@ -39,18 +39,24 @@ global.NODE = true;
 global.root = undefined;
 
 
-require( 'tim.js' );
+// registers with tim.js
+{
+	require( 'tim.js' );
 
+	const ending = '/server/start.js';
 
-tim.catalog.addRootDir(
-	( function( ) {
-		let path = module.filename.split( '/' );
-		path.pop( );
-		path.pop( );
-		return path.join( '/' ) + '/';
-	} )( ),
-	'linkloom'
-);
+	const filename = module.filename;
+
+	// if this filename is not bootstrap.js something is seriously amiss.
+	if( !filename.endsWith( ending ) ) throw new Error( );
+
+	const rootPath = filename.substr( 0, filename.length - ending.length );
+
+	// timcode path is one level up
+	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode';
+
+	tim.catalog.addRootDir( rootPath, 'linkloom', timcodePath );
+}
 
 const database_repository = require( '../database/repository' );
 

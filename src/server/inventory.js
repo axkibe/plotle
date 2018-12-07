@@ -121,10 +121,10 @@ def.func.prepareResource =
 				'realpath', realpath
 			);
 
-		const timcodeRootDir = tim.findTimcodeRootDir( realpath );
+		const timcodeRootPath = tim.catalog.getRootDir( timspec ).timcodePath;
 
 		const timcode =
-			yield fs.readFile( timcodeRootDir + rmod.timcodeFilename, readOptions, resume( ) );
+			yield fs.readFile( timcodeRootPath + '/' + rmod.timcodeFilename, readOptions, resume( ) );
 
 		const timcodeResource =
 			resource.create(
