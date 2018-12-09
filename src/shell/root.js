@@ -380,7 +380,7 @@ def.static._createFormRoot =
 
 	const formRootPath = tim_path.empty.append( 'form' );
 
-	// FIXME XXX move this from layout creation to form.root
+	// FIXME move this from layout creation to form.root
 
 	for( let name in formLayouts )
 	{

@@ -91,8 +91,6 @@ if( TIM )
 
 	def.twig =
 	[
-		// FIXME XXX remove layouts
-		'../layout/button',
 		'../widget/button',
 		'../widget/checkbox',
 		'../widget/input',

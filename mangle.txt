@@ -1,17 +1,3 @@
-. concernsSpaceRef
-. concernsUser
-. concernsUserSpaceList
-. createGeneric
-. doTracker
-> endsWith
-. extends
-> hover
-. insert
-. listAppend
-. size
-. system
-. wrap
-. zoom
 > Label
 > Note
 > PI
@@ -343,6 +329,9 @@
 . concernsHover
 . concernsMark
 . concernsShow
+. concernsSpaceRef
+. concernsUser
+. concernsUserSpaceList
 . contains
 . containsPath
 > content
@@ -359,6 +348,7 @@
 . createFromJSON
 . createFromLayout
 . createFromLocalStorage
+. createGeneric
 . createLabel
 > createLinearGradient
 > createMissing
@@ -398,6 +388,7 @@
 > display
 . distance
 . doAnimation
+. doTracker
 > doc
 . docPath
 > done
@@ -423,6 +414,7 @@
 . end2
 . endMark
 . endTransform
+> endsWith
 . enlarge1
 . ensureMinSize
 . enter
@@ -432,6 +424,7 @@
 . errorLabel
 > exec
 . exports
+. extends
 . facet
 . facets
 . fail
@@ -443,6 +436,7 @@
 > fillRect
 > fillStyle
 . finishAnimation
+. fixScrollPos
 > floor
 . flowWidth
 . flush
@@ -520,6 +514,7 @@
 . highlight
 > hinting
 > home
+> hover
 . iconFacet
 . iconShape
 . ignores
@@ -537,6 +532,7 @@
 . inputFacets
 . inputPitch
 . inputRounding
+. insert
 > isArray
 . isBlank
 . isEmpty
@@ -581,6 +577,7 @@
 . linkloomHome
 . linkloomSandbox
 > list
+. listAppend
 . listAppendList
 . listGet
 . listInsert
@@ -829,6 +826,7 @@
 . signupButton
 . simpleBlack
 > sin
+. size
 > slice
 > sort
 . source
@@ -871,6 +869,7 @@
 > substring
 . suggestingKeyboard
 > sw
+. system
 . tFont
 . tShape
 . tZone
@@ -883,7 +882,6 @@
 . textPath
 . textRotation
 . textWheelSpeed
-. tim.js
 . timtype
 . toItemPath
 > toJSON
@@ -951,6 +949,7 @@
 . widgetPath
 > width
 . within
+. wrap
 > x
 > x1
 > x2
@@ -966,6 +965,7 @@
 . zeroRect
 > zone
 . zones
+. zoom
 . zoomBase
 . zoomMax
 . zoomMin

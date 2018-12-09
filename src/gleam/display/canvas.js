@@ -247,7 +247,7 @@ def.staticLazy.helper = ( ) =>
 /*
 | Ensures mono causal chain of canvas.
 */
-/**/if( true || CHECK ) // FIXME XXX!!!
+/**/if( true || CHECK ) // FIXME
 /**/{
 /**/	def.lazy._expired = ( ) => true;
 /**/

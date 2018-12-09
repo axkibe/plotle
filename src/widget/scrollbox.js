@@ -73,20 +73,7 @@ const widget_widget = require( './widget' );
 /**/	{
 /**/		const sp = this.scrollPos;
 /**/
-/**/		const is = this.innerSize;
-/**/
-/**/		const zone = this.zone;
-/**/
 /**/		if( sp.x < 0 || sp.y < 0 ) throw new Error( );
-/**/
-/**/		if( is.height <= zone.height )
-/**/		{
-/**/			if( sp.y > 0 ) throw new Error( );
-/**/		}
-/**/		else
-/**/		{
-/**/			if( sp.y > is.height - zone.height ) throw new Error( );
-/**/		}
 /**/	};
 /**/}
 
@@ -332,6 +319,25 @@ def.lazy.scrollbarY =
 			'transform', this.transform
 		)
 	);
+};
+
+
+/*
+| Returns a fixed scrollPos if
+| current is out of bonds.
+|
+| Used by parents transformative getter.
+*/
+def.lazy.fixScrollPos =
+	function( )
+{
+	const y = this.scrollPos.y;
+
+	const maxY = this.innerSize.height - this.zone.height;
+
+	if( y <= maxY ) return pass;
+
+	return this.scrollPos.create( 'y', maxY );
 };
 
 

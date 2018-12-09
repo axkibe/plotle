@@ -638,18 +638,14 @@ def.func.scrollMarkIntoView =
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
-			this.scrollPos.create(
-				'y', sy + n
-			)
+			this.scrollPos.create( 'y', sy + n )
 		);
 	}
 	else if( s > zone.height )
 	{
 		root.setPath(
 			this.path.append( 'scrollPos' ),
-			this.scrollPos.create(
-				'y', sy + s - zone.height
-			)
+			this.scrollPos.create( 'y', sy + s - zone.height )
 		);
 	}
 };

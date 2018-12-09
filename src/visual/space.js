@@ -316,15 +316,9 @@ def.transform.get =
 	}
 
 
-	if(
-		action2 !== action
-		|| highlight2 !== highlight
-	)
+	if( action2 !== action || highlight2 !== highlight )
 	{
-		item = item.create(
-			'action', action2,
-			'highlight', highlight2
-		);
+		item = item.create( 'action', action2, 'highlight', highlight2 );
 	}
 
 	return item;
