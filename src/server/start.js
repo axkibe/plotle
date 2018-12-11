@@ -146,7 +146,7 @@ const startup = function*( )
 			    result.writeHead(
 					307,
 					{
-						Location: 'https://' + request.headers.host + '/' + request.url,
+						Location: 'https://' + request.headers.host + request.url,
 					}
 				);
 
