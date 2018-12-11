@@ -60,8 +60,9 @@ const shell_settings = require( '../shell/settings' );
 
 
 /*
-| Catches all error a function throws
-| and coorects hover and attention steering.
+| Catches all thrown errors.
+|
+| also coorects hover and attention steering.
 */
 const transmitter =
 	function(
@@ -73,7 +74,7 @@ const transmitter =
 	{
 		if( failScreen ) return;
 
-		if( config.devel && !config.weinre )
+		if( DEVEL && !WEINRE )
 		{
 			func.apply( this, arguments );
 
@@ -114,7 +115,7 @@ const transmitter =
 					+ '\n\n'
 					+ 'Please report to axkibe@gmail.com';
 
-				if( !config.weinre )
+				if( !WEINRE )
 				{
 					system.failScreen( message );
 				}
@@ -1435,7 +1436,7 @@ def.static.startup = function( )
 
 	const init = transmitter( shell_system.init, true );
 
-	if( !config.weinre )
+	if( !WEINRE )
 	{
 		init( );
 	}

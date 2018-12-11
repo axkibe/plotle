@@ -10,6 +10,8 @@ Error.stackTraceLimit = Infinity;
 
 const config = require( '../../config' );
 
+const log = require( './log' );
+
 config.database_version = 15;
 
 
@@ -35,9 +37,12 @@ global.NODE = true;
 
 /*
 | Sets root as global variable.
+| Works around to hide node.js unnessary warning.
 */
-global.root = undefined;
-
+Object.defineProperty(
+	global, 'root',
+	{ configureable: true, writable: true, enumerable: true, value: undefined }
+);
 
 // registers with tim.js
 {
@@ -60,9 +65,11 @@ global.root = undefined;
 
 const database_repository = require( '../database/repository' );
 
+const fs = require( 'fs' );
+
 const http = require( 'http' );
 
-const log = require( '../log/root' );
+const https = require( 'https' );
 
 const server_root = require( './root' );
 
@@ -118,22 +125,51 @@ const startup = function*( )
 
 	yield* root.loadSpaces( );
 
-	log.start(
-		'starting server @ http://' +
-			( config.ip || '*' ) + '/:' + config.port
-	);
-
-	yield http.createServer(
-		function(
-			request,
-			result
-		)
+	if( !config.https )
 	{
-		suspend( root.requestListener ).call( root, request, result );
-	}
-	).listen( config.port, config.ip, resume( ) );
+		log( 'starting server @ http://' + ( config.ip || '*' ) + '/:' + config.port );
 
-	log.start( 'server running' );
+		yield http.createServer(
+			( request, result ) =>
+			{
+				suspend( root.requestListener ).call( root, request, result );
+			}
+		).listen( config.port, config.ip, resume( ) );
+	}
+	else
+	{
+		log( 'starting redirect @ http://' + ( config.ip || '*' ) + '/:' + config.port );
+
+		http.createServer(
+		    ( request, result ) =>
+			{
+			    result.writeHead(
+					307,
+					{
+						Location: 'https://' + request.headers.host + '/' + request.url,
+					}
+				);
+
+				result.end( 'go use https' );
+			}
+		).listen( 80 );
+
+		log( 'starting server @ https://' + ( config.ip || '*' ) + '/:' + config.port );
+
+		const options = {
+		    cert: fs.readFileSync( config.https_cert ),
+			key: fs.readFileSync( config.https_key ),
+		};
+
+		yield https.createServer( options,
+			( request, result ) =>
+			{
+				suspend( root.requestListener ).call( root, request, result );
+			}
+		).listen( config.port, config.ip, resume( ) );
+	}
+
+	log( 'server running' );
 };
 
 

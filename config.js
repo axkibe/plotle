@@ -1,155 +1,86 @@
 /*
-| Config
+| Config.
 */
 
+// shortcut for development mode
+// switching several options below
+const devel = true;
+//const devel = false;
 
-/*
-| Config init.
-*/
-var config = module.exports = { };
+// init
+const config = module.exports = { };
 
+// if enabled http requests will be forwarded to https
+config.https = !devel;
 
-/*
-| an additional admin user
-*/
+// the admin user
 config.admin = 'axel';
 
-
-/*
-| The interface to listen on,.
-|   null       means listens on all interfaces.
-*/
+// the interface to listen on,.
+// null       means listens on all interfaces.
 config.ip = null;
 
+// the port to listen on.
+config.port = config.https ? 443 : 8833;
 
-/*
-| The port to listen on.
-*/
-config.port = 8833;
+// the location of the https certificate
+config.https_cert = '/etc/letsencrypt/live/linkloom.org/cert1.pem';
 
+// the location of the https key
+config.https_privkey = '/etc/letsencrypt/live/linkloom.org/privkey.pem';
 
-/*
-| Host the mongodb database runs on
-*/
+// host the mongodb database runs on
 config.database_host = '127.0.0.1';
 
-
-/*
-| Port the mongodb database runs on
-*/
+// port the mongodb database runs on
 config.database_port = 27017;
 
-
-/*
-| Name of the mongodb database
-*/
+// name of the mongodb database
 config.database_name = 'linkloom-1';
 
-
-/*
-| Runs in devel mode.
-*/
-config.devel = true;
-config.devel = false;
-
-
-/*
-| Provides the shell devel files.
-*/
+// Provides the shell devel files.
 config.shell_devel = true;
 
+// provides the shell bundle.
+config.shell_bundle = !devel;
 
-/*
-| Provide a bundle.
-*/
-config.shell_bundle = !config.devel;
-//config.shell_bundle = true;
+// if true checking code is turned on in shell
+config.shell_check = devel;
 
+// if true freezing objects is turned on in shell
+config.shell_freeze = devel;
 
-/*
-| If true checking code is turned on in shell
-*/
-config.shell_check = config.devel;
-//config.shell_check = true;
-
-
-/*
-| If true freezing objects is turned on in shell
-*/
-config.shell_freeze = config.devel;
-
-
-/*
-| If true checking code is turned on in server
-*/
+// if true checking code is turned on in server
 config.server_check = true;
 
-
-/*
-| If true freezing objects is turned on in server
-|
-| NOTE: this make the server very slow!
-*/
+// if true freezing objects is turned on in server
 config.server_freeze = false;
 
+// if the server is in devel mode
+// * it will die on a command it considers unacceptable.
+// * also it will check for changed ressources on every request.
+config.server_devel = devel;
 
-/*
-| If the server is in devel mode,
-| it will die on a command it considers unacceptable.
-*/
-config.server_devel = false;
+// if false to server tells each client is told not to cache http
+// requests.
+config.http_cache = devel;
 
+// if true writes manglemap and sourcemap.
+config.report = !devel;
 
-/*
-| Does not write stuff on server startup
-*/
-config.noWrite = false;
+// if true "uglifies" the javascript pack, minimizing its size.
+config.uglify = !devel;
 
+// if true does extra mangles on output compression
+// FIXME currently broken
+config.extraMangle = false;
 
-/*
-| If true "uglifies" the javascript pack, minimizing its size.
-*/
-config.uglify = !config.devel;
-//config.uglify = true;
-
-
-/*
-| If true does extra mangles on output compression
-*/
-config.extraMangle = config.shell_bundle;
-//config.extraMangle = true;
-
-
-/*
-| If true "beautifies" uglify output.
-*/
+// if true "beautifies" uglify output.
 config.beautify = false;
-//config.beautify = true;
 
-
-/*
-| Activates all hacks needed to debug the client with weinre.
-| Set to false/null or the address of the weinre server
-*/
+// activates all hacks needed to debug the client with weinre.
+// Set to false/null or the address of the weinre server
 config.weinre = false;
 
-
-/*
-| If set, accept only connections from these addresses
-*/
+// if set, accepts only connections from these addresses
 config.whiteList = false;
-
-
-/*
-| enable specific logging categories
-*/
-config.log  = {
-	all : false,
-	ajax : false,
-	debug : true,
-	fail : true,
-	start : true,
-	web : true,
-	warn : true
-};
-

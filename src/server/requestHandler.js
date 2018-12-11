@@ -10,11 +10,11 @@ module.exports =
 
 const config = require( '../../config' );
 
-const log = require( '../log/root' );
-
 const change_dynamic = require( '../change/dynamic' );
 
 const change_wrapList = require( '../change/wrapList' );
+
+const log = require( './log' );
 
 const ref_space = require( '../ref/space' );
 
@@ -64,7 +64,7 @@ const replyError =
 		throw new Error( message );
 	}
 
-	log.warn( 'reject', message );
+	log( 'reject', message );
 
 	return reply_error.create( 'message', message );
 };
@@ -173,7 +173,7 @@ const serveAuth =
 	}
 	catch( err )
 	{
-		console.log( err.stack );
+		log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -218,7 +218,7 @@ const serveRegister =
 	}
 	catch( err )
 	{
-		console.log( err.stack );
+		log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -270,7 +270,7 @@ const serveUpdate =
 	}
 	catch( err )
 	{
-		console.log( err.stack );
+		log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -332,7 +332,7 @@ const serveAcquire =
 	}
 	catch( err )
 	{
-		console.log( err.stack );
+		log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -547,8 +547,6 @@ server_requestHandler.expireUpdateSleep =
 
 	const asw = reply_update.create( );
 
-	log.ajax( '->', asw );
-
 	const result = sleep.result;
 
 	result.writeHead(
@@ -598,7 +596,7 @@ server_requestHandler.serve =
 
 		default :
 
-			log.warn( 'unknown command', request );
+			log( 'unknown command', request );
 
 			return replyError( 'unknown command' );
 	}

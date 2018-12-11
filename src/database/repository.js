@@ -8,11 +8,6 @@
 tim.define( module, ( def, database_repository ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,22 +23,13 @@ if( TIM )
 	};
 }
 
-
-/*:::::::::.
-:: Imports
-'::::::::::*/
-
+const log = require( '../server/log' );
 
 const ref_space = require( '../ref/space' );
 
 const mongodb = require( 'mongodb' );
 
 const resume = require( 'suspend' ).resume;
-
-
-/*:::::::::::::::::::.
-:: Static functions
-'::::::::::::::::::::*/
 
 
 /*
@@ -57,7 +43,7 @@ const initRepository =
 {
 	const spaces = yield connection.collection( 'spaces', resume( ) );
 
-	console.log( 'start', 'found no repository, initializing a new one' );
+	log( 'found no repository, initializing a new one' );
 
 	const initSpaces =
 		[
@@ -75,7 +61,7 @@ const initRepository =
 	{
 		const sr = initSpaces[ s ];
 
-		console.log( 'start', '  initializing space ' + sr.fullname );
+		log( '  initializing space ' + sr.fullname );
 
 		yield spaces.insert(
 			{
@@ -87,7 +73,7 @@ const initRepository =
 		);
 	}
 
-	console.log( 'start', '  initializing global.version' );
+	log( '  initializing global.version' );
 
 	const global = yield connection.collection( 'global', resume( ) );
 
@@ -110,7 +96,7 @@ const checkRepository =
 		config
 	)
 {
-	console.log( 'start', 'checking repository schema version' );
+	log( 'checking repository schema version' );
 
 	const global = yield connection.collection( 'global', resume( ) );
 
@@ -146,8 +132,7 @@ def.static.connect =
 		config
 	)
 {
-	console.log(
-		'start',
+	log(
 		'connecting to database',
 		config.database_host + ':' + config.database_port,
 		config.database_name
@@ -185,11 +170,6 @@ def.static.connect =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

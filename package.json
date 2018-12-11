@@ -1,15 +1,16 @@
 {
-  "name": "ideoloom",
-  "version": "1.21.1",
+  "name": "linkloom",
+  "version": "1.32",
   "description": "collaborative concept map editor",
   "author": "Axel Kittenberger <axkibe@gmail.com",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/axkibe/ideoloom"
+    "url": "https://github.com/axkibe/linkloom"
   },
   "dependencies": {
-    "mongodb": "^2.2.34",
+    "mongodb": "^3.1.10",
+    "npm-check-updates": "^2.15.0",
     "suspend": "^0.7.0",
     "uglify-es": "^3.3.9"
   }

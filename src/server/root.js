@@ -58,7 +58,7 @@ const config = require( '../../config' );
 
 const fs = require( 'fs' );
 
-const log = require( '../log/root' );
+const log = require( './log' );
 
 const server_maxAge = require( './maxAge' );
 
@@ -99,7 +99,7 @@ const zlib = require( 'zlib' );
 def.func.loadSpaces =
 	function*( )
 {
-	log.start( 'loading and replaying all spaces' );
+	log( 'loading and replaying all spaces' );
 
 	const cursor =
 		yield root.repository.spaces.find(
@@ -120,7 +120,7 @@ def.func.loadSpaces =
 				'tag', o.tag
 			);
 
-		log.start( 'loading and replaying "' + spaceRef.fullname + '"' );
+		log( 'loading and replaying "' + spaceRef.fullname + '"' );
 
 		root.create(
 			'spaces',
@@ -135,62 +135,50 @@ def.func.loadSpaces =
 
 
 /*
-| Create the shell's config.js resource.
+| The shell's globals.
 */
-def.func.createShellConfig =
+def.lazy.shellGlobals =
 	function( )
 {
-	const cconfig = [ ];
+	const g =
+		{
+			CHECK: config.shell_check,
+			FREEZE : config.shell_freeze,
+			NODE : false,
+			TIM : false,
+			DEVEL : config.shell_devel,
+			WEINRE : config.weinre
+		};
 
-	cconfig.push(
-		'var config = {\n',
-		'\tdevel   : ', config.devel, ',\n',
-		'\tdebug   : {\n'
-	);
+	if( FREEZE ) Object.freeze( g );
 
-	let first = true;
+	return g;
+};
 
-	for( let k in config.debug )
+
+/*
+| The shell's globals as ressource.
+*/
+def.lazy.shellGlobalsRessource =
+	function( )
+{
+	let text = '';
+
+	const globals = this.shellGlobals;
+
+	const keys = Object.keys( globals ).sort( );
+
+	for( let a = 0, al = keys.length; a < al; a++ )
 	{
-		const val = config.debug[ k ];
+		const key = keys[ a ];
 
-		if( !first ) cconfig.push( ',\n' );
-		else first = false;
-
-		cconfig.push(
-			'\t\t',
-			k,
-			' : ',
-			typeof( val ) === 'string' ? "'" : '',
-			val,
-			typeof( val ) === 'string' ? "'" : ''
-		);
+		text += 'var ' + key + ' = ' + globals[ key ] + ';\n';
 	}
-
-	cconfig.push(
-		'\n\t},\n',
-		'\tlog : {\n'
-	);
-
-	first = true;
-
-	for( let k in config.log )
-	{
-		if( !first ) cconfig.push( ',\n' );
-		else first = false;
-
-		cconfig.push( '\t\t', k, ' : ', config.log[ k ] );
-	}
-
-	cconfig.push(
-		'\n\t}\n',
-		'};\n'
-	);
 
 	return(
 		server_resource.create(
-			'data', cconfig.join( '' ),
-			'filePath', 'config.js',
+			'data', text,
+			'filePath', 'global.js',
 			'inBundle', true,
 			'inTestPad', true
 		)
@@ -204,30 +192,13 @@ def.func.createShellConfig =
 def.func.buildBundle =
 	function( )
 {
-	// the bundle itself
-	let bundle = [ ];
-
-	log.start( 'building bundle' );
+	log( 'building bundle' );
 
 	const timIDs = { };
 
-	const codes = { };
-
-	// loads the files to be bundled
-	for( let a = 0, al = root.inventory.length; a < al; a++ )
-	{
-		const resource = root.inventory.atRank( a );
-
-		if( !resource.inBundle ) continue;
-
-		if( resource.timHolder ) timIDs[ resource.timId ] = resource.hasJson;
-
-		codes[ a ] = resource.data + '';
-	}
-
 	if( config.uglify )
 	{
-		log.start( 'uglifying bundle' );
+		log( 'uglifying bundle' );
 
 		const code = { };
 
@@ -237,21 +208,18 @@ def.func.buildBundle =
 
 			if( !resource.inBundle ) continue;
 
-			code[ resource.filePath || resource.aliases.get( 0 ) ] = codes[ a ];
+			if( resource.filePath === 'global.js' ) continue;
+
+			code[ resource.aliases.get( 0 ) ] = resource.data + '';
 		}
 
-
-		// first pass
-		log.start( '  1st pass' );
+		log( '  1st pass' );
 
 		let options =
 		{
 			compress :
 			{
-				global_defs :
-				{
-					TIM : false
-				},
+				global_defs : this.shellGlobals,
 				evaluate : false,
 			},
 			mangle: false,
@@ -268,43 +236,44 @@ def.func.buildBundle =
 
 		let ast = result.ast;
 
-		if( config.extraMangle )
-		{
-			// ast is not immutable and changed!
-			root.extraMangle( ast, timIDs );
-		}
+		// ast is not immutable and changed!
+		if( config.extraMangle ) root.extraMangle( ast, timIDs );
 
-		// second pass
-		log.start( '  2nd pass' );
+		log( '  2nd pass' );
 
 		options =
 		{
 			compress :
 			{
 				ecma : 6,
-				global_defs :
-				{
-					CHECK   : config.shell_check,
-					FREEZE  : config.shell_freeze,
-					TIM     : false,
-					NODE    : false
-				}
+				global_defs : this.shellGlobals,
 			},
 			output :
 			{
-				beautify : config.beautify
+				beautify : config.beautify,
+			},
+			sourceMap :
+			{
+				filename : 'source.map',
 			}
 		};
 
 		result = uglify.minify( ast, options );
 
+		if( config.report )
+		{
+			fs.writeFileSync( 'report/source.map', result.map );
+		}
+
 		if( result.error ) throw new Error( 'uglify error: ' + result.error );
 
-		bundle = result.code;
+		return result;
 	}
 	else
 	{
-		log.start( 'concating bundle' );
+		log( 'concating bundle' );
+
+		let code = '';
 
 		for( let a = 0, al = root.inventory.length; a < al; a++ )
 		{
@@ -312,42 +281,11 @@ def.func.buildBundle =
 
 			if( !resource.inBundle ) continue;
 
-			bundle += codes[ a ];
+			code += resource.data + '';
 		}
+
+		return { code: code };
 	}
-
-
-		/*
-			ast.mangle_names(
-				{
-					toplevel : true,
-					except : [ 'WebFont', 'opentype' ]
-				}
-			);
-		}
-
-		const sourceMap = uglify.SourceMap( { } );
-
-		const stream =
-			uglify.OutputStream(
-				{
-					beautify : config.beautify,
-					source_map: sourceMap
-				}
-			);
-
-		ast.print( stream );
-
-		bundle = stream.toString( );
-
-		if( !config.noWrite )
-		{
-			yield fs.writeFile( 'report/source.map', sourceMap.toString( ), resume( ) );
-		}
-		*/
-
-
-	return bundle;
 };
 
 
@@ -358,12 +296,11 @@ def.func.buildBundle =
 def.func.prepareInventory =
 	function*( )
 {
-	log.start( 'preparing inventory' );
+	log( 'preparing inventory' );
 
-	// autogenerates the shell config as resource
-	const cconfig = root.createShellConfig( );
-
-	root.create( 'inventory', root.inventory.updateResource( cconfig ) );
+	root.create(
+		'inventory', root.inventory.updateResource( root.shellGlobalsRessource )
+	);
 
 	// takes resource from the the roster
 	for( let a = 0, al = server_roster.length; a < al; a++ )
@@ -386,38 +323,48 @@ def.func.prepareInventory =
 
 	let bundleFilePath;
 
-	// if uglify is turned off
-	// the flags are added before bundle
-	// creation, otherwise afterwards
-	if( !config.uglify ) root.prependConfigFlags( );
-
 	if( config.shell_bundle )
 	{
-		let bundle = this.buildBundle( );
+		const bundle = this.buildBundle( );
+
+		const hash = hash_sha1.calc( bundle.code );
 
 		// calculates the hash for the bundle
-		bundleFilePath = 'linkloom-' + hash_sha1.calc( bundle ) + '.js';
+		bundleFilePath = 'linkloom-' + hash + '.js';
 
 		root.create( 'bundleFilePath', bundleFilePath );
 
+		let bundleResource =
+			server_resource.create(
+				'filePath', bundleFilePath,
+				'maxage', 'long',
+				'data', bundle.code
+			);
+
+		let mapResource;
+
+		if( bundle.map )
+		{
+			const sourceMapPath = 'source-' + hash + '.map';
+
+			mapResource =
+				server_resource.create(
+					'filePath', sourceMapPath,
+					'maxage', 'long',
+					'data', bundle.map
+				);
+
+			bundleResource = bundleResource.create( 'sourceMap', mapResource );
+		}
+
 		// registers the bundle as resource
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					server_resource.create(
-						'filePath', bundleFilePath,
-						'maxage', 'long',
-						'data', bundle
-					)
-				)
-		);
+		let inventory = root.inventory.updateResource( bundleResource );
 
-		log.start( 'bundle:', bundleFilePath );
+		if( mapResource ) inventory = inventory.updateResource( mapResource );
 
-		// if uglify is turned on
-		// the flags are added after bundle
-		// creation, otherwise before
-		if( config.uglify ) root.prependConfigFlags( );
+		root.create( 'inventory', inventory );
+
+		log( 'bundle:', bundleFilePath );
 	}
 
 	// post processing
@@ -460,43 +407,17 @@ def.func.prepareInventory =
 
 	if( config.shell_bundle )
 	{
-		log.start(
+		log(
 			'uncompressed bundle size is ',
 			root.inventory.get( bundleFilePath ).data.length
 		);
 
-		log.start(
+		log(
 			'  compressed bundle size is ',
 			root.inventory.get( bundleFilePath ).gzip.length
 		);
 	}
 };
-
-
-/*
-| Prepends the flags to cconfig
-|
-| Used by development.
-*/
-def.func.prependConfigFlags =
-	function( )
-{
-	const resource = root.inventory.get( 'config.js' );
-
-	root.create(
-		'inventory',
-			root.inventory.updateResource(
-				resource.create(
-					'data',
-						'var CHECK = ' + config.shell_check + ';\n'
-						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
-						+ 'var NODE = false;\n'
-						+ resource.data
-				)
-			)
-	);
-};
-
 
 
 /*
@@ -508,7 +429,7 @@ def.func.extraMangle =
 		timIDs   // FIXME remove
 	)
 {
-	log.start( '  extra mangling the bundle' );
+	log( '  extra mangling the bundle' );
 
 	// unknown properties / keys
 	// that are missed in both lists
@@ -606,7 +527,7 @@ def.func.extraMangle =
 		mangle[ at ] = '$' + server_tools.b64Encode( a );
 	}
 
-	if( !config.noWrite )
+	if( config.report )
 	{
 		fs.writeFileSync( 'report/manglemap.txt', util.inspect( mangle ) );
 	}
@@ -679,17 +600,17 @@ def.func.extraMangle =
 
 	if( missed.length > 0 )
 	{
-		console.log( 'extraMangle missed ' + missed.length + ' properties: ', missed );
+		log( 'extraMangle missed ' + missed.length + ' properties: ', missed );
 	}
 
 	if( useMangle.length > 0 )
 	{
-		console.log( 'extraMangle not used mangles: ', useMangle );
+		log( 'extraMangle not used mangles: ', useMangle );
 	}
 
 	if( useNoMangle.length > 0 )
 	{
-		console.log( 'extraMangle not used no-mangles: ', useNoMangle );
+		log( 'extraMangle not used no-mangles: ', useNoMangle );
 	}
 };
 
@@ -787,8 +708,6 @@ def.func.wake =
 
 		const result = sleep.result;
 
-		log.ajax( '->', asw );
-
 		result.writeHead(
 			200,
 			{
@@ -824,7 +743,7 @@ def.func.webError =
 
 	message = code + ' ' + message;
 
-	log.web( 'error', code, message );
+	log( 'web error', code, message );
 
 	result.end( message );
 };
@@ -841,16 +760,13 @@ def.func.requestListener =
 {
 	const red = url.parse( request.url );
 
-	log.web( request.connection.remoteAddress, red.href );
+	log( request.connection.remoteAddress, red.href );
 
 	if( config.whiteList )
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
 		{
-			log.web(
-				request.connection.remoteAddress,
-				'not in whitelist!'
-			);
+			log( request.connection.remoteAddress, 'not in whitelist!' );
 
 			root.webError( result, 403, 'Forbidden' );
 
@@ -883,7 +799,7 @@ def.func.requestListener =
 
 	// if in devel mode, check if the resource cache
 	// has been invalidated
-	if( config.devel )
+	if( config.server_devel )
 	{
 		let stat;
 
@@ -915,7 +831,8 @@ def.func.requestListener =
 	// delivers the resource
 	let aenc;
 
-	if( !config.devel && resource.gzip )
+	// FIXME how about always?
+	if( !config.server_devel && resource.gzip )
 	{
 		aenc = request.headers[ 'accept-encoding' ];
 	}
@@ -924,11 +841,16 @@ def.func.requestListener =
 	{
 		'Content-Type' : resource.mime,
 		'Cache-Control' :
-			!config.devel
+			!config.http_cache
 			? server_maxAge.map( resource.maxage )
 			: 'no-cache',
 		'Date' : new Date().toUTCString()
 	};
+
+	if( resource.sourceMap )
+	{
+		header.SourceMap = resource.sourceMap.aliases.get( 0 );
+	}
 
 	if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 	{
@@ -1009,8 +931,6 @@ def.func.webAjax =
 		try
 		{
 			cmd = JSON.parse( query );
-
-			log.ajax( '<-', cmd );
 		}
 		catch( err )
 		{
@@ -1022,14 +942,14 @@ def.func.webAjax =
 		// FUTURE REMOVE
 		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
-			console.log( 'DELAYING ALTER');
+			log( 'DELAYING ALTER');
 
 			yield setTimeout( resume( ), DELAY_ALTER );
 		}
 
 		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
-			console.log( 'DELAYING ACQUIRE');
+			log( 'DELAYING ACQUIRE');
 
 			yield setTimeout( resume( ), DELAY_ACQUIRE );
 		}
@@ -1037,8 +957,6 @@ def.func.webAjax =
 		const asw = yield* server_requestHandler.serve( cmd, result );
 
 		if( !asw ) return;
-
-		log.ajax( '->', asw );
 
 		result.writeHead(
 			200,

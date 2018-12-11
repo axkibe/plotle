@@ -61,6 +61,9 @@ if( TIM )
 		// realpath of the resource base
 		realpath : { type : [ 'undefined', 'string' ] },
 
+		// the resource of a sourcemap if applicable
+		sourceMap : { type : [ 'undefined', './resource' ] },
+
 		// in devel mode timestamp when resource cached
 		timestamp : { type : [ 'undefined', 'date' ] },
 

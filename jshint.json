@@ -15,9 +15,11 @@
 	"globals"  :
 	{
 		"CHECK" : true,
+		"DEVEL" : true,
 		"FREEZE" : true,
 		"NODE" : true,
 		"TIM" : true,
+		"WEINRE" : true,
 		"config" : true,
 		"opentype" : true,
 		"pass" : true,

@@ -23,6 +23,8 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 const visual_mark_widget = require( '../visual/mark/widget' );
 
+const widget_scrollbox = require( '../widget/scrollbox' );
+
 
 /*
 | Transforms widgets.
@@ -46,14 +48,21 @@ def.static.transformGet =
 
 	const hover = widget.concernsHover( this.hover, path );
 
-	return(
+	widget =
 		widget.create(
 			'path', path,
 			'hover', hover,
 			'mark', mark,
 			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
-		)
-	);
+		);
+
+	if( widget.timtype !== widget_scrollbox ) return widget;
+
+	const sp = widget.fixScrollPos;
+
+	if( sp !== pass ) widget = widget.create( 'scrollPos', sp );
+
+	return widget;
 };
 
 
