@@ -69,9 +69,6 @@ if( TIM )
 
 		// the resource a tim is genereated from
 		timHolder : { type : [ 'undefined', './resource' ] },
-
-		// if hasTim the tim id string
-		timId : { type : [ 'undefined', 'string' ] },
 	};
 }
 

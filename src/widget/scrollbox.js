@@ -333,7 +333,9 @@ def.lazy.fixScrollPos =
 {
 	const y = this.scrollPos.y;
 
-	const maxY = this.innerSize.height - this.zone.height;
+	let maxY = this.innerSize.height - this.zone.height;
+
+	if( maxY < 0 ) maxY = 0;
 
 	if( y <= maxY ) return pass;
 

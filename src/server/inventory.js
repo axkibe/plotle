@@ -13,7 +13,7 @@ if( TIM )
 }
 
 
-const config = require( '../../config' );
+const config = require( '../config/intf' );
 
 const fs = require( 'fs' );
 
@@ -91,19 +91,20 @@ def.func.prepareResource =
 
 	let mtime;
 
-	if( config.devel && realpath )
+	const updates = config.get( 'server', 'update' );
+
+	if( updates && realpath )
 	{
 		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
 	}
 
 	if( resource.hasTim )
 	{
-		if( config.devel ) delete require.cache[ realpath ];
+		if( updates ) delete require.cache[ realpath ];
 
 		const rmod = require( realpath );
 
-		const source =
-			yield fs.readFile( realpath, readOptions, resume( ) );
+		const source = yield fs.readFile( realpath, readOptions, resume( ) );
 
 		const timspec = tim.catalog.getTimspec( realpath );
 
@@ -116,7 +117,6 @@ def.func.prepareResource =
 		resource =
 			resource.create(
 				'data', preamble + source + postamble,
-				'timId', rmod.timId,
 				'timestamp', mtime,
 				'realpath', realpath
 			);
@@ -124,28 +124,32 @@ def.func.prepareResource =
 		const timcodeRootPath = tim.catalog.getRootDir( timspec ).timcodePath;
 
 		const timcode =
-			yield fs.readFile( timcodeRootPath + '/' + rmod.timcodeFilename, readOptions, resume( ) );
+			yield fs.readFile(
+				timcodeRootPath + '/' + rmod.timcodeFilename, readOptions, resume( )
+			);
 
 		const timcodeResource =
 			resource.create(
 				'aliases', undefined,
 				'data', timPreamble + timcode + postamble,
-				'filePath', rmod.timcodeFilename,
+				'filePath', 'timcode-' + rmod.timcodeFilename,
 				'hasTim', false,
 				'timHolder', resource
 			);
 
 		root.create( 'inventory', root.inventory.updateResource( timcodeResource ) );
 	}
-
-	if( !resource.hasTim && resource.filePath )
+	else
 	{
-		resource =
-			resource.create(
-				'data', yield fs.readFile( resource.filePath, resume( ) ),
-				'timestamp', mtime,
-				'realpath', realpath
-			);
+		if( resource.filePath )
+		{
+			resource =
+				resource.create(
+					'data', yield fs.readFile( resource.filePath, resume( ) ),
+					'timestamp', mtime,
+					'realpath', realpath
+				);
+		}
 	}
 
 	root.create( 'inventory', root.inventory.updateResource( resource ) );

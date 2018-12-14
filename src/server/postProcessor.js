@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-const config = require( '../../config' );
+const config = require( '../config/intf' );
 
 const hash_sha1 = require( '../hash/sha1' );
 
@@ -115,14 +115,14 @@ def.static.develHtml =
 			devels.join( '\n' )
 		);
 
-	if( config.weinre )
+	const weinre = config.get( 'shell', 'weinre' );
+
+	if( weinre )
 	{
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
-				'<script src="http://'
-				+ config.weinre
-				+ '/target/target-script-min.js" defer>'
+				'<script src="http://' + weinre + '/target/target-script-min.js" defer>'
 				+ '</script>'
 			);
 	}
@@ -181,14 +181,14 @@ def.static.testPadHtml =
 			devels.join( '\n' )
 		);
 
-	if( config.weinre )
+	const weinre = config.get( 'shell', 'weinre' );
+
+	if( weinre )
 	{
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
-				'<script src="http://'
-				+ config.weinre
-				+ '/target/target-script-min.js">'
+				'<script src="http://' + weinre + '/target/target-script-min.js" defer>'
 				+ '</script>'
 			);
 	}

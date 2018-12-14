@@ -7,11 +7,6 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -47,11 +42,6 @@ const database_changeSkidList = require( '../database/changeSkidList' );
 const resume = require( 'suspend' ).resume;
 
 const fabric_space = require( '../fabric/space' );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -139,11 +129,6 @@ def.static.createSpace =
 	);
 
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

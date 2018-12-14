@@ -8,7 +8,7 @@ const server_requestHandler =
 module.exports =
 	{ };
 
-const config = require( '../../config' );
+const config = require( '../config/intf' );
 
 const change_dynamic = require( '../change/dynamic' );
 
@@ -58,9 +58,9 @@ const replyError =
 		message
 	)
 {
-	if( config.server_devel )
+	if( config.get( 'server', 'sensitive' ) )
 	{
-		// in devel mode any failure is fatal.
+		// if sensitive (for development) any failure is fatal.
 		throw new Error( message );
 	}
 
@@ -78,20 +78,13 @@ const serveAlter =
 		request
 	)
 {
-	if( !config.server_devel )
-	{
-		try
-		{
-	  		request = request_alter.createFromJSON( request );
-		}
-		catch( err )
-		{
-			return replyError( 'Request JSON translation failed' );
-		}
-	}
-	else
+	try
 	{
 		request = request_alter.createFromJSON( request );
+	}
+	catch( err )
+	{
+		return replyError( 'Request JSON translation failed' );
 	}
 
 	const userCreds = request.userCreds;
@@ -141,14 +134,9 @@ const serveAlter =
 	}
 	catch( error )
 	{
-		if( error.nonFatal && !config.server_devel )
-		{
-			return replyError( error.message );
-		}
-		else
-		{
-			throw error;
-		}
+		if( error.nonFatal ) return replyError( error.message );
+
+		throw error;
 	}
 
 	process.nextTick(

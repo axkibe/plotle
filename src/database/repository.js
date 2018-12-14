@@ -8,6 +8,9 @@
 tim.define( module, ( def, database_repository ) => {
 
 
+const dbVersion = 15;
+
+
 if( TIM )
 {
 	def.attributes =
@@ -25,6 +28,8 @@ if( TIM )
 
 const log = require( '../server/log' );
 
+const config = require( '../config/intf' );
+
 const ref_space = require( '../ref/space' );
 
 const mongodb = require( 'mongodb' );
@@ -37,8 +42,7 @@ const resume = require( 'suspend' ).resume;
 */
 const initRepository =
 	function*(
-		connection,
-		config
+		connection
 	)
 {
 	const spaces = yield connection.collection( 'spaces', resume( ) );
@@ -80,7 +84,7 @@ const initRepository =
 	yield global.insert(
 		{
 			_id : 'version',
-			version : config.database_version
+			version : dbVersion,
 		},
 		resume( )
 	);
@@ -92,8 +96,7 @@ const initRepository =
 */
 const checkRepository =
 	function*(
-		connection,
-		config
+		connection
 	)
 {
 	log( 'checking repository schema version' );
@@ -104,13 +107,11 @@ const checkRepository =
 
 	if( version )
 	{
-		if( version.version !== config.database_version )
+		if( version.version !== dbVersion )
 		{
 			throw new Error(
 				'Wrong repository schema version, expected '
-				+ config.database_version +
-				', but got ' +
-				version.version
+				+ dbVersion + ', but got ' + version.version
 			);
 		}
 	}
@@ -118,7 +119,7 @@ const checkRepository =
 	{
 		// otherwise initializes the database repository
 
-		yield* initRepository( connection, config );
+		yield* initRepository( connection );
 	}
 };
 
@@ -128,29 +129,19 @@ const checkRepository =
 | an active connection.
 */
 def.static.connect =
-	function*(
-		config
-	)
+	function*( )
 {
-	log(
-		'connecting to database',
-		config.database_host + ':' + config.database_port,
-		config.database_name
-	);
+	const host = config.get( 'database', 'host' );
 
-	const server =
-		new mongodb.Server(
-			config.database_host,
-			config.database_port,
-			{ }
-		);
+	const port = config.get( 'database', 'port' );
 
-	const connector =
-		new mongodb.Db(
-			config.database_name,
-			server,
-			{ w : 1 }
-		);
+	const name = config.get( 'database', 'name' );
+
+	log( 'connecting database ' + host + ':' + port + ' ' + name );
+
+	const server = new mongodb.Server( host, port, { } );
+
+	const connector = new mongodb.Db( name, server, { w : 1 } );
 
 	const connection = yield connector.open( resume( ) );
 
@@ -160,7 +151,7 @@ def.static.connect =
 
 	// checking repo version:
 
-	yield* checkRepository( connection, config );
+	yield* checkRepository( connection );
 
 	return(
 		database_repository.create(

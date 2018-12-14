@@ -18,7 +18,7 @@ if( TIM )
 }
 
 
-const config = require( '../../config' );
+const config = require( '../config/intf' );
 
 
 /*::::::::::::::::::.
@@ -41,7 +41,7 @@ def.static.testAccess =
 		{
 			case 'sandbox' : return 'rw';
 
-			case 'home' : return user.name === config.admin ? 'rw' : 'ro';
+			case 'home' : return user.name === config.get( 'admin' ) ? 'rw' : 'ro';
 
 			default : return 'no';
 		}

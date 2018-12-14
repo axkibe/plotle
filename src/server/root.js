@@ -54,7 +54,7 @@ if( TIM )
 const DELAY_ALTER = false;
 const DELAY_ACQUIRE = false;
 
-const config = require( '../../config' );
+const config = require( '../config/intf' );
 
 const fs = require( 'fs' );
 
@@ -137,17 +137,29 @@ def.func.loadSpaces =
 /*
 | The shell's globals.
 */
-def.lazy.shellGlobals =
-	function( )
+def.func.shellGlobals =
+	function(
+		bundle   // if true this is bundle otherwise devel
+	)
 {
+	const check =
+		bundle
+		? config.get( 'shell', 'bundle', 'check' )
+		: config.get( 'shell', 'devel', 'check' );
+
+	const freeze =
+		bundle
+		? config.get( 'shell', 'bundle', 'freeze' )
+		: config.get( 'shell', 'devel', 'freeze' );
+
 	const g =
 		{
-			CHECK: config.shell_check,
-			FREEZE : config.shell_freeze,
+			CHECK: check,
+			FREEZE : freeze,
 			NODE : false,
 			TIM : false,
-			DEVEL : config.shell_devel,
-			WEINRE : config.weinre
+			DEVEL : !bundle,
+			WEINRE : config.get( 'shell', 'weinre' ) || false
 		};
 
 	if( FREEZE ) Object.freeze( g );
@@ -164,7 +176,7 @@ def.lazy.shellGlobalsRessource =
 {
 	let text = '';
 
-	const globals = this.shellGlobals;
+	const globals = this.shellGlobals( false );
 
 	const keys = Object.keys( globals ).sort( );
 
@@ -196,7 +208,7 @@ def.func.buildBundle =
 
 	const timIDs = { };
 
-	if( config.uglify )
+	if( config.get( 'shell', 'bundle', 'uglify' ) )
 	{
 		log( 'uglifying bundle' );
 
@@ -215,11 +227,13 @@ def.func.buildBundle =
 
 		log( '  1st pass' );
 
+		const globals = this.shellGlobals( true );
+
 		let options =
 		{
 			compress :
 			{
-				global_defs : this.shellGlobals,
+				global_defs : globals,
 				evaluate : false,
 			},
 			mangle: false,
@@ -237,7 +251,7 @@ def.func.buildBundle =
 		let ast = result.ast;
 
 		// ast is not immutable and changed!
-		if( config.extraMangle ) root.extraMangle( ast, timIDs );
+		if( config.get( 'shell', 'bundle', 'extraMangle' ) ) root.extraMangle( ast, timIDs );
 
 		log( '  2nd pass' );
 
@@ -246,11 +260,11 @@ def.func.buildBundle =
 			compress :
 			{
 				ecma : 6,
-				global_defs : this.shellGlobals,
+				global_defs : globals,
 			},
 			output :
 			{
-				beautify : config.beautify,
+				beautify : config.get( 'shell', 'bundle', 'beautify' ),
 			},
 			sourceMap :
 			{
@@ -260,7 +274,7 @@ def.func.buildBundle =
 
 		result = uglify.minify( ast, options );
 
-		if( config.report )
+		if( config.get( 'server', 'report' ) )
 		{
 			fs.writeFileSync( 'report/source.map', result.map );
 		}
@@ -302,12 +316,14 @@ def.func.prepareInventory =
 		'inventory', root.inventory.updateResource( root.shellGlobalsRessource )
 	);
 
+	const devel = config.get( 'shell', 'devel', 'enable' );
+
 	// takes resource from the the roster
 	for( let a = 0, al = server_roster.length; a < al; a++ )
 	{
 		const resource = server_roster.get( a );
 
-		if( resource.devel && !config.shell_devel ) continue;
+		if( resource.devel && !devel ) continue;
 
 		yield* root.inventory.prepareResource( resource );
 	}
@@ -323,7 +339,7 @@ def.func.prepareInventory =
 
 	let bundleFilePath;
 
-	if( config.shell_bundle )
+	if( config.get( 'shell', 'bundle', 'enable' ) )
 	{
 		const bundle = this.buildBundle( );
 
@@ -405,17 +421,10 @@ def.func.prepareInventory =
 		);
 	}
 
-	if( config.shell_bundle )
+	if( config.get( 'shell', 'bundle', 'enable' ) )
 	{
-		log(
-			'uncompressed bundle size is ',
-			root.inventory.get( bundleFilePath ).data.length
-		);
-
-		log(
-			'  compressed bundle size is ',
-			root.inventory.get( bundleFilePath ).gzip.length
-		);
+		log( 'uncompressed bundle size is ', root.inventory.get( bundleFilePath ).data.length );
+		log( '  compressed bundle size is ', root.inventory.get( bundleFilePath ).gzip.length );
 	}
 };
 
@@ -527,7 +536,7 @@ def.func.extraMangle =
 		mangle[ at ] = '$' + server_tools.b64Encode( a );
 	}
 
-	if( config.report )
+	if( config.get( 'server', 'report' ) )
 	{
 		fs.writeFileSync( 'report/manglemap.txt', util.inspect( mangle ) );
 	}
@@ -762,6 +771,8 @@ def.func.requestListener =
 
 	log( request.connection.remoteAddress, red.href );
 
+/*
+	FUTURE
 	if( config.whiteList )
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
@@ -773,6 +784,7 @@ def.func.requestListener =
 			return;
 		}
 	}
+*/
 
 	const pathname = red.pathname.replace( /^[\/]+/g, '' );
 
@@ -787,7 +799,9 @@ def.func.requestListener =
 		return;
 	}
 
-	if( resource.inBundle && !config.shell_devel )
+	const devel = config.get( 'shell', 'devel', 'enable' );
+
+	if( resource.inBundle && !devel )
 	{
 		root.webError( result, 404, 'Bad Request' );
 
@@ -797,9 +811,9 @@ def.func.requestListener =
 	// this should not happen
 	if( !resource.data ) throw new Error( 'resource misses data' );
 
-	// if in devel mode, check if the resource cache
+	// if updates enabled, check if the resource cache
 	// has been invalidated
-	if( config.server_devel )
+	if( config.get( 'server', 'update' ) )
 	{
 		let stat;
 
@@ -812,45 +826,41 @@ def.func.requestListener =
 		if( stat && stat.mtime > resource.timestamp )
 		{
 			// when this is a tim its holder is prepared instead.
-			resource =
-				yield* root.inventory.prepareResource(
-					resource.timHolder || resource
-				);
-		}
+			let uResource = resource.timHolder || resource;
 
-		if( resource.postProcessor )
-		{
-			const pp = server_postProcessor[ resource.postProcessor ];
+			log( 'updating', uResource.aliases.get( 0 ) )
 
-			if( !pp ) throw new Error( );
+			uResource = yield* root.inventory.prepareResource( uResource );
 
-			pp( resource, root.bundleFilePath );
+			if( uResource.postProcessor )
+			{
+				const pp = server_postProcessor[ uResource.postProcessor ];
+
+				if( !pp ) throw new Error( );
+
+				pp( uResource, root.bundleFilePath );
+			}
+
+			resource = root.inventory.get( pathname );
 		}
 	}
 
 	// delivers the resource
 	let aenc;
 
-	// FIXME how about always?
-	if( !config.server_devel && resource.gzip )
-	{
-		aenc = request.headers[ 'accept-encoding' ];
-	}
+	if( resource.gzip ) aenc = request.headers[ 'accept-encoding' ];
 
 	const header =
 	{
 		'Content-Type' : resource.mime,
 		'Cache-Control' :
-			!config.http_cache
+			config.get( 'server', 'cache' )
 			? server_maxAge.map( resource.maxage )
 			: 'no-cache',
 		'Date' : new Date().toUTCString()
 	};
 
-	if( resource.sourceMap )
-	{
-		header.SourceMap = resource.sourceMap.aliases.get( 0 );
-	}
+	if( resource.sourceMap ) header.SourceMap = resource.sourceMap.aliases.get( 0 );
 
 	if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 	{
@@ -870,7 +880,8 @@ def.func.requestListener =
 
 		// weinre can't cope with strict mode
 		// so its disabled when weinre is enabled
-		if( config.weinre )
+		// FIXME check if still needed
+		if( config.get( 'shell', 'weinre' ) )
 		{
 			data =
 				( '' + data )
