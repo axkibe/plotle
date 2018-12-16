@@ -77,6 +77,8 @@ const http = require( 'http' );
 
 const https = require( 'https' );
 
+const constants = require( 'constants' );
+
 const server_root = require( './root' );
 
 const server_inventory = require( './inventory' );
@@ -135,14 +137,19 @@ const startMainServer =
 
 			log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
 
+			const cert = fs.readFileSync( config.get( 'https', 'cert' ) ) + '';
+
+			const key = fs.readFileSync( config.get( 'https', 'key' ) ) + '';
+
 			const options =
-				{
-				    cert: fs.readFileSync( config.https_cert ),
-					key: fs.readFileSync( config.https_key ),
-				};
+			{
+				secureOptions: constants.SSL_OP_NO_SSLv3 | constants.SSL_OP_NO_SSLv2,
+				cert: cert,
+				key: key
+			};
 
 			yield https
-			.createServer( handler, options )
+			.createServer( options, handler )
 			.listen( port, listen, resume( ) );
 
 			return;
@@ -236,5 +243,3 @@ suspend(
 	yield* startup( );
 }
 )( );
-
-

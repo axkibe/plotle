@@ -15,6 +15,12 @@ if( TIM )
 	{
 		// https settings
 		enabled : { type : 'boolean', defaultValue : 'false' },
+
+		// cert
+		cert : { type : [ 'null', 'string' ], defaultValue : 'null' },
+
+		// key
+		key : { type : [ 'null', 'string' ], defaultValue : 'null' },
 	};
 }
 
