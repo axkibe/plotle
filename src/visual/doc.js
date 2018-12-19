@@ -251,9 +251,9 @@ def.lazy.glint =
 	)
 	{
 		arr.push(
-			gleam_glint_paint.create(
-				'facet', gruga_selection.facet,
-				'shape', this._rangeShape.transform( this.transform.ortho )
+			gleam_glint_paint.createFS(
+				gruga_selection.facet,
+				this._rangeShape.transform( this.transform.ortho )
 			)
 		);
 	}

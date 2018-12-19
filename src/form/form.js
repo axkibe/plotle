@@ -271,13 +271,7 @@ def.static.getFocusedWidget =
 def.static.glint =
 	function( )
 {
-	const arr =
-		[
-			gleam_glint_paint.create(
-				'facet', gruga_formFacet.model,
-				'shape', this.viewSize.zeroRect
-			)
-		];
+	const arr = [ gleam_glint_paint.createFS( gruga_formFacet.model, this.viewSize.zeroRect ) ];
 
 	for( let r = this.length - 1; r >= 0; r-- )
 	{
@@ -345,7 +339,7 @@ def.static.pointingHover =
 		if( res ) return res;
 	}
 
-	return result_hover.create( 'cursor', 'default' );
+	return result_hover.cursorDefault;
 };
 
 

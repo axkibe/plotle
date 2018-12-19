@@ -19,11 +19,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-			// coordinate offset
-			offset : { type : './point' },
+		// coordinate offset
+		offset : { type : './point' },
 
-			// the zoom factor
-			zoom : { type : 'number' },
+		// the zoom factor
+		zoom : { type : 'number' },
 	};
 }
 

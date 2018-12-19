@@ -471,7 +471,6 @@ def.func.mousewheel =
 	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
 
 	if( y < 0 ) y = 0;
-//	else if( y > XXX ) y = XXX;
 
 	root.setPath(
 		this.path.append( 'scrollPos' ),

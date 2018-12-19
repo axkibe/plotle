@@ -254,12 +254,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push(
-			gleam_glint_paint.create(
-				'facet', facet,
-				'shape', this.tShape
-			)
-		);
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );

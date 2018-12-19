@@ -22,7 +22,8 @@ if( TIM )
 		'./mask',
 		'./paint',
 		'./text',
-		'./window'
+		'./window',
+		'./zoomGrid'
 	];
 }
 

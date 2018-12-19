@@ -4,12 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
+tim.define( module, ( def, visual_mark_items ) => {
 
 
 if( TIM )
@@ -21,8 +16,9 @@ if( TIM )
 	};
 }
 
-
 const change_mark_node = require( '../../change/mark/node' );
+
+const pathList = tim.import( 'tim.js', 'pathList' );
 
 
 /**
@@ -45,19 +41,32 @@ const change_mark_node = require( '../../change/mark/node' );
 /**/}
 
 
+
+/*
+| Creates the list with one item.
+*/
+def.static.createWithOne =
+	function(
+		path
+	)
+{
+	// also sets the user mark on this item
+	const paths = pathList.create( 'list:init', [ path ] );
+
+	return visual_mark_items.create( 'itemPaths', paths );
+};
+
+
 /*
 | The change engine's nodemark.
 */
 def.lazyFuncInt._changeMarkNode =
-	function( i )
+	function(
+		i
+	)
 {
 	return change_mark_node.create( 'path', this.itemPaths.get( i ).chop );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -76,19 +85,12 @@ def.func.createTransformed =
 	{
 		const tm = changes.transform( this._changeMarkNode( a ) );
 
-		if( tm )
-		{
-			arr.push( tm.path.prepend( 'spaceVisual' ) );
-		}
+		if( tm ) arr.push( tm.path.prepend( 'spaceVisual' ) );
 	}
 
 	if( arr.length === 0 ) return undefined;
 
-	return(
-		this.create(
-			'itemPaths', this.itemPaths.create( 'list:init', arr )
-		)
-	);
+	return this.create( 'itemPaths', this.itemPaths.create( 'list:init', arr ) );
 };
 
 
@@ -158,21 +160,11 @@ def.func.togglePath =
 	{
 		if( path.subPathOf( paths.get( a ) ) )
 		{
-			return(
-				this.create(
-					'itemPaths',
-						this.itemPaths.create( 'list:remove', a )
-				)
-			);
+			return this.create( 'itemPaths', this.itemPaths.create( 'list:remove', a ) );
 		}
 	}
 
-	return(
-		this.create(
-			'itemPaths',
-				this.itemPaths.create( 'list:append', path )
-		)
-	);
+	return this.create( 'itemPaths', this.itemPaths.create( 'list:append', path ) );
 };
 
 

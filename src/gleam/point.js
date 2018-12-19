@@ -56,7 +56,7 @@ def.static.xy =
 		y
 	)
 {
-	return gleam_point.create( 'x', x, 'y', y);
+	return gleam_point.create( 'x', x, 'y', y );
 };
 
 

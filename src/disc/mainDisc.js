@@ -683,7 +683,7 @@ def.func.pointingHover =
 		if( bubble ) return bubble;
 	}
 
-	return result_hover.create( 'cursor', 'default' );
+	return result_hover.cursorDefault;
 };
 
 

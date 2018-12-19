@@ -63,12 +63,7 @@ const result_hover = require( '../result/hover' );
 def.lazy.glint =
 	function( )
 {
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_scrollbar.facet,
-			'shape', this._tShape
-		)
-	);
+	return gleam_glint_paint.createFS( gruga_scrollbar.facet, this._tShape );
 };
 
 

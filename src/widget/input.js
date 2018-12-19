@@ -484,7 +484,7 @@ def.func.pointingHover =
 		return undefined;
 	}
 
-	return result_hover.create( 'path', this.path, 'cursor', 'text');
+	return result_hover.create( 'path', this.path, 'cursor', 'text' );
 };
 
 

@@ -16,11 +16,15 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// the paths of the items to drag
+		itemPaths : { type : [ 'undefined', 'tim.js/pathList' ] },
+
 		// drags the items by this x/y
 		moveBy : { type : '../gleam/point' },
 
-		// the paths of the items to drag
-		itemPaths : { type : [ 'undefined', 'tim.js/pathList' ] },
+		// the zone of items when started
+		// (used for snapping)
+		startZone : { type : '../gleam/rect' },
 
 		// mouse down point on drag creation
 		startPoint : { type : '../gleam/point' },

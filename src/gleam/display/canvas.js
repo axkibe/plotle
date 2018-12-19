@@ -42,6 +42,8 @@ const gleam_glint_paint = require( '../glint/paint' );
 
 const gleam_glint_window = require( '../glint/window' );
 
+const gleam_glint_zoomGrid = require( '../glint/zoomGrid' );
+
 const gleam_gradient_askew = require( '../gradient/askew' );
 
 const gleam_gradient_radial = require( '../gradient/radial' );
@@ -562,6 +564,8 @@ def.func._renderGlintList =
 
 /*
 | Renders a glint
+|
+| FIXME make it a Map.
 */
 def.func._renderGlint =
 	function(
@@ -587,35 +591,17 @@ def.func._renderGlint =
 
 			break;
 
-		case gleam_glint_list :
+		case gleam_glint_list : this._renderGlintList( glint, offset ); break;
 
-			this._renderGlintList( glint, offset );
+		case gleam_glint_mask : this._renderMask( glint, offset ); break;
 
-			break;
+		case gleam_glint_paint : this._paint( glint.facet, glint.shape, offset ); break;
 
-		case gleam_glint_paint :
+		case gleam_glint_text : this._renderText( glint, offset ); break;
 
-			this._paint( glint.facet, glint.shape, offset );
+		case gleam_glint_window : this._renderWindow( glint, offset ); break;
 
-			break;
-
-		case gleam_glint_text :
-
-			this._renderText( glint, offset );
-
-			break;
-
-		case gleam_glint_window :
-
-			this._renderWindow( glint, offset );
-
-			break;
-
-		case gleam_glint_mask :
-
-			this._renderMask( glint, offset );
-
-			break;
+		case gleam_glint_zoomGrid : this._renderZoomGrid( glint, offset ); break;
 
 		default : throw new Error( );
 	}
@@ -710,7 +696,6 @@ def.func._renderText =
 		offset
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( glint.timtype !== gleam_glint_text ) throw new Error();
@@ -768,6 +753,64 @@ def.func._renderText =
 	);
 };
 
+
+/*
+| Renders a text using opentype.
+*/
+def.func._renderZoomGrid =
+	function(
+		glint,
+		offset
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( glint.timtype !== gleam_glint_zoomGrid ) throw new Error();
+/**/}
+
+	const go = glint.offset;
+
+	const spacing = glint.spacing;
+
+	const grid = glint.grid;
+
+	const xs = spacing.x * 2;
+	const ys = spacing.y * 2;
+
+	const light = 224;
+	const heavy = 160;
+
+	let weight = round( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
+
+	let xw = false;
+	let yw = false;
+
+	let x0 = go.x;
+	let y0 = go.y;
+
+	if( x0 > xs ) { xw = true; x0 -= xs; }
+	if( y0 > ys ) { yw = true; y0 -= ys; }
+
+	const size = glint.size;
+	const h = size.height;
+	const w = size.width;
+
+	const cx = this._cx;
+
+	const cLight = 'rgb( ' + weight + ', ' + weight + ', ' + weight + ' )';
+	const cHeavy = 'rgb( ' + heavy + ', ' + heavy + ', ' + heavy + ' )';
+
+	for( let x = x0; x < w; x += xs, xw = !xw )
+	{
+		for( let y = y0; y < h; y += ys, yw = !yw )
+		{
+			if( !xw && !yw ) cx.fillStyle = cHeavy;
+			else cx.fillStyle = cLight;
+
+			cx.fillRect( round( x ), round( y ), 2, 2 );
+		}
+	}
+};
 
 /*
 | Renders a window.

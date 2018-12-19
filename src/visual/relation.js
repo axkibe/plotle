@@ -221,12 +221,7 @@ def.func.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push(
-			gleam_glint_paint.create(
-				'facet', facet,
-				'shape', this.tShape
-			)
-		);
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
 	if( shape1 ) arr.push( this._getConnectionGlint( shape1 ) );
@@ -353,19 +348,11 @@ def.func._getConnectionGlint =
 		shape
 	)
 {
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_relation.facet,
-			'shape',
-				gleam_arrow.getArrowShape(
-					shape,
-					'normal',
-					this.shape,
-					'normal'
-				)
-				.transform( this.transform )
-		)
-	);
+	const arrowShape =
+		gleam_arrow.getArrowShape( shape, 'normal', this.shape, 'normal' )
+		.transform( this.transform );
+
+	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
 };
 
 

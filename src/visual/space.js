@@ -7,11 +7,6 @@
 tim.define( module, ( def, visual_space ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -105,6 +100,8 @@ const tim_path = tim.import( 'tim.js', 'path' );
 
 const visual_frame = require( '../visual/frame' );
 
+const visual_grid = require( '../visual/grid' );
+
 const visual_item = require( '../visual/item' );
 
 const visual_itemList = require( '../visual/itemList' );
@@ -119,13 +116,26 @@ const visual_portal = require( '../visual/portal' );
 
 const visual_relation = require( '../visual/relation' );
 
+const standardSpacing = gleam_point.xy( 20, 20 );
 
 
+/*
+| Map of functions for a drag move.
+*/
+const dragMoveMap =
+	new Map( [
+		[ action_createGeneric, '_moveCreateGeneric' ],
+		[ action_createRelation, '_moveCreateRelation' ],
+		[ action_pan, '_movePan' ],
+		[ action_dragItems, '_moveDragItems' ],
+		[ action_resizeItems, '_moveResizeItems' ],
+		[ action_scrolly, '_moveScrollY' ],
+		[ action_select, '_moveSelect' ],
+	] );
+
+/**/if( FREEZE ) Object.freeze( dragMoveMap );
 
 
-/*::::::::::::::::::::::.
-:: Static (lazy) values
-':::::::::::::::::::::::*/
 /*
 | Path of the visual space.
 */
@@ -155,11 +165,6 @@ def.staticLazy.visualMap =
 
 	return map;
 };
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -363,13 +368,6 @@ def.transform.frame =
 };
 
 
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | The attention center.
 */
@@ -407,6 +405,22 @@ def.lazy.focus =
 
 
 /*
+| The zoomGrid glint for this space.
+*/
+def.lazy._grid =
+	function( )
+{
+	return(
+		visual_grid.create(
+			'transform', this.transform,
+			'size', this.viewSize,
+			'spacing', standardSpacing
+		)
+	);
+};
+
+
+/*
 | Return the space glint.
 */
 def.lazy.glint =
@@ -417,6 +431,8 @@ def.lazy.glint =
 	const transform = this.transform;
 
 	const arr = [ ];
+
+	arr.push( this._grid.glint );
 
 	for( let r = this.length - 1; r >= 0; r-- )
 	{
@@ -449,10 +465,7 @@ def.lazy.glint =
 
 				let toItem, toJoint;
 
-				if( action.toItemPath )
-				{
-					toItem = this.get( action.toItemPath.get( -1 ) );
-				}
+				if( action.toItemPath ) toItem = this.get( action.toItemPath.get( -1 ) );
 
 				const fromJoint = fromItem.shape;
 
@@ -481,9 +494,9 @@ def.lazy.glint =
 						);
 
 					arr.push(
-						gleam_glint_paint.create(
-							'facet', gruga_relation.facet,
-							'shape', arrow.shape.transform( transform )
+						gleam_glint_paint.createFS(
+							gruga_relation.facet,
+							arrow.shape.transform( transform )
 						)
 					);
 				}
@@ -496,9 +509,9 @@ def.lazy.glint =
 			if( action.zone )
 			{
 				arr.push(
-					gleam_glint_paint.create(
-						'facet', gruga_select.facet,
-						'shape', action.zone.transform( transform )
+					gleam_glint_paint.createFS(
+						gruga_select.facet,
+						action.zone.transform( transform )
 					)
 				);
 			}
@@ -508,11 +521,6 @@ def.lazy.glint =
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -614,7 +622,7 @@ def.func.pointingHover =
 							'action', action.create( 'fromItemPath', item.path )
 						);
 
-						return result_hover.create( 'cursor', 'default' );
+						return result_hover.cursorDefault;
 					}
 				}
 
@@ -622,14 +630,12 @@ def.func.pointingHover =
 					'action', action.create( 'fromItemPath', undefined )
 				);
 
-				return result_hover.create( 'cursor', 'default' );
+				return result_hover.cursorDefault;
 			}
 
 			break;
 
-		case action_dragItems :
-
-			return result_hover.create( 'cursor', 'grabbing' );
+		case action_dragItems : return result_hover.cursorGrabbing;
 
 		case action_resizeItems :
 
@@ -637,7 +643,7 @@ def.func.pointingHover =
 
 		case action_pan :
 
-			if( action.startPoint ) return result_hover.create( 'cursor', 'grabbing' );
+			if( action.startPoint ) return result_hover.cursorGrabbing;
 
 			break;
 	}
@@ -676,14 +682,9 @@ def.func.dragStart =
 {
 	const access = this.access;
 
-	const frame = this.frame;
-
-	const transform = this.transform;
-
-	// resizing
-	const dp = p.detransform( transform );
-
 	const action = this.action;
+
+	const frame = this.frame;
 
 	const aType = action && action.timtype;
 
@@ -693,12 +694,11 @@ def.func.dragStart =
 		if( frame.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
-	if( aType === action_createGeneric )
-	{
-		this._startCreateGeneric( dp );
+	const transform = this.transform;
 
-		return;
-	}
+	const dp = p.detransform( transform );
+
+	if( aType === action_createGeneric ) { this._startCreateGeneric( p, shift ); return; }
 
 	// see if one item was targeted
 	for( let a = 0, al = this.length; a < al; a++ )
@@ -708,7 +708,6 @@ def.func.dragStart =
 		if( item.dragStart( p, shift, ctrl, access, action ) ) return;
 	}
 
-	// otherwise panning is initiated
 	switch( aType )
 	{
 		case action_createRelation :
@@ -726,13 +725,7 @@ def.func.dragStart =
 
 		case action_select :
 
-			root.create(
-				'action',
-					action.create(
-						'startPoint', dp,
-						'toPoint', dp
-					)
-			);
+			root.create( 'action', action.create( 'startPoint', dp, 'toPoint', dp) );
 
 			return;
 
@@ -937,40 +930,6 @@ def.func.dragStop =
 };
 
 
-const dragMoveMap =
-	new Map( [
-		[
-			action_createGeneric,
-			function( ) { this._moveCreateGeneric.apply( this, arguments ); }
-		],
-		[
-			action_createRelation,
-			function( ) { this._moveCreateRelation.apply( this, arguments ); }
-		],
-		[
-			action_pan,
-			function( ) { this._movePan.apply( this, arguments ); }
-		],
-		[
-			action_dragItems,
-			function( ) { this._moveDragItems.apply( this, arguments ); }
-		],
-		[
-			action_resizeItems,
-			function( ) { this._moveResizeItems.apply( this, arguments ); }
-		],
-		[
-			action_scrolly,
-			function( ) { this._moveScrollY.apply( this, arguments ); }
-		],
-		[
-			action_select,
-			function( ) { this._moveSelect.apply( this, arguments ); }
-		],
-	] );
-
-/**/if( FREEZE ) Object.freeze( dragMoveMap );
-
 /*
 | Moving during an operation with the pointing device button held down.
 */
@@ -985,7 +944,7 @@ def.func.dragMove =
 
 	if( !action ) return 'pointer';
 
-	dragMoveMap.get( action.timtype ).call( this, p, shift, ctrl );
+	this[ dragMoveMap.get( action.timtype ) ]( p, shift, ctrl );
 };
 
 
@@ -1093,13 +1052,28 @@ def.func.specialKey =
 
 
 /*
+| Snaps a point onto the grid.
+*/
+def.func._snap =
+	function(
+		p,     // the point to snap
+		shift  // true if shift key pressed
+	)
+{
+	if( shift ) return p;
+
+	return this._grid.snap( p );
+};
+
+
+/*
 | Moves during creating a generic item.
 */
 def.func._moveCreateGeneric =
 	function(
-		p         // point, viewbased point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,      // point, viewbased point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1109,7 +1083,7 @@ def.func._moveCreateGeneric =
 
 	const transform = this.transform;
 
-	const dp = p.detransform( transform );
+	const dp = this._snap( p, shift ).detransform( transform );
 
 	let zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
@@ -1150,9 +1124,9 @@ def.func._moveCreateGeneric =
 			const pos =
 				( dp.x > action.startPoint.x )
 				? zone.pos
-				: gleam_point.create(
-					'x', zone.pos.x + zone.width - resized.zone.width,
-					'y', zone.pos.y
+				: gleam_point.xy(
+					zone.pos.x + zone.width - resized.zone.width,
+					zone.pos.y
 				);
 
 			transItem =
@@ -1265,9 +1239,9 @@ def.func._moveDragItems =
 		'action',
 			action.create(
 				'moveBy',
-					gleam_point.create(
-						'x', transform.dex( p.x ) - startPoint.x,
-						'y', transform.dey( p.y ) - startPoint.y
+					gleam_point.xy(
+						transform.dex( p.x ) - startPoint.x,
+						transform.dey( p.y ) - startPoint.y
 					)
 			)
 	);
@@ -1279,9 +1253,9 @@ def.func._moveDragItems =
 */
 def.func._moveResizeItems =
 	function(
-		p         // point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,     // point of stop
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1291,6 +1265,8 @@ def.func._moveResizeItems =
 	const pBase = action.pBase;
 
 	const startPoint = action.startPoint;
+
+	p = this._snap( p, shift );
 
 	const dx = transform.dex( p.x );
 
@@ -1383,7 +1359,6 @@ def.func._moveResizeItems =
 		scaleX = scaleY = Math.max( scaleX, scaleY );
 	}
 
-
 	root.create(
 		'action', action.create( 'scaleX', scaleX, 'scaleY', scaleY )
 	);
@@ -1474,7 +1449,8 @@ def.func._moveScrollY =
 */
 def.func._startCreateGeneric =
 	function(
-		dp   // depoint, non-viewbased point of start
+		p,    // point of start
+		shift // true if shift key was pressed
 	)
 {
 	const action = this.action;
@@ -1482,6 +1458,8 @@ def.func._startCreateGeneric =
 	const itemType = action.itemType;
 
 	const model = itemType.model;
+
+	const dp = this._snap( p, shift ).detransform( this.transform );
 
 	let transItem;
 
@@ -1552,7 +1530,9 @@ def.func._stopCreateGeneric =
 
 	if( !action.startPoint ) return;
 
-	action.itemType.createGeneric( action, p.detransform( this.transform ) );
+	const dp = this._snap( p, shift ).detransform( this.transform );
+
+	action.itemType.createGeneric( action, dp );
 
 	root.create(
 		'action',

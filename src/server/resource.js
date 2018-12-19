@@ -33,9 +33,6 @@ if( TIM )
 		// path of the resources file
 		filePath : { type : [ 'undefined', 'string' ] },
 
-		// cached or auto generated zip data
-		gzip : { type : [ 'undefined', 'protean' ] },
-
 		// true if this resource is a typed immutable
 		hasTim : { type : 'boolean', defaultValue : 'false' },
 
@@ -69,13 +66,20 @@ if( TIM )
 
 		// the resource a tim is genereated from
 		timHolder : { type : [ 'undefined', './resource' ] },
+
+		// cached or auto generated zip data
+		_cache : { type : 'protean', defaultValue : '{ }' },
 	};
 }
 
 
+const resume = require( 'suspend' ).resume;
+
 const server_fileTypes = require( './fileTypes' );
 
 const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
+
+const zlib = require( 'zlib' );
 
 
 /*
@@ -106,7 +110,7 @@ def.transform.coding =
 
 /*
 | The mime is either specified manually
-| or derived from file extension
+| or derived from file extension.
 */
 def.transform.mime =
 	function(
@@ -118,7 +122,7 @@ def.transform.mime =
 
 
 /*
-| The file extension
+| The file extension.
 */
 def.lazy.fileExt =
 	function( )
@@ -128,6 +132,28 @@ def.lazy.fileExt =
 	if( !fp ) return;
 
 	return fp.substr( fp.lastIndexOf( '.' ) + 1 );
+};
+
+
+/*
+| Returns the gzipped data.
+*/
+def.func.gzip =
+	function*( )
+{
+	const cache = this._cache;
+
+	let cg = cache.gzip;
+
+	if( cg && cache.data === this.data ) return cg;
+
+	cache.data = undefined;
+
+	cg = cache.gzip = yield zlib.gzip( this.data, resume( ) );
+
+	cache.data = this.data;
+
+	return cg;
 };
 
 

@@ -7,7 +7,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, result_hover ) => {
 
 
 /*::::::::::::::::::::::::::::.
@@ -27,5 +27,14 @@ if( TIM )
 	};
 }
 
+
+/*
+| Shortcuts.
+*/
+def.staticLazy.cursorDefault = ( ) => result_hover.create( 'cursor', 'default' );
+
+def.staticLazy.cursorGrabbing = ( ) => result_hover.create( 'cursor', 'grabbing' );
+
+def.staticLazy.cursorGrab = ( ) => result_hover.create( 'cursor', 'grab' );
 
 } );

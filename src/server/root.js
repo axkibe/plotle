@@ -90,8 +90,6 @@ const util = require( 'util' );
 
 const ref_space = require( '../ref/space' );
 
-const zlib = require( 'zlib' );
-
 
 /*
 | loads all spaces and playbacks all changes from the database.
@@ -400,31 +398,15 @@ def.func.prepareInventory =
 		server_postProcessor[ resource.postProcessor ]( resource, bundleFilePath );
 	}
 
-	// FIXME is this necessary to reassign?
 	inv = root.inventory;
-
-	// prepares the zipped versions
-	for( let a = 0, al = inv.length; a < al; a++ )
-	{
-		const resource = inv.atRank( a );
-
-		//if( resource.inBundle || resource.devel )
-		//{
-		//	continue;
-		//}
-
-		root.create(
-			'inventory',
-				root.inventory.updateResource(
-					resource.create( 'gzip', yield zlib.gzip( resource.data, resume( ) ) )
-				)
-		);
-	}
 
 	if( config.get( 'shell', 'bundle', 'enable' ) )
 	{
-		log( 'uncompressed bundle size is ', root.inventory.get( bundleFilePath ).data.length );
-		log( '  compressed bundle size is ', root.inventory.get( bundleFilePath ).gzip.length );
+		const bundle = root.inventory.get( bundleFilePath );
+		const gzip = yield* bundle.gzip( );
+
+		log( 'uncompressed bundle size is ', bundle.data.length );
+		log( '  compressed bundle size is ', gzip.length );
 	}
 };
 
@@ -828,7 +810,7 @@ def.func.requestListener =
 			// when this is a tim its holder is prepared instead.
 			let uResource = resource.timHolder || resource;
 
-			log( 'updating', uResource.aliases.get( 0 ) )
+			log( 'updating', uResource.aliases.get( 0 ) );
 
 			uResource = yield* root.inventory.prepareResource( uResource );
 
@@ -846,9 +828,7 @@ def.func.requestListener =
 	}
 
 	// delivers the resource
-	let aenc;
-
-	if( resource.gzip ) aenc = request.headers[ 'accept-encoding' ];
+	let aenc = request.headers[ 'accept-encoding' ];
 
 	const header =
 	{
@@ -869,7 +849,9 @@ def.func.requestListener =
 
 		result.writeHead( 200, header );
 
-		result.end( resource.gzip, 'binary' );
+		const gzip = yield* resource.gzip( );
+
+		result.end( gzip, 'binary' );
 	}
 	else
 	{
@@ -983,7 +965,7 @@ def.func.webAjax =
 
 	request.on(
 		'end',
-		function( )
+		function( ) // XXX =>
 	{
 		suspend( handler )( );
 	}

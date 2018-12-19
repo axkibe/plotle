@@ -344,6 +344,11 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/gleam/glint/zoomGrid.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/shape/line.js',
 		'hasTim', true,
 		'inBundle', true
@@ -923,6 +928,11 @@ server_resourceList.create(
 		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
+	),
+	server_resource.create(
+		'filePath', 'src/visual/grid.js',
+		'hasTim', true,
+		'inBundle', true
 	),
 	server_resource.create(
 		'filePath', 'src/visual/space.js',

@@ -184,86 +184,40 @@ def.lazy._shapeMask =
 def.lazy._glintFrame =
 	function( )
 {
+	const handleFacet = gruga_frame.handleFacet;
+
 	const glintFrameBody =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.facet,
-			'shape', this._frameBodyShape
-		);
+		gleam_glint_paint.createFS( gruga_frame.facet, this._frameBodyShape );
 
-	const glintHandleNe =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleNe
-		);
+	const glintHandleNe = gleam_glint_paint.createFS( handleFacet, this._shapeHandleNe );
 
-	const glintHandleNw =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleNw
-		);
+	const glintHandleNw = gleam_glint_paint.createFS( handleFacet, this._shapeHandleNw );
 
-	const glintHandleSe =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleSe
-		);
+	const glintHandleSe = gleam_glint_paint.createFS( handleFacet, this._shapeHandleSe );
 
-	const glintHandleSw =
-		gleam_glint_paint.create(
-			'facet', gruga_frame.handleFacet,
-			'shape', this._shapeHandleSw
-		);
+	const glintHandleSw = gleam_glint_paint.createFS( handleFacet, this._shapeHandleSw );
 
 	let arr;
 
 	if( this.proportional )
 	{
-		arr =
-			[
-				glintFrameBody,
-				glintHandleNw,
-				glintHandleNe,
-				glintHandleSe,
-				glintHandleSw
-			];
+		arr = [ glintFrameBody, glintHandleNw, glintHandleNe, glintHandleSe, glintHandleSw ];
 	}
 	else
 	{
-		const glintHandleE =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleE
-			);
+		const glintHandleE = gleam_glint_paint.createFS( handleFacet, this._shapeHandleE );
 
-		const glintHandleN =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleN
-			);
+		const glintHandleN = gleam_glint_paint.createFS( handleFacet, this._shapeHandleN );
 
-		const glintHandleS =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleS
-			);
+		const glintHandleS = gleam_glint_paint.createFS( handleFacet, this._shapeHandleS );
 
-		const glintHandleW =
-			gleam_glint_paint.create(
-				'facet', gruga_frame.handleFacet,
-				'shape', this._shapeHandleW
-			);
+		const glintHandleW = gleam_glint_paint.createFS( handleFacet, this._shapeHandleW );
 
 		arr =
 			[
 				glintFrameBody,
-				glintHandleNw,
-				glintHandleNe,
-				glintHandleSe,
-				glintHandleSw,
-				glintHandleN,
-				glintHandleE,
-				glintHandleS,
-				glintHandleW
+				glintHandleNw, glintHandleNe, glintHandleSe, glintHandleSw,
+				glintHandleN,  glintHandleE,  glintHandleS,  glintHandleW
 			];
 	}
 
@@ -516,10 +470,7 @@ def.func.dragStart =
 
 	const zone = this.zone;
 
-	if(
-		!this._frameBodyShape.within( p )
-		|| this._shapeMask.within( p )
-	) return;
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
 
 	let com, pBase;
 
@@ -593,7 +544,8 @@ def.func.dragStart =
 			action_dragItems.create(
 				'moveBy', gleam_point.zero,
 				'itemPaths', this.content.itemPaths,
-				'startPoint', dp
+				'startPoint', dp,
+				'startZone', this.zone
 			)
 	);
 
@@ -635,7 +587,7 @@ def.func.pointingHover =
 		return result_hover.create( 'cursor', com + '-resize' );
 	}
 
-	return result_hover.create( 'cursor', 'grab' );
+	return result_hover.cursorGrab;
 };
 
 
