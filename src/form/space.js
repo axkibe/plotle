@@ -7,20 +7,18 @@
 tim.define( module, ( def ) => {
 
 
-const form_form = require( './form' );
-
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
 	{
 		// current action
 		action : { type : [ '< ../action/types', 'undefined' ] },
+
+		// space has grid
+		hasGrid : { type : [ 'undefined', 'boolean' ] },
+
+		// space has snapping
+		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -46,6 +44,29 @@ if( TIM )
 
 	def.twig = [ '< ../widget/types' ];
 }
+
+
+const change_set = require( '../change/set' );
+
+const form_form = require( './form' );
+
+const tim_path = tim.import( 'tim.js', 'path' );
+
+
+/*
+| Does(!) care about hasGrid.
+*/
+def.static.concernsHasGrid =
+def.func.concernsHasGrid =
+	( hasGrid ) => hasGrid;
+
+
+/*
+| Does(!) care about hasSnapping.
+*/
+def.static.concernsHasSnapping =
+def.func.concernsHasSnapping =
+	( hasSnapping ) => hasSnapping;
 
 
 /*
@@ -81,9 +102,13 @@ def.transform.get =
 		widget
 	)
 {
-	if( name === 'headline' )
+	switch( name )
 	{
-		widget = widget.create( 'text', this.spaceRef.fullname );
+		case 'headline' : widget = widget.create( 'text', this.spaceRef.fullname ); break;
+
+		case 'gridCheckBox' : widget = widget.create( 'checked', this.hasGrid ); break;
+		
+		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
 
 	return form_form.transformGet.call( this, name, widget );
@@ -106,11 +131,6 @@ def.lazy.glint = form_form.glint;
 | The focused widget.
 */
 def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -233,5 +253,65 @@ def.func.showDisc = true;
 */
 def.func.specialKey = form_form.specialKey;
 
+
+/*
+| A checkbox has been toggled.
+*/
+def.func.toggleCheckbox =
+	function(
+		path
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		path.length < 5
+/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 1 ) !== 'twig'
+/**/		|| path.get( 2 ) !== 'space'
+/**/		|| path.get( 3 ) !== 'twig'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	switch( path.get( 4 ) )
+	{
+		case 'gridCheckBox' :
+		{
+			const prev = root.spaceFabric.hasGrid;
+
+			const change =
+				change_set.create(
+					'path', tim_path.empty.append( 'hasGrid' ),
+					'val', !prev,
+					'prev', prev
+				);
+
+			root.alter( change );
+
+			return;
+		}
+		
+		case 'snappingCheckBox' :
+		{
+			const prev = root.spaceFabric.hasSnapping;
+
+			const change =
+				change_set.create(
+					'path', tim_path.empty.append( 'hasSnapping' ),
+					'val', !prev,
+					'prev', prev
+				);
+
+			root.alter( change );
+
+			return;
+		}
+
+		default : throw new Error( );
+	}
+};
 
 } );

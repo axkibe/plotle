@@ -110,18 +110,16 @@ def.static.dragStart =
 	// dragging
 	if( access !== 'rw' ) return false;
 
-	const mark = this.mark;
-
-	let paths;
+	let mark = this.mark;
 
 	if( !mark || mark.timtype !== visual_mark_items )
 	{
-		root.setUserMark( visual_mark_items.createWithOne( this.path ) );
+		mark = visual_mark_items.createWithOne( this.path ); 
+
+		root.setUserMark( mark );
 	}
-	else
-	{
-		paths = mark.itemPaths;
-	}
+	
+	const paths = mark.itemPaths;
 
 	root.create(
 		'action',

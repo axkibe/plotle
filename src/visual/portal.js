@@ -393,13 +393,9 @@ def.lazy.zone =
 
 	switch( action && action.timtype )
 	{
-		case action_dragItems :
+		case action_dragItems : return zone.add( action.moveBy );
 
-			return zone.add( action.moveBy );
-
-		case action_resizeItems :
-
-			return zone.baseScale( action, 0, 0 );
+		case action_resizeItems : return zone.baseScaleAction( action, 0, 0 );
 
 		default : return this.fabric.zone;
 	}

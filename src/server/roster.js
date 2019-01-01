@@ -208,6 +208,51 @@ server_resourceList.create(
 		'inBundle', true
 	),
 	server_resource.create(
+		'filePath', 'src/compass/nw.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/n.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/ne.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/e.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/se.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/s.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/sw.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/w.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
+		'filePath', 'src/compass/root.js',
+		'hasTim', true,
+		'inBundle', true
+	),
+	server_resource.create(
 		'filePath', 'src/gleam/color.js',
 		'hasTim', true,
 		'inBundle', true,

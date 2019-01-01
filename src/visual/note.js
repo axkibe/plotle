@@ -347,7 +347,7 @@ def.lazy.zone =
 
 			if( !pBase ) return zone;
 
-			zone = zone.baseScale( action, 0, 0 );
+			zone = zone.baseScaleAction( action, 0, 0 );
 
 			if( zone.height < this.minHeight || zone.width < this.minWidth )
 			{

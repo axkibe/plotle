@@ -32,6 +32,26 @@ if( TIM )
 }
 
 
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		const paths = this.itemPaths;
+/**/
+/**/		for( let c = 0, cZ = paths.length; c < cZ; c++ )
+/**/		{
+/**/			if( paths.get( c ).isEmpty ) throw new Error( );
+/**/
+/**/			if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/		}
+/**/	};
+/**/}
+
+
 /*:::::::::::.
 :: Functions
 '::::::::::::*/

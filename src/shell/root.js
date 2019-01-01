@@ -576,6 +576,8 @@ def.transform.form =
 	return(
 		form.create(
 			'action', this.action,
+			'hasGrid', this.spaceFabric && this.spaceFabric.hasGrid,
+			'hasSnapping', this.spaceFabric && this.spaceFabric.hasSnapping,
 			'hover', form_root.concernsHover( this.hover ),
 			'mark', form_root.concernsMark( this._mark ),
 			'spaceRef', this.spaceRef,
@@ -1279,6 +1281,23 @@ def.func.pushButton =
 
 		default : throw new Error( 'invalid path' );
 	}
+};
+
+
+/*
+| A button has been pushed.
+*/
+def.func.toggleCheckbox =
+	function(
+		path   // path of the button pushed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 0 ) !== 'form' ) throw new Error( );
+/**/}
+
+	root.form.toggleCheckbox( path, false, false );
 };
 
 

@@ -10,11 +10,6 @@ tim.define( module, ( def, gleam_point ) => {
 const gleam_transform = require( './transform' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -30,21 +25,11 @@ if( TIM )
 }
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | Shortcut for point at 0/0.
 */
 def.staticLazy.zero = () =>
 	gleam_point.create( 'x', 0, 'y', 0 );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -58,11 +43,6 @@ def.static.xy =
 {
 	return gleam_point.create( 'x', x, 'y', y );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -107,19 +87,32 @@ def.func.add =
 |
 | ax / ay are added afterward.
 */
-def.func.baseScale =
+def.func.baseScaleAction =
 	function(
 		action,  // action that scales the point
 		ax,      // x value to be added
 		ay       // y value to be added
 	)
 {
-	const pBase = action.pBase;
+	return this.baseScaleXY( action.scaleX, action.scaleY, action.pBase, ax, ay );
+};
 
-	const scaleX = action.scaleX;
 
-	const scaleY = action.scaleY;
-
+/*
+| Returns a point scaled by scaleX, scaleY
+| relative to the action.bPoint.
+|
+| ax / ay are added afterward.
+*/
+def.func.baseScaleXY =
+	function(
+		scaleX,  // x scaling
+		scaleY,  // y scaling
+		pBase,   // base point
+		ax,      // x value to be added
+		ay       // y value to be added
+	)
+{
 	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
 
 	const x = this.x;
@@ -139,7 +132,6 @@ def.func.baseScale =
 		)
 	);
 };
-
 
 /*
 | Returns a border bordering this point.

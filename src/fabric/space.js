@@ -21,6 +21,12 @@ if( TIM )
 
 		// reference to this space
 		ref : { type : [ 'undefined', '../ref/space' ] },
+
+		// this space has a grid.
+		hasGrid : { type : 'boolean', defaultValue : 'true' },
+
+		// this space has grid snapping
+		hasSnapping : { type : 'boolean', defaultValue : 'true' },
 	};
 
 	def.twig =

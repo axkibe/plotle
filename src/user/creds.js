@@ -60,9 +60,9 @@ def.static.createFromLocalStorage =
 def.static.clearLocalStorage =
 	function( )
 {
-	window.localStorage.setItem( 'username', undefined );
+	window.localStorage.removeItem( 'username' );
 
-	window.localStorage.setItem( 'passhash', undefined );
+	window.localStorage.removeItem( 'passhash' );
 };
 
 

@@ -61,6 +61,8 @@ const change_grow = require( '../change/grow' );
 
 const change_shrink = require( '../change/shrink' );
 
+const compass = require( '../compass/root' );
+
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const gleam_glint_paint = require( '../gleam/glint/paint' );
@@ -305,42 +307,28 @@ def.lazy.pos =
 
 			const zone = action.startZones.get( this.path.get( 2 ) );
 
+			// FIXME make a map
 			switch( action.resizeDir )
 			{
-				case 'ne' :
+				case compass.ne :
 
-					return(
-						zone.psw.baseScale(
-							action, 0, -this._zoneHeight
-						)
-					);
+					return zone.psw.baseScaleAction( action, 0, -this._zoneHeight );
 
-				case 'nw' :
+				case compass.nw :
 
-					return(
-						zone.pse.baseScale(
-							action, -this._zoneWidth, -this._zoneHeight
-						)
-					);
+					return zone.pse.baseScaleAction( action, -this._zoneWidth, -this._zoneHeight );
 
-				case 'se' :
+				case compass.se :
 
-					return zone.pos.baseScale( action, 0, 0 );
+					return zone.pos.baseScaleAction( action, 0, 0 );
 
-				case 'sw' :
+				case compass.sw :
 
-					return(
-						zone.pne.baseScale(
-							action,
-							-this._zoneWidth,
-							0
-						)
-					);
-
+					return zone.pne.baseScaleAction( action, -this._zoneWidth, 0 );
 			}
 
-		// should never be reached
-		throw new Error( );
+			// should never be reached
+			throw new Error( );
 	}
 
 	return this.fabric.pos;

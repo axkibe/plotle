@@ -7,11 +7,6 @@
 tim.define( module, ( def, widget_checkbox ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -113,11 +108,6 @@ def.static.createFromLayout =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | The widget's glint.
 */
@@ -180,15 +170,20 @@ def.lazy._checkIcon =
 };
 
 
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
-
-
 /*
 | CheckBoxes are focusable.
 */
 def.func.focusable = true;
+
+
+/*
+| Toggles the checkbox.
+*/
+def.func.toggle =
+	function( )
+{
+	root.toggleCheckbox( this.path );
+};
 
 
 /*
@@ -205,13 +200,9 @@ def.func.click =
 
 	if( this._tZone.within( p ) )
 	{
-		root.setPath( this.path.append( 'checked' ), !this.checked );
+		this.toggle( );
 
 		return false;
-	}
-	else
-	{
-		return undefined;
 	}
 };
 
@@ -224,8 +215,7 @@ def.func.input =
 		text
 	)
 {
-	console.log( 'INPUT', text );
-	root.setPath( this.path.append( 'checked' ), !this.checked );
+	this.toggle( );
 
 	return true;
 };
@@ -239,7 +229,7 @@ def.func.pointingHover =
 		p
 	)
 {
-	if( !this.visible || !this._tZone.within( p ) ) return undefined;
+	if( !this.visible || !this._tZone.within( p ) ) return;
 
 	return(
 		result_hover.create(
@@ -262,26 +252,11 @@ def.func.specialKey =
 {
 	switch( key )
 	{
-		case 'down' :
+		case 'down' : root.cycleFormFocus( this.path.get( 2 ), 1 ); return;
 
-			root.cycleFormFocus( this.path.get( 2 ), 1 );
+		case 'up' : root.cycleFormFocus( this.path.get( 2 ), -1 ); return;
 
-			return;
-
-		case 'up' :
-
-			root.cycleFormFocus( this.path.get( 2 ), -1 );
-
-			return;
-
-		case 'enter' :
-
-			root.setPath(
-				this.path.append( 'checked' ),
-				!this.checked
-			);
-
-			return;
+		case 'enter' : this.toggle( ); return;
 	}
 };
 

@@ -12,17 +12,18 @@ tim.define( module, ( def ) => {
 const form_form = require( './form' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
 	{
 		// current action
 		action : { type : [ '< ../action/types', 'undefined' ] },
+
+		// space has grid
+		hasGrid : { type : 'undefined' },
+
+		// space has snapping
+		hasSnapping : { type : 'undefined' },
 
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -48,6 +49,22 @@ if( TIM )
 
 	def.twig = [ '< ../widget/types' ];
 }
+
+
+/*
+| Doesn't care about hasGrid.
+*/
+def.static.concernsHasGrid =
+def.func.concernsHasGrid =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about hasSnapping.
+*/
+def.static.concernsHasSnapping =
+def.func.concernsHasSnapping =
+	( ) => undefined;
 
 
 /*
@@ -115,11 +132,6 @@ def.lazy.glint = form_form.glint;
 | The focused widget.
 */
 def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

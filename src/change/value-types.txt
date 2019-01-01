@@ -1,5 +1,7 @@
 # Types a set on a space can take.
 
+boolean
+number
 ../fabric/label
 ../fabric/note
 ../fabric/portal
@@ -7,5 +9,4 @@
 ../fabric/relation
 ../gleam/point
 ../gleam/rect
-number
 ../ref/space

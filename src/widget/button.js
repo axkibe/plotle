@@ -7,11 +7,6 @@
 tim.define( module, ( def, widget_button ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -311,11 +306,6 @@ def.lazy._pc =
 {
 	return this._tZone.zeroPos.pc;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

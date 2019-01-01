@@ -7,17 +7,18 @@
 tim.define( module, ( def, form_root ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
 	{
 		// current action
 		action : { type : [ '< ../action/types', 'undefined' ] },
+
+		// space has grid
+		hasGrid : { type : [ 'undefined', 'boolean' ] },
+		
+		// space has snapping on grid
+		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -93,11 +94,17 @@ def.transform.get =
 
 	const user = form.concernsUser( this.user );
 
+	const hasGrid = form.concernsHasGrid( this.hasGrid );
+
+	const hasSnapping = form.concernsHasSnapping( this.hasSnapping );
+
 	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
 
 	return(
 		form.create(
 			'action', this.action,
+			'hasGrid', hasGrid,
+			'hasSnapping', hasSnapping,
 			'hover', this.hover,
 			'mark', mark,
 			'path', path,
@@ -179,7 +186,6 @@ def.func.pushButton =
 		path
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if(
@@ -200,6 +206,46 @@ def.func.pushButton =
 			false
 		)
 	);
+};
+
+
+/*
+| A checkbox has been toggled.
+*/
+def.func.toggleCheckbox =
+	function(
+		path
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		path.length < 3
+/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 1 ) !== 'twig'
+/**/		|| !this.get( path.get( 2 ) )
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	const formKey = path.get( 2 );
+
+	const form = this.get( formKey );
+
+	if( !form.toggleCheckbox )
+	{
+		const widgetKey = path.get( 4 );
+
+		const checked = form.get( widgetKey ).checked;
+
+		root.setPath( path.append( 'checked' ), !checked );
+
+		return;
+	}
+
+	form.toggleCheckbox( path );
 };
 
 

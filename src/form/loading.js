@@ -19,6 +19,12 @@ if( TIM )
 		// current action
 		action : { type : [ '< ../action/types', 'undefined' ] },
 
+		// space has grid
+		hasGrid : { type : 'undefined' },
+		
+		// space has snapping
+		hasSnapping : { type : 'undefined' },
+
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
@@ -46,6 +52,22 @@ if( TIM )
 
 
 def.transform.get = form_form.transformGet;
+
+
+/*
+| Doesn't care about hasGrid.
+*/
+def.static.concernsHasGrid =
+def.func.concernsHasGrid =
+	( ) => undefined;
+
+
+/*
+| Doesn't care about hasSnapping.
+*/
+def.static.concernsHasSnapping =
+def.func.concernsHasSnapping =
+	( ) => undefined;
 
 
 /*

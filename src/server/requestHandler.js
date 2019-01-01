@@ -78,13 +78,20 @@ const serveAlter =
 		request
 	)
 {
-	try
+	if( !config.get( 'server', 'sensitive' ) )
+	{
+		try
+		{
+			request = request_alter.createFromJSON( request );
+		}
+		catch( err )
+		{
+			return replyError( 'Request JSON translation failed' );
+		}
+	}
+	else
 	{
 		request = request_alter.createFromJSON( request );
-	}
-	catch( err )
-	{
-		return replyError( 'Request JSON translation failed' );
 	}
 
 	const userCreds = request.userCreds;
@@ -560,27 +567,18 @@ server_requestHandler.serve =
 		result
 	)
 {
+	// FIXME make a table
 	switch( request.type )
 	{
-		case 'request_alter' :
+		case 'request_alter' : return serveAlter( request );
 
-			return serveAlter( request );
+		case 'request_auth' : return yield* serveAuth( request );
 
-		case 'request_auth' :
+		case 'request_acquire' : return yield* serveAcquire( request );
 
-			return yield* serveAuth( request );
+		case 'request_register' : return yield* serveRegister( request );
 
-		case 'request_acquire' :
-
-			return yield* serveAcquire( request );
-
-		case 'request_register' :
-
-			return yield* serveRegister( request );
-
-		case 'request_update' :
-
-			return serveUpdate( request, result );
+		case 'request_update' : return serveUpdate( request, result );
 
 		default :
 

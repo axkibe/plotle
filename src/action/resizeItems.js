@@ -28,7 +28,7 @@ if( TIM )
 		proportional : { type : [ 'undefined', 'boolean' ] },
 
 		// resize to this direction
-		resizeDir : { type : [ 'undefined', 'string' ] },
+		resizeDir : { type : [ '< ../compass/dir-types' ] },
 
 		// scale x by this factor
 		scaleX : { type : [ 'undefined', 'number' ] },
@@ -37,7 +37,10 @@ if( TIM )
 		scaleY : { type : [ 'undefined', 'number' ] },
 
 		// the zones as the resize started
-		startZones : { type : [ 'undefined', '../gleam/rectGroup' ] },
+		startZone : { type : '../gleam/rect' },
+
+		// the zones as the resize started
+		startZones : { type : '../gleam/rectGroup' },
 	};
 }
 

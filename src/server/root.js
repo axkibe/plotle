@@ -965,7 +965,7 @@ def.func.webAjax =
 
 	request.on(
 		'end',
-		function( ) // XXX =>
+		function( ) // FIXME =>
 	{
 		suspend( handler )( );
 	}

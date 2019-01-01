@@ -29,6 +29,8 @@ const action_dragItems = require( '../action/dragItems' );
 
 const action_resizeItems = require( '../action/resizeItems' );
 
+const compass = require( '../compass/root' );
+
 const gleam_ellipse = require( '../gleam/ellipse' );
 
 const gleam_glint_list = require( '../gleam/glint/list' );
@@ -476,44 +478,44 @@ def.func.dragStart =
 
 	if( this._shapeHandleNw.within( p ) )
 	{
-		com = 'nw';
+		com = compass.nw;
 		pBase = zone.pse;
 	}
 	else if( this._shapeHandleNe.within( p ) )
 	{
-		com = 'ne';
+		com = compass.ne;
 		pBase = zone.psw;
 	}
 	else if( this._shapeHandleSe.within( p ) )
 	{
-		com = 'se';
+		com = compass.se;
 		pBase = zone.pos;
 	}
 	else if( this._shapeHandleSw.within( p ) )
 	{
-		com = 'sw';
+		com = compass.sw;
 		pBase = zone.pne;
 	}
 	else if( !this.proportional )
 	{
 		if( this._shapeHandleN.within( p ) )
 		{
-			com = 'n';
+			com = compass.n;
 			pBase = zone.ps;
 		}
 		else if( this._shapeHandleE.within( p ) )
 		{
-			com = 'e';
+			com = compass.e;
 			pBase = zone.pw;
 		}
 		else if( this._shapeHandleS.within( p ) )
 		{
-			com = 's';
+			com = compass.s;
 			pBase = zone.pn;
 		}
 		else if( this._shapeHandleW.within( p ) )
 		{
-			com = 'w';
+			com = compass.w;
 			pBase = zone.pe;
 		}
 	}
@@ -526,6 +528,7 @@ def.func.dragStart =
 			'action',
 				action_resizeItems.create(
 					'itemPaths', this.content.itemPaths,
+					'startZone', zone,
 					'startZones', this.content.zones,
 					'proportional', this.proportional,
 					'resizeDir', com,
@@ -569,6 +572,8 @@ def.func.pointingHover =
 		!this._frameBodyShape.within( p )
 		|| this._shapeMask.within( p )
 	) return;
+
+	// FIXME use compass
 
 	if( this._shapeHandleNw.within( p ) ) com = 'nw';
 	else if( this._shapeHandleNe.within( p ) ) com = 'ne';

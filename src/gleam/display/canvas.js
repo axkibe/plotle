@@ -127,9 +127,9 @@ const noround = val => val * ratio;
 /**/
 /**/		const width = this.size.width;
 /**/
-/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.001 ) throw new Error( );
+/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.1 ) throw new Error( );
 /**/
-/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.001 ) throw new Error( );
+/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 ) throw new Error( );
 /**/
 /**/		if( canvas.height !== round( height ) ) throw new Error( );
 /**/
@@ -774,22 +774,22 @@ def.func._renderZoomGrid =
 
 	const grid = glint.grid;
 
-	const xs = spacing.x * 2;
-	const ys = spacing.y * 2;
+	const xs = spacing.x;
+	const ys = spacing.y;
 
 	const light = 224;
 	const heavy = 160;
 
 	let weight = round( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
 
-	let xw = false;
-	let yw = false;
+	let xw0 = false;
+	let yw0 = false;
 
 	let x0 = go.x;
 	let y0 = go.y;
 
-	if( x0 > xs ) { xw = true; x0 -= xs; }
-	if( y0 > ys ) { yw = true; y0 -= ys; }
+	while( x0 > xs ) { xw0 = !xw0; x0 -= xs; }
+	while( y0 > ys ) { yw0 = !yw0; y0 -= ys; }
 
 	const size = glint.size;
 	const h = size.height;
@@ -800,12 +800,12 @@ def.func._renderZoomGrid =
 	const cLight = 'rgb( ' + weight + ', ' + weight + ', ' + weight + ' )';
 	const cHeavy = 'rgb( ' + heavy + ', ' + heavy + ', ' + heavy + ' )';
 
-	for( let x = x0; x < w; x += xs, xw = !xw )
+	for( let x = x0, xw = xw0; x < w; x += xs, xw = !xw )
 	{
-		for( let y = y0; y < h; y += ys, yw = !yw )
+		for( let y = y0, yw = yw0; y < h; y += ys, yw = !yw )
 		{
-			if( !xw && !yw ) cx.fillStyle = cHeavy;
-			else cx.fillStyle = cLight;
+			if( xw || yw ) cx.fillStyle = cLight;
+			else cx.fillStyle = cHeavy;
 
 			cx.fillRect( round( x ), round( y ), 2, 2 );
 		}
@@ -1171,8 +1171,8 @@ def.func._sketchGenericShape =
 					r( p.x + ox )
 					+ (
 						p.x > pc.x
-						?  -border
-						: ( p.x < pc.x ?  border : 0 )
+						? -border
+						: ( p.x < pc.x ? border : 0 )
 					)
 					+ shift;
 
@@ -1180,8 +1180,8 @@ def.func._sketchGenericShape =
 					r( p.y + oy )
 					+ (
 						p.y > pc.y
-						?  -border
-						: ( p.y < pc.y ?  border : 0 )
+						? -border
+						: ( p.y < pc.y ? border : 0 )
 					)
 					+ shift;
 			}

@@ -22,7 +22,7 @@ if( TIM )
 		// value to set
 		val : { type : [ '< ./value-types' ], json : true },
 
-		// the value tree had
+		// the value the tree had
 		prev : { type : [ '< ./value-types' ], json : true },
 	};
 
@@ -97,7 +97,7 @@ def.func.changeTree =
 	// Stores the old value for history tracking.
 	const prev = tree.getPath( this.path );
 
-	if( !this.val ) throw new Error( );
+	if( this.val === undefined ) throw new Error( );
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{

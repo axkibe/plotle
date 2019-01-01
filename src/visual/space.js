@@ -116,7 +116,7 @@ const visual_portal = require( '../visual/portal' );
 
 const visual_relation = require( '../visual/relation' );
 
-const standardSpacing = gleam_point.xy( 20, 20 );
+const standardSpacing = gleam_point.xy( 15, 15 );
 
 
 /*
@@ -432,7 +432,8 @@ def.lazy.glint =
 
 	const arr = [ ];
 
-	arr.push( this._grid.glint );
+	// true or undefined -> show grid
+	if( this.fabric.hasGrid !== false ) arr.push( this._grid.glint );
 
 	for( let r = this.length - 1; r >= 0; r-- )
 	{
@@ -639,7 +640,7 @@ def.func.pointingHover =
 
 		case action_resizeItems :
 
-			return result_hover.create( 'cursor', action.resizeDir + '-resize' );
+			return action.resizeDir.resizeHoverCursor;
 
 		case action_pan :
 
@@ -809,17 +810,9 @@ def.func.dragStop =
 
 	switch( action.timtype )
 	{
-		case action_createGeneric :
+		case action_createGeneric : this._stopCreateGeneric( p, shift, ctrl ); break;
 
-			this._stopCreateGeneric( p, shift, ctrl );
-
-			break;
-
-		case action_createRelation :
-
-			this._stopCreateRelation( p, shift, ctrl );
-
-			break;
+		case action_createRelation : this._stopCreateRelation( p, shift, ctrl ); break;
 
 		case action_dragItems :
 
@@ -909,21 +902,11 @@ def.func.dragStop =
 
 			break;
 
-		case action_scrolly :
+		case action_scrolly : root.create( 'action', undefined ); break;
 
-			root.create( 'action', undefined );
+		case action_select : this._stopSelect( p, shift, ctrl ); break;
 
-			break;
-
-		case action_select :
-
-			this._stopSelect( p, shift, ctrl );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
 	return true;
@@ -999,17 +982,9 @@ def.func.specialKey =
 
 			case 'y' : root.doTracker.redo( ); return true;
 
-			case ',' :
+			case ',' : root.changeSpaceTransformCenter( 1 ); return true;
 
-				root.changeSpaceTransformCenter( 1 );
-
-				return true;
-
-			case '.' :
-
-				root.changeSpaceTransformCenter( -1 );
-
-				return true;
+			case '.' : root.changeSpaceTransformCenter( -1 ); return true;
 		}
 	}
 
@@ -1052,15 +1027,27 @@ def.func.specialKey =
 
 
 /*
+| Returns true if doing snapping.
+*/
+def.func._hasSnapping =
+	function(
+		ctrl // state of ctrl key (or defined)
+	)
+{
+	return !ctrl && this.fabric.hasSnapping;
+};
+
+
+/*
 | Snaps a point onto the grid.
 */
 def.func._snap =
 	function(
 		p,     // the point to snap
-		shift  // true if shift key pressed
+		ctrl   // if true don't to snapping (can be undefined)
 	)
 {
-	if( shift ) return p;
+	if( !this._hasSnapping( ctrl ) ) return p;
 
 	return this._grid.snap( p );
 };
@@ -1083,7 +1070,7 @@ def.func._moveCreateGeneric =
 
 	const transform = this.transform;
 
-	const dp = this._snap( p, shift ).detransform( transform );
+	const dp = this._snap( p, ctrl ).detransform( transform );
 
 	let zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
@@ -1151,9 +1138,9 @@ def.func._moveCreateGeneric =
 */
 def.func._moveCreateRelation =
 	function(
-		p         // point, viewbased point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,      // point, viewbased point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1197,9 +1184,9 @@ def.func._moveCreateRelation =
 */
 def.func._moveCreate =
 	function(
-		p         // point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1224,9 +1211,9 @@ def.func._moveCreate =
 */
 def.func._moveDragItems =
 	function(
-		p         // point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,       // point of stop
+		shift,   // true if shift key was pressed
+		ctrl     // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1235,17 +1222,60 @@ def.func._moveDragItems =
 
 	const transform = this.transform;
 
-	root.create(
-		'action',
-			action.create(
-				'moveBy',
-					gleam_point.xy(
-						transform.dex( p.x ) - startPoint.x,
-						transform.dey( p.y ) - startPoint.y
-					)
-			)
-	);
+	const startPos = action.startZone.pos;
+
+	const dp = p.detransform( transform );
+
+	let movedStartPos = startPos.add( dp ).sub( startPoint );
+
+	if( this._hasSnapping( ctrl ) )
+	{
+		movedStartPos =
+			this._snap( movedStartPos.transform( transform ) )
+			.detransform( transform );
+	}
+
+	root.create( 'action', action.create( 'moveBy', movedStartPos.sub( startPos ) ) );
+
+	//gleam_point.xy(
+	//  transform.dex( p.x ) - startPoint.x,
+	//  transform.dey( p.y ) - startPoint.y
+	//)
 };
+
+
+/*
+| Scale directions on resizing for which a scaleY should
+| be calculated.
+*/
+const scaleYDirs =
+{
+	n  : true,
+	ne : true,
+	nw : true,
+	s  : true,
+	se : true,
+	sw : true,
+};
+
+if( FREEZE ) Object.freeze( scaleYDirs );
+
+
+/*
+| Scale directions on resizing for which a scaleY should
+| be calculated.
+*/
+const scaleXDirs =
+{
+	ne : true,
+	nw : true,
+	e  : true,
+	se : true,
+	sw : true,
+	w  : true,
+};
+
+if( FREEZE ) Object.freeze( scaleXDirs );
 
 
 /*
@@ -1264,65 +1294,101 @@ def.func._moveResizeItems =
 
 	const pBase = action.pBase;
 
+	const proportional = action.proportional;
+
+	const resizeDir = action.resizeDir;
+
 	const startPoint = action.startPoint;
 
-	p = this._snap( p, shift );
+	const startZone = action.startZone;
 
-	const dx = transform.dex( p.x );
-
-	const dy = transform.dey( p.y );
+	const dp = p.detransform( transform );
 
 	let scaleX, scaleY;
 
-	switch( action.resizeDir )
 	{
-		case 'n' :
-		case 'ne' :
-		case 'nw' :
-		case 's' :
-		case 'se' :
-		case 'sw' :
+		// start zone reference point
+		const szrp = resizeDir.from( startZone );
 
-			scaleY =
-				Math.max(
-					( pBase.y - dy ) / ( pBase.y - startPoint.y ),
-					0
-				);
+		// distance of startPoint to szrp
+		const disp = szrp.sub( startPoint );
 
-			break;
-	}
+		// end zone point
+		let ezp = dp.add( disp );
 
-	if( !action.proportional || scaleY === undefined )
-	{
-		switch( action.resizeDir )
+		if( this._hasSnapping( ctrl ) )
 		{
-			case 'ne' :
-			case 'nw' :
-			case 'e' :
-			case 'se' :
-			case 'sw' :
-			case 'w' :
+			// snap the endzone point
+			ezp = this._snap( ezp.transform( transform ) ).detransform( transform );
+		}
 
-				scaleX =
-					Math.max(
-						( pBase.x - dx ) / ( pBase.x - startPoint.x ),
-						0
-					);
+		if( resizeDir.hasY )
+		{
+			scaleY = ( pBase.y - ezp.y ) / ( pBase.y - szrp.y );
 
-				break;
+			if( scaleY < 0 ) scaleY = 0;
+		}
+
+		if( resizeDir.hasX )
+		{
+			scaleX = ( pBase.x - ezp.x ) / ( pBase.x - szrp.x );
+
+			if( scaleX < 0 ) scaleX = 0;
 		}
 	}
 
-	if( action.proportional )
+	// FIXME cleanup
+/*	if( resizeDir.hasN )
 	{
-		if( scaleX === undefined )
+		const dy = startZone.pos.y - startPoint.y;
+
+		const dpy = dp.y + dy;
+
+		scaleY = ( pBase.y - dpy ) / ( pBase.y - startZone.pos.y );
+
+		if( scaleY < 0 ) scaleY = 0;
+	}
+	*/
+
+/*
+	if( resizeDir.hasY )
+	{
+//		scaleY = ( pBase.y - dp.y ) / ( pBase.y - startPoint.y );
+
+		if( scaleY < 0 ) scaleY = 0;
+	}
+*/
+
+	/*
+	if( resizeDir.hasX && ( !proportional || scaleY === undefined ) )
+	{
+		scaleX = ( pBase.x - dp.x ) / ( pBase.x - startPoint.x );
+
+		if( scaleX < 0 ) scaleX = 0;
+	}
+	*/
+
+	/*
+	if( !ctrl )
+	{
+		// grid snapping
+		if( resizeDir === 'nw' || resizeDir === 'n' || resizeDir === 'ne' )
 		{
-			scaleX = scaleY;
+			let sp = action.startZone.pos;
+
+			let sps = sp.baseScaleXY( scaleX || 1, scaleY, pBase, 0, 0 );
+
+			sps = this._snap( sps.transform( transform ) ).detransform( transform );
+
+			scaleY = ( pBase.y - sps.y ) / ( pBase.y - startPoint.y );
 		}
-		else if( scaleY === undefined )
-		{
-			scaleY = scaleX;
-		}
+	}
+	*/
+
+	if( proportional )
+	{
+		if( scaleX === undefined ) scaleX = scaleY;
+		else if( scaleY === undefined ) scaleY = scaleX;
 	}
 	else
 	{
@@ -1341,7 +1407,7 @@ def.func._moveResizeItems =
 
 		const key = path.get( 2 );
 
-		const item = this.get( path.get( 2 ) );
+		const item = this.get( key );
 
 		const startZone = startZones.get( key );
 
@@ -1354,10 +1420,7 @@ def.func._moveResizeItems =
 		if( scaleY < min ) scaleY = min;
 	}
 
-	if( action.proportional )
-	{
-		scaleX = scaleY = Math.max( scaleX, scaleY );
-	}
+	if( proportional ) scaleX = scaleY = Math.max( scaleX, scaleY );
 
 	root.create(
 		'action', action.create( 'scaleX', scaleX, 'scaleY', scaleY )
@@ -1449,8 +1512,9 @@ def.func._moveScrollY =
 */
 def.func._startCreateGeneric =
 	function(
-		p,    // point of start
-		shift // true if shift key was pressed
+		p,     // point of start
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
@@ -1459,7 +1523,7 @@ def.func._startCreateGeneric =
 
 	const model = itemType.model;
 
-	const dp = this._snap( p, shift ).detransform( this.transform );
+	const dp = this._snap( p, ctrl ).detransform( this.transform );
 
 	let transItem;
 
@@ -1530,13 +1594,13 @@ def.func._stopCreateGeneric =
 
 	if( !action.startPoint ) return;
 
-	const dp = this._snap( p, shift ).detransform( this.transform );
+	const dp = this._snap( p, ctrl ).detransform( this.transform );
 
 	action.itemType.createGeneric( action, dp );
 
 	root.create(
 		'action',
-			ctrl
+			shift
 			? action_createGeneric.create( 'itemType', action.itemType )
 			: undefined
 	);
@@ -1548,9 +1612,9 @@ def.func._stopCreateGeneric =
 */
 def.func._stopCreate =
 	function(
-		// p      // point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
+		p,      // point of stop
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
 	)
 {
 	root.create(
@@ -1584,7 +1648,7 @@ def.func._stopCreateRelation =
 
 			root.create(
 				'action',
-				ctrl
+				shift
 				? action_createRelation.create( 'relationState', 'start' )
 				: undefined
 			);

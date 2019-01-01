@@ -74,7 +74,7 @@ def.func.snap =
 
 
 /*
-| Spacing wth grid factor applied
+| Spacing with grid factor applied.
 */
 def.lazy._gSpacing =
 	function( )
@@ -88,6 +88,18 @@ def.lazy._gSpacing =
 
 
 /*
+| Spacing with grid factor for visual grid.
+*/
+def.lazy._gVisualSpacing =
+	function( )
+{
+	const gsp = this._gSpacing;
+
+	return gleam_point.xy( gsp.x * 4, gsp.y * 4 );
+};
+
+
+/*
 | Offset of the major grid.
 */
 def.lazy._offset =
@@ -95,9 +107,12 @@ def.lazy._offset =
 {
 	const o = this.transform.offset;
 
-	const s = this._gSpacing;
+	const s = this._gVisualSpacing;
 
-	return gleam_point.xy( o.x % ( s.x * 2 ), o.y % ( s.y * 2 ) );
+	const sx = s.x * 2;
+	const sy = s.y * 2;
+
+	return gleam_point.xy( ( ( o.x % sx ) + sx ) % sx, ( o.y % ( sy ) + sy ) % sy );
 };
 
 
@@ -112,7 +127,7 @@ def.lazy.glint =
 			'grid', this._grid,
 			'offset', this._offset,
 			'size', this.size,
-			'spacing', this._gSpacing
+			'spacing', this._gVisualSpacing
 		)
 	);
 };

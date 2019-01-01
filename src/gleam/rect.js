@@ -369,19 +369,35 @@ def.func.ensureMinSize =
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
-def.func.baseScale =
+def.func.baseScaleAction =
 	function(
 		action,
 		ax,
 		ay
 	)
 {
-	if( action.scaleX === 1 && action.scaleY === 1 )
-		return this.add( ax, ay );
+	return this.baseScaleXY( action.scaleX, action.scaleY, action.pBase, ax, ay );
+};
 
-	const pos = this.pos.baseScale( action, ax, ay );
 
-	const pse = this.pse.baseScale( action, ax, ay );
+/*
+| Returns this point scaled by
+| scaleX, scaleY relative to the base point.
+*/
+def.func.baseScaleXY =
+	function(
+		scaleX,  // x scaling
+		scaleY,  // y scaling
+		pBase,   // base point
+		ax,      // x value to be added
+		ay       // y value to be added
+	)
+{
+	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
+
+	const pos = this.pos.baseScaleXY( scaleX, scaleY, pBase, ax, ay );
+
+	const pse = this.pse.baseScaleXY( scaleX, scaleY, pBase, ax, ay );
 
 	return(
 		this.create(
