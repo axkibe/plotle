@@ -1,6 +1,9 @@
 /*
-| Converts a linkloom-v15 repository to linkloom-v16.
+| Converts a linkloom-v15 repository to plotle-v15.
 */
+// disabled so not to drop target by accident
+return;
+
 'use strict';
 
 const config =
