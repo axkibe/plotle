@@ -309,7 +309,7 @@ def.func.onAuth =
 
 	this.clear( );
 
-	root.moveToSpace( ref_space.linkloomHome, false );
+	root.moveToSpace( ref_space.plotleHome, false );
 };
 
 

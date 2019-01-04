@@ -1,6 +1,6 @@
 /*
 | Linkloom connector using the mongodb driver
-| to access an linkloom repository.
+| to access an plotle repository.
 */
 'use strict';
 
@@ -51,14 +51,8 @@ const initRepository =
 
 	const initSpaces =
 		[
-			ref_space.create(
-				'username', 'linkloom',
-				'tag', 'home'
-			),
-			ref_space.create(
-				'username', 'linkloom',
-				'tag', 'sandbox'
-			)
+			ref_space.create( 'username', 'plotle', 'tag', 'home' ),
+			ref_space.create( 'username', 'plotle', 'tag', 'sandbox' )
 		];
 
 	for( let s = 0, sl = initSpaces.length; s < sl; s++ )

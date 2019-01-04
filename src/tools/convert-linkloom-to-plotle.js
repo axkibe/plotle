@@ -15,7 +15,7 @@ const config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'linkloom-16'
+		name : 'plotle-15'
 	}
 };
 
@@ -31,7 +31,7 @@ global.NODE = true;
 {
 	require( 'tim.js' );
 
-	const ending = '/tools/convert-15-16.js';
+	const ending = '/tools/convert-linkloom-to-plotle.js';
 
 	const filename = module.filename;
 
@@ -43,7 +43,7 @@ global.NODE = true;
 	// timcode path is one level up
 	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode';
 
-	tim.catalog.addRootDir( rootPath, 'convert-15-16', timcodePath );
+	tim.catalog.addRootDir( rootPath, 'convert', timcodePath );
 }
 
 const ref_space = require( '../ref/space' );
@@ -149,7 +149,7 @@ const run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 16
+			version : 15
 		},
 		resume( )
 	);
@@ -179,19 +179,31 @@ const run =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		yield trgSpaces.insert( o, resume( ) );
+		const ot =
+		{
+			username : o.username === 'linkloom' ? 'plotle' : o.username,
+			tag : o.tag
+		};
 
-		const spaceRef =
+		yield trgSpaces.insert( ot, resume( ) );
+
+		const srcSpaceRef =
 			ref_space.create(
 				'username', o.username,
 				'tag', o.tag
 			);
+		
+		const trgSpaceRef =
+			ref_space.create(
+				'username', ot.username,
+				'tag', ot.tag
+			);
 
-		console.log( ' * copying changes of "' + spaceRef.fullname + '"' );
+		console.log( ' * copying changes of "' + srcSpaceRef.fullname + '" to "' + trgSpaceRef.fullname + '"' );
 
-		const srcChanges = yield srcConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+		const srcChanges = yield srcConnection.collection( 'changes:' + srcSpaceRef.fullname, resume( ) );
 
-		const trgChanges = yield trgConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+		const trgChanges = yield trgConnection.collection( 'changes:' + trgSpaceRef.fullname, resume( ) );
 
 		const changesCursor =
 			(

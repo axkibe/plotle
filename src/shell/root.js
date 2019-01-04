@@ -1126,7 +1126,7 @@ def.func.logout =
 			'link', link
 		);
 
-		root.moveToSpace( ref_space.linkloomHome, false );
+		root.moveToSpace( ref_space.plotleHome, false );
 
 		return;
 	}
@@ -1661,7 +1661,7 @@ def.func.onAuth =
 
 	if( userCreds.isVisitor ) user_creds.clearLocalStorage( );
 
-	root.moveToSpace( ref_space.linkloomHome, false );
+	root.moveToSpace( ref_space.plotleHome, false );
 };
 
 

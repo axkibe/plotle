@@ -14,7 +14,7 @@ tim.define( module, ( def ) => {
 
 if( TIM )
 {
-	def.extends = './relation';
+	def.extends = './label';
 
 	def.attributes =
 	{

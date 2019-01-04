@@ -31,7 +31,7 @@ set( 'network', 'main', 'port', 8833 );
 // mongodb database connection
 //     set( 'database', 'host', '127.0.0.1' );
 //     set( 'database', 'port', 27017 );
-//     set( 'database', 'name', 'linkloom-1' );
+//     set( 'database', 'name', 'plotle-15' );
 
 // the /devel.html access.
 //     set( 'shell', 'devel', 'enable', true );

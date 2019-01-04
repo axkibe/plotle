@@ -49,7 +49,7 @@ global.CHECK = true;
 	// timcode path is one level up
 	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode';
 
-	tim.catalog.addRootDir( rootPath, 'linkloom', timcodePath );
+	tim.catalog.addRootDir( rootPath, 'plotle', timcodePath );
 }
 
 

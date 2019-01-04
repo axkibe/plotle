@@ -256,7 +256,7 @@ def.func.onRegister =
 
 	this.clear( );
 
-	root.moveToSpace( ref_space.linkloomHome, false );
+	root.moveToSpace( ref_space.plotleHome, false );
 
 	root.create( 'show', show_form.welcome, 'userCreds', request.userCreds );
 };

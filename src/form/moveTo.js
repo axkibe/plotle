@@ -163,21 +163,21 @@ def.func._transformScrollbox =
 		sb       // the scrollbox widget
 	)
 {
-	const sbRanks = [ 'linkloom:home', 'linkloom:sandbox' ];
+	const sbRanks = [ 'plotle:home', 'plotle:sandbox' ];
 
 	const sbTwig =
 	{
-		'linkloom:home'    : sb.get( 'linkloom:home' ),
-		'linkloom:sandbox' : sb.get( 'linkloom:sandbox' )
+		'plotle:home'    : sb.get( 'plotle:home' ),
+		'plotle:sandbox' : sb.get( 'plotle:sandbox' )
 	};
 
 	// cols in current row
 	let cLen = this._cols;
 
 	// buttons are in the scrollbox
-	let button = sbTwig[ 'linkloom:home' ];
+	let button = sbTwig[ 'plotle:home' ];
 
-	sbTwig[ 'linkloom:home' ] =
+	sbTwig[ 'plotle:home' ] =
 		button.create(
 			'zone',
 				button.zone.create(
@@ -185,9 +185,9 @@ def.func._transformScrollbox =
 				)
 		);
 
-	button = sbTwig[ 'linkloom:sandbox' ];
+	button = sbTwig[ 'plotle:sandbox' ];
 
-	sbTwig[ 'linkloom:sandbox' ] =
+	sbTwig[ 'plotle:sandbox' ] =
 		button.create(
 			'zone',
 				button.zone.create(

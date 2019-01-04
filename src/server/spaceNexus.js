@@ -35,7 +35,7 @@ def.static.testAccess =
 		spaceRef
 	)
 {
-	if( spaceRef.username == 'linkloom' )
+	if( spaceRef.username == 'plotle' )
 	{
 		switch( spaceRef.tag )
 		{

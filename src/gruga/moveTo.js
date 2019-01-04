@@ -117,21 +117,21 @@ def.staticLazy.layout = ( ) =>
 						'height', 100
 					),
 				'twig:add',
-				'linkloom:home',
+				'plotle:home',
 					layout_button.create(
 						'facets', gruga_moveTo._portalButtonFacets,
 						'zone', gruga_moveTo._buttonSize,
-						'text', 'linkloom\nhome',
+						'text', 'plotle\nhome',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
 						'shape', 'ellipse'
 				),
 				'twig:add',
-				'linkloom:sandbox',
+				'plotle:sandbox',
 					layout_button.create(
 						'facets', gruga_moveTo._portalButtonFacets,
 						'zone', gruga_moveTo._buttonSize,
-						'text', 'linkloom\nsandbox',
+						'text', 'plotle\nsandbox',
 						'textNewline', 25,
 						'font', shell_fontPool.get( 14, 'cm' ),
 						'shape', 'ellipse'

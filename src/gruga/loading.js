@@ -29,7 +29,7 @@ def.staticLazy.layout = ( ) =>
 			),
 		'twig:add', 'spaceText',
 			layout_label.create(
-				'text', 'linkloom:home',
+				'text', 'plotle:home',
 				'font', shell_fontPool.get( 28, 'ca' ),
 				'pos', gleam_point.zero
 			)

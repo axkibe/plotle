@@ -344,7 +344,7 @@ def.func.prepareInventory =
 		const hash = hash_sha1.calc( bundle.code );
 
 		// calculates the hash for the bundle
-		bundleFilePath = 'linkloom-' + hash + '.js';
+		bundleFilePath = 'plotle-' + hash + '.js';
 
 		root.create( 'bundleFilePath', bundleFilePath );
 
