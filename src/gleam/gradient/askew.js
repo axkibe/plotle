@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*:::::::::::::::::.
-:: Typed immutable
-'::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes = { };
@@ -21,4 +16,3 @@ if( TIM )
 
 
 } );
-

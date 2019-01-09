@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.list = [ '< ./item-types' ];
@@ -21,11 +16,6 @@ if( TIM )
 const gleam_rectGroup = require( '../gleam/rectGroup' );
 
 const pathList = tim.import( 'tim.js', 'pathList' );
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

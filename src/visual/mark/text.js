@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -43,11 +38,6 @@ const change_mark_text = require( '../../change/mark/text' );
 /**/}
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | The change engine's textmark.
 */
@@ -63,11 +53,6 @@ def.lazy._changeMarkText =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

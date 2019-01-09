@@ -20,4 +20,3 @@ def.static.epsilon = 0.0000000001;
 
 
 } );
-

@@ -7,11 +7,6 @@
 tim.define( module, ( def, change_listAppend ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -29,11 +24,6 @@ const change_listShorten = require( './listShorten' );
 const change_generic = require( './generic' );
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the inversion to this change.
 */
@@ -46,11 +36,6 @@ def.lazy.reverse =
 
 	return inv;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

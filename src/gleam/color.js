@@ -9,11 +9,6 @@
 tim.define( module, ( def, gleam_color ) => {
 
 
-/*:::::::::::::::::::::::::::::
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -29,35 +24,22 @@ if( TIM )
 }
 
 
-/*:::::::::::::::::::::
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | Black.
 */
-def.staticLazy.black = ( ) =>
-	gleam_color.rgb( 0, 0, 0 );
+def.staticLazy.black = ( ) => gleam_color.rgb( 0, 0, 0 );
 
 
 /*
 | Red.
 */
-def.staticLazy.red = ( ) =>
-	gleam_color.rgb( 255, 0, 0 );
+def.staticLazy.red = ( ) => gleam_color.rgb( 255, 0, 0 );
 
 
 /*
 | White.
 */
-def.staticLazy.white = ( ) =>
-	gleam_color.rgb( 255, 255, 255 );
-
-
-/*:::::::::::::::::::
-:: Static functions
-':::::::::::::::::::*/
+def.staticLazy.white = ( ) => gleam_color.rgb( 255, 255, 255 );
 
 
 /*
@@ -102,11 +84,6 @@ def.static.rgba =
 };
 
 
-/*::::::::::::::
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Color text understood by browser.
 */
@@ -138,4 +115,3 @@ def.lazy.css =
 
 
 } );
-

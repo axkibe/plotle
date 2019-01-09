@@ -7,11 +7,6 @@
 tim.define( module, ( def, change_set ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -57,11 +52,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the inversion to this change.
 */
@@ -79,11 +69,6 @@ def.lazy.reverse =
 
 	return inv;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

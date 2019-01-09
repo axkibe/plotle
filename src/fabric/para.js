@@ -7,11 +7,6 @@
 tim.define( module, ( def, fabric_para ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -26,11 +21,6 @@ if( TIM )
 	// FIXME change to 'para'
 	def.json = 'fabric_para';
 }
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

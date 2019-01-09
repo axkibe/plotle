@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	// there aren't any attributes,
@@ -23,4 +18,3 @@ if( TIM )
 
 
 } );
-

@@ -7,11 +7,6 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -149,11 +144,6 @@ def.lazy._ranks =
 {
 	return this.fabric._ranks;
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -315,11 +305,6 @@ def.lazy._caretGlint =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

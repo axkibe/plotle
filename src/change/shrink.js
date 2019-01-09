@@ -34,11 +34,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -73,11 +68,6 @@ if( TIM )
 /**/}
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the inversion to this change.
 */
@@ -95,11 +85,6 @@ def.lazy.reverse =
 
 	return inv;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

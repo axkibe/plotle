@@ -7,11 +7,6 @@
 tim.define( module, ( def, gleam_glint_border ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =

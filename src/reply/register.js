@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	// this hasn't any attributes, a json with the type 'reply_register'
@@ -22,4 +17,3 @@ if( TIM )
 
 
 } );
-

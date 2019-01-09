@@ -11,11 +11,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -50,11 +45,6 @@ const gleam_glint_paint = require( '../gleam/glint/paint' );
 const gruga_scrollbar = require( '../gruga/scrollbar' );
 
 const result_hover = require( '../result/hover' );
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

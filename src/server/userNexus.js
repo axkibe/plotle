@@ -9,11 +9,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -41,11 +36,6 @@ const ref_space = require( '../ref/space' );
 const ref_spaceList = require( '../ref/spaceList' );
 
 const resume = require( 'suspend' ).resume;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

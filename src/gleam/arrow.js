@@ -18,12 +18,6 @@ const gleam_shape_start = require( './shape/start' );
 const gruga_relation = require( '../gruga/relation' );
 
 
-
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -42,10 +36,6 @@ if( TIM )
 	};
 }
 
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 /*
 | Returns a shape of an arrow
@@ -156,11 +146,6 @@ def.static.getArrowShape =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the arrow shape.
 */
@@ -172,4 +157,3 @@ def.lazy.shape =
 
 
 } );
-

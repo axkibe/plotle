@@ -7,11 +7,6 @@
 tim.define( module, ( def, widget_scrollbox ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =

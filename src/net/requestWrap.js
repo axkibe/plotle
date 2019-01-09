@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -33,11 +28,6 @@ if( TIM )
 
 // FIXME
 let onReplyTransmitter;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -149,4 +139,3 @@ def.func.send =
 
 
 } );
-

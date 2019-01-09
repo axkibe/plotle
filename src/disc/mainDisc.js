@@ -40,11 +40,6 @@ const show_zoom = require( '../show/zoom' );
 const widget_widget = require( '../widget/widget' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -321,11 +316,6 @@ def.transform.get =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | The discs glint.
 */
@@ -414,11 +404,6 @@ def.lazy._tShape =
 		.transform( this.controlTransform )
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

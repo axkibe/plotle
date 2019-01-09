@@ -15,11 +15,6 @@ const gleam_border = require( './border' );
 const gleam_color = require( './color' );
 
 
-/*:::::::::::::::::::::::::::::
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -47,11 +42,6 @@ if( TIM )
 
 	def.group = [ 'boolean' ];
 }
-
-
-/*:::::::::::::::::::::
-:: Static lazy values
-':::::::::::::::::::::*/
 
 
 /*

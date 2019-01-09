@@ -328,6 +328,16 @@ def.static.createRelationStop =
 
 	return true;
 };
+ 
+
+/*
+| The key of this item.
+*/
+def.lazy.key =
+       function( )
+{
+       return this.path.get( -1 );
+};
 
 
 } );

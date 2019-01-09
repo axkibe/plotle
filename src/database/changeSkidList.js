@@ -12,11 +12,6 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.list = [ './changeSkid', 'undefined' ];
@@ -28,11 +23,6 @@ if( TIM )
 const change_wrapList = require( '../change/wrapList' );
 
 const database_changeSkid = require( './changeSkid' );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -63,11 +53,6 @@ def.static.createFromChangeWrapList =
 
 	return self.create( 'list:init', list );
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

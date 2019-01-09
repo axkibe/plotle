@@ -15,11 +15,6 @@ const gleam_point = require( '../point' );
 const gleam_transform = require( '../transform' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -36,11 +31,6 @@ if( TIM )
 }
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | Shortcut to create a round to close.
 */
@@ -53,11 +43,6 @@ def.staticLazy.close = ( ) =>
 */
 def.staticLazy.closeCcw = ( ) =>
 	gleam_shape_round.create( 'ccw', true, 'close', true );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -80,11 +65,6 @@ def.static.xy = ( x, y ) =>
 	gleam_shape_round.create(
 		'p', gleam_point.xy( x, y )
 	);
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

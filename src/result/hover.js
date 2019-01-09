@@ -10,11 +10,6 @@
 tim.define( module, ( def, result_hover ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -36,5 +31,6 @@ def.staticLazy.cursorDefault = ( ) => result_hover.create( 'cursor', 'default' )
 def.staticLazy.cursorGrabbing = ( ) => result_hover.create( 'cursor', 'grabbing' );
 
 def.staticLazy.cursorGrab = ( ) => result_hover.create( 'cursor', 'grab' );
+
 
 } );

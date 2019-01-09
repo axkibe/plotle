@@ -9,11 +9,6 @@
 tim.define( module, ( def, shell_system ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -1449,4 +1444,3 @@ def.static.startup = function( )
 
 
 } );
-

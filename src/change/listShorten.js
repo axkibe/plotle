@@ -16,11 +16,6 @@ const change_generic = require( './generic' );
 const error = require( './error' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -31,11 +26,6 @@ if( TIM )
 
 	def.json = 'change_listShorten';
 }
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -50,11 +40,6 @@ def.lazy.reverse =
 
 	return inv;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

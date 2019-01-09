@@ -38,11 +38,6 @@ const shell_doTracker = require( '../shell/doTracker' );
 const tim_path = tim.import( 'tim.js', 'path' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 def.attributes =
 {
 	// reference to the current moment of dynamic space
@@ -67,11 +62,6 @@ def.attributes =
 	// the timer on startup
 	_startTimer : { type : [ 'undefined', 'integer' ] },
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

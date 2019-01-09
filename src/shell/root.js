@@ -7,11 +7,6 @@
 tim.define( module, ( def, shell_root ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -250,12 +245,6 @@ const loadingSpaceTextPath =
 	.append( 'twig' )
 	.append( 'spaceText' )
 	.append( 'text' );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
 
 
 /*
@@ -632,12 +621,6 @@ def.transform.spaceVisual =
 };
 
 
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the attention center.
 |
@@ -693,11 +676,6 @@ def.lazy._currentScreen =
 		default : throw new Error( );
 	}
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

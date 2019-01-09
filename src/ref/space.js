@@ -7,11 +7,6 @@
 tim.define( module, ( def, ref_space ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -25,11 +20,6 @@ if( TIM )
 
 	def.json = 'ref_space';
 }
-
-
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
 
 
 /*
@@ -50,10 +40,6 @@ def.staticLazy.plotleSandbox = ( ) =>
 		'tag', 'sandbox'
 	);
 
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 def.lazy.fullname =
 	function( )

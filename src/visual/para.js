@@ -8,11 +8,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -91,11 +86,6 @@ const shell_settings = require( '../shell/settings' );
 const visual_mark_text = require( '../visual/mark/text' );
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
@@ -123,11 +113,6 @@ def.static.concernsMark =
 		: undefined
 	);
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -404,11 +389,6 @@ def.lazy._glint =
 };
 
 
-/*::::::::::::::::.
-:: Lazy Functions
-':::::::::::::::::*/
-
-
 /*
 | Locates the line number of a given offset.
 */
@@ -441,11 +421,6 @@ def.lazyFuncInt.locateOffsetLine =
 
 	return this.locateOffsetLine( offset );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

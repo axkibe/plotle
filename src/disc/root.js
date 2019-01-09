@@ -16,11 +16,6 @@ const show_create = require( '../show/create' );
 const show_zoom = require( '../show/zoom' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -64,11 +59,6 @@ if( TIM )
 		'./zoomDisc',
 	];
 }
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -138,11 +128,6 @@ def.transform.get =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Updates the glint twig.
 */
@@ -162,11 +147,6 @@ def.lazy.glint =
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

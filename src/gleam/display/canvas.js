@@ -11,11 +11,6 @@
 tim.define( module, ( def, gleam_display_canvas ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 const gleam_border = require( '../border' );
 
 const gleam_borderList = require( '../borderList' );
@@ -138,11 +133,6 @@ const noround = val => val * ratio;
 /**/}
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | Creates a display around an existing HTML canvas.
 */
@@ -229,21 +219,11 @@ def.static.resize =
 };
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | A hidden helper canvas used by within( )
 */
 def.staticLazy.helper = ( ) =>
 	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass );
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -287,11 +267,6 @@ def.lazy._cx =
 | Set when the canvas has been rendered.
 */
 def.lazy._rendered = ( ) => true;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

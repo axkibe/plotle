@@ -7,11 +7,6 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -36,17 +31,7 @@ if( TIM )
 }
 
 
-/*:::::::::.
-:: Imports
-'::::::::::*/
-
-
 const change_wrap = require( '../change/wrap' );
-
-
-/*:::::::::::::::::::.
-:: Static functions
-'::::::::::::::::::::*/
 
 
 /*
@@ -76,11 +61,6 @@ def.static.createFromChangeWrap =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Transforms the change skid to a change wrap.
 */
@@ -95,11 +75,6 @@ def.lazy.asChangeWrap =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

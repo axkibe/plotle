@@ -7,11 +7,6 @@
 tim.define( module, ( def, fabric_space ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -76,4 +71,3 @@ def.transform.path =
 
 
 } );
-

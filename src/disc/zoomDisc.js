@@ -7,11 +7,6 @@
 tim.define( module, ( def, disc_zoomDisc ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -181,11 +176,6 @@ def.transform.get =
 };
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
@@ -198,12 +188,6 @@ def.static._isActiveButton =
 {
 	return false;
 };
-
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

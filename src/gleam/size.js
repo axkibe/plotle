@@ -14,11 +14,6 @@ const gleam_point = require( './point' );
 const gleam_rect = require( './rect' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,11 +23,6 @@ if( TIM )
 		width : { type : 'number' }
 	};
 }
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -46,11 +36,6 @@ def.static.wh =
 {
 	return self.create( 'width', width, 'height', height );
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -108,11 +93,6 @@ def.lazy.zeroRect =
 
 	return rect;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

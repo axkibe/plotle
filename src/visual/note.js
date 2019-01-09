@@ -9,9 +9,7 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
+def.extend = './docItem';
 
 
 if( TIM )
@@ -106,12 +104,6 @@ const visual_para = require( '../visual/para' );
 const widget_scrollbar = require( '../widget/scrollbar' );
 
 
-
-/*::::::::::::::::::::::.
-:: Static (lazy) values
-':::::::::::::::::::::::*/
-
-
 /*
 | The note model.
 */
@@ -141,11 +133,6 @@ def.staticLazy.model =
 | Notes do not need to be resized proportionally.
 */
 def.static.proportional = false;
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -183,12 +170,6 @@ def.static.createGeneric =
 def.static.concernsHover =
 def.func.concernsHover =
 	( ) => undefined;
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter = visual_docItem.attentionCenter;
 
 
 /*
@@ -230,16 +211,6 @@ def.lazy.glint =
 	if( sbary ) arr.push( sbary.glint );
 
 	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The key of this item.
-*/
-def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
 };
 
 
@@ -427,11 +398,6 @@ def.inherit._glint =
 };
 
 
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
-
-
 /**
 *** Exta checking
 ***/
@@ -473,12 +439,6 @@ def.lazy.scrollbarY =
 		)
 	);
 };
-
-
-/*
-| Reacts on clicks.
-*/
-def.func.click = visual_docItem.click;
 
 
 /*

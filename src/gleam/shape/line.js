@@ -16,11 +16,6 @@ const gleam_point = require( '../point' );
 const gleam_transform = require( '../transform' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -40,12 +35,6 @@ if( TIM )
 const e = gleam_constants.epsilon;
 
 
-
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | Shortcut to create a closing line.
 */
@@ -60,11 +49,6 @@ def.staticLazy.closeFly = () =>
 		'close', true,
 		'fly', true
 	);
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -96,11 +80,6 @@ def.static.xyFly = ( x, y ) =>
 		'fly', true,
 		'p', gleam_point.xy( x, y )
 	);
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -178,4 +157,3 @@ def.func.transform =
 
 
 } );
-

@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -31,11 +26,6 @@ if( TIM )
 }
 
 const pathList = tim.import( 'tim.js', 'pathList' );
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -121,11 +111,6 @@ def.lazy.commonPath =
 	return bP.limit( a );
 };
 */
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

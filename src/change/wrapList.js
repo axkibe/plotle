@@ -7,22 +7,12 @@
 tim.define( module, ( def, change_wrapList ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.list = [ './wrap' ];
 
 	def.json = 'change_wrapList';
 }
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

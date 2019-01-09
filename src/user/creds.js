@@ -10,11 +10,6 @@ tim.define( module, ( def, user_creds ) => {
 const session_uid = require( '../session/uid' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,10 +23,6 @@ if( TIM )
 
 	def.json = 'user_creds';
 }
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -81,11 +72,6 @@ def.static.createVisitor =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns true if this user is a visitor
 */
@@ -94,11 +80,6 @@ def.lazy.isVisitor =
 {
 	return this.name.substr( 0, 7 ) === 'visitor';
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -114,4 +95,3 @@ def.func.saveToLocalStorage =
 
 
 } );
-

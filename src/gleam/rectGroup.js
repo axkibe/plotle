@@ -7,9 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*
-| Tim group.
-*/
 if( TIM )
 {
 	def.group = [ './rect' ];
@@ -17,4 +14,3 @@ if( TIM )
 
 
 } );
-

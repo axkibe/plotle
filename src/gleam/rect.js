@@ -22,11 +22,6 @@ const gleam_margin = require( './margin' );
 const gleam_transform = require( './transform' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -42,11 +37,6 @@ if( TIM )
 }
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | A zero rect.
 */
@@ -56,11 +46,6 @@ def.staticLazy.zero = () =>
 		'width', 0,
 		'height', 0
 	);
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -135,11 +120,6 @@ def.static.posSize =
 		)
 	);
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -303,11 +283,6 @@ def.lazy.shrink1 =
 
 	return shrink1;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

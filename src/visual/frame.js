@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -56,10 +51,6 @@ const handleSize = gruga_frame.handleSize;
 
 const handleSize2 = handleSize / 2;
 
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 /*
 | The frames glint
@@ -425,11 +416,6 @@ def.lazy._outerZone =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

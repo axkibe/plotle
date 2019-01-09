@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -35,11 +30,6 @@ const gleam_display_canvas = require( './display/canvas' );
 const gleam_shape_start = require( './shape/start' );
 
 const gleam_transform = require( './transform' );
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -181,4 +171,3 @@ def.func.within =
 
 
 } );
-

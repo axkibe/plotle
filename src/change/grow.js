@@ -7,11 +7,6 @@
 tim.define( module, ( def, change_grow ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -73,11 +68,6 @@ const error = require( './error' );
 /**/}
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 def.lazy.reverse =
 	function( )
 {
@@ -92,11 +82,6 @@ def.lazy.reverse =
 
 	return inv;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

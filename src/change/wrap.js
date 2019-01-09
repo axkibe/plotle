@@ -8,11 +8,6 @@
 tim.define( module, ( def, change_wrap ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -32,11 +27,6 @@ if( TIM )
 
 
 const session_uid = require( '../session/uid' );
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

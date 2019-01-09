@@ -7,11 +7,6 @@
 tim.define( module, ( def, fabric_doc ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -41,11 +36,6 @@ def.transform.get =
 
 	return para.create( 'path', this.path.append( 'twig' ).appendNC( name ) );
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

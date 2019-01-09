@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*:::::::::::::::::.
-:: Typed immutable
-'::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.list = [ '< ./shape-types' ];
@@ -19,11 +14,6 @@ if( TIM )
 
 
 const gleam_transform = require( './transform' );
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

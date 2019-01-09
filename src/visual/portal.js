@@ -7,11 +7,6 @@
 tim.define( module, ( def, visual_portal ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -122,11 +117,6 @@ const spaceFields =
 
 /**/if( FREEZE ) Object.freeze( spaceFields );
 
-
-
-/*::::::::::::::::::::::.
-:: Static (lazy) values
-':::::::::::::::::::::::*/
 
 
 /*
@@ -249,11 +239,6 @@ def.static.isSection =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Returns the attention center.
 */
@@ -313,17 +298,6 @@ def.lazy.glint =
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
-
-
-/*
-| The key of this item.
-*/
-def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
-};
-
 
 
 /*
@@ -723,11 +697,6 @@ def.lazy._zeroShape =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -1467,4 +1436,3 @@ def.func._prepareField =
 
 
 } );
-

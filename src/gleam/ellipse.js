@@ -7,11 +7,6 @@
 tim.define( module, ( def, gleam_ellipse ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -46,12 +41,6 @@ const gleam_shape_start = require( './shape/start' );
 const gleam_transform = require( './transform' );
 
 
-
-/*::::::::::::::::::.
-:: Static functions
-::::::::::::::::::::*/
-
-
 /*
 | Shortcut to create an ellipse by specifying p and size.
 */
@@ -69,11 +58,6 @@ def.static.posSize =
 		)
 	);
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -184,11 +168,6 @@ def.lazy.shape =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

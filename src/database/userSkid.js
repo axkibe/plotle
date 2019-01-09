@@ -9,11 +9,6 @@
 tim.define( module, ( def, database_userSkid ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -39,17 +34,7 @@ if( TIM )
 }
 
 
-/*:::::::::.
-:: Imports
-'::::::::::*/
-
-
 const user_info = require( '../user/info' );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -72,11 +57,6 @@ def.static.createFromUser =
 
 	return dus;
 };
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 def.lazy.asUser =

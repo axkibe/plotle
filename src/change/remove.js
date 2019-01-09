@@ -34,11 +34,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -81,11 +76,6 @@ if( TIM )
 /**/		}
 /**/	};
 /**/}
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*

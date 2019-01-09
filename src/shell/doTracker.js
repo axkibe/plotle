@@ -12,11 +12,6 @@ const change_wrapList = require( '../change/wrapList' );
 const shell_settings = require( '../shell/settings' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,11 +23,6 @@ if( TIM )
 		_redo : { type : [ 'undefined', '../change/wrapList' ] }
 	};
 }
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -49,11 +39,6 @@ def.static.flush =
 			)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
@@ -224,4 +209,3 @@ def.func.redo =
 
 
 } );
-

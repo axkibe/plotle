@@ -22,11 +22,6 @@ tim.define( module, ( def, self ) => {
 //const limit = require( '../math/root' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =

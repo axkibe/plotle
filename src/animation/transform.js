@@ -12,11 +12,6 @@ const gleam_point = require( '../gleam/point' );
 const gleam_transform = require( '../gleam/transform' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -34,12 +29,6 @@ if( TIM )
 		endTransform : { type : '../gleam/transform' },
 	};
 }
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
 
 
 /*
@@ -62,11 +51,6 @@ def.static.createNow =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

@@ -7,11 +7,6 @@
 tim.define( module, ( def, self ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -31,12 +26,6 @@ if( TIM )
 const pathList = tim.import( 'tim.js', 'pathList' );
 
 const visual_mark_text = require( './text' );
-
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -90,11 +79,6 @@ def.lazy.widgetPath =
 
 	return path.limit( 5 );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

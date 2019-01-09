@@ -10,11 +10,6 @@ tim.define( module, ( def, gleam_transform ) => {
 const gleam_point = require( './point' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,11 +23,6 @@ if( TIM )
 }
 
 
-/*::::::::::::::::::::.
-:: Static lazy values
-':::::::::::::::::::::*/
-
-
 /*
 | The normal transform is a transform that doesn't transform.
 */
@@ -41,11 +31,6 @@ def.staticLazy.normal = () =>
 		'offset', gleam_point.zero,
 		'zoom', 1
 	);
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -57,12 +42,6 @@ def.lazy.ortho =
 {
 	return this.create( 'offset', gleam_point.zero );
 };
-
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

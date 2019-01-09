@@ -18,11 +18,6 @@ const ref_userSpaceList = require( '../ref/userSpaceList' );
 const session_uid = require( '../session/uid' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =

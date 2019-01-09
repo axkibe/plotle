@@ -12,11 +12,6 @@ const change_wrap = require( './wrap' );
 const change_wrapList = require( './wrapList' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.list =
@@ -34,11 +29,6 @@ if( TIM )
 
 	def.json = 'change_list';
 }
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -60,11 +50,6 @@ def.lazy.reverse =
 
 	return result;
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

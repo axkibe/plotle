@@ -7,11 +7,6 @@
 tim.define( module, ( def, action_zoomButton ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -23,11 +18,6 @@ if( TIM )
 		refire : { type : 'boolean' }
 	};
 }
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
 
 
 /*
@@ -45,11 +35,6 @@ def.static.createZoom =
 
 	return action_zoomButton.create( 'dir', dir, 'refire', true );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

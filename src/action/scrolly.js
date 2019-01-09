@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -26,11 +21,6 @@ if( TIM )
 		startPos : { type : 'number' },
 	};
 }
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

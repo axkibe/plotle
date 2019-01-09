@@ -7,9 +7,7 @@
 tim.define( module, ( def, visual_label ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
+def.extend = './docItem';
 
 
 if( TIM )
@@ -135,11 +133,6 @@ def.staticLazy.model =
 };
 
 
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
 /*
 | User wants to create a new label.
 */
@@ -224,17 +217,6 @@ def.transform.doc =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter = visual_docItem.attentionCenter;
-
-
 /*
 | The items glint.
 */
@@ -278,20 +260,8 @@ def.inherit.glint =
 
 
 /*
-| The key of this item.
-*/
-def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
-};
-
-
-/*
 | The labels position possibly altered by actions
 */
-// FIXME
-def.static.pos =
 def.lazy.pos =
 	function( )
 {
@@ -350,8 +320,6 @@ def.lazy.shape =
 /*
 | The item's shape in current transform.
 */
-// FIXME
-def.static.tShape =
 def.lazy.tShape =
 	function( )
 {
@@ -362,8 +330,6 @@ def.lazy.tShape =
 /*
 | Zone in current transform.
 */
-// FIXME
-def.static.tZone =
 def.lazy.tZone =
 	function( )
 {
@@ -373,7 +339,6 @@ def.lazy.tZone =
 /*
 | Returns the zone height.
 */
-def.static._zoneHeight =
 def.lazy._zoneHeight =
 	function( )
 {
@@ -384,7 +349,6 @@ def.lazy._zoneHeight =
 /*
 | Returns the zone width.
 */
-def.static._zoneWidth =
 def.lazy._zoneWidth =
 	function( )
 {
@@ -402,7 +366,6 @@ def.lazy._zoneWidth =
 |
 | FUTURE inherit
 */
-def.static.zone =
 def.lazy.zone =
 	function( )
 {
@@ -414,17 +377,6 @@ def.lazy.zone =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
-
-
-/*
-| Reacts on clicks.
-*/
-def.func.click = visual_docItem.click;
 
 
 /*
@@ -454,8 +406,6 @@ def.func.dragStart = visual_docItem.dragStart;
 /*
 | The fontsize of the label.
 */
-// FIXME
-def.static.fontsize =
 def.lazy.fontsize =
 	function( )
 {
@@ -527,8 +477,6 @@ def.func.markLost =
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-// FIXME
-def.static.minScaleX =
 def.func.minScaleX =
 	function(
 		zone  // original zone
@@ -541,8 +489,6 @@ def.func.minScaleX =
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-// FIXME
-def.static.minScaleY =
 def.func.minScaleY =
 	function(
 		// zone  // original zone

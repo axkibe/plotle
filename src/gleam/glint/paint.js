@@ -9,11 +9,6 @@
 tim.define( module, ( def, gleam_glint_paint ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -41,4 +36,3 @@ def.static.createFS =
 
 
 } );
-

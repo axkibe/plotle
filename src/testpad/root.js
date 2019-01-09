@@ -30,11 +30,6 @@ const testpad_action = require( './action' );
 const tim_path = tim.import( 'tim.js', 'path' );
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -246,11 +241,6 @@ const isSpecialKey =
 };
 
 
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
-
-
 /*
 | Generates the noDataScreen.
 */
@@ -277,11 +267,6 @@ def.lazy.noDataScreen =
 
 	return lines.join( '\n' );
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*

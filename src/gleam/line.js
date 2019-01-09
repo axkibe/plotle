@@ -7,11 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -26,11 +21,6 @@ if( TIM )
 const gleam_point = require( './point' );
 
 const gleam_rect = require( './rect' );
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 /*
@@ -63,4 +53,3 @@ def.lazy.zone =
 
 
 } );
-

@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './item';
+
+
 const action_select = require( '../action/select' );
 
 const limit = require( '../math/root' ).limit;
@@ -25,7 +28,7 @@ const visual_mark_text = require( './mark/text' );
 /*
 | The attention center.
 */
-def.static.attentionCenter =
+def.lazy.attentionCenter =
 	function( )
 {
 	return(
@@ -42,7 +45,7 @@ def.static.attentionCenter =
 /*
 | Checks if the item is being clicked and reacts.
 */
-def.static.click =
+def.func.click =
 	function(
 		p,
 		shift,

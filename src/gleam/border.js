@@ -10,11 +10,6 @@ tim.define( module, ( def, self ) => {
 const gleam_color = require( './color' );
 
 
-/*:::::::::::::::::::::::::::::
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -28,11 +23,6 @@ if( TIM )
 		color : { type : './color', defaultValue : 'require("./color").black' },
 	};
 }
-
-
-/*:::::::::::::::::::::
-| Static lazy values
-::::::::::::::::::::::*/
 
 
 /*

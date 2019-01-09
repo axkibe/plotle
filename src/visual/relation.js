@@ -7,15 +7,11 @@
 tim.define( module, ( def ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
+def.extend = './label';
 
 
 if( TIM )
 {
-	def.extends = './label';
-
 	def.attributes =
 	{
 		// current action
@@ -34,10 +30,7 @@ if( TIM )
 		hover : { type : [ 'undefined' ] },
 
 		// the users mark
-		mark :
-		{
-			type : [ '< ./mark/types', 'undefined' ],
-		},
+		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the doc
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -62,19 +55,9 @@ const gruga_label = require( '../gruga/label' );
 
 const gruga_relation = require( '../gruga/relation' );
 
-const visual_docItem = require( '../visual/docItem' );
-
 const visual_item = require( '../visual/item' );
 
 const visual_label = require( '../visual/label' );
-
-
-/*
-| Doesn't care about hovering
-*/
-def.static.concernsHover =
-def.func.concernsHover =
-	( ) => undefined;
 
 
 /*
@@ -85,86 +68,14 @@ def.transform.doc = visual_label.prototype[ '__transform_' + 'doc' ];
 
 
 /*
-| The attention center.
-*/
-def.lazy.attentionCenter = visual_docItem.attentionCenter;
-
-
-/*
-| Fontsize of the relations label.
-*/
-def.lazy.fontsize = visual_label.fontsize;
-
-
-/*
 | The key of this item.
 */
-def.lazy.key =
+/*def.lazy.key =
 	function( )
 {
 	return this.path.get( -1 );
 };
-
-
-/*
-| The labels position possibly altered by an action.
 */
-def.lazy.pos = visual_label.pos;
-
-
-/*
-| The item's shape.
-*/
-def.lazy.shape =
-	function( )
-{
-	return this.zone.shrink1;
-};
-
-
-/*
-| The relations shape for current transform.
-*/
-def.lazy.tShape = visual_label.tShape;
-
-
-/*
-| The relations zone for current transform.
-*/
-def.lazy.tZone = visual_label.tZone;
-
-
-/*
-| The relations zone.
-*/
-def.lazy.zone = visual_label.zone;
-
-def.lazy._zoneHeight = visual_label._zoneHeight;
-
-def.lazy._zoneWidth = visual_label._zoneWidth;
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
-
-
-/*
-| Relations resize proportional only.
-*/
-def.func.proportional = true;
-
-
-/*
-| Reacts on clicks.
-*/
-def.func.click = visual_docItem.click;
-
-
-/*
-| Reacts on ctrl-clicks.
-*/
-def.func.ctrlClick = visual_item.ctrlClick;
 
 
 /*
@@ -177,12 +88,6 @@ def.func.createRelationMove = visual_item.createRelationMove;
 | A create relation action stops.
 */
 def.func.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-def.func.dragStart = visual_docItem.dragStart;
 
 
 /*
@@ -264,80 +169,6 @@ def.inherit.glint =
 	);
 };
 */
-
-
-/*
-| A text has been inputed.
-*/
-def.func.input = visual_docItem.input;
-
-
-/*
-| Returns the change for dragging this item.
-*/
-def.func.getDragItemChange = visual_item.getDragItemChangePosFs;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-def.func.getResizeItemChange = visual_item.getResizeItemChangePosFs;
-
-
-/*
-| Returns the mark for a point
-*/
-def.func.markForPoint = visual_docItem.markForPoint;
-
-
-/*
-| Mouse wheel turned.
-*/
-def.func.mousewheel = visual_label.prototype.mousewheel;
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-def.func.pointingHover = visual_docItem.pointingHover;
-
-
-/*
-| Relations use pos/fontsize for positioning
-*/
-def.func.positioning = 'pos/fontsize';
-
-
-/*
-| Handles a special key.
-*/
-def.func.specialKey = visual_docItem.specialKey;
-
-
-/*
-| Nofication when the item lost the users mark.
-*/
-def.func.markLost = visual_label.prototype.markLost;
-
-
-/*
-| Returns the minimum scale factor this item could go through.
-*/
-def.func.minScaleX = visual_label.minScaleX;
-
-def.func.minScaleY = visual_label.minScaleY;
-
-
-/*
-| A move during a text select on this item.
-*/
-def.func.moveSelect = visual_docItem.moveSelect;
-
-
-/*
-| Dummy since a relation does not scroll.
-*/
-def.func.scrollMarkIntoView = function( ){ };
 
 
 /*

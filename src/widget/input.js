@@ -7,11 +7,6 @@
 tim.define( module, ( def, widget_input ) => {
 
 
-/*::::::::::::::::::::::::::::.
-:: Typed immutable attributes
-':::::::::::::::::::::::::::::*/
-
-
 if( TIM )
 {
 	def.attributes =
@@ -145,16 +140,6 @@ def.static.createFromLayout =
 | Default distance of text
 */
 def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
-
-
-/*::::::::::::::::::.
-:: Static functions
-':::::::::::::::::::*/
-
-
-/*:::::::::::::.
-:: Lazy values
-'::::::::::::::*/
 
 
 def.lazy.attentionCenter =
@@ -365,11 +350,6 @@ def.lazyFuncInt.locateOffsetPoint =
 		)
 	);
 };
-
-
-/*:::::::::::.
-:: Functions
-'::::::::::::*/
 
 
 /*
