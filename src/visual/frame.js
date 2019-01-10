@@ -552,30 +552,20 @@ def.func.pointingHover =
 		p
 	)
 {
-	let com;
-
-	if(
-		!this._frameBodyShape.within( p )
-		|| this._shapeMask.within( p )
-	) return;
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
 
 	// FIXME use compass
 
-	if( this._shapeHandleNw.within( p ) ) com = 'nw';
-	else if( this._shapeHandleNe.within( p ) ) com = 'ne';
-	else if( this._shapeHandleSe.within( p ) ) com = 'se';
-	else if( this._shapeHandleSw.within( p ) ) com = 'sw';
+	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
+	else if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
+	else if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
+	else if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
 	else if( !this.proportional )
 	{
-		if( this._shapeHandleN.within( p ) ) com = 'n';
-		if( this._shapeHandleE.within( p ) ) com = 'e';
-		if( this._shapeHandleS.within( p ) ) com = 's';
-		if( this._shapeHandleW.within( p ) ) com = 'w';
-	}
-
-	if( com )
-	{
-		return result_hover.create( 'cursor', com + '-resize' );
+		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCurosr;
+		if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
+		if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
+		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCurosr;
 	}
 
 	return result_hover.cursorGrab;
@@ -583,4 +573,3 @@ def.func.pointingHover =
 
 
 } );
-

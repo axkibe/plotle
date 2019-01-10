@@ -16,7 +16,7 @@ if( TIM )
 
 		// space has grid
 		hasGrid : { type : [ 'undefined', 'boolean' ] },
-		
+
 		// space has snapping on grid
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 

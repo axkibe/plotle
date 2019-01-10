@@ -135,7 +135,7 @@ const startMainServer =
 	switch( protocol )
 	{
 		case 'https' :
-
+		{
 			log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
 
 			const cert = fs.readFileSync( config.get( 'https', 'cert' ) ) + '';
@@ -154,6 +154,7 @@ const startMainServer =
 			.listen( port, listen, resume( ) );
 
 			return;
+		}
 
 		case 'http' :
 
@@ -193,9 +194,9 @@ const startRedirectServer =
 	log( 'starting redirect @ http://' + ( listen || '*' ) + '/:' + port );
 
 	const handler =
-	    ( request, result ) =>
+		( request, result ) =>
 	{
-	    result.writeHead(
+		result.writeHead(
 			307,
 			{
 				Location: destination + request.headers.host + request.url,

@@ -155,7 +155,6 @@ def.func.transform =
 
 		case change_grow :
 		case change_shrink :
-		case change_split :
 		case change_set :
 		case change_mark_node :
 

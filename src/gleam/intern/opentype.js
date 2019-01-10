@@ -13,11 +13,11 @@ const shell_settings = require( '../../shell/settings' );
 
 const opentypeOptions =
 	{
-	  	kerning: true,
-	    features: {
-	   	    liga: true,
+		kerning: true,
+		features: {
+			liga: true,
 			rlig: true
-	   	},
+		},
 		script: 'latn'
 	};
 
@@ -25,10 +25,10 @@ const opentypeOptionsHinting =
 	{
 		hinting: true,
 		kerning: true,
-	    features: {
-	   	    liga: true,
+		features: {
+			liga: true,
 			rlig: true
-	   	},
+		},
 		script: 'latn'
 	};
 
@@ -77,11 +77,11 @@ const getWidth =
 	{
 		const glyph = glyphs[ a ];
 
-	    if( glyph.advanceWidth ) w += glyph.advanceWidth * fontScale;
+		if( glyph.advanceWidth ) w += glyph.advanceWidth * fontScale;
 
 		if( a + 1 < al )
 		{
-		    w += font.getKerningValue( glyph, glyphs[ a + 1 ] ) * fontScale;
+			w += font.getKerningValue( glyph, glyphs[ a + 1 ] ) * fontScale;
 		}
 	}
 
@@ -139,7 +139,7 @@ def.static.drawText =
 	switch( font.base )
 	{
 		case 'middle' :
-
+		{
 			let capheight = otFont.capheight;
 
 			if( !capheight )
@@ -150,6 +150,7 @@ def.static.drawText =
 			y += capheight * fontScale / 2 - 0.5;
 
 			break;
+		}
 	}
 
 	let glyph;
@@ -158,19 +159,16 @@ def.static.drawText =
 	{
 		if( glyph )
 		{
-	        if( glyph.advanceWidth )
-			{
-		   	    x += glyph.advanceWidth * fontScale;
-		   	}
+			if( glyph.advanceWidth ) x += glyph.advanceWidth * fontScale;
 
 			x += otFont.getKerningValue( glyph, glyphs[ a ] ) * fontScale;
 		}
 
-	   	glyph = glyphs[ a ];
+		glyph = glyphs[ a ];
 
 		if( size >= shell_settings.glyphCacheLimit )
 		{
-	      	const path = glyph.getPath( round( x ), round( y ), size, options, otFont );
+			const path = glyph.getPath( round( x ), round( y ), size, options, otFont );
 
 			path.draw( cx );
 

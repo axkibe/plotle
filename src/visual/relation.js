@@ -55,8 +55,6 @@ const gruga_label = require( '../gruga/label' );
 
 const gruga_relation = require( '../gruga/relation' );
 
-const visual_item = require( '../visual/item' );
-
 const visual_label = require( '../visual/label' );
 
 
@@ -65,29 +63,6 @@ const visual_label = require( '../visual/label' );
 | FIXME this is a dirty workaround.
 */
 def.transform.doc = visual_label.prototype[ '__transform_' + 'doc' ];
-
-
-/*
-| The key of this item.
-*/
-/*def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
-};
-*/
-
-
-/*
-| A create relation action moves.
-*/
-def.func.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-def.func.createRelationStop = visual_item.createRelationStop;
 
 
 /*

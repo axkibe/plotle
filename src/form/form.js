@@ -121,7 +121,7 @@ def.static.cycleFocus =
 
 	const rs = rank;
 
-	while( true )
+	for(;;)
 	{
 		rank = ( rank + dir + length ) % length;
 

@@ -274,7 +274,7 @@ def.lazy.pos =
 			return this.fabric.pos.add( action.moveBy );
 
 		case action_resizeItems :
-
+		{
 			const zone = action.startZones.get( this.path.get( 2 ) );
 
 			// FIXME make a map
@@ -299,6 +299,7 @@ def.lazy.pos =
 
 			// should never be reached
 			throw new Error( );
+		}
 	}
 
 	return this.fabric.pos;
@@ -380,30 +381,6 @@ def.lazy.zone =
 
 
 /*
-| Reacts on ctrl-clicks.
-*/
-def.func.ctrlClick = visual_item.ctrlClick;
-
-
-/*
-| A create relation action moves.
-*/
-def.func.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-def.func.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-def.func.dragStart = visual_docItem.dragStart;
-
-
-/*
 | The fontsize of the label.
 */
 def.lazy.fontsize =
@@ -439,12 +416,6 @@ def.func.getDragItemChange = visual_item.getDragItemChangePosFs;
 | Returns the change for resizing this item.
 */
 def.func.getResizeItemChange = visual_item.getResizeItemChangePosFs;
-
-
-/*
-| A text has been inputed.
-*/
-def.func.input = visual_docItem.input;
 
 
 /*

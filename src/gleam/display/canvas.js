@@ -229,7 +229,7 @@ def.staticLazy.helper = ( ) =>
 /*
 | Ensures mono causal chain of canvas.
 */
-/**/if( true || CHECK ) // FIXME
+/**///if( CHECK ) // FIXME
 /**/{
 /**/	def.lazy._expired = ( ) => true;
 /**/
@@ -308,7 +308,7 @@ def.func.within =
 			break;
 
 		case gleam_rect :
-
+		{
 			const x = p.x;
 
 			const y = p.y;
@@ -321,6 +321,7 @@ def.func.within =
 				&& x <= ps.x + shape.width
 				&& y <= ps.y + shape.height
 			);
+		}
 
 		case gleam_shape :
 
@@ -479,7 +480,7 @@ def.func._colorStyle =
 			break;
 
 		case gleam_gradient_radial :
-
+		{
 			const r0 = shape.gradientR0 || 0;
 
 			const r1 = shape.gradientR1;
@@ -503,11 +504,9 @@ def.func._colorStyle =
 				);
 
 			break;
+		}
 
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
 	for( let a = 0, al = style.length; a < al; a++ )
@@ -1183,7 +1182,7 @@ def.func._sketchGenericShape =
 				break;
 
 			case gleam_shape_round :
-
+			{
 				if( shift && nextSect.timtype === gleam_shape_round )
 				{
 					// workaround gap bug in chrome
@@ -1221,6 +1220,7 @@ def.func._sketchGenericShape =
 				}
 
 				break;
+			}
 
 			default :
 

@@ -581,7 +581,7 @@ def.func.specialKey =
 		switch( key )
 		{
 			case 'a' :
-
+			{
 				const v0 = doc.atRank( 0 );
 
 				const v1 = doc.atRank( doc.length - 1 );
@@ -605,6 +605,7 @@ def.func.specialKey =
 				);
 
 				return true;
+			}
 		}
 	}
 

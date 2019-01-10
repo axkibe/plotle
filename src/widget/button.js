@@ -280,7 +280,7 @@ def.lazy._tzShape =
 	switch( this.shape )
 	{
 		case 'ellipse' :
-
+		{
 			const tZone = this._tZone;
 
 			return(
@@ -290,10 +290,9 @@ def.lazy._tzShape =
 					'height', tZone.height - 1
 				)
 			);
+		}
 
-		default :
-
-			return this.shape.transform( this.transform );
+		default : return this.shape.transform( this.transform );
 	}
 };
 

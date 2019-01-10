@@ -80,6 +80,7 @@ def.static.concernsMark =
 | Handles a potential dragStart event for this item.
 */
 def.static.dragStart =
+def.func.dragStart =
 	function(
 		p,
 		shift,
@@ -114,11 +115,11 @@ def.static.dragStart =
 
 	if( !mark || mark.timtype !== visual_mark_items )
 	{
-		mark = visual_mark_items.createWithOne( this.path ); 
+		mark = visual_mark_items.createWithOne( this.path );
 
 		root.setUserMark( mark );
 	}
-	
+
 	const paths = mark.itemPaths;
 
 	root.create(
@@ -240,7 +241,7 @@ def.static.getResizeItemChangePosFs =
 /*
 | A createRelation action moves.
 */
-def.static.createRelationMove =
+def.func.createRelationMove =
 	function(
 		p,
 		action
@@ -248,9 +249,7 @@ def.static.createRelationMove =
 {
 	if( !this.tZone.within( p ) ) return;
 
-	root.create(
-		'action', action.create( 'toItemPath', this.path )
-	);
+	root.create( 'action', action.create( 'toItemPath', this.path ) );
 
 	return true;
 };
@@ -263,7 +262,7 @@ def.static.createRelationMove =
 |
 | Returns true if it handled the click event.
 */
-def.static.ctrlClick =
+def.func.ctrlClick =
 	function(
 		p,      // the point clicked
 		shift,  // true if shift key was pressed
@@ -307,7 +306,7 @@ def.static.ctrlClick =
 /*
 | A createRelation action stops.
 */
-def.static.createRelationStop =
+def.func.createRelationStop =
 	function(
 		p
 	)
@@ -321,22 +320,19 @@ def.static.createRelationStop =
 
 	if( !this.tZone.within( p ) ) return false;
 
-	root.spawnRelation(
-		root.spaceVisual.get( action.fromItemPath.get( -1 ) ),
-		this
-	);
+	root.spawnRelation( root.spaceVisual.get( action.fromItemPath.get( -1 ) ), this );
 
 	return true;
 };
- 
+
 
 /*
 | The key of this item.
 */
 def.lazy.key =
-       function( )
+	function( )
 {
-       return this.path.get( -1 );
+	return this.path.get( -1 );
 };
 
 

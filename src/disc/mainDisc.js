@@ -444,7 +444,7 @@ def.func.pushButton =
 			break;
 
 		case 'remove' :
-
+		{
 			const paths = this.mark.itemPaths;
 
 			const changes = [ ];
@@ -478,6 +478,7 @@ def.func.pushButton =
 			root.alter( changes );
 
 			break;
+		}
 
 		case 'select' :
 

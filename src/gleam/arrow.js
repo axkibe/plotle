@@ -87,7 +87,7 @@ def.static.getArrowShape =
 			break;
 
 		case 'arrow' :
-
+		{
 			// degree of arrow tail
 			const d = Math.atan2( p2.y - p1.y, p2.x - p1.x );
 
@@ -125,6 +125,7 @@ def.static.getArrowShape =
 			);
 
 			break;
+		}
 
 		// unknown arrow end
 		default : throw new Error( );

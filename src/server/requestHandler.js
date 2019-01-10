@@ -402,7 +402,7 @@ server_requestHandler.conveyUpdate =
 		switch( dynRef.timtype )
 		{
 			case ref_space :
-
+			{
 				const spaceBox = root.spaces.get( dynRef.fullname );
 
 				if( !spaceBox ) continue;
@@ -429,9 +429,10 @@ server_requestHandler.conveyUpdate =
 				);
 
 				continue;
+			}
 
 			case ref_userSpaceList :
-
+			{
 				const userInfo = root.userNexus.getInCache( dynRef.username );
 
 				if( !userInfo ) continue;
@@ -450,6 +451,7 @@ server_requestHandler.conveyUpdate =
 				}
 
 				continue;
+			}
 
 			default :
 
@@ -486,7 +488,7 @@ server_requestHandler.testUpdate =
 		switch( dynRef.timtype )
 		{
 			case ref_space :
-
+			{
 				if(
 					dynRef.username !== 'plotle'
 					&& dynRef.username !== userInfo.name
@@ -505,6 +507,7 @@ server_requestHandler.testUpdate =
 				}
 
 				break;
+			}
 
 			case ref_userSpaceList :
 
@@ -515,9 +518,7 @@ server_requestHandler.testUpdate =
 
 				break;
 
-			default :
-
-				return replyError( 'Invalid dynamic reference' );
+			default : return replyError( 'Invalid dynamic reference' );
 		}
 	}
 };

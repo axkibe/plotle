@@ -294,27 +294,22 @@ def.lazy.zone =
 {
 	const action = this.action;
 
-	let zone;
-
 	switch( action && action.timtype )
 	{
 		case action_dragItems :
-
+		{
 			const moveBy = action.moveBy;
 
-			zone = this.fabric.zone;
+			const zone = this.fabric.zone;
 
-			return(
-				moveBy
-				? zone.add( moveBy )
-				: zone
-			);
+			return moveBy ? zone.add( moveBy ) : zone;
+		}
 
 		case action_resizeItems :
-
+		{
 			const pBase = action.pBase;
 
-			zone = action.startZones.get( this.path.get( 2 ) );
+			let zone = action.startZones.get( this.path.get( 2 ) );
 
 			if( !pBase ) return zone;
 
@@ -330,6 +325,7 @@ def.lazy.zone =
 			}
 
 			return zone;
+		}
 
 		default : return this.fabric.zone;
 	}
@@ -439,36 +435,6 @@ def.lazy.scrollbarY =
 		)
 	);
 };
-
-
-/*
-| Reacts on ctrl-clicks.
-*/
-def.func.ctrlClick = visual_item.ctrlClick;
-
-
-/*
-| A create relation action moves.
-*/
-def.func.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-def.func.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-def.func.dragStart = visual_docItem.dragStart;
-
-
-/*
-| A text has been inputed.
-*/
-def.func.input = visual_docItem.input;
 
 
 /*

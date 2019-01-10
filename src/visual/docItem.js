@@ -65,9 +65,9 @@ def.func.click =
 /*
 | Handles a potential dragStart event.
 |
-| FIXME access and action should be needed to handed...
+| FIXME access and action shouldn't be needed to handed...
 */
-def.static.dragStart =
+def.func.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
@@ -225,7 +225,7 @@ def.static.pointingHover =
 /*
 | A text has been inputed.
 */
-def.static.input =
+def.func.input =
 	function(
 		text
 	)

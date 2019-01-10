@@ -1004,7 +1004,7 @@ def.func.specialKey =
 		switch( key )
 		{
 			case 'a' :
-
+			{
 				// selects all items in this space
 
 				let paths = [ ];
@@ -1019,6 +1019,7 @@ def.func.specialKey =
 				root.setUserMark( visual_mark_items.create( 'itemPaths', paths ) );
 
 				return true;
+			}
 		}
 
 		return true;
@@ -1094,7 +1095,7 @@ def.func._moveCreateGeneric =
 			break;
 
 		case visual_label :
-
+		{
 			const fs =
 				Math.max(
 					model.doc.fontsize
@@ -1123,6 +1124,7 @@ def.func._moveCreateGeneric =
 				);
 
 			break;
+		}
 
 		default : throw new Error( );
 	}
@@ -1530,7 +1532,7 @@ def.func._startCreateGeneric =
 	switch( itemType.positioning )
 	{
 		case 'zone' :
-
+		{
 			let fabric  =
 				model.fabric.create(
 					'zone',
@@ -1558,6 +1560,7 @@ def.func._startCreateGeneric =
 				);
 
 			break;
+		}
 
 		case 'pos/fontsize' :
 

@@ -107,7 +107,7 @@ def.transform.get =
 		case 'headline' : widget = widget.create( 'text', this.spaceRef.fullname ); break;
 
 		case 'gridCheckBox' : widget = widget.create( 'checked', this.hasGrid ); break;
-		
+
 		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
 
@@ -293,7 +293,7 @@ def.func.toggleCheckbox =
 
 			return;
 		}
-		
+
 		case 'snappingCheckBox' :
 		{
 			const prev = root.spaceFabric.hasSnapping;

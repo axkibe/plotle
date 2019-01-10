@@ -461,7 +461,7 @@ def.transform.action =
 	{
 		case action_dragItems :
 		case action_resizeItems :
-
+		{
 			const iPaths = action.itemPaths;
 
 			if( iPaths )
@@ -515,6 +515,7 @@ def.transform.action =
 
 				return action;
 			}
+		}
 	}
 
 	return action;

@@ -869,7 +869,7 @@ def.func._onMouseMove =
 			break;
 
 		case 'atween' :
-
+		{
 			const dragbox = shell_settings.dragbox;
 
 			if(
@@ -897,7 +897,9 @@ def.func._onMouseMove =
 				// saves position for possible atween timeout
 				atweenMove = p;
 			}
+
 			break;
+		}
 
 		case 'drag':
 
@@ -971,10 +973,6 @@ def.func._onMouseUp =
 			this._steerAttention( );
 
 			pointingState = false;
-
-			break;
-
-		case false :
 
 			break;
 
@@ -1093,7 +1091,7 @@ def.func._onTouchMove =
 			break;
 
 		case 'atween':
-
+		{
 			const dragbox = shell_settings.dragbox;
 
 			if(
@@ -1123,6 +1121,7 @@ def.func._onTouchMove =
 			}
 
 			break;
+		}
 
 		case 'drag':
 

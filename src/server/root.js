@@ -763,7 +763,7 @@ def.func.requestListener =
 	}
 */
 
-	const pathname = red.pathname.replace( /^[\/]+/g, '' );
+	const pathname = red.pathname.replace( /^[/]+/g, '' );
 
 	if( pathname === 'mm' ) return root.webAjax( request, red, result );
 
@@ -798,7 +798,7 @@ def.func.requestListener =
 		{
 			stat = yield fs.stat( resource.realpath, resume( ) );
 		}
-		catch( e ) { }
+		catch( e ) { /* ignore */ }
 
 		if( stat && stat.mtime > resource.timestamp )
 		{
@@ -862,7 +862,7 @@ def.func.requestListener =
 		{
 			data =
 				( '' + data )
-				.replace( /'use strict'/, "'not strict'" )
+				.replace( /'use strict'/, '\'not strict\'' )
 				.replace( /"use strict"/, '"not strict"' );
 		}
 

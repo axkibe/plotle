@@ -7,6 +7,9 @@
 tim.define( module, ( def, visual_portal ) => {
 
 
+def.extend = './item';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -771,30 +774,6 @@ def.func.click =
 
 
 /*
-| A create relation action moves.
-*/
-def.func.createRelationMove = visual_item.createRelationMove;
-
-
-/*
-| A create relation action stops.
-*/
-def.func.createRelationStop = visual_item.createRelationStop;
-
-
-/*
-| Reacts on ctrl-clicks.
-*/
-def.func.ctrlClick = visual_item.ctrlClick;
-
-
-/*
-| Handles a potential dragStart event for this item.
-*/
-def.func.dragStart = visual_item.dragStart;
-
-
-/*
 | Returns the change for dragging this item.
 */
 def.func.getDragItemChange = visual_item.getDragItemChangeZone;
@@ -822,12 +801,7 @@ def.func.input =
 
 	if( !visual_portal.isSection( section ) ) return false;
 
-	if( section === 'moveToButton' )
-	{
-		this._moveTo( );
-
-		return;
-	}
+	if( section === 'moveToButton' ) { this._moveTo( ); return; }
 
 	// ignores newlines
 	for( let rx = reg.exec( text ); rx; rx = reg.exec( text ) )
@@ -1067,7 +1041,7 @@ def.func._keyDown =
 	switch( section )
 	{
 		case 'spaceUser' :
-
+		{
 			const cpos = this._locateOffset( section, mark.caret.at );
 
 			root.setUserMark(
@@ -1078,6 +1052,7 @@ def.func._keyDown =
 			);
 
 			break;
+		}
 
 		case 'spaceTag' :
 
@@ -1171,7 +1146,7 @@ def.func._keyUp =
 			break;
 
 		case 'spaceTag' :
-
+		{
 			const cpos = this._locateOffset( section, mark.caret.at );
 
 			root.setUserMark(
@@ -1182,6 +1157,7 @@ def.func._keyUp =
 			);
 
 			break;
+		}
 
 		case 'moveToButton' :
 

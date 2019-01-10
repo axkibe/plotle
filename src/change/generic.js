@@ -1,7 +1,7 @@
 /*
 | Collection of generic change functions.
 */
-"use strict";
+'use strict';
 
 
 tim.define( module, ( def ) => {

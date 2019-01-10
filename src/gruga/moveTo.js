@@ -42,7 +42,7 @@ def.staticLazy._buttonSize = ( ) =>
 
 
 /*
-| TODO
+| Facets of the portal buttons.
 */
 def.staticLazy._portalButtonFacets = ( ) =>
 	gleam_facetList.create(

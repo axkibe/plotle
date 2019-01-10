@@ -853,7 +853,7 @@ def.func.inputSpecialKey =
 			return;
 
 		case 46 : // del
-
+		{
 			if( !doc ) { this.beep( ); return; }
 
 			const text = doc.atRank( cursorLine ).text;
@@ -890,6 +890,7 @@ def.func.inputSpecialKey =
 			);
 
 			return;
+		}
 	}
 };
 

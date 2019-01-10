@@ -1,12 +1,12 @@
 {
   "name": "linkloom",
   "version": "1.32",
-  "description": "collaborative concept map editor",
+  "description": "plot your document",
   "author": "Axel Kittenberger <axkibe@gmail.com",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/axkibe/linkloom"
+    "url": "https://github.com/axkibe/plotle"
   },
   "dependencies": {
     "mongodb": "^3.1.10",

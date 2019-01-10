@@ -6,23 +6,23 @@
 'use strict';
 
 
-tim.define( module, ( def, gleam_glint_paint ) => {
+tim.define( module, ( def ) => {
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		// TODO
+		// the grid zooming factor
 		grid : { type : 'number' },
 
-		// TODO
+		// the offset of the (major) grid
 		offset : { type : '../point' },
 
-		// TODO
+		// the total size of the grid
 		size : { type : '../size' },
 
-		// TODO
+		// the distance of the (major) grid point
 		spacing : { type : '../point' },
 	};
 }
