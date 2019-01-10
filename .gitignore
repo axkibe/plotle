@@ -3,4 +3,4 @@ node_modules/
 report/*
 jioncode/*
 timcode/*
-.jshint.stamp
+.eslint.stamp
