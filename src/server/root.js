@@ -71,6 +71,10 @@ const server_spaceBox = require( './spaceBox' );
 
 const server_tools = require( './tools' );
 
+const timspec_twig = tim.import( 'tim.js', 'timspec/twig' );
+
+const tim_type_tim = tim.import( 'tim.js', 'type/tim' );
+
 const hash_sha1 = require( '../hash/sha1' );
 
 const suspend = require( 'suspend' );
@@ -162,9 +166,9 @@ def.func.shellGlobals =
 
 
 /*
-| The shell's globals as ressource.
+| The shell's globals as resource.
 */
-def.lazy.shellGlobalsRessource =
+def.lazy.shellGlobalsResource =
 	function( )
 {
 	let text = '';
@@ -306,7 +310,7 @@ def.func.prepareInventory =
 	log( 'preparing inventory' );
 
 	root.create(
-		'inventory', root.inventory.updateResource( root.shellGlobalsRessource )
+		'inventory', root.inventory.updateResource( root.shellGlobalsResource )
 	);
 
 	const devel = config.get( 'shell', 'devel', 'enable' );
@@ -319,6 +323,25 @@ def.func.prepareInventory =
 		if( resource.devel && !devel ) continue;
 
 		yield* root.inventory.prepareResource( resource );
+	}
+
+	{
+		const srts =
+			tim.catalog.getTimspecRelative(
+				module.filename,
+				tim_type_tim.createFromPath( '../shell/root'.split( '/' ) )
+			);
+
+		const walk = timspec_twig.createByDependencyWalk( srts );
+
+		for( let a = 0, al = walk.length; a < al; a++ )
+		{
+			const filename = walk.getKey( a );
+
+			console.log( 'WALK', filename );
+		}
+
+		throw new Error( 'XXX' );
 	}
 
 	// adds the tim catalog init

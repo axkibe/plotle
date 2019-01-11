@@ -8,7 +8,7 @@ const server_resource = require( './resource' );
 
 const server_resourceList = require( './resourceList' );
 
-const stringList = tim.import( 'tim.js', 'stringList' ).stringList;
+const stringList = tim.import( 'tim.js', 'string/list' ).stringList;
 
 module.exports =
 server_resourceList.create(
@@ -68,20 +68,20 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'tim-catalog-browser.js' ] ),
 		// FIXME dirty Hack!
-		'filePath', 'node_modules/tim.js/src/export/browserCatalog.js',
+		'filePath', 'node_modules/tim.js/src/browser/catalog.js',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		// FIXME dirty Hack!
-		'filePath', 'node_modules/tim.js/src/export/path.js',
+		'filePath', 'node_modules/tim.js/src/path.js',
 		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
 		// FIXME dirty Hack!
-		'filePath', 'node_modules/tim.js/src/export/pathList.js',
+		'filePath', 'node_modules/tim.js/src/pathList.js',
 		'hasTim', true,
 		'inBundle', true,
 		'inTestPad', true
