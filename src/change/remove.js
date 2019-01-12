@@ -39,7 +39,7 @@ if( TIM )
 	def.attributes =
 	{
 		// removes at this path
-		path : { json : true, type : 'tim.js/path' },
+		path : { json : true, type : 'tim.js/src/path' },
 
 		// source sign
 		val : { json : true, type : 'string' },

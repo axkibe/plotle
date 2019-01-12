@@ -24,7 +24,7 @@ if( TIM )
 		frame : { type : [ './frame', 'undefined' ] },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
@@ -92,11 +92,11 @@ const gruga_relation = require( '../gruga/relation' );
 
 const gruga_select = require( '../gruga/select' );
 
-const pathList = tim.import( 'tim.js', 'pathList' );
+const pathList = tim.import( 'tim.js', 'src/pathList' );
 
 const result_hover = require( '../result/hover' );
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 const visual_frame = require( '../visual/frame' );
 

@@ -25,7 +25,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the para',
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// point in north west
 		pos : { type : '../gleam/point' },

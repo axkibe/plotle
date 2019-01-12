@@ -35,7 +35,7 @@ if( TIM )
 		paraSep : { type : 'number' },
 
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// scroll position of the doc
 		scrollPos : { type : '../gleam/point' },

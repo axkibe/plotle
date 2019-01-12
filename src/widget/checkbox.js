@@ -18,13 +18,13 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the transform
 		transform : { type : '../gleam/transform' },

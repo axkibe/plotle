@@ -23,7 +23,7 @@ if( TIM )
 }
 
 
-const pathList = tim.import( 'tim.js', 'pathList' );
+const pathList = tim.import( 'tim.js', 'src/pathList' );
 
 const visual_mark_text = require( './text' );
 

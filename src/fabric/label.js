@@ -18,7 +18,7 @@ if( TIM )
 		fontsize : { type : 'number', json : true },
 
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		pos : { type : '../gleam/point', json : true },
 	};

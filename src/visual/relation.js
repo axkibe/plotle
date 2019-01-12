@@ -33,7 +33,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' },

@@ -39,7 +39,7 @@ if( TIM )
 	def.attributes =
 	{
 		// shrinks at this path
-		path : { type : 'tim.js/path', json : true },
+		path : { type : 'tim.js/src/path', json : true },
 
 		// value the tree had
 		prev : { type : [ '< ./value-types' ], json : true },

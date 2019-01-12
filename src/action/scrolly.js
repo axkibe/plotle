@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// path to the item or widget being scrolled
-		scrollPath : { type : 'tim.js/path' },
+		scrollPath : { type : 'tim.js/src/path' },
 
 		// mouse down point on start of scrolling
 		startPoint : { type : '../gleam/point' },

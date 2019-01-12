@@ -18,7 +18,7 @@ if( TIM )
 		cursor : { type : 'string' },
 
 		// the path to the thing being hovered upon
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 	};
 }
 

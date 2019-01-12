@@ -27,7 +27,7 @@ const session_uid = require( '../session/uid' );
 
 const testpad_action = require( './action' );
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 
 if( TIM )

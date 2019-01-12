@@ -24,13 +24,13 @@ if( TIM )
 		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon',
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// path of the disc
-		path : { type : 'tim.js/path' },
+		path : { type : 'tim.js/src/path' },
 
 		// shape of the disc
 		shape : { type : '../gleam/ellipse' },

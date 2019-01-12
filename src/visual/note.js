@@ -29,13 +29,13 @@ if( TIM )
 
 		// node currently hovered upon
 		// FIXME undefined only
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the note
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// scroll position
 		scrollPos : { type : [ '../gleam/point' ] },
@@ -87,7 +87,7 @@ const gruga_note = require( '../gruga/note' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 const shell_settings = require( '../shell/settings' );
 

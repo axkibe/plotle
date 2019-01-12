@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the paths of the items to drag
-		itemPaths: { type : [ 'undefined', 'tim.js/pathList' ] },
+		itemPaths: { type : [ 'undefined', 'tim.js/src/pathList' ] },
 
 		// mouseDown point on drag creation
 		startPoint : { type : '../gleam/point' },

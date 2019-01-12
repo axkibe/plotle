@@ -13,7 +13,7 @@ if( TIM )
 	{
 		// the list of aliases this is served under
 		// by default determined from filePath
-		aliases : { type : [ 'undefined', 'tim.js/string/list' ] },
+		aliases : { type : [ 'undefined', 'tim.js/src/string/list' ] },
 
 		// "binary" or "utf-8"
 		// by default determined from file extension
@@ -72,7 +72,7 @@ const resume = require( 'suspend' ).resume;
 
 const server_fileTypes = require( './fileTypes' );
 
-const stringList = tim.import( 'tim.js', 'string/list' ).stringList;
+const stringList = tim.import( 'tim.js', 'src/string/list' ).stringList;
 
 const zlib = require( 'zlib' );
 

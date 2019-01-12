@@ -12,13 +12,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item the relation goes from
-		fromItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+		fromItemPath : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// offset when panning during creation
 		offset : { type : [ 'undefined', '../gleam/point' ] },
 
 		// the item the relation goes to
-		toItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+		toItemPath : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the arrow destination while its floating
 		toPoint : { type : [ 'undefined', '../gleam/point' ] },

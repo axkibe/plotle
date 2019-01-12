@@ -39,7 +39,7 @@ if( TIM )
 	def.attributes =
 	{
 		// join at this path
-		path : { type : 'tim.js/path', json : true },
+		path : { type : 'tim.js/src/path', json : true },
 
 		// join at this place
 		// must be length of text
@@ -47,7 +47,7 @@ if( TIM )
 
 		// join this
 		// must be after path
-		path2 : { type : 'tim.js/path', json : true },
+		path2 : { type : 'tim.js/src/path', json : true },
 	};
 
 	def.json = 'change_join';

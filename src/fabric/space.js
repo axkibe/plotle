@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the path of the space
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// reference to this space
 		ref : { type : [ 'undefined', '../ref/space' ] },
@@ -36,7 +36,7 @@ if( TIM )
 }
 
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 
 /*

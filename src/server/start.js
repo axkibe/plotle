@@ -37,7 +37,7 @@ global.CHECK = true;
 {
 	require( 'tim.js' );
 
-	const ending = '/server/start.js';
+	const ending = 'src/server/start.js';
 
 	const filename = module.filename;
 
@@ -47,7 +47,7 @@ global.CHECK = true;
 	const rootPath = filename.substr( 0, filename.length - ending.length );
 
 	// timcode path is one level up
-	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode';
+	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode/';
 
 	tim.catalog.addRootDir( rootPath, 'plotle', timcodePath );
 }

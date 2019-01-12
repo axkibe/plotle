@@ -24,13 +24,13 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the portal
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// current space transform
 		transform : { type : '../gleam/transform' },
@@ -86,7 +86,7 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_portal = require( '../gruga/portal' );
 
-const pathList = tim.import( 'tim.js', 'pathList' );
+const pathList = tim.import( 'tim.js', 'src/pathList' );
 
 const result_hover = require( '../result/hover' );
 
@@ -98,7 +98,7 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 const visual_item = require( '../visual/item' );
 

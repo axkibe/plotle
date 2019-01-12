@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// if selecting ranges (text block), item to path
-		itemPath : { type : [ 'undefined', 'tim.js/path' ] },
+		itemPath : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// point at start of operation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] },

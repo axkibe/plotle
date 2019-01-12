@@ -71,9 +71,9 @@ const server_spaceBox = require( './spaceBox' );
 
 const server_tools = require( './tools' );
 
-const timspec_twig = tim.import( 'tim.js', 'timspec/twig' );
+const timspec_twig = tim.import( 'tim.js', 'src/timspec/twig' );
 
-const tim_type_tim = tim.import( 'tim.js', 'type/tim' );
+const tim_type_tim = tim.import( 'tim.js', 'src/type/tim' );
 
 const hash_sha1 = require( '../hash/sha1' );
 
@@ -325,11 +325,14 @@ def.func.prepareInventory =
 		yield* root.inventory.prepareResource( resource );
 	}
 
+	if( false )
 	{
+		require( '../shell/fontloader' );
+
 		const srts =
 			tim.catalog.getTimspecRelative(
 				module.filename,
-				tim_type_tim.createFromPath( '../shell/root'.split( '/' ) )
+				tim_type_tim.createFromPath( '../shell/fontloader'.split( '/' ) )
 			);
 
 		const walk = timspec_twig.createByDependencyWalk( srts );

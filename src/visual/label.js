@@ -33,7 +33,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' }
@@ -83,7 +83,7 @@ const gruga_label = require( '../gruga/label' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = tim.import( 'tim.js', 'path' );
+const tim_path = tim.import( 'tim.js', 'src/path' );
 
 const visual_doc = require( '../visual/doc' );
 
