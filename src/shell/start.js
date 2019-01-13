@@ -1,7 +1,5 @@
 /*
-| Loads the web fonts Meshcraft uses.
-|
-| Starts the browser system when finished.
+| Starts up the shell.
 */
 'use strict';
 

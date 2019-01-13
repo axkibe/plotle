@@ -7,6 +7,9 @@
 tim.define( module, ( def, change_grow ) => {
 
 
+def.extend = './generic';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -24,8 +27,6 @@ if( TIM )
 	def.json = 'change_grow';
 }
 
-
-const change_generic = require( './generic' );
 
 const change_insert = require( './insert' );
 
@@ -119,13 +120,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-
-/*
 | Returns a change* transformed on this change.
 */
 def.func.transform =
@@ -173,24 +167,6 @@ def.func.transform =
 			throw new Error( );
 	}
 };
-
-
-/*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 } );

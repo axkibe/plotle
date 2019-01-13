@@ -7,6 +7,9 @@
 tim.define( module, ( def, change_listAppend ) => {
 
 
+def.extend = './generic';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -20,8 +23,6 @@ if( TIM )
 
 
 const change_listShorten = require( './listShorten' );
-
-const change_generic = require( './generic' );
 
 
 /*
@@ -51,12 +52,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change* transformed on this change.
 */
 def.func.transform =
@@ -66,24 +61,6 @@ def.func.transform =
 {
 	return cx;
 };
-
-
-/*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 } );

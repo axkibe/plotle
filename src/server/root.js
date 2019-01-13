@@ -325,14 +325,14 @@ def.func.prepareInventory =
 		yield* root.inventory.prepareResource( resource );
 	}
 
-	if( false )
+	// adds the shell to the inventory
 	{
-		require( '../shell/fontloader' );
+		require( '../shell/start' );
 
 		const srts =
 			tim.catalog.getTimspecRelative(
 				module.filename,
-				tim_type_tim.createFromPath( '../shell/fontloader'.split( '/' ) )
+				tim_type_tim.createFromPath( '../shell/start'.split( '/' ) )
 			);
 
 		const walk = timspec_twig.createByDependencyWalk( srts );
@@ -341,11 +341,20 @@ def.func.prepareInventory =
 		{
 			const filename = walk.getKey( a );
 
-			console.log( 'WALK', filename );
-		}
+			const ts = tim.catalog.getTimspec( filename );
 
-		throw new Error( 'XXX' );
+			const resource =
+				server_resource.create(
+					'filePath', ts.path.chop.filepath,
+					'realpath', filename,
+					'hasTim', true,
+					'inBundle', true
+				);
+
+			yield* root.inventory.prepareResource( resource );
+		}
 	}
+
 
 	// adds the tim catalog init
 	root.create(
@@ -984,13 +993,7 @@ def.func.webAjax =
 		result.end( JSON.stringify( asw ) );
 	};
 
-	request.on(
-		'end',
-		function( ) // FIXME =>
-	{
-		suspend( handler )( );
-	}
-	);
+	request.on( 'end', ( ) => suspend( handler )( ) );
 };
 
 } );

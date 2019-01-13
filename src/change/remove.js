@@ -7,7 +7,31 @@
 tim.define( module, ( def, change_remove ) => {
 
 
-const change_generic = require( './generic' );
+def.extend = './generic';
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// removes at this path
+		path : { json : true, type : 'tim.js/src/path' },
+
+		// source sign
+		val : { json : true, type : 'string' },
+
+		// remove at this place begin
+		at1 : { json : true, type : 'integer' },
+
+		// remove ends here
+		// must be at1 + val.length
+		// FUTURE have it lazyEval
+		at2 : { json : true, type : 'integer' },
+	};
+
+	def.json = 'change_remove';
+}
+
 
 const change_grow = require( './grow' );
 
@@ -34,27 +58,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// removes at this path
-		path : { json : true, type : 'tim.js/src/path' },
-
-		// source sign
-		val : { json : true, type : 'string' },
-
-		// remove at this place begin
-		at1 : { json : true, type : 'integer' },
-
-		// remove ends here
-		// must be at1 + val.length
-		// FUTURE have it lazyEval
-		at2 : { json : true, type : 'integer' },
-	};
-
-	def.json = 'change_remove';
-}
 
 
 /**
@@ -132,12 +135,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
@@ -194,24 +191,6 @@ def.func.transform =
 
 
 /*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
-
-
-/*
 | Transforms an insert change
 | considering this remove actually came first.
 */
@@ -244,12 +223,6 @@ def.func._transformInsert =
 		return cx.create( 'at1', cx.at1 - len, 'at2', cx.at2 - len );
 	}
 };
-
-
-/*
-| Transforms a range mark by this remove.
-*/
-def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
 /*

@@ -7,7 +7,26 @@
 tim.define( module, ( def, change_shrink ) => {
 
 
-const change_generic = require( './generic' );
+def.extend = './generic';
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// shrinks at this path
+		path : { type : 'tim.js/src/path', json : true },
+
+		// value the tree had
+		prev : { type : [ '< ./value-types' ], json : true },
+
+		// rank of new node
+		rank : { type : 'integer', json : true },
+	};
+
+	def.json = 'change_shrink';
+}
+
 
 const change_grow = require( './grow' );
 
@@ -34,22 +53,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// shrinks at this path
-		path : { type : 'tim.js/src/path', json : true },
-
-		// value the tree had
-		prev : { type : [ '< ./value-types' ], json : true },
-
-		// rank of new node
-		rank : { type : 'integer', json : true },
-	};
-
-	def.json = 'change_shrink';
-}
 
 
 /**
@@ -135,12 +138,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change* transformed on this change.
 */
 def.func.transform =
@@ -219,23 +216,4 @@ def.func._transformMark =
 };
 
 
-/*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
-
-
 } );
-

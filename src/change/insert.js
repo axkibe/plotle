@@ -7,7 +7,31 @@
 tim.define( module, ( def, change_insert ) => {
 
 
-const change_generic = require( './generic' );
+def.extend = './generic';
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// insert at this path
+		path : { type : 'tim.js/src/path', json : true },
+
+		// insert this
+		val : { type : 'string', json : true },
+
+		// insert at this place begin
+		at1 : { type : 'integer', json : true },
+
+		// insert ends here
+		// must be at1 + val.length
+		// FUTURE have this be a lazy
+		at2 : { type : 'integer', json : true },
+	};
+
+	def.json = 'change_insert';
+}
+
 
 const change_grow = require( './grow' );
 
@@ -34,28 +58,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-if( TIM )
-{
-
-	def.attributes =
-	{
-		// insert at this path
-		path : { type : 'tim.js/src/path', json : true },
-
-		// insert this
-		val : { type : 'string', json : true },
-
-		// insert at this place begin
-		at1 : { type : 'integer', json : true },
-
-		// insert ends here
-		// must be at1 + val.length
-		// FUTURE have this be a lazy
-		at2 : { type : 'integer', json : true },
-	};
-
-	def.json = 'change_insert';
-}
 
 
 /**
@@ -131,12 +133,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
@@ -190,25 +186,6 @@ def.func.transform =
 
 
 /*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
-
-
-
-/*
 | Transforms another insert/remove change
 | considering this insert actually came first.
 */
@@ -238,12 +215,6 @@ def.func._transformInsertRemove =
 		)
 	);
 };
-
-
-/*
-| Transforms a range mark by this insert.
-*/
-def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
 /*

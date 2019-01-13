@@ -13,7 +13,7 @@ const change_list = require( './list' );
 /*
 | Reversivly performs this change on a tree.
 */
-def.static.changeTreeReverse =
+def.func.changeTreeReverse =
 	function(
 		tree
 	)
@@ -25,7 +25,7 @@ def.static.changeTreeReverse =
 /*
 | Returns a change list transformed by this change.
 */
-def.static.transformChangeList =
+def.func.transformChangeList =
 	function(
 		cList
 	)
@@ -64,7 +64,7 @@ def.static.transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.static.transformChangeWrap =
+def.func.transformChangeWrap =
 	function(
 		cw
 	)
@@ -76,7 +76,7 @@ def.static.transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.static.transformChangeWrapList =
+def.func.transformChangeWrapList =
 	function(
 		cwList
 	)
@@ -94,4 +94,3 @@ def.static.transformChangeWrapList =
 
 
 } );
-

@@ -7,9 +7,28 @@
 tim.define( module, ( def, change_split ) => {
 
 
-const error = require( './error' );
+def.extend = './generic';
 
-const change_generic = require( './generic' );
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// split at this path
+		path : { type : 'tim.js/src/path', json : true },
+
+		// insert at this place begin
+		at1 : { type : 'integer', json : true },
+
+		// split created this new/next path
+		path2 : { type : 'tim.js/src/path', json : true }
+	};
+
+	def.json = 'change_split';
+}
+
+
+const error = require( './error' );
 
 const change_grow = require( './grow' );
 
@@ -33,23 +52,6 @@ const change_wrap = require( './wrap' );
 
 const change_wrapList = require( './wrapList' );
 
-
-if( TIM )
-{
-	def.attributes =
-	{
-		// split at this path
-		path : { type : 'tim.js/src/path', json : true },
-
-		// insert at this place begin
-		at1 : { type : 'integer', json : true },
-
-		// split created this new/next path
-		path2 : { type : 'tim.js/src/path', json : true }
-	};
-
-	def.json = 'change_split';
-}
 
 
 /**
@@ -155,12 +157,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
@@ -221,24 +217,6 @@ def.func.transform =
 			throw new Error( );
 	}
 };
-
-
-/*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*

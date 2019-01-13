@@ -7,7 +7,28 @@
 tim.define( module, ( def, change_join ) => {
 
 
-const change_generic = require( './generic' );
+def.extend = './generic';
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// join at this path
+		path : { type : 'tim.js/src/path', json : true },
+
+		// join at this place
+		// must be length of text
+		at1 : { type : 'integer', json : true },
+
+		// join this
+		// must be after path
+		path2 : { type : 'tim.js/src/path', json : true },
+	};
+
+	def.json = 'change_join';
+}
+
 
 const change_grow = require( './grow' );
 
@@ -34,24 +55,6 @@ const change_wrapList = require( './wrapList' );
 const error = require( './error' );
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// join at this path
-		path : { type : 'tim.js/src/path', json : true },
-
-		// join at this place
-		// must be length of text
-		at1 : { type : 'integer', json : true },
-
-		// join this
-		// must be after path
-		path2 : { type : 'tim.js/src/path', json : true },
-	};
-
-	def.json = 'change_join';
-}
 
 
 /**
@@ -171,12 +174,6 @@ def.func.changeTree =
 
 
 /*
-| Reversivly performs this change on a tree.
-*/
-def.func.changeTreeReverse = change_generic.changeTreeReverse;
-
-
-/*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
@@ -234,24 +231,6 @@ def.func.transform =
 			throw new Error( );
 	}
 };
-
-
-/*
-| Returns a change list transformed by this change.
-*/
-def.func._transformChangeList = change_generic.transformChangeList;
-
-
-/*
-| Returns a change wrap transformed by this change.
-*/
-def.func._transformChangeWrap = change_generic.transformChangeWrap;
-
-
-/*
-| Returns a change wrap list transformed by this change.
-*/
-def.func._transformChangeWrapList = change_generic.transformChangeWrapList;
 
 
 /*
@@ -330,12 +309,6 @@ def.func._transformTextMark =
 		)
 	);
 };
-
-
-/*
-| Transforms a range mark by this join.
-*/
-def.func._transformRangeMark = change_generic.transformRangeMark;
 
 
 } );
