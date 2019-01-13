@@ -61,7 +61,7 @@ if( TIM )
 
 const form_form = require( './form' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 
 /**

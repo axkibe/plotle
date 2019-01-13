@@ -36,7 +36,7 @@ if( TIM )
 }
 
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 
 /*

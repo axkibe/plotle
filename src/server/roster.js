@@ -8,7 +8,7 @@ const server_resource = require( './resource' );
 
 const server_resourceList = require( './resourceList' );
 
-const stringList = tim.import( 'tim.js', 'src/string/list' ).stringList;
+const stringList = require( 'tim.js/src/string/list' ).stringList;
 
 module.exports =
 server_resourceList.create(

@@ -71,9 +71,9 @@ const server_spaceBox = require( './spaceBox' );
 
 const server_tools = require( './tools' );
 
-const timspec_twig = tim.import( 'tim.js', 'src/timspec/twig' );
+const timspec_twig = require( 'tim.js/src/timspec/twig' );
 
-const tim_type_tim = tim.import( 'tim.js', 'src/type/tim' );
+const tim_type_tim = require( 'tim.js/src/type/tim' );
 
 const hash_sha1 = require( '../hash/sha1' );
 

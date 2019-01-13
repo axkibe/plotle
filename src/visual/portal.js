@@ -86,7 +86,7 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_portal = require( '../gruga/portal' );
 
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 const result_hover = require( '../result/hover' );
 
@@ -98,7 +98,7 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 const visual_item = require( '../visual/item' );
 

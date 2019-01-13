@@ -11,7 +11,7 @@ const config = require( '../config/intf' );
 
 const hash_sha1 = require( '../hash/sha1' );
 
-const stringList = tim.import( 'tim.js', 'src/string/list' ).stringList;
+const stringList = require( 'tim.js/src/string/list' ).stringList;
 
 let opentypeHash;
 let opentypeMinHash;

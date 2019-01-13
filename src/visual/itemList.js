@@ -15,7 +15,7 @@ if( TIM )
 
 const gleam_rectGroup = require( '../gleam/rectGroup' );
 
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 
 /*

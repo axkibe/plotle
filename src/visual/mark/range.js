@@ -25,7 +25,7 @@ if( TIM )
 	};
 }
 
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 
 /*

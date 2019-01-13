@@ -201,8 +201,7 @@ const net_channel = require( '../net/channel' );
 
 const net_link = require( '../net/link' );
 
-//const pathList = require( 'tim.js/src/pathList' );
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 const ref_space = require( '../ref/space' );
 
@@ -226,7 +225,7 @@ const show_normal = require( '../show/normal' );
 
 const show_zoom = require( '../show/zoom' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 const user_creds = require( '../user/creds' );
 

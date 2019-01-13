@@ -72,7 +72,7 @@ const resume = require( 'suspend' ).resume;
 
 const server_fileTypes = require( './fileTypes' );
 
-const stringList = tim.import( 'tim.js', 'src/string/list' ).stringList;
+const stringList = require( 'tim.js/src/string/list' ).stringList;
 
 const zlib = require( 'zlib' );
 

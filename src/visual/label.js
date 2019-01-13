@@ -83,7 +83,7 @@ const gruga_label = require( '../gruga/label' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 const visual_doc = require( '../visual/doc' );
 

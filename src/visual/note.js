@@ -87,7 +87,7 @@ const gruga_note = require( '../gruga/note' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 const shell_settings = require( '../shell/settings' );
 

@@ -18,7 +18,7 @@ if( TIM )
 
 const change_mark_node = require( '../../change/mark/node' );
 
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 
 /**

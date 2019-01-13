@@ -92,11 +92,11 @@ const gruga_relation = require( '../gruga/relation' );
 
 const gruga_select = require( '../gruga/select' );
 
-const pathList = tim.import( 'tim.js', 'src/pathList' );
+const pathList = require( 'tim.js/src/pathList' );
 
 const result_hover = require( '../result/hover' );
 
-const tim_path = tim.import( 'tim.js', 'src/path' );
+const tim_path = require( 'tim.js/src/path' );
 
 const visual_frame = require( '../visual/frame' );
 
