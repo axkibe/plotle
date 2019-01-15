@@ -96,8 +96,6 @@ server_resourceList.create(
 		'filePath', 'media/fonts/SourceSansPro-Regular.ttf',
 		'maxage', 'long'
 	),
-
-	// --- TestPad ---
 	server_resource.create(
 		'aliases', stringList( [ 'testpad.html' ] ),
 		'filePath', 'media/testpad.html',

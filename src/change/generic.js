@@ -25,7 +25,7 @@ def.func.changeTreeReverse =
 /*
 | Returns a change list transformed by this change.
 */
-def.func.transformChangeList =
+def.func._transformChangeList =
 	function(
 		cList
 	)
@@ -64,7 +64,7 @@ def.func.transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func.transformChangeWrap =
+def.func._transformChangeWrap =
 	function(
 		cw
 	)
@@ -76,7 +76,7 @@ def.func.transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func.transformChangeWrapList =
+def.func._transformChangeWrapList =
 	function(
 		cwList
 	)

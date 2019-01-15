@@ -4,7 +4,48 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, testpad_root ) => {
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// the action the user is preparing
+		action : { type : [ 'undefined', './action' ] },
+
+		// removes the beep
+		beepTimer : { type : [ 'undefined', 'number' ] },
+
+		// offset cursor is at
+		cursorAt : { type : 'integer', defaultValue : '0' },
+
+		// line cursor is in
+		cursorLine : { type : 'integer', defaultValue : '0' },
+
+		// the document
+		// FIXME make lazy
+		doc : { type : [ '../fabric/doc', 'undefined' ] },
+
+		// DOM elements
+		elements : { type : 'protean' },
+
+		// true when having focus
+		haveFocus : { type : 'boolean', defaultValue : 'false' },
+
+		// true when mouse button is held down
+		mouseDown : { type : 'boolean', defaultValue : 'false' },
+
+		// the testing repository
+		repository :
+		{
+			type : './repository',
+			defaultValue : 'require( "./repository" ).init( )'
+		}
+	};
+
+	def.global = 'root';
+}
 
 
 const change_insert = require( '../change/insert' );
@@ -29,63 +70,6 @@ const testpad_action = require( './action' );
 
 const tim_path = require( 'tim.js/src/path' );
 
-
-if( TIM )
-{
-	def.attributes =
-	{
-		action :
-		{
-			// the action the user is preparing
-			type : [ 'undefined', './action' ]
-		},
-		beepTimer :
-		{
-			// removes the beep
-			type : [ 'undefined', 'protean' ]
-		},
-		cursorAt :
-		{
-			// offset cursor is at
-			type : 'integer',
-			defaultValue : '0'
-		},
-		cursorLine :
-		{
-			// line cursor is in
-			type : 'integer',
-			defaultValue : '0'
-		},
-		elements :
-		{
-			// DOM elements
-			type : [ 'undefined', 'protean' ]
-		},
-		haveFocus :
-		{
-			// true when having focus
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		mouseDown :
-		{
-			// true when mouse button is held down
-			type : 'boolean',
-			defaultValue : 'false'
-		},
-		repository :
-		{
-			// the testing repository
-			type : './repository',
-			// TODO
-			// defaultValue : 'testpad_repository.create( )'
-		}
-	};
-
-	def.init = [ ];
-}
-
-
 const noteDocPath = tim_path.empty.append( 'note' ).append( 'doc' );
 
 
@@ -98,107 +82,46 @@ const _bind =
 		handler  // the handler of testpad
 	)
 {
-	return(
-		function( )
-		{
-			root[ handler ].apply( root, arguments );
-		}
-	);
+	return( function( ) { root[ handler ].apply( root, arguments ); } );
+};
+
+
+
+/*
+| Updates the sequence number
+*/
+def.func.updateSeq =
+	function(
+		seq
+	)
+{
+	const repository = this.repository;
+
+	seq = limit( 0, seq, repository.maxSeq );
+
+	return root.create( 'repository', repository.create( 'seq', seq ) );
 };
 
 
 /*
-| Initializer.
+| FIXME
 */
-/* FIXME
-def.func.init =
+def.func.update =
 	function( )
 {
-	let elements = this.elements;
-
-	if( !elements )
-	{
-		elements =
-		this.elements =
-			{
-				measure : undefined,
-				pad : undefined,
-				input : undefined,
-				beep : undefined,
-				send : undefined,
-				cancel : undefined,
-				upnow : undefined,
-				up : undefined,
-				now : undefined,
-				down : undefined
-			};
-
-		for( let id in elements )
-		{
-			elements[ id ] = document.getElementById( id );
-		}
-
-		const pad = elements.pad;
-
-		const input = elements.input;
-
-		const send = elements.send;
-
-		const cancel = elements.cancel;
-
-		const down = elements.down;
-
-		const up = elements.up;
-
-		const upnow = elements.upnow;
-
-		pad.onmousedown = _bind( 'onMouseDown' );
-
-		pad.onmousemove = _bind( 'onMouseMove' );
-
-		pad.onmouseup = _bind( 'onMouseUp' );
-
-		pad.onclick = _bind( 'onMouseClick' );
-
-		input.onkeypress = _bind( 'onKeyPress' );
-
-		input.onkeydown = _bind( 'onKeyDown' );
-
-		input.onkeyup = _bind( 'onKeyUp' );
-
-		input.onfocus = _bind( 'onFocus' );
-
-		input.onblur = _bind( 'onBlur' );
-
-		send.onclick = _bind( 'send' );
-
-		cancel.onclick = _bind( 'onCancelButton' );
-
-		down.onclick = _bind( 'onDownButton' );
-
-		up.onclick = _bind( 'onUpButton' );
-
-		upnow.onclick = _bind( 'onUpNowButton' );
-	}
+	const elements = this.elements;
 
 	elements.send.disabled =
 	elements.cancel.disabled =
 		!this.action;
 
-	const doc =
-	this._doc =
-		this.repository.get( noteDocPath.chop );
+	const doc = this.repository.get( noteDocPath.chop );
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	this.cursorLine = limit( 0, this.cursorLine, doc.length - 1 );
+	const cursorLine = limit( 0, this.cursorLine, doc.length - 1 );
 
-	this.cursorAt =
-		limit(
-			0,
-			this.cursorAt,
-			doc.atRank( this.cursorLine ).text.length
-		);
+	const cursorAt = limit( 0, this.cursorAt, doc.atRank( cursorLine ).text.length );
 
 	if( !doc )
 	{
@@ -209,9 +132,13 @@ def.func.init =
 		elements.pad.innerHTML = this.makeScreen( doc );
 	}
 
-	root = this;
+	root.create(
+		'doc', doc,
+		'elements', elements,
+		'cursorLine', cursorLine,
+		'cursorAt', cursorAt
+	);
 };
-*/
 
 
 /*
@@ -233,9 +160,11 @@ const isSpecialKey =
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
+
 			return true;
 
 		default :
+
 			return false;
 	}
 };
@@ -280,8 +209,7 @@ def.func.alter =
 	const changeWrap =
 		change_wrap.create(
 			'cid', session_uid.newUid( ),
-			'changeList',
-				change_list.create( 'list:set', 0, change )
+			'changeList', change_list.create( 'list:set', 0, change )
 		);
 
 	root.repository.alter( changeWrap );
@@ -302,7 +230,7 @@ def.func.onMouseDown =
 
 	root.captureEvents( );
 
-	root.create( 'mouseDown', true );
+	root.create( 'mouseDown', true ).update( );
 
 	root.elements.input.focus( );
 
@@ -310,7 +238,7 @@ def.func.onMouseDown =
 
 	const measure = root.elements.measure;
 
-	const doc = root._doc;
+	const doc = root.doc;
 
 	const x = event.pageX - pad.offsetLeft;
 
@@ -335,7 +263,7 @@ def.func.onMouseDown =
 				Math.floor( x / measure.offsetWidth ),
 				cText.length
 			)
-	);
+	).update( );
 };
 
 
@@ -374,9 +302,7 @@ def.func.releaseEvents =
 	}
 	else
 	{
-		document.onmouseup =
-		document.onmousemove =
-			undefined;
+		document.onmouseup = document.onmousemove = undefined;
 	}
 };
 
@@ -393,7 +319,7 @@ def.func.onMouseUp =
 
 	event.preventDefault( );
 
-	root.create( 'mouseDown', false );
+	root.create( 'mouseDown', false ).update( );
 
 	root.releaseEvents( );
 };
@@ -421,10 +347,7 @@ def.func.onMouseMove =
 		event
 	)
 {
-	if( root.mouseDown )
-	{
-		root.onMouseDown( event );
-	}
+	if( root.mouseDown ) root.onMouseDown( event );
 };
 
 
@@ -479,7 +402,7 @@ def.func.onKeyUp =
 def.func.onFocus =
 	function( )
 {
-	root.create( 'haveFocus', true );
+	root.create( 'haveFocus', true ).update( );
 };
 
 
@@ -489,7 +412,7 @@ def.func.onFocus =
 def.func.onBlur =
 	function( )
 {
-	root.create( 'haveFocus', false );
+	root.create( 'haveFocus', false ).update( );
 };
 
 
@@ -503,14 +426,9 @@ def.func.send =
 
 	let cursorAt;
 
-	const doc = this._doc;
+	const doc = this.doc;
 
-	if( !action )
-	{
-		this.beep( );
-
-		return;
-	}
+	if( !action ) { this.beep( ); return; }
 
 	const linePath =
 		noteDocPath
@@ -592,9 +510,10 @@ def.func.send =
 
 	root.create(
 		'action', undefined,
-		'cursorAt', cursorAt,
-		'repository', root.repository.create( 'seq', maxInteger )
-	);
+		'cursorAt', cursorAt
+	)
+	.updateSeq( maxInteger )
+	.update( );
 };
 
 
@@ -604,7 +523,7 @@ def.func.send =
 def.func.onCancelButton =
 	function( )
 {
-	root.create( 'action', undefined );
+	root.create( 'action', undefined ).update( );
 };
 
 
@@ -616,15 +535,11 @@ def.func.beep =
 {
 	root.elements.beep.innerHTML = 'BEEP!';
 
-	if( root.beepTimer )
-	{
-		clearInterval( root.beepTimer );
-	}
+	if( root.beepTimer ) clearInterval( root.beepTimer );
 
 	root.create(
-		'beepTimer',
-			setInterval( _bind( 'clearBeep' ), 540 )
-	);
+		'beepTimer', setInterval( _bind( 'clearBeep' ), 540 )
+	).update( );
 };
 
 
@@ -638,7 +553,7 @@ def.func.clearBeep =
 
 	clearInterval( root.beepTimer );
 
-	root.create( 'beepTimer', undefined );
+	root.create( 'beepTimer', undefined ).update( );
 };
 
 
@@ -662,7 +577,7 @@ def.func.testInput =
 
 	if( text === '' ) return;
 
-	if( !root._doc ) { root.beep( ); return; }
+	if( !root.doc ) { root.beep( ); return; }
 
 	if( !action )
 	{
@@ -674,26 +589,20 @@ def.func.testInput =
 				'at', cursorAt,
 				'value', text
 			)
-		);
+		).update( );
 
 		return;
 	}
 
 	if(
 		action.command === 'insert'
-		&&
-		cursorLine === action.line
-		&&
-		cursorAt === action.at
+		&& cursorLine === action.line
+		&& cursorAt === action.at
 	)
 	{
-		root.create(
-			'action',
-			action.create(
-				'value',
-					action.value + text
-			)
-		);
+		root
+		.create( 'action', action.create( 'value', action.value + text ) )
+		.update( );
 
 		return;
 	}
@@ -717,7 +626,7 @@ def.func.inputSpecialKey =
 
 	const cursorAt = root.cursorAt;
 
-	const doc = root._doc;
+	const doc = root.doc;
 
 	switch( keyCode )
 	{
@@ -735,7 +644,7 @@ def.func.inputSpecialKey =
 							'command', 'join',
 							'line', cursorLine
 						)
-				);
+				).update( );
 
 				return;
 			}
@@ -751,7 +660,7 @@ def.func.inputSpecialKey =
 						'at2', cursorAt
 					),
 					'cursorAt', cursorAt - 1
-				);
+				).update( );
 
 				return;
 			}
@@ -766,7 +675,7 @@ def.func.inputSpecialKey =
 			root.create(
 				'action', root.action.create( 'at', root.action.at - 1 ),
 				'cursorAt', cursorAt - 1
-			);
+			).update( );
 
 			return;
 
@@ -785,13 +694,13 @@ def.func.inputSpecialKey =
 						'line', cursorLine,
 						'at', cursorAt
 					)
-			);
+			).update( );
 
 			return;
 
 		case 27 : // esc
 
-			root.create( 'action', undefined );
+			root.create( 'action', undefined ).update( );
 
 			return;
 
@@ -799,9 +708,7 @@ def.func.inputSpecialKey =
 
 			if( !doc ) { this.beep( ); return; }
 
-			root.create(
-				'cursorAt', doc.atRank( cursorLine ).text.length
-			);
+			root.create( 'cursorAt', doc.atRank( cursorLine ).text.length ).update( );
 
 			return;
 
@@ -809,7 +716,7 @@ def.func.inputSpecialKey =
 
 			if( !doc ) { this.beep( ); return; }
 
-			root.create( 'cursorAt', 0 );
+			root.create( 'cursorAt', 0 ).update( );
 
 			return;
 
@@ -819,7 +726,7 @@ def.func.inputSpecialKey =
 
 			if( cursorAt <= 0 ) { this.beep( ); return; }
 
-			root.create( 'cursorAt', cursorAt - 1 );
+			root.create( 'cursorAt', cursorAt - 1 ).update( );
 
 			return;
 
@@ -827,7 +734,7 @@ def.func.inputSpecialKey =
 
 			if( !doc || cursorLine <= 0) { this.beep( ); return; }
 
-			root.create( 'cursorLine', cursorLine - 1 );
+			root.create( 'cursorLine', cursorLine - 1 ).update( );
 
 			return;
 
@@ -835,7 +742,7 @@ def.func.inputSpecialKey =
 
 			if( !doc ) { this.beep( ); return; }
 
-			root.create( 'cursorAt', cursorAt + 1 );
+			root.create( 'cursorAt', cursorAt + 1 ).update( );
 
 			return;
 
@@ -848,7 +755,7 @@ def.func.inputSpecialKey =
 				return;
 			}
 
-			root.create( 'cursorLine', cursorLine + 1 );
+			root.create( 'cursorLine', cursorLine + 1 ).update( );
 
 			return;
 
@@ -870,9 +777,8 @@ def.func.inputSpecialKey =
 							'at', cursorAt,
 							'at2', cursorAt + 1
 						),
-					'cursorAt',
-						cursorAt + 1
-				);
+					'cursorAt', cursorAt + 1
+				).update( );
 
 				return;
 			}
@@ -887,7 +793,7 @@ def.func.inputSpecialKey =
 			root.create(
 				'action', action.create( 'at2', action.at2 + 1 ),
 				'cursorAt', cursorAt + 1
-			);
+			).update( );
 
 			return;
 		}
@@ -901,10 +807,7 @@ def.func.inputSpecialKey =
 def.func.onUpNowButton =
 	function( )
 {
-	root.create(
-		'repository',
-			root.repository.create( 'seq', maxInteger )
-	);
+	root.updateSeq( maxInteger ).update( );
 
 	this.elements.input.focus( );
 };
@@ -916,10 +819,7 @@ def.func.onUpNowButton =
 def.func.onUpButton =
 	function( )
 {
-	root.create(
-		'repository',
-			root.repository.create( 'seq', root.repository.seq + 1 )
-	);
+	root.updateSeq( root.repository.seq + 1 ).update( );
 
 	this.elements.input.focus( );
 };
@@ -931,10 +831,7 @@ def.func.onUpButton =
 def.func.onDownButton =
 	function( )
 {
-	root.create(
-		'repository',
-			root.repository.create( 'seq', root.repository.seq - 1 )
-	);
+	root.updateSeq( root.repository.seq - 1 ).update( );
 
 	this.elements.input.focus( );
 };
@@ -1092,7 +989,65 @@ if( !NODE )
 	window.onload =
 		function( )
 	{
-		self.create( );
+		const elements =
+		{
+			measure : undefined,
+			pad : undefined,
+			input : undefined,
+			beep : undefined,
+			send : undefined,
+			cancel : undefined,
+			upnow : undefined,
+			up : undefined,
+			now : undefined,
+			down : undefined
+		};
+
+		for( let id in elements ) elements[ id ] = document.getElementById( id );
+
+		const pad = elements.pad;
+
+		const input = elements.input;
+
+		const send = elements.send;
+
+		const cancel = elements.cancel;
+
+		const down = elements.down;
+
+		const up = elements.up;
+
+		const upnow = elements.upnow;
+
+		pad.onmousedown = _bind( 'onMouseDown' );
+
+		pad.onmousemove = _bind( 'onMouseMove' );
+
+		pad.onmouseup = _bind( 'onMouseUp' );
+
+		pad.onclick = _bind( 'onMouseClick' );
+
+		input.onkeypress = _bind( 'onKeyPress' );
+
+		input.onkeydown = _bind( 'onKeyDown' );
+
+		input.onkeyup = _bind( 'onKeyUp' );
+
+		input.onfocus = _bind( 'onFocus' );
+
+		input.onblur = _bind( 'onBlur' );
+
+		send.onclick = _bind( 'send' );
+
+		cancel.onclick = _bind( 'onCancelButton' );
+
+		down.onclick = _bind( 'onDownButton' );
+
+		up.onclick = _bind( 'onUpButton' );
+
+		upnow.onclick = _bind( 'onUpNowButton' );
+
+		testpad_root.create( 'elements', elements ).update( );
 
 		root.elements.input.focus( );
 	};

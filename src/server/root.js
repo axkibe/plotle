@@ -309,13 +309,11 @@ def.func.prepareInventory =
 {
 	log( 'preparing inventory' );
 
-	root.create(
-		'inventory', root.inventory.updateResource( root.shellGlobalsResource )
-	);
+	root.create( 'inventory', root.inventory.updateResource( root.shellGlobalsResource ) );
 
 	const devel = config.get( 'shell', 'devel', 'enable' );
 
-	// takes resource from the the roster
+	// prepares ressources from the roster
 	for( let a = 0, al = server_roster.length; a < al; a++ )
 	{
 		const resource = server_roster.get( a );
@@ -325,14 +323,16 @@ def.func.prepareInventory =
 		yield* root.inventory.prepareResource( resource );
 	}
 
-	// adds the shell to the inventory
+	// prepares ressources form the the shell
 	{
-		require( '../shell/start' );
+		const entry = '../shell/start';
+
+		require( entry );
 
 		const srts =
 			tim.catalog.getTimspecRelative(
 				module.filename,
-				tim_type_tim.createFromPath( '../shell/start'.split( '/' ) )
+				tim_type_tim.createFromPath( entry.split( '/' ) )
 			);
 
 		const walk = timspec_twig.createByDependencyWalk( srts );
@@ -355,6 +355,48 @@ def.func.prepareInventory =
 		}
 	}
 
+	// prepares ressources for the testpad
+	{
+		const entry = '../testpad/root';
+
+		require( entry );
+
+		const srts =
+			tim.catalog.getTimspecRelative(
+				module.filename,
+				tim_type_tim.createFromPath( entry.split( '/' ) )
+			);
+
+		const walk = timspec_twig.createByDependencyWalk( srts );
+
+		for( let a = 0, al = walk.length; a < al; a++ )
+		{
+			const filename = walk.getKey( a );
+
+			const ts = tim.catalog.getTimspec( filename );
+
+			const filePath = ts.path.chop.filepath;
+
+			let resource = root.inventory.get( server_resource.filePathAlias( filePath ) );
+
+			if( resource )
+			{
+				resource = resource.create( 'inTestPad', true );
+			}
+			else
+			{
+				resource =
+					server_resource.create(
+						'filePath', ts.path.chop.filepath,
+						'realpath', filename,
+						'hasTim', true,
+						'inTestPad', true
+					);
+			}
+
+			yield* root.inventory.prepareResource( resource );
+		}
+	}
 
 	// adds the tim catalog init
 	root.create(

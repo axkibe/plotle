@@ -4,88 +4,87 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
-
-
-//const change_wrapList = require( '../change/wrapList' );
-
-//const fabric_doc = require( '../fabric/doc' );
-
-//const fabric_note = require( '../fabric/note' );
-
-//const fabric_para = require( '../fabric/para' );
-
-//const gleam_point = require( '../gleam/point' );
-
-//const gleam_rect = require( '../gleam/rect' );
-
-//const limit = require( '../math/root' );
+tim.define( module, ( def, testpad_repository ) => {
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		seq :
-		{
-			// current sequence numer
-			type : 'integer',
-			defaultValue : '0'
-		},
-		_changeWrapList :
-		{
-			// history of all changes
-			type : [ 'undefined', '../change/wrapList' ]
-		},
-		_note :
-		{
-			// the note
-			type : [ 'undefined', '../fabric/note' ]
-		}
-	};
+		// current sequence numer
+		seq : { type : 'integer' },
 
-	def.init = [ ];
+		// history of all changes
+		_changeWrapList : { type : [ 'undefined', '../change/wrapList' ] },
+
+		// the note
+		_note : { type : [ 'undefined', '../fabric/note' ] }
+	};
 }
 
 
+const change_wrapList = require( '../change/wrapList' );
+
+const fabric_doc = require( '../fabric/doc' );
+
+const fabric_note = require( '../fabric/note' );
+
+const fabric_para = require( '../fabric/para' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+
 /*
-| Initializer.
+| Creates the start of the repository.
 */
-/* FIXME
-def.func.xinit =
+def.static.init =
 	function( )
 {
-	// the current note;
-	if( !this._note )
-	{
-		this._note =
-			fabric_note.create(
-				'doc',
-					fabric_doc.create(
-						'twig:add', '1',
-							fabric_para.create( 'text', 'Ameno' ),
-						'twig:add', '2',
-							fabric_para.create( 'text', 'Latire' ),
-						'twig:add', '3',
-							fabric_para.create( 'text', 'Dorime' )
-					),
-				'zone',
-					gleam_rect.create(
-						'pnw', gleam_point.create( 'x', 0, 'y', 0 ),
-						'pse', gleam_point.create( 'x', 100, 'y', 100 )
-					),
-				'fontsize', 13
-			);
-	}
-
-	if( !this._changeWrapList )
-	{
-		this._changeWrapList = change_wrapList.create( );
-	}
-
-	this.seq = limit( 0, this.seq, this._changeWrapList.length );
+	return(
+		testpad_repository.create(
+			'seq', 0,
+			'_changeWrapList',  change_wrapList.create( ),
+			'_note',
+				fabric_note.create(
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
+							'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
+							'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
+						),
+					'zone',
+						gleam_rect.create(
+							'pos', gleam_point.create( 'x', 0, 'y', 0 ),
+							'height', 100,
+							'width', 100
+						),
+					'fontsize', 13
+				)
+		)
+	);
 };
+
+
+/*
+| Extra checking.
 */
+def.func._check =
+	function( )
+{
+	if( this.seq < 0 || this.seq > this._changeWrapList.length ) throw new Error( );
+};
+
+
+/*
+| The maximum sequence number.
+*/
+def.lazy.maxSeq =
+	function( )
+{
+	return this._changeWrapList.length;
+}
 
 
 /*

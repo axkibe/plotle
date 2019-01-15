@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, server_resource ) => {
 
 
 if( TIM )
@@ -78,6 +78,18 @@ const zlib = require( 'zlib' );
 
 
 /*
+| Returns the default alias for a filePath
+*/
+def.static.filePathAlias =
+	function(
+		filePath
+	)
+{
+	return filePath.replace( /\//g, '-' );
+};
+
+
+/*
 | The alias is are the paths the file is served as
 | directories are replaced with hypens to ease debugging
 */
@@ -86,7 +98,7 @@ def.transform.aliases =
 		aliases
 	)
 {
-	return aliases || stringList( [ this.filePath.replace( /\//g, '-' ) ] );
+	return aliases || stringList( [ server_resource.filePathAlias( this.filePath ) ] );
 };
 
 
