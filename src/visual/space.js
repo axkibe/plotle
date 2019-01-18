@@ -45,7 +45,8 @@ if( TIM )
 		'./label',
 		'./note',
 		'./portal',
-		'./relation'
+		'./relation',
+		'./stroke'
 	];
 }
 
@@ -53,6 +54,8 @@ if( TIM )
 const action_createGeneric = require( '../action/createGeneric' );
 
 const action_createRelation = require( '../action/createRelation' );
+
+const action_createStroke = require( '../action/createStroke' );
 
 const action_dragItems = require( '../action/dragItems' );
 
@@ -73,6 +76,8 @@ const fabric_note = require( '../fabric/note' );
 const fabric_portal = require( '../fabric/portal' );
 
 const fabric_relation = require( '../fabric/relation' );
+
+const fabric_stroke = require( '../fabric/stroke' );
 
 const gleam_arrow = require( '../gleam/arrow' );
 
@@ -116,55 +121,87 @@ const visual_portal = require( '../visual/portal' );
 
 const visual_relation = require( '../visual/relation' );
 
-const standardSpacing = gleam_point.xy( 15, 15 );
-
-
-/*
-| Map of functions for a drag move.
-*/
-const dragMoveMap =
-	new Map( [
-		[ action_createGeneric, '_moveCreateGeneric' ],
-		[ action_createRelation, '_moveCreateRelation' ],
-		[ action_pan, '_movePan' ],
-		[ action_dragItems, '_moveDragItems' ],
-		[ action_resizeItems, '_moveResizeItems' ],
-		[ action_scrolly, '_moveScrollY' ],
-		[ action_select, '_moveSelect' ],
-	] );
-
-/**/if( FREEZE ) Object.freeze( dragMoveMap );
+const visual_stroke = require( '../visual/stroke' );
 
 
 /*
 | Path of the visual space.
 */
-def.staticLazy.spacePath = () => tim_path.empty.append( 'spaceVisual' );
+def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'spaceVisual' );
 
 
 /*
 | The path for transientItems
 */
-def.staticLazy.transPath = () => tim_path.empty.append( 'spaceVisual' ).append( ':transient' );
+def.staticLazy.transPath = ( ) => visual_space.spacePath.append( ':transient' );
 
 
 /*
-| Mapping of fabric item name to visual items.
+| The attention center.
 */
-def.staticLazy.visualMap =
+def.lazy.attentionCenter =
 	function( )
 {
-	const map = new Map( );
+	const focus = this.focus;
 
-	map.set( fabric_label, visual_label );
-	map.set( fabric_note, visual_note );
-	map.set( fabric_portal, visual_portal );
-	map.set( fabric_relation, visual_relation );
+	if( !focus ) return;
 
-	if( FREEZE ) Object.freeze( map );
-
-	return map;
+	return this.transform.y( focus.attentionCenter );
 };
+
+
+/*
+| A click.
+*/
+def.func.click =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	const access = this.access;
+
+	const mark = this.mark;
+
+	const frame = this.frame;
+
+	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
+
+	// clicked some item?
+	for( let a = 0, al = this.length; a < al; a++ )
+	{
+		const item = this.atRank( a );
+
+		if( ctrl )
+		{
+			if( item.ctrlClick( p, shift, access, mark ) ) return true;
+		}
+		else
+		{
+			if( item.click( p, shift, access ) ) return true;
+		}
+	}
+
+	// otherwise ...
+
+	if( !ctrl ) root.setUserMark( undefined );
+
+	return true;
+};
+
+
+/*
+| Returns the hover path if the space concerns about a hover.
+*/
+def.static.concernsHover =
+	function(
+		hover
+	)
+{
+	return( hover && hover.get( 0 ) === 'spaceVisual' ? hover : undefined );
+};
+
 
 
 /*
@@ -184,28 +221,12 @@ def.static.concernsMark =
 
 
 /*
-| Returns the hover path if the space concerns about a hover.
-*/
-def.static.concernsHover =
-	function(
-		hover
-	)
-{
-	return(
-		hover && hover.get( 0 ) === 'spaceVisual'
-		? hover
-		: undefined
-	);
-};
-
-
-/*
 | Transforms the items into visual items.
 */
 def.transform.get =
 	function(
-		key,
-		item
+		key,   // key of the visual item to be retrieved
+		item   // the unaltered item.
 	)
 {
 	let path;
@@ -216,7 +237,7 @@ def.transform.get =
 
 	if( !item )
 	{
-		item = visual_space.visualMap.get( fabric.timtype );
+		item = visual_space._visualMap.get( fabric.timtype );
 
 /**/	if( CHECK )
 /**/	{
@@ -238,9 +259,7 @@ def.transform.get =
 
 	if( !highlight && action && item.timtype )
 	{
-		highlight =
-			( action.timtype === action_createRelation && action.affectsItem( item ) )
-			|| ( action.timtype === action_select && action.affectsItem( item ) );
+		highlight = this._highlightItem( item, action );
 	}
 
 	const hover = item.concernsHover( this.hover, path );
@@ -301,25 +320,13 @@ def.transform.get =
 
 	// FIXME take scrollPos into redo
 
-	if( !action )
-	{
-		action2 = visual_item.concernsAction( this.action, item );
-	}
+	if( !action ) action2 = visual_item.concernsAction( this.action, item );
 
 	// checks if the highlight feature has changed on the created item
-	if( !highlight && action2 && item.timtype )
+	if( !highlight2 && action2 && item.timtype )
 	{
-		switch( action2.timtype )
-		{
-			case action_createRelation :
-			case action_select :
-
-				highlight2 = action2.affectsItem( item );
-
-				break;
-		}
+		highlight2 = this._highlightItem( item, action );
 	}
-
 
 	if( action2 !== action || highlight2 !== highlight )
 	{
@@ -327,58 +334,6 @@ def.transform.get =
 	}
 
 	return item;
-};
-
-
-/*
-| Takes the ranks of the fabric.
-*/
-def.lazy._ranks =
-	function( )
-{
-	return this.fabric._ranks;
-};
-
-
-/*
-| The current alteration frame.
-*/
-def.transform.frame =
-	function(
-		frame
-	)
-{
-	const mark = this.mark;
-
-	if( !mark ) return;
-
-	if( !mark.itemPaths ) return;
-
-	const content = this.getList( mark.itemPaths );
-
-	if( !content ) return;
-
-	return(
-		( frame || visual_frame )
-		.create(
-			'content', content,
-			'transform', this.transform
-		)
-	);
-};
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter =
-	function( )
-{
-	const focus = this.focus;
-
-	if( !focus ) return;
-
-	return this.transform.y( focus.attentionCenter );
 };
 
 
@@ -405,18 +360,26 @@ def.lazy.focus =
 
 
 /*
-| The zoomGrid glint for this space.
+| The current alteration frame.
 */
-def.lazy._grid =
-	function( )
+def.transform.frame =
+	function(
+		frame
+	)
 {
-	return(
-		visual_grid.create(
-			'transform', this.transform,
-			'size', this.viewSize,
-			'spacing', standardSpacing
-		)
-	);
+	const mark = this.mark;
+
+	if( !mark ) return;
+
+	if( !mark.itemPaths ) return;
+
+	const content = this.getList( mark.itemPaths );
+
+	if( !content ) return;
+
+	if( !frame ) frame = visual_frame;
+
+	return frame.create( 'content', content, 'transform', this.transform );
 };
 
 
@@ -433,7 +396,7 @@ def.lazy.glint =
 	const arr = [ ];
 
 	// true or undefined -> show grid
-	if( this.fabric.hasGrid !== false ) arr.push( this._grid.glint );
+	if( this.fabric.hasGrid ) arr.push( this._grid.glint );
 
 	for( let r = this.length - 1; r >= 0; r-- )
 	{
@@ -458,7 +421,15 @@ def.lazy.glint =
 
 			break;
 
+		case action_createStroke :
+
+			if( action.from ) arr.push( action.transItem.glint );
+
+			break;
+
 		case action_createRelation :
+
+			// FIXME make a transItem
 
 			if( action.fromItemPath )
 			{
@@ -525,76 +496,9 @@ def.lazy.glint =
 
 
 /*
-| The disc is shown while a space is shown.
+| Moving during an operation with the pointing device button held down.
 */
-def.func.showDisc = true;
-
-
-/*
-| Returns a list of visual items by a list of paths.
-*/
-def.func.getList =
-	function(
-		paths
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( paths.timtype !== pathList ) throw new Error( );
-/**/
-/**/	if( paths.length === 0 ) throw new Error( );
-/**/}
-
-	const items = [ ];
-
-	for( let a = 0, al = paths.length; a < al; a++ )
-	{
-		const path = paths.get( a );
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
-/**/
-/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
-/**/	}
-
-		items.push( this.get( path.get( 2 ) ) );
-	}
-
-	return visual_itemList.create( 'list:init', items );
-};
-
-
-/*
-| Mouse wheel.
-*/
-def.func.mousewheel =
-	function(
-		p,     // cursor point
-		dir,   // wheel direction, >0 for down, <0 for up
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		const item = this.atRank( r );
-
-		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
-	}
-
-	root.changeSpaceTransformPoint( dir > 0 ? 1 : -1, p );
-
-	return true;
-};
-
-
-/*
-| Mouse hover.
-|
-| Returns true if the mouse pointer hovers over anything.
-*/
-def.func.pointingHover =
+def.func.dragMove =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -603,71 +507,9 @@ def.func.pointingHover =
 {
 	const action = this.action;
 
-	const frame = this.frame;
+	if( !action ) return 'pointer';
 
-	const aType = action && action.timtype;
-
-	switch( aType )
-	{
-		case action_createRelation :
-
-			if( action.relationState === 'start' )
-			{
-				for( let a = 0, al = this.length; a < al; a++ )
-				{
-					const item = this.atRank( a );
-
-					if( item.tZone.within( p ) )
-					{
-						root.create(
-							'action', action.create( 'fromItemPath', item.path )
-						);
-
-						return result_hover.cursorDefault;
-					}
-				}
-
-				root.create(
-					'action', action.create( 'fromItemPath', undefined )
-				);
-
-				return result_hover.cursorDefault;
-			}
-
-			break;
-
-		case action_dragItems : return result_hover.cursorGrabbing;
-
-		case action_resizeItems :
-
-			return action.resizeDir.resizeHoverCursor;
-
-		case action_pan :
-
-			if( action.startPoint ) return result_hover.cursorGrabbing;
-
-			break;
-	}
-
-	if( frame && aType !== action_select )
-	{
-		const result = frame.pointingHover( p );
-
-		if( result ) return result;
-	}
-
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		const result = this.atRank( a ).pointingHover( p, action );
-
-		if( result ) return result;
-	}
-
-	return(
-		result_hover.create(
-			'cursor', aType === 'action_select' ? 'crosshair' : 'pointer'
-		)
-	);
+	this[ visual_space._dragMoveMap.get( action.timtype ) ]( p, shift, ctrl );
 };
 
 
@@ -717,10 +559,16 @@ def.func.dragStart =
 				'action',
 					action.create(
 						'offset', transform.offset,
-						'relationState', 'pan', // FUTURE remove pan
+						'relationState', 'pan',
 						'startPoint', p
 					)
 			);
+
+			return;
+
+		case action_createStroke :
+
+			root.create( 'action', action.create( 'from', dp ) );
 
 			return;
 
@@ -733,56 +581,11 @@ def.func.dragStart =
 		default :
 
 			root.create(
-				'action',
-					action_pan.create(
-						'offset', transform.offset,
-						'startPoint', p
-					)
+				'action', action_pan.create( 'offset', transform.offset, 'startPoint', p )
 			);
 
 			return;
 	}
-};
-
-
-/*
-| A click.
-*/
-def.func.click =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	const access = this.access;
-
-	const mark = this.mark;
-
-	const frame = this.frame;
-
-	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
-
-	// clicked some item?
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		const item = this.atRank( a );
-
-		if( ctrl )
-		{
-			if( item.ctrlClick( p, shift, access, mark ) ) return true;
-		}
-		else
-		{
-			if( item.click( p, shift, access ) ) return true;
-		}
-	}
-
-	// otherwise ...
-
-	if( !ctrl ) root.setUserMark( undefined );
-
-	return true;
 };
 
 
@@ -914,20 +717,37 @@ def.func.dragStop =
 
 
 /*
-| Moving during an operation with the pointing device button held down.
+| Returns a list of visual items by a list of paths.
 */
-def.func.dragMove =
+def.func.getList =
 	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
+		paths
 	)
 {
-	const action = this.action;
+/**/if( CHECK )
+/**/{
+/**/	if( paths.timtype !== pathList ) throw new Error( );
+/**/
+/**/	if( paths.length === 0 ) throw new Error( );
+/**/}
 
-	if( !action ) return 'pointer';
+	const items = [ ];
 
-	this[ dragMoveMap.get( action.timtype ) ]( p, shift, ctrl );
+	for( let a = 0, al = paths.length; a < al; a++ )
+	{
+		const path = paths.get( a );
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/
+/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
+/**/	}
+
+		items.push( this.get( path.get( 2 ) ) );
+	}
+
+	return visual_itemList.create( 'list:init', items );
 };
 
 
@@ -952,6 +772,124 @@ def.func.input =
 
 
 /*
+| Mouse wheel.
+*/
+def.func.mousewheel =
+	function(
+		p,     // cursor point
+		dir,   // wheel direction, >0 for down, <0 for up
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		const item = this.atRank( r );
+
+		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
+	}
+
+	root.changeSpaceTransformPoint( dir > 0 ? 1 : -1, p );
+
+	return true;
+};
+
+
+/*
+| Mouse hover.
+|
+| Returns true if the mouse pointer hovers over anything.
+*/
+def.func.pointingHover =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	const action = this.action;
+
+	const frame = this.frame;
+
+	const aType = action && action.timtype;
+
+	switch( aType )
+	{
+		case action_createRelation :
+
+			if( action.relationState === 'start' )
+			{
+				for( let a = 0, al = this.length; a < al; a++ )
+				{
+					const item = this.atRank( a );
+
+					if( item.tZone.within( p ) )
+					{
+						root.create( 'action', action.create( 'fromItemPath', item.path ) );
+
+						return result_hover.cursorDefault;
+					}
+				}
+
+				root.create( 'action', action.create( 'fromItemPath', undefined ) );
+
+				return result_hover.cursorDefault;
+			}
+
+			break;
+
+		case action_createStroke :
+
+			for( let a = 0, al = this.length; a < al; a++ )
+			{
+				const item = this.atRank( a );
+
+				if( item.tZone.within( p ) )
+				{
+					root.create( 'action', action.create( 'hover', item.path ) );
+
+					return result_hover.cursorDefault;
+				}
+			}
+
+			root.create( 'action', action.create( 'hover', undefined ) );
+
+			return result_hover.cursorDefault;
+
+		case action_dragItems : return result_hover.cursorGrabbing;
+
+		case action_resizeItems : return action.resizeDir.resizeHoverCursor;
+
+		case action_pan :
+
+			if( action.startPoint ) return result_hover.cursorGrabbing;
+
+			break;
+	}
+
+	if( frame && aType !== action_select )
+	{
+		const result = frame.pointingHover( p );
+
+		if( result ) return result;
+	}
+
+	for( let a = 0, al = this.length; a < al; a++ )
+	{
+		const result = this.atRank( a ).pointingHover( p, action );
+
+		if( result ) return result;
+	}
+
+	return(
+		result_hover.create(
+			'cursor', aType === 'action_select' ? 'crosshair' : 'pointer'
+		)
+	);
+};
+
+
+/*
 | Tries to scrolls the focused item to move
 | the mark into view.
 */
@@ -962,6 +900,12 @@ def.func.scrollMarkIntoView =
 
 	if( focus && focus.scrollMarkIntoView ) focus.scrollMarkIntoView( );
 };
+
+
+/*
+| The disc is shown while a space is shown.
+*/
+def.func.showDisc = true;
 
 
 /*
@@ -1028,6 +972,38 @@ def.func.specialKey =
 
 
 /*
+| Map of functions for a drag move.
+*/
+def.staticLazy._dragMoveMap = ( ) =>
+	new Map( [
+		[ action_createGeneric, '_moveCreateGeneric' ],
+		[ action_createRelation, '_moveCreateRelation' ],
+		[ action_createStroke, '_moveCreateStroke' ],
+		[ action_pan, '_movePan' ],
+		[ action_dragItems, '_moveDragItems' ],
+		[ action_resizeItems, '_moveResizeItems' ],
+		[ action_scrolly, '_moveScrollY' ],
+		[ action_select, '_moveSelect' ],
+	] );
+
+
+/*
+| The zoomGrid glint for this space.
+*/
+def.lazy._grid =
+	function( )
+{
+	return(
+		visual_grid.create(
+			'transform', this.transform,
+			'size', this.viewSize,
+			'spacing', visual_space._standardSpacing
+		)
+	);
+};
+
+
+/*
 | Returns true if doing snapping.
 */
 def.func._hasSnapping =
@@ -1040,17 +1016,51 @@ def.func._hasSnapping =
 
 
 /*
-| Snaps a point onto the grid.
+| Returns true if the item ought to be highlighted.
 */
-def.func._snap =
+def.func._highlightItem =
 	function(
-		p,     // the point to snap
-		ctrl   // if true don't to snapping (can be undefined)
+		item  // the item in question
 	)
 {
-	if( !this._hasSnapping( ctrl ) ) return p;
+	const action = this.action;
 
-	return this._grid.snap( p );
+	const att = action.timtype;
+
+	if(
+		att !== action_createRelation
+		&& att !== action_createStroke
+		&& att !== action_select
+	) return false;
+
+	return action.affectsItem( item );
+};
+
+
+/*
+| Moves during creating.
+*/
+def.func._moveCreate =
+	function(
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const action = this.action;
+
+	const transform = this.transform;
+
+	if( action.offset )
+	{
+		// panning while creating a relation
+
+		const pd = p.sub( action.startPoint );
+
+		root.create(
+			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
+		);
+	}
 };
 
 
@@ -1075,14 +1085,14 @@ def.func._moveCreateGeneric =
 
 	let zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const model = action.itemType.model;
+	const model = action.itemTim.model;
 
 	let transItem = action.transItem;
 
 	switch( action.itemType )
 	{
-		case visual_note :
-		case visual_portal :
+		case 'note' :
+		case 'portal' :
 
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
@@ -1094,13 +1104,11 @@ def.func._moveCreateGeneric =
 
 			break;
 
-		case visual_label :
+		case 'label' :
 		{
 			const fs =
 				Math.max(
-					model.doc.fontsize
-					* zone.height
-					/ model.zone.height,
+					model.doc.fontsize * zone.height / model.zone.height,
 					gruga_label.minSize
 				);
 
@@ -1182,29 +1190,26 @@ def.func._moveCreateRelation =
 
 
 /*
-| Moves during creating.
+| Moves during creating a stroke.
 */
-def.func._moveCreate =
+def.func._moveCreateStroke =
 	function(
-		p,      // point of stop
+		p,      // point, viewbased point of stop
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
 	const action = this.action;
 
-	const transform = this.transform;
-
-	if( action.offset )
+	/*
+	// Looks if the action is dragging to an item
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
-		// panning while creating a relation
-
-		const pd = p.sub( action.startPoint );
-
-		root.create(
-			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
-		);
+		if( this.atRank( r ).createRelationMove( p, action ) ) return;
 	}
+	*/
+
+	root.create( 'action', action.create( 'to', p ) );
 };
 
 
@@ -1244,40 +1249,6 @@ def.func._moveDragItems =
 	//  transform.dey( p.y ) - startPoint.y
 	//)
 };
-
-
-/*
-| Scale directions on resizing for which a scaleY should
-| be calculated.
-*/
-const scaleYDirs =
-{
-	n  : true,
-	ne : true,
-	nw : true,
-	s  : true,
-	se : true,
-	sw : true,
-};
-
-if( FREEZE ) Object.freeze( scaleYDirs );
-
-
-/*
-| Scale directions on resizing for which a scaleY should
-| be calculated.
-*/
-const scaleXDirs =
-{
-	ne : true,
-	nw : true,
-	e  : true,
-	se : true,
-	sw : true,
-	w  : true,
-};
-
-if( FREEZE ) Object.freeze( scaleXDirs );
 
 
 /*
@@ -1339,54 +1310,6 @@ def.func._moveResizeItems =
 		}
 	}
 
-	// FIXME cleanup
-/*	if( resizeDir.hasN )
-	{
-		const dy = startZone.pos.y - startPoint.y;
-
-		const dpy = dp.y + dy;
-
-		scaleY = ( pBase.y - dpy ) / ( pBase.y - startZone.pos.y );
-
-		if( scaleY < 0 ) scaleY = 0;
-	}
-	*/
-
-/*
-	if( resizeDir.hasY )
-	{
-//		scaleY = ( pBase.y - dp.y ) / ( pBase.y - startPoint.y );
-
-		if( scaleY < 0 ) scaleY = 0;
-	}
-*/
-
-	/*
-	if( resizeDir.hasX && ( !proportional || scaleY === undefined ) )
-	{
-		scaleX = ( pBase.x - dp.x ) / ( pBase.x - startPoint.x );
-
-		if( scaleX < 0 ) scaleX = 0;
-	}
-	*/
-
-	/*
-	if( !ctrl )
-	{
-		// grid snapping
-		if( resizeDir === 'nw' || resizeDir === 'n' || resizeDir === 'ne' )
-		{
-			let sp = action.startZone.pos;
-
-			let sps = sp.baseScaleXY( scaleX || 1, scaleY, pBase, 0, 0 );
-
-			sps = this._snap( sps.transform( transform ) ).detransform( transform );
-
-			scaleY = ( pBase.y - sps.y ) / ( pBase.y - startPoint.y );
-		}
-	}
-	*/
-
 	if( proportional )
 	{
 		if( scaleX === undefined ) scaleX = scaleY;
@@ -1424,9 +1347,7 @@ def.func._moveResizeItems =
 
 	if( proportional ) scaleX = scaleY = Math.max( scaleX, scaleY );
 
-	root.create(
-		'action', action.create( 'scaleX', scaleX, 'scaleY', scaleY )
-	);
+	root.create( 'action', action.create( 'scaleX', scaleX, 'scaleY', scaleY ) );
 };
 
 
@@ -1510,6 +1431,37 @@ def.func._moveScrollY =
 
 
 /*
+| Takes the ranks of the fabric.
+*/
+def.lazy._ranks =
+	function( )
+{
+	return this.fabric._ranks;
+};
+
+
+/*
+| Snaps a point onto the grid.
+*/
+def.func._snap =
+	function(
+		p,     // the point to snap
+		ctrl   // if true don't to snapping (can be undefined)
+	)
+{
+	if( !this._hasSnapping( ctrl ) ) return p;
+
+	return this._grid.snap( p );
+};
+
+
+/*
+| Standard grid spacing.
+*/
+def.staticLazy._standardSpacing = ( ) => gleam_point.xy( 15, 15 );
+
+
+/*
 | Starts creating a generic item.
 */
 def.func._startCreateGeneric =
@@ -1521,15 +1473,15 @@ def.func._startCreateGeneric =
 {
 	const action = this.action;
 
-	const itemType = action.itemType;
+	const itemTim = action.itemTim;
 
-	const model = itemType.model;
+	const model = itemTim.model;
 
 	const dp = this._snap( p, ctrl ).detransform( this.transform );
 
 	let transItem;
 
-	switch( itemType.positioning )
+	switch( itemTim.positioning )
 	{
 		case 'zone' :
 		{
@@ -1543,7 +1495,7 @@ def.func._startCreateGeneric =
 						)
 				);
 
-			if( itemType === visual_portal )
+			if( itemTim === visual_portal )
 			{
 				fabric =
 					fabric.create(
@@ -1599,7 +1551,7 @@ def.func._stopCreateGeneric =
 
 	const dp = this._snap( p, ctrl ).detransform( this.transform );
 
-	action.itemType.createGeneric( action, dp );
+	action.itemTim.createGeneric( action, dp );
 
 	root.create(
 		'action',
@@ -1658,18 +1610,11 @@ def.func._stopCreateRelation =
 
 			return;
 
-		case 'start' :
-
-			root.create( 'action', undefined );
-
-			return;
+		case 'start' : root.create( 'action', undefined ); return;
 
 		case 'pan' :
 
-			root.create(
-				'action',
-					action.create( 'relationState', 'start' )
-			);
+			root.create( 'action', action.create( 'relationState', 'start' ) );
 
 			return;
 
@@ -1706,10 +1651,7 @@ def.func._stopSelect =
 		if( action.affectsItem( item ) ) paths.push( item.path );
 	}
 
-	action =
-		shift
-		? action_select.create( )
-		: undefined;
+	action = shift ? action_select.create( ) : undefined;
 
 	let mark = pass;
 
@@ -1736,5 +1678,24 @@ def.func._stopSelect =
 };
 
 
-} );
+/*
+| Mapping of fabric item name to visual items.
+*/
+def.staticLazy._visualMap =
+	function( )
+{
+	const map = new Map( );
 
+	map.set( fabric_label, visual_label );
+	map.set( fabric_note, visual_note );
+	map.set( fabric_portal, visual_portal );
+	map.set( fabric_relation, visual_relation );
+	map.set( fabric_stroke, visual_stroke );
+
+	if( FREEZE ) Object.freeze( map );
+
+	return map;
+};
+
+
+} );

@@ -24,13 +24,7 @@ if( TIM )
 		hasSnapping : { type : 'boolean', defaultValue : 'true' },
 	};
 
-	def.twig =
-	[
-		'./note',
-		'./label',
-		'./relation',
-		'./portal'
-	];
+	def.twig = [ '< ./item-types' ];
 
 	def.json = 'space';
 }

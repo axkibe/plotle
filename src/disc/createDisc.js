@@ -59,6 +59,8 @@ const action_createGeneric = require( '../action/createGeneric' );
 
 const action_createRelation = require( '../action/createRelation' );
 
+const action_createStroke = require( '../action/createStroke' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -74,12 +76,6 @@ const gleam_rect = require( '../gleam/rect' );
 const gleam_transform = require( '../gleam/transform' );
 
 const layout_disc = require( '../layout/disc' );
-
-const visual_label = require( '../visual/label' );
-
-const visual_note = require( '../visual/note' );
-
-const visual_portal = require( '../visual/portal' );
 
 const widget_widget = require( '../widget/widget' );
 
@@ -177,7 +173,7 @@ def.transform.get =
 		widget.create(
 			'path', path,
 			'hover', hover,
-			'down', disc_createDisc._isActiveButton( this.action, name ),
+			'down', this._isActiveButton( name ),
 			'transform', this.controlTransform
 		)
 	);
@@ -185,39 +181,41 @@ def.transform.get =
 
 
 /*
+| Mapping of the the itemType name to the button name.
+*/
+def.staticLazy.itemTypeToButtonName = ( ) =>
+( {
+	'arrow'  : 'createArrow',
+	'label'  : 'createLabel',
+	'line'   : 'createLine',
+	'note'   : 'createNote',
+	'portal' : 'createPortal',
+} );
+
+
+/*
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-def.static._isActiveButton =
+def.func._isActiveButton =
 	function(
-		action,  // the action
 		wname    // the widget name
 	)
 {
+	const action = this.action;
+
 	if( !action ) return false;
 
 	switch( action.timtype )
 	{
 		case action_createGeneric :
+		case action_createStroke :
 
-			switch( action.itemType )
-			{
-				case visual_note   : return wname === 'createNote';
+			return wname === disc_createDisc.itemTypeToButtonName[ action.itemType ] || false;
 
-				case visual_label  : return wname === 'createLabel';
+		case action_createRelation : return wname === 'createRelation';
 
-				case visual_portal : return wname === 'createPortal';
-			}
-
-			return false;
-
-		case action_createRelation :
-
-			return wname === 'createRelation';
-
-		default :
-
-			return false;
+		default : return false;
 	}
 };
 
@@ -245,13 +243,7 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr =
-		[
-			gleam_glint_fill.create(
-				'facet', this.facet,
-				'shape', this._tShape
-			)
-		];
+	const arr = [ gleam_glint_fill.create( 'facet', this.facet, 'shape', this._tShape ) ];
 
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -355,57 +347,28 @@ def.func.pushButton =
 
 	const buttonName = path.get( 4 );
 
+	let action;
+
 	switch( buttonName )
 	{
-		case 'createLabel' :
+		case 'createArrow' : action = action_createStroke.createArrow; break;
 
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_label
-					)
-			);
+		case 'createLabel' : action = action_createGeneric.createLabel; break;
 
-			return;
+		case 'createLine' : action = action_createStroke.createLine; break;
 
-		case 'createNote' :
+		case 'createNote' : action = action_createGeneric.createNote; break;
 
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_note
-					)
-			);
-
-			return;
-
-		case 'createPortal' :
-
-			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', visual_portal
-					)
-			);
-
-			return;
+		case 'createPortal' : action = action_createGeneric.createPortal; break;
 
 		case 'createRelation' :
 
-			root.create(
-				'action',
-					action_createRelation.create(
-						'relationState', 'start'
-					)
-			);
+			action = action_createRelation.create( 'relationState', 'start' ); break;
 
-			return;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
+	root.create( 'action', action );
 };
 
 
@@ -593,4 +556,3 @@ def.func.specialKey =
 
 
 } );
-

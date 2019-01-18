@@ -32,7 +32,7 @@ if( TIM )
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
-		// the path of the doc
+		// the path of the item
 		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the current space transform

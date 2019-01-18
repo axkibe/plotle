@@ -43,10 +43,7 @@ def.func.affectsItem =
 {
 	const path = item.path;
 
-	return(
-		path.equals( this.fromItemPath )
-		|| path.equals( this.toItemPath )
-	);
+	return path.equals( this.fromItemPath ) || path.equals( this.toItemPath );
 };
 
 

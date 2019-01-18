@@ -84,7 +84,7 @@ def.lazy.maxSeq =
 	function( )
 {
 	return this._changeWrapList.length;
-}
+};
 
 
 /*

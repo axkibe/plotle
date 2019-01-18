@@ -2,6 +2,7 @@
 
 ./createGeneric
 ./createRelation
+./createStroke
 ./dragItems
 ./pan
 ./resizeItems

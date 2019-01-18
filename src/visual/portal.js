@@ -29,7 +29,7 @@ if( TIM )
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
-		// the path of the portal
+		// the path of the item
 		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// current space transform

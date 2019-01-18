@@ -34,7 +34,7 @@ if( TIM )
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
-		// the path of the note
+		// the path of the item
 		path : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// scroll position

@@ -1,4 +1,4 @@
-# Typemap of item visualisations.
+# all fabric item types
 
 ./label
 ./note

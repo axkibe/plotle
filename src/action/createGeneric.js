@@ -8,7 +8,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, action_createGeneric ) => {
 
 
 if( TIM )
@@ -16,13 +16,7 @@ if( TIM )
 	def.attributes =
 	{
 		// item type to be created
-		itemType :
-		{
-			type : 'protean'
-			// 'visual_note:static',
-			// 'visual_label:static',
-			// 'visual_portal:static'
-		},
+		itemType : { type : 'string'  },
 
 		// the transient item in creation
 		transItem : { type : [ '< ../visual/item-types', 'undefined' ] },
@@ -33,16 +27,69 @@ if( TIM )
 }
 
 
+const visual_label = require( '../visual/label' );
+
+const visual_note = require( '../visual/note' );
+
+const visual_portal = require( '../visual/portal' );
+
+
+/*
+| Shortcut.
+*/
+def.staticLazy.createLabel = ( ) =>
+	action_createGeneric.create( 'itemType', 'label' );
+
+
+/*
+| Shortcut.
+*/
+def.staticLazy.createNote = ( ) =>
+	action_createGeneric.create( 'itemType', 'note' );
+
+
+/*
+| Shortcut.
+*/
+def.staticLazy.createPortal = ( ) =>
+	action_createGeneric.create( 'itemType', 'portal' );
+
+
+/*
+| Maps item type names to timtypes.
+*/
+def.staticLazy.itemTypeToTim = ( ) =>
+( {
+	'label'  : visual_label,
+	'note'   : visual_note,
+	'portal' : visual_portal,
+} );
+
+
+/*
+| Extra checking
+*/
+def.func._check =
+	function( )
+{
+	if( !this.itemTim ) throw new Error( );
+};
+
+
+/*
+| Returns the tim of the item to be created.
+*/
+def.lazy.itemTim =
+	function( )
+{
+	return action_createGeneric.itemTypeToTim[ this.itemType ];
+};
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affectsItem =
-	function(
-		item
-	)
-{
-	return false;
-};
+def.func.affectsItem = ( item ) => false;
 
 
 } );
