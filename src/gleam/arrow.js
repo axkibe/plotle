@@ -22,10 +22,10 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// "normal" or "arrow"
+		// "none" or "arrow"
 		end1 : { type : 'string' },
 
-		// "normal" or "arrow"
+		// "none" or "arrow"
 		end2 : { type : 'string' },
 
 		// connect to this point or shape
@@ -46,9 +46,9 @@ if( TIM )
 def.static.getArrowShape =
 	function(
 		joint1,  // point/shape for the arrow to go from
-		end1,    // 'normal' or 'arrow'
+		end1,    // 'none' or 'arrow'
 		joint2,  // point/shape for the arrow to go to
-		end2     // 'normal' or 'arrow'
+		end2     // 'none' or 'arrow'
 	)
 {
 	const line = gleam_connect.line( joint1, joint2 );
@@ -62,11 +62,9 @@ def.static.getArrowShape =
 	// FUTURE, allow arrows on p1.
 	switch( end1 )
 	{
-		case 'normal':
+		case 'none':
 
-			sections.push(
-				gleam_shape_start.create( 'p', p1 )
-			);
+			sections.push( gleam_shape_start.create( 'p', p1 ) );
 
 			break;
 
@@ -78,11 +76,9 @@ def.static.getArrowShape =
 
 	switch( end2 )
 	{
-		case 'normal' :
+		case 'none' :
 
-			sections.push(
-				gleam_shape_line.create( 'p', p2 )
-			);
+			sections.push( gleam_shape_line.create( 'p', p2 ) );
 
 			break;
 

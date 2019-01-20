@@ -104,36 +104,6 @@ const visual_para = require( '../visual/para' );
 const widget_scrollbar = require( '../widget/scrollbar' );
 
 
-/*
-| The note model.
-*/
-def.staticLazy.model =
-	function( )
-{
-	return(
-		self.create(
-			'fabric',
-				fabric_note.create(
-					'fontsize', gruga_note.defaultFontsize,
-					'zone', gleam_rect.zero,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1', fabric_para.create( 'text', '' )
-						)
-				),
-			'highlight', false,
-			'scrollPos', gleam_point.zero,
-			'transform', gleam_transform.normal
-		)
-	);
-};
-
-
-/*
-| Notes do not need to be resized proportionally.
-*/
-def.static.proportional = false;
-
 
 /*
 | User wants to create a new note.
@@ -147,7 +117,7 @@ def.static.createGeneric =
 {
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const note = action.transItem.fabric.create( 'zone', zone );
+	const note = action.transientItem.fabric.create( 'zone', zone );
 
 	const key = session_uid.newUid( );
 
@@ -170,70 +140,6 @@ def.static.createGeneric =
 def.static.concernsHover =
 def.func.concernsHover =
 	( ) => undefined;
-
-
-/*
-| Forwards fabric settings.
-*/
-def.lazy.fontsize =
-	function( )
-{
-	return this.fabric.fontsize;
-};
-
-
-/*
-| The item's glint.
-*/
-def.lazy.glint =
-	function( )
-{
-	const tZone = this.tZone;
-
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this._glint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		const facet = gruga_note.facets.getFacet( 'highlight', true );
-
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
-	}
-
-	const sbary = this.scrollbarY;
-
-	if( sbary ) arr.push( sbary.glint );
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The notes shape
-*/
-def.lazy.shape =
-	function( )
-{
-	const zone = this.zone;
-
-	const cr = gruga_note.cornerRadius;
-
-	return(
-		gleam_roundRect.create(
-			'pos', zone.pos,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
-};
 
 
 /*
@@ -264,6 +170,270 @@ def.transform.doc =
 		)
 	);
 };
+
+
+/*
+| Forwards fabric settings.
+*/
+def.lazy.fontsize =
+	function( )
+{
+	return this.fabric.fontsize;
+};
+
+
+/*
+| Returns the change for dragging this item.
+*/
+def.func.getDragItemChange = visual_item.getDragItemChangeZone;
+
+
+/*
+| Returns the change for resizing this item.
+*/
+def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
+
+
+/*
+| The item's glint.
+*/
+def.func.glint = function( ) { return this._glint; };
+
+
+/*
+| Returns the mark for a point
+*/
+def.func.markForPoint = visual_docItem.markForPoint;
+
+
+/*
+| Nofication when the item lost the users mark.
+*/
+def.func.markLost = function( ){ };
+
+
+/*
+| Minimum height.
+*/
+def.func.minHeight = gruga_note.minHeight;
+
+
+/*
+| Returns the minimum x-scale factor this item could go through.
+*/
+def.func.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minWidth / zone.width;
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+def.func.minScaleY =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minHeight / zone.height;
+};
+
+
+/*
+| Minimum width.
+*/
+def.func.minWidth = gruga_note.minWidth;
+
+
+/*
+| The note model.
+*/
+def.staticLazy.model =
+	function( )
+{
+	return(
+		self.create(
+			'fabric',
+				fabric_note.create(
+					'fontsize', gruga_note.defaultFontsize,
+					'zone', gleam_rect.zero,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1', fabric_para.create( 'text', '' )
+						)
+				),
+			'highlight', false,
+			'scrollPos', gleam_point.zero,
+			'transform', gleam_transform.normal
+		)
+	);
+};
+
+
+/*
+| Mouse wheel turned.
+*/
+def.func.mousewheel =
+	function(
+		p,
+		dir
+		// shift,
+		// ctrl
+	)
+{
+	if( !this.tShape.within( p ) ) return false;
+
+	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
+
+	if( y < 0 ) y = 0;
+
+	root.setPath(
+		this.path.append( 'scrollPos' ),
+		this.scrollPos.create( 'y', y )
+	);
+
+	return true;
+};
+
+
+/*
+| A move during a text select on this item.
+*/
+def.func.moveSelect = visual_docItem.moveSelect;
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+def.func.pointingHover = visual_docItem.pointingHover;
+
+
+/*
+| Notes use zone for positioning
+*/
+def.static.positioning =
+def.func.positioning =
+	'zone';
+
+
+/*
+| Notes do not need to be resized proportionally.
+*/
+def.static.proportional = false;
+
+
+/*
+| The vertical scrollbar.
+*/
+def.lazy.scrollbarY =
+	function( )
+{
+	const dHeight = this.doc.fullsize.height;
+
+	const zone = this.zone;
+
+	const aperture = zone.height - gruga_note.innerMargin.y;
+
+	const path = this.path;
+
+	if( dHeight <= aperture ) return;
+
+	return(
+		widget_scrollbar.create(
+			'aperture', aperture,
+			'max', dHeight,
+			'path', path && path.append( 'scrollbarY' ),
+			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
+			'scrollpos', this.scrollPos.y,
+			'size', zone.height - gruga_note.vScrollbarDis * 2,
+			'transform', this.transform
+		)
+	);
+};
+
+
+/*
+| Scrolls the note so the caret comes into view.
+*/
+def.func.scrollMarkIntoView =
+	function( )
+{
+	const mark = this.mark;
+
+	if( !mark || !mark.hasCaret ) return;
+
+	const sy = this.scrollPos.y;
+
+	// FUTURE, more elegant path getting
+	const para = this.doc.get( mark.caret.path.get( 5 ) );
+
+/**/if( CHECK )
+/**/{
+/**/	if( para.timtype !== visual_para ) throw new Error( );
+/**/}
+
+	const zone = this.zone;
+
+	const imargin = this.doc.innerMargin;
+
+	const fs = this.doc.font.size;
+
+	const descend = fs * shell_settings.bottombox;
+
+	const p = para.locateOffsetPoint( mark.caret.at );
+
+	const ppos = para.pos;
+
+	const s = ppos.y + p.y + descend + imargin.s;
+
+	const n = ppos.y + p.y - fs - imargin.n;
+
+	if( n < 0 )
+	{
+		root.setPath(
+			this.path.append( 'scrollPos' ),
+			this.scrollPos.create( 'y', sy + n )
+		);
+	}
+	else if( s > zone.height )
+	{
+		root.setPath(
+			this.path.append( 'scrollPos' ),
+			this.scrollPos.create( 'y', sy + s - zone.height )
+		);
+	}
+};
+
+
+/*
+| The notes shape
+*/
+def.lazy.shape =
+	function( )
+{
+	const zone = this.zone;
+
+	const cr = gruga_note.cornerRadius;
+
+	return(
+		gleam_roundRect.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
+		)
+	);
+};
+
+
+/*
+| Handles a special key.
+*/
+def.func.specialKey = visual_docItem.specialKey;
 
 
 /*
@@ -332,32 +502,55 @@ def.lazy.zone =
 };
 
 
+/**
+*** Exta checking
+***/
+/**/if( CHECK )
+/**/{
+/**/	def.func._check =
+/**/		function( )
+/**/	{
+/**/		if( this.scrollPos.x < 0 || this.scrollPos.y < 0 ) throw new Error( );
+/**/	};
+/**/}
+
+
 /*
-| The notes shape anchored at zero.
+| The item's glint.
 */
-def.lazy._zeroShape =
+def.lazy._glint =
 	function( )
 {
-	const zone = this.zone;
+	const tZone = this.tZone;
 
-	const cr = gruga_note.cornerRadius;
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._innerGlint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
 
-	return(
-		gleam_roundRect.create(
-			'pos', gleam_point.zero,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
+	if( this.highlight )
+	{
+		const facet = gruga_note.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+	}
+
+	const sbary = this.scrollbarY;
+
+	if( sbary ) arr.push( sbary.glint );
+
+	return gleam_glint_list.create( 'list:init', arr );
 };
 
 
 /*
 | The notes inner glint.
 */
-def.lazy._glint =
+def.lazy._innerGlint =
 	function( )
 {
 	const doc = this.doc;
@@ -382,7 +575,7 @@ def.lazy._glint =
 /*
 | Inheritance optimization.
 */
-def.inherit._glint =
+def.inherit._innerGlint =
 	function(
 		inherit
 	)
@@ -394,211 +587,25 @@ def.inherit._glint =
 };
 
 
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.func._check =
-/**/		function( )
-/**/	{
-/**/		if( this.scrollPos.x < 0 || this.scrollPos.y < 0 ) throw new Error( );
-/**/	};
-/**/}
-
-
 /*
-| The y scrollbar.
+| The notes shape anchored at zero.
 */
-def.lazy.scrollbarY =
+def.lazy._zeroShape =
 	function( )
 {
-	const dHeight = this.doc.fullsize.height;
-
 	const zone = this.zone;
 
-	const aperture = zone.height - gruga_note.innerMargin.y;
-
-	const path = this.path;
-
-	if( dHeight <= aperture ) return;
+	const cr = gruga_note.cornerRadius;
 
 	return(
-		widget_scrollbar.create(
-			'aperture', aperture,
-			'max', dHeight,
-			'path', path && path.append( 'scrollbarY' ),
-			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
-			'scrollpos', this.scrollPos.y,
-			'size', zone.height - gruga_note.vScrollbarDis * 2,
-			'transform', this.transform
+		gleam_roundRect.create(
+			'pos', gleam_point.zero,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
 		)
 	);
-};
-
-
-/*
-| Returns the change for dragging this item.
-*/
-def.func.getDragItemChange = visual_item.getDragItemChangeZone;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-def.func.pointingHover = visual_docItem.pointingHover;
-
-
-/*
-| Notes use zone for positioning
-*/
-def.static.positioning =
-def.func.positioning =
-	'zone';
-
-
-/*
-| Nofication when the item lost the users mark.
-*/
-def.func.markLost = function( ){ };
-
-
-/*
-| Returns the mark for a point
-*/
-def.func.markForPoint = visual_docItem.markForPoint;
-
-
-/*
-| Minimum height.
-*/
-def.func.minHeight = gruga_note.minHeight;
-
-
-/*
-| Minimum width.
-*/
-def.func.minWidth = gruga_note.minWidth;
-
-
-/*
-| Mouse wheel turned.
-*/
-def.func.mousewheel =
-	function(
-		p,
-		dir
-		// shift,
-		// ctrl
-	)
-{
-	if( !this.tShape.within( p ) ) return false;
-
-	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
-
-	if( y < 0 ) y = 0;
-
-	root.setPath(
-		this.path.append( 'scrollPos' ),
-		this.scrollPos.create( 'y', y )
-	);
-
-	return true;
-};
-
-
-/*
-| A move during a text select on this item.
-*/
-def.func.moveSelect = visual_docItem.moveSelect;
-
-
-/*
-| Scrolls the note so the caret comes into view.
-*/
-def.func.scrollMarkIntoView =
-	function( )
-{
-	const mark = this.mark;
-
-	if( !mark || !mark.hasCaret ) return;
-
-	const sy = this.scrollPos.y;
-
-	// FUTURE, more elegant path getting
-	const para = this.doc.get( mark.caret.path.get( 5 ) );
-
-/**/if( CHECK )
-/**/{
-/**/	if( para.timtype !== visual_para ) throw new Error( );
-/**/}
-
-	const zone = this.zone;
-
-	const imargin = this.doc.innerMargin;
-
-	const fs = this.doc.font.size;
-
-	const descend = fs * shell_settings.bottombox;
-
-	const p = para.locateOffsetPoint( mark.caret.at );
-
-	const ppos = para.pos;
-
-	const s = ppos.y + p.y + descend + imargin.s;
-
-	const n = ppos.y + p.y - fs - imargin.n;
-
-	if( n < 0 )
-	{
-		root.setPath(
-			this.path.append( 'scrollPos' ),
-			this.scrollPos.create( 'y', sy + n )
-		);
-	}
-	else if( s > zone.height )
-	{
-		root.setPath(
-			this.path.append( 'scrollPos' ),
-			this.scrollPos.create( 'y', sy + s - zone.height )
-		);
-	}
-};
-
-
-/*
-| Handles a special key.
-*/
-def.func.specialKey = visual_docItem.specialKey;
-
-
-/*
-| Returns the minimum x-scale factor this item could go through.
-*/
-def.func.minScaleX =
-	function(
-		zone  // original zone
-	)
-{
-	return this.minWidth / zone.width;
-};
-
-
-/*
-| Returns the minimum y-scale factor this item could go through.
-*/
-def.func.minScaleY =
-	function(
-		zone  // original zone
-	)
-{
-	return this.minHeight / zone.height;
 };
 
 

@@ -26,6 +26,11 @@ if( TIM )
 }
 
 
+const fabric_stroke = require( '../fabric/stroke' );
+
+const visual_stroke = require( '../visual/stroke' );
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -54,17 +59,45 @@ def.staticLazy.createLine = ( ) =>
 	action_createStroke.create( 'itemType', 'line' );
 
 
+/*
+| The transient item of this creation.
+*/
+def.func.transientItem =
+	function(
+		transfrom   // the transform for the item
+	)
+{
+
+	const fabric =
+		fabric_stroke.create(
+			'from', this.from,
+			'to', this.to,
+			'fromStyle', 'none',
+			'toStyle', this._toStyle
+		);
+
+	return(
+		visual_stroke.create(
+			'fabric', fabric,
+			'highlight', false,
+			'transform', transfrom
+		)
+	);
+};
 
 
-def.lazy.transientItem =
+/*
+| The end style of the be created stroke.
+*/
+def.lazy._toStyle =
 	function( )
 {
 	switch( this.itemType )
 	{
-		case arrow:
-
-			return(
-				visual_stroke.create(
+		case 'arrow' : return 'arrow';
+		case 'line' : return 'none';
+		default : throw new Error( );
+	}
 };
 
 

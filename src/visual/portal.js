@@ -123,35 +123,6 @@ const spaceFields =
 
 
 /*
-| The portal model.
-*/
-def.staticLazy.model =
-	function( )
-{
-	return(
-		visual_portal.create(
-			'fabric',
-				fabric_portal.create(
-					'zone', gleam_rect.zero,
-					'spaceUser', '',
-					'spaceTag', ''
-				),
-			'highlight', false,
-			'transform', gleam_transform.normal
-		)
-	);
-};
-
-
-/*
-| Deriving concerns stuff.
-*/
-def.func.concernsHover =
-def.static.concernsHover =
-	visual_item.concernsHover;
-
-
-/*
 | Gets the previous section in a cycle.
 */
 def.static.antiCycle =
@@ -166,78 +137,6 @@ def.static.antiCycle =
 		case 'spaceTag' : return 'spaceUser';
 
 		case 'moveToButton' : return 'spaceTag';
-	}
-};
-
-
-/*
-| User wants to create a new portal.
-*/
-def.static.createGeneric =
-	function(
-		action, // the create action
-		dp      // the detransform point the createGeneric
-		//      // stoped at.
-	)
-{
-	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
-
-	const portal = action.transItem.fabric.create( 'zone', zone );
-
-	const key = session_uid.newUid( );
-
-	root.alter(
-		change_grow.create(
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'val', portal,
-			'rank', 0
-		)
-	);
-
-	root.setUserMark(
-		visual_mark_caret.pathAt( root.spaceVisual.get( key ).path.append( 'spaceUser' ), 0 )
-	);
-};
-
-
-/*
-| Gets the next section in a cycle.
-*/
-def.static.cycle =
-	function(
-		section
-	)
-{
-	switch( section )
-	{
-		case 'spaceUser' : return 'spaceTag';
-
-		case 'spaceTag' : return 'moveToButton';
-
-		case 'moveToButton' : return 'spaceUser';
-	}
-};
-
-
-/*
-| Returns true if section is a section.
-*/
-def.static.isSection =
-	function(
-		section
-	)
-{
-	switch( section )
-	{
-		case 'spaceUser' :
-		case 'spaceTag' :
-		case 'moveToButton' :
-
-			return true;
-
-		default :
-
-			return false;
 	}
 };
 
@@ -276,31 +175,329 @@ def.lazy.attentionCenter =
 
 
 /*
-| The item's glint.
+| Deriving concerns stuff.
 */
-def.lazy.glint =
-	function( )
+def.func.concernsHover =
+def.static.concernsHover =
+	visual_item.concernsHover;
+
+
+/*
+| User wants to create a new portal.
+*/
+def.static.createGeneric =
+	function(
+		action, // the create action
+		dp      // the detransform point the createGeneric
+		//      // stoped at.
+	)
 {
-	const tZone = this.tZone;
+	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this._glint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
-			)
-		];
+	const portal = action.transientItem.fabric.create( 'zone', zone );
 
-	if( this.highlight )
+	const key = session_uid.newUid( );
+
+	root.alter(
+		change_grow.create(
+			'path', tim_path.empty.append( 'twig' ).append( key ),
+			'val', portal,
+			'rank', 0
+		)
+	);
+
+	root.setUserMark(
+		visual_mark_caret.pathAt( root.spaceVisual.get( key ).path.append( 'spaceUser' ), 0 )
+	);
+};
+
+
+/*
+| Sees if this portal is being clicked.
+*/
+def.func.click =
+	function(
+		p,
+		shift,
+		access
+	)
+{
+	if( !this.tShape.within( p ) ) return;
+
+	const transform = this.transform;
+
+	const zone = this.zone;
+
+	let pp = p.detransform( transform ).sub( zone.pos );
+
+	if( this._moveToButtonShape.within( pp ) )
 	{
-		const facet = gruga_portal.facets.getFacet( 'highlight', true );
+		this._moveTo( );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		return true;
 	}
 
-	return gleam_glint_list.create( 'list:init', arr );
+	if( access != 'rw' ) return false;
+
+	pp = p.detransform( transform ).sub( zone.pos );
+
+	let setMark;
+
+	for( let field in spaceFields )
+	{
+		const fieldLazyName = spaceFields[ field ];
+
+		const sf = this[ fieldLazyName ];
+
+		if( sf.shape.within( pp ) )
+		{
+			setMark =
+				visual_mark_caret.pathAt(
+					this.path.append( field ),
+					this._getOffsetAt( field, pp.x )
+				);
+
+			break;
+		}
+	}
+
+	// if non of the field were clicked
+	// just focus the portal itself
+	if( !setMark )
+	{
+		setMark =
+			visual_mark_items.create(
+				'itemPaths', pathList.create( 'list:init', [ this.path ] )
+			);
+	}
+
+	if( setMark ) root.setUserMark( setMark );
+
+	return true;
 };
+
+
+
+/*
+| Gets the next section in a cycle.
+*/
+def.static.cycle =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' : return 'spaceTag';
+
+		case 'spaceTag' : return 'moveToButton';
+
+		case 'moveToButton' : return 'spaceUser';
+	}
+};
+
+
+/*
+| Returns the change for dragging this item.
+*/
+def.func.getDragItemChange = visual_item.getDragItemChangeZone;
+
+
+/*
+| Returns the change for resizing this item.
+*/
+def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
+
+
+/*
+| The item's glint.
+*/
+def.func.glint = function( ){ return this._glint; };
+
+
+/*
+| Text has been inputed.
+*/
+def.func.input =
+	function(
+		text
+	)
+{
+	const reg  = /([^\n]+)(\n?)/g;
+
+	const mark = this.mark;
+
+	const section = this._markSection;
+
+	if( !visual_portal.isSection( section ) ) return false;
+
+	if( section === 'moveToButton' ) { this._moveTo( ); return; }
+
+	// ignores newlines
+	for( let rx = reg.exec( text ); rx; rx = reg.exec( text ) )
+	{
+		const line = rx[ 1 ];
+
+		root.alter(
+			change_insert.create(
+				'val', line,
+				'path', this.path.append( section ).chop,
+				'at1', mark.caret.at,
+				'at2', mark.caret.at + line.length
+			)
+		);
+	}
+};
+
+
+/*
+| Returns true if section is a section.
+*/
+def.static.isSection =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' :
+		case 'spaceTag' :
+		case 'moveToButton' :
+
+			return true;
+
+		default :
+
+			return false;
+	}
+};
+
+
+
+/*
+| Nofication when the item lost the users mark.
+*/
+def.func.markLost = function( ){ };
+
+
+/*
+| Minimum height.
+*/
+def.func.minHeight = gruga_portal.minHeight;
+
+
+/*
+| Returns the minimum x-scale factor this item could go through.
+*/
+def.func.minScaleX =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minWidth / zone.width;
+};
+
+
+/*
+| Returns the minimum y-scale factor this item could go through.
+*/
+def.func.minScaleY =
+	function(
+		zone  // original zone
+	)
+{
+	return this.minHeight / zone.height;
+};
+
+
+/*
+| Minimum width.
+*/
+def.func.minWidth = gruga_portal.minWidth;
+
+
+/*
+| The portal model.
+*/
+def.staticLazy.model =
+	function( )
+{
+	return(
+		visual_portal.create(
+			'fabric',
+				fabric_portal.create(
+					'zone', gleam_rect.zero,
+					'spaceUser', '',
+					'spaceTag', ''
+				),
+			'highlight', false,
+			'transform', gleam_transform.normal
+		)
+	);
+};
+
+
+/*
+| Mouse wheel turned.
+*/
+def.func.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
+{
+	return this.tShape.within( p );
+};
+
+
+/*
+| User is hovering his/her pointing device around.
+|
+| Checks if this item reacts on this.
+*/
+def.func.pointingHover =
+	function(
+		p       // point hovered upon
+	)
+{
+	const transform = this.transform;
+
+	const zone = this.zone;
+
+	// not clicked on the portal?
+	if( !this.tShape.within( p ) ) return;
+
+	const pp = p.detransform( transform ).sub( zone.pos );
+
+	if( this._moveToButtonShape.within( pp ) )
+	{
+		return(
+			result_hover.create(
+				'path', this.path.append( 'moveToButton' ),
+				'cursor', 'pointer'
+			)
+		);
+	}
+	{
+		return result_hover.create( 'cursor', 'default' );
+	}
+};
+
+
+/*
+| Portals are positioned by their zone.
+*/
+def.static.positioning =
+def.func.positioning =
+	'zone';
+
+
+/*
+| Portals do not need to be resized proportionally.
+*/
+def.func.proportional = false;
 
 
 /*
@@ -335,6 +532,41 @@ def.lazy.spaceRef =
 			'tag', this.fabric.spaceTag
 		)
 	);
+};
+
+
+/*
+| User pressed a special key.
+*/
+def.func.specialKey =
+	function(
+		key,
+		shift
+		// ctrl
+	)
+{
+	switch( key )
+	{
+		case 'backspace' : this._keyBackspace( shift ); break;
+
+		case 'del' : this._keyDel( shift ); break;
+
+		case 'down' : this._keyDown( shift ); break;
+
+		case 'end' : this._keyEnd( shift ); break;
+
+		case 'enter' : this._keyEnter( shift ); break;
+
+		case 'left' : this._keyLeft( shift ); break;
+
+		case 'pos1' : this._keyPos1( shift ); break;
+
+		case 'right' : this._keyRight( shift ); break;
+
+		case 'tab' : this._keyTab( shift ); break;
+
+		case 'up' : this._keyUp( shift ); break;
+	}
 };
 
 
@@ -380,86 +612,6 @@ def.lazy.zone =
 
 
 /*
-| Font for spaceUser.
-*/
-def.lazy._fontSpaceUser =
-	function( )
-{
-	return shell_fontPool.get( 13, 'la' );
-};
-
-
-/*
-| Font for spaceTag.
-*/
-def.lazy._fontSpaceTag =
-	function( )
-{
-	return shell_fontPool.get( 13, 'la' );
-};
-
-
-/*
-| Font for moveToButton.
-*/
-def.lazy._fontMoveTo =
-	function( )
-{
-	return shell_fontPool.get( 13, 'cm' );
-};
-
-
-/*
-| Font for spaceUser.
-*/
-def.lazy._tFontSpaceUser =
-	function( )
-{
-	return this._fontSpaceUser.transform( this.transform );
-};
-
-
-/*
-| Font for spaceTag.
-*/
-def.lazy._tFontSpaceTag =
-	function( )
-{
-	return this._fontSpaceTag.transform( this.transform );
-};
-
-
-/*
-| Font for moveToButton.
-*/
-def.lazy._tFontMoveTo =
-	function( )
-{
-	return this._fontMoveTo.transform( this.transform );
-};
-
-
-/*
-| Prepares the spaceTag field.
-*/
-def.lazy._fieldSpaceTag =
-	function( )
-{
-	return this._prepareField( 'spaceTag', this._fieldSpaceUser.pos );
-};
-
-
-/*
-| Prepares the spaceUser field.
-*/
-def.lazy._fieldSpaceUser =
-	function( )
-{
-	return this._prepareField( 'spaceUser' );
-};
-
-
-/*
 | The moveToButton facet.
 */
 def.lazy._facetMoveToButton =
@@ -480,9 +632,191 @@ def.lazy._facetMoveToButton =
 
 
 /*
-| Creates the portal's inner glint.
+| Returns the font for 'section'.
+*/
+def.func._fontFor =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' : return this._fontSpaceUser;
+
+		case 'spaceTag' : return this._fontSpaceTag;
+
+		case 'moveTo' : return this._fontMoveTo;
+
+		default : throw new Error( );
+	}
+};
+
+
+/*
+| Font for moveToButton.
+*/
+def.lazy._fontMoveTo =
+	function( )
+{
+	return shell_fontPool.get( 13, 'cm' );
+};
+
+
+/*
+| Font for spaceTag.
+*/
+def.lazy._fontSpaceTag =
+	function( )
+{
+	return shell_fontPool.get( 13, 'la' );
+};
+
+
+/*
+| Prepares the spaceTag field.
+*/
+def.lazy._fieldSpaceTag =
+	function( )
+{
+	return this._prepareField( 'spaceTag', this._fieldSpaceUser.pos );
+};
+
+
+/*
+| Font for spaceUser.
+*/
+def.lazy._fontSpaceUser =
+	function( )
+{
+	return shell_fontPool.get( 13, 'la' );
+};
+
+
+/*
+| Prepares the spaceUser field.
+*/
+def.lazy._fieldSpaceUser =
+	function( )
+{
+	return this._prepareField( 'spaceUser' );
+};
+
+/*
+| Glint for the caret.
+*/
+def.lazy._glintCaret =
+	function( )
+{
+	const mark = this.mark;
+
+	const ot = this.transform.ortho;
+
+	const section = this._markSection;
+
+	if( !visual_portal.isSection( section ) || section === 'moveToButton' ) return;
+
+	const font = this._fontFor( section );
+
+	const fs = font.size;
+
+	const descend = fs * shell_settings.bottombox;
+
+	const fieldPos = this[ spaceFields[ section ] ].pos;
+
+	const p = this._locateOffset( section, mark.caret.at );
+
+	const pos =
+		p
+		.add(
+			fieldPos.x,
+			p.y + descend + fieldPos.y - fs - descend
+		)
+		.transform( ot );
+
+	return(
+		gleam_glint_fill.create(
+			'facet', gleam_facet.blackFill,
+			'shape',
+				gleam_rect.create(
+					'pos', pos,
+					'width', 1,
+					'height', ot.scale( fs + descend )
+				)
+		)
+	);
+};
+
+
+/*
+| Returns the offset nearest to point p.
+*/
+def.func._getOffsetAt =
+	function(
+		section,
+		x
+	)
+{
+	const dx = x - this[ spaceFields[ section ] ].pos.x;
+
+	const value = this.fabric[ section ];
+
+	let x1 = 0;
+
+	let x2 = 0;
+
+	const font = this._fontFor( section );
+
+	let a;
+
+	const al = value.length;
+
+	for( a = 0; a < al; a++ )
+	{
+		x1 = x2;
+
+		x2 = font.getAdvanceWidth( value.substr( 0, a ) );
+
+		if( x2 >= dx ) break;
+	}
+
+	if( dx - x1 < x2 - dx && a > 0 ) a--;
+
+	return a;
+};
+
+
+/*
+| The item's glint.
 */
 def.lazy._glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._innerGlint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_portal.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| Creates the portal's inner glint.
+*/
+def.lazy._innerGlint =
 	function( )
 {
 	const ot = this.transform.ortho;
@@ -574,7 +908,7 @@ def.lazy._glint =
 /*
 | Inheritance optimization.
 */
-def.inherit._glint =
+def.inherit._innerGlint =
 	function(
 		inherit
 	)
@@ -583,418 +917,6 @@ def.inherit._glint =
 		inherit.alikeIgnoringTransform( this )
 		&& inherit.transform.zoom === this.transform.zoom
 	);
-};
-
-
-/*
-| Glint for the caret.
-*/
-def.lazy._glintCaret =
-	function( )
-{
-	const mark = this.mark;
-
-	const ot = this.transform.ortho;
-
-	const section = this._markSection;
-
-	if( !visual_portal.isSection( section ) || section === 'moveToButton' ) return;
-
-	const font = this._fontFor( section );
-
-	const fs = font.size;
-
-	const descend = fs * shell_settings.bottombox;
-
-	const fieldPos = this[ spaceFields[ section ] ].pos;
-
-	const p = this._locateOffset( section, mark.caret.at );
-
-	const pos =
-		p
-		.add(
-			fieldPos.x,
-			p.y + descend + fieldPos.y - fs - descend
-		)
-		.transform( ot );
-
-	return(
-		gleam_glint_fill.create(
-			'facet', gleam_facet.blackFill,
-			'shape',
-				gleam_rect.create(
-					'pos', pos,
-					'width', 1,
-					'height', ot.scale( fs + descend )
-				)
-		)
-	);
-};
-
-
-/*
-| The section of the current mark
-*/
-def.lazy._markSection =
-	function( )
-{
-	const mark = this.mark;
-
-	return mark && mark.hasCaret && mark.caret.path.get( -1 );
-};
-
-
-/*
-| The move to button shape.
-*/
-def.lazy._moveToButtonShape =
-	function( )
-{
-	const zone = this.zone;
-
-	const width = gruga_portal.moveToWidth;
-
-	const height = gruga_portal.moveToHeight;
-
-	const rounding = gruga_portal.moveToRounding;
-
-	return(
-		gleam_roundRect.create(
-			'pos',
-				gleam_point.create(
-					'x', ( zone.width - width ) / 2,
-					'y', ( zone.height + 10 ) / 2
-				),
-			'width', width,
-			'height', height,
-			'a', rounding,
-			'b', rounding
-		)
-	);
-};
-
-
-/*
-| The move to button shape transformed to current zoom level.
-*/
-def.lazy._orthoMoveToButtonShape =
-	function( )
-{
-	return this._moveToButtonShape.transform( this.transform.ortho );
-};
-
-
-/*
-| The portal's shape at zero.
-*/
-def.lazy._zeroShape =
-	function( )
-{
-	const zone = this.zone;
-
-	return(
-		gleam_ellipse.create(
-			'pos', gleam_point.zero,
-			'width', zone.width,
-			'height', zone.height
-		)
-	);
-};
-
-
-/*
-| Portals do not need to be resized proportionally.
-*/
-def.func.proportional = false;
-
-
-/*
-| Sees if this portal is being clicked.
-*/
-def.func.click =
-	function(
-		p,
-		shift,
-		access
-	)
-{
-	if( !this.tShape.within( p ) ) return;
-
-	const transform = this.transform;
-
-	const zone = this.zone;
-
-	let pp = p.detransform( transform ).sub( zone.pos );
-
-	if( this._moveToButtonShape.within( pp ) )
-	{
-		this._moveTo( );
-
-		return true;
-	}
-
-	if( access != 'rw' ) return false;
-
-	pp = p.detransform( transform ).sub( zone.pos );
-
-	let setMark;
-
-	for( let field in spaceFields )
-	{
-		const fieldLazyName = spaceFields[ field ];
-
-		const sf = this[ fieldLazyName ];
-
-		if( sf.shape.within( pp ) )
-		{
-			setMark =
-				visual_mark_caret.pathAt(
-					this.path.append( field ),
-					this._getOffsetAt( field, pp.x )
-				);
-
-			break;
-		}
-	}
-
-	// if non of the field were clicked
-	// just focus the portal itself
-	if( !setMark )
-	{
-		setMark =
-			visual_mark_items.create(
-				'itemPaths', pathList.create( 'list:init', [ this.path ] )
-			);
-	}
-
-	if( setMark ) root.setUserMark( setMark );
-
-	return true;
-};
-
-
-/*
-| Returns the change for dragging this item.
-*/
-def.func.getDragItemChange = visual_item.getDragItemChangeZone;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
-
-
-/*
-| Text has been inputed.
-*/
-def.func.input =
-	function(
-		text
-	)
-{
-	const reg  = /([^\n]+)(\n?)/g;
-
-	const mark = this.mark;
-
-	const section = this._markSection;
-
-	if( !visual_portal.isSection( section ) ) return false;
-
-	if( section === 'moveToButton' ) { this._moveTo( ); return; }
-
-	// ignores newlines
-	for( let rx = reg.exec( text ); rx; rx = reg.exec( text ) )
-	{
-		const line = rx[ 1 ];
-
-		root.alter(
-			change_insert.create(
-				'val', line,
-				'path', this.path.append( section ).chop,
-				'at1', mark.caret.at,
-				'at2', mark.caret.at + line.length
-			)
-		);
-	}
-};
-
-
-/*
-| Nofication when the item lost the users mark.
-*/
-def.func.markLost = function( ){ };
-
-
-/*
-| Minimum height.
-*/
-def.func.minHeight = gruga_portal.minHeight;
-
-
-/*
-| Minimum width.
-*/
-def.func.minWidth = gruga_portal.minWidth;
-
-
-/*
-| Returns the minimum x-scale factor this item could go through.
-*/
-def.func.minScaleX =
-	function(
-		zone  // original zone
-	)
-{
-	return this.minWidth / zone.width;
-};
-
-
-/*
-| Returns the minimum y-scale factor this item could go through.
-*/
-def.func.minScaleY =
-	function(
-		zone  // original zone
-	)
-{
-	return this.minHeight / zone.height;
-};
-
-
-/*
-| Mouse wheel turned.
-*/
-def.func.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	return this.tShape.within( p );
-};
-
-
-/*
-| User is hovering his/her pointing device around.
-|
-| Checks if this item reacts on this.
-*/
-def.func.pointingHover =
-	function(
-		p       // point hovered upon
-	)
-{
-	const transform = this.transform;
-
-	const zone = this.zone;
-
-	// not clicked on the portal?
-	if( !this.tShape.within( p ) ) return;
-
-	const pp = p.detransform( transform ).sub( zone.pos );
-
-	if( this._moveToButtonShape.within( pp ) )
-	{
-		return(
-			result_hover.create(
-				'path', this.path.append( 'moveToButton' ),
-				'cursor', 'pointer'
-			)
-		);
-	}
-	{
-		return result_hover.create( 'cursor', 'default' );
-	}
-};
-
-
-/*
-| Portals are positioned by their zone.
-*/
-def.static.positioning =
-def.func.positioning =
-	'zone';
-
-
-/*
-| Returns the font for 'section'.
-*/
-def.func._fontFor =
-	function(
-		section
-	)
-{
-	switch( section )
-	{
-		case 'spaceUser' : return this._fontSpaceUser;
-
-		case 'spaceTag' : return this._fontSpaceTag;
-
-		case 'moveTo' : return this._fontMoveTo;
-
-		default : throw new Error( );
-	}
-};
-
-
-/*
-| Returns the point of a given offset.
-*/
-def.func._locateOffset =
-	function(
-		section,   // 'spaceUser' or 'spaceTag'
-		offset     // the offset to get the point from.
-	)
-{
-	// FUTURE cache position
-	const font = this._fontFor( section );
-
-	const text = this.fabric[ section ];
-
-	return(
-		gleam_point.xy(
-			Math.round( font.getAdvanceWidth( text.substring( 0, offset ) ) ),
-			0
-		)
-	);
-};
-
-
-/*
-| User pressed a special key.
-*/
-def.func.specialKey =
-	function(
-		key,
-		shift
-		// ctrl
-	)
-{
-	switch( key )
-	{
-		case 'backspace' : this._keyBackspace( shift ); break;
-
-		case 'del' : this._keyDel( shift ); break;
-
-		case 'down' : this._keyDown( shift ); break;
-
-		case 'end' : this._keyEnd( shift ); break;
-
-		case 'enter' : this._keyEnter( shift ); break;
-
-		case 'left' : this._keyLeft( shift ); break;
-
-		case 'pos1' : this._keyPos1( shift ); break;
-
-		case 'right' : this._keyRight( shift ); break;
-
-		case 'tab' : this._keyTab( shift ); break;
-
-		case 'up' : this._keyUp( shift ); break;
-	}
 };
 
 
@@ -1103,100 +1025,6 @@ def.func._keyLeft =
 
 
 /*
-| User pressed down key.
-*/
-def.func._keyTab =
-	function(
-		shift
-	)
-{
-	const mark = this.mark;
-
-	const section = this._markSection;
-
-	if( !visual_portal.isSection( section ) ) return;
-
-	const cycle =
-		shift
-		? visual_portal.antiCycle( section )
-		: visual_portal.cycle( section );
-
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path.set( -1, cycle ), 0 ) );
-};
-
-
-/*
-| User pressed down key.
-*/
-def.func._keyUp =
-	function( )
-{
-	const mark = this.mark;
-
-	const section = this._markSection;
-
-	if( !visual_portal.isSection( section ) ) return;
-
-	switch( section )
-	{
-		case 'spaceUser' :
-
-			root.setUserMark( visual_mark_caret.pathAt( this.path.append( 'moveToButton' ), 0 ) );
-
-			break;
-
-		case 'spaceTag' :
-		{
-			const cpos = this._locateOffset( section, mark.caret.at );
-
-			root.setUserMark(
-				visual_mark_caret.pathAt(
-					this.path.append( 'spaceUser' ),
-					this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x )
-				)
-			);
-
-			break;
-		}
-
-		case 'moveToButton' :
-
-			root.setUserMark( visual_mark_caret.pathAt( this.path.append( 'spaceTag' ), 0 ) );
-
-			break;
-	}
-};
-
-
-/*
-| User pressed right key.
-*/
-def.func._keyRight =
-	function( )
-{
-	const mark = this.mark;
-
-	const section = this._markSection;
-
-	if( !visual_portal.isSection( section ) ) return false;
-
-	const value = this.fabric[ section ];
-
-	if( section === 'moveToButton' || ( value && mark.caret.at >= value.length ) )
-	{
-		const cycle = visual_portal.cycle( section );
-
-		root.setUserMark( visual_mark_caret.pathAt( this.path.append( cycle ), 0 ) );
-
-		return;
-	}
-
-	// FIXME lazy val caret
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 ) );
-};
-
-
-/*
 | User pressed del.
 */
 def.func._keyDel =
@@ -1285,44 +1113,6 @@ def.func._keyEnter =
 
 
 /*
-| Returns the offset nearest to point p.
-*/
-def.func._getOffsetAt =
-	function(
-		section,
-		x
-	)
-{
-	const dx = x - this[ spaceFields[ section ] ].pos.x;
-
-	const value = this.fabric[ section ];
-
-	let x1 = 0;
-
-	let x2 = 0;
-
-	const font = this._fontFor( section );
-
-	let a;
-
-	const al = value.length;
-
-	for( a = 0; a < al; a++ )
-	{
-		x1 = x2;
-
-		x2 = font.getAdvanceWidth( value.substr( 0, a ) );
-
-		if( x2 >= dx ) break;
-	}
-
-	if( dx - x1 < x2 - dx && a > 0 ) a--;
-
-	return a;
-};
-
-
-/*
 | User pressed pos1 key,
 */
 def.func._keyPos1 =
@@ -1330,6 +1120,168 @@ def.func._keyPos1 =
 {
 	root.setUserMark( this.mark.create( 'at', 0 ) );
 };
+
+
+/*
+| User pressed right key.
+*/
+def.func._keyRight =
+	function( )
+{
+	const mark = this.mark;
+
+	const section = this._markSection;
+
+	if( !visual_portal.isSection( section ) ) return false;
+
+	const value = this.fabric[ section ];
+
+	if( section === 'moveToButton' || ( value && mark.caret.at >= value.length ) )
+	{
+		const cycle = visual_portal.cycle( section );
+
+		root.setUserMark( visual_mark_caret.pathAt( this.path.append( cycle ), 0 ) );
+
+		return;
+	}
+
+	// FIXME lazy val caret
+	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 ) );
+};
+
+
+/*
+| User pressed down key.
+*/
+def.func._keyTab =
+	function(
+		shift
+	)
+{
+	const mark = this.mark;
+
+	const section = this._markSection;
+
+	if( !visual_portal.isSection( section ) ) return;
+
+	const cycle =
+		shift
+		? visual_portal.antiCycle( section )
+		: visual_portal.cycle( section );
+
+	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path.set( -1, cycle ), 0 ) );
+};
+
+
+/*
+| User pressed down key.
+*/
+def.func._keyUp =
+	function( )
+{
+	const mark = this.mark;
+
+	const section = this._markSection;
+
+	if( !visual_portal.isSection( section ) ) return;
+
+	switch( section )
+	{
+		case 'spaceUser' :
+
+			root.setUserMark( visual_mark_caret.pathAt( this.path.append( 'moveToButton' ), 0 ) );
+
+			break;
+
+		case 'spaceTag' :
+		{
+			const cpos = this._locateOffset( section, mark.caret.at );
+
+			root.setUserMark(
+				visual_mark_caret.pathAt(
+					this.path.append( 'spaceUser' ),
+					this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x )
+				)
+			);
+
+			break;
+		}
+
+		case 'moveToButton' :
+
+			root.setUserMark( visual_mark_caret.pathAt( this.path.append( 'spaceTag' ), 0 ) );
+
+			break;
+	}
+};
+
+
+/*
+| Returns the point of a given offset.
+*/
+def.func._locateOffset =
+	function(
+		section,   // 'spaceUser' or 'spaceTag'
+		offset     // the offset to get the point from.
+	)
+{
+	// FUTURE cache position
+	const font = this._fontFor( section );
+
+	const text = this.fabric[ section ];
+
+	return(
+		gleam_point.xy(
+			Math.round( font.getAdvanceWidth( text.substring( 0, offset ) ) ),
+			0
+		)
+	);
+};
+
+
+/*
+| The section of the current mark
+*/
+def.lazy._markSection =
+	function( )
+{
+	const mark = this.mark;
+
+	return mark && mark.hasCaret && mark.caret.path.get( -1 );
+};
+
+
+/*
+| The move to button shape.
+*/
+def.lazy._moveToButtonShape =
+	function( )
+{
+	const zone = this.zone;
+
+	const width = gruga_portal.moveToWidth;
+
+	const height = gruga_portal.moveToHeight;
+
+	const rounding = gruga_portal.moveToRounding;
+
+	return(
+		gleam_roundRect.create(
+			'pos',
+				gleam_point.create(
+					'x', ( zone.width - width ) / 2,
+					'y', ( zone.height + 10 ) / 2
+				),
+			'width', width,
+			'height', height,
+			'a', rounding,
+			'b', rounding
+		)
+	);
+};
+
+
+
 
 
 /*
@@ -1341,6 +1293,15 @@ def.func._moveTo =
 	root.moveToSpace( this.spaceRef, false );
 };
 
+
+/*
+| The move to button shape transformed to current zoom level.
+*/
+def.lazy._orthoMoveToButtonShape =
+	function( )
+{
+	return this._moveToButtonShape.transform( this.transform.ortho );
+};
 
 
 /*
@@ -1408,6 +1369,54 @@ def.func._prepareField =
 /**/if( FREEZE ) Object.freeze( result );
 
 	return result;
+};
+
+
+/*
+| Font for spaceUser.
+*/
+def.lazy._tFontSpaceUser =
+	function( )
+{
+	return this._fontSpaceUser.transform( this.transform );
+};
+
+
+/*
+| Font for spaceTag.
+*/
+def.lazy._tFontSpaceTag =
+	function( )
+{
+	return this._fontSpaceTag.transform( this.transform );
+};
+
+
+/*
+| Font for moveToButton.
+*/
+def.lazy._tFontMoveTo =
+	function( )
+{
+	return this._fontMoveTo.transform( this.transform );
+};
+
+
+/*
+| The portal's shape at zero.
+*/
+def.lazy._zeroShape =
+	function( )
+{
+	const zone = this.zone;
+
+	return(
+		gleam_ellipse.create(
+			'pos', gleam_point.zero,
+			'width', zone.width,
+			'height', zone.height
+		)
+	);
 };
 
 

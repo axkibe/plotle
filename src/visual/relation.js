@@ -68,17 +68,17 @@ def.transform.doc = visual_label.prototype[ '__transform_' + 'doc' ];
 /*
 | The item's glint.
 |
-| This cannot be done lazily, since
-| when one of the items the relation
-| points to is moved the arrows are moved
-| too.
+| This cannot be done lazily, since it
+| depends on other items.
 */
 def.func.glint =
 	function( )
 {
-	const item1 = root.spaceVisual.get( this.fabric.item1key );
+	const fabric = this.fabric;
 
-	const item2 = root.spaceVisual.get( this.fabric.item2key );
+	const item1 = root.spaceVisual.get( fabric.item1key );
+
+	const item2 = root.spaceVisual.get( fabric.item2key );
 
 	let shape1, shape2;
 
@@ -147,22 +147,6 @@ def.inherit.glint =
 
 
 /*
-| Returns the glint of a connection to a shape.
-*/
-def.func._getConnectionGlint =
-	function(
-		shape
-	)
-{
-	const arrowShape =
-		gleam_arrow.getArrowShape( shape, 'normal', this.shape, 'normal' )
-		.transform( this.transform );
-
-	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
-};
-
-
-/*
 | Returns the glint of an arrow to a shape.
 */
 def.func._getArrowGlint =
@@ -176,13 +160,28 @@ def.func._getArrowGlint =
 			'shape',
 				gleam_arrow.getArrowShape(
 					this.shape,
-					'normal',
+					'none',
 					shape,
 					'arrow'
 				)
 				.transform( this.transform )
 		)
 	);
+};
+
+/*
+| Returns the glint of a connection to a shape.
+*/
+def.func._getConnectionGlint =
+	function(
+		shape
+	)
+{
+	const arrowShape =
+		gleam_arrow.getArrowShape( shape, 'none', this.shape, 'none' )
+		.transform( this.transform );
+
+	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
 };
 
 

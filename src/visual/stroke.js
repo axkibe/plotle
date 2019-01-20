@@ -38,23 +38,34 @@ if( TIM )
 }
 
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_arrow = require( '../gleam/arrow' );
+
+const gleam_glint_paint = require( '../gleam/glint/paint' );
+
+const gruga_relation = require( '../gruga/relation' );
 
 
 /*
 | The item's glint.
 |
-| This cannot be done lazily, since
-| when one of the items the relation
-| points to is moved the arrows are moved
-| too.
+| This cannot be done lazily, since it may
+| depend on other items.
 */
 def.func.glint =
 	function( )
 {
-	const arr = [ ];
+	const fabric = this.fabric;
 
-	return gleam_glint_list.create( 'list:init', arr );
+	const shape =
+		gleam_arrow.create(
+			'joint1', fabric.from,
+			'joint2', fabric.to,
+			'end1', fabric.fromStyle,
+			'end2', fabric.toStyle
+		).shape.transform( this.transform );
+
+	// FIXME remove gruga_relation dependency
+	return gleam_glint_paint.createFS( gruga_relation.facet, shape );
 };
 
 

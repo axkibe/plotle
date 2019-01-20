@@ -38,16 +38,6 @@ if( TIM )
 		// the current space transform
 		transform : { type : '../gleam/transform' }
 	};
-
-	/*
-	def.alike =
-	{
-		alikeIgnoringTransform :
-		{
-			ignores : { 'transform' : true }
-		}
-	};
-	*/
 }
 
 
@@ -100,37 +90,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 def.static.concernsHover =
 def.func.concernsHover =
 	( ) => undefined;
-
-
-/*
-| Labels resize proportional only.
-*/
-def.func.proportional = true;
-
-
-/*
-| The label model.
-*/
-def.staticLazy.model =
-	function( )
-{
-	return(
-		visual_label.create(
-			'fabric',
-				fabric_label.create(
-					'pos', gleam_point.zero,
-					'fontsize', gruga_label.defaultFontsize,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1',
-							fabric_para.create( 'text', 'Label' )
-						)
-				),
-			'highlight', false,
-			'transform', gleam_transform.normal
-		)
-	);
-};
 
 
 /*
@@ -218,169 +177,6 @@ def.transform.doc =
 
 
 /*
-| The items glint.
-*/
-def.lazy.glint =
-	function( )
-{
-	const tZone = this.tZone;
-
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this.doc.glint,
-				'rect', tZone.enlarge1,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		const facet = gruga_label.facets.getFacet( 'highlight', true );
-
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| Inheritance optimization.
-|
-| FIXME shouldn't this be default?
-*/
-def.inherit.glint =
-	function(
-		inherit
-	)
-{
-	return inherit.equals( this );
-};
-
-
-/*
-| The labels position possibly altered by actions
-*/
-def.lazy.pos =
-	function( )
-{
-	const action = this.action;
-
-	switch( action && action.timtype )
-	{
-		case action_dragItems :
-
-			return this.fabric.pos.add( action.moveBy );
-
-		case action_resizeItems :
-		{
-			const zone = action.startZones.get( this.path.get( 2 ) );
-
-			// FIXME make a map
-			switch( action.resizeDir )
-			{
-				case compass.ne :
-
-					return zone.psw.baseScaleAction( action, 0, -this._zoneHeight );
-
-				case compass.nw :
-
-					return zone.pse.baseScaleAction( action, -this._zoneWidth, -this._zoneHeight );
-
-				case compass.se :
-
-					return zone.pos.baseScaleAction( action, 0, 0 );
-
-				case compass.sw :
-
-					return zone.pne.baseScaleAction( action, -this._zoneWidth, 0 );
-			}
-
-			// should never be reached
-			throw new Error( );
-		}
-	}
-
-	return this.fabric.pos;
-};
-
-
-
-
-/*
-| The item's shape.
-*/
-def.lazy.shape =
-	function( )
-{
-	return this.zone.shrink1;
-};
-
-
-/*
-| The item's shape in current transform.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return this.shape.transform( this.transform );
-};
-
-
-/*
-| Zone in current transform.
-*/
-def.lazy.tZone =
-	function( )
-{
-	return this.zone.transform( this.transform );
-};
-
-/*
-| Returns the zone height.
-*/
-def.lazy._zoneHeight =
-	function( )
-{
-	return this.doc.fullsize.height + 2;
-};
-
-
-/*
-| Returns the zone width.
-*/
-def.lazy._zoneWidth =
-	function( )
-{
-	return(
-		Math.max(
-			this.doc.fullsize.width + 4,
-			this._zoneHeight / 4
-		)
-	);
-};
-
-/*
-| Calculates the labels zone,
-| possibly altered by an action.
-|
-| FUTURE inherit
-*/
-def.lazy.zone =
-	function( )
-{
-	return(
-		gleam_rect.create(
-			'pos', this.pos,
-			'width', this._zoneWidth,
-			'height', this._zoneHeight
-		)
-	);
-};
-
-
-/*
 | The fontsize of the label.
 */
 def.lazy.fontsize =
@@ -416,6 +212,12 @@ def.func.getDragItemChange = visual_item.getDragItemChangePosFs;
 | Returns the change for resizing this item.
 */
 def.func.getResizeItemChange = visual_item.getResizeItemChangePosFs;
+
+
+/*
+| The items glint.
+*/
+def.func.glint = function( ) { return this._glint; };
 
 
 /*
@@ -470,6 +272,31 @@ def.func.minScaleY =
 
 
 /*
+| The label model.
+*/
+def.staticLazy.model =
+	function( )
+{
+	return(
+		visual_label.create(
+			'fabric',
+				fabric_label.create(
+					'pos', gleam_point.zero,
+					'fontsize', gruga_label.defaultFontsize,
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1',
+							fabric_para.create( 'text', 'Label' )
+						)
+				),
+			'highlight', false,
+			'transform', gleam_transform.normal
+		)
+	);
+};
+
+
+/*
 | The mouse wheel turned.
 */
 def.func.mousewheel =
@@ -497,11 +324,70 @@ def.func.pointingHover = visual_docItem.pointingHover;
 
 
 /*
+| The labels position possibly altered by actions
+*/
+def.lazy.pos =
+	function( )
+{
+	const action = this.action;
+
+	switch( action && action.timtype )
+	{
+		case action_dragItems :
+
+			return this.fabric.pos.add( action.moveBy );
+
+		case action_resizeItems :
+		{
+			const zone = action.startZones.get( this.path.get( 2 ) );
+
+			// FIXME make a map
+			switch( action.resizeDir )
+			{
+				case compass.ne :
+
+					return zone.psw.baseScaleAction( action, 0, -this._zoneHeight );
+
+				case compass.nw :
+
+					return zone.pse.baseScaleAction( action, -this._zoneWidth, -this._zoneHeight );
+
+				case compass.se :
+
+					return zone.pos.baseScaleAction( action, 0, 0 );
+
+				case compass.sw :
+
+					return zone.pne.baseScaleAction( action, -this._zoneWidth, 0 );
+			}
+
+			// should never be reached
+			throw new Error( );
+		}
+	}
+
+	return this.fabric.pos;
+};
+
+
+/*
 | Labels use pos/fontsize for positioning
 */
 def.static.positioning =
 def.func.positioning =
 	'pos/fontsize';
+
+
+/*
+| Labels resize proportional only.
+*/
+def.func.proportional = true;
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+def.func.scrollMarkIntoView = function( ){ };
 
 
 /*
@@ -511,10 +397,119 @@ def.func.specialKey = visual_docItem.specialKey;
 
 
 /*
-| Dummy since a label does not scroll.
+| The item's shape.
 */
-def.func.scrollMarkIntoView = function( ){ };
+def.lazy.shape =
+	function( )
+{
+	return this.zone.shrink1;
+};
+
+
+/*
+| The item's shape in current transform.
+*/
+def.lazy.tShape =
+	function( )
+{
+	return this.shape.transform( this.transform );
+};
+
+
+/*
+| Zone in current transform.
+*/
+def.lazy.tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
+};
+
+/*
+| Calculates the labels zone,
+| possibly altered by an action.
+|
+| FUTURE inherit
+*/
+def.lazy.zone =
+	function( )
+{
+	return(
+		gleam_rect.create(
+			'pos', this.pos,
+			'width', this._zoneWidth,
+			'height', this._zoneHeight
+		)
+	);
+};
+
+
+
+/*
+| The items glint.
+*/
+def.lazy._glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this.doc.glint,
+				'rect', tZone.enlarge1,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_label.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| Inheritance optimization.
+|
+| FIXME shouldn't this be default?
+*/
+def.inherit._glint =
+	function(
+		inherit
+	)
+{
+	return inherit.equals( this );
+};
+
+
+/*
+| Returns the zone height.
+*/
+def.lazy._zoneHeight =
+	function( )
+{
+	return this.doc.fullsize.height + 2;
+};
+
+
+/*
+| Returns the zone width.
+*/
+def.lazy._zoneWidth =
+	function( )
+{
+	return(
+		Math.max(
+			this.doc.fullsize.width + 4,
+			this._zoneHeight / 4
+		)
+	);
+};
 
 
 } );
-

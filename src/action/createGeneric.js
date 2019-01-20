@@ -19,7 +19,7 @@ if( TIM )
 		itemType : { type : 'string'  },
 
 		// the transient item in creation
-		transItem : { type : [ '< ../visual/item-types', 'undefined' ] },
+		transientItem : { type : [ '< ../visual/item-types', 'undefined' ] },
 
 		// start point of drag creation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] }

@@ -402,11 +402,7 @@ def.lazy.glint =
 	{
 		const s = this.atRank( r );
 
-		let g = s.glint;
-
-		if( typeof( g ) === 'function' ) g = g.call( s );
-
-		arr.push( g );
+		arr.push( s.glint( ) );
 	}
 
 	const frame = this.frame;
@@ -417,19 +413,19 @@ def.lazy.glint =
 	{
 		case action_createGeneric :
 
-			if( action.startPoint ) arr.push( action.transItem.glint );
+			if( action.startPoint ) arr.push( action.transientItem.glint( ) );
 
 			break;
 
 		case action_createStroke :
 
-			if( action.from ) arr.push( action.transItem.glint );
+			if( action.from ) arr.push( action.transientItem( transform ) .glint( ) );
 
 			break;
 
 		case action_createRelation :
 
-			// FIXME make a transItem
+			// FIXME make a transientItem
 
 			if( action.fromItemPath )
 			{
@@ -461,7 +457,7 @@ def.lazy.glint =
 						gleam_arrow.create(
 							'joint1', fromJoint,
 							'joint2', toJoint,
-							'end1', 'normal',
+							'end1', 'none',
 							'end2', 'arrow'
 						);
 
@@ -1087,7 +1083,7 @@ def.func._moveCreateGeneric =
 
 	const model = action.itemTim.model;
 
-	let transItem = action.transItem;
+	let transientItem = action.transientItem;
 
 	switch( action.itemType )
 	{
@@ -1096,9 +1092,9 @@ def.func._moveCreateGeneric =
 
 			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
 
-			transItem =
-				transItem.create(
-					'fabric', transItem.fabric.create( 'zone', zone ),
+			transientItem =
+				transientItem.create(
+					'fabric', transientItem.fabric.create( 'zone', zone ),
 					'transform', transform
 				);
 
@@ -1113,7 +1109,7 @@ def.func._moveCreateGeneric =
 				);
 
 			const resized =
-				transItem.create(
+				transientItem.create(
 					'fabric', model.fabric.create( 'fontsize', fs )
 				);
 
@@ -1125,7 +1121,7 @@ def.func._moveCreateGeneric =
 					zone.pos.y
 				);
 
-			transItem =
+			transientItem =
 				resized.create(
 					'fabric', resized.fabric.create( 'pos', pos ),
 					'transform', transform
@@ -1138,7 +1134,7 @@ def.func._moveCreateGeneric =
 	}
 
 	root.create(
-		'action', action.create( 'transItem', transItem )
+		'action', action.create( 'transientItem', transientItem )
 	);
 };
 
@@ -1479,7 +1475,7 @@ def.func._startCreateGeneric =
 
 	const dp = this._snap( p, ctrl ).detransform( this.transform );
 
-	let transItem;
+	let transientItem;
 
 	switch( itemTim.positioning )
 	{
@@ -1504,7 +1500,7 @@ def.func._startCreateGeneric =
 					);
 			}
 
-			transItem =
+			transientItem =
 				model.create(
 					'fabric', fabric,
 					'path', visual_space.transPath,
@@ -1516,7 +1512,7 @@ def.func._startCreateGeneric =
 
 		case 'pos/fontsize' :
 
-			transItem =
+			transientItem =
 				model.create(
 					'fabric', model.fabric.create( 'pos', dp ),
 					'path', visual_space.transPath,
@@ -1529,9 +1525,7 @@ def.func._startCreateGeneric =
 
 	}
 
-	root.create(
-		'action', action.create( 'startPoint', dp, 'transItem', transItem )
-	);
+	root.create( 'action', action.create( 'startPoint', dp, 'transientItem', transientItem ) );
 };
 
 
