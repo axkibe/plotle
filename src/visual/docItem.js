@@ -175,7 +175,7 @@ def.static.markForPoint =
 /*
 | A move during a text select on this item.
 */
-def.static.moveSelect =
+def.func.moveSelect =
 	function(
 		p
 	)
@@ -189,7 +189,7 @@ def.static.moveSelect =
 /*
 | User is hovering their pointing device over something.
 */
-def.static.pointingHover =
+def.func.pointingHover =
 	function(
 		p,     // point hovered upon
 		action // space action

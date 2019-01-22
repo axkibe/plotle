@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, gleam_size ) => {
 
 
 const gleam_point = require( './point' );
@@ -20,7 +20,7 @@ if( TIM )
 	{
 		height : { type : 'number' },
 
-		width : { type : 'number' }
+		width : { type : 'number' },
 	};
 }
 
@@ -34,7 +34,7 @@ def.static.wh =
 		height
 	)
 {
-	return self.create( 'width', width, 'height', height );
+	return gleam_size.create( 'width', width, 'height', height );
 };
 
 

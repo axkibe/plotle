@@ -45,15 +45,8 @@ def.static.concernsAction =
 | the hover.
 */
 def.static.concernsHover =
-	function(
-		hover,
-		path
-	)
-{
-	if( !path || !hover ) return undefined;
-
-	return path.subPathOf( hover ) ? hover : undefined;
-};
+def.func.concernsHover =
+	( hover, path ) => undefined;
 
 
 /*
@@ -333,6 +326,33 @@ def.lazy.key =
 	function( )
 {
 	return this.path.get( -1 );
+};
+
+
+
+/*
+| Nofication when the item lost the users mark.
+*/
+def.func.markLost = function( ){ };
+
+
+/*
+| The shape in current transform.
+*/
+def.lazy.tShape =
+	function( )
+{
+	return this.shape.transform( this.transform );
+};
+
+
+/*
+| Zone in current transform.
+*/
+def.lazy.tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
 };
 
 

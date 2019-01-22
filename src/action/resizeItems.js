@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -69,6 +72,31 @@ def.func.affectsItem =
 | 'Normal' button ought to be down during this action.
 */
 def.func.normalButtonDown = true;
+
+
+/*
+| Returns a zone affted by this action.
+| FIXME put into use.
+*/
+def.func.affectZone =
+	function(
+		zone,      // the unaffected zone
+		itemKey,   // the key of the item to be affected
+		minSize    // minimum size of the zone
+	)
+{
+	const pBase = this.pBase;
+
+	zone = this.startZones.get( itemKey );
+
+	if( !pBase ) return zone;
+
+	zone = zone.baseScaleAction( this, 0, 0 );
+
+	if( minSize ) zone = zone.ensureMinSize( minSize );
+
+	return zone;
+};
 
 
 } );

@@ -85,14 +85,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*
-| Doesn't care about hovering
-*/
-def.static.concernsHover =
-def.func.concernsHover =
-	( ) => undefined;
-
-
-/*
 | User wants to create a new label.
 */
 def.static.createGeneric =
@@ -106,11 +98,7 @@ def.static.createGeneric =
 
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const fs =
-		Math.max(
-			model.doc.fontsize * zone.height / model.zone.height,
-			gruga_label.minSize
-		);
+	const fs = model.doc.fontsize * zone.height / model.zone.height;
 
 	const resized =
 		model.create(
@@ -194,8 +182,6 @@ def.lazy.fontsize =
 /**/	}
 
 		fs *= action.scaleY;
-
-		fs = Math.max( fs, gruga_label.minSize );
 	}
 
 	return fs;
@@ -255,7 +241,7 @@ def.func.minScaleX =
 		zone  // original zone
 	)
 {
-	return this.minScaleY( zone );
+	return 0;
 };
 
 
@@ -267,7 +253,7 @@ def.func.minScaleY =
 		// zone  // original zone
 	)
 {
-	return gruga_label.minSize / this.fabric.fontsize;
+	return 0;
 };
 
 
@@ -309,18 +295,6 @@ def.func.mousewheel =
 	// the label lets wheel events pass through it.
 	return false;
 };
-
-
-/*
-| A move during a text select on this item.
-*/
-def.func.moveSelect = visual_docItem.moveSelect;
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-def.func.pointingHover = visual_docItem.pointingHover;
 
 
 /*
@@ -405,25 +379,6 @@ def.lazy.shape =
 	return this.zone.shrink1;
 };
 
-
-/*
-| The item's shape in current transform.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return this.shape.transform( this.transform );
-};
-
-
-/*
-| Zone in current transform.
-*/
-def.lazy.tZone =
-	function( )
-{
-	return this.zone.transform( this.transform );
-};
 
 /*
 | Calculates the labels zone,

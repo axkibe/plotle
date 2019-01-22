@@ -42,7 +42,51 @@ const gleam_arrow = require( '../gleam/arrow' );
 
 const gleam_glint_paint = require( '../gleam/glint/paint' );
 
+const gleam_rect = require( '../gleam/rect' );
+
 const gruga_relation = require( '../gruga/relation' );
+
+
+/*
+| The attention center.
+*/
+def.lazy.attentionCenter =
+	function( )
+{
+	return this.zone.pc.y;
+};
+
+
+/*
+| Sees if this portal is being clicked.
+*/
+def.func.click =
+	function(
+		p,
+		shift,
+		access  // FIXME have access be an attribute
+	)
+{
+	return;
+};
+
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+def.func.dragStart =
+	function(
+		p,
+		shift,
+		ctrl,
+		access
+	)
+{
+	// FIXME make it more coherent what don't care means
+	// false or undefined
+	return false;
+};
 
 
 /*
@@ -54,18 +98,98 @@ const gruga_relation = require( '../gruga/relation' );
 def.func.glint =
 	function( )
 {
+	const shape = this.shape.transform( this.transform );
+
+	// FIXME remove gruga_relation dependency
+	return gleam_glint_paint.createFS( gruga_relation.facet, shape );
+};
+
+
+/*
+| No scaling minimum.
+*/
+def.func.minScaleX =
+def.func.minScaleY =
+	( ) => 0;
+
+
+/*
+| Mouse wheel turned.
+*/
+def.func.mousewheel =
+	function(
+		p,
+		dir
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| User is hovering his/her pointing device around.
+|
+| Checks if this item reacts on this.
+*/
+def.func.pointingHover =
+	function(
+		p       // point hovered upon
+	)
+{
+	return;
+};
+
+
+/*
+| The items shape
+*/
+def.lazy.shape =
+	function( )
+{
 	const fabric = this.fabric;
 
-	const shape =
+	return(
 		gleam_arrow.create(
 			'joint1', fabric.from,
 			'joint2', fabric.to,
 			'end1', fabric.fromStyle,
 			'end2', fabric.toStyle
-		).shape.transform( this.transform );
+		).shape
+	);
+};
 
-	// FIXME remove gruga_relation dependency
-	return gleam_glint_paint.createFS( gruga_relation.facet, shape );
+
+
+/*
+| The items zone possibly altered by action.
+*/
+def.lazy.zone =
+	function( )
+{
+	return gleam_rect.createArbitrary( this._pointFrom, this._pointTo );
+};
+
+
+
+/*
+| Point the stroke goes from.
+*/
+def.lazy._pointFrom =
+	function( )
+{
+	return this.fabric.from;
+};
+
+
+/*
+| Point the stroke goes to.
+*/
+def.lazy._pointTo =
+	function( )
+{
+	return this.fabric.to;
 };
 
 

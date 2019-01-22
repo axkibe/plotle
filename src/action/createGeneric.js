@@ -11,6 +11,9 @@
 tim.define( module, ( def, action_createGeneric ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -84,12 +87,6 @@ def.lazy.itemTim =
 {
 	return action_createGeneric.itemTypeToTim[ this.itemType ];
 };
-
-
-/*
-| Returns true if an entity with path is affected by this action.
-*/
-def.func.affectsItem = ( item ) => false;
 
 
 } );

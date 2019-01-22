@@ -51,10 +51,6 @@ if( TIM )
 }
 
 
-const action_dragItems = require( '../action/dragItems' );
-
-const action_resizeItems = require( '../action/resizeItems' );
-
 const change_grow = require( '../change/grow' );
 
 const fabric_doc = require( '../fabric/doc' );
@@ -135,14 +131,6 @@ def.static.createGeneric =
 
 
 /*
-| Doesn't care about hovering
-*/
-def.static.concernsHover =
-def.func.concernsHover =
-	( ) => undefined;
-
-
-/*
 | Adapts the doc.
 */
 def.transform.doc =
@@ -207,18 +195,6 @@ def.func.markForPoint = visual_docItem.markForPoint;
 
 
 /*
-| Nofication when the item lost the users mark.
-*/
-def.func.markLost = function( ){ };
-
-
-/*
-| Minimum height.
-*/
-def.func.minHeight = gruga_note.minHeight;
-
-
-/*
 | Returns the minimum x-scale factor this item could go through.
 */
 def.func.minScaleX =
@@ -226,7 +202,7 @@ def.func.minScaleX =
 		zone  // original zone
 	)
 {
-	return this.minWidth / zone.width;
+	return this.minSize.width / zone.width;
 };
 
 
@@ -238,14 +214,14 @@ def.func.minScaleY =
 		zone  // original zone
 	)
 {
-	return this.minHeight / zone.height;
+	return this.minSize.height / zone.height;
 };
 
 
 /*
-| Minimum width.
+| Minimum size.
 */
-def.func.minWidth = gruga_note.minWidth;
+def.func.minSize = gruga_note.minSize;
 
 
 /*
@@ -297,18 +273,6 @@ def.func.mousewheel =
 
 	return true;
 };
-
-
-/*
-| A move during a text select on this item.
-*/
-def.func.moveSelect = visual_docItem.moveSelect;
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-def.func.pointingHover = visual_docItem.pointingHover;
 
 
 /*
@@ -437,26 +401,6 @@ def.func.specialKey = visual_docItem.specialKey;
 
 
 /*
-| The transformed shape.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return this.shape.transform( this.transform );
-};
-
-
-/*
-| Zone in current transform.
-*/
-def.lazy.tZone =
-	function( )
-{
-	return this.zone.transform( this.transform );
-};
-
-
-/*
 | The items zone possibly altered by action.
 */
 def.lazy.zone =
@@ -464,41 +408,11 @@ def.lazy.zone =
 {
 	const action = this.action;
 
-	switch( action && action.timtype )
-	{
-		case action_dragItems :
-		{
-			const moveBy = action.moveBy;
+	const fzone = this.fabric.zone;
 
-			const zone = this.fabric.zone;
+	if( !action ) return fzone;
 
-			return moveBy ? zone.add( moveBy ) : zone;
-		}
-
-		case action_resizeItems :
-		{
-			const pBase = action.pBase;
-
-			let zone = action.startZones.get( this.path.get( 2 ) );
-
-			if( !pBase ) return zone;
-
-			zone = zone.baseScaleAction( action, 0, 0 );
-
-			if( zone.height < this.minHeight || zone.width < this.minWidth )
-			{
-				zone =
-					zone.create(
-						'width', Math.max( zone.width, this.minWidth ),
-						'height', Math.max( zone.height, this.minHeight )
-					);
-			}
-
-			return zone;
-		}
-
-		default : return this.fabric.zone;
-	}
+	return action.affectZone( fzone, this.key, this.minSize );
 };
 
 

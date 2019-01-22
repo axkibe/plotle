@@ -21,6 +21,8 @@ const gleam_gradient_radial = require( '../gleam/gradient/radial' );
 
 const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
 
+const gleam_size = require( '../gleam/size' );
+
 const gruga_highlight = require( './highlight' );
 
 
@@ -138,9 +140,8 @@ def.static.inputPitch = 5;
 /*
 | Minimum size of the portal.
 */
-def.static.minWidth = 40;
-
-def.static.minHeight = 40;
+def.staticLazy.minSize = ( ) =>
+	gleam_size.wh( 40, 40 );
 
 
 /*

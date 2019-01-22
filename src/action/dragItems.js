@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -74,5 +77,21 @@ def.func.affectsItem =
 def.func.normalButtonDown = true;
 
 
-} );
+/*
+| Returns a zone affted by this action.
+| FIXME put into use.
+*/
+def.func.affectZone =
+	function(
+		zone,      // the unaffected zone
+		itemKey,   // the key of the item to be affected
+		minSize    // minimum size of the zone
+	)
+{
+	const moveBy = this.moveBy;
 
+	return moveBy ? zone.add( moveBy ) : zone;
+};
+
+
+} );

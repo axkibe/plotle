@@ -23,6 +23,8 @@ const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
 
 const gleam_margin = require( '../gleam/margin' );
 
+const gleam_size = require( '../gleam/size' );
+
 const gruga_highlight = require( '../gruga/highlight' );
 
 
@@ -74,9 +76,8 @@ def.staticLazy.innerMargin = ( ) =>
 /*
 | Minimum note size.
 */
-def.static.minWidth = 30;
-
-def.static.minHeight = 30;
+def.staticLazy.minSize = ( ) =>
+	gleam_size.wh( 30, 30 );
 
 
 /*

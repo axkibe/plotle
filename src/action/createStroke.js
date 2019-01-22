@@ -7,6 +7,9 @@
 tim.define( module, ( def, action_createStroke ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -60,25 +63,34 @@ def.staticLazy.createLine = ( ) =>
 
 
 /*
-| The transient item of this creation.
+| The transient item being created.
 */
-def.func.transientItem =
-	function(
-		transfrom   // the transform for the item
-	)
+def.lazy.transientFabric =
+	function( )
 {
-
-	const fabric =
+	return(
 		fabric_stroke.create(
 			'from', this.from,
 			'to', this.to,
 			'fromStyle', 'none',
 			'toStyle', this._toStyle
-		);
+		)
+	);
+};
+
+
+/*
+| The transient visual being created.
+*/
+def.func.transientVisual =
+	function(
+		transfrom   // the transform for the item
+	)
+{
 
 	return(
 		visual_stroke.create(
-			'fabric', fabric,
+			'fabric', this.transientFabric,
 			'highlight', false,
 			'transform', transfrom
 		)

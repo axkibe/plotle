@@ -7,6 +7,7 @@ number
 ../fabric/portal
 ../fabric/para
 ../fabric/relation
+../fabric/stroke
 ../gleam/point
 ../gleam/rect
 ../ref/space

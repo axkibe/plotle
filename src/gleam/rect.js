@@ -15,7 +15,7 @@ tim.define( module, ( def, gleam_rect ) => {
 
 const gleam_point = require( './point' );
 
-const gleam_size= require( './size' );
+const gleam_size = require( './size' );
 
 const gleam_margin = require( './margin' );
 
@@ -26,10 +26,13 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// position of the rect
 		pos : { type : './point', json : true },
 
+		// height of the rect
 		height : { type : 'number', json : true },
 
+		// width of the rect
 		width : { type : 'number', json : true }
 	};
 
@@ -105,6 +108,7 @@ def.static.createArbitrary =
 
 /*
 | Shortcut to create a rect by specifying position and size.
+| FIXME call createPosSize
 */
 def.static.posSize =
 	function(
@@ -320,21 +324,30 @@ def.func.border =
 
 
 /*
-| Returns a rect which has at least
-| minHeight / minWidth
+| Returns a rect which is at least as large
+| a size.
 */
 def.func.ensureMinSize =
 	function(
-		minHeight,
-		minWidth
+		min    // minimum size
 	)
 {
-	if( this.width >= minWidth && this.height >= minHeight ) return this;
+/**/if( CHECK )
+/**/{
+/**/	if( min.timtype !== gleam_size ) throw new Error( );
+/**/}
+
+	const h = this.height;
+	const w = this.width;
+	const mh = min.height;
+	const mw = min.width;
+
+	if( w >= mw && h >= mh ) return this;
 
 	return(
 		this.create(
-			'width', Math.max( this.width, minWidth ),
-			'height', Math.max( this.height, minHeight )
+			'height', Math.max( h, mh ),
+			'width', Math.max( w, mw )
 		)
 	);
 };

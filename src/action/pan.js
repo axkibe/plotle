@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -18,18 +21,6 @@ if( TIM )
 		offset : { type : '../gleam/point' },
 	};
 }
-
-
-/*
-| Returns true if an entity with path is affected by this action.
-*/
-def.func.affectsItem =
-	function(
-		item
-	)
-{
-	return false;
-};
 
 
 } );

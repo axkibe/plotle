@@ -133,6 +133,7 @@ def.func.baseScaleXY =
 	);
 };
 
+
 /*
 | Returns a border bordering this point.
 |

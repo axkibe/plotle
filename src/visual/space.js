@@ -67,6 +67,8 @@ const action_select = require( '../action/select' );
 
 const action_scrolly = require( '../action/scrolly' );
 
+const change_grow = require( '../change/grow' );
+
 const change_list = require( '../change/list' );
 
 const fabric_label = require( '../fabric/label' );
@@ -100,6 +102,8 @@ const gruga_select = require( '../gruga/select' );
 const pathList = require( 'tim.js/src/pathList' );
 
 const result_hover = require( '../result/hover' );
+
+const session_uid = require( '../session/uid' );
 
 const tim_path = require( 'tim.js/src/path' );
 
@@ -419,7 +423,7 @@ def.lazy.glint =
 
 		case action_createStroke :
 
-			if( action.from ) arr.push( action.transientItem( transform ) .glint( ) );
+			if( action.from ) arr.push( action.transientVisual( transform ) .glint( ) );
 
 			break;
 
@@ -605,101 +609,20 @@ def.func.dragStop =
 
 	if( !action ) return;
 
-	let changes, paths;
-
+	// FIXME make map
 	switch( action.timtype )
 	{
 		case action_createGeneric : this._stopCreateGeneric( p, shift, ctrl ); break;
 
 		case action_createRelation : this._stopCreateRelation( p, shift, ctrl ); break;
 
-		case action_dragItems :
+		case action_createStroke : this._stopCreateStroke( p, shift, ctrl ); break;
 
-			paths = action.itemPaths;
+		case action_dragItems : this._stopDragItems( p, shift, ctrl ); break;
 
-			for( let a = 0, al = paths.length; a < al; a++ )
-			{
-				const item = root.getPath( paths.get( a ) );
+		case action_pan : root.create( 'action', undefined ); break;
 
-				const chi = item.getDragItemChange( );
-
-				if( !chi ) continue;
-
-				if( !changes )
-				{
-					changes = chi;
-				}
-				else
-				{
-					if( changes.timtype !== change_list )
-					{
-						changes = change_list.create( 'list:append', changes );
-					}
-
-					if( chi.timtype !== change_list )
-					{
-						changes = changes.create( 'list:append', chi );
-					}
-					else
-					{
-						changes = changes.appendList( chi );
-					}
-
-				}
-			}
-
-			if( changes ) root.alter( changes );
-
-			root.create( 'action', undefined );
-
-			break;
-
-		case action_pan :
-
-			root.create( 'action', undefined );
-
-			break;
-
-		case action_resizeItems :
-
-			paths = action.itemPaths;
-
-			for( let a = 0, al = paths.length; a < al; a++ )
-			{
-				const item = root.getPath( paths.get( a ) );
-
-				const chi = item.getResizeItemChange( );
-
-				if( !chi ) continue;
-
-				if( !changes )
-				{
-					changes = chi;
-				}
-				else
-				{
-					if( changes.timtype !== change_list )
-					{
-						changes = change_list.create( 'list:append', changes );
-					}
-
-					if( chi.timtype !== change_list )
-					{
-						changes = changes.create( 'list:append', chi );
-					}
-					else
-					{
-						changes = changes.appendList( chi );
-					}
-
-				}
-			}
-
-			if( changes ) root.alter( changes );
-
-			root.create( 'action', undefined );
-
-			break;
+		case action_resizeItems : this._stopDragResizeItems( p, shift, ctrl ); break;
 
 		case action_scrolly : root.create( 'action', undefined ); break;
 
@@ -819,6 +742,7 @@ def.func.pointingHover =
 				{
 					const item = this.atRank( a );
 
+					// FIXME really tZone?
 					if( item.tZone.within( p ) )
 					{
 						root.create( 'action', action.create( 'fromItemPath', item.path ) );
@@ -834,23 +758,7 @@ def.func.pointingHover =
 
 			break;
 
-		case action_createStroke :
-
-			for( let a = 0, al = this.length; a < al; a++ )
-			{
-				const item = this.atRank( a );
-
-				if( item.tZone.within( p ) )
-				{
-					root.create( 'action', action.create( 'hover', item.path ) );
-
-					return result_hover.cursorDefault;
-				}
-			}
-
-			root.create( 'action', action.create( 'hover', undefined ) );
-
-			return result_hover.cursorDefault;
+		case action_createStroke : return result_hover.cursorDefault;
 
 		case action_dragItems : return result_hover.cursorGrabbing;
 
@@ -1090,7 +998,7 @@ def.func._moveCreateGeneric =
 		case 'note' :
 		case 'portal' :
 
-			zone = zone.ensureMinSize( model.minWidth, model.minHeight );
+			zone = zone.ensureMinSize( model.minSize );
 
 			transientItem =
 				transientItem.create(
@@ -1102,11 +1010,7 @@ def.func._moveCreateGeneric =
 
 		case 'label' :
 		{
-			const fs =
-				Math.max(
-					model.doc.fontsize * zone.height / model.zone.height,
-					gruga_label.minSize
-				);
+			const fs = model.doc.fontsize * zone.height / model.zone.height;
 
 			const resized =
 				transientItem.create(
@@ -1483,12 +1387,7 @@ def.func._startCreateGeneric =
 		{
 			let fabric  =
 				model.fabric.create(
-					'zone',
-						gleam_rect.create(
-							'pos', dp,
-							'width', model.minWidth,
-							'height', model.minHeight
-						)
+					'zone', gleam_rect.posSize( dp, model.minSize )
 				);
 
 			if( itemTim === visual_portal )
@@ -1614,6 +1513,131 @@ def.func._stopCreateRelation =
 
 		default : throw new Error( );
 	}
+};
+
+
+/*
+| Stops creating a relation.
+*/
+def.func._stopCreateStroke =
+	function(
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const val = this.action.transientFabric;
+
+	const key = session_uid.newUid( );
+
+	root.alter(
+		change_grow.create(
+			'val', val,
+			'path', tim_path.empty.append( 'twig' ).append( key ),
+			'rank', 0
+		)
+	);
+};
+
+
+/*
+| Stops creating a relation.
+*/
+def.func._stopDragItems =
+	function(
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const paths = this.action.itemPaths;
+
+	let changes;
+
+	for( let a = 0, al = paths.length; a < al; a++ )
+	{
+		const item = root.getPath( paths.get( a ) );
+
+		const chi = item.getDragItemChange( );
+
+		if( !chi ) continue;
+
+		if( !changes )
+		{
+			changes = chi;
+		}
+		else
+		{
+			if( changes.timtype !== change_list )
+			{
+				changes = change_list.create( 'list:append', changes );
+			}
+
+			if( chi.timtype !== change_list )
+			{
+				changes = changes.create( 'list:append', chi );
+			}
+			else
+			{
+				changes = changes.appendList( chi );
+			}
+		}
+	}
+
+	if( changes ) root.alter( changes );
+
+	root.create( 'action', undefined );
+};
+
+
+/*
+| Stops creating a relation.
+*/
+def.func._stopDragResizeItems =
+	function(
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const paths = this.action.itemPaths;
+
+	let changes;
+
+	for( let a = 0, al = paths.length; a < al; a++ )
+	{
+		const item = root.getPath( paths.get( a ) );
+
+		const chi = item.getResizeItemChange( );
+
+		if( !chi ) continue;
+
+		if( !changes )
+		{
+			changes = chi;
+		}
+		else
+		{
+			if( changes.timtype !== change_list )
+			{
+				changes = change_list.create( 'list:append', changes );
+			}
+
+			if( chi.timtype !== change_list )
+			{
+				changes = changes.create( 'list:append', chi );
+			}
+			else
+			{
+				changes = changes.appendList( chi );
+			}
+
+		}
+	}
+
+	if( changes ) root.alter( changes );
+
+	root.create( 'action', undefined );
 };
 
 

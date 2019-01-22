@@ -37,8 +37,5 @@ def.staticLazy.innerMargin = ( ) =>
 	gleam_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 );
 
 
-def.static.minSize = 8;
-
-
 } );
 

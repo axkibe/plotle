@@ -7,6 +7,9 @@
 tim.define( module, ( def, action_zoomButton ) => {
 
 
+def.extend = './action';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -34,18 +37,6 @@ def.static.createZoom =
 /**/}
 
 	return action_zoomButton.create( 'dir', dir, 'refire', true );
-};
-
-
-/*
-| Returns true if an entity with path is affected by this action.
-*/
-def.func.affectsItem =
-	function(
-		item
-	)
-{
-	return false;
 };
 
 

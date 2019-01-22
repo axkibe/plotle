@@ -175,11 +175,20 @@ def.lazy.attentionCenter =
 
 
 /*
-| Deriving concerns stuff.
+| Returns the action if an item with 'path' concerns about
+| the hover.
 */
-def.func.concernsHover =
 def.static.concernsHover =
-	visual_item.concernsHover;
+def.func.concernsHover =
+	function(
+		hover,
+		path
+	)
+{
+	if( !path || !hover ) return undefined;
+
+	return path.subPathOf( hover ) ? hover : undefined;
+};
 
 
 /*
@@ -373,19 +382,6 @@ def.static.isSection =
 };
 
 
-
-/*
-| Nofication when the item lost the users mark.
-*/
-def.func.markLost = function( ){ };
-
-
-/*
-| Minimum height.
-*/
-def.func.minHeight = gruga_portal.minHeight;
-
-
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
@@ -394,7 +390,7 @@ def.func.minScaleX =
 		zone  // original zone
 	)
 {
-	return this.minWidth / zone.width;
+	return this.minSize.width / zone.width;
 };
 
 
@@ -406,14 +402,14 @@ def.func.minScaleY =
 		zone  // original zone
 	)
 {
-	return this.minHeight / zone.height;
+	return this.minSize.height / zone.height;
 };
 
 
 /*
-| Minimum width.
+| Minimum size
 */
-def.func.minWidth = gruga_portal.minWidth;
+def.func.minSize = gruga_portal.minSize;
 
 
 /*
@@ -567,26 +563,6 @@ def.func.specialKey =
 
 		case 'up' : this._keyUp( shift ); break;
 	}
-};
-
-
-/*
-| The shape in current transform.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return this.shape.transform( this.transform );
-};
-
-
-/*
-| Zone in current transform.
-*/
-def.lazy.tZone =
-	function( )
-{
-	return this.zone.transform( this.transform );
 };
 
 
