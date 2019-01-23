@@ -295,7 +295,7 @@ def.lazy.shrink1 =
 | add( point )   -or-
 | add( x, y  )
 */
-def.func.add =
+def.proto.add =
 	function(
 		a1,
 		a2
@@ -308,7 +308,7 @@ def.func.add =
 /*
 | Returns a shape bordering this shape by d.
 */
-def.func.border =
+def.proto.border =
 	function(
 		d // distance to border
 	)
@@ -327,7 +327,7 @@ def.func.border =
 | Returns a rect which is at least as large
 | a size.
 */
-def.func.ensureMinSize =
+def.proto.ensureMinSize =
 	function(
 		min    // minimum size
 	)
@@ -357,7 +357,7 @@ def.func.ensureMinSize =
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
-def.func.baseScaleAction =
+def.proto.baseScaleAction =
 	function(
 		action,
 		ax,
@@ -372,7 +372,7 @@ def.func.baseScaleAction =
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
-def.func.baseScaleXY =
+def.proto.baseScaleXY =
 	function(
 		scaleX,  // x scaling
 		scaleY,  // y scaling
@@ -400,7 +400,7 @@ def.func.baseScaleXY =
 /*
 | Returns this detransformed rect.
 */
-def.func.detransform =
+def.proto.detransform =
 	function(
 		transform
 	)
@@ -427,7 +427,7 @@ def.func.detransform =
 | Returns the point where a ray going from
 | center of the rect (pc) to p intersects with the rect.
 */
-def.func.getProjection =
+def.proto.getProjection =
 	function(
 		p     // point to project to
 	)
@@ -484,7 +484,7 @@ def.func.getProjection =
 /*
 | Returns this transformed rect.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
@@ -510,7 +510,7 @@ def.func.transform =
 /*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-def.func.reduce =
+def.proto.reduce =
 	function(
 		margin
 	)
@@ -535,7 +535,7 @@ def.func.reduce =
 /*
 | Returns a rect moved by -x/-y.
 */
-def.func.sub =
+def.proto.sub =
 	function(
 		x,
 		y
@@ -550,7 +550,7 @@ def.func.sub =
 |
 | FIXME check if this border stuff can be removed.
 */
-def.func.within =
+def.proto.within =
 	function(
 		p,      // point
 		border  // additional border

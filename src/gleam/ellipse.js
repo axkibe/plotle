@@ -173,7 +173,7 @@ def.lazy.shape =
 /*
 | Returns a moved ellipse.
 */
-def.func.add =
+def.proto.add =
 	function(
 		p
 	)
@@ -189,7 +189,7 @@ def.func.add =
 /*
 | Returns a shape bordering this shape by d.
 */
-def.func.border =
+def.proto.border =
 	function(
 		d // distance to border
 	)
@@ -201,7 +201,7 @@ def.func.border =
 /*
 | Gets the source of a projection to p.
 */
-def.func.getProjection =
+def.proto.getProjection =
 	function( /*...*/ )
 {
 	return this.shape.getProjection.apply( this.shape, arguments );
@@ -211,7 +211,7 @@ def.func.getProjection =
 /*
 | Returns a transformed roundRect.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
@@ -251,7 +251,7 @@ def.func.transform =
 /*
 | Returns true if p is within the ellipse.
 */
-def.func.within =
+def.proto.within =
 	function(
 		p
 	)

@@ -72,7 +72,7 @@ def.staticLazy.itemTypeToTim = ( ) =>
 /*
 | Extra checking
 */
-def.func._check =
+def.proto._check =
 	function( )
 {
 	if( !this.itemTim ) throw new Error( );

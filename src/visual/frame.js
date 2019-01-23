@@ -421,7 +421,7 @@ def.lazy._outerZone =
 /*
 | Checks if the frame has been clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,        // cursor point
 		shift,    // true if shift key was pressed
@@ -446,7 +446,7 @@ def.func.click =
 /*
 | Starts an operation with the pointing device held down.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,      // cursor point
 		shift,  // true if shift key was pressed
@@ -547,7 +547,7 @@ def.func.dragStart =
 |
 | Returns true if the pointing device hovers over anything.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p
 	)

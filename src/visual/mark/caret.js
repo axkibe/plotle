@@ -85,7 +85,7 @@ def.lazy.widgetPath =
 | Recreates this mark with a transformation
 | applied.
 */
-def.func.createTransformed =
+def.proto.createTransformed =
 	function(
 		changes
 	)
@@ -106,20 +106,20 @@ def.func.createTransformed =
 | (the text range is the other mark
 |  which has this too )
 */
-def.func.hasCaret = true;
+def.proto.hasCaret = true;
 
 
 /*
 | The content the mark puts into the clipboard.
 */
-def.func.clipboard = '';
+def.proto.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.func.containsPath =
+def.proto.containsPath =
 	function(
 		path
 	)

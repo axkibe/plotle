@@ -79,7 +79,7 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 /*
 | Returns the mark if the widget with 'path' concerns about the mark.
 */
-def.func.concernsMark =
+def.proto.concernsMark =
 def.static.concernsMark =
 	function(
 		mark,
@@ -94,7 +94,7 @@ def.static.concernsMark =
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,
 		path
@@ -355,13 +355,13 @@ def.lazyFuncInt.locateOffsetPoint =
 /*
 | Inputs can hold a caret.
 */
-def.func.caretable = true;
+def.proto.caretable = true;
 
 
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -383,7 +383,7 @@ def.func.click =
 /*
 | User input.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -419,13 +419,13 @@ def.func.input =
 /*
 | Inputs are focusable
 */
-def.func.focusable = true;
+def.proto.focusable = true;
 
 
 /*
 | Returns the kerning of characters for password masks.
 */
-def.func.maskKern =
+def.proto.maskKern =
 	function(
 		size
 	)
@@ -437,7 +437,7 @@ def.func.maskKern =
 /*
 | Returns the width of a character for password masks.
 */
-def.func.maskWidth =
+def.proto.maskWidth =
 	function(
 		size
 	)
@@ -449,7 +449,7 @@ def.func.maskWidth =
 /*
 | Mouse hover
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p
 		// shift,
@@ -471,7 +471,7 @@ def.func.pointingHover =
 /*
 | User pressed a special key
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,
@@ -504,7 +504,7 @@ def.func.specialKey =
 /*
 | Returns the offset nearest to point p.
 */
-def.func._getOffsetAt =
+def.proto._getOffsetAt =
 	function(
 		p
 	)
@@ -553,7 +553,7 @@ def.func._getOffsetAt =
 /*
 | User pressed backspace.
 */
-def.func._keyBackspace =
+def.proto._keyBackspace =
 	function( )
 {
 	const mark = this.mark;
@@ -576,7 +576,7 @@ def.func._keyBackspace =
 /*
 | User pressed del.
 */
-def.func._keyDel =
+def.proto._keyDel =
 	function( )
 {
 	const at = this.mark.caret.at;
@@ -595,8 +595,8 @@ def.func._keyDel =
 | User pressed return key.
 | User pressed down key.
 */
-def.func._keyEnter =
-def.func._keyDown =
+def.proto._keyEnter =
+def.proto._keyDown =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), 1 );
@@ -606,7 +606,7 @@ def.func._keyDown =
 /*
 | User pressed end key.
 */
-def.func._keyEnd =
+def.proto._keyEnd =
 	function( )
 {
 	const mark = this.mark;
@@ -622,7 +622,7 @@ def.func._keyEnd =
 /*
 | User pressed left key.
 */
-def.func._keyLeft =
+def.proto._keyLeft =
 	function( )
 {
 	const mark = this.mark;
@@ -636,7 +636,7 @@ def.func._keyLeft =
 /*
 | User pressed pos1 key
 */
-def.func._keyPos1 =
+def.proto._keyPos1 =
 	function( )
 {
 	const mark = this.mark;
@@ -650,7 +650,7 @@ def.func._keyPos1 =
 /*
 | User pressed right key
 */
-def.func._keyRight =
+def.proto._keyRight =
 	function( )
 {
 	const mark = this.mark;
@@ -665,7 +665,7 @@ def.func._keyRight =
 /*
 | User pressed up key.
 */
-def.func._keyUp =
+def.proto._keyUp =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), -1 );

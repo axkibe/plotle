@@ -35,7 +35,7 @@ let onReplyTransmitter;
 |
 | Returns true if the request has been aborted.
 */
-def.func.abort =
+def.proto.abort =
 	function( )
 {
 	if( this._xhr )
@@ -106,7 +106,7 @@ const onReply =
 /*
 | Sends the wrapped request.
 */
-def.func.send =
+def.proto.send =
 	function( )
 {
 /**/if( CHECK )

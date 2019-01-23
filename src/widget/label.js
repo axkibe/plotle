@@ -49,7 +49,7 @@ const layout_label = require( '../layout/label' );
 /*
 | A label doesn't care about marks.
 */
-def.func.concernsMark =
+def.proto.concernsMark =
 def.static.concernsMark =
 	( ) => undefined;
 
@@ -57,7 +57,7 @@ def.static.concernsMark =
 /*
 | A label doesn't care about hovering.
 */
-def.func.concernsHover =
+def.proto.concernsHover =
 def.static.concernsHover =
 	( ) => undefined;
 
@@ -124,7 +124,7 @@ def.lazy.glint =
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -138,7 +138,7 @@ def.func.click =
 /*
 | Handles a potential dragStart event.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
@@ -152,7 +152,7 @@ def.func.dragStart =
 /*
 | Mouse wheel is being turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		shift,
@@ -166,7 +166,7 @@ def.func.mousewheel =
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,

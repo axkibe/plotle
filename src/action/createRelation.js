@@ -39,7 +39,7 @@ if( TIM )
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affectsItem =
+def.proto.affectsItem =
 	function(
 		item
 	)

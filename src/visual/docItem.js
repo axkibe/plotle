@@ -45,7 +45,7 @@ def.lazy.attentionCenter =
 /*
 | Checks if the item is being clicked and reacts.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -67,7 +67,7 @@ def.func.click =
 |
 | FIXME access and action shouldn't be needed to handed...
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
@@ -175,7 +175,7 @@ def.static.markForPoint =
 /*
 | A move during a text select on this item.
 */
-def.func.moveSelect =
+def.proto.moveSelect =
 	function(
 		p
 	)
@@ -189,7 +189,7 @@ def.func.moveSelect =
 /*
 | User is hovering their pointing device over something.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,     // point hovered upon
 		action // space action
@@ -225,7 +225,7 @@ def.func.pointingHover =
 /*
 | A text has been inputed.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)

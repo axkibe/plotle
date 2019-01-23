@@ -83,7 +83,7 @@ def.static.concernsHover =
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		const hover = this.hover;
@@ -152,7 +152,7 @@ def.lazy.glint =
 /*
 | Move during a dragging operation.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,
 		shift,
@@ -175,7 +175,7 @@ def.func.dragMove =
 /*
 | Start of a dragging operation.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -198,7 +198,7 @@ def.func.dragStart =
 /*
 | Stop of a dragging operation.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,
 		shift,
@@ -221,7 +221,7 @@ def.func.dragStop =
 /*
 | Mouse wheel.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -245,7 +245,7 @@ def.func.mousewheel =
 /*
 | Returns true if point is on the disc panel.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -270,7 +270,7 @@ def.func.pointingHover =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-def.func.probeClickDrag =
+def.proto.probeClickDrag =
 	function(
 		p,
 		shift,
@@ -293,7 +293,7 @@ def.func.probeClickDrag =
 /*
 | Returns true if some disc accepted the click.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -316,7 +316,7 @@ def.func.click =
 /*
 | A button of the main disc has been pushed.
 */
-def.func.dragStartButton =
+def.proto.dragStartButton =
 	function(
 		path,
 		shift,
@@ -333,7 +333,7 @@ def.func.dragStartButton =
 /*
 | A button of the main disc has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path,
 		shift,

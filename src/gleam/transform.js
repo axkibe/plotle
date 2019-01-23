@@ -49,7 +49,7 @@ def.lazy.ortho =
 | as the combination of
 | t applied after this transform.
 */
-def.func.combine =
+def.proto.combine =
 	function(
 		t
 	)
@@ -76,7 +76,7 @@ def.func.combine =
 /*
 | Returns a reverse transformed x value.
 */
-def.func.dex =
+def.proto.dex =
 	function(
 		x
 	)
@@ -93,7 +93,7 @@ def.func.dex =
 /*
 | Returns the reverse transformed y value.
 */
-def.func.dey =
+def.proto.dey =
 	function(
 		y
 	)
@@ -110,7 +110,7 @@ def.func.dey =
 /*
 | Creates a transformed point.
 */
-def.func.point =
+def.proto.point =
 	function(
 		x,
 		y
@@ -125,7 +125,7 @@ def.func.point =
 |
 | FIXME this should be called 'd' then
 */
-def.func.scale =
+def.proto.scale =
 	function(
 		d
 	)
@@ -137,7 +137,7 @@ def.func.scale =
 /*
 | Returns a transformed x value.
 */
-def.func.x =
+def.proto.x =
 	function(
 		x
 	)
@@ -154,7 +154,7 @@ def.func.x =
 /*
 | Returns a transformed y value.
 */
-def.func.y =
+def.proto.y =
 	function(
 		y
 	)

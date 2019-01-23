@@ -11,31 +11,20 @@ if( TIM )
 {
 	def.attributes =
 	{
-		command :
-		{
-			// action command
-			type : 'string'
-		},
-		line :
-		{
-			// action affects at line
-			type : 'integer'
-		},
-		at :
-		{
-			// action affects offset
-			type : [ 'undefined', 'integer' ]
-		},
-		at2 :
-		{
-			// action affects offset (span end)
-			type : [ 'undefined', 'integer' ]
-		},
-		value :
-		{
-			// action carries value
-			type : [ 'undefined', 'string' ]
-		}
+		// action command
+		command : { type : 'string' },
+
+		// action affects at line
+		line : { type : 'integer' },
+
+		// action affects offset
+		at : { type : [ 'undefined', 'integer' ] },
+
+		// action affects offset (span end)
+		at2 : { type : [ 'undefined', 'integer' ] },
+
+		// action carries value
+		value : { type : [ 'undefined', 'string' ] },
 	};
 }
 

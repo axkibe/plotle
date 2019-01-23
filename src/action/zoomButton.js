@@ -43,7 +43,7 @@ def.static.createZoom =
 /*
 | A zoom animation finished.
 */
-def.func.finishAnimation =
+def.proto.finishAnimation =
 	function( )
 {
 	if( this.refire )
@@ -60,7 +60,7 @@ def.func.finishAnimation =
 /*
 | 'Normal' button ought to be down during this action.
 */
-def.func.normalButtonDown = true;
+def.proto.normalButtonDown = true;
 
 
 } );

@@ -58,7 +58,7 @@ const error = require( './error' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.rank !== undefined && this.rank < 0 )
@@ -88,7 +88,7 @@ def.lazy.reverse =
 /*
 | Performs the growth change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -122,7 +122,7 @@ def.func.changeTree =
 /*
 | Returns a change* transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)

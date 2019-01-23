@@ -157,7 +157,7 @@ def.lazy.attentionCenter =
 /*
 | A click.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -498,7 +498,7 @@ def.lazy.glint =
 /*
 | Moving during an operation with the pointing device button held down.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -516,7 +516,7 @@ def.func.dragMove =
 /*
 | Starts an operation with the pointing device held down.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -592,7 +592,7 @@ def.func.dragStart =
 /*
 | Stops an operation with the poiting device button held down.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -638,7 +638,7 @@ def.func.dragStop =
 /*
 | Returns a list of visual items by a list of paths.
 */
-def.func.getList =
+def.proto.getList =
 	function(
 		paths
 	)
@@ -673,7 +673,7 @@ def.func.getList =
 /*
 | Text input
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -693,7 +693,7 @@ def.func.input =
 /*
 | Mouse wheel.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,     // cursor point
 		dir,   // wheel direction, >0 for down, <0 for up
@@ -719,7 +719,7 @@ def.func.mousewheel =
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -797,7 +797,7 @@ def.func.pointingHover =
 | Tries to scrolls the focused item to move
 | the mark into view.
 */
-def.func.scrollMarkIntoView =
+def.proto.scrollMarkIntoView =
 	function( )
 {
 	const focus =  this.focus;
@@ -809,13 +809,13 @@ def.func.scrollMarkIntoView =
 /*
 | The disc is shown while a space is shown.
 */
-def.func.showDisc = true;
+def.proto.showDisc = true;
 
 
 /*
 | User pressed a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,   // key being pressed
 		shift, // true if shift key was pressed
@@ -910,7 +910,7 @@ def.lazy._grid =
 /*
 | Returns true if doing snapping.
 */
-def.func._hasSnapping =
+def.proto._hasSnapping =
 	function(
 		ctrl // state of ctrl key (or defined)
 	)
@@ -922,7 +922,7 @@ def.func._hasSnapping =
 /*
 | Returns true if the item ought to be highlighted.
 */
-def.func._highlightItem =
+def.proto._highlightItem =
 	function(
 		item  // the item in question
 	)
@@ -944,7 +944,7 @@ def.func._highlightItem =
 /*
 | Moves during creating.
 */
-def.func._moveCreate =
+def.proto._moveCreate =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
@@ -971,7 +971,7 @@ def.func._moveCreate =
 /*
 | Moves during creating a generic item.
 */
-def.func._moveCreateGeneric =
+def.proto._moveCreateGeneric =
 	function(
 		p,      // point, viewbased point of stop
 		shift,  // true if shift key was pressed
@@ -1046,7 +1046,7 @@ def.func._moveCreateGeneric =
 /*
 | Moves during creating a relation.
 */
-def.func._moveCreateRelation =
+def.proto._moveCreateRelation =
 	function(
 		p,      // point, viewbased point of stop
 		shift,  // true if shift key was pressed
@@ -1092,7 +1092,7 @@ def.func._moveCreateRelation =
 /*
 | Moves during creating a stroke.
 */
-def.func._moveCreateStroke =
+def.proto._moveCreateStroke =
 	function(
 		p,      // point, viewbased point of stop
 		shift,  // true if shift key was pressed
@@ -1116,7 +1116,7 @@ def.func._moveCreateStroke =
 /*
 | Moves during item dragging.
 */
-def.func._moveDragItems =
+def.proto._moveDragItems =
 	function(
 		p,       // point of stop
 		shift,   // true if shift key was pressed
@@ -1154,7 +1154,7 @@ def.func._moveDragItems =
 /*
 | Moves during item resizing.
 */
-def.func._moveResizeItems =
+def.proto._moveResizeItems =
 	function(
 		p,     // point of stop
 		shift, // true if shift key was pressed
@@ -1254,7 +1254,7 @@ def.func._moveResizeItems =
 /*
 | Moves during panning.
 */
-def.func._movePan =
+def.proto._movePan =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
@@ -1279,7 +1279,7 @@ def.func._movePan =
 /*
 | Moves during selecting.
 */
-def.func._moveSelect =
+def.proto._moveSelect =
 	function(
 		p         // point
 		// shift, // true if shift key was pressed
@@ -1304,7 +1304,7 @@ def.func._moveSelect =
 /*
 | Moves during scrolling.
 */
-def.func._moveScrollY =
+def.proto._moveScrollY =
 	function(
 		p         // point of stop
 		// shift, // true if shift key was pressed
@@ -1343,7 +1343,7 @@ def.lazy._ranks =
 /*
 | Snaps a point onto the grid.
 */
-def.func._snap =
+def.proto._snap =
 	function(
 		p,     // the point to snap
 		ctrl   // if true don't to snapping (can be undefined)
@@ -1364,7 +1364,7 @@ def.staticLazy._standardSpacing = ( ) => gleam_point.xy( 15, 15 );
 /*
 | Starts creating a generic item.
 */
-def.func._startCreateGeneric =
+def.proto._startCreateGeneric =
 	function(
 		p,     // point of start
 		shift, // true if shift key was pressed
@@ -1431,7 +1431,7 @@ def.func._startCreateGeneric =
 /*
 | Stops creating a generic item.
 */
-def.func._stopCreateGeneric =
+def.proto._stopCreateGeneric =
 	function(
 		p,     // point of stop
 		shift, // true if shift key was pressed
@@ -1458,7 +1458,7 @@ def.func._stopCreateGeneric =
 /*
 | Stops creating.
 */
-def.func._stopCreate =
+def.proto._stopCreate =
 	function(
 		p,      // point of stop
 		shift, // true if shift key was pressed
@@ -1474,7 +1474,7 @@ def.func._stopCreate =
 /*
 | Stops creating a relation.
 */
-def.func._stopCreateRelation =
+def.proto._stopCreateRelation =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
@@ -1519,7 +1519,7 @@ def.func._stopCreateRelation =
 /*
 | Stops creating a relation.
 */
-def.func._stopCreateStroke =
+def.proto._stopCreateStroke =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
@@ -1543,7 +1543,7 @@ def.func._stopCreateStroke =
 /*
 | Stops creating a relation.
 */
-def.func._stopDragItems =
+def.proto._stopDragItems =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
@@ -1593,7 +1593,7 @@ def.func._stopDragItems =
 /*
 | Stops creating a relation.
 */
-def.func._stopDragResizeItems =
+def.proto._stopDragResizeItems =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed
@@ -1644,7 +1644,7 @@ def.func._stopDragResizeItems =
 /*
 | Stops selecting.
 */
-def.func._stopSelect =
+def.proto._stopSelect =
 	function(
 		p,      // point of stop
 		shift,  // true if shift key was pressed

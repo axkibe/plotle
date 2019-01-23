@@ -71,7 +71,7 @@ def.transform.doc = visual_label.prototype[ '__transform_' + 'doc' ];
 | This cannot be done lazily, since it
 | depends on other items.
 */
-def.func.glint =
+def.proto.glint =
 	function( )
 {
 	const fabric = this.fabric;
@@ -149,7 +149,7 @@ def.inherit.glint =
 /*
 | Returns the glint of an arrow to a shape.
 */
-def.func._getArrowGlint =
+def.proto._getArrowGlint =
 	function(
 		shape
 	)
@@ -172,7 +172,7 @@ def.func._getArrowGlint =
 /*
 | Returns the glint of a connection to a shape.
 */
-def.func._getConnectionGlint =
+def.proto._getConnectionGlint =
 	function(
 		shape
 	)

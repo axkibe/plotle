@@ -48,7 +48,7 @@ def.static.xy =
 /*
 | Adds a points or x/y values, returns a new point.
 */
-def.func.add =
+def.proto.add =
 	function(
 		a1,
 		a2
@@ -87,7 +87,7 @@ def.func.add =
 |
 | ax / ay are added afterward.
 */
-def.func.baseScaleAction =
+def.proto.baseScaleAction =
 	function(
 		action,  // action that scales the point
 		ax,      // x value to be added
@@ -104,7 +104,7 @@ def.func.baseScaleAction =
 |
 | ax / ay are added afterward.
 */
-def.func.baseScaleXY =
+def.proto.baseScaleXY =
 	function(
 		scaleX,  // x scaling
 		scaleY,  // y scaling
@@ -139,7 +139,7 @@ def.func.baseScaleXY =
 |
 | See gleam_shape.border for further explanation.
 */
-def.func.border =
+def.proto.border =
 	function(
 		pc,  // center point to border relatively to
 		d    // distance to border
@@ -177,7 +177,7 @@ def.func.border =
 /*
 | Returns a transformed point.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform  // transform to apply
 	)
@@ -202,7 +202,7 @@ def.func.transform =
 /*
 | Returns a detransformed point.
 */
-def.func.detransform =
+def.proto.detransform =
 	function(
 		transform   // transform to apply reversely.
 	)
@@ -219,7 +219,7 @@ def.func.detransform =
 /*
 | Subtracts a point (or x/y from this), returns new point.
 */
-def.func.sub =
+def.proto.sub =
 	function(
 		a1,
 		a2

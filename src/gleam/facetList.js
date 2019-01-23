@@ -21,7 +21,7 @@ if( TIM )
 |
 | 'name', value pairs
 */
-def.func.getFacet =
+def.proto.getFacet =
 	function(
 		// ...
 	)

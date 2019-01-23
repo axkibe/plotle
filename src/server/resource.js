@@ -145,7 +145,7 @@ def.lazy.fileExt =
 /*
 | Returns the gzipped data.
 */
-def.func.gzip =
+def.proto.gzip =
 	function*( )
 {
 	const cache = this._cache;

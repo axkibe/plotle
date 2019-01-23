@@ -15,13 +15,13 @@ const result_hover = require( '../result/hover' );
 /*
 | Gets point from a rect.
 */
-def.func.from = ( rect ) => rect.ps;
+def.proto.from = ( rect ) => rect.ps;
 
 
 /*
 | Has y component.
 */
-def.func.hasY = true;
+def.proto.hasY = true;
 
 
 /*

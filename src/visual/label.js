@@ -191,31 +191,31 @@ def.lazy.fontsize =
 /*
 | Returns the change for dragging this item.
 */
-def.func.getDragItemChange = visual_item.getDragItemChangePosFs;
+def.proto.getDragItemChange = visual_item.getDragItemChangePosFs;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.func.getResizeItemChange = visual_item.getResizeItemChangePosFs;
+def.proto.getResizeItemChange = visual_item.getResizeItemChangePosFs;
 
 
 /*
 | The items glint.
 */
-def.func.glint = function( ) { return this._glint; };
+def.proto.glint = function( ) { return this._glint; };
 
 
 /*
 | Returns the mark for a point
 */
-def.func.markForPoint = visual_docItem.markForPoint;
+def.proto.markForPoint = visual_docItem.markForPoint;
 
 
 /*
 | Nofication when the item lost the users mark.
 */
-def.func.markLost =
+def.proto.markLost =
 	function( )
 {
 	if( this.doc.fabric.isBlank )
@@ -236,7 +236,7 @@ def.func.markLost =
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-def.func.minScaleX =
+def.proto.minScaleX =
 	function(
 		zone  // original zone
 	)
@@ -248,7 +248,7 @@ def.func.minScaleX =
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-def.func.minScaleY =
+def.proto.minScaleY =
 	function(
 		// zone  // original zone
 	)
@@ -285,7 +285,7 @@ def.staticLazy.model =
 /*
 | The mouse wheel turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		// p
 		// dir
@@ -348,26 +348,26 @@ def.lazy.pos =
 | Labels use pos/fontsize for positioning
 */
 def.static.positioning =
-def.func.positioning =
+def.proto.positioning =
 	'pos/fontsize';
 
 
 /*
 | Labels resize proportional only.
 */
-def.func.proportional = true;
+def.proto.proportional = true;
 
 
 /*
 | Dummy since a label does not scroll.
 */
-def.func.scrollMarkIntoView = function( ){ };
+def.proto.scrollMarkIntoView = function( ){ };
 
 
 /*
 | Handles a special key.
 */
-def.func.specialKey = visual_docItem.specialKey;
+def.proto.specialKey = visual_docItem.specialKey;
 
 
 /*

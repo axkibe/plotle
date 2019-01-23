@@ -45,7 +45,7 @@ def.static.concernsAction =
 | the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	( hover, path ) => undefined;
 
 
@@ -73,7 +73,7 @@ def.static.concernsMark =
 | Handles a potential dragStart event for this item.
 */
 def.static.dragStart =
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -234,7 +234,7 @@ def.static.getResizeItemChangePosFs =
 /*
 | A createRelation action moves.
 */
-def.func.createRelationMove =
+def.proto.createRelationMove =
 	function(
 		p,
 		action
@@ -255,7 +255,7 @@ def.func.createRelationMove =
 |
 | Returns true if it handled the click event.
 */
-def.func.ctrlClick =
+def.proto.ctrlClick =
 	function(
 		p,      // the point clicked
 		shift,  // true if shift key was pressed
@@ -299,7 +299,7 @@ def.func.ctrlClick =
 /*
 | A createRelation action stops.
 */
-def.func.createRelationStop =
+def.proto.createRelationStop =
 	function(
 		p
 	)
@@ -333,7 +333,7 @@ def.lazy.key =
 /*
 | Nofication when the item lost the users mark.
 */
-def.func.markLost = function( ){ };
+def.proto.markLost = function( ){ };
 
 
 /*

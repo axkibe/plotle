@@ -57,7 +57,7 @@ const tim_path = require( 'tim.js/src/path' );
 | Does(!) care about hasGrid.
 */
 def.static.concernsHasGrid =
-def.func.concernsHasGrid =
+def.proto.concernsHasGrid =
 	( hasGrid ) => hasGrid;
 
 
@@ -65,7 +65,7 @@ def.func.concernsHasGrid =
 | Does(!) care about hasSnapping.
 */
 def.static.concernsHasSnapping =
-def.func.concernsHasSnapping =
+def.proto.concernsHasSnapping =
 	( hasSnapping ) => hasSnapping;
 
 
@@ -73,7 +73,7 @@ def.func.concernsHasSnapping =
 | Does(!) care about spaceRef.
 */
 def.static.concernsSpaceRef =
-def.func.concernsSpaceRef =
+def.proto.concernsSpaceRef =
 	( spaceRef ) => spaceRef;
 
 
@@ -81,7 +81,7 @@ def.func.concernsSpaceRef =
 | Doesn't care about user.
 */
 def.static.concernsUser =
-def.func.concernsUser =
+def.proto.concernsUser =
 	( ) => undefined;
 
 
@@ -89,7 +89,7 @@ def.func.concernsUser =
 | Doesn't care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
-def.func.concernsUserSpaceList =
+def.proto.concernsUserSpaceList =
 	( ) => undefined;
 
 
@@ -136,19 +136,19 @@ def.lazy.focusedWidget = form_form.getFocusedWidget;
 /*
 | User clicked.
 */
-def.func.click = form_form.click;
+def.proto.click = form_form.click;
 
 
 /*
 | Cycles the focus.
 */
-def.func.cycleFocus = form_form.cycleFocus;
+def.proto.cycleFocus = form_form.cycleFocus;
 
 
 /*
 | Moving during an operation with the mouse button held down.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,
 		shift,
@@ -164,7 +164,7 @@ def.func.dragMove =
 |
 | Mouse down or finger on screen.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -178,7 +178,7 @@ def.func.dragStart =
 /*
 | Stops an operation with the mouse button held down.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,
 		shift,
@@ -192,13 +192,13 @@ def.func.dragStop =
 /*
 | User is inputing text.
 */
-def.func.input = form_form.input;
+def.proto.input = form_form.input;
 
 
 /*
 | Mouse wheel.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -213,13 +213,13 @@ def.func.mousewheel =
 /*
 | If point is on the form returns its hovering state.
 */
-def.func.pointingHover = form_form.pointingHover;
+def.proto.pointingHover = form_form.pointingHover;
 
 
 /*
 | A button of the form has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path,
 		shift,
@@ -245,19 +245,19 @@ def.func.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-def.func.showDisc = true;
+def.proto.showDisc = true;
 
 
 /*
 | User is pressing a special key.
 */
-def.func.specialKey = form_form.specialKey;
+def.proto.specialKey = form_form.specialKey;
 
 
 /*
 | A checkbox has been toggled.
 */
-def.func.toggleCheckbox =
+def.proto.toggleCheckbox =
 	function(
 		path
 	)

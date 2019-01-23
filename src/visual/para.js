@@ -426,7 +426,7 @@ def.lazyFuncInt.locateOffsetLine =
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-def.func.getOffsetAt =
+def.proto.getOffsetAt =
 	function(
 		ln,  // line number
 		x    // x coordinate
@@ -486,7 +486,7 @@ def.func.getOffsetAt =
 /*
 | Returns the offset closest to a point.
 */
-def.func.getPointOffset =
+def.proto.getPointOffset =
 	function(
 		point     // the point to look for
 	)
@@ -511,7 +511,7 @@ def.func.getPointOffset =
 /*
 | A text has been inputed.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text   // text inputed
 	)
@@ -564,7 +564,7 @@ def.func.input =
 /*
 | Handles a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		doc,
@@ -673,7 +673,7 @@ if( FREEZE ) Object.freeze( _keyMap );
 /*
 | Backspace pressed.
 */
-def.func._keyBackspace =
+def.proto._keyBackspace =
 	function(
 		doc,
 		at
@@ -723,7 +723,7 @@ def.func._keyBackspace =
 /*
 | Del-key pressed.
 */
-def.func._keyDel =
+def.proto._keyDel =
 	function(
 		doc,
 		at
@@ -771,7 +771,7 @@ def.func._keyDel =
 /*
 | Down arrow pressed.
 */
-def.func._keyDown =
+def.proto._keyDown =
 	function(
 		doc,
 		at,
@@ -822,7 +822,7 @@ def.func._keyDown =
 /*
 | End-key pressed.
 */
-def.func._keyEnd =
+def.proto._keyEnd =
 	function(
 		doc,
 		at,
@@ -837,7 +837,7 @@ def.func._keyEnd =
 /*
 | Enter-key pressed
 */
-def.func._keyEnter =
+def.proto._keyEnter =
 	function(
 		doc,
 		at
@@ -860,7 +860,7 @@ def.func._keyEnter =
 /*
 | Left arrow pressed.
 */
-def.func._keyLeft =
+def.proto._keyLeft =
 	function(
 		doc,
 		at,
@@ -900,7 +900,7 @@ def.func._keyLeft =
 |
 | FUTURE maintain relative scroll pos
 */
-def.func._pageUpDown =
+def.proto._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		doc,
@@ -939,7 +939,7 @@ def.func._pageUpDown =
 /*
 | PageDown key pressed.
 */
-def.func._keyPageDown =
+def.proto._keyPageDown =
 	function(
 		doc,
 		at,
@@ -954,7 +954,7 @@ def.func._keyPageDown =
 /*
 | PageUp key pressed.
 */
-def.func._keyPageUp =
+def.proto._keyPageUp =
 	function(
 		doc,
 		at,
@@ -969,7 +969,7 @@ def.func._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-def.func._keyPos1 =
+def.proto._keyPos1 =
 	function(
 		doc,
 		at,
@@ -984,7 +984,7 @@ def.func._keyPos1 =
 /*
 | Right arrow pressed.
 */
-def.func._keyRight =
+def.proto._keyRight =
 	function(
 		doc,
 		at,
@@ -1018,7 +1018,7 @@ def.func._keyRight =
 /*
 | Up arrow pressed.
 */
-def.func._keyUp =
+def.proto._keyUp =
 	function(
 		doc,
 		at,
@@ -1064,7 +1064,7 @@ def.func._keyUp =
 /*
 | Sets the aheadValues for point and line of a given offset.
 */
-def.func._locateOffset =
+def.proto._locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
@@ -1127,7 +1127,7 @@ def.func._locateOffset =
 /*
 | Sets the users caret or range
 */
-def.func._setMark =
+def.proto._setMark =
 	function(
 		at,        // position to mark caret (or endMark of range)
 		retainx,   // retains this x position when moving up/down

@@ -18,7 +18,7 @@ if( TIM )
 /*
 | Creates an invertes changeWrapList
 */
-def.func.createReverse =
+def.proto.createReverse =
 	function( )
 {
 	const iList = [ ];
@@ -35,7 +35,7 @@ def.func.createReverse =
 /*
 | Performes the wrapped change-(lists) on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -53,7 +53,7 @@ def.func.changeTree =
 | Performes the reversion of the
 | wrapped-change (lists) on a tree.
 */
-def.func.changeTreeReverse =
+def.proto.changeTreeReverse =
 	function(
 		tree
 	)
@@ -72,7 +72,7 @@ def.func.changeTreeReverse =
 |
 | cx can be a change, changeList, changeWrap or changeWrapList.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)

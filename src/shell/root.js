@@ -430,7 +430,7 @@ def.static._createFormRoot =
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		const hover = this.hover;
@@ -684,7 +684,7 @@ def.lazy._currentScreen =
 |
 | Feeds the doTracker.
 */
-def.func.alter =
+def.proto.alter =
 	function(
 		a1 // change, several changes or array of changes
 		// // ...
@@ -724,7 +724,7 @@ def.func.alter =
 /*
 | Does an animation frame.
 */
-def.func.animationFrame =
+def.proto.animationFrame =
 	function(
 		time // time stamp the animation frame has been fired for
 	)
@@ -736,7 +736,7 @@ def.func.animationFrame =
 /*
 | Finished an animation
 */
-def.func.finishAnimation =
+def.proto.finishAnimation =
 	function(
 		name  // animation name
 	)
@@ -770,7 +770,7 @@ def.func.finishAnimation =
 | -> oy1 = z1 * ( oy0 / z0 - py * ( 1 / z0 - 1 / z1  ) )
 |
 */
-def.func.changeSpaceTransformPoint =
+def.proto.changeSpaceTransformPoint =
 	function(
 		de,  // difference of view zoom exponent
 		p    // point to keep constant
@@ -809,7 +809,7 @@ def.func.changeSpaceTransformPoint =
 /*
 | Changes the zoom factor keeping current center
 */
-def.func.changeSpaceTransformCenter =
+def.proto.changeSpaceTransformCenter =
 	function(
 		dir    // direction of zoom change (+/- 1)
 	)
@@ -821,7 +821,7 @@ def.func.changeSpaceTransformCenter =
 /*
 | Changed the views so that all items of current space are visible.
 */
-def.func.changeSpaceTransformAll =
+def.proto.changeSpaceTransformAll =
 	function( )
 {
 	const space = root.spaceVisual;
@@ -913,7 +913,7 @@ def.func.changeSpaceTransformAll =
 /*
 | Changed the views zoom to 1 and pans to home.
 */
-def.func.changeSpaceTransformHome =
+def.proto.changeSpaceTransformHome =
 	function( )
 {
 	root._changeTransformTo(
@@ -927,7 +927,7 @@ def.func.changeSpaceTransformHome =
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -948,7 +948,7 @@ def.func.click =
 /*
 | Clears the carets retainx info.
 */
-def.func.clearRetainX =
+def.proto.clearRetainX =
 	function( )
 {
 	const mark = this._mark;
@@ -963,7 +963,7 @@ def.func.clearRetainX =
 /*
 | Cycles focus in a form.
 */
-def.func.cycleFormFocus =
+def.proto.cycleFormFocus =
 	function(
 		name,
 		dir
@@ -976,7 +976,7 @@ def.func.cycleFormFocus =
 /*
 | Moving during an operation with the mouse button held down.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,
 		shift,
@@ -1003,7 +1003,7 @@ def.func.dragMove =
 |
 | Mouse down or finger on screen.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -1028,7 +1028,7 @@ def.func.dragStart =
 /*
 | A button has been dragStarted.
 */
-def.func.dragStartButton =
+def.proto.dragStartButton =
 	function(
 		path
 	)
@@ -1047,7 +1047,7 @@ def.func.dragStartButton =
 /*
 | Stops an operation with the mouse button held down.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,
 		shift,
@@ -1072,7 +1072,7 @@ def.func.dragStop =
 /*
 | User entered normal text (one character or more).
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -1091,7 +1091,7 @@ def.func.input =
 /*
 | Logs out the current user
 */
-def.func.logout =
+def.proto.logout =
 	function( )
 {
 	// clears the user spaces list
@@ -1124,7 +1124,7 @@ def.func.logout =
 /*
 | Mouse wheel is being turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -1150,7 +1150,7 @@ def.func.mousewheel =
 |
 | if spaceRef is undefined reloads current space
 */
-def.func.moveToSpace =
+def.proto.moveToSpace =
 	function(
 		spaceRef,     // reference of type ref_space
 		createMissing // if true, non-existing spaces are to be created
@@ -1172,7 +1172,7 @@ def.func.moveToSpace =
 /*
 | User is hovering his/her pointing device.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -1221,7 +1221,7 @@ def.func.pointingHover =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-def.func.probeClickDrag =
+def.proto.probeClickDrag =
 	function(
 		p,
 		shift,
@@ -1247,7 +1247,7 @@ def.func.probeClickDrag =
 /*
 | A button has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path   // path of the button pushed
 	)
@@ -1266,7 +1266,7 @@ def.func.pushButton =
 /*
 | A button has been pushed.
 */
-def.func.toggleCheckbox =
+def.proto.toggleCheckbox =
 	function(
 		path   // path of the button pushed
 	)
@@ -1283,7 +1283,7 @@ def.func.toggleCheckbox =
 /*
 | Sets the user mark.
 */
-def.func.setUserMark =
+def.proto.setUserMark =
 	function(
 		mark
 	)
@@ -1329,7 +1329,7 @@ def.func.setUserMark =
 | When a space is loaded, this is space/normal
 | otherwise it is the loading screen.
 */
-def.func.showHome =
+def.proto.showHome =
 	function( )
 {
 	root.create(
@@ -1345,7 +1345,7 @@ def.func.showHome =
 /*
 | User is pressing a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,
@@ -1377,7 +1377,7 @@ def.func.specialKey =
 /*
 | User is releasing a special key.
 */
-def.func.releaseSpecialKey =
+def.proto.releaseSpecialKey =
 	function(
 		key
 //		shift,
@@ -1403,7 +1403,7 @@ def.func.releaseSpecialKey =
 | Returns true if the iPad ought to show
 | the virtual keyboard
 */
-def.func.suggestingKeyboard =
+def.proto.suggestingKeyboard =
 	function( )
 {
 	return this._mark && this._mark.hasCaret;
@@ -1414,7 +1414,7 @@ def.func.suggestingKeyboard =
 | Sets if the shell got the system focus
 | (that is display the virtual caret)
 */
-def.func.setSystemFocus =
+def.proto.setSystemFocus =
 	function(
 		focus
 	)
@@ -1442,7 +1442,7 @@ def.func.setSystemFocus =
 /*
 | The link is reporting updates.
 */
-def.func.update =
+def.proto.update =
 	function(
 		changes
 	)
@@ -1476,7 +1476,7 @@ def.func.update =
 /*
 | The window has been resized.
 */
-def.func.resize =
+def.proto.resize =
 	function(
 		size    // of type gleam_size
 	)
@@ -1491,7 +1491,7 @@ def.func.resize =
 /*
 | Receiving a moveTo event
 */
-def.func.onAcquireSpace =
+def.proto.onAcquireSpace =
 	function(
 		request,
 		reply
@@ -1569,7 +1569,7 @@ def.func.onAcquireSpace =
 /*
 | Received an 'auth' reply.
 */
-def.func.onAuth =
+def.proto.onAuth =
 	function(
 		wasVisitor,   // if true this was a visitor account requested
 		reply
@@ -1647,7 +1647,7 @@ def.func.onAuth =
 /*
 | Received a 'register' reply.
 */
-def.func.onRegister =
+def.proto.onRegister =
 	function(
 		request,
 		reply
@@ -1674,7 +1674,7 @@ def.func.onRegister =
 /*
 | Removes a text spawning over several entities.
 */
-def.func.removeRange =
+def.proto.removeRange =
 	function(
 		range
 	)
@@ -1771,7 +1771,7 @@ def.func.removeRange =
 /*
 | Creates a new relation by specifing its relates.
 */
-def.func.spawnRelation =
+def.proto.spawnRelation =
 	function(
 		item1,
 		item2
@@ -1881,7 +1881,7 @@ def.inherit.draw =
 | Changes the space transform to transform.
 | Possibly with an animation.
 */
-def.func._changeTransformTo =
+def.proto._changeTransformTo =
 	function(
 		exp,         // exponent of destination transform
 		transform,   // destination transform

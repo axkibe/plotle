@@ -179,7 +179,7 @@ def.lazy.attentionCenter =
 | the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,
 		path
@@ -224,7 +224,7 @@ def.static.createGeneric =
 /*
 | Sees if this portal is being clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -309,25 +309,25 @@ def.static.cycle =
 /*
 | Returns the change for dragging this item.
 */
-def.func.getDragItemChange = visual_item.getDragItemChangeZone;
+def.proto.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
+def.proto.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
 | The item's glint.
 */
-def.func.glint = function( ){ return this._glint; };
+def.proto.glint = function( ){ return this._glint; };
 
 
 /*
 | Text has been inputed.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -385,7 +385,7 @@ def.static.isSection =
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-def.func.minScaleX =
+def.proto.minScaleX =
 	function(
 		zone  // original zone
 	)
@@ -397,7 +397,7 @@ def.func.minScaleX =
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-def.func.minScaleY =
+def.proto.minScaleY =
 	function(
 		zone  // original zone
 	)
@@ -409,7 +409,7 @@ def.func.minScaleY =
 /*
 | Minimum size
 */
-def.func.minSize = gruga_portal.minSize;
+def.proto.minSize = gruga_portal.minSize;
 
 
 /*
@@ -436,7 +436,7 @@ def.staticLazy.model =
 /*
 | Mouse wheel turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -453,7 +453,7 @@ def.func.mousewheel =
 |
 | Checks if this item reacts on this.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p       // point hovered upon
 	)
@@ -486,14 +486,14 @@ def.func.pointingHover =
 | Portals are positioned by their zone.
 */
 def.static.positioning =
-def.func.positioning =
+def.proto.positioning =
 	'zone';
 
 
 /*
 | Portals do not need to be resized proportionally.
 */
-def.func.proportional = false;
+def.proto.proportional = false;
 
 
 /*
@@ -534,7 +534,7 @@ def.lazy.spaceRef =
 /*
 | User pressed a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift
@@ -610,7 +610,7 @@ def.lazy._facetMoveToButton =
 /*
 | Returns the font for 'section'.
 */
-def.func._fontFor =
+def.proto._fontFor =
 	function(
 		section
 	)
@@ -726,7 +726,7 @@ def.lazy._glintCaret =
 /*
 | Returns the offset nearest to point p.
 */
-def.func._getOffsetAt =
+def.proto._getOffsetAt =
 	function(
 		section,
 		x
@@ -899,7 +899,7 @@ def.inherit._innerGlint =
 /*
 | User pressed backspace.
 */
-def.func._keyBackspace =
+def.proto._keyBackspace =
 	function( )
 {
 	const mark = this.mark;
@@ -927,7 +927,7 @@ def.func._keyBackspace =
 /*
 | User pressed down key.
 */
-def.func._keyDown =
+def.proto._keyDown =
 	function( )
 {
 	const mark = this.mark;
@@ -970,7 +970,7 @@ def.func._keyDown =
 /*
 | User pressed right key.
 */
-def.func._keyLeft =
+def.proto._keyLeft =
 	function( )
 {
 	const mark = this.mark;
@@ -1003,7 +1003,7 @@ def.func._keyLeft =
 /*
 | User pressed del.
 */
-def.func._keyDel =
+def.proto._keyDel =
 	function( )
 {
 	const mark = this.mark;
@@ -1032,7 +1032,7 @@ def.func._keyDel =
 /*
 | User pressed end key.
 */
-def.func._keyEnd =
+def.proto._keyEnd =
 	function( )
 {
 	const mark = this.mark;
@@ -1054,7 +1054,7 @@ def.func._keyEnd =
 /*
 | User pressed enter key.
 */
-def.func._keyEnter =
+def.proto._keyEnter =
 	function( )
 {
 	const mark = this.mark;
@@ -1091,7 +1091,7 @@ def.func._keyEnter =
 /*
 | User pressed pos1 key,
 */
-def.func._keyPos1 =
+def.proto._keyPos1 =
 	function( )
 {
 	root.setUserMark( this.mark.create( 'at', 0 ) );
@@ -1101,7 +1101,7 @@ def.func._keyPos1 =
 /*
 | User pressed right key.
 */
-def.func._keyRight =
+def.proto._keyRight =
 	function( )
 {
 	const mark = this.mark;
@@ -1129,7 +1129,7 @@ def.func._keyRight =
 /*
 | User pressed down key.
 */
-def.func._keyTab =
+def.proto._keyTab =
 	function(
 		shift
 	)
@@ -1152,7 +1152,7 @@ def.func._keyTab =
 /*
 | User pressed down key.
 */
-def.func._keyUp =
+def.proto._keyUp =
 	function( )
 {
 	const mark = this.mark;
@@ -1195,7 +1195,7 @@ def.func._keyUp =
 /*
 | Returns the point of a given offset.
 */
-def.func._locateOffset =
+def.proto._locateOffset =
 	function(
 		section,   // 'spaceUser' or 'spaceTag'
 		offset     // the offset to get the point from.
@@ -1263,7 +1263,7 @@ def.lazy._moveToButtonShape =
 /*
 | Issues the moveTo action.
 */
-def.func._moveTo =
+def.proto._moveTo =
 	function( )
 {
 	root.moveToSpace( this.spaceRef, false );
@@ -1283,7 +1283,7 @@ def.lazy._orthoMoveToButtonShape =
 /*
 | Prepares an input field ( user / tag )
 */
-def.func._prepareField =
+def.proto._prepareField =
 	function(
 		section,
 		baseP

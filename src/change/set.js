@@ -75,7 +75,7 @@ def.lazy.reverse =
 /*
 | Performs the insertion change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -99,7 +99,7 @@ def.func.changeTree =
 /*
 | Returns a change* transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)
@@ -146,7 +146,7 @@ def.func.transform =
 | Transforms a set by this set actually
 | happening first.
 */
-def.func._transformChangeSet =
+def.proto._transformChangeSet =
 	function(
 		cx
 	)

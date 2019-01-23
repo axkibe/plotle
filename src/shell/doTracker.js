@@ -46,7 +46,7 @@ def.static.flush =
 |
 | It will track it on the undo stack.
 */
-def.func.track =
+def.proto.track =
 	function(
 		changeWrap
 	)
@@ -77,7 +77,7 @@ def.func.track =
 | now enriched with sequence ids as well as genuine updates
 | from others.
 */
-def.func.update =
+def.proto.update =
 	function(
 		changeWrapList
 	)
@@ -145,7 +145,7 @@ def.func.update =
 /*
 | Reverts actions from the undo stack.
 */
-def.func.undo =
+def.proto.undo =
 	function( )
 {
 /**/if( CHECK )
@@ -178,7 +178,7 @@ def.func.undo =
 /*
 | Reverts undos from the redo stack.
 */
-def.func.redo =
+def.proto.redo =
 	function( )
 {
 /**/if( CHECK )

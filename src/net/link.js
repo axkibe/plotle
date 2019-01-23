@@ -68,7 +68,7 @@ def.attributes =
 | Aquires a space from the server
 | and starts receiving updates for it.
 */
-def.func.acquireSpace =
+def.proto.acquireSpace =
 	function(
 		spaceRef,
 		createMissing
@@ -109,7 +109,7 @@ def.func.acquireSpace =
 /*
 | Alters the tree.
 */
-def.func.alter =
+def.proto.alter =
 	function(
 		changeWrap // the changeWrap to apply to tree
 	)
@@ -138,7 +138,7 @@ def.func.alter =
 /*
 | Checks with server if user creds are valid.
 */
-def.func.auth =
+def.proto.auth =
 	function(
 		userCreds
 	)
@@ -155,7 +155,7 @@ def.func.auth =
 /*
 | Tries to registers a new user.
 */
-def.func.register =
+def.proto.register =
 	function(
 		userCreds,
 		mail,
@@ -178,7 +178,7 @@ def.func.register =
 /*
 | A space has been acquired.
 */
-def.func._onAcquireSpace =
+def.proto._onAcquireSpace =
 	function(
 		request,
 		reply
@@ -256,7 +256,7 @@ def.func._onAcquireSpace =
 /*
 | Received an auth reply.
 */
-def.func._onAuth =
+def.proto._onAuth =
 	function(
 		request,
 		reply
@@ -286,7 +286,7 @@ def.func._onAuth =
 /*
 | Received a register reply.
 */
-def.func._onRegister =
+def.proto._onRegister =
 	function(
 		request,
 		reply
@@ -316,7 +316,7 @@ def.func._onRegister =
 /*
 | Sends the stored changes to server.
 */
-def.func._sendChanges =
+def.proto._sendChanges =
 	function( )
 {
 /**/if( CHECK )
@@ -356,7 +356,7 @@ def.func._sendChanges =
 /*
 | Received a reply of a sendChanges request.
 */
-def.func._onSendChanges =
+def.proto._onSendChanges =
 	function(
 		request,
 		reply
@@ -372,7 +372,7 @@ def.func._onSendChanges =
 /*
 | Received an update.
 */
-def.func._onUpdate =
+def.proto._onUpdate =
 	function(
 		request,
 		reply
@@ -424,7 +424,7 @@ def.func._onUpdate =
 /*
 | Updates the current space dynamic.
 */
-def.func._gotUpdateSpace =
+def.proto._gotUpdateSpace =
 	function(
 		changeDynamic  // the dynamic change instructions
 	)
@@ -528,7 +528,7 @@ def.func._gotUpdateSpace =
 /*
 | Updates the current space dynamic.
 */
-def.func._gotUpdateUserSpaceList =
+def.proto._gotUpdateUserSpaceList =
 	function(
 		changeDynamic  // the dynamic change instructions
 	)
@@ -551,7 +551,7 @@ def.func._gotUpdateUserSpaceList =
 /*
 | Sends an update request to the server and computes its answer.
 */
-def.func._update =
+def.proto._update =
 	function( )
 {
 	const list = [ this.refMomentSpace ];

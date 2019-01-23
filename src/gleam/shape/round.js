@@ -70,7 +70,7 @@ def.static.xy = ( x, y ) =>
 /*
 | Returns a transformed shape section.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
@@ -96,7 +96,7 @@ def.func.transform =
 | case it intersects with this sectioin
 | or undefined otherwise
 */
-def.func.getProjection =
+def.proto.getProjection =
 	function(
 		p,   // point to project to
 		pn,  // next point in shape( === this.p when not closing )

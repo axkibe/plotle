@@ -38,7 +38,7 @@ const net_requestWrapList = require( './requestWrapList' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if(	this.path.get( 0 ) !== 'ajax' ) throw new Error( );
@@ -62,7 +62,7 @@ def.lazy.channelName =
 | If receiverFuncName is not undefined only aborts requests
 | with this receiverFuncName
 */
-def.func.abortAll =
+def.proto.abortAll =
 	function(
 		receiverFuncName // if not undefined aborts these
 	)
@@ -112,7 +112,7 @@ def.func.abortAll =
 /*
 | Issues a request.
 */
-def.func.request =
+def.proto.request =
 	function(
 		request,         // request
 		receiverFuncName // the receivers func name to call
@@ -141,7 +141,7 @@ def.func.request =
 /*
 | The top request on the channel has received a reply
 */
-def.func.onReply =
+def.proto.onReply =
 	function(
 		wrap,
 		reply

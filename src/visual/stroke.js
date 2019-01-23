@@ -60,7 +60,7 @@ def.lazy.attentionCenter =
 /*
 | Sees if this portal is being clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -75,7 +75,7 @@ def.func.click =
 /*
 | Handles a potential dragStart event for this item.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -95,7 +95,7 @@ def.func.dragStart =
 | This cannot be done lazily, since it may
 | depend on other items.
 */
-def.func.glint =
+def.proto.glint =
 	function( )
 {
 	const shape = this.shape.transform( this.transform );
@@ -108,15 +108,15 @@ def.func.glint =
 /*
 | No scaling minimum.
 */
-def.func.minScaleX =
-def.func.minScaleY =
+def.proto.minScaleX =
+def.proto.minScaleY =
 	( ) => 0;
 
 
 /*
 | Mouse wheel turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir
@@ -133,7 +133,7 @@ def.func.mousewheel =
 |
 | Checks if this item reacts on this.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p       // point hovered upon
 	)

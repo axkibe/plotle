@@ -93,7 +93,7 @@ const ref_space = require( '../ref/space' );
 /*
 | loads all spaces and playbacks all changes from the database.
 */
-def.func.loadSpaces =
+def.proto.loadSpaces =
 	function*( )
 {
 	log( 'loading and replaying all spaces' );
@@ -134,7 +134,7 @@ def.func.loadSpaces =
 /*
 | The shell's globals.
 */
-def.func.shellGlobals =
+def.proto.shellGlobals =
 	function(
 		bundle   // if true this is bundle otherwise devel
 	)
@@ -198,7 +198,7 @@ def.lazy.shellGlobalsResource =
 /*
 | Builds the bundle.
 */
-def.func.buildBundle =
+def.proto.buildBundle =
 	function( )
 {
 	log( 'building bundle' );
@@ -304,7 +304,7 @@ def.func.buildBundle =
 | Registers and prepares the inventory.
 | Also builds the bundle.
 */
-def.func.prepareInventory =
+def.proto.prepareInventory =
 	function*( )
 {
 	log( 'preparing inventory' );
@@ -486,7 +486,7 @@ def.func.prepareInventory =
 /*
 | Makes additional mangles
 */
-def.func.extraMangle =
+def.proto.extraMangle =
 	function(
 		ast,
 		timIDs   // FIXME remove
@@ -681,7 +681,7 @@ def.func.extraMangle =
 /*
 | Creates a new space.
 */
-def.func.createSpace =
+def.proto.createSpace =
 	function*(
 		spaceRef
 	)
@@ -709,7 +709,7 @@ def.func.createSpace =
 /*
 | A sleeping update closed prematurely.
 */
-def.func.closeSleep =
+def.proto.closeSleep =
 	function(
 		sleepID
 	)
@@ -730,7 +730,7 @@ def.func.closeSleep =
 /*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-def.func.wake =
+def.proto.wake =
 	function(
 		ref // reference to wake for
 	)
@@ -788,7 +788,7 @@ def.func.wake =
 /*
 | Logs and returns a web error
 */
-def.func.webError =
+def.proto.webError =
 	function(
 		result,
 		code,
@@ -815,7 +815,7 @@ def.func.webError =
 /*
 | Listens to http requests
 */
-def.func.requestListener =
+def.proto.requestListener =
 	function*(
 		request,
 		result
@@ -951,7 +951,7 @@ def.func.requestListener =
 /*
 | Handles ajax requests.
 */
-def.func.webAjax =
+def.proto.webAjax =
 	function(
 		request,
 		red,

@@ -16,7 +16,7 @@ if( TIM )
 /*
 | Handles a frame for all animations.
 */
-def.func.frame =
+def.proto.frame =
 	function(
 		time
 	)

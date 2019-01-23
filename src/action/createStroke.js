@@ -37,7 +37,7 @@ const visual_stroke = require( '../visual/stroke' );
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affectsItem =
+def.proto.affectsItem =
 	function(
 		item
 	)
@@ -82,7 +82,7 @@ def.lazy.transientFabric =
 /*
 | The transient visual being created.
 */
-def.func.transientVisual =
+def.proto.transientVisual =
 	function(
 		transfrom   // the transform for the item
 	)

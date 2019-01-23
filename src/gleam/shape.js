@@ -40,7 +40,7 @@ const gleam_transform = require( './transform' );
 | a real scale/zoom, since the border distance is for example
 | always 1 regardless how far from central point away.
 */
-def.func.border =
+def.proto.border =
 	function(
 		d // distance to border
 	)
@@ -76,7 +76,7 @@ def.func.border =
 | Gets the intersection of a projection from this central point
 | to point p.
 */
-def.func.getProjection =
+def.proto.getProjection =
 	function(
 		p
 	)
@@ -132,7 +132,7 @@ def.func.getProjection =
 /*
 | Returns a transformed shape.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
@@ -156,7 +156,7 @@ def.func.transform =
 /*
 | Returns true if p is within the shape.
 */
-def.func.within =
+def.proto.within =
 	function(
 		p
 	)

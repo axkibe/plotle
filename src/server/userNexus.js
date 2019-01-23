@@ -43,7 +43,7 @@ const resume = require( 'suspend' ).resume;
 |
 | The user must be loaded in cache for this to work.
 */
-def.func.addUserSpaceRef =
+def.proto.addUserSpaceRef =
 	function(
 		spaceRef
 	)
@@ -92,7 +92,7 @@ def.func.addUserSpaceRef =
 /*
 | Creates a new visitor.
 */
-def.func.createVisitor =
+def.proto.createVisitor =
 	function(
 		userCreds
 	)
@@ -132,7 +132,7 @@ def.func.createVisitor =
 /*
 | Gets the list of spaces of a user.
 */
-def.func.getUserSpaceList =
+def.proto.getUserSpaceList =
 	function*(
 		userInfo
 	)
@@ -196,7 +196,7 @@ def.func.getUserSpaceList =
 /*
 | Registers a user.
 */
-def.func.register =
+def.proto.register =
 	function*(
 		userInfo
 	)
@@ -253,7 +253,7 @@ def.func.register =
 |
 | If so returns the matching user info.
 */
-def.func.getInCache =
+def.proto.getInCache =
 	function(
 		username
 	)
@@ -267,7 +267,7 @@ def.func.getInCache =
 |
 | If so returns the matching user info.
 */
-def.func.testInCache =
+def.proto.testInCache =
 	function(
 		userCreds
 	)
@@ -285,7 +285,7 @@ def.func.testInCache =
 |
 | If so loads and returns the matching user info.
 */
-def.func.testUserCreds =
+def.proto.testUserCreds =
 	function*(
 		userCreds
 	)

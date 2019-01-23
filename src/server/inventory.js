@@ -27,7 +27,7 @@ if( FREEZE ) Object.freeze( readOptions );
 /*
 | Returns an inventory with a resource added/updated.
 */
-def.func.updateResource =
+def.proto.updateResource =
 	function(
 		resource
 	)
@@ -53,7 +53,7 @@ def.func.updateResource =
 /*
 | Returns an inventory with a resource removed.
 */
-def.func.removeResource =
+def.proto.removeResource =
 	function(
 		resource
 	)
@@ -74,7 +74,7 @@ def.func.removeResource =
 |
 | Returns the prepared resource, but updates the inventory already.
 */
-def.func.prepareResource =
+def.proto.prepareResource =
 	function*(
 		resource
 	)
@@ -104,7 +104,7 @@ def.func.prepareResource =
 
 		const rmod = require( realpath );
 
-		const source = yield fs.readFile( realpath, readOptions, resume( ) );
+		const source = ( yield fs.readFile( realpath, readOptions, resume( ) ) ) + '';
 
 		const timspec = tim.catalog.getTimspec( realpath );
 
@@ -119,14 +119,14 @@ def.func.prepareResource =
 				'data', preamble + source + postamble,
 				'timestamp', mtime,
 				'realpath', realpath
-			);
+			 );
 
 		const timcodeRootPath = tim.catalog.getRootDir( timspec ).timcodePath;
 
 		const timcode =
-			yield fs.readFile(
+			( yield fs.readFile(
 				timcodeRootPath + '/' + rmod.timcodeFilename, readOptions, resume( )
-			);
+			) ) + '';
 
 		const timcodeResource =
 			resource.create(

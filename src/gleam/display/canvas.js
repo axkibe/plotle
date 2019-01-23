@@ -113,7 +113,7 @@ const noround = val => val * ratio;
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		const canvas = this.canvas;
@@ -272,7 +272,7 @@ def.lazy._rendered = ( ) => true;
 /*
 | Returns true if p is within the shape.
 */
-def.func.within =
+def.proto.within =
 	function(
 		p,
 		shape
@@ -341,7 +341,7 @@ def.func.within =
 /*
 | Renders the display.
 */
-def.func.render =
+def.proto.render =
 	function( )
 {
 	const size = this.size;
@@ -368,7 +368,7 @@ def.func.render =
 /*
 | Draws a single border.
 */
-def.func._border =
+def.proto._border =
 	function(
 		border, // the gleam_border
 		shape,  // an object to draw
@@ -392,7 +392,7 @@ def.func._border =
 /*
 | Draws a border or borderList.
 */
-def.func._borders  =
+def.proto._borders  =
 	function(
 		border, // the gleam_border
 		shape,  // the shape to draw the border in
@@ -426,7 +426,7 @@ def.func._borders  =
 /*
 | Draws a fill.
 */
-def.func._fill  =
+def.proto._fill  =
 	function(
 		fill,   // the gleam_border
 		shape,  // a shape to sketch
@@ -446,7 +446,7 @@ def.func._fill  =
 /*
 | Returns a HTML5 color style.
 */
-def.func._colorStyle =
+def.proto._colorStyle =
 	function(
 		style,
 		shape,
@@ -523,7 +523,7 @@ def.func._colorStyle =
 /*
 | Renders a glint twig.
 */
-def.func._renderGlintList =
+def.proto._renderGlintList =
 	function(
 		glint,  // the glint list to render
 		offset  // offset all rendering by this
@@ -541,7 +541,7 @@ def.func._renderGlintList =
 |
 | FIXME make it a Map.
 */
-def.func._renderGlint =
+def.proto._renderGlint =
 	function(
 		glint,
 		offset
@@ -585,7 +585,7 @@ def.func._renderGlint =
 /*
 | Renders masked stuff.
 */
-def.func._renderMask =
+def.proto._renderMask =
 	function(
 		glint,
 		offset
@@ -664,7 +664,7 @@ def.func._renderMask =
 /*
 | Renders a text using opentype.
 */
-def.func._renderText =
+def.proto._renderText =
 	function(
 		glint,
 		offset
@@ -731,7 +731,7 @@ def.func._renderText =
 /*
 | Renders a text using opentype.
 */
-def.func._renderZoomGrid =
+def.proto._renderZoomGrid =
 	function(
 		glint,
 		offset
@@ -789,7 +789,7 @@ def.func._renderZoomGrid =
 /*
 | Renders a window.
 */
-def.func._renderWindow =
+def.proto._renderWindow =
 	function(
 		glint,
 		offset
@@ -876,7 +876,7 @@ def.func._renderWindow =
 /*
 | Sketches a line.
 */
-def.func._sketchLine =
+def.proto._sketchLine =
 	function(
 		line,
 		border,
@@ -915,7 +915,7 @@ def.func._sketchLine =
 /*
 | Sketches a rectangle.
 */
-def.func._sketchRect =
+def.proto._sketchRect =
 	function(
 		rect,
 		border,
@@ -950,7 +950,7 @@ def.func._sketchRect =
 /*
 | Fills a shape and draws its borders.
 */
-def.func._paint =
+def.proto._paint =
 	function(
 		facet,  // paint in this facet
 		shape,  // paint this shape
@@ -980,7 +980,7 @@ def.func._paint =
 /*
 | Sketches a shape.
 */
-def.func._sketch =
+def.proto._sketch =
 	function(
 		shape,  // shape to sketch
 		border, // additional border
@@ -1039,7 +1039,7 @@ def.func._sketch =
 /*
 | Sketches a generic shape.
 */
-def.func._sketchGenericShape =
+def.proto._sketchGenericShape =
 	function(
 		shape,  // shape to sketch
 		border, // additional border

@@ -173,31 +173,31 @@ def.lazy.fontsize =
 /*
 | Returns the change for dragging this item.
 */
-def.func.getDragItemChange = visual_item.getDragItemChangeZone;
+def.proto.getDragItemChange = visual_item.getDragItemChangeZone;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.func.getResizeItemChange = visual_item.getResizeItemChangeZone;
+def.proto.getResizeItemChange = visual_item.getResizeItemChangeZone;
 
 
 /*
 | The item's glint.
 */
-def.func.glint = function( ) { return this._glint; };
+def.proto.glint = function( ) { return this._glint; };
 
 
 /*
 | Returns the mark for a point
 */
-def.func.markForPoint = visual_docItem.markForPoint;
+def.proto.markForPoint = visual_docItem.markForPoint;
 
 
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-def.func.minScaleX =
+def.proto.minScaleX =
 	function(
 		zone  // original zone
 	)
@@ -209,7 +209,7 @@ def.func.minScaleX =
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-def.func.minScaleY =
+def.proto.minScaleY =
 	function(
 		zone  // original zone
 	)
@@ -221,7 +221,7 @@ def.func.minScaleY =
 /*
 | Minimum size.
 */
-def.func.minSize = gruga_note.minSize;
+def.proto.minSize = gruga_note.minSize;
 
 
 /*
@@ -252,7 +252,7 @@ def.staticLazy.model =
 /*
 | Mouse wheel turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir
@@ -279,7 +279,7 @@ def.func.mousewheel =
 | Notes use zone for positioning
 */
 def.static.positioning =
-def.func.positioning =
+def.proto.positioning =
 	'zone';
 
 
@@ -322,7 +322,7 @@ def.lazy.scrollbarY =
 /*
 | Scrolls the note so the caret comes into view.
 */
-def.func.scrollMarkIntoView =
+def.proto.scrollMarkIntoView =
 	function( )
 {
 	const mark = this.mark;
@@ -397,7 +397,7 @@ def.lazy.shape =
 /*
 | Handles a special key.
 */
-def.func.specialKey = visual_docItem.specialKey;
+def.proto.specialKey = visual_docItem.specialKey;
 
 
 /*
@@ -421,7 +421,7 @@ def.lazy.zone =
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.scrollPos.x < 0 || this.scrollPos.y < 0 ) throw new Error( );

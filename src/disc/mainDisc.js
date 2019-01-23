@@ -98,7 +98,7 @@ if( TIM )
 | Does(!) care about show.
 */
 def.static.concernsShow =
-def.func.concernsShow =
+def.proto.concernsShow =
 	( show ) => show;
 
 
@@ -106,7 +106,7 @@ def.func.concernsShow =
 | Does(!) care about spaceRef.
 */
 def.static.concernsSpaceRef =
-def.func.concernsSpaceRef =
+def.proto.concernsSpaceRef =
 	( spaceRef ) => spaceRef;
 
 
@@ -114,7 +114,7 @@ def.func.concernsSpaceRef =
 | Does(!) care about user.
 */
 def.static.concernsUser =
-def.func.concernsUser =
+def.proto.concernsUser =
 	( user ) => user;
 
 
@@ -409,7 +409,7 @@ def.lazy._tShape =
 /*
 | A button of the main disc has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path
 		// shift,
@@ -522,7 +522,7 @@ def.func.pushButton =
 /*
 | Checks if the user clicked something on the panel
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -549,7 +549,7 @@ def.func.click =
 /*
 | Start of a dragging operation.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p
 		// shift,
@@ -577,7 +577,7 @@ def.func.dragStart =
 /*
 | Move during a dragging operation.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,
 		shift,
@@ -591,7 +591,7 @@ def.func.dragMove =
 /*
 | Stop of a dragging operation.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,
 		shift,
@@ -606,7 +606,7 @@ def.func.dragStop =
 /*
 | User is inputing text.
 */
-def.func.input =
+def.proto.input =
 	function(
 		// text
 	)
@@ -618,7 +618,7 @@ def.func.input =
 /*
 | Mouse wheel.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p
 		// dir,
@@ -645,7 +645,7 @@ def.func.mousewheel =
 /*
 | Returns true if point is on the disc panel.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -678,7 +678,7 @@ def.func.pointingHover =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-def.func.probeClickDrag =
+def.proto.probeClickDrag =
 	function(
 		p,
 		shift,
@@ -697,7 +697,7 @@ def.func.probeClickDrag =
 /*
 | User is pressing a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,

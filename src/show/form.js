@@ -57,7 +57,7 @@ if( FREEZE ) Object.freeze( validForms );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( !validForms[ this.formName ] ) throw new Error( );

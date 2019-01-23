@@ -65,7 +65,7 @@ const error = require( './error' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.at1 + this.val.length !== this.at2 )
@@ -105,7 +105,7 @@ def.lazy.reverse =
 /*
 | Performs the insertion change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -138,7 +138,7 @@ def.func.changeTree =
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)
@@ -194,7 +194,7 @@ def.func.transform =
 | Transforms an insert change
 | considering this remove actually came first.
 */
-def.func._transformInsert =
+def.proto._transformInsert =
 	function(
 		cx
 	)
@@ -228,7 +228,7 @@ def.func._transformInsert =
 /*
 | Transforms a text mark by this insert.
 */
-def.func._transformTextMark =
+def.proto._transformTextMark =
 	function(
 		mark
 	)
@@ -254,7 +254,7 @@ def.func._transformTextMark =
 | Transforms another remove change.
 | considering this remove actually came first.
 */
-def.func._transformRemove =
+def.proto._transformRemove =
 	function(
 		cx
 	)
@@ -347,7 +347,7 @@ def.func._transformRemove =
 | Transforms a join or split change.
 | considering this remove actually came first.
 */
-def.func._transformJoinSplit =
+def.proto._transformJoinSplit =
 	function(
 		cx
 	)

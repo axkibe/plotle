@@ -136,7 +136,7 @@ def.static.createSpace =
 |
 | This is currently write and forget to database.
 */
-def.func.appendChanges =
+def.proto.appendChanges =
 	function(
 		changeWrapList,
 		user
@@ -183,7 +183,7 @@ def.func.appendChanges =
 /*
 | Returns the change skid by its sequence.
 */
-def.func.getChangeWrap =
+def.proto.getChangeWrap =
 	function(
 		seq
 	)

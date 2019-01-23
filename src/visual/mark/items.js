@@ -26,7 +26,7 @@ const pathList = require( 'tim.js/src/pathList' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		const paths = this.itemPaths;
@@ -72,7 +72,7 @@ def.lazyFuncInt._changeMarkNode =
 /*
 | Recreates this mark with a change set applied.
 */
-def.func.createTransformed =
+def.proto.createTransformed =
 	function(
 		changes
 	)
@@ -97,13 +97,13 @@ def.func.createTransformed =
 /*
 | Item marks do not have a caret.
 */
-def.func.hasCaret = false;
+def.proto.hasCaret = false;
 
 
 /*
 | The widget's path.
 */
-def.func.widgetPath = undefined;
+def.proto.widgetPath = undefined;
 
 
 /*
@@ -111,14 +111,14 @@ def.func.widgetPath = undefined;
 |
 | FUTURE write something
 */
-def.func.clipboard = '';
+def.proto.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.func.containsPath =
+def.proto.containsPath =
 	function(
 		path
 	)
@@ -144,7 +144,7 @@ def.func.containsPath =
 | when it isn't part of this mark, or the
 | path removed when it is.
 */
-def.func.togglePath =
+def.proto.togglePath =
 	function(
 		path
 	)
@@ -172,7 +172,7 @@ def.func.togglePath =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.func.containsPath =
+def.proto.containsPath =
 	function(
 		path
 	)

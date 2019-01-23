@@ -56,7 +56,7 @@ def.static.createNow =
 /*
 | Gets the transformation for a frame at time.
 */
-def.func.getTransform =
+def.proto.getTransform =
 	function(
 		time
 	)
@@ -99,7 +99,7 @@ def.func.getTransform =
 /*
 | Handles a frame for this animation.
 */
-def.func.frame =
+def.proto.frame =
 	function(
 		time
 	)

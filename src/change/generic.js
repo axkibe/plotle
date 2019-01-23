@@ -13,7 +13,7 @@ const change_list = require( './list' );
 /*
 | Reversivly performs this change on a tree.
 */
-def.func.changeTreeReverse =
+def.proto.changeTreeReverse =
 	function(
 		tree
 	)
@@ -25,7 +25,7 @@ def.func.changeTreeReverse =
 /*
 | Returns a change list transformed by this change.
 */
-def.func._transformChangeList =
+def.proto._transformChangeList =
 	function(
 		cList
 	)
@@ -64,7 +64,7 @@ def.func._transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func._transformChangeWrap =
+def.proto._transformChangeWrap =
 	function(
 		cw
 	)
@@ -76,7 +76,7 @@ def.func._transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func._transformChangeWrapList =
+def.proto._transformChangeWrapList =
 	function(
 		cwList
 	)

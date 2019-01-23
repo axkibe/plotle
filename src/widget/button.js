@@ -82,7 +82,7 @@ const result_hover = require( '../result/hover' );
 | Returns the mark if the widget with 'path' concerns about the mark.
 */
 def.static.concernsMark =
-def.func.concernsMark =
+def.proto.concernsMark =
 	function(
 		mark,
 		path
@@ -96,7 +96,7 @@ def.func.concernsMark =
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,
 		path
@@ -310,13 +310,13 @@ def.lazy._pc =
 /*
 | Buttons are focusable.
 */
-def.func.focusable = true;
+def.proto.focusable = true;
 
 
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -334,7 +334,7 @@ def.func.click =
 /*
 | Start an operation with the poiting device button held down.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -352,7 +352,7 @@ def.func.dragStart =
 /*
 | Stops an operation with the poiting device button held down.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function( )
 {
 	root.create( 'action', undefined );
@@ -362,7 +362,7 @@ def.func.dragStop =
 /*
 | Any normal key for a button having focus triggers a push.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -376,7 +376,7 @@ def.func.input =
 /*
 | Mouse wheel is being turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		shift,
@@ -390,7 +390,7 @@ def.func.mousewheel =
 /*
 | Mouse hover.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p
 	)
@@ -409,7 +409,7 @@ def.func.pointingHover =
 /*
 | Special keys for buttons having focus
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,
@@ -431,7 +431,7 @@ def.func.specialKey =
 | Returns true if p is within
 | the button
 */
-def.func.within =
+def.proto.within =
 	function(
 		p
 	)

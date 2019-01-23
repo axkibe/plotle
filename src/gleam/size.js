@@ -98,7 +98,7 @@ def.lazy.zeroRect =
 /*
 | Returns a size tim enlarged by w/h.
 */
-def.func.add =
+def.proto.add =
 	function(
 		w,
 		h

@@ -59,7 +59,7 @@ def.lazy.reverse =
 |
 | The result can be a change or a change_list.
 */
-def.func._transformSingle =
+def.proto._transformSingle =
 	function(
 		c
 	)
@@ -81,7 +81,7 @@ def.func._transformSingle =
 |
 | The result is a change_list.
 */
-def.func._transformChangeList =
+def.proto._transformChangeList =
 	function(
 		cList
 	)
@@ -98,7 +98,7 @@ def.func._transformChangeList =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func._transformChangeWrap =
+def.proto._transformChangeWrap =
 	function(
 		cw
 	)
@@ -110,7 +110,7 @@ def.func._transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-def.func._transformChangeWrapList =
+def.proto._transformChangeWrapList =
 	function(
 		cwList
 	)
@@ -131,7 +131,7 @@ def.func._transformChangeWrapList =
 | change, change_list, change_wrap or change_wrapList
 | transformed by this change_list.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		co
 	)
@@ -160,7 +160,7 @@ def.func.transform =
 /*
 | Performes this change list on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -179,7 +179,7 @@ def.func.changeTree =
 /*
 | Reversevly performes this change list on a tree.
 */
-def.func.changeTreeReverse =
+def.proto.changeTreeReverse =
 	function(
 		tree
 	)

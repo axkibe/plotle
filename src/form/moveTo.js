@@ -69,7 +69,7 @@ if( TIM )
 | Doesn't care about hasGrid.
 */
 def.static.concernsHasGrid =
-def.func.concernsHasGrid =
+def.proto.concernsHasGrid =
 	( ) => undefined;
 
 
@@ -77,7 +77,7 @@ def.func.concernsHasGrid =
 | Doesn't care about hasSnapping.
 */
 def.static.concernsHasSnapping =
-def.func.concernsHasSnapping =
+def.proto.concernsHasSnapping =
 	( ) => undefined;
 
 
@@ -85,7 +85,7 @@ def.func.concernsHasSnapping =
 | Doesn't care about spaceRef.
 */
 def.static.concernsSpaceRef =
-def.func.concernsSpaceRef =
+def.proto.concernsSpaceRef =
 	( ) => undefined;
 
 
@@ -93,7 +93,7 @@ def.func.concernsSpaceRef =
 | Doesn't care about user.
 */
 def.static.concernsUser =
-def.func.concernsUser =
+def.proto.concernsUser =
 	( ) => undefined;
 
 
@@ -101,7 +101,7 @@ def.func.concernsUser =
 | Does(!) care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
-def.func.concernsUserSpaceList =
+def.proto.concernsUserSpaceList =
 	( userSpaceList ) => userSpaceList;
 
 
@@ -137,7 +137,7 @@ def.lazy._cols =
 | Doesn't care about spaceRef.
 */
 def.static.concernsSpaceRef =
-def.func.concernsSpaceRef =
+def.proto.concernsSpaceRef =
 	( ) => undefined;
 
 
@@ -158,7 +158,7 @@ def.lazy._rows =
 /*
 | Transforms the scrollbox.
 */
-def.func._transformScrollbox =
+def.proto._transformScrollbox =
 	function(
 		sb       // the scrollbox widget
 	)
@@ -271,7 +271,7 @@ def.func._transformScrollbox =
 /*
 | Transforms the headline.
 */
-def.func._transformHeadline =
+def.proto._transformHeadline =
 	function(
 		headline   // the headline widget
 	)
@@ -334,13 +334,13 @@ def.lazy.attentionCenter = form_form.getAttentionCenter;
 /*
 | User clicked.
 */
-def.func.click = form_form.click;
+def.proto.click = form_form.click;
 
 
 /*
 | Cycles the focus.
 */
-def.func.cycleFocus = form_form.cycleFocus;
+def.proto.cycleFocus = form_form.cycleFocus;
 
 
 /*
@@ -358,7 +358,7 @@ def.lazy.focusedWidget = form_form.getFocusedWidget;
 /*
 | Moving during an operation with the mouse button held down.
 */
-def.func.dragMove = form_form.dragMove;
+def.proto.dragMove = form_form.dragMove;
 
 
 /*
@@ -366,37 +366,37 @@ def.func.dragMove = form_form.dragMove;
 |
 | Mouse down or finger on screen.
 */
-def.func.dragStart = form_form.dragStart;
+def.proto.dragStart = form_form.dragStart;
 
 
 /*
 | Stops an operation with the mouse button held down.
 */
-def.func.dragStop = form_form.dragStop;
+def.proto.dragStop = form_form.dragStop;
 
 
 /*
 | User is inputing text.
 */
-def.func.input = form_form.input;
+def.proto.input = form_form.input;
 
 
 /*
 | Mouse wheel.
 */
-def.func.mousewheel = form_form.mousewheel;
+def.proto.mousewheel = form_form.mousewheel;
 
 
 /*
 | If point is on the form returns its hovering state.
 */
-def.func.pointingHover = form_form.pointingHover;
+def.proto.pointingHover = form_form.pointingHover;
 
 
 /*
 | A button of the form has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path,
 		shift,
@@ -422,13 +422,13 @@ def.func.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-def.func.showDisc = true;
+def.proto.showDisc = true;
 
 
 /*
 | User is pressing a special key.
 */
-def.func.specialKey = form_form.specialKey;
+def.proto.specialKey = form_form.specialKey;
 
 
 } );

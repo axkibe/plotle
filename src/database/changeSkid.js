@@ -81,7 +81,7 @@ def.lazy.asChangeWrap =
 | Returns a changy thing
 | transformed on this changeSkid
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cyt // a changy thing ( change, changeList, changeWrap, etc. )
 	)
@@ -93,7 +93,7 @@ def.func.transform =
 /*
 | Changes a data tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)

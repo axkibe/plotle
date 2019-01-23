@@ -69,7 +69,7 @@ const tim_path = require( 'tim.js/src/path' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.hover && this.hover.isEmpty ) throw new Error( );
@@ -149,7 +149,7 @@ def.static.concernsMark =
 /*
 | Cycles the focus in a form
 */
-def.func.cycleFocus =
+def.proto.cycleFocus =
 	function(
 		formName,
 		dir
@@ -169,7 +169,7 @@ def.func.cycleFocus =
 /*
 | A button has been dragStarted.
 */
-def.func.dragStartButton =
+def.proto.dragStartButton =
 	function(
 		path
 	)
@@ -181,7 +181,7 @@ def.func.dragStartButton =
 /*
 | A button has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path
 	)
@@ -212,7 +212,7 @@ def.func.pushButton =
 /*
 | A checkbox has been toggled.
 */
-def.func.toggleCheckbox =
+def.proto.toggleCheckbox =
 	function(
 		path
 	)

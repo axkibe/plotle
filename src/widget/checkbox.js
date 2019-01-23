@@ -54,7 +54,7 @@ const result_hover = require( '../result/hover' );
 /*
 | Returns the mark if the widget with 'path' concerns about the mark.
 */
-def.func.concernsMark =
+def.proto.concernsMark =
 def.static.concernsMark =
 	function(
 		mark,
@@ -69,7 +69,7 @@ def.static.concernsMark =
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,
 		path
@@ -173,13 +173,13 @@ def.lazy._checkIcon =
 /*
 | CheckBoxes are focusable.
 */
-def.func.focusable = true;
+def.proto.focusable = true;
 
 
 /*
 | Toggles the checkbox.
 */
-def.func.toggle =
+def.proto.toggle =
 	function( )
 {
 	root.toggleCheckbox( this.path );
@@ -189,7 +189,7 @@ def.func.toggle =
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p
 		// shift,
@@ -210,7 +210,7 @@ def.func.click =
 /*
 | Any normal key for a checkbox triggers it to flip
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -224,7 +224,7 @@ def.func.input =
 /*
 | Mouse hover.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p
 	)
@@ -243,7 +243,7 @@ def.func.pointingHover =
 /*
 | Special keys for buttons having focus
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,

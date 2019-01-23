@@ -40,7 +40,7 @@ def.static.xy = ( x, y ) =>
 /*
 | Returns the shape section repositioned to a view.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)

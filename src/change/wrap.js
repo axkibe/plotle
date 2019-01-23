@@ -34,7 +34,7 @@ const session_uid = require( '../session/uid' );
 |
 | This one has a distinct change id and no sequence id yet
 */
-def.func.createReverse =
+def.proto.createReverse =
 	function( )
 {
 	return(
@@ -51,7 +51,7 @@ def.func.createReverse =
 |
 | cx can be a change, changeList, changeWrap or changeWrapList.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)
@@ -64,7 +64,7 @@ def.func.transform =
 /*
 | Performes the wrapped changeList on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -76,7 +76,7 @@ def.func.changeTree =
 /*
 | Reversevly performes the wrapped changeList on a tree.
 */
-def.func.changeTreeReverse =
+def.proto.changeTreeReverse =
 	function(
 		tree
 	)

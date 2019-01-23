@@ -118,7 +118,7 @@ def.lazy.commonPath =
 |
 | The caretMark is identical to endMark.
 */
-def.func.hasCaret = true;
+def.proto.hasCaret = true;
 
 
 
@@ -191,7 +191,7 @@ def.lazy.clipboard =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.func.containsPath =
+def.proto.containsPath =
 	function(
 		path
 	)
@@ -239,7 +239,7 @@ def.func.containsPath =
 | Recreates this mark with a transformation
 | applied.
 */
-def.func.createTransformed =
+def.proto.createTransformed =
 	function(
 		changes,
 		doc
@@ -285,7 +285,7 @@ def.lazy.empty =
 /*
 | Sets frontMark/backMark so frontMark is before backMark.
 */
-def.func._normalize =
+def.proto._normalize =
 	function( )
 {
 	const beginMark = this.beginMark;

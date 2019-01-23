@@ -85,7 +85,7 @@ def.lazy.isVisitor =
 /*
 | Saves this user tim to local storage.
 */
-def.func.saveToLocalStorage =
+def.proto.saveToLocalStorage =
 	function( )
 {
 	window.localStorage.setItem( 'username', this.name );

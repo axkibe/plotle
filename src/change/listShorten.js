@@ -45,7 +45,7 @@ def.lazy.reverse =
 /*
 | Performs the list app change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		list
 	)
@@ -69,7 +69,7 @@ def.func.changeTree =
 /*
 | Returns a change* transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)

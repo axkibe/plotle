@@ -63,7 +63,7 @@ const widget_widget = require( './widget' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		const sp = this.scrollPos;
@@ -77,7 +77,7 @@ const widget_widget = require( './widget' );
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
-def.func.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,
 		path
@@ -90,7 +90,7 @@ def.func.concernsHover =
 /*
 | Returns the mark if the widget with 'path' concerns about the mark.
 */
-def.func.concernsMark =
+def.proto.concernsMark =
 def.static.concernsMark =
 	function(
 		mark,
@@ -341,7 +341,7 @@ def.lazy.fixScrollPos =
 /*
 | User clicked.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -368,7 +368,7 @@ def.func.click =
 /*
 | Starts an operation with the pointing device held down.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -404,7 +404,7 @@ def.func.dragStart =
 /*
 | User is hovering his/her pointer (mouse move).
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -440,7 +440,7 @@ def.func.pointingHover =
 /*
 | Mouse wheel is being turned.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,

@@ -43,7 +43,7 @@ if( TIM )
 /*
 | Returns the altered dynamic.
 */
-def.func.alter =
+def.proto.alter =
 	function(
 		a1 // change, several changes or array of changes
 		// // ...
@@ -87,7 +87,7 @@ def.func.alter =
 /*
 | Applies a changeDynamic
 */
-def.func.applyChangeDynamic =
+def.proto.applyChangeDynamic =
 	function(
 		changeDynamic
 	)
@@ -113,7 +113,7 @@ def.func.applyChangeDynamic =
 | The current state of the dynamic
 | as reference to this moment.
 */
-def.func.refMoment =
+def.proto.refMoment =
 	function(
 		username
 	)

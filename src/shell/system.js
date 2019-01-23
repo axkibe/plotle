@@ -285,7 +285,7 @@ const systemTransmitter =
 /*
 | Cancels an interval timer.
 */
-def.func.cancelInterval =
+def.proto.cancelInterval =
 	function( id )
 {
 	return window.clearInterval( id );
@@ -295,7 +295,7 @@ def.func.cancelInterval =
 /*
 | Cancels a single timer.
 */
-def.func.cancelTimer =
+def.proto.cancelTimer =
 	function( id )
 {
 	return window.clearTimeout( id );
@@ -304,7 +304,7 @@ def.func.cancelTimer =
 /*
 | If not already animating, start doing so.
 */
-def.func.doAnimation =
+def.proto.doAnimation =
 	function( )
 {
 	if( animating ) return;
@@ -318,7 +318,7 @@ def.func.doAnimation =
 /*
 | Replaces the shell by a failscreen
 */
-def.func.failScreen =
+def.proto.failScreen =
 	function(
 		message
 	)
@@ -378,7 +378,7 @@ def.func.failScreen =
 /*
 | (Re)Starts the blink timer
 */
-def.func.restartBlinker =
+def.proto.restartBlinker =
 	function( )
 {
 	// double uses the blink timer
@@ -393,7 +393,7 @@ def.func.restartBlinker =
 /*
 | Sets the hidden input field (text selection)
 */
-def.func.setInput =
+def.proto.setInput =
 	function(
 		text
 	)
@@ -413,7 +413,7 @@ def.func.setInput =
 |
 | Return the timer id.
 */
-def.func.setInterval =
+def.proto.setInterval =
 	function(
 		time,
 		callback
@@ -430,7 +430,7 @@ def.func.setInterval =
 |
 | Return the timer id.
 */
-def.func.setTimer =
+def.proto.setTimer =
 	function(
 		time,
 		callback
@@ -443,7 +443,7 @@ def.func.setTimer =
 /*
 | Stops animating.
 */
-def.func.stopAnimation =
+def.proto.stopAnimation =
 	function( )
 {
 	animating = false;
@@ -456,7 +456,7 @@ def.func.stopAnimation =
 /*
 | Does an animation frame.
 */
-def.func._animation =
+def.proto._animation =
 	function(
 		time
 	)
@@ -472,7 +472,7 @@ def.func._animation =
 /*
 | Blinks the caret
 */
-def.func._blink =
+def.proto._blink =
 	function( )
 {
 	if( failScreen ) return;
@@ -501,7 +501,7 @@ const _resetAtweenState =
 /*
 | timeout after mouse down so dragging starts
 */
-def.func._onAtweenTime =
+def.proto._onAtweenTime =
 	function( )
 {
 
@@ -525,7 +525,7 @@ def.func._onAtweenTime =
 /*
 | Input blur
 */
-def.func._onInputBlur =
+def.proto._onInputBlur =
 	function(
 		// event
 	)
@@ -538,7 +538,7 @@ def.func._onInputBlur =
 /*
 | Lost focus.
 */
-def.func._onSystemBlur =
+def.proto._onSystemBlur =
 	function(
 		// event
 	)
@@ -551,7 +551,7 @@ def.func._onSystemBlur =
 /*
 | Got focus.
 */
-def.func._onSystemFocus =
+def.proto._onSystemFocus =
 	function(
 		// event
 	)
@@ -563,7 +563,7 @@ def.func._onSystemFocus =
 /*
 | Window is being resized.
 */
-def.func._onResize =
+def.proto._onResize =
 	function(
 		// event
 	)
@@ -582,7 +582,7 @@ def.func._onResize =
 /*
 | Captures all mouseevents event beyond the canvas (for dragging)
 */
-def.func._captureEvents =
+def.proto._captureEvents =
 	function( )
 {
 	if( this._useCapture )
@@ -602,7 +602,7 @@ def.func._captureEvents =
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-def.func._onKeyDown =
+def.proto._onKeyDown =
 	function(
 		event
 	)
@@ -619,7 +619,7 @@ def.func._onKeyDown =
 /*
 | Hidden input key press.
 */
-def.func._onKeyPress =
+def.proto._onKeyPress =
 	function(
 		event
 	)
@@ -655,7 +655,7 @@ def.func._onKeyPress =
 /*
 | Hidden input key up.
 */
-def.func._onKeyUp =
+def.proto._onKeyUp =
 	function( event )
 {
 	this._testInput( );
@@ -673,7 +673,7 @@ def.func._onKeyUp =
 /*
 | Disables context menues.
 */
-def.func._onContextMenu =
+def.proto._onContextMenu =
 	function(
 		event
 	)
@@ -687,7 +687,7 @@ def.func._onContextMenu =
 /*
 | Mouse down event.
 */
-def.func._onMouseDown =
+def.proto._onMouseDown =
 	function(
 		event
 	)
@@ -722,7 +722,7 @@ def.func._onMouseDown =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-def.func._probeClickDrag =
+def.proto._probeClickDrag =
 	function(
 		p,
 		shift,
@@ -770,7 +770,7 @@ def.func._probeClickDrag =
 /*
 | Handles hovering of the pointing device.
 */
-def.func._pointingHover =
+def.proto._pointingHover =
 	function(
 		p,
 		shift,
@@ -792,7 +792,7 @@ def.func._pointingHover =
 /*
 | Sets the cursor
 */
-def.func._setCursor =
+def.proto._setCursor =
 	function(
 		cursor
 	)
@@ -833,7 +833,7 @@ def.func._setCursor =
 |
 | Used by asyncEvents so the hoveringState is corrected.
 */
-def.func._repeatHover =
+def.proto._repeatHover =
 	function( )
 {
 	if( !hoverP ) return;
@@ -845,7 +845,7 @@ def.func._repeatHover =
 /*
 | Mouse move event.
 */
-def.func._onMouseMove =
+def.proto._onMouseMove =
 	function(
 		event
 	)
@@ -921,7 +921,7 @@ def.func._onMouseMove =
 /*
 | Mouse up event.
 */
-def.func._onMouseUp =
+def.proto._onMouseUp =
 	function(
 		event
 	)
@@ -988,7 +988,7 @@ def.func._onMouseUp =
 /*
 | The mouse wheel is being turned.
 */
-def.func._onMouseWheel =
+def.proto._onMouseWheel =
 	function(
 		event
 	)
@@ -1033,7 +1033,7 @@ def.func._onMouseWheel =
 /*
 | The user is touching something ( on mobile devices )
 */
-def.func._onTouchStart =
+def.proto._onTouchStart =
 	function(
 		event
 	)
@@ -1062,7 +1062,7 @@ def.func._onTouchStart =
 /*
 | The use is moving the touch ( on mobile devices )
 */
-def.func._onTouchMove =
+def.proto._onTouchMove =
 	function(
 		event
 	)
@@ -1144,7 +1144,7 @@ def.func._onTouchMove =
 /*
 | The using is lifting his/her finger ( on mobile devices)
 */
-def.func._onTouchEnd =
+def.proto._onTouchEnd =
 	function(
 		event
 	)
@@ -1218,7 +1218,7 @@ def.func._onTouchEnd =
 /*
 | Stops capturing all mouseevents
 */
-def.func._releaseEvents =
+def.proto._releaseEvents =
 	function( )
 {
 	if ( this._useCapture )
@@ -1237,7 +1237,7 @@ def.func._releaseEvents =
 /*
 | A special key is being pressed.
 */
-def.func._specialKey =
+def.proto._specialKey =
 	function(
 		keyCode,
 		shift,
@@ -1264,7 +1264,7 @@ def.func._specialKey =
 /*
 | A special key is being released.
 */
-def.func._releaseSpecialKey =
+def.proto._releaseSpecialKey =
 	function(
 		keyCode,
 		shift,
@@ -1290,7 +1290,7 @@ def.func._releaseSpecialKey =
 /*
 | Tests if the hidden input field got data
 */
-def.func._testInput =
+def.proto._testInput =
 	function( )
 {
 	if( !root ) return;
@@ -1317,7 +1317,7 @@ def.func._testInput =
 | and if takes care the caret is scrolled into
 | visible screen area.
 */
-def.func._steerAttention =
+def.proto._steerAttention =
 	function( )
 {
 	let ac = root.attentionCenter;

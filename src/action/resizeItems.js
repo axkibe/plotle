@@ -48,7 +48,7 @@ if( TIM )
 /*
 | Returns true if an entity with path is affected by this action.
 */
-def.func.affectsItem =
+def.proto.affectsItem =
 	function(
 		item
 	)
@@ -71,14 +71,14 @@ def.func.affectsItem =
 /*
 | 'Normal' button ought to be down during this action.
 */
-def.func.normalButtonDown = true;
+def.proto.normalButtonDown = true;
 
 
 /*
 | Returns a zone affted by this action.
 | FIXME put into use.
 */
-def.func.affectZone =
+def.proto.affectZone =
 	function(
 		zone,      // the unaffected zone
 		itemKey,   // the key of the item to be affected

@@ -310,7 +310,7 @@ def.lazy._caretGlint =
 /*
 | Returns the paragraph at point
 */
-def.func.getParaAtPoint =
+def.proto.getParaAtPoint =
 	function(
 		p
 	)
@@ -335,7 +335,7 @@ def.func.getParaAtPoint =
 /*
 | A text has been inputed.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text  // text inputed
 	)
@@ -368,7 +368,7 @@ def.func.input =
 /*
 | Handles a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,

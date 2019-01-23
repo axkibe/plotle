@@ -12,14 +12,14 @@ tim.define( module, ( def ) => {
 |
 | Default, nothing is affected.
 */
-def.func.affectsItem = ( item ) => false;
+def.proto.affectsItem = ( item ) => false;
 
 
 /*
 | Returns a zone affted by this action.
 | Default, don't to anything.
 */
-def.func.affectZone = ( zone, itemKey, minSize ) => zone;
+def.proto.affectZone = ( zone, itemKey, minSize ) => zone;
 
 
 } );

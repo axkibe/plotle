@@ -21,7 +21,7 @@ const gleam_transform = require( './transform' );
 | +/- distance. See gleam_shape.border for further
 | explanation.
 */
-def.func.border =
+def.proto.border =
 	function(
 		d // distance to border
 	)
@@ -40,7 +40,7 @@ def.func.border =
 /*
 | Returns a transformed shapeList.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
@@ -65,7 +65,7 @@ def.func.transform =
 /*
 | Returns true if point is within the shape list.
 */
-def.func.within =
+def.proto.within =
 	function(
 		p
 	)

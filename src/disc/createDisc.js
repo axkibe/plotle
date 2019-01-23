@@ -84,7 +84,7 @@ const widget_widget = require( '../widget/widget' );
 | Doesn't care about show.
 */
 def.static.concernsShow =
-def.func.concernsShow =
+def.proto.concernsShow =
 	( ) => undefined;
 
 
@@ -92,7 +92,7 @@ def.func.concernsShow =
 | Doesn't care about spaceRef.
 */
 def.static.concernsSpaceRef =
-def.func.concernsSpaceRef =
+def.proto.concernsSpaceRef =
 	( ) => undefined;
 
 
@@ -100,7 +100,7 @@ def.func.concernsSpaceRef =
 | Doesn't care about user.
 */
 def.static.concernsUser =
-def.func.concernsUser =
+def.proto.concernsUser =
 	( ) => undefined;
 
 
@@ -197,7 +197,7 @@ def.staticLazy.itemTypeToButtonName = ( ) =>
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-def.func._isActiveButton =
+def.proto._isActiveButton =
 	function(
 		wname    // the widget name
 	)
@@ -309,7 +309,7 @@ def.lazy._tShape =
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
 */
-def.func.probeClickDrag =
+def.proto.probeClickDrag =
 	function(
 		p,
 		shift,
@@ -333,7 +333,7 @@ def.func.probeClickDrag =
 /*
 | A button of the disc has been pushed.
 */
-def.func.pushButton =
+def.proto.pushButton =
 	function(
 		path,
 		shift,
@@ -375,7 +375,7 @@ def.func.pushButton =
 /*
 | Returns true if point is on the disc panel.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -404,7 +404,7 @@ def.func.pointingHover =
 /*
 | Checks if the user clicked something on the panel.
 */
-def.func.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -435,7 +435,7 @@ def.func.click =
 /*
 | Cycles the focus
 */
-def.func.cycleFocus =
+def.proto.cycleFocus =
 	function(
 		dir
 	)
@@ -447,7 +447,7 @@ def.func.cycleFocus =
 /*
 | User is inputing text.
 */
-def.func.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -459,7 +459,7 @@ def.func.input =
 /*
 | Start of a dragging operation.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -482,7 +482,7 @@ def.func.dragStart =
 /*
 | A button has been dragStarted.
 */
-def.func.dragStartButton =
+def.proto.dragStartButton =
 	function(
 		path
 	)
@@ -494,7 +494,7 @@ def.func.dragStartButton =
 /*
 | Move during a dragging operation.
 */
-def.func.dragMove =
+def.proto.dragMove =
 	function(
 		p,
 		shift,
@@ -508,7 +508,7 @@ def.func.dragMove =
 /*
 | Stop of a dragging operation.
 */
-def.func.dragStop =
+def.proto.dragStop =
 	function(
 		p,
 		shift,
@@ -522,7 +522,7 @@ def.func.dragStop =
 /*
 | Mouse wheel.
 */
-def.func.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -544,7 +544,7 @@ def.func.mousewheel =
 /*
 | User is pressing a special key.
 */
-def.func.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,

@@ -99,7 +99,7 @@ def.lazy._tShape =
 /*
 | Handles a potential dragStart event.
 */
-def.func.dragStart =
+def.proto.dragStart =
 	function(
 		p          // point where dragging starts
 		//shift,   // true if shift key was held down
@@ -124,7 +124,7 @@ def.func.dragStart =
 /*
 | User is hovering his/her pointing device.
 */
-def.func.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -145,7 +145,7 @@ def.func.pointingHover =
 /*
 | Returns the value of pos change for d pixels in the current zone.
 */
-def.func.scale =
+def.proto.scale =
 	function(
 		d
 	)

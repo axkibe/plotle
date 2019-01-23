@@ -36,20 +36,20 @@ def.lazy.widgetPath =
 /*
 | Widget marks have no carets.
 */
-def.func.hasCaret = false;
+def.proto.hasCaret = false;
 
 
 /*
 | The content the mark puts into the clipboard.
 */
-def.func.clipboard = '';
+def.proto.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.func.containsPath =
+def.proto.containsPath =
 	function(
 		path
 	)

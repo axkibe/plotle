@@ -162,7 +162,7 @@ def.static.connect =
 |
 | FUTURE let it return a tim.
 */
-def.func.collection =
+def.proto.collection =
 	function*(
 		name
 	)
@@ -174,7 +174,7 @@ def.func.collection =
 /*
 | Closes the connection.
 */
-def.func.close =
+def.proto.close =
 	function( )
 {
 	this._connection.close( );

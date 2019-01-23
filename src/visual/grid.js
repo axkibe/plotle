@@ -46,7 +46,7 @@ def.lazy._grid =
 /*
 | Snaps a point to the grid
 */
-def.func.snap =
+def.proto.snap =
 	function(
 		p
 	)

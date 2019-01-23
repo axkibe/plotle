@@ -59,7 +59,7 @@ const change_wrapList = require( './wrapList' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
@@ -89,7 +89,7 @@ def.lazy.reverse =
 /*
 | Performs the insertion change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -160,7 +160,7 @@ def.func.changeTree =
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)
@@ -223,7 +223,7 @@ def.func.transform =
 | Transforms an insert change
 | considering this split actually came first.
 */
-def.func._transformInsert =
+def.proto._transformInsert =
 	function(
 		cx
 	)
@@ -255,7 +255,7 @@ def.func._transformInsert =
 | Transforms a join/split change
 | considering this split actually came first.
 */
-def.func._transformJoinSplit =
+def.proto._transformJoinSplit =
 	function(
 		cx
 	)
@@ -288,7 +288,7 @@ def.func._transformJoinSplit =
 /*
 | Transforms a text mark by this split.
 */
-def.func._transformTextMark =
+def.proto._transformTextMark =
 	function(
 		mark
 	)
@@ -310,7 +310,7 @@ def.func._transformTextMark =
 | Transforms a remove change
 | considering this split actually came first.
 */
-def.func._transformRemove =
+def.proto._transformRemove =
 	function(
 		cx
 	)

@@ -70,7 +70,7 @@ def.static.init =
 /*
 | Extra checking.
 */
-def.func._check =
+def.proto._check =
 	function( )
 {
 	if( this.seq < 0 || this.seq > this._changeWrapList.length ) throw new Error( );
@@ -90,7 +90,7 @@ def.lazy.maxSeq =
 /*
 | Gets a twig.
 */
-def.func.get =
+def.proto.get =
 	function(
 		path,
 		len
@@ -126,7 +126,7 @@ def.func.get =
 /*
 | Alters the tree.
 */
-def.func.alter =
+def.proto.alter =
 	function(
 		cw  // changeWrap
 	)

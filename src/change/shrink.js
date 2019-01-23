@@ -60,7 +60,7 @@ const error = require( './error' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.rank !== undefined && this.rank < 0 )
@@ -93,7 +93,7 @@ def.lazy.reverse =
 /*
 | Performs the insertion change on a tree.
 */
-def.func.changeTree =
+def.proto.changeTree =
 	function(
 		tree
 	)
@@ -140,7 +140,7 @@ def.func.changeTree =
 /*
 | Returns a change* transformed on this change.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		cx
 	)
@@ -191,7 +191,7 @@ def.func.transform =
 | Transforms a insert/remove/set/split changes
 | by this shrink
 */
-def.func._transformJIRS =
+def.proto._transformJIRS =
 	function(
 		cx
 	)
@@ -205,7 +205,7 @@ def.func._transformJIRS =
 /*
 | Transforms a mark by this set.
 */
-def.func._transformMark =
+def.proto._transformMark =
 	function(
 		mark
 	)

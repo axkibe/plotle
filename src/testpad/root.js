@@ -90,7 +90,7 @@ const _bind =
 /*
 | Updates the sequence number
 */
-def.func.updateSeq =
+def.proto.updateSeq =
 	function(
 		seq
 	)
@@ -106,7 +106,7 @@ def.func.updateSeq =
 /*
 | FIXME
 */
-def.func.update =
+def.proto.update =
 	function( )
 {
 	const elements = this.elements;
@@ -201,7 +201,7 @@ def.lazy.noDataScreen =
 /*
 | Alters the tree.
 */
-def.func.alter =
+def.proto.alter =
 	function(
 		change
 	)
@@ -219,7 +219,7 @@ def.func.alter =
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-def.func.onMouseDown =
+def.proto.onMouseDown =
 	function(
 		event
 	)
@@ -270,7 +270,7 @@ def.func.onMouseDown =
 /*
 | Captures all mouse events.
 */
-def.func.captureEvents =
+def.proto.captureEvents =
 	function( )
 {
 	const pad = root.elements.pad;
@@ -291,7 +291,7 @@ def.func.captureEvents =
 /*
 | Stops capturing all mouse events.
 */
-def.func.releaseEvents =
+def.proto.releaseEvents =
 	function( )
 {
 	const pad = this.elements.pad;
@@ -310,7 +310,7 @@ def.func.releaseEvents =
 /*
 | Mouse button released.
 */
-def.func.onMouseUp =
+def.proto.onMouseUp =
 	function(
 		event
 	)
@@ -329,7 +329,7 @@ def.func.onMouseUp =
 /*
 | Mouse clicked on pad.
 */
-def.func.onMouseClick =
+def.proto.onMouseClick =
 	function(
 		event
 	)
@@ -342,7 +342,7 @@ def.func.onMouseClick =
 | Mouse moved over pad
 | (or while dragging around it).
 */
-def.func.onMouseMove =
+def.proto.onMouseMove =
 	function(
 		event
 	)
@@ -354,7 +354,7 @@ def.func.onMouseMove =
 /*
 | Key down event to ( hidden ) input.
 */
-def.func.onKeyDown =
+def.proto.onKeyDown =
 	function(
 		event
 	)
@@ -375,7 +375,7 @@ def.func.onKeyDown =
 /*
 | Press event to (hidden) input.
 */
-def.func.onKeyPress =
+def.proto.onKeyPress =
 	function(
 		// event
 	)
@@ -387,7 +387,7 @@ def.func.onKeyPress =
 /*
 | Up event to (hidden) input.
 */
-def.func.onKeyUp =
+def.proto.onKeyUp =
 	function(
 		// event
 	)
@@ -399,7 +399,7 @@ def.func.onKeyUp =
 /*
 | Hidden input got focus.
 */
-def.func.onFocus =
+def.proto.onFocus =
 	function( )
 {
 	root.create( 'haveFocus', true ).update( );
@@ -409,7 +409,7 @@ def.func.onFocus =
 /*
 | Hidden input lost focus.
 */
-def.func.onBlur =
+def.proto.onBlur =
 	function( )
 {
 	root.create( 'haveFocus', false ).update( );
@@ -419,7 +419,7 @@ def.func.onBlur =
 /*
 | Sends the current action.
 */
-def.func.send =
+def.proto.send =
 	function( )
 {
 	const action = this.action;
@@ -520,7 +520,7 @@ def.func.send =
 /*
 | Cancels the current action.
 */
-def.func.onCancelButton =
+def.proto.onCancelButton =
 	function( )
 {
 	root.create( 'action', undefined ).update( );
@@ -530,7 +530,7 @@ def.func.onCancelButton =
 /*
 | Displays a beep message.
 */
-def.func.beep =
+def.proto.beep =
 	function( )
 {
 	root.elements.beep.innerHTML = 'BEEP!';
@@ -546,7 +546,7 @@ def.func.beep =
 /*
 | Clears the beep message.
 */
-def.func.clearBeep =
+def.proto.clearBeep =
 	function( )
 {
 	root.elements.beep.innerHTML = '';
@@ -560,7 +560,7 @@ def.func.clearBeep =
 /*
 | Aquires non-special input from (hidden) input.
 */
-def.func.testInput =
+def.proto.testInput =
 	function( )
 {
 	const action = root.action;
@@ -614,7 +614,7 @@ def.func.testInput =
 /*
 | Handles all kind of special keys.
 */
-def.func.inputSpecialKey =
+def.proto.inputSpecialKey =
 	function(
 		keyCode,
 		ctrl
@@ -804,7 +804,7 @@ def.func.inputSpecialKey =
 /*
 | Button update-to-now has been clicked.
 */
-def.func.onUpNowButton =
+def.proto.onUpNowButton =
 	function( )
 {
 	root.updateSeq( maxInteger ).update( );
@@ -816,7 +816,7 @@ def.func.onUpNowButton =
 /*
 | Button one-up-the-sequence has been clicked.
 */
-def.func.onUpButton =
+def.proto.onUpButton =
 	function( )
 {
 	root.updateSeq( root.repository.seq + 1 ).update( );
@@ -828,7 +828,7 @@ def.func.onUpButton =
 /*
 | Button one-down-the-sequence has been clicked.
 */
-def.func.onDownButton =
+def.proto.onDownButton =
 	function( )
 {
 	root.updateSeq( root.repository.seq - 1 ).update( );
@@ -840,7 +840,7 @@ def.func.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-def.func.makeScreen =
+def.proto.makeScreen =
 	function(
 		doc
 	)

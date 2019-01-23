@@ -28,7 +28,7 @@ const change_mark_text = require( '../../change/mark/text' );
 ***/
 /**/if( CHECK )
 /**/{
-/**/	def.func._check =
+/**/	def.proto._check =
 /**/		function( )
 /**/	{
 /**/		if( this.path.isEmpty ) throw new Error( );
@@ -59,7 +59,7 @@ def.lazy._changeMarkText =
 | Recreates this mark with a transformation
 | applied.
 */
-def.func.createTransformed =
+def.proto.createTransformed =
 	function(
 		changes
 	)

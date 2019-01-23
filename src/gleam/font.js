@@ -40,7 +40,7 @@ if( TIM )
 /*
 | Measures the advance width of a given text.
 */
-def.func.getAdvanceWidth =
+def.proto.getAdvanceWidth =
 	function(
 		text
 	)
@@ -52,7 +52,7 @@ def.func.getAdvanceWidth =
 /*
 | Applies a transformation to this font.
 */
-def.func.transform =
+def.proto.transform =
 	function(
 		transform
 	)
