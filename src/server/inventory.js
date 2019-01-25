@@ -119,7 +119,7 @@ def.proto.prepareResource =
 				'data', preamble + source + postamble,
 				'timestamp', mtime,
 				'realpath', realpath
-			 );
+			);
 
 		const timcodeRootPath = tim.catalog.getRootDir( timspec ).timcodePath;
 

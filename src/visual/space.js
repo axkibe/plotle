@@ -91,8 +91,6 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
-const gruga_label = require( '../gruga/label' );
-
 const gruga_note = require( '../gruga/note' );
 
 const gruga_relation = require( '../gruga/relation' );
