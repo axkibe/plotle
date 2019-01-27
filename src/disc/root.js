@@ -24,7 +24,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// currently active action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },

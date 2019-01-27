@@ -7,39 +7,6 @@
 tim.define( module, ( def, disc_mainDisc ) => {
 
 
-const action_select = require( '../action/select' );
-
-const change_shrink = require( '../change/shrink' );
-
-const gleam_glint_border = require( '../gleam/glint/border' );
-
-const gleam_glint_fill = require( '../gleam/glint/fill' );
-
-const gleam_glint_list = require( '../gleam/glint/list' );
-
-const gleam_glint_window = require( '../gleam/glint/window' );
-
-const gleam_point = require( '../gleam/point' );
-
-const gleam_rect = require( '../gleam/rect' );
-
-const gleam_transform = require( '../gleam/transform' );
-
-const layout_disc = require( '../layout/disc' );
-
-const result_hover = require( '../result/hover' );
-
-const show_create = require( '../show/create' );
-
-const show_form = require( '../show/form' );
-
-const show_normal = require( '../show/normal' );
-
-const show_zoom = require( '../show/zoom' );
-
-const widget_widget = require( '../widget/widget' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -48,7 +15,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// currently active action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
@@ -92,6 +59,42 @@ if( TIM )
 		'../widget/label'
 	];
 }
+
+
+const action_none = require( '../action/none' );
+
+const action_select = require( '../action/select' );
+
+const change_shrink = require( '../change/shrink' );
+
+const gleam_glint_border = require( '../gleam/glint/border' );
+
+const gleam_glint_fill = require( '../gleam/glint/fill' );
+
+const gleam_glint_list = require( '../gleam/glint/list' );
+
+const gleam_glint_window = require( '../gleam/glint/window' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const layout_disc = require( '../layout/disc' );
+
+const result_hover = require( '../result/hover' );
+
+const show_create = require( '../show/create' );
+
+const show_form = require( '../show/form' );
+
+const show_normal = require( '../show/normal' );
+
+const show_zoom = require( '../show/zoom' );
+
+const widget_widget = require( '../widget/widget' );
+
 
 
 /*
@@ -158,6 +161,7 @@ def.static.createFromLayout =
 	return(
 		disc_mainDisc.create(
 			'twig:init', twig, layout._ranks,
+			'action', action_none.create( ),
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
@@ -224,10 +228,7 @@ def.transform.get =
 
 			visible = this.spaceRef !== undefined;
 
-			down =
-				show.timtype !== show_normal
-				? false
-				: ( action ? action.normalButtonDown : true );
+			down = show.timtype !== show_normal ? false : action.normalButtonDown;
 
 			break;
 
@@ -491,10 +492,7 @@ def.proto.pushButton =
 
 		case 'create' :
 
-			root.create(
-				'action', undefined,
-				'show', show_create.create( )
-			);
+			root.create( 'action', action_none.create( ), 'show', show_create.create( ) );
 
 			break;
 

@@ -7,6 +7,8 @@
 tim.define( module, ( def, form_form ) => {
 
 
+const action_none = require( '../action/none' );
+
 const action_scrolly = require( '../action/scrolly' );
 
 const gleam_glint_list = require( '../gleam/glint/list' );
@@ -174,12 +176,10 @@ def.static.dragMove =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	const action = this.action;
-
-	if( !action ) return 'pointer';
-
-	switch( action.timtype )
+	switch( this.action.timtype )
 	{
+		case action_none : return 'pointer';
+
 		case action_scrolly :
 
 			form_form._moveScrollY.call( this, p, shift, ctrl );
@@ -222,7 +222,7 @@ def.static.dragStop =
 		//ctrl   // true if ctrl key was pressed
 	)
 {
-	root.create( 'action', undefined );
+	root.create( 'action', action_none.create( ) );
 };
 
 

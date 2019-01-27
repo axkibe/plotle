@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the ajax communication
 		ajax : { type : '../net/ajax' },
@@ -106,6 +106,8 @@ const animation_root = require( '../animation/root' );
 const animation_transform = require( '../animation/transform' );
 
 const action_dragItems = require( '../action/dragItems' );
+
+const action_none = require( '../action/none' );
 
 const action_resizeItems = require( '../action/resizeItems' );
 
@@ -272,6 +274,7 @@ def.static.startup =
 	if( !userCreds ) userCreds = user_creds.createVisitor( );
 
 	shell_root.create(
+		'action', action_none.create( ),
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -311,6 +314,7 @@ def.static._createDiscRoot =
 
 	return(
 		disc_root.create(
+			'action', action_none.create( ),
 			'controlTransform', gleam_transform.normal,
 			'path', path,
 			'show', show,
@@ -396,13 +400,15 @@ def.static._createFormRoot =
 
 		forms[ name ] =
 			entry[ 1 ].create(
-				'twig:init', twig, layout._ranks,
-				'viewSize', viewSize
+				'action', action_none.create( ),
+				'viewSize', viewSize,
+				'twig:init', twig, layout._ranks
 			);
 	}
 
 	let formRoot =
 		form_root.create(
+			'action', action_none.create( ),
 			'path', formRootPath,
 			'viewSize', viewSize
 		);
@@ -453,15 +459,15 @@ def.transform.action =
 		action
 	)
 {
-	if( !action ) return undefined;
-
-	const fabric = this.spaceFabric;
-
 	switch( action.timtype )
 	{
+		case action_none : return action;
+
 		case action_dragItems :
 		case action_resizeItems :
 		{
+			const fabric = this.spaceFabric;
+
 			const iPaths = action.itemPaths;
 
 			if( iPaths )
@@ -1333,7 +1339,7 @@ def.proto.showHome =
 	function( )
 {
 	root.create(
-		'action', undefined,
+		'action', action_none.create( ),
 		'show',
 			root.spaceVisual
 			? show_normal.create( )
@@ -1356,10 +1362,7 @@ def.proto.specialKey =
 	{
 		const action = this.action;
 
-		if( !action )
-		{
-			root.create( 'action', action_select.create( ) );
-		}
+		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
 
 		return true;
 	}
@@ -1388,13 +1391,9 @@ def.proto.releaseSpecialKey =
 
 	const action = this.action;
 
-	if(
-		action
-		&& action.timtype === action_select
-		&& !action.startPoint
-	)
+	if( action.timtype === action_select && !action.startPoint )
 	{
-		root.create( 'action', undefined );
+		root.create( 'action', action_none.create( ) );
 	}
 };
 
@@ -1819,8 +1818,6 @@ const notAnimationFinish =
 	function( )
 {
 	const action = root.action;
-
-	if( !action ) return;
 
 	if( !action.finishAnimation ) return;
 

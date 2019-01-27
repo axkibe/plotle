@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// currently active action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
@@ -60,6 +60,8 @@ const action_createGeneric = require( '../action/createGeneric' );
 const action_createRelation = require( '../action/createRelation' );
 
 const action_createStroke = require( '../action/createStroke' );
+
+const action_none = require( '../action/none' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
 
@@ -144,6 +146,7 @@ def.static.createFromLayout =
 	return(
 		disc_createDisc.create(
 			'twig:init', twig, layout._ranks,
+			'action', action_none.create( ),
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,

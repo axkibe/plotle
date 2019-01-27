@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// space fabric data
 		fabric : { type : '../fabric/space' },
@@ -58,6 +58,8 @@ const action_createRelation = require( '../action/createRelation' );
 const action_createStroke = require( '../action/createStroke' );
 
 const action_dragItems = require( '../action/dragItems' );
+
+const action_none = require( '../action/none' );
 
 const action_pan = require( '../action/pan' );
 
@@ -259,7 +261,7 @@ def.transform.get =
 
 	let highlight = !!( mark && mark.containsPath( path ) );
 
-	if( !highlight && action && item.timtype )
+	if( !highlight && item.timtype )
 	{
 		highlight = this._highlightItem( item, action );
 	}
@@ -322,7 +324,7 @@ def.transform.get =
 
 	// FIXME take scrollPos into redo
 
-	if( !action ) action2 = visual_item.concernsAction( this.action, item );
+	action2 = visual_item.concernsAction( this.action, item );
 
 	// checks if the highlight feature has changed on the created item
 	if( !highlight2 && action2 && item.timtype )
@@ -411,7 +413,7 @@ def.lazy.glint =
 
 	if( frame ) arr.push( frame.glint );
 
-	switch( action && action.timtype )
+	switch( action.timtype )
 	{
 		case action_createGeneric :
 
@@ -505,7 +507,7 @@ def.proto.dragMove =
 {
 	const action = this.action;
 
-	if( !action ) return 'pointer';
+	if( action.timtype === action_none ) return 'pointer';
 
 	this[ visual_space._dragMoveMap.get( action.timtype ) ]( p, shift, ctrl );
 };
@@ -527,7 +529,7 @@ def.proto.dragStart =
 
 	const frame = this.frame;
 
-	const aType = action && action.timtype;
+	const aType = action.timtype;
 
 	// see if the frame was targeted
 	if( access == 'rw' && frame && aType !== action_select )
@@ -603,12 +605,8 @@ def.proto.dragStop =
 /**/	if( root.spaceVisual !== this ) throw new Error( );
 /**/}
 
-	const action = this.action;
-
-	if( !action ) return;
-
 	// FIXME make map
-	switch( action.timtype )
+	switch( this.action.timtype )
 	{
 		case action_createGeneric : this._stopCreateGeneric( p, shift, ctrl ); break;
 
@@ -618,11 +616,13 @@ def.proto.dragStop =
 
 		case action_dragItems : this._stopDragItems( p, shift, ctrl ); break;
 
-		case action_pan : root.create( 'action', undefined ); break;
+		case action_none : break;
+
+		case action_pan : root.create( 'action', action_none.create( ) ); break;
 
 		case action_resizeItems : this._stopDragResizeItems( p, shift, ctrl ); break;
 
-		case action_scrolly : root.create( 'action', undefined ); break;
+		case action_scrolly : root.create( 'action', action_none.create( ) ); break;
 
 		case action_select : this._stopSelect( p, shift, ctrl ); break;
 
@@ -728,7 +728,7 @@ def.proto.pointingHover =
 
 	const frame = this.frame;
 
-	const aType = action && action.timtype;
+	const aType = action.timtype;
 
 	switch( aType )
 	{
@@ -1035,9 +1035,7 @@ def.proto._moveCreateGeneric =
 		default : throw new Error( );
 	}
 
-	root.create(
-		'action', action.create( 'transientItem', transientItem )
-	);
+	root.create( 'action', action.create( 'transientItem', transientItem ) );
 };
 
 
@@ -1062,10 +1060,7 @@ def.proto._moveCreateRelation =
 		const pd = p.sub( action.startPoint );
 
 		root.create(
-			'spaceTransform',
-				transform.create(
-					'offset', action.offset.add( pd )
-				)
+			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
 		);
 
 		return;
@@ -1077,13 +1072,7 @@ def.proto._moveCreateRelation =
 		if( this.atRank( r ).createRelationMove( p, action ) ) return;
 	}
 
-	root.create(
-		'action',
-			action.create(
-				'toItemPath', undefined,
-				'toPoint', p
-			)
-	);
+	root.create( 'action', action.create( 'toItemPath', undefined, 'toPoint', p ) );
 };
 
 
@@ -1266,10 +1255,7 @@ def.proto._movePan =
 	const pd = p.sub( action.startPoint );
 
 	root.create(
-		'spaceTransform',
-			transform.create(
-				'offset', action.offset.add( pd )
-			)
+		'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
 	);
 };
 
@@ -1448,7 +1434,7 @@ def.proto._stopCreateGeneric =
 		'action',
 			shift
 			? action_createGeneric.create( 'itemType', action.itemType )
-			: undefined
+			: action_none.create( )
 	);
 };
 
@@ -1463,9 +1449,7 @@ def.proto._stopCreate =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	root.create(
-		'action', this.action.create( 'offset', undefined, 'startPoint', undefined )
-	);
+	root.create( 'action', this.action.create( 'offset', undefined, 'startPoint', undefined ) );
 };
 
 
@@ -1496,12 +1480,12 @@ def.proto._stopCreateRelation =
 				'action',
 				shift
 				? action_createRelation.create( 'relationState', 'start' )
-				: undefined
+				: action_none.create( )
 			);
 
 			return;
 
-		case 'start' : root.create( 'action', undefined ); return;
+		case 'start' : root.create( 'action', action_none.create( ) ); return;
 
 		case 'pan' :
 
@@ -1584,7 +1568,7 @@ def.proto._stopDragItems =
 
 	if( changes ) root.alter( changes );
 
-	root.create( 'action', undefined );
+	root.create( 'action', action_none.create( ) );
 };
 
 
@@ -1635,7 +1619,7 @@ def.proto._stopDragResizeItems =
 
 	if( changes ) root.alter( changes );
 
-	root.create( 'action', undefined );
+	root.create( 'action', action_none.create( ) );
 };
 
 
@@ -1667,7 +1651,7 @@ def.proto._stopSelect =
 		if( action.affectsItem( item ) ) paths.push( item.path );
 	}
 
-	action = shift ? action_select.create( ) : undefined;
+	action = shift ? action_select.create( ) : action_none.create( );
 
 	let mark = pass;
 

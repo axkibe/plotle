@@ -11,6 +11,8 @@ const action_createRelation = require( '../action/createRelation' );
 
 const action_dragItems = require( '../action/dragItems' );
 
+const action_none = require( '../action/none' );
+
 const change_list = require( '../change/list' );
 
 const change_set = require( '../change/set' );
@@ -34,9 +36,11 @@ def.static.concernsAction =
 		item
 	)
 {
-	if( !item || !item.path || !action ) return undefined;
+	if( action.timtype === action_none ) return action;
 
-	return action.affectsItem( item ) ? action : undefined;
+	if( !item || !item.path ) return action_none.create( );
+
+	return action.affectsItem( item ) ? action : action_none.create( );
 };
 
 

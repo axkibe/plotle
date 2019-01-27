@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// portal fabric data
 		fabric : { type : '../fabric/portal' },
@@ -420,6 +420,7 @@ def.staticLazy.model =
 {
 	return(
 		visual_portal.create(
+			'action', action_none.create( ),
 			'fabric',
 				fabric_portal.create(
 					'zone', gleam_rect.zero,

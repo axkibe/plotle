@@ -4,6 +4,7 @@
 ./createRelation
 ./createStroke
 ./dragItems
+./none
 ./pan
 ./resizeItems
 ./scrolly

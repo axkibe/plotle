@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : [ 'undefined', 'string' ] },
 
 		// currently active action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
@@ -54,6 +54,8 @@ if( TIM )
 	def.twig = [ '< ../widget/types' ];
 }
 
+
+const action_none = require( '../action/none' );
 
 const action_zoomButton = require( '../action/zoomButton' );
 
@@ -140,6 +142,7 @@ def.static.createFromLayout =
 	return(
 		disc_zoomDisc.create(
 			'twig:init', twig, layout._ranks,
+			'action', action_none.create( ),
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
@@ -446,7 +449,7 @@ def.proto.dragMove =
 {
 	const action = this.action;
 
-	if( !action || action.timtype !== action_zoomButton ) return;
+	if( action.timtype !== action_zoomButton ) return;
 
 	return false;
 };
@@ -505,9 +508,7 @@ def.proto.dragStartButton =
 	{
 		case 'zoomIn' :
 
-			root.create(
-				'action', action_zoomButton.createZoom( 1 )
-			);
+			root.create( 'action', action_zoomButton.createZoom( 1 ) );
 
 			root.changeSpaceTransformCenter( 1 );
 
@@ -515,9 +516,7 @@ def.proto.dragStartButton =
 
 		case 'zoomOut' :
 
-			root.create(
-				'action', action_zoomButton.createZoom( -1 )
-			);
+			root.create( 'action', action_zoomButton.createZoom( -1 ) );
 
 			root.changeSpaceTransformCenter( -1 );
 
@@ -538,7 +537,7 @@ def.proto.dragStop =
 {
 	const action = this.action;
 
-	if( !action || action.timtype !== action_zoomButton ) return;
+	if( action.timtype !== action_zoomButton ) return;
 
 	root.create( 'action', action.create( 'refire', false ) );
 

@@ -29,6 +29,8 @@ if( TIM )
 }
 
 
+const action_none = require( '../action/none' );
+
 const fabric_stroke = require( '../fabric/stroke' );
 
 const visual_stroke = require( '../visual/stroke' );
@@ -90,6 +92,7 @@ def.proto.transientVisual =
 
 	return(
 		visual_stroke.create(
+			'action', action_none.create( ),
 			'fabric', this.transientFabric,
 			'highlight', false,
 			'transform', transfrom

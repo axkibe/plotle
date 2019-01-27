@@ -59,6 +59,8 @@ if( TIM )
 }
 
 
+const action_none = require( '../action/none' );
+
 const gleam_ellipse = require( '../gleam/ellipse' );
 
 const gleam_glint_list = require( '../gleam/glint/list' );
@@ -355,7 +357,7 @@ def.proto.dragStart =
 def.proto.dragStop =
 	function( )
 {
-	root.create( 'action', undefined );
+	root.create( 'action', action_none.create );
 };
 
 

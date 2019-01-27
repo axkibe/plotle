@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the item's fabric
 		fabric : { type : '../fabric/stroke' },

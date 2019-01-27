@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// space has grid
 		hasGrid : { type : 'undefined' },
@@ -45,6 +45,8 @@ if( TIM )
 	def.twig = [ '< ../widget/types' ];
 }
 
+
+const action_none = require( '../action/none' );
 
 const form_form = require( '../form/form' );
 
@@ -305,7 +307,7 @@ def.proto.onAuth =
 
 	reply.userCreds.saveToLocalStorage( );
 
-	root.create( 'action', undefined, 'userCreds', reply.userCreds );
+	root.create( 'action', action_none.create( ), 'userCreds', reply.userCreds );
 
 	this.clear( );
 

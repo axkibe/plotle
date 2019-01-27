@@ -6,7 +6,7 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, visual_note ) => {
 
 
 def.extend = './docItem';
@@ -17,7 +17,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		doc : { type : [ './doc', 'undefined' ] },
 
@@ -50,6 +50,8 @@ if( TIM )
 	};
 }
 
+
+const action_none = require( '../action/none' );
 
 const change_grow = require( '../change/grow' );
 
@@ -231,7 +233,8 @@ def.staticLazy.model =
 	function( )
 {
 	return(
-		self.create(
+		visual_note.create(
+			'action', action_none.create( ),
 			'fabric',
 				fabric_note.create(
 					'fontsize', gruga_note.defaultFontsize,

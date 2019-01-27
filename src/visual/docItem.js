@@ -85,7 +85,7 @@ def.proto.dragStart =
 		if( bubble !== undefined ) return bubble;
 	}
 
-	if( action && action.timtype === action_select )
+	if( action.timtype === action_select )
 	{
 		if( !this.tShape.within( p ) ) return false;
 
@@ -208,7 +208,7 @@ def.proto.pointingHover =
 
 	let cursor = 'default';
 
-	switch( action && action.timtype )
+	switch( action.timtype )
 	{
 		case action_select : cursor = 'text'; break;
 	}

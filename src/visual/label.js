@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// current action
-		action : { type : [ '< ../action/types', 'undefined' ] },
+		action : { type : [ '< ../action/types' ] },
 
 		// the document (content)
 		doc : { type : [ './doc', 'undefined' ] },
@@ -265,6 +265,7 @@ def.staticLazy.model =
 {
 	return(
 		visual_label.create(
+			'action', action_none.create( ),
 			'fabric',
 				fabric_label.create(
 					'pos', gleam_point.zero,
