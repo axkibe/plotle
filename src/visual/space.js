@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// rights the current user has for this space
-		access : { type : [ 'undefined', 'string' ] },
+		access : { type : 'string' },
 
 		// current action
 		action : { type : [ '< ../action/types' ] },
@@ -225,9 +225,9 @@ def.static.concernsMark =
 
 
 /*
-| Transforms the items into visual items.
+| Transforms the fabric items into visual items.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		key,   // key of the visual item to be retrieved
 		item   // the unaltered item.
@@ -268,10 +268,13 @@ def.transform.get =
 
 	const hover = item.concernsHover( this.hover, path );
 
+	const access = this.access;
+
 	if( item === visual_note || item.timtype === visual_note )
 	{
 		item =
 			item.create(
+				'access', access,
 				'action', action,
 				'highlight', highlight,
 				'hover', hover,
@@ -287,6 +290,7 @@ def.transform.get =
 	{
 		item =
 			item.create(
+				'access', access,
 				'action', action,
 				'highlight', highlight,
 				'hover', hover,
@@ -366,7 +370,7 @@ def.lazy.focus =
 /*
 | The current alteration frame.
 */
-def.transform.frame =
+def.adjust.frame =
 	function(
 		frame
 	)
@@ -383,7 +387,13 @@ def.transform.frame =
 
 	if( !frame ) frame = visual_frame;
 
-	return frame.create( 'content', content, 'transform', this.transform );
+	return(
+		frame.create(
+			'access', this.access,
+			'content', content,
+			'transform', this.transform
+		)
+	);
 };
 
 
@@ -534,7 +544,7 @@ def.proto.dragStart =
 	// see if the frame was targeted
 	if( access == 'rw' && frame && aType !== action_select )
 	{
-		if( frame.dragStart( p, shift, ctrl, access, action ) ) return;
+		if( frame.dragStart( p, shift, ctrl ) ) return;
 	}
 
 	const transform = this.transform;
@@ -548,7 +558,7 @@ def.proto.dragStart =
 	{
 		const item = this.atRank( a );
 
-		if( item.dragStart( p, shift, ctrl, access, action ) ) return;
+		if( item.dragStart( p, shift, ctrl ) ) return;
 	}
 
 	switch( aType )

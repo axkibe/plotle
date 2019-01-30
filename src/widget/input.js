@@ -7,6 +7,9 @@
 tim.define( module, ( def, widget_input ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -137,11 +140,14 @@ def.static.createFromLayout =
 
 
 /*
-| Default distance of text
+| Default distance of text.
 */
 def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
 
 
+/*
+| FIXME.
+*/
 def.lazy.attentionCenter =
 	function( )
 {
@@ -397,19 +403,14 @@ def.proto.input =
 	const maxlen = this.maxlen;
 
 	// cuts of text if larger than this maxlen
-	if(
-		maxlen > 0
-		&& value.length + text.length > maxlen
-	)
+	if( maxlen > 0 && value.length + text.length > maxlen )
 	{
 		text = text.substring( 0, maxlen - value.length );
 	}
 
 	root.setPath(
 		this.path.append( 'value' ),
-		value.substring( 0, at ) +
-			text +
-			value.substring( at )
+		value.substring( 0, at ) + text + value.substring( at )
 	);
 
 	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, at + text.length ) );

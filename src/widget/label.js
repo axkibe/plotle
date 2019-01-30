@@ -7,6 +7,9 @@
 tim.define( module, ( def, widget_label ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -129,20 +132,6 @@ def.proto.click =
 		p,
 		shift,
 		ctrl
-	)
-{
-	return undefined;
-};
-
-
-/*
-| Handles a potential dragStart event.
-*/
-def.proto.dragStart =
-	function(
-		p,       // point where dragging starts
-		shift,   // true if shift key was held down
-		ctrl     // true if ctrl or meta key was held down
 	)
 {
 	return undefined;

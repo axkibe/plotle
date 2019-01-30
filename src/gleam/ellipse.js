@@ -63,7 +63,7 @@ def.static.posSize =
 /*
 | The center point of gradient.
 */
-def.transform.gradientPC =
+def.adjust.gradientPC =
 	function(
 		gradientPC
 	)
@@ -75,7 +75,7 @@ def.transform.gradientPC =
 /*
 | Gradient inner radius.
 */
-def.transform.gradientR1 =
+def.adjust.gradientR1 =
 	function(
 		gradientR1
 	)
@@ -89,7 +89,7 @@ def.transform.gradientR1 =
 /*
 | Gradient inner radius.
 */
-def.transform.gradientR0 =
+def.adjust.gradientR0 =
 	function(
 		gradientR0
 	)

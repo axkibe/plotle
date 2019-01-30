@@ -93,7 +93,7 @@ def.static.filePathAlias =
 | The alias is are the paths the file is served as
 | directories are replaced with hypens to ease debugging
 */
-def.transform.aliases =
+def.adjust.aliases =
 	function(
 		aliases
 	)
@@ -106,25 +106,12 @@ def.transform.aliases =
 | The file coding is either specified manually
 | or derived from file extension.
 */
-def.transform.coding =
+def.adjust.coding =
 	function(
 		coding
 	)
 {
 	return coding || server_fileTypes.coding( this.fileExt );
-};
-
-
-/*
-| The mime is either specified manually
-| or derived from file extension.
-*/
-def.transform.mime =
-	function(
-		mime
-	)
-{
-	return mime || server_fileTypes.mime( this.fileExt );
 };
 
 
@@ -161,6 +148,19 @@ def.proto.gzip =
 	cache.data = this.data;
 
 	return cg;
+};
+
+
+/*
+| The mime is either specified manually
+| or derived from file extension.
+*/
+def.adjust.mime =
+	function(
+		mime
+	)
+{
+	return mime || server_fileTypes.mime( this.fileExt );
 };
 
 

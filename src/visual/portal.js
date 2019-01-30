@@ -14,6 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// rights the current user has for this space
+		access : { type : 'string' },
+
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
@@ -47,6 +50,8 @@ if( TIM )
 
 
 const action_dragItems = require( '../action/dragItems' );
+
+const action_none = require( '../action/none' );
 
 const action_resizeItems = require( '../action/resizeItems' );
 
@@ -420,6 +425,7 @@ def.staticLazy.model =
 {
 	return(
 		visual_portal.create(
+			'access', 'rw',
 			'action', action_none.create( ),
 			'fabric',
 				fabric_portal.create(

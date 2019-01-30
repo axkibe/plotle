@@ -23,9 +23,9 @@ if( TIM )
 
 
 /*
-| Transforms paras.
+| Forwards the path to paras.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		para

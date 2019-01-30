@@ -123,7 +123,7 @@ def.proto.point =
 /*
 | Returns a transformed distance.
 |
-| FIXME this should be called 'd' then
+| FIXME this should be called 'distance' then
 */
 def.proto.scale =
 	function(

@@ -1,10 +1,13 @@
 /*
-| A form.
+| Abstract parent of forms.
 */
 'use strict';
 
 
 tim.define( module, ( def, form_form ) => {
+
+
+def.abstract = true;
 
 
 const action_none = require( '../action/none' );
@@ -29,69 +32,25 @@ const widget_scrollbox = require( '../widget/scrollbox' );
 
 
 /*
-| Transforms widgets.
+| By default forms don't care about 'hasGrid'.
 */
-def.static.transformGet =
-	function(
-		name,
-		widget
-	)
-{
-	// FIXME make this some lazy value
-	const transform =
-		gleam_transform.create(
-			'zoom', 1,
-			'offset', this.viewSize.zeroRect.pc
-		);
-
-	const path = widget.path || this.path.append( 'twig' ).append( name );
-
-	const mark = widget.concernsMark( this.mark, path );
-
-	const hover = widget.concernsHover( this.hover, path );
-
-	widget =
-		widget.create(
-			'path', path,
-			'hover', hover,
-			'mark', mark,
-			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
-		);
-
-	if( widget.timtype !== widget_scrollbox ) return widget;
-
-	const sp = widget.fixScrollPos;
-
-	if( sp !== pass ) widget = widget.create( 'scrollPos', sp );
-
-	return widget;
-};
+def.static.concernsHasGrid =
+def.proto.concernsHasGrid =
+	( ) => undefined;
 
 
 /*
-| User clicked.
+| By default forms don't care about 'hasSnapping'.
 */
-def.static.click =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		const res = this.atRank( r ).click( p, shift, ctrl );
+def.static.concernsHasSnapping =
+def.proto.concernsHasSnapping =
+	( ) => undefined;
 
-		if( res ) return res;
-	}
-
-	return false;
-};
 
 
 /*
 | Returns the mark if a form with 'path' concerns about
-| 'mark'.
+| 'mark'. This is the same for all forms.
 */
 def.static.concernsMark =
 	function(
@@ -106,9 +65,33 @@ def.static.concernsMark =
 
 
 /*
-| Cycles the focus
+| By default forms don't care about 'spaceRef'.
 */
-def.static.cycleFocus =
+def.static.concernsSpaceRef =
+def.proto.concernsSpaceRef =
+	( ) => undefined;
+
+
+/*
+| By default forms don't care about 'user'.
+*/
+def.static.concernsUser =
+def.proto.concernsUser =
+	( ) => undefined;
+
+
+/*
+| By default forms don't care about 'userSpaceList'.
+*/
+def.static.concernsUserSpaceList =
+def.proto.concernsUserSpaceList =
+	( ) => undefined;
+
+
+/*
+| Cycles the focus.
+*/
+def.proto.cycleFocus =
 	function(
 		dir
 	)
@@ -148,7 +131,7 @@ def.static.cycleFocus =
 /*
 | User clicked.
 */
-def.static.click =
+def.proto.click =
 	function(
 		p,
 		shift,
@@ -169,7 +152,7 @@ def.static.click =
 /*
 | Moving during an operation with the pointing device button held down.
 */
-def.static.dragMove =
+def.proto.dragMove =
 	function(
 		p,     // cursor point
 		shift, // true if shift key was pressed
@@ -194,7 +177,7 @@ def.static.dragMove =
 /*
 | Starts an operation with the pointing device held down.
 */
-def.static.dragStart =
+def.proto.dragStart =
 	function(
 		p,
 		shift,
@@ -215,7 +198,7 @@ def.static.dragStart =
 /*
 | Stops an operation with the poiting device button held down.
 */
-def.static.dragStop =
+def.proto.dragStop =
 	function(
 		//p,     // cursor point
 		//shift, // true if shift key was pressed
@@ -227,27 +210,63 @@ def.static.dragStop =
 
 
 /*
-| Returns the attention center.
-|
-| To be used as lazyValue getter.
+| Transforms widgets.
+| FIXME proper inherit
 */
-def.static.getAttentionCenter =
+def.adjust.get =
+def.static.adjustGet =
+	function(
+		name,
+		widget
+	)
+{
+	// FIXME make this some lazy value
+	const transform =
+		gleam_transform.create(
+			'zoom', 1,
+			'offset', this.viewSize.zeroRect.pc
+		);
+
+	const path = widget.path || this.path.append( 'twig' ).append( name );
+
+	const mark = widget.concernsMark( this.mark, path );
+
+	const hover = widget.concernsHover( this.hover, path );
+
+	widget =
+		widget.create(
+			'path', path,
+			'hover', hover,
+			'mark', mark,
+			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
+		);
+
+	if( widget.timtype !== widget_scrollbox ) return widget;
+
+	const sp = widget.fixScrollPos;
+
+	if( sp !== pass ) widget = widget.create( 'scrollPos', sp );
+
+	return widget;
+};
+
+
+/*
+| Returns the attention center.
+*/
+def.lazy.attentionCenter =
 	function( )
 {
 	const focus = this.focusedWidget;
 
-	return(
-		focus
-		? focus.attentionCenter
-		: undefined
-	);
+	return focus ? focus.attentionCenter : undefined;
 };
 
 
 /*
 | Returns the focused widget.
 */
-def.static.getFocusedWidget =
+def.lazy.focusedWidget =
 	function( )
 {
 	const mark = this.mark;
@@ -268,7 +287,7 @@ def.static.getFocusedWidget =
 /*
 | Return the space glint.
 */
-def.static.glint =
+def.lazy.glint =
 	function( )
 {
 	const arr = [ gleam_glint_paint.createFS( gruga_formFacet.model, this.viewSize.zeroRect ) ];
@@ -289,7 +308,7 @@ def.static.glint =
 /*
 | User is inputing text.
 */
-def.static.input =
+def.proto.input =
 	function(
 		text
 	)
@@ -303,7 +322,7 @@ def.static.input =
 /*
 | Mouse wheel is being turned.
 */
-def.static.mousewheel =
+def.proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -325,7 +344,7 @@ def.static.mousewheel =
 /*
 | If point is on the form returns its hovering state.
 */
-def.static.pointingHover =
+def.proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -346,7 +365,7 @@ def.static.pointingHover =
 /*
 | User is pressing a special key.
 */
-def.static.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,
@@ -396,5 +415,5 @@ def.static._moveScrollY =
 	);
 };
 
-} );
 
+} );

@@ -81,10 +81,14 @@ def.proto.dragStart =
 	function(
 		p,
 		shift,
-		ctrl,
-		access
+		ctrl
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	const action = this.action;
 
 	if( !this.tShape.within( p ) ) return false;
@@ -106,7 +110,7 @@ def.proto.dragStart =
 	}
 
 	// dragging
-	if( access !== 'rw' ) return false;
+	if( this.access !== 'rw' ) return false;
 
 	let mark = this.mark;
 

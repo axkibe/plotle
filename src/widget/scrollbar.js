@@ -11,6 +11,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =

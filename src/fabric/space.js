@@ -34,9 +34,9 @@ const tim_path = require( 'tim.js/src/path' );
 
 
 /*
-| Transforms items.
+| Forwards the path to items.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		item
@@ -51,9 +51,9 @@ def.transform.get =
 
 
 /*
-| Transforms the path attribute.
+| Adjusts the path attribute to a default.
 */
-def.transform.path =
+def.adjust.path =
 	function(
 		path
 	)

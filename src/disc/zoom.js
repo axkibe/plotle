@@ -1,10 +1,13 @@
 /*
-| The creation disc.
+| The zoom disc.
 */
 'use strict';
 
 
-tim.define( module, ( def, disc_createDisc ) => {
+tim.define( module, ( def, disc_zoom ) => {
+
+
+def.extend = './disc';
 
 
 if( TIM )
@@ -23,7 +26,7 @@ if( TIM )
 		// facet of the disc
 		facet : { type : '../gleam/facet' },
 
-		// the widget hovered upon',
+		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the users mark
@@ -32,10 +35,10 @@ if( TIM )
 		// path of the disc
 		path : { type : 'tim.js/src/path' },
 
-		// shape of the disc
+		// shape of the disc',
 		shape : { type : '../gleam/ellipse' },
 
-		// currently form/disc shown
+		// form/disc currently shown
 		show : { type : 'undefined' },
 
 		// designed size
@@ -48,20 +51,16 @@ if( TIM )
 		user : { type : 'undefined' },
 
 		// current view size
-		viewSize : { type : '../gleam/size' },
+		viewSize : { type : '../gleam/size' }
 	};
 
 	def.twig = [ '< ../widget/types' ];
 }
 
 
-const action_createGeneric = require( '../action/createGeneric' );
-
-const action_createRelation = require( '../action/createRelation' );
-
-const action_createStroke = require( '../action/createStroke' );
-
 const action_none = require( '../action/none' );
+
+const action_zoomButton = require( '../action/zoomButton' );
 
 const gleam_glint_border = require( '../gleam/glint/border' );
 
@@ -79,7 +78,7 @@ const gleam_transform = require( '../gleam/transform' );
 
 const layout_disc = require( '../layout/disc' );
 
-const widget_widget = require( '../widget/widget' );
+const widget_factory = require( '../widget/factory' );
 
 
 /*
@@ -134,7 +133,7 @@ def.static.createFromLayout =
 		const iLayout = layout.get( key );
 
 		const item =
-			widget_widget.createFromLayout(
+			widget_factory.createFromLayout(
 				iLayout,
 				path.append( 'twig' ).append( key ),
 				transform
@@ -144,14 +143,14 @@ def.static.createFromLayout =
 	}
 
 	return(
-		disc_createDisc.create(
+		disc_zoom.create(
 			'twig:init', twig, layout._ranks,
 			'action', action_none.create( ),
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
 			'shape', layout.shape,
-			'show', disc_createDisc.concernsShow( show ),
+			'show', disc_zoom.concernsShow( show ),
 			'size', layout.size,
 			'viewSize', viewSize
 		)
@@ -160,9 +159,9 @@ def.static.createFromLayout =
 
 
 /*
-| Transforms widgets.
+| Adjusts widgets.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		widget
@@ -176,7 +175,7 @@ def.transform.get =
 		widget.create(
 			'path', path,
 			'hover', hover,
-			'down', this._isActiveButton( name ),
+			'down', disc_zoom._isActiveButton( this.action, name ),
 			'transform', this.controlTransform
 		)
 	);
@@ -184,42 +183,16 @@ def.transform.get =
 
 
 /*
-| Mapping of the the itemType name to the button name.
-*/
-def.staticLazy.itemTypeToButtonName = ( ) =>
-( {
-	'arrow'  : 'createArrow',
-	'label'  : 'createLabel',
-	'line'   : 'createLine',
-	'note'   : 'createNote',
-	'portal' : 'createPortal',
-} );
-
-
-/*
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-def.proto._isActiveButton =
+def.static._isActiveButton =
 	function(
+		action,  // the action
 		wname    // the widget name
 	)
 {
-	const action = this.action;
-
-	if( !action ) return false;
-
-	switch( action.timtype )
-	{
-		case action_createGeneric :
-		case action_createStroke :
-
-			return wname === disc_createDisc.itemTypeToButtonName[ action.itemType ] || false;
-
-		case action_createRelation : return wname === 'createRelation';
-
-		default : return false;
-	}
+	return false;
 };
 
 
@@ -246,7 +219,7 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr = [ gleam_glint_fill.create( 'facet', this.facet, 'shape', this._tShape ) ];
+	const arr = [ gleam_glint_fill.createFS( this.facet, this._tShape) ];
 
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -255,12 +228,7 @@ def.lazy._glint =
 		if( g ) arr.push( g );
 	}
 
-	arr.push(
-		gleam_glint_border.create(
-			'facet', this.facet,
-			'shape', this._tShape
-		)
-	);
+	arr.push( gleam_glint_border.createFS( this.facet, this._tShape ) );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
@@ -308,70 +276,35 @@ def.lazy._tShape =
 
 
 /*
-| The pointing device just went down.
-| Probes if the system ought to wait if it's
-| a click or can initiate a drag right away.
-*/
-def.proto.probeClickDrag =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	const tZone = this._tZone;
-
-	// shortcut if p is not near the panel
-	if( !tZone.within( p ) ) return;
-
-	const pp = p.sub( tZone.pos );
-
-	// if p is not on the panel
-	if( !this._tShape.within( pp ) ) return;
-
-	return 'atween';
-};
-
-
-/*
-| A button of the disc has been pushed.
+| A button of the main disc has been pushed.
 */
 def.proto.pushButton =
 	function(
-		path,
-		shift,
-		ctrl
+		path
+		// shift,
+		// ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'createDisc' ) throw new Error( );
+/**/	if( path.get( 2 ) !== 'zoom' ) throw new Error( );
 /**/}
 
 	const buttonName = path.get( 4 );
 
-	let action;
+	// zoomIn and zoomOut are handled
+	// via "dragging" operations so holding
+	// makes multiple events
 
 	switch( buttonName )
 	{
-		case 'createArrow' : action = action_createStroke.createArrow; break;
+		case 'zoomAll' : root.changeSpaceTransformAll( ); return;
 
-		case 'createLabel' : action = action_createGeneric.createLabel; break;
-
-		case 'createLine' : action = action_createStroke.createLine; break;
-
-		case 'createNote' : action = action_createGeneric.createNote; break;
-
-		case 'createPortal' : action = action_createGeneric.createPortal; break;
-
-		case 'createRelation' :
-
-			action = action_createRelation.create( 'relationState', 'start' ); break;
+		case 'zoomHome' : root.changeSpaceTransformHome( ); return;
 
 		default : throw new Error( );
 	}
 
-	root.create( 'action', action );
 };
 
 
@@ -436,6 +369,18 @@ def.proto.click =
 
 
 /*
+| User is inputing text.
+*/
+def.proto.input =
+	function(
+		text
+	)
+{
+	return;
+};
+
+
+/*
 | Cycles the focus
 */
 def.proto.cycleFocus =
@@ -448,14 +393,68 @@ def.proto.cycleFocus =
 
 
 /*
-| User is inputing text.
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
 */
-def.proto.input =
+def.proto.probeClickDrag =
 	function(
-		text
+		p,
+		shift,
+		ctrl
 	)
 {
-	return;
+	const tZone = this._tZone;
+
+	// shortcut if p is not near the panel
+	if( !tZone.within( p ) ) return;
+
+	const pp = p.sub( tZone.pos );
+
+	// if p is not on the panel
+	if( !this._tShape.within( pp ) ) return;
+
+	if(
+		this.get( 'zoomIn' ).within( pp )
+		|| this.get( 'zoomOut' ).within( pp )
+	)
+	{
+		return 'drag';
+	}
+
+	return 'atween';
+};
+
+
+/*
+| User is pressing a special key.
+*/
+def.proto.specialKey =
+	function(
+	//	key,
+	//	shift,
+	//	ctrl
+	)
+{
+	// not implemented
+};
+
+
+/*
+| Move during a dragging operation.
+*/
+def.proto.dragMove =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	const action = this.action;
+
+	if( action.timtype !== action_zoomButton ) return;
+
+	return false;
 };
 
 
@@ -474,10 +473,21 @@ def.proto.dragStart =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
+	const pp = p.sub( tZone.pos );
+
+	if( !this._tShape.within( pp ) ) return;
+
+	// it's on the disc
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		const bubble = this.atRank( r ).dragStart( pp, shift, ctrl );
+
+		if( bubble ) return bubble;
+	}
 
 	// the dragging operation is on the panel
 	// but it denies it.
+
 	return false;
 };
 
@@ -490,21 +500,31 @@ def.proto.dragStartButton =
 		path
 	)
 {
-	return false;
-};
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== 'zoom' ) throw new Error( );
+/**/}
 
+	const buttonName = path.get( 4 );
 
-/*
-| Move during a dragging operation.
-*/
-def.proto.dragMove =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return;
+	switch( buttonName )
+	{
+		case 'zoomIn' :
+
+			root.create( 'action', action_zoomButton.createZoom( 1 ) );
+
+			root.changeSpaceTransformCenter( 1 );
+
+			return;
+
+		case 'zoomOut' :
+
+			root.create( 'action', action_zoomButton.createZoom( -1 ) );
+
+			root.changeSpaceTransformCenter( -1 );
+
+			return;
+	}
 };
 
 
@@ -513,12 +533,18 @@ def.proto.dragMove =
 */
 def.proto.dragStop =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
-	return;
+	const action = this.action;
+
+	if( action.timtype !== action_zoomButton ) return;
+
+	root.create( 'action', action.create( 'refire', false ) );
+
+	return false;
 };
 
 
@@ -543,19 +569,6 @@ def.proto.mousewheel =
 	return true;
 };
 
-
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	// not implemented
-};
 
 
 } );

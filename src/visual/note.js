@@ -16,9 +16,13 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// access level of current user (rw or ro)
+		access : { type : 'string' },
+
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
+		// the visual document (content)
 		doc : { type : [ './doc', 'undefined' ] },
 
 		// the notes fabric
@@ -133,9 +137,9 @@ def.static.createGeneric =
 
 
 /*
-| Adapts the doc.
+| Adjusts the doc.
 */
-def.transform.doc =
+def.adjust.doc =
 	function(
 		doc
 	)
@@ -234,6 +238,7 @@ def.staticLazy.model =
 {
 	return(
 		visual_note.create(
+			'access', 'rw',
 			'action', action_none.create( ),
 			'fabric',
 				fabric_note.create(

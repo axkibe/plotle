@@ -7,6 +7,9 @@
 tim.define( module, ( def, widget_checkbox ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =

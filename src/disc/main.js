@@ -4,7 +4,10 @@
 'use strict';
 
 
-tim.define( module, ( def, disc_mainDisc ) => {
+tim.define( module, ( def, disc_main ) => {
+
+
+def.extend = './disc';
 
 
 if( TIM )
@@ -93,7 +96,7 @@ const show_normal = require( '../show/normal' );
 
 const show_zoom = require( '../show/zoom' );
 
-const widget_widget = require( '../widget/widget' );
+const widget_factory = require( '../widget/factory' );
 
 
 
@@ -149,7 +152,7 @@ def.static.createFromLayout =
 		const iLayout = layout.get( key );
 
 		const item =
-			widget_widget.createFromLayout(
+			widget_factory.createFromLayout(
 				iLayout,
 				path.append( 'twig' ).append( key ),
 				transform
@@ -159,7 +162,7 @@ def.static.createFromLayout =
 	}
 
 	return(
-		disc_mainDisc.create(
+		disc_main.create(
 			'twig:init', twig, layout._ranks,
 			'action', action_none.create( ),
 			'controlTransform', transform,
@@ -175,9 +178,9 @@ def.static.createFromLayout =
 
 
 /*
-| Transforms widgets.
+| Adjusts widgets.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		widget
@@ -421,7 +424,7 @@ def.proto.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== 'mainDisc' ) throw new Error( );
+/**/	if( discname !== 'main' ) throw new Error( );
 /**/}
 
 	const buttonName = path.get( 4 );

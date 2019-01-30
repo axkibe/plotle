@@ -1,5 +1,5 @@
 /*
-| Default design for the maindisc.
+| Default design for the main disc.
 */
 'use strict';
 
@@ -7,48 +7,47 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_border = require( '../gleam/border' );
+const gleam_border = require( '../../gleam/border' );
 
-const gleam_borderList = require( '../gleam/borderList' );
+const gleam_borderList = require( '../../gleam/borderList' );
 
-const gleam_color = require( '../gleam/color' );
+const gleam_color = require( '../../gleam/color' );
 
-const gleam_ellipse = require( '../gleam/ellipse' );
+const gleam_ellipse = require( '../../gleam/ellipse' );
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = require( '../../gleam/facet' );
 
-const gleam_facetList = require( '../gleam/facetList' );
+const gleam_facetList = require( '../../gleam/facetList' );
 
-const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+const gleam_gradient_colorStop = require( '../../gleam/gradient/colorStop' );
 
-const gleam_gradient_radial = require( '../gleam/gradient/radial' );
+const gleam_gradient_radial = require( '../../gleam/gradient/radial' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = require( '../../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = require( '../../gleam/rect' );
 
-const gleam_size = require( '../gleam/size' );
+const gleam_size = require( '../../gleam/size' );
 
-const gruga_iconNormal = require( '../gruga/iconNormal' );
+const gruga_iconNormal = require( '../../gruga/iconNormal' );
 
-const gruga_iconRemove = require( '../gruga/iconRemove' );
+const gruga_iconRemove = require( '../../gruga/iconRemove' );
 
-const gruga_iconSelect = require( '../gruga/iconSelect' );
+const gruga_iconSelect = require( '../../gruga/iconSelect' );
 
-const gruga_iconZoom = require( '../gruga/iconZoom' );
+const gruga_iconZoom = require( '../../gruga/iconZoom' );
 
-const layout_button = require( '../layout/button' );
+const layout_button = require( '../../layout/button' );
 
-const layout_disc = require( '../layout/disc' );
+const layout_disc = require( '../../layout/disc' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const shell_fontPool = require( '../../shell/fontPool' );
 
 
 def.staticLazy.layout =
 	function( )
 {
 	const pw = gleam_point.xy( 0, 500 );
-
 
 	const buttonFacets =
 		gleam_facetList.create(

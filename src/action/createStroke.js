@@ -92,6 +92,7 @@ def.proto.transientVisual =
 
 	return(
 		visual_stroke.create(
+			'access', 'rw',
 			'action', action_none.create( ),
 			'fabric', this.transientFabric,
 			'highlight', false,

@@ -14,6 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// rights the current user has for this space
+		access : { type : 'string' },
+
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
@@ -79,10 +82,14 @@ def.proto.dragStart =
 	function(
 		p,
 		shift,
-		ctrl,
-		access
+		ctrl
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	// FIXME make it more coherent what don't care means
 	// false or undefined
 	return false;

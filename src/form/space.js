@@ -7,6 +7,12 @@
 tim.define( module, ( def ) => {
 
 
+/*
+| Is a form.
+*/
+def.extend = './form';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -54,7 +60,7 @@ const tim_path = require( 'tim.js/src/path' );
 
 
 /*
-| Does(!) care about hasGrid.
+| Does care about hasGrid.
 */
 def.static.concernsHasGrid =
 def.proto.concernsHasGrid =
@@ -62,7 +68,7 @@ def.proto.concernsHasGrid =
 
 
 /*
-| Does(!) care about hasSnapping.
+| Does care about hasSnapping.
 */
 def.static.concernsHasSnapping =
 def.proto.concernsHasSnapping =
@@ -70,7 +76,7 @@ def.proto.concernsHasSnapping =
 
 
 /*
-| Does(!) care about spaceRef.
+| Does care about spaceRef.
 */
 def.static.concernsSpaceRef =
 def.proto.concernsSpaceRef =
@@ -78,25 +84,9 @@ def.proto.concernsSpaceRef =
 
 
 /*
-| Doesn't care about user.
+| Adjusts widgets.
 */
-def.static.concernsUser =
-def.proto.concernsUser =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about userSpaceList.
-*/
-def.static.concernsUserSpaceList =
-def.proto.concernsUserSpaceList =
-	( ) => undefined;
-
-
-/*
-| Transforms widgets.
-*/
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		widget
@@ -111,109 +101,8 @@ def.transform.get =
 		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
 
-	return form_form.transformGet.call( this, name, widget );
+	return form_form.adjustGet.call( this, name, widget );
 };
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter = form_form.getAttentionCenter;
-
-
-/*
-| The form's glint.
-*/
-def.lazy.glint = form_form.glint;
-
-
-/*
-| The focused widget.
-*/
-def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*
-| User clicked.
-*/
-def.proto.click = form_form.click;
-
-
-/*
-| Cycles the focus.
-*/
-def.proto.cycleFocus = form_form.cycleFocus;
-
-
-/*
-| Moving during an operation with the mouse button held down.
-*/
-def.proto.dragMove =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return;
-};
-
-
-/*
-| Starts an operation with the pointing device active.
-|
-| Mouse down or finger on screen.
-*/
-def.proto.dragStart =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return false;
-};
-
-
-/*
-| Stops an operation with the mouse button held down.
-*/
-def.proto.dragStop =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return true;
-};
-
-
-/*
-| User is inputing text.
-*/
-def.proto.input = form_form.input;
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	return true;
-};
-
-
-/*
-| If point is on the form returns its hovering state.
-*/
-def.proto.pointingHover = form_form.pointingHover;
 
 
 /*
@@ -246,12 +135,6 @@ def.proto.pushButton =
 | The disc is shown while a form is shown.
 */
 def.proto.showDisc = true;
-
-
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey = form_form.specialKey;
 
 
 /*
@@ -313,5 +196,6 @@ def.proto.toggleCheckbox =
 		default : throw new Error( );
 	}
 };
+
 
 } );

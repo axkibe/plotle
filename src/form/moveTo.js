@@ -7,23 +7,10 @@
 tim.define( module, ( def, form_moveTo ) => {
 
 
-const form_form = require( './form' );
-
-const gleam_point = require( '../gleam/point' );
-
-const gleam_rect = require( '../gleam/rect' );
-
-const gleam_transform = require( '../gleam/transform' );
-
-const gruga_moveTo = require( '../gruga/moveTo' );
-
-const gruga_scrollbar = require( '../gruga/scrollbar' );
-
-const ref_space = require( '../ref/space' );
-
-const widget_button = require( '../widget/button' );
-
-const widget_scrollbox = require( '../widget/scrollbox' );
+/*
+| Is a form.
+*/
+def.extend = './form';
 
 
 if( TIM )
@@ -65,40 +52,27 @@ if( TIM )
 }
 
 
-/*
-| Doesn't care about hasGrid.
-*/
-def.static.concernsHasGrid =
-def.proto.concernsHasGrid =
-	( ) => undefined;
+const form_form = require( './form' );
+
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
+const gleam_transform = require( '../gleam/transform' );
+
+const gruga_moveTo = require( '../gruga/moveTo' );
+
+const gruga_scrollbar = require( '../gruga/scrollbar' );
+
+const ref_space = require( '../ref/space' );
+
+const widget_button = require( '../widget/button' );
+
+const widget_scrollbox = require( '../widget/scrollbox' );
 
 
 /*
-| Doesn't care about hasSnapping.
-*/
-def.static.concernsHasSnapping =
-def.proto.concernsHasSnapping =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about spaceRef.
-*/
-def.static.concernsSpaceRef =
-def.proto.concernsSpaceRef =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about user.
-*/
-def.static.concernsUser =
-def.proto.concernsUser =
-	( ) => undefined;
-
-
-/*
-| Does(!) care about userSpaceList.
+| Does care about userSpaceList.
 */
 def.static.concernsUserSpaceList =
 def.proto.concernsUserSpaceList =
@@ -109,8 +83,8 @@ def.proto.concernsUserSpaceList =
 | Distance to left side of screen.
 */
 def.lazy._leftDistance = ( ) =>
-	root.disc.get( 'mainDisc' ).size.width
-	+ 20; // == left distance to disc
+	// == left distance to disc
+	root.disc.get( 'main' ).size.width + 20;
 
 
 /*
@@ -131,14 +105,6 @@ def.lazy._cols =
 {
 	return Math.floor( ( this._availableWidth + 30 ) / 160 );
 };
-
-
-/*
-| Doesn't care about spaceRef.
-*/
-def.static.concernsSpaceRef =
-def.proto.concernsSpaceRef =
-	( ) => undefined;
 
 
 /*
@@ -291,9 +257,9 @@ def.proto._transformHeadline =
 
 
 /*
-| Transforms widgets.
+| Adjusts widgets.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		widget
@@ -306,7 +272,7 @@ def.transform.get =
 		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
 	}
 
-	return form_form.transformGet.call( this, name, widget );
+	return form_form.adjustGet.call( this, name, widget );
 };
 
 
@@ -316,81 +282,8 @@ def.transform.get =
 def.staticLazy.scrollbarYOffset =
 	function( )
 {
-	return(
-		gleam_point.xy(
-			Math.ceil( -gruga_scrollbar.strength / 2 ) - 1,
-			0
-		)
-	);
+	return gleam_point.xy( Math.ceil( -gruga_scrollbar.strength / 2 ) - 1, 0 );
 };
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter = form_form.getAttentionCenter;
-
-
-/*
-| User clicked.
-*/
-def.proto.click = form_form.click;
-
-
-/*
-| Cycles the focus.
-*/
-def.proto.cycleFocus = form_form.cycleFocus;
-
-
-/*
-| The form's glint.
-*/
-def.lazy.glint = form_form.glint;
-
-
-/*
-| The focused widget.
-*/
-def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*
-| Moving during an operation with the mouse button held down.
-*/
-def.proto.dragMove = form_form.dragMove;
-
-
-/*
-| Starts an operation with the pointing device active.
-|
-| Mouse down or finger on screen.
-*/
-def.proto.dragStart = form_form.dragStart;
-
-
-/*
-| Stops an operation with the mouse button held down.
-*/
-def.proto.dragStop = form_form.dragStop;
-
-
-/*
-| User is inputing text.
-*/
-def.proto.input = form_form.input;
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel = form_form.mousewheel;
-
-
-/*
-| If point is on the form returns its hovering state.
-*/
-def.proto.pointingHover = form_form.pointingHover;
 
 
 /*
@@ -425,11 +318,4 @@ def.proto.pushButton =
 def.proto.showDisc = true;
 
 
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey = form_form.specialKey;
-
-
 } );
-

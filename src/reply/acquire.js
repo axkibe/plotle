@@ -14,7 +14,10 @@ if( TIM )
 		// the acquire result
 		status : { type : 'string', json : true },
 
-		// access level, readonly(r) or read-write(rw)
+		// access level
+		// 'ro' : readonly
+		// 'rw' : read-write
+		// 'no' : none
 		access : { type : [ 'undefined', 'string' ], json : true },
 
 		// sequence the space is at

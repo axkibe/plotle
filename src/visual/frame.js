@@ -11,6 +11,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// current users access level
+		access : { type : 'string' },
+
 		// content of the frame
 		content : { type : './itemList' },
 
@@ -426,17 +429,13 @@ def.proto.click =
 		p,        // cursor point
 		shift,    // true if shift key was pressed
 		ctrl      // true if ctrl key was pressed
-		//access  // rights the current user has for current space
 	)
 {
 	// ctrl-clicks are not swallowed.
 	if( ctrl ) return false;
 
 	// not been clicked, pass through
-	if(
-		!this._frameBodyShape.within( p )
-		|| this._shapeMask.within( p )
-	) return;
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
 
 	// it has been clicked, yet do nothing.
 	return true;
@@ -450,11 +449,15 @@ def.proto.dragStart =
 	function(
 		p,      // cursor point
 		shift,  // true if shift key was pressed
-		ctrl,   // true if ctrl key was pressed
-		access  // rights the current user has for current space
+		ctrl    // true if ctrl key was pressed
 	)
 {
-	if( access !== 'rw' ) return;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
+	if( this.access !== 'rw' ) return;
 
 	const zone = this.zone;
 

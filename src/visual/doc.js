@@ -86,7 +86,7 @@ const visual_para = require( './para' );
 /*
 | Transforms content.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		key,
 		para
@@ -168,7 +168,7 @@ def.lazy.attentionCenter =
 | If created with undefined,
 | it is set to equal to fullsize
 */
-def.transform.clipsize =
+def.adjust.clipsize =
 	function(
 		clipsize
 	)

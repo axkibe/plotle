@@ -7,6 +7,9 @@
 tim.define( module, ( def, widget_button ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -343,6 +346,11 @@ def.proto.dragStart =
 		ctrl
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	if( !this.within( p ) ) return undefined;
 
 	root.dragStartButton( this.path );

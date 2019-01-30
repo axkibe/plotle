@@ -9,6 +9,7 @@ tim.define( module, ( def ) => {
 
 def.extend = './item';
 
+const action_none = require( '../action/none' );
 
 const action_select = require( '../action/select' );
 
@@ -64,21 +65,24 @@ def.proto.click =
 
 /*
 | Handles a potential dragStart event.
-|
-| FIXME access and action shouldn't be needed to handed...
 */
 def.proto.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
-		ctrl,    // true if ctrl or meta key was held down
-		access,  // current space access rights
-		action   // current space action
+		ctrl     // true if ctrl or meta key was held down
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	const sbary = this.scrollbarY;
 
-	if( !this.action && sbary )
+	const action = this.action;
+
+	if( action.timtype === action_none && sbary )
 	{
 		const bubble = sbary.dragStart( p, shift, ctrl );
 
@@ -91,16 +95,14 @@ def.proto.dragStart =
 
 		const mark = this.markForPoint( p, false );
 
-		action = action.create( 'itemPath', this.path );
-
-		root.create( 'action', action );
+		root.create( 'action', action.create( 'itemPath', this.path ) );
 
 		root.setUserMark( mark );
 
 		return true;
 	}
 
-	return visual_item.dragStart.call( this, p, shift, ctrl, access, action );
+	return visual_item.dragStart.call( this, p, shift, ctrl );
 };
 
 

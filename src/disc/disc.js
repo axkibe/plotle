@@ -1,5 +1,5 @@
 /*
-| A disc panel.
+| Abstract parent of disc panels
 */
 'use strict';
 
@@ -7,11 +7,15 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 /*
 | Returns the hover path when a disc
 | is concerned about it.
 */
 def.static.concernsHover =
+def.proto.concernsHover =
 	function(
 		hover,  // hover path
 		path    // path of the disc
@@ -37,4 +41,3 @@ def.static.concernsHover =
 
 
 } );
-

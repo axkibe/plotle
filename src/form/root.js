@@ -78,9 +78,9 @@ const tim_path = require( 'tim.js/src/path' );
 
 
 /*
-| Transforms forms.
+| Adjusts forms.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		form
@@ -138,7 +138,7 @@ def.static.concernsHover =
 | Returns the mark if the form root concerns about it.
 */
 def.static.concernsMark =
-	mark =>
+	( mark ) =>
 	(
 		mark && mark.containsPath( form_root.path )
 		? mark
@@ -250,4 +250,3 @@ def.proto.toggleCheckbox =
 
 
 } );
-

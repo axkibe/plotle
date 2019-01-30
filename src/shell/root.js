@@ -125,11 +125,11 @@ const change_wrap = require( '../change/wrap' );
 
 const disc_root = require( '../disc/root' );
 
-const disc_createDisc = require( '../disc/createDisc' );
+const disc_create = require( '../disc/create' );
 
-const disc_mainDisc = require( '../disc/mainDisc' );
+const disc_main = require( '../disc/main' );
 
-const disc_zoomDisc = require( '../disc/zoomDisc' );
+const disc_zoom = require( '../disc/zoom' );
 
 const fabric_doc = require( '../fabric/doc' );
 
@@ -169,13 +169,13 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_controls = require( '../gruga/controls' );
 
-const gruga_createDisc = require( '../gruga/createDisc' );
+const gruga_disc_create = require( '../gruga/disc/create' );
 
 const gruga_loading = require( '../gruga/loading' );
 
 const gruga_login = require( '../gruga/login' );
 
-const gruga_mainDisc = require( '../gruga/mainDisc' );
+const gruga_disc_main = require( '../gruga/disc/main' );
 
 const gruga_moveTo = require( '../gruga/moveTo' );
 
@@ -193,7 +193,7 @@ const gruga_user = require( '../gruga/user' );
 
 const gruga_welcome = require( '../gruga/welcome' );
 
-const gruga_zoomDisc = require( '../gruga/zoomDisc' );
+const gruga_disc_zoom = require( '../gruga/disc/zoom' );
 
 const limit = require( '../math/root' ).limit;
 
@@ -237,7 +237,7 @@ const visual_mark_range = require( '../visual/mark/range' );
 
 const visual_space = require( '../visual/space' );
 
-const widget_widget = require( '../widget/widget' );
+const widget_factory = require( '../widget/factory' );
 
 const loadingSpaceTextPath =
 	tim_path.empty
@@ -319,26 +319,26 @@ def.static._createDiscRoot =
 			'path', path,
 			'show', show,
 			'viewSize', viewSize,
-			'twig:add', 'mainDisc',
-				disc_mainDisc.createFromLayout(
-					gruga_mainDisc.layout,
-					twPath.append( 'mainDisc' ),
+			'twig:add', 'main',
+				disc_main.createFromLayout(
+					gruga_disc_main.layout,
+					twPath.append( 'main' ),
 					gleam_transform.normal,
 					show,
 					viewSize
 				),
-			'twig:add', 'createDisc',
-				disc_createDisc.createFromLayout(
-					gruga_createDisc.layout,
-					twPath.append( 'createDisc' ),
+			'twig:add', 'create',
+				disc_create.createFromLayout(
+					gruga_disc_create.layout,
+					twPath.append( 'create' ),
 					gleam_transform.normal,
 					show,
 					viewSize
 				),
-			'twig:add', 'zoomDisc',
-				disc_zoomDisc.createFromLayout(
-					gruga_zoomDisc.layout,
-					twPath.append( 'zoomDisc' ),
+			'twig:add', 'zoom',
+				disc_zoom.createFromLayout(
+					gruga_disc_zoom.layout,
+					twPath.append( 'zoom' ),
 					gleam_transform.normal,
 					show,
 					viewSize
@@ -394,7 +394,7 @@ def.static._createFormRoot =
 			const path = formPath.append( 'twig' ).append( key );
 
 			twig[ key ] =
-				widget_widget.createFromLayout( wLayout, path, gleam_transform.normal );
+				widget_factory.createFromLayout( wLayout, path, gleam_transform.normal );
 
 		}
 
@@ -447,14 +447,14 @@ def.static._createFormRoot =
 
 
 /*
-| Transforms the current action.
+| Adjusts the current action.
 |
 | Makes sure the action has not any removed items in them.
 | If so the paths are removed from its itemPathsList.
 |
-| If no item is left, action is set to undefined.
+| If no item is left, action is set to none.
 */
-def.transform.action =
+def.adjust.action =
 	function(
 		action
 	)
@@ -530,9 +530,9 @@ def.transform.action =
 
 
 /*
-| Transforms the disc.
+| Adjusts the disc.
 */
-def.transform.disc =
+def.adjust.disc =
 	function(
 		disc
 	)
@@ -562,9 +562,9 @@ def.transform.disc =
 
 
 /*
-| Transforms the form root.
+| Adjusts the form root.
 */
-def.transform.form =
+def.adjust.form =
 	function(
 		form
 	)
@@ -586,9 +586,9 @@ def.transform.form =
 
 
 /*
-| Transforms the link.
+| Adjusts the link.
 */
-def.transform.link =
+def.adjust.link =
 	function(
 		link
 	)
@@ -600,7 +600,7 @@ def.transform.link =
 /*
 | Transforms the space visualisation.
 */
-def.transform.spaceVisual =
+def.adjust.spaceVisual =
 	function(
 		spaceVisual
 	)
@@ -868,7 +868,7 @@ def.proto.changeSpaceTransformAll =
 
 	const cy = ( ny + sy ) / 2;
 
-	const discWidth = root.disc.get( 'mainDisc' ).tZone.width;
+	const discWidth = root.disc.get( 'main' ).tZone.width;
 
 	const vsx = root.viewSize.width - discWidth;
 
@@ -991,8 +991,6 @@ def.proto.dragMove =
 {
 	const screen = root._currentScreen;
 
-	if( !screen ) return;
-
 	if( screen.showDisc )
 	{
 		const bubble = root.disc.dragMove( p, shift, ctrl );
@@ -1017,8 +1015,6 @@ def.proto.dragStart =
 	)
 {
 	const screen = root._currentScreen;
-
-	if( !screen ) return;
 
 	if( screen.showDisc )
 	{
@@ -1061,8 +1057,6 @@ def.proto.dragStop =
 	)
 {
 	const screen = root._currentScreen;
-
-	if( !screen ) return;
 
 	if( screen.showDisc )
 	{

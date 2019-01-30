@@ -7,6 +7,9 @@
 tim.define( module, ( def, widget_scrollbox ) => {
 
 
+def.extend = './widget';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -53,9 +56,9 @@ const layout_scrollbox = require( '../layout/scrollbox' );
 
 const shell_settings = require( '../shell/settings' );
 
-const widget_scrollbar = require( './scrollbar' );
+const widget_factory = require( './factory' );
 
-const widget_widget = require( './widget' );
+const widget_scrollbar = require( './scrollbar' );
 
 
 /**
@@ -127,7 +130,7 @@ def.static.createFromLayout =
 		const iLayout = layout.get( key );
 
 		const item =
-			widget_widget.createFromLayout(
+			widget_factory.createFromLayout(
 				iLayout,
 				path.append( 'twig' ).append( key ),
 				transform
@@ -150,9 +153,9 @@ def.static.createFromLayout =
 
 
 /*
-| Transforms widgets.
+| Adjusts widgets.
 */
-def.transform.get =
+def.adjust.get =
 	function(
 		name,
 		widget
@@ -375,6 +378,11 @@ def.proto.dragStart =
 		ctrl   // true if ctrl key was pressed
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	const sbary = this.scrollbarY;
 
 	if( sbary )

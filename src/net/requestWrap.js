@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, net_requestWrap ) => {
 
 
 if( TIM )
@@ -26,10 +26,6 @@ if( TIM )
 }
 
 
-// FIXME
-let onReplyTransmitter;
-
-
 /*
 | Aborts the request if it is active.
 |
@@ -49,6 +45,13 @@ def.proto.abort =
 
 	return false;
 };
+
+
+/*
+| The error catcher for onReply events.
+*/
+def.staticLazy.onReplyTransmitter = ( ) =>
+	system.transmitter( onReply );
 
 
 /*
@@ -125,12 +128,7 @@ def.proto.send =
 		'application/x-www-form-urlencoded'
 	);
 
-	if( !onReplyTransmitter )
-	{
-		onReplyTransmitter = system.transmitter( onReply );
-	}
-
-	xhr.onreadystatechange = onReplyTransmitter;
+	xhr.onreadystatechange = net_requestWrap.onReplyTransmitter;
 
 	xhr.send( JSON.stringify( this.request ) );
 

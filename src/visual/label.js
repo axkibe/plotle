@@ -14,10 +14,13 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// access level of current user (rw or ro)
+		access : { type : 'string' },
+
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
-		// the document (content)
+		// the visual document (content)
 		doc : { type : [ './doc', 'undefined' ] },
 
 		// the labels fabric
@@ -42,6 +45,8 @@ if( TIM )
 
 
 const action_dragItems = require( '../action/dragItems' );
+
+const action_none = require( '../action/none' );
 
 const action_resizeItems = require( '../action/resizeItems' );
 
@@ -139,9 +144,9 @@ def.static.createGeneric =
 
 
 /*
-| Transforms the doc.
+| Adjusts the doc.
 */
-def.transform.doc =
+def.adjust.doc =
 	function(
 		doc
 	)
@@ -265,6 +270,7 @@ def.staticLazy.model =
 {
 	return(
 		visual_label.create(
+			'access', 'rw',
 			'action', action_none.create( ),
 			'fabric',
 				fabric_label.create(

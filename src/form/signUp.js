@@ -7,6 +7,12 @@
 tim.define( module, ( def ) => {
 
 
+/*
+| Is a form.
+*/
+def.extend = './form';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -62,67 +68,6 @@ const visual_mark_caret = require( '../visual/mark/caret' );
 
 
 /*
-| Doesn't care about hasGrid.
-*/
-def.static.concernsHasGrid =
-def.proto.concernsHasGrid =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about hasSnapping.
-*/
-def.static.concernsHasSnapping =
-def.proto.concernsHasSnapping =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about spaceRef.
-*/
-def.static.concernsSpaceRef =
-def.proto.concernsSpaceRef =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about user.
-*/
-def.static.concernsUser =
-def.proto.concernsUser =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about userSpaceList.
-*/
-def.static.concernsUserSpaceList =
-def.proto.concernsUserSpaceList =
-	( ) => undefined;
-
-
-def.transform.get = form_form.transformGet;
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter = form_form.getAttentionCenter;
-
-
-/*
-| The form's glint.
-*/
-def.lazy.glint = form_form.glint;
-
-
-/*
-| The focused widget.
-*/
-def.lazy.focusedWidget = form_form.getFocusedWidget;
-
-
-/*
 | Clears all fields.
 */
 def.proto.clear =
@@ -145,82 +90,6 @@ def.proto.clear =
 	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
 
 	root.setUserMark( undefined );
-};
-
-
-/*
-| User clicked.
-*/
-def.proto.click = form_form.click;
-
-
-/*
-| Cycles the focus.
-*/
-def.proto.cycleFocus = form_form.cycleFocus;
-
-
-/*
-| Moving during an operation with the mouse button held down.
-*/
-def.proto.dragMove =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-};
-
-
-/*
-| Starts an operation with the pointing device active.
-|
-| Mouse down or finger on screen.
-*/
-def.proto.dragStart =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return false;
-};
-
-
-/*
-| Stops an operation with the mouse button held down.
-*/
-def.proto.dragStop =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return true;
-};
-
-
-/*
-| User is inputing text.
-*/
-def.proto.input = form_form.input;
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	return true;
 };
 
 
@@ -260,12 +129,6 @@ def.proto.onRegister =
 
 	root.create( 'show', show_form.welcome, 'userCreds', request.userCreds );
 };
-
-
-/*
-| If point is on the form returns its hovering state.
-*/
-def.proto.pointingHover = form_form.pointingHover;
 
 
 /*
@@ -388,11 +251,4 @@ def.proto.signup =
 };
 
 
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey = form_form.specialKey;
-
-
 } );
-

@@ -1,5 +1,5 @@
 /*
-| A widget.
+| Abstract parent of widgets.
 */
 'use strict';
 
@@ -7,55 +7,17 @@
 tim.define( module, ( def, widget_widget ) => {
 
 
-const layout_button = require( '../layout/button' );
-
-const layout_checkbox = require( '../layout/checkbox' );
-
-const layout_input = require( '../layout/input' );
-
-const layout_label = require( '../layout/label' );
-
-const layout_scrollbox = require( '../layout/scrollbox' );
-
-const widget_button = require( './button' );
-
-const widget_checkbox = require( './checkbox' );
-
-const widget_input = require( './input' );
-
-const widget_label = require( './label' );
-
-const widget_scrollbox = require( './scrollbox' );
+def.abstract = true;
 
 
 /*
-| Mapping of widget layouts to widget objects.
+| Handles a potential dragStart event.
 */
-def.staticLazy._layoutMap =
-	function( )
-{
-	const map = new Map( );
-
-	map.set( layout_button, widget_button );
-	map.set( layout_checkbox, widget_checkbox );
-	map.set( layout_input, widget_input );
-	map.set( layout_label, widget_label );
-	map.set( layout_scrollbox, widget_scrollbox );
-
-	if( FREEZE ) Object.freeze( map );
-
-	return map;
-};
-
-
-/*
-| Creates an actual widget from a layout.
-*/
-def.static.createFromLayout =
+def.proto.dragStart =
 	function(
-		layout,     // of type layout_label
-		path,       // path of the widget
-		transform   // visual transformation
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl     // true if ctrl or meta key was held down
 	)
 {
 /**/if( CHECK )
@@ -63,13 +25,8 @@ def.static.createFromLayout =
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
-	const widget = widget_widget._layoutMap.get( layout.timtype );
-
-	if( !widget ) throw new Error( );
-
-	return widget.createFromLayout( layout, path, transform );
+	return undefined;
 };
 
 
 } );
-

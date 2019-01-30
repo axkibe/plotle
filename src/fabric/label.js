@@ -28,9 +28,9 @@ if( TIM )
 
 
 /*
-| Puts in the path to doc child.
+| Forwards the path to the doc.
 */
-def.transform.doc =
+def.adjust.doc =
 	function(
 		doc
 	)
