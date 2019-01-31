@@ -30,6 +30,10 @@ if( TIM )
 }
 
 
+const gleam_point = require( '../gleam/point' );
+
+const gleam_rect = require( '../gleam/rect' );
+
 const visual_label = require( '../visual/label' );
 
 const visual_note = require( '../visual/note' );
@@ -70,6 +74,16 @@ def.staticLazy.itemTypeToTim = ( ) =>
 
 
 /*
+| Returns the tim of the item to be created.
+*/
+def.lazy.itemTim =
+	function( )
+{
+	return action_createGeneric.itemTypeToTim[ this.itemType ];
+};
+
+
+/*
 | Extra checking
 */
 def.proto._check =
@@ -80,12 +94,80 @@ def.proto._check =
 
 
 /*
-| Returns the tim of the item to be created.
+| Drag moves during creating a generic item.
 */
-def.lazy.itemTim =
-	function( )
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
 {
-	return action_createGeneric.itemTypeToTim[ this.itemType ];
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	// there isn't really a creation going on?
+	if( !this.startPoint ) return;
+
+	const transform = space.transform;
+
+	// FIXME make this combo a visual space call
+	const dp = space._snap( p, ctrl ).detransform( transform );
+
+	let zone = gleam_rect.createArbitrary( this.startPoint, dp );
+
+	const model = this.itemTim.model;
+
+	let transientItem = this.transientItem;
+
+	switch( this.itemType )
+	{
+		case 'note' :
+		case 'portal' :
+
+			zone = zone.ensureMinSize( model.minSize );
+
+			transientItem =
+				transientItem.create(
+					'fabric', transientItem.fabric.create( 'zone', zone ),
+					'transform', transform
+				);
+
+			break;
+
+		case 'label' :
+		{
+			const fs = model.doc.fontsize * zone.height / model.zone.height;
+
+			const resized =
+				transientItem.create(
+					'fabric', model.fabric.create( 'fontsize', fs )
+				);
+
+			const pos =
+				( dp.x > this.startPoint.x )
+				? zone.pos
+				: gleam_point.xy(
+					zone.pos.x + zone.width - resized.zone.width,
+					zone.pos.y
+				);
+
+			transientItem =
+				resized.create(
+					'fabric', resized.fabric.create( 'pos', pos ),
+					'transform', transform
+				);
+
+			break;
+		}
+
+		default : throw new Error( );
+	}
+
+	root.create( 'action', this.create( 'transientItem', transientItem ) );
 };
 
 

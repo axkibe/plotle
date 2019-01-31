@@ -94,4 +94,37 @@ def.proto.affectZone =
 };
 
 
+/*
+| Drag moves during item dragging.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const startPoint = this.startPoint;
+
+	const transform = space.transform;
+
+	const startPos = this.startZone.pos;
+
+	const dp = p.detransform( transform );
+
+	let movedStartPos = startPos.add( dp ).sub( startPoint );
+
+	// FIXME XXX takes privates from space!!!
+	if( space._hasSnapping( ctrl ) )
+	{
+		movedStartPos =
+			space._snap( movedStartPos.transform( transform ) )
+			.detransform( transform );
+	}
+
+	root.create( 'action', this.create( 'moveBy', movedStartPos.sub( startPos ) ) );
+};
+
+
 } );

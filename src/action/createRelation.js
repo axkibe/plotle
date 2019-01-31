@@ -50,4 +50,39 @@ def.proto.affectsItem =
 };
 
 
+/*
+| Drag moves during creating a relation.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	if( this.relationState === 'pan' )
+	{
+		// panning while creating a relation
+		const pd = p.sub( this.startPoint );
+
+		// FIXME this is an akward call.
+		root.create(
+			'spaceTransform', space.transform.create( 'offset', this.offset.add( pd ) )
+		);
+
+		return;
+	}
+
+	// Looks if this action is dragging to an item
+	// FIXME move somewhere else
+	for( let r = 0, rZ = space.length; r < rZ; r++ )
+	{
+		if( space.atRank( r ).createRelationMove( p, this ) ) return;
+	}
+
+	root.create( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );
+};
+
+
 } );

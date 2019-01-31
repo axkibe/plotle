@@ -99,5 +99,109 @@ def.proto.affectZone =
 };
 
 
-} );
+/*
+| Drag moves during item resizing.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
 
+	const transform = space.transform;
+
+	const pBase = this.pBase;
+
+	const proportional = this.proportional;
+
+	const resizeDir = this.resizeDir;
+
+	const startPoint = this.startPoint;
+
+	const startZone = this.startZone;
+
+	const dp = p.detransform( transform );
+
+	let scaleX, scaleY;
+
+	{
+		// start zone reference point
+		const szrp = resizeDir.from( startZone );
+
+		// distance of startPoint to szrp
+		const disp = szrp.sub( startPoint );
+
+		// end zone point
+		let ezp = dp.add( disp );
+
+		// FIXME XXX
+		if( space._hasSnapping( ctrl ) )
+		{
+			// snap the endzone point
+			ezp = space._snap( ezp.transform( transform ) ).detransform( transform );
+		}
+
+		if( resizeDir.hasY )
+		{
+			scaleY = ( pBase.y - ezp.y ) / ( pBase.y - szrp.y );
+
+			if( scaleY < 0 ) scaleY = 0;
+		}
+
+		if( resizeDir.hasX )
+		{
+			scaleX = ( pBase.x - ezp.x ) / ( pBase.x - szrp.x );
+
+			if( scaleX < 0 ) scaleX = 0;
+		}
+	}
+
+	if( proportional )
+	{
+		if( scaleX === undefined ) scaleX = scaleY;
+		else if( scaleY === undefined ) scaleY = scaleX;
+	}
+	else
+	{
+		if( scaleX === undefined ) scaleX = 1;
+
+		if( scaleY === undefined ) scaleY = 1;
+	}
+
+	const paths = this.itemPaths;
+
+	const startZones = this.startZones;
+
+	for( let a = 0, al = paths.length; a < al; a++ )
+	{
+		const path = paths.get( a );
+
+		const key = path.get( 2 );
+
+		const item = space.get( key );
+
+		const startZone = startZones.get( key );
+
+		let min = item.minScaleX( startZone );
+
+		if( scaleX < min ) scaleX = min;
+
+		min = item.minScaleY( startZone );
+
+		if( scaleY < min ) scaleY = min;
+	}
+
+	if( proportional ) scaleX = scaleY = Math.max( scaleX, scaleY );
+
+	root.create( 'action', this.create( 'scaleX', scaleX, 'scaleY', scaleY ) );
+};
+
+
+} );

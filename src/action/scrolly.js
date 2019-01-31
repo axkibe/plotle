@@ -44,5 +44,32 @@ def.proto.affectsItem =
 def.proto.normalButtonDown = true;
 
 
-} );
+/*
+| Moves during scrolling.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const item = space.get( this.scrollPath.get( -1 ) );
 
+	const dy = ( p.y - this.startPoint.y ) / space.transform.zoom;
+
+	const sbary = item.scrollbarY;
+
+	let spos = this.startPos + sbary.scale( dy );
+
+	if( spos < 0 ) spos = 0;
+
+	root.setPath(
+		item.path.append( 'scrollPos' ),
+		item.scrollPos.create( 'y', spos )
+	);
+};
+
+
+} );

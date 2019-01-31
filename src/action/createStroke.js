@@ -103,6 +103,31 @@ def.proto.transientVisual =
 
 
 /*
+| Drag Mmves during creating a stroke.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	/*
+	// Looks if the action is dragging to an item
+	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	{
+		if( this.atRank( r ).createRelationMove( p, action ) ) return;
+	}
+	*/
+
+	// FIXME XXX dp!!!
+
+	root.create( 'action', this.create( 'to', p ) );
+};
+
+
+/*
 | The end style of the be created stroke.
 */
 def.lazy._toStyle =

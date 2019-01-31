@@ -165,6 +165,7 @@ def.proto.dragMove =
 
 		case action_scrolly :
 
+			// FIXME this is awkward
 			form_form._moveScrollY.call( this, p, shift, ctrl );
 
 			return;
@@ -365,6 +366,7 @@ def.proto.pointingHover =
 /*
 | User is pressing a special key.
 */
+def.static.specialKey =
 def.proto.specialKey =
 	function(
 		key,

@@ -15,9 +15,9 @@ def.abstract = true;
 */
 def.proto.dragStart =
 	function(
-		p,       // point where dragging starts
-		shift,   // true if shift key was held down
-		ctrl     // true if ctrl or meta key was held down
+		p,      // point where dragging starts
+		shift,  // true if shift key was held down
+		ctrl    // true if ctrl(or meta) was held down
 	)
 {
 /**/if( CHECK )
@@ -26,6 +26,21 @@ def.proto.dragStart =
 /**/}
 
 	return undefined;
+};
+
+
+/*
+| Mouse wheel is being turned.
+*/
+def.proto.mousewheel =
+	function(
+		p,      // screen position of the wheel event
+		dir,    // direction of the wheel
+		shift,  // true if shift key was held down
+		ctrl    // true if ctrl(or meta) was held down
+	)
+{
+	// default to nothing
 };
 
 

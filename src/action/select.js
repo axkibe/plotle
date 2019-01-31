@@ -69,5 +69,28 @@ def.proto.affectsItem =
 };
 
 
-} );
+/*
+| Drag moves during selecting.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		space,  // the visual space for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	if( this.itemPath )
+	{
+		const item = space.get( this.itemPath.get( 2 ) );
 
+		return item.moveSelect( p );
+	}
+
+	root.create(
+		'action', this.create( 'toPoint', p.detransform( space.transform ) )
+	);
+};
+
+
+} );

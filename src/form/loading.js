@@ -54,9 +54,6 @@ if( TIM )
 }
 
 
-const form_form = require( './form' );
-
-
 /*
 | The disc is shown while a form is shown.
 */
