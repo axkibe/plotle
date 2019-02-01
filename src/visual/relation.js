@@ -58,15 +58,6 @@ const gruga_label = require( '../gruga/label' );
 
 const gruga_relation = require( '../gruga/relation' );
 
-const visual_label = require( '../visual/label' );
-
-
-/*
-| Transforms the doc.
-| FIXME this is a dirty workaround.
-*/
-def.adjust.doc = visual_label.prototype[ '__adjust_' + 'doc' ];
-
 
 /*
 | The item's glint.

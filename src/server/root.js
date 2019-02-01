@@ -335,7 +335,7 @@ def.proto.prepareInventory =
 				tim_type_tim.createFromPath( entry.split( '/' ) )
 			);
 
-		const walk = timspec_twig.createByDependencyWalk( srts );
+		let walk = timspec_twig.createByDependencyWalk( srts );
 
 		for( let a = 0, al = walk.length; a < al; a++ )
 		{

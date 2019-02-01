@@ -23,21 +23,27 @@ if( TIM )
 }
 
 
+const visual_space = require( '../visual/space' );
+
+
 /*
 | Drag moves during panning.
 */
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
 	const pd = p.sub( this.startPoint );
 
 	root.create(
-		'spaceTransform', space.transform.create( 'offset', this.offset.add( pd ) )
+		'spaceTransform', screen.transform.create( 'offset', this.offset.add( pd ) )
 	);
 };
 

@@ -6,7 +6,6 @@
 
 tim.define( module, ( def ) => {
 
-
 const gruga_fonts = require( '../gruga/fonts' );
 
 const shell_system = require( './system' );

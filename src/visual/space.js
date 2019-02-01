@@ -506,20 +506,6 @@ def.lazy.glint =
 
 
 /*
-| Moving during an operation with the pointing device button held down.
-*/
-def.proto.dragMove =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	this.action.dragMove( p, this, shift, ctrl );
-};
-
-
-/*
 | Starts an operation with the pointing device held down.
 */
 def.proto.dragStart =
@@ -896,18 +882,6 @@ def.lazy._grid =
 
 
 /*
-| Returns true if doing snapping.
-*/
-def.proto._hasSnapping =
-	function(
-		ctrl // state of ctrl key (or defined)
-	)
-{
-	return !ctrl && this.fabric.hasSnapping;
-};
-
-
-/*
 | Returns true if the item ought to be highlighted.
 */
 def.proto._highlightItem =
@@ -967,17 +941,21 @@ def.lazy._ranks =
 
 
 /*
-| Snaps a point onto the grid.
+| (De)transforms a point from visual reference system (VisualRS) to
+| space reference system (SpaceRS)
 */
-def.proto._snap =
+def.proto.pointToSpaceRS =
 	function(
-		p,     // the point to snap
-		ctrl   // if true don't to snapping (can be undefined)
+		p,    // the point in visual RS
+		snap  // if true snap if enabled for space
 	)
 {
-	if( !this._hasSnapping( ctrl ) ) return p;
+	if( !snap || !this.fabric.hasSnapping )
+	{
+		return p.detransform( this.transform );
+	}
 
-	return this._grid.snap( p );
+	return this._grid.snap( p ).detransform( this.transform );
 };
 
 
@@ -1003,7 +981,7 @@ def.proto._startCreateGeneric =
 
 	const model = itemTim.model;
 
-	const dp = this._snap( p, ctrl ).detransform( this.transform );
+	const ps = this.pointToSpaceRS( p, !ctrl );
 
 	let transientItem;
 
@@ -1013,7 +991,7 @@ def.proto._startCreateGeneric =
 		{
 			let fabric  =
 				model.fabric.create(
-					'zone', gleam_rect.posSize( dp, model.minSize )
+					'zone', gleam_rect.posSize( ps, model.minSize )
 				);
 
 			if( itemTim === visual_portal )
@@ -1039,7 +1017,7 @@ def.proto._startCreateGeneric =
 
 			transientItem =
 				model.create(
-					'fabric', model.fabric.create( 'pos', dp ),
+					'fabric', model.fabric.create( 'pos', ps ),
 					'path', visual_space.transPath,
 					'transform', this.transform
 				);
@@ -1050,7 +1028,7 @@ def.proto._startCreateGeneric =
 
 	}
 
-	root.create( 'action', action.create( 'startPoint', dp, 'transientItem', transientItem ) );
+	root.create( 'action', action.create( 'startPoint', ps, 'transientItem', transientItem ) );
 };
 
 
@@ -1068,9 +1046,9 @@ def.proto._stopCreateGeneric =
 
 	if( !action.startPoint ) return;
 
-	const dp = this._snap( p, ctrl ).detransform( this.transform );
+	const ps = this.pointToSpaceRS( p, !ctrl );
 
-	action.itemTim.createGeneric( action, dp );
+	action.itemTim.createGeneric( action, ps );
 
 	root.create(
 		'action',

@@ -40,6 +40,8 @@ const visual_note = require( '../visual/note' );
 
 const visual_portal = require( '../visual/portal' );
 
+const visual_space = require( '../visual/space' );
+
 
 /*
 | Shortcut.
@@ -99,7 +101,7 @@ def.proto._check =
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
@@ -109,15 +111,17 @@ def.proto.dragMove =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
 	// there isn't really a creation going on?
 	if( !this.startPoint ) return;
 
-	const transform = space.transform;
+	const transform = screen.transform;
 
-	// FIXME make this combo a visual space call
-	const dp = space._snap( p, ctrl ).detransform( transform );
+	const ps = screen.pointToSpaceRS( p, !ctrl );
 
-	let zone = gleam_rect.createArbitrary( this.startPoint, dp );
+	let zone = gleam_rect.createArbitrary( this.startPoint, ps );
 
 	const model = this.itemTim.model;
 
@@ -148,7 +152,7 @@ def.proto.dragMove =
 				);
 
 			const pos =
-				( dp.x > this.startPoint.x )
+				( ps.x > this.startPoint.x )
 				? zone.pos
 				: gleam_point.xy(
 					zone.pos.x + zone.width - resized.zone.width,

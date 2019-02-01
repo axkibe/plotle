@@ -26,6 +26,9 @@ if( TIM )
 }
 
 
+const visual_space = require( '../visual/space' );
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -50,14 +53,17 @@ def.proto.normalButtonDown = true;
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	const item = space.get( this.scrollPath.get( -1 ) );
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
 
-	const dy = ( p.y - this.startPoint.y ) / space.transform.zoom;
+	const item = screen.get( this.scrollPath.get( -1 ) );
+
+	const dy = ( p.y - this.startPoint.y ) / screen.transform.zoom;
 
 	const sbary = item.scrollbarY;
 

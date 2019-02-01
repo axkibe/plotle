@@ -45,6 +45,9 @@ if( TIM )
 }
 
 
+const visual_space = require( '../visual/space' );
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -105,7 +108,7 @@ def.proto.affectZone =
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
@@ -115,7 +118,10 @@ def.proto.dragMove =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	const transform = space.transform;
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
+	const transform = screen.transform;
 
 	const pBase = this.pBase;
 
@@ -141,12 +147,8 @@ def.proto.dragMove =
 		// end zone point
 		let ezp = dp.add( disp );
 
-		// FIXME XXX
-		if( space._hasSnapping( ctrl ) )
-		{
-			// snap the endzone point
-			ezp = space._snap( ezp.transform( transform ) ).detransform( transform );
-		}
+		// FIXME decomplicate
+		ezp = screen.pointToSpaceRS( ezp.transform( transform ), !ctrl );
 
 		if( resizeDir.hasY )
 		{
@@ -185,7 +187,7 @@ def.proto.dragMove =
 
 		const key = path.get( 2 );
 
-		const item = space.get( key );
+		const item = screen.get( key );
 
 		const startZone = startZones.get( key );
 

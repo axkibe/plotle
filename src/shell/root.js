@@ -239,6 +239,7 @@ const visual_space = require( '../visual/space' );
 
 const widget_factory = require( '../widget/factory' );
 
+
 const loadingSpaceTextPath =
 	tim_path.empty
 	.append( 'form' )
@@ -998,7 +999,7 @@ def.proto.dragMove =
 		if( bubble !== undefined ) return;
 	}
 
-	screen.dragMove( p, shift, ctrl );
+	root.action.dragMove( p, screen, shift, ctrl );
 };
 
 

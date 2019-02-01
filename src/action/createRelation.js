@@ -36,6 +36,9 @@ if( TIM )
 }
 
 
+const visual_space = require( '../visual/space' );
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -56,11 +59,14 @@ def.proto.affectsItem =
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
 	if( this.relationState === 'pan' )
 	{
 		// panning while creating a relation
@@ -68,17 +74,23 @@ def.proto.dragMove =
 
 		// FIXME this is an akward call.
 		root.create(
-			'spaceTransform', space.transform.create( 'offset', this.offset.add( pd ) )
+			'spaceTransform', screen.transform.create( 'offset', this.offset.add( pd ) )
 		);
 
 		return;
 	}
 
 	// Looks if this action is dragging to an item
-	// FIXME move somewhere else
-	for( let r = 0, rZ = space.length; r < rZ; r++ )
+	for( let r = 0, rZ = screen.length; r < rZ; r++ )
 	{
-		if( space.atRank( r ).createRelationMove( p, this ) ) return;
+		const item = screen.atRank( r );
+
+		if( item.tZone.within( p ) )
+		{
+			root.create( 'action', this.create( 'toItemPath', item.path ) );
+
+			return;
+		}
 	}
 
 	root.create( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );

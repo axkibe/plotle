@@ -240,23 +240,6 @@ def.static.getResizeItemChangePosFs =
 
 
 /*
-| A createRelation action moves.
-*/
-def.proto.createRelationMove =
-	function(
-		p,
-		action
-	)
-{
-	if( !this.tZone.within( p ) ) return;
-
-	root.create( 'action', action.create( 'toItemPath', this.path ) );
-
-	return true;
-};
-
-
-/*
 | Generic click handler.
 |
 | Takes care about mutli-selecting item groups by ctrl+click.

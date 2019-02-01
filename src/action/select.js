@@ -28,6 +28,8 @@ if( TIM )
 
 const gleam_rect = require( '../gleam/rect' );
 
+const visual_space = require( '../visual/space' );
+
 
 /*
 | Zone of the action.
@@ -75,21 +77,22 @@ def.proto.affectsItem =
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
 	if( this.itemPath )
 	{
-		const item = space.get( this.itemPath.get( 2 ) );
+		const item = screen.get( this.itemPath.get( 2 ) );
 
 		return item.moveSelect( p );
 	}
 
-	root.create(
-		'action', this.create( 'toPoint', p.detransform( space.transform ) )
-	);
+	root.create( 'action', this.create( 'toPoint', screen.pointToSpaceRS( p, false ) ) );
 };
 
 

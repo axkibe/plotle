@@ -30,6 +30,9 @@ if( TIM )
 }
 
 
+const visual_space = require( '../visual/space' );
+
+
 /**
 *** Exta checking
 ***/
@@ -100,14 +103,17 @@ def.proto.affectZone =
 def.proto.dragMove =
 	function(
 		p,      // point, viewbased point of stop
-		space,  // the visual space for this operation
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
 	const startPoint = this.startPoint;
 
-	const transform = space.transform;
+	const transform = screen.transform;
 
 	const startPos = this.startZone.pos;
 
@@ -115,13 +121,8 @@ def.proto.dragMove =
 
 	let movedStartPos = startPos.add( dp ).sub( startPoint );
 
-	// FIXME XXX takes privates from space!!!
-	if( space._hasSnapping( ctrl ) )
-	{
-		movedStartPos =
-			space._snap( movedStartPos.transform( transform ) )
-			.detransform( transform );
-	}
+	// FIXME decomplicated this.
+	movedStartPos = screen.pointToSpaceRS( movedStartPos.transform( transform ), !ctrl );
 
 	root.create( 'action', this.create( 'moveBy', movedStartPos.sub( startPos ) ) );
 };
