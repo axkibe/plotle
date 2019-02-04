@@ -533,8 +533,6 @@ def.proto.dragStart =
 
 	const dp = p.detransform( transform );
 
-	if( aType === action_createGeneric ) { this._startCreateGeneric( p, shift ); return; }
-
 	// see if one item was targeted
 	for( let a = 0, al = this.length; a < al; a++ )
 	{
@@ -543,41 +541,6 @@ def.proto.dragStart =
 		if( item.dragStart( p, shift, ctrl ) ) return;
 	}
 
-	switch( aType )
-	{
-		case action_createRelation :
-
-			root.create(
-				'action',
-					action.create(
-						'offset', transform.offset,
-						'relationState', 'pan',
-						'startPoint', p
-					)
-			);
-
-			return;
-
-		case action_createStroke :
-
-			root.create( 'action', action.create( 'from', dp ) );
-
-			return;
-
-		case action_select :
-
-			root.create( 'action', action.create( 'startPoint', dp, 'toPoint', dp) );
-
-			return;
-
-		default :
-
-			root.create(
-				'action', action_pan.create( 'offset', transform.offset, 'startPoint', p )
-			);
-
-			return;
-	}
 };
 
 
@@ -963,73 +926,6 @@ def.proto.pointToSpaceRS =
 | Standard grid spacing.
 */
 def.staticLazy._standardSpacing = ( ) => gleam_point.xy( 15, 15 );
-
-
-/*
-| Starts creating a generic item.
-*/
-def.proto._startCreateGeneric =
-	function(
-		p,     // point of start
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	const action = this.action;
-
-	const itemTim = action.itemTim;
-
-	const model = itemTim.model;
-
-	const ps = this.pointToSpaceRS( p, !ctrl );
-
-	let transientItem;
-
-	switch( itemTim.positioning )
-	{
-		case 'zone' :
-		{
-			let fabric  =
-				model.fabric.create(
-					'zone', gleam_rect.posSize( ps, model.minSize )
-				);
-
-			if( itemTim === visual_portal )
-			{
-				fabric =
-					fabric.create(
-						'spaceUser', root.userCreds.name,
-						'spaceTag', 'home'
-					);
-			}
-
-			transientItem =
-				model.create(
-					'fabric', fabric,
-					'path', visual_space.transPath,
-					'transform', this.transform
-				);
-
-			break;
-		}
-
-		case 'pos/fontsize' :
-
-			transientItem =
-				model.create(
-					'fabric', model.fabric.create( 'pos', ps ),
-					'path', visual_space.transPath,
-					'transform', this.transform
-				);
-
-			break;
-
-		default : throw new Error( );
-
-	}
-
-	root.create( 'action', action.create( 'startPoint', ps, 'transientItem', transientItem ) );
-};
 
 
 /*

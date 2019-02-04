@@ -175,4 +175,78 @@ def.proto.dragMove =
 };
 
 
+/*
+| Starts a drag.
+*/
+def.proto.dragStart =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
+	const itemTim = this.itemTim;
+
+	const model = itemTim.model;
+
+	const ps = screen.pointToSpaceRS( p, !ctrl );
+
+	let transientItem;
+
+	switch( itemTim.positioning )
+	{
+		case 'zone' :
+		{
+			let fabric  =
+				model.fabric.create(
+					'zone', gleam_rect.posSize( ps, model.minSize )
+				);
+
+			if( itemTim === visual_portal )
+			{
+				fabric =
+					fabric.create(
+						'spaceUser', root.userCreds.name,
+						'spaceTag', 'home'
+					);
+			}
+
+			transientItem =
+				model.create(
+					'fabric', fabric,
+					'path', visual_space.transPath,
+					'transform', screen.transform
+				);
+
+			break;
+		}
+
+		case 'pos/fontsize' :
+
+			transientItem =
+				model.create(
+					'fabric', model.fabric.create( 'pos', ps ),
+					'path', visual_space.transPath,
+					'transform', screen.transform
+				);
+
+			break;
+
+		default : throw new Error( );
+
+	}
+
+	root.create( 'action', this.create( 'startPoint', ps, 'transientItem', transientItem ) );
+};
+
+
 } );

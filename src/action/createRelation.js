@@ -54,7 +54,7 @@ def.proto.affectsItem =
 
 
 /*
-| Drag moves during creating a relation.
+| Drag moves.
 */
 def.proto.dragMove =
 	function(
@@ -64,6 +64,11 @@ def.proto.dragMove =
 		ctrl    // true if ctrl key was pressed
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
 	// this action only makes sense on spaces
 	if( screen.timtype !== visual_space ) return;
 
@@ -94,6 +99,55 @@ def.proto.dragMove =
 	}
 
 	root.create( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );
+};
+
+
+/*
+| Starts a drag.
+*/
+def.proto.dragStart =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	// this action only makes sense on spaces
+	if( screen.timtype !== visual_space ) return;
+
+	// see if one item was targeted
+	for( let a = 0, al = screen.length; a < al; a++ )
+	{
+		const item = screen.atRank( a );
+
+		if( !item.tShape.within( p ) ) continue;
+
+		root.create(
+			'action',
+				this.create(
+					'fromItemPath', item.path,
+					'relationState', 'hadSelect',
+					'toPoint', p
+				)
+		);
+
+		return;
+	}
+
+	root.create(
+		'action',
+			this.create(
+				'offset', screen.transform.offset,
+				'relationState', 'pan',
+				'startPoint', p
+			)
+	);
 };
 
 

@@ -74,70 +74,6 @@ def.static.concernsMark =
 
 
 /*
-| Handles a potential dragStart event for this item.
-*/
-def.static.dragStart =
-def.proto.dragStart =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/}
-
-	const action = this.action;
-
-	if( !this.tShape.within( p ) ) return false;
-
-	switch( action && action.timtype )
-	{
-		case action_createRelation :
-
-			root.create(
-				'action',
-					action.create(
-						'fromItemPath', this.path,
-						'relationState', 'hadSelect',
-						'toPoint', p
-					)
-			);
-
-			return true;
-	}
-
-	// dragging
-	if( this.access !== 'rw' ) return false;
-
-	let mark = this.mark;
-
-	if( !mark || mark.timtype !== visual_mark_items )
-	{
-		mark = visual_mark_items.createWithOne( this.path );
-
-		root.setUserMark( mark );
-	}
-
-	const paths = mark.itemPaths;
-
-	root.create(
-		'action',
-			action_dragItems.create(
-				'itemPaths', paths,
-				'moveBy', gleam_point.zero,
-				'startPoint', p.detransform( this.transform ),
-				'startZone', this.zone
-			)
-	);
-
-	return true;
-};
-
-
-/*
 | Returns the change-set for a dragging
 | the item, defined by its zone.
 */
@@ -311,6 +247,52 @@ def.proto.createRelationStop =
 
 
 /*
+| dragging start.
+*/
+def.static.dragStart =
+def.proto.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
+	if( !this.tShape.within( p ) ) return false;
+
+	// dragging
+	if( this.access !== 'rw' ) return false;
+
+	let mark = this.mark;
+
+	if( !mark || mark.timtype !== visual_mark_items )
+	{
+		mark = visual_mark_items.createWithOne( this.path );
+
+		root.setUserMark( mark );
+	}
+
+	const paths = mark.itemPaths;
+
+	root.create(
+		'action',
+			action_dragItems.create(
+				'itemPaths', paths,
+				'moveBy', gleam_point.zero,
+				'startPoint', p.detransform( this.transform ),
+				'startZone', this.zone
+			)
+	);
+
+	return true;
+};
+
+
+/*
 | The key of this item.
 */
 def.lazy.key =
@@ -318,7 +300,6 @@ def.lazy.key =
 {
 	return this.path.get( -1 );
 };
-
 
 
 /*

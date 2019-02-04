@@ -26,9 +26,6 @@ if( TIM )
 }
 
 
-const visual_space = require( '../visual/space' );
-
-
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -58,23 +55,47 @@ def.proto.dragMove =
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	// item or widget
+	const iow = root.getPath( this.scrollPath );
 
-	const item = screen.get( this.scrollPath.get( -1 ) );
+	const dy =
+		( p.y - this.startPoint.y )
+		/ (
+			screen.transform
+			? screen.transform.zoom
+			: 1
+		);
 
-	const dy = ( p.y - this.startPoint.y ) / screen.transform.zoom;
-
-	const sbary = item.scrollbarY;
+	const sbary = iow.scrollbarY;
 
 	let spos = this.startPos + sbary.scale( dy );
 
 	if( spos < 0 ) spos = 0;
 
 	root.setPath(
-		item.path.append( 'scrollPos' ),
-		item.scrollPos.create( 'y', spos )
+		iow.path.append( 'scrollPos' ),
+		iow.scrollPos.create( 'y', spos )
 	);
+};
+
+
+/*
+| Starts a drag.
+*/
+def.proto.dragStart =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	console.log( 'scrolly.dragStart shouldn\'t happen' );
 };
 
 

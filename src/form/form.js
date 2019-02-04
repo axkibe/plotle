@@ -12,8 +12,6 @@ def.abstract = true;
 
 const action_none = require( '../action/none' );
 
-const action_scrolly = require( '../action/scrolly' );
-
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const gleam_glint_paint = require( '../gleam/glint/paint' );
@@ -146,32 +144,6 @@ def.proto.click =
 	}
 
 	return false;
-};
-
-
-/*
-| Moving during an operation with the pointing device button held down.
-*/
-def.proto.dragMove =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	switch( this.action.timtype )
-	{
-		case action_none : return 'pointer';
-
-		case action_scrolly :
-
-			// FIXME this is awkward
-			form_form._moveScrollY.call( this, p, shift, ctrl );
-
-			return;
-
-		default : throw new Error( );
-	}
 };
 
 
@@ -386,35 +358,6 @@ def.proto.specialKey =
 	}
 
 	widget.specialKey( key, shift, ctrl );
-};
-
-
-/*
-| Moves during scrolling.
-*/
-def.static._moveScrollY =
-	function(
-		p         // point of stop
-		// shift, // true if shift key was pressed
-		// ctrl   // true if ctrl key was pressed
-	)
-{
-	const action = this.action;
-
-	const wPath = action.scrollPath;
-
-	const widget = root.getPath( wPath );
-
-	const dy = p.y - action.startPoint.y;
-
-	const sbary = widget.scrollbarY;
-
-	const spos = action.startPos + sbary.scale( dy );
-
-	root.setPath(
-		wPath.append( 'scrollPos' ),
-		widget.scrollPos.create( 'y', spos )
-	);
 };
 
 

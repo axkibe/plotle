@@ -80,12 +80,65 @@ def.proto.concernsUserSpaceList =
 
 
 /*
-| Distance to left side of screen.
+| Adjusts widgets.
 */
-def.lazy._leftDistance = ( ) =>
-	// == left distance to disc
-	root.disc.get( 'main' ).size.width + 20;
+def.adjust.get =
+	function(
+		name,
+		widget
+	)
+{
+	switch( name )
+	{
+		case 'headline' : widget = this._transformHeadline( widget ); break;
 
+		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
+	}
+
+	return form_form.adjustGet.call( this, name, widget );
+};
+
+
+/*
+| Offset of the vertical scrollbar, set so it's within the scrollbox.
+*/
+def.staticLazy.scrollbarYOffset =
+	function( )
+{
+	return gleam_point.xy( Math.ceil( -gruga_scrollbar.strength / 2 ) - 1, 0 );
+};
+
+
+/*
+| A button of the form has been pushed.
+*/
+def.proto.pushButton =
+	function(
+		path,
+		shift,
+		ctrl
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== 'moveTo' ) throw new Error( );
+/**/}
+
+	const buttonName = path.get( -1 );
+
+	const parts = buttonName.split( ':' );
+
+	root.moveToSpace(
+		ref_space.create( 'username', parts[ 0 ], 'tag',  parts[ 1 ] ),
+		false
+	);
+};
+
+
+/*
+| The disc is shown while a form is shown.
+*/
+def.proto.showDisc = true;
 
 /*
 | Width available to the form.
@@ -108,6 +161,14 @@ def.lazy._cols =
 
 
 /*
+| Distance to left side of screen.
+*/
+def.lazy._leftDistance = ( ) =>
+	// == left distance to disc
+	root.disc.get( 'main' ).size.width + 20;
+
+
+/*
 | Number of rows used.
 */
 def.lazy._rows =
@@ -118,6 +179,28 @@ def.lazy._rows =
 	if( !userSpaceList ) return 0;
 
 	return Math.ceil( userSpaceList.length / this._cols );
+};
+
+
+/*
+| Transforms the headline.
+*/
+def.proto._transformHeadline =
+	function(
+		headline   // the headline widget
+	)
+{
+	// content height
+	const ch = headline.font.size * 2 + 160 + this._rows * 160;
+
+	// if below minimum content is no longer vertical centered and scrolling is needed.
+	const y = Math.max( this.viewSize.height / 2 - ch / 2, 10 + headline.font.size );
+
+	return(
+		headline.create(
+			'pos', gleam_point.xy( this._leftDistance + ( this._cols - 0.5 ) * 80 + 30, y )
+		)
+	);
 };
 
 
@@ -232,90 +315,6 @@ def.proto._transformScrollbox =
 		)
 	);
 };
-
-
-/*
-| Transforms the headline.
-*/
-def.proto._transformHeadline =
-	function(
-		headline   // the headline widget
-	)
-{
-	// content height
-	const ch = headline.font.size * 2 + 160 + this._rows * 160;
-
-	// if below minimum content is no longer vertical centered and scrolling is needed.
-	const y = Math.max( this.viewSize.height / 2 - ch / 2, 10 + headline.font.size );
-
-	return(
-		headline.create(
-			'pos', gleam_point.xy( this._leftDistance + ( this._cols - 0.5 ) * 80 + 30, y )
-		)
-	);
-};
-
-
-/*
-| Adjusts widgets.
-*/
-def.adjust.get =
-	function(
-		name,
-		widget
-	)
-{
-	switch( name )
-	{
-		case 'headline' : widget = this._transformHeadline( widget ); break;
-
-		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
-	}
-
-	return form_form.adjustGet.call( this, name, widget );
-};
-
-
-/*
-| Offset of the vertical scrollbar, set so it's within the scrollbox.
-*/
-def.staticLazy.scrollbarYOffset =
-	function( )
-{
-	return gleam_point.xy( Math.ceil( -gruga_scrollbar.strength / 2 ) - 1, 0 );
-};
-
-
-/*
-| A button of the form has been pushed.
-*/
-def.proto.pushButton =
-	function(
-		path,
-		shift,
-		ctrl
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 2 ) !== 'moveTo' ) throw new Error( );
-/**/}
-
-	const buttonName = path.get( -1 );
-
-	const parts = buttonName.split( ':' );
-
-	root.moveToSpace(
-		ref_space.create( 'username', parts[ 0 ], 'tag',  parts[ 1 ] ),
-		false
-	);
-};
-
-
-/*
-| The disc is shown while a form is shown.
-*/
-def.proto.showDisc = true;
 
 
 } );
