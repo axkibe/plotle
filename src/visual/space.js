@@ -91,8 +91,6 @@ const gleam_glint_paint = require( '../gleam/glint/paint' );
 
 const gleam_point = require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
-
 const gruga_note = require( '../gruga/note' );
 
 const gruga_relation = require( '../gruga/relation' );
@@ -524,14 +522,7 @@ def.proto.dragStart =
 	const aType = action.timtype;
 
 	// see if the frame was targeted
-	if( access == 'rw' && frame && aType !== action_select )
-	{
-		if( frame.dragStart( p, shift, ctrl ) ) return;
-	}
-
-	const transform = this.transform;
-
-	const dp = p.detransform( transform );
+	if( access == 'rw' && frame && frame.dragStart( p, shift, ctrl ) ) return;
 
 	// see if one item was targeted
 	for( let a = 0, al = this.length; a < al; a++ )
@@ -540,7 +531,6 @@ def.proto.dragStart =
 
 		if( item.dragStart( p, shift, ctrl ) ) return;
 	}
-
 };
 
 

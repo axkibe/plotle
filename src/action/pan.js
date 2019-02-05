@@ -64,7 +64,7 @@ def.proto.dragStart =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	console.log( 'pan.dragStart shouldn\'t happen' );
+	console.log( new Error( ) );
 };
 
 

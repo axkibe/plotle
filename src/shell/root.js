@@ -105,8 +105,6 @@ const animation_root = require( '../animation/root' );
 
 const animation_transform = require( '../animation/transform' );
 
-const action_createRelation = require( '../action/createRelation' );
-
 const action_dragItems = require( '../action/dragItems' );
 
 const action_none = require( '../action/none' );
@@ -1026,17 +1024,7 @@ def.proto.dragStart =
 		if( bubble !== undefined ) return;
 	}
 
-	const action = root.action;
-
-	// FIXME take out exceptions
-	if( action.timtype === action_createRelation )
-	{
-		action.dragStart( p, screen, shift, ctrl );
-	}
-	else
-	{
-		screen.dragStart( p, shift, ctrl );
-	}
+	root.action.dragStart( p, screen, shift, ctrl );
 };
 
 
