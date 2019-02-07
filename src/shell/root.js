@@ -1066,7 +1066,7 @@ def.proto.dragStop =
 		if( bubble !== undefined ) return;
 	}
 
-	screen.dragStop( p, shift, ctrl );
+	root.action.dragStop( p, screen, shift, ctrl );
 };
 
 

@@ -59,19 +59,11 @@ const action_createStroke = require( '../action/createStroke' );
 
 const action_dragItems = require( '../action/dragItems' );
 
-const action_none = require( '../action/none' );
-
 const action_pan = require( '../action/pan' );
 
 const action_resizeItems = require( '../action/resizeItems' );
 
 const action_select = require( '../action/select' );
-
-const action_scrolly = require( '../action/scrolly' );
-
-const change_grow = require( '../change/grow' );
-
-const change_list = require( '../change/list' );
 
 const fabric_label = require( '../fabric/label' );
 
@@ -100,8 +92,6 @@ const gruga_select = require( '../gruga/select' );
 const pathList = require( 'tim.js/src/pathList' );
 
 const result_hover = require( '../result/hover' );
-
-const session_uid = require( '../session/uid' );
 
 const tim_path = require( 'tim.js/src/path' );
 
@@ -515,11 +505,7 @@ def.proto.dragStart =
 {
 	const access = this.access;
 
-	const action = this.action;
-
 	const frame = this.frame;
-
-	const aType = action.timtype;
 
 	// see if the frame was targeted
 	if( access == 'rw' && frame && frame.dragStart( p, shift, ctrl ) ) return;
@@ -553,21 +539,6 @@ def.proto.dragStop =
 	// FIXME make map
 	switch( this.action.timtype )
 	{
-		case action_createGeneric : this._stopCreateGeneric( p, shift, ctrl ); break;
-
-		case action_createRelation : this._stopCreateRelation( p, shift, ctrl ); break;
-
-		case action_createStroke : this._stopCreateStroke( p, shift, ctrl ); break;
-
-		case action_dragItems : this._stopDragItems( p, shift, ctrl ); break;
-
-		case action_none : break;
-
-		case action_pan : root.create( 'action', action_none.create( ) ); break;
-
-		case action_resizeItems : this._stopDragResizeItems( p, shift, ctrl ); break;
-
-		case action_scrolly : root.create( 'action', action_none.create( ) ); break;
 
 		case action_select : this._stopSelect( p, shift, ctrl ); break;
 
@@ -919,33 +890,6 @@ def.staticLazy._standardSpacing = ( ) => gleam_point.xy( 15, 15 );
 
 
 /*
-| Stops creating a generic item.
-*/
-def.proto._stopCreateGeneric =
-	function(
-		p,     // point of stop
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	const action = this.action;
-
-	if( !action.startPoint ) return;
-
-	const ps = this.pointToSpaceRS( p, !ctrl );
-
-	action.itemTim.createGeneric( action, ps );
-
-	root.create(
-		'action',
-			shift
-			? action_createGeneric.create( 'itemType', action.itemType )
-			: action_none.create( )
-	);
-};
-
-
-/*
 | Stops creating.
 */
 def.proto._stopCreate =
@@ -958,230 +902,6 @@ def.proto._stopCreate =
 	root.create( 'action', this.action.create( 'offset', undefined, 'startPoint', undefined ) );
 };
 
-
-/*
-| Stops creating a relation.
-*/
-def.proto._stopCreateRelation =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const action = this.action;
-
-	switch( action.relationState )
-	{
-		case 'hadSelect' :
-
-			if( action.toItemPath )
-			{
-				const item = this.get( action.toItemPath.get( -1 ) );
-
-				item.createRelationStop( p );
-			}
-
-			root.create(
-				'action',
-				shift
-				? action_createRelation.create( 'relationState', 'start' )
-				: action_none.create( )
-			);
-
-			return;
-
-		case 'start' : root.create( 'action', action_none.create( ) ); return;
-
-		case 'pan' :
-
-			root.create( 'action', action.create( 'relationState', 'start' ) );
-
-			return;
-
-		default : throw new Error( );
-	}
-};
-
-
-/*
-| Stops creating a relation.
-*/
-def.proto._stopCreateStroke =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const val = this.action.transientFabric;
-
-	const key = session_uid.newUid( );
-
-	root.alter(
-		change_grow.create(
-			'val', val,
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'rank', 0
-		)
-	);
-};
-
-
-/*
-| Stops creating a relation.
-*/
-def.proto._stopDragItems =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const paths = this.action.itemPaths;
-
-	let changes;
-
-	for( let a = 0, al = paths.length; a < al; a++ )
-	{
-		const item = root.getPath( paths.get( a ) );
-
-		const chi = item.getDragItemChange( );
-
-		if( !chi ) continue;
-
-		if( !changes )
-		{
-			changes = chi;
-		}
-		else
-		{
-			if( changes.timtype !== change_list )
-			{
-				changes = change_list.create( 'list:append', changes );
-			}
-
-			if( chi.timtype !== change_list )
-			{
-				changes = changes.create( 'list:append', chi );
-			}
-			else
-			{
-				changes = changes.appendList( chi );
-			}
-		}
-	}
-
-	if( changes ) root.alter( changes );
-
-	root.create( 'action', action_none.create( ) );
-};
-
-
-/*
-| Stops creating a relation.
-*/
-def.proto._stopDragResizeItems =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const paths = this.action.itemPaths;
-
-	let changes;
-
-	for( let a = 0, al = paths.length; a < al; a++ )
-	{
-		const item = root.getPath( paths.get( a ) );
-
-		const chi = item.getResizeItemChange( );
-
-		if( !chi ) continue;
-
-		if( !changes )
-		{
-			changes = chi;
-		}
-		else
-		{
-			if( changes.timtype !== change_list )
-			{
-				changes = change_list.create( 'list:append', changes );
-			}
-
-			if( chi.timtype !== change_list )
-			{
-				changes = changes.create( 'list:append', chi );
-			}
-			else
-			{
-				changes = changes.appendList( chi );
-			}
-
-		}
-	}
-
-	if( changes ) root.alter( changes );
-
-	root.create( 'action', action_none.create( ) );
-};
-
-
-/*
-| Stops selecting.
-*/
-def.proto._stopSelect =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	let action = this.action;
-
-/**/if( CHECK )
-/**/{
-/**/	if( action.timtype !== action_select ) throw new Error( );
-/**/}
-
-	action = action.create( 'toPoint', p.detransform( this.transform ) );
-
-	let paths = [ ];
-
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		const item = this.atRank( r );
-
-		if( action.affectsItem( item ) ) paths.push( item.path );
-	}
-
-	action = shift ? action_select.create( ) : action_none.create( );
-
-	let mark = pass;
-
-	if( paths.length > 0 )
-	{
-		paths = pathList.create( 'list:init', paths );
-
-		if( !ctrl || !this.mark )
-		{
-			mark = visual_mark_items.create( 'itemPaths', paths );
-		}
-		else
-		{
-			mark =
-				visual_mark_items.create(
-					'itemPaths', paths.combine( this.mark.itemPaths )
-				);
-		}
-	}
-
-	root.create( 'action', action );
-
-	root.setUserMark( mark );
-};
 
 
 /*

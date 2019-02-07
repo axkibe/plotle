@@ -9,6 +9,7 @@ tim.define( module, ( def ) => {
 
 def.extend = './item';
 
+
 const action_none = require( '../action/none' );
 
 const action_select = require( '../action/select' );
@@ -110,7 +111,7 @@ def.proto.dragStart =
 /*
 | Returns the mark for a point
 */
-def.static.markForPoint =
+def.proto.markForPoint =
 	function(
 		p,       // the point to mark to
 		doRange  // if true possible make a range
@@ -239,7 +240,7 @@ def.proto.input =
 /*
 | Handles a special key.
 */
-def.static.specialKey =
+def.proto.specialKey =
 	function(
 		key,
 		shift,

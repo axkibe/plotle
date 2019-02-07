@@ -30,6 +30,8 @@ if( TIM )
 }
 
 
+const action_none = require( './none' );
+
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -180,10 +182,10 @@ def.proto.dragMove =
 */
 def.proto.dragStart =
 	function(
-		p,     // cursor point
+		p,      // cursor point
 		screen, // the screen for this operation
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
 	)
 {
 /**/if( CHECK )
@@ -246,6 +248,32 @@ def.proto.dragStart =
 	}
 
 	root.create( 'action', this.create( 'startPoint', ps, 'transientItem', transientItem ) );
+};
+
+
+/*
+| Stops a drag.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	if( !this.startPoint ) return;
+
+	const ps = screen.pointToSpaceRS( p, !ctrl );
+
+	this.itemTim.createGeneric( this, ps );
+
+	root.create(
+		'action',
+			shift
+			? action_createGeneric.create( 'itemType', this.itemType )
+			: action_none.create( )
+	);
 };
 
 

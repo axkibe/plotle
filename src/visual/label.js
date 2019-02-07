@@ -80,11 +80,9 @@ const session_uid = require( '../session/uid' );
 
 const tim_path = require( 'tim.js/src/path' );
 
+const visual_base_posfs = require( '../visual/base/posfs' );
+
 const visual_doc = require( '../visual/doc' );
-
-const visual_docItem = require( '../visual/docItem' );
-
-const visual_item = require( '../visual/item' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
@@ -196,25 +194,19 @@ def.lazy.fontsize =
 /*
 | Returns the change for dragging this item.
 */
-def.proto.getDragItemChange = visual_item.getDragItemChangePosFs;
+def.proto.getDragItemChange = visual_base_posfs.getDragItemChange;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.proto.getResizeItemChange = visual_item.getResizeItemChangePosFs;
+def.proto.getResizeItemChange = visual_base_posfs.getResizeItemChange;
 
 
 /*
 | The items glint.
 */
 def.proto.glint = function( ) { return this._glint; };
-
-
-/*
-| Returns the mark for a point
-*/
-def.proto.markForPoint = visual_docItem.markForPoint;
 
 
 /*
@@ -369,12 +361,6 @@ def.proto.proportional = true;
 | Dummy since a label does not scroll.
 */
 def.proto.scrollMarkIntoView = function( ){ };
-
-
-/*
-| Handles a special key.
-*/
-def.proto.specialKey = visual_docItem.specialKey;
 
 
 /*

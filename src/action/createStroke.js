@@ -29,9 +29,15 @@ if( TIM )
 }
 
 
-const action_none = require( '../action/none' );
+const action_none = require( './none' );
+
+const change_grow = require( '../change/grow' );
 
 const fabric_stroke = require( '../fabric/stroke' );
+
+const session_uid = require( '../session/uid' );
+
+const tim_path = require( 'tim.js/src/path' );
 
 const visual_space = require( '../visual/space' );
 
@@ -144,6 +150,32 @@ def.proto.dragStart =
 	if( screen.timtype !== visual_space ) return;
 
 	root.create( 'action', this.create( 'from', screen.pointToSpaceRS( p, !ctrl ) ) );
+};
+
+
+/*
+| Stops creating a relation.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const val = this.transientFabric;
+
+	const key = session_uid.newUid( );
+
+	root.alter(
+		change_grow.create(
+			'val', val,
+			'path', tim_path.empty.append( 'twig' ).append( key ),
+			'rank', 0
+		)
+	);
+
+	// FIXME switch to action none?
 };
 
 

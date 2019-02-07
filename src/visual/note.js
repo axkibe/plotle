@@ -93,11 +93,9 @@ const tim_path = require( 'tim.js/src/path' );
 
 const shell_settings = require( '../shell/settings' );
 
+const visual_base_zone = require( '../visual/base/zone' );
+
 const visual_doc = require( '../visual/doc' );
-
-const visual_docItem = require( '../visual/docItem' );
-
-const visual_item = require( '../visual/item' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
@@ -179,25 +177,19 @@ def.lazy.fontsize =
 /*
 | Returns the change for dragging this item.
 */
-def.proto.getDragItemChange = visual_item.getDragItemChangeZone;
+def.proto.getDragItemChange = visual_base_zone.getDragItemChange;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.proto.getResizeItemChange = visual_item.getResizeItemChangeZone;
+def.proto.getResizeItemChange = visual_base_zone.getResizeItemChange;
 
 
 /*
 | The item's glint.
 */
 def.proto.glint = function( ) { return this._glint; };
-
-
-/*
-| Returns the mark for a point
-*/
-def.proto.markForPoint = visual_docItem.markForPoint;
 
 
 /*
@@ -400,12 +392,6 @@ def.lazy.shape =
 		)
 	);
 };
-
-
-/*
-| Handles a special key.
-*/
-def.proto.specialKey = visual_docItem.specialKey;
 
 
 /*

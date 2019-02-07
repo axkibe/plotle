@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, action_select ) => {
 
 
 def.extend = './action';
@@ -26,7 +26,13 @@ if( TIM )
 }
 
 
+const action_none = require( './none' );
+
 const gleam_rect = require( '../gleam/rect' );
+
+const pathList = require( 'tim.js/src/pathList' );
+
+const visual_mark_items = require( '../visual/mark/items' );
 
 const visual_space = require( '../visual/space' );
 
@@ -118,6 +124,53 @@ def.proto.dragStart =
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
 	root.create( 'action', this.create( 'startPoint', ps, 'toPoint', ps ) );
+};
+
+
+/*
+| Stops a drag.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	let action = this.create( 'toPoint', screen.pointToSpaceRS( p, false ) );
+
+	let paths = [ ];
+
+	for( let r = 0, rZ = screen.length; r < rZ; r++ )
+	{
+		const item = screen.atRank( r );
+
+		if( action.affectsItem( item ) ) paths.push( item.path );
+	}
+
+	let mark = pass;
+
+	if( paths.length > 0 )
+	{
+		paths = pathList.create( 'list:init', paths );
+
+		if( !ctrl || !screen.mark )
+		{
+			mark = visual_mark_items.create( 'itemPaths', paths );
+		}
+		else
+		{
+			mark =
+				visual_mark_items.create(
+					'itemPaths', paths.combine( screen.mark.itemPaths )
+				);
+		}
+	}
+
+	root.create( 'action', shift ? action_select.create( ) : action_none.create( ) );
+
+	root.setUserMark( mark );
 };
 
 

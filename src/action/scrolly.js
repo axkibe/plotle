@@ -26,6 +26,9 @@ if( TIM )
 }
 
 
+const action_none = require( './none' );
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 */
@@ -96,6 +99,21 @@ def.proto.dragStart =
 /**/}
 
 	console.log( new Error( ) );
+};
+
+
+/*
+| Stops a drag.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	root.create( 'action', action_none.create( ) );
 };
 
 

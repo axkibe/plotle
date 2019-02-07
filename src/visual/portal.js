@@ -105,7 +105,7 @@ const shell_settings = require( '../shell/settings' );
 
 const tim_path = require( 'tim.js/src/path' );
 
-const visual_item = require( '../visual/item' );
+const visual_base_zone = require( '../visual/base/zone' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
@@ -314,13 +314,13 @@ def.static.cycle =
 /*
 | Returns the change for dragging this item.
 */
-def.proto.getDragItemChange = visual_item.getDragItemChangeZone;
+def.proto.getDragItemChange = visual_base_zone.getDragItemChange;
 
 
 /*
 | Returns the change for resizing this item.
 */
-def.proto.getResizeItemChange = visual_item.getResizeItemChangeZone;
+def.proto.getResizeItemChange = visual_base_zone.getResizeItemChange;
 
 
 /*

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, action_createRelation ) => {
 
 
 def.extend = './action';
@@ -35,6 +35,8 @@ if( TIM )
 	};
 }
 
+
+const action_none = require( './none' );
 
 const visual_space = require( '../visual/space' );
 
@@ -148,6 +150,50 @@ def.proto.dragStart =
 				'startPoint', p
 			)
 	);
+};
+
+
+/*
+| Stops a drag.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	switch( this.relationState )
+	{
+		case 'hadSelect' :
+
+			if( this.toItemPath )
+			{
+				const item = screen.get( this.toItemPath.get( -1 ) );
+
+				item.createRelationStop( p );
+			}
+
+			root.create(
+				'action',
+				shift
+				? action_createRelation.create( 'relationState', 'start' )
+				: action_none.create( )
+			);
+
+			return;
+
+		case 'start' : root.create( 'action', action_none.create( ) ); return;
+
+		case 'pan' :
+
+			root.create( 'action', this.create( 'relationState', 'start' ) );
+
+			return;
+
+		default : throw new Error( );
+	}
 };
 
 
