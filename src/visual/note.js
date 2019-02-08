@@ -404,8 +404,6 @@ def.lazy.zone =
 
 	const fzone = this.fabric.zone;
 
-	if( !action ) return fzone;
-
 	return action.affectZone( fzone, this.key, this.minSize );
 };
 

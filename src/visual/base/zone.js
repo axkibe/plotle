@@ -33,7 +33,7 @@ def.static.getDragItemChange =
 		change_set.create(
 			'path', this.path.chop.append( 'zone' ),
 			'val', zone.add( moveBy ),
-			'prev', this.fabric.zone
+			'prev', zone
 		)
 	);
 };

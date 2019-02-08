@@ -9,11 +9,11 @@
 tim.define( module, ( def ) => {
 
 
-const change_list = require( '../change/list' );
+const change_list = require( '../../change/list' );
 
-const change_set = require( '../change/set' );
+const change_set = require( '../../change/set' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = require( '../../gleam/point' );
 
 
 /*
