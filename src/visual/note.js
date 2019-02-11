@@ -373,7 +373,7 @@ def.proto.scrollMarkIntoView =
 
 
 /*
-| The notes shape
+| The notes shape.
 */
 def.lazy.shape =
 	function( )
@@ -400,11 +400,7 @@ def.lazy.shape =
 def.lazy.zone =
 	function( )
 {
-	const action = this.action;
-
-	const fzone = this.fabric.zone;
-
-	return action.affectZone( fzone, this.key, this.minSize );
+	return this.action.affectZone( this.fabric.fzone, this.key, this.minSize );
 };
 
 

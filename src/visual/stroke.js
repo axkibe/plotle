@@ -186,7 +186,7 @@ def.lazy.zone =
 def.lazy._pointFrom =
 	function( )
 {
-	//XXX
+
 	return this.fabric.from;
 };
 

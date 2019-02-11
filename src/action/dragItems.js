@@ -79,14 +79,7 @@ def.proto.affectsItem =
 
 
 /*
-| 'Normal' button ought to be down during this action.
-*/
-def.proto.normalButtonDown = true;
-
-
-/*
 | Returns a zone affted by this action.
-| FIXME put into use.
 */
 def.proto.affectZone =
 	function(
@@ -95,9 +88,7 @@ def.proto.affectZone =
 		minSize    // minimum size of the zone
 	)
 {
-	const moveBy = this.moveBy;
-
-	return moveBy ? zone.add( moveBy ) : zone;
+	return zone.add( moveBy );
 };
 
 
@@ -181,6 +172,12 @@ def.proto.dragStop =
 
 	root.create( 'action', action_none.create( ) );
 };
+
+
+/*
+| 'Normal' button ought to be down during this action.
+*/
+def.proto.normalButtonDown = true;
 
 
 } );
