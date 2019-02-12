@@ -79,16 +79,32 @@ def.proto.affectsItem =
 
 
 /*
-| Returns a zone affted by this action.
+| Returns a zone affected by this action.
 */
 def.proto.affectZone =
 	function(
 		zone,      // the unaffected zone
-		itemKey,   // the key of the item to be affected
 		minSize    // minimum size of the zone
 	)
 {
-	return zone.add( moveBy );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
+
+	return zone.add( this.moveBy );
+};
+
+
+/*
+| Returns a zone affected by this action.
+*/
+def.proto.affectPoint =
+	function(
+		p   // the unaffected point
+	)
+{
+	return p;
 };
 
 

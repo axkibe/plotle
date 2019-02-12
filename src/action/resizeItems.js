@@ -88,15 +88,15 @@ def.proto.normalButtonDown = true;
 def.proto.affectZone =
 	function(
 		zone,      // the unaffected zone
-		itemKey,   // the key of the item to be affected
 		minSize    // minimum size of the zone
 	)
 {
-	const pBase = this.pBase;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
 
-	zone = this.startZones.get( itemKey );
-
-	if( !pBase ) return zone;
+	if( !this.pBase ) return zone;
 
 	zone = zone.baseScaleAction( this, 0, 0 );
 

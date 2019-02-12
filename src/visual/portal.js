@@ -49,11 +49,7 @@ if( TIM )
 }
 
 
-const action_dragItems = require( '../action/dragItems' );
-
 const action_none = require( '../action/none' );
-
-const action_resizeItems = require( '../action/resizeItems' );
 
 const change_grow = require( '../change/grow' );
 
@@ -579,19 +575,9 @@ def.proto.specialKey =
 def.lazy.zone =
 	function( )
 {
-	const action = this.action;
-
-	const zone = this.fabric.zone;
-
-	switch( action && action.timtype )
-	{
-		case action_dragItems : return zone.add( action.moveBy );
-
-		case action_resizeItems : return zone.baseScaleAction( action, 0, 0 );
-
-		default : return this.fabric.zone;
-	}
+	return this.action.affectZone( this.fabric.zone, this.minSize );
 };
+
 
 
 /*

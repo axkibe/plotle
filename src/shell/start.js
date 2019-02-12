@@ -6,6 +6,10 @@
 
 tim.define( module, ( def ) => {
 
+// FUTURE, hack for loading depencencies
+require( '../visual/base/zone' );
+require( '../visual/base/posfs' );
+
 const gruga_fonts = require( '../gruga/fonts' );
 
 const shell_system = require( './system' );

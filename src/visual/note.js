@@ -400,7 +400,7 @@ def.lazy.shape =
 def.lazy.zone =
 	function( )
 {
-	return this.action.affectZone( this.fabric.fzone, this.key, this.minSize );
+	return this.action.affectZone( this.fabric.zone, this.minSize );
 };
 
 
