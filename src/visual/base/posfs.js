@@ -13,38 +13,12 @@ const change_list = require( '../../change/list' );
 
 const change_set = require( '../../change/set' );
 
-const gleam_point = require( '../../gleam/point' );
-
-
-/*
-| An dragItems action stopped.
-*/
-def.static.getDragItemChange =
-	function( )
-{
-	const action = this.action;
-
-	const moveBy = action.moveBy;
-
-	if( action.moveBy.equals( gleam_point.zero ) ) return;
-
-	const pos = this.fabric.pos;
-
-	return(
-		change_set.create(
-			'path', this.path.chop.append( 'pos' ),
-			'val', pos.add( moveBy ),
-			'prev', pos
-		)
-	);
-};
-
 
 /*
 | Returns the change-set for a resizing
 | the item, defined by pos/fontsize.
 */
-def.static.getResizeItemChange =
+def.static.getItemChange =
 	function( )
 {
 /**/if( CHECK )
@@ -52,22 +26,39 @@ def.static.getResizeItemChange =
 /**/	if( this.positioning !== 'pos/fontsize' ) throw new Error( );
 /**/}
 
-	return(
-		change_list.create(
-			'list:append',
+	const changes = [ ];
+
+	const tpos = this.pos;
+	const fpos = this.fabric.pos;
+
+	const tfs = this.fontsize;
+	const ffs = this.fabric.fontsize;
+
+	if( !tpos.equals( fpos ) )
+	{
+		changes.push(
 			change_set.create(
 				'path', this.path.chop.append( 'pos' ),
 				'val', this.pos,
 				'prev', this.fabric.pos
-			),
-			'list:append',
+			)
+		);
+	}
+
+	if( tfs !== ffs )
+	{
+		changes.push(
 			change_set.create(
 				'path', this.path.chop.append( 'fontsize' ),
 				'val', this.fontsize,
 				'prev', this.fabric.fontsize
 			)
-		)
-	);
+		);
+	}
+
+	if( changes.length === 0 ) return;
+	if( changes.length === 1 ) return changes[ 0 ];
+	return( change_list.create( 'list:init', changes ) );
 };
 
 

@@ -82,8 +82,26 @@ def.proto.normalButtonDown = true;
 
 
 /*
+| Returns a zone affected by this action.
+*/
+def.proto.affectPoint =
+	function(
+		p   // the unaffected point
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	if( !this.pBase ) return p;
+
+	return p.baseScaleAction( this, 0, 0 );
+};
+
+
+/*
 | Returns a zone affted by this action.
-| FIXME put into use.
 */
 def.proto.affectZone =
 	function(
@@ -250,7 +268,7 @@ def.proto.dragStop =
 	{
 		const item = root.getPath( paths.get( a ) );
 
-		const chi = item.getResizeItemChange( );
+		const chi = item.getItemChange( );
 
 		if( !chi ) continue;
 

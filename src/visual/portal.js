@@ -308,15 +308,9 @@ def.static.cycle =
 
 
 /*
-| Returns the change for dragging this item.
+| Returns the change for the action affecting this item.
 */
-def.proto.getDragItemChange = visual_base_zone.getDragItemChange;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-def.proto.getResizeItemChange = visual_base_zone.getResizeItemChange;
+def.proto.getItemChange = visual_base_zone.getItemChange;
 
 
 /*

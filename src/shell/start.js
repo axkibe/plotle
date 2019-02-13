@@ -7,8 +7,9 @@
 tim.define( module, ( def ) => {
 
 // FUTURE, hack for loading depencencies
-require( '../visual/base/zone' );
 require( '../visual/base/posfs' );
+require( '../visual/base/stroke' );
+require( '../visual/base/zone' );
 
 const gruga_fonts = require( '../gruga/fonts' );
 

@@ -104,7 +104,7 @@ def.proto.affectPoint =
 		p   // the unaffected point
 	)
 {
-	return p;
+	return p.add( this.moveBy );
 };
 
 
@@ -158,7 +158,7 @@ def.proto.dragStop =
 	{
 		const item = root.getPath( paths.get( a ) );
 
-		const chi = item.getDragItemChange( );
+		const chi = item.getItemChange( );
 
 		if( !chi ) continue;
 

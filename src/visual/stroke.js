@@ -49,6 +49,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_relation = require( '../gruga/relation' );
 
+const visual_base_stroke = require( './base/stroke' );
+
 
 /*
 | The attention center.
@@ -94,6 +96,12 @@ def.proto.dragStart =
 	// false or undefined
 	return false;
 };
+
+
+/*
+| Returns the change for the action affecting this item.
+*/
+def.proto.getItemChange = visual_base_stroke.getItemChange;
 
 
 /*
@@ -186,7 +194,7 @@ def.lazy.zone =
 def.lazy._pointFrom =
 	function( )
 {
-	return this.fabric.from;
+	return this.action.affectPoint( this.fabric.from );
 };
 
 
@@ -196,7 +204,7 @@ def.lazy._pointFrom =
 def.lazy._pointTo =
 	function( )
 {
-	return this.fabric.to;
+	return this.action.affectPoint( this.fabric.to );
 };
 
 

@@ -192,15 +192,9 @@ def.lazy.fontsize =
 
 
 /*
-| Returns the change for dragging this item.
+| Returns the change for the action affecting this item.
 */
-def.proto.getDragItemChange = visual_base_posfs.getDragItemChange;
-
-
-/*
-| Returns the change for resizing this item.
-*/
-def.proto.getResizeItemChange = visual_base_posfs.getResizeItemChange;
+def.proto.getItemChange = visual_base_posfs.getItemChange;
 
 
 /*
