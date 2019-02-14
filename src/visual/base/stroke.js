@@ -29,30 +29,34 @@ def.static.getItemChange =
 
 	if( moveBy.equals( gleam_point.zero ) ) return;
 
-	const from = this.fabric.from;
+	const tfrom = this.from;
 
-	const to = this.fabric.to;
+	const tto = this.to;
+
+	const ffrom = this.fabric.from;
+
+	const fto = this.fabric.to;
 
 	let changes = [ ];
 
-	if( from.timtype === gleam_point )
+	if( tfrom.timtype !== ffrom.timtype || !tfrom.equals( ffrom ) )
 	{
 		changes.push(
 			change_set.create(
 				'path', this.path.chop.append( 'from' ),
 				'val', this.from,
-				'prev', from
+				'prev', ffrom
 			)
 		);
 	}
 
-	if( to.timtype === gleam_point )
+	if( tto.timtype !== fto.timtype || !tto.equals( fto ) )
 	{
 		changes.push(
 			change_set.create(
-				'path', this.path.chop.append( 'from' ),
-				'val', this.from,
-				'prev', from
+				'path', this.path.chop.append( 'to' ),
+				'val', this.to,
+				'prev', fto
 			)
 		);
 	}
