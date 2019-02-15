@@ -45,6 +45,8 @@ const gleam_arrow = require( '../gleam/arrow' );
 
 const gleam_glint_paint = require( '../gleam/glint/paint' );
 
+const gleam_point = require( '../gleam/point' );
+
 const gleam_rect = require( '../gleam/rect' );
 
 const gruga_relation = require( '../gruga/relation' );
@@ -167,8 +169,8 @@ def.lazy.shape =
 
 	return(
 		gleam_arrow.create(
-			'joint1', fabric.from,
-			'joint2', fabric.to,
+			'joint1', this._from,
+			'joint2', this._to,
 			'end1', fabric.fromStyle,
 			'end2', fabric.toStyle
 		).shape
@@ -183,28 +185,73 @@ def.lazy.shape =
 def.lazy.zone =
 	function( )
 {
-	return gleam_rect.createArbitrary( this._pointFrom, this._pointTo );
+	return gleam_rect.createArbitrary( this._fromPoint, this._toPoint );
 };
 
+
+/*
+| Item or point the stroke goes from.
+*/
+def.lazy._from =
+	function( )
+{
+	const ffrom = this.fabric.from;
+
+	return(
+		ffrom.timtype === gleam_point
+		? this._fromPoint
+		: ffrom
+	);
+};
+
+
+/*
+| Item or point the stroke goes to.
+*/
+def.lazy._to =
+	function( )
+{
+	const fto = this.fabric.to;
+
+	return(
+		fto.timtype === gleam_point
+		? this._toPoint
+		: fto
+	);
+};
 
 
 /*
 | Point the stroke goes from.
 */
-def.lazy._pointFrom =
+def.lazy._fromPoint =
 	function( )
 {
-	return this.action.affectPoint( this.fabric.from );
+	const ffrom = this.fabric.from;
+
+/**/if( CHECK )
+/**/{
+/**/	if( ffrom.timtype !== gleam_point ) throw new Error( );
+/**/}
+
+	return this.action.affectPoint( ffrom );
 };
 
 
 /*
 | Point the stroke goes to.
 */
-def.lazy._pointTo =
+def.lazy._toPoint =
 	function( )
 {
-	return this.action.affectPoint( this.fabric.to );
+	const fto = this.fabric.to;
+
+/**/if( CHECK )
+/**/{
+/**/	if( fto.timtype !== gleam_point ) throw new Error( );
+/**/}
+
+	return this.action.affectPoint( fto );
 };
 
 

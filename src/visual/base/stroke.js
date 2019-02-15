@@ -11,8 +11,6 @@ tim.define( module, ( def ) => {
 
 const change_set = require( '../../change/set' );
 
-const gleam_point = require( '../../gleam/point' );
-
 const change_list = require( '../../change/list' );
 
 
@@ -23,15 +21,9 @@ const change_list = require( '../../change/list' );
 def.static.getItemChange =
 	function( )
 {
-	const action = this.action;
+	const tfrom = this._from;
 
-	const moveBy = action.moveBy;
-
-	if( moveBy.equals( gleam_point.zero ) ) return;
-
-	const tfrom = this.from;
-
-	const tto = this.to;
+	const tto = this._to;
 
 	const ffrom = this.fabric.from;
 
@@ -44,7 +36,7 @@ def.static.getItemChange =
 		changes.push(
 			change_set.create(
 				'path', this.path.chop.append( 'from' ),
-				'val', this.from,
+				'val', tfrom,
 				'prev', ffrom
 			)
 		);
@@ -55,7 +47,7 @@ def.static.getItemChange =
 		changes.push(
 			change_set.create(
 				'path', this.path.chop.append( 'to' ),
-				'val', this.to,
+				'val', tto,
 				'prev', fto
 			)
 		);

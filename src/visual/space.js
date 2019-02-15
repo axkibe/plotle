@@ -517,6 +517,14 @@ def.proto.dragStart =
 
 		if( item.dragStart( p, shift, ctrl ) ) return;
 	}
+
+	root.create(
+		'action',
+			action_pan.create(
+				'offset', this.transform.offset,
+				'startPoint', p
+			)
+	);
 };
 
 
