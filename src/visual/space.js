@@ -57,11 +57,7 @@ const action_createRelation = require( '../action/createRelation' );
 
 const action_createStroke = require( '../action/createStroke' );
 
-const action_dragItems = require( '../action/dragItems' );
-
 const action_pan = require( '../action/pan' );
-
-const action_resizeItems = require( '../action/resizeItems' );
 
 const action_select = require( '../action/select' );
 
@@ -152,27 +148,23 @@ def.proto.click =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	const access = this.access;
-
-	const mark = this.mark;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
 
 	const frame = this.frame;
 
-	if( frame && frame.click( p, shift, ctrl, access ) ) return true;
+	if( frame && frame.click( p, shift, ctrl ) ) return true;
+
+	const mark = this.mark;
 
 	// clicked some item?
 	for( let a = 0, al = this.length; a < al; a++ )
 	{
 		const item = this.atRank( a );
 
-		if( ctrl )
-		{
-			if( item.ctrlClick( p, shift, access, mark ) ) return true;
-		}
-		else
-		{
-			if( item.click( p, shift, access ) ) return true;
-		}
+		if( item.click( p, shift, ctrl, mark ) ) return true;
 	}
 
 	// otherwise ...
@@ -639,7 +631,7 @@ def.proto.mousewheel =
 /*
 | Mouse hover.
 |
-| Returns true if the mouse pointer hovers over anything.
+| Returns a result_hover with hovering path and cursor to show.
 */
 def.proto.pointingHover =
 	function(
@@ -656,39 +648,7 @@ def.proto.pointingHover =
 
 	switch( aType )
 	{
-		case action_createRelation :
-
-			if( action.relationState === 'start' )
-			{
-				for( let a = 0, al = this.length; a < al; a++ )
-				{
-					const item = this.atRank( a );
-
-					// FIXME really tZone?
-					if( item.tZone.within( p ) )
-					{
-						root.create( 'action', action.create( 'fromItemPath', item.path ) );
-
-						return result_hover.cursorDefault;
-					}
-				}
-
-				root.create( 'action', action.create( 'fromItemPath', undefined ) );
-
-				return result_hover.cursorDefault;
-			}
-
-			break;
-
-		case action_createStroke : return result_hover.cursorDefault;
-
-		case action_dragItems : return result_hover.cursorGrabbing;
-
-		case action_resizeItems : return action.resizeDir.resizeHoverCursor;
-
 		case action_pan :
-
-			if( action.startPoint ) return result_hover.cursorGrabbing;
 
 			break;
 	}

@@ -251,6 +251,24 @@ const loadingSpaceTextPath =
 
 
 /*
+| When animations are turned off, but the action has
+| an finishAnimation a time is used instead an this
+| is the callback.
+*/
+const notAnimationFinish =
+	function( )
+{
+	const action = root.action;
+
+	if( !action.finishAnimation ) return;
+
+	action.finishAnimation( );
+};
+
+
+
+
+/*
 | Startup of shell.
 */
 def.static.startup =
@@ -529,6 +547,18 @@ def.adjust.action =
 };
 
 
+/*
+| Returns the attention center.
+|
+| That is the horiziontal offset of the caret.
+|
+| Used for example on the iPad so
+| the caret is scrolled into view
+| when the keyboard is visible.
+*/
+def.lazy.attentionCenter = ( ) =>
+	root._currentScreen.attentionCenter;
+
 
 /*
 | Adjusts the disc.
@@ -563,6 +593,55 @@ def.adjust.disc =
 
 
 /*
+| Draws everything.
+*/
+def.lazy.draw =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this !== root ) throw new Error( );
+/**/}
+
+	let display = root.display;
+
+	const screen = root._currentScreen;
+
+	const arr = [ screen.glint ];
+
+	if( screen.showDisc )
+	{
+		const disc = root.disc;
+
+		arr[ 1 ] = disc.glint;
+	}
+
+	display =
+		display.create(
+			'glint', gleam_glint_list.create( 'list:init', arr )
+		);
+
+	display.render( );
+
+	root.create( 'display', display );
+
+	return true;
+};
+
+
+/*
+| No need to redraw if this root looks alike it's parent
+*/
+def.inherit.draw =
+	function(
+		inherit
+	)
+{
+	return this.lookAlike( inherit );
+};
+
+
+/*
 | Adjusts the form root.
 */
 def.adjust.form =
@@ -583,18 +662,6 @@ def.adjust.form =
 			'viewSize', this.viewSize
 		)
 	);
-};
-
-
-/*
-| Adjusts the link.
-*/
-def.adjust.link =
-	function(
-		link
-	)
-{
-	return link.create( 'userCreds', this.userCreds );
 };
 
 
@@ -630,24 +697,6 @@ def.adjust.spaceVisual =
 
 
 /*
-| Returns the attention center.
-|
-| That is the horiziontal offset of the caret.
-|
-| Used for example on the iPad so
-| the caret is scrolled into view
-| when the keyboard is visible.
-*/
-def.lazy.attentionCenter =
-	function( )
-{
-	const screen = root._currentScreen;
-
-	return screen && screen.attentionCenter;
-};
-
-
-/*
 | Returns the what the clipboard should hold.
 */
 def.lazy.clipboard =
@@ -656,33 +705,6 @@ def.lazy.clipboard =
 	const mark = this._mark;
 
 	return mark ? mark.clipboard : '';
-};
-
-
-/*
-| Returns current screen
-|
-| This is either a fabric space or a form
-*/
-def.lazy._currentScreen =
-	function( )
-{
-	const show = this.show;
-
-	switch( show.timtype )
-	{
-		case show_create :
-		case show_normal :
-		case show_zoom :
-
-			return root.spaceVisual;
-
-		case show_form :
-
-			return root.form.get( show.formName );
-
-		default : throw new Error( );
-	}
 };
 
 
@@ -737,22 +759,6 @@ def.proto.animationFrame =
 	)
 {
 	root._animation.frame( time );
-};
-
-
-/*
-| Finished an animation
-*/
-def.proto.finishAnimation =
-	function(
-		name  // animation name
-	)
-{
-	if( !root._animation.get( name ) ) return;
-
-	root.create( '_animation', root._animation.create( 'twig:remove', name ) );
-
-	if( root._animation.length === 0 ) system.stopAnimation( );
 };
 
 
@@ -1071,6 +1077,22 @@ def.proto.dragStop =
 
 
 /*
+| Finished an animation
+*/
+def.proto.finishAnimation =
+	function(
+		name  // animation name
+	)
+{
+	if( !root._animation.get( name ) ) return;
+
+	root.create( '_animation', root._animation.create( 'twig:remove', name ) );
+
+	if( root._animation.length === 0 ) system.stopAnimation( );
+};
+
+
+/*
 | User entered normal text (one character or more).
 */
 def.proto.input =
@@ -1086,6 +1108,18 @@ def.proto.input =
 
 		if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
 	}
+};
+
+
+/*
+| Adjusts the link.
+*/
+def.adjust.link =
+	function(
+		link
+	)
+{
+	return link.create( 'userCreds', this.userCreds );
 };
 
 
@@ -1135,14 +1169,14 @@ def.proto.mousewheel =
 {
 	const screen = root._currentScreen;
 
-	if( screen && screen.showDisc )
+	if( screen.showDisc )
 	{
 		const bubble = root.disc.mousewheel( p, dir, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
 
-	if( screen ) screen.mousewheel( p, dir, shift, ctrl );
+	return screen.mousewheel( p, dir, shift, ctrl );
 };
 
 
@@ -1167,318 +1201,6 @@ def.proto.moveToSpace =
 	root.setPath( loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
-};
-
-
-/*
-| User is hovering his/her pointing device.
-*/
-def.proto.pointingHover =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	const screen = root._currentScreen;
-
-	if( screen && screen.showDisc )
-	{
-		const result = root.disc.pointingHover( p, shift, ctrl );
-
-		if( result )
-		{
-/**/		if( CHECK )
-/**/		{
-/**/			if( result.timtype !== result_hover ) throw new Error( );
-/**/		}
-
-			root.create( 'hover', result.path );
-
-			return result.cursor;
-		}
-	}
-
-	if( screen )
-	{
-		const result = screen.pointingHover( p, shift, ctrl );
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( result.timtype !== result_hover ) throw new Error( );
-/**/	}
-
-		root.create( 'hover', result.path );
-
-		return result.cursor;
-	}
-
-	return 'default';
-};
-
-
-/*
-| The pointing device just went down.
-| Probes if the system ought to wait if it's
-| a click or can initiate a drag right away.
-*/
-def.proto.probeClickDrag =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	const screen = root._currentScreen;
-
-	if( screen && screen.showDisc )
-	{
-		const bubble = root.disc.probeClickDrag( p, shift, ctrl );
-
-		if( bubble !== undefined ) return bubble;
-	}
-
-//	FUTURE
-//	if( screen ) screen.probeClickDrag( p, shift, ctrl );
-
-	return 'atween';
-};
-
-
-/*
-| A button has been pushed.
-*/
-def.proto.pushButton =
-	function(
-		path   // path of the button pushed
-	)
-{
-	switch( path.get( 0 ) )
-	{
-		case 'disc' : return root.disc.pushButton( path, false, false );
-
-		case 'form' : return root.form.pushButton( path, false, false );
-
-		default : throw new Error( 'invalid path' );
-	}
-};
-
-
-/*
-| A button has been pushed.
-*/
-def.proto.toggleCheckbox =
-	function(
-		path   // path of the button pushed
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 0 ) !== 'form' ) throw new Error( );
-/**/}
-
-	root.form.toggleCheckbox( path, false, false );
-};
-
-
-/*
-| Sets the user mark.
-*/
-def.proto.setUserMark =
-	function(
-		mark
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
-	if( mark && mark.timtype === visual_mark_caret )
-	{
-		mark = mark.create( 'focus', this._systemFocus );
-	}
-
-	const omark = root._mark;
-
-	root.create( '_mark', mark );
-
-	if( !omark ) return;
-
-	const oip = omark.itemPaths;
-
-	if( !oip ) return;
-
-	const nip = mark && mark.itemPaths;
-
-	for( let a = 0, al = oip.length; a < al; a++ )
-	{
-		const op = oip.get( a );
-
-		if( nip && nip.contains( op ) ) continue;
-
-		const item = root.getPath( op );
-
-		if( item ) item.markLost( );
-	}
-};
-
-
-/*
-| Shows the "home" screen.
-|
-| When a space is loaded, this is space/normal
-| otherwise it is the loading screen.
-*/
-def.proto.showHome =
-	function( )
-{
-	root.create(
-		'action', action_none.create( ),
-		'show',
-			root.spaceVisual
-			? show_normal.create( )
-			: show_form.loading
-	);
-};
-
-
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	if( key === 'shift' )
-	{
-		const action = this.action;
-
-		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
-
-		return true;
-	}
-
-	const screen = root._currentScreen;
-
-	const result = screen && screen.specialKey( key, shift, ctrl );
-
-	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
-
-	return result;
-};
-
-
-/*
-| User is releasing a special key.
-*/
-def.proto.releaseSpecialKey =
-	function(
-		key
-//		shift,
-//		ctrl
-	)
-{
-	if( key !== 'shift' ) return;
-
-	const action = this.action;
-
-	if( action.timtype === action_select && !action.startPoint )
-	{
-		root.create( 'action', action_none.create( ) );
-	}
-};
-
-
-/*
-| Returns true if the iPad ought to show
-| the virtual keyboard
-*/
-def.proto.suggestingKeyboard =
-	function( )
-{
-	return this._mark && this._mark.hasCaret;
-};
-
-
-/*
-| Sets if the shell got the system focus
-| (that is display the virtual caret)
-*/
-def.proto.setSystemFocus =
-	function(
-		focus
-	)
-{
-	if( this._systemFocus === focus ) return;
-
-	let mark = this._mark;
-
-	if( mark && mark.timtype === visual_mark_caret )
-	{
-		mark = mark.create( 'focus', focus );
-	}
-	else
-	{
-		mark = pass;
-	}
-
-	root.create(
-		'_systemFocus', focus,
-		'_mark', mark
-	);
-};
-
-
-/*
-| The link is reporting updates.
-*/
-def.proto.update =
-	function(
-		changes
-	)
-{
-	let mark = this._mark;
-
-	if( !mark ) return;
-
-	switch( mark.timtype )
-	{
-		case visual_mark_range :
-
-			mark = mark.createTransformed(
-				changes,
-				root.spaceFabric.getPath( mark.docPath.chop )
-			);
-
-			break;
-
-		default :
-
-			mark = mark.createTransformed( changes );
-
-			break;
-	}
-
-	root.setUserMark( mark );
-};
-
-
-/*
-| The window has been resized.
-*/
-def.proto.resize =
-	function(
-		size    // of type gleam_size
-	)
-{
-	root.create(
-		'display', gleam_display_canvas.resize( this.display, size ),
-		'viewSize', size
-	);
 };
 
 
@@ -1666,6 +1388,207 @@ def.proto.onRegister =
 
 
 /*
+| User is hovering his/her pointing device.
+*/
+def.proto.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	const screen = root._currentScreen;
+
+	if( screen.showDisc )
+	{
+		const result = root.disc.pointingHover( p, shift, ctrl );
+
+		if( result )
+		{
+/**/		if( CHECK )
+/**/		{
+/**/			if( result.timtype !== result_hover ) throw new Error( );
+/**/		}
+
+			root.create( 'hover', result.path );
+
+			return result.cursor;
+		}
+	}
+
+	const result = root.action.pointingHover( p, screen, shift, ctrl );
+
+/**/if( CHECK )
+/**/{
+/**/	if( result.timtype !== result_hover ) throw new Error( );
+/**/}
+
+	root.create( 'hover', result.path );
+
+	return result.cursor;
+};
+
+
+/*
+| The pointing device just went down.
+| Probes if the system ought to wait if it's
+| a click or can initiate a drag right away.
+*/
+def.proto.probeClickDrag =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	const screen = root._currentScreen;
+
+	if( screen.showDisc )
+	{
+		const bubble = root.disc.probeClickDrag( p, shift, ctrl );
+
+		if( bubble !== undefined ) return bubble;
+	}
+
+//	FUTURE
+//	return screen.probeClickDrag( p, shift, ctrl );
+
+	return 'atween';
+};
+
+
+/*
+| A button has been pushed.
+*/
+def.proto.pushButton =
+	function(
+		path   // path of the button pushed
+	)
+{
+	switch( path.get( 0 ) )
+	{
+		case 'disc' : return root.disc.pushButton( path, false, false );
+
+		case 'form' : return root.form.pushButton( path, false, false );
+
+		default : throw new Error( 'invalid path' );
+	}
+};
+
+
+/*
+| Sets the user mark.
+*/
+def.proto.setUserMark =
+	function(
+		mark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	if( mark && mark.timtype === visual_mark_caret )
+	{
+		mark = mark.create( 'focus', this._systemFocus );
+	}
+
+	const omark = root._mark;
+
+	root.create( '_mark', mark );
+
+	if( !omark ) return;
+
+	const oip = omark.itemPaths;
+
+	if( !oip ) return;
+
+	const nip = mark && mark.itemPaths;
+
+	for( let a = 0, al = oip.length; a < al; a++ )
+	{
+		const op = oip.get( a );
+
+		if( nip && nip.contains( op ) ) continue;
+
+		const item = root.getPath( op );
+
+		if( item ) item.markLost( );
+	}
+};
+
+
+/*
+| Shows the "home" screen.
+|
+| When a space is loaded, this is space/normal
+| otherwise it is the loading screen.
+*/
+def.proto.showHome =
+	function( )
+{
+	root.create(
+		'action', action_none.create( ),
+		'show',
+			root.spaceVisual
+			? show_normal.create( )
+			: show_form.loading
+	);
+};
+
+
+/*
+| User is pressing a special key.
+*/
+def.proto.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	if( key === 'shift' )
+	{
+		const action = this.action;
+
+		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
+
+		return true;
+	}
+
+	const screen = root._currentScreen;
+
+	const result = screen.specialKey( key, shift, ctrl );
+
+	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
+
+	return result;
+};
+
+
+/*
+| User is releasing a special key.
+*/
+def.proto.releaseSpecialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	if( key !== 'shift' ) return;
+
+	const action = this.action;
+
+	if( action.timtype === action_select && !action.startPoint )
+	{
+		root.create( 'action', action_none.create( ) );
+	}
+};
+
+
+/*
 | Removes a text spawning over several entities.
 */
 def.proto.removeRange =
@@ -1763,6 +1686,50 @@ def.proto.removeRange =
 
 
 /*
+| The window has been resized.
+*/
+def.proto.resize =
+	function(
+		size    // of type gleam_size
+	)
+{
+	root.create(
+		'display', gleam_display_canvas.resize( this.display, size ),
+		'viewSize', size
+	);
+};
+
+
+/*
+| Sets if the shell got the system focus
+| (that is display the virtual caret)
+*/
+def.proto.setSystemFocus =
+	function(
+		focus
+	)
+{
+	if( this._systemFocus === focus ) return;
+
+	let mark = this._mark;
+
+	if( mark && mark.timtype === visual_mark_caret )
+	{
+		mark = mark.create( 'focus', focus );
+	}
+	else
+	{
+		mark = pass;
+	}
+
+	root.create(
+		'_systemFocus', focus,
+		'_mark', mark
+	);
+};
+
+
+/*
 | Creates a new relation by specifing its relates.
 */
 def.proto.spawnRelation =
@@ -1805,67 +1772,64 @@ def.proto.spawnRelation =
 
 
 /*
-| When animations are turned off, but the action has
-| an finishAnimation a time is used instead an this
-| is the callback.
+| Returns true if the iPad ought to show
+| the virtual keyboard
 */
-const notAnimationFinish =
+def.proto.suggestingKeyboard =
 	function( )
 {
-	const action = root.action;
-
-	if( !action.finishAnimation ) return;
-
-	action.finishAnimation( );
+	return this._mark && this._mark.hasCaret;
 };
 
 
 /*
-| Draws everything.
+| A checkbox has been toggled.
 */
-def.lazy.draw =
-	function( )
+def.proto.toggleCheckbox =
+	function(
+		path   // path of the button pushed
+	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( this !== root ) throw new Error( );
+/**/	if( path.get( 0 ) !== 'form' ) throw new Error( );
 /**/}
 
-	let display = root.display;
-
-	const screen = root._currentScreen;
-
-	const arr = [ screen.glint ];
-
-	if( screen.showDisc )
-	{
-		const disc = root.disc;
-
-		arr[ 1 ] = disc.glint;
-	}
-
-	display =
-		display.create(
-			'glint', gleam_glint_list.create( 'list:init', arr )
-		);
-
-	display.render( );
-
-	root.create( 'display', display );
-
-	return true;
+	root.form.toggleCheckbox( path, false, false );
 };
 
 
 /*
-| No need to redraw if this root looks alike it's parent
+| The link is reporting updates.
 */
-def.inherit.draw =
+def.proto.update =
 	function(
-		inherit
+		changes
 	)
 {
-	return this.lookAlike( inherit );
+	let mark = this._mark;
+
+	if( !mark ) return;
+
+	switch( mark.timtype )
+	{
+		case visual_mark_range :
+
+			mark = mark.createTransformed(
+				changes,
+				root.spaceFabric.getPath( mark.docPath.chop )
+			);
+
+			break;
+
+		default :
+
+			mark = mark.createTransformed( changes );
+
+			break;
+	}
+
+	root.setUserMark( mark );
 };
 
 
@@ -1900,6 +1864,33 @@ def.proto._changeTransformTo =
 		);
 
 		if( root.action.finishAnimation ) system.setTimer( time, notAnimationFinish );
+	}
+};
+
+
+/*
+| Returns current screen
+|
+| This is either a fabric space or a form
+*/
+def.lazy._currentScreen =
+	function( )
+{
+	const show = this.show;
+
+	switch( show.timtype )
+	{
+		case show_create :
+		case show_normal :
+		case show_zoom :
+
+			return root.spaceVisual;
+
+		case show_form :
+
+			return root.form.get( show.formName );
+
+		default : throw new Error( );
 	}
 };
 

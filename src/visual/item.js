@@ -66,54 +66,6 @@ def.static.concernsMark =
 
 
 /*
-| Generic click handler.
-|
-| Takes care about mutli-selecting item groups by ctrl+click.
-|
-| Returns true if it handled the click event.
-*/
-def.proto.ctrlClick =
-	function(
-		p,      // the point clicked
-		shift,  // true if shift key was pressed
-		access, // 'r' or 'rw'
-		mark    // the mark of the space
-	)
-{
-	if( !this.tShape.within( p ) ) return;
-
-	if( access !== 'rw' ) return false;
-
-	if( !mark )
-	{
-		root.setUserMark( visual_mark_items.createWithOne( this.path ) );
-
-		return true;
-	}
-
-	switch( mark.timtype )
-	{
-		case visual_mark_items :
-
-			root.setUserMark( mark.togglePath( this.path ) );
-
-			return true;
-
-		case visual_mark_caret :
-		case visual_mark_range :
-
-			root.setUserMark(
-				visual_mark_items.create(
-					'itemPaths', mark.itemPaths.create( 'list:append', this.path )
-				)
-			);
-
-			return true;
-	}
-};
-
-
-/*
 | A createRelation action stops.
 */
 def.proto.createRelationStop =
@@ -152,7 +104,7 @@ def.proto.dragStart =
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
-	if( !this.tShape.within( p ) ) return false;
+	if( !this.pointWithin( p ) ) return false;
 
 	// dragging
 	if( this.access !== 'rw' ) return false;
@@ -194,17 +146,21 @@ def.lazy.key =
 
 /*
 | Nofication when the item lost the users mark.
+| Defaults to doing nothing about it.
 */
 def.proto.markLost = function( ){ };
 
 
 /*
-| The shape in current transform.
+| Returns true if a point is within
+| the item.
 */
-def.lazy.tShape =
-	function( )
+def.proto.pointWithin =
+	function(
+		p
+	)
 {
-	return this.shape.transform( this.transform );
+	return this.tZone.within( p ) && this._tShape.within( p );
 };
 
 
@@ -215,6 +171,68 @@ def.lazy.tZone =
 	function( )
 {
 	return this.zone.transform( this.transform );
+};
+
+
+/*
+| Generic ctrl click handler.
+|
+| Takes care about mutli-selecting item groups by ctrl+click.
+|
+| Returns true if it handled the click event.
+*/
+def.proto._ctrlClick =
+	function(
+		p,      // the point clicked
+		shift,  // true if shift key was pressed
+		mark    // the mark of the space
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
+	if( this.access !== 'rw' ) return false;
+
+	if( !mark )
+	{
+		root.setUserMark( visual_mark_items.createWithOne( this.path ) );
+
+		return true;
+	}
+
+	switch( mark.timtype )
+	{
+		case visual_mark_items :
+
+			root.setUserMark( mark.togglePath( this.path ) );
+
+			return true;
+
+		case visual_mark_caret :
+		case visual_mark_range :
+
+			root.setUserMark(
+				visual_mark_items.create(
+					'itemPaths', mark.itemPaths.create( 'list:append', this.path )
+				)
+			);
+
+			return true;
+
+		default : return true;
+	}
+};
+
+
+/*
+| The shape in current transform.
+*/
+def.lazy._tShape =
+	function( )
+{
+	return this.shape.transform( this.transform );
 };
 
 

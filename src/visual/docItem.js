@@ -49,16 +49,24 @@ def.lazy.attentionCenter =
 */
 def.proto.click =
 	function(
-		p,
-		shift,
-		access
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		mark     // mark of the visual space
 	)
 {
-	if( !this.tShape.within( p ) ) return;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
 
-	if( access != 'rw' ) return false;
+	if( !this.pointWithin( p ) ) return;
 
-	root.setUserMark( this.markForPoint( p, shift ) );
+	if( ctrl ) return this._ctrlClick( p, shift, mark );
+
+	if( this.access != 'rw' ) return false;
+
+	root.setUserMark( this.markForPoint( p, shift, mark ) );
 
 	return true;
 };
@@ -92,7 +100,7 @@ def.proto.dragStart =
 
 	if( action.timtype === action_select )
 	{
-		if( !this.tShape.within( p ) ) return false;
+		if( !this.pointWithin( p ) ) return false;
 
 		const mark = this.markForPoint( p, false );
 
@@ -207,7 +215,7 @@ def.proto.pointingHover =
 		if( bubble ) return bubble;
 	}
 
-	if( !this.tShape.within( p ) ) return;
+	if( !this.pointWithin( p ) ) return;
 
 	let cursor = 'default';
 

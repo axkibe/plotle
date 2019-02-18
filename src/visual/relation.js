@@ -95,7 +95,7 @@ def.proto.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
 	}
 
 	if( shape1 ) arr.push( this._getConnectionGlint( shape1 ) );

@@ -284,7 +284,6 @@ def.proto.mousewheel =
 		// dir
 	)
 {
-	//return this.tShape.within( p );
 	// the label lets wheel events pass through it.
 	return false;
 };
@@ -408,7 +407,7 @@ def.lazy._glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );

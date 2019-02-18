@@ -227,12 +227,20 @@ def.static.createGeneric =
 */
 def.proto.click =
 	function(
-		p,
-		shift,
-		access
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		mark     // mark of the visual space
 	)
 {
-	if( !this.tShape.within( p ) ) return;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	if( !this.pointWithin( p ) ) return;
+
+	if( ctrl ) return this._ctrlClick( p, shift, mark );
 
 	const transform = this.transform;
 
@@ -247,7 +255,7 @@ def.proto.click =
 		return true;
 	}
 
-	if( access != 'rw' ) return false;
+	if( this.access != 'rw' ) return false;
 
 	pp = p.detransform( transform ).sub( zone.pos );
 
@@ -441,7 +449,7 @@ def.proto.mousewheel =
 		ctrl
 	)
 {
-	return this.tShape.within( p );
+	return this.pointWithin( p );
 };
 
 
@@ -460,7 +468,7 @@ def.proto.pointingHover =
 	const zone = this.zone;
 
 	// not clicked on the portal?
-	if( !this.tShape.within( p ) ) return;
+	if( !this.pointWithin( p ) ) return;
 
 	const pp = p.detransform( transform ).sub( zone.pos );
 
@@ -473,9 +481,8 @@ def.proto.pointingHover =
 			)
 		);
 	}
-	{
-		return result_hover.create( 'cursor', 'default' );
-	}
+
+	return result_hover.create( 'cursor', 'default' );
 };
 
 
@@ -769,7 +776,7 @@ def.lazy._glint =
 	{
 		const facet = gruga_portal.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );

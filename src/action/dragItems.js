@@ -34,6 +34,8 @@ const action_none = require( './none' );
 
 const change_list = require( '../change/list' );
 
+const result_hover = require( '../result/hover' );
+
 const visual_space = require( '../visual/space' );
 
 
@@ -194,6 +196,28 @@ def.proto.dragStop =
 | 'Normal' button ought to be down during this action.
 */
 def.proto.normalButtonDown = true;
+
+
+/*
+| Mouse hover.
+|
+| Returns a result_hover with hovering path and cursor to show.
+*/
+def.proto.pointingHover =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	return result_hover.cursorGrabbing;
+};
 
 
 } );

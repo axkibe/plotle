@@ -254,7 +254,7 @@ def.proto.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.tShape.within( p ) ) return false;
+	if( !this.pointWithin( p ) ) return false;
 
 	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
 
@@ -432,7 +432,7 @@ def.lazy._glint =
 	{
 		const facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
 	}
 
 	const sbary = this.scrollbarY;

@@ -38,6 +38,8 @@ if( TIM )
 
 const action_none = require( './none' );
 
+const result_hover = require( '../result/hover' );
+
 const visual_space = require( '../visual/space' );
 
 
@@ -87,7 +89,7 @@ def.proto.dragMove =
 		return;
 	}
 
-	// Looks if this action is dragging to an item
+	// Looks if this action is dragging over an item
 	for( let r = 0, rZ = screen.length; r < rZ; r++ )
 	{
 		const item = screen.atRank( r );
@@ -128,7 +130,7 @@ def.proto.dragStart =
 	{
 		const item = screen.atRank( a );
 
-		if( !item.tShape.within( p ) ) continue;
+		if( !item.pointWithin( p ) ) continue;
 
 		root.create(
 			'action',
@@ -194,6 +196,49 @@ def.proto.dragStop =
 
 		default : throw new Error( );
 	}
+};
+
+
+/*
+| Mouse hover.
+|
+| Returns a result_hover with hovering path and cursor to show.
+*/
+def.proto.pointingHover =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	if( this.relationState === 'start' )
+	{
+		for( let a = 0, al = screen.length; a < al; a++ )
+		{
+			const item = screen.atRank( a );
+
+			if( item.pointWithin( p ) )
+			{
+				root.create( 'action', this.create( 'fromItemPath', item.path ) );
+
+				return result_hover.cursorDefault;
+			}
+		}
+
+		root.create( 'action', this.create( 'fromItemPath', undefined ) );
+
+		return result_hover.cursorDefault;
+	}
+
+	// otherwise forwards the pointingHover to the screen like action_none
+
+	screen.pointingHover( p, shift, ctrl );
 };
 
 

@@ -35,6 +35,8 @@ const change_grow = require( '../change/grow' );
 
 const fabric_stroke = require( '../fabric/stroke' );
 
+const result_hover = require( '../result/hover' );
+
 const session_uid = require( '../session/uid' );
 
 const tim_path = require( 'tim.js/src/path' );
@@ -176,6 +178,54 @@ def.proto.dragStop =
 	);
 
 	// FIXME switch to action none?
+};
+
+
+/*
+| Mouse hover.
+|
+| Returns a result_hover with hovering path and cursor to show.
+*/
+def.proto.pointingHover =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	/*
+	if( this.relationState === 'start' )
+	{
+		for( let a = 0, al = screen.length; a < al; a++ )
+		{
+			const item = screen.atRank( a );
+
+			if( item.pointWithin( p ) )
+			{
+				root.create( 'action', this.create( 'fromItemPath', item.path ) );
+
+				return result_hover.cursorDefault;
+			}
+		}
+
+		root.create( 'action', this.create( 'fromItemPath', undefined ) );
+
+		return result_hover.cursorDefault;
+	}
+
+	// otherwise forwards the pointingHover to the screen like action_none
+
+	screen.pointingHover( p, shift, ctrl );
+	*/
+
+	// FIXME
+	return result_hover.cursorDefault;
 };
 
 
