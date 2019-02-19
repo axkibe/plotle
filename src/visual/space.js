@@ -241,10 +241,7 @@ def.adjust.get =
 
 	let highlight = !!( mark && mark.containsPath( path ) );
 
-	if( !highlight && item.timtype )
-	{
-		highlight = this._highlightItem( item, action );
-	}
+	if( !highlight && item.timtype ) highlight = this.action.highlightItem( item );
 
 	const hover = item.concernsHover( this.hover, path );
 
@@ -311,10 +308,7 @@ def.adjust.get =
 	action2 = visual_item.concernsAction( this.action, item );
 
 	// checks if the highlight feature has changed on the created item
-	if( !highlight2 && action2 && item.timtype )
-	{
-		highlight2 = this._highlightItem( item, action );
-	}
+	if( !highlight2 && action2 && item.timtype ) highlight2 = this.action.highlightItem( item );
 
 	if( action2 !== action || highlight2 !== highlight )
 	{
@@ -646,13 +640,6 @@ def.proto.pointingHover =
 
 	const aType = action.timtype;
 
-	switch( aType )
-	{
-		case action_pan :
-
-			break;
-	}
-
 	if( frame && aType !== action_select )
 	{
 		const result = frame.pointingHover( p );
@@ -667,11 +654,7 @@ def.proto.pointingHover =
 		if( result ) return result;
 	}
 
-	return(
-		result_hover.create(
-			'cursor', aType === 'action_select' ? 'crosshair' : 'pointer'
-		)
-	);
+	return result_hover.create( 'cursor', aType === action_select ? 'crosshair' : 'pointer' );
 };
 
 
@@ -770,28 +753,6 @@ def.lazy._grid =
 			'spacing', visual_space._standardSpacing
 		)
 	);
-};
-
-
-/*
-| Returns true if the item ought to be highlighted.
-*/
-def.proto._highlightItem =
-	function(
-		item  // the item in question
-	)
-{
-	const action = this.action;
-
-	const att = action.timtype;
-
-	if(
-		att !== action_createRelation
-		&& att !== action_createStroke
-		&& att !== action_select
-	) return false;
-
-	return action.affectsItem( item );
 };
 
 

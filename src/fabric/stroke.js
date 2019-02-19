@@ -12,13 +12,13 @@ if( TIM )
 	def.attributes =
 	{
 		// itemkey or pos the stoke goes from
-		from : { type : [ 'string', '../gleam/point' ], json : true },
+		from : { type : [ 'tim.js/src/path', '../gleam/point' ], json : true },
 
 		// "arrow" or "none"
 		fromStyle : { type : 'string', json: true },
 
 		// itemkey or pos the stroke goes to
-		to : { type : [ 'string', '../gleam/point' ], json : true },
+		to : { type : [ 'tim.js/src/path', '../gleam/point' ], json : true },
 
 		// "arrow" or "none"
 		toStyle : { type : 'string', json: true },

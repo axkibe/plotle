@@ -115,7 +115,7 @@ def.proto.getItemChange = visual_base_stroke.getItemChange;
 def.proto.glint =
 	function( )
 {
-	const shape = this.shape.transform( this.transform );
+	const shape = this.shape( ).transform( this.transform );
 
 	// FIXME remove gruga_relation dependency
 	return gleam_glint_paint.createFS( gruga_relation.facet, shape );
@@ -162,15 +162,23 @@ def.proto.pointingHover =
 /*
 | The items shape
 */
-def.lazy.shape =
+def.proto.shape =
 	function( )
 {
 	const fabric = this.fabric;
 
+	let from = this._from;
+
+	let to = this._to;
+
+	if( typeof( from ) === 'string' ) from = root.spaceVisual.get( from );
+
+	if( typeof( to ) === 'string' ) to = root.spaceVisual.get( to );
+
 	return(
 		gleam_arrow.create(
-			'joint1', this._from,
-			'joint2', this._to,
+			'joint1', from,
+			'joint2', to,
 			'end1', fabric.fromStyle,
 			'end2', fabric.toStyle
 		).shape

@@ -7,7 +7,7 @@
 tim.define( module, ( def, action_createStroke ) => {
 
 
-def.extend = './action';
+def.extend = './base';
 
 
 if( TIM )
@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item path or pos the stroke goes from
-		from : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
+		from : { type : [ 'undefined', 'string', '../gleam/point' ] },
 
 		// the item path hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'string' ] },
 
 		// the item path or pos the stroke goes to
-		to : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
+		to : { type : [ 'undefined', 'string', '../gleam/point' ] },
 
 		// the itemType of stroke ("arrow" or "line")
 		itemType : { type : 'string' },
@@ -56,8 +56,17 @@ def.proto.affectsItem =
 {
 	const path = item.path;
 
-	return path.equals( this.from ) || path.equals( this.to ) || path.equals( this.hover );
+	const iKey = path.get( 2 );
+
+	return iKey === this.from || iKey === this.to || iKey === this.hover;
 };
+
+
+/*
+| Returns true if the item should be highlighted.
+| Default, don't highlight items.
+*/
+def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
 
 
 /*
@@ -151,7 +160,9 @@ def.proto.dragStart =
 	// this action only makes sense on spaces
 	if( screen.timtype !== visual_space ) return;
 
-	root.create( 'action', this.create( 'from', screen.pointToSpaceRS( p, !ctrl ) ) );
+	root.create(
+		'action', this.create( 'from', this.hover || screen.pointToSpaceRS( p, !ctrl ) )
+	);
 };
 
 
@@ -199,8 +210,7 @@ def.proto.pointingHover =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	/*
-	if( this.relationState === 'start' )
+	if( !this.from )
 	{
 		for( let a = 0, al = screen.length; a < al; a++ )
 		{
@@ -208,23 +218,17 @@ def.proto.pointingHover =
 
 			if( item.pointWithin( p ) )
 			{
-				root.create( 'action', this.create( 'fromItemPath', item.path ) );
+				root.create( 'action', this.create( 'hover', item.path.get( 2 ) ) );
 
 				return result_hover.cursorDefault;
 			}
 		}
 
-		root.create( 'action', this.create( 'fromItemPath', undefined ) );
+		root.create( 'action', this.create( 'hover', undefined ) );
 
 		return result_hover.cursorDefault;
 	}
 
-	// otherwise forwards the pointingHover to the screen like action_none
-
-	screen.pointingHover( p, shift, ctrl );
-	*/
-
-	// FIXME
 	return result_hover.cursorDefault;
 };
 

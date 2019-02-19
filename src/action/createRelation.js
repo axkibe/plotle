@@ -7,7 +7,7 @@
 tim.define( module, ( def, action_createRelation ) => {
 
 
-def.extend = './action';
+def.extend = './base';
 
 
 if( TIM )
@@ -200,6 +200,13 @@ def.proto.dragStop =
 
 
 /*
+| Returns true if the item should be highlighted.
+| Default, don't highlight items.
+*/
+def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
+
+
+/*
 | Mouse hover.
 |
 | Returns a result_hover with hovering path and cursor to show.
@@ -238,7 +245,7 @@ def.proto.pointingHover =
 
 	// otherwise forwards the pointingHover to the screen like action_none
 
-	screen.pointingHover( p, shift, ctrl );
+	return screen.pointingHover( p, shift, ctrl );
 };
 
 

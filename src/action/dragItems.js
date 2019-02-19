@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-def.extend = './action';
+def.extend = './base';
 
 
 if( TIM )

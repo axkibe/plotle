@@ -136,12 +136,7 @@ def.proto.pointingHover =
 {
 	if( !this._tShape.within( p ) ) return undefined;
 
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'ns-resize'
-		)
-	);
+	return result_hover.cursorNSResize.create( 'path', this.path );
 };
 
 

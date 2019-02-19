@@ -7,7 +7,7 @@
 tim.define( module, ( def, action_zoomButton ) => {
 
 
-def.extend = './action';
+def.extend = './base';
 
 
 if( TIM )
@@ -21,6 +21,9 @@ if( TIM )
 		refire : { type : 'boolean' }
 	};
 }
+
+
+const result_hover = require( '../result/hover' );
 
 
 /*
@@ -96,6 +99,28 @@ def.proto.dragStart =
 /**/}
 
 	console.log( new Error( ) );
+};
+
+
+/*
+| Mouse hover.
+|
+| Returns a result_hover with hovering path and cursor to show.
+*/
+def.proto.pointingHover =
+	function(
+		p,     // cursor point
+		screen, // the screen for this operation
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/}
+
+	return result_hover.cursorDefault;
 };
 
 

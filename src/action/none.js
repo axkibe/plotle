@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-def.extend = './action';
+def.extend = './base';
 
 
 /*
@@ -65,6 +65,12 @@ def.proto.dragStop =
 
 
 /*
+| 'Normal' button ought to be down during this action.
+*/
+def.proto.normalButtonDown = true;
+
+
+/*
 | Mouse hover.
 |
 | Returns a result_hover with hovering path and cursor to show.
@@ -85,7 +91,7 @@ def.proto.pointingHover =
 	// in case of no action, forwards the pointingHover
 	// to the screen.
 
-	screen.pointingHover( p, shift, ctrl );
+	return screen.pointingHover( p, shift, ctrl );
 };
 
 

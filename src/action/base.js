@@ -1,5 +1,5 @@
 /*
-| The generic action supertype.
+| The generic action base.
 */
 'use strict';
 
@@ -12,6 +12,13 @@ tim.define( module, ( def ) => {
 | Default, nothing is affected.
 */
 def.proto.affectsItem = ( item ) => false;
+
+
+/*
+| Returns true if the item should be highlighted.
+| Default, don't highlight items.
+*/
+def.proto.highlightItem = ( item ) => false;
 
 
 /*

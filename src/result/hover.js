@@ -26,11 +26,15 @@ if( TIM )
 /*
 | Shortcuts.
 */
+def.staticLazy.cursorCrosshair = ( ) => result_hover.create( 'cursor', 'crosshair' );
+
 def.staticLazy.cursorDefault = ( ) => result_hover.create( 'cursor', 'default' );
 
 def.staticLazy.cursorGrabbing = ( ) => result_hover.create( 'cursor', 'grabbing' );
 
 def.staticLazy.cursorGrab = ( ) => result_hover.create( 'cursor', 'grab' );
+
+def.staticLazy.cursorNSResize = ( ) => result_hover.create( 'cursor', 'ns-resize' );
 
 
 } );
