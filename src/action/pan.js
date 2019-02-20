@@ -88,6 +88,12 @@ def.proto.dragStop =
 
 
 /*
+| 'Normal' button ought to be down during this action.
+*/
+def.proto.normalButtonDown = true;
+
+
+/*
 | Mouse hover.
 |
 | Returns a result_hover with hovering path and cursor to show.

@@ -369,23 +369,7 @@ def.proto.scrollMarkIntoView =
 /*
 | The notes shape.
 */
-def.lazy.shape =
-	function( )
-{
-	const zone = this.zone;
-
-	const cr = gruga_note.cornerRadius;
-
-	return(
-		gleam_roundRect.create(
-			'pos', zone.pos,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
-};
+def.proto.shape = function( ){ return this._shape; };
 
 
 /*
@@ -432,7 +416,7 @@ def.lazy._glint =
 	{
 		const facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
 	}
 
 	const sbary = this.scrollbarY;
@@ -440,6 +424,28 @@ def.lazy._glint =
 	if( sbary ) arr.push( sbary.glint );
 
 	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| The notes shape.
+*/
+def.lazy._shape =
+	function( )
+{
+	const zone = this.zone;
+
+	const cr = gruga_note.cornerRadius;
+
+	return(
+		gleam_roundRect.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
+		)
+	);
 };
 
 
@@ -503,6 +509,5 @@ def.lazy._zeroShape =
 		)
 	);
 };
-
 
 } );

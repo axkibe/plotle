@@ -160,7 +160,7 @@ def.proto.pointWithin =
 		p
 	)
 {
-	return this.tZone.within( p ) && this._tShape.within( p );
+	return this.tZone.within( p ) && this._tShape( ).within( p );
 };
 
 
@@ -227,12 +227,22 @@ def.proto._ctrlClick =
 
 
 /*
-| The shape in current transform.
+| The shape in current transform (lazy default)
 */
-def.lazy._tShape =
+def.lazy.__tlShape =
 	function( )
 {
-	return this.shape.transform( this.transform );
+	return this.shape( ).transform( this.transform );
+};
+
+
+/*
+| The shape in current transform.
+*/
+def.proto._tShape =
+	function( )
+{
+	return this.__tlShape;
 };
 
 

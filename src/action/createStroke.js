@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item path or pos the stroke goes from
-		from : { type : [ 'undefined', 'string', '../gleam/point' ] },
+		from : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
 
 		// the item path hovered upon
-		hover : { type : [ 'undefined', 'string' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
 
 		// the item path or pos the stroke goes to
-		to : { type : [ 'undefined', 'string', '../gleam/point' ] },
+		to : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
 
 		// the itemType of stroke ("arrow" or "line")
 		itemType : { type : 'string' },
@@ -54,19 +54,14 @@ def.proto.affectsItem =
 		item
 	)
 {
-	const path = item.path;
+	let path = item.path;
 
-	const iKey = path.get( 2 );
+	if( path.get( 0 ) !== 'spaceVisual' ) return false;
 
-	return iKey === this.from || iKey === this.to || iKey === this.hover;
+	path = path.chop;
+
+	return path.equals( this.from ) || path.equals( this.to ) || path.equals( this.hover );
 };
-
-
-/*
-| Returns true if the item should be highlighted.
-| Default, don't highlight items.
-*/
-def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
 
 
 /*
@@ -81,44 +76,6 @@ def.staticLazy.createArrow = ( ) =>
 */
 def.staticLazy.createLine = ( ) =>
 	action_createStroke.create( 'itemType', 'line' );
-
-
-/*
-| The transient item being created.
-*/
-def.lazy.transientFabric =
-	function( )
-{
-	return(
-		fabric_stroke.create(
-			'from', this.from,
-			'to', this.to,
-			'fromStyle', 'none',
-			'toStyle', this._toStyle
-		)
-	);
-};
-
-
-/*
-| The transient visual being created.
-*/
-def.proto.transientVisual =
-	function(
-		transfrom   // the transform for the item
-	)
-{
-
-	return(
-		visual_stroke.create(
-			'access', 'rw',
-			'action', action_none.create( ),
-			'fabric', this.transientFabric,
-			'highlight', false,
-			'transform', transfrom
-		)
-	);
-};
 
 
 /*
@@ -188,8 +145,16 @@ def.proto.dragStop =
 		)
 	);
 
+	root.create( 'action', action_none.create( ) );
 	// FIXME switch to action none?
 };
+
+
+/*
+| Returns true if the item should be highlighted.
+| Default, don't highlight items.
+*/
+def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
 
 
 /*
@@ -218,7 +183,7 @@ def.proto.pointingHover =
 
 			if( item.pointWithin( p ) )
 			{
-				root.create( 'action', this.create( 'hover', item.path.get( 2 ) ) );
+				root.create( 'action', this.create( 'hover', item.path.chop ) );
 
 				return result_hover.cursorDefault;
 			}
@@ -230,6 +195,44 @@ def.proto.pointingHover =
 	}
 
 	return result_hover.cursorDefault;
+};
+
+
+/*
+| The transient item being created.
+*/
+def.lazy.transientFabric =
+	function( )
+{
+	return(
+		fabric_stroke.create(
+			'from', this.from,
+			'to', this.to,
+			'fromStyle', 'none',
+			'toStyle', this._toStyle
+		)
+	);
+};
+
+
+/*
+| The transient visual being created.
+*/
+def.proto.transientVisual =
+	function(
+		transfrom   // the transform for the item
+	)
+{
+
+	return(
+		visual_stroke.create(
+			'access', 'rw',
+			'action', action_none.create( ),
+			'fabric', this.transientFabric,
+			'highlight', false,
+			'transform', transfrom
+		)
+	);
 };
 
 

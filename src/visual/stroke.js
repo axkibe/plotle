@@ -51,6 +51,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_relation = require( '../gruga/relation' );
 
+const tim_path = require( 'tim.js/src/path' );
+
 const visual_base_stroke = require( './base/stroke' );
 
 
@@ -115,10 +117,8 @@ def.proto.getItemChange = visual_base_stroke.getItemChange;
 def.proto.glint =
 	function( )
 {
-	const shape = this.shape( ).transform( this.transform );
-
 	// FIXME remove gruga_relation dependency
-	return gleam_glint_paint.createFS( gruga_relation.facet, shape );
+	return gleam_glint_paint.createFS( gruga_relation.facet, this._tShape( ) );
 };
 
 
@@ -167,24 +167,15 @@ def.proto.shape =
 {
 	const fabric = this.fabric;
 
-	let from = this._from;
-
-	let to = this._to;
-
-	if( typeof( from ) === 'string' ) from = root.spaceVisual.get( from );
-
-	if( typeof( to ) === 'string' ) to = root.spaceVisual.get( to );
-
 	return(
 		gleam_arrow.create(
-			'joint1', from,
-			'joint2', to,
+			'joint1', this._from,
+			'joint2', this._to,
 			'end1', fabric.fromStyle,
 			'end2', fabric.toStyle
 		).shape
 	);
 };
-
 
 
 /*
@@ -198,34 +189,21 @@ def.lazy.zone =
 
 
 /*
-| Item or point the stroke goes from.
+| Shape or point the stroke goes from.
 */
 def.lazy._from =
 	function( )
 {
 	const ffrom = this.fabric.from;
 
-	return(
-		ffrom.timtype === gleam_point
-		? this._fromPoint
-		: ffrom
-	);
-};
+	switch( ffrom.timtype )
+	{
+		case gleam_point : return this._fromPoint;
 
+		case tim_path : return root.spaceVisual.getPath( ffrom ).shape( );
 
-/*
-| Item or point the stroke goes to.
-*/
-def.lazy._to =
-	function( )
-{
-	const fto = this.fabric.to;
-
-	return(
-		fto.timtype === gleam_point
-		? this._toPoint
-		: fto
-	);
+		default : throw new Error( );
+	}
 };
 
 
@@ -247,6 +225,25 @@ def.lazy._fromPoint =
 
 
 /*
+| Shape or point the stroke goes to.
+*/
+def.lazy._to =
+	function( )
+{
+	const fto = this.fabric.to;
+
+	switch( fto.timtype )
+	{
+		case gleam_point : return this._toPoint;
+
+		case tim_path : return root.spaceVisual.getPath( fto ).shape( );
+
+		default : throw new Error( );
+	}
+};
+
+
+/*
 | Point the stroke goes to.
 */
 def.lazy._toPoint =
@@ -260,6 +257,16 @@ def.lazy._toPoint =
 /**/}
 
 	return this.action.affectPoint( fto );
+};
+
+
+/*
+| Transformed shape.
+*/
+def.proto._tShape =
+	function( )
+{
+	return this.shape( ).transform( this.transform );
 };
 
 

@@ -503,19 +503,7 @@ def.proto.proportional = false;
 /*
 | The portal's shape.
 */
-def.lazy.shape =
-	function( )
-{
-	const zone = this.zone;
-
-	return(
-		gleam_ellipse.create(
-			'pos', zone.pos,
-			'width', zone.width,
-			'height', zone.height
-		)
-	);
-};
+def.proto.shape = function( ) { return this._shape; };
 
 
 /*
@@ -776,7 +764,7 @@ def.lazy._glint =
 	{
 		const facet = gruga_portal.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape ) );
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );
@@ -1339,6 +1327,24 @@ def.proto._prepareField =
 /**/if( FREEZE ) Object.freeze( result );
 
 	return result;
+};
+
+
+/*
+| The portal's shape.
+*/
+def.lazy._shape =
+	function( )
+{
+	const zone = this.zone;
+
+	return(
+		gleam_ellipse.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height
+		)
+	);
 };
 
 

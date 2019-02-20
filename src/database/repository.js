@@ -8,7 +8,7 @@
 tim.define( module, ( def, database_repository ) => {
 
 
-const dbVersion = 15;
+const dbVersion = 16;
 
 
 if( TIM )
@@ -25,6 +25,7 @@ if( TIM )
 		spaces : { type : 'protean' },
 	};
 }
+
 
 const log = require( '../server/log' );
 
