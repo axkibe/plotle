@@ -126,7 +126,7 @@ def.proto.dragStart =
 				'itemPaths', paths,
 				'moveBy', gleam_point.zero,
 				'startPoint', p.detransform( this.transform ),
-				'startZone', this.zone
+				'startZone', this.zone( )
 			)
 	);
 
@@ -170,7 +170,7 @@ def.proto.pointWithin =
 def.lazy.tZone =
 	function( )
 {
-	return this.zone.transform( this.transform );
+	return this.zone( ).transform( this.transform );
 };
 
 

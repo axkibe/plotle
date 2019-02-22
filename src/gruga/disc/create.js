@@ -48,13 +48,15 @@ def.staticLazy.layout =
 
 	const labelButtonPos = pw.add( 81, -254 );
 
-	const lineButtonPos = pw.add( 92, -183 );
+	const relationButtonPos = pw.add( 92, -183 );
+//	const lineButtonPos = pw.add( 92, -183 );
 
-	const arrowButtonPos = pw.add( 99, -112 );
+	const portalButtonPos = pw.add( 99, -112 );
+//	const arrowButtonPos = pw.add( 99, -112 );
 
-	const relationButtonPos = pw.add( 102, -41 );
+//	const relationButtonPos = pw.add( 102, -41 );
 
-	const portalButtonPos = pw.add( 100, 30 );
+//	const portalButtonPos = pw.add( 100, 30 );
 
 	const genericButtonSize = gleam_size.wh( 70, 70 );
 
@@ -151,6 +153,7 @@ def.staticLazy.layout =
 				'text', 'Label',
 				'zone', gleam_rect.posSize( labelButtonPos, genericButtonSize )
 			),
+		/*
 		'twig:add',
 		'createLine',
 			layout_button.create(
@@ -171,6 +174,7 @@ def.staticLazy.layout =
 				'textNewline', 20,
 				'zone', gleam_rect.posSize( arrowButtonPos, genericButtonSize )
 			),
+		*/
 		'twig:add',
 		'createRelation',
 			layout_button.create(

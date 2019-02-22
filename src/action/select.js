@@ -60,21 +60,21 @@ def.proto.affectsItem =
 		item
 	)
 {
-	const tZone = this.zone;
+	const zone = this.zone;
 
-	if( !tZone ) return false;
+	if( !zone ) return false;
 
-	const tPos = tZone.pos;
+	const tPos = zone.pos;
 
-	const iZone = item.zone;
+	const iZone = item.zone( );
 
 	const iPos = iZone.pos;
 
 	return(
 		iPos.x >= tPos.x
 		&& iPos.y >= tPos.y
-		&& iPos.x + iZone.width <= tPos.x + tZone.width
-		&& iPos.y + iZone.height <= tPos.y + tZone.height
+		&& iPos.x + iZone.width <= tPos.x + zone.width
+		&& iPos.y + iZone.height <= tPos.y + zone.height
 	);
 };
 

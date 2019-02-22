@@ -138,7 +138,7 @@ def.proto.dragMove =
 
 		case 'label' :
 		{
-			const fs = model.doc.fontsize * zone.height / model.zone.height;
+			const fs = model.doc.fontsize * zone.height / model.zone( ).height;
 
 			const resized =
 				transientItem.create(

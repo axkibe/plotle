@@ -102,7 +102,7 @@ const convertPath =
 			continue;
 		}
 
-		if( typeof( obj ) === 'object' || typeof( obj ) === 'array' ) convertPath( obj[ key ] );
+		if( typeof( obj ) === 'object' ) convertPath( obj[ key ] );
 	}
 };
 

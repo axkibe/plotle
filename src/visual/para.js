@@ -143,7 +143,7 @@ def.lazy.flow =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( !this.fontsize ) throw new Error( );
+/**/	if( this.fontsize === undefined ) throw new Error( );
 /**/}
 
 	// width the flow can fill

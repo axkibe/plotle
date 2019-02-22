@@ -1738,7 +1738,7 @@ def.proto.spawnRelation =
 		item2
 	)
 {
-	const line = gleam_connect.line( item1.shape, item2.shape );
+	const line = gleam_connect.line( item1.shape( ), item2.shape( ) );
 
 	const pos = line.pc.sub( gruga_relation.spawnOffset );
 

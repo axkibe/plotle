@@ -144,7 +144,7 @@ def.adjust.doc =
 {
 	const path = this.path;
 
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	return(
 		( doc || visual_doc )
@@ -291,7 +291,7 @@ def.lazy.scrollbarY =
 {
 	const dHeight = this.doc.fullsize.height;
 
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const aperture = zone.height - gruga_note.innerMargin.y;
 
@@ -333,7 +333,7 @@ def.proto.scrollMarkIntoView =
 /**/	if( para.timtype !== visual_para ) throw new Error( );
 /**/}
 
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const imargin = this.doc.innerMargin;
 
@@ -375,11 +375,7 @@ def.proto.shape = function( ){ return this._shape; };
 /*
 | The items zone possibly altered by action.
 */
-def.lazy.zone =
-	function( )
-{
-	return this.action.affectZone( this.fabric.zone, this.minSize );
-};
+def.proto.zone = function( ) { return this._zone; };
 
 
 /**
@@ -433,7 +429,7 @@ def.lazy._glint =
 def.lazy._shape =
 	function( )
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const cr = gruga_note.cornerRadius;
 
@@ -495,7 +491,7 @@ def.inherit._innerGlint =
 def.lazy._zeroShape =
 	function( )
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const cr = gruga_note.cornerRadius;
 
@@ -509,5 +505,16 @@ def.lazy._zeroShape =
 		)
 	);
 };
+
+
+/*
+| The items zone possibly altered by action.
+*/
+def.lazy._zone =
+	function( )
+{
+	return this.action.affectZone( this.fabric.zone, this.minSize );
+};
+
 
 } );

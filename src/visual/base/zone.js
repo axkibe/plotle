@@ -27,7 +27,7 @@ def.static.getItemChange =
 	return(
 		change_set.create(
 			'path', this.path.chop.append( 'zone' ),
-			'val', this.zone,
+			'val', this.zone( ),
 			'prev', this.fabric.zone
 		)
 	);

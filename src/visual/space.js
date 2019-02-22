@@ -280,7 +280,7 @@ def.adjust.get =
 
 	if( item.timtype === visual_note )
 	{
-		const aperture = item.zone.height - gruga_note.innerMargin.y;
+		const aperture = item.zone( ).height - gruga_note.innerMargin.y;
 
 		const dHeight = item.doc.fullsize.height;
 
@@ -423,7 +423,7 @@ def.lazy.glint =
 
 				if( action.toItemPath ) toItem = this.get( action.toItemPath.get( -1 ) );
 
-				const fromJoint = fromItem.shape;
+				const fromJoint = fromItem.shape( );
 
 				if(
 					action.toItemPath
@@ -431,7 +431,7 @@ def.lazy.glint =
 				)
 				{
 					// arrow connects two items
-					toJoint = toItem.shape;
+					toJoint = toItem.shape( );
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{

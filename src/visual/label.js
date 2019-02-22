@@ -101,7 +101,7 @@ def.static.createGeneric =
 
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const fs = model.doc.fontsize * zone.height / model.zone.height;
+	const fs = model.doc.fontsize * zone.height / model.zone( ).height;
 
 	const resized =
 		model.create(
@@ -241,7 +241,7 @@ def.proto.minScaleX =
 */
 def.proto.minScaleY =
 	function(
-		// zone  // original zone
+		zone  // original zone
 	)
 {
 	return 0;
@@ -359,7 +359,7 @@ def.proto.scrollMarkIntoView = function( ){ };
 /*
 | The item's shape.
 */
-def.proto.shape = function( ){ return this.zone.shrink1; };
+def.proto.shape = function( ){ return this.zone( ).shrink1; };
 
 
 /*
@@ -368,7 +368,7 @@ def.proto.shape = function( ){ return this.zone.shrink1; };
 |
 | FUTURE inherit
 */
-def.lazy.zone =
+def.proto.zone =
 	function( )
 {
 	return(
@@ -379,7 +379,6 @@ def.lazy.zone =
 		)
 	);
 };
-
 
 
 /*
@@ -421,6 +420,25 @@ def.inherit._glint =
 	)
 {
 	return inherit.equals( this );
+};
+
+
+/*
+| Calculates the labels zone,
+| possibly altered by an action.
+|
+| FUTURE inherit
+*/
+def.lazy._zone =
+	function( )
+{
+	return(
+		gleam_rect.create(
+			'pos', this.pos,
+			'width', this._zoneWidth,
+			'height', this._zoneHeight
+		)
+	);
 };
 
 

@@ -76,9 +76,9 @@ def.proto.glint =
 
 	let shape1, shape2;
 
-	if( item1 ) shape1 = item1.shape;
+	if( item1 ) shape1 = item1.shape( );
 
-	if( item2 ) shape2 = item2.shape;
+	if( item2 ) shape2 = item2.shape( );
 
 	const tZone = this.tZone;
 
@@ -106,40 +106,6 @@ def.proto.glint =
 };
 
 
-/* FUTURE repair caching
-def.inherit.glint =
-	function(
-		inherit
-	)
-{
-	const item1 = root.spaceVisual.get( this.fabric.item1key );
-
-	const item2 = root.spaceVisual.get( this.fabric.item2key );
-
-	let shape1, shape2;
-
-	if( item1 ) shape1 = item1.shape;
-
-	if( item2 ) shape2 = item2.shape;
-
-	const arrShape = cache.arrShape;
-
-	const conShape = cache.conShape;
-
-	return(
-		(
-			( !conShape && !shape1 )
-			|| ( conShape && conShape.equals( shape1 ) )
-		)
-		&& (
-			( !arrShape && !shape2 )
-			|| ( arrShape && arrShape.equals( shape2 ) )
-		)
-	);
-};
-*/
-
-
 /*
 | Returns the glint of an arrow to a shape.
 */
@@ -148,20 +114,13 @@ def.proto._getArrowGlint =
 		shape
 	)
 {
-	return(
-		gleam_glint_paint.create(
-			'facet', gruga_relation.facet,
-			'shape',
-				gleam_arrow.getArrowShape(
-					this.shape,
-					'none',
-					shape,
-					'arrow'
-				)
-				.transform( this.transform )
-		)
-	);
+	const arrowShape =
+		gleam_arrow.getArrowShape( this.shape( ), 'none', shape, 'arrow' )
+		.transform( this.transform );
+
+	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
 };
+
 
 /*
 | Returns the glint of a connection to a shape.
@@ -172,7 +131,7 @@ def.proto._getConnectionGlint =
 	)
 {
 	const arrowShape =
-		gleam_arrow.getArrowShape( shape, 'none', this.shape, 'none' )
+		gleam_arrow.getArrowShape( shape, 'none', this.shape( ), 'none' )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );

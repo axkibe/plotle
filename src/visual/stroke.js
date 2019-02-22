@@ -43,11 +43,11 @@ if( TIM )
 
 const gleam_arrow = require( '../gleam/arrow' );
 
+const gleam_connect = require( '../gleam/connect' );
+
 const gleam_glint_paint = require( '../gleam/glint/paint' );
 
 const gleam_point = require( '../gleam/point' );
-
-const gleam_rect = require( '../gleam/rect' );
 
 const gruga_relation = require( '../gruga/relation' );
 
@@ -62,18 +62,19 @@ const visual_base_stroke = require( './base/stroke' );
 def.lazy.attentionCenter =
 	function( )
 {
-	return this.zone.pc.y;
+	return this.zone( ).pc.y;
 };
 
 
 /*
-| Sees if this portal is being clicked.
+| Checks if the item is being clicked and reacts.
 */
 def.proto.click =
 	function(
-		p,
-		shift,
-		access  // FIXME have access be an attribute
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		mark     // mark of the visual space
 	)
 {
 	return;
@@ -169,8 +170,8 @@ def.proto.shape =
 
 	return(
 		gleam_arrow.create(
-			'joint1', this._from,
-			'joint2', this._to,
+			'joint1', this._line( ).p1,
+			'joint2', this._line( ).p2,
 			'end1', fabric.fromStyle,
 			'end2', fabric.toStyle
 		).shape
@@ -181,10 +182,10 @@ def.proto.shape =
 /*
 | The items zone possibly altered by action.
 */
-def.lazy.zone =
+def.proto.zone =
 	function( )
 {
-	return gleam_rect.createArbitrary( this._fromPoint, this._toPoint );
+	return this._line( ).zone;
 };
 
 
@@ -198,9 +199,9 @@ def.lazy._from =
 
 	switch( ffrom.timtype )
 	{
-		case gleam_point : return this._fromPoint;
+		case gleam_point : return this._line( ).p1;
 
-		case tim_path : return root.spaceVisual.getPath( ffrom ).shape( );
+		case tim_path : return ffrom;
 
 		default : throw new Error( );
 	}
@@ -208,19 +209,39 @@ def.lazy._from =
 
 
 /*
-| Point the stroke goes from.
+| The line of the stroke.
 */
-def.lazy._fromPoint =
+def.proto._line =
 	function( )
 {
-	const ffrom = this.fabric.from;
+	let ffrom = this.fabric.from;
+	let fto = this.fabric.to;
 
-/**/if( CHECK )
-/**/{
-/**/	if( ffrom.timtype !== gleam_point ) throw new Error( );
-/**/}
+	if( ffrom.timtype === gleam_point )
+	{
+		ffrom = this.action.affectPoint( ffrom );
+	}
+	else
+	{
+		const ifrom = root.spaceVisual.getPath( ffrom );
 
-	return this.action.affectPoint( ffrom );
+		if( ifrom ) ffrom = root.spaceVisual.getPath( ffrom ).shape( );
+		else ffrom = gleam_point.zero;
+	}
+
+	if( fto.timtype === gleam_point )
+	{
+		fto = this.action.affectPoint( fto );
+	}
+	else
+	{
+		const ito = root.spaceVisual.getPath( fto );
+
+		if( ito ) fto = root.spaceVisual.getPath( fto ).shape( );
+		else fto = gleam_point.zero;
+	}
+
+	return gleam_connect.line( ffrom, fto );
 };
 
 
@@ -234,29 +255,12 @@ def.lazy._to =
 
 	switch( fto.timtype )
 	{
-		case gleam_point : return this._toPoint;
+		case gleam_point : return this._line( ).p2;
 
-		case tim_path : return root.spaceVisual.getPath( fto ).shape( );
+		case tim_path : return fto;
 
 		default : throw new Error( );
 	}
-};
-
-
-/*
-| Point the stroke goes to.
-*/
-def.lazy._toPoint =
-	function( )
-{
-	const fto = this.fabric.to;
-
-/**/if( CHECK )
-/**/{
-/**/	if( fto.timtype !== gleam_point ) throw new Error( );
-/**/}
-
-	return this.action.affectPoint( fto );
 };
 
 

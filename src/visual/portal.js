@@ -148,7 +148,7 @@ def.static.antiCycle =
 def.lazy.attentionCenter =
 	function( )
 {
-	const ac = this.zone.pos.y;
+	const ac = this.zone( ).pos.y;
 
 	const mark = this.mark;
 
@@ -244,7 +244,7 @@ def.proto.click =
 
 	const transform = this.transform;
 
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	let pp = p.detransform( transform ).sub( zone.pos );
 
@@ -465,7 +465,7 @@ def.proto.pointingHover =
 {
 	const transform = this.transform;
 
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	// not clicked on the portal?
 	if( !this.pointWithin( p ) ) return;
@@ -561,12 +561,7 @@ def.proto.specialKey =
 /*
 | The items zone possibly altered by action.
 */
-def.lazy.zone =
-	function( )
-{
-	return this.action.affectZone( this.fabric.zone, this.minSize );
-};
-
+def.proto.zone = function( ) { return this._zone; };
 
 
 /*
@@ -1215,7 +1210,7 @@ def.lazy._markSection =
 def.lazy._moveToButtonShape =
 	function( )
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const width = gruga_portal.moveToWidth;
 
@@ -1271,7 +1266,7 @@ def.proto._prepareField =
 		baseP
 	)
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	const pitch = gruga_portal.inputPitch;
 
@@ -1336,7 +1331,7 @@ def.proto._prepareField =
 def.lazy._shape =
 	function( )
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	return(
 		gleam_ellipse.create(
@@ -1384,7 +1379,7 @@ def.lazy._tFontMoveTo =
 def.lazy._zeroShape =
 	function( )
 {
-	const zone = this.zone;
+	const zone = this.zone( );
 
 	return(
 		gleam_ellipse.create(
@@ -1393,6 +1388,16 @@ def.lazy._zeroShape =
 			'height', zone.height
 		)
 	);
+};
+
+
+/*
+| The items zone possibly altered by action.
+*/
+def.lazy._zone =
+	function( )
+{
+	return this.action.affectZone( this.fabric.zone, this.minSize );
 };
 
 
