@@ -542,7 +542,7 @@ def.proto.dragStop =
 
 	if( action.timtype !== action_zoomButton ) return;
 
-	root.create( 'action', action.create( 'refire', false ) );
+	root.create( 'action', action_none.create( ) );
 
 	return false;
 };

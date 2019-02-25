@@ -72,7 +72,7 @@ def.proto.removeResource =
 /*
 | Prepares a resource.
 |
-| Returns the prepared resource, but updates the inventory already.
+| Returns the prepared resource, but also updates the inventory.
 */
 def.proto.prepareResource =
 	function*(
@@ -86,7 +86,7 @@ def.proto.prepareResource =
 		realpath =
 			resource.realpath
 			? resource.realpath
-			: yield fs.realpath( root.serverDir + resource.filePath, resume( ) );
+			: yield fs.realpath( './' + resource.filePath, resume( ) );
 	}
 
 	let mtime;

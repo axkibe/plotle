@@ -23,12 +23,7 @@ const openTypeLoad =
 	function( )
 {
 	opentype.load(
-		//'media-fonts-OpenSans-Regular.ttf',
-		//'media-fonts-Roboto-Regular.ttf',
-		'media-fonts-DejaVuSans-Regular.ttf',
-		//'media-fonts-NotoSans-Regular.ttf',
-		//'media-fonts-SourceSansPro-Regular.ttf',
-		//'media-dejavusans-webfont.ttf',
+		'font-DejaVuSans-Regular.ttf',
 		function( err, font )
 	{
 		if (err)

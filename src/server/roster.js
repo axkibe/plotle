@@ -58,6 +58,14 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
+		'aliases', stringList( [ 'tim-common.js' ] ),
+		'coding', 'utf-8',
+		'data', tim.commonSource,
+		'mime', 'text/javascript',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	server_resource.create(
 		'aliases', stringList( [ 'tim-catalog-init.js' ] ),
 		'coding', 'utf-8',
 		'data', undefined,
@@ -77,23 +85,7 @@ server_resourceList.create(
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'filePath', 'media/fonts/DejaVuSans-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'media/fonts/NotoSans-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'media/fonts/OpenSans-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'media/fonts/Roboto-Regular.ttf',
-		'maxage', 'long'
-	),
-	server_resource.create(
-		'filePath', 'media/fonts/SourceSansPro-Regular.ttf',
+		'filePath', 'font/DejaVuSans-Regular.ttf',
 		'maxage', 'long'
 	),
 	server_resource.create(

@@ -27,9 +27,6 @@ if( TIM )
 		base : { type : 'string' }
 	};
 
-	/*
-	| Tim alike functions.
-	*/
 	def.alike =
 	{
 		alikeWithoutSize : { ignores : { size : true } }

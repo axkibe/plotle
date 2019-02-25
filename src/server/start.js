@@ -17,23 +17,19 @@ Object.defineProperty(
 );
 
 
-/*
-| Running node normaly, TIM is false.
-*/
+// Running node normaly, TIM is false.
 global.TIM = false;
 
-/*
-| This is node.
-*/
+
+// This is node.
 global.NODE = true;
 
-/*
-| Server checking.
-*/
+
+// Server checking (first true, later override by config)
 global.CHECK = true;
 
 
-// registers with tim.js
+// Registers with tim.js
 {
 	require( 'tim.js' );
 
@@ -58,15 +54,13 @@ const config = require( '../config/intf' );
 require( '../../config' )( config.set );
 
 
-/*
-| Server checking.
-*/
+// Server checking.
 global.CHECK = config.get( 'server', 'check' );
 
-/*
-| Server object freezing.
-*/
+
+// Server object freezing.
 global.FREEZE = config.get( 'server', 'freeze' );
+
 
 const log = require( './log' );
 
@@ -93,25 +87,6 @@ const server_userNexus = require( './userNexus' );
 const suspend = require( 'suspend' );
 
 const resume = suspend.resume;
-
-
-/*
-| Calculates the server root directory.
-*/
-let serverDir;
-
-( function( )
-{
-	serverDir = module.filename;
-
-	for( let a = 0; a < 3; a++ )
-	{
-		serverDir = serverDir.substr( 0, serverDir.lastIndexOf( '/' ) );
-	}
-
-	serverDir += '/';
-}
-)( );
 
 
 /*
@@ -223,8 +198,7 @@ const startup =
 		'spaces', server_spaceNexus.create( ),
 		'upSleeps', server_upSleepGroup.create( ),
 		'nextVisitor', 1000,
-		'userNexus', server_userNexus.create( ),
-		'serverDir', serverDir
+		'userNexus', server_userNexus.create( )
 	);
 
 	yield* root.prepareInventory( );
@@ -239,9 +213,4 @@ const startup =
 };
 
 
-suspend(
-	function*( )
-{
-	yield* startup( );
-}
-)( );
+suspend( function*( ) { yield* startup( ); } )( );

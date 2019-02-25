@@ -845,29 +845,33 @@ def.proto.changeSpaceTransformAll =
 
 	let item = space.atRank( 0 );
 
-	let pos = item.pos || item.zone.pos;
+	let zone = item.zone( );
+
+	let pos = item.pos || zone.pos;
 
 	let wx = pos.x;
 
 	let ny = pos.y;
 
-	let ex = wx + item.zone.width;
+	let ex = wx + zone.width;
 
-	let sy = ny + item.zone.height;
+	let sy = ny + zone.height;
 
 	for( let r = 1; r < rZ; r++ )
 	{
 		item = space.atRank( r );
 
-		pos = item.pos || item.zone.pos;
+		pos = item.pos;
+
+		if( !pos ) { zone = item.zone( ); pos = zone.pos; }
 
 		if( pos.x < wx ) wx = pos.x;
 
 		if( pos.y < ny ) ny = pos.y;
 
-		if( pos.x + item.zone.width > ex ) ex = pos.x + item.zone.width;
+		if( pos.x + zone.width > ex ) ex = pos.x + zone.width;
 
-		if( pos.y + item.zone.height > sy ) sy = pos.y + item.zone.height;
+		if( pos.y + zone.height > sy ) sy = pos.y + zone.height;
 	}
 
 	// center

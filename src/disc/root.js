@@ -7,9 +7,6 @@
 tim.define( module, ( def, disc_root ) => {
 
 
-def.extend = './disc';
-
-
 if( TIM )
 {
 	def.attributes =

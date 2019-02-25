@@ -26,9 +26,6 @@ if( TIM )
 		// the database backend
 		repository : { type : '../database/repository' },
 
-		// server directory
-		serverDir : { type : 'string' },
-
 		// all spaces
 		spaces : { type : './spaceNexus' },
 

@@ -1,6 +1,11 @@
 /*
-| Converts a v12 repository to v13.
+| Converts a v10 repository to v11.
 */
+
+
+// deactivated
+return false;
+
 
 /*
 | This tool is configered directly here
@@ -14,13 +19,13 @@ config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-12'
+		name : 'ideoloom-10'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-13'
+		name : 'ideoloom-11'
 	}
 };
 
@@ -34,33 +39,33 @@ config =
 
 // this is not true albeit
 // works as hack.
-global.APP = 'server';
+GLOBAL.APP = 'server';
 
-global.FORCE_JION_LOADING = false;
+GLOBAL.FORCE_JION_LOADING = false;
 
-global.CHECK = true;
+GLOBAL.CHECK = true;
 
-global.FREEZE = false;
+GLOBAL.FREEZE = false;
 
-global.JION = false;
+GLOBAL.JION = false;
 
-global.NODE = true;
+// this also not fully true
+GLOBAL.SERVER = true;
 
 
 var
-	convertChange,
-	convertChangeRay,
-	convertChangeSkid,
 	connectToSource,
 	connectToTarget,
 	fabric_spaceRef,
+	jools,
 	mongodb,
 	resume,
 	run,
-	json_typemap,
 	sus,
-	util;
+	translateChange,
+	translateChangeRay;
 
+jools = require( '../jools/jools' );
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
 
@@ -70,21 +75,7 @@ sus = require( 'suspend' );
 
 resume = sus.resume;
 
-json_typemap = {
-	'euclid_point' : 'point',
-	'euclid_rect' : 'rect',
-	'gleam_point' : 'point',
-	'gleam_rect' : 'rect',
-
-	'fabric_label' : 'label',
-	'fabric_note' : 'note',
-	'fabric_portal' : 'portal',
-	'fabric_relation' : 'relation'
-};
-
 root = { };
-
-util = require( 'util' );
 
 
 /*
@@ -143,63 +134,58 @@ connectToTarget =
 };
 
 
-/*
-| Converts a change
-*/
-convertChange =
+translateChange =
 	function(
-		c
+		c10
 	)
 {
-	var
-		a,
-		aZ,
-		keys;
-
-	if( typeof( c ) === 'string' || c instanceof String ) return;
-
-	if( json_typemap[ c.type ] )
+	if( c10.type !== 'change_set' )
 	{
-		c.type = json_typemap[ c.type ];
+		return c10;
 	}
 
-	keys = Object.keys( c );
-
-	for( a = 0, aZ = keys.length; a < aZ; a++ )
+	if( c10.val === null )
 	{
-		convertChange( c[ keys[ a ] ] );
+		c10.type = 'change_shrink';
+
+		delete c10.val;
+
+		return c10;
 	}
+
+	if( c10.prev === null )
+	{
+		c10.type = 'change_grow';
+
+		delete c10.prev;
+
+		return c10;
+	}
+
+	delete c10.rank;
+
+	return c10;
 };
 
 
-/*
-| Converts a changeRay of a change
-*/
-convertChangeRay =
+translateChangeRay =
 	function(
-		cr
+		cr10
 	)
 {
 	var
-		a,
-		aZ;
+		a, aZ;
 
-	for( a = 0, aZ = cr.length; a < aZ; a++ )
-	{
-		convertChange( cr[ a ] );
-	}
-};
-
-
-/*
-| Converts a change skid.
-*/
-convertChangeSkid =
-	function(
-		cs
+	for(
+		a = 0, aZ = cr10.changeRay.ray.length;
+		a < aZ;
+		a++
 	)
-{
-	convertChangeRay( cs.changeRay.ray );
+	{
+		translateChange( cr10.changeRay.ray[ a ] );
+	}
+
+	return cr10;
 };
 
 
@@ -212,14 +198,13 @@ run =
 	var
 		changesCursor,
 		cursor,
-		cs,
+		c,
 		o,
 		spaces,
 		spaceRef,
 		srcChanges,
 		srcConnection,
 		srcSpaces,
-		srcGlobal,
 		srcUsers,
 		trgConnection,
 		trgChanges,
@@ -230,20 +215,6 @@ run =
 	console.log( '* connecting to src' );
 
 	srcConnection = yield* connectToSource( );
-
-	srcGlobal =
-		yield srcConnection.collection( 'global', resume( ) );
-
-	o =
-		yield srcGlobal.findOne(
-			{ _id : 'version' },
-			resume( )
-		);
-
-	if( o.version !== 12 )
-	{
-		throw new Error( 'src is not a v12 repository' );
-	}
 
 	console.log( '* connecting to trg' );
 
@@ -268,12 +239,12 @@ run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 13
+			version : 11
 		},
 		resume( )
 	);
 
-	console.log( '* converting src.users -> trg.users' );
+	console.log( '* copying src.users -> trg.users' );
 
 	cursor = yield srcUsers.find( resume( ) );
 
@@ -313,7 +284,7 @@ run =
 				'tag', o.tag
 			);
 
-		console.log( ' * copying changes of "' + spaceRef.fullname + '"' );
+		console.log( ' * translating changes of "' + spaceRef.fullname + '"' );
 
 		srcChanges = yield srcConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
 
@@ -329,16 +300,12 @@ run =
 			).batchSize( 100 );
 
 		for(
-			cs = yield changesCursor.nextObject( resume( ) );
-			cs !== null;
-			cs = yield changesCursor.nextObject( resume( ) )
+			c = yield changesCursor.nextObject( resume( ) );
+			c !== null;
+			c = yield changesCursor.nextObject( resume( ) )
 		)
 		{
-			convertChangeSkid( cs );
-
-			if( false ) console.log( util.inspect( cs, false, null ) );
-
-			yield trgChanges.insert( cs, resume( ) );
+			yield trgChanges.insert( translateChangeRay( c ), resume( ) );
 		}
 	}
 

@@ -2,8 +2,10 @@
 | Converts a v7 repository to v8.
 */
 
+
 // deactivated
-if( true ) return false;
+return false;
+
 
 /*
 | This tool is configered directly here

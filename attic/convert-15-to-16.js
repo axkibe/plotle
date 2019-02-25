@@ -3,6 +3,11 @@
 */
 'use strict';
 
+
+// deactivated
+return false;
+
+
 const config =
 {
 	src :

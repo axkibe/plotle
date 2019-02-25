@@ -1,6 +1,5 @@
 /*
-| Opentype.js interface
-| including glyph caching.
+| Opentype.js interface including glyph caching.
 */
 'use strict';
 
@@ -241,4 +240,3 @@ def.static.drawText =
 
 
 } );
-

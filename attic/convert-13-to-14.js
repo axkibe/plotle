@@ -1,30 +1,28 @@
 /*
-| Converts a v11 repository to v12.
+| Converts a v12 repository to v13.
 */
 
+
 // deactivated
-if( true ) return false;
+return false;
 
 
 /*
 | This tool is configered directly here
 */
-var
-	config;
-
-config =
+const config =
 {
 	src :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-11'
+		name : 'ideoloom-13'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-12'
+		name : 'ideoloom-14'
 	}
 };
 
@@ -38,32 +36,32 @@ config =
 
 // this is not true albeit
 // works as hack.
-GLOBAL.APP = 'server';
+global.APP = 'server';
 
-GLOBAL.FORCE_JION_LOADING = false;
+global.FORCE_JION_LOADING = false;
 
-GLOBAL.CHECK = true;
+global.CHECK = true;
 
-GLOBAL.FREEZE = false;
+global.FREEZE = false;
 
-GLOBAL.JION = false;
+global.JION = false;
 
-// this also not fully true
-GLOBAL.SERVER = true;
+global.NODE = true;
 
 
 var
+	convertChange,
+	convertChangeRay,
+	convertChangeSkid,
 	connectToSource,
 	connectToTarget,
-	convertUser,
 	fabric_spaceRef,
-	jools,
 	mongodb,
 	resume,
 	run,
-	sus;
+	sus,
+	util;
 
-jools = require( '../jools/jools' );
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
 
@@ -74,6 +72,8 @@ sus = require( 'suspend' );
 resume = sus.resume;
 
 root = { };
+
+util = require( 'util' );
 
 
 /*
@@ -133,18 +133,82 @@ connectToTarget =
 
 
 /*
-| Converts the user.
+| Converts a change
 */
-convertUser =
-	function( o )
+convertChange =
+	function(
+		c
+	)
 {
-	o.passhash = o.pass;
+	var
+		a,
+		aZ,
+		keys;
 
-	delete o.pass;
+	if( typeof( c ) === 'string' || c instanceof String ) return;
+	
+	if( c.type && c.type === 'rect' )
+	{
+		//console.log( 'CONVERTED FROM', c);
+		c.width = c.pse.x - c.pnw.x;
+		c.height = c.pse.y - c.pnw.y;
+		c.pos = c.pnw;
+		delete c.pnw;
+		delete c.pse;
+		//console.log( 'CONVERTED TO', c);
+		return;
+	}
 
-	return o;
+	if( c.pnw ) {
+		c.pos = c.pnw;
+		delete c.pnw;
+	}
+
+	if( c.path ) {
+		for( a = 0; a < c.path.length; a++ )
+		{
+			if( c.path[ a ] === 'pnw' ) c.path[ a ] = 'pos';
+		}
+	}
+
+	keys = Object.keys( c );
+
+	for( a = 0, aZ = keys.length; a < aZ; a++ )
+	{
+		convertChange( c[ keys[ a ] ] );
+	}
 };
 
+
+/*
+| Converts a changeRay of a change
+*/
+convertChangeRay =
+	function(
+		cr
+	)
+{
+	var
+		a,
+		aZ;
+
+	for( a = 0, aZ = cr.length; a < aZ; a++ )
+	{
+		convertChange( cr[ a ] );
+	}
+};
+
+
+/*
+| Converts a change skid.
+*/
+convertChangeSkid =
+	function(
+		cs
+	)
+{
+	convertChangeRay( cs.changeRay.ray );
+};
 
 
 /*
@@ -156,7 +220,7 @@ run =
 	var
 		changesCursor,
 		cursor,
-		c,
+		cs,
 		o,
 		spaces,
 		spaceRef,
@@ -184,9 +248,9 @@ run =
 			resume( )
 		);
 
-	if( o.version !== 11 )
+	if( o.version !== 13 )
 	{
-		throw new Error( 'src is not a v11 repository' );
+		throw new Error( 'src is not a v13 repository' );
 	}
 
 	console.log( '* connecting to trg' );
@@ -212,7 +276,7 @@ run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 12
+			version : 14
 		},
 		resume( )
 	);
@@ -229,7 +293,7 @@ run =
 	{
 		console.log( ' * ' + o._id );
 
-		yield trgUsers.insert( convertUser( o ), resume( ) );
+		yield trgUsers.insert( o, resume( ) );
 	}
 
 	console.log( '* copying src.spaces -> trg.spaces' );
@@ -273,12 +337,16 @@ run =
 			).batchSize( 100 );
 
 		for(
-			c = yield changesCursor.nextObject( resume( ) );
-			c !== null;
-			c = yield changesCursor.nextObject( resume( ) )
+			cs = yield changesCursor.nextObject( resume( ) );
+			cs !== null;
+			cs = yield changesCursor.nextObject( resume( ) )
 		)
 		{
-			yield trgChanges.insert( c, resume( ) );
+			convertChangeSkid( cs );
+
+			if( false ) console.log( util.inspect( cs, false, null ) );
+
+			yield trgChanges.insert( cs, resume( ) );
 		}
 	}
 

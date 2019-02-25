@@ -2,13 +2,15 @@
 | Converts a v14 repository to v15.
 */
 
+
+// deactivated
+return false;
+
+
 /*
 | This tool is configered directly here
 */
-var
-	config;
-
-config =
+const config =
 {
 	src :
 	{

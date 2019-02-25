@@ -4,8 +4,10 @@
 | Authors: Axel Kittenberger
 */
 
+
 // deactivated
-if( true ) return false;
+return false;
+
 
 /*
 | This tool is configered directly here

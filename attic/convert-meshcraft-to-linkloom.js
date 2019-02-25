@@ -3,15 +3,16 @@
 |
 | Authors: Axel Kittenberger
 */
+
+
+// disabled so not to drop target by accident
 return false;
+
 
 /*
 | This tool is configered directly here
 */
-var
-config,
-
-config =
+const config =
 {
 src :
 {

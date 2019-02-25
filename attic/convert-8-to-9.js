@@ -1,16 +1,17 @@
 /*
-| Converts a v10 repository to v11.
+| Converts a v8 repository to v9.
 */
 
+
 // deactivated
-if( true ) return false;
+return false;
 
 
 /*
 | This tool is configered directly here
 */
 var
-	config;
+config,
 
 config =
 {
@@ -18,13 +19,13 @@ config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-10'
+		name : 'ideoloom-8'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-11'
+		name : 'ideoloom-9'
 	}
 };
 
@@ -44,6 +45,8 @@ GLOBAL.FORCE_JION_LOADING = false;
 
 GLOBAL.CHECK = true;
 
+GLOBAL.CONVERT = true;
+
 GLOBAL.FREEZE = false;
 
 GLOBAL.JION = false;
@@ -52,23 +55,26 @@ GLOBAL.JION = false;
 GLOBAL.SERVER = true;
 
 
+/*
+| Imports
+*/
 var
-	connectToSource,
 	connectToTarget,
+	database_repository,
 	fabric_spaceRef,
-	jools,
 	mongodb,
 	resume,
 	run,
-	sus,
-	translateChange,
-	translateChangeRay;
+	server_spaceBox,
+	sus;
 
-jools = require( '../jools/jools' );
+database_repository = require( '../database/repository' );
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
 
 mongodb = require( 'mongodb' );
+
+server_spaceBox = require( '../server/spaceBox' );
 
 sus = require( 'suspend' );
 
@@ -76,37 +82,8 @@ resume = sus.resume;
 
 root = { };
 
-
 /*
-| Creates a connection to the target.
-*/
-connectToSource =
-	function*( )
-{
-	var
-		connector,
-		server;
-
-	server =
-		new mongodb.Server(
-			config.src.host,
-			config.src.port,
-			{ }
-		);
-
-	connector =
-		new mongodb.Db(
-			config.src.name,
-			server,
-			{ w : 1 }
-		);
-
-	return yield connector.open( resume( ) );
-};
-
-
-/*
-| Creates a connection to the source.
+| creates a connection to target
 */
 connectToTarget =
 	function*( )
@@ -133,61 +110,6 @@ connectToTarget =
 };
 
 
-translateChange =
-	function(
-		c10
-	)
-{
-	if( c10.type !== 'change_set' )
-	{
-		return c10;
-	}
-
-	if( c10.val === null )
-	{
-		c10.type = 'change_shrink';
-
-		delete c10.val;
-
-		return c10;
-	}
-
-	if( c10.prev === null )
-	{
-		c10.type = 'change_grow';
-
-		delete c10.prev;
-
-		return c10;
-	}
-
-	delete c10.rank;
-
-	return c10;
-};
-
-
-translateChangeRay =
-	function(
-		cr10
-	)
-{
-	var
-		a, aZ;
-
-	for(
-		a = 0, aZ = cr10.changeRay.ray.length;
-		a < aZ;
-		a++
-	)
-	{
-		translateChange( cr10.changeRay.ray[ a ] );
-	}
-
-	return cr10;
-};
-
-
 /*
 | The main runner.
 */
@@ -195,25 +117,34 @@ run =
 	function*( )
 {
 	var
-		changesCursor,
+		a,
+		aZ,
 		cursor,
-		c,
 		o,
 		spaces,
+		spaceBox,
 		spaceRef,
-		srcChanges,
-		srcConnection,
-		srcSpaces,
-		srcUsers,
-		trgConnection,
+		srcConfig,
 		trgChanges,
+		srcDatabase,
 		trgGlobal,
+		trgUsers,
 		trgSpaces,
-		trgUsers;
+		trgConnection;
+
+	srcConfig = {
+		database_name : config.src.name,
+		database_host : config.src.host,
+		database_port : config.src.port,
+		database_version : 8
+	};
 
 	console.log( '* connecting to src' );
 
-	srcConnection = yield* connectToSource( );
+	srcDatabase = yield* database_repository.connect( srcConfig );
+
+	// spaceBox is using this global
+	root.repository = srcDatabase;
 
 	console.log( '* connecting to trg' );
 
@@ -222,10 +153,6 @@ run =
 	console.log( '* dropping trg' );
 
 	yield trgConnection.dropDatabase( resume( ) );
-
-	srcUsers = yield srcConnection.collection( 'users', resume( ) );
-
-	srcSpaces = yield srcConnection.collection( 'spaces', resume( ) );
 
 	trgGlobal = yield trgConnection.collection( 'global', resume( ) );
 
@@ -238,14 +165,14 @@ run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 11
+			version : 9
 		},
 		resume( )
 	);
 
 	console.log( '* copying src.users -> trg.users' );
 
-	cursor = yield srcUsers.find( resume( ) );
+	cursor = yield srcDatabase.users.find( resume( ) );
 
 	for(
 		o = yield cursor.nextObject( resume( ) );
@@ -258,12 +185,12 @@ run =
 		yield trgUsers.insert( o, resume( ) );
 	}
 
-	console.log( '* copying src.spaces -> trg.spaces' );
+	console.log( '* loading and replaying all spaces' );
 
 	spaces = { };
 
 	cursor =
-		yield srcSpaces.find(
+		yield srcDatabase.spaces.find(
 			{ },
 			{ sort: '_id' },
 			sus.resume( )
@@ -275,42 +202,41 @@ run =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		yield trgSpaces.insert( o, resume( ) );
-
 		spaceRef =
 			fabric_spaceRef.create(
 				'username', o.username,
 				'tag', o.tag
 			);
 
-		console.log( ' * translating changes of "' + spaceRef.fullname + '"' );
+		console.log( ' * loading and replaying "' + spaceRef.fullname + '"' );
 
-		srcChanges = yield srcConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+		spaces[ spaceRef.fullname ] =
+		spaceBox =
+			yield* server_spaceBox.loadSpace( spaceRef );
 
-		trgChanges = yield trgConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+		console.log( ' * writing "' + spaceRef.fullname + '"' );
 
-		changesCursor =
-			(
-				yield srcChanges.find(
-					{ },
-					{ sort: '_id' },
-					sus.resume( )
-				)
-			).batchSize( 100 );
+		yield trgSpaces.insert( o, resume( ) );
+
+		trgChanges =
+			trgConnection.collection( 'changes:' + spaceRef.fullname );
 
 		for(
-			c = yield changesCursor.nextObject( resume( ) );
-			c !== null;
-			c = yield changesCursor.nextObject( resume( ) )
+			a = 1, aZ = spaceBox._changeSkids.length;
+			a < aZ;
+			a++
 		)
 		{
-			yield trgChanges.insert( translateChangeRay( c ), resume( ) );
+			yield trgChanges.insert(
+				JSON.parse( JSON.stringify( spaceBox._changeSkids.get( a ) ) ),
+				resume( )
+			);
 		}
 	}
 
 	console.log( '* closing connections' );
 
-	srcConnection.close( );
+	srcDatabase.close( );
 
 	trgConnection.close( );
 
