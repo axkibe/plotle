@@ -10,6 +10,7 @@ const server_resourceList = require( './resourceList' );
 
 const stringList = require( 'tim.js/src/string/list' ).stringList;
 
+
 module.exports =
 server_resourceList.create(
 	'list:init',
@@ -42,17 +43,17 @@ server_resourceList.create(
 		'maxage', 'long'
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-proto.js' ] ),
+		'aliases', stringList( [ 'tim-browser-init.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.proto.source,
+		'data', tim.browserSource,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-browser.js' ] ),
+		'aliases', stringList( [ 'tim-proto.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.browserSource,
+		'data', tim.proto.source,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
