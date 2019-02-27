@@ -27,7 +27,7 @@ const devel = true;
 | The admin user. By default it is called "admin".
 */
 
-set( 'admin', 'axel' );
+// set( 'admin', 'admin' );
 
 
 /*

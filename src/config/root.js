@@ -14,7 +14,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the admin user
-		admin : { type : [ 'undefined', 'string' ] },
+		admin : { type : 'string', defaultValue : '"admin"' },
 
 		// database settings
 		database : { type : './database', defaultValue : 'require( "./database" ).create( )' },
