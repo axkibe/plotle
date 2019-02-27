@@ -8,7 +8,7 @@ module.exports = {
     "extends": "eslint:recommended",
     "globals": {
         "CHECK": true,
-        "DEVEL": true,
+        "FAILSCREEN": true,
         "FREEZE": true,
         "NODE": true,
         "TIM": true,

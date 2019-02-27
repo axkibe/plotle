@@ -133,28 +133,23 @@ def.proto.loadSpaces =
 */
 def.proto.shellGlobals =
 	function(
-		bundle   // if true this is bundle otherwise devel
+		mode
 	)
 {
-	const check =
-		bundle
-		? config.get( 'shell', 'bundle', 'check' )
-		: config.get( 'shell', 'devel', 'check' );
-
-	const freeze =
-		bundle
-		? config.get( 'shell', 'bundle', 'freeze' )
-		: config.get( 'shell', 'devel', 'freeze' );
+/**/if( CHECK )
+/**/{
+/**/	if( mode !== 'bundle' && mode !== 'devel' ) throw new Error( );
+/**/}
 
 	const g =
-		{
-			CHECK: check,
-			FREEZE : freeze,
-			NODE : false,
-			TIM : false,
-			DEVEL : !bundle,
-			WEINRE : config.get( 'shell', 'weinre' ) || false
-		};
+	{
+		CHECK: config.get( 'shell', mode, 'check' ),
+		FREEZE : config.get( 'shell', mode, 'freeze' ),
+		NODE : false,
+		TIM : false,
+		FAILSCREEN : config.get( 'shell', mode, 'failScreen' ),
+		WEINRE : config.get( 'shell', 'weinre' )
+	};
 
 	if( FREEZE ) Object.freeze( g );
 
@@ -170,7 +165,7 @@ def.lazy.shellGlobalsResource =
 {
 	let text = '';
 
-	const globals = this.shellGlobals( false );
+	const globals = this.shellGlobals( 'devel' );
 
 	const keys = Object.keys( globals ).sort( );
 
@@ -221,7 +216,7 @@ def.proto.buildBundle =
 
 		log( '  1st pass' );
 
-		const globals = this.shellGlobals( true );
+		const globals = this.shellGlobals( 'bundle' );
 
 		let options =
 		{

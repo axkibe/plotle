@@ -16,10 +16,13 @@ if( TIM )
 		// if enabled this access is provided
 		enable : { type : 'boolean', defaultValue : 'true' },
 
-		// enable checking
+		// enables checking
 		check : { type : 'boolean', defaultValue : 'true' },
 
-		// enable freeze checking
+		// enables the failScreen
+		failScreen : { type : 'boolean', defaultValue : 'true' },
+
+		// enables freeze checking
 		freeze : { type : 'boolean', defaultValue : 'true' },
 	};
 }
