@@ -13,26 +13,28 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// enable beautify-ing of uglify-ed code
+		// enables beautifying of minified code
+		// only applicable with minify
 		beautify : { type : 'boolean', defaultValue : 'false' },
 
-		// enable checking
+		// enables checking
 		check : { type : 'boolean', defaultValue : 'false' },
 
 		// if enabled this access is provided
 		enable : { type : 'boolean', defaultValue : 'true' },
 
-		// enable extraMangling
-		extraMangle : { type : 'boolean', defaultValue : 'false' },
+		// enables sourceMap
+		// only applicable with minify
+		sourceMap : { type : 'boolean', defaultValue : 'true' },
 
 		// enables the failScreen
 		failScreen : { type : 'boolean', defaultValue : 'true' },
 
-		// enable freeze checking
+		// enables freeze checking
 		freeze : { type : 'boolean', defaultValue : 'false' },
 
-		// enable uglify.js minimizing
-		uglify : { type : 'boolean', defaultValue : 'true' },
+		// enables minifying
+		minify : { type : 'boolean', defaultValue : 'true' },
 	};
 }
 

@@ -97,9 +97,11 @@ const startMainServer =
 {
 	const protocol = config.get( 'network', 'main', 'protocol' );
 
-	const port = config.get( 'network', 'main', 'port' );
+	let port = config.get( 'network', 'main', 'port' );
 
 	const listen = config.get( 'network', 'listen' );
+
+	if( port === 0 ) port = protocol === 'http' ? 8833 : 443;
 
 	const handler =
 		( request, result ) =>

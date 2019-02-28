@@ -13,8 +13,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// http or https? default, nothing so error if not configured
-		protocol : { type : [ 'undefined', 'string' ] },
+		// http or https?
+		protocol : { type : 'string', defaultValue : '"http"' },
 
 		// port to listen on
 		// 0 defaults to 8833 when http and 443 when https

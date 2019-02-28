@@ -1,7 +1,5 @@
 /*
 | Config
-|
-| Default values are commented out.
 */
 
 module.exports = ( set ) => {
@@ -15,7 +13,7 @@ module.exports = ( set ) => {
 /*
 | Shortcut for development mode switching several options below
 */
-const devel = true;
+const devel = false;
 
 
 /*
@@ -24,7 +22,10 @@ const devel = true;
 '*/
 
 /*
-| The admin user. By default it is called "admin".
+| The admin user.
+| Note: you'll have to register the admin user using 'sign up' in the shell.
+|
+| Default: called "admin".
 */
 
 // set( 'admin', 'admin' );
@@ -36,24 +37,51 @@ const devel = true;
 '*/
 
 /*
-| The interface to listen on, default listens to all networks.
+| The interface to listen on.
+|
+| Default: null -> listens on all networks.
 */
 
 // set( 'network', 'listen', '[IP]' );
 
 /*
-| The protocol and port for the main server.
+| The protocol used by the main server.
+|
+| Default: http
 */
 
-set( 'network', 'main', 'protocol', 'http' );
-set( 'network', 'main', 'port', 8833 );
+// set( 'network', 'main', 'protocol', 'http' );
 
 /*
-| By default http traffic is redirected to https
+| The port to listen on.
+|
+| Default: 0 -> 8833 when http, 443 when https
+*/
+
+// set( 'network', 'main', 'port', 0 );
+
+/*
+| Redirects http traffic. ('' or or 'http')
+|
+| Default: '' -> no redirect
+*/
+
+// set( 'network', 'redirect', 'protocol', '' );
+
+/*
+| Port for the redirector to listen on
+|
+| Default: 80
 */
 
 // set( 'network', 'redirect', 'port', '80' );
-// set( 'network', 'redirect', 'protocol', 'http' );
+
+/*
+| Destination to redirect to.
+|
+| Default: 'https://'
+*/
+
 // set( 'network', 'redirect', 'destination', 'https://' );
 
 
@@ -64,6 +92,7 @@ set( 'network', 'main', 'port', 8833 );
 
 /*
 | The location of the https certificate..
+| No defaults.
 */
 
 // set( 'https', 'cert', '[PATH TO CERT]' );
@@ -82,6 +111,51 @@ set( 'network', 'main', 'port', 8833 );
 
 
 /*
+|* SHELL BUNDLE
+|* ============
+|* the / and /index.html access and options active there.
+'*/
+
+// set( 'shell', 'bundle', 'check', false );
+// set( 'shell', 'bundle', 'freeze', false );
+
+/*
+| Shell error catching and producing a failScreen in such a case.
+|
+| When developing it is preferable to disable this, so errors
+| are dropped to the console.
+|
+| Default: on for bundle
+*/
+
+// set( 'shell', 'bundle', 'failScreen', true );
+
+/*
+| Servers a sourceMap for the bundle.
+|
+| Default: enabled
+*/
+
+// set( 'shell', 'bundle', 'sourceMap', true );
+
+/*
+| If true minifies the javascript pack.
+|
+| Default: enabled
+*/
+
+// set( 'shell', 'bundle', 'minify', true );
+
+/*
+| If true beautifies minified output.
+|
+| Default: disabled
+*/
+
+// set( 'shell', 'bundle', 'beautify', false );
+
+
+/*
 |* SHELL DEVEL
 |* ===========
 |* the /devel.html access and options active there.
@@ -92,42 +166,15 @@ set( 'network', 'main', 'port', 8833 );
 // set( 'shell', 'devel', 'freeze', true );
 
 /*
-| Enables shell error catching and producing a failScreen
-| when developing it is preferable to disable this, so errors
+| Shell error catching and producing a failScreen in such a case.
+|
+| When developing it is preferable to disable this, so errors
 | are dropped to the console.
+|
+| Default: off for devel
 */
 
-// set( 'shell', 'devel', 'failScreen', true );
-
-
-/*
-|* SHELL BUNDLE
-|* ============
-|* the / and /index.html access and options active there.
-'*/
-
-// set( 'shell', 'bundle', 'check', false );
-// set( 'shell', 'bundle', 'freeze', false );
-// set( 'shell', 'bundle', 'failScreen', false );
-
-/*
-| If true "uglifies" the javascript pack, minimizing its size.
-*/
-
-// set( 'shell', 'bundle', 'uglify', true );
-
-/*
-| if true does extra mangles on output compression
-| FIXME currently broken
-*/
-
-// set( 'shell', 'bundle', 'extraMangle', false );
-
-/*
-| If true "beautifies" uglify output.
-*/
-
-// set( 'shell', 'bundle', 'beautify', false );
+// set( 'shell', 'devel', 'failScreen', false );
 
 
 /*

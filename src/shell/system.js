@@ -69,7 +69,7 @@ const transmitter =
 	{
 		if( failScreen ) return;
 
-		if( FAILSCREEN && !WEINRE )
+		if( !FAILSCREEN && !WEINRE )
 		{
 			func.apply( this, arguments );
 
