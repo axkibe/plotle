@@ -36,7 +36,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the item
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' },

@@ -24,7 +24,7 @@ if( TIM )
 		frame : { type : [ './frame', 'undefined' ] },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
@@ -85,11 +85,11 @@ const gruga_relation = require( '../gruga/relation' );
 
 const gruga_select = require( '../gruga/select' );
 
-const pathList = require( 'tim.js/src/pathList' );
-
 const result_hover = require( '../result/hover' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
+
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 const visual_frame = require( '../visual/frame' );
 
@@ -553,7 +553,7 @@ def.proto.getList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( paths.timtype !== pathList ) throw new Error( );
+/**/	if( paths.timtype !== tim_path_list ) throw new Error( );
 /**/
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
@@ -727,7 +727,7 @@ def.proto.specialKey =
 					paths.push( this.atRank( r ).path );
 				}
 
-				paths = pathList.create( 'list:init', paths );
+				paths = tim_path_list.create( 'list:init', paths );
 
 				root.setUserMark( visual_mark_items.create( 'itemPaths', paths ) );
 

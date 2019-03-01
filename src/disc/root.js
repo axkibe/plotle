@@ -21,13 +21,13 @@ if( TIM )
 		controlTransform : { type : '../gleam/transform' },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// path of the disc
-		path : { type : 'tim.js/src/path' },
+		path : { type : 'tim.js/src/path/path' },
 
 		// currently form/disc shown
 		show : { type : [ '< ../show/types' ] },

@@ -16,7 +16,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the channels path in data tree
-		path : { type : 'tim.js/src/path' },
+		path : { type : 'tim.js/src/path/path' },
 
 		// the fifo of requests
 		_fifo :

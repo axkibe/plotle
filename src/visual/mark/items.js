@@ -12,13 +12,13 @@ if( TIM )
 	def.attributes =
 	{
 		// paths of the items
-		itemPaths : { type : 'tim.js/src/pathList' }
+		itemPaths : { type : 'tim.js/src/path/list' }
 	};
 }
 
 const change_mark_node = require( '../../change/mark/node' );
 
-const pathList = require( 'tim.js/src/pathList' );
+const pathList = require( 'tim.js/src/path/list' );
 
 
 /**

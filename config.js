@@ -13,7 +13,7 @@ module.exports = ( set ) => {
 /*
 | Shortcut for development mode switching several options below
 */
-const devel = false;
+const devel = true;
 
 
 /*
@@ -115,6 +115,8 @@ const devel = false;
 |* ============
 |* the / and /index.html access and options active there.
 '*/
+
+set( 'shell', 'bundle', 'enable', !devel );
 
 // set( 'shell', 'bundle', 'check', false );
 // set( 'shell', 'bundle', 'freeze', false );

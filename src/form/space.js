@@ -27,13 +27,13 @@ if( TIM )
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the reference of current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
@@ -56,7 +56,7 @@ const change_set = require( '../change/set' );
 
 const form_form = require( './form' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 
 /*

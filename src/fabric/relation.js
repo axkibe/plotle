@@ -24,7 +24,7 @@ if( TIM )
 		item2key : { type : 'string', json : true },
 
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// position
 		pos : { type : '../gleam/point', json : true },

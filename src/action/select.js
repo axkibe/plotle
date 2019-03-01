@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// if selecting ranges (text block), item to path
-		itemPath : { type : [ 'undefined', 'tim.js/src/path' ] },
+		itemPath : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// point at start of operation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] },
@@ -30,9 +30,9 @@ const action_none = require( './none' );
 
 const gleam_rect = require( '../gleam/rect' );
 
-const pathList = require( 'tim.js/src/pathList' );
-
 const result_hover = require( '../result/hover' );
+
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 const visual_mark_items = require( '../visual/mark/items' );
 
@@ -155,7 +155,7 @@ def.proto.dragStop =
 
 	if( paths.length > 0 )
 	{
-		paths = pathList.create( 'list:init', paths );
+		paths = tim_path_list.create( 'list:init', paths );
 
 		if( !ctrl || !screen.mark )
 		{

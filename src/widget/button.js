@@ -24,7 +24,7 @@ if( TIM )
 		font : { type : [ 'undefined', '../gleam/font' ] },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// icon shape
 		iconShape : { type : [ '< ../gleam/shape-types', 'undefined' ] },
@@ -36,7 +36,7 @@ if( TIM )
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// shape of the button
 		shape : { type : [ 'string', '../gleam/ellipse' ] },

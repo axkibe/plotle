@@ -116,6 +116,14 @@ const devel = false;
 |* the / and /index.html access and options active there.
 '*/
 
+/*
+| Enables the shell bundle.
+|
+| Default: enabled
+*/
+
+set( 'shell', 'bundle', 'enable', !devel );
+
 // set( 'shell', 'bundle', 'check', false );
 // set( 'shell', 'bundle', 'freeze', false );
 

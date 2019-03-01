@@ -15,7 +15,7 @@ if( TIM )
 
 const gleam_rectGroup = require( '../gleam/rectGroup' );
 
-const pathList = require( 'tim.js/src/pathList' );
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 
 /*
@@ -31,7 +31,7 @@ def.lazy.itemPaths =
 		arr.push( this.get( a ).path );
 	}
 
-	return pathList.create( 'list:init', arr );
+	return tim_path_list.create( 'list:init', arr );
 };
 
 

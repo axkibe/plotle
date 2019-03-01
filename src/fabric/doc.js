@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/src/path' ] }
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] }
 	};
 
 	def.json = 'fabric_doc';

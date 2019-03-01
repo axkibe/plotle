@@ -20,7 +20,7 @@ if( TIM )
 		fontsize : { type : 'number', json : true },
 
 		// the path of the note
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the notes zone
 		zone : { type : '../gleam/rect', json : true },

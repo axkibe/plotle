@@ -7,6 +7,12 @@
 tim.define( module, ( def ) => {
 
 
+/*
+| Visual item is a to be extended abstract type.
+*/
+def.abstract = true;
+
+
 const action_createRelation = require( '../action/createRelation' );
 
 const action_dragItems = require( '../action/dragItems' );

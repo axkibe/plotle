@@ -33,13 +33,13 @@ if( TIM )
 
 		// node currently hovered upon
 		// FIXME undefined only
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the item
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// scroll position
 		scrollPos : { type : [ '../gleam/point' ] },
@@ -89,7 +89,7 @@ const gruga_note = require( '../gruga/note' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 const shell_settings = require( '../shell/settings' );
 

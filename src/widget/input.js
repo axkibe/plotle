@@ -18,7 +18,7 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// font of the text
 		font : { type : '../gleam/font' },
@@ -33,7 +33,7 @@ if( TIM )
 		password : { type : 'boolean', defaultValue : 'false' },
 
 		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the transform
 		transform : { type : '../gleam/transform' },

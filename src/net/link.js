@@ -35,7 +35,7 @@ const request_update = require( '../request/update' );
 
 const shell_doTracker = require( '../shell/doTracker' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 
 def.attributes =

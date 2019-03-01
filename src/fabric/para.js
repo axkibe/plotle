@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the path of the para
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the paragraphs text
 		text : { type : 'string', json : true }

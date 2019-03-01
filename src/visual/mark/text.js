@@ -15,7 +15,7 @@ if( TIM )
 		at : { type : 'integer' },
 
 		// path of the caret
-		path : { type : 'tim.js/src/path' },
+		path : { type : 'tim.js/src/path/path' },
 	};
 }
 

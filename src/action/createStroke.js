@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item path or pos the stroke goes from
-		from : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
+		from : { type : [ 'undefined', 'tim.js/src/path/path', '../gleam/point' ] },
 
 		// the item path hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the item path or pos the stroke goes to
-		to : { type : [ 'undefined', 'tim.js/src/path', '../gleam/point' ] },
+		to : { type : [ 'undefined', 'tim.js/src/path/path', '../gleam/point' ] },
 
 		// the itemType of stroke ("arrow" or "line")
 		itemType : { type : 'string' },
@@ -39,7 +39,7 @@ const result_hover = require( '../result/hover' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 const visual_space = require( '../visual/space' );
 

@@ -25,7 +25,7 @@ if( TIM )
 	};
 }
 
-const pathList = require( 'tim.js/src/pathList' );
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 
 /*
@@ -125,7 +125,7 @@ def.proto.hasCaret = true;
 /*
 | The item path.
 |
-| This is either undefined or an pathList of length === 1
+| This is either undefined or an path list of length === 1
 */
 def.lazy.itemPaths =
 	function( )
@@ -134,7 +134,7 @@ def.lazy.itemPaths =
 
 	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
 
-	return pathList.create( 'list:append', beginPath.limit( 3 ) );
+	return tim_path_list.create( 'list:append', beginPath.limit( 3 ) );
 };
 
 

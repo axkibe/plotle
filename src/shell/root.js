@@ -36,7 +36,7 @@ if( TIM )
 		form : { type : '../form/root' },
 
 		// current hovered item
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the link to the server
 		link : { type : '../net/link' },
@@ -203,8 +203,6 @@ const net_channel = require( '../net/channel' );
 
 const net_link = require( '../net/link' );
 
-const pathList = require( 'tim.js/src/pathList' );
-
 const ref_space = require( '../ref/space' );
 
 const result_hover = require( '../result/hover' );
@@ -227,7 +225,9 @@ const show_normal = require( '../show/normal' );
 
 const show_zoom = require( '../show/zoom' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
+
+const tim_pathList = require( 'tim.js/src/path/list' );
 
 const user_creds = require( '../user/creds' );
 
@@ -533,7 +533,7 @@ def.adjust.action =
 
 					return(
 						action.create(
-							'itemPaths', pathList.create( 'list:init', nPaths )
+							'itemPaths', tim_pathList.create( 'list:init', nPaths )
 						)
 					);
 				}

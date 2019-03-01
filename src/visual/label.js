@@ -36,7 +36,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the item
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' }
@@ -78,7 +78,7 @@ const gruga_label = require( '../gruga/label' );
 
 const session_uid = require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 const visual_base_posfs = require( '../visual/base/posfs' );
 

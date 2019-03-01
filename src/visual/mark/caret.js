@@ -23,7 +23,7 @@ if( TIM )
 }
 
 
-const pathList = require( 'tim.js/src/pathList' );
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 const visual_mark_text = require( './text' );
 
@@ -54,7 +54,7 @@ def.lazy.caret =
 /*
 | The item path.
 |
-| This is either undefined or an pathList of length === 1
+| This is either undefined or a path list of length === 1
 */
 def.lazy.itemPaths =
 	function( )
@@ -63,7 +63,7 @@ def.lazy.itemPaths =
 
 	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
 
-	return pathList.create( 'list:append', path.limit( 3 ) );
+	return tim_path_list.create( 'list:append', path.limit( 3 ) );
 };
 
 

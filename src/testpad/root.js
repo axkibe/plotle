@@ -68,7 +68,7 @@ const session_uid = require( '../session/uid' );
 
 const testpad_action = require( './action' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
 
 const noteDocPath = tim_path.empty.append( 'note' ).append( 'doc' );
 

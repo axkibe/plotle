@@ -27,13 +27,13 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the item
-		path : { type : [ 'undefined', 'tim.js/src/path' ] },
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// current space transform
 		transform : { type : '../gleam/transform' },
@@ -87,8 +87,6 @@ const gleam_transform = require( '../gleam/transform' );
 
 const gruga_portal = require( '../gruga/portal' );
 
-const pathList = require( 'tim.js/src/pathList' );
-
 const result_hover = require( '../result/hover' );
 
 const ref_space = require( '../ref/space' );
@@ -99,7 +97,9 @@ const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
-const tim_path = require( 'tim.js/src/path' );
+const tim_path = require( 'tim.js/src/path/path' );
+
+const tim_path_list = require( 'tim.js/src/path/list' );
 
 const visual_base_zone = require( '../visual/base/zone' );
 
@@ -285,7 +285,7 @@ def.proto.click =
 	{
 		setMark =
 			visual_mark_items.create(
-				'itemPaths', pathList.create( 'list:init', [ this.path ] )
+				'itemPaths', tim_path_list.create( 'list:init', [ this.path ] )
 			);
 	}
 

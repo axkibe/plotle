@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the ajax path
-		path : { type : 'tim.js/src/path' }
+		path : { type : 'tim.js/src/path/path' }
 	};
 
 
