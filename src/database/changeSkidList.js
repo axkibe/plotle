@@ -32,8 +32,7 @@ def.static.createFromChangeWrapList =
 	function(
 		changeWrapList, // the change wrap list to turn into a skid list
 		user,           // the user that sent the changeWrapList
-		seq             // if undefined assign this seq
-		//              // as start to changeSkidList
+		seq             // if defined assign this seq as start to changeSkidList
 	)
 {
 	const list = [ ];

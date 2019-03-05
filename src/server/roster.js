@@ -45,7 +45,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'tim-browser-init.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.browserSource,
+		'data', tim.source.browserInit,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -53,7 +53,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'tim-proto.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.proto.source,
+		'data', tim.source.proto,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -61,7 +61,7 @@ server_resourceList.create(
 	server_resource.create(
 		'aliases', stringList( [ 'tim-common.js' ] ),
 		'coding', 'utf-8',
-		'data', tim.commonSource,
+		'data', tim.source.common,
 		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
@@ -75,9 +75,10 @@ server_resourceList.create(
 		'inTestPad', true
 	),
 	server_resource.create(
-		'aliases', stringList( [ 'tim-catalog-browser.js' ] ),
-		// FIXME dirty Hack!
-		'filePath', 'node_modules/tim.js/src/browser/catalog.js',
+		'aliases', stringList( [ 'tim-browser-catalog.js' ] ),
+		'coding', 'utf-8',
+		'data', tim.source.browserCatalog,
+		'mime', 'text/javascript',
 		'inBundle', true,
 		'inTestPad', true
 	),

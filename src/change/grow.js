@@ -1,5 +1,5 @@
 /*
-| Sets a tree node.
+| Adds a new entry to a twig.
 */
 'use strict';
 
@@ -14,7 +14,7 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// grow at this path',
+		// grow at this path
 		path : { type : [ 'tim.js/src/path/path' ] , json : true },
 
 		// value to grow

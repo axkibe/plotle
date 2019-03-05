@@ -20,7 +20,7 @@ if( TIM )
 		check : { type : 'boolean', defaultValue : 'true' },
 
 		// enables the failScreen
-		failScreen : { type : 'boolean', defaultValue : 'true' },
+		failScreen : { type : 'boolean', defaultValue : 'false' },
 
 		// enables freeze checking
 		freeze : { type : 'boolean', defaultValue : 'true' },

@@ -24,11 +24,9 @@ const devel = true;
 /*
 | The admin user.
 | Note: you'll have to register the admin user using 'sign up' in the shell.
-|
-| Default: called "admin".
 */
 
-// set( 'admin', 'admin' );
+set( 'admin', 'axel' );
 
 
 /*
@@ -119,7 +117,6 @@ const devel = true;
 set( 'shell', 'bundle', 'enable', !devel );
 
 // set( 'shell', 'bundle', 'check', false );
-// set( 'shell', 'bundle', 'freeze', false );
 
 /*
 | Shell error catching and producing a failScreen in such a case.
@@ -165,7 +162,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 
 // set( 'shell', 'devel', 'enable', true );
 // set( 'shell', 'devel', 'check', true );
-// set( 'shell', 'devel', 'freeze', true );
 
 /*
 | Shell error catching and producing a failScreen in such a case.
@@ -189,12 +185,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 */
 
 // set( 'server', 'check', true );
-
-/*
-| Freezing is by default turned off on server
-*/
-
-// set( 'server', 'freeze', false );
 
 /*
 | If true the server will die on invalid commands.

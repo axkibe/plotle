@@ -8,6 +8,7 @@ number
 ../fabric/para
 ../fabric/relation
 ../fabric/stroke
+../fabric/space
 ../gleam/point
 ../gleam/rect
 ../ref/space

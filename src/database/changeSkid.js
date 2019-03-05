@@ -1,5 +1,5 @@
 /*
-| A change on a skid for database storage.
+| A change list prepared for database storage.
 */
 'use strict';
 
@@ -41,7 +41,7 @@ def.static.createFromChangeWrap =
 	function(
 		changeWrap, // the change wrap to turn into a skid
 		user,       // the user that sent the changeWrap
-		seq         // if undefined assign this seq to changeWrap.
+		seq         // if defined assign this seq to changeWrap.
 	)
 {
 	if( !changeWrap.changeList ) return;

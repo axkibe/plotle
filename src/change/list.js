@@ -7,11 +7,6 @@
 tim.define( module, ( def, change_list ) => {
 
 
-const change_wrap = require( './wrap' );
-
-const change_wrapList = require( './wrapList' );
-
-
 if( TIM )
 {
 	def.list =
@@ -29,6 +24,12 @@ if( TIM )
 
 	def.json = 'change_list';
 }
+
+
+const change_wrap = require( './wrap' );
+
+const change_wrapList = require( './wrapList' );
+
 
 
 /*

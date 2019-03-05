@@ -25,7 +25,7 @@ const devel = false;
 | The admin user.
 | Note: you'll have to register the admin user using 'sign up' in the shell.
 |
-| Default: called "admin".
+| Default: no admin.
 */
 
 // set( 'admin', 'admin' );

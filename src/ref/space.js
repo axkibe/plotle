@@ -23,24 +23,29 @@ if( TIM )
 
 
 /*
+| Create Shortcut.
+*/
+def.static.createUsernameTag = ( username, tag ) =>
+	ref_space.create( 'username', username, 'tag', tag );
+
+
+/*
 | Reference to plotles home space.
 */
 def.staticLazy.plotleHome = ( ) =>
-	ref_space.create(
-		'username', 'plotle',
-		'tag', 'home'
-	);
+	ref_space.createUsernameTag( 'plotle', 'home' );
+
 
 /*
 | Reference to plotle sandbox space.
 */
 def.staticLazy.plotleSandbox = ( ) =>
-	ref_space.create(
-		'username', 'plotle',
-		'tag', 'sandbox'
-	);
+	ref_space.createUsernameag( 'plotle', 'sandbox' );
 
 
+/*
+| Fullname of the space reference.
+*/
 def.lazy.fullname =
 	function( )
 {

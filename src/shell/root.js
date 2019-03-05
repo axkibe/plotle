@@ -226,6 +226,7 @@ const show_normal = require( '../show/normal' );
 const show_zoom = require( '../show/zoom' );
 
 const tim_path = require( 'tim.js/src/path/path' );
+//const tim_path = require( 'tim.js/path' );
 
 const tim_pathList = require( 'tim.js/src/path/list' );
 

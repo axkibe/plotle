@@ -124,7 +124,8 @@ def.static.createGeneric =
 	root.alter(
 		change_grow.create(
 			'val', note,
-			'path', tim_path.empty.append( 'twig' ).append( key ), 'rank', 0
+			'path', tim_path.empty.append( 'twig' ).append( key ),
+			'rank', 0
 		)
 	);
 

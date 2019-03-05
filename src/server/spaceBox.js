@@ -74,10 +74,7 @@ def.static.loadSpace =
 	{
 		const changeSkid = database_changeSkid.createFromJSON( o );
 
-		if( changeSkid._id !== seqZ )
-		{
-			throw new Error( 'sequence mismatch' );
-		}
+		if( changeSkid._id !== seqZ ) throw new Error( 'sequence mismatch' );
 
 		seqZ++;
 
@@ -119,10 +116,7 @@ def.static.createSpace =
 			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1,
-			'_changesDB',
-				yield* root.repository.collection(
-					'changes:' + spaceRef.fullname
-				),
+			'_changesDB', yield* root.repository.collection( 'changes:' + spaceRef.fullname ),
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', 1
 		)
@@ -132,9 +126,9 @@ def.static.createSpace =
 
 
 /*
-| Appends a change.
+| Appends a change wrap list.
 |
-| This is currently write and forget to database.
+| This is currently initiate write to database and forget.
 */
 def.proto.appendChanges =
 	function(
@@ -159,13 +153,7 @@ def.proto.appendChanges =
 	// saves the changeSkid in the database
 	this._changesDB.insert(
 		JSON.parse( JSON.stringify( changeSkidList ) ).list,
-		function(
-			error
-			// count
-		)
-	{
-		if( error ) throw new Error( 'Database error' );
-	}
+		( error ) => { if( error ) throw new Error( 'Database error' ); }
 	);
 
 	return(

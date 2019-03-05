@@ -20,7 +20,7 @@ if( TIM )
 		port : { type : 'integer', defaultValue : '27017' },
 
 		// name of the dabase
-		name : { type : 'string', defaultValue : '"plotle-16"' },
+		name : { type : 'string', defaultValue : '"plotle-17"' },
 	};
 }
 

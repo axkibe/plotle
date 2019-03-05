@@ -1,5 +1,5 @@
 /*
-| A change wrapped for transport.
+| A change wrapped for client/server transport.
 */
 'use strict';
 
@@ -86,4 +86,3 @@ def.proto.changeTreeReverse =
 
 
 } );
-

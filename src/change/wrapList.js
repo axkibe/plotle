@@ -16,16 +16,16 @@ if( TIM )
 
 
 /*
-| Creates an invertes changeWrapList
+| Creates an inverted changeWrapList.
 */
 def.proto.createReverse =
 	function( )
 {
 	const iList = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
-		iList[ a ] = this.get( aZ - 1 - a ).createReverse( );
+		iList[ a ] = this.get( al - 1 - a ).createReverse( );
 	}
 
 	return change_wrapList.create( 'list:init', iList );
@@ -41,7 +41,7 @@ def.proto.changeTree =
 	)
 {
 	// iterates through the change list
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
 		tree = this.get( a ).changeTree( tree );
 	}
@@ -77,9 +77,9 @@ def.proto.transform =
 		cx
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
-		cx = this.get( r ).transform( cx );
+		cx = this.get( a ).transform( cx );
 	}
 
 	return cx;
@@ -87,4 +87,3 @@ def.proto.transform =
 
 
 } );
-
