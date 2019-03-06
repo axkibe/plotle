@@ -8,7 +8,7 @@ tim.define( module, ( def ) => {
 
 
 /*
-| Visual item is a to be extended abstract type.
+| This tim needs to be extended.
 */
 def.abstract = true;
 
