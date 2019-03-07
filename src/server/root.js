@@ -138,16 +138,14 @@ def.proto.shellGlobals =
 /**/}
 
 	const g =
-	{
-		CHECK: config.get( 'shell', mode, 'check' ),
-		FREEZE : config.get( 'shell', mode, 'freeze' ),
-		NODE : false,
-		TIM : false,
-		FAILSCREEN : config.get( 'shell', mode, 'failScreen' ),
-		WEINRE : config.get( 'shell', 'weinre' )
-	};
-
-	if( FREEZE ) Object.freeze( g );
+		Object.freeze ( {
+			CHECK: config.get( 'shell', mode, 'check' ),
+			FREEZE : config.get( 'shell', mode, 'freeze' ),
+			NODE : false,
+			TIM : false,
+			FAILSCREEN : config.get( 'shell', mode, 'failScreen' ),
+			WEINRE : config.get( 'shell', 'weinre' )
+		} );
 
 	return g;
 };

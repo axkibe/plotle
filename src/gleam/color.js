@@ -52,13 +52,7 @@ def.static.rgb =
 		blue
 	)
 {
-	return(
-		gleam_color.create(
-			'red', red,
-			'green', green,
-			'blue', blue
-		)
-	);
+	return gleam_color.create( 'red', red, 'green', green, 'blue', blue );
 };
 
 
@@ -73,14 +67,7 @@ def.static.rgba =
 		alpha
 	)
 {
-	return(
-		gleam_color.create(
-			'red', red,
-			'green', green,
-			'blue', blue,
-			'alpha', alpha
-		)
-	);
+	return gleam_color.create( 'red', red, 'green', green, 'blue', blue, 'alpha', alpha );
 };
 
 

@@ -303,7 +303,7 @@ def.lazy.glint =
 /*
 | Returns true if a glint can be inherited.
 */
-def.inherit.glint =
+def.inherit._glint =
 def.inherit.flow =
 	function(
 		inherit
@@ -375,9 +375,9 @@ def.lazy._glint =
 				gleam_glint_text.create(
 					'font', tFont,
 					'p',
-						gleam_point.create(
-							'x', transform.x( token.x ),
-							'y', transform.y( line.y )
+						gleam_point.xy(
+							transform.x( token.x ),
+							transform.y( line.y )
 						),
 					'text', token.text
 				)

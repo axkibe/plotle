@@ -9,6 +9,8 @@ tim.define( module, ( def ) => {
 
 const shell_fontPool = require( '../shell/fontPool' );
 
+const gleam_color = require( '../gleam/color' );
+
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -80,8 +82,9 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'errorLabel',
 			layout_label.create(
+				'color', gleam_color.red,
 				'text', '',
-				'font', shell_fontPool.get( 14, 'car' ),
+				'font', shell_fontPool.get( 14, 'ca' ),
 				'pos', gleam_point.xy( -20, -136 )
 			),
 		'twig:add',

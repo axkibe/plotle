@@ -32,7 +32,7 @@ const openTypeLoad =
 		}
 		else
 		{
-			font.glyphCache = {};
+			font.glyphCache = { };
 
 			gruga_fonts.setOpenTypeDefault( font );
 

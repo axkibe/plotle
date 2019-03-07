@@ -7,21 +7,26 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
+const gleam_color = require( '../color' );
+
 const shell_settings = require( '../../shell/settings' );
 
 
 const opentypeOptions =
-	{
+	Object.freeze( {
 		kerning: true,
 		features: {
 			liga: true,
 			rlig: true
 		},
 		script: 'latn'
-	};
+	} );
 
 const opentypeOptionsHinting =
-	{
+	Object.freeze( {
 		hinting: true,
 		kerning: true,
 		features: {
@@ -29,17 +34,10 @@ const opentypeOptionsHinting =
 			rlig: true
 		},
 		script: 'latn'
-	};
+	} );
 
 
 const round = Math.round;
-
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( opentypeOptions );
-/**/	Object.freeze( opentypeOptionsHinting );
-/**/}
 
 
 /*
@@ -97,22 +95,31 @@ def.static.drawText =
 		x,     // x
 		y,     // y
 		font,  // font to draw it in
+		color, // the color to draw in
 		size,  // the actual size to draw
 		cx     // canvas context to draw it on.
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( size !== Math.floor( size ) ) throw new Error();
+/**/	if( arguments.length !== 7 ) throw new Error( );
+/**/
+/**/	if( color.timtype !== gleam_color ) throw new Error( );
+/**/
+/**/	if( size !== Math.floor( size ) ) throw new Error( );
 /**/}
 
 	const otFont = font.opentype;
 
 	const glyphCache = otFont.glyphCache;
 
-	let glyphCacheSet = glyphCache[ size ];
+	let glyphCacheColor = glyphCache[ color.css ];
 
-	if( !glyphCacheSet ) glyphCacheSet = glyphCache[ size ] = { };
+	if( !glyphCacheColor ) glyphCacheColor = glyphCache[ color.css ] = { };
+
+	let glyphCacheSet = glyphCacheColor[ size ];
+
+	if( !glyphCacheSet ) glyphCacheSet = glyphCacheColor[ size ] = { };
 
 	const fontScale = 1 / otFont.unitsPerEm * size;
 
@@ -122,17 +129,9 @@ def.static.drawText =
 
 	switch( font.align )
 	{
-		case 'center' :
+		case 'center' : x -= getWidth( glyphs, otFont, fontScale ) / 2; break;
 
-			x -= getWidth( glyphs, otFont, fontScale ) / 2;
-
-			break;
-
-		case 'end' :
-
-			x -= getWidth( glyphs, otFont, fontScale );
-
-			break;
+		case 'end' : x -= getWidth( glyphs, otFont, fontScale ); break;
 	}
 
 	switch( font.base )
@@ -182,11 +181,7 @@ def.static.drawText =
 		{
 			if( cg.canvas )
 			{
-				cx.drawImage(
-					cg.canvas,
-					round( x + cg.x1 ),
-					round( y + cg.y1 )
-				);
+				cx.drawImage( cg.canvas, round( x + cg.x1 ), round( y + cg.y1 ) );
 			}
 
 			continue;

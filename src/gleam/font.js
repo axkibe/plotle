@@ -20,9 +20,6 @@ if( TIM )
 		// horizonal alignment
 		align : { type : 'string' },
 
-		// font color
-		fill : { type : './color' },
-
 		// vertical alignment
 		base : { type : 'string' }
 	};

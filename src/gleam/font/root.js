@@ -13,7 +13,11 @@ if( TIM )
 }
 
 
-//const loadFamilies = tim.freeze( [ 'DejaVuSans-Regular' ] );
+/*
+| The dynamic pool
+*/
+def.staticLazy.pool =
+	( ) => ( { root : font_root.create( ) } );
 
 
 } );

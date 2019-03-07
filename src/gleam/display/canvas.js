@@ -686,6 +686,7 @@ def.proto._renderText =
 			round( p.x + offset.x ),
 			round( p.y + offset.y ),
 			glint.font,
+			glint.color,
 			round( glint.font.size ),
 			this._cx
 		);
@@ -716,6 +717,7 @@ def.proto._renderText =
 		round( ( x * t1 + y * t2 ) / det ),
 		round( ( y * t1 - x * t2 ) / det ),
 		glint.font,
+		glint.color,
 		round( glint.font.size ),
 		this._cx
 	);

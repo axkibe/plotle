@@ -11,6 +11,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// color of the label
+		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
+
 		// font of the text
 		font : { type : [ 'undefined', '../gleam/font' ] },
 

@@ -14,6 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// color of the label
+		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
+
 		// component hovered upon
 		hover : { type : 'undefined' },
 
@@ -84,6 +87,7 @@ def.static.createFromLayout =
 
 	return(
 		widget_label.create(
+			'color', layout.color,
 			'font', layout.font,
 			'newline', layout.newline,
 			'path', path,
