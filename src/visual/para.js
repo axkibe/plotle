@@ -247,7 +247,7 @@ def.lazy.flow =
 def.lazy.font =
 	function( )
 {
-	return shell_fontPool.get( this.fontsize, 'la' );
+	return shell_fontPool.get( this.fontsize, 'a' );
 };
 
 
@@ -267,12 +267,7 @@ def.lazy.textPath =
 def.lazy.tFont =
 	function( )
 {
-	return(
-		shell_fontPool.get(
-			this.transform.scale( this.fontsize ),
-			'la'
-		)
-	);
+	return shell_fontPool.get( this.transform.scale( this.fontsize ), 'a' );
 };
 
 

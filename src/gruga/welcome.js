@@ -29,15 +29,17 @@ def.staticLazy.layout = ( ) =>
 	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
-				'text', 'welcome',
-				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -120 )
+				'align', 'center',
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( 0, -120 ),
+				'text', 'welcome'
 			),
 		'twig:add', 'message1',
 			layout_label.create(
-				'text', 'Your registration was successful :-)',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, -50 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, -50 ),
+				'text', 'Your registration was successful :-)'
 			),
 		'twig:add', 'closeButton',
 			layout_button.create(
@@ -49,7 +51,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 50
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			)
 	);

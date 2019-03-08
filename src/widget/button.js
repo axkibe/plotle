@@ -21,7 +21,7 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// font of the text
-		font : { type : [ 'undefined', '../gleam/font' ] },
+		font : { type : [ 'undefined', '../gleam/font/font' ] },
 
 		// component hovered upon
 		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
@@ -204,6 +204,8 @@ def.lazy._glint =
 		{
 			arr.push(
 				gleam_glint_text.create(
+					'align', 'center',
+					'base', 'middle',
 					'font', font,
 					'p', this._pc,
 					'rotate', this.textRotation,
@@ -225,6 +227,8 @@ def.lazy._glint =
 			{
 				arr.push(
 					gleam_glint_text.create(
+						'align', 'center',
+						'base', 'middle',
 						'font', font,
 						'p', this._pc.add( 0, y ),
 						'text', text[ t ]

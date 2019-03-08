@@ -21,7 +21,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// font of the text
-		font : { type : '../gleam/font' },
+		font : { type : '../gleam/font/font' },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },

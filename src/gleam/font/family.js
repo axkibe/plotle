@@ -1,34 +1,47 @@
 /*
-| A font style.
-|
-| FIXME family is ignored?
+| A font family.
 */
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, font_family ) => {
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		size : { type : 'number' },
+		// name of hte family
+		name : { type : 'string' },
 
+		// opentype font implementation
 		opentype : { type : [ 'undefined', 'protean' ] },
 
-		// horizonal alignment
-		align : { type : 'string' },
-
-		// vertical alignment
-		base : { type : 'string' }
-	};
-
-	def.alike =
-	{
-		alikeWithoutSize : { ignores : { size : true } }
+		// the size pool
+		_pool : { type : 'protean', defaultValue : '{ }' },
 	};
 }
+
+
+const gleam_font_font = require( './font' );
+
+
+/*
+| Returns the font tim.
+*/
+def.proto.get =
+	function(
+		size
+	)
+{
+	let font = this._pool[ size ];
+
+	if( font ) return font;
+
+	font = this._pool[ size ] = gleam_font_font.create( 'family', this, 'size', size );
+
+	return font;
+};
 
 
 /*

@@ -33,9 +33,10 @@ def.staticLazy.layout = ( ) =>
 	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
-				'text', '',
-				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -120 )
+				'align', 'center',
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( 0, -120 ),
+				'text', ''
 			),
 		'twig:add', 'gridCheckBox',
 			layout_checkbox.create(
@@ -51,7 +52,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'gridMessage',
 			layout_label.create(
 				'text', 'show grid',
-				'font', shell_fontPool.get( 16, 'la' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -25, -50 )
 			),
 		'twig:add', 'snappingCheckBox',
@@ -68,7 +69,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'snappingMessage',
 			layout_label.create(
 				'text', 'snap to grid',
-				'font', shell_fontPool.get( 16, 'la' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -25, -15 )
 			),
 		'twig:add', 'closeButton',
@@ -81,7 +82,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 50
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			)
 	);

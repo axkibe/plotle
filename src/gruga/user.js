@@ -30,75 +30,82 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'headline',
 			layout_label.create(
-				'text', 'Hello',
-				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -120 )
+				'align', 'center',
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( 0, -120 ),
+				'text', 'Hello'
 			),
 		'twig:add',
 		'visitor1',
 			layout_label.create(
-				'text', 'You\'re currently an anonymous visitor!',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, -50 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, -50 ),
+				'text', 'You\'re currently an anonymous visitor!'
 			),
 		'twig:add',
 		'visitor2',
 			layout_label.create(
-				'text', 'Click on "sign up" or "log in"',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.zero
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.zero,
+				'text', 'Click on "sign up" or "log in"'
 			),
 		'twig:add',
 		'visitor3',
 			layout_label.create(
-				'text', 'on the control disc to the left',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, 20 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, 20 ),
+				'text', 'on the control disc to the left'
 			),
 		'twig:add',
 		'visitor4',
 			layout_label.create(
-				'text', 'to register as an user.',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, 40 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, 40 ),
+				'text', 'to register as an user.'
 			),
 		'twig:add',
 		'greeting1',
 			layout_label.create(
-				'text', 'This is your profile page!',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, -50 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, -50 ),
+				'text', 'This is your profile page!'
 			),
 		'twig:add',
 		'greeting2',
 			layout_label.create(
-				'text', 'In future you will be able to do stuff here,',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, -10 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, -10 ),
+				'text', 'In future you will be able to do stuff here,'
 			),
 		'twig:add',
 		'greeting3',
 			layout_label.create(
-				'text', 'like for example change your password.',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, 10 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, 10 ),
+				'text', 'like for example change your password.'
 			),
 		'twig:add',
 		'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
+				'font', shell_fontPool.get( 14, 'a' ),
+				'shape', 'ellipse',
+				'text', 'close',
 				'zone',
 					gleam_rect.create(
 						'pos', gleam_point.xy( 180, 38 ),
 						'width', 50,
 						'height', 50
-					),
-				'text', 'close',
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', 'ellipse'
+					)
 			)
 	);
 
 
 } );
-

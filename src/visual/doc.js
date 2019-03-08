@@ -183,7 +183,7 @@ def.adjust.clipsize =
 def.lazy.font =
 	function( )
 {
-	return shell_fontPool.get( this.fontsize, 'la' );
+	return shell_fontPool.get( this.fontsize, 'a' );
 };
 
 

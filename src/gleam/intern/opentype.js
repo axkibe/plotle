@@ -97,12 +97,14 @@ def.static.drawText =
 		font,  // font to draw it in
 		color, // the color to draw in
 		size,  // the actual size to draw
+		align, // horizontal align
+		base,  // vertial align
 		cx     // canvas context to draw it on.
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 7 ) throw new Error( );
+/**/	if( arguments.length !== 9 ) throw new Error( );
 /**/
 /**/	if( color.timtype !== gleam_color ) throw new Error( );
 /**/
@@ -127,15 +129,21 @@ def.static.drawText =
 
 	const glyphs = otFont.stringToGlyphs( text, options );
 
-	switch( font.align )
+	switch( align )
 	{
 		case 'center' : x -= getWidth( glyphs, otFont, fontScale ) / 2; break;
 
-		case 'end' : x -= getWidth( glyphs, otFont, fontScale ); break;
+		case 'left' : break;
+
+		case 'right' : x -= getWidth( glyphs, otFont, fontScale ); break;
+
+		default : throw new Error( );
 	}
 
-	switch( font.base )
+	switch( base )
 	{
+		case 'alphabetic' : break;
+
 		case 'middle' :
 		{
 			let capheight = otFont.capheight;
@@ -149,6 +157,8 @@ def.static.drawText =
 
 			break;
 		}
+
+		default : throw new Error( );
 	}
 
 	let glyph;

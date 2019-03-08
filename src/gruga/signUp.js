@@ -40,58 +40,64 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'headline',
 			layout_label.create(
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( -245, -165 ),
 				'text', 'Sign Up',
-				'font', shell_fontPool.get( 22, 'la' ),
-				'pos', gleam_point.xy( -245, -165 )
 			),
 		'twig:add',
 		'usernameLabel',
 			layout_label.create(
-				'text', 'username',
-				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', gleam_point.xy( -98, -102 )
+				'align', 'right',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( -98, -102 ),
+				'text', 'username'
 			),
 		'twig:add',
 		'emailLabel',
 			layout_label.create(
+				'align', 'right',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( -98, -62 ),
 				'text', 'email',
-				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', gleam_point.xy( -98, -62 )
 			),
 		'twig:add',
 		'passwordLabel',
 			layout_label.create(
-				'text', 'password',
-				'font', shell_fontPool.get( 16, 'ra' ),
-				'pos', gleam_point.xy( -98, -22 )
+				'align', 'right',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( -98, -22 ),
+				'text', 'password'
 			),
 		'twig:add',
 		'password2Label',
 			layout_label.create(
+				'align', 'right',
 				'text', 'repeat password',
-				'font', shell_fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -98, 18 )
 			),
 		'twig:add',
 		'newsletterLabel',
 			layout_label.create(
+				'align', 'right',
 				'text', 'newsletter',
-				'font', shell_fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -98, 58 )
 			),
 		'twig:add',
 		'errorLabel',
 			layout_label.create(
+				'align', 'center',
 				'color', gleam_color.red,
-				'text', '',
-				'font', shell_fontPool.get( 14, 'ca' ),
-				'pos', gleam_point.xy( -20, -136 )
+				'font', shell_fontPool.get( 14, 'a' ),
+				'pos', gleam_point.xy( -20, -136 ),
+				'text', ''
 			),
 		'twig:add',
 		'userInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -104,7 +110,7 @@ def.staticLazy.layout = ( ) =>
 		'emailInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -117,7 +123,7 @@ def.staticLazy.layout = ( ) =>
 		'passwordInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'password', true,
 				'zone',
@@ -132,7 +138,7 @@ def.staticLazy.layout = ( ) =>
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -157,14 +163,14 @@ def.staticLazy.layout = ( ) =>
 		'newsletter2Label',
 			layout_label.create(
 				'text', 'Updates and News',
-				'font', shell_fontPool.get( 12, 'la' ),
+				'font', shell_fontPool.get( 12, 'a' ),
 				'pos', gleam_point.xy( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
 			layout_label.create(
 				'text', 'Not going to be more than an email a month.',
-				'font', shell_fontPool.get( 12, 'la' ),
+				'font', shell_fontPool.get( 12, 'a' ),
 				'pos', gleam_point.xy( -45, 77 )
 			),
 		'twig:add',
@@ -178,7 +184,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 70
 					),
 				'text', 'sign up',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -192,7 +198,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 50
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			)
 	);

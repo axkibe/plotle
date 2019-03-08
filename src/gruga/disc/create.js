@@ -139,7 +139,7 @@ def.staticLazy.layout =
 		'createNote',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Note',
 				'zone', gleam_rect.posSize( noteButtonPos, genericButtonSize )
@@ -148,7 +148,7 @@ def.staticLazy.layout =
 		'createLabel',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Label',
 				'zone', gleam_rect.posSize( labelButtonPos, genericButtonSize )
@@ -158,7 +158,7 @@ def.staticLazy.layout =
 		'createLine',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Line',
 				'textNewline', 20,
@@ -168,7 +168,7 @@ def.staticLazy.layout =
 		'createArrow',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Arrow',
 				'textNewline', 20,
@@ -179,7 +179,7 @@ def.staticLazy.layout =
 		'createRelation',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
@@ -189,7 +189,7 @@ def.staticLazy.layout =
 		'createPortal',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'cm' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'shape', 'ellipse',
 				'text', 'Portal',
 				'zone', gleam_rect.posSize( portalButtonPos, genericButtonSize )

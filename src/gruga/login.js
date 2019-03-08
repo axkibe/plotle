@@ -39,36 +39,37 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'text', 'Log In',
-				'font', shell_fontPool.get( 22, 'la' ),
+				'font', shell_fontPool.get( 22, 'a' ),
 				'pos', gleam_point.xy( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			layout_label.create(
 				'text', 'username',
-				'font', shell_fontPool.get( 16, 'la' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			layout_label.create(
 				'text', 'password',
-				'font', shell_fontPool.get( 16, 'la' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
 			layout_label.create(
+				'align', 'center',
 				'color', gleam_color.red,
 				'text', '',
-				'font', shell_fontPool.get( 14, 'ca' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'pos', gleam_point.xy( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -82,7 +83,7 @@ def.staticLazy.layout = ( ) =>
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
-				'font', shell_fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -101,7 +102,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 70, 70 )
 					),
 				'text', 'log in',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -114,7 +115,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 50, 50 )
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			)
 	);

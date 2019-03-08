@@ -14,6 +14,12 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// horizonal alignment
+		align : { type : 'string', defaultValue : '"left"' },
+
+		// vertical alignment
+		base : { type : 'string', defaultValue : '"alphabetic"' },
+
 		// color of the label
 		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
 
@@ -21,7 +27,7 @@ if( TIM )
 		hover : { type : 'undefined' },
 
 		// font of the text
-		font : { type : [ 'undefined', '../gleam/font' ] },
+		font : { type : [ 'undefined', '../gleam/font/font' ] },
 
 		// the users mark
 		mark : { type : 'undefined' },

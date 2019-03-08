@@ -29,28 +29,30 @@ def.staticLazy.layout = ( ) =>
 	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
-				'text', '',
-				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -120 )
+				'align', 'center',
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( 0, -120 ),
+				'text', ''
 			),
 		'twig:add', 'message1',
 			layout_label.create(
-				'text', 'Sorry, you cannot port to this space or create it.',
-				'font', shell_fontPool.get( 16, 'ca' ),
-				'pos', gleam_point.xy( 0, -50 )
+				'align', 'center',
+				'font', shell_fontPool.get( 16, 'a' ),
+				'pos', gleam_point.xy( 0, -50 ),
+				'text', 'Sorry, you cannot port to this space or create it.'
 			),
 		'twig:add', 'okButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
+				'font', shell_fontPool.get( 14, 'a' ),
+				'shape', 'ellipse',
+				'text', 'ok',
 				'zone',
 					gleam_rect.create(
 						'pos', gleam_point.xy( 180, 38 ),
 						'width', 50,
 						'height', 50
-					),
-				'text', 'ok',
-				'font', shell_fontPool.get( 14, 'cm' ),
-				'shape', 'ellipse'
+					)
 			)
 	);
 

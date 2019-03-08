@@ -606,42 +606,12 @@ def.proto._fontFor =
 
 
 /*
-| Font for moveToButton.
-*/
-def.lazy._fontMoveTo =
-	function( )
-{
-	return shell_fontPool.get( 13, 'cm' );
-};
-
-
-/*
-| Font for spaceTag.
-*/
-def.lazy._fontSpaceTag =
-	function( )
-{
-	return shell_fontPool.get( 13, 'la' );
-};
-
-
-/*
 | Prepares the spaceTag field.
 */
 def.lazy._fieldSpaceTag =
 	function( )
 {
 	return this._prepareField( 'spaceTag', this._fieldSpaceUser.pos );
-};
-
-
-/*
-| Font for spaceUser.
-*/
-def.lazy._fontSpaceUser =
-	function( )
-{
-	return shell_fontPool.get( 13, 'la' );
 };
 
 
@@ -653,6 +623,25 @@ def.lazy._fieldSpaceUser =
 {
 	return this._prepareField( 'spaceUser' );
 };
+
+
+/*
+| Font for moveToButton.
+*/
+def.lazy._fontMoveTo = ( ) => shell_fontPool.get( 13, 'a' );
+
+
+/*
+| Font for spaceTag.
+*/
+def.lazy._fontSpaceTag = ( ) => shell_fontPool.get( 13, 'a' );
+
+
+/*
+| Font for spaceUser.
+*/
+def.lazy._fontSpaceUser = ( ) => shell_fontPool.get( 13, 'a' );
+
 
 /*
 | Glint for the caret.
@@ -815,6 +804,8 @@ def.lazy._innerGlint =
 				'text', fieldSpaceTag.text
 			),
 			gleam_glint_text.create(
+				'align', 'center',
+				'base', 'middle',
 				'font', this._tFontMoveTo,
 				'p', orthoMoveToButtonShape.pc,
 				'text', 'move to'
@@ -1310,18 +1301,16 @@ def.proto._prepareField =
 			'shape', shape
 		);
 
-	const result = {
-		text : text,
-		width : width,
-		height : height,
-		pos : pos,
-		shape : shape,
-		glint : glint
-	};
-
-/**/if( FREEZE ) Object.freeze( result );
-
-	return result;
+	return(
+		Object.freeze( {
+			text : text,
+			width : width,
+			height : height,
+			pos : pos,
+			shape : shape,
+			glint : glint
+		} )
+	);
 };
 
 

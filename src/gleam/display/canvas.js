@@ -688,6 +688,8 @@ def.proto._renderText =
 			glint.font,
 			glint.color,
 			round( glint.font.size ),
+			glint.align,
+			glint.base,
 			this._cx
 		);
 
@@ -719,6 +721,8 @@ def.proto._renderText =
 		glint.font,
 		glint.color,
 		round( glint.font.size ),
+		glint.align,
+		glint.base,
 		this._cx
 	);
 

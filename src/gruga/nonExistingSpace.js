@@ -30,15 +30,17 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'headline',
 			layout_label.create(
+				'align', 'center',
+				'font', shell_fontPool.get( 22, 'a' ),
+				'pos', gleam_point.xy( 0, -120 ),
 				'text', '',
-				'font', shell_fontPool.get( 22, 'ca' ),
-				'pos', gleam_point.xy( 0, -120 )
 			),
 		'twig:add',
 		'message1',
 			layout_label.create(
+				'align', 'center',
 				'text', 'Do you want to create it?',
-				'font', shell_fontPool.get( 16, 'ca' ),
+				'font', shell_fontPool.get( 16, 'a' ),
 				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
@@ -52,7 +54,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'No',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -66,7 +68,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'Yes',
-				'font', shell_fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'a' ),
 				'shape', 'ellipse'
 			)
 	);

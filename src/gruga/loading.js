@@ -23,18 +23,19 @@ def.staticLazy.layout = ( ) =>
 	layout_form.create(
 		'twig:add', 'headline',
 			layout_label.create(
-				'text', 'loading',
-				'font', shell_fontPool.get( 28, 'ca' ),
-				'pos', gleam_point.xy( 0, -56)
+				'align', 'center',
+				'font', shell_fontPool.get( 28, 'a' ),
+				'pos', gleam_point.xy( 0, -56 ),
+				'text', 'loading'
 			),
 		'twig:add', 'spaceText',
 			layout_label.create(
-				'text', 'plotle:home',
-				'font', shell_fontPool.get( 28, 'ca' ),
-				'pos', gleam_point.zero
+				'align', 'center',
+				'font', shell_fontPool.get( 28, 'a' ),
+				'pos', gleam_point.zero,
+				'text', 'plotle:home'
 			)
 	);
 
 
 } );
-
