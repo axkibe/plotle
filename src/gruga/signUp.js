@@ -7,13 +7,13 @@
 tim.define( module, ( def ) => {
 
 
-const shell_fontPool = require( '../shell/fontPool' );
-
 const gleam_color = require( '../gleam/color' );
 
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
+
+const gruga_font = require( './font' );
 
 const gruga_genericButton = require( '../gruga/genericButton' );
 
@@ -40,7 +40,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add',
 		'headline',
 			layout_label.create(
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.xy( -245, -165 ),
 				'text', 'Sign Up',
 			),
@@ -48,7 +48,7 @@ def.staticLazy.layout = ( ) =>
 		'usernameLabel',
 			layout_label.create(
 				'align', 'right',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -98, -102 ),
 				'text', 'username'
 			),
@@ -56,7 +56,7 @@ def.staticLazy.layout = ( ) =>
 		'emailLabel',
 			layout_label.create(
 				'align', 'right',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -98, -62 ),
 				'text', 'email',
 			),
@@ -64,7 +64,7 @@ def.staticLazy.layout = ( ) =>
 		'passwordLabel',
 			layout_label.create(
 				'align', 'right',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -98, -22 ),
 				'text', 'password'
 			),
@@ -73,7 +73,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'right',
 				'text', 'repeat password',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -98, 18 )
 			),
 		'twig:add',
@@ -81,7 +81,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'right',
 				'text', 'newsletter',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -98, 58 )
 			),
 		'twig:add',
@@ -89,7 +89,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'color', gleam_color.red,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'pos', gleam_point.xy( -20, -136 ),
 				'text', ''
 			),
@@ -97,7 +97,7 @@ def.staticLazy.layout = ( ) =>
 		'userInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -110,7 +110,7 @@ def.staticLazy.layout = ( ) =>
 		'emailInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -123,7 +123,7 @@ def.staticLazy.layout = ( ) =>
 		'passwordInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'password', true,
 				'zone',
@@ -138,7 +138,7 @@ def.staticLazy.layout = ( ) =>
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -163,14 +163,14 @@ def.staticLazy.layout = ( ) =>
 		'newsletter2Label',
 			layout_label.create(
 				'text', 'Updates and News',
-				'font', shell_fontPool.get( 12, 'a' ),
+				'font', gruga_font.standard( 12 ),
 				'pos', gleam_point.xy( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
 			layout_label.create(
 				'text', 'Not going to be more than an email a month.',
-				'font', shell_fontPool.get( 12, 'a' ),
+				'font', gruga_font.standard( 12 ),
 				'pos', gleam_point.xy( -45, 77 )
 			),
 		'twig:add',
@@ -184,7 +184,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 70
 					),
 				'text', 'sign up',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -198,7 +198,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 50
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

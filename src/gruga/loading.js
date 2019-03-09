@@ -9,11 +9,12 @@ tim.define( module, ( def ) => {
 
 const gleam_point = require( '../gleam/point' );
 
+const gruga_font = require( './font' );
+
 const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
 
-const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -24,14 +25,14 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 28, 'a' ),
+				'font', gruga_font.standard( 28 ),
 				'pos', gleam_point.xy( 0, -56 ),
 				'text', 'loading'
 			),
 		'twig:add', 'spaceText',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 28, 'a' ),
+				'font', gruga_font.standard( 28 ),
 				'pos', gleam_point.zero,
 				'text', 'plotle:home'
 			)

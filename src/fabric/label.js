@@ -35,11 +35,14 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = this.path;
+	const path = doc.path || ( this.path && this.path.append( 'doc' ) );
 
-	if( !path ) return doc;
-
-	return doc.create( 'path', path.append( 'doc' ) );
+	return(
+		doc.create(
+			'flowWidth', 0,
+			'path', path
+		)
+	);
 };
 
 

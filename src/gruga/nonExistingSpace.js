@@ -11,9 +11,9 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
-const gruga_genericButton = require( '../gruga/genericButton' );
+const gruga_font = require( './font' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const gruga_genericButton = require( './genericButton' );
 
 const layout_button = require( '../layout/button' );
 
@@ -31,7 +31,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.xy( 0, -120 ),
 				'text', '',
 			),
@@ -40,7 +40,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'text', 'Do you want to create it?',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, -50 )
 			),
 		'twig:add',
@@ -54,7 +54,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'No',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -68,7 +68,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'Yes',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

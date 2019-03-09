@@ -111,7 +111,7 @@ def.static.drawText =
 /**/	if( size !== Math.floor( size ) ) throw new Error( );
 /**/}
 
-	const otFont = font.opentype;
+	const otFont = font.family.opentype;
 
 	const glyphCache = otFont.glyphCache;
 

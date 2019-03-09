@@ -85,6 +85,8 @@ const gleam_roundRect = require( '../gleam/roundRect' );
 
 const gleam_transform = require( '../gleam/transform' );
 
+const gruga_font = require( '../gruga/font' );
+
 const gruga_portal = require( '../gruga/portal' );
 
 const result_hover = require( '../result/hover' );
@@ -92,8 +94,6 @@ const result_hover = require( '../result/hover' );
 const ref_space = require( '../ref/space' );
 
 const session_uid = require( '../session/uid' );
-
-const shell_fontPool = require( '../shell/fontPool' );
 
 const shell_settings = require( '../shell/settings' );
 
@@ -628,19 +628,19 @@ def.lazy._fieldSpaceUser =
 /*
 | Font for moveToButton.
 */
-def.lazy._fontMoveTo = ( ) => shell_fontPool.get( 13, 'a' );
+def.lazy._fontMoveTo = ( ) => gruga_font.standard( 13 );
 
 
 /*
 | Font for spaceTag.
 */
-def.lazy._fontSpaceTag = ( ) => shell_fontPool.get( 13, 'a' );
+def.lazy._fontSpaceTag = ( ) => gruga_font.standard( 13 );
 
 
 /*
 | Font for spaceUser.
 */
-def.lazy._fontSpaceUser = ( ) => shell_fontPool.get( 13, 'a' );
+def.lazy._fontSpaceUser = ( ) => gruga_font.standard( 13 );
 
 
 /*

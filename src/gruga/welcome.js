@@ -11,6 +11,8 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
+const gruga_font = require( './font' );
+
 const gruga_genericButton = require( './genericButton' );
 
 const layout_button = require( '../layout/button' );
@@ -18,8 +20,6 @@ const layout_button = require( '../layout/button' );
 const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
-
-const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -30,14 +30,14 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.xy( 0, -120 ),
 				'text', 'welcome'
 			),
 		'twig:add', 'message1',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, -50 ),
 				'text', 'Your registration was successful :-)'
 			),
@@ -51,7 +51,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 50
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

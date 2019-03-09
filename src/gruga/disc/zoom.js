@@ -29,6 +29,8 @@ const gleam_rect = require( '../../gleam/rect' );
 
 const gleam_size = require( '../../gleam/size' );
 
+const gruga_font = require( '../font' );
+
 const gruga_iconZoomAll = require( '.././iconZoomAll' );
 
 const gruga_iconZoomHome = require( '.././iconZoomHome' );
@@ -40,8 +42,6 @@ const gruga_iconZoomOut = require( '.././iconZoomOut' );
 const layout_button = require( '../../layout/button' );
 
 const layout_disc = require( '../../layout/disc' );
-
-const shell_fontPool = require( '../../shell/fontPool' );
 
 
 def.staticLazy.layout =
@@ -137,7 +137,7 @@ def.staticLazy.layout =
 		'zoomAll',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomAll.shape,
 				'iconFacet', gruga_iconZoomAll.facet,
 				'shape', 'ellipse',
@@ -147,7 +147,7 @@ def.staticLazy.layout =
 		'zoomIn',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomIn.shape,
 				'iconFacet', gruga_iconZoomIn.facet,
 				'shape', 'ellipse',
@@ -157,7 +157,7 @@ def.staticLazy.layout =
 		'zoomOut',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomOut.shape,
 				'iconFacet', gruga_iconZoomOut.facet,
 				'shape', 'ellipse',
@@ -167,7 +167,7 @@ def.staticLazy.layout =
 		'zoomHome',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomHome.shape,
 				'iconFacet', gruga_iconZoomHome.facet,
 				'shape', 'ellipse',

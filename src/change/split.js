@@ -102,22 +102,13 @@ def.proto.changeTree =
 
 	const text = tree.getPath( path );
 
-	if( typeof( text ) !== 'string' )
-	{
-		throw error.make( 'split.path signates no string' );
-	}
+	if( typeof( text ) !== 'string' ) throw error.make( 'split.path signates no string' );
 
 	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
-	if( !pivot.getKey )
-	{
-		throw error.make( 'split.pivot not ranked' );
-	}
+	if( !pivot.getKey ) throw error.make( 'split.pivot not ranked' );
 
-	if( at1 > text.length )
-	{
-		throw error.make( 'split.at1 > text.length' );
-	}
+	if( at1 > text.length ) throw error.make( 'split.at1 > text.length' );
 
 	if( !path2.shorten.shorten.subPathOf( path ) )
 	{
@@ -128,19 +119,13 @@ def.proto.changeTree =
 
 	const key2 = path2.get( -2 );
 
-	if( pivot.get( key2 ) )
-	{
-		throw error.make( 'split.path2 already exists' );
-	}
+	if( pivot.get( key2 ) ) throw error.make( 'split.path2 already exists' );
 
 	let para1 = pivot.get( key );
 
 	const rank1 = pivot.rankOf( key );
 
-	if( rank1 < 0 )
-	{
-		throw error.make( 'split has no rank' );
-	}
+	if( rank1 < 0 ) throw error.make( 'split has no rank' );
 
 	para1 = para1.create( 'text', text.substring( 0, at1 ) );
 

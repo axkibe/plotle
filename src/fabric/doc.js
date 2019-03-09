@@ -11,8 +11,11 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// width available to fill( 0 for labels is infinite )
+		flowWidth : { type : [ 'undefined', 'number' ] },
+
 		// the path of the doc
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] }
+		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 	};
 
 	def.json = 'fabric_doc';
@@ -31,10 +34,11 @@ def.adjust.get =
 		para
 	)
 {
-	// FIXME, check why undefined paras are requested
-	if( !para || para.path || !this.path ) return para;
+	if( !para ) return;
 
-	return para.create( 'path', this.path.append( 'twig' ).appendNC( name ) );
+	const path = para.path || ( this.path && this.path.append( 'twig' ).appendNC( name ) );
+
+	return para.create( 'path', path );
 };
 
 

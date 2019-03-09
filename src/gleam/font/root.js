@@ -24,7 +24,41 @@ let pool;
 
 if( NODE )
 {
-	// FIXME TODO
+	const opentype = require( 'opentype.js' );
+
+	/*
+	| Loads a font (node version)
+	*/
+	def.static.load =
+		function(
+			name,      // the name of the font to load
+			callback   // the callback when done so
+		)
+	{
+		opentype.load(
+			'./font/' + name + '.ttf',
+			( err, otFont ) =>
+			{
+				if( err )
+				{
+					// FIXME make proper error presentation
+					console.log( 'Font "' + name + '" could not be loaded: ' + err );
+
+					callback( err );
+
+					return;
+				}
+
+				otFont.glyphCache = { };
+
+				const fontFamily = font_family.create( 'name', name, 'opentype', otFont );
+
+				pool = ( pool || font_root ).create( 'group:set', name, fontFamily );
+
+				callback( undefined, fontFamily );
+			}
+		);
+	};
 }
 else
 {
@@ -39,24 +73,25 @@ else
 	{
 		opentype.load(
 			'font-' + name + '.ttf',
-			function( err, otFont )
-		{
-			if( err )
+			( err, otFont ) =>
 			{
-				// FIXME make proper error presentation
-				console.log( 'Font "' + name + '" could not be loaded: ' + err );
+				if( err )
+				{
+					// FIXME make proper error presentation
+					console.log( 'Font "' + name + '" could not be loaded: ' + err );
 
-				return;
+					return;
+				}
+
+				otFont.glyphCache = { };
+
+				const fontFamily = font_family.create( 'name', name, 'opentype', otFont );
+
+				pool = ( pool || font_root ).create( 'group:set', name, fontFamily );
+
+				callback( fontFamily );
 			}
-
-			otFont.glyphCache = { };
-
-			const fontFamily = font_family.create( 'name', name, 'opentype', otFont );
-
-			pool = ( pool || font_root ).create( 'group:set', name, fontFamily );
-
-			callback( fontFamily );
-		} );
+		);
 	};
 }
 

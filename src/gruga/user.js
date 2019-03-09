@@ -11,6 +11,8 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
+const gruga_font = require( './font' );
+
 const gruga_genericButton = require( './genericButton' );
 
 const layout_button = require( '../layout/button' );
@@ -18,8 +20,6 @@ const layout_button = require( '../layout/button' );
 const layout_form = require( '../layout/form' );
 
 const layout_label = require( '../layout/label' );
-
-const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -31,7 +31,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.xy( 0, -120 ),
 				'text', 'Hello'
 			),
@@ -39,7 +39,7 @@ def.staticLazy.layout = ( ) =>
 		'visitor1',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, -50 ),
 				'text', 'You\'re currently an anonymous visitor!'
 			),
@@ -47,7 +47,7 @@ def.staticLazy.layout = ( ) =>
 		'visitor2',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.zero,
 				'text', 'Click on "sign up" or "log in"'
 			),
@@ -55,7 +55,7 @@ def.staticLazy.layout = ( ) =>
 		'visitor3',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, 20 ),
 				'text', 'on the control disc to the left'
 			),
@@ -63,7 +63,7 @@ def.staticLazy.layout = ( ) =>
 		'visitor4',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, 40 ),
 				'text', 'to register as an user.'
 			),
@@ -71,7 +71,7 @@ def.staticLazy.layout = ( ) =>
 		'greeting1',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, -50 ),
 				'text', 'This is your profile page!'
 			),
@@ -79,7 +79,7 @@ def.staticLazy.layout = ( ) =>
 		'greeting2',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, -10 ),
 				'text', 'In future you will be able to do stuff here,'
 			),
@@ -87,7 +87,7 @@ def.staticLazy.layout = ( ) =>
 		'greeting3',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( 0, 10 ),
 				'text', 'like for example change your password.'
 			),
@@ -95,7 +95,7 @@ def.staticLazy.layout = ( ) =>
 		'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse',
 				'text', 'close',
 				'zone',

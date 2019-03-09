@@ -37,6 +37,7 @@ if( TIM )
 /*
 | Forwards the path to the doc.
 */
+/*
 def.adjust.doc =
 	function(
 		doc
@@ -48,6 +49,7 @@ def.adjust.doc =
 
 	return doc.create( 'path', path.append( 'doc' ) );
 };
+*/
 
 
 } );

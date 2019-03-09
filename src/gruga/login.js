@@ -15,6 +15,8 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gleam_size = require( '../gleam/size' );
 
+const gruga_font = require( './font' );
+
 const gruga_genericButton = require( '../gruga/genericButton' );
 
 const gruga_genericInput = require( '../gruga/genericInput' );
@@ -27,8 +29,6 @@ const layout_input = require( '../layout/input' );
 
 const layout_label = require( '../layout/label' );
 
-const shell_fontPool = require( '../shell/fontPool' );
-
 
 /*
 | Layout
@@ -39,21 +39,21 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'text', 'Log In',
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.xy( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			layout_label.create(
 				'text', 'username',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			layout_label.create(
 				'text', 'password',
-				'font', shell_fontPool.get( 16, 'a' ),
+				'font', gruga_font.standard( 16 ),
 				'pos', gleam_point.xy( -175, -9 )
 			),
 		'twig:add',
@@ -62,14 +62,14 @@ def.staticLazy.layout = ( ) =>
 				'align', 'center',
 				'color', gleam_color.red,
 				'text', '',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'pos', gleam_point.xy( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -83,7 +83,7 @@ def.staticLazy.layout = ( ) =>
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -102,7 +102,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 70, 70 )
 					),
 				'text', 'log in',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -115,7 +115,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 50, 50 )
 					),
 				'text', 'close',
-				'font', shell_fontPool.get( 14, 'a' ),
+				'font', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

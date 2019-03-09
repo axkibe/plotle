@@ -135,14 +135,10 @@ const loadSpace =
 
 		if( changeSkid._id !== seqZ ) throw new Error( 'sequence mismatch' );
 
-		console.inspect( 'change', seqZ, JSON.parse( JSON.stringify( changeSkid ) ) );
-
 		seqZ++;
 
 		space = changeSkid.changeTree( space );
 	}
-
-	console.inspect( 'space json', JSON.parse( JSON.stringify( space ) ) );
 
 	const changeSet =
 		change_set.create(

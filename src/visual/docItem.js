@@ -224,12 +224,7 @@ def.proto.pointingHover =
 		case action_select : cursor = 'text'; break;
 	}
 
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', cursor
-		)
-	);
+	return result_hover.create( 'path', this.path, 'cursor', cursor );
 };
 
 

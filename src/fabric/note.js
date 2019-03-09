@@ -30,6 +30,9 @@ if( TIM )
 }
 
 
+const gruga_note = require( '../gruga/note' );
+
+
 /*
 | Forwards the path to the doc.
 */
@@ -38,11 +41,16 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = this.path;
+	const path = doc.path || ( this.path && this.path.append( 'doc' ) );
 
-	if( !path ) return doc;
+	const zone = this.zone;
 
-	return doc.create( 'path', path.append( 'doc' ) );
+	return(
+		doc.create(
+			'flowWidth', zone.width - gruga_note.innerMargin.x,
+			'path', path
+		)
+	);
 };
 
 

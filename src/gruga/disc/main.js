@@ -29,19 +29,20 @@ const gleam_rect = require( '../../gleam/rect' );
 
 const gleam_size = require( '../../gleam/size' );
 
-const gruga_iconNormal = require( '../../gruga/iconNormal' );
+const gruga_font = require( '../font' );
 
-const gruga_iconRemove = require( '../../gruga/iconRemove' );
+const gruga_iconNormal = require( '../iconNormal' );
 
-const gruga_iconSelect = require( '../../gruga/iconSelect' );
+const gruga_iconRemove = require( '../iconRemove' );
 
-const gruga_iconZoom = require( '../../gruga/iconZoom' );
+const gruga_iconSelect = require( '../iconSelect' );
+
+const gruga_iconZoom = require( '../iconZoom' );
 
 const layout_button = require( '../../layout/button' );
 
 const layout_disc = require( '../../layout/disc' );
 
-const shell_fontPool = require( '../../shell/fontPool' );
 
 
 def.staticLazy.layout =
@@ -177,7 +178,7 @@ def.staticLazy.layout =
 		'twig:add', 'create',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', shell_fontPool.get( 13, 'a' ),
+				'font', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'new',
 				'visible', false,
@@ -195,7 +196,7 @@ def.staticLazy.layout =
 		'twig:add', 'moveTo',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', shell_fontPool.get( 13, 'a' ),
+				'font', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'go',
 				'visible', false,
@@ -213,7 +214,7 @@ def.staticLazy.layout =
 		'twig:add', 'space',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', shell_fontPool.get( 12, 'a' ),
+				'font', gruga_font.standard( 13 ),
 				'shape',
 					gleam_ellipse.posSize(
 						gleam_point.xy( -60, 0 ),
@@ -226,7 +227,7 @@ def.staticLazy.layout =
 		'twig:add', 'user',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', shell_fontPool.get( 12, 'a' ),
+				'font', gruga_font.standard( 12 ),
 				'shape',
 					gleam_ellipse.posSize(
 						gleam_point.xy( -70, 0 ),
@@ -239,7 +240,7 @@ def.staticLazy.layout =
 		'twig:add', 'login',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', shell_fontPool.get( 13, 'a' ),
+				'font', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'log\nin',
 				'textNewline', 14,
@@ -252,7 +253,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'sign\nup',
 				'textNewline', 14,
-				'font', shell_fontPool.get( 13, 'a' ),
+				'font', gruga_font.standard( 13 ),
 				'visible', false,
 				'zone', gleam_rect.posSize( signupButtonPos, buttonSize )
 			)

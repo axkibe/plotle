@@ -19,6 +19,8 @@ const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
 
+const gruga_font = require( '../gruga/font' );
+
 const layout_button = require( '../layout/button' );
 
 const layout_form = require( '../layout/form' );
@@ -26,8 +28,6 @@ const layout_form = require( '../layout/form' );
 const layout_label = require( '../layout/label' );
 
 const layout_scrollbox = require( '../layout/scrollbox' );
-
-const shell_fontPool = require( '../shell/fontPool' );
 
 
 /*
@@ -102,7 +102,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', shell_fontPool.get( 22, 'a' ),
+				'font', gruga_font.standard( 22 ),
 				'pos', gleam_point.zero,
 				'text', 'go to another space',
 			),
@@ -124,7 +124,7 @@ def.staticLazy.layout = ( ) =>
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'plotle\nhome',
 						'textNewline', 25,
-						'font', shell_fontPool.get( 14, 'a' ),
+						'font', gruga_font.standard( 14 ),
 						'shape', 'ellipse'
 				),
 				'twig:add',
@@ -134,7 +134,7 @@ def.staticLazy.layout = ( ) =>
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'plotle\nsandbox',
 						'textNewline', 25,
-						'font', shell_fontPool.get( 14, 'a' ),
+						'font', gruga_font.standard( 14 ),
 						'shape', 'ellipse'
 					)
 		)
@@ -147,7 +147,7 @@ def.staticLazy.layout = ( ) =>
 def.staticLazy.spaceButtonLayout = ( ) =>
 	layout_button.create(
 		'facets', gruga_moveTo._portalButtonFacets,
-		'font', shell_fontPool.get( 14, 'a' ),
+		'font', gruga_font.standard( 14 ),
 		'shape', 'ellipse',
 		'textNewline', 25,
 		'zone', gruga_moveTo._buttonSize

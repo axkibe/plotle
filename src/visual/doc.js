@@ -70,9 +70,9 @@ const gleam_shape_start = require( '../gleam/shape/start' );
 
 const gleam_size = require( '../gleam/size' );
 
-const gruga_selection = require( '../gruga/selection' );
+const gruga_font = require( '../gruga/font' );
 
-const shell_fontPool = require( '../shell/fontPool' );
+const gruga_selection = require( '../gruga/selection' );
 
 const shell_settings = require( '../shell/settings' );
 
@@ -183,7 +183,7 @@ def.adjust.clipsize =
 def.lazy.font =
 	function( )
 {
-	return shell_fontPool.get( this.fontsize, 'a' );
+	return gruga_font.standard( this.fontsize );
 };
 
 

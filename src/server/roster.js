@@ -16,12 +16,14 @@ server_resourceList.create(
 	'list:init',
 	[
 	server_resource.create(
-		'filePath', 'import/opentype.js',
+		'aliases', stringList( [ 'opentype.js' ] ),
+		'filePath', 'node_modules/opentype.js/dist/opentype.js',
 		'maxage', 'long',
 		'postProcessor', 'opentype'
 	),
 	server_resource.create(
-		'filePath', 'import/opentype.min.js',
+		'aliases', stringList( [ 'opentype.min.js' ] ),
+		'filePath', 'node_modules/opentype.js/dist/opentype.min.js',
 		'maxage', 'long',
 		'postProcessor', 'opentypeMin'
 	),

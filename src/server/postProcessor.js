@@ -31,17 +31,7 @@ def.static.opentype =
 		'inventory',
 			root.inventory.updateResource(
 				resource.create(
-					'aliases',
-						stringList(
-							[
-							resource.filePath
-							.substr(0, resource.filePath.length - 3 )
-							.replace( /\//g, '-' )
-							+ '-'
-							+ opentypeHash
-							+ '.js'
-							]
-						)
+					'aliases', stringList( [ 'opentype-' + opentypeHash + '.js' ] )
 				)
 			)
 	);
@@ -62,17 +52,7 @@ def.static.opentypeMin =
 		'inventory',
 			root.inventory.updateResource(
 				resource.create(
-					'aliases',
-						stringList(
-							[
-							resource.filePath
-							.substr(0, resource.filePath.length - 3 )
-							.replace( /\//g, '-' )
-							+ '-'
-							+ opentypeMinHash
-							+ '.js'
-							]
-						)
+					'aliases', stringList( [ 'opentype-' + opentypeMinHash + '.js' ] )
 				)
 			)
 	);
@@ -130,7 +110,7 @@ def.static.develHtml =
 	data =
 		data.replace(
 			/<!--OPENTYPE.*>/,
-			'<script src="import-opentype-'
+			'<script src="opentype-'
 			+ opentypeHash
 			+ '.js" type="text/javascript" defer>'
 			+ '</script>'
@@ -222,21 +202,10 @@ def.static.indexHtml =
 			+ '</script>'
 		);
 
-	/*
 	data =
 		data.replace(
 			/<!--OPENTYPE.*>/,
-			'<script src="import-opentype-'
-			+ opentypeHash
-			+ '.js" type="text/javascript">'
-			+ '</script>'
-		);
-	*/
-
-	data =
-		data.replace(
-			/<!--OPENTYPE.*>/,
-			'<script src="import-opentype.min-'
+			'<script src="opentype.min-'
 			+ opentypeMinHash
 			+ '.js" type="text/javascript">'
 			+ '</script>'

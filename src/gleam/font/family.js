@@ -28,8 +28,10 @@ const gleam_font_font = require( './font' );
 
 /*
 | Returns the font tim.
+| FIXME remove get
 */
 def.proto.get =
+def.proto.createSize =
 	function(
 		size
 	)
