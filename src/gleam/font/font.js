@@ -23,6 +23,13 @@ if( TIM )
 
 
 /*
+| Factor to add to the bottom of font height.
+| FUTURE remove
+*/
+def.static.bottomBox = 0.25;
+
+
+/*
 | Measures the advance width of a given text.
 */
 def.proto.getAdvanceWidth =

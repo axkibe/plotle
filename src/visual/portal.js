@@ -63,6 +63,8 @@ const gleam_ellipse = require( '../gleam/ellipse' );
 
 const gleam_facet = require( '../gleam/facet' );
 
+const gleam_font_font = require( '../gleam/font/font' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -94,8 +96,6 @@ const result_hover = require( '../result/hover' );
 const ref_space = require( '../ref/space' );
 
 const session_uid = require( '../session/uid' );
-
-const shell_settings = require( '../shell/settings' );
 
 const tim_path = require( 'tim.js/src/path/path' );
 
@@ -661,7 +661,7 @@ def.lazy._glintCaret =
 
 	const fs = font.size;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	const fieldPos = this[ spaceFields[ section ] ].pos;
 

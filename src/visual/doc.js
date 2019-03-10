@@ -50,6 +50,8 @@ if( TIM )
 
 const gleam_facet = require( '../gleam/facet' );
 
+const gleam_font_font = require( '../gleam/font/font' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_paint = require( '../gleam/glint/paint' );
@@ -73,8 +75,6 @@ const gleam_size = require( '../gleam/size' );
 const gruga_font = require( '../gruga/font' );
 
 const gruga_selection = require( '../gruga/selection' );
-
-const shell_settings = require( '../shell/settings' );
 
 const visual_mark_caret = require( './mark/caret' );
 
@@ -218,7 +218,7 @@ def.lazy.fullsize =
 		height += flow.height;
 	}
 
-	height += Math.round( fs * shell_settings.bottombox );
+	height += Math.round( fs * gleam_font_font.bottomBox );
 
 	return gleam_size.wh( width, height );
 };
@@ -282,7 +282,7 @@ def.lazy._caretGlint =
 
 	const fs = this.fontsize;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	let p = para.locateOffsetPoint( mark.at );
 
@@ -449,7 +449,7 @@ def.lazy._rangeShape =
 
 	const fontsize = this.fontsize;
 
-	const descend = Math.round( fontsize * shell_settings.bottombox );
+	const descend = Math.round( fontsize * gleam_font_font.bottomBox );
 
 	const ascend = Math.round( fontsize );
 

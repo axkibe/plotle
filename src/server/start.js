@@ -74,7 +74,7 @@ const https = require( 'https' );
 
 const constants = require( 'constants' );
 
-//const gleam_font_root = require( '../gleam/font/root' );
+const gleam_font_root = require( '../gleam/font/root' );
 
 const server_root = require( './root' );
 
@@ -195,7 +195,7 @@ const startRedirectServer =
 const startup =
 	function*( )
 {
-//	yield gleam_font_root.load( 'DejaVuSans-Regular', resume( ) );
+	yield gleam_font_root.load( 'DejaVuSans-Regular', resume( ) );
 
 	server_root.create(
 		'inventory', server_inventory.create( ),

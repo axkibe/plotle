@@ -7,6 +7,9 @@
 tim.define( module, ( def, fabric_relation ) => {
 
 
+def.extend = './label';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -24,6 +27,7 @@ if( TIM )
 		item2key : { type : 'string', json : true },
 
 		// the path of the doc
+		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		// position
@@ -32,24 +36,6 @@ if( TIM )
 
 	def.json = 'relation';
 }
-
-
-/*
-| Forwards the path to the doc.
-*/
-/*
-def.adjust.doc =
-	function(
-		doc
-	)
-{
-	const path = this.path;
-
-	if( !path ) return doc;
-
-	return doc.create( 'path', path.append( 'doc' ) );
-};
-*/
 
 
 } );

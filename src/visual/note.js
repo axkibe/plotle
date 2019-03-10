@@ -65,6 +65,8 @@ const fabric_note = require( '../fabric/note' );
 
 const fabric_para = require( '../fabric/para' );
 
+const gleam_font_font = require( '../gleam/font/font' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -340,7 +342,7 @@ def.proto.scrollMarkIntoView =
 
 	const fs = this.doc.font.size;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	const p = para.locateOffsetPoint( mark.caret.at );
 

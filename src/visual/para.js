@@ -57,6 +57,8 @@ const change_remove = require( '../change/remove' );
 
 const change_split = require( '../change/split' );
 
+const gleam_font_font = require( '../gleam/font/font' );
+
 const gleam_glint_list = require( '../gleam/glint/list' );
 
 const gleam_glint_text = require( '../gleam/glint/text' );
@@ -69,19 +71,11 @@ const gleam_rect = require( '../gleam/rect' );
 
 const gruga_font = require( '../gruga/font' );
 
-const flow_block = require( '../flow/block' );
-
-const flow_line = require( '../flow/line' );
-
-const flow_token = require( '../flow/token' );
-
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 const visual_mark_range = require( '../visual/mark/range' );
 
 const session_uid = require( '../session/uid' );
-
-const shell_settings = require( '../shell/settings' );
 
 const visual_mark_text = require( '../visual/mark/text' );
 
@@ -123,7 +117,7 @@ def.lazy.attentionCenter =
 {
 	const fs = this.fontsize;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caret.at );
 
@@ -141,100 +135,9 @@ def.lazy.attentionCenter =
 def.lazy.flow =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.fontsize === undefined ) throw new Error( );
-/**/}
-
-	// width the flow can fill
-	// 0 means infinite
-	const flowWidth = this.flowWidth;
-
-	const font = this.font;
-
-	// FUTURE go into subnodes
-	const text = this.text;
-
-	// width really used.
-	let width = 0;
-
-	// current x positon, and current x including last tokens width
-	let x = 0;
-
-	let y = font.size;
-
-	const space = font.getAdvanceWidth( ' ' );
-
-	const lines = [ ];
-
-	let currentLineOffset = 0;
-
-	let currentLineList = [ ];
-
-	const reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
-	// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-
-	for( let ca = reg.exec( text ); ca; ca = reg.exec( text ) )
-	{
-		// a token is a word plus following hard spaces
-		const tokenText = ca[ 1 ] + ca[ 3 ];
-
-		const w = font.getAdvanceWidth( tokenText );
-
-		if( flowWidth > 0 && x + w > flowWidth )
-		{
-			if( x > 0 )
-			{
-				// soft break
-				lines.push(
-					flow_line.create(
-						'list:init', currentLineList,
-						'y', y,
-						'offset', currentLineOffset
-					)
-				);
-
-				x = 0;
-
-				currentLineList = [ ];
-
-				y += font.size * ( 1 + shell_settings.bottombox );
-
-				currentLineOffset = ca.index;
-			}
-			else
-			{
-				// horizontal overflow
-				// ('HORIZONTAL OVERFLOW'); // FUTURE
-			}
-		}
-
-		currentLineList.push(
-			flow_token.create(
-				'x', x,
-				'width', w,
-				'offset', ca.index,
-				'text', tokenText
-			)
-		);
-
-		if( width < x + w ) { width = x + w; }
-
-		x = x + w + space;
-	}
-
-	lines.push(
-		flow_line.create(
-			'list:init', currentLineList,
-			'offset', currentLineOffset,
-			'y', y
-		)
-	);
-
-	return flow_block.create( 'list:init', lines, 'height', y, 'width', width );
+	console.log( 'FIXME REMOVE' );
+	return this.fabric.flow;
 };
-
-
 
 
 /*
@@ -245,107 +148,6 @@ def.lazy.font =
 {
 	return gruga_font.standard( this.fontsize );
 };
-
-
-/*
-| The para's flow, the position of all chunks.
-*/
-def.lazy.flow =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.fontsize === undefined ) throw new Error( );
-/**/}
-
-	// width the flow can fill
-	// 0 means infinite
-	const flowWidth = this.flowWidth;
-
-	const font = this.font;
-
-	// FUTURE go into subnodes
-	const text = this.text;
-
-	// width really used.
-	let width = 0;
-
-	// current x positon, and current x including last tokens width
-	let x = 0;
-
-	let y = font.size;
-
-	const space = font.getAdvanceWidth( ' ' );
-
-	const lines = [ ];
-
-	let currentLineOffset = 0;
-
-	let currentLineList = [ ];
-
-	const reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
-	// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-
-	for( let ca = reg.exec( text ); ca; ca = reg.exec( text ) )
-	{
-		// a token is a word plus following hard spaces
-		const tokenText = ca[ 1 ] + ca[ 3 ];
-
-		const w = font.getAdvanceWidth( tokenText );
-
-		if( flowWidth > 0 && x + w > flowWidth )
-		{
-			if( x > 0 )
-			{
-				// soft break
-				lines.push(
-					flow_line.create(
-						'list:init', currentLineList,
-						'y', y,
-						'offset', currentLineOffset
-					)
-				);
-
-				x = 0;
-
-				currentLineList = [ ];
-
-				y += font.size * ( 1 + shell_settings.bottombox );
-
-				currentLineOffset = ca.index;
-			}
-			else
-			{
-				// horizontal overflow
-				// ('HORIZONTAL OVERFLOW'); // FUTURE
-			}
-		}
-
-		currentLineList.push(
-			flow_token.create(
-				'x', x,
-				'width', w,
-				'offset', ca.index,
-				'text', tokenText
-			)
-		);
-
-		if( width < x + w ) { width = x + w; }
-
-		x = x + w + space;
-	}
-
-	lines.push(
-		flow_line.create(
-			'list:init', currentLineList,
-			'offset', currentLineOffset,
-			'y', y
-		)
-	);
-
-	return flow_block.create( 'list:init', lines, 'height', y, 'width', width );
-};
-
 
 
 /*
@@ -414,7 +216,7 @@ def.inherit.flow =
 def.lazy.height =
 	function( )
 {
-	return this.flow.height + Math.round( this.fontsize * shell_settings.bottombox );
+	return this.flow.height + Math.round( this.fontsize * gleam_font_font.bottomBox );
 };
 
 

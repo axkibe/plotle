@@ -18,6 +18,7 @@ if( TIM )
 		fontsize : { type : 'number', json : true },
 
 		// the path of the doc
+		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
 		pos : { type : '../gleam/point', json : true },
@@ -40,6 +41,7 @@ def.adjust.doc =
 	return(
 		doc.create(
 			'flowWidth', 0,
+			'fontsize', this.fontsize,
 			'path', path
 		)
 	);

@@ -54,6 +54,8 @@ const gleam_ellipse = require( '../gleam/ellipse' );
 
 const gleam_facet = require( '../gleam/facet' );
 
+const gleam_font_font = require( '../gleam/font/font' );
+
 const gleam_glint_border = require( '../gleam/glint/border' );
 
 const gleam_glint_fill = require( '../gleam/glint/fill' );
@@ -73,8 +75,6 @@ const gleam_roundRect = require( '../gleam/roundRect' );
 const layout_input = require( '../layout/input' );
 
 const result_hover = require( '../result/hover' );
-
-const shell_settings = require( '../shell/settings' );
 
 const visual_mark_caret = require( '../visual/mark/caret' );
 
@@ -153,7 +153,7 @@ def.lazy.attentionCenter =
 {
 	const fs = this.font.size;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caret.at );
 
@@ -199,7 +199,7 @@ def.lazy._caretGlint =
 {
 	const fs = this.font.size;
 
-	const descend = fs * shell_settings.bottombox;
+	const descend = fs * gleam_font_font.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caret.at );
 

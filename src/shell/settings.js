@@ -24,12 +24,6 @@ def.static.animationZoomAllHomeTime = 120;
 */
 def.static.animationZoomStepTime = 40;
 
-/*
-| Factor to add to the bottom of font height.
-| FUTURE remove
-*/
-def.static.bottombox = 0.25;
-
 // blink speed of the caret.
 // Note currently not blinking, but used to check
 // the input box.

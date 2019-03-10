@@ -12,9 +12,15 @@ if( TIM )
 	def.attributes =
 	{
 		// width available to fill( 0 for labels is infinite )
+		// no json thus not saved or transmitted
 		flowWidth : { type : [ 'undefined', 'number' ] },
 
+		// size of the font
+		// no json thus not saved or transmitted
+		fontsize : { type : 'number' },
+
 		// the path of the doc
+		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 	};
 
@@ -41,6 +47,7 @@ def.adjust.get =
 	return(
 		para.create(
 			'flowWidth', this.flowWidth,
+			'fontsize', this.fontsize,
 			'path', path,
 		)
 	);
