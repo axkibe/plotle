@@ -38,7 +38,12 @@ def.adjust.get =
 
 	const path = para.path || ( this.path && this.path.append( 'twig' ).appendNC( name ) );
 
-	return para.create( 'path', path );
+	return(
+		para.create(
+			'flowWidth', this.flowWidth,
+			'path', path,
+		)
+	);
 };
 
 

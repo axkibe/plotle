@@ -11,6 +11,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// width the flow can fill
+		flowWidth : { type : [ 'undefined', 'number' ] },
+
 		// the path of the para
 		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
 
