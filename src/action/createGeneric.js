@@ -32,6 +32,8 @@ if( TIM )
 
 const action_none = require( './none' );
 
+const fabric_note = require( '../fabric/note' );
+
 const gleam_point = require( '../gleam/point' );
 
 const gleam_rect = require( '../gleam/rect' );
@@ -39,8 +41,6 @@ const gleam_rect = require( '../gleam/rect' );
 const result_hover = require( '../result/hover' );
 
 const visual_label = require( '../visual/label' );
-
-const visual_note = require( '../visual/note' );
 
 const visual_portal = require( '../visual/portal' );
 
@@ -74,7 +74,7 @@ def.staticLazy.createPortal = ( ) =>
 def.staticLazy.itemTypeToTim = ( ) =>
 ( {
 	'label'  : visual_label,
-	'note'   : visual_note,
+	'note'   : fabric_note,
 	'portal' : visual_portal,
 } );
 

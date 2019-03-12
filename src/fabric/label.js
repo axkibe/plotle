@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, fabric_label ) => {
 
 
 if( TIM )

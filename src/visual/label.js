@@ -21,7 +21,7 @@ if( TIM )
 		action : { type : [ '< ../action/types' ] },
 
 		// the visual document (content)
-		doc : { type : [ './doc', 'undefined' ] },
+		doc : { type : [ '../fabric/doc', 'undefined' ] },
 
 		// the labels fabric
 		fabric : { type : '../fabric/label' },
@@ -82,8 +82,6 @@ const tim_path = require( 'tim.js/src/path/path' );
 
 const visual_base_posfs = require( '../visual/base/posfs' );
 
-const visual_doc = require( '../visual/doc' );
-
 const visual_mark_caret = require( '../visual/mark/caret' );
 
 
@@ -101,7 +99,7 @@ def.static.createGeneric =
 
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
 
-	const fs = model.doc.fontsize * zone.height / model.zone( ).height;
+	const fs = model.doc.fontsize * zone.height / model.zone.height;
 
 	const resized =
 		model.create(
@@ -149,11 +147,8 @@ def.adjust.doc =
 		doc
 	)
 {
-	const fabric = this.fabric;
-
 	return(
-		( doc || visual_doc ).create(
-			'fabric', fabric.doc,
+		( doc || this.fabric.doc ).create(
 			'flowWidth', 0,
 			'fontsize', this.fontsize,
 			'innerMargin', gruga_label.innerMargin,
@@ -358,17 +353,16 @@ def.proto.scrollMarkIntoView = function( ){ };
 
 /*
 | The item's shape.
+| FIXME lazy
 */
-def.proto.shape = function( ){ return this.zone( ).shrink1; };
+def.proto.shape = function( ){ return this.zone.shrink1; };
 
 
 /*
 | Calculates the labels zone,
 | possibly altered by an action.
-|
-| FUTURE inherit
 */
-def.proto.zone =
+def.lazy.zone =
 	function( )
 {
 	return(
@@ -420,25 +414,6 @@ def.inherit._glint =
 	)
 {
 	return inherit.equals( this );
-};
-
-
-/*
-| Calculates the labels zone,
-| possibly altered by an action.
-|
-| FUTURE inherit
-*/
-def.lazy._zone =
-	function( )
-{
-	return(
-		gleam_rect.create(
-			'pos', this.pos,
-			'width', this._zoneWidth,
-			'height', this._zoneHeight
-		)
-	);
 };
 
 

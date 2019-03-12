@@ -43,7 +43,7 @@ if( TIM )
 	[
 		'undefined',
 		'./label',
-		'./note',
+		'../fabric/note',
 		'./portal',
 		'./relation',
 		'./stroke'
@@ -102,8 +102,6 @@ const visual_itemList = require( '../visual/itemList' );
 const visual_label = require( '../visual/label' );
 
 const visual_mark_items = require( '../visual/mark/items' );
-
-const visual_note = require( '../visual/note' );
 
 const visual_portal = require( '../visual/portal' );
 
@@ -221,7 +219,15 @@ def.adjust.get =
 
 	if( !item )
 	{
-		item = visual_space._visualMap.get( fabric.timtype );
+		// FIXME XXX
+		if( fabric.timtype === fabric_note )
+		{
+			item = fabric;
+		}
+		else
+		{
+			item = visual_space._visualMap.get( fabric.timtype );
+		}
 
 /**/	if( CHECK )
 /**/	{
@@ -247,7 +253,7 @@ def.adjust.get =
 
 	const access = this.access;
 
-	if( item === visual_note || item.timtype === visual_note )
+	if( item === fabric_note || item.timtype === fabric_note )
 	{
 		item =
 			item.create(
@@ -255,7 +261,6 @@ def.adjust.get =
 				'action', action,
 				'highlight', highlight,
 				'hover', hover,
-				'fabric', fabric,
 				'mark', mark,
 				'path', path,
 				// FIXME why not just defaultValue?
@@ -278,9 +283,9 @@ def.adjust.get =
 			);
 	}
 
-	if( item.timtype === visual_note )
+	if( item.timtype === fabric_note )
 	{
-		const aperture = item.zone( ).height - gruga_note.innerMargin.y;
+		const aperture = item.zone.height - gruga_note.innerMargin.y;
 
 		const dHeight = item.doc.fullsize.height;
 
@@ -835,6 +840,7 @@ def.proto._stopCreate =
 
 /*
 | Mapping of fabric item name to visual items.
+| FIXME remove
 */
 def.staticLazy._visualMap =
 	function( )
@@ -842,7 +848,7 @@ def.staticLazy._visualMap =
 	const map = new Map( );
 
 	map.set( fabric_label, visual_label );
-	map.set( fabric_note, visual_note );
+	map.set( fabric_note, fabric_note );
 	map.set( fabric_portal, visual_portal );
 	map.set( fabric_relation, visual_relation );
 	map.set( fabric_stroke, visual_stroke );

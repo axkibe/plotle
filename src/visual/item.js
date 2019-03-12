@@ -13,9 +13,13 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const action_createRelation = require( '../action/createRelation' );
+// const action_createRelation = require( '../action/createRelation' );
+// XXX
+const action_createRelation = { };
 
-const action_dragItems = require( '../action/dragItems' );
+// const action_dragItems = require( '../action/dragItems' );
+// XXX
+const action_dragItems = { };
 
 const action_none = require( '../action/none' );
 
@@ -132,7 +136,7 @@ def.proto.dragStart =
 				'itemPaths', paths,
 				'moveBy', gleam_point.zero,
 				'startPoint', p.detransform( this.transform ),
-				'startZone', this.zone( )
+				'startZone', this.zone
 			)
 	);
 
@@ -176,7 +180,7 @@ def.proto.pointWithin =
 def.lazy.tZone =
 	function( )
 {
-	return this.zone( ).transform( this.transform );
+	return this.zone.transform( this.transform );
 };
 
 

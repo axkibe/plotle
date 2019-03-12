@@ -104,7 +104,7 @@ def.lazy.zone =
 /**/	if ( cLen === 0 ) throw new Error( );
 /**/}
 
-	let cZone = content.get( 0 ).zone( );
+	let cZone = content.get( 0 ).zone;
 
 	if( cLen === 1 ) return cZone;
 
@@ -120,7 +120,7 @@ def.lazy.zone =
 
 	for( let a = 1; a < cLen; a++ )
 	{
-		cZone = content.get( a ).zone( );
+		cZone = content.get( a ).zone;
 
 		pos = cZone.pos;
 

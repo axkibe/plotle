@@ -21,7 +21,7 @@ if( TIM )
 		action : { type : [ '< ../action/types' ] },
 
 		// the document (content)
-		doc : { type : [ './doc', 'undefined' ] },
+		doc : { type : [ '../fabric/doc', 'undefined' ] },
 
 		// the relations fabric
 		fabric : { type : '../fabric/relation' },

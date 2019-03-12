@@ -12,7 +12,9 @@ def.extend = './item';
 
 const action_none = require( '../action/none' );
 
-const action_select = require( '../action/select' );
+//const action_select = require( '../action/select', 'lazy' );
+// XXX
+const action_select = { };
 
 const limit = require( '../math/root' ).limit;
 
@@ -34,11 +36,11 @@ def.lazy.attentionCenter =
 	function( )
 {
 	return(
-		this.zone( ).pos.y
+		this.zone.pos.y
 		+ limit(
 			0,
 			this.doc.attentionCenter - ( this.scrollPos ?  this.scrollPos.y : 0 ),
-			this.zone( ).height
+			this.zone.height
 		)
 	);
 };
@@ -127,7 +129,7 @@ def.proto.markForPoint =
 {
 	const tp = p.detransform( this.transform );
 
-	const pos = this.zone( ).pos;
+	const pos = this.zone.pos;
 
 	const pi = tp.sub( pos );
 
