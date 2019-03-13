@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the paths of the items to drag
-		itemPaths: { type : [ 'undefined', 'tim.js/src/path/list' ] },
+		itemPaths: { type : [ 'undefined', 'tim.js/pathList' ] },
 
 		// mouseDown point on drag creation
 		startPoint : { type : '../gleam/point' },
@@ -45,11 +45,11 @@ if( TIM )
 }
 
 
-const action_none = require( './none' );
+const action_none = tim.require( './none' );
 
-const change_list = require( '../change/list' );
+const change_list = tim.require( '../change/list' );
 
-const visual_space = require( '../visual/space' );
+const visual_space = tim.require( '../visual/space' );
 
 
 /*

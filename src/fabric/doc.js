@@ -32,7 +32,7 @@ if( TIM )
 
 		// the path of the doc
 		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// vertical seperation of paragraphs
 		// no json thus not saved or transmitted

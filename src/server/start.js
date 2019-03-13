@@ -4,8 +4,8 @@
 'use strict';
 
 
-//Error.stackTraceLimit = 15;
-Error.stackTraceLimit = Infinity;
+Error.stackTraceLimit = 15;
+//Error.stackTraceLimit = Infinity;
 
 
 /*

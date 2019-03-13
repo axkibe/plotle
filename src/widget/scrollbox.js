@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
 		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position
 		scrollPos : { type : '../gleam/point' },

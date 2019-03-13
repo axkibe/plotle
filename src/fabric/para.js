@@ -25,7 +25,7 @@ if( TIM )
 
 		// the path of the para
 		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the paragraphs text
 		text : { type : 'string', json : true },

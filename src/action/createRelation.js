@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item the relation goes from
-		fromItemPath : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		fromItemPath : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// offset when panning during creation
 		offset : { type : [ 'undefined', '../gleam/point' ] },
 
 		// the item the relation goes to
-		toItemPath : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		toItemPath : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the arrow destination while its floating
 		toPoint : { type : [ 'undefined', '../gleam/point' ] },
@@ -36,11 +36,11 @@ if( TIM )
 }
 
 
-const action_none = require( './none' );
+const action_none = tim.require( './none' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const visual_space = require( '../visual/space' );
+const visual_space = tim.require( '../visual/space' );
 
 
 /*

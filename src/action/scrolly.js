@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// path to the item or widget being scrolled
-		scrollPath : { type : 'tim.js/src/path/path' },
+		scrollPath : { type : 'tim.js/path' },
 
 		// mouse down point on start of scrolling
 		startPoint : { type : '../gleam/point' },
@@ -26,9 +26,9 @@ if( TIM )
 }
 
 
-const action_none = require( './none' );
+const action_none = tim.require( './none' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

@@ -106,7 +106,7 @@ def.proto.prepareResource =
 
 		const source = ( yield fs.readFile( realpath, readOptions, resume( ) ) ) + '';
 
-		const timspec = tim.catalog.getTimspec( realpath );
+		const timspec = tim.catalog.getByRealpath( realpath );
 
 		const preamble = timspec.getBrowserPreamble( false );
 

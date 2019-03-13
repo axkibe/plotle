@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// grow at this path
-		path : { type : [ 'tim.js/src/path/path' ] , json : true },
+		path : { type : [ 'tim.js/path' ] , json : true },
 
 		// value to grow
 		val : { type : [ '< ./value-types' ], json : true },

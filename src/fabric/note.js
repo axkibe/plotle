@@ -40,7 +40,7 @@ if( TIM )
 		// node currently hovered upon
 		// FIXME undefined only
 		// no json thus not saved or transmitted
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		// no json thus not saved or transmitted
@@ -48,7 +48,7 @@ if( TIM )
 
 		// the path of the item
 		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position
 		// no json thus not saved or transmitted
@@ -71,48 +71,47 @@ if( TIM )
 }
 
 
-const change_grow = require( '../change/grow' );
+const change_grow = tim.require( '../change/grow' );
 
-const fabric_doc = require( '../fabric/doc' );
+const fabric_doc = tim.require( '../fabric/doc' );
 
-const fabric_para = require( '../fabric/para' );
+const fabric_para = tim.require( '../fabric/para' );
 
-const gleam_font_font = require( '../gleam/font/font' );
+const gleam_font_font = tim.require( '../gleam/font/font' );
 
-const gleam_glint_border = require( '../gleam/glint/border' );
+const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
-const gleam_glint_fill = require( '../gleam/glint/fill' );
+const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_mask = require( '../gleam/glint/mask' );
+const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gleam_roundRect = require( '../gleam/roundRect' );
+const gleam_roundRect = tim.require( '../gleam/roundRect' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_note = require( '../gruga/note' );
+const gruga_note = tim.require( '../gruga/note' );
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const shell_settings = require( '../shell/settings' );
+const shell_settings = tim.require( '../shell/settings' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const widget_scrollbar = require( '../widget/scrollbar' );
+const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
-//FIXME NEEDS NOW!!!
-const visual_base_zone = require( '../visual/base/zone' );
+const visual_base_zone = tim.require( '../visual/base/zone', 'NOW' );
 
 /*
 | Exta checking

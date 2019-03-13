@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// if selecting ranges (text block), item to path
-		itemPath : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		itemPath : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// point at start of operation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] },
@@ -26,17 +26,17 @@ if( TIM )
 }
 
 
-const action_none = require( './none' );
+const action_none = tim.require( './none' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const tim_path_list = require( 'tim.js/src/path/list' );
+const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_mark_items = require( '../visual/mark/items' );
+const visual_mark_items = tim.require( '../visual/mark/items' );
 
-const visual_space = require( '../visual/space' );
+const visual_space = tim.require( '../visual/space' );
 
 
 /*
@@ -66,7 +66,7 @@ def.proto.affectsItem =
 
 	const tPos = zone.pos;
 
-	const iZone = item.zone( );
+	const iZone = item.zone;
 
 	const iPos = iZone.pos;
 

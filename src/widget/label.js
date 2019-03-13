@@ -36,7 +36,7 @@ if( TIM )
 		newline : { type : [ 'undefined', 'number' ] },
 
 		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// designed position
 		pos : { type : '../gleam/point' },

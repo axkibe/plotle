@@ -50,13 +50,17 @@ const config = require( '../config/intf' );
 
 const fs = require( 'fs' );
 
+const hash_sha1 = require( '../hash/sha1' );
+
 const log = require( './log' );
+
+const ref_space = require( '../ref/space' );
+
+const ref_userSpaceList = require( '../ref/userSpaceList' );
 
 const server_maxAge = require( './maxAge' );
 
 const server_postProcessor = require( './postProcessor' );
-
-const ref_userSpaceList = require( '../ref/userSpaceList' );
 
 const server_requestHandler = require( './requestHandler' );
 
@@ -66,21 +70,17 @@ const server_resource = require( './resource' );
 
 const server_spaceBox = require( './spaceBox' );
 
-const timspec_twig = require( 'tim.js/src/timspec/twig' );
-
-const tim_type_tim = require( 'tim.js/src/type/tim' );
-
-const hash_sha1 = require( '../hash/sha1' );
-
 const suspend = require( 'suspend' );
-
-const resume = suspend.resume;
 
 const terser = require( 'terser' );
 
+const timspec_twig = require( 'tim.js/src/timspec/twig' );
+
+const tim_path = require( 'tim.js/src/path/path' );
+
 const url = require( 'url' );
 
-const ref_space = require( '../ref/space' );
+const resume = suspend.resume;
 
 
 /*
@@ -140,6 +140,7 @@ def.proto.shellGlobals =
 	const g =
 		Object.freeze ( {
 			CHECK: config.get( 'shell', mode, 'check' ),
+			// FIXME remove
 			FREEZE : config.get( 'shell', mode, 'freeze' ),
 			NODE : false,
 			TIM : false,
@@ -291,9 +292,9 @@ def.proto.prepareInventory =
 		require( entry );
 
 		const srts =
-			tim.catalog.getTimspecRelative(
+			tim.catalog.getByRelativePath(
 				module.filename,
-				tim_type_tim.createFromPath( entry.split( '/' ) )
+				tim_path.createFromString( entry )
 			);
 
 		let walk = timspec_twig.createByDependencyWalk( srts );
@@ -302,7 +303,7 @@ def.proto.prepareInventory =
 		{
 			const filename = walk.getKey( a );
 
-			const ts = tim.catalog.getTimspec( filename );
+			const ts = tim.catalog.getByRealpath( filename );
 
 			const resource =
 				server_resource.create(
@@ -323,9 +324,9 @@ def.proto.prepareInventory =
 		require( entry );
 
 		const srts =
-			tim.catalog.getTimspecRelative(
+			tim.catalog.getByRelativePath(
 				module.filename,
-				tim_type_tim.createFromPath( entry.split( '/' ) )
+				tim_path.createFromString( entry )
 			);
 
 		const walk = timspec_twig.createByDependencyWalk( srts );
@@ -334,7 +335,7 @@ def.proto.prepareInventory =
 		{
 			const filename = walk.getKey( a );
 
-			const ts = tim.catalog.getTimspec( filename );
+			const ts = tim.catalog.getByRealpath( filename );
 
 			const filePath = ts.path.chop.filepath;
 

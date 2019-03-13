@@ -28,7 +28,7 @@ if( TIM )
 		// minimum is always zero
 		max : { type : 'number' },
 
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		pos : { type : '../gleam/point' },
 

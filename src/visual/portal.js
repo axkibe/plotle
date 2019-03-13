@@ -27,13 +27,13 @@ if( TIM )
 		highlight : { type : 'boolean' },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the item
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// current space transform
 		transform : { type : '../gleam/transform' },

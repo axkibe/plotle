@@ -36,7 +36,7 @@ if( TIM )
 		form : { type : '../form/root' },
 
 		// current hovered item
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the link to the server
 		link : { type : '../net/link' },
@@ -101,144 +101,143 @@ if( TIM )
 }
 
 
-const animation_root = require( '../animation/root' );
+const animation_root = tim.require( '../animation/root' );
 
-const animation_transform = require( '../animation/transform' );
+const animation_transform = tim.require( '../animation/transform' );
 
-const action_dragItems = require( '../action/dragItems' );
+const action_dragItems = tim.require( '../action/dragItems' );
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const action_resizeItems = require( '../action/resizeItems' );
+const action_resizeItems = tim.require( '../action/resizeItems' );
 
-const action_select = require( '../action/select' );
+const action_select = tim.require( '../action/select' );
 
-const change_grow = require( '../change/grow' );
+const change_grow = tim.require( '../change/grow' );
 
-const change_join = require( '../change/join' );
+const change_join = tim.require( '../change/join' );
 
-const change_list = require( '../change/list' );
+const change_list = tim.require( '../change/list' );
 
-const change_remove = require( '../change/remove' );
+const change_remove = tim.require( '../change/remove' );
 
-const change_wrap = require( '../change/wrap' );
+const change_wrap = tim.require( '../change/wrap' );
 
-const disc_root = require( '../disc/root' );
+const disc_root = tim.require( '../disc/root' );
 
-const disc_create = require( '../disc/create' );
+const disc_create = tim.require( '../disc/create' );
 
-const disc_main = require( '../disc/main' );
+const disc_main = tim.require( '../disc/main' );
 
-const disc_zoom = require( '../disc/zoom' );
+const disc_zoom = tim.require( '../disc/zoom' );
 
-const fabric_doc = require( '../fabric/doc' );
+const fabric_doc = tim.require( '../fabric/doc' );
 
-const fabric_para = require( '../fabric/para' );
+const fabric_para = tim.require( '../fabric/para' );
 
-const fabric_relation = require( '../fabric/relation' );
+const fabric_relation = tim.require( '../fabric/relation' );
 
-const form_loading = require( '../form/loading' );
+const form_loading = tim.require( '../form/loading' );
 
-const form_login = require( '../form/login' );
+const form_login = tim.require( '../form/login' );
 
-const form_moveTo = require( '../form/moveTo' );
+const form_moveTo = tim.require( '../form/moveTo' );
 
-const form_noAccessToSpace = require( '../form/noAccessToSpace' );
+const form_noAccessToSpace = tim.require( '../form/noAccessToSpace' );
 
-const form_nonExistingSpace = require( '../form/nonExistingSpace' );
+const form_nonExistingSpace = tim.require( '../form/nonExistingSpace' );
 
-const form_root = require( '../form/root' );
+const form_root = tim.require( '../form/root' );
 
-const form_signUp = require( '../form/signUp' );
+const form_signUp = tim.require( '../form/signUp' );
 
-const form_space = require( '../form/space' );
+const form_space = tim.require( '../form/space' );
 
-const form_user = require( '../form/user' );
+const form_user = tim.require( '../form/user' );
 
-const form_welcome = require( '../form/welcome' );
+const form_welcome = tim.require( '../form/welcome' );
 
-const gleam_connect = require( '../gleam/connect' );
+const gleam_connect = tim.require( '../gleam/connect' );
 
-const gleam_display_canvas = require( '../gleam/display/canvas' );
+const gleam_display_canvas = tim.require( '../gleam/display/canvas' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_controls = require( '../gruga/controls' );
+const gruga_controls = tim.require( '../gruga/controls' );
 
-const gruga_disc_create = require( '../gruga/disc/create' );
+const gruga_disc_create = tim.require( '../gruga/disc/create' );
 
-const gruga_loading = require( '../gruga/loading' );
+const gruga_loading = tim.require( '../gruga/loading' );
 
-const gruga_login = require( '../gruga/login' );
+const gruga_login = tim.require( '../gruga/login' );
 
-const gruga_disc_main = require( '../gruga/disc/main' );
+const gruga_disc_main = tim.require( '../gruga/disc/main' );
 
-const gruga_moveTo = require( '../gruga/moveTo' );
+const gruga_moveTo = tim.require( '../gruga/moveTo' );
 
-const gruga_noAccessToSpace = require( '../gruga/noAccessToSpace' );
+const gruga_noAccessToSpace = tim.require( '../gruga/noAccessToSpace' );
 
-const gruga_nonExistingSpace = require( '../gruga/nonExistingSpace' );
+const gruga_nonExistingSpace = tim.require( '../gruga/nonExistingSpace' );
 
-const gruga_relation = require( '../gruga/relation' );
+const gruga_relation = tim.require( '../gruga/relation' );
 
-const gruga_signUp = require( '../gruga/signUp' );
+const gruga_signUp = tim.require( '../gruga/signUp' );
 
-const gruga_space = require( '../gruga/space' );
+const gruga_space = tim.require( '../gruga/space' );
 
-const gruga_user = require( '../gruga/user' );
+const gruga_user = tim.require( '../gruga/user' );
 
-const gruga_welcome = require( '../gruga/welcome' );
+const gruga_welcome = tim.require( '../gruga/welcome' );
 
-const gruga_disc_zoom = require( '../gruga/disc/zoom' );
+const gruga_disc_zoom = tim.require( '../gruga/disc/zoom' );
 
-const limit = require( '../math/root' ).limit;
+const limit = tim.require( '../math/root', 'NOW' ).limit;
 
-const net_ajax = require( '../net/ajax' );
+const net_ajax = tim.require( '../net/ajax' );
 
-const net_channel = require( '../net/channel' );
+const net_channel = tim.require( '../net/channel' );
 
-const net_link = require( '../net/link' );
+const net_link = tim.require( '../net/link' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const reply_auth = require( '../reply/auth' );
+const reply_auth = tim.require( '../reply/auth' );
 
-const reply_error = require( '../reply/error' );
+const reply_error = tim.require( '../reply/error' );
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const shell_doTracker = require( './doTracker' );
+const shell_doTracker = tim.require( './doTracker' );
 
-const shell_settings = require( './settings' );
+const shell_settings = tim.require( './settings' );
 
-const show_create = require( '../show/create' );
+const show_create = tim.require( '../show/create' );
 
-const show_form = require( '../show/form' );
+const show_form = tim.require( '../show/form' );
 
-const show_normal = require( '../show/normal' );
+const show_normal = tim.require( '../show/normal' );
 
-const show_zoom = require( '../show/zoom' );
+const show_zoom = tim.require( '../show/zoom' );
 
-const tim_path = require( 'tim.js/src/path/path' );
-//const tim_path = require( 'tim.js/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const tim_pathList = require( 'tim.js/src/path/list' );
+const tim_pathList = tim.require( 'tim.js/pathList' );
 
-const user_creds = require( '../user/creds' );
+const user_creds = tim.require( '../user/creds' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_range = require( '../visual/mark/range' );
+const visual_mark_range = tim.require( '../visual/mark/range' );
 
-const visual_space = require( '../visual/space' );
+const visual_space = tim.require( '../visual/space' );
 
-const widget_factory = require( '../widget/factory' );
+const widget_factory = tim.require( '../widget/factory' );
 
 
 const loadingSpaceTextPath =

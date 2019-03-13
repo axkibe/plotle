@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item path or pos the stroke goes from
-		from : { type : [ 'undefined', 'tim.js/src/path/path', '../gleam/point' ] },
+		from : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
 
 		// the item path hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the item path or pos the stroke goes to
-		to : { type : [ 'undefined', 'tim.js/src/path/path', '../gleam/point' ] },
+		to : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
 
 		// the itemType of stroke ("arrow" or "line")
 		itemType : { type : 'string' },
@@ -29,21 +29,21 @@ if( TIM )
 }
 
 
-const action_none = require( './none' );
+const action_none = tim.require( './none' );
 
-const change_grow = require( '../change/grow' );
+const change_grow = tim.require( '../change/grow' );
 
-const fabric_stroke = require( '../fabric/stroke' );
+const fabric_stroke = tim.require( '../fabric/stroke' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const visual_space = require( '../visual/space' );
+const visual_space = tim.require( '../visual/space' );
 
-const visual_stroke = require( '../visual/stroke' );
+const visual_stroke = tim.require( '../visual/stroke' );
 
 
 /*

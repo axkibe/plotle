@@ -13,7 +13,7 @@ if( TIM )
 	{
 		// the list of aliases this is served under
 		// by default determined from filePath
-		aliases : { type : [ 'undefined', 'tim.js/src/string/list' ] },
+		aliases : { type : [ 'undefined', 'tim.js/stringList' ] },
 
 		// "binary" or "utf-8"
 		// by default determined from file extension

@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// set at this path
-		path : { type : 'tim.js/src/path/path', json : true },
+		path : { type : 'tim.js/path', json : true },
 
 		// value to set
 		val : { type : [ '< ./value-types' ], json : true },

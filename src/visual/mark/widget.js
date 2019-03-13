@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// path of the item
-		path : { type : 'tim.js/src/path/path' }
+		path : { type : 'tim.js/path' }
 	};
 }
 

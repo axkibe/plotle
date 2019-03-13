@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// path of the mark
-		path : { type : 'tim.js/src/path/path' },
+		path : { type : 'tim.js/path' },
 	};
 }
 

@@ -23,7 +23,7 @@ if( TIM )
 }
 
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

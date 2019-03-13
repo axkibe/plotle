@@ -24,7 +24,7 @@ if( TIM )
 		frame : { type : [ './frame', 'undefined' ] },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
@@ -51,63 +51,63 @@ if( TIM )
 }
 
 
-const action_createGeneric = require( '../action/createGeneric' );
+const action_createGeneric = tim.require( '../action/createGeneric' );
 
-const action_createRelation = require( '../action/createRelation' );
+const action_createRelation = tim.require( '../action/createRelation' );
 
-const action_createStroke = require( '../action/createStroke' );
+const action_createStroke = tim.require( '../action/createStroke' );
 
-const action_pan = require( '../action/pan' );
+const action_pan = tim.require( '../action/pan' );
 
-const action_select = require( '../action/select' );
+const action_select = tim.require( '../action/select' );
 
-const fabric_label = require( '../fabric/label' );
+const fabric_label = tim.require( '../fabric/label' );
 
-const fabric_note = require( '../fabric/note' );
+const fabric_note = tim.require( '../fabric/note' );
 
-const fabric_portal = require( '../fabric/portal' );
+const fabric_portal = tim.require( '../fabric/portal' );
 
-const fabric_relation = require( '../fabric/relation' );
+const fabric_relation = tim.require( '../fabric/relation' );
 
-const fabric_stroke = require( '../fabric/stroke' );
+const fabric_stroke = tim.require( '../fabric/stroke' );
 
-const gleam_arrow = require( '../gleam/arrow' );
+const gleam_arrow = tim.require( '../gleam/arrow' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gruga_note = require( '../gruga/note' );
+const gruga_note = tim.require( '../gruga/note' );
 
-const gruga_relation = require( '../gruga/relation' );
+const gruga_relation = tim.require( '../gruga/relation' );
 
-const gruga_select = require( '../gruga/select' );
+const gruga_select = tim.require( '../gruga/select' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path', 'NOW' );
 
-const tim_path_list = require( 'tim.js/src/path/list' );
+const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_frame = require( '../visual/frame' );
+const visual_frame = tim.require( '../visual/frame' );
 
-const visual_grid = require( '../visual/grid' );
+const visual_grid = tim.require( '../visual/grid' );
 
-const visual_item = require( '../visual/item' );
+const visual_item = tim.require( '../visual/item' );
 
-const visual_itemList = require( '../visual/itemList' );
+const visual_itemList = tim.require( '../visual/itemList' );
 
-const visual_label = require( '../visual/label' );
+const visual_label = tim.require( '../visual/label' );
 
-const visual_mark_items = require( '../visual/mark/items' );
+const visual_mark_items = tim.require( '../visual/mark/items' );
 
-const visual_portal = require( '../visual/portal' );
+const visual_portal = tim.require( '../visual/portal' );
 
-const visual_relation = require( '../visual/relation' );
+const visual_relation = tim.require( '../visual/relation' );
 
-const visual_stroke = require( '../visual/stroke' );
+const visual_stroke = tim.require( '../visual/stroke' );
 
 
 /*

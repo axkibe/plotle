@@ -13,23 +13,23 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-// const action_createRelation = require( '../action/createRelation' );
+//const action_createRelation = tim.require( '../action/createRelation' );
 // XXX
 const action_createRelation = { };
 
-// const action_dragItems = require( '../action/dragItems' );
+//const action_dragItems = tim.require( '../action/dragItems' );
 // XXX
 const action_dragItems = { };
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_items = require( '../visual/mark/items' );
+const visual_mark_items = tim.require( '../visual/mark/items' );
 
-const visual_mark_range = require( '../visual/mark/range' );
+const visual_mark_range = tim.require( '../visual/mark/range' );
 
 
 /*

@@ -33,7 +33,7 @@ if( TIM )
 		mark : { type : [ '< ./mark/types', 'undefined' ] },
 
 		// the path of the itm
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the current space transform
 		transform : { type : '../gleam/transform' },
@@ -41,19 +41,19 @@ if( TIM )
 }
 
 
-const gleam_arrow = require( '../gleam/arrow' );
+const gleam_arrow = tim.require( '../gleam/arrow' );
 
-const gleam_connect = require( '../gleam/connect' );
+const gleam_connect = tim.require( '../gleam/connect' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gruga_relation = require( '../gruga/relation' );
+const gruga_relation = tim.require( '../gruga/relation' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const visual_base_stroke = require( './base/stroke' );
+const visual_base_stroke = tim.require( './base/stroke' );
 
 
 /*

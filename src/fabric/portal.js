@@ -13,7 +13,7 @@ if( TIM )
 	{
 		// the path of the doc
 		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/src/path/path' ] },
+		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// owner of the space the portal goes to
 		spaceUser : { type : 'string', json : true },
