@@ -7,13 +7,13 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_color = require( '../gleam/color' );
+const gleam_color = tim.require( '../gleam/color' );
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_gradient_askew = require( '../gleam/gradient/askew' );
+const gleam_gradient_askew = tim.require( '../gleam/gradient/askew' );
 
-const gleam_gradient_colorStop = require( '../gleam/gradient/colorStop' );
+const gleam_gradient_colorStop = tim.require( '../gleam/gradient/colorStop' );
 
 
 def.staticLazy.model = ( ) =>

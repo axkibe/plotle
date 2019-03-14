@@ -31,7 +31,7 @@ if( TIM )
 }
 
 
-const change_wrap = require( '../change/wrap' );
+const change_wrap = tim.require( '../change/wrap' );
 
 
 /*

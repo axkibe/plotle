@@ -7,7 +7,7 @@
 tim.define( module, ( def, user_creds ) => {
 
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
 
 if( TIM )

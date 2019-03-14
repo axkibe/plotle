@@ -23,17 +23,17 @@ if( TIM )
 }
 
 
-const change_listAppend = require( '../change/listAppend' );
+const change_listAppend = tim.require( '../change/listAppend' );
 
-const dynamic_refSpaceList = require( '../dynamic/refSpaceList' );
+const dynamic_refSpaceList = tim.require( '../dynamic/refSpaceList' );
 
-const user_info = require( '../user/info' );
+const user_info = tim.require( '../user/info' );
 
-const database_userSkid = require( '../database/userSkid' );
+const database_userSkid = tim.require( '../database/userSkid' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const ref_spaceList = require( '../ref/spaceList' );
+const ref_spaceList = tim.require( '../ref/spaceList' );
 
 const resume = require( 'suspend' ).resume;
 

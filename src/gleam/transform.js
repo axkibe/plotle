@@ -7,9 +7,6 @@
 tim.define( module, ( def, gleam_transform ) => {
 
 
-const gleam_point = require( './point' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -21,6 +18,10 @@ if( TIM )
 		zoom : { type : 'number' },
 	};
 }
+
+
+const gleam_point = tim.require( './point' );
+
 
 
 /*
@@ -63,7 +64,7 @@ def.proto.combine =
 	return(
 		gleam_transform.create(
 			'offset',
-				gleam_point.create.xy(
+				gleam_point.xy(
 					offset.x * tzoom + toffset.x,
 					offset.y * tzoom + toffset.y
 				),

@@ -63,6 +63,11 @@ global.CHECK = config.get( 'server', 'check' );
 global.FREEZE = config.get( 'server', 'freeze' );
 
 
+// FIX for dependency resolving
+require( '../visual/item' );
+require( '../visual/docItem' );
+require( '../visual/label' );
+
 const log = require( './log' );
 
 const database_repository = require( '../database/repository' );
@@ -116,7 +121,7 @@ const startMainServer =
 	{
 		case 'https' :
 		{
-			log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
+			log.log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
 
 			const cert = fs.readFileSync( config.get( 'https', 'cert' ) ) + '';
 
@@ -138,7 +143,7 @@ const startMainServer =
 
 		case 'http' :
 
-			log( 'starting server @ http://' + ( listen || '*' ) + '/:' + port );
+			log.log( 'starting server @ http://' + ( listen || '*' ) + '/:' + port );
 
 			yield http
 			.createServer( handler )
@@ -171,7 +176,7 @@ const startRedirectServer =
 
 	const listen = config.get( 'network', 'listen' );
 
-	log( 'starting redirect @ http://' + ( listen || '*' ) + '/:' + port );
+	log.log( 'starting redirect @ http://' + ( listen || '*' ) + '/:' + port );
 
 	const handler =
 		( request, result ) =>
@@ -216,7 +221,7 @@ const startup =
 
 	yield* startRedirectServer( );
 
-	log( 'server running' );
+	log.log( 'server running' );
 };
 
 

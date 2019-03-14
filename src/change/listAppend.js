@@ -22,7 +22,7 @@ if( TIM )
 }
 
 
-const change_listShorten = require( './listShorten' );
+const change_listShorten = tim.require( './listShorten' );
 
 
 /*

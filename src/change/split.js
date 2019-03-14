@@ -28,29 +28,29 @@ if( TIM )
 }
 
 
-const error = require( './error' );
+const error = tim.require( './error' );
 
-const change_grow = require( './grow' );
+const change_grow = tim.require( './grow' );
 
-const change_insert = require( './insert' );
+const change_insert = tim.require( './insert' );
 
-const change_join = require( './join' );
+const change_join = tim.require( './join' );
 
-const change_list = require( './list' );
+const change_list = tim.require( './list' );
 
-const change_mark_node = require( './mark/node' );
+const change_mark_node = tim.require( './mark/node' );
 
-const change_mark_text = require( './mark/text' );
+const change_mark_text = tim.require( './mark/text' );
 
-const change_remove = require( './remove' );
+const change_remove = tim.require( './remove' );
 
-const change_shrink = require( './shrink' );
+const change_shrink = tim.require( './shrink' );
 
-const change_set = require( './set' );
+const change_set = tim.require( './set' );
 
-const change_wrap = require( './wrap' );
+const change_wrap = tim.require( './wrap' );
 
-const change_wrapList = require( './wrapList' );
+const change_wrapList = tim.require( './wrapList' );
 
 
 

@@ -52,17 +52,17 @@ if( TIM )
 }
 
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const reply_error = require( '../reply/error' );
+const reply_error = tim.require( '../reply/error' );
 
-const show_form= require( '../show/form' );
+const show_form= tim.require( '../show/form' );
 
-const user_creds = require( '../user/creds' );
+const user_creds = tim.require( '../user/creds' );
 
-const user_passhash = require( '../user/passhash' );
+const user_passhash = tim.require( '../user/passhash' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 
 /*

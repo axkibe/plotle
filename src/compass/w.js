@@ -7,9 +7,9 @@
 tim.define( module, ( def ) => {
 
 
-const compass_root = require( './root' );
+const compass_root = tim.require( './root' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

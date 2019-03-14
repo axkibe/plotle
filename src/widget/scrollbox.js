@@ -44,21 +44,21 @@ if( TIM )
 }
 
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_size = require( '../gleam/size' );
+const gleam_size = tim.require( '../gleam/size' );
 
-const layout_scrollbox = require( '../layout/scrollbox' );
+const layout_scrollbox = tim.require( '../layout/scrollbox' );
 
-const shell_settings = require( '../shell/settings' );
+const shell_settings = tim.require( '../shell/settings' );
 
-const widget_factory = require( './factory' );
+const widget_factory = tim.require( './factory' );
 
-const widget_scrollbar = require( './scrollbar' );
+const widget_scrollbar = tim.require( './scrollbar' );
 
 
 /**

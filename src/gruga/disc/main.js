@@ -7,41 +7,41 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_border = require( '../../gleam/border' );
+const gleam_border = tim.require( '../../gleam/border' );
 
-const gleam_borderList = require( '../../gleam/borderList' );
+const gleam_borderList = tim.require( '../../gleam/borderList' );
 
-const gleam_color = require( '../../gleam/color' );
+const gleam_color = tim.require( '../../gleam/color' );
 
-const gleam_ellipse = require( '../../gleam/ellipse' );
+const gleam_ellipse = tim.require( '../../gleam/ellipse' );
 
-const gleam_facet = require( '../../gleam/facet' );
+const gleam_facet = tim.require( '../../gleam/facet' );
 
-const gleam_facetList = require( '../../gleam/facetList' );
+const gleam_facetList = tim.require( '../../gleam/facetList' );
 
-const gleam_gradient_colorStop = require( '../../gleam/gradient/colorStop' );
+const gleam_gradient_colorStop = tim.require( '../../gleam/gradient/colorStop' );
 
-const gleam_gradient_radial = require( '../../gleam/gradient/radial' );
+const gleam_gradient_radial = tim.require( '../../gleam/gradient/radial' );
 
-const gleam_point = require( '../../gleam/point' );
+const gleam_point = tim.require( '../../gleam/point' );
 
-const gleam_rect = require( '../../gleam/rect' );
+const gleam_rect = tim.require( '../../gleam/rect' );
 
-const gleam_size = require( '../../gleam/size' );
+const gleam_size = tim.require( '../../gleam/size' );
 
-const gruga_font = require( '../font' );
+const gruga_font = tim.require( '../font' );
 
-const gruga_iconNormal = require( '../iconNormal' );
+const gruga_iconNormal = tim.require( '../iconNormal' );
 
-const gruga_iconRemove = require( '../iconRemove' );
+const gruga_iconRemove = tim.require( '../iconRemove' );
 
-const gruga_iconSelect = require( '../iconSelect' );
+const gruga_iconSelect = tim.require( '../iconSelect' );
 
-const gruga_iconZoom = require( '../iconZoom' );
+const gruga_iconZoom = tim.require( '../iconZoom' );
 
-const layout_button = require( '../../layout/button' );
+const layout_button = tim.require( '../../layout/button' );
 
-const layout_disc = require( '../../layout/disc' );
+const layout_disc = tim.require( '../../layout/disc' );
 
 
 

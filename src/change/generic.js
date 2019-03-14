@@ -7,7 +7,13 @@
 tim.define( module, ( def ) => {
 
 
-const change_list = require( './list' );
+/*
+| Needs to be extended.
+*/
+def.abstract = true;
+
+
+const change_list = tim.require( './list' );
 
 
 /*

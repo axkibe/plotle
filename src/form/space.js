@@ -52,11 +52,11 @@ if( TIM )
 }
 
 
-const change_set = require( '../change/set' );
+const change_set = tim.require( '../change/set' );
 
-const form_form = require( './form' );
+const form_form = tim.require( './form' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
 
 /*

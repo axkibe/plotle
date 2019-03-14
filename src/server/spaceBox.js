@@ -33,15 +33,15 @@ if( TIM )
 }
 
 
-const change_wrapList = require( '../change/wrapList' );
+const change_wrapList = tim.require( '../change/wrapList' );
 
-const database_changeSkid = require( '../database/changeSkid' );
+const database_changeSkid = tim.require( '../database/changeSkid' );
 
-const database_changeSkidList = require( '../database/changeSkidList' );
+const database_changeSkidList = tim.require( '../database/changeSkidList' );
 
 const resume = require( 'suspend' ).resume;
 
-const fabric_space = require( '../fabric/space' );
+const fabric_space = tim.require( '../fabric/space' );
 
 
 /*

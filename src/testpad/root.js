@@ -48,29 +48,34 @@ if( TIM )
 }
 
 
-const change_insert = require( '../change/insert' );
+const change_insert = tim.require( '../change/insert' );
 
-const change_list = require( '../change/list' );
+const change_list = tim.require( '../change/list' );
 
-const change_join = require( '../change/join' );
+const change_join = tim.require( '../change/join' );
 
-const change_remove = require( '../change/remove' );
+const change_remove = tim.require( '../change/remove' );
 
-const change_split = require( '../change/split' );
+const change_split = tim.require( '../change/split' );
 
-const change_wrap = require( '../change/wrap' );
+const change_wrap = tim.require( '../change/wrap' );
 
-const limit = require( '../math/root' ).limit;
+const limit = tim.require( '../math/root' ).limit;
 
-const maxInteger = require( '../math/root' ).maxInteger;
+const maxInteger = tim.require( '../math/root' ).maxInteger;
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const testpad_action = require( './action' );
+const testpad_action = tim.require( './action' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const noteDocPath = tim_path.empty.append( 'note' ).append( 'doc' );
+
+/*
+| FIXME
+*/
+def.staticLazy.noteDocPath = ( ) =>
+	tim_path.empty.append( 'note' ).append( 'doc' );
 
 
 /*
@@ -115,7 +120,7 @@ def.proto.update =
 	elements.cancel.disabled =
 		!this.action;
 
-	const doc = this.repository.get( noteDocPath.chop );
+	const doc = this.repository.get( testpad_root.noteDocPath.chop );
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
@@ -431,7 +436,7 @@ def.proto.send =
 	if( !action ) { this.beep( ); return; }
 
 	const linePath =
-		noteDocPath
+		testpad_root.noteDocPath
 		.append( 'twig' )
 		.append( doc.getKey( action.line ) )
 		.append( 'text' );
@@ -493,7 +498,7 @@ def.proto.send =
 			root.alter(
 				change_join.create(
 					'path',
-						noteDocPath
+						testpad_root.noteDocPath
 						.append( 'twig' )
 						.append( doc.getKey( action.line - 1 ) )
 						.append( 'text' )

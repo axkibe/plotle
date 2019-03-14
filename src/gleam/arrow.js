@@ -7,15 +7,15 @@
 tim.define( module, ( def, gleam_arrow ) => {
 
 
-const gleam_connect = require( './connect' );
+const gleam_connect = tim.require( './connect' );
 
-const gleam_shape = require( './shape' );
+const gleam_shape = tim.require( './shape' );
 
-const gleam_shape_line = require( './shape/line' );
+const gleam_shape_line = tim.require( './shape/line' );
 
-const gleam_shape_start = require( './shape/start' );
+const gleam_shape_start = tim.require( './shape/start' );
 
-const gruga_relation = require( '../gruga/relation' );
+const gruga_relation = tim.require( '../gruga/relation' );
 
 
 if( TIM )

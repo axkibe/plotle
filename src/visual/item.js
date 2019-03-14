@@ -13,13 +13,9 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-//const action_createRelation = tim.require( '../action/createRelation' );
-// XXX
-const action_createRelation = { };
+const action_createRelation = tim.require( '../action/createRelation' );
 
-//const action_dragItems = tim.require( '../action/dragItems' );
-// XXX
-const action_dragItems = { };
+const action_dragItems = tim.require( '../action/dragItems' );
 
 const action_none = tim.require( '../action/none' );
 

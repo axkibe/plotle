@@ -42,17 +42,17 @@ if( TIM )
 }
 
 
-const gleam_display_canvas = require( './display/canvas' );
+const gleam_display_canvas = tim.require( './display/canvas' );
 
-const gleam_shape = require( './shape' );
+const gleam_shape = tim.require( './shape' );
 
-const gleam_shape_line = require( './shape/line' );
+const gleam_shape_line = tim.require( './shape/line' );
 
-const gleam_shape_round = require( './shape/round' );
+const gleam_shape_round = tim.require( './shape/round' );
 
-const gleam_shape_start = require( './shape/start' );
+const gleam_shape_start = tim.require( './shape/start' );
 
-const gleam_transform = require( './transform' );
+const gleam_transform = tim.require( './transform' );
 
 
 /*

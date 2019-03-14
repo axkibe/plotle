@@ -9,7 +9,7 @@
 tim.define( module, ( def ) => {
 
 
-const change_set = require( '../../change/set' );
+const change_set = tim.require( '../../change/set' );
 
 
 /*

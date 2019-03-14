@@ -50,33 +50,33 @@ if( TIM )
 }
 
 
-const gleam_ellipse = require( '../gleam/ellipse' );
+const gleam_ellipse = tim.require( '../gleam/ellipse' );
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_font_font = require( '../gleam/font/font' );
+const gleam_font_font = tim.require( '../gleam/font/font' );
 
-const gleam_glint_border = require( '../gleam/glint/border' );
+const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
-const gleam_glint_fill = require( '../gleam/glint/fill' );
+const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_text = require( '../gleam/glint/text' );
+const gleam_glint_text = tim.require( '../gleam/glint/text' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gleam_roundRect = require( '../gleam/roundRect' );
+const gleam_roundRect = tim.require( '../gleam/roundRect' );
 
-const layout_input = require( '../layout/input' );
+const layout_input = tim.require( '../layout/input' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 
 /*

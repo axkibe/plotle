@@ -2,6 +2,6 @@
 
 ./label
 ../fabric/note
-./portal
+../fabric/portal
 ./relation
 ./stroke

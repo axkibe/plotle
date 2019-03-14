@@ -18,9 +18,9 @@ if( TIM )
 }
 
 
-const gleam_point = require( './point' );
+const gleam_point = tim.require( './point' );
 
-const gleam_rect = require( './rect' );
+const gleam_rect = tim.require( './rect' );
 
 
 /*

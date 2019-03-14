@@ -55,7 +55,7 @@ if( TIM )
 }
 
 
-const form_form = require( './form' );
+const form_form = tim.require( './form' );
 
 
 /*

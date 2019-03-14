@@ -26,7 +26,7 @@ if( TIM )
 }
 
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
 
 /*

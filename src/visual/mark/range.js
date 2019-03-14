@@ -25,7 +25,7 @@ if( TIM )
 	};
 }
 
-const tim_path_list = require( 'tim.js/src/path/list' );
+const tim_path_list = tim.require( 'tim.js/pathList' );
 
 
 /*

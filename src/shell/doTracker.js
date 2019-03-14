@@ -7,9 +7,9 @@
 tim.define( module, ( def, shell_doTracker ) => {
 
 
-const change_wrapList = require( '../change/wrapList' );
+const change_wrapList = tim.require( '../change/wrapList' );
 
-const shell_settings = require( '../shell/settings' );
+const shell_settings = tim.require( '../shell/settings' );
 
 
 if( TIM )

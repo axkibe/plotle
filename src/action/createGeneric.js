@@ -4,6 +4,8 @@
 | Creating a new note.
 | Creating a new label.
 | Creating a new portal.
+|
+| Unify "model" and "transientItem"
 */
 'use strict';
 
@@ -34,6 +36,8 @@ const action_none = tim.require( './none' );
 
 const fabric_note = tim.require( '../fabric/note' );
 
+const fabric_portal = tim.require( '../fabric/portal' );
+
 const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
@@ -41,8 +45,6 @@ const gleam_rect = tim.require( '../gleam/rect' );
 const result_hover = tim.require( '../result/hover' );
 
 const visual_label = tim.require( '../visual/label' );
-
-const visual_portal = tim.require( '../visual/portal' );
 
 const visual_space = tim.require( '../visual/space' );
 
@@ -75,7 +77,7 @@ def.staticLazy.itemTypeToTim = ( ) =>
 ( {
 	'label'  : visual_label,
 	'note'   : fabric_note,
-	'portal' : visual_portal,
+	'portal' : fabric_portal,
 } );
 
 
@@ -117,7 +119,7 @@ def.proto.dragMove =
 
 	let zone = gleam_rect.createArbitrary( this.startPoint, ps );
 
-	const model = this.itemTim.model;
+	let model = this.itemTim.model;
 
 	let transientItem = this.transientItem;
 
@@ -130,7 +132,7 @@ def.proto.dragMove =
 
 			transientItem =
 				transientItem.create(
-					'fabric', transientItem.fabric.create( 'zone', zone ),
+					'zone', zone,
 					'transform', transform
 				);
 
@@ -140,10 +142,7 @@ def.proto.dragMove =
 		{
 			const fs = model.doc.fontsize * zone.height / model.zone( ).height;
 
-			const resized =
-				transientItem.create(
-					'fabric', model.fabric.create( 'fontsize', fs )
-				);
+			const resized = transientItem.create( 'fontsize', fs );
 
 			const pos =
 				( ps.x > this.startPoint.x )
@@ -155,7 +154,7 @@ def.proto.dragMove =
 
 			transientItem =
 				resized.create(
-					'fabric', resized.fabric.create( 'pos', pos ),
+					'pos', pos,
 					'transform', transform
 				);
 
@@ -190,7 +189,7 @@ def.proto.dragStart =
 
 	const itemTim = this.itemTim;
 
-	const model = itemTim.model;
+	let model = itemTim.model;
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
@@ -200,15 +199,15 @@ def.proto.dragStart =
 	{
 		case 'zone' :
 		{
-			let fabric  =
-				model.fabric.create(
+			model  =
+				model.create(
 					'zone', gleam_rect.posSize( ps, model.minSize )
 				);
 
-			if( itemTim === visual_portal )
+			if( itemTim === fabric_portal )
 			{
-				fabric =
-					fabric.create(
+				model =
+					model.create(
 						'spaceUser', root.userCreds.name,
 						'spaceTag', 'home'
 					);
@@ -216,7 +215,6 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'fabric', fabric,
 					'path', visual_space.transPath,
 					'transform', screen.transform
 				);
@@ -228,8 +226,8 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'fabric', model.fabric.create( 'pos', ps ),
 					'path', visual_space.transPath,
+					'pos', ps,
 					'transform', screen.transform
 				);
 

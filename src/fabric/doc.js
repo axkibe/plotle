@@ -28,6 +28,7 @@ if( TIM )
 		innerMargin : { type : [ 'undefined', '../gleam/margin' ] },
 
 		// the users mark
+		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
 
 		// the path of the doc
@@ -52,39 +53,39 @@ if( TIM )
 	def.twig = [ './para' ];
 }
 
-const fabric_para = require( '../fabric/para' );
+const fabric_para = tim.require( '../fabric/para' );
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_font_font = require( '../gleam/font/font' );
+const gleam_font_font = tim.require( '../gleam/font/font' );
 
-const gleam_glint_border = require( '../gleam/glint/border' );
+const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_line = require( '../gleam/line' );
+const gleam_line = tim.require( '../gleam/line' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_shape = require( '../gleam/shape' );
+const gleam_shape = tim.require( '../gleam/shape' );
 
-const gleam_shapeList = require( '../gleam/shapeList' );
+const gleam_shapeList = tim.require( '../gleam/shapeList' );
 
-const gleam_shape_line = require( '../gleam/shape/line' );
+const gleam_shape_line = tim.require( '../gleam/shape/line' );
 
-const gleam_shape_start = require( '../gleam/shape/start' );
+const gleam_shape_start = tim.require( '../gleam/shape/start' );
 
-const gleam_size = require( '../gleam/size' );
+const gleam_size = tim.require( '../gleam/size' );
 
-const gruga_font = require( '../gruga/font' );
+const gruga_font = tim.require( '../gruga/font' );
 
-const gruga_selection = require( '../gruga/selection' );
+const gruga_selection = tim.require( '../gruga/selection' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_range = require( '../visual/mark/range' );
+const visual_mark_range = tim.require( '../visual/mark/range' );
 
 
 /*

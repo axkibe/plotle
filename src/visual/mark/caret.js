@@ -23,9 +23,9 @@ if( TIM )
 }
 
 
-const tim_path_list = require( 'tim.js/src/path/list' );
+const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_mark_text = require( './text' );
+const visual_mark_text = tim.require( './text' );
 
 
 /*

@@ -7,11 +7,11 @@
 tim.define( module, ( def ) => {
 
 
-const config = require( '../config/intf' );
+const config = tim.require( '../config/intf' );
 
-const hash_sha1 = require( '../hash/sha1' );
+const hash_sha1 = tim.require( '../hash/sha1' );
 
-const stringList = require( 'tim.js/src/string/list' ).stringList;
+const stringList = tim.require( 'tim.js/stringList', 'NOW' ).stringList;
 
 let opentypeHash;
 let opentypeMinHash;

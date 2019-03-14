@@ -11,61 +11,61 @@
 tim.define( module, ( def, gleam_display_canvas ) => {
 
 
-const gleam_border = require( '../border' );
+const gleam_border = tim.require( '../border' );
 
-const gleam_borderList = require( '../borderList' );
+const gleam_borderList = tim.require( '../borderList' );
 
-const gleam_color = require( '../color' );
+const gleam_color = tim.require( '../color' );
 
-const gleam_constants = require( '../constants' );
+const gleam_constants = tim.require( '../constants' );
 
-const gleam_ellipse = require( '../ellipse' );
+const gleam_ellipse = tim.require( '../ellipse' );
 
-const gleam_facet = require( '../facet' );
+const gleam_facet = tim.require( '../facet' );
 
-const gleam_glint_border = require( '../glint/border' );
+const gleam_glint_border = tim.require( '../glint/border' );
 
-const gleam_glint_fill = require( '../glint/fill' );
+const gleam_glint_fill = tim.require( '../glint/fill' );
 
-const gleam_glint_list = require( '../glint/list' );
+const gleam_glint_list = tim.require( '../glint/list' );
 
-const gleam_glint_mask = require( '../glint/mask' );
+const gleam_glint_mask = tim.require( '../glint/mask' );
 
-const gleam_glint_text = require( '../glint/text' );
+const gleam_glint_text = tim.require( '../glint/text' );
 
-const gleam_glint_paint = require( '../glint/paint' );
+const gleam_glint_paint = tim.require( '../glint/paint' );
 
-const gleam_glint_window = require( '../glint/window' );
+const gleam_glint_window = tim.require( '../glint/window' );
 
-const gleam_glint_zoomGrid = require( '../glint/zoomGrid' );
+const gleam_glint_zoomGrid = tim.require( '../glint/zoomGrid' );
 
-const gleam_gradient_askew = require( '../gradient/askew' );
+const gleam_gradient_askew = tim.require( '../gradient/askew' );
 
-const gleam_gradient_radial = require( '../gradient/radial' );
+const gleam_gradient_radial = tim.require( '../gradient/radial' );
 
-const gleam_intern_opentype = require( '../intern/opentype' );
+const gleam_intern_opentype = tim.require( '../intern/opentype' );
 
-const gleam_line = require( '../line' );
+const gleam_line = tim.require( '../line' );
 
-const gleam_point = require( '../point' );
+const gleam_point = tim.require( '../point' );
 
-const gleam_rect = require( '../rect' );
+const gleam_rect = tim.require( '../rect' );
 
-const gleam_roundRect = require( '../roundRect' );
+const gleam_roundRect = tim.require( '../roundRect' );
 
-const gleam_shape = require( '../shape' );
+const gleam_shape = tim.require( '../shape' );
 
-const gleam_shapeList = require( '../shapeList' );
+const gleam_shapeList = tim.require( '../shapeList' );
 
-const gleam_shape_line = require( '../shape/line' );
+const gleam_shape_line = tim.require( '../shape/line' );
 
-const gleam_shape_round = require( '../shape/round' );
+const gleam_shape_round = tim.require( '../shape/round' );
 
-const gleam_shape_start = require( '../shape/start' );
+const gleam_shape_start = tim.require( '../shape/start' );
 
-const gleam_size = require( '../size' );
+const gleam_size = tim.require( '../size' );
 
-const shell_settings = require( '../../shell/settings' );
+const shell_settings = tim.require( '../../shell/settings' );
 
 
 if( TIM )

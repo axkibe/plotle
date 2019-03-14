@@ -26,9 +26,9 @@ if( TIM )
 }
 
 
-const change_wrap = require( './wrap' );
+const change_wrap = tim.require( './wrap' );
 
-const change_wrapList = require( './wrapList' );
+const change_wrapList = tim.require( './wrapList' );
 
 
 

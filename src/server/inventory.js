@@ -13,15 +13,13 @@ if( TIM )
 }
 
 
-const config = require( '../config/intf' );
+const config = tim.require( '../config/intf' );
 
 const fs = require( 'fs' );
 
 const resume = require( 'suspend' ).resume;
 
-const readOptions = { encoding : 'utf8' };
-
-if( FREEZE ) Object.freeze( readOptions );
+const readOptions = Object.freeze( { encoding : 'utf8' } );
 
 
 /*

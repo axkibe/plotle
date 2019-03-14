@@ -4,14 +4,17 @@
 'use strict';
 
 
-const server_resource = require( './resource' );
-
-const server_resourceList = require( './resourceList' );
-
-const stringList = require( 'tim.js/src/string/list' ).stringList;
+tim.define( module, ( def ) => {
 
 
-module.exports =
+const server_resource = tim.require( './resource' );
+
+const server_resourceList = tim.require( './resourceList' );
+
+const stringList = tim.require( 'tim.js/stringList', 'NOW' ).stringList;
+
+
+def.staticLazy.roster = ( ) =>
 server_resourceList.create(
 	'list:init',
 	[
@@ -100,4 +103,7 @@ server_resourceList.create(
 	),
 	]
 );
+
+
+} );
 

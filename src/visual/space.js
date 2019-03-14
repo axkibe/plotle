@@ -44,7 +44,7 @@ if( TIM )
 		'undefined',
 		'./label',
 		'../fabric/note',
-		'./portal',
+		'../fabric/portal',
 		'./relation',
 		'./stroke'
 	];
@@ -102,8 +102,6 @@ const visual_itemList = tim.require( '../visual/itemList' );
 const visual_label = tim.require( '../visual/label' );
 
 const visual_mark_items = tim.require( '../visual/mark/items' );
-
-const visual_portal = tim.require( '../visual/portal' );
 
 const visual_relation = tim.require( '../visual/relation' );
 
@@ -220,7 +218,7 @@ def.adjust.get =
 	if( !item )
 	{
 		// FIXME XXX
-		if( fabric.timtype === fabric_note )
+		if( fabric.timtype === fabric_note || fabric.timtype === fabric_portal )
 		{
 			item = fabric;
 		}
@@ -270,6 +268,19 @@ def.adjust.get =
 	}
 	else
 	{
+		// FIXME XXX
+		if( item === fabric_portal || item.timtype === fabric_portal )
+		item =
+			item.create(
+				'access', access,
+				'action', action,
+				'highlight', highlight,
+				'hover', hover,
+				'mark', mark,
+				'path', path,
+				'transform', this.transform
+			);
+		else // FIXME XXX
 		item =
 			item.create(
 				'access', access,
@@ -849,7 +860,7 @@ def.staticLazy._visualMap =
 
 	map.set( fabric_label, visual_label );
 	map.set( fabric_note, fabric_note );
-	map.set( fabric_portal, visual_portal );
+	map.set( fabric_portal, fabric_portal );
 	map.set( fabric_relation, visual_relation );
 	map.set( fabric_stroke, visual_stroke );
 

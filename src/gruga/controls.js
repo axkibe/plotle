@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_size = require( '../gleam/size' );
+const gleam_size = tim.require( '../gleam/size' );
 
 
 /*

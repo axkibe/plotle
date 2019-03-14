@@ -13,7 +13,7 @@ if( TIM )
 }
 
 
-const gleam_transform = require( './transform' );
+const gleam_transform = tim.require( './transform' );
 
 
 /*

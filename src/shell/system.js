@@ -41,17 +41,17 @@ if( TIM )
 /*
 | Currently only canvas is supported as display backend.
 */
-const gleam_impl = require( '../gleam/display/canvas' );
+const gleam_impl = tim.require( '../gleam/display/canvas' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_size = require( '../gleam/size' );
+const gleam_size = tim.require( '../gleam/size' );
 
-const limit = require( '../math/root' ).limit;
+const limit = tim.require( '../math/root', 'NOW' ).limit;
 
-const shell_root = require( '../shell/root' );
+const shell_root = tim.require( '../shell/root' );
 
-const shell_settings = require( '../shell/settings' );
+const shell_settings = tim.require( '../shell/settings' );
 
 
 /*

@@ -10,7 +10,7 @@ tim.define( module, ( def, gruga_font ) => {
 def.abstract = true;
 
 
-const gleam_font_root = require( '../gleam/font/root' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
 
 /*

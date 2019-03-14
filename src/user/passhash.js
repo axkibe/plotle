@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-const hash_sha1 = require( '../hash/sha1' );
+const hash_sha1 = tim.require( '../hash/sha1' );
 
 
 /*

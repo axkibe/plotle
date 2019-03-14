@@ -25,7 +25,7 @@ if( TIM )
 }
 
 
-const error = require( './error' );
+const error = tim.require( './error' );
 
 
 /*

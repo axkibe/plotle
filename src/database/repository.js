@@ -27,11 +27,11 @@ if( TIM )
 }
 
 
-const log = require( '../server/log' );
+const log = tim.require( '../server/log' );
 
-const config = require( '../config/intf' );
+const config = tim.require( '../config/intf' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
 const mongodb = require( 'mongodb' );
 
@@ -48,7 +48,7 @@ const initRepository =
 {
 	const spaces = yield connection.collection( 'spaces', resume( ) );
 
-	log( 'found no repository, initializing a new one' );
+	log.log( 'found no repository, initializing a new one' );
 
 	const initSpaces =
 		[
@@ -60,7 +60,7 @@ const initRepository =
 	{
 		const sr = initSpaces[ s ];
 
-		log( '  initializing space ' + sr.fullname );
+		log.log( '  initializing space ' + sr.fullname );
 
 		yield spaces.insert(
 			{
@@ -72,7 +72,7 @@ const initRepository =
 		);
 	}
 
-	log( '  initializing global.version' );
+	log.log( '  initializing global.version' );
 
 	const global = yield connection.collection( 'global', resume( ) );
 
@@ -94,7 +94,7 @@ const checkRepository =
 		connection
 	)
 {
-	log( 'checking repository schema version' );
+	log.log( 'checking repository schema version' );
 
 	const global = yield connection.collection( 'global', resume( ) );
 
@@ -132,7 +132,7 @@ def.static.connect =
 
 	const name = config.get( 'database', 'name' );
 
-	log( 'connecting database ' + host + ':' + port + ' ' + name );
+	log.log( 'connecting database ' + host + ':' + port + ' ' + name );
 
 	const server = new mongodb.Server( host, port, { } );
 

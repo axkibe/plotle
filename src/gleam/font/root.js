@@ -13,7 +13,7 @@ if( TIM )
 }
 
 
-const font_family = require( './family' );
+const font_family = tim.require( './family' );
 
 
 /*

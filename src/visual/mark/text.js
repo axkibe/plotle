@@ -20,7 +20,7 @@ if( TIM )
 }
 
 
-const change_mark_text = require( '../../change/mark/text' );
+const change_mark_text = tim.require( '../../change/mark/text' );
 
 
 /**

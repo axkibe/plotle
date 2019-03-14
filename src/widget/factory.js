@@ -10,26 +10,25 @@ tim.define( module, ( def, widget_factory ) => {
 def.abstract = true;
 
 
-const layout_button = require( '../layout/button' );
+const layout_button = tim.require( '../layout/button' );
 
-const layout_checkbox = require( '../layout/checkbox' );
+const layout_checkbox = tim.require( '../layout/checkbox' );
 
-const layout_input = require( '../layout/input' );
+const layout_input = tim.require( '../layout/input' );
 
-const layout_label = require( '../layout/label' );
+const layout_label = tim.require( '../layout/label' );
 
-const layout_scrollbox = require( '../layout/scrollbox' );
+const layout_scrollbox = tim.require( '../layout/scrollbox' );
 
-const widget_button = require( './button' );
+const widget_button = tim.require( './button' );
 
-const widget_checkbox = require( './checkbox' );
+const widget_checkbox = tim.require( './checkbox' );
 
-const widget_input = require( './input' );
+const widget_input = tim.require( './input' );
 
-const widget_label = require( './label' );
+const widget_label = tim.require( './label' );
 
-const widget_scrollbox = require( './scrollbox' );
-
+const widget_scrollbox = tim.require( './scrollbox' );
 
 
 /*

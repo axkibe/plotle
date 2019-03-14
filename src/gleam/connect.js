@@ -7,9 +7,9 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_line = require( './line' );
+const gleam_line = tim.require( './line' );
 
-const gleam_point = require( './point' );
+const gleam_point = tim.require( './point' );
 
 
 /*

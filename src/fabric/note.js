@@ -23,9 +23,7 @@ if( TIM )
 
 		// current action
 		// FIXME remove
-		//action : { type : [ 'undefined', '< ../action/types' ] },
-		// XXX
-		action : { type : [ 'undefined', 'protean' ] },
+		action : { type : [ 'undefined', '< ../action/types' ] },
 
 		// the notes document
 		doc : { type : './doc', json : true },
@@ -70,6 +68,7 @@ if( TIM )
 	};
 }
 
+const action_none = tim.require( '../action/none' );
 
 const change_grow = tim.require( '../change/grow' );
 

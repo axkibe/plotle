@@ -6,15 +6,16 @@
 
 tim.define( module, ( def ) => {
 
+
 // FUTURE, hack for loading depencencies
-require( '../visual/base/posfs' );
-require( '../visual/base/stroke' );
-require( '../visual/base/zone' );
+tim.require( '../visual/base/posfs' );
+tim.require( '../visual/base/stroke' );
+tim.require( '../visual/base/zone' );
 
 
-const gleam_font_root = require( '../gleam/font/root' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
-const shell_system = require( './system' );
+const shell_system = tim.require( './system' );
 
 
 if( !NODE )

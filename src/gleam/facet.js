@@ -7,12 +7,12 @@
 
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, gleam_facet ) => {
 
 
-const gleam_border = require( './border' );
+const gleam_border = tim.require( './border' );
 
-const gleam_color = require( './color' );
+const gleam_color = tim.require( './color' );
 
 
 if( TIM )
@@ -48,14 +48,14 @@ if( TIM )
 | A simple black fill.
 */
 def.staticLazy.blackFill = () =>
-	self.create( 'fill', gleam_color.black );
+	gleam_facet.create( 'fill', gleam_color.black );
 
 
 /*
 | A simple black stroke.
 */
 def.staticLazy.blackStroke = () =>
-	self.create(
+	gleam_facet.create(
 		'border', gleam_border.create( 'color', gleam_color.black )
 	);
 

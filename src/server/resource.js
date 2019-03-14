@@ -70,9 +70,9 @@ if( TIM )
 
 const resume = require( 'suspend' ).resume;
 
-const server_fileTypes = require( './fileTypes' );
+const server_fileTypes = tim.require( './fileTypes' );
 
-const stringList = require( 'tim.js/src/string/list' ).stringList;
+const stringList = tim.require( 'tim.js/stringList', 'NOW' ).stringList;
 
 const zlib = require( 'zlib' );
 

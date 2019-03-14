@@ -52,13 +52,13 @@ if( TIM )
 }
 
 
-const disc_disc = require( './disc' );
+const disc_disc = tim.require( './disc' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const show_create = require( '../show/create' );
+const show_create = tim.require( '../show/create' );
 
-const show_zoom = require( '../show/zoom' );
+const show_zoom = tim.require( '../show/zoom' );
 
 
 /*

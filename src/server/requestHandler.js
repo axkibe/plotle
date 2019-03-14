@@ -4,49 +4,54 @@
 'use strict';
 
 
-const server_requestHandler =
-module.exports =
-	{ };
+tim.define( module, ( def, server_requestHandler ) => {
 
-const config = require( '../config/intf' );
 
-const change_dynamic = require( '../change/dynamic' );
+/*
+| Provides only static functions.
+*/
+def.abstract = true;
 
-const change_wrapList = require( '../change/wrapList' );
 
-const log = require( './log' );
+const config = tim.require( '../config/intf' );
 
-const ref_space = require( '../ref/space' );
+const change_dynamic = tim.require( '../change/dynamic' );
 
-const ref_userSpaceList = require( '../ref/userSpaceList' );
+const change_wrapList = tim.require( '../change/wrapList' );
 
-const reply_acquire = require( '../reply/acquire' );
+const log = tim.require( './log' );
 
-const reply_alter = require( '../reply/alter' );
+const ref_space = tim.require( '../ref/space' );
 
-const reply_auth = require( '../reply/auth' );
+const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
 
-const reply_error = require( '../reply/error' );
+const reply_acquire = tim.require( '../reply/acquire' );
 
-const reply_register = require( '../reply/register' );
+const reply_alter = tim.require( '../reply/alter' );
 
-const reply_update = require( '../reply/update' );
+const reply_auth = tim.require( '../reply/auth' );
 
-const request_acquire = require( '../request/acquire' );
+const reply_error = tim.require( '../reply/error' );
 
-const request_alter = require( '../request/alter' );
+const reply_register = tim.require( '../reply/register' );
 
-const request_auth = require( '../request/auth' );
+const reply_update = tim.require( '../reply/update' );
 
-const request_register = require( '../request/register' );
+const request_acquire = tim.require( '../request/acquire' );
 
-const request_update = require( '../request/update' );
+const request_alter = tim.require( '../request/alter' );
 
-const server_spaceNexus = require( './spaceNexus' );
+const request_auth = tim.require( '../request/auth' );
 
-const server_upSleep = require( './upSleep' );
+const request_register = tim.require( '../request/register' );
 
-const user_info = require( '../user/info' );
+const request_update = tim.require( '../request/update' );
+
+const server_spaceNexus = tim.require( './spaceNexus' );
+
+const server_upSleep = tim.require( './upSleep' );
+
+const user_info = tim.require( '../user/info' );
 
 
 /*
@@ -64,7 +69,7 @@ const replyError =
 		throw new Error( message );
 	}
 
-	log( 'reject', message );
+	log.log( 'reject', message );
 
 	return reply_error.create( 'message', message );
 };
@@ -168,7 +173,7 @@ const serveAuth =
 	}
 	catch( err )
 	{
-		log( err.stack );
+		log.log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -213,7 +218,7 @@ const serveRegister =
 	}
 	catch( err )
 	{
-		log( err.stack );
+		log.log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -265,7 +270,7 @@ const serveUpdate =
 	}
 	catch( err )
 	{
-		log( err.stack );
+		log.log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -327,7 +332,7 @@ const serveAcquire =
 	}
 	catch( err )
 	{
-		log( err.stack );
+		log.log( err.stack );
 
 		return replyError( 'Request JSON translation failed' );
 	}
@@ -384,7 +389,7 @@ const serveAcquire =
 /*
 | Returns a result for an update operation.
 */
-server_requestHandler.conveyUpdate =
+def.static.conveyUpdate =
 	function(
 		moments   // references to moments in dynamics to get updates for
 	)
@@ -471,7 +476,7 @@ server_requestHandler.conveyUpdate =
 /*
 | Tests if an update request is legitimate.
 */
-server_requestHandler.testUpdate =
+def.static.testUpdate =
 	function(
 		userInfo, // user info
 		moments   // references to space dynamics to get updates for
@@ -527,7 +532,7 @@ server_requestHandler.testUpdate =
 /*
 | A sleeping update expired.
 */
-server_requestHandler.expireUpdateSleep =
+def.static.expireUpdateSleep =
 	function(
 		sleepID
 	)
@@ -562,7 +567,7 @@ server_requestHandler.expireUpdateSleep =
 /*
 | Serves an serveRequest
 */
-server_requestHandler.serve =
+def.static.serve =
 	function*(
 		request,
 		result
@@ -583,9 +588,11 @@ server_requestHandler.serve =
 
 		default :
 
-			log( 'unknown command', request );
+			log.log( 'unknown command', request );
 
 			return replyError( 'unknown command' );
 	}
 };
 
+
+} );

@@ -4,6 +4,15 @@
 'use strict';
 
 
+tim.define( module, ( def ) => {
+
+
+/*
+| Provides only static functions.
+*/
+def.abstract = true;
+
+
 /*
 | Pads the number with a leading zero if below 10.
 */
@@ -41,7 +50,7 @@ const timestamp =
 /*
 | Logs a message
 */
-module.exports =
+def.static.log =
 	function( )
 {
 	let args = Array.prototype.slice.call( arguments );
@@ -50,3 +59,6 @@ module.exports =
 
 	console.log.apply( console, args );
 };
+
+
+} );

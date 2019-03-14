@@ -7,29 +7,29 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_color = require( '../gleam/color' );
+const gleam_color = tim.require( '../gleam/color' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gruga_font = require( './font' );
+const gruga_font = tim.require( './font' );
 
-const gruga_genericButton = require( '../gruga/genericButton' );
+const gruga_genericButton = tim.require( '../gruga/genericButton' );
 
-const gruga_genericCheckbox = require( '../gruga/genericCheckbox' );
+const gruga_genericCheckbox = tim.require( '../gruga/genericCheckbox' );
 
-const gruga_genericInput = require( '../gruga/genericInput' );
+const gruga_genericInput = tim.require( '../gruga/genericInput' );
 
-const layout_button = require( '../layout/button' );
+const layout_button = tim.require( '../layout/button' );
 
-const layout_checkbox = require( '../layout/checkbox' );
+const layout_checkbox = tim.require( '../layout/checkbox' );
 
-const layout_form = require( '../layout/form' );
+const layout_form = tim.require( '../layout/form' );
 
-const layout_input = require( '../layout/input' );
+const layout_input = tim.require( '../layout/input' );
 
-const layout_label = require( '../layout/label' );
+const layout_label = tim.require( '../layout/label' );
 
 
 /*

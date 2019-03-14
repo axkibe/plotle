@@ -7,9 +7,6 @@
 tim.define( module, ( def, gleam_point ) => {
 
 
-const gleam_transform = require( './transform' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -23,6 +20,9 @@ if( TIM )
 
 	def.json = 'point';
 }
+
+
+const gleam_transform = tim.require( './transform' );
 
 
 /*

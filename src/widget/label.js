@@ -53,9 +53,9 @@ if( TIM )
 }
 
 
-const gleam_glint_text = require( '../gleam/glint/text' );
+const gleam_glint_text = tim.require( '../gleam/glint/text' );
 
-const layout_label = require( '../layout/label' );
+const layout_label = tim.require( '../layout/label' );
 
 
 /*

@@ -13,13 +13,13 @@
 tim.define( module, ( def, gleam_rect ) => {
 
 
-const gleam_point = require( './point' );
+const gleam_point = tim.require( './point' );
 
-const gleam_size = require( './size' );
+const gleam_size = tim.require( './size' );
 
-const gleam_margin = require( './margin' );
+const gleam_margin = tim.require( './margin' );
 
-const gleam_transform = require( './transform' );
+const gleam_transform = tim.require( './transform' );
 
 
 if( TIM )

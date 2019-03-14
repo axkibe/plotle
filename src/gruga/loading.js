@@ -7,14 +7,13 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gruga_font = require( './font' );
+const gruga_font = tim.require( './font' );
 
-const layout_form = require( '../layout/form' );
+const layout_form = tim.require( '../layout/form' );
 
-const layout_label = require( '../layout/label' );
-
+const layout_label = tim.require( '../layout/label' );
 
 
 /*

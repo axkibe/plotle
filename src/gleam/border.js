@@ -7,7 +7,7 @@
 tim.define( module, ( def, self ) => {
 
 
-const gleam_color = require( './color' );
+const gleam_color = tim.require( './color' );
 
 
 if( TIM )

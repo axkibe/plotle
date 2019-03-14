@@ -44,19 +44,19 @@ if( TIM )
 }
 
 
-const gleam_arrow = require( '../gleam/arrow' );
+const gleam_arrow = tim.require( '../gleam/arrow' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gruga_label = require( '../gruga/label' );
+const gruga_label = tim.require( '../gruga/label' );
 
-const gruga_relation = require( '../gruga/relation' );
+const gruga_relation = tim.require( '../gruga/relation' );
 
 
 /*

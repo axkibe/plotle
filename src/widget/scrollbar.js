@@ -39,15 +39,15 @@ if( TIM )
 }
 
 
-const action_scrolly = require( '../action/scrolly' );
+const action_scrolly = tim.require( '../action/scrolly' );
 
-const gleam_roundRect = require( '../gleam/roundRect' );
+const gleam_roundRect = tim.require( '../gleam/roundRect' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gruga_scrollbar = require( '../gruga/scrollbar' );
+const gruga_scrollbar = tim.require( '../gruga/scrollbar' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

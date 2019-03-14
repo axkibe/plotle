@@ -7,35 +7,35 @@
 tim.define( module, ( def ) => {
 
 
-const change_wrapList = require( '../change/wrapList' );
+const change_wrapList = tim.require( '../change/wrapList' );
 
-const reply_auth = require( '../reply/auth' );
+const reply_auth = tim.require( '../reply/auth' );
 
-const reply_acquire = require( '../reply/acquire' );
+const reply_acquire = tim.require( '../reply/acquire' );
 
-const reply_error = require( '../reply/error' );
+const reply_error = tim.require( '../reply/error' );
 
-const reply_register = require( '../reply/register' );
+const reply_register = tim.require( '../reply/register' );
 
-const reply_update = require( '../reply/update' );
+const reply_update = tim.require( '../reply/update' );
 
-const ref_moment = require( '../ref/moment' );
+const ref_moment = tim.require( '../ref/moment' );
 
-const ref_momentList = require( '../ref/momentList' );
+const ref_momentList = tim.require( '../ref/momentList' );
 
-const request_acquire = require( '../request/acquire' );
+const request_acquire = tim.require( '../request/acquire' );
 
-const request_alter = require( '../request/alter' );
+const request_alter = tim.require( '../request/alter' );
 
-const request_auth = require( '../request/auth' );
+const request_auth = tim.require( '../request/auth' );
 
-const request_register = require( '../request/register' );
+const request_register = tim.require( '../request/register' );
 
-const request_update = require( '../request/update' );
+const request_update = tim.require( '../request/update' );
 
-const shell_doTracker = require( '../shell/doTracker' );
+const shell_doTracker = tim.require( '../shell/doTracker' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
 
 def.attributes =

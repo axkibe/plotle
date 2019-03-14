@@ -41,17 +41,17 @@ if( TIM )
 }
 
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_iconCheck = require( '../gruga/iconCheck' );
+const gruga_iconCheck = tim.require( '../gruga/iconCheck' );
 
-const layout_checkbox = require( '../layout/checkbox' );
+const layout_checkbox = tim.require( '../layout/checkbox' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

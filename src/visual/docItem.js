@@ -10,23 +10,21 @@ tim.define( module, ( def ) => {
 def.extend = './item';
 
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-//const action_select = require( '../action/select', 'lazy' );
-// XXX
-const action_select = { };
+const action_select = tim.require( '../action/select' );
 
-const limit = require( '../math/root' ).limit;
+const limit = tim.require( '../math/root', 'NOW' ).limit;
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const visual_item = require( '../visual/item' );
+const visual_item = tim.require( '../visual/item' );
 
-const visual_mark_caret = require( './mark/caret' );
+const visual_mark_caret = tim.require( './mark/caret' );
 
-const visual_mark_range = require( './mark/range' );
+const visual_mark_range = tim.require( './mark/range' );
 
-const visual_mark_text = require( './mark/text' );
+const visual_mark_text = tim.require( './mark/text' );
 
 
 /*

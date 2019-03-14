@@ -10,9 +10,9 @@
 tim.define( module, ( def, gleam_shape_round ) => {
 
 
-const gleam_point = require( '../point' );
+const gleam_point = tim.require( '../point' );
 
-const gleam_transform = require( '../transform' );
+const gleam_transform = tim.require( '../transform' );
 
 
 if( TIM )

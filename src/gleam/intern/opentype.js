@@ -10,9 +10,9 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const gleam_color = require( '../color' );
+const gleam_color = tim.require( '../color' );
 
-const shell_settings = require( '../../shell/settings' );
+const shell_settings = tim.require( '../../shell/settings' );
 
 
 const opentypeOptions =

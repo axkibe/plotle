@@ -10,23 +10,23 @@ tim.define( module, ( def, form_form ) => {
 def.abstract = true;
 
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_formFacet = require( '../gruga/formFacet' );
+const gruga_formFacet = tim.require( '../gruga/formFacet' );
 
-const result_hover = require( '../result/hover' );
+const result_hover = tim.require( '../result/hover' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_widget = require( '../visual/mark/widget' );
+const visual_mark_widget = tim.require( '../visual/mark/widget' );
 
-const widget_scrollbox = require( '../widget/scrollbox' );
+const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
 
 /*

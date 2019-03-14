@@ -7,17 +7,6 @@
 tim.define( module, ( def ) => {
 
 
-const change_list = require( '../change/list' );
-
-const change_wrap = require( '../change/wrap' );
-
-const ref_moment = require( '../ref/moment' );
-
-const ref_userSpaceList = require( '../ref/userSpaceList' );
-
-const session_uid = require( '../session/uid' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -38,6 +27,17 @@ if( TIM )
 
 	def.json = 'dynamic_refSpaceList';
 }
+
+
+const change_list = tim.require( '../change/list' );
+
+const change_wrap = tim.require( '../change/wrap' );
+
+const ref_moment = tim.require( '../ref/moment' );
+
+const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
+
+const session_uid = tim.require( '../session/uid' );
 
 
 /*

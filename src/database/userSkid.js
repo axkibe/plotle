@@ -34,7 +34,7 @@ if( TIM )
 }
 
 
-const user_info = require( '../user/info' );
+const user_info = tim.require( '../user/info' );
 
 
 /*

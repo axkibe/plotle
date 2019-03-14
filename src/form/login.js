@@ -52,19 +52,19 @@ if( TIM )
 }
 
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const form_form = require( '../form/form' );
+const form_form = tim.require( '../form/form' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const reply_auth = require( '../reply/auth' );
+const reply_auth = tim.require( '../reply/auth' );
 
-const user_creds = require( '../user/creds' );
+const user_creds = tim.require( '../user/creds' );
 
-const user_passhash = require( '../user/passhash' );
+const user_passhash = tim.require( '../user/passhash' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 
 /*

@@ -44,45 +44,45 @@ if( TIM )
 }
 
 
-const action_dragItems = require( '../action/dragItems' );
+const action_dragItems = tim.require( '../action/dragItems' );
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const action_resizeItems = require( '../action/resizeItems' );
+const action_resizeItems = tim.require( '../action/resizeItems' );
 
-const change_grow = require( '../change/grow' );
+const change_grow = tim.require( '../change/grow' );
 
-const change_shrink = require( '../change/shrink' );
+const change_shrink = tim.require( '../change/shrink' );
 
-const compass = require( '../compass/root' );
+const compass = tim.require( '../compass/root' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_paint = require( '../gleam/glint/paint' );
+const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const fabric_doc = require( '../fabric/doc' );
+const fabric_doc = tim.require( '../fabric/doc' );
 
-const fabric_label = require( '../fabric/label' );
+const fabric_label = tim.require( '../fabric/label' );
 
-const fabric_para = require( '../fabric/para' );
+const fabric_para = tim.require( '../fabric/para' );
 
-const gruga_label = require( '../gruga/label' );
+const gruga_label = tim.require( '../gruga/label' );
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
-const visual_base_posfs = require( '../visual/base/posfs' );
+const visual_base_posfs = tim.require( '../visual/base/posfs' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 
 /*
@@ -204,7 +204,7 @@ def.proto.glint = function( ) { return this._glint; };
 def.proto.markLost =
 	function( )
 {
-	if( this.doc.fabric.isBlank )
+	if( this.doc.isBlank )
 	{
 		const pc = this.path.chop;
 

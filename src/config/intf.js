@@ -4,12 +4,19 @@
 'use strict';
 
 
-const intf = module.exports;
+tim.define( module, ( def ) => {
 
-const server_config_root = require( './root' );
+
+/*
+| Provides only static functions.
+*/
+def.abstract = true;
+
+
+const server_config_root = tim.require( './root' );
 
 // the actual current configuration
-let config = server_config_root.create( );
+let config;
 
 
 /*
@@ -37,7 +44,7 @@ const _set =
 /*
 | Interface for config.js
 */
-intf.set =
+def.static.set =
 	function(
 		// path
 		// value
@@ -47,6 +54,8 @@ intf.set =
 
 	let value = path.pop( );
 
+	if( !config ) config = server_config_root.create( );
+
 	config = _set( path, value, config, 0 );
 };
 
@@ -54,7 +63,7 @@ intf.set =
 /*
 | Returns a config setting.
 */
-intf.get =
+def.static.get =
 	function(
 		// path
 	)
@@ -73,3 +82,6 @@ intf.get =
 
 	return entry;
 };
+
+
+} );

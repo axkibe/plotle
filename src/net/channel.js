@@ -28,9 +28,9 @@ if( TIM )
 }
 
 
-const net_requestWrap = require( './requestWrap' );
+const net_requestWrap = tim.require( './requestWrap' );
 
-const net_requestWrapList = require( './requestWrapList' );
+const net_requestWrapList = tim.require( './requestWrapList' );
 
 
 /**

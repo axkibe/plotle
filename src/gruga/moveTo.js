@@ -7,27 +7,27 @@
 tim.define( module, ( def, gruga_moveTo ) => {
 
 
-const gleam_border = require( '../gleam/border' );
+const gleam_border = tim.require( '../gleam/border' );
 
-const gleam_color = require( '../gleam/color' );
+const gleam_color = tim.require( '../gleam/color' );
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_facetList = require( '../gleam/facetList' );
+const gleam_facetList = tim.require( '../gleam/facetList' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gruga_font = require( '../gruga/font' );
+const gruga_font = tim.require( '../gruga/font' );
 
-const layout_button = require( '../layout/button' );
+const layout_button = tim.require( '../layout/button' );
 
-const layout_form = require( '../layout/form' );
+const layout_form = tim.require( '../layout/form' );
 
-const layout_label = require( '../layout/label' );
+const layout_label = tim.require( '../layout/label' );
 
-const layout_scrollbox = require( '../layout/scrollbox' );
+const layout_scrollbox = tim.require( '../layout/scrollbox' );
 
 
 /*

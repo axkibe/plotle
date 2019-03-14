@@ -7,21 +7,21 @@
 tim.define( module, ( def ) => {
 
 
-const compass_nw = require( './nw' );
+const compass_nw = tim.require( './nw' );
 
-const compass_n = require( './n' );
+const compass_n = tim.require( './n' );
 
-const compass_ne = require( './ne' );
+const compass_ne = tim.require( './ne' );
 
-const compass_e = require( './e' );
+const compass_e = tim.require( './e' );
 
-const compass_se = require( './se' );
+const compass_se = tim.require( './se' );
 
-const compass_s = require( './s' );
+const compass_s = tim.require( './s' );
 
-const compass_sw = require( './sw' );
+const compass_sw = tim.require( './sw' );
 
-const compass_w = require( './w' );
+const compass_w = tim.require( './w' );
 
 
 /*

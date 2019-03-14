@@ -16,9 +16,9 @@ if( TIM )
 	};
 }
 
-const change_mark_node = require( '../../change/mark/node' );
+const change_mark_node = tim.require( '../../change/mark/node' );
 
-const pathList = require( 'tim.js/src/path/list' );
+const pathList = tim.require( 'tim.js/pathList' );
 
 
 /**

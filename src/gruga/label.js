@@ -7,13 +7,13 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_facet = require( '../gleam/facet' );
+const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_facetList = require( '../gleam/facetList' );
+const gleam_facetList = tim.require( '../gleam/facetList' );
 
-const gleam_margin = require( '../gleam/margin' );
+const gleam_margin = tim.require( '../gleam/margin' );
 
-const gruga_highlight = require( './highlight' );
+const gruga_highlight = tim.require( './highlight' );
 
 
 def.staticLazy.facets = ( ) =>

@@ -23,7 +23,7 @@ if( TIM )
 }
 
 
-const gleam_font_font = require( './font' );
+const gleam_font_font = tim.require( './font' );
 
 
 /*

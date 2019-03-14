@@ -240,7 +240,10 @@ const visual_space = tim.require( '../visual/space' );
 const widget_factory = tim.require( '../widget/factory' );
 
 
-const loadingSpaceTextPath =
+/*
+| FIXME
+*/
+def.staticLazy._loadingSpaceTextPath = ( ) =>
 	tim_path.empty
 	.append( 'form' )
 	.append( 'twig' )
@@ -1202,7 +1205,7 @@ def.proto.moveToSpace =
 	);
 
 	// FUTURE move setPath into creator
-	root.setPath( loadingSpaceTextPath, spaceRef.fullname );
+	root.setPath( shell_root._loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
 };

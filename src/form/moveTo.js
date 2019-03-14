@@ -52,23 +52,23 @@ if( TIM )
 }
 
 
-const form_form = require( './form' );
+const form_form = tim.require( './form' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_moveTo = require( '../gruga/moveTo' );
+const gruga_moveTo = tim.require( '../gruga/moveTo' );
 
-const gruga_scrollbar = require( '../gruga/scrollbar' );
+const gruga_scrollbar = tim.require( '../gruga/scrollbar' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const widget_button = require( '../widget/button' );
+const widget_button = tim.require( '../widget/button' );
 
-const widget_scrollbox = require( '../widget/scrollbox' );
+const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
 
 /*

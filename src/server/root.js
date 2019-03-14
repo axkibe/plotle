@@ -46,37 +46,37 @@ if( TIM )
 const DELAY_ALTER = false;
 const DELAY_ACQUIRE = false;
 
-const config = require( '../config/intf' );
+const config = tim.require( '../config/intf' );
 
-const fs = require( 'fs' );
+const fs = tim.require( 'fs' );
 
-const hash_sha1 = require( '../hash/sha1' );
+const hash_sha1 = tim.require( '../hash/sha1' );
 
-const log = require( './log' );
+const log = tim.require( './log' );
 
-const ref_space = require( '../ref/space' );
+const ref_space = tim.require( '../ref/space' );
 
-const ref_userSpaceList = require( '../ref/userSpaceList' );
+const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
 
-const server_maxAge = require( './maxAge' );
+const server_maxAge = tim.require( './maxAge' );
 
-const server_postProcessor = require( './postProcessor' );
+const server_postProcessor = tim.require( './postProcessor' );
 
-const server_requestHandler = require( './requestHandler' );
+const server_requestHandler = tim.require( './requestHandler' );
 
-const server_roster = require( './roster' );
+const server_roster = tim.require( './roster' );
 
-const server_resource = require( './resource' );
+const server_resource = tim.require( './resource' );
 
-const server_spaceBox = require( './spaceBox' );
+const server_spaceBox = tim.require( './spaceBox' );
 
 const suspend = require( 'suspend' );
 
 const terser = require( 'terser' );
 
-const timspec_twig = require( 'tim.js/src/timspec/twig' );
+const timspec_twig = tim.require( 'tim.js/timspecTwig' );
 
-const tim_path = require( 'tim.js/src/path/path' );
+const tim_path = tim.require( 'tim.js/path' );
 
 const url = require( 'url' );
 
@@ -89,7 +89,7 @@ const resume = suspend.resume;
 def.proto.loadSpaces =
 	function*( )
 {
-	log( 'loading and replaying all spaces' );
+	log.log( 'loading and replaying all spaces' );
 
 	const cursor =
 		yield root.repository.spaces.find(
@@ -110,7 +110,7 @@ def.proto.loadSpaces =
 				'tag', o.tag
 			);
 
-		log( 'loading and replaying "' + spaceRef.fullname + '"' );
+		log.log( 'loading and replaying "' + spaceRef.fullname + '"' );
 
 		root.create(
 			'spaces',
@@ -188,11 +188,11 @@ def.lazy.shellGlobalsResource =
 def.proto.buildBundle =
 	function( )
 {
-	log( 'building bundle' );
+	log.log( 'building bundle' );
 
 	if( config.get( 'shell', 'bundle', 'minify' ) )
 	{
-		log( 'minifying bundle' );
+		log.log( 'minifying bundle' );
 
 		const code = { };
 
@@ -244,7 +244,7 @@ def.proto.buildBundle =
 	}
 	else
 	{
-		log( 'concating bundle' );
+		log.log( 'concating bundle' );
 
 		let code = '';
 
@@ -269,16 +269,19 @@ def.proto.buildBundle =
 def.proto.prepareInventory =
 	function*( )
 {
-	log( 'preparing inventory' );
+	log.log( 'preparing inventory' );
 
 	root.create( 'inventory', root.inventory.updateResource( root.shellGlobalsResource ) );
 
 	const devel = config.get( 'shell', 'devel', 'enable' );
 
 	// prepares ressources from the roster
-	for( let a = 0, al = server_roster.length; a < al; a++ )
+
+	const roster = server_roster.roster;
+
+	for( let a = 0, al = roster.length; a < al; a++ )
 	{
-		const resource = server_roster.get( a );
+		const resource = roster.get( a );
 
 		if( resource.devel && !devel ) continue;
 
@@ -439,8 +442,8 @@ def.proto.prepareInventory =
 		const bundle = root.inventory.get( bundleFilePath );
 		const gzip = yield* bundle.gzip( );
 
-		log( 'uncompressed bundle size is ', bundle.data.length );
-		log( '  compressed bundle size is ', gzip.length );
+		log.log( 'uncompressed bundle size is ', bundle.data.length );
+		log.log( '  compressed bundle size is ', gzip.length );
 	}
 };
 
@@ -573,7 +576,7 @@ def.proto.webError =
 
 	message = code + ' ' + message;
 
-	log( 'web error', code, message );
+	log.log( 'web error', code, message );
 
 	result.end( message );
 };
@@ -590,7 +593,7 @@ def.proto.requestListener =
 {
 	const red = url.parse( request.url );
 
-	log( request.connection.remoteAddress, red.href );
+	log.log( request.connection.remoteAddress, red.href );
 
 /*
 	FUTURE
@@ -598,7 +601,7 @@ def.proto.requestListener =
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
 		{
-			log( request.connection.remoteAddress, 'not in whitelist!' );
+			log.log( request.connection.remoteAddress, 'not in whitelist!' );
 
 			root.webError( result, 403, 'Forbidden' );
 
@@ -649,7 +652,7 @@ def.proto.requestListener =
 			// when this is a tim its holder is prepared instead.
 			let uResource = resource.timHolder || resource;
 
-			log( 'updating', uResource.aliases.get( 0 ) );
+			log.log( 'updating', uResource.aliases.get( 0 ) );
 
 			uResource = yield* root.inventory.prepareResource( uResource );
 
@@ -774,14 +777,14 @@ def.proto.webAjax =
 		// FUTURE REMOVE
 		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
-			log( 'DELAYING ALTER');
+			log.log( 'DELAYING ALTER');
 
 			yield setTimeout( resume( ), DELAY_ALTER );
 		}
 
 		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
-			log( 'DELAYING ACQUIRE');
+			log.log( 'DELAYING ACQUIRE');
 
 			yield setTimeout( resume( ), DELAY_ACQUIRE );
 		}

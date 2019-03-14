@@ -56,41 +56,41 @@ if( TIM )
 	};
 }
 
-const change_insert = require( '../change/insert' );
+const change_insert = tim.require( '../change/insert' );
 
-const change_join = require( '../change/join' );
+const change_join = tim.require( '../change/join' );
 
-const change_remove = require( '../change/remove' );
+const change_remove = tim.require( '../change/remove' );
 
-const change_split = require( '../change/split' );
+const change_split = tim.require( '../change/split' );
 
-const flow_block = require( '../flow/block' );
+const flow_block = tim.require( '../flow/block' );
 
-const flow_line = require( '../flow/line' );
+const flow_line = tim.require( '../flow/line' );
 
-const flow_token = require( '../flow/token' );
+const flow_token = tim.require( '../flow/token' );
 
-const gleam_font_font = require( '../gleam/font/font' );
+const gleam_font_font = tim.require( '../gleam/font/font' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_text = require( '../gleam/glint/text' );
+const gleam_glint_text = tim.require( '../gleam/glint/text' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gruga_font = require( '../gruga/font' );
+const gruga_font = tim.require( '../gruga/font' );
 
-const visual_mark_caret = require( '../visual/mark/caret' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_range = require( '../visual/mark/range' );
+const visual_mark_range = tim.require( '../visual/mark/range' );
 
-const session_uid = require( '../session/uid' );
+const session_uid = tim.require( '../session/uid' );
 
-const visual_mark_text = require( '../visual/mark/text' );
+const visual_mark_text = tim.require( '../visual/mark/text' );
 
 // FIXME
 const _keyMap =

@@ -7,19 +7,19 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gruga_font = require( './font' );
+const gruga_font = tim.require( './font' );
 
-const gruga_genericButton = require( './genericButton' );
+const gruga_genericButton = tim.require( './genericButton' );
 
-const layout_button = require( '../layout/button' );
+const layout_button = tim.require( '../layout/button' );
 
-const layout_form = require( '../layout/form' );
+const layout_form = tim.require( '../layout/form' );
 
-const layout_label = require( '../layout/label' );
+const layout_label = tim.require( '../layout/label' );
 
 
 /*

@@ -58,31 +58,31 @@ if( TIM )
 }
 
 
-const action_createGeneric = require( '../action/createGeneric' );
+const action_createGeneric = tim.require( '../action/createGeneric' );
 
-const action_createRelation = require( '../action/createRelation' );
+const action_createRelation = tim.require( '../action/createRelation' );
 
-const action_createStroke = require( '../action/createStroke' );
+const action_createStroke = tim.require( '../action/createStroke' );
 
-const action_none = require( '../action/none' );
+const action_none = tim.require( '../action/none' );
 
-const gleam_glint_border = require( '../gleam/glint/border' );
+const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
-const gleam_glint_fill = require( '../gleam/glint/fill' );
+const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
 
-const gleam_glint_list = require( '../gleam/glint/list' );
+const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_window = require( '../gleam/glint/window' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
-const gleam_point = require( '../gleam/point' );
+const gleam_point = tim.require( '../gleam/point' );
 
-const gleam_rect = require( '../gleam/rect' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
-const gleam_transform = require( '../gleam/transform' );
+const gleam_transform = tim.require( '../gleam/transform' );
 
-const layout_disc = require( '../layout/disc' );
+const layout_disc = tim.require( '../layout/disc' );
 
-const widget_factory = require( '../widget/factory' );
+const widget_factory = tim.require( '../widget/factory' );
 
 
 /*

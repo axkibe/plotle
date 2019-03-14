@@ -13,7 +13,7 @@ if( TIM )
 }
 
 
-const config = require( '../config/intf' );
+const config = tim.require( '../config/intf' );
 
 
 /*

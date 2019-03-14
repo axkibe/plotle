@@ -13,9 +13,9 @@ if( TIM )
 }
 
 
-const gleam_rectGroup = require( '../gleam/rectGroup' );
+const gleam_rectGroup = tim.require( '../gleam/rectGroup' );
 
-const tim_path_list = require( 'tim.js/src/path/list' );
+const tim_path_list = tim.require( 'tim.js/pathList' );
 
 
 /*
