@@ -60,9 +60,7 @@ const change_split = tim.require( '../change/split' );
 
 const change_wrap = tim.require( '../change/wrap' );
 
-const limit = tim.require( '../math/root' ).limit;
-
-const maxInteger = tim.require( '../math/root' ).maxInteger;
+const math = tim.require( '../math/root' );
 
 const session_uid = tim.require( '../session/uid' );
 
@@ -102,7 +100,7 @@ def.proto.updateSeq =
 {
 	const repository = this.repository;
 
-	seq = limit( 0, seq, repository.maxSeq );
+	seq = math.limit( 0, seq, repository.maxSeq );
 
 	return root.create( 'repository', repository.create( 'seq', seq ) );
 };
@@ -124,9 +122,9 @@ def.proto.update =
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	const cursorLine = limit( 0, this.cursorLine, doc.length - 1 );
+	const cursorLine = math.limit( 0, this.cursorLine, doc.length - 1 );
 
-	const cursorAt = limit( 0, this.cursorAt, doc.atRank( cursorLine ).text.length );
+	const cursorAt = math.limit( 0, this.cursorAt, doc.atRank( cursorLine ).text.length );
 
 	if( !doc )
 	{
@@ -252,7 +250,7 @@ def.proto.onMouseDown =
 	if( !doc ) { root.beep( ); return; }
 
 	const cLine =
-		limit(
+		math.limit(
 			0,
 			Math.floor( y / measure.offsetHeight ),
 			doc.length - 1
@@ -263,7 +261,7 @@ def.proto.onMouseDown =
 	root.create(
 		'cursorLine', cLine,
 		'cursorAt',
-			limit(
+			math.limit(
 				0,
 				Math.floor( x / measure.offsetWidth ),
 				cText.length
@@ -517,7 +515,7 @@ def.proto.send =
 		'action', undefined,
 		'cursorAt', cursorAt
 	)
-	.updateSeq( maxInteger )
+	.updateSeq( math.maxInteger )
 	.update( );
 };
 
@@ -812,7 +810,7 @@ def.proto.inputSpecialKey =
 def.proto.onUpNowButton =
 	function( )
 {
-	root.updateSeq( maxInteger ).update( );
+	root.updateSeq( math.maxInteger ).update( );
 
 	this.elements.input.focus( );
 };

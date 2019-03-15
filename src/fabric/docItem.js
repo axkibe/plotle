@@ -14,17 +14,17 @@ const action_none = tim.require( '../action/none' );
 
 const action_select = tim.require( '../action/select' );
 
-const limit = tim.require( '../math/root', 'NOW' ).limit;
+const fabric_item = tim.require( './item' );
+
+const math = tim.require( '../math/root' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const visual_item = tim.require( '../visual/item' );
+const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
-const visual_mark_caret = tim.require( './mark/caret' );
+const visual_mark_range = tim.require( '../visual/mark/range' );
 
-const visual_mark_range = tim.require( './mark/range' );
-
-const visual_mark_text = tim.require( './mark/text' );
+const visual_mark_text = tim.require( '../visual/mark/text' );
 
 
 /*
@@ -35,7 +35,7 @@ def.lazy.attentionCenter =
 {
 	return(
 		this.zone.pos.y
-		+ limit(
+		+ math.limit(
 			0,
 			this.doc.attentionCenter - ( this.scrollPos ?  this.scrollPos.y : 0 ),
 			this.zone.height
@@ -111,7 +111,7 @@ def.proto.dragStart =
 		return true;
 	}
 
-	return visual_item.dragStart.call( this, p, shift, ctrl );
+	return fabric_item.dragStart.call( this, p, shift, ctrl );
 };
 
 

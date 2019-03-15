@@ -1,7 +1,0 @@
-# Typemap of item visualisations.
-
-./label
-../fabric/note
-../fabric/portal
-./relation
-./stroke

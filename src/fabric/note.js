@@ -9,7 +9,7 @@
 tim.define( module, ( def, fabric_note ) => {
 
 
-def.extend = '../visual/docItem';
+def.extend = './docItem';
 
 
 if( TIM )

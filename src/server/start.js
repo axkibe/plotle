@@ -64,9 +64,9 @@ global.FREEZE = config.get( 'server', 'freeze' );
 
 
 // FIX for dependency resolving
-require( '../visual/item' );
-require( '../visual/docItem' );
-require( '../visual/label' );
+//require( '../visual/item' );
+//require( '../visual/docItem' );
+//require( '../visual/label' );
 
 const log = require( './log' );
 

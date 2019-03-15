@@ -45,16 +45,13 @@ if( TIM )
 		show : { type : [ '< ../show/types' ] },
 
 		// current space data
-		spaceFabric : { type : [ 'undefined', '../fabric/space' ] },
+		space : { type : [ 'undefined', '../fabric/space' ] },
 
 		// reference to current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// current space transform
 		spaceTransform : { type : '../gleam/transform' },
-
-		// current space visualisation
-		spaceVisual : { type : [ 'undefined', '../visual/space' ] },
 
 		// current user credentials
 		userCreds : { type : [ 'undefined', '../user/creds' ] },
@@ -137,6 +134,8 @@ const fabric_para = tim.require( '../fabric/para' );
 
 const fabric_relation = tim.require( '../fabric/relation' );
 
+const fabric_space = tim.require( '../fabric/space' );
+
 const form_loading = tim.require( '../form/loading' );
 
 const form_login = tim.require( '../form/login' );
@@ -195,7 +194,7 @@ const gruga_welcome = tim.require( '../gruga/welcome' );
 
 const gruga_disc_zoom = tim.require( '../gruga/disc/zoom' );
 
-const limit = tim.require( '../math/root', 'NOW' ).limit;
+const math = tim.require( '../math/root' );
 
 const net_ajax = tim.require( '../net/ajax' );
 
@@ -234,8 +233,6 @@ const user_creds = tim.require( '../user/creds' );
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 const visual_mark_range = tim.require( '../visual/mark/range' );
-
-const visual_space = tim.require( '../visual/space' );
 
 const widget_factory = tim.require( '../widget/factory' );
 
@@ -488,7 +485,7 @@ def.adjust.action =
 		case action_dragItems :
 		case action_resizeItems :
 		{
-			const fabric = this.spaceFabric;
+			const space = this.space;
 
 			const iPaths = action.itemPaths;
 
@@ -501,7 +498,7 @@ def.adjust.action =
 					const path = iPaths.get( p );
 
 					if( path.get( 0 ) === 'spaceVisual' &&
-						!fabric.get( path.get( 2 ) )
+						!space.get( path.get( 2 ) )
 					) break;
 				}
 
@@ -525,8 +522,8 @@ def.adjust.action =
 					{
 						const path = iPaths.get( p );
 
-						if( path.get( 0 ) === 'spaceVisual' &&
-							!fabric.get( path.get( 2 ) )
+						if( path.get( 0 ) === 'space' &&
+							!space.get( path.get( 2 ) )
 						) continue;
 
 						nPaths[ p2++ ] = path;
@@ -655,8 +652,8 @@ def.adjust.form =
 	return(
 		form.create(
 			'action', this.action,
-			'hasGrid', this.spaceFabric && this.spaceFabric.hasGrid,
-			'hasSnapping', this.spaceFabric && this.spaceFabric.hasSnapping,
+			'hasGrid', this.space && this.space.hasGrid,
+			'hasSnapping', this.space && this.space.hasSnapping,
 			'hover', form_root.concernsHover( this.hover ),
 			'mark', form_root.concernsMark( this._mark ),
 			'spaceRef', this.spaceRef,
@@ -671,25 +668,21 @@ def.adjust.form =
 /*
 | Transforms the space visualisation.
 */
-def.adjust.spaceVisual =
+def.adjust.space =
 	function(
-		spaceVisual
+		space
 	)
 {
-	const spaceFabric = this.spaceFabric;
+	if( !space ) return;
 
-	if( !spaceFabric ) return;
+	const mark = fabric_space.concernsMark( this._mark );
 
-	const mark = visual_space.concernsMark( this._mark );
-
-	const hover = visual_space.concernsHover( this.hover );
+	const hover = fabric_space.concernsHover( this.hover );
 
 	return(
-		( spaceVisual || visual_space )
-		.create(
+		space.create(
 			'access', this.access,
 			'action', this.action,
-			'fabric', this.spaceFabric,
 			'hover', hover,
 			'mark', mark,
 			'transform', this.spaceTransform,
@@ -797,7 +790,7 @@ def.proto.changeSpaceTransformPoint =
 	const offset = st.offset;
 
 	const e1 =
-		limit(
+		math.limit(
 			shell_settings.zoomMin,
 			this._transformExponent + de,
 			shell_settings.zoomMax
@@ -1201,7 +1194,7 @@ def.proto.moveToSpace =
 	root.create(
 		'fallbackSpaceRef', this.spaceRef,
 		'show', show_form.loading,
-		'spaceFabric', undefined
+		'space', undefined
 	);
 
 	// FUTURE move setPath into creator
@@ -1282,7 +1275,7 @@ def.proto.onAcquireSpace =
 			( show.timtype === show_form && show.formName === 'loading' )
 			? show_normal.create( )
 			: pass,
-		'spaceFabric', reply.space,
+		'space', reply.space,
 		'spaceRef', request.spaceRef,
 		'_mark', undefined
 	);
@@ -1628,7 +1621,7 @@ def.proto.removeRange =
 				'at1', frontMark.at,
 				'at2', backMark.at,
 				'val',
-					root.spaceFabric.getPath( frontMark.path.chop )
+					root.space.getPath( frontMark.path.chop )
 					.substring( frontMark.at, backMark.at )
 			)
 		);
@@ -1643,7 +1636,7 @@ def.proto.removeRange =
 	const k2 = backMark.path.get( -2 );
 
 	const pivot =
-		root.spaceFabric.getPath(
+		root.space.getPath(
 			frontMark.path.chop.shorten.shorten.shorten
 		);
 
@@ -1651,10 +1644,7 @@ def.proto.removeRange =
 
 	const r2 = pivot.rankOf( k2 );
 
-	let text =
-		root.spaceFabric.getPath(
-			frontMark.path.chop
-		);
+	let text = root.space.getPath( frontMark.path.chop );
 
 	let ve;
 
@@ -1824,7 +1814,7 @@ def.proto.update =
 
 			mark = mark.createTransformed(
 				changes,
-				root.spaceFabric.getPath( mark.docPath.chop )
+				root.space.getPath( mark.docPath.chop )
 			);
 
 			break;

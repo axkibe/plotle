@@ -43,8 +43,6 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const visual_space = tim.require( '../visual/space' );
 
-const visual_stroke = tim.require( '../visual/stroke' );
-
 
 /*
 | Returns true if an entity with path is affected by this action.
@@ -202,35 +200,20 @@ def.proto.pointingHover =
 | The transient item being created.
 */
 def.lazy.transientFabric =
-	function( )
+	function(
+		transform   // the transform for the item
+	)
 {
 	return(
 		fabric_stroke.create(
+			'access', 'rw',
+			'action', action_none.create( ),
 			'from', this.from,
 			'to', this.to,
 			'fromStyle', 'none',
-			'toStyle', this._toStyle
-		)
-	);
-};
-
-
-/*
-| The transient visual being created.
-*/
-def.proto.transientVisual =
-	function(
-		transfrom   // the transform for the item
-	)
-{
-
-	return(
-		visual_stroke.create(
-			'access', 'rw',
-			'action', action_none.create( ),
-			'fabric', this.transientFabric,
 			'highlight', false,
-			'transform', transfrom
+			'toStyle', this._toStyle,
+			'transform', transform
 		)
 	);
 };

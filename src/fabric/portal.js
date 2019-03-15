@@ -7,7 +7,7 @@
 tim.define( module, ( def, fabric_portal ) => {
 
 
-def.extend = '../visual/item';
+def.extend = './item';
 
 
 if( TIM )

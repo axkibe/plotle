@@ -1,5 +1,5 @@
 /*
-| A list of visual items.
+| A list of items.
 */
 'use strict';
 

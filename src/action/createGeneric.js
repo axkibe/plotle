@@ -24,7 +24,7 @@ if( TIM )
 		itemType : { type : 'string'  },
 
 		// the transient item in creation
-		transientItem : { type : [ '< ../visual/item-types', 'undefined' ] },
+		transientItem : { type : [ 'undefined', '< ../fabric/item-types' ] },
 
 		// start point of drag creation
 		startPoint : { type : [ 'undefined', '../gleam/point' ] }
@@ -33,6 +33,8 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
+
+const fabric_label = tim.require( '../fabric/label' );
 
 const fabric_note = tim.require( '../fabric/note' );
 
@@ -43,8 +45,6 @@ const gleam_point = tim.require( '../gleam/point' );
 const gleam_rect = tim.require( '../gleam/rect' );
 
 const result_hover = tim.require( '../result/hover' );
-
-const visual_label = tim.require( '../visual/label' );
 
 const visual_space = tim.require( '../visual/space' );
 
@@ -75,7 +75,7 @@ def.staticLazy.createPortal = ( ) =>
 */
 def.staticLazy.itemTypeToTim = ( ) =>
 ( {
-	'label'  : visual_label,
+	'label'  : fabric_label,
 	'note'   : fabric_note,
 	'portal' : fabric_portal,
 } );

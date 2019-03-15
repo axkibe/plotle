@@ -42,11 +42,11 @@ if( TIM )
 	def.twig =
 	[
 		'undefined',
-		'./label',
+		'../fabric/label',
 		'../fabric/note',
 		'../fabric/portal',
-		'./relation',
-		'./stroke'
+		'../fabric/relation',
+		'../fabric/stroke'
 	];
 }
 
@@ -61,15 +61,9 @@ const action_pan = tim.require( '../action/pan' );
 
 const action_select = tim.require( '../action/select' );
 
-const fabric_label = tim.require( '../fabric/label' );
+const fabric_item = tim.require( '../fabric/item' );
 
 const fabric_note = tim.require( '../fabric/note' );
-
-const fabric_portal = tim.require( '../fabric/portal' );
-
-const fabric_relation = tim.require( '../fabric/relation' );
-
-const fabric_stroke = tim.require( '../fabric/stroke' );
 
 const gleam_arrow = tim.require( '../gleam/arrow' );
 
@@ -95,17 +89,9 @@ const visual_frame = tim.require( '../visual/frame' );
 
 const visual_grid = tim.require( '../visual/grid' );
 
-const visual_item = tim.require( '../visual/item' );
-
-const visual_itemList = tim.require( '../visual/itemList' );
-
-const visual_label = tim.require( '../visual/label' );
+const fabric_itemList = tim.require( '../fabric/itemList' );
 
 const visual_mark_items = tim.require( '../visual/mark/items' );
-
-const visual_relation = tim.require( '../visual/relation' );
-
-const visual_stroke = tim.require( '../visual/stroke' );
 
 
 /*
@@ -217,20 +203,7 @@ def.adjust.get =
 
 	if( !item )
 	{
-		// FIXME XXX
-		if( fabric.timtype === fabric_note || fabric.timtype === fabric_portal )
-		{
-			item = fabric;
-		}
-		else
-		{
-			item = visual_space._visualMap.get( fabric.timtype );
-		}
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !item ) throw new Error( );
-/**/	}
+		item = fabric;
 
 		path = visual_space.spacePath.append( 'twig' ).appendNC( key );
 	}
@@ -239,9 +212,9 @@ def.adjust.get =
 		path = item.path;
 	}
 
-	const action = visual_item.concernsAction( this.action, item );
+	const action = fabric_item.concernsAction( this.action, item );
 
-	const mark = visual_item.concernsMark( this.mark, path );
+	const mark = fabric_item.concernsMark( this.mark, path );
 
 	let highlight = !!( mark && mark.containsPath( path ) );
 
@@ -268,26 +241,12 @@ def.adjust.get =
 	}
 	else
 	{
-		// FIXME XXX
-		if( item === fabric_portal || item.timtype === fabric_portal )
 		item =
 			item.create(
 				'access', access,
 				'action', action,
 				'highlight', highlight,
 				'hover', hover,
-				'mark', mark,
-				'path', path,
-				'transform', this.transform
-			);
-		else // FIXME XXX
-		item =
-			item.create(
-				'access', access,
-				'action', action,
-				'highlight', highlight,
-				'hover', hover,
-				'fabric', fabric,
 				'mark', mark,
 				'path', path,
 				'transform', this.transform
@@ -321,7 +280,7 @@ def.adjust.get =
 
 	// FIXME take scrollPos into redo
 
-	action2 = visual_item.concernsAction( this.action, item );
+	action2 = fabric_item.concernsAction( this.action, item );
 
 	// checks if the highlight feature has changed on the created item
 	if( !highlight2 && action2 && item.timtype ) highlight2 = this.action.highlightItem( item );
@@ -590,7 +549,7 @@ def.proto.getList =
 		items.push( this.get( path.get( 2 ) ) );
 	}
 
-	return visual_itemList.create( 'list:init', items );
+	return fabric_itemList.create( 'list:init', items );
 };
 
 
@@ -845,28 +804,6 @@ def.proto._stopCreate =
 	)
 {
 	root.create( 'action', this.action.create( 'offset', undefined, 'startPoint', undefined ) );
-};
-
-
-
-/*
-| Mapping of fabric item name to visual items.
-| FIXME remove
-*/
-def.staticLazy._visualMap =
-	function( )
-{
-	const map = new Map( );
-
-	map.set( fabric_label, visual_label );
-	map.set( fabric_note, fabric_note );
-	map.set( fabric_portal, fabric_portal );
-	map.set( fabric_relation, visual_relation );
-	map.set( fabric_stroke, visual_stroke );
-
-	if( FREEZE ) Object.freeze( map );
-
-	return map;
 };
 
 

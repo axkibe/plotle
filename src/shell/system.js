@@ -47,7 +47,7 @@ const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_size = tim.require( '../gleam/size' );
 
-const limit = tim.require( '../math/root', 'NOW' ).limit;
+const math = tim.require( '../math/root' );
 
 const shell_root = tim.require( '../shell/root' );
 
@@ -1332,7 +1332,7 @@ def.proto._steerAttention =
 	}
 	else
 	{
-		ac = limit( 0, ac, root.viewSize.height - 15 );
+		ac = math.limit( 0, ac, root.viewSize.height - 15 );
 
 		hiddenInput.style.top = ac + 'px';
 

@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : 'string' },
 
 		// content of the frame
-		content : { type : './itemList' },
+		content : { type : '../fabric/itemList' },
 
 		// current transform of the frame
 		transform : { type : '../gleam/transform' },
