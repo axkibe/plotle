@@ -18,10 +18,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// current action
-		// no json thus not saved or transmitted
-		action : { type : [ 'undefined', '< ../action/types' ] },
-
 		// the item is highlighted
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
@@ -63,8 +59,6 @@ if( TIM )
 	};
 }
 
-
-const action_none = tim.require( '../action/none' );
 
 const change_grow = tim.require( '../change/grow' );
 
@@ -113,8 +107,6 @@ const session_uid = tim.require( '../session/uid' );
 const tim_path = tim.require( 'tim.js/path' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
-
-const visual_base_zone = tim.require( '../visual/base/zone' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
@@ -185,7 +177,7 @@ def.lazy.attentionCenter =
 
 
 /*
-| Returns the action if an item with 'path' concerns about
+| Returns the hover if an item with 'path' concerns about
 | the hover.
 */
 def.static.concernsHover =
@@ -226,7 +218,7 @@ def.static.createGeneric =
 	);
 
 	root.setUserMark(
-		visual_mark_caret.pathAt( root.spaceVisual.get( key ).path.append( 'spaceUser' ), 0 )
+		visual_mark_caret.pathAt( root.space.get( key ).path.append( 'spaceUser' ), 0 )
 	);
 };
 
@@ -239,7 +231,7 @@ def.proto.click =
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
 		ctrl,    // true if ctrl or meta key was held down
-		mark     // mark of the visual space
+		mark     // mark, FIXME remove
 	)
 {
 /**/if( CHECK )
@@ -322,12 +314,6 @@ def.static.cycle =
 		case 'moveToButton' : return 'spaceUser';
 	}
 };
-
-
-/*
-| Returns the change for the action affecting this item.
-*/
-def.proto.getItemChange = visual_base_zone.getItemChange;
 
 
 /*
@@ -433,7 +419,6 @@ def.staticLazy.model =
 	return(
 		fabric_portal.create(
 			'access', 'rw',
-			'action', action_none.create( ),
 			'highlight', false,
 			'spaceTag', '',
 			'spaceUser', '',
@@ -1229,7 +1214,7 @@ def.lazy._moveToButtonShape =
 
 
 /*
-| Issues the moveTo action.
+| Moves the user to another space.
 */
 def.proto._moveTo =
 	function( )
@@ -1377,17 +1362,6 @@ def.lazy._zeroShape =
 			'height', zone.height
 		)
 	);
-};
-
-
-/*
-| The items zone possibly altered by action.
-| FIXME remove
-*/
-def.lazy._zone =
-	function( )
-{
-	return this.action.affectZone( this.zone, this.minSize );
 };
 
 

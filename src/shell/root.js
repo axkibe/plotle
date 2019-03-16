@@ -266,8 +266,6 @@ const notAnimationFinish =
 };
 
 
-
-
 /*
 | Startup of shell.
 */
@@ -318,151 +316,20 @@ def.static.startup =
 };
 
 
-/*
-| Creates the disc root.
-*/
-def.static._createDiscRoot =
-	function(
-		viewSize,
-		show
-	)
-{
-	const path = tim_path.empty.append( 'disc' );
-
-	const twPath = path.append( 'twig' );
-
-	return(
-		disc_root.create(
-			'action', action_none.create( ),
-			'controlTransform', gleam_transform.normal,
-			'path', path,
-			'show', show,
-			'viewSize', viewSize,
-			'twig:add', 'main',
-				disc_main.createFromLayout(
-					gruga_disc_main.layout,
-					twPath.append( 'main' ),
-					gleam_transform.normal,
-					show,
-					viewSize
-				),
-			'twig:add', 'create',
-				disc_create.createFromLayout(
-					gruga_disc_create.layout,
-					twPath.append( 'create' ),
-					gleam_transform.normal,
-					show,
-					viewSize
-				),
-			'twig:add', 'zoom',
-				disc_zoom.createFromLayout(
-					gruga_disc_zoom.layout,
-					twPath.append( 'zoom' ),
-					gleam_transform.normal,
-					show,
-					viewSize
-				)
-		)
-	);
-};
-
 
 /*
-| Creates the form root.
+| Exta checking
 */
-def.static._createFormRoot =
-	function(
-		viewSize
-	)
+def.proto._check =
+	function( )
 {
-	const formLayouts =
-	{
-		loading : [ gruga_loading.layout, form_loading ],
-		login : [ gruga_login.layout, form_login ],
-		moveTo : [ gruga_moveTo.layout, form_moveTo ],
-		noAccessToSpace : [ gruga_noAccessToSpace.layout, form_noAccessToSpace ],
-		nonExistingSpace : [ gruga_nonExistingSpace.layout, form_nonExistingSpace ],
-		signUp : [ gruga_signUp.layout, form_signUp ],
-		space : [ gruga_space.layout, form_space ],
-		user : [ gruga_user.layout, form_user ],
-		welcome : [ gruga_welcome.layout, form_welcome ],
-	};
-
-	let forms = { };
-
-	const formRootPath = tim_path.empty.append( 'form' );
-
-	// FIXME move this from layout creation to form.root
-
-	for( let name in formLayouts )
-	{
-		const entry = formLayouts[ name ];
-
-		const layout = entry[ 0 ];
-
-		const formPath = formRootPath.append( 'twig' ).append( name );
-
-		const twig = { };
-
-		for( let w = 0, wZ = layout.length; w < wZ; w++ )
-		{
-			const key = layout.getKey( w );
-
-			const wLayout = layout.get( key );
-
-			const path = formPath.append( 'twig' ).append( key );
-
-			twig[ key ] =
-				widget_factory.createFromLayout( wLayout, path, gleam_transform.normal );
-
-		}
-
-		forms[ name ] =
-			entry[ 1 ].create(
-				'action', action_none.create( ),
-				'viewSize', viewSize,
-				'twig:init', twig, layout._ranks
-			);
-	}
-
-	let formRoot =
-		form_root.create(
-			'action', action_none.create( ),
-			'path', formRootPath,
-			'viewSize', viewSize
-		);
-
-	const keys = Object.keys( forms );
-
-	// FUTURE do a twig:init instead
-	for( let a = 0, al = keys.length; a < al; a++ )
-	{
-		const key = keys[ a ];
-
-		formRoot =
-			formRoot.create(
-				'twig:add', key,
-				forms[ key ].create( 'viewSize', viewSize )
-			);
-	}
-
-	return formRoot;
-};
-
-
-/**
-*** Exta checking
-***/
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		const hover = this.hover;
+/**/	const hover = this.hover;
 /**/
-/**/		if( hover && hover.isEmpty ) throw new Error( );
-/**/	};
+/**/	if( hover && hover.isEmpty ) throw new Error( );
 /**/}
+};
 
 
 /*
@@ -497,9 +364,7 @@ def.adjust.action =
 				{
 					const path = iPaths.get( p );
 
-					if( path.get( 0 ) === 'spaceVisual' &&
-						!space.get( path.get( 2 ) )
-					) break;
+					if( path.get( 0 ) === 'space' && !space.get( path.get( 2 ) ) ) break;
 				}
 
 				if( p < pl )
@@ -833,7 +698,7 @@ def.proto.changeSpaceTransformCenter =
 def.proto.changeSpaceTransformAll =
 	function( )
 {
-	const space = root.spaceVisual;
+	const space = root._actionSpace;
 
 	const rZ = space.length;
 
@@ -1106,7 +971,7 @@ def.proto.input =
 	{
 		screen.input( text );
 
-		if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
+		if( root._actionSpace ) root._actionSpace.scrollMarkIntoView( );
 	}
 };
 
@@ -1530,10 +1395,7 @@ def.proto.showHome =
 {
 	root.create(
 		'action', action_none.create( ),
-		'show',
-			root.spaceVisual
-			? show_normal.create( )
-			: show_form.loading
+		'show', root._actionSpace ? show_normal.create( ) : show_form.loading
 	);
 };
 
@@ -1561,7 +1423,7 @@ def.proto.specialKey =
 
 	const result = screen.specialKey( key, shift, ctrl );
 
-	if( root.spaceVisual ) root.spaceVisual.scrollMarkIntoView( );
+	if( root._actionSpace ) root._actionSpace.scrollMarkIntoView( );
 
 	return result;
 };
@@ -1605,8 +1467,8 @@ def.proto.removeRange =
 /**/	if(
 /**/		frontMark.path.get( -1 ) !== 'text'
 /**/		|| backMark.path.get( -1 ) !== 'text'
-/**/		|| frontMark.path.get( 0 ) !== 'spaceVisual'
-/**/		|| backMark.path.get( 0 ) !== 'spaceVisual'
+/**/		|| frontMark.path.get( 0 ) !== 'space'
+/**/		|| backMark.path.get( 0 ) !== 'space'
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -1621,7 +1483,7 @@ def.proto.removeRange =
 				'at1', frontMark.at,
 				'at2', backMark.at,
 				'val',
-					root.space.getPath( frontMark.path.chop )
+					root._actionSpace.getPath( frontMark.path.chop )
 					.substring( frontMark.at, backMark.at )
 			)
 		);
@@ -1763,7 +1625,7 @@ def.proto.spawnRelation =
 	);
 
 	root.setUserMark(
-		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
+		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
 
@@ -1831,6 +1693,16 @@ def.proto.update =
 
 
 /*
+| The space with the current action applied.
+*/
+def.lazy._actionSpace =
+	function( )
+{
+	return this.space.create( 'action', this.action );
+};
+
+
+/*
 | Changes the space transform to transform.
 | Possibly with an animation.
 */
@@ -1866,6 +1738,139 @@ def.proto._changeTransformTo =
 
 
 /*
+| Creates the disc root.
+*/
+def.static._createDiscRoot =
+	function(
+		viewSize,
+		show
+	)
+{
+	const path = tim_path.empty.append( 'disc' );
+
+	const twPath = path.append( 'twig' );
+
+	return(
+		disc_root.create(
+			'action', action_none.create( ),
+			'controlTransform', gleam_transform.normal,
+			'path', path,
+			'show', show,
+			'viewSize', viewSize,
+			'twig:add', 'main',
+				disc_main.createFromLayout(
+					gruga_disc_main.layout,
+					twPath.append( 'main' ),
+					gleam_transform.normal,
+					show,
+					viewSize
+				),
+			'twig:add', 'create',
+				disc_create.createFromLayout(
+					gruga_disc_create.layout,
+					twPath.append( 'create' ),
+					gleam_transform.normal,
+					show,
+					viewSize
+				),
+			'twig:add', 'zoom',
+				disc_zoom.createFromLayout(
+					gruga_disc_zoom.layout,
+					twPath.append( 'zoom' ),
+					gleam_transform.normal,
+					show,
+					viewSize
+				)
+		)
+	);
+};
+
+
+/*
+| Creates the form root.
+*/
+def.static._createFormRoot =
+	function(
+		viewSize
+	)
+{
+	const formLayouts =
+	{
+		loading : [ gruga_loading.layout, form_loading ],
+		login : [ gruga_login.layout, form_login ],
+		moveTo : [ gruga_moveTo.layout, form_moveTo ],
+		noAccessToSpace : [ gruga_noAccessToSpace.layout, form_noAccessToSpace ],
+		nonExistingSpace : [ gruga_nonExistingSpace.layout, form_nonExistingSpace ],
+		signUp : [ gruga_signUp.layout, form_signUp ],
+		space : [ gruga_space.layout, form_space ],
+		user : [ gruga_user.layout, form_user ],
+		welcome : [ gruga_welcome.layout, form_welcome ],
+	};
+
+	let forms = { };
+
+	const formRootPath = tim_path.empty.append( 'form' );
+
+	// FIXME move this from layout creation to form.root
+
+	for( let name in formLayouts )
+	{
+		const entry = formLayouts[ name ];
+
+		const layout = entry[ 0 ];
+
+		const formPath = formRootPath.append( 'twig' ).append( name );
+
+		const twig = { };
+
+		for( let w = 0, wZ = layout.length; w < wZ; w++ )
+		{
+			const key = layout.getKey( w );
+
+			const wLayout = layout.get( key );
+
+			const path = formPath.append( 'twig' ).append( key );
+
+			twig[ key ] =
+				widget_factory.createFromLayout( wLayout, path, gleam_transform.normal );
+
+		}
+
+		forms[ name ] =
+			entry[ 1 ].create(
+				'action', action_none.create( ),
+				'viewSize', viewSize,
+				'twig:init', twig, layout._ranks
+			);
+	}
+
+	let formRoot =
+		form_root.create(
+			'action', action_none.create( ),
+			'path', formRootPath,
+			'viewSize', viewSize
+		);
+
+	const keys = Object.keys( forms );
+
+	// FUTURE do a twig:init instead
+	for( let a = 0, al = keys.length; a < al; a++ )
+	{
+		const key = keys[ a ];
+
+		formRoot =
+			formRoot.create(
+				'twig:add', key,
+				forms[ key ].create( 'viewSize', viewSize )
+			);
+	}
+
+	return formRoot;
+};
+
+
+
+/*
 | Returns current screen
 |
 | This is either a fabric space or a form
@@ -1881,7 +1886,7 @@ def.lazy._currentScreen =
 		case show_normal :
 		case show_zoom :
 
-			return root.spaceVisual;
+			return root._actionSpace;
 
 		case show_form :
 

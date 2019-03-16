@@ -40,13 +40,13 @@ const fabric_note = tim.require( '../fabric/note' );
 
 const fabric_portal = tim.require( '../fabric/portal' );
 
+const fabric_space = tim.require( '../fabric/space' );
+
 const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
 
 const result_hover = tim.require( '../result/hover' );
-
-const visual_space = tim.require( '../visual/space' );
 
 
 /*
@@ -108,7 +108,7 @@ def.proto.dragMove =
 /**/}
 
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	// there isn't really a creation going on?
 	if( !this.startPoint ) return;
@@ -185,7 +185,7 @@ def.proto.dragStart =
 /**/}
 
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const itemTim = this.itemTim;
 
@@ -215,7 +215,7 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'path', visual_space.transPath,
+					'path', fabric_space.transPath,
 					'transform', screen.transform
 				);
 
@@ -226,7 +226,7 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'path', visual_space.transPath,
+					'path', fabric_space.transPath,
 					'pos', ps,
 					'transform', screen.transform
 				);

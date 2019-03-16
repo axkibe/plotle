@@ -33,6 +33,8 @@ const action_none = tim.require( './none' );
 
 const change_grow = tim.require( '../change/grow' );
 
+const fabric_space = tim.require( '../fabric/space' );
+
 const fabric_stroke = tim.require( '../fabric/stroke' );
 
 const result_hover = tim.require( '../result/hover' );
@@ -40,8 +42,6 @@ const result_hover = tim.require( '../result/hover' );
 const session_uid = tim.require( '../session/uid' );
 
 const tim_path = tim.require( 'tim.js/path' );
-
-const visual_space = tim.require( '../visual/space' );
 
 
 /*
@@ -54,7 +54,7 @@ def.proto.affectsItem =
 {
 	let path = item.path;
 
-	if( path.get( 0 ) !== 'spaceVisual' ) return false;
+	if( path.get( 0 ) !== 'space' ) return false;
 
 	path = path.chop;
 
@@ -88,7 +88,7 @@ def.proto.dragMove =
 	)
 {
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
@@ -113,7 +113,7 @@ def.proto.dragStart =
 /**/}
 
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	root.create(
 		'action', this.create( 'from', this.hover || screen.pointToSpaceRS( p, !ctrl ) )

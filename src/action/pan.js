@@ -25,9 +25,9 @@ if( TIM )
 
 const action_none = tim.require( './none' );
 
-const result_hover = tim.require( '../result/hover' );
+const fabric_space = tim.require( '../fabric/space' );
 
-const visual_space = tim.require( '../visual/space' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*
@@ -42,7 +42,7 @@ def.proto.dragMove =
 	)
 {
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const pd = p.sub( this.startPoint );
 

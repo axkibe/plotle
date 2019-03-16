@@ -68,6 +68,8 @@ const action_createRelation = tim.require( '../action/createRelation' );
 
 const action_createStroke = tim.require( '../action/createStroke' );
 
+const action_none = tim.require( '../action/none' );
+
 const action_pan = tim.require( '../action/pan' );
 
 const action_select = tim.require( '../action/select' );
@@ -164,7 +166,7 @@ def.static.concernsHover =
 		hover
 	)
 {
-	return( hover && hover.get( 0 ) === 'spaceVisual' ? hover : undefined );
+	return( hover && hover.get( 0 ) === 'space' ? hover : undefined );
 };
 
 
@@ -181,6 +183,65 @@ def.static.concernsMark =
 		? mark
 		: undefined
 	);
+};
+
+
+/*
+| Starts an operation with the pointing device held down.
+*/
+def.proto.dragStart =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+	const access = this.access;
+
+	const frame = this.frame;
+
+	// see if the frame was targeted
+	if( access == 'rw' && frame && frame.dragStart( p, shift, ctrl ) ) return;
+
+	const action = this.action;
+
+	// see if one item was targeted
+	for( let a = 0, al = this.length; a < al; a++ )
+	{
+		if( this.atRank( a ).dragStart( p, shift, ctrl, action ) ) return;
+	}
+
+	root.create(
+		'action', action_pan.create( 'offset', this.transform.offset, 'startPoint', p )
+	);
+};
+
+
+/*
+| Stops an operation with the poiting device button held down.
+*/
+def.proto.dragStop =
+	function(
+		p,     // cursor point
+		shift, // true if shift key was pressed
+		ctrl   // true if ctrl key was pressed
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.space !== this ) throw new Error( );
+/**/}
+
+	// FIXME make map
+	switch( this.action.timtype )
+	{
+		case action_select : this._stopSelect( p, shift, ctrl ); break;
+
+		default : throw new Error( );
+	}
+
+	return true;
 };
 
 
@@ -252,8 +313,6 @@ def.adjust.get =
 	// this is all thats needed for serverside
 	if( NODE ) return item.create( 'path', path );
 
-	const action = fabric_item.concernsAction( this.action, item );
-
 	const mark = fabric_item.concernsMark( this.mark, path );
 
 	let highlight = !!( mark && mark.containsPath( path ) );
@@ -269,7 +328,6 @@ def.adjust.get =
 		item =
 			item.create(
 				'access', access,
-				'action', action,
 				'highlight', highlight,
 				'hover', hover,
 				'mark', mark,
@@ -284,7 +342,6 @@ def.adjust.get =
 		item =
 			item.create(
 				'access', access,
-				'action', action,
 				'highlight', highlight,
 				'hover', hover,
 				'mark', mark,
@@ -315,49 +372,52 @@ def.adjust.get =
 		}
 	}
 
-	let action2 = action;
 	let highlight2 = highlight;
 
 	// FIXME take scrollPos into redo
 
-	action2 = fabric_item.concernsAction( this.action, item );
-
 	// checks if the highlight feature has changed on the created item
-	if( !highlight2 && action2 && item.timtype ) highlight2 = this.action.highlightItem( item );
+	if( !highlight2 && item.timtype ) highlight2 = this.action.highlightItem( item );
 
-	if( action2 !== action || highlight2 !== highlight )
-	{
-		item = item.create( 'action', action2, 'highlight', highlight2 );
-	}
+	if( highlight2 !== highlight ) item = item.create( 'highlight', highlight2 );
 
 	return item;
 };
 
 
 /*
-| Adjusts the path attribute to a default.
+| Returns a list of items by a list of paths.
 */
-def.adjust.path =
+def.proto.getList =
 	function(
-		path
+		paths
 	)
 {
-	if( path ) return path;
+/**/if( CHECK )
+/**/{
+/**/	if( paths.timtype !== tim_path_list ) throw new Error( );
+/**/
+/**/	if( paths.length === 0 ) throw new Error( );
+/**/}
 
-	return tim_path.empty.append( 'space' );
+	const items = [ ];
+
+	for( let a = 0, al = paths.length; a < al; a++ )
+	{
+		const path = paths.get( a );
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
+/**/
+/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
+/**/	}
+
+		items.push( this.get( path.get( 2 ) ) );
+	}
+
+	return fabric_itemList.create( 'list:init', items );
 };
-
-
-/*
-| Path of the visual space.
-*/
-def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'space' );
-
-
-/*
-| The path for transientItems
-*/
-def.staticLazy.transPath = ( ) => fabric_space.spacePath.append( ':transient' );
 
 
 /*
@@ -469,105 +529,6 @@ def.lazy.glint =
 
 
 /*
-| Starts an operation with the pointing device held down.
-*/
-def.proto.dragStart =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-	const access = this.access;
-
-	const frame = this.frame;
-
-	// see if the frame was targeted
-	if( access == 'rw' && frame && frame.dragStart( p, shift, ctrl ) ) return;
-
-	// see if one item was targeted
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		const item = this.atRank( a );
-
-		if( item.dragStart( p, shift, ctrl ) ) return;
-	}
-
-	root.create(
-		'action',
-			action_pan.create(
-				'offset', this.transform.offset,
-				'startPoint', p
-			)
-	);
-};
-
-
-/*
-| Stops an operation with the poiting device button held down.
-*/
-def.proto.dragStop =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.spaceVisual !== this ) throw new Error( );
-/**/}
-
-	// FIXME make map
-	switch( this.action.timtype )
-	{
-
-		case action_select : this._stopSelect( p, shift, ctrl ); break;
-
-		default : throw new Error( );
-	}
-
-	return true;
-};
-
-
-/*
-| Returns a list of visual items by a list of paths.
-*/
-def.proto.getList =
-	function(
-		paths
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( paths.timtype !== tim_path_list ) throw new Error( );
-/**/
-/**/	if( paths.length === 0 ) throw new Error( );
-/**/}
-
-	const items = [ ];
-
-	for( let a = 0, al = paths.length; a < al; a++ )
-	{
-		const path = paths.get( a );
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( path.get( 0 ) !== 'spaceVisual' ) throw new Error( );
-/**/
-/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
-/**/	}
-
-		items.push( this.get( path.get( 2 ) ) );
-	}
-
-	return fabric_itemList.create( 'list:init', items );
-};
-
-
-/*
 | Text input
 */
 def.proto.input =
@@ -612,6 +573,20 @@ def.proto.mousewheel =
 
 
 /*
+| Adjusts the path attribute to a default.
+*/
+def.adjust.path =
+	function(
+		path
+	)
+{
+	if( path ) return path;
+
+	return tim_path.empty.append( 'space' );
+};
+
+
+/*
 | Mouse hover.
 |
 | Returns a result_hover with hovering path and cursor to show.
@@ -648,6 +623,25 @@ def.proto.pointingHover =
 
 
 /*
+| (De)transforms a point from visual reference system (VisualRS) to
+| space reference system (SpaceRS)
+*/
+def.proto.pointToSpaceRS =
+	function(
+		p,    // the point in visual RS
+		snap  // if true snap if enabled for space
+	)
+{
+	if( !snap || !this.hasSnapping )
+	{
+		return p.detransform( this.transform );
+	}
+
+	return this._grid.snap( p ).detransform( this.transform );
+};
+
+
+/*
 | Tries to scrolls the focused item to move
 | the mark into view.
 */
@@ -664,6 +658,12 @@ def.proto.scrollMarkIntoView =
 | The disc is shown while a space is shown.
 */
 def.proto.showDisc = true;
+
+
+/*
+| Path of the space.
+*/
+def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'space' );
 
 
 /*
@@ -730,6 +730,12 @@ def.proto.specialKey =
 
 
 /*
+| The path for transientItems
+*/
+def.staticLazy.transPath = ( ) => fabric_space.spacePath.append( ':transient' );
+
+
+/*
 | The zoomGrid glint for this space.
 */
 def.lazy._grid =
@@ -747,7 +753,9 @@ def.lazy._grid =
 
 /*
 | Moves during creating.
+| FIXME cleanup
 */
+/*
 def.proto._moveCreate =
 	function(
 		p,      // point of stop
@@ -770,25 +778,7 @@ def.proto._moveCreate =
 		);
 	}
 };
-
-
-/*
-| (De)transforms a point from visual reference system (VisualRS) to
-| space reference system (SpaceRS)
 */
-def.proto.pointToSpaceRS =
-	function(
-		p,    // the point in visual RS
-		snap  // if true snap if enabled for space
-	)
-{
-	if( !snap || !this.hasSnapping )
-	{
-		return p.detransform( this.transform );
-	}
-
-	return this._grid.snap( p ).detransform( this.transform );
-};
 
 
 /*

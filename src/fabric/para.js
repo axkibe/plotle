@@ -535,7 +535,7 @@ def.proto.specialKey =
 
 				root.setUserMark(
 					visual_mark_range.create(
-						'doc', doc.fabric,
+						'doc', doc,
 						'beginMark',
 							visual_mark_text.create(
 								'path', v0.textPath,
@@ -1134,7 +1134,7 @@ def.proto._setMark =
 			'retainx', retainx
 		)
 		: visual_mark_range.create(
-			'doc', doc.fabric,
+			'doc', doc,
 			'beginMark', beginMark,
 			'endMark', mark,
 			'retainx', retainx

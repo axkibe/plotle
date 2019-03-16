@@ -163,7 +163,7 @@ def.proto.toggleCheckbox =
 	{
 		case 'gridCheckBox' :
 		{
-			const prev = root.spaceFabric.hasGrid;
+			const prev = root.space.hasGrid;
 
 			const change =
 				change_set.create(
@@ -179,7 +179,7 @@ def.proto.toggleCheckbox =
 
 		case 'snappingCheckBox' :
 		{
-			const prev = root.spaceFabric.hasSnapping;
+			const prev = root.space.hasSnapping;
 
 			const change =
 				change_set.create(

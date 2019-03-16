@@ -49,7 +49,7 @@ const action_none = tim.require( './none' );
 
 const change_list = tim.require( '../change/list' );
 
-const visual_space = tim.require( '../visual/space' );
+const fabric_space = tim.require( '../fabric/space' );
 
 
 /*
@@ -141,7 +141,7 @@ def.proto.dragMove =
 /**/}
 
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const transform = screen.transform;
 

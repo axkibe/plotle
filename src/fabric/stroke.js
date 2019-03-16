@@ -72,8 +72,6 @@ const gruga_relation = tim.require( '../gruga/relation' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
-const visual_base_stroke = tim.require( '../visual/base/stroke' );
-
 
 /*
 | The attention center.
@@ -92,13 +90,10 @@ def.proto.click =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
-		ctrl,    // true if ctrl or meta key was held down
-		mark     // mark of the visual space
+		ctrl     // true if ctrl or meta key was held down
 	)
 {
-	return;
 };
-
 
 
 /*
@@ -120,12 +115,6 @@ def.proto.dragStart =
 	// false or undefined
 	return false;
 };
-
-
-/*
-| Returns the change for the action affecting this item.
-*/
-def.proto.getItemChange = visual_base_stroke.getItemChange;
 
 
 /*
@@ -185,14 +174,12 @@ def.proto.pointingHover =
 def.proto.shape =
 	function( )
 {
-	const fabric = this.fabric;
-
 	return(
 		gleam_arrow.create(
 			'joint1', this._line( ).p1,
 			'joint2', this._line( ).p2,
-			'end1', fabric.fromStyle,
-			'end2', fabric.toStyle
+			'end1', this.fromStyle,
+			'end2', this.toStyle
 		).shape
 	);
 };
@@ -214,7 +201,7 @@ def.lazy.zone =
 def.lazy._from =
 	function( )
 {
-	const ffrom = this.fabric.from;
+	const ffrom = this.from;
 
 	switch( ffrom.timtype )
 	{
@@ -233,8 +220,8 @@ def.lazy._from =
 def.proto._line =
 	function( )
 {
-	let ffrom = this.fabric.from;
-	let fto = this.fabric.to;
+	let ffrom = this.from;
+	let fto = this.to;
 
 	if( ffrom.timtype === gleam_point )
 	{
@@ -242,9 +229,10 @@ def.proto._line =
 	}
 	else
 	{
-		const ifrom = root.spaceVisual.getPath( ffrom );
+		// FIXME immutable tree hierachy violation
+		const ifrom = root.space.getPath( ffrom );
 
-		if( ifrom ) ffrom = root.spaceVisual.getPath( ffrom ).shape( );
+		if( ifrom ) ffrom = root.space.getPath( ffrom ).shape( );
 		else ffrom = gleam_point.zero;
 	}
 
@@ -254,9 +242,10 @@ def.proto._line =
 	}
 	else
 	{
-		const ito = root.spaceVisual.getPath( fto );
+		// FIXME immutable tree hierachy violation
+		const ito = root.space.getPath( fto );
 
-		if( ito ) fto = root.spaceVisual.getPath( fto ).shape( );
+		if( ito ) fto = root.space.getPath( fto ).shape( );
 		else fto = gleam_point.zero;
 	}
 
@@ -270,7 +259,7 @@ def.proto._line =
 def.lazy._to =
 	function( )
 {
-	const fto = this.fabric.to;
+	const fto = this.to;
 
 	switch( fto.timtype )
 	{

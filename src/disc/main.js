@@ -459,7 +459,7 @@ def.proto.pushButton =
 			{
 				const pi = paths.get( p );
 
-				const rank = root.spaceFabric.rankOf( pi.get( 2 ) );
+				const rank = root.space.rankOf( pi.get( 2 ) );
 
 				let rc = 0;
 
@@ -473,7 +473,7 @@ def.proto.pushButton =
 				changes[ p ] =
 					change_shrink.create(
 						'path', pi.chop,
-						'prev', root.spaceFabric.getPath( pi.chop ),
+						'prev', root.space.getPath( pi.chop ),
 						'rank', rank - rc
 					);
 

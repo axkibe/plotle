@@ -119,14 +119,11 @@ def.proto.alter =
 /**/	if( root.link !== this ) throw new Error( );
 /**/}
 
-	const space = changeWrap.changeTree( root.spaceFabric );
+	const space = changeWrap.changeTree( root.space );
 
 	root.create(
-		'link',
-			root.link.create(
-				'_outbox', root.link._outbox.append( changeWrap )
-			),
-		'spaceFabric', space
+		'link', root.link.create( '_outbox', root.link._outbox.append( changeWrap ) ),
+		'space', space
 	);
 
 	root.link._sendChanges( );
@@ -231,9 +228,9 @@ def.proto._onAcquireSpace =
 		);
 
 	root.create(
-		'spaceFabric',
+		'space',
 			reply.space.create(
-				'path', tim_path.empty.append( 'spaceFabric' ),
+				'path', tim_path.empty.append( 'space' ),
 				'ref', request.spaceRef
 			),
 		'link',
@@ -435,7 +432,7 @@ def.proto._gotUpdateSpace =
 
 	const seq = changeDynamic.seq;
 
-	let space = root.spaceFabric;
+	let space = root.space;
 
 	let gotOwnChgs = false;
 
@@ -510,7 +507,7 @@ def.proto._gotUpdateSpace =
 						'seq', seq + changeWrapList.length
 					)
 			),
-		'spaceFabric', space
+		'space', space
 	);
 
 	// FUTURE move to "markJockey"

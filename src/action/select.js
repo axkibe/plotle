@@ -28,6 +28,8 @@ if( TIM )
 
 const action_none = tim.require( './none' );
 
+const fabric_space = tim.require( '../fabric/space' );
+
 const gleam_rect = tim.require( '../gleam/rect' );
 
 const result_hover = tim.require( '../result/hover' );
@@ -35,8 +37,6 @@ const result_hover = tim.require( '../result/hover' );
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
 const visual_mark_items = tim.require( '../visual/mark/items' );
-
-const visual_space = tim.require( '../visual/space' );
 
 
 /*
@@ -91,7 +91,7 @@ def.proto.dragMove =
 	)
 {
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	if( this.itemPath )
 	{
@@ -121,7 +121,7 @@ def.proto.dragStart =
 /**/}
 
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 

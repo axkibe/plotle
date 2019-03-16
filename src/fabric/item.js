@@ -88,32 +88,33 @@ def.proto.createRelationStop =
 
 	if( !this.tZone.within( p ) ) return false;
 
-	root.spawnRelation( root.spaceVisual.get( action.fromItemPath.get( -1 ) ), this );
+	root.spawnRelation( root.space.get( action.fromItemPath.get( -1 ) ), this );
 
 	return true;
 };
 
 
 /*
-| dragging start.
+| Dragging start.
 */
 def.static.dragStart =
 def.proto.dragStart =
 	function(
-		p,
-		shift,
-		ctrl
+		p,       // point where dragging starts
+		shift,   // true if shift key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		action   // current action
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	if( !this.pointWithin( p ) ) return false;
+	if( !this.pointWithin( p ) ) return;
 
 	// dragging
-	if( this.access !== 'rw' ) return false;
+	if( this.access !== 'rw' ) return;
 
 	let mark = this.mark;
 
@@ -135,8 +136,6 @@ def.proto.dragStart =
 				'startZone', this.zone
 			)
 	);
-
-	return true;
 };
 
 

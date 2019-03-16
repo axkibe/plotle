@@ -34,9 +34,9 @@ const action_none = tim.require( './none' );
 
 const change_list = tim.require( '../change/list' );
 
-const result_hover = tim.require( '../result/hover' );
+const fabric_space = tim.require( '../fabric/space' );
 
-const visual_space = tim.require( '../visual/space' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /**
@@ -53,7 +53,7 @@ const visual_space = tim.require( '../visual/space' );
 /**/		{
 /**/			if( paths.get( c ).isEmpty ) throw new Error( );
 /**/
-/**/			if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/			if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
 /**/		}
 /**/	};
 /**/}
@@ -122,7 +122,7 @@ def.proto.dragMove =
 	)
 {
 	// this action only makes sense on spaces
-	if( screen.timtype !== visual_space ) return;
+	if( screen.timtype !== fabric_space ) return;
 
 	const startPoint = this.startPoint;
 

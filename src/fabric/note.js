@@ -21,10 +21,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// current action
-		// FIXME remove
-		action : { type : [ 'undefined', '< ../action/types' ] },
-
 		// the notes document
 		doc : { type : './doc', json : true },
 
@@ -68,7 +64,6 @@ if( TIM )
 	};
 }
 
-const action_none = tim.require( '../action/none' );
 
 const change_grow = tim.require( '../change/grow' );
 
@@ -110,7 +105,6 @@ const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
 const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
-const visual_base_zone = tim.require( '../visual/base/zone', 'NOW' );
 
 /*
 | Exta checking
@@ -152,7 +146,7 @@ def.static.createGeneric =
 	);
 
 	root.setUserMark(
-		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
+		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
 
@@ -182,11 +176,6 @@ def.adjust.doc =
 		)
 	);
 };
-
-/*
-| Returns the change for the action affecting this item.
-*/
-def.proto.getItemChange = visual_base_zone.getItemChange;
 
 
 /*
@@ -234,7 +223,6 @@ def.staticLazy.model =
 	return(
 		fabric_note.create(
 			'access', 'rw',
-			'action', action_none.create( ),
 			'doc',
 				fabric_doc.create(
 					'twig:add', '1', fabric_para.create( 'text', '' )
@@ -492,17 +480,6 @@ def.lazy._zeroShape =
 			'b', cr
 		)
 	);
-};
-
-
-/*
-| The items zone possibly altered by action.
-| FIXME remove.
-*/
-def.lazy._zone =
-	function( )
-{
-	return this.action.affectZone( this.zone, this.minSize );
 };
 
 

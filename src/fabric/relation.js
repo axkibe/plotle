@@ -85,9 +85,10 @@ const gruga_relation = tim.require( '../gruga/relation' );
 def.proto.glint =
 	function( )
 {
-	const item1 = root.spaceVisual.get( this.item1key );
+	// FIXME immutable tree hierachy violaion
+	const item1 = root.space.get( this.item1key );
 
-	const item2 = root.spaceVisual.get( this.item2key );
+	const item2 = root.space.get( this.item2key );
 
 	let shape1, shape2;
 

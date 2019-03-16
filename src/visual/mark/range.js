@@ -46,7 +46,7 @@ def.lazy.docPath =
 {
 	const beginPath = this.beginMark.path;
 
-	if( beginPath.length < 4 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
+	if( beginPath.length < 4 || beginPath.get( 0 ) !== 'space' ) return;
 
 /**/if( CHECK )
 /**/{
@@ -132,7 +132,7 @@ def.lazy.itemPaths =
 {
 	const beginPath = this.beginMark.path;
 
-	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'spaceVisual' ) return;
+	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'space' ) return;
 
 	return tim_path_list.create( 'list:append', beginPath.limit( 3 ) );
 };
@@ -251,7 +251,7 @@ def.proto.createTransformed =
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	if( this.beginMark.path.get( 0 ) !== 'spaceVisual' ) return this;
+	if( this.beginMark.path.get( 0 ) !== 'space' ) return this;
 
 	const bm = this.beginMark.createTransformed( changes );
 

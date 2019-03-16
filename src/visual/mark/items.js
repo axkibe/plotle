@@ -35,7 +35,7 @@ const pathList = tim.require( 'tim.js/pathList' );
 /**/		{
 /**/			if( paths.get( c ).isEmpty ) throw new Error( );
 /**/
-/**/			if( paths.get( c ).get( 0 ) !== 'spaceVisual' ) throw new Error( );
+/**/			if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
 /**/		}
 /**/	};
 /**/}
@@ -85,7 +85,7 @@ def.proto.createTransformed =
 	{
 		const tm = changes.transform( this._changeMarkNode( a ) );
 
-		if( tm ) arr.push( tm.path.prepend( 'spaceVisual' ) );
+		if( tm ) arr.push( tm.path.prepend( 'space' ) );
 	}
 
 	if( arr.length === 0 ) return undefined;

@@ -61,7 +61,7 @@ def.lazy.itemPaths =
 {
 	const path = this.textMark.path;
 
-	if( path.length < 3 || path.get( 0 ) !== 'spaceVisual' ) return;
+	if( path.length < 3 || path.get( 0 ) !== 'space' ) return;
 
 	return tim_path_list.create( 'list:append', path.limit( 3 ) );
 };
@@ -90,7 +90,7 @@ def.proto.createTransformed =
 		changes
 	)
 {
-	if( this.textMark.path.get( 0 ) !== 'spaceVisual' ) return this;
+	if( this.textMark.path.get( 0 ) !== 'space' ) return this;
 
 	const tm = this.textMark.createTransformed( changes );
 

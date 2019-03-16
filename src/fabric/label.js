@@ -18,10 +18,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// current action
-		// no json thus not saved or transmitted
-		action : { type : [ 'undefined', '< ../action/types' ] },
-
 		// the labels document
 		doc : { type : './doc', json : true },
 
@@ -55,7 +51,6 @@ if( TIM )
 	def.json = 'label';
 }
 
-const action_none = tim.require( '../action/none' );
 
 const change_grow = tim.require( '../change/grow' );
 
@@ -82,8 +77,6 @@ const gruga_label = tim.require( '../gruga/label' );
 const session_uid = tim.require( '../session/uid' );
 
 const tim_path = tim.require( 'tim.js/path' );
-
-const visual_base_posfs = tim.require( '../visual/base/posfs' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
 
@@ -134,7 +127,7 @@ def.static.createGeneric =
 	);
 
 	root.setUserMark(
-		visual_mark_caret.pathAt( root.spaceVisual.get( key ).doc.atRank( 0 ).textPath, 0 )
+		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
 };
 
@@ -191,12 +184,6 @@ def.lazy.fontsize =
 
 
 /*
-| Returns the change for the action affecting this item.
-*/
-def.proto.getItemChange = visual_base_posfs.getItemChange;
-
-
-/*
 | The items glint.
 */
 def.proto.glint = function( ) { return this._glint; };
@@ -215,8 +202,8 @@ def.proto.markLost =
 		root.alter(
 			change_shrink.create(
 				'path', pc,
-				'prev', root.spaceFabric.getPath( pc ),
-				'rank', root.spaceFabric.rankOf( pc.get( 1 ) )
+				'prev', root.space.getPath( pc ),
+				'rank', root.space.rankOf( pc.get( 1 ) )
 			)
 		);
 	}
@@ -256,7 +243,6 @@ def.staticLazy.model =
 	return(
 		fabric_label.create(
 			'access', 'rw',
-			'action', action_none.create( ),
 			'doc',
 				fabric_doc.create(
 					'twig:add', '1', fabric_para.create( 'text', 'Label' )

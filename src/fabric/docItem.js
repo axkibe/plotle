@@ -52,7 +52,7 @@ def.proto.click =
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
 		ctrl,    // true if ctrl or meta key was held down
-		mark     // mark of the visual space
+		mark     // mark, FIXME remove
 	)
 {
 /**/if( CHECK )
@@ -79,17 +79,16 @@ def.proto.dragStart =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
-		ctrl     // true if ctrl or meta key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		action   // current action
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
 	const sbary = this.scrollbarY;
-
-	const action = this.action;
 
 	if( action.timtype === action_none && sbary )
 	{
@@ -154,7 +153,7 @@ def.proto.markForPoint =
 	{
 		return(
 			visual_mark_range.create(
-				'doc', this.doc.fabric,
+				'doc', this.doc,
 				'beginMark', mark.textMark,
 				'endMark',
 					visual_mark_text.create(

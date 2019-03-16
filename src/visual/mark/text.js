@@ -44,7 +44,7 @@ const change_mark_text = tim.require( '../../change/mark/text' );
 def.lazy._changeMarkText =
 	function( )
 {
-	if( this.path.get( 0 ) !== 'spaceVisual' ) return;
+	if( this.path.get( 0 ) !== 'space' ) return;
 
 	return(
 		change_mark_text.create(
@@ -64,7 +64,7 @@ def.proto.createTransformed =
 		changes
 	)
 {
-	if( this.path.get( 0 ) !== 'spaceVisual' ) return this;
+	if( this.path.get( 0 ) !== 'space' ) return this;
 
 	const tm = changes.transform( this._changeMarkText );
 
@@ -73,7 +73,7 @@ def.proto.createTransformed =
 	const vm =
 		this.create(
 			'at', tm.at,
-			'path', tm.path.prepend( 'spaceVisual' )
+			'path', tm.path.prepend( 'space' )
 		);
 
 	tim.aheadValue( vm, '_changeMarkText', tm );
