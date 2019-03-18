@@ -136,6 +136,7 @@ def.proto.dragStop =
 	const key = session_uid.newUid( );
 
 	root.alter(
+		'change',
 		change_grow.create(
 			'val', val,
 			'path', tim_path.empty.append( 'twig' ).append( key ),

@@ -119,6 +119,7 @@ def.static.createGeneric =
 /**/}
 
 	root.alter(
+		'change',
 		change_grow.create(
 			'val', label,
 			'path', tim_path.empty.append( 'twig' ).append( key ),
@@ -200,6 +201,7 @@ def.proto.markLost =
 		const pc = this.path.chop;
 
 		root.alter(
+			'change',
 			change_shrink.create(
 				'path', pc,
 				'prev', root.space.getPath( pc ),

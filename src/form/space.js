@@ -172,7 +172,7 @@ def.proto.toggleCheckbox =
 					'prev', prev
 				);
 
-			root.alter( change );
+			root.alter( 'change', change );
 
 			return;
 		}
@@ -188,7 +188,7 @@ def.proto.toggleCheckbox =
 					'prev', prev
 				);
 
-			root.alter( change );
+			root.alter( 'change', change );
 
 			return;
 		}

@@ -39,28 +39,29 @@ const fabric_space = tim.require( '../fabric/space' );
 const result_hover = tim.require( '../result/hover' );
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
+/**/	const paths = this.itemPaths;
+/**/
+/**/	for( let c = 0, cZ = paths.length; c < cZ; c++ )
 /**/	{
-/**/		const paths = this.itemPaths;
+/**/		if( paths.get( c ).isEmpty ) throw new Error( );
 /**/
-/**/		for( let c = 0, cZ = paths.length; c < cZ; c++ )
-/**/		{
-/**/			if( paths.get( c ).isEmpty ) throw new Error( );
-/**/
-/**/			if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
-/**/		}
-/**/	};
+/**/		if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
+/**/	}
 /**/}
+};
 
 
 /*
 | Returns true if an entity with path is affected by this action.
+| FIXME remove
 */
 def.proto.affectsItem =
 	function(
@@ -82,6 +83,7 @@ def.proto.affectsItem =
 
 /*
 | Returns a zone affected by this action.
+| FIXME remove
 */
 def.proto.affectZone =
 	function(
@@ -100,6 +102,7 @@ def.proto.affectZone =
 
 /*
 | Returns a zone affected by this action.
+| FIXME remove
 */
 def.proto.affectPoint =
 	function(
@@ -111,51 +114,13 @@ def.proto.affectPoint =
 
 
 /*
-| Drag moves during item dragging.
+| The changes this action applies on the fabric tree.
 */
-def.proto.dragMove =
-	function(
-		p,      // point, viewbased point of stop
-		screen, // the screen for this operation
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
+def.lazy.changes =
+	function( )
 {
-	// this action only makes sense on spaces
-	if( screen.timtype !== fabric_space ) return;
-
-	const startPoint = this.startPoint;
-
-	const transform = screen.transform;
-
-	const startPos = this.startZone.pos;
-
-	const dp = p.detransform( transform );
-
-	let movedStartPos = startPos.add( dp ).sub( startPoint );
-
-	// FIXME decomplicated this.
-	movedStartPos = screen.pointToSpaceRS( movedStartPos.transform( transform ), !ctrl );
-
-	root.create( 'action', this.create( 'moveBy', movedStartPos.sub( startPos ) ) );
-};
-
-
-/*
-| Stops a drag.
-*/
-def.proto.dragStop =
-	function(
-		p,      // point of stop
-		screen, // the screen for this operation
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const paths = this.itemPaths;
-
 	let changes;
-
+XXX
 	for( let a = 0, al = paths.length; a < al; a++ )
 	{
 		const item = root.getPath( paths.get( a ) );
@@ -186,9 +151,55 @@ def.proto.dragStop =
 		}
 	}
 
-	if( changes ) root.alter( changes );
+};
 
-	root.create( 'action', action_none.create( ) );
+
+/*
+| Drag moves during item dragging.
+*/
+def.proto.dragMove =
+	function(
+		p,      // point, viewbased point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	// this action only makes sense on spaces
+	if( screen.timtype !== fabric_space ) return;
+
+	const startPoint = this.startPoint;
+
+	const transform = screen.transform;
+
+	const startPos = this.startZone.pos;
+
+	const dp = p.detransform( transform );
+
+	let movedStartPos = startPos.add( dp ).sub( startPoint );
+
+	// FIXME decomplicated this.
+	movedStartPos = screen.pointToSpaceRS( movedStartPos.transform( transform ), !ctrl );
+
+	root.alter( 'action', this.create( 'moveBy', movedStartPos.sub( startPos ) ) );
+};
+
+
+/*
+| Stops a drag.
+*/
+def.proto.dragStop =
+	function(
+		p,      // point of stop
+		screen, // the screen for this operation
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+	const paths = this.itemPaths;
+
+
+	root.alter( 'action', action_none.create( ), 'change', this.changes );
 };
 
 

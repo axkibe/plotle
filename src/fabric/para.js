@@ -445,7 +445,7 @@ def.proto.input =
 		}
 	}
 
-	root.alter( changes );
+	root.alter( 'change', changes );
 
 	root.clearRetainX( );
 };
@@ -673,6 +673,7 @@ def.proto._keyBackspace =
 	if( at > 0 )
 	{
 		root.alter(
+			'change',
 			change_remove.create(
 				'path', this.textPath.chop,
 				'at1', at - 1,
@@ -698,6 +699,7 @@ def.proto._keyBackspace =
 	const ve = doc.atRank( r - 1 );
 
 	root.alter(
+		'change',
 		change_join.create(
 			'path', ve.textPath.chop,
 			'path2', this.textPath.chop,
@@ -723,6 +725,7 @@ def.proto._keyDel =
 	if( at < this.text.length )
 	{
 		root.alter(
+			'change',
 			change_remove.create(
 				'path', this.textPath.chop,
 				'at1', at,
@@ -746,6 +749,7 @@ def.proto._keyDel =
 	if( r >= doc.length - 1 ) return;
 
 	root.alter(
+		'change',
 		change_join.create(
 			'path', this.textPath.chop,
 			'path2', doc.atRank( r + 1).textPath.chop,
@@ -837,6 +841,7 @@ def.proto._keyEnter =
 	const tpc = this.textPath.chop;
 
 	root.alter(
+		'change',
 		change_split.create(
 			'path', tpc,
 			'path2', tpc.set( -2, session_uid.newUid( ) ),

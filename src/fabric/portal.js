@@ -210,6 +210,7 @@ def.static.createGeneric =
 	const key = session_uid.newUid( );
 
 	root.alter(
+		'change',
 		change_grow.create(
 			'path', tim_path.empty.append( 'twig' ).append( key ),
 			'val', portal,
@@ -346,6 +347,7 @@ def.proto.input =
 		const line = rx[ 1 ];
 
 		root.alter(
+			'change',
 			change_insert.create(
 				'val', line,
 				'path', this.path.append( section ).chop,
@@ -866,6 +868,7 @@ def.proto._keyBackspace =
 	if( at <= 0 ) return;
 
 	root.alter(
+		'change',
 		change_remove.create(
 			'path', this.path.append( section ).chop,
 			'at1', at - 1,
@@ -972,6 +975,7 @@ def.proto._keyDel =
 	if( at >= value.length ) return;
 
 	root.alter(
+		'change',
 		change_remove.create(
 			'path', this.path.append( section ).chop,
 			'at1', at,

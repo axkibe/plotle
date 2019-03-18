@@ -68,8 +68,6 @@ const action_createRelation = tim.require( '../action/createRelation' );
 
 const action_createStroke = tim.require( '../action/createStroke' );
 
-const action_none = tim.require( '../action/none' );
-
 const action_pan = tim.require( '../action/pan' );
 
 const action_select = tim.require( '../action/select' );

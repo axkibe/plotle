@@ -1,5 +1,7 @@
 /*
 | The root of the user shell.
+|
+| FIXME remove all external root.create calls.
 */
 'use strict';
 
@@ -237,18 +239,6 @@ const visual_mark_range = tim.require( '../visual/mark/range' );
 const widget_factory = tim.require( '../widget/factory' );
 
 
-/*
-| FIXME
-*/
-def.staticLazy._loadingSpaceTextPath = ( ) =>
-	tim_path.empty
-	.append( 'form' )
-	.append( 'twig' )
-	.append( 'loading' )
-	.append( 'twig' )
-	.append( 'spaceText' )
-	.append( 'text' );
-
 
 /*
 | When animations are turned off, but the action has
@@ -263,72 +253,6 @@ const notAnimationFinish =
 	if( !action.finishAnimation ) return;
 
 	action.finishAnimation( );
-};
-
-
-/*
-| Startup of shell.
-*/
-def.static.startup =
-	function(
-		display
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	// singleton
-/**/	if( root ) throw new Error( );
-/**/}
-
-	const viewSize = display.size;
-
-	const show = show_form.loading;
-
-	const ajaxPath = tim_path.empty.append( 'ajax' );
-
-	let userCreds = user_creds.createFromLocalStorage( );
-
-	if( !userCreds ) userCreds = user_creds.createVisitor( );
-
-	shell_root.create(
-		'action', action_none.create( ),
-		'ajax',
-			net_ajax.create(
-				'path', ajaxPath,
-				'twig:add', 'command',
-					net_channel.create( 'path', ajaxPath.append( 'command' ) ),
-				'twig:add', 'update',
-					net_channel.create( 'path', ajaxPath.append( 'update' ) )
-			),
-		'display', display,
-		'doTracker', shell_doTracker.create( ),
-		'link', net_link.create( ),
-		'show', show,
-		'spaceTransform', gleam_transform.normal,
-		'viewSize', display.size,
-		'disc', shell_root._createDiscRoot( viewSize, show ),
-		'form', shell_root._createFormRoot( viewSize ),
-		'_animation', animation_root.create( ),
-		'_systemFocus', true
-	);
-
-	root.link.auth( userCreds );
-};
-
-
-
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	const hover = this.hover;
-/**/
-/**/	if( hover && hover.isEmpty ) throw new Error( );
-/**/}
 };
 
 
@@ -423,6 +347,73 @@ def.adjust.action =
 */
 def.lazy.attentionCenter = ( ) =>
 	root._currentScreen.attentionCenter;
+
+
+/*
+| Startup of shell.
+*/
+def.static.startup =
+	function(
+		display
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	// singleton
+/**/	if( root ) throw new Error( );
+/**/}
+
+	const viewSize = display.size;
+
+	const show = show_form.loading;
+
+	const ajaxPath = tim_path.empty.append( 'ajax' );
+
+	let userCreds = user_creds.createFromLocalStorage( );
+
+	if( !userCreds ) userCreds = user_creds.createVisitor( );
+
+	shell_root.create(
+		'action', action_none.create( ),
+		'ajax',
+			net_ajax.create(
+				'path', ajaxPath,
+				'twig:add', 'command',
+					net_channel.create( 'path', ajaxPath.append( 'command' ) ),
+				'twig:add', 'update',
+					net_channel.create( 'path', ajaxPath.append( 'update' ) )
+			),
+		'display', display,
+		'doTracker', shell_doTracker.create( ),
+		'link', net_link.create( ),
+		'show', show,
+		'spaceTransform', gleam_transform.normal,
+		'viewSize', display.size,
+		'disc', shell_root._createDiscRoot( viewSize, show ),
+		'form', shell_root._createFormRoot( viewSize ),
+		'_animation', animation_root.create( ),
+		'_systemFocus', true
+	);
+
+	root.link.auth( userCreds );
+};
+
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	const hover = this.hover;
+/**/
+/**/	if( hover && hover.isEmpty ) throw new Error( );
+/**/}
+};
+
 
 
 /*
@@ -570,44 +561,29 @@ def.lazy.clipboard =
 
 
 /*
-| Alters the tree.
-|
-| Feeds the doTracker.
+| Alters to shell.
 */
 def.proto.alter =
 	function(
-		a1 // change, several changes or array of changes
-		// // ...
+		// free strings
 	)
 {
-	let changeList;
-
-	if( a1.timtype === change_list )
+	for( let a = 0, al = arguments.length; a < al; a++ )
 	{
-		changeList = a1;
-	}
-	else if( Array.isArray( a1 ) )
-	{
-		changeList = change_list.create( 'list:init', a1 );
-	}
-	else
-	{
-		changeList =
-			change_list.create(
-				'list:init',
-				Array.prototype.slice.apply( arguments )
-			);
-	}
+		const command = arguments[ a ];
 
-	const changeWrap =
-		change_wrap.create(
-			'cid', session_uid.newUid( ),
-			'changeList', changeList
-		);
+		const arg = arguments[ a + 1 ];
 
-	root.link.alter( changeWrap );
+		// FUTURE smarter combine alterations.
+		switch( command )
+		{
+			case 'action' : root.create( 'action', arg ); continue;
 
-	root.doTracker.track( changeWrap );
+			case 'change' : if( arg ) root._alterChange( arg ); continue;
+
+			default : throw new Error( );
+		}
+	}
 };
 
 
@@ -1342,94 +1318,6 @@ def.proto.pushButton =
 
 
 /*
-| Sets the user mark.
-*/
-def.proto.setUserMark =
-	function(
-		mark
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
-	if( mark && mark.timtype === visual_mark_caret )
-	{
-		mark = mark.create( 'focus', this._systemFocus );
-	}
-
-	const omark = root._mark;
-
-	root.create( '_mark', mark );
-
-	if( !omark ) return;
-
-	const oip = omark.itemPaths;
-
-	if( !oip ) return;
-
-	const nip = mark && mark.itemPaths;
-
-	for( let a = 0, al = oip.length; a < al; a++ )
-	{
-		const op = oip.get( a );
-
-		if( nip && nip.contains( op ) ) continue;
-
-		const item = root.getPath( op );
-
-		if( item ) item.markLost( );
-	}
-};
-
-
-/*
-| Shows the "home" screen.
-|
-| When a space is loaded, this is space/normal
-| otherwise it is the loading screen.
-*/
-def.proto.showHome =
-	function( )
-{
-	root.create(
-		'action', action_none.create( ),
-		'show', root._actionSpace ? show_normal.create( ) : show_form.loading
-	);
-};
-
-
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	if( key === 'shift' )
-	{
-		const action = this.action;
-
-		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
-
-		return true;
-	}
-
-	const screen = root._currentScreen;
-
-	const result = screen.specialKey( key, shift, ctrl );
-
-	if( root._actionSpace ) root._actionSpace.scrollMarkIntoView( );
-
-	return result;
-};
-
-
-/*
 | User is releasing a special key.
 */
 def.proto.releaseSpecialKey =
@@ -1478,6 +1366,7 @@ def.proto.removeRange =
 	if ( frontMark.path.equals( backMark.path ) )
 	{
 		root.alter(
+			'change',
 			change_remove.create(
 				'path', frontMark.path.chop,
 				'at1', frontMark.at,
@@ -1540,7 +1429,7 @@ def.proto.removeRange =
 		)
 	);
 
-	root.alter( changes );
+	root.alter( 'change', changes );
 };
 
 
@@ -1589,6 +1478,64 @@ def.proto.setSystemFocus =
 
 
 /*
+| Sets the user mark.
+*/
+def.proto.setUserMark =
+	function(
+		mark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	if( mark && mark.timtype === visual_mark_caret )
+	{
+		mark = mark.create( 'focus', this._systemFocus );
+	}
+
+	const omark = root._mark;
+
+	root.create( '_mark', mark );
+
+	if( !omark ) return;
+
+	const oip = omark.itemPaths;
+
+	if( !oip ) return;
+
+	const nip = mark && mark.itemPaths;
+
+	for( let a = 0, al = oip.length; a < al; a++ )
+	{
+		const op = oip.get( a );
+
+		if( nip && nip.contains( op ) ) continue;
+
+		const item = root.getPath( op );
+
+		if( item ) item.markLost( );
+	}
+};
+
+
+/*
+| Shows the "home" screen.
+|
+| When a space is loaded, this is space/normal
+| otherwise it is the loading screen.
+*/
+def.proto.showHome =
+	function( )
+{
+	root.create(
+		'action', action_none.create( ),
+		'show', root._actionSpace ? show_normal.create( ) : show_form.loading
+	);
+};
+
+/*
 | Creates a new relation by specifing its relates.
 */
 def.proto.spawnRelation =
@@ -1617,6 +1564,7 @@ def.proto.spawnRelation =
 	const key = session_uid.newUid( );
 
 	root.alter(
+		'change',
 		change_grow.create(
 			'val', val,
 			'path', tim_path.empty.append( 'twig' ).append( key ),
@@ -1627,6 +1575,35 @@ def.proto.spawnRelation =
 	root.setUserMark(
 		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
 	);
+};
+
+
+/*
+| User is pressing a special key.
+*/
+def.proto.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	if( key === 'shift' )
+	{
+		const action = this.action;
+
+		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
+
+		return true;
+	}
+
+	const screen = root._currentScreen;
+
+	const result = screen.specialKey( key, shift, ctrl );
+
+	if( root._actionSpace ) root._actionSpace.scrollMarkIntoView( );
+
+	return result;
 };
 
 
@@ -1689,6 +1666,44 @@ def.proto.update =
 	}
 
 	root.setUserMark( mark );
+};
+
+
+/*
+| Helper for alter( ).
+|
+| Handles 'change' alterations.
+*/
+def.proto._alterChange =
+	function(
+		change
+	)
+{
+	let changeList;
+
+	if( change.timtype === change_list )
+	{
+		changeList = change;
+	}
+	else if( Array.isArray( change ) )
+	{
+		changeList = change_list.create( 'list:init', change );
+	}
+	else
+	{
+		changeList = change_list.create( 'list:init', [ change ] );
+	}
+
+	const changeWrap =
+		// FIXME make a shortcut function
+		change_wrap.create(
+			'cid', session_uid.newUid( ),
+			'changeList', changeList
+		);
+
+	root.link.alter( changeWrap );
+
+	root.doTracker.track( changeWrap );
 };
 
 
@@ -1895,6 +1910,20 @@ def.lazy._currentScreen =
 		default : throw new Error( );
 	}
 };
+
+
+/*
+| The path of the label of the space being loaded in the loading form.
+| FIXME remove
+*/
+def.staticLazy._loadingSpaceTextPath = ( ) =>
+	tim_path.empty
+	.append( 'form' )
+	.append( 'twig' )
+	.append( 'loading' )
+	.append( 'twig' )
+	.append( 'spaceText' )
+	.append( 'text' );
 
 
 } );

@@ -479,7 +479,7 @@ def.proto.pushButton =
 
 			}
 
-			root.alter( changes );
+			root.alter( 'change', changes );
 
 			break;
 		}

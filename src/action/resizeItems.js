@@ -295,7 +295,8 @@ def.proto.dragStop =
 		}
 	}
 
-	if( changes ) root.alter( changes );
+	// FIXME combine
+	if( changes ) root.alter( 'change', changes );
 
 	root.create( 'action', action_none.create( ) );
 };
