@@ -19,6 +19,8 @@ const action_dragItems = tim.require( '../action/dragItems' );
 
 const action_none = tim.require( '../action/none' );
 
+const fabric_itemSet = tim.require( '../fabric/itemSet' );
+
 const gleam_point = tim.require( '../gleam/point' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
@@ -40,9 +42,9 @@ def.static.concernsAction =
 {
 	if( action.timtype === action_none ) return action;
 
-	if( !item || !item.path ) return action_none.create( );
+	if( !item || !item.path ) return action_none.singleton;
 
-	return action.affectsItem( item ) ? action : action_none.create( );
+	return action.affectsItem( item ) ? action : action_none.singleton;
 };
 
 
@@ -122,31 +124,28 @@ def.proto.dragStart =
 	{
 		mark = visual_mark_items.createWithOne( this.path );
 
+		// FIXME combine with root.alter
 		root.setUserMark( mark );
 	}
 
-	const paths = mark.itemPaths;
-
-	root.create(
+	root.alter(
 		'action',
 			action_dragItems.create(
-				'itemPaths', paths,
 				'moveBy', gleam_point.zero,
+				'startItems', fabric_itemSet.create( 'set:add', this ),
 				'startPoint', p.detransform( this.transform ),
 				'startZone', this.zone
 			)
 	);
+
+	return true;
 };
 
 
 /*
 | The key of this item.
 */
-def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
-};
+def.lazy.key = function( ) { return this.path.get( -1 ); };
 
 
 /*

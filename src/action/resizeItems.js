@@ -224,7 +224,7 @@ def.proto.dragMove =
 
 	if( proportional ) scaleX = scaleY = Math.max( scaleX, scaleY );
 
-	root.create( 'action', this.create( 'scaleX', scaleX, 'scaleY', scaleY ) );
+	root.alter( 'action', this.create( 'scaleX', scaleX, 'scaleY', scaleY ) );
 };
 
 
@@ -295,10 +295,7 @@ def.proto.dragStop =
 		}
 	}
 
-	// FIXME combine
-	if( changes ) root.alter( 'change', changes );
-
-	root.create( 'action', action_none.create( ) );
+	root.alter( 'action', action_none.singleton, 'change', changes || pass );
 };
 
 

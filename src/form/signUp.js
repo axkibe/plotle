@@ -73,19 +73,14 @@ def.proto.clear =
 {
 	// FUTURE make this in one call, somehow
 
-	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
-
-	root.setPath( this.get( 'emailInput' ).path.append( 'value' ), '' );
-
-	root.setPath( this.get( 'passwordInput' ).path.append( 'value' ), '' );
-
-	root.setPath( this.get( 'password2Input' ).path.append( 'value' ), '' );
-
-	root.setPath(
-		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true
+	root.alter(
+		this.get( 'userInput' ).path.append( 'value' ), '',
+		this.get( 'emailInput' ).path.append( 'value' ), '',
+		this.get( 'passwordInput' ).path.append( 'value' ), '',
+		this.get( 'password2Input' ).path.append( 'value' ), '' ,
+		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true,
+		this.get( 'errorLabel' ).path.append( 'text' ), ''
 	);
-
-	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
 
 	root.setUserMark( undefined );
 };
@@ -104,10 +99,7 @@ def.proto.onRegister =
 	{
 		const message = reply.message;
 
-		root.setPath(
-			this.get( 'errorLabel' ).path.append( 'text' ),
-			message
-		);
+		root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
 
 		const userInput = this.get( 'userInput' );
 
@@ -125,7 +117,7 @@ def.proto.onRegister =
 
 	root.moveToSpace( ref_space.plotleHome, false );
 
-	root.create( 'show', show_form.welcome, 'userCreds', request.userCreds );
+	root.alter( 'show', show_form.welcome, 'userCreds', request.userCreds );
 };
 
 
@@ -171,10 +163,7 @@ def.proto.setErrorMessage =
 		message
 	)
 {
-	root.setPath(
-		this.get( 'errorLabel' ).path.append( 'text' ),
-		message
-	);
+	root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
 };
 
 

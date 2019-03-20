@@ -77,7 +77,7 @@ def.proto.dragMove =
 
 	if( spos < 0 ) spos = 0;
 
-	root.setPath(
+	root.alter(
 		iow.path.append( 'scrollPos' ),
 		iow.scrollPos.create( 'y', spos )
 	);
@@ -115,7 +115,7 @@ def.proto.dragStop =
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	root.create( 'action', action_none.create( ) );
+	root.alter( 'action', action_none.singleton );
 };
 
 

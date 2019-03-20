@@ -164,7 +164,7 @@ def.proto.dragMove =
 		default : throw new Error( );
 	}
 
-	root.create( 'action', this.create( 'transientItem', transientItem ) );
+	root.alter( 'action', this.create( 'transientItem', transientItem ) );
 };
 
 
@@ -237,7 +237,7 @@ def.proto.dragStart =
 
 	}
 
-	root.create( 'action', this.create( 'startPoint', ps, 'transientItem', transientItem ) );
+	root.alter( 'action', this.create( 'startPoint', ps, 'transientItem', transientItem ) );
 };
 
 
@@ -258,11 +258,11 @@ def.proto.dragStop =
 
 	this.itemTim.createGeneric( this, ps );
 
-	root.create(
+	root.alter(
 		'action',
 			shift
 			? action_createGeneric.create( 'itemType', this.itemType )
-			: action_none.create( )
+			: action_none.singleton
 	);
 };
 

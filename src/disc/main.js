@@ -164,7 +164,7 @@ def.static.createFromLayout =
 	return(
 		disc_main.create(
 			'twig:init', twig, layout._ranks,
-			'action', action_none.create( ),
+			'action', action_none.singleton,
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
@@ -486,7 +486,7 @@ def.proto.pushButton =
 
 		case 'select' :
 
-			root.create(
+			root.alter(
 				'action', action_select.create( ),
 				'show', show_normal.create( )
 			);
@@ -495,7 +495,7 @@ def.proto.pushButton =
 
 		case 'create' :
 
-			root.create( 'action', action_none.create( ), 'show', show_create.create( ) );
+			root.alter( 'action', action_none.singleton, 'show', show_create.create( ) );
 
 			break;
 
@@ -505,13 +505,13 @@ def.proto.pushButton =
 		case 'space' :
 		case 'user' :
 
-			root.create( 'show', show_form[ buttonName ] );
+			root.alter( 'show', show_form[ buttonName ] );
 
 			break;
 
 		case 'zoom' :
 
-			root.create( 'show', show_zoom.create( ) );
+			root.alter( 'show', show_zoom.create( ) );
 
 			break;
 

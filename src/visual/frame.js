@@ -15,7 +15,7 @@ if( TIM )
 		access : { type : 'string' },
 
 		// content of the frame
-		content : { type : '../fabric/itemList' },
+		content : { type : '../fabric/itemSet' },
 
 		// current transform of the frame
 		transform : { type : '../gleam/transform' },
@@ -97,16 +97,20 @@ def.lazy.zone =
 {
 	const content = this.content;
 
-	const cLen = content.length;
+	const size = content.size;
 
 /**/if( CHECK )
 /**/{
-/**/	if ( cLen === 0 ) throw new Error( );
+/**/	if ( !( size > 0 ) ) throw new Error( );
 /**/}
 
-	let cZone = content.get( 0 ).zone;
+	const it = content.iterator( );
 
-	if( cLen === 1 ) return cZone;
+	let i = it.next( );
+
+	let cZone = i.value.zone;
+
+	if( size === 1 ) return cZone;
 
 	let pos = cZone.pos;
 
@@ -118,9 +122,9 @@ def.lazy.zone =
 
 	let ex = pos.x + cZone.width;
 
-	for( let a = 1; a < cLen; a++ )
+	for( ; !i.done; i = it.next( ) )
 	{
-		cZone = content.get( a ).zone;
+		cZone = i.value.zone;
 
 		pos = cZone.pos;
 
@@ -153,19 +157,10 @@ def.lazy.zone =
 def.lazy._shapeMask =
 	function( )
 {
-	const content = this.content;
-
-/**/if( CHECK )
-/**/{
-/**/	if( content.length === 0 ) throw new Error( );
-/**/}
-
 	const arr = [ ];
 
-	for( let a = 0, al = content.length; a < al; a++ )
+	for( let ca of this.content.iterator( ) )
 	{
-		const ca = content.get( a );
-
 		// FIXME XXX privacy violation!
 		arr.push( ca._tShape( ).border( -12 ) );
 	}
@@ -514,7 +509,7 @@ def.proto.dragStart =
 
 	if( com )
 	{
-		root.create(
+		root.alter(
 			'action',
 				action_resizeItems.create(
 					'itemPaths', this.content.itemPaths,
@@ -532,12 +527,14 @@ def.proto.dragStart =
 		return true;
 	}
 
-	root.create(
+	root.alter(
 		'action',
 			action_dragItems.create(
 				'moveBy', gleam_point.zero,
-				'itemPaths', this.content.itemPaths,
+				'startItems', this.content,
 				'startPoint', dp,
+				// FIXME move this.zone logic into itemSet
+				// so it becomes this.content.zone
 				'startZone', this.zone
 			)
 	);

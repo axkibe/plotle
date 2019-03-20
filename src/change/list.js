@@ -31,6 +31,11 @@ const change_wrap = tim.require( './wrap' );
 const change_wrapList = tim.require( './wrapList' );
 
 
+/*
+| An empty list.
+*/
+def.staticLazy.empty = ( ) => change_list.create( );
+
 
 /*
 | Returns a change list with reversed changes.

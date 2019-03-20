@@ -104,7 +104,7 @@ def.proto.frame =
 		time
 	)
 {
-	root.create( 'spaceTransform', this.getTransform( time ) );
+	root.alter( 'spaceTransform', this.getTransform( time ) );
 
 	let going = time < this.end;
 

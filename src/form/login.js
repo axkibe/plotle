@@ -74,11 +74,11 @@ def.proto.clear =
 	function( )
 {
 	// FUTURE combine calls
-	root.setPath( this.get( 'userInput' ).path.append( 'value' ), '' );
-
-	root.setPath( this.get( 'passwordInput' ).path.append( 'value' ), '' );
-
-	root.setPath( this.get( 'errorLabel' ).path.append( 'text' ), '' );
+	root.alter(
+		this.get( 'userInput' ).path.append( 'value' ), '',
+		this.get( 'passwordInput' ).path.append( 'value' ), '',
+		this.get( 'errorLabel' ).path.append( 'text' ), ''
+	);
 
 	root.setUserMark( undefined );
 };
@@ -172,7 +172,7 @@ def.proto.onAuth =
 
 	reply.userCreds.saveToLocalStorage( );
 
-	root.create( 'action', action_none.create( ), 'userCreds', reply.userCreds );
+	root.alter( 'action', action_none.singleton, 'userCreds', reply.userCreds );
 
 	this.clear( );
 
@@ -216,10 +216,7 @@ def.proto._setErrorMessage =
 		message
 	)
 {
-	root.setPath(
-		this.get( 'errorLabel' ).path.append( 'text' ),
-		message
-	);
+	root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
 };
 
 

@@ -92,7 +92,7 @@ def.proto.dragMove =
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
-	root.create( 'action', this.create( 'to', ps ) );
+	root.alter( 'action', this.create( 'to', ps ) );
 };
 
 
@@ -115,7 +115,7 @@ def.proto.dragStart =
 	// this action only makes sense on spaces
 	if( screen.timtype !== fabric_space ) return;
 
-	root.create(
+	root.alter(
 		'action', this.create( 'from', this.hover || screen.pointToSpaceRS( p, !ctrl ) )
 	);
 };
@@ -136,16 +136,14 @@ def.proto.dragStop =
 	const key = session_uid.newUid( );
 
 	root.alter(
+		'action', action_none.singleton,
 		'change',
-		change_grow.create(
-			'val', val,
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'rank', 0
-		)
+			change_grow.create(
+				'val', val,
+				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'rank', 0
+			)
 	);
-
-	root.create( 'action', action_none.create( ) );
-	// FIXME switch to action none?
 };
 
 
@@ -182,13 +180,13 @@ def.proto.pointingHover =
 
 			if( item.pointWithin( p ) )
 			{
-				root.create( 'action', this.create( 'hover', item.path.chop ) );
+				root.alter( 'action', this.create( 'hover', item.path.chop ) );
 
 				return result_hover.cursorDefault;
 			}
 		}
 
-		root.create( 'action', this.create( 'hover', undefined ) );
+		root.alter( 'action', this.create( 'hover', undefined ) );
 
 		return result_hover.cursorDefault;
 	}
@@ -208,7 +206,6 @@ def.lazy.transientFabric =
 	return(
 		fabric_stroke.create(
 			'access', 'rw',
-			'action', action_none.create( ),
 			'from', this.from,
 			'to', this.to,
 			'fromStyle', 'none',

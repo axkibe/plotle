@@ -178,7 +178,7 @@ def.proto.dragStop =
 		//ctrl   // true if ctrl key was pressed
 	)
 {
-	root.create( 'action', action_none.create( ) );
+	root.alter( 'action', action_none.singleton );
 };
 
 

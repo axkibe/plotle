@@ -51,10 +51,13 @@ if( TIM )
 	def.json = 'label';
 }
 
+const action_dragItems = tim.require( '../action/dragItems' );
 
 const change_grow = tim.require( '../change/grow' );
 
 const change_shrink = tim.require( '../change/shrink' );
+
+const change_set = tim.require( '../change/set' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -182,6 +185,32 @@ def.lazy.fontsize =
 	return fs;
 };
 */
+
+
+/*
+| Returns the change-set for a resizing
+| the item, defined by its zone.
+*/
+def.proto.getActionChanges =
+	function(
+		action  // the action doing the change
+	)
+{
+	switch( action.timtype )
+	{
+		case action_dragItems :
+
+			return(
+				change_set.create(
+					'path', this.path.chop.append( 'pos' ),
+					'val', this.pos.add( action.moveBy ),
+					'prev', this.pos
+				)
+			);
+
+		default : throw new Error( );
+	}
+};
 
 
 /*

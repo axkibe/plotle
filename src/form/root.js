@@ -240,7 +240,7 @@ def.proto.toggleCheckbox =
 
 		const checked = form.get( widgetKey ).checked;
 
-		root.setPath( path.append( 'checked' ), !checked );
+		root.alter( path.append( 'checked' ), !checked );
 
 		return;
 	}

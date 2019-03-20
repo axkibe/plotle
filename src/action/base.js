@@ -7,6 +7,16 @@
 tim.define( module, ( def ) => {
 
 
+const change_list = tim.require( '../change/list' );
+
+
+/*
+| The changes this action applies on the fabric tree.
+| Default, no changes.
+*/
+def.lazy.changes = ( ) => change_list.empty;
+
+
 /*
 | Returns true if an entity with path is affected by this action.
 | Default, nothing is affected.

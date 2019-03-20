@@ -369,7 +369,7 @@ def.proto.dragStart =
 def.proto.dragStop =
 	function( )
 {
-	root.create( 'action', action_none.create );
+	root.alter( 'action', action_none.singleton );
 };
 
 

@@ -31,7 +31,7 @@ if( TIM )
 def.static.flush =
 	function( )
 {
-	root.create(
+	root.alter(
 		'doTracker',
 			shell_doTracker.create(
 				'_undo', change_wrapList.create( ),
@@ -55,12 +55,9 @@ def.proto.track =
 
 	undo = undo.append( changeWrap );
 
-	if( undo.length > shell_settings.maxUndo )
-	{
-		undo = undo.remove( 0 );
-	}
+	if( undo.length > shell_settings.maxUndo ) undo = undo.remove( 0 );
 
-	root.create(
+	root.alter(
 		'doTracker',
 			this.create(
 				'_undo', undo,
@@ -163,7 +160,7 @@ def.proto.undo =
 
 	changeWrap = changeWrap.createReverse( );
 
-	root.create(
+	root.alter(
 		'doTracker',
 			this.create(
 				'_undo', undo,
@@ -196,7 +193,7 @@ def.proto.redo =
 
 	redo = redo.remove( redo.length - 1 );
 
-	root.create(
+	root.alter(
 		'doTracker',
 			this.create(
 				'_redo', redo,

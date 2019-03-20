@@ -475,10 +475,7 @@ def.proto.mousewheel =
 
 	if( y < 0 ) y = 0;
 
-	root.setPath(
-		this.path.append( 'scrollPos' ),
-		this.scrollPos.create( 'y', y )
-	);
+	root.alter( this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', y ) );
 };
 
 

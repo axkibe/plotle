@@ -86,9 +86,10 @@ def.proto.glint =
 	function( )
 {
 	// FIXME immutable tree hierachy violaion
-	const item1 = root.space.get( this.item1key );
+	// FIXME XXX privacy violation
+	const item1 = root._actionSpace.get( this.item1key );
 
-	const item2 = root.space.get( this.item2key );
+	const item2 = root._actionSpace.get( this.item2key );
 
 	let shape1, shape2;
 

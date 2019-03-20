@@ -103,14 +103,14 @@ def.proto.dragStart =
 
 		const mark = this.markForPoint( p, false );
 
-		root.create( 'action', action.create( 'itemPath', this.path ) );
+		root.alter( 'action', action.create( 'itemPath', this.path ) );
 
 		root.setUserMark( mark );
 
 		return true;
 	}
 
-	return fabric_item.dragStart.call( this, p, shift, ctrl );
+	return fabric_item.dragStart.call( this, p, shift, ctrl, action );
 };
 
 

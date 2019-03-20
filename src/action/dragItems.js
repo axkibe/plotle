@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the paths of the items to drag
-		itemPaths : { type : [ 'undefined', 'tim.js/pathList' ] },
+		startItems : { type : [ 'undefined', '../fabric/itemSet' ] },
 
 		// drags the items by this x/y
 		moveBy : { type : '../gleam/point' },
@@ -40,26 +40,6 @@ const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	const paths = this.itemPaths;
-/**/
-/**/	for( let c = 0, cZ = paths.length; c < cZ; c++ )
-/**/	{
-/**/		if( paths.get( c ).isEmpty ) throw new Error( );
-/**/
-/**/		if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
-/**/	}
-/**/}
-};
-
-
-/*
 | Returns true if an entity with path is affected by this action.
 | FIXME remove
 */
@@ -68,6 +48,7 @@ def.proto.affectsItem =
 		item
 	)
 {
+	/*
 	const paths = this.itemPaths;
 
 	for( let a = 0, pLen = paths.length; a < pLen; a++ )
@@ -76,6 +57,8 @@ def.proto.affectsItem =
 
 		if( pa.equals( item.path ) ) return true;
 	}
+	*/
+	console.log( 'FIXME remove' );
 
 	return false;
 };
@@ -119,38 +102,27 @@ def.proto.affectPoint =
 def.lazy.changes =
 	function( )
 {
-	let changes;
-XXX
-	for( let a = 0, al = paths.length; a < al; a++ )
+	let changes = change_list.create( );
+
+	const it = this.startItems.iterator( );
+
+	for( let i = it.next( ); !i.done; i = it.next( ) )
 	{
-		const item = root.getPath( paths.get( a ) );
+		const item = i.value;
 
-		const chi = item.getItemChange( );
+		const chi = item.getActionChanges( this );
 
-		if( !chi ) continue;
-
-		if( !changes )
+		if( chi.timtype !== change_list )
 		{
-			changes = chi;
+			changes = changes.create( 'list:append', chi );
 		}
 		else
 		{
-			if( changes.timtype !== change_list )
-			{
-				changes = change_list.create( 'list:append', changes );
-			}
-
-			if( chi.timtype !== change_list )
-			{
-				changes = changes.create( 'list:append', chi );
-			}
-			else
-			{
-				changes = changes.appendList( chi );
-			}
+			changes = changes.appendList( chi );
 		}
 	}
 
+	return changes;
 };
 
 
@@ -196,10 +168,7 @@ def.proto.dragStop =
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	const paths = this.itemPaths;
-
-
-	root.alter( 'action', action_none.create( ), 'change', this.changes );
+	root.alter( 'action', action_none.singleton, 'change', this.changes );
 };
 
 

@@ -1,5 +1,5 @@
 /*
-| A list of items.
+| A set of items.
 */
 'use strict';
 
@@ -9,7 +9,7 @@ tim.define( module, ( def ) => {
 
 if( TIM )
 {
-	def.list = [ '< ./item-types' ];
+	def.set = [ '< ./item-types' ];
 }
 
 
@@ -20,15 +20,18 @@ const tim_path_list = tim.require( 'tim.js/pathList' );
 
 /*
 | Returns the list of paths of the items.
+| FIXME make it a set.
 */
 def.lazy.itemPaths =
 	function( )
 {
 	const arr = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	const it = this.iterator( );
+
+	for( let i = it.next( ); !i.done; i = it.next( ) )
 	{
-		arr.push( this.get( a ).path );
+		arr.push( i.value.path );
 	}
 
 	return tim_path_list.create( 'list:init', arr );
@@ -37,15 +40,18 @@ def.lazy.itemPaths =
 
 /*
 | Returns the list of zones of the items.
+| FIXME make a set.
 */
 def.lazy.zones =
 	function( )
 {
 	const group = { };
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	const it = this.iterator( );
+
+	for( let i = it.next( ); !i.done; i = it.next( ) )
 	{
-		const item = this.get( a );
+		const item = i.value;
 
 		const key = item.path.get( 2 );
 
@@ -62,4 +68,3 @@ def.lazy.zones =
 
 
 } );
-

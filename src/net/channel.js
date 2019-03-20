@@ -98,7 +98,7 @@ def.proto.abortAll =
 		}
 	}
 
-	root.create(
+	root.alter(
 		'ajax',
 			root.ajax.create(
 				'twig:set',
@@ -127,7 +127,7 @@ def.proto.request =
 
 	if( this._fifo.length === 0 ) reqWrap = reqWrap.send( );
 
-	root.create(
+	root.alter(
 		'ajax',
 			root.ajax.create(
 				'twig:set',
@@ -160,7 +160,7 @@ def.proto.onReply =
 
 	channel = channel.create( '_fifo', fifo );
 
-	root.create(
+	root.alter(
 		'ajax',
 			root.ajax.create(
 				'twig:set',

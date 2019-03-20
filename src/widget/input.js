@@ -408,7 +408,7 @@ def.proto.input =
 		text = text.substring( 0, maxlen - value.length );
 	}
 
-	root.setPath(
+	root.alter(
 		this.path.append( 'value' ),
 		value.substring( 0, at ) + text + value.substring( at )
 	);
@@ -426,25 +426,13 @@ def.proto.focusable = true;
 /*
 | Returns the kerning of characters for password masks.
 */
-def.proto.maskKern =
-	function(
-		size
-	)
-{
-	return Math.round( size * 0.15 );
-};
+def.proto.maskKern = ( size ) => Math.round( size * 0.15 );
 
 
 /*
 | Returns the width of a character for password masks.
 */
-def.proto.maskWidth =
-	function(
-		size
-	)
-{
-	return Math.round( size * 0.5 );
-};
+def.proto.maskWidth = ( size ) => Math.round( size * 0.5 );
 
 
 /*
@@ -563,10 +551,9 @@ def.proto._keyBackspace =
 
 	if( at <= 0 ) return;
 
-	root.setPath(
+	root.alter(
 		this.path.append( 'value' ),
-		this.value.substring( 0, at - 1 ) +
-			this.value.substring( at )
+		this.value.substring( 0, at - 1 ) + this.value.substring( at )
 	);
 
 	// FIXME lazy
@@ -584,10 +571,9 @@ def.proto._keyDel =
 
 	if( at >= this.value.length ) return;
 
-	root.setPath(
+	root.alter(
 		this.path.append( 'value' ),
-		this.value.substring( 0, at ) +
-			this.value.substring( at + 1 )
+		this.value.substring( 0, at ) + this.value.substring( at + 1 )
 	);
 };
 

@@ -145,7 +145,7 @@ def.static.createFromLayout =
 	return(
 		disc_zoom.create(
 			'twig:init', twig, layout._ranks,
-			'action', action_none.create( ),
+			'action', action_none.singleton,
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
@@ -511,7 +511,7 @@ def.proto.dragStartButton =
 	{
 		case 'zoomIn' :
 
-			root.create( 'action', action_zoomButton.createZoom( 1 ) );
+			root.alter( 'action', action_zoomButton.createZoom( 1 ) );
 
 			root.changeSpaceTransformCenter( 1 );
 
@@ -519,7 +519,7 @@ def.proto.dragStartButton =
 
 		case 'zoomOut' :
 
-			root.create( 'action', action_zoomButton.createZoom( -1 ) );
+			root.alter( 'action', action_zoomButton.createZoom( -1 ) );
 
 			root.changeSpaceTransformCenter( -1 );
 
@@ -542,7 +542,7 @@ def.proto.dragStop =
 
 	if( action.timtype !== action_zoomButton ) return;
 
-	root.create( 'action', action_none.create( ) );
+	root.alter( 'action', action_none.singleton );
 
 	return false;
 };

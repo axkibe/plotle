@@ -100,7 +100,7 @@ def.proto.dragMove =
 		return item.moveSelect( p );
 	}
 
-	root.create( 'action', this.create( 'toPoint', screen.pointToSpaceRS( p, false ) ) );
+	root.alter( 'action', this.create( 'toPoint', screen.pointToSpaceRS( p, false ) ) );
 };
 
 
@@ -125,7 +125,7 @@ def.proto.dragStart =
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
-	root.create( 'action', this.create( 'startPoint', ps, 'toPoint', ps ) );
+	root.alter( 'action', this.create( 'startPoint', ps, 'toPoint', ps ) );
 };
 
 
@@ -170,7 +170,7 @@ def.proto.dragStop =
 		}
 	}
 
-	root.create( 'action', shift ? action_select.create( ) : action_none.create( ) );
+	root.alter( 'action', shift ? action_select.create( ) : action_none.singleton );
 
 	root.setUserMark( mark );
 };

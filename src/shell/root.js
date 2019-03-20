@@ -1,7 +1,5 @@
 /*
 | The root of the user shell.
-|
-| FIXME remove all external root.create calls.
 */
 'use strict';
 
@@ -11,6 +9,8 @@ tim.define( module, ( def, shell_root ) => {
 
 if( TIM )
 {
+	def.create = [ '_create' ];
+
 	def.attributes =
 	{
 		// access level to current space
@@ -104,11 +104,7 @@ const animation_root = tim.require( '../animation/root' );
 
 const animation_transform = tim.require( '../animation/transform' );
 
-const action_dragItems = tim.require( '../action/dragItems' );
-
 const action_none = tim.require( '../action/none' );
-
-const action_resizeItems = tim.require( '../action/resizeItems' );
 
 const action_select = tim.require( '../action/select' );
 
@@ -228,8 +224,6 @@ const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
-const tim_pathList = tim.require( 'tim.js/pathList' );
-
 const user_creds = tim.require( '../user/creds' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
@@ -263,7 +257,10 @@ const notAnimationFinish =
 | If so the paths are removed from its itemPathsList.
 |
 | If no item is left, action is set to none.
+|
+| FIXME rebuild into alter( )
 */
+/*
 def.adjust.action =
 	function(
 		action
@@ -334,6 +331,7 @@ def.adjust.action =
 
 	return action;
 };
+*/
 
 
 /*
@@ -373,8 +371,8 @@ def.static.startup =
 
 	if( !userCreds ) userCreds = user_creds.createVisitor( );
 
-	shell_root.create(
-		'action', action_none.create( ),
+	shell_root._create(
+		'action', action_none.singleton,
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -479,7 +477,8 @@ def.lazy.draw =
 
 	display.render( );
 
-	root.create( 'display', display );
+	// FIXME check if this is privatable
+	root._create( 'display', display );
 
 	return true;
 };
@@ -568,22 +567,125 @@ def.proto.alter =
 		// free strings
 	)
 {
-	for( let a = 0, al = arguments.length; a < al; a++ )
+	let action = pass;
+
+	// FIXME make ajax part of link.
+	let ajax = pass;
+
+	let change = pass;
+
+	let doTracker = pass;
+
+	let form = pass;
+
+	let hover = pass;
+
+	let link = pass;
+
+	let show = pass;
+
+	let space = pass;
+
+	let spaceTransform = pass;
+
+	let userSpaceList = pass;
+
+	let userCreds = pass;
+
+	for( let a = 0, al = arguments.length; a < al; a += 2 )
 	{
 		const command = arguments[ a ];
 
 		const arg = arguments[ a + 1 ];
 
-		// FUTURE smarter combine alterations.
 		switch( command )
 		{
-			case 'action' : root.create( 'action', arg ); continue;
+			case 'action' : action = arg; continue;
 
-			case 'change' : if( arg ) root._alterChange( arg ); continue;
+			case 'ajax' : ajax = arg; continue;
 
-			default : throw new Error( );
+			case 'change' : change = arg; continue;
+
+			case 'doTracker' : doTracker = arg; continue;
+
+			case 'form' : form = arg; continue;
+
+			case 'hover' : hover = arg; continue;
+
+			case 'link' : link = arg; continue;
+
+			case 'show' : show = arg; continue;
+
+			case 'space' : space = arg; continue;
+
+			case 'spaceTransform' : spaceTransform = arg; continue;
+
+			case 'userCreds' : userCreds = arg; continue;
+
+			case 'userSpaceList' : userSpaceList = arg; continue;
+
+			default :
+			{
+/**/			if( CHECK )
+/**/			{
+/**/				if( command.timtype !== tim_path ) throw new Error( );
+/**/			}
+
+				const base = command.get( 0 );
+
+				switch( base )
+				{
+					case 'form' :
+
+						if( CHECK )
+/**/					{
+/**/						if( command.get( 1 ) !== 'twig' ) throw new Error( );
+/**/					}
+
+						if( form === pass ) form = this.form;
+
+						form = form.setPath( command.chop, arg );
+
+						break;
+
+					case 'space' :
+
+						if( space === pass ) space = this.space;
+
+						if( CHECK )
+/**/					{
+/**/						if( command.get( 1 ) !== 'twig' ) throw new Error( );
+/**/					}
+
+						if( space === pass ) space = this.space;
+
+						space = space.setPath( command.chop, arg );
+
+						break;
+
+					default : throw new Error( );
+				}
+			}
 		}
 	}
+
+	if( change !== pass ) root._alterChange( change );
+
+	if( space !== pass ) space = space.create( 'action', action_none.singleton );
+
+	root._create(
+		'action', action,
+		'ajax', ajax,
+		'doTracker', doTracker,
+		'form', form,
+		'hover', hover,
+		'link', link,
+		'show', show,
+		'space', space,
+		'spaceTransform', spaceTransform,
+		'userCreds', userCreds,
+		'userSpaceList', userSpaceList,
+	);
 };
 
 
@@ -927,7 +1029,7 @@ def.proto.finishAnimation =
 {
 	if( !root._animation.get( name ) ) return;
 
-	root.create( '_animation', root._animation.create( 'twig:remove', name ) );
+	root._create( '_animation', root._animation.create( 'twig:remove', name ) );
 
 	if( root._animation.length === 0 ) system.stopAnimation( );
 };
@@ -975,7 +1077,7 @@ def.proto.logout =
 
 	if( root._visitorCreds )
 	{
-		root.create(
+		root._create(
 			'userCreds', root._visitorCreds,
 			'userSpaceList', undefined,
 			'link', link
@@ -988,7 +1090,7 @@ def.proto.logout =
 
 	// FIXME i don't get it what happens when there are no _visitorCreds
 
-	root.create(
+	root.alter(
 		'userSpaceList', undefined,
 		'link', link
 	);
@@ -1032,14 +1134,18 @@ def.proto.moveToSpace =
 		createMissing // if true, non-existing spaces are to be created
 	)
 {
-	root.create(
+	let loading = root.form.get( 'loading' );
+
+	const spaceText = loading.get( 'spaceText' ).create( 'text', spaceRef.fullname );
+
+	loading = loading.set( 'spaceText', spaceText );
+
+	root._create(
 		'fallbackSpaceRef', this.spaceRef,
+		'form', root.form.set( 'loading', loading ),
 		'show', show_form.loading,
 		'space', undefined
 	);
-
-	// FUTURE move setPath into creator
-	root.setPath( shell_root._loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
 };
@@ -1067,9 +1173,8 @@ def.proto.onAcquireSpace =
 
 		case 'nonexistent' :
 
-			root.setPath(
-				root.form.get( 'nonExistingSpace' ).path
-					.append( 'nonSpaceRef' ),
+			root.alter(
+				root.form.get( 'nonExistingSpace' ).path.append( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 
@@ -1078,15 +1183,14 @@ def.proto.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'show', show_form.nonExistingSpace );
+			root._create( 'show', show_form.nonExistingSpace );
 
 			return;
 
 		case 'no access' :
 
-			root.setPath(
-				root.form.get( 'noAccessToSpace' ).path
-					.append( 'nonSpaceRef' ),
+			root.alter(
+				root.form.get( 'noAccessToSpace' ).path.append( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 
@@ -1095,7 +1199,7 @@ def.proto.onAcquireSpace =
 				root.moveToSpace( root.fallbackSpaceRef, false );
 			}
 
-			root.create( 'show', show_form.noAccessToSpace );
+			root._create( 'show', show_form.noAccessToSpace );
 
 			return;
 
@@ -1110,13 +1214,13 @@ def.proto.onAcquireSpace =
 
 	const show = root.show;
 
-	root.create(
+	root._create(
 		'access', access,
 		'show',
 			( show.timtype === show_form && show.formName === 'loading' )
 			? show_normal.create( )
 			: pass,
-		'space', reply.space,
+		'space', reply.space.create( 'action', action_none.singleton ),
 		'spaceRef', request.spaceRef,
 		'_mark', undefined
 	);
@@ -1136,7 +1240,7 @@ def.proto.onAuth =
 
 	if( userSpaceList )
 	{
-		root.create(
+		root.alter(
 			'userSpaceList', userSpaceList.current,
 			'link',
 				root.link.create(
@@ -1147,7 +1251,7 @@ def.proto.onAuth =
 	}
 	else
 	{
-		root.create(
+		root.alter(
 			'userSpaceList', undefined,
 			'link',
 				root.link.create(
@@ -1190,7 +1294,7 @@ def.proto.onAuth =
 
 	let userCreds = reply.userCreds;
 
-	root.create(
+	root._create(
 		'userCreds', userCreds,
 		'_visitorCreds', userCreds.isVisitor ? userCreds : pass
 	);
@@ -1251,7 +1355,7 @@ def.proto.pointingHover =
 /**/			if( result.timtype !== result_hover ) throw new Error( );
 /**/		}
 
-			root.create( 'hover', result.path );
+			root.alter( 'hover', result.path );
 
 			return result.cursor;
 		}
@@ -1264,7 +1368,7 @@ def.proto.pointingHover =
 /**/	if( result.timtype !== result_hover ) throw new Error( );
 /**/}
 
-	root.create( 'hover', result.path );
+	root.alter( 'hover', result.path );
 
 	return result.cursor;
 };
@@ -1333,7 +1437,7 @@ def.proto.releaseSpecialKey =
 
 	if( action.timtype === action_select && !action.startPoint )
 	{
-		root.create( 'action', action_none.create( ) );
+		root.alter( 'action', action_none.singleton );
 	}
 };
 
@@ -1441,7 +1545,7 @@ def.proto.resize =
 		size    // of type gleam_size
 	)
 {
-	root.create(
+	root._create(
 		'display', gleam_display_canvas.resize( this.display, size ),
 		'viewSize', size
 	);
@@ -1470,15 +1574,14 @@ def.proto.setSystemFocus =
 		mark = pass;
 	}
 
-	root.create(
-		'_systemFocus', focus,
-		'_mark', mark
-	);
+	root._create( '_systemFocus', focus, '_mark', mark );
 };
 
 
 /*
 | Sets the user mark.
+|
+| FIXME move into root.alter( )
 */
 def.proto.setUserMark =
 	function(
@@ -1497,7 +1600,7 @@ def.proto.setUserMark =
 
 	const omark = root._mark;
 
-	root.create( '_mark', mark );
+	root._create( '_mark', mark );
 
 	if( !omark ) return;
 
@@ -1529,8 +1632,8 @@ def.proto.setUserMark =
 def.proto.showHome =
 	function( )
 {
-	root.create(
-		'action', action_none.create( ),
+	root.alter(
+		'action', action_none.singleton,
 		'show', root._actionSpace ? show_normal.create( ) : show_form.loading
 	);
 };
@@ -1592,7 +1695,7 @@ def.proto.specialKey =
 	{
 		const action = this.action;
 
-		if( action.timtype === action_none ) root.create( 'action', action_select.create( ) );
+		if( action.timtype === action_none ) root.alter( 'action', action_select.create( ) );
 
 		return true;
 	}
@@ -1713,7 +1816,21 @@ def.proto._alterChange =
 def.lazy._actionSpace =
 	function( )
 {
-	return this.space.create( 'action', this.action );
+	const space = this.space;
+
+	// checks if alter set a none action.
+
+	if( !space ) return;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !space.action ) throw new Error( );
+/**/}
+
+	return(
+		this.action.changes.changeTree( space )
+		.create( 'action', this.action )
+	);
 };
 
 
@@ -1730,7 +1847,7 @@ def.proto._changeTransformTo =
 {
 	if( shell_settings.animation )
 	{
-		root.create(
+		root._create(
 			'_transformExponent', exp,
 			'_animation',
 				root._animation.create(
@@ -1742,7 +1859,7 @@ def.proto._changeTransformTo =
 	}
 	else
 	{
-		root.create(
+		root._create(
 			'_transformExponent', exp,
 			'spaceTransform', transform
 		);
@@ -1767,7 +1884,7 @@ def.static._createDiscRoot =
 
 	return(
 		disc_root.create(
-			'action', action_none.create( ),
+			'action', action_none.singleton,
 			'controlTransform', gleam_transform.normal,
 			'path', path,
 			'show', show,
@@ -1853,7 +1970,7 @@ def.static._createFormRoot =
 
 		forms[ name ] =
 			entry[ 1 ].create(
-				'action', action_none.create( ),
+				'action', action_none.singleton,
 				'viewSize', viewSize,
 				'twig:init', twig, layout._ranks
 			);
@@ -1861,7 +1978,7 @@ def.static._createFormRoot =
 
 	let formRoot =
 		form_root.create(
-			'action', action_none.create( ),
+			'action', action_none.singleton,
 			'path', formRootPath,
 			'viewSize', viewSize
 		);
@@ -1910,20 +2027,6 @@ def.lazy._currentScreen =
 		default : throw new Error( );
 	}
 };
-
-
-/*
-| The path of the label of the space being loaded in the loading form.
-| FIXME remove
-*/
-def.staticLazy._loadingSpaceTextPath = ( ) =>
-	tim_path.empty
-	.append( 'form' )
-	.append( 'twig' )
-	.append( 'loading' )
-	.append( 'twig' )
-	.append( 'spaceText' )
-	.append( 'text' );
 
 
 } );

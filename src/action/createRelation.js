@@ -82,7 +82,7 @@ def.proto.dragMove =
 		const pd = p.sub( this.startPoint );
 
 		// FIXME this is an akward call.
-		root.create(
+		root.alter(
 			'spaceTransform', screen.transform.create( 'offset', this.offset.add( pd ) )
 		);
 
@@ -96,13 +96,13 @@ def.proto.dragMove =
 
 		if( item.tZone.within( p ) )
 		{
-			root.create( 'action', this.create( 'toItemPath', item.path ) );
+			root.alter( 'action', this.create( 'toItemPath', item.path ) );
 
 			return;
 		}
 	}
 
-	root.create( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );
+	root.alter( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );
 };
 
 
@@ -132,7 +132,7 @@ def.proto.dragStart =
 
 		if( !item.pointWithin( p ) ) continue;
 
-		root.create(
+		root.alter(
 			'action',
 				this.create(
 					'fromItemPath', item.path,
@@ -144,7 +144,7 @@ def.proto.dragStart =
 		return;
 	}
 
-	root.create(
+	root.alter(
 		'action',
 			this.create(
 				'offset', screen.transform.offset,
@@ -177,20 +177,20 @@ def.proto.dragStop =
 				item.createRelationStop( p );
 			}
 
-			root.create(
+			root.alter(
 				'action',
 				shift
 				? action_createRelation.create( 'relationState', 'start' )
-				: action_none.create( )
+				: action_none.singleton
 			);
 
 			return;
 
-		case 'start' : root.create( 'action', action_none.create( ) ); return;
+		case 'start' : root.alter( 'action', action_none.singleton ); return;
 
 		case 'pan' :
 
-			root.create( 'action', this.create( 'relationState', 'start' ) );
+			root.alter( 'action', this.create( 'relationState', 'start' ) );
 
 			return;
 
@@ -232,13 +232,13 @@ def.proto.pointingHover =
 
 			if( item.pointWithin( p ) )
 			{
-				root.create( 'action', this.create( 'fromItemPath', item.path ) );
+				root.alter( 'action', this.create( 'fromItemPath', item.path ) );
 
 				return result_hover.cursorDefault;
 			}
 		}
 
-		root.create( 'action', this.create( 'fromItemPath', undefined ) );
+		root.alter( 'action', this.create( 'fromItemPath', undefined ) );
 
 		return result_hover.cursorDefault;
 	}

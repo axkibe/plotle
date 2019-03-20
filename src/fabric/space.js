@@ -24,16 +24,14 @@ if( TIM )
 
 		// this space has a grid.
 		// no json thus not saved or transmitted
-		// FIXME why?
-		hasGrid : { type : 'boolean', defaultValue : 'true' },
+		hasGrid : { type : 'boolean', defaultValue : 'true', json: true, },
 
 		// node currently hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// this space has grid snapping
 		// no json thus not saved or transmitted
-		// FIXME why?
-		hasSnapping : { type : 'boolean', defaultValue : 'true' },
+		hasSnapping : { type : 'boolean', defaultValue : 'true', json: true },
 
 		// the path of the space
 		// no json thus not saved or transmitted
@@ -74,7 +72,7 @@ const action_select = tim.require( '../action/select' );
 
 const fabric_item = tim.require( './item' );
 
-const fabric_itemList = tim.require( '../fabric/itemList' );
+const fabric_itemSet = tim.require( '../fabric/itemSet' );
 
 const fabric_note = tim.require( './note' );
 
@@ -209,7 +207,7 @@ def.proto.dragStart =
 		if( this.atRank( a ).dragStart( p, shift, ctrl, action ) ) return;
 	}
 
-	root.create(
+	root.alter(
 		'action', action_pan.create( 'offset', this.transform.offset, 'startPoint', p )
 	);
 };
@@ -279,7 +277,7 @@ def.adjust.frame =
 
 	if( !mark.itemPaths ) return;
 
-	const content = this.getList( mark.itemPaths );
+	const content = this.getSet( mark.itemPaths );
 
 	if( !content ) return;
 
@@ -384,9 +382,9 @@ def.adjust.get =
 
 
 /*
-| Returns a list of items by a list of paths.
+| Returns a set of items by a list of paths. // FIXME set of paths
 */
-def.proto.getList =
+def.proto.getSet =
 	function(
 		paths
 	)
@@ -398,7 +396,7 @@ def.proto.getList =
 /**/	if( paths.length === 0 ) throw new Error( );
 /**/}
 
-	const items = [ ];
+	const items = new Set( );
 
 	for( let a = 0, al = paths.length; a < al; a++ )
 	{
@@ -411,10 +409,10 @@ def.proto.getList =
 /**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
 /**/	}
 
-		items.push( this.get( path.get( 2 ) ) );
+		items.add( this.get( path.get( 2 ) ) );
 	}
 
-	return fabric_itemList.create( 'list:init', items );
+	return fabric_itemSet.create( 'set:init', items );
 };
 
 
@@ -771,7 +769,7 @@ def.proto._moveCreate =
 
 		const pd = p.sub( action.startPoint );
 
-		root.create(
+		root.alter(
 			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
 		);
 	}
@@ -795,7 +793,7 @@ def.proto._stopCreate =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	root.create( 'action', this.action.create( 'offset', undefined, 'startPoint', undefined ) );
+	root.alter( 'action', this.action.create( 'offset', undefined, 'startPoint', undefined ) );
 };
 
 

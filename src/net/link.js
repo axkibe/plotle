@@ -78,24 +78,18 @@ def.proto.acquireSpace =
 	{
 		system.cancelTimer( root.link._startTimer );
 
-		root.create(
+		root.alter(
 			'link', root.link.create( '_startTimer', undefined )
 		);
 	}
 
 	// aborts the current running update.
-	root.ajax
-	.get( 'update' )
-	.abortAll( );
+	root.ajax.get( 'update' ).abortAll( );
 
 	// aborts any previous acquireSpace requests.
-	root.ajax
-	.get( 'command' )
-	.abortAll( '_onAcquireSpace' );
+	root.ajax.get( 'command' ).abortAll( '_onAcquireSpace' );
 
-	root.ajax
-	.get( 'command' )
-	.request(
+	root.ajax.get( 'command' ).request(
 		request_acquire.create(
 			'createMissing', createMissing,
 			'spaceRef', spaceRef,
@@ -121,7 +115,7 @@ def.proto.alter =
 
 	const space = changeWrap.changeTree( root.space );
 
-	root.create(
+	root.alter(
 		'link', root.link.create( '_outbox', root.link._outbox.append( changeWrap ) ),
 		'space', space
 	);
@@ -219,7 +213,7 @@ def.proto._onAcquireSpace =
 			1000,
 			function( )
 			{
-				root.create(
+				root.alter(
 					'link', root.link.create( '_startTimer', undefined )
 				);
 
@@ -227,7 +221,7 @@ def.proto._onAcquireSpace =
 			}
 		);
 
-	root.create(
+	root.alter(
 		'space',
 			reply.space.create(
 				'path', tim_path.empty.append( 'space' ),
@@ -329,7 +323,7 @@ def.proto._sendChanges =
 
 	const outbox = root.link._outbox;
 
-	root.create(
+	root.alter(
 		'link',
 			root.link.create(
 				'_outbox', change_wrapList.create( ),
@@ -497,7 +491,7 @@ def.proto._gotUpdateSpace =
 
 	space = outbox.changeTree( space );
 
-	root.create(
+	root.alter(
 		'link',
 			root.link.create(
 				'_outbox', outbox || change_wrapList.create( ),
@@ -515,7 +509,7 @@ def.proto._gotUpdateSpace =
 	{
 		root.update( report );
 
-		root.create( 'doTracker', root.doTracker.update( report ) );
+		root.alter( 'doTracker', root.doTracker.update( report ) );
 	}
 
 	return gotOwnChgs;
@@ -534,7 +528,7 @@ def.proto._gotUpdateUserSpaceList =
 
 	const userSpaceList = root.link.userSpaceList.applyChangeDynamic( changeDynamic );
 
-	root.create(
+	root.alter(
 		'userSpaceList', userSpaceList.current,
 		'link',
 			root.link.create(

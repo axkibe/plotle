@@ -149,7 +149,7 @@ def.static.createFromLayout =
 	return(
 		disc_create.create(
 			'twig:init', twig, layout._ranks,
-			'action', action_none.create( ),
+			'action', action_none.singleton,
 			'controlTransform', transform,
 			'facet', layout.facet,
 			'path', path,
@@ -374,7 +374,7 @@ def.proto.pushButton =
 		default : throw new Error( );
 	}
 
-	root.create( 'action', action );
+	root.alter( 'action', action );
 };
 
 

@@ -178,7 +178,9 @@ def.adjust.get =
 	// FIXME why?
 	if( !para ) return;
 
-	const path = para.path || ( this.path && this.path.append( 'twig' ).appendNC( key ) );
+	//const path = para.path || ( this.path && this.path.append( 'twig' ).appendNC( key ) );
+	// Xxx?
+	const path = ( this.path && this.path.append( 'twig' ).appendNC( key ) );
 
 	let mark, pos, y;
 
@@ -187,10 +189,11 @@ def.adjust.get =
 		const innerMargin = this.innerMargin;
 
 		const rank = this.rankOf( key );
-/**/if( CHECK )
-/**/{
-/**/	if( rank < 0 ) throw new Error( );
-/**/}
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( rank < 0 ) throw new Error( );
+/**/	}
 
 		if( rank > 0 )
 		{

@@ -111,7 +111,7 @@ def.proto.dragStart =
 {
 	if( !this._tShape.within( p ) ) return undefined;
 
-	root.create(
+	root.alter(
 		'action',
 			action_scrolly.create(
 				'scrollPath', this.path.shorten,

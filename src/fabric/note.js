@@ -65,7 +65,12 @@ if( TIM )
 }
 
 
+
+const action_dragItems = tim.require( '../action/dragItems' );
+
 const change_grow = tim.require( '../change/grow' );
+
+const change_set = tim.require( '../change/set' );
 
 const fabric_doc = tim.require( '../fabric/doc' );
 
@@ -107,17 +112,28 @@ const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
 
 /*
-| Exta checking
+| Returns the change-set for a resizing
+| the item, defined by its zone.
 */
-def.proto._check =
-	function( )
+def.proto.getActionChanges =
+	function(
+		action  // the action doing the change
+	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if(	this.scrollPos
-/**/		&& ( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
-/**/	) throw new Error( );
-/**/}
+	switch( action.timtype )
+	{
+		case action_dragItems :
+
+			return(
+				change_set.create(
+					'path', this.path.chop.append( 'zone' ),
+					'val', this.zone.add( action.moveBy ),
+					'prev', this.zone
+				)
+			);
+
+		default : throw new Error( );
+	}
 };
 
 
@@ -181,6 +197,7 @@ def.adjust.doc =
 
 /*
 | The item's glint.
+| FIXME this is stupid.
 */
 def.proto.glint = function( ) { return this._glint; };
 
@@ -255,7 +272,7 @@ def.proto.mousewheel =
 
 	if( y < 0 ) y = 0;
 
-	root.setPath(
+	root.alter(
 		this.path.append( 'scrollPos' ),
 		this.scrollPos.create( 'y', y )
 	);
@@ -346,14 +363,13 @@ def.proto.scrollMarkIntoView =
 
 	if( n < 0 )
 	{
-		root.setPath(
-			this.path.append( 'scrollPos' ),
-			this.scrollPos.create( 'y', sy + n )
+		root.alter(
+			this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', sy + n )
 		);
 	}
 	else if( s > zone.height )
 	{
-		root.setPath(
+		root.alter(
 			this.path.append( 'scrollPos' ),
 			this.scrollPos.create( 'y', sy + s - zone.height )
 		);
@@ -365,6 +381,21 @@ def.proto.scrollMarkIntoView =
 | The notes shape.
 */
 def.proto.shape = function( ){ return this._shape; };
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if(	this.scrollPos
+/**/		&& ( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
+/**/	) throw new Error( );
+/**/}
+};
 
 
 /*

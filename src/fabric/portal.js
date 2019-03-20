@@ -60,11 +60,15 @@ if( TIM )
 }
 
 
+const action_dragItems = tim.require( '../action/dragItems' );
+
 const change_grow = tim.require( '../change/grow' );
 
 const change_insert = tim.require( '../change/insert' );
 
 const change_remove = tim.require( '../change/remove' );
+
+const change_set = tim.require( '../change/set' );
 
 const gleam_ellipse = tim.require( '../gleam/ellipse' );
 
@@ -313,6 +317,33 @@ def.static.cycle =
 		case 'spaceTag' : return 'moveToButton';
 
 		case 'moveToButton' : return 'spaceUser';
+	}
+};
+
+
+
+/*
+| Returns the change-set for a resizing
+| the item, defined by its zone.
+*/
+def.proto.getActionChanges =
+	function(
+		action  // the action doing the change
+	)
+{
+	switch( action.timtype )
+	{
+		case action_dragItems :
+
+			return(
+				change_set.create(
+					'path', this.path.chop.append( 'zone' ),
+					'val', this.zone.add( action.moveBy ),
+					'prev', this.zone
+				)
+			);
+
+		default : throw new Error( );
 	}
 };
 
