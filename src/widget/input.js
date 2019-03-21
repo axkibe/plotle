@@ -565,14 +565,14 @@ def.proto._keyBackspace =
 
 	root.alter(
 		this.path.append( 'value' ),
-			this.value.substring( 0, at - 1 ) + this.value.substring( at )
+			this.value.substring( 0, at - 1 ) + this.value.substring( at ),
 		'mark',
 			// FIXME lazy
 			visual_mark_caret.pathAt(
 				mark.caret.path,
 				at - 1
 			)
-		);
+		)
 	);
 };
 
