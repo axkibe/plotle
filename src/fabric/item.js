@@ -19,8 +19,6 @@ const action_dragItems = tim.require( '../action/dragItems' );
 
 const action_none = tim.require( '../action/none' );
 
-const fabric_itemSet = tim.require( '../fabric/itemSet' );
-
 const gleam_point = tim.require( '../gleam/point' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
@@ -28,6 +26,14 @@ const visual_mark_caret = tim.require( '../visual/mark/caret' );
 const visual_mark_items = tim.require( '../visual/mark/items' );
 
 const visual_mark_range = tim.require( '../visual/mark/range' );
+
+
+/*
+| By default deny all action effects.
+*/
+def.proto.actionAffectsPosFs =
+def.proto.actionAffectsZone =
+	false;
 
 
 /*
@@ -123,19 +129,23 @@ def.proto.dragStart =
 	if( !mark || mark.timtype !== visual_mark_items )
 	{
 		mark = visual_mark_items.createWithOne( this.path );
-
-		// FIXME combine with root.alter
-		root.setUserMark( mark );
 	}
+	else
+	{
+		mark = pass;
+	}
+
+	const items = root.space.getSet( mark.itemPaths );
 
 	root.alter(
 		'action',
 			action_dragItems.create(
+				'items', items,
 				'moveBy', gleam_point.zero,
-				'startItems', fabric_itemSet.create( 'set:add', this ),
 				'startPoint', p.detransform( this.transform ),
 				'startZone', this.zone
-			)
+			),
+		'mark', mark
 	);
 
 	return true;
@@ -201,7 +211,7 @@ def.proto._ctrlClick =
 
 	if( !mark )
 	{
-		root.setUserMark( visual_mark_items.createWithOne( this.path ) );
+		root.alter( 'mark', visual_mark_items.createWithOne( this.path ) );
 
 		return true;
 	}
@@ -210,17 +220,18 @@ def.proto._ctrlClick =
 	{
 		case visual_mark_items :
 
-			root.setUserMark( mark.togglePath( this.path ) );
+			root.alter( 'mark', mark.togglePath( this.path ) );
 
 			return true;
 
 		case visual_mark_caret :
 		case visual_mark_range :
 
-			root.setUserMark(
-				visual_mark_items.create(
-					'itemPaths', mark.itemPaths.create( 'list:append', this.path )
-				)
+			root.alter(
+				'mark',
+					visual_mark_items.create(
+						'itemPaths', mark.itemPaths.create( 'list:append', this.path )
+					)
 			);
 
 			return true;

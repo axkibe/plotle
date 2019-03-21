@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// the paths of the items to drag
-		startItems : { type : [ 'undefined', '../fabric/itemSet' ] },
+		items : { type : [ 'undefined', '../fabric/itemSet' ] },
 
 		// drags the items by this x/y
 		moveBy : { type : '../gleam/point' },
@@ -34,66 +34,11 @@ const action_none = tim.require( './none' );
 
 const change_list = tim.require( '../change/list' );
 
+const change_set = tim.require( '../change/set' );
+
 const fabric_space = tim.require( '../fabric/space' );
 
 const result_hover = tim.require( '../result/hover' );
-
-
-/*
-| Returns true if an entity with path is affected by this action.
-| FIXME remove
-*/
-def.proto.affectsItem =
-	function(
-		item
-	)
-{
-	/*
-	const paths = this.itemPaths;
-
-	for( let a = 0, pLen = paths.length; a < pLen; a++ )
-	{
-		const pa = paths.get( a );
-
-		if( pa.equals( item.path ) ) return true;
-	}
-	*/
-	console.log( 'FIXME remove' );
-
-	return false;
-};
-
-
-/*
-| Returns a zone affected by this action.
-| FIXME remove
-*/
-def.proto.affectZone =
-	function(
-		zone,      // the unaffected zone
-		minSize    // minimum size of the zone
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 2 ) throw new Error( );
-/**/}
-
-	return zone.add( this.moveBy );
-};
-
-
-/*
-| Returns a zone affected by this action.
-| FIXME remove
-*/
-def.proto.affectPoint =
-	function(
-		p   // the unaffected point
-	)
-{
-	return p.add( this.moveBy );
-};
 
 
 /*
@@ -102,27 +47,46 @@ def.proto.affectPoint =
 def.lazy.changes =
 	function( )
 {
-	let changes = change_list.create( );
+	const moveBy = this.moveBy;
 
-	const it = this.startItems.iterator( );
+	const changes = [ ];
 
-	for( let i = it.next( ); !i.done; i = it.next( ) )
+	if( moveBy.x === 0 && moveBy.y === 0 ) return change_list.empty;
+
+	for( let item of this.items.iterator( ) )
 	{
-		const item = i.value;
-
-		const chi = item.getActionChanges( this );
-
-		if( chi.timtype !== change_list )
+		if( item.actionAffectsZone )
 		{
-			changes = changes.create( 'list:append', chi );
+			const iZone = item.zone;
+
+			const aZone = iZone.add( moveBy );
+
+			changes.push(
+				change_set.create(
+					'path', item.path.chop.append( 'zone' ),
+					'val', aZone,
+					'prev', iZone
+				)
+			);
 		}
-		else
+
+		if( item.actionAffectsPosFs )
 		{
-			changes = changes.appendList( chi );
+			const iPos = item.pos;
+
+			const aPos = iPos.add( moveBy );
+
+			changes.push(
+				change_set.create(
+					'path', item.path.chop.append( 'pos' ),
+					'val', aPos,
+					'prev', iPos
+				)
+			);
 		}
 	}
 
-	return changes;
+	return change_list.create( 'list:init', changes );
 };
 
 

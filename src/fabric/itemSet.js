@@ -60,7 +60,7 @@ def.lazy.zones =
 /**/		if( group[ key ] ) throw new Error( );
 /**/	}
 
-		group[ key ] = item.zone( );
+		group[ key ] = item.zone;
 	}
 
 	return gleam_rectGroup.create( 'group:init', group );

@@ -275,6 +275,9 @@ const serveUpdate =
 		return replyError( 'Request JSON translation failed' );
 	}
 
+	// XXX
+	console.inspect( 'CREDS', request.userCreds );
+
 	const userInfo = root.userNexus.testInCache( request.userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid creds' );

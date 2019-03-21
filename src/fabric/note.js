@@ -66,11 +66,7 @@ if( TIM )
 
 
 
-const action_dragItems = tim.require( '../action/dragItems' );
-
 const change_grow = tim.require( '../change/grow' );
-
-const change_set = tim.require( '../change/set' );
 
 const fabric_doc = tim.require( '../fabric/doc' );
 
@@ -112,29 +108,12 @@ const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
 
 /*
-| Returns the change-set for a resizing
-| the item, defined by its zone.
+| The zone is directly affected by actions.
+| FIXME check if static is necessary
 */
-def.proto.getActionChanges =
-	function(
-		action  // the action doing the change
-	)
-{
-	switch( action.timtype )
-	{
-		case action_dragItems :
-
-			return(
-				change_set.create(
-					'path', this.path.chop.append( 'zone' ),
-					'val', this.zone.add( action.moveBy ),
-					'prev', this.zone
-				)
-			);
-
-		default : throw new Error( );
-	}
-};
+def.static.actionAffectsZone =
+def.proto.actionAffectsZone =
+	true;
 
 
 /*
@@ -155,15 +134,16 @@ def.static.createGeneric =
 
 	root.alter(
 		'change',
-		change_grow.create(
-			'val', note,
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'rank', 0
-		)
-	);
-
-	root.setUserMark(
-		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
+			change_grow.create(
+				'val', note,
+				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'rank', 0
+			),
+		'mark',
+			visual_mark_caret.pathAt(
+				root.space.get( key ).doc.atRank( 0 ).textPath,
+				0
+			)
 	);
 };
 
@@ -176,7 +156,7 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = doc.path || ( this.path && this.path.append( 'doc' ) );
+	const path = this.path && this.path.append( 'doc' );
 
 	const zone = this.zone;
 

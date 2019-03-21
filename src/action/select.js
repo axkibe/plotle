@@ -170,9 +170,10 @@ def.proto.dragStop =
 		}
 	}
 
-	root.alter( 'action', shift ? action_select.create( ) : action_none.singleton );
-
-	root.setUserMark( mark );
+	root.alter(
+		'action', shift ? action_select.create( ) : action_none.singleton,
+		'mark', mark
+	);
 };
 
 

@@ -51,13 +51,9 @@ if( TIM )
 	def.json = 'label';
 }
 
-const action_dragItems = tim.require( '../action/dragItems' );
-
 const change_grow = tim.require( '../change/grow' );
 
 const change_shrink = tim.require( '../change/shrink' );
-
-const change_set = tim.require( '../change/set' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -82,6 +78,15 @@ const session_uid = tim.require( '../session/uid' );
 const tim_path = tim.require( 'tim.js/path' );
 
 const visual_mark_caret = tim.require( '../visual/mark/caret' );
+
+
+/*
+| Position and fontsize are directly affected by actions.
+*/
+def.static.actionAffectsPosFs =
+def.proto.actionAffectsPosFs =
+	true;
+
 
 
 /*
@@ -123,15 +128,16 @@ def.static.createGeneric =
 
 	root.alter(
 		'change',
-		change_grow.create(
-			'val', label,
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'rank', 0
-		)
-	);
-
-	root.setUserMark(
-		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
+			change_grow.create(
+				'val', label,
+				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'rank', 0
+			),
+		'mark',
+			visual_mark_caret.pathAt(
+				root.space.get( key ).doc.atRank( 0 ).textPath,
+				0
+			)
 	);
 };
 
@@ -185,32 +191,6 @@ def.lazy.fontsize =
 	return fs;
 };
 */
-
-
-/*
-| Returns the change-set for a resizing
-| the item, defined by its zone.
-*/
-def.proto.getActionChanges =
-	function(
-		action  // the action doing the change
-	)
-{
-	switch( action.timtype )
-	{
-		case action_dragItems :
-
-			return(
-				change_set.create(
-					'path', this.path.chop.append( 'pos' ),
-					'val', this.pos.add( action.moveBy ),
-					'prev', this.pos
-				)
-			);
-
-		default : throw new Error( );
-	}
-};
 
 
 /*

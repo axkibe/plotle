@@ -148,7 +148,7 @@ def.proto.click =
 
 	// otherwise ...
 
-	if( !ctrl ) root.setUserMark( undefined );
+	if( !ctrl ) root.alter( 'mark', undefined );
 
 	return true;
 };
@@ -304,7 +304,10 @@ def.adjust.get =
 {
 	if( !item ) return;
 
-	const path = item.path || fabric_space.spacePath.append( 'twig' ).appendNC( key );
+	let path;
+
+	if( item.path && item.key === key ) path = item.path;
+	else path = fabric_space.spacePath.append( 'twig' ).appendNC( key );
 
 	// this is all thats needed for serverside
 	if( NODE ) return item.create( 'path', path );
@@ -714,7 +717,7 @@ def.proto.specialKey =
 
 				paths = tim_path_list.create( 'list:init', paths );
 
-				root.setUserMark( visual_mark_items.create( 'itemPaths', paths ) );
+				root.alter( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
 
 				return true;
 			}

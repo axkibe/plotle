@@ -78,11 +78,9 @@ def.lazy.glint =
 def.lazy.proportional =
 	function( )
 {
-	const content = this.content;
-
-	for( let a = 0, al = content.length; a < al; a++ )
+	for( let item of this.content.iterator( ) )
 	{
-		if( content.get( a ).proportional ) return true;
+		if( item.proportional ) return true;
 	}
 
 	return false;
@@ -512,7 +510,7 @@ def.proto.dragStart =
 		root.alter(
 			'action',
 				action_resizeItems.create(
-					'itemPaths', this.content.itemPaths,
+					'items', this.content,
 					'startZone', zone,
 					'startZones', this.content.zones,
 					'proportional', this.proportional,
@@ -530,8 +528,8 @@ def.proto.dragStart =
 	root.alter(
 		'action',
 			action_dragItems.create(
+				'items', this.content,
 				'moveBy', gleam_point.zero,
-				'startItems', this.content,
 				'startPoint', dp,
 				// FIXME move this.zone logic into itemSet
 				// so it becomes this.content.zone

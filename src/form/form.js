@@ -114,10 +114,11 @@ def.proto.cycleFocus =
 
 		if( ve.focusable && ve.visible !== false )
 		{
-			root.setUserMark(
-				ve.caretable
-				? visual_mark_caret.pathAt( ve.path, 0 )
-				: visual_mark_widget.create( 'path', ve.path )
+			root.alter(
+				'mark',
+					ve.caretable
+					? visual_mark_caret.pathAt( ve.path, 0 )
+					: visual_mark_widget.create( 'path', ve.path )
 			);
 
 			break;

@@ -66,7 +66,7 @@ def.proto.click =
 
 	if( this.access != 'rw' ) return false;
 
-	root.setUserMark( this.markForPoint( p, shift, mark ) );
+	root.alter( 'mark', this.markForPoint( p, shift, mark ) );
 
 	return true;
 };
@@ -103,9 +103,10 @@ def.proto.dragStart =
 
 		const mark = this.markForPoint( p, false );
 
-		root.alter( 'action', action.create( 'itemPath', this.path ) );
-
-		root.setUserMark( mark );
+		root.alter(
+			'action', action.create( 'itemPath', this.path ),
+			'mark', mark
+		);
 
 		return true;
 	}
@@ -190,7 +191,7 @@ def.proto.moveSelect =
 		p
 	)
 {
-	root.setUserMark( this.markForPoint( p, true ) );
+	root.alter(	'mark', this.markForPoint( p, true ) );
 
 	this.scrollMarkIntoView( );
 };

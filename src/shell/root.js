@@ -582,6 +582,10 @@ def.proto.alter =
 
 	let link = pass;
 
+	let mark = pass;
+
+	let omark;
+
 	let show = pass;
 
 	let space = pass;
@@ -613,6 +617,8 @@ def.proto.alter =
 			case 'hover' : hover = arg; continue;
 
 			case 'link' : link = arg; continue;
+
+			case 'mark' : mark = arg; continue;
 
 			case 'show' : show = arg; continue;
 
@@ -673,6 +679,16 @@ def.proto.alter =
 
 	if( space !== pass ) space = space.create( 'action', action_none.singleton );
 
+	if( mark !== pass )
+	{
+		if( mark.timtype === visual_mark_caret )
+		{
+			mark = mark.create( 'focus', this._systemFocus );
+		}
+
+		omark = root._mark;
+	}
+
 	root._create(
 		'action', action,
 		'ajax', ajax,
@@ -685,7 +701,31 @@ def.proto.alter =
 		'spaceTransform', spaceTransform,
 		'userCreds', userCreds,
 		'userSpaceList', userSpaceList,
+		'_mark', mark
 	);
+
+	if( omark )
+	{
+		// issues the markLost( ) calls
+		// used by empty labels to remove themselves
+		const oip = omark.itemPaths;
+
+		if( oip )
+		{
+			const nip = mark && mark.itemPaths;
+
+			for( let a = 0, al = oip.length; a < al; a++ )
+			{
+				const op = oip.get( a );
+
+				if( nip && nip.contains( op ) ) continue;
+
+				const item = root.getPath( op );
+
+				if( item ) item.markLost( );
+			}
+		}
+	}
 };
 
 
@@ -911,7 +951,7 @@ def.proto.clearRetainX =
 
 	if( mark.retainx !== undefined )
 	{
-		this.create( '_mark', mark.create( 'retainx', undefined ) );
+		this._create( '_mark', mark.create( 'retainx', undefined ) );
 	}
 };
 
@@ -1579,51 +1619,6 @@ def.proto.setSystemFocus =
 
 
 /*
-| Sets the user mark.
-|
-| FIXME move into root.alter( )
-*/
-def.proto.setUserMark =
-	function(
-		mark
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
-	if( mark && mark.timtype === visual_mark_caret )
-	{
-		mark = mark.create( 'focus', this._systemFocus );
-	}
-
-	const omark = root._mark;
-
-	root._create( '_mark', mark );
-
-	if( !omark ) return;
-
-	const oip = omark.itemPaths;
-
-	if( !oip ) return;
-
-	const nip = mark && mark.itemPaths;
-
-	for( let a = 0, al = oip.length; a < al; a++ )
-	{
-		const op = oip.get( a );
-
-		if( nip && nip.contains( op ) ) continue;
-
-		const item = root.getPath( op );
-
-		if( item ) item.markLost( );
-	}
-};
-
-
-/*
 | Shows the "home" screen.
 |
 | When a space is loaded, this is space/normal
@@ -1668,15 +1663,16 @@ def.proto.spawnRelation =
 
 	root.alter(
 		'change',
-		change_grow.create(
-			'val', val,
-			'path', tim_path.empty.append( 'twig' ).append( key ),
-			'rank', 0
-		)
-	);
-
-	root.setUserMark(
-		visual_mark_caret.pathAt( root.space.get( key ).doc.atRank( 0 ).textPath, 0 )
+			change_grow.create(
+				'val', val,
+				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'rank', 0
+			),
+		'mark',
+			visual_mark_caret.pathAt(
+				root.space.get( key ).doc.atRank( 0 ).textPath,
+				0
+			)
 	);
 };
 
@@ -1768,7 +1764,7 @@ def.proto.update =
 			break;
 	}
 
-	root.setUserMark( mark );
+	root.alter( 'mark', mark );
 };
 
 

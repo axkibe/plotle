@@ -8,3 +8,4 @@ FIXME: move the dragstart/move/stop logic from all over to place to the actions.
 FIXME: after zooming draging on on forms errors
 
 FIXME: use (for ... of) instead of iterators.
+FIXME: remove all action: affectZone, affectItem, affects.bla

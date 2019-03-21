@@ -380,7 +380,13 @@ def.proto.click =
 
 	if( !this._tzShape.within( pp ) ) return undefined;
 
-	root.setUserMark( visual_mark_caret.pathAt( this.path, this._getOffsetAt( pp ) ) );
+	root.alter(
+		'mark',
+			visual_mark_caret.pathAt(
+				this.path,
+				this._getOffsetAt( pp )
+			)
+	);
 
 	return false;
 };
@@ -413,7 +419,13 @@ def.proto.input =
 		value.substring( 0, at ) + text + value.substring( at )
 	);
 
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, at + text.length ) );
+	root.alter(
+		'mark',
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				at + text.length
+			)
+	);
 };
 
 
@@ -553,11 +565,15 @@ def.proto._keyBackspace =
 
 	root.alter(
 		this.path.append( 'value' ),
-		this.value.substring( 0, at - 1 ) + this.value.substring( at )
+			this.value.substring( 0, at - 1 ) + this.value.substring( at )
+		'mark',
+			// FIXME lazy
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				at - 1
+			)
+		);
 	);
-
-	// FIXME lazy
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, at - 1 ) );
 };
 
 
@@ -602,7 +618,13 @@ def.proto._keyEnd =
 
 	if( at >= this.value.length ) return;
 
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, this.value.length ) );
+	root.alter(
+		'mark',
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				this.value.length
+			)
+	);
 };
 
 
@@ -616,7 +638,13 @@ def.proto._keyLeft =
 
 	if( mark.caret.at <= 0 ) return;
 
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, mark.caret.at - 1 ) );
+	root.alter(
+		'mark',
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				mark.caret.at - 1
+			)
+	);
 };
 
 
@@ -630,7 +658,13 @@ def.proto._keyPos1 =
 
 	if( mark.caret.at <= 0 ) return;
 
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, 0 ) );
+	root.alter(
+		'mark',
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				0
+			)
+	);
 };
 
 
@@ -644,8 +678,14 @@ def.proto._keyRight =
 
 	if( mark.caret.at >= this.value.length ) return;
 
-	// FIXME lazy
-	root.setUserMark( visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 ) );
+	root.alter(
+		'mark',
+			// FIXME lazy
+			visual_mark_caret.pathAt(
+				mark.caret.path,
+				mark.caret.at + 1
+			)
+	);
 };
 
 
