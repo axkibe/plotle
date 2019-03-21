@@ -572,7 +572,6 @@ def.proto._keyBackspace =
 				mark.caret.path,
 				at - 1
 			)
-		)
 	);
 };
 
