@@ -156,6 +156,22 @@ def.proto.dragStart =
 
 
 /*
+| A createRelation action stops.
+*/
+def.proto.createRelationStop =
+	function(
+		p
+	)
+{
+	if( !this.tZone.within( p ) ) return false;
+
+
+	return true;
+};
+
+
+
+/*
 | Stops a drag.
 */
 def.proto.dragStop =
@@ -172,9 +188,10 @@ def.proto.dragStop =
 
 			if( this.toItemPath )
 			{
-				const item = screen.get( this.toItemPath.get( -1 ) );
-
-				item.createRelationStop( p );
+				root.spawnRelation(
+					screen.get( this.fromItemPath.get( -1 ) ),
+					screen.get( this.toItemPath.get( -1 ) )
+				);
 			}
 
 			root.alter(

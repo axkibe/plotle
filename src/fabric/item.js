@@ -130,10 +130,6 @@ def.proto.dragStart =
 	{
 		mark = visual_mark_items.createWithOne( this.path );
 	}
-	else
-	{
-		mark = pass;
-	}
 
 	const items = root.space.getSet( mark.itemPaths );
 

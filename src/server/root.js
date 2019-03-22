@@ -470,7 +470,7 @@ def.proto.createSpace =
 
 	root.userNexus.addUserSpaceRef( spaceRef );
 
-	root.wake( ref_userSpaceList.create( 'username', spaceRef.username ) );
+	yield* root.wake( ref_userSpaceList.create( 'username', spaceRef.username ) );
 
 	return spaceBox;
 };
@@ -501,7 +501,7 @@ def.proto.closeSleep =
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 def.proto.wake =
-	function(
+	function*(
 		ref // reference to wake for
 	)
 {
@@ -529,15 +529,13 @@ def.proto.wake =
 		if( b >= bZ ) continue;
 
 		// this sleep needs to be waked
-		const asw = server_requestHandler.conveyUpdate( sleep.moments );
+		const asw = yield* server_requestHandler.conveyUpdate( sleep.moments );
 
 		if( !asw ) continue;
 
 		clearTimeout( sleep.timer );
 
-		root.create(
-			'upSleeps', root.upSleeps.remove( key )
-		);
+		root.create( 'upSleeps', root.upSleeps.remove( key ) );
 
 		const result = sleep.result;
 

@@ -110,14 +110,20 @@ def.static.createGeneric =
 	const pos =
 		( dp.x > action.startPoint.x )
 		? zone.pos
-		: gleam_point.create(
-			'x', zone.pos.x + zone.width - resized.zone.width,
-			'y', zone.pos.y
+		: gleam_point.xy(
+			zone.pos.x + zone.width - resized.zone.width,
+			zone.pos.y
 		);
 
 	const label = resized.create( 'pos', pos );
 
 	const key = session_uid.newUid( );
+
+	const path = tim_path.empty.append( 'twig' ).append( key );
+
+	const mpath =
+		path.prepend( 'space' )
+		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
 
 /**/if( CHECK )
 /**/{
@@ -130,14 +136,10 @@ def.static.createGeneric =
 		'change',
 			change_grow.create(
 				'val', label,
-				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'path', path,
 				'rank', 0
 			),
-		'mark',
-			visual_mark_caret.pathAt(
-				root.space.get( key ).doc.atRank( 0 ).textPath,
-				0
-			)
+		'mark', visual_mark_caret.pathAt( mpath, 0 )
 	);
 };
 
@@ -150,7 +152,9 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = doc.path || ( this.path && this.path.append( 'doc' ) );
+	const path = this.path;
+
+	const transform = this.transform;
 
 	return(
 		( doc || this.doc ).create(
@@ -159,42 +163,17 @@ def.adjust.doc =
 			'innerMargin', gruga_label.innerMargin,
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
-			'path', path,
+			'path', path && path.append( 'doc' ),
 			'scrollPos', gleam_point.zero,
-			'transform', this.transform && this.transform.ortho
+			'transform', transform && transform.ortho
 		)
 	);
 };
 
 
 /*
-| The fontsize of the label.
-*/
-/*
-def.lazy.fontsize =
-	function( )
-{
-	const action = this.action;
-
-	let fs = this.fontsize;
-
-	if( action && action.timtype === action_resizeItems )
-	{
-****	if( CHECK )
-****	{
-****		if( action.scaleX !== action.scaleY ) throw new Error( );
-****	}
-
-		fs *= action.scaleY;
-	}
-
-	return fs;
-};
-*/
-
-
-/*
 | The items glint.
+| FIXME this is redicolous.
 */
 def.proto.glint = function( ) { return this._glint; };
 

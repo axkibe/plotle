@@ -216,18 +216,18 @@ def.static.createGeneric =
 
 	const key = session_uid.newUid( );
 
+	const path = tim_path.empty.append( 'twig' ).append( key );
+
+	const mpath = path.prepend( 'space' ).append( 'spaceUser', );
+
 	root.alter(
 		'change',
 			change_grow.create(
-				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'path', path,
 				'val', portal,
 				'rank', 0
 			),
-		'mark',
-			visual_mark_caret.pathAt(
-				root.space.get( key ).path.append( 'spaceUser' ),
-				0
-			)
+		'mark', visual_mark_caret.pathAt( mpath, 0 )
 	);
 };
 

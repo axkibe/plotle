@@ -681,7 +681,7 @@ def.proto.alter =
 
 	if( mark !== pass )
 	{
-		if( mark.timtype === visual_mark_caret )
+		if( mark && mark.timtype === visual_mark_caret )
 		{
 			mark = mark.create( 'focus', this._systemFocus );
 		}
@@ -824,7 +824,7 @@ def.proto.changeSpaceTransformAll =
 
 	let item = space.atRank( 0 );
 
-	let zone = item.zone( );
+	let zone = item.zone;
 
 	let pos = item.pos || zone.pos;
 
@@ -842,7 +842,7 @@ def.proto.changeSpaceTransformAll =
 
 		pos = item.pos;
 
-		if( !pos ) { zone = item.zone( ); pos = zone.pos; }
+		if( !pos ) { zone = item.zone; pos = zone.pos; }
 
 		if( pos.x < wx ) wx = pos.x;
 
@@ -1661,18 +1661,20 @@ def.proto.spawnRelation =
 
 	const key = session_uid.newUid( );
 
+	const path = tim_path.empty.append( 'twig' ).append( key );
+
+	const mpath =
+		path.prepend( 'space' )
+		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
+
 	root.alter(
 		'change',
 			change_grow.create(
 				'val', val,
-				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'path', path,
 				'rank', 0
 			),
-		'mark',
-			visual_mark_caret.pathAt(
-				root.space.get( key ).doc.atRank( 0 ).textPath,
-				0
-			)
+		'mark', visual_mark_caret.pathAt( mpath, 0 )
 	);
 };
 

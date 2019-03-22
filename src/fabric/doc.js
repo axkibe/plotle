@@ -178,19 +178,9 @@ def.adjust.get =
 	// FIXME why?
 	if( !para ) return;
 
-	let path, mark, pos, y;
+	let mark, pos, y;
 
-	if( this.path )
-	{
-		if( para.path && para.path.get( -1 ) === key )
-		{
-			path = para.path;
-		}
-		else
-		{
-			path = this.path.append( 'twig' ).appendNC( key );
-		}
-	}
+	const path = this.path && this.path.append( 'twig' ).append( key );
 
 	if( !NODE )
 	{

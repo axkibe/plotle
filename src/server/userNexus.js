@@ -253,28 +253,29 @@ def.proto.register =
 |
 | If so returns the matching user info.
 */
-def.proto.getInCache =
-	function(
+def.proto.getByName =
+	function*(
 		username
 	)
 {
-	return this._cache.get( username );
-};
+	let userInfo = this._cache.get( username );
 
+	if( userInfo ) return userInfo;
 
-/*
-| Tests if a user is already in the cache.
-|
-| If so returns the matching user info.
-*/
-def.proto.testInCache =
-	function(
-		userCreds
-	)
-{
-	const userInfo = this._cache.get( userCreds.name );
+	// else the user is to be loaded from the database
+	const val =
+		yield root.repository.users.findOne(
+			{ _id : username },
+			resume( )
+		);
 
-	if( !userInfo || userInfo.passhash !== userCreds.passhash ) return false;
+	if( !val ) return;
+
+	userInfo = database_userSkid.createFromJSON( val ).asUser;
+
+	root.create(
+		'userNexus', this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
+	);
 
 	return userInfo;
 };
@@ -290,30 +291,9 @@ def.proto.testUserCreds =
 		userCreds
 	)
 {
-	let userInfo = this._cache.get( userCreds.name );
+	const userInfo = yield* this.getByName( userCreds.name );
 
-	// if in cache answer directly
-	if( userInfo )
-	{
-		if( userInfo.passhash !== userCreds.passhash ) return false;
-
-		return userInfo;
-	}
-
-	// else the user is to be loaded from the database
-	const val =
-		yield root.repository.users.findOne(
-			{ _id : userCreds.name },
-			resume( )
-		);
-
-	if( !val ) return false;
-
-	userInfo = database_userSkid.createFromJSON( val ).asUser;
-
-	root.create(
-		'userNexus', this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
-	);
+	if( !userInfo ) return false;
 
 	if( userInfo.passhash !== userCreds.passhash ) return false;
 

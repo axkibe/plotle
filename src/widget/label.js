@@ -93,6 +93,8 @@ def.static.createFromLayout =
 
 	return(
 		widget_label.create(
+			'align', layout.align,
+			'base', layout.base,
 			'color', layout.color,
 			'font', layout.font,
 			'newline', layout.newline,
@@ -126,6 +128,8 @@ def.lazy.glint =
 
 	return(
 		gleam_glint_text.create(
+			'align', this.align,
+			'base', this.base,
 			'font', this.font,
 			'p', this._pos,
 			'text', this.text

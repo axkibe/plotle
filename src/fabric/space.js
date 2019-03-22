@@ -304,10 +304,7 @@ def.adjust.get =
 {
 	if( !item ) return;
 
-	let path;
-
-	if( item.path && item.key === key ) path = item.path;
-	else path = fabric_space.spacePath.append( 'twig' ).appendNC( key );
+	const path = fabric_space.spacePath.append( 'twig' ).append( key );
 
 	// this is all thats needed for serverside
 	if( NODE ) return item.create( 'path', path );

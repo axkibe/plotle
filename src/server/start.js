@@ -225,4 +225,5 @@ const startup =
 };
 
 
+// FIXME can be simplified?
 suspend( function*( ) { yield* startup( ); } )( );

@@ -51,6 +51,8 @@ const server_spaceNexus = tim.require( './spaceNexus' );
 
 const server_upSleep = tim.require( './upSleep' );
 
+const suspend = require( 'suspend' );
+
 const user_info = tim.require( '../user/info' );
 
 
@@ -79,7 +81,7 @@ const replyError =
 | Serves an alter request.
 */
 const serveAlter =
-	function(
+	function*(
 		request
 	)
 {
@@ -101,7 +103,7 @@ const serveAlter =
 
 	const userCreds = request.userCreds;
 
-	if( !root.userNexus.testInCache( userCreds ) )
+	if( !( yield* root.userNexus.testUserCreds( userCreds ) ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
@@ -151,8 +153,12 @@ const serveAlter =
 		throw error;
 	}
 
+	// FIXME can be simplified?
 	process.nextTick(
-		function( ) { root.wake( spaceRef ); }
+		function( )
+		{
+			suspend( function*( ){ yield* root.wake( spaceRef ); } )( );
+		}
 	);
 
 	return reply_alter.create( );
@@ -259,7 +265,7 @@ const serveRegister =
 | Gets new changes or waits for them.
 */
 const serveUpdate =
-	function (
+	function*(
 		request,
 		result
 	)
@@ -275,10 +281,7 @@ const serveUpdate =
 		return replyError( 'Request JSON translation failed' );
 	}
 
-	// XXX
-	console.inspect( 'CREDS', request.userCreds );
-
-	const userInfo = root.userNexus.testInCache( request.userCreds );
+	const userInfo = yield* root.userNexus.testUserCreds( request.userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid creds' );
 
@@ -289,7 +292,7 @@ const serveUpdate =
 	// if testUpdate failed return the error
 	if( asw ) return asw;
 
-	asw = server_requestHandler.conveyUpdate( moments );
+	asw = yield* server_requestHandler.conveyUpdate( moments );
 
 	// immediate answer?
 	if( asw ) return asw;
@@ -342,7 +345,7 @@ const serveAcquire =
 
 	const userCreds = request.userCreds;
 
-	if( !root.userNexus.testInCache( userCreds ) )
+	if( !( yield* root.userNexus.testUserCreds( userCreds ) ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
@@ -393,7 +396,7 @@ const serveAcquire =
 | Returns a result for an update operation.
 */
 def.static.conveyUpdate =
-	function(
+	function*(
 		moments   // references to moments in dynamics to get updates for
 	)
 {
@@ -441,11 +444,13 @@ def.static.conveyUpdate =
 
 			case ref_userSpaceList :
 			{
-				const userInfo = root.userNexus.getInCache( dynRef.username );
+				const userInfo = yield* root.userNexus.getByName( dynRef.username );
 
 				if( !userInfo ) continue;
 
-				const changeWraps = userInfo.spaceList.changeWraps;
+				const userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
+
+				const changeWraps = userSpaceList.changeWraps;
 
 				if( seq - 1 < changeWraps.length )
 				{
@@ -579,7 +584,7 @@ def.static.serve =
 	// FIXME make a table
 	switch( request.type )
 	{
-		case 'request_alter' : return serveAlter( request );
+		case 'request_alter' : return yield* serveAlter( request );
 
 		case 'request_auth' : return yield* serveAuth( request );
 
@@ -587,7 +592,7 @@ def.static.serve =
 
 		case 'request_register' : return yield* serveRegister( request );
 
-		case 'request_update' : return serveUpdate( request, result );
+		case 'request_update' : return yield* serveUpdate( request, result );
 
 		default :
 
