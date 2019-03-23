@@ -56,6 +56,18 @@ const change_set = require( '../change/set' );
 
 const database_changeSkid = require( '../database/changeSkid' );
 
+const priorfabric_doc = require( '../priorfabric/doc' );
+
+const priorfabric_note = require( '../priorfabric/note' );
+
+const priorfabric_space = require( '../priorfabric/space' );
+
+const fabric_doc = require( '../fabric/doc' );
+
+const fabric_note = require( '../fabric/note' );
+
+const fabric_para = require( '../fabric/para' );
+
 const fabric_space = require( '../fabric/space' );
 
 const mongodb = require( 'mongodb' );
@@ -99,6 +111,72 @@ const connectToTarget =
 };
 
 
+const JsonMap =
+	Object.freeze( {
+		'space'        : 'prior-space',
+		'note'         : 'prior-note',
+		'label'        : 'prior-label',
+		'portal'       : 'prior-portal',
+		'arrow'        : 'prior-stroke',
+		'relation'     : 'prior-relation',
+		'fabric_doc'   : 'prior-doc',
+		'fabric_para'  : 'prior-para',
+	} );
+
+
+/*
+| Converts the JSON types in an object.
+*/
+const convertJsonTypes =
+	function(
+		obj
+	)
+{
+	for( let key in obj )
+	{
+		const o = obj[ key ];
+
+		if( key === 'type' )
+		{
+			const mapped = JsonMap[ o ];
+
+			if( mapped ) obj.type = mapped;
+
+			continue;
+		}
+
+		if( typeof( o ) === 'object' ) convertJsonTypes( o );
+	}
+};
+
+
+/*
+| Converts a priorfabric doc.
+*/
+const convertDoc =
+	function(
+		pdoc
+	)
+{
+	if( pdoc.timtype !== priorfabric_doc ) throw new Error( );
+
+	let doc = fabric_doc.create( );
+
+	for( let a = 0, aZ = pdoc.length; a < aZ; a++ )
+	{
+		const key = pdoc.getKey( a );
+
+		const ppara = pdoc.get( key );
+
+		const para = fabric_para.create( 'text', ppara.text );
+
+		doc = doc.create( 'twig:add', key, para );
+	}
+
+	return doc;
+};
+
+
 /*
 | loads all spaces and playbacks all changes from the database.
 */
@@ -123,7 +201,7 @@ const loadSpace =
 
 	let seqZ = 1;
 
-	let space = fabric_space.create( );
+	let pspace = priorfabric_space.create( );
 
 	for(
 		let o = yield cursor.nextObject( resume( ) );
@@ -131,13 +209,46 @@ const loadSpace =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
+		convertJsonTypes( o );
+
 		const changeSkid = database_changeSkid.createFromJSON( o );
 
 		if( changeSkid._id !== seqZ ) throw new Error( 'sequence mismatch' );
 
 		seqZ++;
 
-		space = changeSkid.changeTree( space );
+		pspace = changeSkid.changeTree( pspace );
+	}
+
+	let space = fabric_space.create( );
+
+	for( let a = 0, al = pspace.length; a < al; a++ )
+	{
+		const key = pspace.getKey( a );
+
+		const pitem = pspace.get( key );
+
+		let item;
+
+		switch( pitem.timtype )
+		{
+			case priorfabric_note :
+
+				item =
+					fabric_note.create(
+						'doc', convertDoc( pitem.doc ),
+						'fontsize', pitem.fontsize,
+						'zone', pitem.zone
+					);
+
+				break;
+
+			// XXX
+			// default: throw new Error( );
+		}
+
+		// FIXME XXX remove if
+		if( item ) space = space.create( 'twig:add', key, item );
 	}
 
 	const changeSet =

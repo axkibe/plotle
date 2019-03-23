@@ -39,7 +39,8 @@ if( TIM )
 		transform : { type : [ 'undefined', '../gleam/transform' ] }
 	};
 
-	def.json = 'para';
+	// FIXME change to 'para'
+	def.json = 'prior-para';
 
 	def.alike =
 	{

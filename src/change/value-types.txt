@@ -12,3 +12,11 @@ number
 ../gleam/point
 ../gleam/rect
 ../ref/space
+# XXX remove
+../priorfabric/label
+../priorfabric/note
+../priorfabric/portal
+../priorfabric/para
+../priorfabric/relation
+../priorfabric/stroke
+../priorfabric/space

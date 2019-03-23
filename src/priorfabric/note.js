@@ -56,7 +56,7 @@ if( TIM )
 		zone : { type : '../gleam/rect', json : true },
 	};
 
-	def.json = 'note';
+	def.json = 'prior-note';
 
 	def.alike =
 	{

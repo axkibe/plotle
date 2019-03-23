@@ -48,7 +48,7 @@ if( TIM )
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
 	};
 
-	def.json = 'doc';
+	def.json = 'prior-doc';
 
 	def.twig = [ './para' ];
 }

@@ -1,0 +1,7 @@
+# all fabric item types
+
+./label
+./note
+./portal
+./relation
+./stroke

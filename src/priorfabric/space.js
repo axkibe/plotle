@@ -56,7 +56,7 @@ if( TIM )
 
 	def.twig = [ '< ./item-types' ];
 
-	def.json = 'space';
+	def.json = 'prior-space';
 }
 
 

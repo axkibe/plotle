@@ -55,7 +55,7 @@ if( TIM )
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
 	};
 
-	def.json = 'stroke';
+	def.json = 'prior-stroke';
 }
 
 
