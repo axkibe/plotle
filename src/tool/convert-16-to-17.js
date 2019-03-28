@@ -56,21 +56,35 @@ const change_set = require( '../change/set' );
 
 const database_changeSkid = require( '../database/changeSkid' );
 
-const priorfabric_doc = require( '../priorfabric/doc' );
-
-const priorfabric_note = require( '../priorfabric/note' );
-
-const priorfabric_space = require( '../priorfabric/space' );
-
 const fabric_doc = require( '../fabric/doc' );
+
+const fabric_label = require( '../fabric/label' );
 
 const fabric_note = require( '../fabric/note' );
 
 const fabric_para = require( '../fabric/para' );
 
+const fabric_portal = require( '../fabric/portal' );
+
+const fabric_relation = require( '../fabric/relation' );
+
 const fabric_space = require( '../fabric/space' );
 
+const gleam_font_root = require( '../gleam/font/root' );
+
 const mongodb = require( 'mongodb' );
+
+const priorfabric_doc = require( '../priorfabric/doc' );
+
+const priorfabric_label = require( '../priorfabric/label' );
+
+const priorfabric_note = require( '../priorfabric/note' );
+
+const priorfabric_portal = require( '../priorfabric/portal' );
+
+const priorfabric_relation = require( '../priorfabric/relation' );
+
+const priorfabric_space = require( '../priorfabric/space' );
 
 const ref_space = require( '../ref/space' );
 
@@ -232,6 +246,17 @@ const loadSpace =
 
 		switch( pitem.timtype )
 		{
+			case priorfabric_label :
+
+				item =
+					fabric_label.create(
+						'doc', convertDoc( pitem.doc ),
+						'fontsize', pitem.fontsize,
+						'zone', pitem.zone
+					);
+
+				break;
+
 			case priorfabric_note :
 
 				item =
@@ -243,12 +268,34 @@ const loadSpace =
 
 				break;
 
-			// XXX
-			// default: throw new Error( );
+			case priorfabric_portal :
+
+				item =
+					fabric_portal.create(
+						'spaceTag', pitem.spaceTag,
+						'spaceUser', pitem.spaceUser,
+						'zone', pitem.zone
+					);
+
+				break;
+
+			case priorfabric_relation :
+
+				item =
+					fabric_relation.create(
+						'doc', convertDoc( pitem.doc ),
+						'fontsize', pitem.fontsize,
+						'item1key', pitem.item1key,
+						'item2key', pitem.item2key,
+						'zone', pitem.zone
+					);
+
+				break;
+
+			default: throw new Error( );
 		}
 
-		// FIXME XXX remove if
-		if( item ) space = space.create( 'twig:add', key, item );
+		space = space.create( 'twig:add', key, item );
 	}
 
 	const changeSet =
@@ -290,6 +337,10 @@ const loadSpace =
 const run =
 	function*( )
 {
+	console.log( '* loading fonts' );
+
+	yield gleam_font_root.load( 'DejaVuSans-Regular', resume( ) );
+
 	console.log( '* connecting to src' );
 
 	const srcConnection = yield* connectToSource( );

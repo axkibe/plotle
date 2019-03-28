@@ -90,7 +90,7 @@ def.lazy.changes =
 
 	const changes = [ ];
 
-	for( let item of this.items.iterator( ) )
+	for( let item of this.items )
 	{
 		if( item.actionAffectsZone )
 		{
@@ -109,7 +109,7 @@ def.lazy.changes =
 
 		if( item.actionAffectsPosFs )
 		{
-			const iPos = item.pos;
+			const iPos = item.zone.pos;
 
 			const aPos = iPos.baseScaleAction( this, 0, 0 );
 
@@ -117,7 +117,7 @@ def.lazy.changes =
 			{
 				changes.push(
 					change_set.create(
-						'path', item.path.chop.append( 'pos' ),
+						'path', item.path.chop.append( 'zone' ).append( 'pos' ),
 						'val', aPos,
 						'prev', iPos
 					)
@@ -228,7 +228,7 @@ def.proto.dragMove =
 
 	const startZones = this.startZones;
 
-	for( let item of this.items.iterator( ) )
+	for( let item of this.items )
 	{
 		const key = item.key;
 

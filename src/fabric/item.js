@@ -37,6 +37,12 @@ def.proto.actionAffectsZone =
 
 
 /*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.proto.ancillary = ( ) => undefined;
+
+
+/*
 | Returns the action if an item with 'path' concerns about
 | the action.
 */

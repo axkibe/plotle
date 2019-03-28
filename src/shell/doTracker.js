@@ -45,6 +45,8 @@ def.static.flush =
 | Reporting the doTracker something has been altered.
 |
 | It will track it on the undo stack.
+|
+| FIXME return new tracker instead of using alter
 */
 def.proto.track =
 	function(
@@ -161,14 +163,13 @@ def.proto.undo =
 	changeWrap = changeWrap.createReverse( );
 
 	root.alter(
+		'changeWrap', changeWrap,
 		'doTracker',
 			this.create(
 				'_undo', undo,
 				'_redo', this._redo.append( changeWrap )
 			)
 	);
-
-	root.link.alter( changeWrap );
 };
 
 
@@ -194,14 +195,13 @@ def.proto.redo =
 	redo = redo.remove( redo.length - 1 );
 
 	root.alter(
+		'changeWrap', changeWrap,
 		'doTracker',
 			this.create(
 				'_redo', redo,
 				'_undo', this._undo.append( changeWrap )
 			)
 	);
-
-	root.link.alter( changeWrap );
 };
 
 

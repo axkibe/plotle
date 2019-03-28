@@ -9,3 +9,5 @@ FIXME: after zooming draging on on forms errors
 
 FIXME: use (for ... of) instead of iterators.
 FIXME: remove all action: affectZone, affectItem, affects.bla
+
+FIXME: check all create( ) if replaceable with .empty

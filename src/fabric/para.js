@@ -59,6 +59,8 @@ const change_insert = tim.require( '../change/insert' );
 
 const change_join = tim.require( '../change/join' );
 
+const change_list = tim.require( '../change/list' );
+
 const change_remove = tim.require( '../change/remove' );
 
 const change_split = tim.require( '../change/split' );
@@ -444,8 +446,9 @@ def.proto.input =
 		}
 	}
 
-	root.alter( 'change', changes );
+	root.alter( 'change', change_list.create( 'list:init', changes ) );
 
+	// FIXME make tthis an alter
 	root.clearRetainX( );
 };
 

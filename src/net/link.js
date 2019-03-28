@@ -113,11 +113,8 @@ def.proto.alter =
 /**/	if( root.link !== this ) throw new Error( );
 /**/}
 
-	const space = changeWrap.changeTree( root.space );
-
 	root.alter(
 		'link', root.link.create( '_outbox', root.link._outbox.append( changeWrap ) ),
-		'space', space
 	);
 
 	root.link._sendChanges( );

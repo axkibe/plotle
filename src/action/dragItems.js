@@ -53,37 +53,19 @@ def.lazy.changes =
 
 	if( moveBy.x === 0 && moveBy.y === 0 ) return change_list.empty;
 
-	for( let item of this.items.iterator( ) )
+	for( let item of this.items )
 	{
-		if( item.actionAffectsZone )
-		{
-			const iZone = item.zone;
+		const iZone = item.zone;
 
-			const aZone = iZone.add( moveBy );
+		const aZone = iZone.add( moveBy );
 
-			changes.push(
-				change_set.create(
-					'path', item.path.chop.append( 'zone' ),
-					'val', aZone,
-					'prev', iZone
-				)
-			);
-		}
-
-		if( item.actionAffectsPosFs )
-		{
-			const iPos = item.pos;
-
-			const aPos = iPos.add( moveBy );
-
-			changes.push(
-				change_set.create(
-					'path', item.path.chop.append( 'pos' ),
-					'val', aPos,
-					'prev', iPos
-				)
-			);
-		}
+		changes.push(
+			change_set.create(
+				'path', item.path.chop.append( 'zone' ),
+				'val', aZone,
+				'prev', iZone
+			)
+		);
 	}
 
 	return change_list.create( 'list:init', changes );

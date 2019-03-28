@@ -49,12 +49,12 @@ if( TIM )
 		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		// position
-		pos : { type : '../gleam/point', json : true },
-
 		// the current space transform
 		// no json thus not saved or transmitted
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
+
+		// the items zone
+		zone : { type : '../gleam/rect', json : true },
 	};
 
 	def.json = 'relation';

@@ -27,11 +27,9 @@ def.lazy.itemPaths =
 {
 	const arr = [ ];
 
-	const it = this.iterator( );
-
-	for( let i = it.next( ); !i.done; i = it.next( ) )
+	for( let item of this )
 	{
-		arr.push( i.value.path );
+		arr.push( item.path );
 	}
 
 	return tim_path_list.create( 'list:init', arr );
@@ -47,12 +45,8 @@ def.lazy.zones =
 {
 	const group = { };
 
-	const it = this.iterator( );
-
-	for( let i = it.next( ); !i.done; i = it.next( ) )
+	for( let item of this )
 	{
-		const item = i.value;
-
 		const key = item.path.get( 2 );
 
 /**/	if( CHECK )

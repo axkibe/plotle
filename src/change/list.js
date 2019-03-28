@@ -30,11 +30,97 @@ const change_wrap = tim.require( './wrap' );
 
 const change_wrapList = tim.require( './wrapList' );
 
+const string_set = tim.require( 'tim.js/stringSet' );
+
+
+/*
+| The set of twig keys affected by this change list.
+*/
+def.lazy.affectedTwigItems =
+	function( )
+{
+	const affected = new Set( );
+
+	for( let ch of this )
+	{
+		const path = ch.path;
+
+		if( path.length < 2 ) continue;
+
+		if( path.get( 0 ) !== 'twig' ) continue;
+
+		const iKey = path.get( 1 );
+
+		affected.add( iKey );
+	}
+
+	return string_set.create( 'set:init', affected );
+};
+
+
+/*
+| Performes this change list on a tree.
+*/
+def.proto.changeTree =
+	function(
+		tree
+	)
+{
+	// iterates through the change list
+	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		// the tree returned by op-handler is the new tree
+		tree = this.get( a ).changeTree( tree );
+	}
+
+	return tree;
+};
+
+
+/*
+| Reversevly performes this change list on a tree.
+*/
+def.proto.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	for( let a = this.length - 1; a >= 0; a-- )
+	{
+		tree = this.get( a ).changeTreeReverse( tree );
+	}
+
+	return tree;
+};
+
 
 /*
 | An empty list.
 */
 def.staticLazy.empty = ( ) => change_list.create( );
+
+
+/*
+| Returns the result of a
+| change, change_list, change_wrap or change_wrapList
+| transformed by this change_list.
+*/
+def.proto.transform =
+	function(
+		co
+	)
+{
+	switch( co.timtype )
+	{
+		case change_list : return this._transformChangeList( co );
+
+		case change_wrap : return this._transformChangeWrap( co );
+
+		case change_wrapList : return this._transformChangeWrapList( co );
+
+		default : return this._transformSingle( co );
+	}
+};
 
 
 /*
@@ -129,73 +215,6 @@ def.proto._transformChangeWrapList =
 	}
 
 	return cwList.create( 'list:init', tList );
-};
-
-
-/*
-| Returns the result of a
-| change, change_list, change_wrap or change_wrapList
-| transformed by this change_list.
-*/
-def.proto.transform =
-	function(
-		co
-	)
-{
-	switch( co.timtype )
-	{
-		case change_list :
-
-			return this._transformChangeList( co );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( co );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( co );
-
-		default :
-
-			return this._transformSingle( co );
-	}
-};
-
-
-/*
-| Performes this change list on a tree.
-*/
-def.proto.changeTree =
-	function(
-		tree
-	)
-{
-	// iterates through the change list
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		// the tree returned by op-handler is the new tree
-		tree = this.get( a ).changeTree( tree );
-	}
-
-	return tree;
-};
-
-
-/*
-| Reversevly performes this change list on a tree.
-*/
-def.proto.changeTreeReverse =
-	function(
-		tree
-	)
-{
-	for( let a = this.length - 1; a >= 0; a-- )
-	{
-		tree = this.get( a ).changeTreeReverse( tree );
-	}
-
-	return tree;
 };
 
 

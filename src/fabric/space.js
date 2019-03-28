@@ -571,15 +571,7 @@ def.proto.mousewheel =
 /*
 | Adjusts the path attribute to a default.
 */
-def.adjust.path =
-	function(
-		path
-	)
-{
-	if( path ) return path;
-
-	return tim_path.empty.append( 'space' );
-};
+def.adjust.path = ( path ) => path || fabric_space.spacePath;
 
 
 /*
@@ -628,10 +620,7 @@ def.proto.pointToSpaceRS =
 		snap  // if true snap if enabled for space
 	)
 {
-	if( !snap || !this.hasSnapping )
-	{
-		return p.detransform( this.transform );
-	}
+	if( !snap || !this.hasSnapping ) return p.detransform( this.transform );
 
 	return this._grid.snap( p ).detransform( this.transform );
 };
@@ -647,6 +636,40 @@ def.proto.scrollMarkIntoView =
 	const focus =  this.focus;
 
 	if( focus && focus.scrollMarkIntoView ) focus.scrollMarkIntoView( );
+};
+
+
+/*
+| Gathers the ancillary changes for a changeList.
+|
+| Returns the ancillary changes.
+*/
+def.proto.ancillary =
+	function(
+		affectedTwigItems
+	)
+{
+	let a;
+
+	for( let key of affectedTwigItems )
+	{
+		const item = this.get( key );
+
+		const ia = item.ancillary( /* FIXME depends */ );
+
+		if( !ia ) continue;
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( ia.length === 0 ) throw new Error( );
+/**/	}
+
+		if( !a ) { a = ia; continue; }
+
+		a = a.listAppend( ia );
+	}
+
+	return a;
 };
 
 
@@ -745,36 +768,6 @@ def.lazy._grid =
 		)
 	);
 };
-
-
-/*
-| Moves during creating.
-| FIXME cleanup
-*/
-/*
-def.proto._moveCreate =
-	function(
-		p,      // point of stop
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-	const action = this.action;
-
-	const transform = this.transform;
-
-	if( action.offset )
-	{
-		// panning while creating a relation
-
-		const pd = p.sub( action.startPoint );
-
-		root.alter(
-			'spaceTransform', transform.create( 'offset', action.offset.add( pd ) )
-		);
-	}
-};
-*/
 
 
 /*

@@ -78,7 +78,7 @@ def.lazy.glint =
 def.lazy.proportional =
 	function( )
 {
-	for( let item of this.content.iterator( ) )
+	for( let item of this.content )
 	{
 		if( item.proportional ) return true;
 	}
@@ -102,29 +102,33 @@ def.lazy.zone =
 /**/	if ( !( size > 0 ) ) throw new Error( );
 /**/}
 
-	const it = content.iterator( );
+	let cZone, ny, wx, sy, ex;
 
-	let i = it.next( );
-
-	let cZone = i.value.zone;
-
-	if( size === 1 ) return cZone;
-
-	let pos = cZone.pos;
-
-	let ny = pos.y;
-
-	let wx = pos.x;
-
-	let sy = pos.y + cZone.height;
-
-	let ex = pos.x + cZone.width;
-
-	for( ; !i.done; i = it.next( ) )
+	for( let item of content )
 	{
-		cZone = i.value.zone;
+		if( !cZone )
+		{
+			// first iteration
+			cZone = item.zone;
 
-		pos = cZone.pos;
+			if( size === 1 ) return cZone;
+
+			const pos = cZone.pos;
+
+			ny = pos.y;
+
+			wx = pos.x;
+
+			sy = pos.y + cZone.height;
+
+			ex = pos.x + cZone.width;
+
+			continue;
+		}
+
+		cZone = item.zone;
+
+		const pos = cZone.pos;
 
 		const cex = pos.x + cZone.width;
 
@@ -157,7 +161,7 @@ def.lazy._shapeMask =
 {
 	const arr = [ ];
 
-	for( let ca of this.content.iterator( ) )
+	for( let ca of this.content )
 	{
 		// FIXME XXX privacy violation!
 		arr.push( ca._tShape( ).border( -12 ) );

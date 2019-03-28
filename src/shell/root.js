@@ -574,6 +574,8 @@ def.proto.alter =
 
 	let change = pass;
 
+	let changeWrap;
+
 	let doTracker = pass;
 
 	let form = pass;
@@ -609,6 +611,8 @@ def.proto.alter =
 			case 'ajax' : ajax = arg; continue;
 
 			case 'change' : change = arg; continue;
+
+			case 'changeWrap' : changeWrap = arg; continue;
 
 			case 'doTracker' : doTracker = arg; continue;
 
@@ -675,7 +679,55 @@ def.proto.alter =
 		}
 	}
 
-	if( change !== pass ) root._alterChange( change );
+	if( change !== pass )
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( changeWrap ) throw new Error( );
+/**/	}
+
+		if( space === pass ) space = root.space;
+
+		if( change.timtype !== change_list )
+		{
+			change = change_list.create( 'list:init', [ change ] );
+		}
+
+		space = change.changeTree( space );
+
+		const ancillary = space.ancillary( change.affectedTwigItems );
+
+		if( ancillary )
+		{
+			space = ancillary.changeTree( space );
+
+			change = change.appendList( ancillary );
+		}
+
+		{
+			const changeWrap =
+				// FIXME make a shortcut function
+				change_wrap.create(
+					'cid', session_uid.newUid( ),
+					'changeList', change
+				);
+
+			root.link.alter( changeWrap );
+
+			root.doTracker.track( changeWrap );
+		}
+	}
+	else if( changeWrap )
+	{
+		// the undo/redo tracker does directly changeWraps
+		if( space === pass ) space = root.space;
+
+		space = changeWrap.changeTree( space );
+
+		// no need for ancillaries
+
+		root.link.alter( changeWrap );
+	}
 
 	if( space !== pass ) space = space.create( 'action', action_none.singleton );
 
@@ -1777,34 +1829,10 @@ def.proto.update =
 */
 def.proto._alterChange =
 	function(
-		change
+		change,  // the change or change list to apply
+		space    // the space
 	)
 {
-	let changeList;
-
-	if( change.timtype === change_list )
-	{
-		changeList = change;
-	}
-	else if( Array.isArray( change ) )
-	{
-		changeList = change_list.create( 'list:init', change );
-	}
-	else
-	{
-		changeList = change_list.create( 'list:init', [ change ] );
-	}
-
-	const changeWrap =
-		// FIXME make a shortcut function
-		change_wrap.create(
-			'cid', session_uid.newUid( ),
-			'changeList', changeList
-		);
-
-	root.link.alter( changeWrap );
-
-	root.doTracker.track( changeWrap );
 };
 
 
@@ -1814,7 +1842,7 @@ def.proto._alterChange =
 def.lazy._actionSpace =
 	function( )
 {
-	const space = this.space;
+	let space = this.space;
 
 	// checks if alter set a none action.
 
@@ -1825,10 +1853,17 @@ def.lazy._actionSpace =
 /**/	if( !space.action ) throw new Error( );
 /**/}
 
-	return(
-		this.action.changes.changeTree( space )
-		.create( 'action', this.action )
-	);
+	const change = this.action.changes;
+
+	space = change.changeTree( space );
+
+	{
+		const ancillary = space.ancillary( change.affectedTwigItems );
+
+		if( ancillary ) space = ancillary.changeTree( space );
+	}
+
+	return space.create( 'action', this.action );
 };
 
 

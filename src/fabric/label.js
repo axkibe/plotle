@@ -40,20 +40,29 @@ if( TIM )
 		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		// position
-		pos : { type : '../gleam/point', json : true },
-
 		// the current space transform
 		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] }
+		transform : { type : [ 'undefined', '../gleam/transform' ] },
+
+		// the items zone
+		zone : { type : '../gleam/rect', json : true },
 	};
 
 	def.json = 'label';
 }
 
+
 const change_grow = tim.require( '../change/grow' );
 
+const change_list = tim.require( '../change/list' );
+
+const change_set = tim.require( '../change/set' );
+
 const change_shrink = tim.require( '../change/shrink' );
+
+const fabric_doc = tim.require( './doc' );
+
+const fabric_para = tim.require( './para' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -66,10 +75,6 @@ const gleam_point = tim.require( '../gleam/point' );
 const gleam_rect = tim.require( '../gleam/rect' );
 
 const gleam_transform = tim.require( '../gleam/transform' );
-
-const fabric_doc = tim.require( './doc' );
-
-const fabric_para = tim.require( './para' );
 
 const gruga_label = tim.require( '../gruga/label' );
 
@@ -86,7 +91,6 @@ const visual_mark_caret = tim.require( '../visual/mark/caret' );
 def.static.actionAffectsPosFs =
 def.proto.actionAffectsPosFs =
 	true;
-
 
 
 /*
@@ -190,11 +194,11 @@ def.proto.markLost =
 
 		root.alter(
 			'change',
-			change_shrink.create(
-				'path', pc,
-				'prev', root.space.getPath( pc ),
-				'rank', root.space.rankOf( pc.get( 1 ) )
-			)
+				change_shrink.create(
+					'path', pc,
+					'prev', root.space.getPath( pc ),
+					'rank', root.space.rankOf( pc.get( 1 ) )
+				)
 		);
 	}
 };
@@ -203,24 +207,45 @@ def.proto.markLost =
 /*
 | Returns the minimum x-scale factor this item could go through.
 */
-def.proto.minScaleX =
-	function(
-		zone  // original zone
-	)
-{
-	return 0;
-};
+def.proto.minScaleX = ( zone ) => 0;
 
 
 /*
 | Returns the minimum y-scale factor this item could go through.
 */
-def.proto.minScaleY =
+def.proto.minScaleY = ( zone ) => 0;
+
+
+/*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.static.ancillary =
+def.proto.ancillary =
 	function(
-		zone  // original zone
+		// XXX items dependend upon
 	)
 {
-	return 0;
+	const zone = this.zone;
+
+	const height = this.doc.fullsize.height + 2;
+
+	const width =
+		Math.max(
+			this.doc.fullsize.width + 4,
+			this._zoneHeight / 4
+		);
+
+	// no secondary changes needed
+	if( width === zone.width && height === zone.height ) return;
+
+	const c =
+		change_set.create(
+			'path', this.path.chop.append( 'zone' ),
+			'prev', zone,
+			'val', zone.create( 'height', height, 'width', width )
+		);
+
+	return change_list.create( 'list:init', [ c ] );
 };
 
 
@@ -261,56 +286,6 @@ def.proto.mousewheel =
 
 
 /*
-| The labels position possibly altered by actions
-| FIXME
-*/
-/*
-def.lazy.pos =
-	function( )
-{
-	const action = this.action;
-
-	switch( action && action.timtype )
-	{
-		case action_dragItems :
-
-			return this.pos.add( action.moveBy );
-
-		case action_resizeItems :
-		{
-			const zone = action.startZones.get( this.path.get( 2 ) );
-
-			// FIXME make a map
-			switch( action.resizeDir )
-			{
-				case compass.ne :
-
-					return zone.psw.baseScaleAction( action, 0, -this._zoneHeight );
-
-				case compass.nw :
-
-					return zone.pse.baseScaleAction( action, -this._zoneWidth, -this._zoneHeight );
-
-				case compass.se :
-
-					return zone.pos.baseScaleAction( action, 0, 0 );
-
-				case compass.sw :
-
-					return zone.pne.baseScaleAction( action, -this._zoneWidth, 0 );
-			}
-
-			// should never be reached
-			throw new Error( );
-		}
-	}
-
-	return this.pos;
-};
-*/
-
-
-/*
 | Labels use pos/fontsize for positioning
 */
 def.static.positioning =
@@ -327,7 +302,7 @@ def.proto.proportional = true;
 /*
 | Dummy since a label does not scroll.
 */
-def.proto.scrollMarkIntoView = function( ){ };
+def.proto.scrollMarkIntoView = ( ) => undefined;
 
 
 /*
@@ -341,16 +316,10 @@ def.proto.shape = function( ){ return this.zone.shrink1; };
 | Calculates the labels zone,
 | possibly altered by an action.
 */
-def.lazy.zone =
+def.lazy.pos =
 	function( )
 {
-	return(
-		gleam_rect.create(
-			'pos', this.pos,
-			'width', this._zoneWidth,
-			'height', this._zoneHeight
-		)
-	);
+	throw new Error( 'FIXME' );
 };
 
 
