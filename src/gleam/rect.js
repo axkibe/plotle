@@ -43,7 +43,7 @@ if( TIM )
 /*
 | A zero rect.
 */
-def.staticLazy.zero = () =>
+def.staticLazy.zero = ( ) =>
 	gleam_rect.create(
 		'pos', gleam_point.zero,
 		'width', 0,

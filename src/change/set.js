@@ -18,10 +18,10 @@ if( TIM )
 		path : { type : 'tim.js/path', json : true },
 
 		// value to set
-		val : { type : [ '< ./value-types' ], json : true },
+		val : { type : [ 'undefined', '< ./value-types' ], json : true },
 
 		// the value the tree had
-		prev : { type : [ '< ./value-types' ], json : true },
+		prev : { type : [ 'undefined', '< ./value-types' ], json : true },
 	};
 
 	def.json = 'change_set';
@@ -83,7 +83,7 @@ def.proto.changeTree =
 	// Stores the old value for history tracking.
 	const prev = tree.getPath( this.path );
 
-	if( this.val === undefined ) throw new Error( );
+	// if( this.val === undefined ) throw new Error( );
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{

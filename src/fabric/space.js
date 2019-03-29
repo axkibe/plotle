@@ -649,10 +649,13 @@ def.proto.ancillary =
 		affectedTwigItems
 	)
 {
-	let a;
+	let change;
 
-	for( let key of affectedTwigItems )
+	// FUTURE for( let key of affectedTwigItems )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
+		const key = this.getKey( a );
+
 		const item = this.get( key );
 
 		const ia = item.ancillary( this );
@@ -664,12 +667,12 @@ def.proto.ancillary =
 /**/		if( ia.length === 0 ) throw new Error( );
 /**/	}
 
-		if( !a ) { a = ia; continue; }
+		if( !change ) { change = ia; continue; }
 
-		a = a.listAppend( ia );
+		change = change.listAppend( ia );
 	}
 
-	return a;
+	return change;
 };
 
 

@@ -68,6 +68,8 @@ const action_none = tim.require( '../action/none' );
 
 const action_select = tim.require( '../action/select' );
 
+const change_list = tim.require( '../change/list' );
+
 const change_shrink = tim.require( '../change/shrink' );
 
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
@@ -451,7 +453,7 @@ def.proto.pushButton =
 		{
 			const paths = this.mark.itemPaths;
 
-			const changes = [ ];
+			const change = [ ];
 
 			const ranks = [ ];
 
@@ -470,7 +472,7 @@ def.proto.pushButton =
 
 				ranks.push( rank );
 
-				changes[ p ] =
+				change[ p ] =
 					change_shrink.create(
 						'path', pi.chop,
 						'prev', root.space.getPath( pi.chop ),
@@ -479,7 +481,7 @@ def.proto.pushButton =
 
 			}
 
-			root.alter( 'change', changes );
+			root.alter( 'change', change_list.create( 'list:init', change ) );
 
 			break;
 		}

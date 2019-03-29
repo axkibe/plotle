@@ -154,7 +154,7 @@ def.proto.dragMove =
 
 			transientItem =
 				resized.create(
-					'pos', pos,
+					'zone', resized.zone.create( 'pos', pos ),
 					'transform', transform
 				);
 
@@ -227,7 +227,7 @@ def.proto.dragStart =
 			transientItem =
 				model.create(
 					'path', fabric_space.transPath,
-					'pos', ps,
+					'zone', model.zone.create( 'pos', ps ),
 					'transform', screen.transform
 				);
 

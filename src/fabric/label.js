@@ -266,7 +266,7 @@ def.staticLazy.model =
 					'twig:add', '1', fabric_para.create( 'text', 'Label' )
 				),
 			'fontsize', gruga_label.defaultFontsize,
-			'pos', gleam_point.zero,
+			'zone', gleam_rect.zero,
 			'highlight', false,
 			'transform', gleam_transform.normal
 		)

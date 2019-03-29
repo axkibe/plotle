@@ -162,6 +162,8 @@ const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
+const gleam_rect = tim.require( '../gleam/rect' );
+
 const gleam_transform = tim.require( '../gleam/transform' );
 
 const gruga_controls = tim.require( '../gruga/controls' );
@@ -684,6 +686,8 @@ def.proto.alter =
 /**/	if( CHECK )
 /**/	{
 /**/		if( changeWrap ) throw new Error( );
+/**/
+/**/		if( Array.isArray( change ) ) throw new Error( );
 /**/	}
 
 		if( space === pass ) space = root.space;
@@ -1698,9 +1702,18 @@ def.proto.spawnRelation =
 
 	const pos = line.pc.sub( gruga_relation.spawnOffset );
 
+	const key = session_uid.newUid( );
+
+	const path = tim_path.empty.append( 'space' ).append( 'twig' ).append( key );
+
 	const val =
 		fabric_relation.create(
-			'pos', pos,
+			'zone',
+				gleam_rect.create(
+					'pos', pos,
+					'width', 0,
+					'height', 0
+				),
 			'doc',
 				fabric_doc.create(
 					'twig:add', '1',
@@ -1708,24 +1721,26 @@ def.proto.spawnRelation =
 				),
 			'fontsize', 20,
 			'item1key', item1.path.get( -1 ),
-			'item2key', item2.path.get( -1 )
+			'item2key', item2.path.get( -1 ),
+			'path', path
 		);
 
-	const key = session_uid.newUid( );
+	const mpath = path.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
 
-	const path = tim_path.empty.append( 'twig' ).append( key );
-
-	const mpath =
-		path.prepend( 'space' )
-		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
-
-	root.alter(
-		'change',
+	let change =
+		change_list.create(
+			'list:append',
 			change_grow.create(
 				'val', val,
-				'path', path,
+				'path', path.chop,
 				'rank', 0
-			),
+			)
+		);
+
+	change = change.appendList( val.ancillary( root.space ) );
+
+	root.alter(
+		'change', change,
 		'mark', visual_mark_caret.pathAt( mpath, 0 )
 	);
 };

@@ -273,9 +273,14 @@ def.inherit._glint =
 	// FUTURE for now don't optimize this in server.
 	if( NODE ) return false;
 
+	const itransform = inherit.transform;
+	const ttransform = this.transform;
+
+	if( !itransform || !ttransform ) return false;
+
 	return(
 		inherit.alikeVisually( this )
-		&& inherit.transform.zoom === this.transform.zoom
+		&& itransform.zoom === ttransform.zoom
 	);
 };
 
