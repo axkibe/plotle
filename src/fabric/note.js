@@ -21,6 +21,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
+		// the keys of the items this item affects (for ancillaries)
+		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
+
 		// the notes document
 		doc : { type : './doc', json : true },
 

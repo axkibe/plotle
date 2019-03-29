@@ -13,7 +13,7 @@ if( TIM )
 	{
 		p1 : { type : './point' },
 
-		p2 : { type : './point' }
+		p2 : { type : './point' },
 	};
 }
 

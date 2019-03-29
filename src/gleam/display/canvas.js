@@ -10,7 +10,6 @@
 
 tim.define( module, ( def, gleam_display_canvas ) => {
 
-
 const gleam_border = tim.require( '../border' );
 
 const gleam_borderList = tim.require( '../borderList' );
@@ -67,6 +66,11 @@ const gleam_size = tim.require( '../size' );
 
 const shell_settings = tim.require( '../../shell/settings' );
 
+const createCanvas =
+	NODE
+	? tim.require( 'canvas' ).createCanvas
+	: ( width, height ) => document.createElement( 'canvas' );
+
 
 if( TIM )
 {
@@ -98,6 +102,10 @@ if( !NODE )
 {
 	ratio = window.devicePixelRatio || 1;
 }
+else
+{
+	ratio = 1;
+}
 
 
 /*
@@ -108,29 +116,39 @@ const round = val => Math.round( val * ratio );
 const noround = val => val * ratio;
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
+/**/
+/**/	const canvas = this.canvas;
+/**/
+/**/	const height = this.size.height;
+/**/
+/**/	const width = this.size.width;
+/**/
+/**/	if( !NODE )
 /**/	{
-/**/		const canvas = this.canvas;
+/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.1 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/
-/**/		const height = this.size.height;
+/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
 /**/
-/**/		const width = this.size.width;
+/**/	if( canvas.height !== round( height ) ) throw new Error( );
 /**/
-/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.1 ) throw new Error( );
-/**/
-/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 ) throw new Error( );
-/**/
-/**/		if( canvas.height !== round( height ) ) throw new Error( );
-/**/
-/**/		if( canvas.width !== round( width ) ) throw new Error( );
-/**/	};
+/**/	if( canvas.width !== round( width ) ) throw new Error( );
 /**/}
+};
 
 
 /*
@@ -152,8 +170,11 @@ def.static.createAroundHTMLCanvas =
 	const height = size.height;
 	const width = size.width;
 
-	canvas.style.height = height + 'px';
-	canvas.style.width = width + 'px';
+	if( !NODE )
+	{
+		canvas.style.height = height + 'px';
+		canvas.style.width = width + 'px';
+	}
 
 	canvas.height = round( height );
 	canvas.width = round( width );
@@ -178,9 +199,11 @@ def.static.createNewCanvas =
 		glint
 	)
 {
+	const canvas = createCanvas( size.width, size.height );
+
 	return(
 		gleam_display_canvas.createAroundHTMLCanvas(
-			document.createElement( 'canvas' ),
+			canvas,
 			size,
 			glint,
 			undefined  // transparent background

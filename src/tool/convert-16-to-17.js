@@ -236,6 +236,8 @@ const loadSpace =
 
 	let space = fabric_space.create( );
 
+	// converts the fabric items and sets zones for labels/relations
+
 	for( let a = 0, al = pspace.length; a < al; a++ )
 	{
 		const key = pspace.getKey( a );
@@ -280,7 +282,7 @@ const loadSpace =
 				break;
 
 			case priorfabric_relation :
-
+			{
 				item =
 					fabric_relation.create(
 						'doc', convertDoc( pitem.doc ),
@@ -291,11 +293,56 @@ const loadSpace =
 					);
 
 				break;
+			}
 
 			default: throw new Error( );
 		}
 
 		space = space.create( 'twig:add', key, item );
+	}
+
+	// next iteration sets from/to points for relations
+
+	pspace = space;
+
+	for( let a = 0, al = pspace.length; a < al; a++ )
+	{
+		const key = pspace.getKey( a );
+
+		let item = pspace.get( key );
+
+		if( item.timtype !== fabric_relation ) continue;
+
+		const item1 = pspace.get( item.item1key );
+
+		const item2 = pspace.get( item.item2key );
+
+		if( item1 ) item = item.create( 'from', item.ancillaryFrom( item1 ) );
+
+		if( item2 ) item = item.create( 'to', item.ancillaryTo( item2 ) );
+
+		space = space.create( 'twig:set', key, item );
+	}
+
+	// next iteration fill in the affects for relations
+
+	for( let a = 0, al = space.length; a < al; a++ )
+	{
+		const key = space.getKey( a );
+XXX
+		let item = pspace.get( key );
+
+		if( item.timtype !== fabric_relation ) continue;
+
+		const item1 = pspace.get( item.item1key );
+
+		const item2 = pspace.get( item.item2key );
+
+		if( item1 ) item = item.create( 'from', item.ancillaryFrom( item1 ) );
+
+		if( item2 ) item = item.create( 'to', item.ancillaryTo( item2 ) );
+
+		space = space.create( 'twig:set', key, item );
 	}
 
 	const changeSet =

@@ -18,6 +18,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
+		// the keys of the items this item affects (for ancillaries)
+		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
+
 		// the labels document
 		doc : { type : './doc', json : true },
 
@@ -222,7 +225,7 @@ def.proto.minScaleY = ( zone ) => 0;
 def.static.ancillary =
 def.proto.ancillary =
 	function(
-		// XXX items dependend upon
+		space  // space including other items dependend upon
 	)
 {
 	const zone = this.zone;

@@ -21,10 +21,6 @@ def.static.line =
 		sp2   // glint2 or point2
 	)
 {
-	// the projection points
-	let p1, p2;
-
-
 /**/if( CHECK )
 /**/{
 /**/	if( !sp1 || !sp2 ) throw new Error( );
@@ -33,6 +29,9 @@ def.static.line =
 	const pc1 = sp1.timtype === gleam_point ? sp1 : sp1.pc;
 
 	const pc2 = sp2.timtype === gleam_point ? sp2 : sp2.pc;
+
+	// the projection points
+	let p1, p2;
 
 	if( sp1.timtype === gleam_point )
 	{

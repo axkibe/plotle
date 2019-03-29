@@ -655,7 +655,7 @@ def.proto.ancillary =
 	{
 		const item = this.get( key );
 
-		const ia = item.ancillary( /* FIXME depends */ );
+		const ia = item.ancillary( this );
 
 		if( !ia ) continue;
 

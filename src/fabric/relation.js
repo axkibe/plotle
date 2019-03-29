@@ -22,11 +22,17 @@ if( TIM )
 		// no json thus not saved or transmitted
 		action : { type : [ 'undefined', '< ../action/types' ] },
 
+		// the keys of the items this item affects (for ancillaries)
+		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
+
 		// the labels document
 		doc : { type : './doc', json : true },
 
 		// the fontsize of the label
 		fontsize : { type : 'number', json : true },
+
+		// the point the relation goes from
+		from : { type : [ 'undefined', '../gleam/point' ], json : true },
 
 		// the item is highlighted
 		// no json thus not saved or transmitted
@@ -53,6 +59,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
+		// the point the relation goes to
+		to : { type : [ 'undefined', '../gleam/point' ], json : true },
+
 		// the items zone
 		zone : { type : '../gleam/rect', json : true },
 	};
@@ -61,7 +70,15 @@ if( TIM )
 }
 
 
+const fabric_label = tim.require( './label' );
+
+const change_list = tim.require( '../change/list' );
+
+const change_set = tim.require( '../change/set' );
+
 const gleam_arrow = tim.require( '../gleam/arrow' );
+
+const gleam_connect = tim.require( '../gleam/connect' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -77,6 +94,94 @@ const gruga_relation = tim.require( '../gruga/relation' );
 
 
 /*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.proto.ancillary =
+	function(
+		space  // space including other items dependend upon
+	)
+{
+	const item1 = space.get( this.item1key );
+
+	const item2 = space.get( this.item2key );
+
+	const from = item1 && this.ancillaryFrom( item1 );
+
+	const to =  item2 && this.ancillaryTo( item2 );
+
+	let ancillary = fabric_label.ancillary.call( this, space );
+
+	const tfrom = this.from;
+
+	const tto = this.to;
+
+	if( ( tfrom && !tfrom.equals( from ) )
+		|| ( from && !from.equals( tfrom ) )
+	)
+	{
+		const ch =
+			change_set.create(
+				'path', this.path.chop.append( 'from' ),
+				'prev', tfrom,
+				'val', from
+			);
+
+		if( !ancillary ) ancillary = change_list.create( 'list:init', [ ch ] );
+		else ancillary = ancillary.append( ch );
+	}
+
+	if( ( tto && !tto.equals( to ) )
+		|| ( to && !to.equals( tto ) )
+	)
+	{
+		const ch =
+			change_set.create(
+				'path', this.path.chop.append( 'to' ),
+				'prev', tto,
+				'val', to
+			);
+
+		if( !ancillary ) ancillary = change_list.create( 'list:init', [ ch ] );
+		else ancillary = ancillary.append( ch );
+	}
+
+	return ancillary;
+};
+
+
+/*
+| Calculates the from point.
+*/
+def.proto.ancillaryFrom =
+	function(
+		item
+	)
+{
+	const shape = item.shape( );
+
+	const line = gleam_connect.line( shape, this.shape( ) );
+
+	return line.p1;
+};
+
+
+/*
+| Calculates the to point.
+*/
+def.proto.ancillaryTo =
+	function(
+		item
+	)
+{
+	const shape = item.shape( );
+
+	const line = gleam_connect.line( this.shape( ), shape );
+
+	return line.p2;
+};
+
+
+/*
 | The item's glint.
 |
 | This cannot be done lazily, since it
@@ -85,18 +190,6 @@ const gruga_relation = tim.require( '../gruga/relation' );
 def.proto.glint =
 	function( )
 {
-	// FIXME immutable tree hierachy violaion
-	// FIXME XXX privacy violation
-	const item1 = root._actionSpace.get( this.item1key );
-
-	const item2 = root._actionSpace.get( this.item2key );
-
-	let shape1, shape2;
-
-	if( item1 ) shape1 = item1.shape( );
-
-	if( item2 ) shape2 = item2.shape( );
-
 	const tZone = this.tZone;
 
 	const wg =
@@ -115,9 +208,13 @@ def.proto.glint =
 		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
 	}
 
-	if( shape1 ) arr.push( this._getConnectionGlint( shape1 ) );
+	let fromGlint = this._getConnectionGlint( );
 
-	if( shape2 ) arr.push( this._getArrowGlint( shape2 ) );
+	let toGlint = this._getArrowGlint( );
+
+	if( fromGlint ) arr.push( fromGlint );
+
+	if( toGlint ) arr.push( toGlint );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
@@ -127,12 +224,14 @@ def.proto.glint =
 | Returns the glint of an arrow to a shape.
 */
 def.proto._getArrowGlint =
-	function(
-		shape
-	)
+	function( )
 {
+	const to = this.to;
+
+	if( !to ) return;
+
 	const arrowShape =
-		gleam_arrow.getArrowShape( this.shape( ), 'none', shape, 'arrow' )
+		gleam_arrow.getArrowShape( this.shape( ), 'none', to, 'arrow' )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
@@ -143,12 +242,14 @@ def.proto._getArrowGlint =
 | Returns the glint of a connection to a shape.
 */
 def.proto._getConnectionGlint =
-	function(
-		shape
-	)
+	function( )
 {
+	const from = this.from;
+
+	if( !from ) return;
+
 	const arrowShape =
-		gleam_arrow.getArrowShape( shape, 'none', this.shape( ), 'none' )
+		gleam_arrow.getArrowShape( from, 'none', this.shape( ), 'none' )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
