@@ -114,6 +114,11 @@ def.static.createGeneric =
 
 	const resized = model.create( 'fontsize', fs );
 
+	const ti = action.transientItem;
+
+	const pos = ti.zone.pos;
+
+	/*
 	const pos =
 		( dp.x > action.startPoint.x )
 		? zone.pos
@@ -121,8 +126,17 @@ def.static.createGeneric =
 			zone.pos.x + zone.width - resized.zone.width,
 			zone.pos.y
 		);
+	*/
 
-	const label = resized.create( 'pos', pos );
+	const label =
+		resized.create(
+			'zone',
+				gleam_rect.create(
+					'pos', pos,
+					'width', resized.ancillaryWidth,
+					'height', resized.ancillaryHeight
+				)
+		);
 
 	const key = session_uid.newUid( );
 
@@ -135,8 +149,6 @@ def.static.createGeneric =
 /**/if( CHECK )
 /**/{
 /**/	if( label.fontsize !== label.doc.fontsize ) throw new Error( );
-/**/
-/**/	if( label.pos !== label.pos ) throw new Error( );
 /**/}
 
 	root.alter(
@@ -220,6 +232,33 @@ def.proto.minScaleY = ( zone ) => 0;
 
 
 /*
+| Computed height of the label.
+*/
+def.lazy.ancillaryHeight =
+	function( )
+{
+	return this.doc.fullsize.height + 2;
+};
+
+
+/*
+| Computed width of the label.
+|
+| FIXME change to ancillarySize
+*/
+def.lazy.ancillaryWidth =
+	function( )
+{
+	return(
+		Math.max(
+			this.doc.fullsize.width + 4,
+			this.ancillaryHeight / 4
+		)
+	);
+};
+
+
+/*
 | The changes needed for secondary data to adapt to primary.
 */
 def.static.ancillary =
@@ -230,13 +269,9 @@ def.proto.ancillary =
 {
 	const zone = this.zone;
 
-	const height = this.doc.fullsize.height + 2;
+	const width = this.ancillaryWidth;
 
-	const width =
-		Math.max(
-			this.doc.fullsize.width + 4,
-			this._zoneHeight / 4
-		);
+	const height = this.ancillaryHeight;
 
 	// no secondary changes needed
 	if( width === zone.width && height === zone.height ) return;
@@ -258,19 +293,31 @@ def.proto.ancillary =
 def.staticLazy.model =
 	function( )
 {
-	return(
+	const fontsize = gruga_label.defaultFontsize;
+
+	let model =
 		fabric_label.create(
 			'access', 'rw',
 			'doc',
 				fabric_doc.create(
 					'twig:add', '1', fabric_para.create( 'text', 'Label' )
 				),
-			'fontsize', gruga_label.defaultFontsize,
+			'fontsize', fontsize,
 			'zone', gleam_rect.zero,
 			'highlight', false,
 			'transform', gleam_transform.normal
-		)
-	);
+		);
+
+	model =
+		model.create(
+			'zone',
+			model.zone.create(
+				'width', model.ancillaryWidth,
+				'height', model.ancillaryHeight
+			)
+		);
+
+	return model;
 };
 
 
@@ -365,31 +412,6 @@ def.inherit._glint =
 	)
 {
 	return inherit.equals( this );
-};
-
-
-/*
-| Returns the zone height.
-*/
-def.lazy._zoneHeight =
-	function( )
-{
-	return this.doc.fullsize.height + 2;
-};
-
-
-/*
-| Returns the zone width.
-*/
-def.lazy._zoneWidth =
-	function( )
-{
-	return(
-		Math.max(
-			this.doc.fullsize.width + 4,
-			this._zoneHeight / 4
-		)
-	);
 };
 
 

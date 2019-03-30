@@ -154,7 +154,12 @@ def.proto.dragMove =
 
 			transientItem =
 				resized.create(
-					'zone', resized.zone.create( 'pos', pos ),
+					'zone',
+						gleam_rect.create(
+							'pos', pos,
+							'width', resized.ancillaryWidth,
+							'height', resized.ancillaryHeight
+						),
 					'transform', transform
 				);
 

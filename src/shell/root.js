@@ -716,7 +716,9 @@ def.proto.alter =
 					'changeList', change
 				);
 
-			root.link.alter( changeWrap );
+			root.link.send( changeWrap );
+
+			mark = root.update( changeWrap );
 
 			root.doTracker.track( changeWrap );
 		}
@@ -730,7 +732,9 @@ def.proto.alter =
 
 		// no need for ancillaries
 
-		root.link.alter( changeWrap );
+		root.link.send( changeWrap );
+
+		mark = root.update( changeWrap );
 	}
 
 	if( space !== pass ) space = space.create( 'action', action_none.singleton );
@@ -743,6 +747,18 @@ def.proto.alter =
 		}
 
 		omark = root._mark;
+	}
+
+	if( space !== pass || mark !== pass )
+	{
+		if( mark && mark.timtype === visual_mark_range )
+		{
+			if( space === pass ) space = this.space;
+
+			const markedItem = space.get( mark.beginMark.path.get( 2 ) );
+
+			mark = mark.create( 'doc', markedItem.doc );
+		}
 	}
 
 	root._create(
@@ -1580,7 +1596,7 @@ def.proto.removeRange =
 		return;
 	}
 
-	const changes = [ ];
+	const change = [ ];
 
 	const k1 = frontMark.path.get( -2 );
 
@@ -1603,7 +1619,7 @@ def.proto.removeRange =
 	{
 		ve = pivot.atRank( r + 1 );
 
-		changes.push(
+		change.push(
 			change_join.create(
 				'path', frontMark.path.chop,
 				'path2', ve.textPath.chop,
@@ -1620,7 +1636,7 @@ def.proto.removeRange =
 			text.length - ve.text.length + backMark.at
 		);
 
-	changes.push(
+	change.push(
 		change_remove.create(
 			'path', frontMark.path.chop,
 			'at1', frontMark.at,
@@ -1629,7 +1645,7 @@ def.proto.removeRange =
 		)
 	);
 
-	root.alter( 'change', changes );
+	root.alter( 'change', change_list.create( 'list:init', change ) );
 };
 
 
@@ -1833,21 +1849,7 @@ def.proto.update =
 			break;
 	}
 
-	root.alter( 'mark', mark );
-};
-
-
-/*
-| Helper for alter( ).
-|
-| Handles 'change' alterations.
-*/
-def.proto._alterChange =
-	function(
-		change,  // the change or change list to apply
-		space    // the space
-	)
-{
+	return mark;
 };
 
 

@@ -265,7 +265,6 @@ def.lazy.glint =
 		arr.push( this._caretGlint );
 	}
 
-
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
 		arr.push( this.atRank( r ).glint );
@@ -389,11 +388,7 @@ def.lazy._caretGlint =
 
 	const ppos = para.pos;
 
-	p =
-		transform.point(
-			ppos.x + p.x,
-			ppos.y + p.y - fs
-		);
+	p = transform.point( ppos.x + p.x, ppos.y + p.y - fs );
 
 	return(
 		gleam_glint_border.create(
@@ -479,7 +474,6 @@ def.lazy._rangeShape =
 	if( frontKey === backKey && fLine === bLine )
 	{
 		// fp o******o bp
-
 		const sections =
 		[
 			gleam_shape_start.p( fp.add( 0, descend ) ),
@@ -502,11 +496,9 @@ def.lazy._rangeShape =
 	}
 	else if (
 		bp.x < fp.x
-		&&
-		(
+		&& (
 			frontKey === backKey && fLine + 1 === bLine
-			||
-			(
+			|| (
 				f2Key === backKey
 				&& fLine + 1 >= frontFlow.length
 				&& bLine === 0

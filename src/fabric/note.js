@@ -167,6 +167,7 @@ def.adjust.doc =
 
 	return(
 		doc.create(
+			'clipsize', zone.size,
 			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
 			'innerMargin', gruga_note.innerMargin,

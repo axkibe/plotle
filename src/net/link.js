@@ -101,9 +101,9 @@ def.proto.acquireSpace =
 
 
 /*
-| Alters the tree.
+| Sends changes.
 */
-def.proto.alter =
+def.proto.send =
 	function(
 		changeWrap // the changeWrap to apply to tree
 	)
@@ -118,8 +118,6 @@ def.proto.alter =
 	);
 
 	root.link._sendChanges( );
-
-	root.update( changeWrap );
 };
 
 
@@ -504,9 +502,9 @@ def.proto._gotUpdateSpace =
 	// FUTURE move to "markJockey"
 	if( report.length > 0 )
 	{
-		root.update( report );
+		const mark = root.update( report );
 
-		root.alter( 'doTracker', root.doTracker.update( report ) );
+		root.alter( 'doTracker', root.doTracker.update( report ), 'mark', mark );
 	}
 
 	return gotOwnChgs;

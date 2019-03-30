@@ -669,7 +669,7 @@ def.proto.ancillary =
 
 		if( !change ) { change = ia; continue; }
 
-		change = change.listAppend( ia );
+		change = change.appendList( ia );
 	}
 
 	return change;
