@@ -52,7 +52,7 @@ def.static.opentypeMin =
 		'inventory',
 			root.inventory.updateResource(
 				resource.create(
-					'aliases', stringList( [ 'opentype-' + opentypeMinHash + '.js' ] )
+					'aliases', stringList( [ 'opentype.min-' + opentypeMinHash + '.js' ] )
 				)
 			)
 	);

@@ -415,7 +415,7 @@ def.proto.prepareInventory =
 
 		root.create( 'inventory', inventory );
 
-		log( 'bundle:', bundleFilePath );
+		log.log( 'bundle:', bundleFilePath );
 	}
 
 	// post processing
