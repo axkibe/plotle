@@ -8,7 +8,7 @@
 tim.define( module, ( def, database_repository ) => {
 
 
-const dbVersion = 17;
+const dbVersion = 18;
 
 
 if( TIM )

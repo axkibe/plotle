@@ -187,7 +187,7 @@ def.proto.ancillaryTo =
 | This cannot be done lazily, since it
 | depends on other items.
 */
-def.proto.glint =
+def.lazy.glint =
 	function( )
 {
 	const tZone = this.tZone;

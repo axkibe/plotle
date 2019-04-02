@@ -129,9 +129,7 @@ const spaceFields =
 /*
 | The zone is directly affected by actions.
 */
-def.static.actionAffectsZone =
-def.proto.actionAffectsZone =
-	true;
+def.proto.actionAffectsZone = true;
 
 
 /*
@@ -145,9 +143,7 @@ def.static.antiCycle =
 	switch( section )
 	{
 		case 'spaceUser' : return 'moveToButton';
-
 		case 'spaceTag' : return 'spaceUser';
-
 		case 'moveToButton' : return 'spaceTag';
 	}
 };
@@ -331,7 +327,31 @@ def.static.cycle =
 /*
 | The item's glint.
 */
-def.proto.glint = function( ){ return this._glint; };
+def.lazy.glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._innerGlint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_portal.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
 
 
 /*
@@ -722,34 +742,6 @@ def.proto._getOffsetAt =
 	if( dx - x1 < x2 - dx && a > 0 ) a--;
 
 	return a;
-};
-
-
-/*
-| The item's glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const tZone = this.tZone;
-
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this._innerGlint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		const facet = gruga_portal.facets.getFacet( 'highlight', true );
-
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
 };
 
 

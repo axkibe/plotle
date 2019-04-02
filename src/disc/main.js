@@ -165,7 +165,7 @@ def.static.createFromLayout =
 
 	return(
 		disc_main.create(
-			'twig:init', twig, layout._ranks,
+			'twig:init', twig, layout.keys,
 			'action', action_none.singleton,
 			'controlTransform', transform,
 			'facet', layout.facet,

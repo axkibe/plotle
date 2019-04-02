@@ -112,11 +112,8 @@ const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
 /*
 | The zone is directly affected by actions.
-| FIXME check if static is necessary
 */
-def.static.actionAffectsZone =
-def.proto.actionAffectsZone =
-	true;
+def.proto.actionAffectsZone = true;
 
 
 /*
@@ -183,9 +180,34 @@ def.adjust.doc =
 
 /*
 | The item's glint.
-| FIXME this is stupid.
 */
-def.proto.glint = function( ) { return this._glint; };
+def.lazy.glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this._innerGlint,
+				'rect', tZone.add1_5,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_note.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+	}
+
+	const sbary = this.scrollbarY;
+
+	if( sbary ) arr.push( sbary.glint );
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
 
 
 /*
@@ -258,10 +280,7 @@ def.proto.mousewheel =
 
 	if( y < 0 ) y = 0;
 
-	root.alter(
-		this.path.append( 'scrollPos' ),
-		this.scrollPos.create( 'y', y )
-	);
+	root.alter( this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', y ) );
 
 	return true;
 };
@@ -278,7 +297,7 @@ def.proto.positioning =
 /*
 | Notes do not need to be resized proportionally.
 */
-def.static.proportional = false;
+def.proto.proportional = false;
 
 
 /*
@@ -390,29 +409,6 @@ def.proto._check =
 def.lazy._glint =
 	function( )
 {
-	const tZone = this.tZone;
-
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this._innerGlint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		const facet = gruga_note.facets.getFacet( 'highlight', true );
-
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
-	}
-
-	const sbary = this.scrollbarY;
-
-	if( sbary ) arr.push( sbary.glint );
-
-	return gleam_glint_list.create( 'list:init', arr );
 };
 
 

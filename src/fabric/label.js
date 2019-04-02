@@ -91,9 +91,7 @@ const visual_mark_caret = tim.require( '../visual/mark/caret' );
 /*
 | Position and fontsize are directly affected by actions.
 */
-def.static.actionAffectsPosFs =
-def.proto.actionAffectsPosFs =
-	true;
+def.proto.actionAffectsPosFs = true;
 
 
 /*
@@ -192,9 +190,45 @@ def.adjust.doc =
 
 /*
 | The items glint.
-| FIXME this is redicolous.
 */
-def.proto.glint = function( ) { return this._glint; };
+def.lazy.glint =
+	function( )
+{
+	const tZone = this.tZone;
+
+	const arr =
+		[
+			gleam_glint_window.create(
+				'glint', this.doc.glint,
+				'rect', tZone.enlarge1,
+				'offset', gleam_point.zero
+			)
+		];
+
+	if( this.highlight )
+	{
+		const facet = gruga_label.facets.getFacet( 'highlight', true );
+
+		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+	}
+
+	return gleam_glint_list.create( 'list:init', arr );
+};
+
+
+/*
+| Inheritance optimization.
+|
+| FIXME shouldn't this be default?
+*/
+def.inherit.glint =
+	function(
+		inherit
+	)
+{
+	return inherit.equals( this );
+};
+
 
 
 /*
@@ -360,59 +394,6 @@ def.proto.scrollMarkIntoView = ( ) => undefined;
 | FIXME lazy
 */
 def.proto.shape = function( ){ return this.zone.shrink1; };
-
-
-/*
-| Calculates the labels zone,
-| possibly altered by an action.
-*/
-def.lazy.pos =
-	function( )
-{
-	throw new Error( 'FIXME' );
-};
-
-
-/*
-| The items glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const tZone = this.tZone;
-
-	const arr =
-		[
-			gleam_glint_window.create(
-				'glint', this.doc.glint,
-				'rect', tZone.enlarge1,
-				'offset', gleam_point.zero
-			)
-		];
-
-	if( this.highlight )
-	{
-		const facet = gruga_label.facets.getFacet( 'highlight', true );
-
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| Inheritance optimization.
-|
-| FIXME shouldn't this be default?
-*/
-def.inherit._glint =
-	function(
-		inherit
-	)
-{
-	return inherit.equals( this );
-};
 
 
 } );

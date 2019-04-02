@@ -2022,7 +2022,7 @@ def.static._createFormRoot =
 			entry[ 1 ].create(
 				'action', action_none.singleton,
 				'viewSize', viewSize,
-				'twig:init', twig, layout._ranks
+				'twig:init', twig, layout.keys
 			);
 	}
 

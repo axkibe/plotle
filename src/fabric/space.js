@@ -139,10 +139,8 @@ def.proto.click =
 	const mark = this.mark;
 
 	// clicked some item?
-	for( let a = 0, al = this.length; a < al; a++ )
+	for( let item of this )
 	{
-		const item = this.atRank( a );
-
 		if( item.click( p, shift, ctrl, mark ) ) return true;
 	}
 
@@ -202,9 +200,9 @@ def.proto.dragStart =
 	const action = this.action;
 
 	// see if one item was targeted
-	for( let a = 0, al = this.length; a < al; a++ )
+	for( let item of this )
 	{
-		if( this.atRank( a ).dragStart( p, shift, ctrl, action ) ) return;
+		if( item.dragStart( p, shift, ctrl, action ) ) return;
 	}
 
 	root.alter(
@@ -435,7 +433,7 @@ def.lazy.glint =
 	{
 		const s = this.atRank( r );
 
-		arr.push( s.glint( ) );
+		arr.push( s.glint );
 	}
 
 	const frame = this.frame;
@@ -446,13 +444,13 @@ def.lazy.glint =
 	{
 		case action_createGeneric :
 
-			if( action.startPoint ) arr.push( action.transientItem.glint( ) );
+			if( action.startPoint ) arr.push( action.transientItem.glint );
 
 			break;
 
 		case action_createStroke :
 
-			if( action.from ) arr.push( action.transientVisual( transform ) .glint( ) );
+			if( action.from ) arr.push( action.transientVisual( transform ) .glint );
 
 			break;
 
@@ -555,10 +553,8 @@ def.proto.mousewheel =
 		ctrl   // true if ctrl key was pressed
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let item of this )
 	{
-		const item = this.atRank( r );
-
 		if( item.mousewheel( p, dir, shift, ctrl ) ) return true;
 	}
 
@@ -652,12 +648,8 @@ def.proto.ancillary =
 	let change;
 
 	// FUTURE for( let key of affectedTwigItems )
-	for( let a = 0, al = this.length; a < al; a++ )
+	for( let item of this )
 	{
-		const key = this.getKey( a );
-
-		const item = this.get( key );
-
 		const ia = item.ancillary( this );
 
 		if( !ia ) continue;
@@ -733,10 +725,8 @@ def.proto.specialKey =
 
 				let paths = [ ];
 
-				for( let r = 0, rZ = this.length; r < rZ; r++ )
-				{
-					paths.push( this.atRank( r ).path );
-				}
+				// FIXME make this a lazy
+				for( let item of this ) paths.push( item.path );
 
 				paths = tim_path_list.create( 'list:init', paths );
 

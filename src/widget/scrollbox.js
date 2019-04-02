@@ -141,7 +141,7 @@ def.static.createFromLayout =
 
 	return(
 		widget_scrollbox.create(
-			'twig:init', twig, layout._ranks,
+			'twig:init', twig, layout.keys,
 			'path', path,
 			'scrollbarYOffset', layout.scrollbarYOffset,
 			'scrollPos', gleam_point.zero,
