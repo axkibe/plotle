@@ -39,8 +39,6 @@ const database_changeSkid = tim.require( '../database/changeSkid' );
 
 const database_changeSkidList = tim.require( '../database/changeSkidList' );
 
-const resume = require( 'suspend' ).resume;
-
 const fabric_space = tim.require( '../fabric/space' );
 
 
@@ -48,7 +46,7 @@ const fabric_space = tim.require( '../fabric/space' );
 | Loads a space from the db and returns the spaceBox for it.
 */
 def.static.loadSpace =
-	function*(
+	async function(
 		spaceRef
 	)
 {
@@ -57,19 +55,16 @@ def.static.loadSpace =
 	let space = fabric_space.create( );
 
 	const changesDB =
-		yield* root.repository.collection( 'changes:' + spaceRef.fullname );
+		await root.repository.collection( 'changes:' + spaceRef.fullname );
 
 	const cursor =
-		( yield changesDB.find(
-			{ },
-			{ sort : '_id' },
-			resume( )
-		) ).batchSize( 100 );
+		( await changesDB.find( { }, { sort : '_id' } ) )
+		.batchSize( 100 );
 
 	for(
-		let o = yield cursor.nextObject( resume( ) );
+		let o = await cursor.nextObject( );
 		o;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
 		const changeSkid = database_changeSkid.createFromJSON( o );
@@ -98,17 +93,16 @@ def.static.loadSpace =
 | Creates a new space and returns the spaceBox for it.
 */
 def.static.createSpace =
-	function*(
+	async function(
 		spaceRef
 	)
 {
-	yield root.repository.spaces.insert(
+	await root.repository.spaces.insert(
 		{
 			_id : spaceRef.fullname,
 			username: spaceRef.username,
 			tag : spaceRef.tag
-		},
-		resume( )
+		}
 	);
 
 	return(
@@ -116,7 +110,7 @@ def.static.createSpace =
 			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1,
-			'_changesDB', yield* root.repository.collection( 'changes:' + spaceRef.fullname ),
+			'_changesDB', await root.repository.collection( 'changes:' + spaceRef.fullname ),
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', 1
 		)

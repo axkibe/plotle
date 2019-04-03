@@ -51,8 +51,6 @@ const server_spaceNexus = tim.require( './spaceNexus' );
 
 const server_upSleep = tim.require( './upSleep' );
 
-const suspend = require( 'suspend' );
-
 const user_info = tim.require( '../user/info' );
 
 
@@ -81,7 +79,7 @@ const replyError =
 | Serves an alter request.
 */
 const serveAlter =
-	function*(
+	async function(
 		request
 	)
 {
@@ -103,7 +101,7 @@ const serveAlter =
 
 	const userCreds = request.userCreds;
 
-	if( !( yield* root.userNexus.testUserCreds( userCreds ) ) )
+	if( !( await root.userNexus.testUserCreds( userCreds ) ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
@@ -153,11 +151,11 @@ const serveAlter =
 		throw error;
 	}
 
-	// FIXME can be simplified?
 	process.nextTick(
-		function( )
+		( ) =>
 		{
-			suspend( function*( ){ yield* root.wake( spaceRef ); } )( );
+			root.wake( spaceRef )
+			.catch( ( error ) => { console.error( error ); process.exit( -1 ); } );
 		}
 	);
 
@@ -169,7 +167,7 @@ const serveAlter =
 | Serves an auth request.
 */
 const serveAuth =
-	function*(
+	async function(
 		request
 	)
 {
@@ -195,11 +193,11 @@ const serveAuth =
 		return reply_auth.create( 'userCreds', userCreds );
 	}
 
-	const userInfo = yield* root.userNexus.testUserCreds( userCreds );
+	const userInfo = await root.userNexus.testUserCreds( userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid password' );
 
-	const userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
+	const userSpaceList = await root.userNexus.getUserSpaceList( userInfo );
 
 	return(
 		reply_auth.create(
@@ -214,7 +212,7 @@ const serveAuth =
 | Serves a register request.
 */
 const serveRegister =
-	function*(
+	async function(
 		request
 	)
 {
@@ -246,7 +244,7 @@ const serveRegister =
 	}
 
 	const sUser =
-		yield* root.userNexus.register(
+		await root.userNexus.register(
 			user_info.create(
 				'name', userCreds.name,
 				'passhash', userCreds.passhash,
@@ -265,7 +263,7 @@ const serveRegister =
 | Gets new changes or waits for them.
 */
 const serveUpdate =
-	function*(
+	async function(
 		request,
 		result
 	)
@@ -281,7 +279,7 @@ const serveUpdate =
 		return replyError( 'Request JSON translation failed' );
 	}
 
-	const userInfo = yield* root.userNexus.testUserCreds( request.userCreds );
+	const userInfo = await root.userNexus.testUserCreds( request.userCreds );
 
 	if( !userInfo ) return replyError( 'Invalid creds' );
 
@@ -292,7 +290,7 @@ const serveUpdate =
 	// if testUpdate failed return the error
 	if( asw ) return asw;
 
-	asw = yield* server_requestHandler.conveyUpdate( moments );
+	asw = await server_requestHandler.conveyUpdate( moments );
 
 	// immediate answer?
 	if( asw ) return asw;
@@ -328,7 +326,7 @@ const serveUpdate =
 | Serves a get request.
 */
 const serveAcquire =
-	function*(
+	async function(
 		request
 	)
 {
@@ -345,7 +343,7 @@ const serveAcquire =
 
 	const userCreds = request.userCreds;
 
-	if( !( yield* root.userNexus.testUserCreds( userCreds ) ) )
+	if( !( await root.userNexus.testUserCreds( userCreds ) ) )
 	{
 		return replyError( 'Invalid creds' );
 	}
@@ -368,7 +366,7 @@ const serveAcquire =
 	{
 		if( request.createMissing === true )
 		{
-			spaceBox = yield* root.createSpace( request.spaceRef );
+			spaceBox = await root.createSpace( request.spaceRef );
 		}
 		else
 		{
@@ -396,7 +394,7 @@ const serveAcquire =
 | Returns a result for an update operation.
 */
 def.static.conveyUpdate =
-	function*(
+	async function(
 		moments   // references to moments in dynamics to get updates for
 	)
 {
@@ -444,11 +442,11 @@ def.static.conveyUpdate =
 
 			case ref_userSpaceList :
 			{
-				const userInfo = yield* root.userNexus.getByName( dynRef.username );
+				const userInfo = await root.userNexus.getByName( dynRef.username );
 
 				if( !userInfo ) continue;
 
-				const userSpaceList = yield* root.userNexus.getUserSpaceList( userInfo );
+				const userSpaceList = await root.userNexus.getUserSpaceList( userInfo );
 
 				const changeWraps = userSpaceList.changeWraps;
 
@@ -576,7 +574,7 @@ def.static.expireUpdateSleep =
 | Serves an serveRequest
 */
 def.static.serve =
-	function*(
+	async function(
 		request,
 		result
 	)
@@ -584,15 +582,15 @@ def.static.serve =
 	// FIXME make a table
 	switch( request.type )
 	{
-		case 'request_alter' : return yield* serveAlter( request );
+		case 'request_alter' : return await serveAlter( request );
 
-		case 'request_auth' : return yield* serveAuth( request );
+		case 'request_auth' : return await serveAuth( request );
 
-		case 'request_acquire' : return yield* serveAcquire( request );
+		case 'request_acquire' : return await serveAcquire( request );
 
-		case 'request_register' : return yield* serveRegister( request );
+		case 'request_register' : return await serveRegister( request );
 
-		case 'request_update' : return yield* serveUpdate( request, result );
+		case 'request_update' : return await serveUpdate( request, result );
 
 		default :
 

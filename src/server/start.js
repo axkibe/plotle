@@ -63,11 +63,6 @@ global.CHECK = config.get( 'server', 'check' );
 global.FREEZE = config.get( 'server', 'freeze' );
 
 
-// FIX for dependency resolving
-//require( '../visual/item' );
-//require( '../visual/docItem' );
-//require( '../visual/label' );
-
 const log = require( './log' );
 
 const database_repository = require( '../database/repository' );
@@ -92,16 +87,14 @@ const server_upSleepGroup = require( './upSleepGroup' );
 
 const server_userNexus = require( './userNexus' );
 
-const suspend = require( 'suspend' );
-
-const resume = suspend.resume;
+const util = require( 'util' );
 
 
 /*
 | Starts the main server.
 */
 const startMainServer =
-	function*( )
+	async function( )
 {
 	const protocol = config.get( 'network', 'main', 'protocol' );
 
@@ -114,7 +107,8 @@ const startMainServer =
 	const handler =
 		( request, result ) =>
 	{
-		suspend( root.requestListener ).call( root, request, result );
+		root.requestListener( request, result )
+		.catch( ( error ) => { console.error( error ); process.exit( -1 ); } );
 	};
 
 	switch( protocol )
@@ -123,9 +117,9 @@ const startMainServer =
 		{
 			log.log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
 
-			const cert = fs.readFileSync( config.get( 'https', 'cert' ) ) + '';
+			const cert = ( fs.readFileSync( config.get( 'https', 'cert' ) ) ) + '';
 
-			const key = fs.readFileSync( config.get( 'https', 'key' ) ) + '';
+			const key = ( fs.readFileSync( config.get( 'https', 'key' ) ) ) + '';
 
 			const options =
 			{
@@ -134,26 +128,29 @@ const startMainServer =
 				key: key
 			};
 
-			yield https
-			.createServer( options, handler )
-			.listen( port, listen, resume( ) );
+			const server = https.createServer( options, handler );
+
+			const promise = util.promisify( server.listen.bind( server ) );
+
+			await promise( port, listen );
 
 			return;
 		}
 
 		case 'http' :
-
+		{
 			log.log( 'starting server @ http://' + ( listen || '*' ) + '/:' + port );
 
-			yield http
-			.createServer( handler )
-			.listen( port, listen, resume( ) );
+			const server = http.createServer( handler );
+
+			const promise = util.promisify( server.listen.bind( server ) );
+
+			await promise( port, listen );
 
 			return;
+		}
 
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -162,7 +159,7 @@ const startMainServer =
 | Starts the redirect server.
 */
 const startRedirectServer =
-	function*( )
+	async function( )
 {
 	const protocol = config.get( 'network', 'redirect', 'protocol' );
 
@@ -191,7 +188,11 @@ const startRedirectServer =
 		result.end( 'go use https' );
 	};
 
-	yield http.createServer( handler ).listen( port, listen, resume( ) );
+	const server = http.createServer( handler );
+
+	const promise = util.promisify( server.listen.bind( server ) );
+
+	await promise( port, listen );
 };
 
 
@@ -199,31 +200,35 @@ const startRedirectServer =
 | Sets up the server.
 |*/
 const startup =
-	function*( )
+	async function( )
 {
-	yield gleam_font_root.load( 'DejaVuSans-Regular', resume( ) );
+	{
+		// FIXIME have gleam_font_root use async
+		const promise = util.promisify( gleam_font_root.load );
+
+		await promise( 'DejaVuSans-Regular' );
+	}
 
 	server_root.create(
 		'inventory', server_inventory.create( ),
 		'nextSleepID', 1,
-		'repository', yield* database_repository.connect( ),
+		'repository', await database_repository.connect( ),
 		'spaces', server_spaceNexus.create( ),
 		'upSleeps', server_upSleepGroup.create( ),
 		'nextVisitor', 1000,
 		'userNexus', server_userNexus.create( )
 	);
 
-	yield* root.prepareInventory( );
+	await root.prepareInventory( );
 
-	yield* root.loadSpaces( );
+	await root.loadSpaces( );
 
-	yield* startMainServer( );
+	await startMainServer( );
 
-	yield* startRedirectServer( );
+	await startRedirectServer( );
 
 	log.log( 'server running' );
 };
 
 
-// FIXME can be simplified?
-suspend( function*( ) { yield* startup( ); } )( );
+startup( ).catch( ( error ) => console.error( error ) );

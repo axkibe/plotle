@@ -54,22 +54,18 @@ const mongodb = require( 'mongodb' );
 
 const ref_space = require( '../ref/space' );
 
-const suspend = require( 'suspend' );
-
-const resume = suspend.resume;
-
 
 /*
 | Creates a connection to the target.
 */
 const connectToSource =
-	function*( )
+	async function( )
 {
 	const server = new mongodb.Server( config.src.host, config.src.port, { } );
 
 	const connector = new mongodb.Db( config.src.name, server, { w : 1 } );
 
-	return yield connector.open( resume( ) );
+	return await connector.open( );
 };
 
 
@@ -77,13 +73,13 @@ const connectToSource =
 | Creates a connection to the source.
 */
 const connectToTarget =
-	function*( )
+	async function( )
 {
 	const server = new mongodb.Server( config.trg.host, config.trg.port, { } );
 
 	const connector = new mongodb.Db( config.trg.name, server, { w : 1 } );
 
-	return yield connector.open( resume( ) );
+	return await connector.open( );
 };
 
 
@@ -115,7 +111,7 @@ const convertJson =
 | Converts a space.
 */
 const convertSpace =
-	function*(
+	async function(
 		srcConnection,
 		trgConnection,
 		spaceRef
@@ -123,28 +119,24 @@ const convertSpace =
 {
 	console.log( 'loading and replaying "' + spaceRef.fullname + '"' );
 
-	const srcChanges =
-		yield srcConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+	const srcChanges = await srcConnection.collection( 'changes:' + spaceRef.fullname );
 
 	const cursor =
-		( yield srcChanges.find(
-			{ },
-			{ sort : '_id' },
-			resume( )
-		) ).batchSize( 100 );
+		( await srcChanges.find( { }, { sort : '_id' },) )
+		.batchSize( 100 );
 
 	const trgChanges =
-		yield trgConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
+		await trgConnection.collection( 'changes:' + spaceRef.fullname );
 
 	for(
-		let o = yield cursor.nextObject( resume( ) );
+		let o = await cursor.nextObject( );
 		o;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
 		convertJson( o );
 
-		if( !dry ) { yield trgChanges.insert( o, resume( ) ); }
+		if( !dry ) { await trgChanges.insert( o ); }
 	}
 };
 
@@ -153,70 +145,70 @@ const convertSpace =
 | The main runner.
 */
 const run =
-	function*( )
+	async function( )
 {
 	console.log( '* connecting to src' );
 
-	const srcConnection = yield* connectToSource( );
+	const srcConnection = await connectToSource( );
 
-	const srcGlobal = yield srcConnection.collection( 'global', resume( ) );
+	const srcGlobal = await srcConnection.collection( 'global' );
 
-	let o = yield srcGlobal.findOne( { _id : 'version' }, resume( ) );
+	let o = await srcGlobal.findOne( { _id : 'version' } );
 
 	if( o.version !== 17 ) throw new Error( 'src is not a v17 repository' );
 
 	console.log( '* connecting to trg' );
 
-	const trgConnection = yield* connectToTarget( );
+	const trgConnection = await connectToTarget( );
 
 	console.log( '* dropping trg' );
 
-	if( !dry ) yield trgConnection.dropDatabase( resume( ) );
+	if( !dry ) await trgConnection.dropDatabase( );
 
-	const srcUsers = yield srcConnection.collection( 'users', resume( ) );
+	const srcUsers = await srcConnection.collection( 'users' );
 
-	const srcSpaces = yield srcConnection.collection( 'spaces', resume( ) );
+	const srcSpaces = await srcConnection.collection( 'spaces' );
 
-	const trgGlobal = yield trgConnection.collection( 'global', resume( ) );
+	const trgGlobal = await trgConnection.collection( 'global' );
 
-	const trgUsers = yield trgConnection.collection( 'users', resume( ) );
+	const trgUsers = await trgConnection.collection( 'users' );
 
-	const trgSpaces = yield trgConnection.collection( 'spaces', resume( ) );
+	const trgSpaces = await trgConnection.collection( 'spaces' );
 
 	console.log( '* creating trg.global' );
 
-	if( !dry ) yield trgGlobal.insert( { _id : 'version', version : 18 }, resume( ) );
+	if( !dry ) await trgGlobal.insert( { _id : 'version', version : 18 } );
 
 	console.log( '* converting src.users -> trg.users' );
 
-	let cursor = yield srcUsers.find( resume( ) );
+	let cursor = await srcUsers.find( );
 
 	for(
-		o = yield cursor.nextObject( resume( ) );
+		o = await cursor.nextObject( );
 		o !== null;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
 		console.log( ' * ' + o._id );
 
-		if( !dry ) yield trgUsers.insert( o, resume( ) );
+		if( !dry ) await trgUsers.insert( o );
 	}
 
 	console.log( '* copying src.spaces -> trg.spaces' );
 
-	cursor = yield srcSpaces.find( { }, { sort: '_id' }, resume( ) );
+	cursor = await srcSpaces.find( { }, { sort: '_id' } );
 
 	for(
-		o = yield cursor.nextObject( resume( ) );
+		o = await cursor.nextObject( );
 		o !== null;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
-		if( !dry ) yield trgSpaces.insert( o, resume( ) );
+		if( !dry ) await trgSpaces.insert( o );
 
 		const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
 
-		yield * convertSpace( srcConnection, trgConnection, spaceRef );
+		await convertSpace( srcConnection, trgConnection, spaceRef );
 	}
 
 	console.log( '* closing connections' );
@@ -228,4 +220,5 @@ const run =
 	console.log( '* done' );
 };
 
-suspend( run )( );
+
+run( ).catch( ( error ) => { console.error( error ); } );

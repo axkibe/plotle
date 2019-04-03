@@ -35,18 +35,16 @@ const ref_space = tim.require( '../ref/space' );
 
 const mongodb = require( 'mongodb' );
 
-const resume = require( 'suspend' ).resume;
-
 
 /*
 | Initializes a new repository.
 */
 const initRepository =
-	function*(
+	async function(
 		connection
 	)
 {
-	const spaces = yield connection.collection( 'spaces', resume( ) );
+	const spaces = await connection.collection( 'spaces' );
 
 	log.log( 'found no repository, initializing a new one' );
 
@@ -62,26 +60,24 @@ const initRepository =
 
 		log.log( '  initializing space ' + sr.fullname );
 
-		yield spaces.insert(
+		await spaces.insert(
 			{
 				_id : sr.fullname,
 				username : sr.username,
 				tag : sr.tag
-			},
-			resume( )
+			}
 		);
 	}
 
 	log.log( '  initializing global.version' );
 
-	const global = yield connection.collection( 'global', resume( ) );
+	const global = await connection.collection( 'global' );
 
-	yield global.insert(
+	await global.insert(
 		{
 			_id : 'version',
 			version : dbVersion,
-		},
-		resume( )
+		}
 	);
 };
 
@@ -90,15 +86,15 @@ const initRepository =
 | Ensures the repository schema version fits this server.
 */
 const checkRepository =
-	function*(
+	async function(
 		connection
 	)
 {
 	log.log( 'checking repository schema version' );
 
-	const global = yield connection.collection( 'global', resume( ) );
+	const global = await connection.collection( 'global' );
 
-	const version = yield global.findOne( { _id : 'version' }, resume( ) );
+	const version = await global.findOne( { _id : 'version' } );
 
 	if( version )
 	{
@@ -113,8 +109,7 @@ const checkRepository =
 	else
 	{
 		// otherwise initializes the database repository
-
-		yield* initRepository( connection );
+		await initRepository( connection );
 	}
 };
 
@@ -124,7 +119,7 @@ const checkRepository =
 | an active connection.
 */
 def.static.connect =
-	function*( )
+	async function( )
 {
 	const host = config.get( 'database', 'host' );
 
@@ -138,15 +133,15 @@ def.static.connect =
 
 	const connector = new mongodb.Db( name, server, { w : 1 } );
 
-	const connection = yield connector.open( resume( ) );
+	const connection = await connector.open( );
 
-	const users = yield connection.collection( 'users', resume( ) );
+	const users = await connection.collection( 'users' );
 
-	const spaces = yield connection.collection( 'spaces', resume( ) );
+	const spaces = await connection.collection( 'spaces' );
 
 	// checking repo version:
 
-	yield* checkRepository( connection );
+	await checkRepository( connection );
 
 	return(
 		database_repository.create(
@@ -164,11 +159,11 @@ def.static.connect =
 | FUTURE let it return a tim.
 */
 def.proto.collection =
-	function*(
+	async function(
 		name
 	)
 {
-	return yield this._connection.collection( name, resume( ) );
+	return await this._connection.collection( name );
 };
 
 

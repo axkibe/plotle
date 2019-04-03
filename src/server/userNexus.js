@@ -35,8 +35,6 @@ const ref_space = tim.require( '../ref/space' );
 
 const ref_spaceList = tim.require( '../ref/spaceList' );
 
-const resume = require( 'suspend' ).resume;
-
 
 /*
 | Adds the reference of a space being owned by an user.
@@ -133,7 +131,7 @@ def.proto.createVisitor =
 | Gets the list of spaces of a user.
 */
 def.proto.getUserSpaceList =
-	function*(
+	async function(
 		userInfo
 	)
 {
@@ -148,17 +146,12 @@ def.proto.getUserSpaceList =
 
 	const arr = [ ];
 
-	const cursor =
-		yield root.repository.spaces.find(
-			{ },
-			{ sort: '_id' },
-			resume( )
-		);
+	const cursor = await root.repository.spaces.find( { }, { sort: '_id' } );
 
 	for(
-		let o = yield cursor.nextObject( resume( ) );
+		let o = await cursor.nextObject( );
 		o;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
 		if( o.username !== userInfo.name ) continue;
@@ -197,7 +190,7 @@ def.proto.getUserSpaceList =
 | Registers a user.
 */
 def.proto.register =
-	function*(
+	async function(
 		userInfo
 	)
 {
@@ -215,10 +208,7 @@ def.proto.register =
 	if( this._cache.get( userInfo.name ) ) return false;
 
 	const val =
-		yield root.repository.users.findOne(
-			{ _id : userInfo.name },
-			resume( )
-		);
+		await root.repository.users.findOne( { _id : userInfo.name } );
 
 	// user already registered
 	if( val ) return false;
@@ -233,14 +223,13 @@ def.proto.register =
 		this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
 	);
 
-	yield root.repository.users.insert(
+	await root.repository.users.insert(
 		JSON.parse( JSON.stringify(
 			database_userSkid.createFromUser( userInfo )
-		) ),
-		resume( )
+		) )
 	);
 
-	yield* root.createSpace(
+	await root.createSpace(
 		ref_space.create( 'username', userInfo.name, 'tag', 'home' )
 	);
 
@@ -254,7 +243,7 @@ def.proto.register =
 | If so returns the matching user info.
 */
 def.proto.getByName =
-	function*(
+	async function(
 		username
 	)
 {
@@ -263,11 +252,7 @@ def.proto.getByName =
 	if( userInfo ) return userInfo;
 
 	// else the user is to be loaded from the database
-	const val =
-		yield root.repository.users.findOne(
-			{ _id : username },
-			resume( )
-		);
+	const val = await root.repository.users.findOne( { _id : username } );
 
 	if( !val ) return;
 
@@ -287,11 +272,11 @@ def.proto.getByName =
 | If so loads and returns the matching user info.
 */
 def.proto.testUserCreds =
-	function*(
+	async function(
 		userCreds
 	)
 {
-	const userInfo = yield* this.getByName( userCreds.name );
+	const userInfo = await this.getByName( userCreds.name );
 
 	if( !userInfo ) return false;
 

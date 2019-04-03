@@ -70,8 +70,6 @@ const server_resource = tim.require( './resource' );
 
 const server_spaceBox = tim.require( './spaceBox' );
 
-const suspend = require( 'suspend' );
-
 const terser = require( 'terser' );
 
 const timspec_twig = tim.require( 'tim.js/timspecTwig' );
@@ -80,28 +78,25 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const url = require( 'url' );
 
-const resume = suspend.resume;
+const util = require( 'util' );
+
+const fsStat = util.promisify( fs.stat );
 
 
 /*
 | loads all spaces and playbacks all changes from the database.
 */
 def.proto.loadSpaces =
-	function*( )
+	async function( )
 {
 	log.log( 'loading and replaying all spaces' );
 
-	const cursor =
-		yield root.repository.spaces.find(
-			{ },
-			{ sort: '_id' },
-			resume( )
-		);
+	const cursor = await root.repository.spaces.find( { }, { sort: '_id' } );
 
 	for(
-		let o = yield cursor.nextObject( resume( ) );
+		let o = await cursor.nextObject( );
 		o;
-		o = yield cursor.nextObject( resume( ) )
+		o = await cursor.nextObject( )
 	)
 	{
 		const spaceRef =
@@ -117,7 +112,7 @@ def.proto.loadSpaces =
 				root.spaces.create(
 					'group:set',
 					spaceRef.fullname,
-					yield* server_spaceBox.loadSpace( spaceRef )
+					await server_spaceBox.loadSpace( spaceRef )
 				)
 		);
 	}
@@ -267,7 +262,7 @@ def.proto.buildBundle =
 | Also builds the bundle.
 */
 def.proto.prepareInventory =
-	function*( )
+	async function( )
 {
 	log.log( 'preparing inventory' );
 
@@ -285,7 +280,7 @@ def.proto.prepareInventory =
 
 		if( resource.devel && !devel ) continue;
 
-		yield* root.inventory.prepareResource( resource );
+		await root.inventory.prepareResource( resource );
 	}
 
 	// prepares ressources form the the shell
@@ -316,7 +311,7 @@ def.proto.prepareInventory =
 					'inBundle', true
 				);
 
-			yield* root.inventory.prepareResource( resource );
+			await root.inventory.prepareResource( resource );
 		}
 	}
 
@@ -359,7 +354,7 @@ def.proto.prepareInventory =
 					);
 			}
 
-			yield* root.inventory.prepareResource( resource );
+			await root.inventory.prepareResource( resource );
 		}
 	}
 
@@ -440,7 +435,7 @@ def.proto.prepareInventory =
 	if( config.get( 'shell', 'bundle', 'enable' ) )
 	{
 		const bundle = root.inventory.get( bundleFilePath );
-		const gzip = yield* bundle.gzip( );
+		const gzip = await bundle.gzip( );
 
 		log.log( 'uncompressed bundle size is ', bundle.data.length );
 		log.log( '  compressed bundle size is ', gzip.length );
@@ -452,7 +447,7 @@ def.proto.prepareInventory =
 | Creates a new space.
 */
 def.proto.createSpace =
-	function*(
+	async function(
 		spaceRef
 	)
 {
@@ -462,7 +457,7 @@ def.proto.createSpace =
 /**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
 /**/}
 
-	const spaceBox = yield* server_spaceBox.createSpace( spaceRef );
+	const spaceBox = await server_spaceBox.createSpace( spaceRef );
 
 	root.create(
 		'spaces', root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
@@ -470,7 +465,7 @@ def.proto.createSpace =
 
 	root.userNexus.addUserSpaceRef( spaceRef );
 
-	yield* root.wake( ref_userSpaceList.create( 'username', spaceRef.username ) );
+	await root.wake( ref_userSpaceList.create( 'username', spaceRef.username ) );
 
 	return spaceBox;
 };
@@ -501,7 +496,7 @@ def.proto.closeSleep =
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 def.proto.wake =
-	function*(
+	async function(
 		ref // reference to wake for
 	)
 {
@@ -529,7 +524,7 @@ def.proto.wake =
 		if( b >= bZ ) continue;
 
 		// this sleep needs to be waked
-		const asw = yield* server_requestHandler.conveyUpdate( sleep.moments );
+		const asw = await server_requestHandler.conveyUpdate( sleep.moments );
 
 		if( !asw ) continue;
 
@@ -584,7 +579,7 @@ def.proto.webError =
 | Listens to http requests
 */
 def.proto.requestListener =
-	function*(
+	async function(
 		request,
 		result
 	)
@@ -641,7 +636,7 @@ def.proto.requestListener =
 
 		try
 		{
-			stat = yield fs.stat( resource.realpath, resume( ) );
+			stat = await fsStat( resource.realpath );
 		}
 		catch( e ) { /* ignore */ }
 
@@ -652,7 +647,7 @@ def.proto.requestListener =
 
 			log.log( 'updating', uResource.aliases.get( 0 ) );
 
-			uResource = yield* root.inventory.prepareResource( uResource );
+			uResource = await root.inventory.prepareResource( uResource );
 
 			if( uResource.postProcessor )
 			{
@@ -689,7 +684,7 @@ def.proto.requestListener =
 
 		result.writeHead( 200, header );
 
-		const gzip = yield* resource.gzip( );
+		const gzip = await resource.gzip( );
 
 		result.end( gzip, 'binary' );
 	}
@@ -755,7 +750,7 @@ def.proto.webAjax =
 	);
 
 	const handler =
-		function*( )
+		async function( )
 	{
 		const query = data.join( '' );
 
@@ -776,18 +771,18 @@ def.proto.webAjax =
 		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
 			log.log( 'DELAYING ALTER');
-
-			yield setTimeout( resume( ), DELAY_ALTER );
+			throw new Error( 'FIXME' );
+			//yield setTimeout( resume( ), DELAY_ALTER );
 		}
 
 		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
 			log.log( 'DELAYING ACQUIRE');
-
-			yield setTimeout( resume( ), DELAY_ACQUIRE );
+			throw new Error( 'FIXME' );
+			//yield setTimeout( resume( ), DELAY_ACQUIRE );
 		}
 
-		const asw = yield* server_requestHandler.serve( cmd, result );
+		const asw = await server_requestHandler.serve( cmd, result );
 
 		if( !asw ) return;
 
@@ -803,7 +798,9 @@ def.proto.webAjax =
 		result.end( JSON.stringify( asw ) );
 	};
 
-	request.on( 'end', ( ) => suspend( handler )( ) );
+	request.on( 'end',
+		( ) => handler( ).catch( ( error ) => { console.error( error ); process.exit( -1 ); } )
+	);
 };
 
 } );

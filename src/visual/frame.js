@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, visual_frame ) => {
 
 
 if( TIM )
@@ -45,14 +45,20 @@ const gleam_roundRect = tim.require( '../gleam/roundRect' );
 
 const gleam_shapeList = tim.require( '../gleam/shapeList' );
 
-const gruga_frame = tim.require( '../gruga/frame', 'NOW' );
+const gruga_frame = tim.require( '../gruga/frame' );
 
 const result_hover = tim.require( '../result/hover' );
 
 
-const handleSize = gruga_frame.handleSize;
-
-const handleSize2 = handleSize / 2;
+/*
+| Stancil for handles.
+*/
+def.staticLazy.handle = ( ) =>
+	gleam_ellipse.create(
+		'pos', gleam_point.zero,
+		'width', gruga_frame.handleSize,
+		'height', gruga_frame.handleSize
+	);
 
 
 /*
@@ -232,8 +238,8 @@ def.lazy._frameBodyShape =
 			'pos', oZone.pos,
 			'width', oZone.width,
 			'height', oZone.height,
-			'a', handleSize / 2,
-			'b', handleSize / 2
+			'a', gruga_frame.handleSize / 2,
+			'b', gruga_frame.handleSize / 2
 		)
 	);
 };
@@ -251,10 +257,8 @@ def.lazy._shapeHandleN =
 /**/}
 
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pn.add( -handleSize2, 0 ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.pn.add( -gruga_frame.handleSize / 2, 0 )
 		)
 	);
 };
@@ -267,10 +271,8 @@ def.lazy._shapeHandleNe =
 	function( )
 {
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pne.add( -handleSize, 0 ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.pne.add( -gruga_frame.handleSize, 0 )
 		)
 	);
 };
@@ -282,13 +284,7 @@ def.lazy._shapeHandleNe =
 def.lazy._shapeHandleNw =
 	function( )
 {
-	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pos,
-			'width', handleSize,
-			'height', handleSize
-		)
-	);
+	return visual_frame.handle.create( 'pos', this._outerZone.pos );
 };
 
 
@@ -304,10 +300,8 @@ def.lazy._shapeHandleE =
 /**/}
 
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pe.add( -handleSize, -handleSize2 ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.pe.add( -gruga_frame.handleSize, -gruga_frame.handleSize / 2 )
 		)
 	);
 };
@@ -325,10 +319,8 @@ def.lazy._shapeHandleS =
 /**/}
 
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.ps.add( -handleSize2, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.ps.add( -gruga_frame.handleSize / 2, -gruga_frame.handleSize ),
 		)
 	);
 };
@@ -341,10 +333,8 @@ def.lazy._shapeHandleSe =
 	function( )
 {
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pse.add( -handleSize, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.pse.add( -gruga_frame.handleSize, -gruga_frame.handleSize )
 		)
 	);
 };
@@ -357,10 +347,8 @@ def.lazy._shapeHandleSw =
 	function( )
 {
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.psw.add( 0, -handleSize ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.psw.add( 0, -gruga_frame.handleSize )
 		)
 	);
 };
@@ -378,10 +366,8 @@ def.lazy._shapeHandleW =
 /**/}
 
 	return(
-		gleam_ellipse.create(
-			'pos', this._outerZone.pw.add( 0, -handleSize2 ),
-			'width', handleSize,
-			'height', handleSize
+		visual_frame.handle.create(
+			'pos', this._outerZone.pw.add( 0, -gruga_frame.handleSize / 2 ),
 		)
 	);
 };
@@ -403,7 +389,7 @@ def.lazy._outerZone =
 
 	const hh = tZone.height / 2;
 
-	const min = handleSize2 * ( this.proportional ? 2.5 : 3.5 );
+	const min = gruga_frame.handleSize / 2 * ( this.proportional ? 2.5 : 3.5 );
 
 	return(
 		gleam_rect.create(

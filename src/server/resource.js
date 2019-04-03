@@ -68,13 +68,15 @@ if( TIM )
 }
 
 
-const resume = require( 'suspend' ).resume;
-
 const server_fileTypes = tim.require( './fileTypes' );
 
-const stringList = tim.require( 'tim.js/stringList', 'NOW' ).stringList;
+const stringList = tim.require( 'tim.js/stringList' );
 
 const zlib = require( 'zlib' );
+
+const util = require( 'util' );
+
+const gzip = util.promisify( zlib.gzip );
 
 
 /*
@@ -98,7 +100,7 @@ def.adjust.aliases =
 		aliases
 	)
 {
-	return aliases || stringList( [ server_resource.filePathAlias( this.filePath ) ] );
+	return aliases || stringList.stringList( [ server_resource.filePathAlias( this.filePath ) ] );
 };
 
 
@@ -133,7 +135,7 @@ def.lazy.fileExt =
 | Returns the gzipped data.
 */
 def.proto.gzip =
-	function*( )
+	async function( )
 {
 	const cache = this._cache;
 
@@ -143,7 +145,7 @@ def.proto.gzip =
 
 	cache.data = undefined;
 
-	cg = cache.gzip = yield zlib.gzip( this.data, resume( ) );
+	cg = cache.gzip = await gzip( this.data );
 
 	cache.data = this.data;
 

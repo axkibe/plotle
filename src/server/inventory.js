@@ -17,7 +17,13 @@ const config = tim.require( '../config/intf' );
 
 const fs = require( 'fs' );
 
-const resume = require( 'suspend' ).resume;
+const util = require( 'util' );
+
+const fsRealpath = util.promisify( fs.realpath );
+
+const fsReadFile = util.promisify( fs.readFile );
+
+const fsStat = util.promisify( fs.stat );
 
 const readOptions = Object.freeze( { encoding : 'utf8' } );
 
@@ -73,7 +79,7 @@ def.proto.removeResource =
 | Returns the prepared resource, but also updates the inventory.
 */
 def.proto.prepareResource =
-	function*(
+	async function(
 		resource
 	)
 {
@@ -84,7 +90,7 @@ def.proto.prepareResource =
 		realpath =
 			resource.realpath
 			? resource.realpath
-			: yield fs.realpath( './' + resource.filePath, resume( ) );
+			: ( await fsRealpath( './' + resource.filePath ) );
 	}
 
 	let mtime;
@@ -93,7 +99,7 @@ def.proto.prepareResource =
 
 	if( updates && realpath )
 	{
-		mtime = ( yield fs.stat( realpath, resume( ) ) ).mtime;
+		mtime = ( await fsStat( realpath ) ).mtime;
 	}
 
 	if( resource.hasTim )
@@ -102,7 +108,7 @@ def.proto.prepareResource =
 
 		const rmod = require( realpath );
 
-		const source = ( yield fs.readFile( realpath, readOptions, resume( ) ) ) + '';
+		const source = ( await fsReadFile( realpath, readOptions ) ) + '';
 
 		const timspec = tim.catalog.getByRealpath( realpath );
 
@@ -122,9 +128,7 @@ def.proto.prepareResource =
 		const timcodeRootPath = tim.catalog.getRootDir( timspec ).timcodePath;
 
 		const timcode =
-			( yield fs.readFile(
-				timcodeRootPath + '/' + rmod.timcodeFilename, readOptions, resume( )
-			) ) + '';
+			( await fsReadFile( timcodeRootPath + '/' + rmod.timcodeFilename, readOptions ) ) + '';
 
 		const timcodeResource =
 			resource.create(
@@ -143,7 +147,7 @@ def.proto.prepareResource =
 		{
 			resource =
 				resource.create(
-					'data', yield fs.readFile( resource.filePath, resume( ) ),
+					'data', await fsReadFile( resource.filePath ),
 					'timestamp', mtime,
 					'realpath', realpath
 				);

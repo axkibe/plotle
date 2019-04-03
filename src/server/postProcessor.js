@@ -11,7 +11,7 @@ const config = tim.require( '../config/intf' );
 
 const hash_sha1 = tim.require( '../hash/sha1' );
 
-const stringList = tim.require( 'tim.js/stringList', 'NOW' ).stringList;
+const stringList = tim.require( 'tim.js/stringList' );
 
 let opentypeHash;
 let opentypeMinHash;
@@ -31,7 +31,7 @@ def.static.opentype =
 		'inventory',
 			root.inventory.updateResource(
 				resource.create(
-					'aliases', stringList( [ 'opentype-' + opentypeHash + '.js' ] )
+					'aliases', stringList.stringList( [ 'opentype-' + opentypeHash + '.js' ] )
 				)
 			)
 	);
@@ -52,7 +52,7 @@ def.static.opentypeMin =
 		'inventory',
 			root.inventory.updateResource(
 				resource.create(
-					'aliases', stringList( [ 'opentype.min-' + opentypeMinHash + '.js' ] )
+					'aliases', stringList.stringList( [ 'opentype.min-' + opentypeMinHash + '.js' ] )
 				)
 			)
 	);
