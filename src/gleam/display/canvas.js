@@ -311,9 +311,9 @@ def.proto.within =
 
 	if( shape.timtype === gleam_shapeList )
 	{
-		for( let a = 0, al = shape.length; a < al; a++ )
+		for( let s of shape )
 		{
-			if( this.within( p, shape.get( a ) ) ) return true;
+			if( this.within( p, s ) ) return true;
 		}
 
 		return false;
@@ -333,9 +333,7 @@ def.proto.within =
 		case gleam_rect :
 		{
 			const x = p.x;
-
 			const y = p.y;
-
 			const ps = shape.p;
 
 			return(
@@ -426,22 +424,13 @@ def.proto._borders  =
 	{
 		case gleam_borderList :
 
-			for( let a = 0, al = border.length; a < al; a++ )
-			{
-				this._border( border.get( a ), shape, offset );
-			}
+			for( let b of border ) this._border( b, shape, offset );
 
 			break;
 
-		case gleam_border :
+		case gleam_border : this._border( border, shape, offset ); break;
 
-			this._border( border, shape, offset );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 
@@ -532,10 +521,8 @@ def.proto._colorStyle =
 		default : throw new Error( );
 	}
 
-	for( let a = 0, al = style.length; a < al; a++ )
+	for( let cs of style )
 	{
-		const cs = style.get( a );
-
 		grad.addColorStop( cs.offset, cs.color.css );
 	}
 
@@ -552,10 +539,7 @@ def.proto._renderGlintList =
 		offset  // offset all rendering by this
 	)
 {
-	for( let a = 0, al = glint.length; a < al; a++ )
-	{
-		this._renderGlint( glint.get( a ), offset );
-	}
+	for( let g of glint ) this._renderGlint( g, offset );
 };
 
 
@@ -632,24 +616,18 @@ def.proto._renderMask =
 
 	if( shape.timtype === gleam_shapeList )
 	{
-		for( let a = 0, al = shape.length; a < al; a++ )
+		for( let sa of shape )
 		{
 			cx.beginPath( );
 
 			if( glint.reverse )
 			{
 				cx.moveTo( 0, 0 );
-
 				cx.lineTo( 0, h );
-
 				cx.lineTo( w, h );
-
 				cx.lineTo( w, 0 );
-
 				cx.lineTo( 0, 0 );
 			}
-
-			const sa = shape.get( a );
 
 			this._sketch( sa, 0, offset, 0.5 );
 
@@ -663,13 +641,9 @@ def.proto._renderMask =
 		if( glint.reverse )
 		{
 			cx.moveTo( 0, 0 );
-
 			cx.lineTo( 0, h );
-
 			cx.lineTo( w, h );
-
 			cx.lineTo( w, 0 );
-
 			cx.lineTo( 0, 0 );
 		}
 
@@ -1052,10 +1026,7 @@ def.proto._sketch =
 
 		case gleam_shapeList :
 
-			for( let a = 0, al = shape.length; a < al; a++ )
-			{
-				this._sketch( shape.get( a ), border, offset, shift );
-			}
+			for( let s of shape ) this._sketch( s, border, offset, shift );
 
 			return;
 
@@ -1199,14 +1170,8 @@ def.proto._sketchGenericShape =
 		{
 			case gleam_shape_line :
 
-				if( !section.fly || shift === 0 )
-				{
-					cx.lineTo( pnx, pny );
-				}
-				else
-				{
-					cx.moveTo( pnx, pny );
-				}
+				if( !section.fly || shift === 0 ) cx.lineTo( pnx, pny );
+				else cx.moveTo( pnx, pny );
 
 				break;
 
@@ -1261,7 +1226,6 @@ def.proto._sketchGenericShape =
 		cpy = pny;
 	}
 };
-
 
 
 } );

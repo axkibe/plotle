@@ -23,19 +23,19 @@ if( TIM )
 		{
 			type :
 			[
+				'undefined',
 				'./border',
 				'./borderList',
-				'undefined'
 			]
 		},
 		fill :
 		{
 			type :
 			[
+				'undefined',
 				'./color',
 				'./gradient/askew',
 				'./gradient/radial',
-				'undefined'
 			]
 		}
 	};
