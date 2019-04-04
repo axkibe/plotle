@@ -249,7 +249,7 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr = [ gleam_glint_fill.create( 'facet', this.facet, 'shape', this._tShape ) ];
+	const arr = [ gleam_glint_fill.create( 'facet', this.facet, 'shape', this.tShape ) ];
 
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
 	{
@@ -261,7 +261,7 @@ def.lazy._glint =
 	arr.push(
 		gleam_glint_border.create(
 			'facet', this.facet,
-			'shape', this._tShape
+			'shape', this.tShape
 		)
 	);
 
@@ -294,7 +294,7 @@ def.lazy._tZone =
 /*
 | The disc's transformed shape.
 */
-def.lazy._tShape =
+def.lazy.tShape =
 	function( )
 {
 	return(
@@ -330,7 +330,7 @@ def.proto.probeClickDrag =
 	const pp = p.sub( tZone.pos );
 
 	// if p is not on the panel
-	if( !this._tShape.within( pp ) ) return;
+	if( !this.tShape.within( pp ) ) return;
 
 	return 'atween';
 };
@@ -395,7 +395,7 @@ def.proto.pointingHover =
 
 	const pp = p.sub( tZone.pos );
 
-	if( !this._tShape.within( pp ) ) return;
+	if( !this.tShape.within( pp ) ) return;
 
 	// it's on the disc
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
@@ -424,7 +424,7 @@ def.proto.click =
 
 	const pp = p.sub( tZone.pos );
 
-	if( !this._tShape.within( pp ) ) return;
+	if( !this.tShape.within( pp ) ) return;
 
 	// this is on the disc
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
@@ -477,7 +477,7 @@ def.proto.dragStart =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
+	if( !this.tShape.within( p.sub( tZone.pos ) ) ) return;
 
 	// the dragging operation is on the panel
 	// but it denies it.
@@ -541,7 +541,7 @@ def.proto.mousewheel =
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( tZone.pos ) ) ) return;
+	if( !this.tShape.within( p.sub( tZone.pos ) ) ) return;
 
 	return true;
 };

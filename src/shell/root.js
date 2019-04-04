@@ -1714,7 +1714,7 @@ def.proto.spawnRelation =
 		item2
 	)
 {
-	const line = gleam_connect.line( item1.shape( ), item2.shape( ) );
+	const line = gleam_connect.line( item1.shape, item2.shape );
 
 	const pos = line.pc.sub( gruga_relation.spawnOffset );
 
@@ -2005,17 +2005,15 @@ def.static._createFormRoot =
 
 		const twig = { };
 
-		for( let w = 0, wZ = layout.length; w < wZ; w++ )
+		// XXX for( let w = 0, wZ = layout.length; w < wZ; w++ )
+		for( let key of layout.keys )
 		{
-			const key = layout.getKey( w );
-
 			const wLayout = layout.get( key );
 
 			const path = formPath.append( 'twig' ).append( key );
 
 			twig[ key ] =
 				widget_factory.createFromLayout( wLayout, path, gleam_transform.normal );
-
 		}
 
 		forms[ name ] =

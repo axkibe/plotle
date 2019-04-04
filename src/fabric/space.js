@@ -466,7 +466,7 @@ def.lazy.glint =
 
 				if( action.toItemPath ) toItem = this.get( action.toItemPath.get( -1 ) );
 
-				const fromJoint = fromItem.shape( );
+				const fromJoint = fromItem.shape;
 
 				if(
 					action.toItemPath
@@ -474,7 +474,7 @@ def.lazy.glint =
 				)
 				{
 					// arrow connects two items
-					toJoint = toItem.shape( );
+					toJoint = toItem.shape;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
@@ -595,9 +595,9 @@ def.proto.pointingHover =
 		if( result ) return result;
 	}
 
-	for( let a = 0, al = this.length; a < al; a++ )
+	for( let item of this )
 	{
-		const result = this.atRank( a ).pointingHover( p, action );
+		const result = item.pointingHover( p, action );
 
 		if( result ) return result;
 	}

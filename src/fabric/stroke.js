@@ -126,7 +126,7 @@ def.proto.glint =
 	function( )
 {
 	// FIXME remove gruga_relation dependency
-	return gleam_glint_paint.createFS( gruga_relation.facet, this._tShape( ) );
+	return gleam_glint_paint.createFS( gruga_relation.facet, this.tShape );
 };
 
 
@@ -170,13 +170,13 @@ def.proto.pointingHover =
 /*
 | The items shape
 */
-def.proto.shape =
+def.lazy.shape =
 	function( )
 {
 	return(
 		gleam_arrow.create(
-			'joint1', this._line( ).p1,
-			'joint2', this._line( ).p2,
+			'joint1', this._line.p1,
+			'joint2', this._line.p2,
 			'end1', this.fromStyle,
 			'end2', this.toStyle
 		).shape
@@ -190,7 +190,7 @@ def.proto.shape =
 def.lazy.zone =
 	function( )
 {
-	return this._line( ).zone;
+	return this._line.zone;
 };
 
 
@@ -204,7 +204,7 @@ def.lazy._from =
 
 	switch( ffrom.timtype )
 	{
-		case gleam_point : return this._line( ).p1;
+		case gleam_point : return this._line.p1;
 
 		case tim_path : return ffrom;
 
@@ -216,7 +216,7 @@ def.lazy._from =
 /*
 | The line of the stroke.
 */
-def.proto._line =
+def.lazy._line =
 	function( )
 {
 	let ffrom = this.from;
@@ -231,7 +231,7 @@ def.proto._line =
 		// FIXME immutable tree hierachy violation
 		const ifrom = root.space.getPath( ffrom );
 
-		if( ifrom ) ffrom = root.space.getPath( ffrom ).shape( );
+		if( ifrom ) ffrom = root.space.getPath( ffrom ).shape;
 		else ffrom = gleam_point.zero;
 	}
 
@@ -244,7 +244,7 @@ def.proto._line =
 		// FIXME immutable tree hierachy violation
 		const ito = root.space.getPath( fto );
 
-		if( ito ) fto = root.space.getPath( fto ).shape( );
+		if( ito ) fto = root.space.getPath( fto ).shape;
 		else fto = gleam_point.zero;
 	}
 
@@ -262,22 +262,12 @@ def.lazy._to =
 
 	switch( fto.timtype )
 	{
-		case gleam_point : return this._line( ).p2;
+		case gleam_point : return this._line.p2;
 
 		case tim_path : return fto;
 
 		default : throw new Error( );
 	}
-};
-
-
-/*
-| Transformed shape.
-*/
-def.proto._tShape =
-	function( )
-{
-	return this.shape( ).transform( this.transform );
 };
 
 

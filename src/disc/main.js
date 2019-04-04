@@ -147,10 +147,8 @@ def.static.createFromLayout =
 
 	const twig = { };
 
-	for( let a = 0, aZ = layout.length; a < aZ; a++ )
+	for( let key of layout.keys )
 	{
-		const key = layout.getKey( a );
-
 		const iLayout = layout.get( key );
 
 		const item =
@@ -349,13 +347,13 @@ def.lazy._glint =
 		[
 			gleam_glint_fill.create(
 				'facet', this.facet,
-				'shape', this._tShape
+				'shape', this.tShape
 			)
 		];
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const g = this.atRank( r ).glint;
+		const g = widget.glint;
 
 		if( g ) arr.push( g );
 	}
@@ -363,7 +361,7 @@ def.lazy._glint =
 	arr.push(
 		gleam_glint_border.create(
 			'facet', this.facet,
-			'shape', this._tShape
+			'shape', this.tShape
 		)
 	);
 
@@ -396,7 +394,7 @@ def.lazy.tZone =
 /*
 | The disc's transformed shape.
 */
-def.lazy._tShape =
+def.lazy.tShape =
 	function( )
 {
 	return(
@@ -431,10 +429,7 @@ def.proto.pushButton =
 
 	const buttonName = path.get( 4 );
 
-	if(
-		buttonName === 'login'
-		&& this.user && !this.user.isVisitor
-	)
+	if( buttonName === 'login' && this.user && !this.user.isVisitor )
 	{
 		root.logout( );
 
@@ -537,12 +532,13 @@ def.proto.click =
 
 	const pp = p.sub( this.tZone.pos );
 
-	if( !this._tShape.within( pp ) ) return;
+	if( !this.tShape.within( pp ) ) return;
 
 	// this is on the disc
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		this.atRank( r ).click( pp, shift, ctrl );
+		// FIXME stop at hit
+		widget.click( pp, shift, ctrl );
 	}
 
 	return true;
@@ -562,14 +558,7 @@ def.proto.dragStart =
 	// shortcut if p is not near the panel
 	if( !this.tZone.within( p ) ) return;
 
-	if(
-		!this._tShape.within(
-			p.sub( this.tZone.pos )
-		)
-	)
-	{
-		return;
-	}
+	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
 
 	// the dragging operation is on the panel
 	// but it denies it.
@@ -632,14 +621,7 @@ def.proto.mousewheel =
 	// shortcut if p is not near the panel
 	if( !this.tZone.within( p ) ) return;
 
-	if(
-		!this._tShape.within(
-			p.sub( this.tZone.pos )
-		)
-	)
-	{
-		return;
-	}
+	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
 
 	return true;
 };
@@ -660,7 +642,7 @@ def.proto.pointingHover =
 
 	const pp = p.sub( this.tZone.pos );
 
-	if( !this._tShape.within( pp ) ) return;
+	if( !this.tShape.within( pp ) ) return;
 
 	// this is on the disc
 	for( let r = 0, rZ = this.length; r < rZ; r++ )
@@ -691,7 +673,7 @@ def.proto.probeClickDrag =
 	// shortcut if p is not near the panel
 	if( !this.tZone.within( p ) ) return;
 
-	if( !this._tShape.within( p.sub( this.tZone.pos ) ) ) return;
+	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
 
 	return 'atween';
 };

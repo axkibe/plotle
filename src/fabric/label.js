@@ -209,7 +209,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
 	return gleam_glint_list.create( 'list:init', arr );
@@ -391,9 +391,8 @@ def.proto.scrollMarkIntoView = ( ) => undefined;
 
 /*
 | The item's shape.
-| FIXME lazy
 */
-def.proto.shape = function( ){ return this.zone.shrink1; };
+def.lazy.shape = function( ){ return this.zone.shrink1; };
 
 
 } );

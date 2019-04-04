@@ -1152,10 +1152,7 @@ def.proto._onTouchEnd =
 	event.preventDefault( );
 
 	// for now ignore multi-touches
-	if( event.touches.length !== 0 )
-	{
-		return false;
-	}
+	if( event.touches.length !== 0 ) return false;
 
 	this._releaseEvents( );
 

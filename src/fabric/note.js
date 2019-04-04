@@ -199,7 +199,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
 	const sbary = this.scrollbarY;
@@ -385,7 +385,25 @@ def.proto.scrollMarkIntoView =
 /*
 | The notes shape.
 */
-def.proto.shape = function( ){ return this._shape; };
+def.lazy.shape =
+	function( )
+{
+	const zone = this.zone;
+
+	const cr = gruga_note.cornerRadius;
+
+	return(
+		gleam_roundRect.create(
+			'pos', zone.pos,
+			'width', zone.width,
+			'height', zone.height,
+			'a', cr,
+			'b', cr
+		)
+	);
+};
+
+
 
 
 /*
@@ -451,28 +469,6 @@ def.inherit._innerGlint =
 	);
 };
 
-
-
-/*
-| The notes shape.
-*/
-def.lazy._shape =
-	function( )
-{
-	const zone = this.zone;
-
-	const cr = gruga_note.cornerRadius;
-
-	return(
-		gleam_roundRect.create(
-			'pos', zone.pos,
-			'width', zone.width,
-			'height', zone.height,
-			'a', cr,
-			'b', cr
-		)
-	);
-};
 
 
 /*

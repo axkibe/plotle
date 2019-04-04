@@ -56,14 +56,14 @@ const result_hover = tim.require( '../result/hover' );
 def.lazy.glint =
 	function( )
 {
-	return gleam_glint_paint.createFS( gruga_scrollbar.facet, this._tShape );
+	return gleam_glint_paint.createFS( gruga_scrollbar.facet, this.tShape );
 };
 
 
 /*
 | Returns the transformed shape of the scrollbar.
 */
-def.lazy._tShape =
+def.lazy.tShape =
 	function( )
 {
 	const pos = this.pos;
@@ -109,7 +109,7 @@ def.proto.dragStart =
 		//ctrl     // true if ctrl or meta key was held down
 	)
 {
-	if( !this._tShape.within( p ) ) return undefined;
+	if( !this.tShape.within( p ) ) return undefined;
 
 	root.alter(
 		'action',
@@ -134,7 +134,7 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	if( !this._tShape.within( p ) ) return undefined;
+	if( !this.tShape.within( p ) ) return undefined;
 
 	return result_hover.cursorNSResize.create( 'path', this.path );
 };

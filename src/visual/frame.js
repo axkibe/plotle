@@ -169,8 +169,7 @@ def.lazy._shapeMask =
 
 	for( let ca of this.content )
 	{
-		// FIXME XXX privacy violation!
-		arr.push( ca._tShape( ).border( -12 ) );
+		arr.push( ca.tShape.border( -12 ) );
 	}
 
 	return gleam_shapeList.create( 'list:init', arr );

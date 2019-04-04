@@ -157,9 +157,9 @@ def.proto.ancillaryFrom =
 		item
 	)
 {
-	const shape = item.shape( );
+	const shape = item.shape;
 
-	const line = gleam_connect.line( shape, this.shape( ) );
+	const line = gleam_connect.line( shape, this.shape );
 
 	return line.p1;
 };
@@ -173,9 +173,9 @@ def.proto.ancillaryTo =
 		item
 	)
 {
-	const shape = item.shape( );
+	const shape = item.shape;
 
-	const line = gleam_connect.line( this.shape( ), shape );
+	const line = gleam_connect.line( this.shape, shape );
 
 	return line.p2;
 };
@@ -205,7 +205,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this._tShape( ) ) );
+		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
 	let fromGlint = this._getConnectionGlint( );
@@ -231,7 +231,7 @@ def.proto._getArrowGlint =
 	if( !to ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( this.shape( ), 'none', to, 'arrow' )
+		gleam_arrow.getArrowShape( this.shape, 'none', to, 'arrow' )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
@@ -249,7 +249,7 @@ def.proto._getConnectionGlint =
 	if( !from ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( from, 'none', this.shape( ), 'none' )
+		gleam_arrow.getArrowShape( from, 'none', this.shape, 'none' )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
