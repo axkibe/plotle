@@ -60,7 +60,8 @@ def.static.init =
 							'height', 100,
 							'width', 100
 						),
-					'fontsize', 13
+					'fontsize', 13,
+					'scrollPos', gleam_point.zero
 				)
 		)
 	);

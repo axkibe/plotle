@@ -147,15 +147,16 @@ def.lazy.fullsize =
 
 	const paraSep = this.paraSep;
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		const para = this.atRank( a );
+	let first = true;
 
+	for( let para of this )
+	{
 		const flow = para.flow;
 
 		width = max( width, flow.width );
 
-		if( a > 0 ) height += paraSep;
+		if( !first ) height += paraSep;
+		else first = false;
 
 		height += flow.height;
 	}
@@ -232,10 +233,8 @@ def.proto.getParaAtPoint =
 {
 	if( p.y < this.innerMargin.n ) return this.atRank( 0 );
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let para of this )
 	{
-		const para = this.atRank( r );
-
 		if( p.y < para.pos.y + para.flow.height ) return para;
 	}
 };
@@ -265,10 +264,7 @@ def.lazy.glint =
 		arr.push( this._caretGlint );
 	}
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		arr.push( this.atRank( r ).glint );
-	}
+	for( let para of this ) arr.push( para.glint );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
@@ -309,12 +305,8 @@ def.proto.input =
 def.lazy.isBlank =
 	function( )
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
-	{
-		const para = this.atRank( r );
-
+	for( let para of this )
 		if( !para.isBlank ) return false;
-	}
 
 	return true;
 };

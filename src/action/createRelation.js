@@ -126,10 +126,8 @@ def.proto.dragStart =
 	if( screen.timtype !== fabric_space ) return;
 
 	// see if one item was targeted
-	for( let a = 0, al = screen.length; a < al; a++ )
+	for( let item of screen )
 	{
-		const item = screen.atRank( a );
-
 		if( !item.pointWithin( p ) ) continue;
 
 		root.alter(
