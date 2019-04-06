@@ -21,9 +21,6 @@ if( TIM )
 
 		// enables the failScreen
 		failScreen : { type : 'boolean', defaultValue : 'false' },
-
-		// enables freeze checking
-		freeze : { type : 'boolean', defaultValue : 'true' },
 	};
 }
 

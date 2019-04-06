@@ -9,9 +9,9 @@ module.exports = {
     "globals": {
         "CHECK": true,
         "FAILSCREEN": true,
-        "FREEZE": true,
         "NODE": true,
         "TIM": true,
+        "VISUAL": true,
         "WEINRE": true,
         "opentype": true,
         "pass": true,

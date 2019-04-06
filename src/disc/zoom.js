@@ -221,9 +221,9 @@ def.lazy._glint =
 {
 	const arr = [ gleam_glint_fill.createFS( this.facet, this.tShape) ];
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const g = this.atRank( r ).glint;
+		const g = widget.glint;
 
 		if( g ) arr.push( g );
 	}
@@ -328,9 +328,9 @@ def.proto.pointingHover =
 	if( !this.tShape.within( pp ) ) return;
 
 	// it's on the disc
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const bubble = this.atRank( r ).pointingHover( pp, shift, ctrl );
+		const bubble = widget.pointingHover( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -356,10 +356,10 @@ def.proto.click =
 
 	if( !this.tShape.within( pp ) ) return;
 
-	// this is on the disc
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const bubble = this.atRank( r ).click( pp, shift, ctrl );
+		// this is on the disc
+		const bubble = widget.click( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -478,9 +478,9 @@ def.proto.dragStart =
 	if( !this.tShape.within( pp ) ) return;
 
 	// it's on the disc
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const bubble = this.atRank( r ).dragStart( pp, shift, ctrl );
+		const bubble = widget.dragStart( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}

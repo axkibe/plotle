@@ -19,9 +19,6 @@ if( TIM )
 		// if true enables checking code on server.
 		check : { type : 'boolean', defaultValue : 'true' },
 
-		// enable freeze checking on server.
-		freeze : { type : 'boolean', defaultValue : 'false' },
-
 		// if true writes manglemap and sourcemap.
 		report : { type : 'boolean', defaultValue : 'false' },
 

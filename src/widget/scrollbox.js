@@ -357,14 +357,12 @@ def.proto.click =
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).click( p, shift, ctrl );
+		const bubble = widget.click( p, shift, ctrl );
 
-		if( res !== undefined ) return res;
+		if( bubble !== undefined ) return bubble;
 	}
-
-	return undefined;
 };
 
 
@@ -398,14 +396,12 @@ def.proto.dragStart =
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).click( p, shift, ctrl );
+		const bubble = widget.click( p, shift, ctrl );
 
-		if( res !== undefined ) return res;
+		if( bubble !== undefined ) return bubble;
 	}
-
-	return undefined;
 };
 
 
@@ -434,14 +430,12 @@ def.proto.pointingHover =
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const bubble = this.atRank( r ).pointingHover( p, shift, ctrl );
+		const bubble = widget.pointingHover( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
-
-	return undefined;
 };
 
 
@@ -464,11 +458,11 @@ def.proto.mousewheel =
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
 
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+		const bubble = widget.mousewheel( p, dir, shift, ctrl );
 
-		if( res ) return res;
+		if( bubble ) return bubble;
 	}
 
 	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;

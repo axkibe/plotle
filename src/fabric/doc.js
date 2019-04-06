@@ -53,6 +53,7 @@ if( TIM )
 	def.twig = [ './para' ];
 }
 
+
 const fabric_para = tim.require( './para' );
 
 const gleam_facet = tim.require( '../gleam/facet' );
@@ -183,7 +184,7 @@ def.adjust.get =
 
 	const path = this.path && this.path.append( 'twig' ).append( key );
 
-	if( !NODE )
+	if( VISUAL )
 	{
 		const innerMargin = this.innerMargin;
 

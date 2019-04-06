@@ -229,7 +229,7 @@ let pointingState = false;
 
 
 const keyCodeNames =
-	new Map( [
+	Object.freeze( new Map( [
 		[  8, 'backspace' ],
 		[  9, 'tab'       ],
 		[ 13, 'enter'     ],
@@ -245,10 +245,10 @@ const keyCodeNames =
 		[ 39, 'right'     ],
 		[ 40, 'down'      ],
 		[ 46, 'del'       ]
-	] );
+	] ) );
 
 const keyCodeNamesCtrl =
-	new Map( [
+	Object.freeze( new Map( [
 		[  16, 'shift' ],
 		[  17, 'ctrl'  ],
 		[  65, 'a'     ],
@@ -256,10 +256,7 @@ const keyCodeNamesCtrl =
 		[  90, 'z'     ],
 		[ 188, ','     ],
 		[ 190, '.'     ]
-	] );
-
-
-/**/if( FREEZE ) Object.freeze( keyCodeNames, keyCodeNamesCtrl );
+	] ) );
 
 
 /*

@@ -78,6 +78,8 @@ def.static.develHtml =
 	{
 		const res = inventory.atRank( a );
 
+		if( res.filePath === 'global-testpad.js' ) continue;
+
 		if( res.inBundle )
 		{
 			devels.push(

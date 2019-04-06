@@ -11,14 +11,12 @@ tim.define( module, ( def ) => {
 | cache control mappings for max age
 */
 const mapping =
-	{
+	Object.freeze( {
 		none : 'no-cache',
 		short : 'max-age=' + ( 60 * 60 ),
 		long : 'max-age=' + ( 60 * 60 * 24 * 365 )
-	};
+	} );
 
-
-/**/if( FREEZE ) Object.freeze( mapping );
 
 /*
 | Maps a maxage setting to a cache control.

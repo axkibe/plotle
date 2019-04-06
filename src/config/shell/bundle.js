@@ -30,9 +30,6 @@ if( TIM )
 		// enables the failScreen
 		failScreen : { type : 'boolean', defaultValue : 'true' },
 
-		// enables freeze checking
-		freeze : { type : 'boolean', defaultValue : 'false' },
-
 		// enables minifying
 		minify : { type : 'boolean', defaultValue : 'true' },
 	};

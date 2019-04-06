@@ -70,8 +70,6 @@ def.proto.transform =
 
 	if( tp ) return tp;
 
-	if( !FREEZE && !this._tPool ) this._tPool = { };
-
 	tp =
 	this._tPool[ transform.zoom ] =
 		this.create( 'size', this.size * transform.zoom );

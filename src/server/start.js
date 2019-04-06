@@ -18,16 +18,20 @@ Object.defineProperty(
 );
 
 
-// Running node normaly, TIM is false.
+// running node normaly, TIM is false.
 global.TIM = false;
 
 
-// This is node.
+// this is node.
 global.NODE = true;
 
 
-// Server checking (first true, later override by config)
+// server checking (first true, later override by config)
 global.CHECK = true;
+
+
+// server isn't a visual
+global.VISUAL = false;
 
 
 // Registers with tim.js
@@ -57,10 +61,6 @@ require( '../../config' )( config.set );
 
 // Server checking.
 global.CHECK = config.get( 'server', 'check' );
-
-
-// Server object freezing.
-global.FREEZE = config.get( 'server', 'freeze' );
 
 
 const log = require( './log' );
@@ -231,4 +231,5 @@ const startup =
 };
 
 
-startup( ).catch( ( error ) => console.error( error ) );
+startup( )
+.catch( ( error ) => { console.error( error ); process.exit( -1 ); } );

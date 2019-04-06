@@ -45,9 +45,7 @@ def.staticLazy._layoutMap =
 	map.set( layout_label, widget_label );
 	map.set( layout_scrollbox, widget_scrollbox );
 
-	if( FREEZE ) Object.freeze( map );
-
-	return map;
+	return Object.freeze( map );
 };
 
 

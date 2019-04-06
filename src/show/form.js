@@ -18,7 +18,7 @@ if( TIM )
 
 
 const validForms =
-{
+Object.freeze ( {
 	// loading a space.
 	'loading' : true,
 
@@ -46,10 +46,7 @@ const validForms =
 
 	// welcome view
 	'welcome' : true
-};
-
-
-if( FREEZE ) Object.freeze( validForms );
+} );
 
 
 /**
@@ -65,13 +62,10 @@ if( FREEZE ) Object.freeze( validForms );
 /**/}
 
 
-
-
-/* jshint -W083 */
 for( let formName in validForms )
 {
 	def.staticLazy[ formName ] =
-		( formName => show_form.create( 'formName', formName ) )
+		( ( formName ) => show_form.create( 'formName', formName ) )
 		.bind( undefined, formName );
 }
 

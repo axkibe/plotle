@@ -270,8 +270,7 @@ def.inherit._glint =
 		inherit
 	)
 {
-	// FUTURE for now don't optimize this in server.
-	if( NODE ) return false;
+	if( !VISUAL ) return false;
 
 	const itransform = inherit.transform;
 	const ttransform = this.transform;

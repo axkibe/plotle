@@ -460,9 +460,9 @@ def.proto.pushButton =
 
 				let rc = 0;
 
-				for( let r = 0, rZ = ranks.length; r < rZ; r++ )
+				for( let r of ranks )
 				{
-					if( ranks[ r ] <= rank ) rc++;
+					if( r <= rank ) rc++;
 				}
 
 				ranks.push( rank );
@@ -645,11 +645,9 @@ def.proto.pointingHover =
 	if( !this.tShape.within( pp ) ) return;
 
 	// this is on the disc
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const bubble =
-			this.atRank( r )
-			.pointingHover( pp, shift, ctrl );
+		const bubble = widget.pointingHover( pp, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}

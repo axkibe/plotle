@@ -124,38 +124,41 @@ def.proto.loadSpaces =
 */
 def.proto.shellGlobals =
 	function(
-		mode
+		mode,
+		target
 	)
 {
 /**/if( CHECK )
 /**/{
 /**/	if( mode !== 'bundle' && mode !== 'devel' ) throw new Error( );
+/**/
+/**/	if( target !== 'shell' && target !== 'testpad' ) throw new Error( );
 /**/}
 
-	const g =
+	return(
 		Object.freeze ( {
 			CHECK: config.get( 'shell', mode, 'check' ),
-			// FIXME remove
-			FREEZE : config.get( 'shell', mode, 'freeze' ),
 			NODE : false,
 			TIM : false,
 			FAILSCREEN : config.get( 'shell', mode, 'failScreen' ),
+			VISUAL : target === 'shell',
 			WEINRE : config.get( 'shell', 'weinre' )
-		} );
-
-	return g;
+		} )
+	);
 };
 
 
 /*
 | The shell's globals as resource.
 */
-def.lazy.shellGlobalsResource =
-	function( )
+def.proto.shellGlobalsResource =
+	function(
+		target   // 'shell' or 'testpad'
+	)
 {
 	let text = '';
 
-	const globals = this.shellGlobals( 'devel' );
+	const globals = this.shellGlobals( 'devel', target );
 
 	const keys = Object.keys( globals ).sort( );
 
@@ -169,9 +172,9 @@ def.lazy.shellGlobalsResource =
 	return(
 		server_resource.create(
 			'data', text,
-			'filePath', 'global.js',
+			'filePath', 'global-' + target + '.js',
 			'inBundle', true,
-			'inTestPad', true
+			'inTestPad', target === 'testpad'
 		)
 	);
 };
@@ -197,12 +200,14 @@ def.proto.buildBundle =
 
 			if( !resource.inBundle ) continue;
 
-			if( resource.filePath === 'global.js' ) continue;
+			if( resource.filePath === 'global-shell.js' ) continue;
+
+			if( resource.filePath === 'global-testpad.js' ) continue;
 
 			code[ resource.aliases.get( 0 ) ] = resource.data + '';
 		}
 
-		const globals = this.shellGlobals( 'bundle' );
+		const globals = this.shellGlobals( 'bundle', 'shell' );
 
 		const options =
 		{
@@ -266,12 +271,16 @@ def.proto.prepareInventory =
 {
 	log.log( 'preparing inventory' );
 
-	root.create( 'inventory', root.inventory.updateResource( root.shellGlobalsResource ) );
-
 	const devel = config.get( 'shell', 'devel', 'enable' );
 
-	// prepares ressources from the roster
+	root.create(
+		'inventory',
+		root.inventory
+		.updateResource( root.shellGlobalsResource( 'shell' ) )
+		.updateResource( root.shellGlobalsResource( 'testpad' ) )
+	);
 
+	// prepares ressources from the roster
 	const roster = server_roster.roster;
 
 	for( let a = 0, al = roster.length; a < al; a++ )
@@ -283,7 +292,7 @@ def.proto.prepareInventory =
 		await root.inventory.prepareResource( resource );
 	}
 
-	// prepares ressources form the the shell
+	// prepares resources form the the shell
 	{
 		const entry = '../shell/start';
 
@@ -315,7 +324,7 @@ def.proto.prepareInventory =
 		}
 	}
 
-	// prepares ressources for the testpad
+	// prepares resources for the testpad
 	{
 		const entry = '../testpad/root';
 
