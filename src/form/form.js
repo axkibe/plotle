@@ -137,11 +137,11 @@ def.proto.click =
 		ctrl
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).click( p, shift, ctrl );
+		const bubble = widget.click( p, shift, ctrl );
 
-		if( res ) return res;
+		if( bubble ) return bubble;
 	}
 
 	return false;
@@ -158,11 +158,11 @@ def.proto.dragStart =
 		ctrl
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).dragStart( p, shift, ctrl );
+		const bubble = widget.dragStart( p, shift, ctrl );
 
-		if( res ) return res;
+		if( bubble ) return bubble;
 	}
 
 	return false;

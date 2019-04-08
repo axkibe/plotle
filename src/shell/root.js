@@ -890,39 +890,39 @@ def.proto.changeSpaceTransformAll =
 {
 	const space = root._actionSpace;
 
-	const rZ = space.length;
+	let first = true;
 
-	if( rZ === 0 ) return;
+	let wx, ny, ex, sy;
 
-	let item = space.atRank( 0 );
-
-	let zone = item.zone;
-
-	let pos = item.pos || zone.pos;
-
-	let wx = pos.x;
-
-	let ny = pos.y;
-
-	let ex = wx + zone.width;
-
-	let sy = ny + zone.height;
-
-	for( let r = 1; r < rZ; r++ )
+	// FIXME make this calculation part of space
+	for( let item of space )
 	{
-		item = space.atRank( r );
+		const zone = item.zone;
 
-		pos = item.pos;
+		const pos = zone.pos;
 
-		if( !pos ) { zone = item.zone; pos = zone.pos; }
+		if( first )
+		{
+			wx = pos.x;
 
-		if( pos.x < wx ) wx = pos.x;
+			ny = pos.y;
 
-		if( pos.y < ny ) ny = pos.y;
+			ex = pos.x + zone.width;
 
-		if( pos.x + zone.width > ex ) ex = pos.x + zone.width;
+			sy = pos.y + zone.height;
 
-		if( pos.y + zone.height > sy ) sy = pos.y + zone.height;
+			first = false;
+		}
+		else
+		{
+			if( pos.x < wx ) wx = pos.x;
+
+			if( pos.y < ny ) ny = pos.y;
+
+			if( pos.x + zone.width > ex ) ex = pos.x + zone.width;
+
+			if( pos.y + zone.height > sy ) sy = pos.y + zone.height;
+		}
 	}
 
 	// center

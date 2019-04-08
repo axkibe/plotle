@@ -556,6 +556,8 @@ def.proto.within =
 		border  // additional border
 	)
 {
+	if( arguments.length !== 1 ) throw new Error( 'FIXME' );
+
 	border = border || 0;
 
 	const x = p.x;
