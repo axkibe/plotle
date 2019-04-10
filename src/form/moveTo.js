@@ -246,7 +246,9 @@ def.proto._transformScrollbox =
 
 	let sbPath = this.path.append( 'twig' ).append( 'scrollbox' );
 
-	if( this.userSpaceList )
+	const userSpaceList = this.userSpaceList;
+
+	if( userSpaceList )
 	{
 		let c = 0; // current column
 
@@ -254,18 +256,18 @@ def.proto._transformScrollbox =
 
 		let r = 1; // current row
 
-		for( let a = 0, aZ = this.userSpaceList.length; a < aZ; a++ )
+		const uslLen = userSpaceList.length;
+
+		for( let rSpace of userSpaceList )
 		{
 			if( r >= this._rows )
 			{
-				cLen = aZ % this._cols;
+				cLen = uslLen % this._cols;
 
 				if( cLen === 0 ) cLen = this._cols;
 
 				cOff = ( this._cols - cLen ) / 2;
 			}
-
-			const rSpace = this.userSpaceList.get( a );
 
 			const fullname = rSpace.fullname;
 

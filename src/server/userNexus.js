@@ -66,9 +66,9 @@ def.proto.addUserSpaceRef =
 	// current space list
 	const csl = dsl.current;
 
-	for( let a = 0, aZ = csl.length; a < aZ; a++ )
+	for( let r of csl )
 	{
-		if( csl.get( a ).equals( spaceRef ) ) throw new Error( );
+		if( r.equals( spaceRef ) ) throw new Error( );
 	}
 
 	dsl =

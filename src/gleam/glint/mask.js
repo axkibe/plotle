@@ -15,7 +15,7 @@ if( TIM )
 		glint : { type : './list' },
 
 		// true if reversing mask
-		reverse : { type : [ 'undefined', 'boolean' ] },
+		reversed : { type : [ 'undefined', 'boolean' ] },
 
 		// the shape(list) to mask to
 		shape : { type : [ '< ../shape-types', '../shapeList' ] }

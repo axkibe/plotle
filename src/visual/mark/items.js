@@ -21,25 +21,54 @@ const change_mark_node = tim.require( '../../change/mark/node' );
 const pathList = tim.require( 'tim.js/pathList' );
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
+/**/	for( let path of this.itemPaths )
 /**/	{
-/**/		const paths = this.itemPaths;
+/**/		if( path.isEmpty ) throw new Error( );
 /**/
-/**/		for( let c = 0, cZ = paths.length; c < cZ; c++ )
-/**/		{
-/**/			if( paths.get( c ).isEmpty ) throw new Error( );
-/**/
-/**/			if( paths.get( c ).get( 0 ) !== 'space' ) throw new Error( );
-/**/		}
-/**/	};
+/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
+/**/	}
 /**/}
+};
 
+
+/*
+| The content the mark puts into the clipboard.
+|
+| FUTURE write something
+*/
+def.proto.clipboard = '';
+
+
+
+/*
+| Recreates this mark with changes applied.
+*/
+def.proto.createTransformed =
+	function(
+		changes
+	)
+{
+	const arr = [ ];
+
+	for( let path of this.itemPaths )
+	{
+		const tm = changes.transform( this._changeMarkNode( path ) );
+
+		if( tm ) arr.push( tm.path.prepend( 'space' ) );
+	}
+
+	if( arr.length === 0 ) return undefined;
+
+	return this.create( 'itemPaths', this.itemPaths.create( 'list:init', arr ) );
+};
 
 
 /*
@@ -58,43 +87,6 @@ def.static.createWithOne =
 
 
 /*
-| The change engine's nodemark.
-*/
-def.lazyFuncInt._changeMarkNode =
-	function(
-		i
-	)
-{
-	return change_mark_node.create( 'path', this.itemPaths.get( i ).chop );
-};
-
-
-/*
-| Recreates this mark with a change set applied.
-*/
-def.proto.createTransformed =
-	function(
-		changes
-	)
-{
-	const paths = this.itemPaths;
-
-	const arr = [ ];
-
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
-	{
-		const tm = changes.transform( this._changeMarkNode( a ) );
-
-		if( tm ) arr.push( tm.path.prepend( 'space' ) );
-	}
-
-	if( arr.length === 0 ) return undefined;
-
-	return this.create( 'itemPaths', this.itemPaths.create( 'list:init', arr ) );
-};
-
-
-/*
 | Item marks do not have a caret.
 */
 def.proto.hasCaret = false;
@@ -104,14 +96,6 @@ def.proto.hasCaret = false;
 | The widget's path.
 */
 def.proto.widgetPath = undefined;
-
-
-/*
-| The content the mark puts into the clipboard.
-|
-| FUTURE write something
-*/
-def.proto.clipboard = '';
 
 
 /*
@@ -125,14 +109,12 @@ def.proto.containsPath =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.length === 0 )	throw new Error( );
+/**/	if( path.empty ) throw new Error( );
 /**/}
 
-	const paths = this.itemPaths;
-
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let p of this.itemPaths )
 	{
-		if( path.subPathOf( paths.get( a ) ) ) return true;
+		if( path.subPathOf( p ) ) return true;
 	}
 
 	return false;
@@ -156,9 +138,9 @@ def.proto.togglePath =
 
 	const paths = this.itemPaths;
 
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
+	for( let a = 0, al = paths.length; a < al; a++ )
 	{
-		if( path.subPathOf( paths.get( a ) ) )
+		if( path.equals( paths.get( a ) ) )
 		{
 			return this.create( 'itemPaths', this.itemPaths.create( 'list:remove', a ) );
 		}
@@ -169,27 +151,14 @@ def.proto.togglePath =
 
 
 /*
-| Returns true if an entity of this mark
-| contains 'path'.
+| The change engine's nodemark.
 */
-def.proto.containsPath =
+def.proto._changeMarkNode =
 	function(
 		path
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( path.empty ) throw new Error( );
-/**/}
-
-	const paths = this.itemPaths;
-
-	for( let a = 0, aZ = paths.length; a < aZ; a++ )
-	{
-		if( path.subPathOf( paths.get( a ) ) ) return true;
-	}
-
-	return false;
+	return change_mark_node.create( 'path', path.chop );
 };
 
 

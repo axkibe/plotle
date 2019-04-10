@@ -144,10 +144,8 @@ def.proto.dragStop =
 
 	let paths = [ ];
 
-	for( let r = 0, rZ = screen.length; r < rZ; r++ )
+	for( let item of screen )
 	{
-		const item = screen.atRank( r );
-
 		if( action.affectsItem( item ) ) paths.push( item.path );
 	}
 

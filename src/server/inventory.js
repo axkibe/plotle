@@ -38,10 +38,8 @@ def.proto.updateResource =
 {
 	let inv = this;
 
-	for( let a = 0, aZ = resource.aliases.length; a < aZ; a++ )
+	for( let alias of resource.aliases )
 	{
-		const alias = resource.aliases.get( a );
-
 		inv =
 			inv.create(
 				inv.get( alias ) ? 'twig:set' : 'twig:add',
@@ -64,9 +62,9 @@ def.proto.removeResource =
 {
 	let inv = this;
 
-	for( let a = 0, aZ = resource.aliases.length; a < aZ; a++ )
+	for( let alias of resource.aliases )
 	{
-		inv = inv.create( 'twig:remove', resource.aliases.get( a ), resource );
+		inv = inv.create( 'twig:remove', alias, resource );
 	}
 
 	return inv;

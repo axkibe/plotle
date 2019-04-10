@@ -26,14 +26,11 @@ def.proto.border =
 		d // distance to border
 	)
 {
-	const arr = [ ];
+	const a = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		arr[ a ] = this.get( a ).border( d );
-	}
+	for( let shape of this ) a.push( shape.border( d ) );
 
-	return( this.create( 'list:init', arr ) );
+	return( this.create( 'list:init', a ) );
 };
 
 
@@ -53,10 +50,7 @@ def.proto.transform =
 
 	const list = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		list[ a ] = this.get( a ).transform( transform );
-	}
+	for( let shape of this ) list.push( shape.transform( transform ) );
 
 	return this.create( 'list:init', list );
 };
@@ -70,14 +64,10 @@ def.proto.within =
 		p
 	)
 {
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		if( this.get( a ).within( p ) ) return true;
-	}
+	for( let shape of this ) if( shape.within( p ) ) return true;
 
 	return false;
 };
 
 
 } );
-

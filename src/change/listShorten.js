@@ -31,12 +31,12 @@ const error = tim.require( './error' );
 /*
 | Returns the inversion to this change.
 */
-def.lazy.reverse =
+def.lazy.reversed =
 	function( )
 {
 	const inv = change_listShorten.create( 'val', this.val );
 
-	tim.aheadValue( inv, 'reverse', this );
+	tim.aheadValue( inv, 'reversed', this );
 
 	return inv;
 };

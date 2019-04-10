@@ -123,20 +123,14 @@ def.static.createFromLayout =
 
 	const twig = { };
 
-	for( let a = 0, aZ = layout.length; a < aZ; a++ )
+	for( let key of layout.keys )
 	{
-		const key = layout.getKey( a );
-
-		const iLayout = layout.get( key );
-
-		const item =
+		twig[ key ] =
 			widget_factory.createFromLayout(
-				iLayout,
+				layout.get( key ),
 				path.append( 'twig' ).append( key ),
 				transform
 			);
-
-		twig[ key ] = item;
 	}
 
 	return(

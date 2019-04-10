@@ -71,7 +71,7 @@ def.lazy.glint =
 		gleam_glint_mask.create(
 			'glint', this._glintFrame,
 			'shape', this._shapeMask,
-			'reverse', true
+			'reversed', true
 		)
 	);
 };

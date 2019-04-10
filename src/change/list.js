@@ -41,9 +41,9 @@ def.lazy.affectedTwigItems =
 {
 	const affected = new Set( );
 
-	for( let ch of this )
+	for( let change of this )
 	{
-		const path = ch.path;
+		const path = change.path;
 
 		if( path.length < 2 ) continue;
 
@@ -67,10 +67,10 @@ def.proto.changeTree =
 	)
 {
 	// iterates through the change list
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let change of this )
 	{
 		// the tree returned by op-handler is the new tree
-		tree = this.get( a ).changeTree( tree );
+		tree = change.changeTree( tree );
 	}
 
 	return tree;
@@ -85,9 +85,9 @@ def.proto.changeTreeReverse =
 		tree
 	)
 {
-	for( let a = this.length - 1; a >= 0; a-- )
+	for( let change of this.reverse( ) )
 	{
-		tree = this.get( a ).changeTreeReverse( tree );
+		tree = change.changeTreeReverse( tree );
 	}
 
 	return tree;
@@ -126,19 +126,19 @@ def.proto.transform =
 /*
 | Returns a change list with reversed changes.
 */
-def.lazy.reverse =
+def.lazy.reversed =
 	function( )
 {
 	const arr = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let a = 0, al = this.length; a < al; a++ )
 	{
-		arr[ a ] = this.get( aZ - 1 - a ).reverse;
+		arr[ a ] = this.get( al - 1 - a ).reversed;
 	}
 
 	const result = change_list.create( 'list:init', arr );
 
-	tim.aheadValue( result, 'reverse', this );
+	tim.aheadValue( result, 'reversed', this );
 
 	return result;
 };
@@ -153,15 +153,10 @@ def.lazy.reverse =
 */
 def.proto._transformSingle =
 	function(
-		c
+		cx
 	)
 {
-	let cx = c;
-
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		cx = this.get( a ).transform( cx );
-	}
+	for( let ch of this ) cx = ch.transform( cx );
 
 	return cx;
 };
@@ -178,10 +173,7 @@ def.proto._transformChangeList =
 		cList
 	)
 {
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		cList = this.get( a ).transform( cList );
-	}
+	for( let change of this ) cList = change.transform( cList );
 
 	return cList;
 };
@@ -209,9 +201,9 @@ def.proto._transformChangeWrapList =
 {
 	const tList = [ ];
 
-	for( let r = 0, rZ = cwList.length; r < rZ; r++ )
+	for( let cw of cwList )
 	{
-		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
+		tList.push( this._transformChangeWrap( cw ) );
 	}
 
 	return cwList.create( 'list:init', tList );

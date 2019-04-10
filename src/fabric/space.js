@@ -429,11 +429,9 @@ def.lazy.glint =
 	// true or undefined -> show grid
 	if( this.hasGrid ) arr.push( this._grid.glint );
 
-	for( let r = this.length - 1; r >= 0; r-- )
+	for( let item of this.reverse( ) )
 	{
-		const s = this.atRank( r );
-
-		arr.push( s.glint );
+		arr.push( item.glint );
 	}
 
 	const frame = this.frame;

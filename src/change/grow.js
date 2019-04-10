@@ -69,7 +69,7 @@ const error = tim.require( './error' );
 /**/}
 
 
-def.lazy.reverse =
+def.lazy.reversed =
 	function( )
 {
 	const inv =
@@ -79,7 +79,7 @@ def.lazy.reverse =
 			'rank', this.rank
 		);
 
-	tim.aheadValue( inv, 'reverse', this );
+	tim.aheadValue( inv, 'reversed', this );
 
 	return inv;
 };

@@ -620,7 +620,7 @@ def.proto._renderMask =
 		{
 			cx.beginPath( );
 
-			if( glint.reverse )
+			if( glint.reversed )
 			{
 				cx.moveTo( 0, 0 );
 				cx.lineTo( 0, h );
@@ -638,7 +638,7 @@ def.proto._renderMask =
 	{
 		cx.beginPath( );
 
-		if( glint.reverse )
+		if( glint.reversed )
 		{
 			cx.moveTo( 0, 0 );
 			cx.lineTo( 0, h );

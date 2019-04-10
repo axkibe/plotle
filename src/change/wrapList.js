@@ -18,14 +18,14 @@ if( TIM )
 /*
 | Creates an inverted changeWrapList.
 */
-def.proto.createReverse =
+def.proto.createReversed =
 	function( )
 {
 	const iList = [ ];
 
 	for( let a = 0, al = this.length; a < al; a++ )
 	{
-		iList[ a ] = this.get( al - 1 - a ).createReverse( );
+		iList[ a ] = this.get( al - 1 - a ).createReversed( );
 	}
 
 	return change_wrapList.create( 'list:init', iList );

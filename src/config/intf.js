@@ -70,9 +70,9 @@ def.static.get =
 {
 	let entry = config;
 
-	for( let a = 0, aZ = arguments.length; a < aZ; a++ )
+	for( let a of arguments )
 	{
-		entry = entry[ arguments[ a ] ];
+		entry = entry[ a ];
 	}
 
 /**/if( CHECK )

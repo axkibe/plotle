@@ -37,10 +37,8 @@ def.static.createFromChangeWrapList =
 {
 	const list = [ ];
 
-	for( let a = 0, aZ = changeWrapList.length; a < aZ; a++ )
+	for( let cw of changeWrapList )
 	{
-		const cw = changeWrapList.get( a );
-
 		if( !cw ) continue;
 
 		const cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
@@ -62,10 +60,7 @@ def.lazy.asChangeWrapList =
 {
 	const list = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		list[ a ] = this.get( a ).asChangeWrap;
-	}
+	for( let cs of this ) list.push( cs.asChangeWrap );
 
 	return change_wrapList.create( 'list:init', list );
 };

@@ -26,7 +26,7 @@ def.proto.getFacet =
 		// ...
 	)
 {
-	const aZ = arguments.length;
+	const al = arguments.length;
 
 	for( let r = this.length - 1; r >= 0; r-- )
 	{
@@ -34,12 +34,9 @@ def.proto.getFacet =
 
 		let matches = 0;
 
-		for( let a = 0; a < aZ; a += 2 )
+		for( let a = 0; a < al; a += 2 )
 		{
-			if( f.get( arguments[ a ] ) === arguments[ a + 1 ] )
-			{
-				matches++;
-			}
+			if( f.get( arguments[ a ] ) === arguments[ a + 1 ] ) matches++;
 		}
 
 		if( matches === f.size ) return f;

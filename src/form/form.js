@@ -304,11 +304,11 @@ def.proto.mousewheel =
 		ctrl
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).mousewheel( p, dir, shift, ctrl );
+		const bubble = widget.mousewheel( p, dir, shift, ctrl );
 
-		if( res ) return res;
+		if( bubble ) return bubble;
 	}
 
 	return false;
@@ -325,11 +325,11 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	for( let r = 0, rZ = this.length; r < rZ; r++ )
+	for( let widget of this )
 	{
-		const res = this.atRank( r ).pointingHover( p, shift, ctrl );
+		const bubble = widget.pointingHover( p, shift, ctrl );
 
-		if( res ) return res;
+		if( bubble ) return bubble;
 	}
 
 	return result_hover.cursorDefault;

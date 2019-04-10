@@ -630,8 +630,6 @@ def.lazy.tFont =
 def.lazy._glint =
 	function( )
 {
-	const flow = this.flow;
-
 	const tFont = this.tFont;
 
 	const arr = [ ];
@@ -640,14 +638,10 @@ def.lazy._glint =
 
 	// draws text into the display
 
-	for( let a = 0, aZ = flow.length; a < aZ; a++ )
+	for( let line of this.flow )
 	{
-		const line = flow.get( a );
-
-		for( let b = 0, bZ = line.length; b < bZ; b++ )
+		for( let token of line )
 		{
-			const token = line.get( b );
-
 			arr.push(
 				gleam_glint_text.create(
 					'font', tFont,

@@ -241,14 +241,12 @@ def.lazy._glint =
 
 	if( this.password )
 	{
-		const pm = this._passMask;
-
-		for( let a = 0, aZ = pm.length; a < aZ; a++ )
+		for( let shape of this._passMask )
 		{
 			arr.push(
 				gleam_glint_fill.create(
 					'facet', gleam_facet.blackFill,
-					'shape', pm[ a ]
+					'shape', shape
 				)
 			);
 		}
@@ -258,11 +256,7 @@ def.lazy._glint =
 		arr.push(
 			gleam_glint_text.create(
 				'font', font,
-				'p',
-					gleam_point.create(
-						'x', pitch.x,
-						'y', font.size + pitch.y
-					),
+				'p', gleam_point.xy( pitch.x, font.size + pitch.y ),
 				'text', value
 			)
 		);
@@ -727,7 +721,7 @@ def.lazy._passMask =
 
 	const k = this.maskKern( size );
 
-	for( let a = 0, aZ = value.length; a < aZ; a++, x += w + k )
+	for( let a = 0, al = value.length; a < al; a++, x += w + k )
 	{
 		pm[ a ] =
 			gleam_ellipse.create(

@@ -443,10 +443,8 @@ def.proto._gotUpdateSpace =
 
 	space = postbox.changeTreeReverse( space );
 
-	for( let a = 0, aZ = changeWrapList.length; a < aZ; a++ )
+	for( let changeWrap of changeWrapList )
 	{
-		const changeWrap = changeWrapList.get( a );
-
 		// applies changes to the space
 		space = changeWrap.changeTree( space );
 

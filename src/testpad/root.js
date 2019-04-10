@@ -855,16 +855,14 @@ def.proto.makeScreen =
 	// splits up the doc into
 	// an array of lines which are
 	// an array of chars
-	for( let a = 0, aZ = doc.length; a < aZ; a++ )
+	for( let para of doc )
 	{
-		lines.push( doc.atRank( a ).text.split( '' ) );
+		lines.push( para.text.split( '' ) );
 	}
 
 	// replaces HTML entities
-	for( let a = 0, aZ = lines.length; a < aZ; a++ )
+	for( let line of lines )
 	{
-		const line = lines[ a ];
-
 		for( let b = 0, bZ = line.length; b < bZ; b++ )
 		{
 			switch( line[ b ] )

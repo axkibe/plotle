@@ -90,10 +90,8 @@ def.proto.dragMove =
 	}
 
 	// Looks if this action is dragging over an item
-	for( let r = 0, rZ = screen.length; r < rZ; r++ )
+	for( let item of screen )
 	{
-		const item = screen.atRank( r );
-
 		if( item.tZone.within( p ) )
 		{
 			root.alter( 'action', this.create( 'toItemPath', item.path ) );

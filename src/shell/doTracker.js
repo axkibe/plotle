@@ -160,7 +160,7 @@ def.proto.undo =
 
 	undo = undo.remove( undo.length - 1 );
 
-	changeWrap = changeWrap.createReverse( );
+	changeWrap = changeWrap.createReversed( );
 
 	root.alter(
 		'changeWrap', changeWrap,
@@ -190,7 +190,7 @@ def.proto.redo =
 
 	let changeWrap = redo.get( redo.length - 1 );
 
-	changeWrap = changeWrap.createReverse( );
+	changeWrap = changeWrap.createReversed( );
 
 	redo = redo.remove( redo.length - 1 );
 

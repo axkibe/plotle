@@ -56,7 +56,7 @@ const error = tim.require( './error' );
 /*
 | Returns the inversion to this change.
 */
-def.lazy.reverse =
+def.lazy.reversed =
 	function( )
 {
 	const inv =
@@ -66,7 +66,7 @@ def.lazy.reverse =
 			'prev', this.val
 		);
 
-	tim.aheadValue( inv, 'reverse', this );
+	tim.aheadValue( inv, 'reversed', this );
 
 	return inv;
 };

@@ -45,30 +45,20 @@ def.proto.border =
 		d // distance to border
 	)
 {
-	const arr = [ ];
+	const a = [ ];
 
 	const pc = this.pc;
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let section of this )
 	{
-		const section = this.get( a );
+		if( section.close ) { a.push( section ); continue; }
 
-		if( section.close )
-		{
-			arr[ a ] = section;
-
-			continue;
-		}
-
-		const p = section.p;
-
-		arr[ a ] =
-			section.create(
-				'p', p.border( pc, d )
-			);
+		a.push(
+			section.create( 'p', section.p.border( pc, d ) )
+		);
 	}
 
-	return this.create( 'list:init', arr );
+	return this.create( 'list:init', a );
 };
 
 
@@ -95,7 +85,9 @@ def.proto.getProjection =
 
 	let pn;
 
-	for( let r = 1, rZ = this.length; r < rZ; r++ )
+	let first = true;
+
+	for( let section of this )
 	{
 /**/	if( CHECK )
 /**/	{
@@ -103,7 +95,7 @@ def.proto.getProjection =
 /**/		if( !pstart ) throw new Error( );
 /**/	}
 
-		const section = this.get( r );
+		if( first ) { first = false; continue; }
 
 		if( section.close )
 		{
@@ -142,14 +134,14 @@ def.proto.transform =
 /**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
-	const arr = [ ];
+	const a = [ ];
 
-	for( let a = 0, aZ = this.length; a < aZ; a++ )
+	for( let section of this )
 	{
-		arr[ a ] = this.get( a ).transform( transform );
+		a.push( section.transform( transform ) );
 	}
 
-	return this.create( 'list:init', arr );
+	return this.create( 'list:init', a );
 };
 
 

@@ -173,8 +173,8 @@ def.lazy.clipboard =
 	];
 
 	for(
-		let r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
-		r < rZ;
+		let r = doc.rankOf( frontKey ) + 1, rl = doc.rankOf( backKey );
+		r < rl;
 		r++
 	)
 	{

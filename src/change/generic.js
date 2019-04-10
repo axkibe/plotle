@@ -24,7 +24,7 @@ def.proto.changeTreeReverse =
 		tree
 	)
 {
-	return this.reverse.changeTree( tree );
+	return this.reversed.changeTree( tree );
 };
 
 

@@ -34,13 +34,13 @@ const session_uid = tim.require( '../session/uid' );
 |
 | This one has a distinct change id and no sequence id yet
 */
-def.proto.createReverse =
+def.proto.createReversed =
 	function( )
 {
 	return(
 		change_wrap.create(
 			'cid', session_uid.newUid( ),
-			'changeList', this.changeList.reverse
+			'changeList', this.changeList.reversed
 		)
 	);
 };
