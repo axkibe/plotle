@@ -332,10 +332,7 @@ def.lazyFuncInt.locateOffsetPoint =
 			gleam_point.create(
 				'x',
 					pitch.x
-					+ (
-						this.maskWidth( font.size ) +
-						this.maskKern( font.size )
-					)
+					+ ( this._maskWidth + this._maskKern )
 					* offset
 					- 1,
 				'y', Math.round( pitch.y + font.size )
@@ -430,18 +427,6 @@ def.proto.focusable = true;
 
 
 /*
-| Returns the kerning of characters for password masks.
-*/
-def.proto.maskKern = ( size ) => Math.round( size * 0.15 );
-
-
-/*
-| Returns the width of a character for password masks.
-*/
-def.proto.maskWidth = ( size ) => Math.round( size * 0.5 );
-
-
-/*
 | Mouse hover
 */
 def.proto.pointingHover =
@@ -520,10 +505,7 @@ def.proto._getOffsetAt =
 
 	const font = this.font;
 
-	if( password )
-	{
-		mw = this.maskWidth( font.size ) + this.maskKern( font.size );
-	}
+	if( password ) mw = this._maskWidth + this._maskKern;
 
 	let a;
 
@@ -632,11 +614,7 @@ def.proto._keyLeft =
 	if( mark.caret.at <= 0 ) return;
 
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				mark.caret.at - 1
-			)
+		'mark', visual_mark_caret.pathAt( mark.caret.path, mark.caret.at - 1 )
 	);
 };
 
@@ -652,11 +630,7 @@ def.proto._keyPos1 =
 	if( mark.caret.at <= 0 ) return;
 
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				0
-			)
+		'mark', visual_mark_caret.pathAt( mark.caret.path, 0 )
 	);
 };
 
@@ -671,13 +645,9 @@ def.proto._keyRight =
 
 	if( mark.caret.at >= this.value.length ) return;
 
+	// FIXME lazy
 	root.alter(
-		'mark',
-			// FIXME lazy
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				mark.caret.at + 1
-			)
+		'mark', visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 )
 	);
 };
 
@@ -693,6 +663,25 @@ def.proto._keyUp =
 	return;
 };
 
+
+/*
+| Returns the kerning of characters for password masks.
+*/
+def.lazy._maskKern =
+	function( )
+{
+	return Math.round( this.font.size * 0.15 );
+};
+
+
+/*
+| Returns the width of a character for password masks.
+*/
+def.lazy._maskWidth =
+	function( )
+{
+	return Math.round( this.font.size * 0.5 );
+};
 
 
 /*
@@ -714,21 +703,22 @@ def.lazy._passMask =
 
 	const y = pitch.y + Math.round( size * 0.7 );
 
-	const w = this.maskWidth( size );
+	const w = this._maskWidth;
 
 	//h = size * 0.32,
 	const h = w;
 
-	const k = this.maskKern( size );
+	const k = this._maskKern;
 
 	for( let a = 0, al = value.length; a < al; a++, x += w + k )
 	{
-		pm[ a ] =
+		pm.push(
 			gleam_ellipse.create(
 				'pos', gleam_point.xy( x, y - h / 2 ),
 				'width', w,
 				'height', h
-			);
+			)
+		);
 	}
 
 	return pm;

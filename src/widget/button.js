@@ -219,11 +219,11 @@ def.lazy._glint =
 
 			text = text.split( '\n' );
 
-			const tZ = text.length;
+			const tlen = text.length;
 
-			let y = -( tZ - 1 ) / 2 * newline;
+			let y = -( tlen - 1 ) / 2 * newline;
 
-			for( let t = 0; t < tZ; t++, y += newline )
+			for( let t = 0; t < tlen; t++, y += newline )
 			{
 				arr.push(
 					gleam_glint_text.create(

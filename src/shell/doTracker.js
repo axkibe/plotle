@@ -111,11 +111,11 @@ def.proto.update =
 			undo = undo.remove( a-- );
 
 			al--;
-
-			continue;
 		}
-
-		undo = undo.set( a, cw );
+		else
+		{
+			undo = undo.set( a, cw );
+		}
 	}
 
 	for( let a = 0, al = redo.length; a < al; a++ )
@@ -130,11 +130,11 @@ def.proto.update =
 			redo = redo.remove( a-- );
 
 			al--;
-
-			continue;
 		}
-
-		redo = redo.set( a, cw );
+		else
+		{
+			redo = redo.set( a, cw );
+		}
 	}
 
 	return this.create( '_undo', undo, '_redo', redo );

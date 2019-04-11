@@ -99,11 +99,7 @@ def.proto.loadSpaces =
 		o = await cursor.nextObject( )
 	)
 	{
-		const spaceRef =
-			ref_space.create(
-				'username', o.username,
-				'tag', o.tag
-			);
+		const spaceRef = ref_space.create( 'username', o.username, 'tag', o.tag );
 
 		log.log( 'loading and replaying "' + spaceRef.fullname + '"' );
 
@@ -160,12 +156,8 @@ def.proto.shellGlobalsResource =
 
 	const globals = this.shellGlobals( 'devel', target );
 
-	const keys = Object.keys( globals ).sort( );
-
-	for( let a = 0, al = keys.length; a < al; a++ )
+	for( let key of Object.keys( globals ).sort( ) )
 	{
-		const key = keys[ a ];
-
 		text += 'var ' + key + ' = ' + globals[ key ] + ';\n';
 	}
 
@@ -194,10 +186,8 @@ def.proto.buildBundle =
 
 		const code = { };
 
-		for( let a = 0, al = root.inventory.length; a < al; a++ )
+		for( let resource of root.inventory )
 		{
-			const resource = root.inventory.atRank( a );
-
 			if( !resource.inBundle ) continue;
 
 			if( resource.filePath === 'global-shell.js' ) continue;
@@ -248,10 +238,8 @@ def.proto.buildBundle =
 
 		let code = '';
 
-		for( let a = 0, al = root.inventory.length; a < al; a++ )
+		for( let resource of root.inventory )
 		{
-			const resource = root.inventory.atRank( a );
-
 			if( !resource.inBundle ) continue;
 
 			code += resource.data + '';
@@ -281,12 +269,8 @@ def.proto.prepareInventory =
 	);
 
 	// prepares ressources from the roster
-	const roster = server_roster.roster;
-
-	for( let a = 0, al = roster.length; a < al; a++ )
+	for( let resource of server_roster.roster )
 	{
-		const resource = roster.get( a );
-
 		if( resource.devel && !devel ) continue;
 
 		await root.inventory.prepareResource( resource );
@@ -304,12 +288,10 @@ def.proto.prepareInventory =
 				tim_path.createFromString( entry )
 			);
 
-		let walk = timspec_twig.createByDependencyWalk( srts );
+		const walk = timspec_twig.createByDependencyWalk( srts );
 
-		for( let a = 0, al = walk.length; a < al; a++ )
+		for( let filename of walk.keys )
 		{
-			const filename = walk.getKey( a );
-
 			const ts = tim.catalog.getByRealpath( filename );
 
 			const resource =
@@ -338,10 +320,8 @@ def.proto.prepareInventory =
 
 		const walk = timspec_twig.createByDependencyWalk( srts );
 
-		for( let a = 0, al = walk.length; a < al; a++ )
+		for( let filename of walk.keys )
 		{
-			const filename = walk.getKey( a );
-
 			const ts = tim.catalog.getByRealpath( filename );
 
 			const filePath = ts.path.chop.filepath;
@@ -511,26 +491,22 @@ def.proto.wake =
 {
 	const upSleeps = root.upSleeps;
 
-	const sleepKeys = upSleeps.keys;
-
 	// FUTURE cache change lists
 	// to answer the same to multiple clients.
-	for( let a = 0, al = sleepKeys.length; a < al; a++ )
+	for( let key of upSleeps.keys )
 	{
-		const key = sleepKeys[ a ];
-
 		const sleep = upSleeps.get( key );
 
 		const moments = sleep.moments;
 
-		let b, bZ;
-		for( b = 0, bZ = sleep.length; b < bZ; b++ )
+		let b, blen;
+		for( b = 0, blen = sleep.length; b < blen; b++ )
 		{
 			if( ref.equals( moments.get( b ).dynRef ) ) break;
 		}
 
 		// none of the moments matched
-		if( b >= bZ ) continue;
+		if( b >= blen ) continue;
 
 		// this sleep needs to be waked
 		const asw = await server_requestHandler.conveyUpdate( sleep.moments );

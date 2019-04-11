@@ -28,10 +28,8 @@ def.proto.getFacet =
 {
 	const al = arguments.length;
 
-	for( let r = this.length - 1; r >= 0; r-- )
+	for( let f of this.reverse( ) )
 	{
-		const f = this.get( r );
-
 		let matches = 0;
 
 		for( let a = 0; a < al; a += 2 )

@@ -23,10 +23,7 @@ def.proto.createReversed =
 {
 	const iList = [ ];
 
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		iList[ a ] = this.get( al - 1 - a ).createReversed( );
-	}
+	for( let cw of this.reverse( ) ) iList.push( cw.createReversed( ) );
 
 	return change_wrapList.create( 'list:init', iList );
 };
@@ -41,10 +38,7 @@ def.proto.changeTree =
 	)
 {
 	// iterates through the change list
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		tree = this.get( a ).changeTree( tree );
-	}
+	for( let cw of this ) tree = cw.changeTree( tree );
 
 	return tree;
 };
@@ -77,10 +71,7 @@ def.proto.transform =
 		cx
 	)
 {
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		cx = this.get( a ).transform( cx );
-	}
+	for( let cw of this ) cx = cw.transform( cx );
 
 	return cx;
 };

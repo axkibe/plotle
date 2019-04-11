@@ -121,16 +121,16 @@ const serveAlter =
 
 	let spaceBox = root.spaces.get( spaceRef.fullname );
 
-	const seqZ = spaceBox.seqZ;
+	const boxSeq = spaceBox.seq;
 
-	if( seq === -1 ) seq = seqZ;
+	if( seq === -1 ) seq = boxSeq;
 
-	if( seq < 0 || seq > seqZ ) return replyError( 'invalid seq' );
+	if( seq < 0 || seq > boxSeq ) return replyError( 'invalid seq' );
 
 	try
 	{
 		// translates the changes if not most recent
-		for( let a = seq; a < seqZ; a++ )
+		for( let a = seq; a < boxSeq; a++ )
 		{
 			changeWrapList =
 				spaceBox.getChangeWrap( a ).transform( changeWrapList );
@@ -383,7 +383,7 @@ const serveAcquire =
 		reply_acquire.create(
 			'status', 'served',
 			'access', access,
-			'seq', spaceBox.seqZ,
+			'seq', spaceBox.seq,
 			'space', spaceBox.space
 		)
 	);
@@ -416,14 +416,14 @@ def.static.conveyUpdate =
 
 				if( !spaceBox ) continue;
 
-				const seqZ = spaceBox.seqZ;
+				const boxSeq = spaceBox.seq;
 
-				if( seq >= seqZ ) continue;
+				if( seq >= boxSeq ) continue;
 
 				const chgA = [ ];
 
 				// FIXME make a getChangeWraps function to spaceBox
-				for( let c = seq; c < seqZ; c++ )
+				for( let c = seq; c < boxSeq; c++ )
 				{
 					chgA.push( spaceBox.getChangeWrap( c ) );
 				}
@@ -512,7 +512,7 @@ def.static.testUpdate =
 
 				if( !spaceBox ) return replyError( 'Unknown space' );
 
-				if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
+				if ( !( seq >= 0 && seq <= spaceBox.seq ) )
 				{
 					return replyError( 'Invalid or missing seq: ' + seq );
 				}

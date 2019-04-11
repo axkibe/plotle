@@ -1117,7 +1117,6 @@ def.proto._sketchGenericShape =
 
 	for( let a = 1; a < al; a++ )
 	{
-
 /**/	if( CHECK )
 /**/	{
 /**/		// there was a close before end?

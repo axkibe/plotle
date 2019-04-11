@@ -99,20 +99,17 @@ def.proto.get =
 {
 	const cwList = this._changeWrapList;
 
-	const cZ = cwList.length;
+	const cwListLen = cwList.length;
 
 	const seq = this.seq;
 
 	let note = this._note;
 
-	if( seq < 0 || seq > cZ )
-	{
-		throw new Error( 'invalid seq' );
-	}
+	if( seq < 0 || seq > cwListLen ) throw new Error( 'invalid seq' );
 
 	// if the requested seq is not latest,
 	// rewinds stuff
-	for( let a = cZ - 1; a >= seq; a-- )
+	for( let a = cwListLen - 1; a >= seq; a-- )
 	{
 		const changeList = cwList.get( a ).changeList;
 
@@ -136,7 +133,7 @@ def.proto.alter =
 
 	const seq = this.seq;
 
-	for( let s = seq, sZ = cwList.length; s < sZ; s++ )
+	for( let s = seq, slen = cwList.length; s < slen; s++ )
 	{
 		cw = cwList.get( s ).transform( cw );
 	}

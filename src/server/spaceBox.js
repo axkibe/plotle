@@ -12,7 +12,7 @@ if( TIM )
 	def.attributes =
 	{
 		// latest sequence number
-		seqZ : { type : 'integer' },
+		seq : { type : 'integer' },
 
 		// latest space version
 		space : { type : '../fabric/space' },
@@ -50,7 +50,7 @@ def.static.loadSpace =
 		spaceRef
 	)
 {
-	let seqZ = 1;
+	let seq = 1;
 
 	let space = fabric_space.create( );
 
@@ -69,9 +69,9 @@ def.static.loadSpace =
 	{
 		const changeSkid = database_changeSkid.createFromJSON( o );
 
-		if( changeSkid._id !== seqZ ) throw new Error( 'sequence mismatch' );
+		if( changeSkid._id !== seq ) throw new Error( 'sequence mismatch' );
 
-		seqZ++;
+		seq++;
 
 		space = changeSkid.changeTree( space );
 	}
@@ -80,10 +80,10 @@ def.static.loadSpace =
 		self.create(
 			'space', space,
 			'spaceRef', spaceRef,
-			'seqZ', seqZ,
+			'seq', seq,
 			'_changesDB', changesDB,
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
-			'_changesOffset', seqZ
+			'_changesOffset', seq
 		)
 	);
 };
@@ -109,7 +109,7 @@ def.static.createSpace =
 		self.create(
 			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
-			'seqZ', 1,
+			'seq', 1,
 			'_changesDB', await root.repository.collection( 'changes:' + spaceRef.fullname ),
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', 1
@@ -138,11 +138,7 @@ def.proto.appendChanges =
 	const tree = changeWrapList.changeTree( this.space );
 
 	const changeSkidList =
-		database_changeSkidList.createFromChangeWrapList(
-			changeWrapList,
-			user,
-			this.seqZ
-		);
+		database_changeSkidList.createFromChangeWrapList( changeWrapList, user, this.seq );
 
 	// saves the changeSkid in the database
 	this._changesDB.insert(
@@ -152,7 +148,7 @@ def.proto.appendChanges =
 
 	return(
 		this.create(
-			'seqZ', this.seqZ + changeSkidList.length,
+			'seq', this.seq + changeSkidList.length,
 			'space', tree,
 			'_changeWraps',
 				this._changeWraps

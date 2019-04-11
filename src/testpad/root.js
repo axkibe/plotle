@@ -863,7 +863,7 @@ def.proto.makeScreen =
 	// replaces HTML entities
 	for( let line of lines )
 	{
-		for( let b = 0, bZ = line.length; b < bZ; b++ )
+		for( let b = 0, blen = line.length; b < blen; b++ )
 		{
 			switch( line[ b ] )
 			{
@@ -973,7 +973,7 @@ def.proto.makeScreen =
 
 	// transforms lines to a HTML string
 
-	for( let a = 0, aZ = lines.length; a < aZ; a++ )
+	for( let a = 0, al = lines.length; a < al; a++ )
 	{
 		lines[ a ] = lines[ a ].join( '' );
 	}

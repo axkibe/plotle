@@ -47,9 +47,9 @@ function getCapHeight( font )
 {
 	const chars = 'HIKLEFJMNTZBDPRAGOQSUVWXY';
 
-	for( let a = 0, al = chars.length; a < al; a++ )
+	for( let c of chars )
 	{
-		const idx = font.charToGlyphIndex( chars[ a ] );
+		const idx = font.charToGlyphIndex( c );
 
 		if( idx <= 0 ) continue;
 

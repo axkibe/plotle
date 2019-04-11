@@ -448,10 +448,8 @@ def.proto.pushButton =
 
 			const ranks = [ ];
 
-			for( let p = 0, pZ = paths.length; p < pZ; p++ )
+			for( let pi of paths )
 			{
-				const pi = paths.get( p );
-
 				const rank = root.space.rankOf( pi.get( 2 ) );
 
 				let rc = 0;
@@ -463,13 +461,13 @@ def.proto.pushButton =
 
 				ranks.push( rank );
 
-				change[ p ] =
+				change.push(
 					change_shrink.create(
 						'path', pi.chop,
 						'prev', root.space.getPath( pi.chop ),
 						'rank', rank - rc
-					);
-
+					)
+				);
 			}
 
 			root.alter( 'change', change_list.create( 'list:init', change ) );

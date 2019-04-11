@@ -95,15 +95,15 @@ def.lazy.commonPath =
 
 	const eP = this.endMark.path;
 
-	const bZ = bP.length;
+	const blen = bP.length;
 
-	const eZ = eP.length;
+	const elen = eP.length;
 
-	const mZ = Math.min( bZ, eZ );
+	const mlen = Math.min( blen, elen );
 
 	let a;
 
-	for( a = 0; a < mZ; a++ )
+	for( a = 0; a < mlen; a++ )
 	{
 		if( bP.get( a ) !== eP.get( a ) ) break;
 	}

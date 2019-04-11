@@ -19,10 +19,8 @@ let fsTrace = fs.readFileSync( process.argv[ 3 ] ) + '';
 
 fsTrace = fsTrace.split( /[ \n]/ );
 
-for( let a = 0, al = fsTrace.length; a < al; a++ )
+for( let line of fsTrace )
 {
-	const line = fsTrace[ a ];
-
 	const r = line.match( ':([0-9]*):([0-9]*)' );
 
 	if( !r ) continue;
@@ -41,9 +39,9 @@ map = JSON.parse( map );
 
 const smc = new SourceMap.SourceMapConsumer( map );
 
-for( let a = 0, al = trace.length; a < al; a++ )
+for( let t of trace )
 {
-	const io = smc.originalPositionFor( trace[ a ] );
+	const io = smc.originalPositionFor( t );
 
 	console.log( io.source + ':' + io.line + ':' + io.column );
 }

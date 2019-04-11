@@ -129,14 +129,11 @@ def.proto.transform =
 def.lazy.reversed =
 	function( )
 {
-	const arr = [ ];
+	const a = [ ];
 
-	for( let a = 0, al = this.length; a < al; a++ )
-	{
-		arr[ a ] = this.get( al - 1 - a ).reversed;
-	}
+	for( let c of this.reverse( ) ) a.push( c.reversed );
 
-	const result = change_list.create( 'list:init', arr );
+	const result = change_list.create( 'list:init', a );
 
 	tim.aheadValue( result, 'reversed', this );
 

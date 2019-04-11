@@ -74,26 +74,23 @@ def.proto.abortAll =
 
 	if( receiverFuncName === undefined )
 	{
-		for( let f = 0, fZ = fifo.length; f < fZ; f++ )
-		{
-			fifo.get( f ).abort( );
-		}
+		for( let rw of fifo ) rw.abort( );
 
 		fifo = net_requestWrapList.create( );
 	}
 	else
 	{
-		for( let f = 0, fZ = fifo.length; f < fZ; f++ )
+		for( let f = 0, flen = fifo.length; f < flen; f++ )
 		{
-			const r = fifo.get( f ) ;
+			const rw = fifo.get( f ) ;
 
-			if( r.receiverFuncName === receiverFuncName )
+			if( rw.receiverFuncName === receiverFuncName )
 			{
-				r.abort( );
+				rw.abort( );
 
 				fifo = fifo.remove( f );
 
-				f--; fZ--;
+				f--; flen--;
 			}
 		}
 	}

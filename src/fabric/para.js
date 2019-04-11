@@ -299,21 +299,18 @@ def.proto.getOffsetAt =
 
 	const line = flow.get( ln );
 
-	const lZ = line.length;
+	const llen = line.length;
 
 	let token, tn;
 
-	for( tn = 0; tn < lZ; tn++ )
+	for( tn = 0; tn < llen; tn++ )
 	{
 		token = line.get( tn );
 
 		if( x <= token.x + token.width ) break;
 	}
 
-	if( tn >= lZ && lZ > 0 )
-	{
-		token = line.get( --tn );
-	}
+	if( tn >= llen && llen > 0 ) token = line.get( --tn );
 
 	if( !token ) return 0;
 

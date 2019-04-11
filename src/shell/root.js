@@ -786,10 +786,8 @@ def.proto.alter =
 		{
 			const nip = mark && mark.itemPaths;
 
-			for( let a = 0, al = oip.length; a < al; a++ )
+			for( let op of oip )
 			{
-				const op = oip.get( a );
-
 				if( nip && nip.contains( op ) ) continue;
 
 				const item = root.getPath( op );
@@ -2005,7 +2003,6 @@ def.static._createFormRoot =
 
 		const twig = { };
 
-		// XXX for( let w = 0, wZ = layout.length; w < wZ; w++ )
 		for( let key of layout.keys )
 		{
 			const wLayout = layout.get( key );
@@ -2031,13 +2028,9 @@ def.static._createFormRoot =
 			'viewSize', viewSize
 		);
 
-	const keys = Object.keys( forms );
-
 	// FUTURE do a twig:init instead
-	for( let a = 0, al = keys.length; a < al; a++ )
+	for( let key of Object.keys( forms ) )
 	{
-		const key = keys[ a ];
-
 		formRoot =
 			formRoot.create(
 				'twig:add', key,

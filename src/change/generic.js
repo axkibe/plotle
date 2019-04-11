@@ -43,23 +43,20 @@ def.proto._transformChangeList =
 
 	const tList = [ ];
 
-	for( let r = 0, rl = cList.length; r < rl; r++ )
+	for( let c of cList )
 	{
-		const c = this.transform( cList.get( r ) );
+		const cr = this.transform( cList.get( c ) );
 
 		// changes that transformed away are sliced out.
-		if( !c ) continue;
+		if( !cr ) continue;
 
-		if( c.timtype === change_list )
+		if( cr.timtype === change_list )
 		{
-			for( let a = 0, al = c.length; a < al; a++ )
-			{
-				tList.push( c.get( a ) );
-			}
+			for( let ch of cr ) tList.push( ch );
 		}
 		else
 		{
-			tList.push( c );
+			tList.push( cr );
 		}
 	}
 
