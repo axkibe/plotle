@@ -107,7 +107,7 @@ def.proto.ancillary =
 
 	const from = item1 && this.ancillaryFrom( item1 );
 
-	const to =  item2 && this.ancillaryTo( item2 );
+	const to = item2 && this.ancillaryTo( item2 );
 
 	let ancillary = fabric_label.ancillary.call( this, space );
 
@@ -115,9 +115,7 @@ def.proto.ancillary =
 
 	const tto = this.to;
 
-	if( ( tfrom && !tfrom.equals( from ) )
-		|| ( from && !from.equals( tfrom ) )
-	)
+	if( ( tfrom && !tfrom.equals( from ) ) || ( from && !from.equals( tfrom ) ) )
 	{
 		const ch =
 			change_set.create(
@@ -126,13 +124,11 @@ def.proto.ancillary =
 				'val', from
 			);
 
-		if( !ancillary ) ancillary = change_list.create( 'list:init', [ ch ] );
+		if( !ancillary ) ancillary = change_list.one( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
-	if( ( tto && !tto.equals( to ) )
-		|| ( to && !to.equals( tto ) )
-	)
+	if( ( tto && !tto.equals( to ) ) || ( to && !to.equals( tto ) ) )
 	{
 		const ch =
 			change_set.create(
@@ -141,7 +137,7 @@ def.proto.ancillary =
 				'val', to
 			);
 
-		if( !ancillary ) ancillary = change_list.create( 'list:init', [ ch ] );
+		if( !ancillary ) ancillary = change_list.one( ch );
 		else ancillary = ancillary.append( ch );
 	}
 

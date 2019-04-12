@@ -84,6 +84,13 @@ const fsStat = util.promisify( fs.stat );
 
 
 /*
+| Waits for 'time' milliseconds.
+*/
+const wait = ( time ) =>
+	new Promise( ( resolve ) => { setTimeout( ( ) => resolve( ), time ); } );
+
+
+/*
 | loads all spaces and playbacks all changes from the database.
 */
 def.proto.loadSpaces =
@@ -716,22 +723,11 @@ def.proto.webAjax =
 	}
 
 	request.on(
-		'close',
-		function( )
-	{
-		if( result.sleepID )
-		{
-			root.closeSleep( result.sleepID );
-		}
-	}
+		'close', ( ) => { if( result.sleepID ) root.closeSleep( result.sleepID ); }
 	);
 
 	request.on(
-		'data',
-		function( chunk )
-	{
-		data.push( chunk );
-	}
+		'data', ( chunk ) => { data.push( chunk ); }
 	);
 
 	const handler =
@@ -756,15 +752,15 @@ def.proto.webAjax =
 		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
 			log.log( 'DELAYING ALTER');
-			throw new Error( 'FIXME' );
-			//yield setTimeout( resume( ), DELAY_ALTER );
+
+			await wait( DELAY_ALTER );
 		}
 
 		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
 			log.log( 'DELAYING ACQUIRE');
-			throw new Error( 'FIXME' );
-			//yield setTimeout( resume( ), DELAY_ACQUIRE );
+
+			await wait( DELAY_ACQUIRE );
 		}
 
 		const asw = await server_requestHandler.serve( cmd, result );

@@ -93,20 +93,23 @@ const session_uid = tim.require( '../session/uid' );
 
 const visual_mark_text = tim.require( '../visual/mark/text' );
 
-// FIXME
+
+/*
+| Maps keys to handlers.
+*/
 const _keyMap =
 	Object.freeze( {
-		'backspace' : '_keyBackspace',
-		'del' : '_keyDel',
-		'down' : '_keyDown',
-		'end' : '_keyEnd',
-		'enter' : '_keyEnter',
-		'left' : '_keyLeft',
-		'pagedown' : '_keyPageDown',
-		'pageup' : '_keyPageUp',
-		'pos1' : '_keyPos1',
-		'right' : '_keyRight',
-		'up' : '_keyUp'
+		backspace : '_keyBackspace',
+		deli      : '_keyDel',
+		down      : '_keyDown',
+		end       : '_keyEnd',
+		enter     : '_keyEnter',
+		left      : '_keyLeft',
+		pagedown  : '_keyPageDown',
+		pageup    : '_keyPageUp',
+		pos1      : '_keyPos1',
+		right     : '_keyRight',
+		up        : '_keyUp'
 	} );
 
 
@@ -449,7 +452,7 @@ def.proto.input =
 
 	root.alter( 'change', change_list.create( 'list:init', changes ) );
 
-	// FIXME make tthis an alter
+	// FIXME make this an alter
 	root.clearRetainX( );
 };
 
@@ -606,8 +609,7 @@ def.proto.specialKey =
 def.lazy.textPath =
 	function( )
 {
-	// FIXME is this.path test necessary?
-	return this.path && this.path.append( 'text' );
+	return this.path.append( 'text' );
 };
 
 

@@ -227,7 +227,7 @@ def.lazy.size =
 
 
 /*
-| A rectangle of same size with pnw at 0/0
+| A rectangle of same size with pos at 0/0
 */
 def.lazy.zeroPos =
 	function( )
@@ -306,54 +306,6 @@ def.proto.add =
 
 
 /*
-| Returns a shape bordering this shape by d.
-*/
-def.proto.border =
-	function(
-		d // distance to border
-	)
-{
-	return(
-		this.create(
-			'pos', this.pos.add(d, d),
-			'width', this.width - 2 * d,
-			'height', this.height - 2 * d
-		)
-	);
-};
-
-
-/*
-| Returns a rect which is at least as large
-| a size.
-*/
-def.proto.ensureMinSize =
-	function(
-		min    // minimum size
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( min.timtype !== gleam_size ) throw new Error( );
-/**/}
-
-	const h = this.height;
-	const w = this.width;
-	const mh = min.height;
-	const mw = min.width;
-
-	if( w >= mw && h >= mh ) return this;
-
-	return(
-		this.create(
-			'height', Math.max( h, mh ),
-			'width', Math.max( w, mw )
-		)
-	);
-};
-
-
-/*
 | Returns this point scaled by
 | scaleX, scaleY relative to the base point.
 */
@@ -397,6 +349,25 @@ def.proto.baseScaleXY =
 };
 
 
+
+/*
+| Returns a shape bordering this shape by d.
+*/
+def.proto.border =
+	function(
+		d // distance to border
+	)
+{
+	return(
+		this.create(
+			'pos', this.pos.add(d, d),
+			'width', this.width - 2 * d,
+			'height', this.height - 2 * d
+		)
+	);
+};
+
+
 /*
 | Returns this detransformed rect.
 */
@@ -418,6 +389,36 @@ def.proto.detransform =
 			'pos', this.pos.detransform( transform ),
 			'width', transform.scale( this.width ),
 			'height', transform.scale( this.height )
+		)
+	);
+};
+
+
+/*
+| Returns a rect which is at least as large
+| a size.
+*/
+def.proto.ensureMinSize =
+	function(
+		min    // minimum size
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( min.timtype !== gleam_size ) throw new Error( );
+/**/}
+
+	const h = this.height;
+	const w = this.width;
+	const mh = min.height;
+	const mw = min.width;
+
+	if( w >= mw && h >= mh ) return this;
+
+	return(
+		this.create(
+			'height', Math.max( h, mh ),
+			'width', Math.max( w, mw )
 		)
 	);
 };
@@ -533,15 +534,18 @@ def.proto.reduce =
 
 
 /*
-| Returns a rect moved by -x/-y.
+| Returns a rect moved by a point or x/y.
+|
+| sub( point )   -or-
+| sub( x, y  )
 */
 def.proto.sub =
 	function(
-		x,
-		y
+		a1,
+		a2
 	)
 {
-	return this.create( 'pos', this.pos.sub( x, y ) );
+	return this.create( 'pos', this.pos.sub( a1, a2 ) );
 };
 
 
@@ -552,13 +556,13 @@ def.proto.sub =
 */
 def.proto.within =
 	function(
-		p,      // point
-		border  // additional border
+		p      // point
 	)
 {
-	if( arguments.length !== 1 ) throw new Error( 'FIXME' );
-
-	border = border || 0;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
 
 	const x = p.x;
 
@@ -567,10 +571,10 @@ def.proto.within =
 	const pos = this.pos;
 
 	return(
-		x >= pos.x + border
-		&& y >= pos.y + border
-		&& x <= pos.x + this.width - border
-		&& y <= pos.y + this.height - border
+		x >= pos.x
+		&& y >= pos.y
+		&& x <= pos.x + this.width
+		&& y <= pos.y + this.height
 	);
 };
 

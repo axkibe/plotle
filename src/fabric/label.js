@@ -77,6 +77,8 @@ const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
 
+const gleam_size = tim.require( '../gleam/size' );
+
 const gleam_transform = tim.require( '../gleam/transform' );
 
 const gruga_label = tim.require( '../gruga/label' );
@@ -116,23 +118,13 @@ def.static.createGeneric =
 
 	const pos = ti.zone.pos;
 
-	/*
-	const pos =
-		( dp.x > action.startPoint.x )
-		? zone.pos
-		: gleam_point.xy(
-			zone.pos.x + zone.width - resized.zone.width,
-			zone.pos.y
-		);
-	*/
-
 	const label =
 		resized.create(
 			'zone',
 				gleam_rect.create(
 					'pos', pos,
-					'width', resized.ancillaryWidth,
-					'height', resized.ancillaryHeight
+					'width', resized.ancillarySize.width,
+					'height', resized.ancillarySize.height
 				)
 		);
 
@@ -150,12 +142,7 @@ def.static.createGeneric =
 /**/}
 
 	root.alter(
-		'change',
-			change_grow.create(
-				'val', label,
-				'path', path,
-				'rank', 0
-			),
+		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
 		'mark', visual_mark_caret.pathAt( mpath, 0 )
 	);
 };
@@ -196,7 +183,7 @@ def.lazy.glint =
 {
 	const tZone = this.tZone;
 
-	const arr =
+	const a =
 		[
 			gleam_glint_window.create(
 				'glint', this.doc.glint,
@@ -209,10 +196,10 @@ def.lazy.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		a.push( gleam_glint_paint.createFS( facet, this.tShape ) );
 	}
 
-	return gleam_glint_list.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', a );
 };
 
 
@@ -268,25 +255,15 @@ def.proto.minScaleY = ( zone ) => 0;
 /*
 | Computed height of the label.
 */
-def.lazy.ancillaryHeight =
+def.lazy.ancillarySize =
 	function( )
 {
-	return this.doc.fullsize.height + 2;
-};
+	const height = this.doc.fullsize.height + 2;
 
-
-/*
-| Computed width of the label.
-|
-| FIXME change to ancillarySize
-*/
-def.lazy.ancillaryWidth =
-	function( )
-{
 	return(
-		Math.max(
-			this.doc.fullsize.width + 4,
-			this.ancillaryHeight / 4
+		gleam_size.wh(
+			Math.max( this.doc.fullsize.width + 4, height / 4 ),
+			height
 		)
 	);
 };
@@ -303,11 +280,13 @@ def.proto.ancillary =
 {
 	const zone = this.zone;
 
-	const width = this.ancillaryWidth;
+	const as = this.ancillarySize;
 
-	const height = this.ancillaryHeight;
+	const width = as.width;
 
-	// no secondary changes needed
+	const height = as.height;
+
+	// no ancillary changes needed
 	if( width === zone.width && height === zone.height ) return;
 
 	const c =
@@ -346,8 +325,8 @@ def.staticLazy.model =
 		model.create(
 			'zone',
 			model.zone.create(
-				'width', model.ancillaryWidth,
-				'height', model.ancillaryHeight
+				'width', model.ancillarySize.width,
+				'height', model.ancillarySize.height
 			)
 		);
 

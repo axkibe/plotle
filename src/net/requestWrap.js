@@ -68,16 +68,13 @@ const onReply =
 
 	this.onreadystatechange = undefined;
 
-	const channel = root.ajax.get( wrap.channelName );
+	const channel = root.link.get( wrap.channelName );
 
 	if( this.status !== 200 )
 	{
 		channel.onReply(
 			wrap,
-			{
-				type: 'reply_error',
-				message: 'Lost server connection'
-			}
+			{ type: 'reply_error', message: 'Lost server connection' }
 		);
 
 		return;
@@ -93,10 +90,7 @@ const onReply =
 	{
 		channel.onReply(
 			wrap,
-			{
-				type: 'reply_error',
-				message: 'Server answered no JSON!'
-			}
+			{ type: 'reply_error', message: 'Server answered no JSON!' }
 		);
 
 		return;

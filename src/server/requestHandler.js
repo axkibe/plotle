@@ -80,7 +80,8 @@ const replyError =
 */
 const serveAlter =
 	async function(
-		request
+		request,
+		result
 	)
 {
 	if( !config.get( 'server', 'sensitive' ) )
@@ -168,7 +169,8 @@ const serveAlter =
 */
 const serveAuth =
 	async function(
-		request
+		request,
+		result
 	)
 {
 	try
@@ -213,7 +215,8 @@ const serveAuth =
 */
 const serveRegister =
 	async function(
-		request
+		request,
+		result
 	)
 {
 	try
@@ -327,7 +330,8 @@ const serveUpdate =
 */
 const serveAcquire =
 	async function(
-		request
+		request,
+		result
 	)
 {
 	try
@@ -488,10 +492,8 @@ def.static.testUpdate =
 		moments   // references to space dynamics to get updates for
 	)
 {
-	for( let a = 0, al = moments.length; a < al; a++ )
+	for( let moment of moments )
 	{
-		const moment = moments.get( a );
-
 		const dynRef = moment.dynRef;
 
 		const seq = moment.seq;
@@ -569,6 +571,18 @@ def.static.expireUpdateSleep =
 };
 
 
+/*
+| Maps the request types to functions.
+*/
+def.staticLazy._serveTable = ( ) =>
+( {
+	request_alter    : serveAlter,
+	request_auth     : serveAuth,
+	request_acquire  : serveAcquire,
+	request_register : serveRegister,
+	request_update   : serveUpdate
+} );
+
 
 /*
 | Serves an serveRequest
@@ -579,25 +593,16 @@ def.static.serve =
 		result
 	)
 {
-	// FIXME make a table
-	switch( request.type )
+	const handler = server_requestHandler._serveTable[ request.type ];
+
+	if( !handler )
 	{
-		case 'request_alter' : return await serveAlter( request );
+		log.log( 'unknown command', request );
 
-		case 'request_auth' : return await serveAuth( request );
-
-		case 'request_acquire' : return await serveAcquire( request );
-
-		case 'request_register' : return await serveRegister( request );
-
-		case 'request_update' : return await serveUpdate( request, result );
-
-		default :
-
-			log.log( 'unknown command', request );
-
-			return replyError( 'unknown command' );
+		return replyError( 'unknown command' );
 	}
+
+	return await handler( request, result );
 };
 
 

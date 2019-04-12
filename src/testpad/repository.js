@@ -50,9 +50,10 @@ def.static.init =
 				fabric_note.create(
 					'doc',
 						fabric_doc.create(
-							'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
-							'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
-							'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
+							'twig:add', '1', fabric_para.create( 'text', 'a' ),
+//							'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
+//							'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
+//							'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
 						),
 					'zone',
 						gleam_rect.create(

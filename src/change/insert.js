@@ -60,25 +60,25 @@ const error = tim.require( './error' );
 
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
+/**/	if( this.at1 + this.val.length !== this.at2 )
 /**/	{
-/**/		if( this.at1 + this.val.length !== this.at2 )
-/**/		{
-/**/			throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
-/**/		}
+/**/		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
+/**/	}
 /**/
-/**/		if( this.at1 < 0 || this.at2 < 0 )
-/**/		{
-/**/			throw error.make( 'insert.at1|at2 negative' );
-/**/		}
-/**/	};
+/**/	if( this.at1 < 0 || this.at2 < 0 )
+/**/	{
+/**/		throw error.make( 'insert.at1|at2 negative' );
+/**/	}
 /**/}
+};
 
 
 /*
@@ -196,10 +196,7 @@ def.proto._transformInsertRemove =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_insert && cx.timtype !== change_remove )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( cx.timtype !== change_insert && cx.timtype !== change_remove ) throw new Error( );
 /**/}
 
 	if( !this.path.equals( cx.path ) ) return cx;
@@ -208,12 +205,7 @@ def.proto._transformInsertRemove =
 
 	const len = this.val.length;
 
-	return(
-		cx.create(
-			'at1', cx.at1 + len,
-			'at2', cx.at2 + len
-		)
-	);
+	return cx.create( 'at1', cx.at1 + len, 'at2', cx.at2 + len );
 };
 
 

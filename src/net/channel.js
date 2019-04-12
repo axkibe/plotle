@@ -33,17 +33,17 @@ const net_requestWrap = tim.require( './requestWrap' );
 const net_requestWrapList = tim.require( './requestWrapList' );
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking.
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if(	this.path.get( 0 ) !== 'ajax' ) throw new Error( );
-/**/	};
+/**/	if(	this.path.get( 0 ) !== 'link' ) throw new Error( );
 /**/}
+};
 
 
 /*
@@ -96,12 +96,7 @@ def.proto.abortAll =
 	}
 
 	root.alter(
-		'ajax',
-			root.ajax.create(
-				'twig:set',
-				this.channelName,
-				this.create( '_fifo', fifo )
-			)
+		'link', root.link.create( 'twig:set', this.channelName, this.create( '_fifo', fifo ) )
 	);
 };
 
@@ -125,8 +120,8 @@ def.proto.request =
 	if( this._fifo.length === 0 ) reqWrap = reqWrap.send( );
 
 	root.alter(
-		'ajax',
-			root.ajax.create(
+		'link',
+			root.link.create(
 				'twig:set',
 				this.channelName,
 				this.create( '_fifo', this._fifo.append( reqWrap ) )
@@ -158,12 +153,7 @@ def.proto.onReply =
 	channel = channel.create( '_fifo', fifo );
 
 	root.alter(
-		'ajax',
-			root.ajax.create(
-				'twig:set',
-				channel.channelName,
-				channel
-			)
+		'link', root.link.create( 'twig:set', channel.channelName, channel )
 	);
 
 	root.link[ wrap.receiverFuncName ]( wrap.request, reply );

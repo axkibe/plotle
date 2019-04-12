@@ -45,8 +45,6 @@ def.static.flush =
 | Reporting the doTracker something has been altered.
 |
 | It will track it on the undo stack.
-|
-| FIXME return new tracker instead of using alter
 */
 def.proto.track =
 	function(
@@ -59,13 +57,7 @@ def.proto.track =
 
 	if( undo.length > shell_settings.maxUndo ) undo = undo.remove( 0 );
 
-	root.alter(
-		'doTracker',
-			this.create(
-				'_undo', undo,
-				'_redo', change_wrapList.create( )
-			)
-	);
+	return this.create( '_undo', undo, '_redo', change_wrapList.create( ) );
 };
 
 

@@ -52,10 +52,7 @@ def.proto.changeTreeReverse =
 		tree
 	)
 {
-	for( let a = this.length - 1; a >= 0; a-- )
-	{
-		tree = this.get( a ).changeTreeReverse( tree );
-	}
+	for( let cw of this.reverse( ) ) tree = cw.changeTreeReverse( tree );
 
 	return tree;
 };

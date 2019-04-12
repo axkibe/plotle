@@ -88,6 +88,61 @@ const _bind =
 	return( function( ) { root[ handler ].apply( root, arguments ); } );
 };
 
+/*
+| Returns true if a keyCode is known to be a "special key".
+| FUTURE make this a table.
+*/
+const isSpecialKey =
+	function( keyCode )
+{
+	switch( keyCode )
+	{
+		case  8 : // backspace
+		case 13 : // return
+		case 27 : // esc
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+		case 46 : // del
+
+			return true;
+
+		default :
+
+			return false;
+	}
+};
+
+
+
+/*
+| Alters the tree.
+*/
+def.proto.alter =
+	function(
+		change
+	)
+{
+	const changeWrap =
+		change_wrap.create(
+			'cid', session_uid.newUid( ),
+			'changeList', change_list.create( 'list:set', 0, change )
+		);
+
+	root.repository.alter( changeWrap );
+};
+
+/*
+| Shortcut to doc.
+*/
+def.lazy.doc =
+	function( )
+{
+	return this.repository.get( testpad_root.noteDocPath.chop );
+};
 
 
 /*
@@ -118,104 +173,21 @@ def.proto.update =
 	elements.cancel.disabled =
 		!this.action;
 
-	const doc = this.repository.get( testpad_root.noteDocPath.chop );
-
 	elements.now.innerHTML = '' + this.repository.seq;
+
+	const doc = this.doc;
 
 	const cursorLine = math.limit( 0, this.cursorLine, doc.length - 1 );
 
 	const cursorAt = math.limit( 0, this.cursorAt, doc.atRank( cursorLine ).text.length );
 
-	if( !doc )
-	{
-		elements.pad.innerHTML = root.noDataScreen( );
-	}
-	else
-	{
-		elements.pad.innerHTML = this.makeScreen( doc );
-	}
+	elements.pad.innerHTML = this.makeScreen( doc );
 
 	root.create(
-		'doc', doc,
 		'elements', elements,
 		'cursorLine', cursorLine,
 		'cursorAt', cursorAt
 	);
-};
-
-
-/*
-| Returns true if a keyCode is known to be a "special key".
-| FUTURE make this a table.
-*/
-const isSpecialKey =
-	function( keyCode )
-{
-	switch( keyCode )
-	{
-		case  8 : // backspace
-		case 13 : // return
-		case 27 : // esc
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-		case 46 : // del
-
-			return true;
-
-		default :
-
-			return false;
-	}
-};
-
-
-/*
-| Generates the noDataScreen.
-*/
-def.lazy.noDataScreen =
-	function( )
-{
-	let line = [ ];
-
-	for( let a = 0; a < 100; a++ )
-	{
-		line.push( '{}  ' );
-	}
-
-	line = line.join( '' );
-
-	const line2 = '  ' + line;
-
-	const lines = [ ];
-
-	for( let a = 0; a < 50; a++ )
-	{
-		lines.push( line, line2 );
-	}
-
-	return lines.join( '\n' );
-};
-
-
-/*
-| Alters the tree.
-*/
-def.proto.alter =
-	function(
-		change
-	)
-{
-	const changeWrap =
-		change_wrap.create(
-			'cid', session_uid.newUid( ),
-			'changeList', change_list.create( 'list:set', 0, change )
-		);
-
-	root.repository.alter( changeWrap );
 };
 
 

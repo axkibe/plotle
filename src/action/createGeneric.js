@@ -157,8 +157,8 @@ def.proto.dragMove =
 					'zone',
 						gleam_rect.create(
 							'pos', pos,
-							'width', resized.ancillaryWidth,
-							'height', resized.ancillaryHeight
+							'width', resized.ancillarySize.width,
+							'height', resized.ancillarySize.height
 						),
 					'transform', transform
 				);

@@ -19,14 +19,8 @@ if( TIM )
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
-		// the ajax communication
-		ajax : { type : '../net/ajax' },
-
 		// the discs
 		disc : { type : '../disc/root' },
-
-		// the display within everything happens
-		display : { type : '../gleam/display/canvas' },
 
 		// the un/re/do tracker
 		doTracker : { type : './doTracker' },
@@ -67,6 +61,9 @@ if( TIM )
 		// the animations
 		_animation : { type : '../animation/root' },
 
+		// the display within everything happens
+		_display : { type : '../gleam/display/canvas' },
+
 		// the users mark
 		_mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
 
@@ -89,8 +86,7 @@ if( TIM )
 		{
 			ignores :
 			{
-				'ajax' : true,
-				'display' : true,
+				'_display' : true,
 				'link' : true,
 			}
 		}
@@ -195,8 +191,6 @@ const gruga_welcome = tim.require( '../gruga/welcome' );
 const gruga_disc_zoom = tim.require( '../gruga/disc/zoom' );
 
 const math = tim.require( '../math/root' );
-
-const net_ajax = tim.require( '../net/ajax' );
 
 const net_channel = tim.require( '../net/channel' );
 
@@ -367,7 +361,7 @@ def.static.startup =
 
 	const show = show_form.loading;
 
-	const ajaxPath = tim_path.empty.append( 'ajax' );
+	const linkPath = tim_path.empty.append( 'link' );
 
 	let userCreds = user_creds.createFromLocalStorage( );
 
@@ -375,23 +369,22 @@ def.static.startup =
 
 	shell_root._create(
 		'action', action_none.singleton,
-		'ajax',
-			net_ajax.create(
-				'path', ajaxPath,
-				'twig:add', 'command',
-					net_channel.create( 'path', ajaxPath.append( 'command' ) ),
-				'twig:add', 'update',
-					net_channel.create( 'path', ajaxPath.append( 'update' ) )
-			),
-		'display', display,
 		'doTracker', shell_doTracker.create( ),
-		'link', net_link.create( ),
+		'link',
+			net_link.create(
+				'path', linkPath,
+				'twig:add', 'command',
+					net_channel.create( 'path', linkPath.append( 'command' ) ),
+				'twig:add', 'update',
+					net_channel.create( 'path', linkPath.append( 'update' ) )
+			),
 		'show', show,
 		'spaceTransform', gleam_transform.normal,
 		'viewSize', display.size,
 		'disc', shell_root._createDiscRoot( viewSize, show ),
 		'form', shell_root._createFormRoot( viewSize ),
 		'_animation', animation_root.create( ),
+		'_display', display,
 		'_systemFocus', true
 	);
 
@@ -459,28 +452,20 @@ def.lazy.draw =
 /**/	if( this !== root ) throw new Error( );
 /**/}
 
-	let display = root.display;
+	let display = root._display;
 
 	const screen = root._currentScreen;
 
-	const arr = [ screen.glint ];
+	const a = [ screen.glint ];
 
-	if( screen.showDisc )
-	{
-		const disc = root.disc;
+	if( screen.showDisc ) a[ 1 ] = root.disc.glint;
 
-		arr[ 1 ] = disc.glint;
-	}
-
-	display =
-		display.create(
-			'glint', gleam_glint_list.create( 'list:init', arr )
-		);
+	display = display.create( 'glint', gleam_glint_list.create( 'list:init', a ) );
 
 	display.render( );
 
 	// FIXME check if this is privatable
-	root._create( 'display', display );
+	root._create( '_display', display );
 
 	return true;
 };
@@ -571,9 +556,6 @@ def.proto.alter =
 {
 	let action = pass;
 
-	// FIXME make ajax part of link.
-	let ajax = pass;
-
 	let change = pass;
 
 	let changeWrap;
@@ -609,8 +591,6 @@ def.proto.alter =
 		switch( command )
 		{
 			case 'action' : action = arg; continue;
-
-			case 'ajax' : ajax = arg; continue;
 
 			case 'change' : change = arg; continue;
 
@@ -718,9 +698,14 @@ def.proto.alter =
 
 			root.link.send( changeWrap );
 
-			mark = root.update( changeWrap );
+			if( mark === pass ) mark = root.update( changeWrap );
 
-			root.doTracker.track( changeWrap );
+/**/		if( CHECK )
+/**/		{
+/**/			if( doTracker !== pass ) throw new Error( );
+/**/		}
+
+			doTracker = root.doTracker.track( changeWrap );
 		}
 	}
 	else if( changeWrap )
@@ -763,7 +748,6 @@ def.proto.alter =
 
 	root._create(
 		'action', action,
-		'ajax', ajax,
 		'doTracker', doTracker,
 		'form', form,
 		'hover', hover,
@@ -1656,7 +1640,7 @@ def.proto.resize =
 	)
 {
 	root._create(
-		'display', gleam_display_canvas.resize( this.display, size ),
+		'_display', gleam_display_canvas.resize( root._display, size ),
 		'viewSize', size
 	);
 };
@@ -1872,10 +1856,13 @@ def.lazy._actionSpace =
 
 	space = change.changeTree( space );
 
+	for(;;)
 	{
 		const ancillary = space.ancillary( change.affectedTwigItems );
 
-		if( ancillary ) space = ancillary.changeTree( space );
+		if( !ancillary ) break;
+
+		space = ancillary.changeTree( space );
 	}
 
 	return space.create( 'action', this.action );

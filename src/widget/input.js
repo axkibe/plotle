@@ -544,10 +544,7 @@ def.proto._keyBackspace =
 			this.value.substring( 0, at - 1 ) + this.value.substring( at ),
 		'mark',
 			// FIXME lazy
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				at - 1
-			)
+			visual_mark_caret.pathAt( mark.caret.path, at - 1 )
 	);
 };
 

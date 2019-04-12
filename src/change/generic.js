@@ -45,7 +45,7 @@ def.proto._transformChangeList =
 
 	for( let c of cList )
 	{
-		const cr = this.transform( cList.get( c ) );
+		const cr = this.transform( c );
 
 		// changes that transformed away are sliced out.
 		if( !cr ) continue;

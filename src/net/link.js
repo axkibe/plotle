@@ -7,6 +7,40 @@
 tim.define( module, ( def ) => {
 
 
+if( TIM )
+{
+	def.attributes =
+	{
+		// the path, FIXME remove
+		path : { type : 'tim.js/path' },
+
+		// reference to the current moment of dynamic space
+		refMomentSpace : { type : [ 'undefined', '../ref/moment' ] },
+
+		// reference to the current moment
+		// of the userSpaceList
+		refMomentUserSpaceList : { type : [ 'undefined', '../ref/moment' ] },
+
+		// user space list dynamic
+		userSpaceList : { type : [ 'undefined', '../dynamic/refSpaceList' ] },
+
+		// currently logged in user credentials
+		userCreds : { type : [ 'undefined', '../user/creds' ] },
+
+		// changes to be send to the server
+		_outbox : { type : [ 'undefined', '../change/wrapList' ] },
+
+		// changes that are currently on the way
+		_postbox : { type : [ 'undefined', '../change/wrapList' ] },
+
+		// the timer on startup
+		_startTimer : { type : [ 'undefined', 'integer' ] },
+	}
+
+	def.twig = [ './channel' ];
+};
+
+
 const change_wrapList = tim.require( '../change/wrapList' );
 
 const reply_auth = tim.require( '../reply/auth' );
@@ -38,32 +72,6 @@ const shell_doTracker = tim.require( '../shell/doTracker' );
 const tim_path = tim.require( 'tim.js/path' );
 
 
-def.attributes =
-{
-	// reference to the current moment of dynamic space
-	refMomentSpace : { type : [ 'undefined', '../ref/moment' ] },
-
-	// reference to the current moment
-	// of the userSpaceList
-	refMomentUserSpaceList : { type : [ 'undefined', '../ref/moment' ] },
-
-	// user space list dynamic
-	userSpaceList : { type : [ 'undefined', '../dynamic/refSpaceList' ] },
-
-	// currently logged in user credentials
-	userCreds : { type : [ 'undefined', '../user/creds' ] },
-
-	// changes to be send to the server
-	_outbox : { type : [ 'undefined', '../change/wrapList' ] },
-
-	// changes that are currently on the way
-	_postbox : { type : [ 'undefined', '../change/wrapList' ] },
-
-	// the timer on startup
-	_startTimer : { type : [ 'undefined', 'integer' ] },
-};
-
-
 /*
 | Aquires a space from the server
 | and starts receiving updates for it.
@@ -78,18 +86,16 @@ def.proto.acquireSpace =
 	{
 		system.cancelTimer( root.link._startTimer );
 
-		root.alter(
-			'link', root.link.create( '_startTimer', undefined )
-		);
+		root.alter( 'link', root.link.create( '_startTimer', undefined ) );
 	}
 
 	// aborts the current running update.
-	root.ajax.get( 'update' ).abortAll( );
+	root.link.get( 'update' ).abortAll( );
 
 	// aborts any previous acquireSpace requests.
-	root.ajax.get( 'command' ).abortAll( '_onAcquireSpace' );
+	root.link.get( 'command' ).abortAll( '_onAcquireSpace' );
 
-	root.ajax.get( 'command' ).request(
+	root.link.get( 'command' ).request(
 		request_acquire.create(
 			'createMissing', createMissing,
 			'spaceRef', spaceRef,
@@ -129,8 +135,7 @@ def.proto.auth =
 		userCreds
 	)
 {
-	root.ajax
-	.get( 'command' )
+	root.link.get( 'command' )
 	.request(
 		request_auth.create( 'userCreds', userCreds ),
 		'_onAuth'
@@ -148,8 +153,7 @@ def.proto.register =
 		news
 	)
 {
-	root.ajax
-	.get( 'command' )
+	root.link.get( 'command' )
 	.request(
 		request_register.create(
 			'userCreds', userCreds,
@@ -326,8 +330,7 @@ def.proto._sendChanges =
 			)
 	);
 
-	root.ajax
-	.get( 'command' )
+	root.link.get( 'command' )
 	.request(
 		request_alter.create(
 			'changeWrapList', outbox,
@@ -544,8 +547,7 @@ def.proto._update =
 
 	if( refMomentUserSpaceList ) list.push( refMomentUserSpaceList );
 
-	root.ajax
-	.get( 'update' )
+	root.link.get( 'update' )
 	.request(
 		request_update.create(
 			'moments', ref_momentList.create( 'list:init', list ),
