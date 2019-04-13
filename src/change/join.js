@@ -172,62 +172,47 @@ def.proto.changeTree =
 
 
 /*
-| Returns a change, changeList, changeWrap or changeWrapList
-| transformed on this change.
+| Maps transformables to transform functions
 */
-def.proto.transform =
-	function(
-		cx
-	)
+def.staticLazy._transformers = ( ) =>
 {
-	if( !cx ) return cx;
+	const map = new Map( );
 
-	switch( cx.timtype )
-	{
-		case change_mark_text :
+	const tSame           = ( c ) => c;
+	const tTextMark       = function( c ) { return this._transformTextMark( c ); };
+	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
+	const tInsertRemove   = function( c ) { return this._transformInsertRemove( c ); };
+	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
+	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
+	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-			return this._transformTextMark( cx );
+	map.set( change_mark_text, tTextMark );
 
-		case change_mark_node : // FUTURE might be para
-		case change_set :
+	// FUTURE might be para
+	map.set( change_mark_node, tSame );
+	map.set( change_set,       tSame );
 
-			return cx;
+	// FUTURE change ranks
+	// but right now this can never happen
+	// since for text split/join is excl. used
+	// and grow/shrink excl. for items
+	map.set( change_grow,      tSame );
+	map.set( change_shrink,    tSame );
 
-		case change_grow :
-		case change_shrink :
+	map.set( change_join,      tJoinSplit );
+	map.set( change_split,     tJoinSplit );
 
-			// FUTURE change ranks
-			// but right now this can never happen
-			// since for text split/join is excl. used
-			// and grow/shrink excl. for items
-			return cx;
+	map.set( change_insert,    tInsertRemove );
+	map.set( change_remove,    tInsertRemove );
 
-		case change_join :
-		case change_split :
 
-			return this._transformJoinSplit( cx );
+	map.set( change_mark_node, tSame );
 
-		case change_insert :
-		case change_remove :
+	map.set( change_list,      tChangeList );
+	map.set( change_wrap,      tChangeWrap );
+	map.set( change_wrapList,  tChangeWrapList );
 
-			return this._transformInsertRemove( cx );
-
-		case change_list :
-
-			return this._transformChangeList( cx );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( cx );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( cx );
-
-		default :
-
-			throw new Error( );
-	}
+	return map;
 };
 
 

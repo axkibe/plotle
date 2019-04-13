@@ -97,48 +97,34 @@ def.proto.changeTree =
 
 
 /*
-| Returns a change* transformed on this change.
+| Maps transformables to transform functions
 */
-def.proto.transform =
-	function(
-		cx
-	)
+def.staticLazy._transformers = ( ) =>
 {
-	if( !cx ) return cx;
+	const map = new Map( );
 
-	switch( cx.timtype )
-	{
-		case change_grow :
-		case change_join :
-		case change_shrink :
-		case change_split :
-		case change_insert :
-		case change_remove :
-		case change_mark_text :
-		case change_mark_node :
+	const tSame           = ( c ) => c;
+	const tSet            = function( c ) { return this._transformSet( c ); };
+	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
+	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
+	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-			return cx;
+	map.set( change_grow,      tSame );
+	map.set( change_join,      tSame );
+	map.set( change_shrink,    tSame );
+	map.set( change_split,     tSame );
+	map.set( change_insert,    tSame );
+	map.set( change_remove,    tSame );
+	map.set( change_mark_text, tSame );
+	map.set( change_mark_node, tSame );
 
-		case change_set :
+	map.set( change_set,       tSet );
 
-			return this._transformChangeSet( cx );
+	map.set( change_list,      tChangeList );
+	map.set( change_wrap,      tChangeWrap );
+	map.set( change_wrapList,  tChangeWrapList );
 
-		case change_list :
-
-			return this._transformChangeList( cx );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( cx );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( cx );
-
-		default :
-
-			throw new Error( );
-	}
+	return map;
 };
 
 

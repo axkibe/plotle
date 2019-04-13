@@ -135,58 +135,39 @@ def.proto.changeTree =
 
 
 /*
-| Returns a change, changeList, changeWrap or changeWrapList
-| transformed on this change.
+| Maps transformables to transform functions
 */
-def.proto.transform =
-	function(
-		cx
-	)
+def.staticLazy._transformers = ( ) =>
 {
-	if( !cx ) return cx;
+	const map = new Map( );
 
-	switch( cx.timtype )
-	{
-		case change_mark_text :
+	const tSame           = ( c ) => c;
+	const tTextmark       = function( c ) { return this._transformTextMark( c ); };
+	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
+	const tInsert         = function( c ) { return this._transformInsert( c ); };
+	const tRemove         = function( c ) { return this._transformRemove( c ); };
+	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
+	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
+	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-			return this._transformTextMark( cx );
+	map.set( change_mark_text, tTextmark );
 
-		case change_grow :
-		case change_shrink :
-		case change_set :
-		case change_mark_node :
+	map.set( change_grow,      tSame );
+	map.set( change_shrink,    tSame );
+	map.set( change_set,       tSame );
+	map.set( change_mark_node, tSame );
 
-			return cx;
+	map.set( change_join,      tJoinSplit );
+	map.set( change_split,     tJoinSplit );
 
-		case change_join :
-		case change_split :
+	map.set( change_insert,    tInsert );
+	map.set( change_remove,    tRemove );
 
-			return this._transformJoinSplit( cx );
+	map.set( change_list,      tChangeList );
+	map.set( change_wrap,      tChangeWrap );
+	map.set( change_wrapList,  tChangeWrapList );
 
-		case change_insert :
-
-			return this._transformInsert( cx );
-
-		case change_remove :
-
-			return this._transformRemove( cx );
-
-		case change_list :
-
-			return this._transformChangeList( cx );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( cx );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( cx );
-
-		default :
-
-			throw new Error( );
-	}
+	return map;
 };
 
 
@@ -204,15 +185,9 @@ def.proto._transformInsert =
 /**/	if( cx.timtype !== change_insert ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
+	if( !this.path.equals( cx.path ) ) return cx;
 
-	if( cx.at1 < this.at1 )
-	{
-		return cx;
-	}
+	if( cx.at1 < this.at1 ) return cx;
 	else if( cx.at1 <= this.at2 )
 	{
 		return cx.create( 'at1', this.at1, 'at2', this.at1 + cx.val.length );
@@ -235,10 +210,7 @@ def.proto._transformTextMark =
 {
 	if( !this.path.equals( mark.path ) ) return mark;
 
-	if( mark.at < this.at1 )
-	{
-		return mark;
-	}
+	if( mark.at < this.at1 ) return mark;
 	else if( mark.at <= this.at2 )
 	{
 		return mark.create( 'at', this.at1 );
@@ -280,14 +252,10 @@ def.proto._transformRemove =
 
 	if( cx.at2 <= this.at1 )
 	{
-		// console.log( 'case 0' );
-
 		return cx;
 	}
 	else if( cx.at1 >= this.at2 )
 	{
-		// console.log( 'case 1' );
-
 		return(
 			cx.create(
 				'at1', cx.at1 - len,
@@ -297,8 +265,6 @@ def.proto._transformRemove =
 	}
 	else if( cx.at1 < this.at1 && cx.at2 > this.at2 )
 	{
-		// console.log( 'case 2' );
-
 		return(
 			cx.create(
 				'at2', cx.at2 - len,
@@ -310,14 +276,10 @@ def.proto._transformRemove =
 	}
 	else if( cx.at1 >= this.at1 && cx.at2 <= this.at2 )
 	{
-		// console.log( 'case 3' );
-
 		return undefined;
 	}
 	else if( cx.at1 < this.at1 && cx.at2 <= this.at2 )
 	{
-		// console.log( 'case 4' );
-
 		return(
 			cx.create(
 				'at2', this.at1,
@@ -327,8 +289,6 @@ def.proto._transformRemove =
 	}
 	else if( cx.at1 <= this.at2 && cx.at2 > this.at2 )
 	{
-		// console.log( 'case 5' );
-
 		return(
 			cx.create(
 				'at1', this.at1,
@@ -374,7 +334,6 @@ def.proto._transformJoinSplit =
 	if( this.at1 >= cx.at1 )
 	{
 		// case 0
-
 		// the remove happens fully in the line to be
 		// splitted so no change
 		return cx;
@@ -382,18 +341,14 @@ def.proto._transformJoinSplit =
 	else if( this.at2 > cx.at1 )
 	{
 		// case 1
-
 		// the remove shifts the split on its left end
-
 		return cx.create( 'at1', this.at1 );
 	}
 	else
 	{
 		// case 2
-
 		// the remove shifts the split by its length
 		// joins are always case 2 since join.at1 == text.length
-
 		const len = this.val.length;
 
 		return cx.create( 'at1', cx.at1 - len );

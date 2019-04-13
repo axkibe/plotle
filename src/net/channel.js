@@ -15,8 +15,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the channels path in data tree
-		path : { type : 'tim.js/path' },
+		// name of the channel
+		name : { type : 'string' },
 
 		// the fifo of requests
 		_fifo :
@@ -31,29 +31,6 @@ if( TIM )
 const net_requestWrap = tim.require( './requestWrap' );
 
 const net_requestWrapList = tim.require( './requestWrapList' );
-
-
-/*
-| Exta checking.
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if(	this.path.get( 0 ) !== 'link' ) throw new Error( );
-/**/}
-};
-
-
-/*
-| The channel name.
-*/
-def.lazy.channelName =
-	function( )
-{
-	return this.path.get( -1 );
-};
 
 
 /*
@@ -96,7 +73,7 @@ def.proto.abortAll =
 	}
 
 	root.alter(
-		'link', root.link.create( 'twig:set', this.channelName, this.create( '_fifo', fifo ) )
+		'link', root.link.create( 'twig:set', this.name, this.create( '_fifo', fifo ) )
 	);
 };
 
@@ -112,7 +89,7 @@ def.proto.request =
 {
 	let reqWrap =
 		net_requestWrap.create(
-			'channelName', this.channelName,
+			'channelName', this.name,
 			'receiverFuncName', receiverFuncName,
 			'request', request
 		);
@@ -123,7 +100,7 @@ def.proto.request =
 		'link',
 			root.link.create(
 				'twig:set',
-				this.channelName,
+				this.name,
 				this.create( '_fifo', this._fifo.append( reqWrap ) )
 			)
 	);
@@ -153,7 +130,7 @@ def.proto.onReply =
 	channel = channel.create( '_fifo', fifo );
 
 	root.alter(
-		'link', root.link.create( 'twig:set', channel.channelName, channel )
+		'link', root.link.create( 'twig:set', channel.name, channel )
 	);
 
 	root.link[ wrap.receiverFuncName ]( wrap.request, reply );

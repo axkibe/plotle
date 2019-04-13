@@ -11,9 +11,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the path, FIXME remove
-		path : { type : 'tim.js/path' },
-
 		// reference to the current moment of dynamic space
 		refMomentSpace : { type : [ 'undefined', '../ref/moment' ] },
 
@@ -35,10 +32,10 @@ if( TIM )
 
 		// the timer on startup
 		_startTimer : { type : [ 'undefined', 'integer' ] },
-	}
+	};
 
 	def.twig = [ './channel' ];
-};
+}
 
 
 const change_wrapList = tim.require( '../change/wrapList' );

@@ -58,8 +58,6 @@ const change_wrapList = tim.require( './wrapList' );
 const error = tim.require( './error' );
 
 
-
-
 /*
 | Exta checking
 */
@@ -111,15 +109,9 @@ def.proto.changeTree =
 {
 	const text = tree.getPath( this.path );
 
-	if( typeof( text ) !== 'string' )
-	{
-		throw error.make( 'insert.path signates no string' );
-	}
+	if( typeof( text ) !== 'string' ) throw error.make( 'insert.path signates no string' );
 
-	if( this.at1 > text.length )
-	{
-		throw error.make( 'insert.at1 invalid' );
-	}
+	if( this.at1 > text.length ) throw error.make( 'insert.at1 invalid' );
 
 	return(
 		tree.setPath(
@@ -133,55 +125,38 @@ def.proto.changeTree =
 
 
 /*
-| Returns a change, changeList, changeWrap or changeWrapList
-| transformed on this change.
+| Maps transformables to transform functions
 */
-def.proto.transform =
-	function(
-		cx
-	)
+def.staticLazy._transformers = ( ) =>
 {
-	if( !cx ) return cx;
+	const map = new Map( );
 
-	switch( cx.timtype )
-	{
-		case change_mark_text :
+	const tSame           = ( c ) => c;
+	const tTextmark       = function( c ) { return this._transformTextMark( c ); };
+	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
+	const tInsertRemove   = function( c ) { return this._transformInsertRemove( c ); };
+	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
+	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
+	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-			return this._transformTextMark( cx );
+	map.set( change_mark_text, tTextmark );
 
-		case change_grow :
-		case change_shrink :
-		case change_set :
-		case change_mark_node :
+	map.set( change_grow,      tSame );
+	map.set( change_shrink,    tSame );
+	map.set( change_set,       tSame );
+	map.set( change_mark_node, tSame );
 
-			return cx;
+	map.set( change_join,      tJoinSplit );
+	map.set( change_split,     tJoinSplit );
 
-		case change_join :
-		case change_split :
+	map.set( change_insert,    tInsertRemove );
+	map.set( change_remove,    tInsertRemove );
 
-			return this._transformJoinSplit( cx );
+	map.set( change_list,      tChangeList );
+	map.set( change_wrap,      tChangeWrap );
+	map.set( change_wrapList,  tChangeWrapList );
 
-		case change_insert :
-		case change_remove :
-
-			return this._transformInsertRemove( cx );
-
-		case change_list :
-
-			return this._transformChangeList( cx );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( cx );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( cx );
-
-		default :
-
-			throw new Error( );
-	}
+	return map;
 };
 
 
@@ -218,10 +193,7 @@ def.proto._transformTextMark =
 	)
 {
 	return(
-		(
-			!this.path.equals( mark.path )
-			|| mark.at < this.at1
-		)
+		( !this.path.equals( mark.path ) || mark.at < this.at1 )
 		? mark
 		: mark.create( 'at', mark.at + this.val.length )
 	);
@@ -251,7 +223,6 @@ def.proto._transformJoinSplit =
 		// so no need to change the split
 
 		// for joins this cannot happen anyway
-
 		return cx;
 	}
 

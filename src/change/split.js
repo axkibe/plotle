@@ -142,65 +142,41 @@ def.proto.changeTree =
 
 
 /*
-| Returns a change, changeList, changeWrap or changeWrapList
-| transformed on this change.
+| Maps transformables to transform functions
 */
-def.proto.transform =
-	function(
-		cx
-	)
+def.staticLazy._transformers = ( ) =>
 {
-	if( !cx ) return cx;
+	const map = new Map( );
 
-	switch( cx.timtype )
-	{
-		case change_mark_text :
+	const tSame           = ( c ) => c;
+	const tMark           = function( c ) { return this._transformMark( c ); };
+	const tInsert         = function( c ) { return this._transformInsert( c ); };
+	const tRemove         = function( c ) { return this._transformRemove( c ); };
+	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
+	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
+	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
+	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-			return this._transformTextMark( cx );
+	map.set( change_mark_text, tMark );
 
-		case change_grow :
-		case change_shrink :
+	// FUTURE fix ranks
+	map.set( change_grow,      tSame );
+	map.set( change_shrink,    tSame );
 
-			// FUTURE change ranks
-			// but right now this can never happen
-			// since for text split/join is excl. used
-			// and grow/shrink excl. for items
-			return cx;
+	map.set( change_mark_node, tSame );
+	map.set( change_set,       tSame );
 
-		case change_set :
-		case change_mark_node :
+	map.set( change_join,      tJoinSplit );
+	map.set( change_split,     tJoinSplit );
 
-			return cx;
+	map.set( change_insert,    tInsert );
+	map.set( change_remove,    tRemove );
 
-		case change_join :
-		case change_split :
+	map.set( change_list,      tChangeList );
+	map.set( change_wrap,      tChangeWrap );
+	map.set( change_wrapList,  tChangeWrapList );
 
-			return this._transformJoinSplit( cx );
-
-		case change_insert :
-
-			return this._transformInsert( cx );
-
-		case change_list :
-
-			return this._transformChangeList( cx );
-
-		case change_remove :
-
-			return this._transformRemove( cx );
-
-		case change_wrap :
-
-			return this._transformChangeWrap( cx );
-
-		case change_wrapList :
-
-			return this._transformChangeWrapList( cx );
-
-		default :
-
-			throw new Error( );
-	}
+	return map;
 };
 
 

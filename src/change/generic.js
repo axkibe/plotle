@@ -29,6 +29,25 @@ def.proto.changeTreeReverse =
 
 
 /*
+| Returns a change, changeList, changeWrap or changeWrapList
+| transformed on this change.
+*/
+def.proto.transform =
+	function(
+		c     // anything transformable
+	)
+{
+	if( !c ) return c;
+
+	const t = this.timtype._transformers.get( c.timtype );
+
+	if( !t ) throw new Error( );
+
+	return t.call( this, c );
+};
+
+
+/*
 | Returns a change list transformed by this change.
 */
 def.proto._transformChangeList =
@@ -86,11 +105,7 @@ def.proto._transformChangeWrapList =
 {
 	const tList = [ ];
 
-	for( let r = 0, rl = cwList.length; r < rl; r++ )
-	{
-		tList[ r ] = this._transformChangeWrap( cwList.get( r ) );
-	}
-
+	for( let cw of cwList ) tList.push( this._transformChangeWrap( cw ) );
 
 	return cwList.create( 'list:init', tList );
 };

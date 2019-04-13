@@ -69,13 +69,7 @@ def.proto.changeTree =
 /*
 | Returns a change* transformed on this change.
 */
-def.proto.transform =
-	function(
-		cx
-	)
-{
-	return cx;
-};
+def.proto.transform = ( c ) => c;
 
 
 } );

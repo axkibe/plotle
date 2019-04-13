@@ -361,8 +361,6 @@ def.static.startup =
 
 	const show = show_form.loading;
 
-	const linkPath = tim_path.empty.append( 'link' );
-
 	let userCreds = user_creds.createFromLocalStorage( );
 
 	if( !userCreds ) userCreds = user_creds.createVisitor( );
@@ -372,11 +370,8 @@ def.static.startup =
 		'doTracker', shell_doTracker.create( ),
 		'link',
 			net_link.create(
-				'path', linkPath,
-				'twig:add', 'command',
-					net_channel.create( 'path', linkPath.append( 'command' ) ),
-				'twig:add', 'update',
-					net_channel.create( 'path', linkPath.append( 'update' ) )
+				'twig:add', 'command', net_channel.create( 'name', 'command' ),
+				'twig:add', 'update', net_channel.create( 'name', 'update' )
 			),
 		'show', show,
 		'spaceTransform', gleam_transform.normal,
