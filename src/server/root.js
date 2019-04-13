@@ -529,9 +529,9 @@ def.proto.wake =
 		result.writeHead(
 			200,
 			{
-				'Content-Type' : 'application/json',
-				'Cache-Control' : 'no-cache',
-				'Date' : new Date().toUTCString()
+				'content-type' : 'application/json',
+				'cache-control' : 'no-cache',
+				'date' : new Date().toUTCString()
 			}
 		);
 
@@ -553,9 +553,9 @@ def.proto.webError =
 	result.writeHead(
 		code,
 		{
-			'Content-Type' : 'text/plain',
-			'Cache-Control' : 'no-cache',
-			'Date' : new Date().toUTCString()
+			'content-type' : 'text/plain',
+			'cache-control' : 'no-cache',
+			'date' : new Date().toUTCString()
 		}
 	);
 
@@ -659,12 +659,12 @@ def.proto.requestListener =
 
 	const header =
 	{
-		'Content-Type' : resource.mime,
-		'Cache-Control' :
+		'content-type' : resource.mime,
+		'cache-control' :
 			config.get( 'server', 'cache' )
 			? server_maxAge.map( resource.maxage )
 			: 'no-cache',
-		'Date' : new Date().toUTCString()
+		'date' : new Date().toUTCString()
 	};
 
 	if( resource.sourceMap ) header.SourceMap = resource.sourceMap.aliases.get( 0 );
@@ -672,7 +672,7 @@ def.proto.requestListener =
 	if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 	{
 		// delivers compressed
-		header[ 'Content-Encoding' ] = 'gzip';
+		header[ 'content-encoding' ] = 'gzip';
 
 		result.writeHead( 200, header );
 
@@ -770,9 +770,9 @@ def.proto.webAjax =
 		result.writeHead(
 			200,
 			{
-				'Content-Type' : 'application/json',
-				'Cache-Control' : 'no-cache',
-				'Date' : new Date().toUTCString()
+				'content-type' : 'application/json',
+				'cache-control' : 'no-cache',
+				'date' : new Date().toUTCString()
 			}
 		);
 

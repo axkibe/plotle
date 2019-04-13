@@ -149,7 +149,7 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tMark           = function( c ) { return this._transformMark( c ); };
+	const tMark           = function( c ) { return this._transformTextMark( c ); };
 	const tInsert         = function( c ) { return this._transformInsert( c ); };
 	const tRemove         = function( c ) { return this._transformRemove( c ); };
 	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };

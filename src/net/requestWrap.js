@@ -118,7 +118,7 @@ def.proto.send =
 	xhr.open( 'POST', '/mm', true );
 
 	xhr.setRequestHeader(
-		'Content-type',
+		'content-type',
 		'application/x-www-form-urlencoded'
 	);
 
