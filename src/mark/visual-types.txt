@@ -1,5 +1,4 @@
-# All visual mark types.
-
+# All mark types.
 ./caret
 ./items
 ./range

@@ -43,7 +43,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the current transform of space
 		// no json thus not saved or transmitted
@@ -100,7 +100,7 @@ const visual_frame = tim.require( '../visual/frame' );
 
 const visual_grid = tim.require( '../visual/grid' );
 
-const visual_mark_items = tim.require( '../visual/mark/items' );
+const mark_items = tim.require( '../mark/items' );
 
 
 /*
@@ -728,7 +728,7 @@ def.proto.specialKey =
 
 				paths = tim_path_list.create( 'list:init', paths );
 
-				root.alter( 'mark', visual_mark_items.create( 'itemPaths', paths ) );
+				root.alter( 'mark', mark_items.create( 'itemPaths', paths ) );
 
 				return true;
 			}

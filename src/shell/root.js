@@ -65,7 +65,7 @@ if( TIM )
 		_display : { type : '../gleam/display/canvas' },
 
 		// the users mark
-		_mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		_mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// shell has system focus
 		_systemFocus : { type : 'boolean' },
@@ -222,9 +222,9 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const user_creds = tim.require( '../user/creds' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_range = tim.require( '../visual/mark/range' );
+const mark_range = tim.require( '../mark/range' );
 
 const widget_factory = tim.require( '../widget/factory' );
 
@@ -721,7 +721,7 @@ def.proto.alter =
 
 	if( mark !== pass )
 	{
-		if( mark && mark.timtype === visual_mark_caret )
+		if( mark && mark.timtype === mark_caret )
 		{
 			mark = mark.create( 'focus', this._systemFocus );
 		}
@@ -731,11 +731,11 @@ def.proto.alter =
 
 	if( space !== pass || mark !== pass )
 	{
-		if( mark && mark.timtype === visual_mark_range )
+		if( mark && mark.timtype === mark_range )
 		{
 			if( space === pass ) space = this.space;
 
-			const markedItem = space.get( mark.beginMark.path.get( 2 ) );
+			const markedItem = space.get( mark.begin.path.get( 2 ) );
 
 			mark = mark.create( 'doc', markedItem.doc );
 		}
@@ -1539,34 +1539,32 @@ def.proto.removeRange =
 		range
 	)
 {
-	const frontMark = range.frontMark;
+	const front = range.front;
 
-	const backMark = range.backMark;
+	const back = range.back;
 
 /**/if( CHECK )
 /**/{
 /**/	if(
-/**/		frontMark.path.get( -1 ) !== 'text'
-/**/		|| backMark.path.get( -1 ) !== 'text'
-/**/		|| frontMark.path.get( 0 ) !== 'space'
-/**/		|| backMark.path.get( 0 ) !== 'space'
+/**/		front.path.get( -1 ) !== 'text' || back.path.get( -1 ) !== 'text'
+/**/		|| front.path.get( 0 ) !== 'space' || back.path.get( 0 ) !== 'space'
 /**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if ( frontMark.path.equals( backMark.path ) )
+	if ( front.path.equals( back.path ) )
 	{
 		root.alter(
 			'change',
 			change_remove.create(
-				'path', frontMark.path.chop,
-				'at1', frontMark.at,
-				'at2', backMark.at,
+				'path', front.path.chop,
+				'at1', front.at,
+				'at2', back.at,
 				'val',
-					root._actionSpace.getPath( frontMark.path.chop )
-					.substring( frontMark.at, backMark.at )
+					root._actionSpace.getPath( front.path.chop )
+					.substring( front.at, back.at )
 			)
 		);
 
@@ -1575,20 +1573,17 @@ def.proto.removeRange =
 
 	const change = [ ];
 
-	const k1 = frontMark.path.get( -2 );
+	const k1 = front.path.get( -2 );
 
-	const k2 = backMark.path.get( -2 );
+	const k2 = back.path.get( -2 );
 
-	const pivot =
-		root.space.getPath(
-			frontMark.path.chop.shorten.shorten.shorten
-		);
+	const pivot = root.space.getPath( front.path.chop.shorten.shorten.shorten );
 
 	const r1 = pivot.rankOf( k1 );
 
 	const r2 = pivot.rankOf( k2 );
 
-	let text = root.space.getPath( frontMark.path.chop );
+	let text = root.space.getPath( front.path.chop );
 
 	let ve;
 
@@ -1598,7 +1593,7 @@ def.proto.removeRange =
 
 		change.push(
 			change_join.create(
-				'path', frontMark.path.chop,
+				'path', front.path.chop,
 				'path2', ve.textPath.chop,
 				'at1', text.length
 			)
@@ -1607,17 +1602,13 @@ def.proto.removeRange =
 		text += ve.text;
 	}
 
-	text =
-		text.substring(
-			frontMark.at,
-			text.length - ve.text.length + backMark.at
-		);
+	text = text.substring( front.at, text.length - ve.text.length + back.at );
 
 	change.push(
 		change_remove.create(
-			'path', frontMark.path.chop,
-			'at1', frontMark.at,
-			'at2', frontMark.at + text.length,
+			'path', front.path.chop,
+			'at1', front.at,
+			'at2', front.at + text.length,
 			'val', text
 		)
 	);
@@ -1654,7 +1645,7 @@ def.proto.setSystemFocus =
 
 	let mark = this._mark;
 
-	if( mark && mark.timtype === visual_mark_caret )
+	if( mark && mark.timtype === mark_caret )
 	{
 		mark = mark.create( 'focus', focus );
 	}
@@ -1734,7 +1725,7 @@ def.proto.spawnRelation =
 
 	root.alter(
 		'change', change,
-		'mark', visual_mark_caret.pathAt( mpath, 0 )
+		'mark', mark_caret.createPathAt( mpath, 0 )
 	);
 };
 
@@ -1810,18 +1801,18 @@ def.proto.update =
 
 	switch( mark.timtype )
 	{
-		case visual_mark_range :
+		case mark_range :
 
-			mark = mark.createTransformed(
-				changes,
-				root.space.getPath( mark.docPath.chop )
-			);
+			mark = changes.transform( mark );
+
+//          XXX FIXME DOC XXX
+//			mark.createTransformed( changes, root.space.getPath( mark.docPath.chop ) );
 
 			break;
 
 		default :
 
-			mark = mark.createTransformed( changes );
+			mark = changes.transform( mark );
 
 			break;
 	}

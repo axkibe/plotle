@@ -28,8 +28,6 @@ if( TIM )
 }
 
 
-const error = tim.require( './error' );
-
 const change_grow = tim.require( './grow' );
 
 const change_insert = tim.require( './insert' );
@@ -37,10 +35,6 @@ const change_insert = tim.require( './insert' );
 const change_join = tim.require( './join' );
 
 const change_list = tim.require( './list' );
-
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
 
 const change_remove = tim.require( './remove' );
 
@@ -52,19 +46,27 @@ const change_wrap = tim.require( './wrap' );
 
 const change_wrapList = tim.require( './wrapList' );
 
+const error = tim.require( './error' );
+
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
 
 
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
-/**/	};
-/**/}
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
+};
 
 
 /*
@@ -149,7 +151,9 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tMark           = function( c ) { return this._transformTextMark( c ); };
+	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
+	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
+	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
 	const tInsert         = function( c ) { return this._transformInsert( c ); };
 	const tRemove         = function( c ) { return this._transformRemove( c ); };
 	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
@@ -157,13 +161,16 @@ def.staticLazy._transformers = ( ) =>
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tMark );
+	map.set( mark_pat,    tMarkPat );
+	map.set( mark_caret,  tMarkCaret );
+	map.set( mark_range,  tMarkRange );
+	map.set( mark_items,  tSame );
+	map.set( mark_widget, tSame );
 
 	// FUTURE fix ranks
 	map.set( change_grow,      tSame );
 	map.set( change_shrink,    tSame );
 
-	map.set( change_mark_node, tSame );
 	map.set( change_set,       tSame );
 
 	map.set( change_join,      tJoinSplit );
@@ -249,18 +256,18 @@ def.proto._transformJoinSplit =
 /*
 | Transforms a text mark by this split.
 */
-def.proto._transformTextMark =
+def.proto._transformMarkPat =
 	function(
 		mark
 	)
 {
-	if( !this.path.equals( mark.path ) ) return mark;
+	if( !this.path.equals( mark.path.chop ) ) return mark;
 
 	if( mark.at < this.at1 ) return mark;
 
 	return(
 		mark.create(
-			'path', this.path2,
+			'path', this.path2.prepend( mark.path.get( 0 ) ),
 			'at', mark.at - this.at1
 		)
 	);

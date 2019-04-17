@@ -49,7 +49,7 @@ if( TIM )
 		item2key : { type : 'string', json : true },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the doc
 		// no json thus not saved or transmitted
@@ -84,9 +84,9 @@ const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
-const gleam_glint_window = tim.require( '../gleam/glint/window' );
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
 
-const gleam_point = tim.require( '../gleam/point' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gruga_label = tim.require( '../gruga/label' );
 
@@ -190,9 +190,12 @@ def.lazy.glint =
 
 	const wg =
 		gleam_glint_window.create(
-			'glint', this.doc.glint,
-			'rect', tZone.enlarge1,
-			'offset', gleam_point.zero
+			'pane',
+				gleam_glint_pane.create(
+					'glint', this.doc.glint,
+					'size', tZone.enlarge1.size
+				),
+			'pos', tZone.enlarge1.pos
 		);
 
 	const arr = [ wg ];

@@ -36,10 +36,6 @@ const change_join = tim.require( './join' );
 
 const change_list = tim.require( './list' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_remove = tim.require( './remove' );
 
 const change_shrink = tim.require( './shrink' );
@@ -51,6 +47,16 @@ const change_wrap = tim.require( './wrap' );
 const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
+
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
 
 
 /*
@@ -109,14 +115,18 @@ def.staticLazy._transformers = ( ) =>
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
+	map.set( mark_pat,    tSame );
+	map.set( mark_caret,  tSame );
+	map.set( mark_range,  tSame );
+	map.set( mark_items,  tSame );
+	map.set( mark_widget, tSame );
+
 	map.set( change_grow,      tSame );
 	map.set( change_join,      tSame );
 	map.set( change_shrink,    tSame );
 	map.set( change_split,     tSame );
 	map.set( change_insert,    tSame );
 	map.set( change_remove,    tSame );
-	map.set( change_mark_text, tSame );
-	map.set( change_mark_node, tSame );
 
 	map.set( change_set,       tSet );
 

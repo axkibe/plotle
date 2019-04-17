@@ -22,9 +22,9 @@ const gruga_formFacet = tim.require( '../gruga/formFacet' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_widget = tim.require( '../visual/mark/widget' );
+const mark_widget = tim.require( '../mark/widget' );
 
 const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
@@ -117,8 +117,8 @@ def.proto.cycleFocus =
 			root.alter(
 				'mark',
 					ve.caretable
-					? visual_mark_caret.pathAt( ve.path, 0 )
-					: visual_mark_widget.create( 'path', ve.path )
+					? mark_caret.createPathAt( ve.path, 0 )
+					: mark_widget.create( 'path', ve.path )
 			);
 
 			break;

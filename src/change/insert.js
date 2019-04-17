@@ -47,15 +47,21 @@ const change_shrink = tim.require( './shrink' );
 
 const change_split = tim.require( './split' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_wrap = tim.require( './wrap' );
 
 const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
+
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
 
 
 /*
@@ -64,18 +70,12 @@ const error = tim.require( './error' );
 def.proto._check =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.at1 + this.val.length !== this.at2 )
-/**/	{
-/**/		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
-/**/	}
-/**/
-/**/	if( this.at1 < 0 || this.at2 < 0 )
-/**/	{
-/**/		throw error.make( 'insert.at1|at2 negative' );
-/**/	}
-/**/}
+	if( this.at1 + this.val.length !== this.at2 )
+	{
+		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
+	}
+
+	if( this.at1 < 0 || this.at2 < 0 ) throw error.make( 'insert.at1|at2 negative' );
 };
 
 
@@ -132,19 +132,24 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tTextmark       = function( c ) { return this._transformTextMark( c ); };
+	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
+	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
+	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
 	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
 	const tInsertRemove   = function( c ) { return this._transformInsertRemove( c ); };
 	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tTextmark );
+	map.set( mark_pat,    tMarkPat );
+	map.set( mark_caret,  tMarkCaret );
+	map.set( mark_range,  tMarkRange );
+	map.set( mark_items,  tSame );
+	map.set( mark_widget, tSame );
 
 	map.set( change_grow,      tSame );
 	map.set( change_shrink,    tSame );
 	map.set( change_set,       tSame );
-	map.set( change_mark_node, tSame );
 
 	map.set( change_join,      tJoinSplit );
 	map.set( change_split,     tJoinSplit );
@@ -166,34 +171,34 @@ def.staticLazy._transformers = ( ) =>
 */
 def.proto._transformInsertRemove =
 	function(
-		cx
+		c
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_insert && cx.timtype !== change_remove ) throw new Error( );
+/**/	if( c.timtype !== change_insert && c.timtype !== change_remove ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.path.equals( c.path ) ) return c;
 
-	if( cx.at1 < this.at1 ) return cx;
+	if( c.at1 < this.at1 ) return c;
 
 	const len = this.val.length;
 
-	return cx.create( 'at1', cx.at1 + len, 'at2', cx.at2 + len );
+	return c.create( 'at1', c.at1 + len, 'at2', c.at2 + len );
 };
 
 
 /*
-| Transforms a text mark by this insert.
+| Transforms a pat mark by this insert.
 */
-def.proto._transformTextMark =
+def.proto._transformMarkPat =
 	function(
 		mark
 	)
 {
 	return(
-		( !this.path.equals( mark.path ) || mark.at < this.at1 )
+		( !this.path.equals( mark.path.chop ) || mark.at < this.at1 )
 		? mark
 		: mark.create( 'at', mark.at + this.val.length )
 	);
@@ -206,27 +211,26 @@ def.proto._transformTextMark =
 */
 def.proto._transformJoinSplit =
 	function(
-		cx
+		c
 	)
 {
-
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_join && cx.timtype !== change_split ) throw new Error( );
+/**/	if( c.timtype !== change_join && c.timtype !== change_split ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.path.equals( c.path ) ) return c;
 
-	if( this.at1 > cx.at1 )
+	if( this.at1 > c.at1 )
 	{
 		// this insert is in the line to be splited
 		// so no need to change the split
 
 		// for joins this cannot happen anyway
-		return cx;
+		return c;
 	}
 
-	return cx.create( 'at1', cx.at1 + this.val.length );
+	return c.create( 'at1', c.at1 + this.val.length );
 };
 
 

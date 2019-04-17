@@ -36,10 +36,6 @@ const change_insert = tim.require( './insert' );
 
 const change_list = tim.require( './list' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_remove = tim.require( './remove' );
 
 const change_set = tim.require( './set' );
@@ -54,21 +50,25 @@ const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
 
+const mark_caret = tim.require( '../mark/caret' );
 
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( this.at1 < 0 )
-/**/		{
-/**/			throw error.make( 'join.at1 negative' );
-/**/		}
-/**/	};
-/**/}
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.at1 < 0 ) throw error.make( 'join.at1 negative' );
+};
 
 
 /*
@@ -108,29 +108,17 @@ def.proto.changeTree =
 
 	const text2 = tree.getPath( path2 );
 
-	if( typeof( text ) !== 'string' )
-	{
-		throw error.make( 'join.path signates no string' );
-	}
+	if( typeof( text ) !== 'string' ) throw error.make( 'join.path signates no string' );
 
-	if( typeof( text2 ) !== 'string' )
-	{
-		throw error.make( 'join.path2 signates no string' );
-	}
+	if( typeof( text2 ) !== 'string' ) throw error.make( 'join.path2 signates no string' );
 
 	let pivot = tree.getPath( path.shorten.shorten.shorten );
 
 	if( !pivot.getKey ) throw error.make( 'join.pivot not ranked' );
 
-	if( at1 !== text.length )
-	{
-		throw error.make( 'join.at1 !== text.length' );
-	}
+	if( at1 !== text.length ) throw error.make( 'join.at1 !== text.length' );
 
-	if( !path2.shorten.shorten.subPathOf( path ) )
-	{
-		throw error.make( 'join.path2 not a subPath' );
-	}
+	if( !path2.shorten.shorten.subPathOf( path ) ) throw error.make( 'join.path2 not a subPath' );
 
 	const key = path.get( -2 );
 
@@ -144,20 +132,11 @@ def.proto.changeTree =
 
 	const rank2 = pivot.rankOf( key2 );
 
-	if( rank1 < 0 )
-	{
-		throw error.make( 'join.path has no rank' );
-	}
+	if( rank1 < 0 ) throw error.make( 'join.path has no rank' );
 
-	if( rank2 < 0 )
-	{
-		throw error.make( 'join.path2 has no rank' );
-	}
+	if( rank2 < 0 ) throw error.make( 'join.path2 has no rank' );
 
-	if( rank1 + 1 !== rank2 )
-	{
-		throw error.make( 'join ranks not sequential' );
-	}
+	if( rank1 + 1 !== rank2 ) throw error.make( 'join ranks not sequential' );
 
 	para1 = para1.create( 'text', para1.text + para2.text );
 
@@ -179,17 +158,23 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tTextMark       = function( c ) { return this._transformTextMark( c ); };
+	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
+	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
+	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
+
 	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
 	const tInsertRemove   = function( c ) { return this._transformInsertRemove( c ); };
 	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tTextMark );
+	map.set( mark_pat,    tMarkPat );
+	map.set( mark_caret,  tMarkCaret );
+	map.set( mark_range,  tMarkRange );
+	map.set( mark_items,  tSame );
+	map.set( mark_widget, tSame );
 
 	// FUTURE might be para
-	map.set( change_mark_node, tSame );
 	map.set( change_set,       tSame );
 
 	// FUTURE change ranks
@@ -205,8 +190,6 @@ def.staticLazy._transformers = ( ) =>
 	map.set( change_insert,    tInsertRemove );
 	map.set( change_remove,    tInsertRemove );
 
-
-	map.set( change_mark_node, tSame );
 
 	map.set( change_list,      tChangeList );
 	map.set( change_wrap,      tChangeWrap );
@@ -278,16 +261,16 @@ def.proto._transformJoinSplit =
 /*
 | Transforms a mark by this join.
 */
-def.proto._transformTextMark =
+def.proto._transformMarkPat =
 	function(
 		mark
 	)
 {
-	if( !this.path2.equals( mark.path ) ) return mark;
+	if( !this.path2.equals( mark.path.chop ) ) return mark;
 
 	return(
 		mark.create(
-			'path', this.path,
+			'path', this.path.prepend( mark.path.get( 0 ) ),
 			'at', mark.at + this.at1
 		)
 	);

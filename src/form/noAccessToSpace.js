@@ -30,7 +30,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the denied space
 		nonSpaceRef : { type : [ 'undefined', '../ref/space' ] },

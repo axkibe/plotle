@@ -32,7 +32,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },

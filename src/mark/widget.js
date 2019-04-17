@@ -20,17 +20,13 @@ if( TIM )
 /*
 | A widget has no item paths.
 */
-def.lazy.paths = () => undefined;
+def.lazy.paths = ( ) => undefined;
 
 
 /*
 | The widget's path.
 */
-def.lazy.widgetPath =
-	function( )
-{
-	return this.path;
-};
+def.lazy.widgetPath = function( ) { return this.path; };
 
 
 /*

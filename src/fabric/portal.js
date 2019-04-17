@@ -31,7 +31,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the doc
 		// no json thus not saved or transmitted
@@ -111,9 +111,9 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_items = tim.require( '../visual/mark/items' );
+const mark_items = tim.require( '../mark/items' );
 
 
 /*
@@ -226,7 +226,7 @@ def.static.createGeneric =
 				'val', portal,
 				'rank', 0
 			),
-		'mark', visual_mark_caret.pathAt( mpath, 0 )
+		'mark', mark_caret.createPathAt( mpath, 0 )
 	);
 };
 
@@ -279,7 +279,7 @@ def.proto.click =
 		if( sf.shape.within( pp ) )
 		{
 			setMark =
-				visual_mark_caret.pathAt(
+				mark_caret.createPathAt(
 					this.path.append( field ),
 					this._getOffsetAt( field, pp.x )
 				);
@@ -293,7 +293,7 @@ def.proto.click =
 	if( !setMark )
 	{
 		setMark =
-			visual_mark_items.create(
+			mark_items.create(
 				'itemPaths', tim_path_list.create( 'list:init', [ this.path ] )
 			);
 	}
@@ -814,11 +814,7 @@ def.lazy._innerGlint =
 			)
 		];
 
-	if(
-		mark
-		&& mark.timtype === visual_mark_caret
-		&& mark.focus
-	)
+	if( mark && mark.timtype === mark_caret && mark.focus )
 	{
 		const glintCaret = this._glintCaret;
 
@@ -915,7 +911,7 @@ def.proto._keyDown =
 
 			root.alter(
 				'mark',
-					visual_mark_caret.pathAt(
+					mark_caret.createPathAt(
 						this.path.append( 'spaceTag' ),
 						this._getOffsetAt( 'spaceTag', cpos.x + this._fieldSpaceUser.pos.x )
 					)
@@ -927,11 +923,7 @@ def.proto._keyDown =
 		case 'spaceTag' :
 
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						this.path.append( 'moveToButton' ),
-						0
-					)
+				'mark', mark_caret.createPathAt( this.path.append( 'moveToButton' ), 0 )
 			);
 
 			break;
@@ -939,11 +931,7 @@ def.proto._keyDown =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						this.path.append( 'spaceUser' ),
-						0
-					)
+				'mark', mark_caret.createPathAt( this.path.append( 'spaceUser' ), 0 )
 			);
 
 			break;
@@ -969,7 +957,7 @@ def.proto._keyLeft =
 
 		root.alter(
 			'mark',
-				visual_mark_caret.pathAt(
+				mark_caret.createPathAt(
 					this.path.append( cycle ),
 					cycle === 'moveToButton' ? 0 : this[ cycle ].length
 				)
@@ -980,8 +968,7 @@ def.proto._keyLeft =
 
 	// FIXME make a lazy value for this
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt( mark.caret.path, mark.caret.at - 1 )
+		'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at - 1 )
 	);
 
 	return;
@@ -1037,7 +1024,7 @@ def.proto._keyEnd =
 	if( at >= value.length ) return;
 
 	root.alter(
-		'mark', visual_mark_caret.pathAt( mark.caret.path, value.length )
+		'mark', mark_caret.createPathAt( mark.caret.path, value.length )
 	);
 };
 
@@ -1066,11 +1053,7 @@ def.proto._keyEnter =
 	if( cycle )
 	{
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					mark.caret.path.set( -1, cycle ),
-					0
-				)
+			'mark', mark_caret.createPathAt( mark.caret.path.set( -1, cycle ), 0 )
 		);
 	}
 	else
@@ -1113,13 +1096,13 @@ def.proto._keyRight =
 	{
 		const cycle = fabric_portal.cycle( section );
 
-		root.alter( 'mark', visual_mark_caret.pathAt( this.path.append( cycle ), 0 ) );
+		root.alter( 'mark', mark_caret.createPathAt( this.path.append( cycle ), 0 ) );
 
 		return;
 	}
 
 	// FIXME lazy val caret
-	root.alter( 'mark', visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 ) );
+	root.alter( 'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at + 1 ) );
 };
 
 
@@ -1142,7 +1125,7 @@ def.proto._keyTab =
 		? fabric_portal.antiCycle( section )
 		: fabric_portal.cycle( section );
 
-	root.alter( 'mark', visual_mark_caret.pathAt( mark.caret.path.set( -1, cycle ), 0 ) );
+	root.alter( 'mark', mark_caret.createPathAt( mark.caret.path.set( -1, cycle ), 0 ) );
 };
 
 
@@ -1164,7 +1147,7 @@ def.proto._keyUp =
 
 			root.alter(
 				'mark',
-					visual_mark_caret.pathAt(
+					mark_caret.createPathAt(
 						this.path.append( 'moveToButton' ),
 						0
 					)
@@ -1178,7 +1161,7 @@ def.proto._keyUp =
 
 			root.alter(
 				'mark',
-					visual_mark_caret.pathAt(
+					mark_caret.createPathAt(
 						this.path.append( 'spaceUser' ),
 						this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x )
 					)
@@ -1190,11 +1173,7 @@ def.proto._keyUp =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						this.path.append( 'spaceTag' ),
-						0
-					)
+				'mark', mark_caret.createPathAt( this.path.append( 'spaceTag' ), 0 )
 			);
 
 			break;

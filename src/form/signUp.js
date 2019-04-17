@@ -30,7 +30,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -62,7 +62,7 @@ const user_creds = tim.require( '../user/creds' );
 
 const user_passhash = tim.require( '../user/passhash' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
 
 /*
@@ -103,11 +103,7 @@ def.proto.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						userInput.path,
-						userInput.value.length
-					)
+				'mark', mark_caret.createPathAt( userInput.path, userInput.value.length )
 			);
 		}
 
@@ -174,7 +170,9 @@ def.proto.setErrorMessage =
 def.proto.signup =
 	function( )
 {
-	const username = this.get( 'userInput' ).value;
+	const userInput = this.get( 'userInput' );
+
+	const username = userInput.value;
 
 	const email = this.get( 'emailInput' ).value;
 
@@ -189,11 +187,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'userInput' ).path,
-					username.length
-				)
+			'mark', mark_caret.createPathAt( userInput.path, username.length )
 		);
 
 		return;
@@ -204,11 +198,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'userInput' ).path,
-					0
-				)
+			'mark', mark_caret.createPathAt( userInput.path, 0 )
 		);
 
 		return;
@@ -219,11 +209,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'passwordInput' ).path,
-					pass.length
-				)
+			'mark', mark_caret.createPathAt( this.get( 'passwordInput' ).path, pass.length )
 		);
 
 		return;
@@ -234,11 +220,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Passwords do not match' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'password2Input' ).path,
-					pass2.length
-				)
+			'mark', mark_caret.createPathAt( this.get( 'password2Input' ).path, pass2.length )
 		);
 
 		return;

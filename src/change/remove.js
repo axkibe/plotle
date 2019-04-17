@@ -41,10 +41,6 @@ const change_join = tim.require( './join' );
 
 const change_list = tim.require( './list' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_set = tim.require( './set' );
 
 const change_shrink = tim.require( './shrink' );
@@ -57,28 +53,30 @@ const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
 
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
 
 
+/*
+» Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.at1 + this.val.length !== this.at2 )
+	{
+		throw error.make( 'remove.at1 + remove.val.length !== remove.at2' );
+	}
 
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( this.at1 + this.val.length !== this.at2 )
-/**/		{
-/**/			throw error.make( 'remove.at1 + remove.val.length !== remove.at2' );
-/**/		}
-/**/
-/**/		if( this.at1 < 0 || this.at2 < 0 )
-/**/		{
-/**/			throw error.make( 'remove.at1|at2 negative' );
-/**/		}
-/**/	};
-/**/}
+	if( this.at1 < 0 || this.at2 < 0 ) throw error.make( 'remove.at1|at2 negative' );
+};
 
 
 /*
@@ -142,7 +140,9 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tTextmark       = function( c ) { return this._transformTextMark( c ); };
+	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
+	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
+	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
 	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
 	const tInsert         = function( c ) { return this._transformInsert( c ); };
 	const tRemove         = function( c ) { return this._transformRemove( c ); };
@@ -150,12 +150,15 @@ def.staticLazy._transformers = ( ) =>
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tTextmark );
+	map.set( mark_pat,    tMarkPat );
+	map.set( mark_caret,  tMarkCaret );
+	map.set( mark_range,  tMarkRange );
+	map.set( mark_items,  tSame );
+	map.set( mark_widget, tSame );
 
 	map.set( change_grow,      tSame );
 	map.set( change_shrink,    tSame );
 	map.set( change_set,       tSame );
-	map.set( change_mark_node, tSame );
 
 	map.set( change_join,      tJoinSplit );
 	map.set( change_split,     tJoinSplit );
@@ -177,25 +180,26 @@ def.staticLazy._transformers = ( ) =>
 */
 def.proto._transformInsert =
 	function(
-		cx
+		c
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_insert ) throw new Error( );
+/**/	if( c.timtype !== change_insert ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.path.equals( c.path ) ) return c;
 
-	if( cx.at1 < this.at1 ) return cx;
-	else if( cx.at1 <= this.at2 )
+	if( c.at1 < this.at1 ) return c;
+	else if( c.at1 <= this.at2 )
 	{
-		return cx.create( 'at1', this.at1, 'at2', this.at1 + cx.val.length );
+		return c.create( 'at1', this.at1, 'at2', this.at1 + c.val.length );
 	}
+	else
 	{
 		const len = this.val.length;
 
-		return cx.create( 'at1', cx.at1 - len, 'at2', cx.at2 - len );
+		return c.create( 'at1', c.at1 - len, 'at2', c.at2 - len );
 	}
 };
 
@@ -203,22 +207,16 @@ def.proto._transformInsert =
 /*
 | Transforms a text mark by this insert.
 */
-def.proto._transformTextMark =
+def.proto._transformMarkPat =
 	function(
 		mark
 	)
 {
-	if( !this.path.equals( mark.path ) ) return mark;
+	if( !this.path.equals( mark.path.chop ) ) return mark;
 
 	if( mark.at < this.at1 ) return mark;
-	else if( mark.at <= this.at2 )
-	{
-		return mark.create( 'at', this.at1 );
-	}
-	else
-	{
-		return mark.create( 'at', mark.at - this.val.length );
-	}
+	else if( mark.at <= this.at2 ) return mark.create( 'at', this.at1 );
+	else return mark.create( 'at', mark.at - this.val.length );
 };
 
 
@@ -228,72 +226,72 @@ def.proto._transformTextMark =
 */
 def.proto._transformRemove =
 	function(
-		cx
+		c
 	)
 {
 
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_remove ) throw new Error( );
+/**/	if( c.timtype !== change_remove ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.path.equals( c.path ) ) return c;
 
 	const len = this.at2 - this.at1;
 
 	// text            tttttttttttt
 	// this remove        ######
-	// case 0:        xxx '    '      cx to left, no effect
-	// case 1:            '    ' xxx  cx to right, move to left
-	// case 2:          xx******x     cx both sides reduced
-	// case 3:            ' ** '      cx fully gone
-	// case 4:          xx**   '      cx partially reduced
-	// case 5:            '   **xx    cx partially reduced
+	// case 0:        xxx '    '      c to left, no effect
+	// case 1:            '    ' xxx  c to right, move to left
+	// case 2:          xx******x     c both sides reduced
+	// case 3:            ' ** '      c fully gone
+	// case 4:          xx**   '      c partially reduced
+	// case 5:            '   **xx    c partially reduced
 
-	if( cx.at2 <= this.at1 )
+	if( c.at2 <= this.at1 )
 	{
-		return cx;
+		return c;
 	}
-	else if( cx.at1 >= this.at2 )
+	else if( c.at1 >= this.at2 )
 	{
 		return(
-			cx.create(
-				'at1', cx.at1 - len,
-				'at2', cx.at2 - len
+			c.create(
+				'at1', c.at1 - len,
+				'at2', c.at2 - len
 			)
 		);
 	}
-	else if( cx.at1 < this.at1 && cx.at2 > this.at2 )
+	else if( c.at1 < this.at1 && c.at2 > this.at2 )
 	{
 		return(
-			cx.create(
-				'at2', cx.at2 - len,
+			c.create(
+				'at2', c.at2 - len,
 				'val',
-					cx.val.substring( 0, this.at1 - cx.at1 )
-					+ cx.val.substring( this.at2 - cx.at1 )
+					c.val.substring( 0, this.at1 - c.at1 )
+					+ c.val.substring( this.at2 - c.at1 )
 			)
 		);
 	}
-	else if( cx.at1 >= this.at1 && cx.at2 <= this.at2 )
+	else if( c.at1 >= this.at1 && c.at2 <= this.at2 )
 	{
 		return undefined;
 	}
-	else if( cx.at1 < this.at1 && cx.at2 <= this.at2 )
+	else if( c.at1 < this.at1 && c.at2 <= this.at2 )
 	{
 		return(
-			cx.create(
+			c.create(
 				'at2', this.at1,
-				'val', cx.val.substring( 0, this.at1 - cx.at1 )
+				'val', c.val.substring( 0, this.at1 - c.at1 )
 			)
 		);
 	}
-	else if( cx.at1 <= this.at2 && cx.at2 > this.at2 )
+	else if( c.at1 <= this.at2 && c.at2 > this.at2 )
 	{
 		return(
-			cx.create(
+			c.create(
 				'at1', this.at1,
-				'at2', this.at1 + cx.at2 - this.at2,
-				'val', cx.val.substring( this.at2 - cx.at1 )
+				'at2', this.at1 + c.at2 - this.at2,
+				'val', c.val.substring( this.at2 - c.at1 )
 			)
 		);
 	}
@@ -309,20 +307,17 @@ def.proto._transformRemove =
 */
 def.proto._transformJoinSplit =
 	function(
-		cx
+		c
 	)
 {
 	// console.log( 'transform join/split by remove' );
 
 /**/if( CHECK )
 /**/{
-/**/	if( cx.timtype !== change_join && cx.timtype !== change_split )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( c.timtype !== change_join && c.timtype !== change_split ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.path.equals( c.path ) ) return c;
 
 	// text    ttttttttttttt
 	// remove     ' xxxx '
@@ -331,18 +326,18 @@ def.proto._transformJoinSplit =
 	// case 2            ^      split right
 
 
-	if( this.at1 >= cx.at1 )
+	if( this.at1 >= c.at1 )
 	{
 		// case 0
 		// the remove happens fully in the line to be
 		// splitted so no change
-		return cx;
+		return c;
 	}
-	else if( this.at2 > cx.at1 )
+	else if( this.at2 > c.at1 )
 	{
 		// case 1
 		// the remove shifts the split on its left end
-		return cx.create( 'at1', this.at1 );
+		return c.create( 'at1', this.at1 );
 	}
 	else
 	{
@@ -351,7 +346,7 @@ def.proto._transformJoinSplit =
 		// joins are always case 2 since join.at1 == text.length
 		const len = this.val.length;
 
-		return cx.create( 'at1', cx.at1 - len );
+		return c.create( 'at1', c.at1 - len );
 	}
 };
 

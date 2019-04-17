@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, visual_mark_items ) => {
+tim.define( module, ( def, mark_items ) => {
 
 
 if( TIM )
@@ -15,8 +15,6 @@ if( TIM )
 		itemPaths : { type : 'tim.js/pathList' }
 	};
 }
-
-const change_mark_node = tim.require( '../../change/mark/node' );
 
 const pathList = tim.require( 'tim.js/pathList' );
 
@@ -47,30 +45,6 @@ def.proto._check =
 def.proto.clipboard = '';
 
 
-
-/*
-| Recreates this mark with changes applied.
-*/
-def.proto.createTransformed =
-	function(
-		changes
-	)
-{
-	const arr = [ ];
-
-	for( let path of this.itemPaths )
-	{
-		const tm = changes.transform( this._changeMarkNode( path ) );
-
-		if( tm ) arr.push( tm.path.prepend( 'space' ) );
-	}
-
-	if( arr.length === 0 ) return undefined;
-
-	return this.create( 'itemPaths', this.itemPaths.create( 'list:init', arr ) );
-};
-
-
 /*
 | Creates the list with one item.
 */
@@ -82,7 +56,7 @@ def.static.createWithOne =
 	// also sets the user mark on this item
 	const paths = pathList.create( 'list:init', [ path ] );
 
-	return visual_mark_items.create( 'itemPaths', paths );
+	return mark_items.create( 'itemPaths', paths );
 };
 
 
@@ -147,18 +121,6 @@ def.proto.togglePath =
 	}
 
 	return this.create( 'itemPaths', this.itemPaths.create( 'list:append', path ) );
-};
-
-
-/*
-| The change engine's nodemark.
-*/
-def.proto._changeMarkNode =
-	function(
-		path
-	)
-{
-	return change_mark_node.create( 'path', path.chop );
 };
 
 

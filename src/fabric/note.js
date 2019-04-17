@@ -41,7 +41,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the path of the item
 		// no json thus not saved or transmitted
@@ -87,6 +87,8 @@ const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
 
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
+
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gleam_point = tim.require( '../gleam/point' );
@@ -105,7 +107,7 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const shell_settings = tim.require( '../shell/settings' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
 const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
@@ -145,7 +147,7 @@ def.static.createGeneric =
 				'path', path,
 				'rank', 0
 			),
-		'mark', visual_mark_caret.pathAt( mpath, 0 )
+		'mark', mark_caret.createPathAt( mpath, 0 )
 	);
 };
 
@@ -189,9 +191,12 @@ def.lazy.glint =
 	const arr =
 		[
 			gleam_glint_window.create(
-				'glint', this._innerGlint,
-				'rect', tZone.add1_5,
-				'offset', gleam_point.zero
+				'pane',
+					gleam_glint_pane.create(
+						'glint', this._innerGlint,
+						'size', tZone.add1_5.size,
+					),
+				'pos', tZone.add1_5.pos
 			)
 		];
 

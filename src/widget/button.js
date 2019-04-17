@@ -33,7 +33,7 @@ if( TIM )
 		iconFacet : { type : [ 'undefined', '../gleam/facet' ] },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the path of the widget
 		path : { type : [ 'undefined', 'tim.js/path' ] },

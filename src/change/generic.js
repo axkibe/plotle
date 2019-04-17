@@ -111,4 +111,34 @@ def.proto._transformChangeWrapList =
 };
 
 
+/*
+| Transforms a caret mark by this change.
+*/
+def.proto._transformMarkCaret =
+	function(
+		mark
+	)
+{
+	const pat = this._transformMarkPat( mark.pat );
+
+	if( pat ) return mark.create( 'pat', pat );
+};
+
+
+/*
+| Transforms a range mark by this change.
+*/
+def.proto._transformMarkRange =
+	function(
+		mark
+	)
+{
+	const begin = this._transformMarkPat( mark.begin );
+
+	const end = this._transformMarkPat( mark.end );
+
+	if( begin && end ) return mark.create( 'begin', begin, 'end', end );
+};
+
+
 } );

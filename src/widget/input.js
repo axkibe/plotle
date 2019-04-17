@@ -24,7 +24,7 @@ if( TIM )
 		font : { type : '../gleam/font/font' },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// maximum input length
 		maxlen : { type : 'integer' },
@@ -76,7 +76,7 @@ const layout_input = tim.require( '../layout/input' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
 
 /*
@@ -262,8 +262,7 @@ def.lazy._glint =
 		);
 	}
 
-	if( mark && mark.timtype === visual_mark_caret && mark.focus )
-		arr.push( this._caretGlint );
+	if( mark && mark.timtype === mark_caret && mark.focus ) arr.push( this._caretGlint );
 
 	arr.push(
 		gleam_glint_border.create(
@@ -372,11 +371,7 @@ def.proto.click =
 	if( !this._tzShape.within( pp ) ) return undefined;
 
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt(
-				this.path,
-				this._getOffsetAt( pp )
-			)
+		'mark', mark_caret.createPathAt( this.path, this._getOffsetAt( pp ) )
 	);
 
 	return false;
@@ -411,11 +406,7 @@ def.proto.input =
 	);
 
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				at + text.length
-			)
+		'mark', mark_caret.createPathAt( mark.caret.path, at + text.length )
 	);
 };
 
@@ -543,8 +534,8 @@ def.proto._keyBackspace =
 		this.path.append( 'value' ),
 			this.value.substring( 0, at - 1 ) + this.value.substring( at ),
 		'mark',
+			mark_caret.createPathAt( mark.caret.path, at - 1 )
 			// FIXME lazy
-			visual_mark_caret.pathAt( mark.caret.path, at - 1 )
 	);
 };
 
@@ -591,11 +582,7 @@ def.proto._keyEnd =
 	if( at >= this.value.length ) return;
 
 	root.alter(
-		'mark',
-			visual_mark_caret.pathAt(
-				mark.caret.path,
-				this.value.length
-			)
+		'mark', mark_caret.createPathAt( mark.caret.path, this.value.length )
 	);
 };
 
@@ -611,7 +598,7 @@ def.proto._keyLeft =
 	if( mark.caret.at <= 0 ) return;
 
 	root.alter(
-		'mark', visual_mark_caret.pathAt( mark.caret.path, mark.caret.at - 1 )
+		'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at - 1 )
 	);
 };
 
@@ -627,7 +614,7 @@ def.proto._keyPos1 =
 	if( mark.caret.at <= 0 ) return;
 
 	root.alter(
-		'mark', visual_mark_caret.pathAt( mark.caret.path, 0 )
+		'mark', mark_caret.createPathAt( mark.caret.path, 0 )
 	);
 };
 
@@ -644,7 +631,7 @@ def.proto._keyRight =
 
 	// FIXME lazy
 	root.alter(
-		'mark', visual_mark_caret.pathAt( mark.caret.path, mark.caret.at + 1 )
+		'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at + 1 )
 	);
 };
 

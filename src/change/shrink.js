@@ -36,10 +36,6 @@ const change_join = tim.require( './join' );
 
 const change_list = tim.require( './list' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_remove = tim.require( './remove' );
 
 const change_set = tim.require( './set' );
@@ -52,23 +48,27 @@ const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
 
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
+
+const pathList = tim.require( 'tim.js/pathList' );
 
 
-
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( this.rank !== undefined && this.rank < 0 )
-/**/		{
-/**/			throw error.make( 'set.rank negative' );
-/**/		}
-/**/	};
-/**/}
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.rank !== undefined && this.rank < 0 ) throw error.make( 'set.rank negative' );
+};
 
 
 /*
@@ -117,21 +117,12 @@ def.proto.changeTree =
 
 	const rank = pivot.rankOf( key );
 
-	if( rank !== this.rank )
-	{
-		throw error.make( 'shrink.rank doesn\'t match' );
-	}
+	if( rank !== this.rank ) throw error.make( 'shrink.rank doesn\'t match' );
 
 	pivot = pivot.create( 'twig:remove', key );
 
-	if( this.path.length > 2 )
-	{
-		tree = tree.setPath( this.path.shorten.shorten, pivot );
-	}
-	else
-	{
-		tree = pivot;
-	}
+	if( this.path.length > 2 ) tree = tree.setPath( this.path.shorten.shorten, pivot );
+	else tree = pivot;
 
 	return tree;
 };
@@ -145,14 +136,20 @@ def.staticLazy._transformers = ( ) =>
 	const map = new Map( );
 
 	const tSame           = ( c ) => c;
-	const tMark           = function( c ) { return this._transformMark( c ); };
+	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
+	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
+	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
+	const tMarkItems      = function( c ) { return this._transformMarkItems( c ); };
 	const tJIRS           = function( c ) { return this._transformJIRS( c ); };
 	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tMark );
-	map.set( change_mark_node, tMark );
+	map.set( mark_pat,    tMarkPat );
+	map.set( mark_caret,  tMarkCaret );
+	map.set( mark_range,  tMarkRange );
+	map.set( mark_items,  tMarkItems );
+	map.set( mark_widget, tSame );
 
 	// FUTURE fix ranks
 	map.set( change_grow,      tSame );
@@ -188,12 +185,42 @@ def.proto._transformJIRS =
 /*
 | Transforms a mark by this set.
 */
-def.proto._transformMark =
+def.proto._transformMarkPat =
 	function(
 		mark
 	)
 {
-	if( !this.path.subPathOf( mark.path ) ) return mark;
+	if( !this.path.subPathOf( mark.path.chop ) ) return mark;
+};
+
+
+/*
+| Transforms a mark by this set.
+*/
+def.proto._transformMarkItems =
+	function(
+		mark
+	)
+{
+	const paths = mark.itemPaths;
+
+	let any = false;
+
+	for( let path of paths )
+	{
+		if( this.path.subPathOf( path.chop ) ) { any = true; break; }
+	}
+
+	if( !any ) return mark;
+
+	const a = [ ];
+
+	for( let path of paths )
+	{
+		if( !this.path.subPathOf( path.chop ) ) { a.push( path ); }
+	}
+
+	return mark_items.create( 'itemPaths', pathList.create( 'list:init', a ) );
 };
 
 

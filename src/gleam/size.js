@@ -28,7 +28,8 @@ if( TIM )
 /*
 | Shortcut to create an gleam_size tim.
 */
-def.static.wh =
+def.static.wh = // FIXME remove this one
+def.static.createWH =
 	function(
 		width,
 		height

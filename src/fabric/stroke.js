@@ -38,7 +38,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the arrow
 		// no json thus not saved or transmitted

@@ -36,7 +36,7 @@ const result_hover = tim.require( '../result/hover' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_mark_items = tim.require( '../visual/mark/items' );
+const mark_items = tim.require( '../mark/items' );
 
 
 /*
@@ -157,14 +157,11 @@ def.proto.dragStop =
 
 		if( !ctrl || !screen.mark )
 		{
-			mark = visual_mark_items.create( 'itemPaths', paths );
+			mark = mark_items.create( 'itemPaths', paths );
 		}
 		else
 		{
-			mark =
-				visual_mark_items.create(
-					'itemPaths', paths.combine( screen.mark.itemPaths )
-				);
+			mark = mark_items.create( 'itemPaths', paths.combine( screen.mark.itemPaths ) );
 		}
 	}
 

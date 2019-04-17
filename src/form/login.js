@@ -30,7 +30,7 @@ if( TIM )
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the users mark
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the form
 		path : { type : [ 'undefined', 'tim.js/path' ] },
@@ -64,7 +64,7 @@ const user_creds = tim.require( '../user/creds' );
 
 const user_passhash = tim.require( '../user/passhash' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
 
 /*
@@ -97,11 +97,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'userInput' ).path,
-					username.length
-				)
+			'mark', mark_caret.createPathAt( this.get( 'userInput' ).path, username.length )
 		);
 
 		return;
@@ -112,11 +108,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'userInput' ).path,
-					0
-				)
+			'mark', mark_caret.createPathAt( this.get( 'userInput' ).path, 0 )
 		);
 
 		return;
@@ -127,11 +119,7 @@ def.proto.login =
 		this._setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark',
-				visual_mark_caret.pathAt(
-					this.get( 'passwordInput' ).path,
-					pass.length
-				)
+			'mark', mark_caret.createPathAt( this.get( 'passwordInput' ).path, pass.length)
 		);
 
 		return;
@@ -165,11 +153,7 @@ def.proto.onAuth =
 			const userInput = this.get( 'userInput' );
 
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						userInput.path,
-						userInput.value.length
-					)
+				'mark', mark_caret.createPathAt( userInput.path, userInput.value.length )
 			);
 		}
 		else
@@ -177,11 +161,7 @@ def.proto.onAuth =
 			const passwordInput = this.get( 'passwordInput' );
 
 			root.alter(
-				'mark',
-					visual_mark_caret.pathAt(
-						passwordInput.path,
-						passwordInput.value.length
-					)
+				'mark', mark_caret.createPathAt( passwordInput.path, passwordInput.value.length )
 			);
 		}
 

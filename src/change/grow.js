@@ -34,10 +34,6 @@ const change_join = tim.require( './join' );
 
 const change_list = tim.require( './list' );
 
-const change_mark_node = tim.require( './mark/node' );
-
-const change_mark_text = tim.require( './mark/text' );
-
 const change_remove = tim.require( './remove' );
 
 const change_set = tim.require( './set' );
@@ -52,6 +48,16 @@ const change_wrapList = tim.require( './wrapList' );
 
 const error = tim.require( './error' );
 
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
+const mark_widget = tim.require( '../mark/widget' );
+
 
 /*
 | Exta checking
@@ -59,10 +65,7 @@ const error = tim.require( './error' );
 def.proto._check =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.rank !== undefined && this.rank < 0 ) throw error.make( 'grow.rank invalid' );
-/**/}
+	if( this.rank !== undefined && this.rank < 0 ) throw error.make( 'grow.rank invalid' );
 };
 
 
@@ -125,8 +128,12 @@ def.staticLazy._transformers = ( ) =>
 	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
 	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
 
-	map.set( change_mark_text, tSame );
-	map.set( change_mark_node, tSame );
+	map.set( mark_pat,         tSame );
+	map.set( mark_caret,       tSame );
+	map.set( mark_range,       tSame );
+	map.set( mark_items,       tSame );
+	map.set( mark_widget,      tSame );
+
 	map.set( change_join,      tSame );
 	map.set( change_split,     tSame );
 	map.set( change_insert,    tSame );
@@ -136,8 +143,6 @@ def.staticLazy._transformers = ( ) =>
 	// FUTURE fix ranks
 	map.set( change_grow,      tSame );
 	map.set( change_shrink,    tSame );
-
-	map.set( change_mark_node, tSame );
 
 	map.set( change_list,      tChangeList );
 	map.set( change_wrap,      tChangeWrap );

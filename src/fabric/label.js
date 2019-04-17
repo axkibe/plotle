@@ -37,7 +37,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ '< ../visual/mark/types', 'undefined' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the path of the doc
 		// no json thus not saved or transmitted
@@ -71,6 +71,8 @@ const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
+
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gleam_point = tim.require( '../gleam/point' );
@@ -87,7 +89,7 @@ const session_uid = tim.require( '../session/uid' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
 
 /*
@@ -143,7 +145,7 @@ def.static.createGeneric =
 
 	root.alter(
 		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
-		'mark', visual_mark_caret.pathAt( mpath, 0 )
+		'mark', mark_caret.createPathAt( mpath, 0 )
 	);
 };
 
@@ -186,9 +188,12 @@ def.lazy.glint =
 	const a =
 		[
 			gleam_glint_window.create(
-				'glint', this.doc.glint,
-				'rect', tZone.enlarge1,
-				'offset', gleam_point.zero
+				'pane',
+					gleam_glint_pane.create(
+						'glint', this.doc.glint,
+						'size', tZone.enlarge1.size,
+					),
+				'pos', tZone.enlarge1.pos
 			)
 		];
 

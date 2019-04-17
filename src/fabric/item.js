@@ -21,11 +21,11 @@ const action_none = tim.require( '../action/none' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_items = tim.require( '../visual/mark/items' );
+const mark_items = tim.require( '../mark/items' );
 
-const visual_mark_range = tim.require( '../visual/mark/range' );
+const mark_range = tim.require( '../mark/range' );
 
 
 /*
@@ -132,9 +132,9 @@ def.proto.dragStart =
 
 	let mark = this.mark;
 
-	if( !mark || mark.timtype !== visual_mark_items )
+	if( !mark || mark.timtype !== mark_items )
 	{
-		mark = visual_mark_items.createWithOne( this.path );
+		mark = mark_items.createWithOne( this.path );
 	}
 
 	const items = root.space.getSet( mark.itemPaths );
@@ -213,25 +213,25 @@ def.proto._ctrlClick =
 
 	if( !mark )
 	{
-		root.alter( 'mark', visual_mark_items.createWithOne( this.path ) );
+		root.alter( 'mark', mark_items.createWithOne( this.path ) );
 
 		return true;
 	}
 
 	switch( mark.timtype )
 	{
-		case visual_mark_items :
+		case mark_items :
 
 			root.alter( 'mark', mark.togglePath( this.path ) );
 
 			return true;
 
-		case visual_mark_caret :
-		case visual_mark_range :
+		case mark_caret :
+		case mark_range :
 
 			root.alter(
 				'mark',
-					visual_mark_items.create(
+					mark_items.create(
 						'itemPaths', mark.itemPaths.create( 'list:append', this.path )
 					)
 			);

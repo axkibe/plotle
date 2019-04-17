@@ -29,7 +29,7 @@ if( TIM )
 
 		// the users mark
 		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../visual/mark/types' ] },
+		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the path of the doc
 		// no json thus not saved or transmitted
@@ -84,9 +84,9 @@ const gruga_font = tim.require( '../gruga/font' );
 
 const gruga_selection = tim.require( '../gruga/selection' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_range = tim.require( '../visual/mark/range' );
+const mark_range = tim.require( '../mark/range' );
 
 
 /*
@@ -251,7 +251,7 @@ def.lazy.glint =
 
 	const mark = this.mark;
 
-	if( mark && mark.timtype === visual_mark_range && mark.containsPath( this.path.limit( 3 ) ) )
+	if( mark && mark.timtype === mark_range && mark.containsPath( this.path.limit( 3 ) ) )
 	{
 		arr.push(
 			gleam_glint_paint.createFS(
@@ -260,7 +260,7 @@ def.lazy.glint =
 			)
 		);
 	}
-	else if( mark && mark.timtype === visual_mark_caret && mark.focus )
+	else if( mark && mark.timtype === mark_caret && mark.focus )
 	{
 		arr.push( this._caretGlint );
 	}
@@ -285,7 +285,7 @@ def.proto.input =
 
 	const path = this.mark.caret.path;
 
-	if( mark.timtype === visual_mark_range && !mark.empty )
+	if( mark.timtype === mark_range && !mark.empty )
 	{
 		root.removeRange( mark );
 
@@ -328,7 +328,7 @@ def.proto.specialKey =
 
 	if( !mark.hasCaret ) return false;
 
-	if( mark.timtype === visual_mark_range && !mark.empty )
+	if( mark.timtype === mark_range && !mark.empty )
 	{
 		switch( key )
 		{
@@ -365,7 +365,7 @@ def.proto.specialKey =
 def.lazy._caretGlint =
 	function( )
 {
-	const mark = this.mark.textMark;
+	const mark = this.mark.pat;
 
 	const transform = this.transform.ortho;
 
@@ -406,16 +406,16 @@ def.lazy._rangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.timtype !== visual_mark_range ) throw new Error( );
+/**/	if( mark.timtype !== mark_range ) throw new Error( );
 /**/}
 
-	const frontMark = mark.frontMark;
+	const front = mark.front;
 
-	const backMark = mark.backMark;
+	const back = mark.back;
 
-	const frontKey = frontMark.path.get( -2 );
+	const frontKey = front.path.get( -2 );
 
-	const backKey = backMark.path.get( -2 );
+	const backKey = back.path.get( -2 );
 
 	const frontPara = this.get( frontKey );
 
@@ -425,13 +425,13 @@ def.lazy._rangeShape =
 
 	const backPos = backPara.pos;
 
-	let fp = frontPara.locateOffsetPoint( frontMark.at );
+	let fp = frontPara.locateOffsetPoint( front.at );
 
-	let bp = backPara.locateOffsetPoint( backMark.at );
+	let bp = backPara.locateOffsetPoint( back.at );
 
-	const fLine = frontPara.locateOffsetLine( frontMark.at );
+	const fLine = frontPara.locateOffsetLine( front.at );
 
-	const bLine = backPara.locateOffsetLine( backMark.at );
+	const bLine = backPara.locateOffsetLine( back.at );
 
 	const fontsize = this.fontsize;
 
@@ -581,7 +581,7 @@ def.lazy._rangeShape =
 		}
 
 
-		if( frontMark.at > 0 )
+		if( front.at > 0 )
 		{
 			const sections =
 			[

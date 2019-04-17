@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, self ) => {
+tim.define( module, ( def, mark_caret ) => {
 
 
 if( TIM )
@@ -17,37 +17,37 @@ if( TIM )
 		// x-position of the caret kept
 		retainx : { type : [ 'undefined', 'number' ] },
 
-		// the text mark
-		textMark : { type : [ 'undefined', './text' ] },
+		// the mark into a text (path/at)
+		pat : { type : './pat' },
 	};
 }
 
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
-const visual_mark_text = tim.require( './text' );
+const mark_pat = tim.require( './pat' );
 
 
 /*
 | Creation Shortcut.
 */
-def.static.pathAt =
+def.static.createPathAt =
 	function(
 		path,
 		at
 	)
 {
-	return self.create( 'textMark', visual_mark_text.create( 'path', path, 'at', at ) );
+	return mark_caret.create( 'pat', mark_pat.create( 'path', path, 'at', at ) );
 };
 
 
 /*
-| The textMark where the caret is.
+| The mark where the caret is.
 */
 def.lazy.caret =
 	function( )
 {
-	return this.textMark;
+	return this.pat;
 };
 
 
@@ -59,7 +59,7 @@ def.lazy.caret =
 def.lazy.itemPaths =
 	function( )
 {
-	const path = this.textMark.path;
+	const path = this.pat.path;
 
 	if( path.length < 3 || path.get( 0 ) !== 'space' ) return;
 
@@ -73,7 +73,7 @@ def.lazy.itemPaths =
 def.lazy.widgetPath =
 	function( )
 {
-	const path = this.textMark.path;
+	const path = this.pat.path;
 
 	if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
 
@@ -82,29 +82,9 @@ def.lazy.widgetPath =
 
 
 /*
-| Recreates this mark with a transformation
-| applied.
-*/
-def.proto.createTransformed =
-	function(
-		changes
-	)
-{
-	if( this.textMark.path.get( 0 ) !== 'space' ) return this;
-
-	const tm = this.textMark.createTransformed( changes );
-
-	if( !tm ) return undefined;
-
-	return this.create( 'textMark', tm );
-};
-
-
-/*
 | A caret mark has a caret.
 |
-| (the text range is the other mark
-|  which has this too )
+| (the text range is the other mark which has this too )
 */
 def.proto.hasCaret = true;
 
@@ -124,13 +104,12 @@ def.proto.containsPath =
 		path
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 )	throw new Error( );
 /**/}
 
-	return path.subPathOf( this.textMark.path );
+	return path.subPathOf( this.pat.path );
 };
 
 

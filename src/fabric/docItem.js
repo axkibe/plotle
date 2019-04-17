@@ -20,11 +20,11 @@ const math = tim.require( '../math/root' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const visual_mark_caret = tim.require( '../visual/mark/caret' );
+const mark_caret = tim.require( '../mark/caret' );
 
-const visual_mark_range = tim.require( '../visual/mark/range' );
+const mark_range = tim.require( '../mark/range' );
 
-const visual_mark_text = tim.require( '../visual/mark/text' );
+const mark_pat = tim.require( '../mark/pat' );
 
 
 /*
@@ -150,35 +150,23 @@ def.proto.markForPoint =
 
 	const mark = this.mark;
 
-	if( doRange && mark && mark.timtype === visual_mark_caret )
+	if( doRange && mark && mark.timtype === mark_caret )
 	{
 		return(
-			visual_mark_range.create(
+			mark_range.create(
 				'doc', this.doc,
-				'beginMark', mark.textMark,
-				'endMark',
-					visual_mark_text.create(
-						'path', para.textPath,
-						'at', at
-					)
+				'begin', mark.pat,
+				'end', mark_pat.createPathAt( para.textPath, at )
 			)
 		);
 	}
-	else if( doRange && mark && mark.timtype === visual_mark_range )
+	else if( doRange && mark && mark.timtype === mark_range )
 	{
-		return(
-			mark.create(
-				'endMark',
-					visual_mark_text.create(
-						'path', para.textPath,
-						'at', at
-					)
-			)
-		);
+		return mark.create( 'end', mark_pat.createPathAt( para.textPath, at ) );
 	}
 	else
 	{
-		return visual_mark_caret.pathAt( para.textPath, at );
+		return mark_caret.createPathAt( para.textPath, at );
 	}
 };
 
