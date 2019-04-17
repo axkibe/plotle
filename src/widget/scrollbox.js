@@ -46,6 +46,8 @@ if( TIM )
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
+
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gleam_point = tim.require( '../gleam/point' );
@@ -222,19 +224,23 @@ def.lazy.glint =
 		if( sg ) arr.push( sg );
 	}
 
+	const zone = this._zone;
+
 	let glint =
 		gleam_glint_window.create(
-			'glint', gleam_glint_list.create( 'list:init', arr ),
-			'rect', this._zone,
-			'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
+			'pane',
+				gleam_glint_pane.create(
+					'glint', gleam_glint_list.create( 'list:init', arr ),
+					'size', zone.size,
+					// FIXME make lazy point.negate
+					'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
+				),
+			'pos', zone.pos
 		);
 
 	const sbary = this.scrollbarY;
 
-	if( sbary )
-	{
-		glint = gleam_glint_list.create( 'list:init', [ glint, sbary.glint ] );
-	}
+	if( sbary ) glint = gleam_glint_list.create( 'list:init', [ glint, sbary.glint ] );
 
 	return glint;
 };

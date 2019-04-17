@@ -72,6 +72,8 @@ const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
 
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
+
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gleam_point = tim.require( '../gleam/point' );
@@ -155,13 +157,16 @@ def.lazy.glint =
 {
 	if( !this.visible ) return undefined;
 
-	const tZone = this._tZone;
+	const zone = this._tZone.enlarge1;
 
 	return(
 		gleam_glint_window.create(
-			'glint', this._glint,
-			'rect', tZone.enlarge1,
-			'offset', gleam_point.zero
+			'pane',
+				gleam_glint_pane.create(
+					'glint', this._glint,
+					'size', zone.size
+				),
+			'pos', zone.pos,
 		)
 	);
 };

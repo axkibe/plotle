@@ -806,9 +806,11 @@ def.proto._renderWindow =
 
 	const cx = this._cx;
 
-	const rect = glint.rect;
+	const pane = glint.pane;
 
-	const pos = rect.pos;
+	const size = pane.size;
+
+	const pos = glint.pos;
 
 	const h = this.size.height;
 
@@ -818,9 +820,9 @@ def.proto._renderWindow =
 
 	let y = offset.y + pos.y;
 
-	const rw = rect.width;
+	const rw = size.width;
 
-	const rh = rect.height;
+	const rh = size.height;
 
 	if( x > w || y > h || x + rw < 0 || y + rh < 0 )
 	{
@@ -856,10 +858,10 @@ def.proto._renderWindow =
 		cx.clip( );
 
 		this._renderGlintList(
-			glint.glint,
+			pane.glint,
 			gleam_point.xy(
-				offset.x + pos.x + glint.offset.x,
-				offset.y + pos.y + glint.offset.y
+				offset.x + pos.x + pane.offset.x,
+				offset.y + pos.y + pane.offset.y
 			)
 		);
 
@@ -867,11 +869,11 @@ def.proto._renderWindow =
 	}
 	else
 	{
-		const cd = glint._canvasDisplay;
+		const cd = pane._canvasDisplay;
 
 		cd.render( );
 
-		cx.drawImage( cd.canvas, round( x + glint.offset.x ), round( y + glint.offset.y ) );
+		cx.drawImage( cd.canvas, round( x + pane.offset.x ), round( y + pane.offset.y ) );
 	}
 };
 

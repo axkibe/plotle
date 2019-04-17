@@ -34,7 +34,7 @@ const gleam_display_canvas = tim.require( '../display/canvas' );
 def.lazy._canvasDisplay =
 	function( )
 {
-	return gleam_display_canvas.createNewCanvas( this.rect.size, this.glint );
+	return gleam_display_canvas.createNewCanvas( this.size, this.glint );
 };
 
 

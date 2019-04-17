@@ -78,9 +78,9 @@ const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
-const gleam_glint_window = tim.require( '../gleam/glint/window' );
+const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
 
-const gleam_point = tim.require( '../gleam/point' );
+const gleam_glint_window = tim.require( '../gleam/glint/window' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
 
@@ -322,12 +322,18 @@ def.adjust.get =
 def.lazy.glint =
 	function( )
 {
+	// FIXME make tZone private?
+	const zone = this.tZone.enlarge1;
+
 	// FUTURE GLINT inherit
 	return(
 		gleam_glint_window.create(
-			'glint', this._glint,
-			'rect', this.tZone.enlarge1,
-			'offset', gleam_point.zero
+			'pane',
+				gleam_glint_pane.create(
+					'glint', this._glint,
+					'size', zone.size
+				),
+			'pos', zone.pos
 		)
 	);
 };
