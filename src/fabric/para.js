@@ -270,7 +270,7 @@ def.lazy.font =
 | Returns true if a flow and glint can be inherited.
 */
 def.inherit.flow =
-def.inherit._glint =
+def.inherit._pane =
 	function(
 		inherit
 	)
@@ -381,15 +381,7 @@ def.lazy.glint =
 
 	return(
 		gleam_glint_window.create(
-			'pane',
-				gleam_glint_pane.create(
-					'glint', this._glint,
-					'size',
-						gleam_size.createWH(
-							transform.scale( this.flow.width ) + 1,
-							transform.scale( this.height ) + 1
-						)
-				),
+			'pane', this._pane,
 			'pos', this.pos.transform( transform.ortho ),
 		)
 	);
@@ -607,42 +599,6 @@ def.lazy.tFont =
 	function( )
 {
 	return gruga_font.standard( this.transform.scale( this.fontsize ), 'a' );
-};
-
-
-/*
-| The para's glint without window.
-*/
-def.lazy._glint =
-	function( )
-{
-	const tFont = this.tFont;
-
-	const arr = [ ];
-
-	const transform = this.transform.ortho;
-
-	// draws text into the display
-
-	for( let line of this.flow )
-	{
-		for( let token of line )
-		{
-			arr.push(
-				gleam_glint_text.create(
-					'font', tFont,
-					'p',
-						gleam_point.xy(
-							transform.x( token.x ),
-							transform.y( line.y )
-						),
-					'text', token.text
-				)
-			);
-		}
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
 };
 
 
@@ -1097,6 +1053,51 @@ def.proto._pageUpDown =
 	at = tpara.getPointOffset( tp.sub( tpos ) );
 
 	tpara._setMark( at, retainx, begin, doc );
+};
+
+
+/*
+| The para's pane.
+| It is independent of it's pos.
+*/
+def.lazy._pane =
+	function( )
+{
+	// FIXME make tFont private?
+	const tFont = this.tFont;
+
+	const transform = this.transform.ortho;
+
+	const a = [ ];
+
+	for( let line of this.flow )
+	{
+		for( let token of line )
+		{
+			a.push(
+				gleam_glint_text.create(
+					'font', tFont,
+					'p',
+						gleam_point.createXY(
+							transform.x( token.x ),
+							transform.y( line.y )
+						),
+					'text', token.text
+				)
+			);
+		}
+	}
+
+	return(
+		gleam_glint_pane.create(
+			'glint', gleam_glint_list.create( 'list:init', a ),
+			'size',
+				gleam_size.createWH(
+					transform.scale( this.flow.width ) + 1,
+					transform.scale( this.height ) + 1
+				)
+		)
+	);
 };
 
 

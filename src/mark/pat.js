@@ -21,6 +21,24 @@ if( TIM )
 
 
 /*
+| The offset reference - 1.
+*/
+def.lazy.backward =
+	function( )
+{
+	const at = this.at;
+
+	if( at <= 0 ) return;
+
+	const o = this.create( 'at', this.at - 1 );
+
+	tim.aheadValue( o, 'forward', this );
+
+	return o;
+};
+
+
+/*
 | Creation Shortcut.
 */
 def.static.createPathAt =
@@ -30,6 +48,30 @@ def.static.createPathAt =
 	)
 {
 	return mark_pat.create( 'path', path, 'at', at );
+};
+
+
+/*
+| The offset reference + 1.
+*/
+def.lazy.forward =
+	function( )
+{
+	const o = this.create( 'at', this.at + 1 );
+
+	tim.aheadValue( o, 'backward', this );
+
+	return o;
+};
+
+
+/*
+| The offset reference at 0.
+*/
+def.lazy.zero =
+	function( )
+{
+	return this.create( 'at', 0 );
 };
 
 

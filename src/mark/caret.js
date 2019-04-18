@@ -29,6 +29,24 @@ const mark_pat = tim.require( './pat' );
 
 
 /*
+| The caret with offset - 1.
+*/
+def.lazy.backward =
+	function( )
+{
+	const pat = this.pat.backward;
+
+	if( !pat ) return;
+
+	const c = this.create( 'pat', pat );
+
+	tim.aheadValue( c, 'forward', this );
+
+	return c;
+};
+
+
+/*
 | Creation Shortcut.
 */
 def.static.createPathAt =
@@ -48,6 +66,20 @@ def.lazy.caret =
 	function( )
 {
 	return this.pat;
+};
+
+
+/*
+| The caret with offset + 1.
+*/
+def.lazy.forward =
+	function( )
+{
+	const c = this.create( 'pat', this.pat.forward );
+
+	tim.aheadValue( c, 'backward', this );
+
+	return c;
 };
 
 
@@ -110,6 +142,16 @@ def.proto.containsPath =
 /**/}
 
 	return path.subPathOf( this.pat.path );
+};
+
+
+/*
+| The caret with offset = 0.
+*/
+def.lazy.zero =
+	function( )
+{
+	return this.create( 'pat', this.pat.zero );
 };
 
 

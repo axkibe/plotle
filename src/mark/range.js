@@ -165,10 +165,7 @@ def.proto.containsPath =
 
 	const dp = this.docPath;
 
-	if( path.length <= dp.length )
-	{
-		return path.subPathOf( dp );
-	}
+	if( path.length <= dp.length ) return path.subPathOf( dp );
 
 	if( path.subPathOf( this.begin.path ) || path.subPathOf( this.end.path ) ) return true;
 
@@ -218,13 +215,11 @@ def.proto._normalize =
 		if( begin.at <= end.at )
 		{
 			tim.aheadValue( this, 'front', begin );
-
 			tim.aheadValue( this, 'back', end );
 		}
 		else
 		{
 			tim.aheadValue( this, 'front', end );
-
 			tim.aheadValue( this, 'back', begin );
 		}
 

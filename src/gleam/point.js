@@ -26,26 +26,6 @@ const gleam_transform = tim.require( './transform' );
 
 
 /*
-| Shortcut for point at 0/0.
-*/
-def.staticLazy.zero = () =>
-	gleam_point.create( 'x', 0, 'y', 0 );
-
-
-/*
-| Shortcut to create a point by x/y values.
-*/
-def.static.xy =
-	function(
-		x,
-		y
-	)
-{
-	return gleam_point.create( 'x', x, 'y', y );
-};
-
-
-/*
 | Adds a points or x/y values, returns a new point.
 */
 def.proto.add =
@@ -73,10 +53,7 @@ def.proto.add =
 /**/		if( arguments.length !== 2 ) throw new Error( );
 /**/	}
 
-		return this.create(
-			'x', this.x + a1,
-			'y', this.y + a2
-		);
+		return gleam_point.createXY( this.x + a1, this.y + a2 );
 	}
 };
 
@@ -126,9 +103,9 @@ def.proto.baseScaleXY =
 	if( x === bx && y === by ) return this.add( ax, ay );
 
 	return(
-		this.create(
-			'x', ( x - bx ) * scaleX + bx + ax,
-			'y', ( y - by ) * scaleY + by + ay
+		gleam_point.createXY(
+			( x - bx ) * scaleX + bx + ax,
+			( y - by ) * scaleY + by + ay
 		)
 	);
 };
@@ -154,48 +131,25 @@ def.proto.border =
 	const cy = pc.y;
 
 	return(
-		this.create(
-			'x',
-				x +
-				(
-					x > cx
-					?  -d
-					: ( x < cx ? d : 0 )
-				),
-			'y',
-				y +
-				(
-					y > cy
-					?  -d
-					: ( y < cy ? d : 0 )
-				)
+		gleam_point.createXY(
+			x + ( x > cx ?  -d : ( x < cx ? d : 0 ) ),
+			y + ( y > cy ?  -d : ( y < cy ? d : 0 ) )
 		)
 	);
 };
 
 
 /*
-| Returns a transformed point.
+| Shortcut to create a point by x/y values.
 */
-def.proto.transform =
+def.static.createXY =
+def.static.xy = // FIXME remove
 	function(
-		transform  // transform to apply
+		x,
+		y
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
-/**/}
-
-	return(
-		transform.zoom === 1
-		? this.add( transform.offset )
-		: this.create(
-			'x', transform.x( this.x ),
-			'y', transform.y( this.y )
-		)
-	);
+	return gleam_point.create( 'x', x, 'y', y );
 };
 
 
@@ -207,12 +161,21 @@ def.proto.detransform =
 		transform   // transform to apply reversely.
 	)
 {
-	return(
-		this.create(
-			'x', transform.dex( this.x ),
-			'y', transform.dey( this.y )
-		)
-	);
+	return gleam_point.createXY( transform.dex( this.x ), transform.dey( this.y ) );
+};
+
+
+/*
+| This point negated.
+*/
+def.lazy.negate =
+	function( )
+{
+	const p = gleam_point.createXY( -this.x, -this.y );
+
+	tim.aheadValue( p, 'negate', this );
+
+	return p;
 };
 
 
@@ -234,10 +197,7 @@ def.proto.sub =
 
 		if( a1.x === 0 && a1.y === 0 ) return this;
 
-		return this.create(
-			'x', this.x - a1.x,
-			'y', this.y - a1.y
-		);
+		return gleam_point.createXY( this.x - a1.x, this.y - a1.y );
 	}
 	else
 	{
@@ -246,12 +206,37 @@ def.proto.sub =
 /**/		if( arguments.length !== 2 ) throw new Error( );
 /**/	}
 
-		return this.create(
-			'x', this.x - a1,
-			'y', this.y - a2
-		);
+		return gleam_point.createXY( this.x - a1, this.y - a2 );
 	}
 };
+
+
+/*
+| Returns a transformed point.
+*/
+def.proto.transform =
+	function(
+		transform  // transform to apply
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
+/**/}
+
+	return(
+		transform.zoom === 1
+		? this.add( transform.offset )
+		: gleam_point.createXY( transform.x( this.x ), transform.y( this.y ) )
+	);
+};
+
+
+/*
+| Shortcut for point at 0/0.
+*/
+def.staticLazy.zero = ( ) => gleam_point.createXY( 0, 0 );
 
 
 } );

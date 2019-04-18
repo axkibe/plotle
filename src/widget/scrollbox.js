@@ -232,8 +232,7 @@ def.lazy.glint =
 				gleam_glint_pane.create(
 					'glint', gleam_glint_list.create( 'list:init', arr ),
 					'size', zone.size,
-					// FIXME make lazy point.negate
-					'offset', gleam_point.xy( -this.scrollPos.x, -this.scrollPos.y )
+					'offset', this.scrollPos.negate
 				),
 			'pos', zone.pos
 		);
