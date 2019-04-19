@@ -109,30 +109,24 @@ def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	const tSame           = ( c ) => c;
-	const tSet            = function( c ) { return this._transformSet( c ); };
-	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
-	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
-	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
+	map.set( mark_pat,    '_transformSame' );
+	map.set( mark_caret,  '_transformSame' );
+	map.set( mark_range,  '_transformSame' );
+	map.set( mark_items,  '_transformSame' );
+	map.set( mark_widget, '_transformSame' );
 
-	map.set( mark_pat,    tSame );
-	map.set( mark_caret,  tSame );
-	map.set( mark_range,  tSame );
-	map.set( mark_items,  tSame );
-	map.set( mark_widget, tSame );
+	map.set( change_grow,   '_transformSame' );
+	map.set( change_join,   '_transformSame' );
+	map.set( change_shrink, '_transformSame' );
+	map.set( change_split,  '_transformSame' );
+	map.set( change_insert, '_transformSame' );
+	map.set( change_remove, '_transformSame' );
 
-	map.set( change_grow,      tSame );
-	map.set( change_join,      tSame );
-	map.set( change_shrink,    tSame );
-	map.set( change_split,     tSame );
-	map.set( change_insert,    tSame );
-	map.set( change_remove,    tSame );
+	map.set( change_set, '_transformSet' );
 
-	map.set( change_set,       tSet );
-
-	map.set( change_list,      tChangeList );
-	map.set( change_wrap,      tChangeWrap );
-	map.set( change_wrapList,  tChangeWrapList );
+	map.set( change_list,     '_transformChangeList' );
+	map.set( change_wrap,     '_transformChangeWrap' );
+	map.set( change_wrapList, '_transformChangeWrapList' );
 
 	return map;
 };

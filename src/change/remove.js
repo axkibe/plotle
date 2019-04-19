@@ -139,36 +139,25 @@ def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	const tSame           = ( c ) => c;
-	const tMarkPat        = function( c ) { return this._transformMarkPat( c ); };
-	const tMarkCaret      = function( c ) { return this._transformMarkCaret( c ); };
-	const tMarkRange      = function( c ) { return this._transformMarkRange( c ); };
-	const tJoinSplit      = function( c ) { return this._transformJoinSplit( c ); };
-	const tInsert         = function( c ) { return this._transformInsert( c ); };
-	const tRemove         = function( c ) { return this._transformRemove( c ); };
-	const tChangeList     = function( c ) { return this._transformChangeList( c ); };
-	const tChangeWrap     = function( c ) { return this._transformChangeWrap( c ); };
-	const tChangeWrapList = function( c ) { return this._transformChangeWrapList( c ); };
+	map.set( mark_pat,    '_transformMarkPat' );
+	map.set( mark_caret,  '_transformMarkCaret' );
+	map.set( mark_range,  '_transformMarkRange' );
+	map.set( mark_items,  '_transformSame' );
+	map.set( mark_widget, '_transformSame' );
 
-	map.set( mark_pat,    tMarkPat );
-	map.set( mark_caret,  tMarkCaret );
-	map.set( mark_range,  tMarkRange );
-	map.set( mark_items,  tSame );
-	map.set( mark_widget, tSame );
+	map.set( change_grow,   '_transformSame' );
+	map.set( change_shrink, '_transformSame' );
+	map.set( change_set,    '_transformSame' );
 
-	map.set( change_grow,      tSame );
-	map.set( change_shrink,    tSame );
-	map.set( change_set,       tSame );
+	map.set( change_join,   '_transformJoinSplit' );
+	map.set( change_split,  '_transformJoinSplit' );
 
-	map.set( change_join,      tJoinSplit );
-	map.set( change_split,     tJoinSplit );
+	map.set( change_insert, '_transformInsert' );
+	map.set( change_remove, '_transformRemove' );
 
-	map.set( change_insert,    tInsert );
-	map.set( change_remove,    tRemove );
-
-	map.set( change_list,      tChangeList );
-	map.set( change_wrap,      tChangeWrap );
-	map.set( change_wrapList,  tChangeWrapList );
+	map.set( change_list,     '_transformChangeList' );
+	map.set( change_wrap,     '_transformChangeWrap' );
+	map.set( change_wrapList, '_transformChangeWrapList' );
 
 	return map;
 };

@@ -43,7 +43,7 @@ def.proto.transform =
 
 	if( !t ) throw new Error( );
 
-	return t.call( this, c );
+	return this[ t ]( c );
 };
 
 
@@ -81,6 +81,12 @@ def.proto._transformChangeList =
 
 	return cList.create( 'list:init', tList );
 };
+
+
+/*
+| Returns a non transform.
+*/
+def.proto._transformSame = ( o ) => o;
 
 
 /*
