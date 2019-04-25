@@ -16,6 +16,8 @@ const action_select = tim.require( '../action/select' );
 
 const fabric_item = tim.require( './item' );
 
+const gleam_point = tim.require( '../gleam/point' );
+
 const math = tim.require( '../math/root' );
 
 const result_hover = tim.require( '../result/hover' );
@@ -49,24 +51,23 @@ def.lazy.attentionCenter =
 */
 def.proto.click =
 	function(
-		p,       // point where dragging starts
-		shift,   // true if shift key was held down
-		ctrl,    // true if ctrl or meta key was held down
-		mark     // mark, FIXME remove
+		p,      // point where dragging starts
+		shift,  // true if shift key was held down
+		ctrl    // true if ctrl or meta key was held down
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
 	if( !this.pointWithin( p ) ) return;
 
-	if( ctrl ) return this._ctrlClick( p, shift, mark );
+	if( ctrl ) return this._ctrlClick( p, shift );
 
 	if( this.access != 'rw' ) return false;
 
-	root.alter( 'mark', this.markForPoint( p, shift, mark ) );
+	root.alter( 'mark', this.markForPoint( p, shift ) );
 
 	return true;
 };
@@ -125,6 +126,15 @@ def.proto.markForPoint =
 		doRange  // if true possible make a range
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/
+/**/	if( p.timtype === gleam_point ) throw new Error( );
+/**/
+/**/	if( typeof( doRange ) !== 'boolean' ) throw new Error( );
+/**/}
+
 	const tp = p.detransform( this.transform );
 
 	const pos = this.zone.pos;

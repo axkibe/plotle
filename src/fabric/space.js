@@ -136,14 +136,11 @@ def.proto.click =
 
 	if( frame && frame.click( p, shift, ctrl ) ) return true;
 
-	const mark = this.mark;
-
 	// clicked some item?
 	for( let item of this )
 	{
-		if( item.click( p, shift, ctrl, mark ) ) return true;
+		if( item.click( p, shift, ctrl ) ) return true;
 	}
-
 	// otherwise ...
 
 	if( !ctrl ) root.alter( 'mark', undefined );

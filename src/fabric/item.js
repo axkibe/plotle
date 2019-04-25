@@ -199,17 +199,18 @@ def.lazy.tZone =
 */
 def.proto._ctrlClick =
 	function(
-		p,      // the point clicked
-		shift,  // true if shift key was pressed
-		mark    // the mark of the space
+		p,     // the point clicked
+		shift  // true if shift key was pressed
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
 	if( this.access !== 'rw' ) return false;
+
+	const mark = this.mark;
 
 	if( !mark )
 	{
