@@ -195,7 +195,7 @@ def.lazy._glint =
 			'focus', !!this.mark
 		);
 
-	const arr = [ gleam_glint_paint.createFS( facet, this._tzShape ) ];
+	const arr = [ gleam_glint_paint.createFacetShape( facet, this._tzShape ) ];
 
 	let text = this.text;
 
@@ -246,7 +246,7 @@ def.lazy._glint =
 	if( this.iconShape )
 	{
 		arr.push(
-			gleam_glint_paint.createFS( this.iconFacet, this._iconShape )
+			gleam_glint_paint.createFacetShape( this.iconFacet, this._iconShape )
 		);
 	}
 

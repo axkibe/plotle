@@ -264,12 +264,11 @@ def.lazy.focusedWidget =
 def.lazy.glint =
 	function( )
 {
-	const arr = [ gleam_glint_paint.createFS( gruga_formFacet.model, this.viewSize.zeroRect ) ];
+	const arr =
+		[ gleam_glint_paint.createFacetShape( gruga_formFacet.model, this.viewSize.zeroRect ) ];
 
-	for( let r = this.length - 1; r >= 0; r-- )
+	for( let s of this.reverse( ) )
 	{
-		const s = this.atRank( r );
-
 		const sg = s.glint;
 
 		if( sg ) arr.push( sg );

@@ -204,7 +204,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_note.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFacetShape( facet, this.tShape ) );
 	}
 
 	const sbary = this.scrollbarY;
@@ -327,7 +327,7 @@ def.lazy.scrollbarY =
 			'max', dHeight,
 			'path', path && path.append( 'scrollbarY' ),
 			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
-			'scrollpos', this.scrollPos.y,
+			'scrollPos', this.scrollPos.y,
 			'size', zone.height - gruga_note.vScrollbarDis * 2,
 			'transform', this.transform
 		)

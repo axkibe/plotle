@@ -445,10 +445,10 @@ def.proto.input =
 		}
 	}
 
-	root.alter( 'change', change_list.create( 'list:init', changes ) );
-
-	// FIXME make this an alter
-	root.clearRetainX( );
+	root.alter(
+		'change', change_list.create( 'list:init', changes ),
+		'clearRetainX', true
+	);
 };
 
 
@@ -617,15 +617,14 @@ def.proto._keyBackspace =
 	{
 		root.alter(
 			'change',
-			change_remove.create(
-				'path', this.textPath.chop,
-				'at1', at - 1,
-				'at2', at,
-				'val', this.text.substring( at - 1, at )
-			)
+				change_remove.create(
+					'path', this.textPath.chop,
+					'at1', at - 1,
+					'at2', at,
+					'val', this.text.substring( at - 1, at )
+				),
+			'clearRetainX', true
 		);
-
-		root.clearRetainX( );
 
 		return;
 	}
@@ -643,14 +642,13 @@ def.proto._keyBackspace =
 
 	root.alter(
 		'change',
-		change_join.create(
-			'path', ve.textPath.chop,
-			'path2', this.textPath.chop,
-			'at1', ve.text.length
-		)
+			change_join.create(
+				'path', ve.textPath.chop,
+				'path2', this.textPath.chop,
+				'at1', ve.text.length
+			),
+		'clearRetainX', true
 	);
-
-	root.clearRetainX( );
 };
 
 
@@ -669,15 +667,14 @@ def.proto._keyDel =
 	{
 		root.alter(
 			'change',
-			change_remove.create(
-				'path', this.textPath.chop,
-				'at1', at,
-				'at2', at + 1,
-				'val', this.text.substring( at, at + 1 )
-			)
+				change_remove.create(
+					'path', this.textPath.chop,
+					'at1', at,
+					'at2', at + 1,
+					'val', this.text.substring( at, at + 1 )
+				),
+			'clearRetainX', true
 		);
-
-		root.clearRetainX( );
 
 		return;
 	}
@@ -693,14 +690,13 @@ def.proto._keyDel =
 
 	root.alter(
 		'change',
-		change_join.create(
-			'path', this.textPath.chop,
-			'path2', doc.atRank( r + 1).textPath.chop,
-			'at1', this.text.length
-		)
+			change_join.create(
+				'path', this.textPath.chop,
+				'path2', doc.atRank( r + 1).textPath.chop,
+				'at1', this.text.length
+			),
+		'clearRetainX', true
 	);
-
-	root.clearRetainX( );
 };
 
 

@@ -30,6 +30,42 @@ const session_uid = tim.require( '../session/uid' );
 
 
 /*
+| Custom shortcut.
+*/
+def.static.createWrapped =
+	function(
+		changeList
+	)
+{
+	return change_wrap.create( 'cid', session_uid.newUid( ), 'changeList', changeList );
+};
+
+
+/*
+| Performes the wrapped changeList on a tree.
+*/
+def.proto.changeTree =
+	function(
+		tree
+	)
+{
+	return this.changeList.changeTree( tree );
+};
+
+
+/*
+| Reversevly performes the wrapped changeList on a tree.
+*/
+def.proto.changeTreeReverse =
+	function(
+		tree
+	)
+{
+	return this.changeList.changeTreeReverse( tree );
+};
+
+
+/*
 | Creates a reversed changeWrap.
 |
 | This one has a distinct change id and no sequence id yet
@@ -57,31 +93,6 @@ def.proto.transform =
 	)
 {
 	return this.changeList.transform( cx );
-};
-
-
-
-/*
-| Performes the wrapped changeList on a tree.
-*/
-def.proto.changeTree =
-	function(
-		tree
-	)
-{
-	return this.changeList.changeTree( tree );
-};
-
-
-/*
-| Reversevly performes the wrapped changeList on a tree.
-*/
-def.proto.changeTreeReverse =
-	function(
-		tree
-	)
-{
-	return this.changeList.changeTreeReverse( tree );
 };
 
 

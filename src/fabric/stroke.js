@@ -126,7 +126,7 @@ def.proto.glint =
 	function( )
 {
 	// FIXME remove gruga_relation dependency
-	return gleam_glint_paint.createFS( gruga_relation.facet, this.tShape );
+	return gleam_glint_paint.createFacetShape( gruga_relation.facet, this.tShape );
 };
 
 

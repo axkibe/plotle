@@ -322,7 +322,7 @@ def.adjust.get =
 def.lazy.glint =
 	function( )
 {
-	// FIXME make tZone private?
+	// FUTURE make tZone private?
 	const zone = this.tZone.enlarge1;
 
 	// FUTURE GLINT inherit
@@ -345,29 +345,18 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr =
-		[
-			gleam_glint_fill.create(
-				'facet', this.facet,
-				'shape', this.tShape
-			)
-		];
+	const a = [ gleam_glint_fill.createFacetShape( this.facet, this.tShape ) ];
 
 	for( let widget of this )
 	{
 		const g = widget.glint;
 
-		if( g ) arr.push( g );
+		if( g ) a.push( g );
 	}
 
-	arr.push(
-		gleam_glint_border.create(
-			'facet', this.facet,
-			'shape', this.tShape
-		)
-	);
+	a.push( gleam_glint_border.createFacetShape( this.facet, this.tShape ) );
 
-	return gleam_glint_list.create( 'list:init', arr );
+	return gleam_glint_list.create( 'list:init', a );
 };
 
 

@@ -186,15 +186,15 @@ def.lazy._glintFrame =
 	const handleFacet = gruga_frame.handleFacet;
 
 	const glintFrameBody =
-		gleam_glint_paint.createFS( gruga_frame.facet, this._frameBodyShape );
+		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._frameBodyShape );
 
-	const glintHandleNe = gleam_glint_paint.createFS( handleFacet, this._shapeHandleNe );
+	const glintHandleNe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNe );
 
-	const glintHandleNw = gleam_glint_paint.createFS( handleFacet, this._shapeHandleNw );
+	const glintHandleNw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNw );
 
-	const glintHandleSe = gleam_glint_paint.createFS( handleFacet, this._shapeHandleSe );
+	const glintHandleSe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSe );
 
-	const glintHandleSw = gleam_glint_paint.createFS( handleFacet, this._shapeHandleSw );
+	const glintHandleSw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSw );
 
 	let arr;
 
@@ -204,13 +204,13 @@ def.lazy._glintFrame =
 	}
 	else
 	{
-		const glintHandleE = gleam_glint_paint.createFS( handleFacet, this._shapeHandleE );
+		const glintHandleE = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleE );
 
-		const glintHandleN = gleam_glint_paint.createFS( handleFacet, this._shapeHandleN );
+		const glintHandleN = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleN );
 
-		const glintHandleS = gleam_glint_paint.createFS( handleFacet, this._shapeHandleS );
+		const glintHandleS = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleS );
 
-		const glintHandleW = gleam_glint_paint.createFS( handleFacet, this._shapeHandleW );
+		const glintHandleW = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleW );
 
 		arr =
 			[

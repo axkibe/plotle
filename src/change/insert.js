@@ -144,8 +144,8 @@ def.staticLazy._transformers = ( ) =>
 	map.set( change_join,  '_transformJoinSplit' );
 	map.set( change_split, '_transformJoinSplit' );
 
-	map.set( change_insert, '_tInsertRemove' );
-	map.set( change_remove, '_tInsertRemove' );
+	map.set( change_insert, '_transformInsertRemove' );
+	map.set( change_remove, '_transformInsertRemove' );
 
 	map.set( change_list,     '_transformChangeList' );
 	map.set( change_wrap,     '_transformChangeWrap' );

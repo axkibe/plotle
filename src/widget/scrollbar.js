@@ -19,7 +19,7 @@ if( TIM )
 	def.attributes =
 	{
 		// scroll position
-		scrollpos : { type : 'number' },
+		scrollPos : { type : 'number' },
 
 		// the size of the bar
 		aperture : { type : 'number' },
@@ -56,7 +56,7 @@ const result_hover = tim.require( '../result/hover' );
 def.lazy.glint =
 	function( )
 {
-	return gleam_glint_paint.createFS( gruga_scrollbar.facet, this.tShape );
+	return gleam_glint_paint.createFacetShape( gruga_scrollbar.facet, this.tShape );
 };
 
 
@@ -70,7 +70,7 @@ def.lazy.tShape =
 
 	const size = this.size;
 
-	const scrollpos = this.scrollpos;
+	const scrollPos = this.scrollPos;
 
 	const max = this.max;
 
@@ -78,7 +78,7 @@ def.lazy.tShape =
 
 	const map = Math.max( ap, gruga_scrollbar.minHeight );
 
-	const sy = scrollpos * ( ( size - map + ap ) / max );
+	const sy = scrollPos * ( ( size - map + ap ) / max );
 
 	const st = gruga_scrollbar.strength;
 
@@ -116,7 +116,7 @@ def.proto.dragStart =
 			action_scrolly.create(
 				'scrollPath', this.path.shorten,
 				'startPoint', p,
-				'startPos', this.scrollpos
+				'startPos', this.scrollPos
 			)
 	);
 

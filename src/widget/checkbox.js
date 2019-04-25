@@ -127,7 +127,7 @@ def.lazy.glint =
 
 	let glint =
 		gleam_glint_list.create(
-			'list:append', gleam_glint_paint.createFS( facet, this._tZone )
+			'list:append', gleam_glint_paint.createFacetShape( facet, this._tZone )
 		);
 
 	if( this.checked )

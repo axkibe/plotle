@@ -23,10 +23,6 @@ if( TIM )
 		// line cursor is in
 		cursorLine : { type : 'integer', defaultValue : '0' },
 
-		// the document
-		// FIXME make lazy
-		doc : { type : [ '../fabric/doc', 'undefined' ] },
-
 		// DOM elements
 		elements : { type : 'protean' },
 

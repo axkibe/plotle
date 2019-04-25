@@ -218,7 +218,7 @@ def.lazy.glint =
 def.lazy._glint =
 	function( )
 {
-	const arr = [ gleam_glint_fill.createFS( this.facet, this.tShape) ];
+	const arr = [ gleam_glint_fill.createFacetShape( this.facet, this.tShape) ];
 
 	for( let widget of this )
 	{
@@ -227,7 +227,7 @@ def.lazy._glint =
 		if( g ) arr.push( g );
 	}
 
-	arr.push( gleam_glint_border.createFS( this.facet, this.tShape ) );
+	arr.push( gleam_glint_border.createFacetShape( this.facet, this.tShape ) );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };

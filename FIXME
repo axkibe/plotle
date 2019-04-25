@@ -1,13 +1,10 @@
-FIXME: scrollpos vs. scrollPos
 FIXME: instead of tim.aheadValue make the attributes setable
 FIXME: after signup the new own homespace is not in the 'go' spaces list
 
 FIXME: on welcome page after signup greet user by name
 
-FIXME: move the dragstart/move/stop logic from all over to place to the actions.
 FIXME: after zooming draging on on forms errors
 
-FIXME: use (for ... of) instead of iterators.
 FIXME: remove all action: affectZone, affectItem, affects.bla
 
 FIXME: check all create( ) if replaceable with .empty

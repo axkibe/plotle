@@ -204,7 +204,7 @@ def.lazy.glint =
 	{
 		const facet = gruga_label.facets.getFacet( 'highlight', true );
 
-		arr.push( gleam_glint_paint.createFS( facet, this.tShape ) );
+		arr.push( gleam_glint_paint.createFacetShape( facet, this.tShape ) );
 	}
 
 	let fromGlint = this._getConnectionGlint( );
@@ -233,7 +233,7 @@ def.proto._getArrowGlint =
 		gleam_arrow.getArrowShape( this.shape, 'none', to, 'arrow' )
 		.transform( this.transform );
 
-	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
+	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );
 };
 
 
@@ -251,7 +251,7 @@ def.proto._getConnectionGlint =
 		gleam_arrow.getArrowShape( from, 'none', this.shape, 'none' )
 		.transform( this.transform );
 
-	return gleam_glint_paint.createFS( gruga_relation.facet, arrowShape );
+	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );
 };
 
 

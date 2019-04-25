@@ -23,7 +23,7 @@ if( TIM )
 /*
 | Shortcut
 */
-def.static.createFS =
+def.static.createFacetShape =
 	function(
 		facet,
 		shape

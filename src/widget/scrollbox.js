@@ -311,7 +311,7 @@ def.lazy.scrollbarY =
 					zone.width + scrollbarYOffset.x,
 					scrollbarYOffset.y
 				),
-			'scrollpos', this.scrollPos.y,
+			'scrollPos', this.scrollPos.y,
 			'size', zone.height,
 			'transform', this.transform
 		)

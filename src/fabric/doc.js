@@ -254,7 +254,7 @@ def.lazy.glint =
 	if( mark && mark.timtype === mark_range && mark.containsPath( this.path.limit( 3 ) ) )
 	{
 		arr.push(
-			gleam_glint_paint.createFS(
+			gleam_glint_paint.createFacetShape(
 				gruga_selection.facet,
 				this._rangeShape.transform( this.transform.ortho )
 			)

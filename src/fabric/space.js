@@ -212,34 +212,6 @@ def.proto.dragStart =
 
 
 /*
-| Stops an operation with the poiting device button held down.
-*/
-def.proto.dragStop =
-	function(
-		p,     // cursor point
-		shift, // true if shift key was pressed
-		ctrl   // true if ctrl key was pressed
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.space !== this ) throw new Error( );
-/**/}
-
-	// FIXME make map
-	switch( this.action.timtype )
-	{
-		case action_select : this._stopSelect( p, shift, ctrl ); break;
-
-		default : throw new Error( );
-	}
-
-	return true;
-};
-
-
-/*
 | Determines the focused item.
 */
 def.lazy.focus =
@@ -491,7 +463,7 @@ def.lazy.glint =
 						);
 
 					arr.push(
-						gleam_glint_paint.createFS(
+						gleam_glint_paint.createFacetShape(
 							gruga_relation.facet,
 							arrow.shape.transform( transform )
 						)
@@ -506,7 +478,7 @@ def.lazy.glint =
 			if( action.zone )
 			{
 				arr.push(
-					gleam_glint_paint.createFS(
+					gleam_glint_paint.createFacetShape(
 						gruga_select.facet,
 						action.zone.transform( transform )
 					)

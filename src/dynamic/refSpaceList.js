@@ -37,8 +37,6 @@ const ref_moment = tim.require( '../ref/moment' );
 
 const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
 
-const session_uid = tim.require( '../session/uid' );
-
 
 /*
 | Returns the altered dynamic.
@@ -68,11 +66,7 @@ def.proto.alter =
 			);
 	}
 
-	const changeWrap =
-		change_wrap.create(
-			'cid', session_uid.newUid( ),
-			'changeList', changeList
-		);
+	const changeWrap = change_wrap.createWrapped( changeList );
 
 	return(
 		this.create(

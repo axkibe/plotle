@@ -459,7 +459,6 @@ def.lazy.draw =
 
 	display.render( );
 
-	// FIXME check if this is privatable
 	root._create( '_display', display );
 
 	return true;
@@ -555,6 +554,8 @@ def.proto.alter =
 
 	let changeWrap;
 
+	let clearRetainX;
+
 	let doTracker = pass;
 
 	let form = pass;
@@ -590,6 +591,8 @@ def.proto.alter =
 			case 'change' : change = arg; continue;
 
 			case 'changeWrap' : changeWrap = arg; continue;
+
+			case 'clearRetainX' : clearRetainX = arg; continue;
 
 			case 'doTracker' : doTracker = arg; continue;
 
@@ -684,12 +687,7 @@ def.proto.alter =
 		}
 
 		{
-			const changeWrap =
-				// FIXME make a shortcut function
-				change_wrap.create(
-					'cid', session_uid.newUid( ),
-					'changeList', change
-				);
+			const changeWrap = change_wrap.createWrapped( change );
 
 			root.link.send( changeWrap );
 
@@ -718,6 +716,13 @@ def.proto.alter =
 	}
 
 	if( space !== pass ) space = space.create( 'action', action_none.singleton );
+
+	if( clearRetainX )
+	{
+		if( mark === pass ) mark = this._mark;
+
+		if( mark.retainx !== undefined ) mark = mark.create( 'retainx', undefined );
+	}
 
 	if( mark !== pass )
 	{
@@ -987,21 +992,6 @@ def.proto.click =
 	if( bubble !== undefined ) return bubble;
 
 	return screen.click( p, shift, ctrl );
-};
-
-
-/*
-| Clears the carets retainx info.
-*/
-def.proto.clearRetainX =
-	function( )
-{
-	const mark = this._mark;
-
-	if( mark.retainx !== undefined )
-	{
-		this._create( '_mark', mark.create( 'retainx', undefined ) );
-	}
 };
 
 
@@ -1799,22 +1789,11 @@ def.proto.update =
 
 	if( !mark ) return;
 
-	switch( mark.timtype )
+	mark = changes.transform( mark );
+
+	if( mark.timtype === mark_range )
 	{
-		case mark_range :
-
-			mark = changes.transform( mark );
-
-//          XXX FIXME DOC XXX
-//			mark.createTransformed( changes, root.space.getPath( mark.docPath.chop ) );
-
-			break;
-
-		default :
-
-			mark = changes.transform( mark );
-
-			break;
+		mark = mark.create( 'doc', root.space.getPath( mark.docPath.chop ) );
 	}
 
 	return mark;
