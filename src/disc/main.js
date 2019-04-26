@@ -526,8 +526,7 @@ def.proto.click =
 	// this is on the disc
 	for( let widget of this )
 	{
-		// FIXME stop at hit
-		widget.click( pp, shift, ctrl );
+		if( widget.click( pp, shift, ctrl ) ) return true;
 	}
 
 	return true;

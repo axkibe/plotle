@@ -351,7 +351,7 @@ def.proto.click =
 	)
 {
 	p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
@@ -390,7 +390,7 @@ def.proto.dragStart =
 	}
 
 	p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
@@ -424,7 +424,7 @@ def.proto.pointingHover =
 	}
 
 	p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);
@@ -452,7 +452,7 @@ def.proto.mousewheel =
 	if( !this._zone.within( p ) ) return;
 
 	p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			p.x - this._zone.pos.x + this.scrollPos.x,
 			p.y - this._zone.pos.y + this.scrollPos.y
 		);

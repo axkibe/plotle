@@ -34,37 +34,40 @@ if( TIM )
 /*
 | Shortcut to create a round to close.
 */
-def.staticLazy.close = ( ) =>
+def.staticLazy.close = // FIXME remove
+def.staticLazy.createClose = ( ) =>
 	gleam_shape_round.create( 'close', true );
 
 
 /*
 | Shortcut to create a count clockwise round to close.
 */
-def.staticLazy.closeCcw = ( ) =>
+def.staticLazy.closeCcw = // FIXME remove
+def.staticLazy.createCloseCcw = ( ) =>
 	gleam_shape_round.create( 'ccw', true, 'close', true );
 
 
 /*
 | Shortcut to create a round to p.
 */
-def.static.p = p =>
+def.static.createP =
+	( p ) =>
 	gleam_shape_round.create( 'p', p );
 
 /*
 | Shortcut to create a counter clockwise round to p.
 */
-def.static.pCcw = p =>
+def.static.createPCcw =
+	( p ) =>
 	gleam_shape_round.create( 'ccw', true, 'p', p );
 
 
 /*
 | Shortcut to create a round to xy.
 */
-def.static.xy = ( x, y ) =>
-	gleam_shape_round.create(
-		'p', gleam_point.xy( x, y )
-	);
+def.static.createXY =
+	( x, y ) =>
+	gleam_shape_round.create( 'p', gleam_point.createXY( x, y ) );
 
 
 /*
@@ -148,15 +151,15 @@ def.proto.getProjection =
 	{
 		if( p.y > cy )
 		{
-			return gleam_point.xy( cx, cy + b );
+			return gleam_point.createXY( cx, cy + b );
 		}
 		else if( p.y < cy )
 		{
-			return gleam_point.xy( cx, cy - b );
+			return gleam_point.createXY( cx, cy - b );
 		}
 		else if( p.y === cy )
 		{
-			return gleam_point.xy( cx, cy );
+			return gleam_point.createXY( cx, cy );
 		}
 	}
 	else
@@ -208,7 +211,7 @@ def.proto.getProjection =
 			( ( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx ) )
 		)
 		{
-			return gleam_point.xy( x, y );
+			return gleam_point.createXY( x, y );
 		}
 	}
 };

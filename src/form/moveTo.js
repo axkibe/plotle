@@ -105,7 +105,7 @@ def.adjust.get =
 def.staticLazy.scrollbarYOffset =
 	function( )
 {
-	return gleam_point.xy( Math.ceil( -gruga_scrollbar.strength / 2 ) - 1, 0 );
+	return gleam_point.createXY( Math.ceil( -gruga_scrollbar.strength / 2 ) - 1, 0 );
 };
 
 
@@ -198,7 +198,7 @@ def.proto._transformHeadline =
 
 	return(
 		headline.create(
-			'pos', gleam_point.xy( this._leftDistance + ( this._cols - 0.5 ) * 80 + 30, y )
+			'pos', gleam_point.createXY( this._leftDistance + ( this._cols - 0.5 ) * 80 + 30, y )
 		)
 	);
 };
@@ -230,7 +230,7 @@ def.proto._transformScrollbox =
 		button.create(
 			'zone',
 				button.zone.create(
-					'pos', gleam_point.xy( 160 * ( this._cols - 2 ) / 2, 0 )
+					'pos', gleam_point.createXY( 160 * ( this._cols - 2 ) / 2, 0 )
 				)
 		);
 
@@ -240,7 +240,7 @@ def.proto._transformScrollbox =
 		button.create(
 			'zone',
 				button.zone.create(
-					'pos', gleam_point.xy( 160 * ( this._cols ) / 2, 0 )
+					'pos', gleam_point.createXY( 160 * ( this._cols ) / 2, 0 )
 				)
 		);
 
@@ -290,7 +290,7 @@ def.proto._transformScrollbox =
 					'text', rSpace.username + '\n' + rSpace.tag,
 					'zone',
 						button.zone.create(
-							'pos', gleam_point.xy( 160 * ( cOff + c ), 160 * r )
+							'pos', gleam_point.createXY( 160 * ( cOff + c ), 160 * r )
 						)
 				);
 
@@ -302,7 +302,7 @@ def.proto._transformScrollbox =
 
 	const zone =
 		gleam_rect.create(
-			'pos', gleam_point.xy( this._leftDistance, cy ),
+			'pos', gleam_point.createXY( this._leftDistance, cy ),
 			'width', this._availableWidth + gruga_scrollbar.strength,
 			'height', this.viewSize.height - cy
 		);

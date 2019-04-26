@@ -53,7 +53,7 @@ def.staticLazy.facet = ( ) =>
 def.staticLazy.shape =
 	function ( )
 {
-	const c = gleam_point.xy( 2, -3 );
+	const c = gleam_point.createXY( 2, -3 );
 
 	return( gleam_shapeList.create(
 		'list:init',
@@ -61,14 +61,14 @@ def.staticLazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.p(    c.add( -12.0, 12 ) ),
-					gleam_shape_line.p(     c.add(  -7.5,  6 ) ),
-					gleam_shape_round.p(    c.add(  -9.0,  0 ) ),
-					gleam_shape_round.p(    c.add(   0.0, -9 ) ),
-					gleam_shape_round.p(    c.add(   9.0,  0 ) ),
-					gleam_shape_round.p(    c.add(   0.0,  9 ) ),
-					gleam_shape_round.p(    c.add(  -5.0,  8 ) ),
-					gleam_shape_line.p(     c.add(  -9.0, 13 ) ),
+					gleam_shape_start.createP(    c.add( -12.0, 12 ) ),
+					gleam_shape_line.createP(     c.add(  -7.5,  6 ) ),
+					gleam_shape_round.createP(    c.add(  -9.0,  0 ) ),
+					gleam_shape_round.createP(    c.add(   0.0, -9 ) ),
+					gleam_shape_round.createP(    c.add(   9.0,  0 ) ),
+					gleam_shape_round.createP(    c.add(   0.0,  9 ) ),
+					gleam_shape_round.createP(    c.add(  -5.0,  8 ) ),
+					gleam_shape_line.createP(     c.add(  -9.0, 13 ) ),
 					gleam_shape_round.close
 				],
 				'pc', c,
@@ -77,10 +77,10 @@ def.staticLazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.p(    c.add( -8.5,  0.0 ) ),
-					gleam_shape_round.pCcw( c.add(  0.0,  8.5 ) ),
-					gleam_shape_round.pCcw( c.add(  8.5,  0.0 ) ),
-					gleam_shape_round.pCcw( c.add(  0.0, -8.5 ) ),
+					gleam_shape_start.createP(    c.add( -8.5,  0.0 ) ),
+					gleam_shape_round.createPCcw( c.add(  0.0,  8.5 ) ),
+					gleam_shape_round.createPCcw( c.add(  8.5,  0.0 ) ),
+					gleam_shape_round.createPCcw( c.add(  0.0, -8.5 ) ),
 					gleam_shape_round.closeCcw
 				],
 				'pc', c,

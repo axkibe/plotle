@@ -147,7 +147,7 @@ def.proto.dragMove =
 			const pos =
 				( ps.x > this.startPoint.x )
 				? zone.pos
-				: gleam_point.xy(
+				: gleam_point.createXY(
 					zone.pos.x + zone.width - resized.zone.width,
 					zone.pos.y
 				);
@@ -206,7 +206,7 @@ def.proto.dragStart =
 		{
 			model  =
 				model.create(
-					'zone', gleam_rect.posSize( ps, model.minSize )
+					'zone', gleam_rect.createPosSize( ps, model.minSize )
 				);
 
 			if( itemTim === fabric_portal )

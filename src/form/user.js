@@ -72,7 +72,6 @@ def.adjust.get =
 		widget
 	)
 {
-	// FIXME make lazy
 	const isVisitor = this.user ? this.user.isVisitor : true;
 
 	switch( name )

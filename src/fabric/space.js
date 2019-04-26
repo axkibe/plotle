@@ -82,9 +82,11 @@ const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 
+const gruga_note = tim.require( '../gruga/note' );
+
 const gleam_point = tim.require( '../gleam/point' );
 
-const gruga_note = tim.require( '../gruga/note' );
+const gleam_rect = tim.require( '../gleam/rect' );
 
 const gruga_relation = tim.require( '../gruga/relation' );
 
@@ -104,6 +106,40 @@ const mark_items = tim.require( '../mark/items' );
 
 
 /*
+| Gathers the ancillary changes for a changeList.
+|
+| Returns the ancillary changes.
+*/
+def.proto.ancillary =
+	function(
+		affectedTwigItems
+	)
+{
+	let change;
+
+	// FUTURE for( let key of affectedTwigItems )
+	for( let item of this )
+	{
+		const ia = item.ancillary( this );
+
+		if( !ia ) continue;
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( ia.length === 0 ) throw new Error( );
+/**/	}
+
+		if( !change ) { change = ia; continue; }
+
+		change = change.appendList( ia );
+	}
+
+	return change;
+};
+
+
+
+/*
 | The attention center.
 */
 def.lazy.attentionCenter =
@@ -115,6 +151,57 @@ def.lazy.attentionCenter =
 
 	return this.transform.y( focus.attentionCenter );
 };
+
+
+/*
+| The zone encompassing all items.
+*/
+def.lazy.allItemsZone =
+	function( )
+{
+	let first = true;
+
+	let wx, ny, ex, sy;
+
+	for( let item of this )
+	{
+		const zone = item.zone;
+
+		const pos = zone.pos;
+
+		if( first )
+		{
+			wx = pos.x;
+
+			ny = pos.y;
+
+			ex = pos.x + zone.width;
+
+			sy = pos.y + zone.height;
+
+			first = false;
+		}
+		else
+		{
+			if( pos.x < wx ) wx = pos.x;
+
+			if( pos.y < ny ) ny = pos.y;
+
+			if( pos.x + zone.width > ex ) ex = pos.x + zone.width;
+
+			if( pos.y + zone.height > sy ) sy = pos.y + zone.height;
+		}
+	}
+
+	return(
+		gleam_rect.create(
+			'pos', gleam_point.createXY( wx, ny ),
+			'height', sy - ny,
+			'width', ex - wx
+		)
+	);
+};
+
 
 
 /*
@@ -602,38 +689,6 @@ def.proto.scrollMarkIntoView =
 };
 
 
-/*
-| Gathers the ancillary changes for a changeList.
-|
-| Returns the ancillary changes.
-*/
-def.proto.ancillary =
-	function(
-		affectedTwigItems
-	)
-{
-	let change;
-
-	// FUTURE for( let key of affectedTwigItems )
-	for( let item of this )
-	{
-		const ia = item.ancillary( this );
-
-		if( !ia ) continue;
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( ia.length === 0 ) throw new Error( );
-/**/	}
-
-		if( !change ) { change = ia; continue; }
-
-		change = change.appendList( ia );
-	}
-
-	return change;
-};
-
 
 /*
 | The disc is shown while a space is shown.
@@ -733,7 +788,8 @@ def.lazy._grid =
 /*
 | Standard grid spacing.
 */
-def.staticLazy._standardSpacing = ( ) => gleam_point.xy( 15, 15 );
+def.staticLazy._standardSpacing = ( ) =>
+	gleam_point.createXY( 15, 15 );
 
 
 /*

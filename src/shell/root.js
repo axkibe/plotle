@@ -335,9 +335,7 @@ def.adjust.action =
 |
 | That is the horiziontal offset of the caret.
 |
-| Used for example on the iPad so
-| the caret is scrolled into view
-| when the keyboard is visible.
+| Used for example on the iPad so the caret is scrolled into view when the keyboard is visible.
 */
 def.lazy.attentionCenter = ( ) =>
 	root._currentScreen.attentionCenter;
@@ -841,7 +839,7 @@ def.proto.changeSpaceTransformPoint =
 		e1,
 		st.create(
 			'offset',
-				gleam_point.xy(
+				gleam_point.createXY(
 					( offset.x / st.zoom - p.x * h ) * zoom,
 					( offset.y / st.zoom - p.y * h ) * zoom
 				),
@@ -872,45 +870,20 @@ def.proto.changeSpaceTransformAll =
 {
 	const space = root._actionSpace;
 
-	let first = true;
-
-	let wx, ny, ex, sy;
-
-	// FIXME make this calculation part of space
-	for( let item of space )
-	{
-		const zone = item.zone;
-
-		const pos = zone.pos;
-
-		if( first )
-		{
-			wx = pos.x;
-
-			ny = pos.y;
-
-			ex = pos.x + zone.width;
-
-			sy = pos.y + zone.height;
-
-			first = false;
-		}
-		else
-		{
-			if( pos.x < wx ) wx = pos.x;
-
-			if( pos.y < ny ) ny = pos.y;
-
-			if( pos.x + zone.width > ex ) ex = pos.x + zone.width;
-
-			if( pos.y + zone.height > sy ) sy = pos.y + zone.height;
-		}
-	}
+	const allItemsZone = space.allItemsZone;
 
 	// center
-	const cx = ( ex + wx ) / 2;
+	const cx = allItemsZone.pc.x;
 
-	const cy = ( ny + sy ) / 2;
+	const cy = allItemsZone.pc.y;
+
+	const ex = allItemsZone.pos.x;
+
+	const ny = allItemsZone.pos.y;
+
+	const sy = allItemsZone.pse.y;
+
+	const wx = allItemsZone.pse.x;
 
 	const discWidth = root.disc.get( 'main' ).tZone.width;
 
@@ -948,11 +921,7 @@ def.proto.changeSpaceTransformAll =
 	root._changeTransformTo(
 		exp,
 		gleam_transform.create(
-			'offset',
-				gleam_point.xy(
-					vsx2 - cx * z + discWidth,
-					vsy2 - cy * z
-				),
+			'offset', gleam_point.createXY( vsx2 - cx * z + discWidth, vsy2 - cy * z ),
 			'zoom', z
 		),
 		shell_settings.animationZoomAllHomeTime

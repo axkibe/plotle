@@ -550,8 +550,6 @@ def.lazy.shape =
 
 /*
 | The space the portals references.
-|
-| FIXME make this the primer data.
 */
 def.lazy.spaceRef =
 	function( )
@@ -972,10 +970,7 @@ def.proto._keyLeft =
 		return;
 	}
 
-	// FIXME make a lazy value for this
-	root.alter(
-		'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at - 1 )
-	);
+	root.alter( 'mark', mark.backward );
 
 	return;
 };
@@ -1080,7 +1075,7 @@ def.proto._keyEnter =
 def.proto._keyPos1 =
 	function( )
 {
-	root.alter( 'mark', this.mark.create( 'at', 0 ) );
+	root.alter( 'mark', this.mark.zero );
 };
 
 
@@ -1107,8 +1102,7 @@ def.proto._keyRight =
 		return;
 	}
 
-	// FIXME lazy val caret
-	root.alter( 'mark', mark_caret.createPathAt( mark.caret.path, mark.caret.at + 1 ) );
+	root.alter( 'mark', mark.forward );
 };
 
 
@@ -1202,7 +1196,7 @@ def.proto._locateOffset =
 	const text = this[ section ];
 
 	return(
-		gleam_point.xy(
+		gleam_point.createXY(
 			Math.round( font.getAdvanceWidth( text.substring( 0, offset ) ) ),
 			0
 		)

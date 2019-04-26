@@ -31,22 +31,23 @@ const gleam_shape_start = tim.require( '../gleam/shape/start' );
 
 
 
-def.staticLazy.facet = ( ) => gleam_facet.create( 'fill', gleam_color.black );
+def.staticLazy.facet = ( ) =>
+	gleam_facet.create( 'fill', gleam_color.black );
 
 
 def.staticLazy.shape =
 	function( )
 {
-	const pc = gleam_point.xy( -2, 0 );
+	const pc = gleam_point.createXY( -2, 0 );
 
 	return(
 		gleam_shape.create(
 			'list:init',
 			[
-				gleam_shape_start.p( pc.add( -5, -3  ) ), // A
-				gleam_shape_line.p(  pc.add(  2,  5  ) ), // B
-				gleam_shape_line.p(  pc.add( 14, -12 ) ), // C
-				gleam_shape_line.p(  pc.add(  2, -1  ) ), // D
+				gleam_shape_start.createP( pc.add( -5, -3  ) ), // A
+				gleam_shape_line.createP(  pc.add(  2,  5  ) ), // B
+				gleam_shape_line.createP(  pc.add( 14, -12 ) ), // C
+				gleam_shape_line.createP(  pc.add(  2, -1  ) ), // D
 				gleam_shape_line.close                    // A
 			],
 			'pc', pc
@@ -54,5 +55,5 @@ def.staticLazy.shape =
 	);
 };
 
-} );
 
+} );

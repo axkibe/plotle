@@ -53,7 +53,7 @@ def.staticLazy.facet = ( ) =>
 def.staticLazy.shape =
 	function( )
 {
-	const c = gleam_point.xy( 0, 2 );
+	const c = gleam_point.createXY( 0, 2 );
 
 	return( gleam_shapeList.create(
 		'list:init',
@@ -61,16 +61,16 @@ def.staticLazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.p( c.add( -6,  4 ) ),
-					gleam_shape_line.p( c.add(  -6, -2 ) ),
-					gleam_shape_line.p( c.add(   0, -9 ) ),
-					gleam_shape_line.p( c.add(   6, -2 ) ),
-					gleam_shape_line.p( c.add(   6,  4 ) ),
+					gleam_shape_start.createP( c.add( -6,  4 ) ),
+					gleam_shape_line.createP( c.add(  -6, -2 ) ),
+					gleam_shape_line.createP( c.add(   0, -9 ) ),
+					gleam_shape_line.createP( c.add(   6, -2 ) ),
+					gleam_shape_line.createP( c.add(   6,  4 ) ),
 
-					gleam_shape_line.p( c.add(   2,  4 ) ),
-					gleam_shape_line.p( c.add(   2, -4 ) ),
-					gleam_shape_line.p( c.add(  -2, -4 ) ),
-					gleam_shape_line.p( c.add(  -2,  4 ) ),
+					gleam_shape_line.createP( c.add(   2,  4 ) ),
+					gleam_shape_line.createP( c.add(   2, -4 ) ),
+					gleam_shape_line.createP( c.add(  -2, -4 ) ),
+					gleam_shape_line.createP( c.add(  -2,  4 ) ),
 
 					gleam_shape_line.close
 				],
@@ -80,18 +80,18 @@ def.staticLazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.p( c.add(  -8,  -3 ) ),
-					gleam_shape_line.p( c.add(  -10,  -3 ) ),
+					gleam_shape_start.createP( c.add(  -8,  -3 ) ),
+					gleam_shape_line.createP( c.add(  -10,  -3 ) ),
 
-					gleam_shape_line.p( c.add(   -7,  -7 ) ),
-					gleam_shape_line.p( c.add(   -7, -13 ) ),
-					gleam_shape_line.p( c.add(   -4, -13 ) ),
-					gleam_shape_line.p( c.add(   -4,  -9 ) ),
+					gleam_shape_line.createP( c.add(   -7,  -7 ) ),
+					gleam_shape_line.createP( c.add(   -7, -13 ) ),
+					gleam_shape_line.createP( c.add(   -4, -13 ) ),
+					gleam_shape_line.createP( c.add(   -4,  -9 ) ),
 
-					gleam_shape_line.p( c.add(    0, -12 ) ),
-					gleam_shape_line.p( c.add(    8,  -3 ) ),
-					gleam_shape_line.p( c.add(   10,  -3 ) ),
-					gleam_shape_line.p( c.add(    0, -14 ) ),
+					gleam_shape_line.createP( c.add(    0, -12 ) ),
+					gleam_shape_line.createP( c.add(    8,  -3 ) ),
+					gleam_shape_line.createP( c.add(   10,  -3 ) ),
+					gleam_shape_line.createP( c.add(    0, -14 ) ),
 					gleam_shape_line.close
 				],
 				'pc', c,

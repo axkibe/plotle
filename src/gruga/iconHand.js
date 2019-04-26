@@ -57,7 +57,7 @@ def.lazyStatic.facet = ( ) =>
 def.staticLazy.shape =
 	function( )
 {
-	const ap = gleam_point.xy( -4, -12 );
+	const ap = gleam_point.createXY( -4, -12 );
 
 	const fh = 12;
 

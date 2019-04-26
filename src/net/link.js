@@ -468,9 +468,6 @@ def.proto._gotUpdateSpace =
 
 	// FUTURE why is it once changeWrapList then report??
 
-	// FIXME changing this now, check if async edits still
-	// are okay
-
 	// transforms the postbox by the updated stuff
 	// postbox = changeWrapList.transform( postbox );
 	postbox = report.transform( postbox );

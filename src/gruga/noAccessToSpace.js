@@ -31,14 +31,14 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( 0, -120 ),
+				'pos', gleam_point.createXY( 0, -120 ),
 				'text', ''
 			),
 		'twig:add', 'message1',
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, -50 ),
+				'pos', gleam_point.createXY( 0, -50 ),
 				'text', 'Sorry, you cannot port to this space or create it.'
 			),
 		'twig:add', 'okButton',
@@ -49,7 +49,7 @@ def.staticLazy.layout = ( ) =>
 				'text', 'ok',
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 180, 38 ),
+						'pos', gleam_point.createXY( 180, 38 ),
 						'width', 50,
 						'height', 50
 					)

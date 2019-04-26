@@ -64,7 +64,7 @@ def.proto.combine =
 	return(
 		gleam_transform.create(
 			'offset',
-				gleam_point.xy(
+				gleam_point.createXY(
 					offset.x * tzoom + toffset.x,
 					offset.y * tzoom + toffset.y
 				),
@@ -117,7 +117,7 @@ def.proto.point =
 		y
 	)
 {
-	return gleam_point.xy( this.x( x ), this.y( y ) );
+	return gleam_point.createXY( this.x( x ), this.y( y ) );
 };
 
 

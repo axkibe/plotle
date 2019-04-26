@@ -87,12 +87,12 @@ def.lazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.p( p.add( 0 , b ) ),
-					gleam_shape_round.p( p.add( a , 0 ) ),
-					gleam_shape_line .p( p.add( w - a , 0 ) ),
-					gleam_shape_round.p( p.add( w , b ) ),
-					gleam_shape_round.p( p.add( w - a , h ) ),
-					gleam_shape_line .p( p.add( a , h ) ),
+					gleam_shape_start.createP( p.add( 0 , b ) ),
+					gleam_shape_round.createP( p.add( a , 0 ) ),
+					gleam_shape_line.createP( p.add( w - a , 0 ) ),
+					gleam_shape_round.createP( p.add( w , b ) ),
+					gleam_shape_round.createP( p.add( w - a , h ) ),
+					gleam_shape_line.createP( p.add( a , h ) ),
 					gleam_shape_round.close
 				],
 				'pc', this.pc
@@ -104,15 +104,15 @@ def.lazy.shape =
 		gleam_shape.create(
 			'list:init',
 			[
-				gleam_shape_start.p( p.add( 0 , b ) ),
-				gleam_shape_round.p( p.add( a , 0 ) ),
-				gleam_shape_line .p( p.add( w - a , 0 ) ),
-				gleam_shape_round.p( p.add( w , b ) ),
-				gleam_shape_line .p( p.add( w , h - b ) ),
-				gleam_shape_round.p( p.add( w - a , h ) ),
-				gleam_shape_line .p( p.add( a , h ) ),
-				gleam_shape_round.p( p.add( 0 , h - b ) ),
-				gleam_shape_line .close
+				gleam_shape_start.createP( p.add( 0 , b ) ),
+				gleam_shape_round.createP( p.add( a , 0 ) ),
+				gleam_shape_line.createP( p.add( w - a , 0 ) ),
+				gleam_shape_round.createP( p.add( w , b ) ),
+				gleam_shape_line.createP( p.add( w , h - b ) ),
+				gleam_shape_round.createP( p.add( w - a , h ) ),
+				gleam_shape_line.createP( p.add( a , h ) ),
+				gleam_shape_round.createP( p.add( 0 , h - b ) ),
+				gleam_shape_line.close
 			],
 			'pc', this.pc
 		)

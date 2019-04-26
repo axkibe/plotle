@@ -32,7 +32,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( 0, -120 ),
+				'pos', gleam_point.createXY( 0, -120 ),
 				'text', 'Hello'
 			),
 		'twig:add',
@@ -40,7 +40,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, -50 ),
+				'pos', gleam_point.createXY( 0, -50 ),
 				'text', 'You\'re currently an anonymous visitor!'
 			),
 		'twig:add',
@@ -56,7 +56,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, 20 ),
+				'pos', gleam_point.createXY( 0, 20 ),
 				'text', 'on the control disc to the left'
 			),
 		'twig:add',
@@ -64,7 +64,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, 40 ),
+				'pos', gleam_point.createXY( 0, 40 ),
 				'text', 'to register as an user.'
 			),
 		'twig:add',
@@ -72,7 +72,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, -50 ),
+				'pos', gleam_point.createXY( 0, -50 ),
 				'text', 'This is your profile page!'
 			),
 		'twig:add',
@@ -80,7 +80,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, -10 ),
+				'pos', gleam_point.createXY( 0, -10 ),
 				'text', 'In future you will be able to do stuff here,'
 			),
 		'twig:add',
@@ -88,7 +88,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, 10 ),
+				'pos', gleam_point.createXY( 0, 10 ),
 				'text', 'like for example change your password.'
 			),
 		'twig:add',
@@ -100,7 +100,7 @@ def.staticLazy.layout = ( ) =>
 				'text', 'close',
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 180, 38 ),
+						'pos', gleam_point.createXY( 180, 38 ),
 						'width', 50,
 						'height', 50
 					)

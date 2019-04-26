@@ -48,7 +48,7 @@ const layout_disc = tim.require( '../../layout/disc' );
 def.staticLazy.layout =
 	function( )
 {
-	const pw = gleam_point.xy( 0, 500 );
+	const pw = gleam_point.createXY( 0, 500 );
 
 	const buttonFacets =
 		gleam_facetList.create(
@@ -152,10 +152,10 @@ def.staticLazy.layout =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pos', gleam_point.xy( -2101, -1100 ),
+				'pos', gleam_point.createXY( -2101, -1100 ),
 				'width', 2200,
 				'height', 2200,
-				'gradientPC', gleam_point.xy( -600, 0 ),
+				'gradientPC', gleam_point.createXY( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add', 'normal',
@@ -164,7 +164,7 @@ def.staticLazy.layout =
 				'iconShape', gruga_iconNormal.shape,
 				'iconFacet', gruga_iconNormal.facet,
 				'shape', 'ellipse',
-				'zone', gleam_rect.posSize( normalButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( normalButtonPos, buttonSize )
 			),
 		'twig:add', 'select',
 			layout_button.create(
@@ -173,7 +173,7 @@ def.staticLazy.layout =
 				'iconFacet', gruga_iconSelect.facet,
 				'shape', 'ellipse',
 				'visible', false,
-				'zone', gleam_rect.posSize( selectButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( selectButtonPos, buttonSize )
 			),
 		'twig:add', 'create',
 			layout_button.create(
@@ -182,7 +182,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'new',
 				'visible', false,
-				'zone', gleam_rect.posSize( createButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( createButtonPos, buttonSize )
 			),
 		'twig:add', 'remove',
 			layout_button.create(
@@ -191,7 +191,7 @@ def.staticLazy.layout =
 				'iconFacet', gruga_iconRemove.facet,
 				'shape', 'ellipse',
 				'visible', false,
-				'zone', gleam_rect.posSize( removeButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( removeButtonPos, buttonSize )
 			),
 		'twig:add', 'moveTo',
 			layout_button.create(
@@ -200,7 +200,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'go',
 				'visible', false,
-				'zone', gleam_rect.posSize( movetoButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( movetoButtonPos, buttonSize )
 			),
 		'twig:add', 'zoom',
 			layout_button.create(
@@ -209,33 +209,33 @@ def.staticLazy.layout =
 				'iconFacet', gruga_iconZoom.facet,
 				'shape', 'ellipse',
 				'visible', false,
-				'zone', gleam_rect.posSize( zoomButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( zoomButtonPos, buttonSize )
 			),
 		'twig:add', 'space',
 			layout_button.create(
 				'facets', buttonFacets,
 				'font', gruga_font.standard( 13 ),
 				'shape',
-					gleam_ellipse.posSize(
-						gleam_point.xy( -60, 0 ),
+					gleam_ellipse.createPosSize(
+						gleam_point.createXY( -60, 0 ),
 						spaceButtonSize.add( 60 - 1, -1 )
 					),
 				'text', '',
 				'textRotation', - Math.PI / 2,
-				'zone', gleam_rect.posSize( spaceButtonPos, spaceButtonSize )
+				'zone', gleam_rect.createPosSize( spaceButtonPos, spaceButtonSize )
 			),
 		'twig:add', 'user',
 			layout_button.create(
 				'facets', buttonFacets,
 				'font', gruga_font.standard( 12 ),
 				'shape',
-					gleam_ellipse.posSize(
-						gleam_point.xy( -70, 0 ),
+					gleam_ellipse.createPosSize(
+						gleam_point.createXY( -70, 0 ),
 						userButtonSize.add( 70 - 1, -1 )
 					),
 				'text', '',
 				'textRotation', ( -Math.PI / 2 ),
-				'zone', gleam_rect.posSize( userButtonPos, userButtonSize )
+				'zone', gleam_rect.createPosSize( userButtonPos, userButtonSize )
 			),
 		'twig:add', 'login',
 			layout_button.create(
@@ -245,7 +245,7 @@ def.staticLazy.layout =
 				'text', 'log\nin',
 				'textNewline', 14,
 				'visible', false,
-				'zone', gleam_rect.posSize( loginButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( loginButtonPos, buttonSize )
 			),
 		'twig:add', 'signUp',
 			layout_button.create(
@@ -255,7 +255,7 @@ def.staticLazy.layout =
 				'textNewline', 14,
 				'font', gruga_font.standard( 13 ),
 				'visible', false,
-				'zone', gleam_rect.posSize( signupButtonPos, buttonSize )
+				'zone', gleam_rect.createPosSize( signupButtonPos, buttonSize )
 			)
 	) );
 };

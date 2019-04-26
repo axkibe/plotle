@@ -209,21 +209,6 @@ def.lazy.glint =
 
 
 /*
-| Inheritance optimization.
-|
-| FIXME shouldn't this be default?
-*/
-def.inherit.glint =
-	function(
-		inherit
-	)
-{
-	return inherit.equals( this );
-};
-
-
-
-/*
 | Nofication when the item lost the users mark.
 */
 def.proto.markLost =

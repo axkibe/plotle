@@ -38,13 +38,13 @@ const e = gleam_constants.epsilon;
 /*
 | Shortcut to create a closing line.
 */
-def.staticLazy.close = () => gleam_shape_line.create( 'close', true );
+def.staticLazy.close = ( ) => gleam_shape_line.create( 'close', true );
 
 
 /*
 | Shortcut to create a fyling, closing line.
 */
-def.staticLazy.closeFly = () =>
+def.staticLazy.closeFly = ( ) =>
 	gleam_shape_line.create(
 		'close', true,
 		'fly', true
@@ -54,31 +54,35 @@ def.staticLazy.closeFly = () =>
 /*
 | Shortcut to create a line to p.
 */
-def.static.p = p =>
+def.static.createP =
+	( p ) =>
 	gleam_shape_line.create( 'p', p );
 
 
 /*
 | Shortcut to create a fly-line to p.
 */
-def.static.pFly = p =>
+def.static.createPFly =
+	( p ) =>
 	gleam_shape_line.create( 'fly', true, 'p', p );
 
 
 /*
 | Shortcut to create a line to xy.
 */
-def.static.xy = ( x, y ) =>
-	gleam_shape_line.create( 'p', gleam_point.xy( x, y ) );
+def.static.createXY =
+	( x, y ) =>
+	gleam_shape_line.create( 'p', gleam_point.createXY( x, y ) );
 
 
 /*
 | Shortcut to create a fly-line to xy.
 */
-def.static.xyFly = ( x, y ) =>
+def.static.createXYFly =
+	( x, y ) =>
 	gleam_shape_line.create(
 		'fly', true,
-		'p', gleam_point.xy( x, y )
+		'p', gleam_point.createXY( x, y )
 	);
 
 
@@ -129,7 +133,7 @@ def.proto.getProjection =
 		&& Math.max( pc.y, p.y  ) >= piy - e
 	)
 	{
-		return gleam_point.xy( pix, piy );
+		return gleam_point.createXY( pix, piy );
 	}
 };
 

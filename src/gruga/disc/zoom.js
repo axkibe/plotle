@@ -47,7 +47,7 @@ const layout_disc = tim.require( '../../layout/disc' );
 def.staticLazy.layout =
 	function( )
 {
-	const pw = gleam_point.xy( 0, 505 );
+	const pw = gleam_point.createXY( 0, 505 );
 
 	const zoomAllButtonPos = pw.add( 100, -91 );
 
@@ -127,10 +127,10 @@ def.staticLazy.layout =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pos', gleam_point.xy( -2149, -1149 ),
+				'pos', gleam_point.createXY( -2149, -1149 ),
 				'width', 2298,
 				'height', 2298,
-				'gradientPC', gleam_point.xy( -600, 0 ),
+				'gradientPC', gleam_point.createXY( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add',
@@ -141,7 +141,7 @@ def.staticLazy.layout =
 				'iconShape', gruga_iconZoomAll.shape,
 				'iconFacet', gruga_iconZoomAll.facet,
 				'shape', 'ellipse',
-				'zone', gleam_rect.posSize( zoomAllButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( zoomAllButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomIn',
@@ -151,7 +151,7 @@ def.staticLazy.layout =
 				'iconShape', gruga_iconZoomIn.shape,
 				'iconFacet', gruga_iconZoomIn.facet,
 				'shape', 'ellipse',
-				'zone', gleam_rect.posSize( zoomInButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( zoomInButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomOut',
@@ -161,7 +161,7 @@ def.staticLazy.layout =
 				'iconShape', gruga_iconZoomOut.shape,
 				'iconFacet', gruga_iconZoomOut.facet,
 				'shape', 'ellipse',
-				'zone', gleam_rect.posSize( zoomOutButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( zoomOutButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'zoomHome',
@@ -171,7 +171,7 @@ def.staticLazy.layout =
 				'iconShape', gruga_iconZoomHome.shape,
 				'iconFacet', gruga_iconZoomHome.facet,
 				'shape', 'ellipse',
-				'zone', gleam_rect.posSize( zoomHomeButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( zoomHomeButtonPos, genericButtonSize )
 			)
 	) );
 };

@@ -84,7 +84,7 @@ def.static.createArbitrary =
 	{
 		return(
 			gleam_rect.create(
-				'pos', gleam_point.xy( p1.x, p2.y ),
+				'pos', gleam_point.createXY( p1.x, p2.y ),
 				'width', p2.x - p1.x,
 				'height', p1.y - p2.y
 			)
@@ -94,7 +94,7 @@ def.static.createArbitrary =
 	{
 		return(
 			gleam_rect.create(
-				'pos', gleam_point.xy( p2.x, p1.y ),
+				'pos', gleam_point.createXY( p2.x, p1.y ),
 				'width', p1.x - p2.x,
 				'height', p2.y - p1.y
 			)
@@ -108,22 +108,14 @@ def.static.createArbitrary =
 
 /*
 | Shortcut to create a rect by specifying position and size.
-| FIXME call createPosSize
 */
-def.static.posSize =
-	function(
-		pos,
-		size
-	)
-{
-	return(
-		gleam_rect.create(
-			'pos', pos,
-			'width', size.width,
-			'height', size.height
-		)
+def.static.createPosSize =
+	( pos, size ) =>
+	gleam_rect.create(
+		'pos', pos,
+		'width', size.width,
+		'height', size.height
 	);
-};
 
 
 /*
@@ -454,28 +446,28 @@ def.proto.getProjection =
 	{
 		const x = ( ny - pc.y ) / k + pc.x;
 
-		if ( x >= wx && x <= ex ) return gleam_point.xy( x, ny );
+		if ( x >= wx && x <= ex ) return gleam_point.createXY( x, ny );
 	}
 
 	if( p.y >= sy )
 	{
 		const x = ( sy - pc.y ) / k + pc.x;
 
-		if( x >= wx && x <= ex ) return gleam_point.xy( x, sy );
+		if( x >= wx && x <= ex ) return gleam_point.createXY( x, sy );
 	}
 
 	if( p.x >= ex )
 	{
 		const y = ( ex - pc.x ) * k + pc.y;
 
-		if( y >= ny && y <= sy ) return gleam_point.xy( ex, y );
+		if( y >= ny && y <= sy ) return gleam_point.createXY( ex, y );
 	}
 
 	if( p.x <= wx )
 	{
 		const y = ( wx - pc.x ) * k + pc.y;
 
-		if( y >= ny && y <= sy ) return gleam_point.xy( wx, y );
+		if( y >= ny && y <= sy ) return gleam_point.createXY( wx, y );
 	}
 
 	return pc;

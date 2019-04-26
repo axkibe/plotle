@@ -45,7 +45,7 @@ def.static.createWH =
 def.lazy.pc =
 	function( )
 {
-	return gleam_point.xy( this.width / 2, this.height / 2 );
+	return gleam_point.createXY( this.width / 2, this.height / 2 );
 };
 
 

@@ -689,7 +689,7 @@ def.proto.requestListener =
 
 		// weinre can't cope with strict mode
 		// so its disabled when weinre is enabled
-		// FIXME check if still needed
+		// FUTURE remove weinre support
 		if( config.get( 'shell', 'weinre' ) )
 		{
 			data =

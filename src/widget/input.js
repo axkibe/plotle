@@ -144,11 +144,12 @@ def.static.createFromLayout =
 /*
 | Default distance of text.
 */
-def.staticLazy._pitch = () => gleam_point.xy( 8, 3 );
+def.staticLazy._pitch = ( ) =>
+	gleam_point.createXY( 8, 3 );
 
 
 /*
-| FIXME.
+| Attention center (see shell/root)
 */
 def.lazy.attentionCenter =
 	function( )
@@ -263,7 +264,7 @@ def.lazy._glint =
 		arr.push(
 			gleam_glint_text.create(
 				'font', font,
-				'p', gleam_point.xy( pitch.x, font.size + pitch.y ),
+				'p', gleam_point.createXY( pitch.x, font.size + pitch.y ),
 				'text', value
 			)
 		);
@@ -692,7 +693,7 @@ def.lazy._passMask =
 	{
 		pm.push(
 			gleam_ellipse.create(
-				'pos', gleam_point.xy( x, y - h / 2 ),
+				'pos', gleam_point.createXY( x, y - h / 2 ),
 				'width', w,
 				'height', h
 			)

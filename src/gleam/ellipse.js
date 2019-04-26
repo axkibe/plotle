@@ -44,7 +44,7 @@ const gleam_transform = tim.require( './transform' );
 /*
 | Shortcut to create an ellipse by specifying p and size.
 */
-def.static.posSize =
+def.static.createPosSize =
 	function(
 		pos,
 		size
@@ -158,10 +158,10 @@ def.lazy.shape =
 		gleam_shape.create(
 			'list:init',
 			[
-				gleam_shape_start.p( this.pw ),
-				gleam_shape_round.p( this.pn ),
-				gleam_shape_round.p( this.pe ),
-				gleam_shape_round.p( this.ps ),
+				gleam_shape_start.createP( this.pw ),
+				gleam_shape_round.createP( this.pn ),
+				gleam_shape_round.createP( this.pe ),
+				gleam_shape_round.createP( this.ps ),
 				gleam_shape_round.close
 			],
 			'pc', this.pc

@@ -41,7 +41,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( -245, -165 ),
+				'pos', gleam_point.createXY( -245, -165 ),
 				'text', 'Sign Up',
 			),
 		'twig:add',
@@ -49,7 +49,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'right',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -98, -102 ),
+				'pos', gleam_point.createXY( -98, -102 ),
 				'text', 'username'
 			),
 		'twig:add',
@@ -57,7 +57,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'right',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -98, -62 ),
+				'pos', gleam_point.createXY( -98, -62 ),
 				'text', 'email',
 			),
 		'twig:add',
@@ -65,7 +65,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'right',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -98, -22 ),
+				'pos', gleam_point.createXY( -98, -22 ),
 				'text', 'password'
 			),
 		'twig:add',
@@ -74,7 +74,7 @@ def.staticLazy.layout = ( ) =>
 				'align', 'right',
 				'text', 'repeat password',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -98, 18 )
+				'pos', gleam_point.createXY( -98, 18 )
 			),
 		'twig:add',
 		'newsletterLabel',
@@ -82,7 +82,7 @@ def.staticLazy.layout = ( ) =>
 				'align', 'right',
 				'text', 'newsletter',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -98, 58 )
+				'pos', gleam_point.createXY( -98, 58 )
 			),
 		'twig:add',
 		'errorLabel',
@@ -90,7 +90,7 @@ def.staticLazy.layout = ( ) =>
 				'align', 'center',
 				'color', gleam_color.red,
 				'font', gruga_font.standard( 14 ),
-				'pos', gleam_point.xy( -20, -136 ),
+				'pos', gleam_point.createXY( -20, -136 ),
 				'text', ''
 			),
 		'twig:add',
@@ -101,7 +101,7 @@ def.staticLazy.layout = ( ) =>
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, -120 ),
+						'pos', gleam_point.createXY( -80, -120 ),
 						'width', 210,
 						'height', 25
 					)
@@ -114,7 +114,7 @@ def.staticLazy.layout = ( ) =>
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, -80 ),
+						'pos', gleam_point.createXY( -80, -80 ),
 						'width', 210,
 						'height', 25
 					)
@@ -128,7 +128,7 @@ def.staticLazy.layout = ( ) =>
 				'password', true,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, -40 ),
+						'pos', gleam_point.createXY( -80, -40 ),
 						'width', 210,
 						'height', 25
 					)
@@ -142,7 +142,7 @@ def.staticLazy.layout = ( ) =>
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, 0 ),
+						'pos', gleam_point.createXY( -80, 0 ),
 						'width', 210,
 						'height', 25
 					)
@@ -154,7 +154,7 @@ def.staticLazy.layout = ( ) =>
 				'checked', false,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -75, 45 ),
+						'pos', gleam_point.createXY( -75, 45 ),
 						'width', 16,
 						'height', 15
 					)
@@ -164,14 +164,14 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'text', 'Updates and News',
 				'font', gruga_font.standard( 12 ),
-				'pos', gleam_point.xy( -45, 57 )
+				'pos', gleam_point.createXY( -45, 57 )
 			),
 		'twig:add',
 		'newsletter3Label',
 			layout_label.create(
 				'text', 'Not going to be more than an email a month.',
 				'font', gruga_font.standard( 12 ),
-				'pos', gleam_point.xy( -45, 77 )
+				'pos', gleam_point.createXY( -45, 77 )
 			),
 		'twig:add',
 		'signupButton',
@@ -179,7 +179,7 @@ def.staticLazy.layout = ( ) =>
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 95, 95 ),
+						'pos', gleam_point.createXY( 95, 95 ),
 						'width', 70,
 						'height', 70
 					),
@@ -193,7 +193,7 @@ def.staticLazy.layout = ( ) =>
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 180, 105 ),
+						'pos', gleam_point.createXY( 180, 105 ),
 						'width', 50,
 						'height', 50
 					),

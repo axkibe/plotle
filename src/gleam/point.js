@@ -143,14 +143,8 @@ def.proto.border =
 | Shortcut to create a point by x/y values.
 */
 def.static.createXY =
-def.static.xy = // FIXME remove
-	function(
-		x,
-		y
-	)
-{
-	return gleam_point.create( 'x', x, 'y', y );
-};
+	( x, y ) =>
+	gleam_point.create( 'x', x, 'y', y );
 
 
 /*

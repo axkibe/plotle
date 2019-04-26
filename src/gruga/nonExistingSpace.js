@@ -32,7 +32,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( 0, -120 ),
+				'pos', gleam_point.createXY( 0, -120 ),
 				'text', '',
 			),
 		'twig:add',
@@ -41,7 +41,7 @@ def.staticLazy.layout = ( ) =>
 				'align', 'center',
 				'text', 'Do you want to create it?',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( 0, -50 )
+				'pos', gleam_point.createXY( 0, -50 )
 			),
 		'twig:add',
 		'noButton',
@@ -49,7 +49,7 @@ def.staticLazy.layout = ( ) =>
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -100, 28 ),
+						'pos', gleam_point.createXY( -100, 28 ),
 						'width', 75,
 						'height', 75
 					),
@@ -63,7 +63,7 @@ def.staticLazy.layout = ( ) =>
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 25, 28 ),
+						'pos', gleam_point.createXY( 25, 28 ),
 						'width', 75,
 						'height', 75
 					),

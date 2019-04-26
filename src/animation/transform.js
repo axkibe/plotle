@@ -86,7 +86,7 @@ def.proto.getTransform =
 	return(
 		gleam_transform.create(
 			'offset',
-				gleam_point.xy(
+				gleam_point.createXY(
 					beginOffset.x + ratio * ( endOffset.x - beginOffset.x ),
 					beginOffset.y + ratio * ( endOffset.y - beginOffset.y )
 				),

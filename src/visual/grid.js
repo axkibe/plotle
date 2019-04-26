@@ -60,7 +60,7 @@ def.proto.snap =
 	const oy = o.y;
 
 	return(
-		gleam_point.xy(
+		gleam_point.createXY(
 			Math.round( ( p.x - ox ) / sx ) * sx + ox,
 			Math.round( ( p.y - oy ) / sy ) * sy + oy
 		)
@@ -78,7 +78,7 @@ def.lazy._gSpacing =
 
 	const spacing = this.spacing;
 
-	return gleam_point.xy( spacing.x * grid, spacing.y * grid );
+	return gleam_point.createXY( spacing.x * grid, spacing.y * grid );
 };
 
 
@@ -90,7 +90,7 @@ def.lazy._gVisualSpacing =
 {
 	const gsp = this._gSpacing;
 
-	return gleam_point.xy( gsp.x * 4, gsp.y * 4 );
+	return gleam_point.createXY( gsp.x * 4, gsp.y * 4 );
 };
 
 
@@ -107,7 +107,7 @@ def.lazy._offset =
 	const sx = s.x * 2;
 	const sy = s.y * 2;
 
-	return gleam_point.xy( ( ( o.x % sx ) + sx ) % sx, ( o.y % ( sy ) + sy ) % sy );
+	return gleam_point.createXY( ( ( o.x % sx ) + sx ) % sx, ( o.y % ( sy ) + sy ) % sy );
 };
 
 

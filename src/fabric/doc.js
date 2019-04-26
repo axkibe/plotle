@@ -177,7 +177,7 @@ def.adjust.get =
 		para
 	)
 {
-	// FIXME why?
+	// FUTURE why?
 	if( !para ) return;
 
 	let mark, pos, y;
@@ -206,7 +206,7 @@ def.adjust.get =
 			y = innerMargin.n - this.scrollPos.y;
 		}
 
-		pos = gleam_point.xy( innerMargin.w, y );
+		pos = gleam_point.createXY( innerMargin.w, y );
 
 		mark = fabric_para.concernsMark( this.mark, path );
 	}
@@ -469,21 +469,17 @@ def.lazy._rangeShape =
 		// fp o******o bp
 		const sections =
 		[
-			gleam_shape_start.p( fp.add( 0, descend ) ),
-			gleam_shape_line.p( fp.add( 0, -ascend ) ),
-			gleam_shape_line.p( bp.add( 0, -ascend ) ),
-			gleam_shape_line.p( bp.add( 0, descend ) ),
-			gleam_shape_line.close
+			gleam_shape_start.createP( fp.add( 0, descend ) ),
+			gleam_shape_line.createP( fp.add( 0, -ascend ) ),
+			gleam_shape_line.createP( bp.add( 0, -ascend ) ),
+			gleam_shape_line.createP( bp.add( 0, descend ) ),
+			gleam_shape_line.createClose
 		];
 
 		return(
 			gleam_shape.create(
 				'list:init', sections,
-				'pc',
-					gleam_point.xy(
-						( fp.x + bp.x ) / 2,
-						( fp.y + bp.y ) / 2
-					)
+				'pc', gleam_point.createXY( ( fp.x + bp.x ) / 2, ( fp.y + bp.y ) / 2 )
 			)
 		);
 	}
@@ -504,19 +500,19 @@ def.lazy._rangeShape =
 
 		const sections =
 		[
-			gleam_shape_start.xy( rx, fp.y - ascend ),
-			gleam_shape_line.xy( fp.x, fp.y - ascend ),
-			gleam_shape_line.xy( fp.x, fp.y + descend ),
-			gleam_shape_line.xy( rx, fp.y + descend ),
+			gleam_shape_start.createXY( rx, fp.y - ascend ),
+			gleam_shape_line.createXY( fp.x, fp.y - ascend ),
+			gleam_shape_line.createXY( fp.x, fp.y + descend ),
+			gleam_shape_line.createXY( rx, fp.y + descend ),
 			gleam_shape_line.closeFly
 		];
 
 		const sections2 =
 		[
-			gleam_shape_start.xy( lx, bp.y - ascend ),
-			gleam_shape_line.xy( bp.x, bp.y - ascend ),
-			gleam_shape_line.xy( bp.x, bp.y + descend ),
-			gleam_shape_line.xy( lx, bp.y + descend ),
+			gleam_shape_start.createXY( lx, bp.y - ascend ),
+			gleam_shape_line.createXY( bp.x, bp.y - ascend ),
+			gleam_shape_line.createXY( bp.x, bp.y + descend ),
+			gleam_shape_line.createXY( lx, bp.y + descend ),
 			gleam_shape_line.closeFly
 		];
 
@@ -525,7 +521,7 @@ def.lazy._rangeShape =
 			gleam_shape.create(
 				'list:init', sections,
 				'pc',
-					gleam_point.xy(
+					gleam_point.createXY(
 						( fp.x + rx ) / 2,
 						( 2 * fp.y - ascend + descend ) / 2
 					)
@@ -533,7 +529,7 @@ def.lazy._rangeShape =
 			gleam_shape.create(
 				'list:init', sections2,
 				'pc',
-					gleam_point.xy(
+					gleam_point.createXY(
 						( fp.x + rx ) / 2,
 						( 2 * fp.y - ascend + descend ) / 2
 					)
@@ -585,14 +581,14 @@ def.lazy._rangeShape =
 		{
 			const sections =
 			[
-				gleam_shape_start.xy( rx, b2y + descend ),    // 1
-				gleam_shape_line.xy( bp.x, b2y + descend ),   // 2
-				gleam_shape_line.xy( bp.x, bp.y + descend ),  // 3
-				gleam_shape_line.xy( lx, bp.y + descend ),    // 4
-				gleam_shape_line.xyFly( lx, f2y - ascend ),   // 5
-				gleam_shape_line.xy( fp.x, f2y - ascend ),    // 6
-				gleam_shape_line.xy( fp.x, fp.y - ascend ),   // 7
-				gleam_shape_line.xy( rx, fp.y - ascend ),     // 8
+				gleam_shape_start.createXY( rx, b2y + descend ),    // 1
+				gleam_shape_line.createXY( bp.x, b2y + descend ),   // 2
+				gleam_shape_line.createXY( bp.x, bp.y + descend ),  // 3
+				gleam_shape_line.createXY( lx, bp.y + descend ),    // 4
+				gleam_shape_line.createXYFly( lx, f2y - ascend ),   // 5
+				gleam_shape_line.createXY( fp.x, f2y - ascend ),    // 6
+				gleam_shape_line.createXY( fp.x, fp.y - ascend ),   // 7
+				gleam_shape_line.createXY( rx, fp.y - ascend ),     // 8
 				gleam_shape_line.closeFly
 			];
 
@@ -600,7 +596,7 @@ def.lazy._rangeShape =
 				gleam_shape.create(
 					'list:init', sections,
 					'pc',
-						gleam_point.xy(
+						gleam_point.createXY(
 							( rx + lx ) / 2,
 							( b2y + descend + f2y - ascend ) / 2
 						)
@@ -611,12 +607,12 @@ def.lazy._rangeShape =
 		{
 			const sections =
 			[
-				gleam_shape_start.xy( rx, b2y + descend ),   // 1
-				gleam_shape_line.xy( bp.x, b2y + descend ),  // 2
-				gleam_shape_line.xy( bp.x, bp.y + descend ), // 3
-				gleam_shape_line.xy( lx, bp.y + descend ),   // 4
-				gleam_shape_line.xyFly( lx, fp.y - ascend ), // 7
-				gleam_shape_line.xy( rx, fp.y - ascend ),    // 8
+				gleam_shape_start.createXY( rx, b2y + descend ),   // 1
+				gleam_shape_line.createXY( bp.x, b2y + descend ),  // 2
+				gleam_shape_line.createXY( bp.x, bp.y + descend ), // 3
+				gleam_shape_line.createXY( lx, bp.y + descend ),   // 4
+				gleam_shape_line.createXYFly( lx, fp.y - ascend ), // 7
+				gleam_shape_line.createXY( rx, fp.y - ascend ),    // 8
 				gleam_shape_line.closeFly
 			];
 
@@ -624,7 +620,7 @@ def.lazy._rangeShape =
 				gleam_shape.create(
 					'list:init', sections,
 					'pc',
-						gleam_point.xy(
+						gleam_point.createXY(
 							( rx + lx ) / 2,
 							( b2y + descend + f2y - ascend ) / 2
 						)

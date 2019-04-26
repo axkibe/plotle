@@ -45,10 +45,10 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			gleam_shape_start.p( c.add( -7, -1 ) ),
-			gleam_shape_line.p(  c.add(  7, -1 ) ),
-			gleam_shape_line.p(  c.add(  7,  1 ) ),
-			gleam_shape_line.p(  c.add( -7,  1 ) ),
+			gleam_shape_start.createP( c.add( -7, -1 ) ),
+			gleam_shape_line.createP(  c.add(  7, -1 ) ),
+			gleam_shape_line.createP(  c.add(  7,  1 ) ),
+			gleam_shape_line.createP(  c.add( -7,  1 ) ),
 			gleam_shape_line.close
 		],
 		'pc', c

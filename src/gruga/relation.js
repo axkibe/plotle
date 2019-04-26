@@ -45,7 +45,7 @@ def.staticLazy.facet = ( ) =>
 | FUTURE calculate dynamically
 */
 def.staticLazy.spawnOffset = ( ) =>
-	gleam_point.xy( 44, 12 );
+	gleam_point.createXY( 44, 12 );
 
 
 

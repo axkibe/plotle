@@ -41,7 +41,7 @@ if( NODE )
 			{
 				if( err )
 				{
-					// FIXME make proper error presentation
+					// FUTURE make proper error presentation
 					console.log( 'Font "' + name + '" could not be loaded: ' + err );
 
 					callback( err );
@@ -77,7 +77,7 @@ else
 			{
 				if( err )
 				{
-					// FIXME make proper error presentation
+					// FUTURE make proper error presentation
 					console.log( 'Font "' + name + '" could not be loaded: ' + err );
 
 					return;

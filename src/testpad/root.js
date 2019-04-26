@@ -66,9 +66,9 @@ const tim_path = tim.require( 'tim.js/path' );
 
 
 /*
-| FIXME
+| Path to the document.
 */
-def.staticLazy.noteDocPath = ( ) =>
+def.staticLazy.docPath = ( ) =>
 	tim_path.empty.append( 'note' ).append( 'doc' );
 
 
@@ -83,6 +83,7 @@ const _bind =
 {
 	return( function( ) { root[ handler ].apply( root, arguments ); } );
 };
+
 
 /*
 | Returns true if a keyCode is known to be a "special key".
@@ -137,7 +138,7 @@ def.proto.alter =
 def.lazy.doc =
 	function( )
 {
-	return this.repository.get( testpad_root.noteDocPath.chop );
+	return this.repository.get( testpad_root.docPath.chop );
 };
 
 
@@ -158,7 +159,7 @@ def.proto.updateSeq =
 
 
 /*
-| FIXME
+| Updates the html elements after altering the root.
 */
 def.proto.update =
 	function( )
@@ -402,7 +403,7 @@ def.proto.send =
 	if( !action ) { this.beep( ); return; }
 
 	const linePath =
-		testpad_root.noteDocPath
+		testpad_root.docPath
 		.append( 'twig' )
 		.append( doc.getKey( action.line ) )
 		.append( 'text' );
@@ -464,7 +465,7 @@ def.proto.send =
 			root.alter(
 				change_join.create(
 					'path',
-						testpad_root.noteDocPath
+						testpad_root.docPath
 						.append( 'twig' )
 						.append( doc.getKey( action.line - 1 ) )
 						.append( 'text' )

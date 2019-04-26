@@ -35,7 +35,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( 0, -120 ),
+				'pos', gleam_point.createXY( 0, -120 ),
 				'text', ''
 			),
 		'twig:add', 'gridCheckBox',
@@ -44,7 +44,7 @@ def.staticLazy.layout = ( ) =>
 				'checked', false,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -52, -64 ),
+						'pos', gleam_point.createXY( -52, -64 ),
 						'width', 16,
 						'height', 15
 					)
@@ -53,7 +53,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'text', 'show grid',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -25, -50 )
+				'pos', gleam_point.createXY( -25, -50 )
 			),
 		'twig:add', 'snappingCheckBox',
 			layout_checkbox.create(
@@ -61,7 +61,7 @@ def.staticLazy.layout = ( ) =>
 				'checked', false,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -52, -29 ),
+						'pos', gleam_point.createXY( -52, -29 ),
 						'width', 16,
 						'height', 15
 					)
@@ -70,14 +70,14 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'text', 'snap to grid',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -25, -15 )
+				'pos', gleam_point.createXY( -25, -15 )
 			),
 		'twig:add', 'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( 180, 38 ),
+						'pos', gleam_point.createXY( 180, 38 ),
 						'width', 50,
 						'height', 50
 					),

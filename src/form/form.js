@@ -185,7 +185,7 @@ def.proto.dragStop =
 
 /*
 | Transforms widgets.
-| FIXME proper inherit
+| FUTURE proper inherit
 */
 def.adjust.get =
 def.static.adjustGet =
@@ -194,7 +194,6 @@ def.static.adjustGet =
 		widget
 	)
 {
-	// FIXME make this some lazy value
 	const transform =
 		gleam_transform.create(
 			'zoom', 1,

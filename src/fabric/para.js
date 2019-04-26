@@ -528,8 +528,6 @@ def.proto.specialKey =
 
 		const v1 = doc.atRank( doc.length - 1 );
 
-		// FIXME make pathAt shortcuts
-
 		root.alter(
 			'mark',
 				mark_range.create(
@@ -589,16 +587,6 @@ def.lazy.textPath =
 	function( )
 {
 	return this.path.append( 'text' );
-};
-
-
-/*
-| The font for current transform.
-*/
-def.lazy.tFont =
-	function( )
-{
-	return gruga_font.standard( this.transform.scale( this.fontsize ), 'a' );
 };
 
 
@@ -1059,8 +1047,7 @@ def.proto._pageUpDown =
 def.lazy._pane =
 	function( )
 {
-	// FIXME make tFont private?
-	const tFont = this.tFont;
+	const tFont = this._tFont;
 
 	const transform = this.transform.ortho;
 
@@ -1122,6 +1109,16 @@ def.proto._setMark =
 				'retainx', retainx
 			)
 	);
+};
+
+
+/*
+| The font for current transform.
+*/
+def.lazy._tFont =
+	function( )
+{
+	return gruga_font.standard( this.transform.scale( this.fontsize ), 'a' );
 };
 
 

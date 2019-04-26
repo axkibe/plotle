@@ -252,7 +252,7 @@ def.staticLazy.helper = ( ) =>
 /*
 | Ensures mono causal chain of canvas.
 */
-/**///if( CHECK ) // FIXME
+/**///if( CHECK ) // FUTURE have lazy timcode variants...
 /**/{
 /**/	def.lazy._expired = ( ) => true;
 /**/
@@ -859,7 +859,7 @@ def.proto._renderWindow =
 
 		this._renderGlintList(
 			pane.glint,
-			gleam_point.xy(
+			gleam_point.createXY(
 				offset.x + pos.x + pane.offset.x,
 				offset.y + pos.y + pane.offset.y
 			)

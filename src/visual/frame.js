@@ -151,7 +151,7 @@ def.lazy.zone =
 
 	return(
 		gleam_rect.create(
-			'pos', gleam_point.xy( wx, ny ),
+			'pos', gleam_point.createXY( wx, ny ),
 			'width', ex - wx,
 			'height', sy - ny
 		)
@@ -541,8 +541,6 @@ def.proto.pointingHover =
 	)
 {
 	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
-
-	// FIXME use compass
 
 	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
 	else if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;

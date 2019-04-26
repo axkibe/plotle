@@ -130,7 +130,7 @@ def.proto.markForPoint =
 /**/{
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/
-/**/	if( p.timtype === gleam_point ) throw new Error( );
+/**/	if( p.timtype !== gleam_point ) throw new Error( );
 /**/
 /**/	if( typeof( doRange ) !== 'boolean' ) throw new Error( );
 /**/}

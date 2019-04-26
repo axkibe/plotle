@@ -42,7 +42,7 @@ const layout_disc = tim.require( '../../layout/disc' );
 def.staticLazy.layout =
 	function( )
 {
-	const pw = gleam_point.xy( 0, 505 );
+	const pw = gleam_point.createXY( 0, 505 );
 
 	const noteButtonPos = pw.add( 65, -325 );
 
@@ -129,10 +129,10 @@ def.staticLazy.layout =
 			),
 		'shape',
 			gleam_ellipse.create(
-				'pos', gleam_point.xy( -2175, -1175 ),
+				'pos', gleam_point.createXY( -2175, -1175 ),
 				'width', 2350,
 				'height', 2350,
-				'gradientPC', gleam_point.xy( -600, 0 ),
+				'gradientPC', gleam_point.createXY( -600, 0 ),
 				'gradientR1', 650
 			),
 		'twig:add',
@@ -142,7 +142,7 @@ def.staticLazy.layout =
 				'font', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Note',
-				'zone', gleam_rect.posSize( noteButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( noteButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'createLabel',
@@ -151,7 +151,7 @@ def.staticLazy.layout =
 				'font', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Label',
-				'zone', gleam_rect.posSize( labelButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( labelButtonPos, genericButtonSize )
 			),
 		/*
 		'twig:add',
@@ -162,7 +162,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'Line',
 				'textNewline', 20,
-				'zone', gleam_rect.posSize( lineButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( lineButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'createArrow',
@@ -172,7 +172,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'Arrow',
 				'textNewline', 20,
-				'zone', gleam_rect.posSize( arrowButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( arrowButtonPos, genericButtonSize )
 			),
 		*/
 		'twig:add',
@@ -183,7 +183,7 @@ def.staticLazy.layout =
 				'shape', 'ellipse',
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
-				'zone', gleam_rect.posSize( relationButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( relationButtonPos, genericButtonSize )
 			),
 		'twig:add',
 		'createPortal',
@@ -192,7 +192,7 @@ def.staticLazy.layout =
 				'font', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Portal',
-				'zone', gleam_rect.posSize( portalButtonPos, genericButtonSize )
+				'zone', gleam_rect.createPosSize( portalButtonPos, genericButtonSize )
 			)
 	) );
 };

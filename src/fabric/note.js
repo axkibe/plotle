@@ -35,9 +35,8 @@ if( TIM )
 		highlight : { type : [ 'undefined', 'boolean' ] },
 
 		// node currently hovered upon
-		// FIXME undefined only
 		// no json thus not saved or transmitted
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : 'undefined' },
 
 		// the users mark
 		// no json thus not saved or transmitted
@@ -49,7 +48,11 @@ if( TIM )
 
 		// scroll position
 		// no json thus not saved or transmitted
-		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
+		scrollPos :
+		{
+			type : [ 'undefined', '../gleam/point' ],
+			defaultValue : 'require( "../gleam/point" ).zero',
+		},
 
 		// the current space transform
 		// no json thus not saved or transmitted
@@ -260,7 +263,6 @@ def.staticLazy.model =
 				),
 			'fontsize', gruga_note.defaultFontsize,
 			'highlight', false,
-			'scrollPos', gleam_point.zero,
 			'transform', gleam_transform.normal,
 			'zone', gleam_rect.zero,
 		)

@@ -40,21 +40,21 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'text', 'Log In',
 				'font', gruga_font.standard( 22 ),
-				'pos', gleam_point.xy( -225, -112 )
+				'pos', gleam_point.createXY( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			layout_label.create(
 				'text', 'username',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -175, -49 )
+				'pos', gleam_point.createXY( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			layout_label.create(
 				'text', 'password',
 				'font', gruga_font.standard( 16 ),
-				'pos', gleam_point.xy( -175, -9 )
+				'pos', gleam_point.createXY( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
@@ -63,7 +63,7 @@ def.staticLazy.layout = ( ) =>
 				'color', gleam_color.red,
 				'text', '',
 				'font', gruga_font.standard( 14 ),
-				'pos', gleam_point.xy( -20, -83 )
+				'pos', gleam_point.createXY( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
@@ -73,7 +73,7 @@ def.staticLazy.layout = ( ) =>
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, -67 ),
+						'pos', gleam_point.createXY( -80, -67 ),
 						'width', 210,
 						'height', 25
 					)
@@ -87,7 +87,7 @@ def.staticLazy.layout = ( ) =>
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
-						'pos', gleam_point.xy( -80, -27 ),
+						'pos', gleam_point.createXY( -80, -27 ),
 						'width', 210,
 						'height', 25
 					)
@@ -97,8 +97,8 @@ def.staticLazy.layout = ( ) =>
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
-					gleam_rect.posSize(
-						gleam_point.xy( 95, 28 ),
+					gleam_rect.createPosSize(
+						gleam_point.createXY( 95, 28 ),
 						gleam_size.wh( 70, 70 )
 					),
 				'text', 'log in',
@@ -110,8 +110,8 @@ def.staticLazy.layout = ( ) =>
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
 				'zone',
-					gleam_rect.posSize(
-						gleam_point.xy( 180, 38 ),
+					gleam_rect.createPosSize(
+						gleam_point.createXY( 180, 38 ),
 						gleam_size.wh( 50, 50 )
 					),
 				'text', 'close',

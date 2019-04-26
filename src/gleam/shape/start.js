@@ -27,14 +27,17 @@ if( TIM )
 /*
 | Shortcut to create a start at p.
 */
-def.static.p = p => gleam_shape_start.create( 'p', p );
+def.static.createP =
+	( p ) =>
+	gleam_shape_start.create( 'p', p );
 
 
 /*
 | Shortcut to create a start at xy.
 */
-def.static.xy = ( x, y ) =>
-	gleam_shape_start.create( 'p', gleam_point.xy( x, y ) );
+def.static.createXY =
+	( x, y ) =>
+	gleam_shape_start.create( 'p', gleam_point.createXY( x, y ) );
 
 
 /*

@@ -697,7 +697,7 @@ def.proto._onMouseDown =
 	//window.focus( );
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
@@ -848,7 +848,7 @@ def.proto._onMouseMove =
 	)
 {
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
@@ -928,7 +928,7 @@ def.proto._onMouseUp =
 	this._releaseEvents( );
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
@@ -993,7 +993,7 @@ def.proto._onMouseWheel =
 	event.preventDefault( );
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.pageX - canvas.offsetLeft,
 			event.pageY - canvas.offsetTop
 		);
@@ -1041,7 +1041,7 @@ def.proto._onTouchStart =
 	if( event.touches.length !== 1 ) return false;
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.touches[ 0 ].pageX - canvas.offsetLeft,
 			event.touches[ 0 ].pageY - canvas.offsetTop
 		);
@@ -1064,13 +1064,13 @@ def.proto._onTouchMove =
 		event
 	)
 {
-	event.preventDefault();
+	event.preventDefault( );
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 ) return false;
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.touches[ 0 ].pageX - canvas.offsetLeft,
 			event.touches[ 0 ].pageY - canvas.offsetTop
 		);
@@ -1154,7 +1154,7 @@ def.proto._onTouchEnd =
 	this._releaseEvents( );
 
 	const p =
-		gleam_point.xy(
+		gleam_point.createXY(
 			event.changedTouches[ 0 ].pageX - canvas.offsetLeft,
 			event.changedTouches[ 0 ].pageY - canvas.offsetTop
 		);
