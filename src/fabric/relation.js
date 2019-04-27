@@ -18,10 +18,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// current action
-		// no json thus not saved or transmitted
-		action : { type : [ 'undefined', '< ../action/types' ] },
-
 		// the keys of the items this item affects (for ancillaries)
 		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
 

@@ -72,20 +72,6 @@ const change_list = tim.require( '../change/list' );
 
 const change_shrink = tim.require( '../change/shrink' );
 
-const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
-const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
-const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
-const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
-const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
-const gleam_rect = tim.require( '../gleam/rect' );
-
-const gleam_transform = tim.require( '../gleam/transform' );
-
 const layout_disc = tim.require( '../layout/disc' );
 
 const result_hover = tim.require( '../result/hover' );
@@ -317,91 +303,6 @@ def.adjust.get =
 
 
 /*
-| The discs glint.
-*/
-def.lazy.glint =
-	function( )
-{
-	// FUTURE make tZone private?
-	const zone = this.tZone.enlarge1;
-
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'pane',
-				gleam_glint_pane.create(
-					'glint', this._glint,
-					'size', zone.size
-				),
-			'pos', zone.pos
-		)
-	);
-};
-
-
-/*
-| Returns the panel's inner glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const a = [ gleam_glint_fill.createFacetShape( this.facet, this.tShape ) ];
-
-	for( let widget of this )
-	{
-		const g = widget.glint;
-
-		if( g ) a.push( g );
-	}
-
-	a.push( gleam_glint_border.createFacetShape( this.facet, this.tShape ) );
-
-	return gleam_glint_list.create( 'list:init', a );
-};
-
-
-/*
-| The disc's transformed zone.
-*/
-def.lazy.tZone =
-	function( )
-{
-	const ctz = this.controlTransform.zoom;
-
-	const size = this.size;
-
-	const vsr = this.viewSize.zeroRect;
-
-	return(
-		gleam_rect.create(
-			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
-			'width', size.width * ctz,
-			'height', size.height * ctz
-		)
-	);
-};
-
-
-/*
-| The disc's transformed shape.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return(
-		this.shape
-		.transform(
-			gleam_transform.create(
-				'offset', this.size.zeroRect.pw,
-				'zoom', 1
-			)
-		)
-		.transform( this.controlTransform )
-	);
-};
-
-
-/*
 | A button of the main disc has been pushed.
 */
 def.proto.pushButton =
@@ -507,33 +408,6 @@ def.proto.pushButton =
 
 
 /*
-| Checks if the user clicked something on the panel
-*/
-def.proto.click =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this.tZone.within( p ) ) return;
-
-	const pp = p.sub( this.tZone.pos );
-
-	if( !this.tShape.within( pp ) ) return;
-
-	// this is on the disc
-	for( let widget of this )
-	{
-		if( widget.click( pp, shift, ctrl ) ) return true;
-	}
-
-	return true;
-};
-
-
-/*
 | Start of a dragging operation.
 */
 def.proto.dragStart =
@@ -579,39 +453,6 @@ def.proto.dragStop =
 	)
 {
 	return;
-};
-
-
-
-/*
-| User is inputing text.
-*/
-def.proto.input =
-	function(
-		// text
-	)
-{
-	return;
-};
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel =
-	function(
-		p
-		// dir,
-		// shift,
-		// ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this.tZone.within( p ) ) return;
-
-	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
-
-	return true;
 };
 
 

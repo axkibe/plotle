@@ -18,10 +18,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// current action
-		// no json thus not saved or transmitted
-		action : { type : [ 'undefined', '< ../action/types' ] },
-
 		// itemkey or pos the stoke goes from
 		from : { type : [ 'tim.js/path', '../gleam/point' ], json : true },
 
@@ -122,7 +118,7 @@ def.proto.dragStart =
 | This cannot be done lazily, since it may
 | depend on other items.
 */
-def.proto.glint =
+def.lazy.glint =
 	function( )
 {
 	// FIXME remove gruga_relation dependency
@@ -185,7 +181,7 @@ def.lazy.shape =
 
 
 /*
-| The items zone possibly altered by action.
+| The items zone.
 */
 def.lazy.zone =
 	function( )
@@ -222,6 +218,7 @@ def.lazy._line =
 	let ffrom = this.from;
 	let fto = this.to;
 
+	/*
 	if( ffrom.timtype === gleam_point )
 	{
 		ffrom = this.action.affectPoint( ffrom );
@@ -247,6 +244,7 @@ def.lazy._line =
 		if( ito ) fto = root.space.getPath( fto ).shape;
 		else fto = gleam_point.zero;
 	}
+	*/
 
 	return gleam_connect.line( ffrom, fto );
 };

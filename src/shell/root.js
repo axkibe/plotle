@@ -1760,9 +1760,11 @@ def.proto.update =
 
 	mark = changes.transform( mark );
 
+	if( !mark ) return;
+
 	if( mark.timtype === mark_range )
 	{
-		mark = mark.create( 'doc', root.space.getPath( mark.docPath.chop ) );
+		return mark.create( 'doc', root.space.getPath( mark.docPath.chop ) );
 	}
 
 	return mark;

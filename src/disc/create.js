@@ -66,47 +66,9 @@ const action_createStroke = tim.require( '../action/createStroke' );
 
 const action_none = tim.require( '../action/none' );
 
-const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
-const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
-const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
-const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
-const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
-const gleam_rect = tim.require( '../gleam/rect' );
-
-const gleam_transform = tim.require( '../gleam/transform' );
-
 const layout_disc = tim.require( '../layout/disc' );
 
 const widget_factory = tim.require( '../widget/factory' );
-
-
-/*
-| Doesn't care about show.
-*/
-def.static.concernsShow =
-def.proto.concernsShow =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about spaceRef.
-*/
-def.static.concernsSpaceRef =
-def.proto.concernsSpaceRef =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about user.
-*/
-def.static.concernsUser =
-def.proto.concernsUser =
-	( ) => undefined;
 
 
 /*
@@ -221,95 +183,6 @@ def.proto._isActiveButton =
 
 
 /*
-| The discs glint.
-*/
-def.lazy.glint =
-	function( )
-{
-	const zone = this._tZone.enlarge1;
-
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'pane',
-				gleam_glint_pane.create(
-					'glint', this._glint,
-					'size', zone.size
-				),
-			'pos', zone.pos
-		)
-	);
-};
-
-
-/*
-| The disc's inner glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const arr = [ gleam_glint_fill.create( 'facet', this.facet, 'shape', this.tShape ) ];
-
-	for( let widget of this )
-	{
-		const g = widget.glint;
-
-		if( g ) arr.push( g );
-	}
-
-	arr.push(
-		gleam_glint_border.create(
-			'facet', this.facet,
-			'shape', this.tShape
-		)
-	);
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The disc's transformed zone.
-*/
-def.lazy._tZone =
-	function( )
-{
-	const ctz = this.controlTransform.zoom;
-
-	const size = this.size;
-
-	const vsr = this.viewSize.zeroRect;
-
-	return(
-		gleam_rect.create(
-			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
-			'width', size.width * ctz + 1,
-			'height', size.height * ctz + 1
-		)
-	);
-};
-
-
-/*
-| The disc's transformed shape.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return(
-		this.shape
-		.transform(
-			gleam_transform.create(
-				'offset', this.size.zeroRect.pw,
-				'zoom', 1
-			)
-		)
-		.transform( this.controlTransform )
-	);
-};
-
-
-/*
 | The pointing device just went down.
 | Probes if the system ought to wait if it's
 | a click or can initiate a drag right away.
@@ -321,7 +194,7 @@ def.proto.probeClickDrag =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -387,7 +260,7 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -416,7 +289,7 @@ def.proto.click =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -450,18 +323,6 @@ def.proto.cycleFocus =
 
 
 /*
-| User is inputing text.
-*/
-def.proto.input =
-	function(
-		text
-	)
-{
-	return;
-};
-
-
-/*
 | Start of a dragging operation.
 */
 def.proto.dragStart =
@@ -471,7 +332,7 @@ def.proto.dragStart =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -521,28 +382,6 @@ def.proto.dragStop =
 	)
 {
 	return;
-};
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	const tZone = this._tZone;
-
-	// shortcut if p is not near the panel
-	if( !tZone.within( p ) ) return;
-
-	if( !this.tShape.within( p.sub( tZone.pos ) ) ) return;
-
-	return true;
 };
 
 

@@ -62,47 +62,9 @@ const action_none = tim.require( '../action/none' );
 
 const action_zoomButton = tim.require( '../action/zoomButton' );
 
-const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
-const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
-const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
-const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
-const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
-const gleam_rect = tim.require( '../gleam/rect' );
-
-const gleam_transform = tim.require( '../gleam/transform' );
-
 const layout_disc = tim.require( '../layout/disc' );
 
 const widget_factory = tim.require( '../widget/factory' );
-
-
-/*
-| Doesn't care about show.
-*/
-def.static.concernsShow =
-def.proto.concernsShow =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about spaceRef.
-*/
-def.static.concernsSpaceRef =
-def.proto.concernsSpaceRef =
-	( ) => undefined;
-
-
-/*
-| Doesn't care about user.
-*/
-def.static.concernsUser =
-def.proto.concernsUser =
-	( ) => undefined;
 
 
 /*
@@ -191,90 +153,6 @@ def.static._isActiveButton =
 
 
 /*
-| The discs glint.
-*/
-def.lazy.glint =
-	function( )
-{
-	const zone = this._tZone.enlarge1;
-
-	// FUTURE GLINT inherit
-	return(
-		gleam_glint_window.create(
-			'pane',
-				gleam_glint_pane.create(
-					'glint', this._glint,
-					'size', zone.size
-				),
-			'pos', zone.pos
-		)
-	);
-};
-
-
-/*
-| The disc's inner glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const arr = [ gleam_glint_fill.createFacetShape( this.facet, this.tShape) ];
-
-	for( let widget of this )
-	{
-		const g = widget.glint;
-
-		if( g ) arr.push( g );
-	}
-
-	arr.push( gleam_glint_border.createFacetShape( this.facet, this.tShape ) );
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The disc's transformed zone.
-*/
-def.lazy._tZone =
-	function( )
-{
-	const ctz = this.controlTransform.zoom;
-
-	const size = this.size;
-
-	const vsr = this.viewSize.zeroRect;
-
-	return(
-		gleam_rect.create(
-			'pos', vsr.pw.add( 0, -size.height * ctz / 2 ),
-			'width', size.width * ctz + 1,
-			'height', size.height * ctz + 1
-		)
-	);
-};
-
-
-/*
-| The disc's transformed shape.
-*/
-def.lazy.tShape =
-	function( )
-{
-	return(
-		this.shape
-		.transform(
-			gleam_transform.create(
-				'offset', this.size.zeroRect.pw,
-				'zoom', 1
-			)
-		)
-		.transform( this.controlTransform )
-	);
-};
-
-
-/*
 | A button of the main disc has been pushed.
 */
 def.proto.pushButton =
@@ -317,7 +195,7 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -333,49 +211,6 @@ def.proto.pointingHover =
 
 		if( bubble ) return bubble;
 	}
-};
-
-
-/*
-| Checks if the user clicked something on the panel.
-*/
-def.proto.click =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	const tZone = this._tZone;
-
-	// shortcut if p is not near the panel
-	if( !tZone.within( p ) ) return;
-
-	const pp = p.sub( tZone.pos );
-
-	if( !this.tShape.within( pp ) ) return;
-
-	for( let widget of this )
-	{
-		// this is on the disc
-		const bubble = widget.click( pp, shift, ctrl );
-
-		if( bubble ) return bubble;
-	}
-
-	return false;
-};
-
-
-/*
-| User is inputing text.
-*/
-def.proto.input =
-	function(
-		text
-	)
-{
-	return;
 };
 
 
@@ -403,7 +238,7 @@ def.proto.probeClickDrag =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -467,7 +302,7 @@ def.proto.dragStart =
 		ctrl
 	)
 {
-	const tZone = this._tZone;
+	const tZone = this.tZone;
 
 	// shortcut if p is not near the panel
 	if( !tZone.within( p ) ) return;
@@ -544,28 +379,6 @@ def.proto.dragStop =
 	root.alter( 'action', action_none.singleton );
 
 	return false;
-};
-
-
-/*
-| Mouse wheel.
-*/
-def.proto.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	const tZone = this._tZone;
-
-	// shortcut if p is not near the panel
-	if( !tZone.within( p ) ) return;
-
-	if( !this.tShape.within( p.sub( tZone.pos ) ) ) return;
-
-	return true;
 };
 
 

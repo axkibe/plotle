@@ -504,7 +504,7 @@ def.lazy.glint =
 
 		case action_createStroke :
 
-			if( action.from ) arr.push( action.transientVisual( transform ) .glint );
+			if( action.from ) arr.push( action.transientItem.glint );
 
 			break;
 

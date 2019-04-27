@@ -23,6 +23,9 @@ if( TIM )
 		// the item path or pos the stroke goes to
 		to : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
 
+		// the transient stroke in creation
+		transientItem : { type : [ 'undefined', '< ../fabric/item-types' ] },
+
 		// the itemType of stroke ("arrow" or "line")
 		itemType : { type : 'string' },
 	};
@@ -36,6 +39,8 @@ const change_grow = tim.require( '../change/grow' );
 const fabric_space = tim.require( '../fabric/space' );
 
 const fabric_stroke = tim.require( '../fabric/stroke' );
+
+const gleam_transform = tim.require( '../gleam/transform' );
 
 const result_hover = tim.require( '../result/hover' );
 
@@ -92,7 +97,15 @@ def.proto.dragMove =
 
 	const ps = screen.pointToSpaceRS( p, !ctrl );
 
-	root.alter( 'action', this.create( 'to', ps ) );
+	let transientItem = this.transientItem;
+
+	transientItem =
+		transientItem.create(
+			'transform', screen.transform,
+			'to', this.hover || ps
+		);
+
+	root.alter( 'action', this.create( 'to', ps, 'transientItem', transientItem ) );
 };
 
 
@@ -115,8 +128,26 @@ def.proto.dragStart =
 	// this action only makes sense on spaces
 	if( screen.timtype !== fabric_space ) return;
 
+	const from = this.hover || screen.pointToSpaceRS( p, !ctrl );
+
+	const transientItem =
+		fabric_stroke.create(
+			'access', 'rw',
+			'highlight', false,
+			'from', from,
+			'fromStyle', 'none',
+			'path', fabric_space.transPath,
+			'transform', gleam_transform.normal,
+			'to', from,
+			'toStyle', this._toStyle,
+		);
+
 	root.alter(
-		'action', this.create( 'from', this.hover || screen.pointToSpaceRS( p, !ctrl ) )
+		'action',
+			this.create(
+				'from', this.hover || screen.pointToSpaceRS( p, !ctrl ),
+				'transientItem', transientItem
+			)
 	);
 };
 
@@ -127,11 +158,12 @@ def.proto.dragStart =
 def.proto.dragStop =
 	function(
 		p,      // point of stop
+		screen, // the screen for this operation
 		shift,  // true if shift key was pressed
 		ctrl    // true if ctrl key was pressed
 	)
 {
-	const val = this.transientFabric;
+	const val = this.transientItem;
 
 	const key = session_uid.newUid( );
 
@@ -192,28 +224,6 @@ def.proto.pointingHover =
 	}
 
 	return result_hover.cursorDefault;
-};
-
-
-/*
-| The transient item being created.
-*/
-def.lazy.transientFabric =
-	function(
-		transform   // the transform for the item
-	)
-{
-	return(
-		fabric_stroke.create(
-			'access', 'rw',
-			'from', this.from,
-			'to', this.to,
-			'fromStyle', 'none',
-			'highlight', false,
-			'toStyle', this._toStyle,
-			'transform', transform
-		)
-	);
 };
 
 
