@@ -7,7 +7,7 @@
 tim.define( module, ( def, gleam_arrow ) => {
 
 
-const gleam_connect = tim.require( './connect' );
+const gleam_line = tim.require( './line' );
 
 const gleam_shape = tim.require( './shape' );
 
@@ -51,7 +51,7 @@ def.static.getArrowShape =
 		end2     // 'none' or 'arrow'
 	)
 {
-	const line = gleam_connect.line( joint1, joint2 );
+	const line = gleam_line.createConnection( joint1, joint2 );
 
 	const p1 = line.p1;
 

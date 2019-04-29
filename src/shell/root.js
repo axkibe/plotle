@@ -150,11 +150,11 @@ const form_user = tim.require( '../form/user' );
 
 const form_welcome = tim.require( '../form/welcome' );
 
-const gleam_connect = tim.require( '../gleam/connect' );
-
 const gleam_display_canvas = tim.require( '../gleam/display/canvas' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
+
+const gleam_line = tim.require( '../gleam/line' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
@@ -1641,7 +1641,7 @@ def.proto.spawnRelation =
 		item2
 	)
 {
-	const line = gleam_connect.line( item1.shape, item2.shape );
+	const line = gleam_line.createConnection( item1.shape, item2.shape );
 
 	const pos = line.pc.sub( gruga_relation.spawnOffset );
 

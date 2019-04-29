@@ -473,7 +473,7 @@ def.lazy._rangeShape =
 			gleam_shape_line.createP( fp.add( 0, -ascend ) ),
 			gleam_shape_line.createP( bp.add( 0, -ascend ) ),
 			gleam_shape_line.createP( bp.add( 0, descend ) ),
-			gleam_shape_line.createClose
+			gleam_shape_line.close
 		];
 
 		return(

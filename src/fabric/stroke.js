@@ -18,8 +18,11 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// itemkey or pos the stoke goes from
-		from : { type : [ 'tim.js/path', '../gleam/point' ], json : true },
+		// pos the stoke goes from (absolute point of reference)
+		from : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+
+		// anchillary point the stroke goes from
+		fromPoint : { type : [ 'undefined', '../gleam/point' ], json : true },
 
 		// "arrow" or "none"
 		fromStyle : { type : 'string', json: true },
@@ -40,8 +43,11 @@ if( TIM )
 		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		// itemkey or pos the stroke goes to
-		to : { type : [ 'tim.js/path', '../gleam/point' ], json : true },
+		// pos the stoke goes to (absolute point of reference)
+		to : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+
+		// anchillary point the stroke goes to
+		toPoint : { type : [ 'undefined', '../gleam/point' ], json : true },
 
 		// "arrow" or "none"
 		toStyle : { type : 'string', json: true },
@@ -55,11 +61,13 @@ if( TIM )
 }
 
 
+const change_shrink = tim.require( '../change/shrink' );
+
 const gleam_arrow = tim.require( '../gleam/arrow' );
 
-const gleam_connect = tim.require( '../gleam/connect' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
+
+const gleam_line = tim.require( '../gleam/line' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
@@ -75,6 +83,83 @@ def.lazy.attentionCenter =
 	function( )
 {
 	return this.zone.pc.y;
+};
+
+
+/*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.proto.ancillary =
+	function(
+		space  // space including other items dependend upon
+	)
+{
+	let from = this.from;
+
+	let to = this.to;
+
+	if( from && from.timtype === tim_path ) from = space.get( from.get( 1 ) );
+
+	if( to && to.timtype === tim_path ) to = space.get( from.get( 1 ) );
+
+	if( !from || !to )
+	{
+		return(
+			change_shrink.create(
+				'path', this.path,
+				'prev', this,
+				'rank', space.rankOf( this )
+			)
+		);
+	}
+
+	/*
+	let anchillary;
+
+	const itemFrom = this.from && space.get( fromRef.get( 1 ) );
+
+	const itemTo = this.to && space.get( toRef.get( 1 ) );
+
+	const item2 = space.get( this.item2key );
+
+	const from = item1 && this.ancillaryFrom( item1 );
+
+	const to = item2 && this.ancillaryTo( item2 );
+
+	let ancillary = fabric_label.ancillary.call( this, space );
+
+	const tfrom = this.from;
+
+	const tto = this.to;
+
+	if( ( tfrom && !tfrom.equals( from ) ) || ( from && !from.equals( tfrom ) ) )
+	{
+		const ch =
+			change_set.create(
+				'path', this.path.chop.append( 'from' ),
+				'prev', tfrom,
+				'val', from
+			);
+
+		if( !ancillary ) ancillary = change_list.one( ch );
+		else ancillary = ancillary.append( ch );
+	}
+
+	if( ( tto && !tto.equals( to ) ) || ( to && !to.equals( tto ) ) )
+	{
+		const ch =
+			change_set.create(
+				'path', this.path.chop.append( 'to' ),
+				'prev', tto,
+				'val', to
+			);
+
+		if( !ancillary ) ancillary = change_list.one( ch );
+		else ancillary = ancillary.append( ch );
+	}
+
+	return ancillary;
+	*/
 };
 
 
@@ -246,7 +331,7 @@ def.lazy._line =
 	}
 	*/
 
-	return gleam_connect.line( ffrom, fto );
+	return gleam_line.createConnection( ffrom, fto );
 };
 
 

@@ -74,8 +74,6 @@ const change_set = tim.require( '../change/set' );
 
 const gleam_arrow = tim.require( '../gleam/arrow' );
 
-const gleam_connect = tim.require( '../gleam/connect' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
@@ -83,6 +81,8 @@ const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
 
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
+
+const gleam_line = tim.require( '../gleam/line' );
 
 const gruga_label = tim.require( '../gruga/label' );
 
@@ -101,9 +101,9 @@ def.proto.ancillary =
 
 	const item2 = space.get( this.item2key );
 
-	const from = item1 && this.ancillaryFrom( item1 );
+	const from = item1 && this._ancillaryFrom( item1 );
 
-	const to = item2 && this.ancillaryTo( item2 );
+	const to = item2 && this._ancillaryTo( item2 );
 
 	let ancillary = fabric_label.ancillary.call( this, space );
 
@@ -144,14 +144,14 @@ def.proto.ancillary =
 /*
 | Calculates the from point.
 */
-def.proto.ancillaryFrom =
+def.proto._ancillaryFrom =
 	function(
 		item
 	)
 {
 	const shape = item.shape;
 
-	const line = gleam_connect.line( shape, this.shape );
+	const line = gleam_line.createConnection( shape, this.shape );
 
 	return line.p1;
 };
@@ -160,14 +160,14 @@ def.proto.ancillaryFrom =
 /*
 | Calculates the to point.
 */
-def.proto.ancillaryTo =
+def.proto._ancillaryTo =
 	function(
 		item
 	)
 {
 	const shape = item.shape;
 
-	const line = gleam_connect.line( this.shape, shape );
+	const line = gleam_line.createConnection( this.shape, shape );
 
 	return line.p2;
 };

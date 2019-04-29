@@ -34,16 +34,14 @@ if( TIM )
 /*
 | Shortcut to create a round to close.
 */
-def.staticLazy.close = // FIXME remove
-def.staticLazy.createClose = ( ) =>
+def.staticLazy.close = ( ) =>
 	gleam_shape_round.create( 'close', true );
 
 
 /*
 | Shortcut to create a count clockwise round to close.
 */
-def.staticLazy.closeCcw = // FIXME remove
-def.staticLazy.createCloseCcw = ( ) =>
+def.staticLazy.closeCcw = ( ) =>
 	gleam_shape_round.create( 'ccw', true, 'close', true );
 
 
