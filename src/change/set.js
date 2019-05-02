@@ -122,7 +122,7 @@ def.staticLazy._transformers = ( ) =>
 	map.set( change_insert, '_transformSame' );
 	map.set( change_remove, '_transformSame' );
 
-	map.set( change_set, '_transformSet' );
+	map.set( change_set, '_transformChangeSet' );
 
 	map.set( change_list,     '_transformChangeList' );
 	map.set( change_wrap,     '_transformChangeWrap' );

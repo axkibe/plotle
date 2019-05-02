@@ -166,7 +166,7 @@ def.proto._transformGrowShrink =
 		c
 	)
 {
-	if( !this.path.chop.equals( c.path.chop ) ) return c;
+	if( !this.path.shorten.equals( c.path.shorten ) ) return c;
 
 	if( this.rank > c.rank ) return c;
 

@@ -120,15 +120,17 @@ def.proto.dragMove =
 
 	const line = gleam_line.createConnection( j1, hover ? hover.shape : psrs );
 
+	const j2 = hover ? hover.path.chop : psrs;
+
 	const transientItem =
 		this.transientItem.create(
 			'transform', screen.transform,
 			'jp1', line.p1,
 			'jp2', line.p2,
-			'j2', hover ? hover.path : psrs
+			'j2', j2
 		);
 
-	root.alter( 'action', this.create( 'j2', psrs, 'transientItem', transientItem ) );
+	root.alter( 'action', this.create( 'j2', j2, 'transientItem', transientItem ) );
 };
 
 
