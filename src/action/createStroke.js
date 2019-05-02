@@ -14,14 +14,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the item path or pos the stroke goes from
-		from : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
+		// the joint the stroke goes from
+		j1 : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
 
 		// the item path hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// the item path or pos the stroke goes to
-		to : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
+		j2 : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
 
 		// the transient stroke in creation
 		transientItem : { type : [ 'undefined', '< ../fabric/item-types' ] },
@@ -39,6 +39,8 @@ const change_grow = tim.require( '../change/grow' );
 const fabric_space = tim.require( '../fabric/space' );
 
 const fabric_stroke = tim.require( '../fabric/stroke' );
+
+const gleam_line = tim.require( '../gleam/line' );
 
 const gleam_transform = tim.require( '../gleam/transform' );
 
@@ -63,7 +65,7 @@ def.proto.affectsItem =
 
 	path = path.chop;
 
-	return path.equals( this.from ) || path.equals( this.to ) || path.equals( this.hover );
+	return path.equals( this.j1 ) || path.equals( this.j2 ) || path.equals( this.hover );
 };
 
 
@@ -95,17 +97,38 @@ def.proto.dragMove =
 	// this action only makes sense on spaces
 	if( screen.timtype !== fabric_space ) return;
 
-	const ps = screen.pointToSpaceRS( p, !ctrl );
+	const psrs = screen.pointToSpaceRS( p, !ctrl );
 
-	let transientItem = this.transientItem;
+	let j1 = this.j1;
 
-	transientItem =
-		transientItem.create(
+	if( j1.timtype === tim_path )
+	{
+		j1 = screen.get( j1.get( 1 ) );
+
+		// early aborts the creation if the first item got removed
+		if( !j1 ) { root.alter( 'action', undefined ); return; }
+
+		j1 = j1.shape;
+	}
+
+	let hover;
+
+	for( let item of screen )
+	{
+		if( item.pointWithin( p ) ) { hover = item; break; }
+	}
+
+	const line = gleam_line.createConnection( j1, hover ? hover.shape : psrs );
+
+	const transientItem =
+		this.transientItem.create(
 			'transform', screen.transform,
-			'to', this.hover || ps
+			'jp1', line.p1,
+			'jp2', line.p2,
+			'j2', hover ? hover.path : psrs
 		);
 
-	root.alter( 'action', this.create( 'to', ps, 'transientItem', transientItem ) );
+	root.alter( 'action', this.create( 'j2', psrs, 'transientItem', transientItem ) );
 };
 
 
@@ -128,24 +151,28 @@ def.proto.dragStart =
 	// this action only makes sense on spaces
 	if( screen.timtype !== fabric_space ) return;
 
-	const from = this.hover || screen.pointToSpaceRS( p, !ctrl );
+	const psrs = screen.pointToSpaceRS( p, !ctrl );
+
+	const j1 = this.hover || psrs;
 
 	const transientItem =
 		fabric_stroke.create(
 			'access', 'rw',
 			'highlight', false,
-			'from', from,
-			'fromStyle', 'none',
+			'j1', j1,
+			'jp1', psrs,
+			'js1', 'none',
 			'path', fabric_space.transPath,
 			'transform', gleam_transform.normal,
-			'to', from,
-			'toStyle', this._toStyle,
+			'j2', j1,
+			'jp2', psrs,
+			'js2', this._toStyle,
 		);
 
 	root.alter(
 		'action',
 			this.create(
-				'from', this.hover || screen.pointToSpaceRS( p, !ctrl ),
+				'j1', this.hover || screen.pointToSpaceRS( p, !ctrl ),
 				'transientItem', transientItem
 			)
 	);
@@ -204,24 +231,17 @@ def.proto.pointingHover =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	if( !this.from )
+	for( let item of screen )
 	{
-		for( let a = 0, al = screen.length; a < al; a++ )
+		if( item.pointWithin( p ) )
 		{
-			const item = screen.atRank( a );
+			root.alter( 'action', this.create( 'hover', item.path.chop ) );
 
-			if( item.pointWithin( p ) )
-			{
-				root.alter( 'action', this.create( 'hover', item.path.chop ) );
-
-				return result_hover.cursorDefault;
-			}
+			return result_hover.cursorDefault;
 		}
-
-		root.alter( 'action', this.create( 'hover', undefined ) );
-
-		return result_hover.cursorDefault;
 	}
+
+	root.alter( 'action', this.create( 'hover', undefined ) );
 
 	return result_hover.cursorDefault;
 };

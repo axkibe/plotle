@@ -141,9 +141,8 @@ def.staticLazy._transformers = ( ) =>
 	map.set( mark_items,  '_transformMarkItems' );
 	map.set( mark_widget, '_transformSame' );
 
-	// FUTURE fix ranks
-	map.set( change_grow,   '_transformSame' );
-	map.set( change_shrink, '_transformSame' );
+	map.set( change_grow,   '_transformGrowShrink' );
+	map.set( change_shrink, '_transformGrowShrink' );
 
 	map.set( change_join,   '_transformJIRS' );
 	map.set( change_split,  '_transformJIRS' );
@@ -160,6 +159,22 @@ def.staticLazy._transformers = ( ) =>
 
 
 /*
+| Transforms a shrink by this shrink.
+*/
+def.proto._transformGrowShrink =
+	function(
+		c
+	)
+{
+	if( !this.path.chop.equals( c.path.chop ) ) return c;
+
+	if( this.rank > c.rank ) return c;
+
+	return c.create( 'rank', c.rank - 1 );
+};
+
+
+/*
 | Transforms a insert/remove/set/split changes
 | by this shrink
 */
@@ -169,6 +184,8 @@ def.proto._transformJIRS =
 	)
 {
 	if( !this.path.subPathOf( cx.path ) ) return cx;
+
+	// otherwise it is gone!
 };
 
 

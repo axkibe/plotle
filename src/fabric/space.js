@@ -120,7 +120,7 @@ def.proto.ancillary =
 	// FUTURE for( let key of affectedTwigItems )
 	for( let item of this )
 	{
-		const ia = item.ancillary( this );
+		let ia = item.ancillary( this );
 
 		if( !ia ) continue;
 
@@ -130,6 +130,10 @@ def.proto.ancillary =
 /**/	}
 
 		if( !change ) { change = ia; continue; }
+
+		// other ancillary changes might affect this change
+		// notably the ranking in case of "shrinks"
+		ia = change.transform( ia );
 
 		change = change.appendList( ia );
 	}
@@ -497,14 +501,9 @@ def.lazy.glint =
 	switch( action.timtype )
 	{
 		case action_createGeneric :
-
-			if( action.startPoint ) arr.push( action.transientItem.glint );
-
-			break;
-
 		case action_createStroke :
 
-			if( action.from ) arr.push( action.transientItem.glint );
+			if( action.transientItem ) arr.push( action.transientItem.glint );
 
 			break;
 

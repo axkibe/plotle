@@ -18,15 +18,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
-		// pos the stoke goes from (absolute point of reference)
-		from : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
-
-		// anchillary point the stroke goes from
-		fromPoint : { type : [ 'undefined', '../gleam/point' ], json : true },
-
-		// "arrow" or "none"
-		fromStyle : { type : 'string', json: true },
-
 		// true if the item is highlighted
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
@@ -35,6 +26,24 @@ if( TIM )
 		// no json thus not saved or transmitted
 		hover : { type : [ 'undefined' ] },
 
+		// pos the stoke goes from (absolute point of reference)
+		j1 : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+
+		// ancillary point the stroke goes from
+		jp1 : { type : [ 'undefined', '../gleam/point' ], json : true },
+
+		// "arrow" or "none"
+		js1 : { type : 'string', json: true },
+
+		// pos the stoke goes to (absolute point of reference)
+		j2 : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+
+		// ancillary point the stroke goes to
+		jp2 : { type : [ 'undefined', '../gleam/point' ], json : true },
+
+		// "arrow" or "none"
+		js2 : { type : 'string', json: true },
+
 		// the users mark
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
@@ -42,15 +51,6 @@ if( TIM )
 		// the path of the arrow
 		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// pos the stoke goes to (absolute point of reference)
-		to : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
-
-		// anchillary point the stroke goes to
-		toPoint : { type : [ 'undefined', '../gleam/point' ], json : true },
-
-		// "arrow" or "none"
-		toStyle : { type : 'string', json: true },
 
 		// the current space transform
 		// no json thus not saved or transmitted
@@ -61,6 +61,10 @@ if( TIM )
 }
 
 
+const change_list = tim.require( '../change/list' );
+
+const change_set = tim.require( '../change/set' );
+
 const change_shrink = tim.require( '../change/shrink' );
 
 const gleam_arrow = tim.require( '../gleam/arrow' );
@@ -70,6 +74,8 @@ const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 const gleam_line = tim.require( '../gleam/line' );
 
 const gleam_point = tim.require( '../gleam/point' );
+
+const gleam_rect = tim.require( '../gleam/rect' );
 
 const gruga_relation = tim.require( '../gruga/relation' );
 
@@ -94,64 +100,73 @@ def.proto.ancillary =
 		space  // space including other items dependend upon
 	)
 {
-	let from = this.from;
+	let j1 = this.j1;
 
-	let to = this.to;
+	let j2 = this.j2;
 
-	if( from && from.timtype === tim_path ) from = space.get( from.get( 1 ) );
+	if( j1 && j1.timtype === tim_path )
+	{
+		j1 = space.get( j1.get( 1 ) );
 
-	if( to && to.timtype === tim_path ) to = space.get( from.get( 1 ) );
+		if( j1 ) j1 = j1.shape;
+	}
 
-	if( !from || !to )
+	if( j2 && j2.timtype === tim_path )
+	{
+		j2 = space.get( j2.get( 1 ) );
+
+		if( j2 ) j2 = j2.shape;
+	}
+
+	if( !j1 || !j2 )
 	{
 		return(
-			change_shrink.create(
-				'path', this.path,
-				'prev', this,
-				'rank', space.rankOf( this )
+			change_list.one(
+				change_shrink.create(
+					'path', this.path.chop,
+					'prev', this,
+					'rank', space.rankOf( this.key )
+				)
 			)
 		);
 	}
 
-	/*
-	let anchillary;
+	if( j1.timtype !== gleam_point || j2.timtype !== gleam_point )
+	{
+		const line = gleam_line.createConnection( j1, j2 );
 
-	const itemFrom = this.from && space.get( fromRef.get( 1 ) );
+		j1 = line.p1;
 
-	const itemTo = this.to && space.get( toRef.get( 1 ) );
+		j2 = line.p2;
+	}
 
-	const item2 = space.get( this.item2key );
+	let ancillary;
 
-	const from = item1 && this.ancillaryFrom( item1 );
+/**/if( CHECK )
+/**/{
+		if( j1.timtype !== gleam_point || j2.timtype !== gleam_point ) throw new Error( );
+/**/}
 
-	const to = item2 && this.ancillaryTo( item2 );
-
-	let ancillary = fabric_label.ancillary.call( this, space );
-
-	const tfrom = this.from;
-
-	const tto = this.to;
-
-	if( ( tfrom && !tfrom.equals( from ) ) || ( from && !from.equals( tfrom ) ) )
+	if( !j1.equals( this.jp1 ) )
 	{
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'from' ),
-				'prev', tfrom,
-				'val', from
+				'path', this.path.chop.append( 'jp1' ),
+				'prev', this.jp1,
+				'val', j1
 			);
 
 		if( !ancillary ) ancillary = change_list.one( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
-	if( ( tto && !tto.equals( to ) ) || ( to && !to.equals( tto ) ) )
+	if( !j2.equals( this.jp2 ) )
 	{
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'to' ),
-				'prev', tto,
-				'val', to
+				'path', this.path.chop.append( 'jp2' ),
+				'prev', this.jp2,
+				'val', j2
 			);
 
 		if( !ancillary ) ancillary = change_list.one( ch );
@@ -159,7 +174,6 @@ def.proto.ancillary =
 	}
 
 	return ancillary;
-	*/
 };
 
 
@@ -183,12 +197,13 @@ def.proto.dragStart =
 	function(
 		p,
 		shift,
-		ctrl
+		ctrl,
+		action   // current action
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
 	// FIXME make it more coherent what don't care means
@@ -256,10 +271,10 @@ def.lazy.shape =
 {
 	return(
 		gleam_arrow.create(
-			'joint1', this._line.p1,
-			'joint2', this._line.p2,
-			'end1', this.fromStyle,
-			'end2', this.toStyle
+			'joint1', this.jp1,
+			'joint2', this.jp2,
+			'end1', this.js1,
+			'end2', this.js2
 		).shape
 	);
 };
@@ -271,86 +286,7 @@ def.lazy.shape =
 def.lazy.zone =
 	function( )
 {
-	return this._line.zone;
-};
-
-
-/*
-| Shape or point the stroke goes from.
-*/
-def.lazy._from =
-	function( )
-{
-	const ffrom = this.from;
-
-	switch( ffrom.timtype )
-	{
-		case gleam_point : return this._line.p1;
-
-		case tim_path : return ffrom;
-
-		default : throw new Error( );
-	}
-};
-
-
-/*
-| The line of the stroke.
-*/
-def.lazy._line =
-	function( )
-{
-	let ffrom = this.from;
-	let fto = this.to;
-
-	/*
-	if( ffrom.timtype === gleam_point )
-	{
-		ffrom = this.action.affectPoint( ffrom );
-	}
-	else
-	{
-		// FIXME immutable tree hierachy violation
-		const ifrom = root.space.getPath( ffrom );
-
-		if( ifrom ) ffrom = root.space.getPath( ffrom ).shape;
-		else ffrom = gleam_point.zero;
-	}
-
-	if( fto.timtype === gleam_point )
-	{
-		fto = this.action.affectPoint( fto );
-	}
-	else
-	{
-		// FIXME immutable tree hierachy violation
-		const ito = root.space.getPath( fto );
-
-		if( ito ) fto = root.space.getPath( fto ).shape;
-		else fto = gleam_point.zero;
-	}
-	*/
-
-	return gleam_line.createConnection( ffrom, fto );
-};
-
-
-/*
-| Shape or point the stroke goes to.
-*/
-def.lazy._to =
-	function( )
-{
-	const fto = this.to;
-
-	switch( fto.timtype )
-	{
-		case gleam_point : return this._line.p2;
-
-		case tim_path : return fto;
-
-		default : throw new Error( );
-	}
+	return gleam_rect.createArbitrary( this.jp1, this.jp2 );
 };
 
 

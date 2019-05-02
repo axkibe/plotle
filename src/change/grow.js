@@ -117,6 +117,22 @@ def.lazy.reversed =
 
 
 /*
+| Transforms a shrink by this shrink.
+*/
+def.proto._transformGrowShrink =
+	function(
+		c
+	)
+{
+	if( !this.path.chop.equals( c.path.chop ) ) return c;
+
+	if( this.rank > c.rank ) return c;
+
+	return c.create( 'rank', c.rank + 1 );
+};
+
+
+/*
 | Maps transformables to transform functions
 */
 def.staticLazy._transformers = ( ) =>
@@ -135,9 +151,8 @@ def.staticLazy._transformers = ( ) =>
 	map.set( change_remove, '_transformSame' );
 	map.set( change_set,    '_transformSame' );
 
-	// FUTURE fix ranks
-	map.set( change_grow,   '_transformSame' );
-	map.set( change_shrink, '_transformSame' );
+	map.set( change_grow,   '_transformGrowShrink' );
+	map.set( change_shrink, '_transformGrowShrink' );
 
 	map.set( change_list,     '_transformChangeList' );
 	map.set( change_wrap,     '_transformChangeWrap' );
