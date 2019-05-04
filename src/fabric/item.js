@@ -29,14 +29,6 @@ const mark_range = tim.require( '../mark/range' );
 
 
 /*
-| By default deny all action effects.
-*/
-def.proto.actionAffectsPosFs =
-def.proto.actionAffectsZone =
-	false;
-
-
-/*
 | The changes needed for secondary data to adapt to primary.
 */
 def.proto.ancillary = ( ) => undefined;
@@ -200,20 +192,21 @@ def.lazy.tZone =
 def.proto._ctrlClick =
 	function(
 		p,     // the point clicked
-		shift  // true if shift key was pressed
+		shift, // true if shift key was pressed
+		mark   // the current user mark
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
 	if( this.access !== 'rw' ) return false;
 
-	const mark = this.mark;
-
 	if( !mark )
 	{
+		console.log( 'X1' );
+
 		root.alter( 'mark', mark_items.createWithOne( this.path ) );
 
 		return true;
@@ -229,6 +222,8 @@ def.proto._ctrlClick =
 
 		case mark_caret :
 		case mark_range :
+
+			console.log( 'X3' );
 
 			root.alter(
 				'mark',

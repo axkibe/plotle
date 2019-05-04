@@ -131,7 +131,7 @@ const spaceFields =
 /*
 | The zone is directly affected by actions.
 */
-def.proto.actionAffectsZone = true;
+def.proto.actionAffects = 'zone';
 
 
 /*
@@ -240,17 +240,16 @@ def.proto.click =
 	function(
 		p,       // point where dragging starts
 		shift,   // true if shift key was held down
-		ctrl     // true if ctrl or meta key was held down
+		ctrl,    // true if ctrl or meta key was held down
+		mark     // current user mark
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
 	if( !this.pointWithin( p ) ) return;
-
-	const mark = this.mark;
 
 	if( ctrl ) return this._ctrlClick( p, shift, mark );
 

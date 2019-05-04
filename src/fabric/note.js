@@ -118,7 +118,7 @@ const widget_scrollbar = tim.require( '../widget/scrollbar' );
 /*
 | The zone is directly affected by actions.
 */
-def.proto.actionAffectsZone = true;
+def.proto.actionAffects = 'zone';
 
 
 /*

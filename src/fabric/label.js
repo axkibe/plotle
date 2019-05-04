@@ -95,7 +95,7 @@ const mark_caret = tim.require( '../mark/caret' );
 /*
 | Position and fontsize are directly affected by actions.
 */
-def.proto.actionAffectsPosFs = true;
+def.proto.actionAffects = 'posfs';
 
 
 /*

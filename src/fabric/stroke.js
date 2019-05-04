@@ -83,6 +83,12 @@ const tim_path = tim.require( 'tim.js/path' );
 
 
 /*
+| The zone is directly affected by actions.
+*/
+def.proto.actionAffects = 'j1j2';
+
+
+/*
 | The attention center.
 */
 def.lazy.attentionCenter =

@@ -53,17 +53,18 @@ def.proto.click =
 	function(
 		p,      // point where dragging starts
 		shift,  // true if shift key was held down
-		ctrl    // true if ctrl or meta key was held down
+		ctrl,   // true if ctrl or meta key was held down
+		mark    // current user mark
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
 	if( !this.pointWithin( p ) ) return;
 
-	if( ctrl ) return this._ctrlClick( p, shift );
+	if( ctrl ) return this._ctrlClick( p, shift, mark );
 
 	if( this.access != 'rw' ) return false;
 

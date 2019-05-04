@@ -230,7 +230,7 @@ def.proto.click =
 	// clicked some item?
 	for( let item of this )
 	{
-		if( item.click( p, shift, ctrl ) ) return true;
+		if( item.click( p, shift, ctrl, this.mark ) ) return true;
 	}
 	// otherwise ...
 

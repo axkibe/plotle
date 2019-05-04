@@ -92,57 +92,71 @@ def.lazy.changes =
 
 	for( let item of this.items )
 	{
-		if( item.actionAffectsZone )
+		switch( item.actionAffects )
 		{
-			const iZone = item.zone;
-
-			const aZone = iZone.baseScaleAction( this, 0, 0 ).ensureMinSize( item.minSize );
-
-			changes.push(
-				change_set.create(
-					'path', item.path.chop.append( 'zone' ),
-					'val', aZone,
-					'prev', iZone
-				)
-			);
-		}
-
-		if( item.actionAffectsPosFs )
-		{
-			const iPos = item.zone.pos;
-
-			const aPos = iPos.baseScaleAction( this, 0, 0 );
-
-			if( !iPos.equals( aPos ) )
+			case 'zone' :
 			{
+				const iZone = item.zone;
+
+				const aZone = iZone.baseScaleAction( this, 0, 0 ).ensureMinSize( item.minSize );
+
 				changes.push(
 					change_set.create(
-						'path', item.path.chop.append( 'zone' ).append( 'pos' ),
-						'val', aPos,
-						'prev', iPos
+						'path', item.path.chop.append( 'zone' ),
+						'val', aZone,
+						'prev', iZone
 					)
 				);
+
+				break;
 			}
 
-			const iFs = item.fontsize;
-
-/**/		if( CHECK )
-/**/		{
-/**/			if( this.scaleX !== this.scaleY ) throw new Error( );
-/**/		}
-
-			const aFs = iFs * this.scaleY;
-
-			if( iFs !== aFs )
+			case 'posfs' :
 			{
-				changes.push(
-					change_set.create(
-						'path', item.path.chop.append( 'fontsize' ),
-						'val', aFs,
-						'prev', iFs
-					)
-				);
+				const iPos = item.zone.pos;
+
+				const aPos = iPos.baseScaleAction( this, 0, 0 );
+
+				if( !iPos.equals( aPos ) )
+				{
+					changes.push(
+						change_set.create(
+							'path', item.path.chop.append( 'zone' ).append( 'pos' ),
+							'val', aPos,
+							'prev', iPos
+						)
+					);
+				}
+
+				const iFs = item.fontsize;
+
+/**/			if( CHECK )
+/**/			{
+/**/				if( this.scaleX !== this.scaleY ) throw new Error( );
+/**/			}
+
+				const aFs = iFs * this.scaleY;
+
+				if( iFs !== aFs )
+				{
+					changes.push(
+						change_set.create(
+							'path', item.path.chop.append( 'fontsize' ),
+							'val', aFs,
+							'prev', iFs
+						)
+					);
+				}
+
+				break;
 			}
+
+			case 'j1j2' :
+			{
+				break;
+			}
+
+			default : throw new Error( );
 		}
 	}
 
