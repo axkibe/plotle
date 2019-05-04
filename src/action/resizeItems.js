@@ -53,6 +53,8 @@ const change_set = tim.require( '../change/set' );
 
 const fabric_space = tim.require( '../fabric/space' );
 
+const gleam_point = tim.require( '../gleam/point' );
+
 
 /*
 | 'Normal' button ought to be down during this action.
@@ -94,67 +96,11 @@ def.lazy.changes =
 	{
 		switch( item.actionAffects )
 		{
-			case 'zone' :
-			{
-				const iZone = item.zone;
+			case 'zone' : this._pushChangesAffectedZone( item, changes ); continue;
 
-				const aZone = iZone.baseScaleAction( this, 0, 0 ).ensureMinSize( item.minSize );
+			case 'posfs' : this._pushChangesAffectedPosFs( item, changes ); continue;
 
-				changes.push(
-					change_set.create(
-						'path', item.path.chop.append( 'zone' ),
-						'val', aZone,
-						'prev', iZone
-					)
-				);
-
-				break;
-			}
-
-			case 'posfs' :
-			{
-				const iPos = item.zone.pos;
-
-				const aPos = iPos.baseScaleAction( this, 0, 0 );
-
-				if( !iPos.equals( aPos ) )
-				{
-					changes.push(
-						change_set.create(
-							'path', item.path.chop.append( 'zone' ).append( 'pos' ),
-							'val', aPos,
-							'prev', iPos
-						)
-					);
-				}
-
-				const iFs = item.fontsize;
-
-/**/			if( CHECK )
-/**/			{
-/**/				if( this.scaleX !== this.scaleY ) throw new Error( );
-/**/			}
-
-				const aFs = iFs * this.scaleY;
-
-				if( iFs !== aFs )
-				{
-					changes.push(
-						change_set.create(
-							'path', item.path.chop.append( 'fontsize' ),
-							'val', aFs,
-							'prev', iFs
-						)
-					);
-				}
-
-				break;
-			}
-
-			case 'j1j2' :
-			{
-				break;
-			}
+			case 'j1j2' : this._pushChangesAffectedj1j2( item, changes ); continue;
 
 			default : throw new Error( );
 		}
@@ -318,5 +264,140 @@ def.proto.pointingHover =
 	return this.resizeDir.resizeHoverCursor;
 };
 
+
+/*
+| Pushes the changes for an item with affected zone.
+*/
+def.proto._pushChangesAffectedZone =
+	function(
+		item,     // affected item
+		changes   // changes array to push upon
+	)
+{
+	const iZone = item.zone;
+
+	const aZone = iZone.baseScaleAction( this, 0, 0 ).ensureMinSize( item.minSize );
+
+	if( iZone.equals( aZone ) ) return;
+
+	changes.push(
+		change_set.create(
+			'path', item.path.chop.append( 'zone' ),
+			'val', aZone,
+			'prev', iZone
+		)
+	);
+};
+
+
+/*
+| Pushes the changes for an item with affected zone.
+*/
+def.proto._pushChangesAffectedPosFs =
+	function(
+		item,     // affected item
+		changes   // changes array to push upon
+	)
+{
+	const iPos = item.zone.pos;
+
+	const aPos = iPos.baseScaleAction( this, 0, 0 );
+
+	if( !iPos.equals( aPos ) )
+	{
+		changes.push(
+			change_set.create(
+				'path', item.path.chop.append( 'zone' ).append( 'pos' ),
+				'val', aPos,
+				'prev', iPos
+			)
+		);
+	}
+
+	const iFs = item.fontsize;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.scaleX !== this.scaleY ) throw new Error( );
+/**/}
+
+	const aFs = iFs * this.scaleY;
+
+	if( iFs !== aFs )
+	{
+		changes.push(
+			change_set.create(
+				'path', item.path.chop.append( 'fontsize' ),
+				'val', aFs,
+				'prev', iFs
+			)
+		);
+	}
+};
+
+
+/*
+| Pushes the changes for an item with affected j1/j2 joints.
+*/
+def.proto._pushChangesAffectedj1j2 =
+	function(
+		item,     // affected item
+		changes   // changes array to push upon
+	)
+{
+	if( item.j1.timtype === gleam_point ) this._pushChangesAffectedj1p( item, changes );
+
+	if( item.j2.timtype === gleam_point ) this._pushChangesAffectedj2p( item, changes );
+};
+
+
+/*
+| Pushes the changes for an item with affected j1 point.
+*/
+def.proto._pushChangesAffectedj1p =
+	function(
+		item,     // affected item
+		changes   // changes array to push upon
+	)
+{
+	const ij = item.j1;
+
+	const aj = ij.baseScaleAction( this, 0, 0 );
+
+	if( ij.equals( aj ) ) return;
+
+	changes.push(
+		change_set.create(
+			'path', item.path.chop.append( 'j1' ),
+			'val', aj,
+			'prev', ij
+		)
+	);
+};
+
+
+/*
+| Pushes the changes for an item with affected j2 point.
+*/
+def.proto._pushChangesAffectedj2p =
+	function(
+		item,     // affected item
+		changes   // changes array to push upon
+	)
+{
+	const ij = item.j2;
+
+	const aj = ij.baseScaleAction( this, 0, 0 );
+
+	if( ij.equals( aj ) ) return;
+
+	changes.push(
+		change_set.create(
+			'path', item.path.chop.append( 'j2' ),
+			'val', aj,
+			'prev', ij
+		)
+	);
+};
 
 } );
