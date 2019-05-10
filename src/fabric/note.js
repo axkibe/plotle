@@ -16,18 +16,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the keys of the items this item affects (for ancillaries)
-		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
-
 		// the notes document
 		doc : { type : './doc', json : true },
 
 		// the fontsize of the note
 		fontsize : { type : 'number', json : true },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// scroll position
 		// no json thus not saved or transmitted

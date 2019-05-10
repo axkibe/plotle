@@ -14,13 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// access level of current user (rw or ro)
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
-		// the keys of the items this item affects (for ancillaries)
-		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
-
 		// the labels document
 		doc : { type : './doc', json : true },
 
@@ -30,10 +23,6 @@ if( TIM )
 		// the item is highlighted
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
 		// the items zone
 		zone : { type : '../gleam/rect', json : true },

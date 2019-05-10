@@ -14,18 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// users access to current space
-		access : { type : [ 'undefined', 'string' ] },
-
-		// currently active action
-		action : { type : [ '< ../action/types' ] },
-
-		// the current transform of controls
-		controlTransform : { type : '../gleam/transform' },
-
-		// facet of the disc
-		facet : { type : '../gleam/facet' },
-
 		// the widget hovered upon
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
 

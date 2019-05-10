@@ -21,6 +21,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
+		// the keys of the items this item affects (for ancillaries)
+		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
+
 		// true if the item is highlighted
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
@@ -29,6 +32,10 @@ if( TIM )
 		// defaults to not accepting hovers
 		// no json thus not saved or transmitted
 		hover : { type : 'undefined' },
+
+		// the users mark
+		// no json thus not saved or transmitted
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// the path of the item
 		// no json thus not saved or transmitted

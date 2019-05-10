@@ -14,16 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the keys of the items this item affects (for ancillaries)
-		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
-
 		// node currently hovered upon
 		// no json thus not saved or transmitted
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
 		// owner of the space the portal goes to
 		spaceUser : { type : 'string', json : true },

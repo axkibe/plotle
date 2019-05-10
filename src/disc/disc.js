@@ -10,6 +10,26 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
+if( TIM )
+{
+	def.attributes =
+	{
+		// users access to current space
+		access : { type : [ 'undefined', 'string' ] },
+
+		// currently active action
+		action : { type : [ '< ../action/types' ] },
+
+		// the current transform of controls
+		controlTransform : { type : '../gleam/transform' },
+
+		// facet of the disc
+		facet : { type : '../gleam/facet' },
+
+	};
+}
+
+
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
 const gleam_glint_fill = tim.require( '../gleam/glint/fill' );

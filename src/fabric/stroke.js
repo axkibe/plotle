@@ -31,10 +31,6 @@ if( TIM )
 
 		// "arrow" or "none"
 		js2 : { type : 'string', json: true },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 	};
 
 	def.json = 'stroke';
