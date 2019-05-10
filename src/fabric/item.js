@@ -13,6 +13,34 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
+if( TIM )
+{
+	def.attributes =
+	{
+		// rights the current user has for this space
+		// no json thus not saved or transmitted
+		access : { type : [ 'undefined', 'string' ] },
+
+		// true if the item is highlighted
+		// no json thus not saved or transmitted
+		highlight : { type : [ 'undefined', 'boolean' ] },
+
+		// node currently hovered upon
+		// defaults to not accepting hovers
+		// no json thus not saved or transmitted
+		hover : { type : 'undefined' },
+
+		// the path of the item
+		// no json thus not saved or transmitted
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the current space transform
+		// no json thus not saved or transmitted
+		transform : { type : [ 'undefined', '../gleam/transform' ] },
+	};
+}
+
+
 const action_createRelation = tim.require( '../action/createRelation' );
 
 const action_dragItems = tim.require( '../action/dragItems' );

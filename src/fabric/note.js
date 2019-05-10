@@ -16,11 +16,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// access level of current user (rw or ro)
-		// not used on server side
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
 		// the keys of the items this item affects (for ancillaries)
 		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
 
@@ -30,21 +25,9 @@ if( TIM )
 		// the fontsize of the note
 		fontsize : { type : 'number', json : true },
 
-		// the item is highlighted
-		// no json thus not saved or transmitted
-		highlight : { type : [ 'undefined', 'boolean' ] },
-
-		// node currently hovered upon
-		// no json thus not saved or transmitted
-		hover : { type : 'undefined' },
-
 		// the users mark
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the path of the item
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// scroll position
 		// no json thus not saved or transmitted
@@ -53,10 +36,6 @@ if( TIM )
 			type : [ 'undefined', '../gleam/point' ],
 			defaultValue : 'require( "../gleam/point" ).zero',
 		},
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
 		// the notes zone
 		zone : { type : '../gleam/rect', json : true },

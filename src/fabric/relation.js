@@ -14,10 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// access level of current user (rw or ro)
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
 		// the keys of the items this item affects (for ancillaries)
 		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
 
@@ -33,10 +29,6 @@ if( TIM )
 		// the item is highlighted
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
-
-		// node currently hovered upon
-		// no json thus not saved or transmitted
-		hover : { type : 'undefined' },
 
 		// item the relation goes from
 		item1key : { type : 'string', json : true },

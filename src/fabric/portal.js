@@ -14,16 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// rights the current user has for this space
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
 		// the keys of the items this item affects (for ancillaries)
 		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
-
-		// the item is highlighted
-		// no json thus not saved or transmitted
-		highlight : { type : [ 'undefined', 'boolean' ] },
 
 		// node currently hovered upon
 		// no json thus not saved or transmitted
@@ -33,19 +25,11 @@ if( TIM )
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the doc
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// owner of the space the portal goes to
 		spaceUser : { type : 'string', json : true },
 
 		// tag of the space the portal goes to
 		spaceTag : { type : 'string', json : true },
-
-		// current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
 		// the portals zone
 		zone : { type : '../gleam/rect', json : true }

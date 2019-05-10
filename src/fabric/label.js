@@ -31,21 +31,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		highlight : { type : [ 'undefined', 'boolean' ] },
 
-		// node currently hovered upon
-		// no json thus not saved or transmitted
-		hover : { type : 'undefined' },
-
 		// the users mark
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the path of the doc
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
 		// the items zone
 		zone : { type : '../gleam/rect', json : true },

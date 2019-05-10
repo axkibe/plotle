@@ -7,6 +7,8 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
 def.extend = './item';
 
 

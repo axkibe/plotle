@@ -14,18 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// rights the current user has for this space
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
-		// true if the item is highlighted
-		// no json thus not saved or transmitted
-		highlight : { type : [ 'undefined', 'boolean' ] },
-
-		// node currently hovered upon
-		// no json thus not saved or transmitted
-		hover : { type : [ 'undefined' ] },
-
 		// pos the stoke goes from (absolute point of reference)
 		j1 : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
 
@@ -47,14 +35,6 @@ if( TIM )
 		// the users mark
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// the path of the arrow
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 	};
 
 	def.json = 'stroke';
