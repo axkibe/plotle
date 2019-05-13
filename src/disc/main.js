@@ -14,41 +14,15 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// path of the disc
-		path : { type : 'tim.js/path' },
-
-		// shape of the disc
-		shape : { type : '../gleam/ellipse' },
-
 		// currently form/disc shown
 		show : { type : [ '< ../show/types' ] },
-
-		// designed size
-		size : { type : '../gleam/size' },
 
 		// reference to current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// currently logged in user
 		user : { type : [ 'undefined', '../user/creds' ] },
-
-		// current view size
-		viewSize : { type : '../gleam/size' }
 	};
-
-	def.twig =
-	[
-		'../widget/button',
-		'../widget/checkbox',
-		'../widget/input',
-		'../widget/label'
-	];
 }
 
 
@@ -60,8 +34,6 @@ const change_list = tim.require( '../change/list' );
 
 const change_shrink = tim.require( '../change/shrink' );
 
-const layout_disc = tim.require( '../layout/disc' );
-
 const result_hover = tim.require( '../result/hover' );
 
 const show_create = tim.require( '../show/create' );
@@ -71,9 +43,6 @@ const show_form = tim.require( '../show/form' );
 const show_normal = tim.require( '../show/normal' );
 
 const show_zoom = tim.require( '../show/zoom' );
-
-const widget_factory = tim.require( '../widget/factory' );
-
 
 
 /*
@@ -98,53 +67,6 @@ def.proto.concernsSpaceRef =
 def.static.concernsUser =
 def.proto.concernsUser =
 	( user ) => user;
-
-
-/*
-| Creates an actual disc from a layout.
-*/
-def.static.createFromLayout =
-	function(
-		layout,     // of type layout_disc
-		path,       // path of the widget
-		transform,  // visual transformation
-		show,       // currently show disc/form
-		viewSize    // viewSize
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 5 ) throw new Error( );
-/**/
-/**/	if( layout.timtype !== layout_disc ) throw new Error( );
-/**/}
-
-	const twig = { };
-
-	for( let key of layout.keys )
-	{
-		twig[ key ] =
-			widget_factory.createFromLayout(
-				layout.get( key ),
-				path.append( 'twig' ).append( key ),
-				transform
-			);
-	}
-
-	return(
-		disc_main.create(
-			'twig:init', twig, layout.keys,
-			'action', action_none.singleton,
-			'controlTransform', transform,
-			'facet', layout.facet,
-			'path', path,
-			'shape', layout.shape,
-			'show', show,
-			'size', layout.size,
-			'viewSize', viewSize
-		)
-	);
-};
 
 
 /*
@@ -396,41 +318,6 @@ def.proto.pushButton =
 
 
 /*
-| Start of a dragging operation.
-*/
-def.proto.dragStart =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this.tZone.within( p ) ) return;
-
-	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
-
-	// the dragging operation is on the panel
-	// but it denies it.
-	return false;
-};
-
-
-/*
-| Move during a dragging operation.
-*/
-def.proto.dragMove =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	return;
-};
-
-
-/*
 | Stop of a dragging operation.
 */
 def.proto.dragStop =
@@ -473,38 +360,5 @@ def.proto.pointingHover =
 };
 
 
-/*
-| The pointing device just went down.
-| Probes if the system ought to wait if it's
-| a click or can initiate a drag right away.
-*/
-def.proto.probeClickDrag =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	// shortcut if p is not near the panel
-	if( !this.tZone.within( p ) ) return;
-
-	if( !this.tShape.within( p.sub( this.tZone.pos ) ) ) return;
-
-	return 'atween';
-};
-
-
-/*
-| User is pressing a special key.
-*/
-def.proto.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	// nothing
-};
 
 } );
