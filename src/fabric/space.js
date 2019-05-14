@@ -7,14 +7,13 @@
 tim.define( module, ( def, fabric_space ) => {
 
 
+def.extend = './fiber';
+
+
 if( TIM )
 {
 	def.attributes =
 	{
-		// rights the current user has for this space
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
 		// current action
 		// no json thus not saved or transmitted
 		action : { type : [ 'undefined', '< ../action/types' ] },
@@ -33,21 +32,9 @@ if( TIM )
 		// no json thus not saved or transmitted
 		hasSnapping : { type : 'boolean', defaultValue : 'true', json: true },
 
-		// the path of the space
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// reference to this space
 		// no json thus not saved or transmitted
 		ref : { type : [ 'undefined', '../ref/space' ] },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the current transform of space
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
 		// current view size
 		// no json thus not saved or transmitted

@@ -7,6 +7,9 @@
 tim.define( module, ( def, fabric_doc ) => {
 
 
+def.extend = './fiber';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -27,14 +30,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		innerMargin : { type : [ 'undefined', '../gleam/margin' ] },
 
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the path of the doc
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// vertical seperation of paragraphs
 		// no json thus not saved or transmitted
 		paraSep : { type : [ 'undefined', 'number' ] },
@@ -42,10 +37,6 @@ if( TIM )
 		// scroll position of the doc
 		// no json thus not saved or transmitted
 		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 	};
 
 	def.json = 'doc';

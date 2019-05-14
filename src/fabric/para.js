@@ -7,6 +7,9 @@
 tim.define( module, ( def, fabric_para ) => {
 
 
+def.extend = './fiber';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -19,24 +22,12 @@ if( TIM )
 		// no json thus not saved or transmitted
 		fontsize : { type : [ 'undefined', 'number' ] },
 
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the path of the para
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// the paragraphs text
 		text : { type : 'string', json : true },
 
 		// point in north west
 		// no json thus not saved or transmitted
 		pos : { type : [ 'undefined', '../gleam/point' ] },
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] }
 	};
 
 	def.json = 'para';
@@ -459,17 +450,6 @@ def.lazy.isBlank =
 	function( )
 {
 	return /^\s*$/.test( this.text );
-};
-
-
-/*
-| Shortcut to the para's key.
-| It is the last path entry.
-*/
-def.lazy.key =
-	function( )
-{
-	return this.path.get( -1 );
 };
 
 

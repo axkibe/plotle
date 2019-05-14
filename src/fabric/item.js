@@ -13,14 +13,13 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
+def.extend = './fiber';
+
+
 if( TIM )
 {
 	def.attributes =
 	{
-		// rights the current user has for this space
-		// no json thus not saved or transmitted
-		access : { type : [ 'undefined', 'string' ] },
-
 		// the keys of the items this item affects (for ancillaries)
 		affects : { type : [ 'undefined', 'tim.js/stringSet' ] },
 
@@ -32,18 +31,6 @@ if( TIM )
 		// defaults to not accepting hovers
 		// no json thus not saved or transmitted
 		hover : { type : 'undefined' },
-
-		// the users mark
-		// no json thus not saved or transmitted
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// the path of the item
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the current space transform
-		// no json thus not saved or transmitted
-		transform : { type : [ 'undefined', '../gleam/transform' ] },
 	};
 }
 
@@ -179,12 +166,6 @@ def.proto.dragStart =
 
 	return true;
 };
-
-
-/*
-| The key of this item.
-*/
-def.lazy.key = function( ) { return this.path.get( -1 ); };
 
 
 /*
