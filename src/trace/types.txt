@@ -1,0 +1,5 @@
+# All trace types
+./doc
+./item
+./offset
+./para

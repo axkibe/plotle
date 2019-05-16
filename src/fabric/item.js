@@ -221,8 +221,6 @@ def.proto._ctrlClick =
 
 	if( !mark )
 	{
-		console.log( 'X1' );
-
 		root.alter( 'mark', mark_items.createWithOne( this.path ) );
 
 		return true;
@@ -238,8 +236,6 @@ def.proto._ctrlClick =
 
 		case mark_caret :
 		case mark_range :
-
-			console.log( 'X3' );
 
 			root.alter(
 				'mark',

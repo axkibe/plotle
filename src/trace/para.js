@@ -1,5 +1,5 @@
 /*
-| A trace into a text.
+| A trace into a paragraph from a doc.
 */
 'use strict';
 
@@ -14,8 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// offset of the trace
-		at : { type : 'integer' },
+		// key of the paragraph
+		key : { type : 'string' },
 	};
 }
 
