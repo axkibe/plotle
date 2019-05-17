@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 const server_resource = tim.require( './resource' );
 
 const server_resourceList = tim.require( './resourceList' );

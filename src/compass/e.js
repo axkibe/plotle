@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.singleton = true;
+
+
 const compass_root = tim.require( './root' );
 
 const result_hover = tim.require( '../result/hover' );

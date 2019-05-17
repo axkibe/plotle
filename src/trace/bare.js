@@ -25,18 +25,15 @@ const trace_offset = tim.require( './offset' );
 
 const trace_para = tim.require( './para' );
 
+const trace_space = tim.require( './space' );
+
 
 /*
 | Returns a trace with a doc part appended.
 */
-def.proto.appendDoc =
+def.lazy.appendDoc =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 0 ) throw new Error( );
-/**/}
-
 	return trace_doc.create( 'list:init', this, 'list:append', this );
 };
 
@@ -44,32 +41,22 @@ def.proto.appendDoc =
 /*
 | Returns a trace with an item part appended.
 */
-def.proto.appendItem =
+def.lazyFuncStr.appendItem =
 	function(
-		key
+		key // key of the item
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
 	return trace_item.create( 'list:init', this, 'list:append', this, 'key', key );
 };
 
 /*
 | Returns a trace with an offset appended.
 */
-def.proto.appendOffset =
+def.lazyFuncInt.appendOffset =
 	function(
-		at
+		at // offset
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
 	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
 };
 
@@ -77,17 +64,22 @@ def.proto.appendOffset =
 /*
 | Returns a trace with a para appended.
 */
-def.proto.appendPara =
+def.lazyFuncStr.appendPara =
 	function(
-		key
+		key // key of the para
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/}
-
 	return trace_para.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| Returns a trace with a space appended.
+*/
+def.lazy.appendSpace =
+	function( )
+{
+	return trace_space.create( 'list:init', this, 'list:append', this );
 };
 
 

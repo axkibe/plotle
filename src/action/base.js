@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 const change_list = tim.require( '../change/list' );
 
 

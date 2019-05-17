@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 /*
 | cache control mappings for max age
 */

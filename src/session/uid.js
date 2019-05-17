@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 const mime = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 

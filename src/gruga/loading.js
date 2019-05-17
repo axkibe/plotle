@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 const gleam_point = tim.require( '../gleam/point' );
 
 const gruga_font = tim.require( './font' );

@@ -687,6 +687,11 @@ def.proto.showDisc = true;
 */
 def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'space' );
 
+/*
+| Trace of the space.
+*/
+//def.staticLazy.spaceTrace = ( ) => tim_path.empty.append( 'space' );
+
 
 /*
 | User pressed a special key.

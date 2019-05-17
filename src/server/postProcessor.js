@@ -7,12 +7,16 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
 const config = tim.require( '../config/intf' );
 
 const hash_sha1 = tim.require( '../hash/sha1' );
 
 const stringList = tim.require( 'tim.js/stringList' );
 
+
+// FIXME this isn't so nice
 let opentypeHash;
 let opentypeMinHash;
 

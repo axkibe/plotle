@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 /*
 |'magic' number to approximate ellipses with beziers.
 */

@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.singleton = true;
+
+
 if( TIM )
 {
 	// this hasn't any attributes, a json with the type 'reply_register'

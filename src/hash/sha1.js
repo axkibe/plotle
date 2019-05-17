@@ -23,6 +23,9 @@ authors: [Christopher Pitt, Enrique Erne]
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 const toUTF8 =
 	function(
 		str

@@ -160,7 +160,7 @@ const serveAlter =
 		}
 	);
 
-	return reply_alter.create( );
+	return reply_alter.singleton;
 };
 
 
@@ -258,7 +258,7 @@ const serveRegister =
 
 	if( !sUser ) return replyError( 'Username already taken' );
 
-	return reply_register.create( );
+	return reply_register.singleton;
 };
 
 

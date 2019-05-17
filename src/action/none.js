@@ -7,15 +7,14 @@
 tim.define( module, ( def, action_none ) => {
 
 
+def.singleton = true;
+
+
+// FIXME remove
 def.create = [ '_create' ];
 
+
 def.extend = './base';
-
-
-/*
-| Short access to singleton.
-*/
-def.staticLazy.singleton = ( ) => action_none._create( );
 
 
 /*

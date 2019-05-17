@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-def.attributes = { };
+def.singleton = true;
 
 
 } );

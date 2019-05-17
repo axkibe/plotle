@@ -1266,7 +1266,7 @@ def.proto.onAcquireSpace =
 		'access', access,
 		'show',
 			( show.timtype === show_form && show.formName === 'loading' )
-			? show_normal.create( )
+			? show_normal.singleton
 			: pass,
 		'space', reply.space.create( 'action', action_none.singleton ),
 		'spaceRef', request.spaceRef,
@@ -1628,7 +1628,7 @@ def.proto.showHome =
 {
 	root.alter(
 		'action', action_none.singleton,
-		'show', root._actionSpace ? show_normal.create( ) : show_form.loading
+		'show', root._actionSpace ? show_normal.singleton : show_form.loading
 	);
 };
 

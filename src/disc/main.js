@@ -285,14 +285,14 @@ def.proto.pushButton =
 
 			root.alter(
 				'action', action_select.create( ),
-				'show', show_normal.create( )
+				'show', show_normal.singleton
 			);
 
 			break;
 
 		case 'create' :
 
-			root.alter( 'action', action_none.singleton, 'show', show_create.create( ) );
+			root.alter( 'action', action_none.singleton, 'show', show_create.singleton );
 
 			break;
 
@@ -308,7 +308,7 @@ def.proto.pushButton =
 
 		case 'zoom' :
 
-			root.alter( 'show', show_zoom.create( ) );
+			root.alter( 'show', show_zoom.singleton );
 
 			break;
 

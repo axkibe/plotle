@@ -7,76 +7,79 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 /*
 | Coding mappings for file types.
 */
 const codings =
-	{
-		// cascading style sheet
-		'css' : 'utf-8',
+{
+	// cascading style sheet
+	'css' : 'utf-8',
 
-		// some font
-		'eot' : 'binary',
+	// some font
+	'eot' : 'binary',
 
-		// hypertext
-		'html' : 'utf-8',
+	// hypertext
+	'html' : 'utf-8',
 
-		// map
-		'map' : 'utf-8',
+	// map
+	'map' : 'utf-8',
 
-		// icon
-		'ico' : 'binary',
+	// icon
+	'ico' : 'binary',
 
-		// javascript
-		'js' : 'utf-8',
+	// javascript
+	'js' : 'utf-8',
 
-		// some font
-		'otf' : 'binary',
+	// some font
+	'otf' : 'binary',
 
-		// some font
-		'svg' : 'utf-8',
+	// some font
+	'svg' : 'utf-8',
 
-		// some font
-		'ttf' : 'binary',
+	// some font
+	'ttf' : 'binary',
 
-		// some font
-		'woff' : 'binary'
-	};
+	// some font
+	'woff' : 'binary'
+};
 
 /*
 | mime mappings for file types
 */
 const mimes =
-	{
-		// cascading style sheet
-		'css' : 'text/css',
+{
+	// cascading style sheet
+	'css' : 'text/css',
 
-		// some font
-		'eot' : 'font/eot',
+	// some font
+	'eot' : 'font/eot',
 
-		// hypertext
-		'html' : 'text/html',
+	// hypertext
+	'html' : 'text/html',
 
-		// icon
-		'ico' : 'image/x-icon',
+	// icon
+	'ico' : 'image/x-icon',
 
-		// map
-		'map' : 'application/json',
+	// map
+	'map' : 'application/json',
 
-		// javascript
-		'js' : 'text/javascript',
+	// javascript
+	'js' : 'text/javascript',
 
-		// some font
-		'otf' : 'font/otf',
+	// some font
+	'otf' : 'font/otf',
 
-		// some font
-		'svg' : 'image/svg+xml',
+	// some font
+	'svg' : 'image/svg+xml',
 
-		// some font
-		'ttf'  : 'font/ttf',
+	// some font
+	'ttf'  : 'font/ttf',
 
-		// some font
-		'woff' : 'application/font-woff'
+	// some font
+	'woff' : 'application/font-woff'
 };
 
 

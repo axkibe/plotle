@@ -548,10 +548,10 @@ def.proto.pointingHover =
 	else if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
 	else if( !this.proportional )
 	{
-		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCurosr;
+		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
 		if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
 		if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
-		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCurosr;
+		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
 	}
 
 	return result_hover.cursorGrab;

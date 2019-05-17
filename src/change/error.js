@@ -11,6 +11,9 @@
 tim.define( module, ( def ) => {
 
 
+def.abstract = true;
+
+
 def.static.make =
 	function(
 		message

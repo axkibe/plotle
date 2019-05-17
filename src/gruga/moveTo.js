@@ -7,6 +7,9 @@
 tim.define( module, ( def, gruga_moveTo ) => {
 
 
+def.abstract = true;
+
+
 const gleam_border = tim.require( '../gleam/border' );
 
 const gleam_color = tim.require( '../gleam/color' );

@@ -7,6 +7,9 @@
 tim.define( module, ( def, self ) => {
 
 
+def.singleton = true;
+
+
 if( TIM )
 {
 	def.attributes = { };
