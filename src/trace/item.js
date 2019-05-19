@@ -17,7 +17,23 @@ if( TIM )
 		// key of the paragraph
 		key : { type : 'string' },
 	};
+
+	// path of trace back.
+	def.list = [ './root', './space' ];
 }
+
+
+const trace_doc = tim.require( './doc' );
+
+
+/*
+| Returns a trace with a doc part appended.
+*/
+def.lazy.appendDoc =
+	function( )
+{
+	return trace_doc.create( 'list:init', this, 'list:append', this );
+};
 
 
 } );

@@ -31,6 +31,10 @@ if( TIM )
 		// defaults to not accepting hovers
 		// no json thus not saved or transmitted
 		hover : { type : 'undefined' },
+
+		// the trace of the space
+		// no json thus not saved or transmitted
+		trace : { type : [ 'undefined', '../trace/item' ] },
 	};
 }
 

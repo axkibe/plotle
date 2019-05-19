@@ -17,6 +17,9 @@ if( TIM )
 		// offset of the trace
 		at : { type : 'integer' },
 	};
+
+	// path of trace back.
+	def.list = [ './root', './space', './item', './doc', './para' ];
 }
 
 

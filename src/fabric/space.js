@@ -85,6 +85,8 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const visual_frame = tim.require( '../visual/frame' );
 
 const visual_grid = tim.require( '../visual/grid' );
@@ -256,6 +258,12 @@ def.static.concernsMark =
 
 
 /*
+| Returns the mark if the space concerns about a mark.
+*/
+def.static.concernsTMark = ( mark ) => mark && mark.hasSpace ? mark : undefined;
+
+
+/*
 | Starts an operation with the pointing device held down.
 */
 def.proto.dragStart =
@@ -351,8 +359,10 @@ def.adjust.get =
 
 	const path = fabric_space.spacePath.append( 'twig' ).append( key );
 
-	// this is all thats needed for serverside
-	if( NODE ) return item.create( 'path', path );
+	const trace = fabric_space.spaceTrace.appendItem( key );
+
+	// this is all that's needed for server side
+	if( NODE ) return item.create( 'path', path, 'trace', trace );
 
 	const mark = fabric_item.concernsMark( this.mark, path );
 
@@ -373,6 +383,7 @@ def.adjust.get =
 				'hover', hover,
 				'mark', mark,
 				'path', path,
+				'trace', trace,
 				// FIXME why not just defaultValue?
 				'scrollPos', item.scrollPos || gleam_point.zero,
 				'transform', this.transform
@@ -387,6 +398,7 @@ def.adjust.get =
 				'hover', hover,
 				'mark', mark,
 				'path', path,
+				'trace', trace,
 				'transform', this.transform
 			);
 	}
@@ -687,10 +699,11 @@ def.proto.showDisc = true;
 */
 def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'space' );
 
+
 /*
 | Trace of the space.
 */
-//def.staticLazy.spaceTrace = ( ) => tim_path.empty.append( 'space' );
+def.staticLazy.spaceTrace = ( ) => trace_root.singleton.appendSpace;
 
 
 /*
@@ -758,6 +771,11 @@ def.proto.specialKey =
 | The path for transientItems
 */
 def.staticLazy.transPath = ( ) => fabric_space.spacePath.append( ':transient' );
+
+/*
+| The trace for transientItems
+*/
+def.staticLazy.transTrace = ( ) => fabric_space.spaceTrace.appendItem( ':transient' );
 
 
 /*

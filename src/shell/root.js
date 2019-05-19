@@ -220,6 +220,8 @@ const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const user_creds = tim.require( '../user/creds' );
 
 const mark_caret = tim.require( '../mark/caret' );
@@ -1268,7 +1270,11 @@ def.proto.onAcquireSpace =
 			( show.timtype === show_form && show.formName === 'loading' )
 			? show_normal.singleton
 			: pass,
-		'space', reply.space.create( 'action', action_none.singleton ),
+		'space',
+			reply.space.create(
+				'action', action_none.singleton,
+				'trace', trace_root.singleton.appendSpace
+			),
 		'spaceRef', request.spaceRef,
 		'_mark', undefined
 	);

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, trace_offset ) => {
+tim.define( module, ( def, trace_para ) => {
 
 
 def.extend = './bare';
@@ -17,7 +17,26 @@ if( TIM )
 		// key of the paragraph
 		key : { type : 'string' },
 	};
+
+
+	// path of trace back.
+	def.list = [ './root', './space', './item', './doc' ];
 }
+
+
+const trace_offset = tim.require( './offset' );
+
+
+/*
+| Returns a trace with an offset appended.
+*/
+def.lazyFuncInt.appendOffset =
+	function(
+		at // offset
+	)
+{
+	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
+};
 
 
 } );

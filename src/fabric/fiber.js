@@ -29,10 +29,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		path : { type : [ 'undefined', 'tim.js/path' ] },
 
-		// the trace of the fiber
-		// no json thus not saved or transmitted
-		trace : { type : [ 'undefined', '< ../trace/types' ] },
-
 		// the current space transform
 		// no json thus not saved or transmitted
 		transform : { type : [ 'undefined', '../gleam/transform' ] },

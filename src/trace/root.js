@@ -6,15 +6,7 @@
 tim.define( module, ( def, trace_root ) => {
 
 
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	// roots need to not have parents
-/**/	if( this.length !== 0 ) throw new Error( );
-/**/}
-};
+def.singleton = true;
 
 
 const trace_space = tim.require( './space' );
@@ -26,7 +18,7 @@ const trace_space = tim.require( './space' );
 def.lazy.appendSpace =
 	function( )
 {
-	return trace_space.create( 'list:init', this, 'list:append', this );
+	return trace_space.create( 'list:append', this );
 };
 
 

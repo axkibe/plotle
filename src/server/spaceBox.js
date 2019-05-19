@@ -61,11 +61,7 @@ def.static.loadSpace =
 		( await changesDB.find( { }, { sort : '_id' } ) )
 		.batchSize( 100 );
 
-	for(
-		let o = await cursor.nextObject( );
-		o;
-		o = await cursor.nextObject( )
-	)
+	for( let o = await cursor.nextObject( ); o; o = await cursor.nextObject( ) )
 	{
 		const changeSkid = database_changeSkid.createFromJSON( o );
 
