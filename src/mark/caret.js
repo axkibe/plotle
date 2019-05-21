@@ -18,7 +18,12 @@ if( TIM )
 		retainx : { type : [ 'undefined', 'number' ] },
 
 		// the mark into a text (path/at)
+		// FIXME remove
 		pat : { type : './pat' },
+
+		// the trace of the caret
+		// FIXME remove undefined
+		offset : { type : [ 'undefined', '../trace/offset' ] },
 	};
 }
 
@@ -107,7 +112,7 @@ def.lazy.widgetPath =
 {
 	const path = this.pat.path;
 
-	if( path.length < 5 || path.get( 0 ) !== 'form' ) return;
+	if( path.length < 5 || path.get( 0 ) !== 'forms' ) return;
 
 	return path.limit( 5 );
 };

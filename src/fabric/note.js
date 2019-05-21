@@ -76,11 +76,13 @@ const gleam_transform = tim.require( '../gleam/transform' );
 
 const gruga_note = tim.require( '../gruga/note' );
 
+const mark_pat = tim.require( '../mark/pat' );
+
 const session_uid = tim.require( '../session/uid' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const shell_settings = tim.require( '../shell/settings' );
+
+const tim_path = tim.require( 'tim.js/path' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
@@ -115,6 +117,8 @@ def.static.createGeneric =
 		path.prepend( 'space' )
 		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
 
+	const offset = this.trace.appendDoc.appendPara( '1' ).appendOffset( 0 );
+
 	root.alter(
 		'change',
 			change_grow.create(
@@ -122,7 +126,11 @@ def.static.createGeneric =
 				'path', path,
 				'rank', 0
 			),
-		'mark', mark_caret.createPathAt( mpath, 0 )
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mpath, 0 ),
+				'offset', offset
+			)
 	);
 };
 
@@ -137,6 +145,8 @@ def.adjust.doc =
 {
 	const path = this.path && this.path.append( 'doc' );
 
+	const trace = this.trace && this.trace.appendDoc;
+
 	const zone = this.zone;
 
 	return(
@@ -149,6 +159,7 @@ def.adjust.doc =
 			'paraSep', this.fontsize / 2,
 			'path', path,
 			'scrollPos', this.scrollPos,
+			'trace', trace,
 			'transform', this.transform
 		)
 	);

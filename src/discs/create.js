@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, disc_create ) => {
+tim.define( module, ( def, discs_create ) => {
 
 
 def.extend = './disc';
@@ -72,7 +72,7 @@ def.proto._isActiveButton =
 		case action_createGeneric :
 		case action_createStroke :
 
-			return wname === disc_create.itemTypeToButtonName[ action.itemType ] || false;
+			return wname === discs_create.itemTypeToButtonName[ action.itemType ] || false;
 
 		case action_createRelation : return wname === 'createRelation';
 

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, disc_root ) => {
+tim.define( module, ( def, discs_root ) => {
 
 
 if( TIM )
@@ -42,7 +42,7 @@ if( TIM )
 		viewSize : { type : '../gleam/size' },
 	};
 
-	// FUTURE make a group instead of a twig
+	// FIXME make it a group
 	def.twig =
 	[
 		'./main',
@@ -52,7 +52,7 @@ if( TIM )
 }
 
 
-const disc_disc = tim.require( './disc' );
+const discs_disc = tim.require( './disc' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -71,7 +71,7 @@ def.static.concernsHover =
 {
 	// FUTURE beautify
 	return(
-		hover && hover.get( 0 ) === 'disc'
+		hover && hover.get( 0 ) === 'discs'
 		? hover
 		: undefined
 	);
@@ -104,7 +104,7 @@ def.adjust.get =
 {
 	const ct = this.controlTransform;
 
-	const hover = disc_disc.concernsHover( this.hover, disc.path );
+	const hover = discs_disc.concernsHover( this.hover, disc.path );
 
 	const show = disc.concernsShow( this.show );
 

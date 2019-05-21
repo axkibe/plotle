@@ -13,48 +13,9 @@ tim.define( module, ( def ) => {
 def.extend = './form';
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action : { type : [ '< ../action/types' ] },
-
-		// space has grid
-		hasGrid : { type : 'undefined' },
-
-		// space has snapping
-		hasSnapping : { type : 'undefined' },
-
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the reference to the current space
-		spaceRef : { type : 'undefined' },
-
-		// currently logged in user
-		user : { type : 'undefined' },
-
-		// list of spaces belonging to user
-		userSpaceList : { type : 'undefined' },
-
-		// current view size
-		viewSize : { type : '../gleam/size' },
-	};
-
-	def.twig = [ '< ../widget/types' ];
-}
-
-
 const action_none = tim.require( '../action/none' );
 
-const form_form = tim.require( '../form/form' );
+const forms_form = tim.require( './form' );
 
 const ref_space = tim.require( '../ref/space' );
 
@@ -249,7 +210,7 @@ def.proto.specialKey =
 		}
 	}
 
-	return form_form.specialKey.call( this, key, shift, ctrl );
+	return forms_form.specialKey.call( this, key, shift, ctrl );
 };
 
 

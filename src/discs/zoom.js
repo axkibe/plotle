@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, disc_zoom ) => {
+tim.define( module, ( def, discs_zoom ) => {
 
 
 def.extend = './disc';
@@ -32,7 +32,7 @@ def.adjust.get =
 		widget.create(
 			'path', path,
 			'hover', hover,
-			'down', disc_zoom._isActiveButton( this.action, name ),
+			'down', discs_zoom._isActiveButton( this.action, name ),
 			'transform', this.controlTransform
 		)
 	);

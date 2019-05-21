@@ -1078,10 +1078,12 @@ def.proto._setMark =
 	// FIXME make a lazyFuncInt for mark_pat.
 	const pat = mark_pat.createPathAt( this.textPath, at );
 
+	const offset = this.trace.appendOffset( at );
+
 	root.alter(
 		'mark',
 			!begin
-			? mark_caret.create( 'pat', pat, 'retainx', retainx )
+			? mark_caret.create( 'offset', offset, 'pat', pat, 'retainx', retainx )
 			: mark_range.create(
 				'doc', doc,
 				'begin', begin,

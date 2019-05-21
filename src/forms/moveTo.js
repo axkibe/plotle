@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, form_moveTo ) => {
+tim.define( module, ( def, forms_moveTo ) => {
 
 
 /*
@@ -17,42 +17,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// current action
-		action : { type : [ '< ../action/types' ] },
-
-		// space has grid
-		hasGrid : { type : 'undefined' },
-
-		// space has snapping
-		hasSnapping : { type : 'undefined' },
-
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the reference to the current space
-		spaceRef : { type : 'undefined' },
-
-		// currently logged in user
-		user : { type : 'undefined' },
-
 		// list of spaces belonging to user
 		userSpaceList : { type : [ 'undefined', '../ref/spaceList' ] },
-
-		// current view size
-		viewSize : { type : '../gleam/size' }
 	};
-
-	def.twig = [ '< ../widget/types' ];
 }
 
 
-const form_form = tim.require( './form' );
+const forms_form = tim.require( './form' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
@@ -95,7 +66,7 @@ def.adjust.get =
 		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
 	}
 
-	return form_form.adjustGet.call( this, name, widget );
+	return forms_form.adjustGet.call( this, name, widget );
 };
 
 
@@ -165,7 +136,7 @@ def.lazy._cols =
 */
 def.lazy._leftDistance = ( ) =>
 	// == left distance to disc
-	root.disc.get( 'main' ).size.width + 20;
+	root.discs.get( 'main' ).size.width + 20;
 
 
 /*
@@ -310,7 +281,7 @@ def.proto._transformScrollbox =
 	return(
 		sb.create(
 			'path', sbPath,
-			'scrollbarYOffset', form_moveTo.scrollbarYOffset,
+			'scrollbarYOffset', forms_moveTo.scrollbarYOffset,
 			'scrollPos', widget_scrollbox.prepareScrollPos( sb.scrollPos, sb.innerSize, zone ),
 			'twig:init', sbTwig, sbRanks,
 			'zone', zone

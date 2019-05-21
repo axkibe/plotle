@@ -32,7 +32,7 @@ if( TIM )
 		// no json thus not saved or transmitted
 		hover : { type : 'undefined' },
 
-		// the trace of the space
+		// the trace of the item
 		// no json thus not saved or transmitted
 		trace : { type : [ 'undefined', '../trace/item' ] },
 	};

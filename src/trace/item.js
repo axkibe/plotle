@@ -25,6 +25,8 @@ if( TIM )
 
 const trace_doc = tim.require( './doc' );
 
+const trace_field = tim.require( './field' );
+
 
 /*
 | Returns a trace with a doc part appended.
@@ -33,6 +35,18 @@ def.lazy.appendDoc =
 	function( )
 {
 	return trace_doc.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Returns a trace with a field part appended.
+*/
+def.lazy.appendField =
+	function(
+		key
+	)
+{
+	return trace_field.create( 'list:init', this, 'list:append', this, 'key', key );
 };
 
 

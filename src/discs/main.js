@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, disc_main ) => {
+tim.define( module, ( def, discs_main ) => {
 
 
 def.extend = './disc';

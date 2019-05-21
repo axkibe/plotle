@@ -4,10 +4,55 @@
 'use strict';
 
 
-tim.define( module, ( def, form_form ) => {
+tim.define( module, ( def, forms_form ) => {
 
 
 def.abstract = true;
+
+
+if( TIM )
+{
+	def.attributes =
+	{
+		// current action
+		action : { type : [ '< ../action/types' ] },
+
+		// space has grid
+		// FIXME rename spaceHasGrid
+		hasGrid : { type : 'undefined' },
+
+		// space has snapping
+		// FIXME rename spaceHasSnapping
+		hasSnapping : { type : 'undefined' },
+
+		// the widget hovered upon
+		hover : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the users mark
+		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
+
+		// the path of the form
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// the reference to the current space
+		spaceRef : { type : 'undefined' },
+
+		// trace of the form
+		// FIXME remove undefined
+		trace : { type : [ 'undefined', '../trace/form' ] },
+
+		// currently logged in user
+		user : { type : 'undefined' },
+
+		// list of spaces belonging to user
+		userSpaceList : { type : 'undefined' },
+
+		// current view size
+		viewSize : { type : '../gleam/size' },
+	};
+
+	def.twig = [ '< ../widget/types' ];
+}
 
 
 const action_none = tim.require( '../action/none' );

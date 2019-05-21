@@ -17,44 +17,21 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// current action
-		action : { type : [ '< ../action/types' ] },
-
 		// space has grid
 		hasGrid : { type : [ 'undefined', 'boolean' ] },
 
 		// space has snapping
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
-
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// the reference of current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
-
-		// currently logged in user
-		user : { type : 'undefined' },
-
-		// list of spaces belonging to user
-		userSpaceList : { type : 'undefined' },
-
-		// current view size
-		viewSize : { type : '../gleam/size' },
 	};
-
-	def.twig = [ '< ../widget/types' ];
 }
 
 
 const change_set = tim.require( '../change/set' );
 
-const form_form = tim.require( './form' );
+const forms_form = tim.require( './form' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
@@ -101,7 +78,7 @@ def.adjust.get =
 		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
 
-	return form_form.adjustGet.call( this, name, widget );
+	return forms_form.adjustGet.call( this, name, widget );
 };
 
 
@@ -149,7 +126,7 @@ def.proto.toggleCheckbox =
 /**/{
 /**/	if(
 /**/		path.length < 5
-/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 0 ) !== 'forms'
 /**/		|| path.get( 1 ) !== 'twig'
 /**/		|| path.get( 2 ) !== 'space'
 /**/		|| path.get( 3 ) !== 'twig'

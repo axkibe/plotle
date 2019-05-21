@@ -1,5 +1,6 @@
 FIXME: instead of tim.aheadValue make the attributes setable
 FIXME: after signup the new own homespace is not in the 'go' spaces list
+FIXME: disable showgrid/snapgrid if no access
 
 FIXME: on welcome page after signup greet user by name
 

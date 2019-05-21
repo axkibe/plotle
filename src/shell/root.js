@@ -20,7 +20,7 @@ if( TIM )
 		action : { type : [ '< ../action/types' ] },
 
 		// the discs
-		disc : { type : '../disc/root' },
+		discs : { type : '../discs/root' },
 
 		// the un/re/do tracker
 		doTracker : { type : './doTracker' },
@@ -29,7 +29,7 @@ if( TIM )
 		fallbackSpaceRef : { type : [ 'undefined', '../ref/space' ] },
 
 		// the forms
-		form : { type : '../form/root' },
+		forms : { type : '../forms/root' },
 
 		// current hovered item
 		hover : { type : [ 'undefined', 'tim.js/path' ] },
@@ -114,13 +114,13 @@ const change_remove = tim.require( '../change/remove' );
 
 const change_wrap = tim.require( '../change/wrap' );
 
-const disc_root = tim.require( '../disc/root' );
+const discs_root = tim.require( '../discs/root' );
 
-const disc_create = tim.require( '../disc/create' );
+const discs_create = tim.require( '../discs/create' );
 
-const disc_main = tim.require( '../disc/main' );
+const discs_main = tim.require( '../discs/main' );
 
-const disc_zoom = tim.require( '../disc/zoom' );
+const discs_zoom = tim.require( '../discs/zoom' );
 
 const fabric_doc = tim.require( '../fabric/doc' );
 
@@ -130,25 +130,25 @@ const fabric_relation = tim.require( '../fabric/relation' );
 
 const fabric_space = tim.require( '../fabric/space' );
 
-const form_loading = tim.require( '../form/loading' );
+const forms_loading = tim.require( '../forms/loading' );
 
-const form_login = tim.require( '../form/login' );
+const forms_login = tim.require( '../forms/login' );
 
-const form_moveTo = tim.require( '../form/moveTo' );
+const forms_moveTo = tim.require( '../forms/moveTo' );
 
-const form_noAccessToSpace = tim.require( '../form/noAccessToSpace' );
+const forms_noAccessToSpace = tim.require( '../forms/noAccessToSpace' );
 
-const form_nonExistingSpace = tim.require( '../form/nonExistingSpace' );
+const forms_nonExistingSpace = tim.require( '../forms/nonExistingSpace' );
 
-const form_root = tim.require( '../form/root' );
+const forms_root = tim.require( '../forms/root' );
 
-const form_signUp = tim.require( '../form/signUp' );
+const forms_signUp = tim.require( '../forms/signUp' );
 
-const form_space = tim.require( '../form/space' );
+const forms_space = tim.require( '../forms/space' );
 
-const form_user = tim.require( '../form/user' );
+const forms_user = tim.require( '../forms/user' );
 
-const form_welcome = tim.require( '../form/welcome' );
+const forms_welcome = tim.require( '../forms/welcome' );
 
 const gleam_display_canvas = tim.require( '../gleam/display/canvas' );
 
@@ -164,13 +164,15 @@ const gleam_transform = tim.require( '../gleam/transform' );
 
 const gruga_controls = tim.require( '../gruga/controls' );
 
-const gruga_disc_create = tim.require( '../gruga/disc/create' );
+const gruga_discs_create = tim.require( '../gruga/discs/create' );
+
+const gruga_discs_main = tim.require( '../gruga/discs/main' );
+
+const gruga_discs_zoom = tim.require( '../gruga/discs/zoom' );
 
 const gruga_loading = tim.require( '../gruga/loading' );
 
 const gruga_login = tim.require( '../gruga/login' );
-
-const gruga_disc_main = tim.require( '../gruga/disc/main' );
 
 const gruga_moveTo = tim.require( '../gruga/moveTo' );
 
@@ -187,8 +189,6 @@ const gruga_space = tim.require( '../gruga/space' );
 const gruga_user = tim.require( '../gruga/user' );
 
 const gruga_welcome = tim.require( '../gruga/welcome' );
-
-const gruga_disc_zoom = tim.require( '../gruga/disc/zoom' );
 
 const math = tim.require( '../math/root' );
 
@@ -219,8 +219,6 @@ const show_normal = tim.require( '../show/normal' );
 const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
-
-const trace_root = tim.require( '../trace/root' );
 
 const user_creds = tim.require( '../user/creds' );
 
@@ -376,8 +374,8 @@ def.static.startup =
 		'show', show,
 		'spaceTransform', gleam_transform.normal,
 		'viewSize', display.size,
-		'disc', shell_root._createDiscRoot( viewSize, show ),
-		'form', shell_root._createFormRoot( viewSize ),
+		'discs', shell_root._createDiscsRoot( viewSize, show ),
+		'forms', shell_root._createFormsRoot( viewSize ),
 		'_animation', animation_root.create( ),
 		'_display', display,
 		'_systemFocus', true
@@ -407,9 +405,9 @@ def.proto._check =
 /*
 | Adjusts the disc.
 */
-def.adjust.disc =
+def.adjust.discs =
 	function(
-		disc
+		discs
 	)
 {
 	const zoom = Math.min( this.viewSize.height / gruga_controls.designSize.height, 1 );
@@ -421,7 +419,7 @@ def.adjust.disc =
 		);
 
 	return(
-		disc.create(
+		discs.create(
 			'access', this.access,
 			'action', this.action,
 			'controlTransform', ctransform,
@@ -453,7 +451,7 @@ def.lazy.draw =
 
 	const a = [ screen.glint ];
 
-	if( screen.showDisc ) a[ 1 ] = root.disc.glint;
+	if( screen.showDisc ) a[ 1 ] = root.discs.glint;
 
 	display = display.create( 'glint', gleam_glint_list.create( 'list:init', a ) );
 
@@ -480,18 +478,18 @@ def.inherit.draw =
 /*
 | Adjusts the form root.
 */
-def.adjust.form =
+def.adjust.forms =
 	function(
-		form
+		forms
 	)
 {
 	return(
-		form.create(
+		forms.create(
 			'action', this.action,
 			'hasGrid', this.space && this.space.hasGrid,
 			'hasSnapping', this.space && this.space.hasSnapping,
-			'hover', form_root.concernsHover( this.hover ),
-			'mark', form_root.concernsMark( this._mark ),
+			'hover', forms_root.concernsHover( this.hover ),
+			'mark', forms_root.concernsMark( this._mark ),
 			'spaceRef', this.spaceRef,
 			'user', this.userCreds,
 			'userSpaceList', this.userSpaceList,
@@ -558,7 +556,7 @@ def.proto.alter =
 
 	let doTracker = pass;
 
-	let form = pass;
+	let forms = pass;
 
 	let hover = pass;
 
@@ -596,7 +594,7 @@ def.proto.alter =
 
 			case 'doTracker' : doTracker = arg; continue;
 
-			case 'form' : form = arg; continue;
+			case 'forms' : forms = arg; continue;
 
 			case 'hover' : hover = arg; continue;
 
@@ -625,16 +623,16 @@ def.proto.alter =
 
 				switch( base )
 				{
-					case 'form' :
+					case 'forms' :
 
 						if( CHECK )
 /**/					{
 /**/						if( command.get( 1 ) !== 'twig' ) throw new Error( );
 /**/					}
 
-						if( form === pass ) form = this.form;
+						if( forms === pass ) forms = this.forms;
 
-						form = form.setPath( command.chop, arg );
+						forms = forms.setPath( command.chop, arg );
 
 						break;
 
@@ -749,7 +747,7 @@ def.proto.alter =
 	root._create(
 		'action', action,
 		'doTracker', doTracker,
-		'form', form,
+		'forms', forms,
 		'hover', hover,
 		'link', link,
 		'show', show,
@@ -887,7 +885,7 @@ def.proto.changeSpaceTransformAll =
 
 	const wx = allItemsZone.pse.x;
 
-	const discWidth = root.disc.get( 'main' ).tZone.width;
+	const discWidth = root.discs.get( 'main' ).tZone.width;
 
 	const vsx = root.viewSize.width - discWidth;
 
@@ -957,7 +955,7 @@ def.proto.click =
 {
 	const screen = root._currentScreen;
 
-	const bubble = root.disc.click( p, shift, ctrl );
+	const bubble = root.discs.click( p, shift, ctrl );
 
 	// if bubble === false do not bubble
 	if( bubble !== undefined ) return bubble;
@@ -975,7 +973,7 @@ def.proto.cycleFormFocus =
 		dir
 	)
 {
-	root.form.cycleFocus( name, dir );
+	root.forms.cycleFocus( name, dir );
 };
 
 
@@ -993,7 +991,7 @@ def.proto.dragMove =
 
 	if( screen.showDisc )
 	{
-		const bubble = root.disc.dragMove( p, shift, ctrl );
+		const bubble = root.discs.dragMove( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -1018,7 +1016,7 @@ def.proto.dragStart =
 
 	if( screen.showDisc )
 	{
-		const bubble = root.disc.dragStart( p, shift, ctrl );
+		const bubble = root.discs.dragStart( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -1037,9 +1035,9 @@ def.proto.dragStartButton =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' : return root.disc.dragStartButton( path, false, false );
+		case 'discs' : return root.discs.dragStartButton( path, false, false );
 
-		case 'form' : return root.form.dragStartButton( path, false, false );
+		case 'forms' : return root.forms.dragStartButton( path, false, false );
 
 		default : throw new Error( 'invalid path' );
 	}
@@ -1060,7 +1058,7 @@ def.proto.dragStop =
 
 	if( screen.showDisc )
 	{
-		const bubble = root.disc.dragStop( p, shift, ctrl );
+		const bubble = root.discs.dragStop( p, shift, ctrl );
 
 		if( bubble !== undefined ) return;
 	}
@@ -1164,7 +1162,7 @@ def.proto.mousewheel =
 
 	if( screen.showDisc )
 	{
-		const bubble = root.disc.mousewheel( p, dir, shift, ctrl );
+		const bubble = root.discs.mousewheel( p, dir, shift, ctrl );
 
 		if( bubble ) return bubble;
 	}
@@ -1184,7 +1182,7 @@ def.proto.moveToSpace =
 		createMissing // if true, non-existing spaces are to be created
 	)
 {
-	let loading = root.form.get( 'loading' );
+	let loading = root.forms.get( 'loading' );
 
 	const spaceText = loading.get( 'spaceText' ).create( 'text', spaceRef.fullname );
 
@@ -1192,7 +1190,7 @@ def.proto.moveToSpace =
 
 	root._create(
 		'fallbackSpaceRef', this.spaceRef,
-		'form', root.form.set( 'loading', loading ),
+		'forms', root.forms.set( 'loading', loading ),
 		'show', show_form.loading,
 		'space', undefined
 	);
@@ -1224,7 +1222,7 @@ def.proto.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.alter(
-				root.form.get( 'nonExistingSpace' ).path.append( 'nonSpaceRef' ),
+				root.forms.get( 'nonExistingSpace' ).path.append( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 
@@ -1240,7 +1238,7 @@ def.proto.onAcquireSpace =
 		case 'no access' :
 
 			root.alter(
-				root.form.get( 'noAccessToSpace' ).path.append( 'nonSpaceRef' ),
+				root.forms.get( 'noAccessToSpace' ).path.append( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 
@@ -1271,10 +1269,7 @@ def.proto.onAcquireSpace =
 			? show_normal.singleton
 			: pass,
 		'space',
-			reply.space.create(
-				'action', action_none.singleton,
-				'trace', trace_root.singleton.appendSpace
-			),
+			reply.space.create( 'action', action_none.singleton ),
 		'spaceRef', request.spaceRef,
 		'_mark', undefined
 	);
@@ -1321,7 +1316,7 @@ def.proto.onAuth =
 	// if in login form this is an atempted login
 	if( show.timtype === show_form && show.formName === 'login' )
 	{
-		root.form.get( 'login' ).onAuth( reply );
+		root.forms.get( 'login' ).onAuth( reply );
 
 		return;
 	}
@@ -1382,7 +1377,7 @@ def.proto.onRegister =
 		return;
 	}
 
-	root.form.get( 'signUp' ).onRegister( request, reply );
+	root.forms.get( 'signUp' ).onRegister( request, reply );
 };
 
 
@@ -1400,7 +1395,7 @@ def.proto.pointingHover =
 
 	if( screen.showDisc )
 	{
-		const result = root.disc.pointingHover( p, shift, ctrl );
+		const result = root.discs.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
@@ -1444,7 +1439,7 @@ def.proto.probeClickDrag =
 
 	if( screen.showDisc )
 	{
-		const bubble = root.disc.probeClickDrag( p, shift, ctrl );
+		const bubble = root.discs.probeClickDrag( p, shift, ctrl );
 
 		if( bubble !== undefined ) return bubble;
 	}
@@ -1466,9 +1461,9 @@ def.proto.pushButton =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' : return root.disc.pushButton( path, false, false );
+		case 'discs' : return root.discs.pushButton( path, false, false );
 
-		case 'form' : return root.form.pushButton( path, false, false );
+		case 'forms' : return root.forms.pushButton( path, false, false );
 
 		default : throw new Error( 'invalid path' );
 	}
@@ -1745,10 +1740,10 @@ def.proto.toggleCheckbox =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 0 ) !== 'form' ) throw new Error( );
+/**/	if( path.get( 0 ) !== 'forms' ) throw new Error( );
 /**/}
 
-	root.form.toggleCheckbox( path, false, false );
+	root.forms.toggleCheckbox( path, false, false );
 };
 
 
@@ -1847,44 +1842,44 @@ def.proto._changeTransformTo =
 
 
 /*
-| Creates the disc root.
+| Creates the discs root.
 */
-def.static._createDiscRoot =
+def.static._createDiscsRoot =
 	function(
 		viewSize,
 		show
 	)
 {
-	const path = tim_path.empty.append( 'disc' );
+	const path = tim_path.empty.append( 'discs' );
 
 	const twPath = path.append( 'twig' );
 
 	return(
-		disc_root.create(
+		discs_root.create(
 			'action', action_none.singleton,
 			'controlTransform', gleam_transform.normal,
 			'path', path,
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'main',
-				disc_main.createFromLayout(
-					gruga_disc_main.layout,
+				discs_main.createFromLayout(
+					gruga_discs_main.layout,
 					twPath.append( 'main' ),
 					gleam_transform.normal,
 					show,
 					viewSize
 				),
 			'twig:add', 'create',
-				disc_create.createFromLayout(
-					gruga_disc_create.layout,
+				discs_create.createFromLayout(
+					gruga_discs_create.layout,
 					twPath.append( 'create' ),
 					gleam_transform.normal,
 					show,
 					viewSize
 				),
 			'twig:add', 'zoom',
-				disc_zoom.createFromLayout(
-					gruga_disc_zoom.layout,
+				discs_zoom.createFromLayout(
+					gruga_discs_zoom.layout,
 					twPath.append( 'zoom' ),
 					gleam_transform.normal,
 					show,
@@ -1896,31 +1891,31 @@ def.static._createDiscRoot =
 
 
 /*
-| Creates the form root.
+| Creates the forms root.
 */
-def.static._createFormRoot =
+def.static._createFormsRoot =
 	function(
 		viewSize
 	)
 {
 	const formLayouts =
 	{
-		loading : [ gruga_loading.layout, form_loading ],
-		login : [ gruga_login.layout, form_login ],
-		moveTo : [ gruga_moveTo.layout, form_moveTo ],
-		noAccessToSpace : [ gruga_noAccessToSpace.layout, form_noAccessToSpace ],
-		nonExistingSpace : [ gruga_nonExistingSpace.layout, form_nonExistingSpace ],
-		signUp : [ gruga_signUp.layout, form_signUp ],
-		space : [ gruga_space.layout, form_space ],
-		user : [ gruga_user.layout, form_user ],
-		welcome : [ gruga_welcome.layout, form_welcome ],
+		loading : [ gruga_loading.layout, forms_loading ],
+		login : [ gruga_login.layout, forms_login ],
+		moveTo : [ gruga_moveTo.layout, forms_moveTo ],
+		noAccessToSpace : [ gruga_noAccessToSpace.layout, forms_noAccessToSpace ],
+		nonExistingSpace : [ gruga_nonExistingSpace.layout, forms_nonExistingSpace ],
+		signUp : [ gruga_signUp.layout, forms_signUp ],
+		space : [ gruga_space.layout, forms_space ],
+		user : [ gruga_user.layout, forms_user ],
+		welcome : [ gruga_welcome.layout, forms_welcome ],
 	};
 
 	let forms = { };
 
-	const formRootPath = tim_path.empty.append( 'form' );
+	const formRootPath = tim_path.empty.append( 'forms' );
 
-	// FIXME move this from layout creation to form.root
+	// FIXME move this from layout creation to forms.root
 
 	for( let name in formLayouts )
 	{
@@ -1951,7 +1946,7 @@ def.static._createFormRoot =
 	}
 
 	let formRoot =
-		form_root.create(
+		forms_root.create(
 			'action', action_none.singleton,
 			'path', formRootPath,
 			'viewSize', viewSize
@@ -1992,7 +1987,7 @@ def.lazy._currentScreen =
 
 		case show_form :
 
-			return root.form.get( show.formName );
+			return root.forms.get( show.formName );
 
 		default : throw new Error( );
 	}

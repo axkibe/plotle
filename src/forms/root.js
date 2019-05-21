@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, form_root ) => {
+tim.define( module, ( def, forms_root ) => {
 
 
 if( TIM )
@@ -42,8 +42,7 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-
-	// FUTURE make a group instead of twig
+	// FIXME make it a group
 	def.twig =
 	[
 		'./loading',
@@ -59,22 +58,24 @@ if( TIM )
 }
 
 
-const form_form = tim.require( './form' );
+const forms_form = tim.require( './form' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_root = tim.require( '../trace/root' );
 
-/**
-*** Exta checking
-***/
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( this.hover && this.hover.isEmpty ) throw new Error( );
-/**/	};
+/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
 /**/}
+};
 
 
 /*
@@ -88,7 +89,7 @@ def.adjust.get =
 {
 	const path = form.path || this.path.append( 'twig' ).append( name );
 
-	const mark = form_form.concernsMark( this.mark, path );
+	const mark = forms_form.concernsMark( this.mark, path );
 
 	const spaceRef = form.concernsSpaceRef( this.spaceRef );
 
@@ -100,6 +101,8 @@ def.adjust.get =
 
 	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
 
+	const trace = trace_root.singleton.appendForms.appendForm( name );
+
 	return(
 		form.create(
 			'action', this.action,
@@ -109,6 +112,7 @@ def.adjust.get =
 			'mark', mark,
 			'path', path,
 			'spaceRef', spaceRef,
+			'trace', trace,
 			'user', user,
 			'userSpaceList', userSpaceList,
 			'viewSize', this.viewSize
@@ -120,7 +124,7 @@ def.adjust.get =
 /*
 | Path of the form root
 */
-def.staticLazy.path = ( ) => tim_path.empty.append( 'form' );
+def.staticLazy.path = ( ) => tim_path.empty.append( 'forms' );
 
 
 /*
@@ -129,7 +133,7 @@ def.staticLazy.path = ( ) => tim_path.empty.append( 'form' );
 def.static.concernsHover =
 	hover =>
 	(
-		hover && hover.get( 0 ) === 'form'
+		hover && hover.get( 0 ) === 'forms'
 		? hover
 		: undefined
 	);
@@ -140,7 +144,7 @@ def.static.concernsHover =
 def.static.concernsMark =
 	( mark ) =>
 	(
-		mark && mark.containsPath( form_root.path )
+		mark && mark.containsPath( forms_root.path )
 		? mark
 		: undefined
 	);
@@ -190,7 +194,7 @@ def.proto.pushButton =
 /**/{
 /**/	if(
 /**/		path.length < 3
-/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 0 ) !== 'forms'
 /**/		|| path.get( 1 ) !== 'twig'
 /**/		|| !this.get( path.get( 2 ) )
 /**/	)
@@ -221,7 +225,7 @@ def.proto.toggleCheckbox =
 /**/{
 /**/	if(
 /**/		path.length < 3
-/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 0 ) !== 'forms'
 /**/		|| path.get( 1 ) !== 'twig'
 /**/		|| !this.get( path.get( 2 ) )
 /**/	)

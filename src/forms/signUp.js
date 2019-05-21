@@ -13,45 +13,6 @@ tim.define( module, ( def ) => {
 def.extend = './form';
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// current action
-		action : { type : [ '< ../action/types' ] },
-
-		// space has grid
-		hasGrid : { type : 'undefined' },
-
-		// space has snapping
-		hasSnapping : { type : 'undefined' },
-
-		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the users mark
-		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
-
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the reference to the current space
-		spaceRef : { type : 'undefined' },
-
-		// currently logged in user
-		user : { type : 'undefined' },
-
-		// list of spaces belonging to user
-		userSpaceList : { type : 'undefined' },
-
-		// current view size
-		viewSize : { type : '../gleam/size' },
-	};
-
-	def.twig = [ '< ../widget/types' ];
-}
-
-
 const ref_space = tim.require( '../ref/space' );
 
 const reply_error = tim.require( '../reply/error' );

@@ -119,6 +119,17 @@ def.proto.dragStart =
 };
 
 
+/*
+| A text has been inputed.
+*/
+def.proto.input =
+	function(
+		text
+	)
+{
+	return this.doc.input( text );
+};
+
 
 /*
 | Returns the mark for a point
@@ -179,7 +190,12 @@ def.proto.markForPoint =
 	}
 	else
 	{
-		return mark_caret.createPathAt( para.textPath, at );
+		return(
+			mark_caret.create(
+				'pat', mark.pat.createPathAt( para.textPath, at ),
+				'trace', para.trace.appendOffset( at )
+			)
+		);
 	}
 };
 
@@ -226,18 +242,6 @@ def.proto.pointingHover =
 	}
 
 	return result_hover.create( 'path', this.path, 'cursor', cursor );
-};
-
-
-/*
-| A text has been inputed.
-*/
-def.proto.input =
-	function(
-		text
-	)
-{
-	return this.doc.input( text );
 };
 
 

@@ -90,9 +90,13 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
+
+const mark_pat = tim.require( '../mark/pat' );
 
 
 /*
@@ -196,7 +200,7 @@ def.static.createGeneric =
 
 	const path = tim_path.empty.append( 'twig' ).append( key );
 
-	const mpath = path.prepend( 'space' ).append( 'spaceUser', );
+	const mpath = path.prepend( 'space' ).append( 'spaceUser' );
 
 	root.alter(
 		'change',
@@ -205,7 +209,16 @@ def.static.createGeneric =
 				'val', portal,
 				'rank', 0
 			),
-		'mark', mark_caret.createPathAt( mpath, 0 )
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mpath, 0 ),
+				'trace',
+					trace_root.singleton
+					.appendSpace
+					.appendItem( key )
+					.appendField( 'spaceUser' )
+					.appendOffset( 0 )
+			)
 	);
 };
 
@@ -257,10 +270,12 @@ def.proto.click =
 
 		if( sf.shape.within( pp ) )
 		{
+			const offset = this._getOffsetAt( field, pp.x );
+
 			setMark =
-				mark_caret.createPathAt(
-					this.path.append( field ),
-					this._getOffsetAt( field, pp.x )
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( this.path.append( field ), offset ),
+					'trace', this.trace .appendField( field ).appendOffset( offset )
 				);
 
 			break;
@@ -889,11 +904,13 @@ def.proto._keyDown =
 		{
 			const cpos = this._locateOffset( section, mark.caret.at );
 
+			const offset = this._getOffsetAt( 'spaceTag', cpos.x + this._fieldSpaceUser.pos.x );
+
 			root.alter(
 				'mark',
-					mark_caret.createPathAt(
-						this.path.append( 'spaceTag' ),
-						this._getOffsetAt( 'spaceTag', cpos.x + this._fieldSpaceUser.pos.x )
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'spaceTag' ), offset ),
+						'trace', this.trace.appendField( 'spaceTag' ).appendOffset( offset )
 					)
 			);
 
@@ -903,7 +920,11 @@ def.proto._keyDown =
 		case 'spaceTag' :
 
 			root.alter(
-				'mark', mark_caret.createPathAt( this.path.append( 'moveToButton' ), 0 )
+				'mark',
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'moveToButton' ), 0 ),
+						'trace', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
+					)
 			);
 
 			break;
@@ -911,7 +932,11 @@ def.proto._keyDown =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark', mark_caret.createPathAt( this.path.append( 'spaceUser' ), 0 )
+				'mark',
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'spaceUser' ), 0 ),
+						'trace', this.trace.appendField( 'spaceUser' ).appendOffset( 0 )
+					)
 			);
 
 			break;
@@ -935,11 +960,13 @@ def.proto._keyLeft =
 	{
 		const cycle = fabric_portal.antiCycle( section );
 
+		const offset = cycle === 'moveToButton' ? 0 : this[ cycle ].length;
+
 		root.alter(
 			'mark',
-				mark_caret.createPathAt(
-					this.path.append( cycle ),
-					cycle === 'moveToButton' ? 0 : this[ cycle ].length
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( this.path.append( cycle ), offset ),
+					'offet', offset
 				)
 		);
 

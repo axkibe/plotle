@@ -19,7 +19,7 @@ if( TIM )
 	};
 
 	// path of trace back.
-	def.list = [ './root', './space', './item', './doc', './para' ];
+	def.list = [ './doc', './form', './forms', './item', './para', './root', './widget', './space' ];
 }
 
 
