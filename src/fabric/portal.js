@@ -212,7 +212,7 @@ def.static.createGeneric =
 		'mark',
 			mark_caret.create(
 				'pat', mark_pat.createPathAt( mpath, 0 ),
-				'trace',
+				'offset',
 					trace_root.singleton
 					.appendSpace
 					.appendItem( key )
@@ -275,7 +275,7 @@ def.proto.click =
 			setMark =
 				mark_caret.create(
 					'pat', mark_pat.createPathAt( this.path.append( field ), offset ),
-					'trace', this.trace .appendField( field ).appendOffset( offset )
+					'offset', this.trace.appendField( field ).appendOffset( offset )
 				);
 
 			break;
@@ -910,7 +910,7 @@ def.proto._keyDown =
 				'mark',
 					mark_caret.create(
 						'pat', mark_pat.createPathAt( this.path.append( 'spaceTag' ), offset ),
-						'trace', this.trace.appendField( 'spaceTag' ).appendOffset( offset )
+						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( offset )
 					)
 			);
 
@@ -923,7 +923,7 @@ def.proto._keyDown =
 				'mark',
 					mark_caret.create(
 						'pat', mark_pat.createPathAt( this.path.append( 'moveToButton' ), 0 ),
-						'trace', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
+						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
 					)
 			);
 
@@ -935,7 +935,7 @@ def.proto._keyDown =
 				'mark',
 					mark_caret.create(
 						'pat', mark_pat.createPathAt( this.path.append( 'spaceUser' ), 0 ),
-						'trace', this.trace.appendField( 'spaceUser' ).appendOffset( 0 )
+						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( 0 )
 					)
 			);
 
@@ -966,7 +966,7 @@ def.proto._keyLeft =
 			'mark',
 				mark_caret.create(
 					'pat', mark_pat.createPathAt( this.path.append( cycle ), offset ),
-					'offet', offset
+					'offset', offset
 				)
 		);
 
@@ -1028,7 +1028,11 @@ def.proto._keyEnd =
 	if( at >= value.length ) return;
 
 	root.alter(
-		'mark', mark_caret.createPathAt( mark.caret.path, value.length )
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mark.caret.path, value.length )
+				'offset', mark.offset.changeTo( value.length )
+			)
 	);
 };
 
@@ -1057,7 +1061,11 @@ def.proto._keyEnter =
 	if( cycle )
 	{
 		root.alter(
-			'mark', mark_caret.createPathAt( mark.caret.path.set( -1, cycle ), 0 )
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( mark.caret.path.set( -1, cycle ), 0 ),
+					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
+				)
 		);
 	}
 	else
@@ -1100,7 +1108,12 @@ def.proto._keyRight =
 	{
 		const cycle = fabric_portal.cycle( section );
 
-		root.alter( 'mark', mark_caret.createPathAt( this.path.append( cycle ), 0 ) );
+		root.alter(
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( this.path.append( cycle ), 0 ),
+					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
+				);
 
 		return;
 	}
@@ -1128,7 +1141,13 @@ def.proto._keyTab =
 		? fabric_portal.antiCycle( section )
 		: fabric_portal.cycle( section );
 
-	root.alter( 'mark', mark_caret.createPathAt( mark.caret.path.set( -1, cycle ), 0 ) );
+	root.alter(
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mark.caret.path.set( -1, cycle ), 0 ),
+				'offset', this.trace.appendField( cycle ).appendOffset( 0 )
+			)
+	);
 };
 
 
@@ -1150,9 +1169,9 @@ def.proto._keyUp =
 
 			root.alter(
 				'mark',
-					mark_caret.createPathAt(
-						this.path.append( 'moveToButton' ),
-						0
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'moveToButton' ), 0 ),
+						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
 					)
 			);
 
@@ -1162,11 +1181,13 @@ def.proto._keyUp =
 		{
 			const cpos = this._locateOffset( section, mark.caret.at );
 
+			const offset = this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x );
+
 			root.alter(
 				'mark',
-					mark_caret.createPathAt(
-						this.path.append( 'spaceUser' ),
-						this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x )
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'spaceUser' ), offset ),
+						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( offset )
 					)
 			);
 
@@ -1176,7 +1197,11 @@ def.proto._keyUp =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark', mark_caret.createPathAt( this.path.append( 'spaceTag' ), 0 )
+				'mark',
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( this.path.append( 'spaceTag' ), 0 ),
+						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( 0 )
+					)
 			);
 
 			break;

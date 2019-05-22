@@ -41,7 +41,7 @@ def.lazy.appendDoc =
 /*
 | Returns a trace with a field part appended.
 */
-def.lazy.appendField =
+def.lazyFuncStr.appendField =
 	function(
 		key
 	)

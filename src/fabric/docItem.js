@@ -192,7 +192,7 @@ def.proto.markForPoint =
 	{
 		return(
 			mark_caret.create(
-				'pat', mark.pat.createPathAt( para.textPath, at ),
+				'pat', mark_pat.createPathAt( para.textPath, at ),
 				'trace', para.trace.appendOffset( at )
 			)
 		);

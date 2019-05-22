@@ -37,6 +37,10 @@ if( TIM )
 		// scroll position of the doc
 		// no json thus not saved or transmitted
 		scrollPos : { type : [ 'undefined', '../gleam/point' ] },
+
+		// the trace of the doc
+		// no json thus not saved or transmitted
+		trace : { type : [ 'undefined', '../trace/doc' ] },
 	};
 
 	def.json = 'doc';
@@ -175,6 +179,8 @@ def.adjust.get =
 
 	const path = this.path && this.path.append( 'twig' ).append( key );
 
+	const trace = this.trace && this.trace.appendPara( key );
+
 	if( VISUAL )
 	{
 		const innerMargin = this.innerMargin;
@@ -209,6 +215,7 @@ def.adjust.get =
 			'mark', mark,
 			'path', path,
 			'pos', pos,
+			'trace', trace,
 			'transform', this.transform
 		)
 	);

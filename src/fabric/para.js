@@ -22,12 +22,16 @@ if( TIM )
 		// no json thus not saved or transmitted
 		fontsize : { type : [ 'undefined', 'number' ] },
 
-		// the paragraphs text
-		text : { type : 'string', json : true },
-
 		// point in north west
 		// no json thus not saved or transmitted
 		pos : { type : [ 'undefined', '../gleam/point' ] },
+
+		// the paragraphs text
+		text : { type : 'string', json : true },
+
+		// the trace of the para
+		// no json thus not saved or transmitted
+		trace : { type : [ 'undefined', '../trace/para' ] },
 	};
 
 	def.json = 'para';

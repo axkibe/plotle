@@ -66,7 +66,11 @@ const session_uid = tim.require( '../session/uid' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const mark_caret = tim.require( '../mark/caret' );
+
+const mark_pat = tim.require( '../mark/pat' );
 
 
 /*
@@ -115,6 +119,8 @@ def.static.createGeneric =
 		path.prepend( 'space' )
 		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
 
+	const trace = trace_root.singleton.appendSpace.appendItem( key );
+
 /**/if( CHECK )
 /**/{
 /**/	if( label.fontsize !== label.doc.fontsize ) throw new Error( );
@@ -122,7 +128,11 @@ def.static.createGeneric =
 
 	root.alter(
 		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
-		'mark', mark_caret.createPathAt( mpath, 0 )
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mpath, 0 ),
+				'offset', trace.appendPara( '1' ).appendOffset( 0 )
+			)
 	);
 };
 

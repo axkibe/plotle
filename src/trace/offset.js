@@ -23,4 +23,16 @@ if( TIM )
 }
 
 
+/*
+| Returns a trace with a changed offset
+*/
+def.proto.changeTo =
+	function(
+		at  // offset
+	)
+{
+	return this.get( this.length - 1 ).appendOffset( at );
+};
+
+
 } );
