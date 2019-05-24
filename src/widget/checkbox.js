@@ -26,15 +26,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the transform
-		transform : { type : '../gleam/transform' },
-
-		// if false the button is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
-
 		// designed zone
 		zone : { type : '../gleam/rect' },
 	};
@@ -117,7 +108,7 @@ def.static.createFromLayout =
 def.lazy.glint =
 	function( )
 {
-	if( !this.visible ) return undefined;
+	if( !this.visible ) return;
 
 	const facet =
 		this.facets.getFacet(
@@ -199,7 +190,7 @@ def.proto.click =
 		// ctrl
 	)
 {
-	if( !this.visible ) return undefined;
+	if( !this.visible ) return;
 
 	if( this._tZone.within( p ) )
 	{

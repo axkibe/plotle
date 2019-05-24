@@ -35,9 +35,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
 
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// shape of the button
 		shape : { type : [ 'string', '../gleam/ellipse' ] },
 
@@ -49,12 +46,6 @@ if( TIM )
 
 		// rotation of the text
 		textRotation : { type : [ 'undefined', 'number' ] },
-
-		// the transform
-		transform : { type : '../gleam/transform' },
-
-		// if false the button is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
 
 		// designed zone
 		zone : { type : '../gleam/rect' },
@@ -155,7 +146,7 @@ def.static.createFromLayout =
 def.lazy.glint =
 	function( )
 {
-	if( !this.visible ) return undefined;
+	if( !this.visible ) return;
 
 	const zone = this._tZone.enlarge1;
 
@@ -360,7 +351,7 @@ def.proto.dragStart =
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
-	if( !this.within( p ) ) return undefined;
+	if( !this.within( p ) ) return;
 
 	root.dragStartButton( this.path );
 
@@ -402,7 +393,6 @@ def.proto.mousewheel =
 		ctrl
 	)
 {
-	return undefined;
 };
 
 

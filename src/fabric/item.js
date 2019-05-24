@@ -97,9 +97,9 @@ def.static.concernsMark =
 		path
 	)
 {
-	if( !path || !mark ) return undefined;
+	if( !path || !mark ) return;
 
-	return mark.containsPath( path ) ? mark : undefined;
+	if( mark.containsPath( path ) ) return mark;
 };
 
 

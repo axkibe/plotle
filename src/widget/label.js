@@ -23,32 +23,17 @@ if( TIM )
 		// color of the label
 		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
 
-		// component hovered upon
-		hover : { type : 'undefined' },
-
 		// font of the text
 		font : { type : [ 'undefined', '../gleam/font/font' ] },
 
-		// the users mark
-		mark : { type : 'undefined' },
-
 		// vertical distance of newline
 		newline : { type : [ 'undefined', 'number' ] },
-
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
 
 		// designed position
 		pos : { type : '../gleam/point' },
 
 		// the label text
 		text : { type : 'string' },
-
-		// the transform
-		transform : { type : '../gleam/transform' },
-
-		// if false the widget is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
 	};
 }
 
@@ -124,7 +109,7 @@ def.lazy._pos =
 def.lazy.glint =
 	function( )
 {
-	if( !this.visible ) return undefined;
+	if( !this.visible ) return;
 
 	return(
 		gleam_glint_text.create(
@@ -148,7 +133,6 @@ def.proto.click =
 		ctrl
 	)
 {
-	return undefined;
 };
 
 
@@ -162,7 +146,6 @@ def.proto.mousewheel =
 		ctrl
 	)
 {
-	return undefined;
 };
 
 
@@ -176,7 +159,6 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	return undefined;
 };
 
 

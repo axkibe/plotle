@@ -263,7 +263,7 @@ def.proto._transformRemove =
 	}
 	else if( c.at1 >= this.at1 && c.at2 <= this.at2 )
 	{
-		return undefined;
+		return;
 	}
 	else if( c.at1 < this.at1 && c.at2 <= this.at2 )
 	{

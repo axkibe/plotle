@@ -22,8 +22,7 @@ if( TIM )
 		pat : { type : './pat' },
 
 		// the trace of the caret
-		// FIXME remove undefined
-		offset : { type : [ 'undefined', '../trace/offset' ] },
+		offset : { type : '../trace/offset' },
 	};
 }
 

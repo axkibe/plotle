@@ -176,9 +176,9 @@ def.proto.concernsHover =
 		path
 	)
 {
-	if( !path || !hover ) return undefined;
+	if( !path || !hover ) return;
 
-	return path.subPathOf( hover ) ? hover : undefined;
+	if( path.subPathOf( hover ) ) return hover;
 };
 
 
@@ -1030,7 +1030,7 @@ def.proto._keyEnd =
 	root.alter(
 		'mark',
 			mark_caret.create(
-				'pat', mark_pat.createPathAt( mark.caret.path, value.length )
+				'pat', mark_pat.createPathAt( mark.caret.path, value.length ),
 				'offset', mark.offset.changeTo( value.length )
 			)
 	);
@@ -1113,7 +1113,8 @@ def.proto._keyRight =
 				mark_caret.create(
 					'pat', mark_pat.createPathAt( this.path.append( cycle ), 0 ),
 					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
-				);
+				)
+		);
 
 		return;
 	}

@@ -190,6 +190,12 @@ const gruga_user = tim.require( '../gruga/user' );
 
 const gruga_welcome = tim.require( '../gruga/welcome' );
 
+const mark_caret = tim.require( '../mark/caret' );
+
+const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
+
 const math = tim.require( '../math/root' );
 
 const net_channel = tim.require( '../net/channel' );
@@ -220,11 +226,9 @@ const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const user_creds = tim.require( '../user/creds' );
-
-const mark_caret = tim.require( '../mark/caret' );
-
-const mark_range = tim.require( '../mark/range' );
 
 const widget_factory = tim.require( '../widget/factory' );
 
@@ -311,7 +315,7 @@ def.adjust.action =
 						nPaths[ p2++ ] = path;
 					}
 
-					if( p2 === 0 ) return undefined;
+					if( p2 === 0 ) return;
 
 					return(
 						action.create(
@@ -1650,6 +1654,8 @@ def.proto.spawnRelation =
 
 	const path = tim_path.empty.append( 'space' ).append( 'twig' ).append( key );
 
+	const trace = trace_root.singleton.appendSpace.appendItem( key );
+
 	const val =
 		fabric_relation.create(
 			'zone',
@@ -1685,7 +1691,11 @@ def.proto.spawnRelation =
 
 	root.alter(
 		'change', change,
-		'mark', mark_caret.createPathAt( mpath, 0 )
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mpath, 0 ),
+				'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 )
+			)
 	);
 };
 

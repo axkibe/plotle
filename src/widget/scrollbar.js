@@ -28,13 +28,9 @@ if( TIM )
 		// minimum is always zero
 		max : { type : 'number' },
 
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		pos : { type : '../gleam/point' },
 
 		size : { type : 'number' },
-
-		transform : { type : '../gleam/transform' }
 	};
 }
 
@@ -109,7 +105,7 @@ def.proto.dragStart =
 		//ctrl     // true if ctrl or meta key was held down
 	)
 {
-	if( !this.tShape.within( p ) ) return undefined;
+	if( !this.tShape.within( p ) ) return;
 
 	root.alter(
 		'action',
@@ -134,7 +130,7 @@ def.proto.pointingHover =
 		ctrl
 	)
 {
-	if( !this.tShape.within( p ) ) return undefined;
+	if( !this.tShape.within( p ) ) return;
 
 	return result_hover.cursorNSResize.create( 'path', this.path );
 };

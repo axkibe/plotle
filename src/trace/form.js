@@ -29,7 +29,7 @@ const trace_widget = tim.require( './widget' );
 /*
 | Returns a trace with a widget appended.
 */
-def.lazyFuncStr.appendPara =
+def.lazyFuncStr.appendWidget =
 	function(
 		key // key of the widget
 	)

@@ -147,6 +147,8 @@ def.adjust.doc =
 {
 	const path = this.path;
 
+	const trace = this.trace && this.trace.appendDoc;
+
 	const transform = this.transform;
 
 	return(
@@ -158,7 +160,8 @@ def.adjust.doc =
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', path && path.append( 'doc' ),
 			'scrollPos', gleam_point.zero,
-			'transform', transform && transform.ortho
+			'transform', transform && transform.ortho,
+			'trace', trace
 		)
 	);
 };

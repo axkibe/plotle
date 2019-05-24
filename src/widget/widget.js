@@ -10,6 +10,30 @@ tim.define( module, ( def, widget_widget ) => {
 def.abstract = true;
 
 
+if( TIM )
+{
+	def.attributes =
+	{
+		// component hovered upon
+		hover : { type : 'undefined' },
+
+		// the users mark
+		mark : { type : 'undefined' },
+
+		// path of the widget
+		path : { type : [ 'undefined', 'tim.js/path' ] },
+
+		// trace of the widget
+		trace : { type : '../trace/widget' },
+
+		// the transform
+		transform : { type : '../gleam/transform' },
+
+		// if false the widget is hidden
+		visible : { type : 'boolean', defaultValue : 'true' },
+	};
+}
+
 /*
 | Handles a potential dragStart event.
 */
@@ -24,8 +48,6 @@ def.proto.dragStart =
 /**/{
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
-
-	return undefined;
 };
 
 

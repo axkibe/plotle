@@ -25,6 +25,8 @@ const user_passhash = tim.require( '../user/passhash' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
+const mark_pat = tim.require( '../mark/pat' );
+
 
 /*
 | Clears all fields.
@@ -64,7 +66,11 @@ def.proto.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.alter(
-				'mark', mark_caret.createPathAt( userInput.path, userInput.value.length )
+				'mark',
+					mark_caret.create(
+						'pat', mark_pat.createPathAt( userInput.path, userInput.value.length ),
+						'offset', userInput.trace.appendOffset( userInput.value.length )
+					)
 			);
 		}
 
@@ -137,9 +143,13 @@ def.proto.signup =
 
 	const email = this.get( 'emailInput' ).value;
 
-	const pass = this.get( 'passwordInput' ).value;
+	const passInput = this.get( 'passwordInput' );
 
-	const pass2 = this.get( 'password2Input' ).value;
+	const pass2Input = this.get( 'password2Input' );
+
+	const pass = passInput.value;
+
+	const pass2 = pass2Input.value;
 
 	const newsletter = this.get( 'newsletterCheckBox' ).checked;
 
@@ -148,7 +158,11 @@ def.proto.signup =
 		this.setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.alter(
-			'mark', mark_caret.createPathAt( userInput.path, username.length )
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( userInput.path, username.length ),
+					'offset', userInput.trace.appendOffset( username.length )
+				)
 		);
 
 		return;
@@ -159,7 +173,11 @@ def.proto.signup =
 		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark', mark_caret.createPathAt( userInput.path, 0 )
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( userInput.path, 0 ),
+					'offset', userInput.trace.appendOffset( 0 )
+				)
 		);
 
 		return;
@@ -170,7 +188,11 @@ def.proto.signup =
 		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark', mark_caret.createPathAt( this.get( 'passwordInput' ).path, pass.length )
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( passInput.path, pass.length ),
+					'offset', passInput.trace.appendOffset( pass.length )
+				)
 		);
 
 		return;
@@ -181,7 +203,11 @@ def.proto.signup =
 		this.setErrorMessage( 'Passwords do not match' );
 
 		root.alter(
-			'mark', mark_caret.createPathAt( this.get( 'password2Input' ).path, pass2.length )
+			'mark',
+				mark_caret.create(
+					'pat', mark_pat.createPathAt( pass2Input.path, pass2.length ),
+					'offset', pass2Input.trace.appendOffset( pass2.length )
+				)
 		);
 
 		return;

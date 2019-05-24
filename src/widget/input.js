@@ -32,17 +32,8 @@ if( TIM )
 		// true for password input
 		password : { type : 'boolean', defaultValue : 'false' },
 
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
-		// the transform
-		transform : { type : '../gleam/transform' },
-
 		// the value in the input box
 		value : { type : 'string', defaultValue : '""' },
-
-		// if false the button is hidden
-		visible : { type : 'boolean', defaultValue : 'true' },
 
 		// designed zone
 		zone : { type : '../gleam/rect' },
@@ -79,6 +70,8 @@ const layout_input = tim.require( '../layout/input' );
 const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
+
+const mark_pat = tim.require( '../mark/pat' );
 
 
 /*
@@ -372,13 +365,21 @@ def.proto.click =
 		ctrl
 	)
 {
-	if( !p || !this._tZone.within( p ) ) return undefined;
+	if( !p || !this._tZone.within( p ) ) return;
 
 	const pp = p.sub( this._tZone.pos );
 
-	if( !this._tzShape.within( pp ) ) return undefined;
+	if( !this._tzShape.within( pp ) ) return;
 
-	root.alter( 'mark', mark_caret.createPathAt( this.path, this._getOffsetAt( pp ) ) );
+	const offset = this._getOffsetAt( pp );
+
+	root.alter(
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( this.path, offset ),
+				'offset', this.trace.appendOffset( offset )
+			)
+	);
 
 	return false;
 };
@@ -411,7 +412,13 @@ def.proto.input =
 		value.substring( 0, at ) + text + value.substring( at )
 	);
 
-	root.alter( 'mark', mark_caret.createPathAt( mark.caret.path, at + text.length ) );
+	root.alter(
+		'mark',
+			mark_caret.create(
+				'pat', mark_pat.createPathAt( mark.caret.path, at + text.length ),
+				'offset', this.trace.appendOffset( at + text.length )
+			)
+	);
 };
 
 
@@ -436,7 +443,7 @@ def.proto.pointingHover =
 		|| !this._tzShape.within( p.sub( this._tZone.pos ) )
 	)
 	{
-		return undefined;
+		return;
 	}
 
 	return result_hover.create( 'path', this.path, 'cursor', 'text' );
@@ -584,7 +591,11 @@ def.proto._keyEnd =
 	if( at >= this.value.length ) return;
 
 	root.alter(
-		'mark', mark_caret.createPathAt( mark.caret.path, this.value.length )
+		'mark',
+			mark_caret.create(
+				'pat', mark_caret.createPathAt( mark.caret.path, this.value.length ),
+				'offset', this.trace.appendOffset( this.value.length )
+			)
 	);
 };
 

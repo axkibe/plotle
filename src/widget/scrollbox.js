@@ -20,14 +20,8 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// scroll position
 		scrollPos : { type : '../gleam/point' },
-
-		// the transform
-		transform : { type : '../gleam/transform' },
 
 		// offset of the scrollbar
 		scrollbarYOffset :
@@ -293,7 +287,7 @@ def.lazy.hasScrollbarY =
 def.lazy.scrollbarY =
 	function( )
 {
-	if( !this.hasScrollbarY ) return undefined;
+	if( !this.hasScrollbarY ) return;
 
 	const innerSize = this.innerSize;
 

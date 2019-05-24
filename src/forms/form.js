@@ -69,6 +69,8 @@ const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
+const mark_pat = tim.require( '../mark/pat' );
+
 const mark_widget = tim.require( '../mark/widget' );
 
 const widget_scrollbox = tim.require( '../widget/scrollbox' );
@@ -162,7 +164,10 @@ def.proto.cycleFocus =
 			root.alter(
 				'mark',
 					ve.caretable
-					? mark_caret.createPathAt( ve.path, 0 )
+					? mark_caret.create(
+						'pat', mark_pat.createPathAt( ve.path, 0 ),
+						'offset', ve.trace.appendOfset( 0 )
+					)
 					: mark_widget.create( 'path', ve.path )
 			);
 
@@ -251,11 +256,14 @@ def.static.adjustGet =
 
 	const hover = widget.concernsHover( this.hover, path );
 
+	const trace = this.trace.appendWidget( name );
+
 	widget =
 		widget.create(
-			'path', path,
 			'hover', hover,
 			'mark', mark,
+			'path', path,
+			'trace', trace,
 			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
 		);
 
@@ -277,7 +285,7 @@ def.lazy.attentionCenter =
 {
 	const focus = this.focusedWidget;
 
-	return focus ? focus.attentionCenter : undefined;
+	if( focus ) return focus.attentionCenter;
 };
 
 
@@ -289,7 +297,7 @@ def.lazy.focusedWidget =
 {
 	const mark = this.mark;
 
-	if( !mark ) return undefined;
+	if( !mark ) return;
 
 	const path = mark.widgetPath;
 

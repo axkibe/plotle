@@ -302,15 +302,15 @@ def.lazy.focus =
 {
 	const mark = this.mark;
 
-	if( !mark ) return undefined;
+	if( !mark ) return;
 
 	const paths = mark.itemPaths;
 
-	if( !paths || paths.length !== 1 ) return undefined;
+	if( !paths || paths.length !== 1 ) return;
 
 	const path = paths.get( 0 );
 
-	if( path.length <= 2 ) return undefined; // FUTURE shouldn't be necessary
+	if( path.length <= 2 ) return; // FUTURE shouldn't be necessary
 
 	return this.get( path.get( 2 ) );
 };

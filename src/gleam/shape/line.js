@@ -115,7 +115,7 @@ def.proto.getProjection =
 
 	const det = la1 * lb2 - la2 * lb1;
 
-	if( det === 0 ) return undefined;
+	if( det === 0 ) return;
 
 	const pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
 
