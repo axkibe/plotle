@@ -28,6 +28,7 @@ if( TIM )
 		'./form',
 		'./forms',
 		'./item',
+		'./space',
 		'./widget'
 	];
 }

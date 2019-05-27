@@ -304,6 +304,8 @@ def.lazy.scrollbarY =
 
 	const path = this.path;
 
+	const trace = this.trace;
+
 	if( dHeight <= aperture ) return;
 
 	return(
