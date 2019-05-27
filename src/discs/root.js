@@ -26,9 +26,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// path of the disc
-		path : { type : 'tim.js/path' },
-
 		// currently form/disc shown
 		show : { type : [ '< ../show/types' ] },
 

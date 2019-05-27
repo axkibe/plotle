@@ -1860,21 +1860,16 @@ def.static._createDiscsRoot =
 		show
 	)
 {
-	const path = tim_path.empty.append( 'discs' );
-
-	const twPath = path.append( 'twig' );
-
 	return(
 		discs_root.create(
 			'action', action_none.singleton,
 			'controlTransform', gleam_transform.normal,
-			'path', path,
 			'show', show,
 			'viewSize', viewSize,
 			'twig:add', 'main',
 				discs_main.createFromLayout(
 					gruga_discs_main.layout,
-					twPath.append( 'main' ),
+					'main',
 					gleam_transform.normal,
 					show,
 					viewSize
@@ -1882,7 +1877,7 @@ def.static._createDiscsRoot =
 			'twig:add', 'create',
 				discs_create.createFromLayout(
 					gruga_discs_create.layout,
-					twPath.append( 'create' ),
+					'create',
 					gleam_transform.normal,
 					show,
 					viewSize
@@ -1890,7 +1885,7 @@ def.static._createDiscsRoot =
 			'twig:add', 'zoom',
 				discs_zoom.createFromLayout(
 					gruga_discs_zoom.layout,
-					twPath.append( 'zoom' ),
+					'zoom',
 					gleam_transform.normal,
 					show,
 					viewSize
@@ -1935,21 +1930,26 @@ def.static._createFormsRoot =
 
 		const formPath = formRootPath.append( 'twig' ).append( name );
 
+		const formTrace = trace_root.singleton.appendForms.appendForm( name );
+
 		const twig = { };
 
-		for( let key of layout.keys )
+		for( let wKey of layout.keys )
 		{
-			const wLayout = layout.get( key );
+			const wLayout = layout.get( wKey );
 
-			const path = formPath.append( 'twig' ).append( key );
+			const path = formPath.append( 'twig' ).append( wKey );
 
-			twig[ key ] =
-				widget_factory.createFromLayout( wLayout, path, gleam_transform.normal );
+			const trace = formTrace.appendWidget( wKey );
+
+			twig[ wKey ] =
+				widget_factory.createFromLayout( wLayout, path, trace, gleam_transform.normal );
 		}
 
 		forms[ name ] =
 			entry[ 1 ].create(
 				'action', action_none.singleton,
+				'trace', formTrace,
 				'viewSize', viewSize,
 				'twig:init', twig, layout.keys
 			);

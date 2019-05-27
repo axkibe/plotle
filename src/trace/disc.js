@@ -1,10 +1,10 @@
 /*
-| A trace into a form.
+| A trace into a disc
 */
 'use strict';
 
 
-tim.define( module, ( def, trace_form ) => {
+tim.define( module, ( def ) => {
 
 
 def.extend = './bare';
@@ -14,12 +14,12 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// key of the form
+		// key of the disc
 		key : { type : 'string' },
 	};
 
 	// path of trace back.
-	def.list = [ './root', './forms' ];
+	def.list = [ './root', './discs' ];
 }
 
 

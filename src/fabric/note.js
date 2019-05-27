@@ -314,6 +314,7 @@ def.lazy.scrollbarY =
 			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
 			'scrollPos', this.scrollPos.y,
 			'size', zone.height - gruga_note.vScrollbarDis * 2,
+			'trace', trace && trace.appendWidget( 'scrollbarY' ),
 			'transform', this.transform
 		)
 	);

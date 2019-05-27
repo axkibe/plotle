@@ -27,6 +27,8 @@ const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
 
+const trace_widget = tim.require( './widget' );
+
 
 /*
 | Returns a trace with a doc part appended.
@@ -47,6 +49,18 @@ def.lazyFuncStr.appendField =
 	)
 {
 	return trace_field.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| Returns a trace with a widget part appended.
+*/
+def.lazyFuncStr.appendWidget =
+	function(
+		key
+	)
+{
+	return trace_widget.create( 'list:init', this, 'list:append', this, 'key', key );
 };
 
 

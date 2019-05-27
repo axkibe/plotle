@@ -57,19 +57,19 @@ const widget_factory = tim.require( './factory' );
 const widget_scrollbar = tim.require( './scrollbar' );
 
 
-/**
-*** Exta checking
-***/
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		const sp = this.scrollPos;
+/**/	const sp = this.scrollPos;
 /**/
-/**/		if( sp.x < 0 || sp.y < 0 ) throw new Error( );
-/**/	};
+/**/	if( sp.x < 0 || sp.y < 0 ) throw new Error( );
 /**/}
+};
 
 
 /*
@@ -107,24 +107,26 @@ def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
 		path,       // path of the widget
+		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_scrollbox ) throw new Error( );
 /**/}
 
 	const twig = { };
 
-	for( let key of layout.keys )
+	for( let wKey of layout.keys )
 	{
-		twig[ key ] =
+		twig[ wKey ] =
 			widget_factory.createFromLayout(
-				layout.get( key ),
-				path.append( 'twig' ).append( key ),
+				layout.get( wKey ),
+				path.append( 'twig' ).append( wKey ),
+				trace.appendWidget( wKey ),
 				transform
 			);
 	}
@@ -135,6 +137,7 @@ def.static.createFromLayout =
 			'path', path,
 			'scrollbarYOffset', layout.scrollbarYOffset,
 			'scrollPos', gleam_point.zero,
+			'trace', trace,
 			'transform', transform,
 			'zone', layout.zone
 		)

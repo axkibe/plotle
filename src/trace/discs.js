@@ -1,5 +1,5 @@
 /*
-| A trace into the forms root.
+| A trace into the discs root.
 */
 'use strict';
 
@@ -16,18 +16,18 @@ if( TIM )
 }
 
 
-const trace_form = tim.require( './form' );
+const trace_disc = tim.require( './disc' );
 
 
 /*
 | Returns a trace with an item part appended.
 */
-def.lazyFuncStr.appendForm =
+def.lazyFuncStr.appendDisc =
 	function(
-		key // name of the form
+		key // key of the dic
 	)
 {
-	return trace_form.create( 'list:init', this, 'list:append', this, 'key', key );
+	return trace_disc.create( 'list:init', this, 'list:append', this, 'key', key );
 };
 
 

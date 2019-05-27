@@ -20,7 +20,16 @@ if( TIM )
 
 
 	// path of trace back.
-	def.list = [ './root', './forms', './form' ];
+	def.list =
+	[
+		'./root',
+		'./disc',
+		'./discs',
+		'./form',
+		'./forms',
+		'./item',
+		'./widget'
+	];
 }
 
 
@@ -36,6 +45,18 @@ def.lazyFuncInt.appendOffset =
 	)
 {
 	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
+};
+
+
+/*
+| Returns a trace with a sub-widget appended.
+*/
+def.lazyFuncStr.appendWidget =
+	function(
+		key // key of the sub widget
+	)
+{
+	return trace_widget.create( 'list:init', this, 'list:append', this, 'key', key );
 };
 
 

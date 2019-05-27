@@ -49,6 +49,9 @@ if( TIM )
 		// default doesn't care
 		spaceRef : { type : 'undefined' },
 
+		// trace of the disc
+		trace : { type : '../trace/disc' },
+
 		// currently logged in user
 		// default doesn't care
 		user : { type : 'undefined' },
@@ -79,6 +82,10 @@ const gleam_transform = tim.require( '../gleam/transform' );
 
 const layout_disc = tim.require( '../layout/disc' );
 
+const tim_path = tim.require( 'tim.js/path' );
+
+const trace_root = tim.require( '../trace/root' );
+
 const widget_factory = tim.require( '../widget/factory' );
 
 
@@ -88,7 +95,7 @@ const widget_factory = tim.require( '../widget/factory' );
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_disc
-		path,       // path of the widget
+		key,        // key of the disc
 		transform,  // visual transformation
 		show,       // currently show disc/form
 		viewSize    // viewSize
@@ -101,14 +108,19 @@ def.static.createFromLayout =
 /**/	if( layout.timtype !== layout_disc ) throw new Error( );
 /**/}
 
+	const path = tim_path.empty.append( 'discs' ).append( 'twig' ).append( key );
+
+	const trace = trace_root.singleton.appendDiscs.appendDisc( key );
+
 	const twig = { };
 
-	for( let key of layout.keys )
+	for( let wKey of layout.keys )
 	{
-		twig[ key ] =
+		twig[ wKey ] =
 			widget_factory.createFromLayout(
-				layout.get( key ),
-				path.append( 'twig' ).append( key ),
+				layout.get( wKey ),
+				path.append( 'twig' ).append( wKey ),
+				trace.appendWidget( wKey ),
 				transform
 			);
 	}
@@ -123,6 +135,7 @@ def.static.createFromLayout =
 			'shape', layout.shape,
 			'show', this.concernsShow( show ),
 			'size', layout.size,
+			'trace', trace,
 			'viewSize', viewSize
 		)
 	);
