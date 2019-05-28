@@ -66,11 +66,8 @@ def.static.createPathAt =
 /*
 | The mark where the caret is.
 */
-def.lazy.caret =
-	function( )
-{
-	return this.pat;
-};
+// FIXME return offset
+def.lazy.caret = function( ) { return this.pat; };
 
 
 /*

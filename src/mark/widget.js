@@ -12,7 +12,10 @@ if( TIM )
 	def.attributes =
 	{
 		// path of the item
-		path : { type : 'tim.js/path' }
+		path : { type : 'tim.js/path' },
+
+		// trace to the widget
+		trace : { type : '../trace/widget' },
 	};
 }
 

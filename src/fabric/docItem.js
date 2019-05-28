@@ -26,9 +26,9 @@ const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_range = tim.require( '../mark/range' );
-
 const mark_pat = tim.require( '../mark/pat' );
+
+const mark_range = tim.require( '../mark/range' );
 
 
 /*
@@ -180,13 +180,20 @@ def.proto.markForPoint =
 			mark_range.create(
 				'doc', this.doc,
 				'begin', mark.pat,
-				'end', mark_pat.createPathAt( para.textPath, at )
+				'beginOffset', mark.offset,
+				'end', mark_pat.createPathAt( para.textPath, at ),
+				'endOffset', para.trace.appendOffset( at )
 			)
 		);
 	}
 	else if( doRange && mark && mark.timtype === mark_range )
 	{
-		return mark.create( 'end', mark_pat.createPathAt( para.textPath, at ) );
+		return(
+			mark.create(
+				'end', mark_pat.createPathAt( para.textPath, at ),
+				'endOffset', para.trace.appendOffset( at )
+			)
+		);
 	}
 	else
 	{

@@ -147,7 +147,7 @@ def.proto.onAuth =
 				'mark',
 					mark_caret.create(
 						'pat', mark_pat.createPathAt( passInput.path, passInput.value.length ),
-						'offset', passInput.trace.appendOfset( passInput.value.length )
+						'offset', passInput.trace.appendOffset( passInput.value.length )
 					)
 			);
 		}

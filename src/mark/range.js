@@ -14,11 +14,17 @@ if( TIM )
 		// begin of the range
 		begin : { type : './pat' },
 
+		// begin of the range
+		beginOffset : { type : '../trace/offset' },
+
 		// the document the range belongs to
 		doc : { type : '../fabric/doc' },
 
 		// end of the range
 		end : { type : './pat' },
+
+		// end of the range
+		endOffset : { type : '../trace/offset' },
 
 		// x-position of the caret kept
 		retainx : { type : [ 'undefined', 'number' ] }
@@ -31,6 +37,7 @@ const tim_path_list = tim.require( 'tim.js/pathList' );
 /*
 | Returns the mark where the caret should show up.
 */
+// FIXME make endOffset
 def.lazy.caret = function( ) { return this.end; };
 
 

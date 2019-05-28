@@ -217,6 +217,8 @@ def.proto._transformScrollbox =
 
 	let sbPath = this.path.append( 'twig' ).append( 'scrollbox' );
 
+	let sbTrace = this.trace.appendWidget( 'scrollbox' );
+
 	const userSpaceList = this.userSpaceList;
 
 	if( userSpaceList )
@@ -250,6 +252,7 @@ def.proto._transformScrollbox =
 					widget_button.createFromLayout(
 						gruga_moveTo.spaceButtonLayout,
 						sbPath.append( 'twig' ).append( fullname ),
+						sbTrace.appendWidget( fullname ),
 						gleam_transform.normal
 					);
 			}

@@ -166,9 +166,9 @@ def.proto.cycleFocus =
 					ve.caretable
 					? mark_caret.create(
 						'pat', mark_pat.createPathAt( ve.path, 0 ),
-						'offset', ve.trace.appendOfset( 0 )
+						'offset', ve.trace.appendOffset( 0 )
 					)
-					: mark_widget.create( 'path', ve.path )
+					: mark_widget.create( 'path', ve.path, 'trace', ve.trace )
 			);
 
 			break;
