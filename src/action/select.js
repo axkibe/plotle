@@ -144,9 +144,16 @@ def.proto.dragStop =
 
 	let paths = [ ];
 
+	let traces = new Set( );
+
 	for( let item of screen )
 	{
-		if( action.affectsItem( item ) ) paths.push( item.path );
+		if( action.affectsItem( item ) )
+		{
+			paths.push( item.path );
+
+			traces.add( item.trace );
+		}
 	}
 
 	let mark = pass;
@@ -157,11 +164,15 @@ def.proto.dragStop =
 
 		if( !ctrl || !screen.mark )
 		{
-			mark = mark_items.create( 'itemPaths', paths );
+			mark = mark_items.create( 'itemPaths', paths, 'set:init', traces );
 		}
 		else
 		{
-			mark = mark_items.create( 'itemPaths', paths.combine( screen.mark.itemPaths ) );
+			mark =
+				mark_items.create(
+					'itemPaths', paths.combine( screen.mark.itemPaths )
+					'set:init', traces
+				).combine( screen.mark.itemsMark )
 		}
 	}
 

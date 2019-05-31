@@ -85,7 +85,7 @@ def.lazy.forward =
 
 
 /*
-| The item path.
+| The item paths.
 |
 | This is either undefined or a path list of length === 1
 */
@@ -97,6 +97,22 @@ def.lazy.itemPaths =
 	if( path.length < 3 || path.get( 0 ) !== 'space' ) return;
 
 	return tim_path_list.create( 'list:append', path.limit( 3 ) );
+};
+
+
+/*
+| The item traces.
+|
+| This is either undefined or mark_items containing the parenting item.
+*/
+def.lazy.itemsMark =
+	function( )
+{
+	const offset = this.offset;
+
+	if( !offset.traceSpace ) return;
+
+	return items_mark.createWithOne( this.path.limit( 3 ), offset.traceItem );
 };
 
 

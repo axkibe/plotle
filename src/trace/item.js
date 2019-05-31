@@ -64,4 +64,10 @@ def.lazyFuncStr.appendWidget =
 };
 
 
+/*
+| This is the item trace.
+*/
+def.lazy.traceItem = function( ) { return this; };
+
+
 } );

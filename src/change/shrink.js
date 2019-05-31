@@ -227,7 +227,13 @@ def.proto._transformMarkItems =
 		if( !this.path.subPathOf( path.chop ) ) { a.push( path ); }
 	}
 
-	return mark_items.create( 'itemPaths', pathList.create( 'list:init', a ) );
+	// XXX FIXME traces
+
+	return(
+		mark_items.create(
+			'itemPaths', pathList.create( 'list:init', a )
+		)
+	);
 };
 
 

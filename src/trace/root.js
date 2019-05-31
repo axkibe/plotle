@@ -46,4 +46,11 @@ def.lazy.appendSpace =
 };
 
 
+/*
+| Root doesn't have back traces.
+*/
+def.proto.traceItem = undefined;
+def.proto.traceSpace = undefined;
+
+
 } );

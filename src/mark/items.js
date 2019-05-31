@@ -14,6 +14,8 @@ if( TIM )
 		// paths of the items
 		itemPaths : { type : 'tim.js/pathList' }
 	};
+
+	def.set = [ '../trace/item' ];
 }
 
 const pathList = tim.require( 'tim.js/pathList' );
@@ -50,13 +52,18 @@ def.proto.clipboard = '';
 */
 def.static.createWithOne =
 	function(
-		path
+		path,
+		trace
 	)
 {
 	// also sets the user mark on this item
 	const paths = pathList.create( 'list:init', [ path ] );
 
-	return mark_items.create( 'itemPaths', paths );
+	const traces = new Set( );
+
+	traces.add( trace );
+
+	return mark_items.create( 'itemPaths', paths, 'set:init', traces );
 };
 
 
@@ -70,6 +77,33 @@ def.proto.hasCaret = false;
 | The widget's path.
 */
 def.proto.widgetPath = undefined;
+
+
+
+/*
+| Combines the items mark (set) with another one.
+*/
+def.proto.combine =
+	function(
+		imark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( imark.timtype !== mark_items ) throw new Error( );
+/**/}
+
+	const itemPaths = this.itemPaths.combine( imark.itemPaths );
+
+	const set = this.clone( );
+
+	for( let t of imark )
+	{
+		if( !this.contains( t ) ) set.add( t );
+	}
+
+	return mark_items.create( 'itemPaths', itemPaths, 'set:init', set );
+}
 
 
 /*
@@ -90,6 +124,22 @@ def.proto.containsPath =
 	{
 		if( path.subPathOf( p ) ) return true;
 	}
+
+	return false;
+};
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+def.proto.containsItemTrace =
+	function(
+		itrace
+	)
+{
+
+	for( let t of this ) if( t.equals( itrace ) return true;
 
 	return false;
 };

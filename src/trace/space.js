@@ -31,4 +31,10 @@ def.lazyFuncStr.appendItem =
 };
 
 
+/*
+| This is the space trace.
+*/
+def.lazy.traceSpace = function( ) { return this; };
+
+
 } );
