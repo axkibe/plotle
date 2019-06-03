@@ -20,6 +20,8 @@ if( TIM )
 
 const pathList = tim.require( 'tim.js/pathList' );
 
+const trace_item = tim.require( '../trce/item' );
+
 
 /*
 | Exta checking
@@ -36,6 +38,8 @@ def.proto._check =
 /**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
 /**/	}
 /**/}
+
+	console.log( this._set );
 };
 
 
@@ -102,8 +106,10 @@ def.proto.combine =
 		if( !this.contains( t ) ) set.add( t );
 	}
 
+	console.log( 'COMBINE', this, '+', imark, '=', set );
+
 	return mark_items.create( 'itemPaths', itemPaths, 'set:init', set );
-}
+};
 
 
 /*
@@ -139,7 +145,7 @@ def.proto.containsItemTrace =
 	)
 {
 
-	for( let t of this ) if( t.equals( itrace ) return true;
+	for( let t of this ) if( t.equals( itrace ) ) return true;
 
 	return false;
 };
@@ -150,15 +156,19 @@ def.proto.containsItemTrace =
 | when it isn't part of this mark, or the
 | path removed when it is.
 */
-def.proto.togglePath =
+def.proto.toggle =
 	function(
-		path
+		path,
+		trace
 	)
 {
 /**/if( CHECK )
 /**/{
 /**/	if( path.empty ) throw new Error( );
+/**/
+/**/	if( trace.timtype === trace_item ) throw new Error( );
 /**/}
+
 
 	const paths = this.itemPaths;
 

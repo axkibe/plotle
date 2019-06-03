@@ -234,7 +234,7 @@ def.proto._ctrlClick =
 	{
 		case mark_items :
 
-			root.alter( 'mark', mark.togglePath( this.path ) );
+			root.alter( 'mark', mark.toggle( this.path, this.trace ) );
 
 			return true;
 

@@ -158,6 +158,8 @@ def.proto.dragStop =
 
 	let mark = pass;
 
+	console.log( 'XXX' );
+
 	if( paths.length > 0 )
 	{
 		paths = tim_path_list.create( 'list:init', paths );
@@ -168,11 +170,13 @@ def.proto.dragStop =
 		}
 		else
 		{
+			console.log( 'XXX' );
+
 			mark =
 				mark_items.create(
-					'itemPaths', paths.combine( screen.mark.itemPaths )
+					'itemPaths', paths.combine( screen.mark.itemPaths ),
 					'set:init', traces
-				).combine( screen.mark.itemsMark )
+				).combine( screen.mark.itemsMark );
 		}
 	}
 

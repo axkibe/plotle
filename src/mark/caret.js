@@ -29,6 +29,8 @@ if( TIM )
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
+const mark_items = tim.require( './items' );
+
 const mark_pat = tim.require( './pat' );
 
 
@@ -112,7 +114,7 @@ def.lazy.itemsMark =
 
 	if( !offset.traceSpace ) return;
 
-	return items_mark.createWithOne( this.path.limit( 3 ), offset.traceItem );
+	return mark_items.createWithOne( this.path.limit( 3 ), offset.traceItem );
 };
 
 
