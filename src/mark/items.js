@@ -20,7 +20,7 @@ if( TIM )
 
 const pathList = tim.require( 'tim.js/pathList' );
 
-const trace_item = tim.require( '../trce/item' );
+const trace_item = tim.require( '../trace/item' );
 
 
 /*
@@ -38,8 +38,6 @@ def.proto._check =
 /**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
 /**/	}
 /**/}
-
-	console.log( this._set );
 };
 
 
@@ -106,8 +104,6 @@ def.proto.combine =
 		if( !this.contains( t ) ) set.add( t );
 	}
 
-	console.log( 'COMBINE', this, '+', imark, '=', set );
-
 	return mark_items.create( 'itemPaths', itemPaths, 'set:init', set );
 };
 
@@ -166,9 +162,8 @@ def.proto.toggle =
 /**/{
 /**/	if( path.empty ) throw new Error( );
 /**/
-/**/	if( trace.timtype === trace_item ) throw new Error( );
+/**/	if( trace.timtype !== trace_item ) throw new Error( );
 /**/}
-
 
 	const paths = this.itemPaths;
 
@@ -176,11 +171,21 @@ def.proto.toggle =
 	{
 		if( path.equals( paths.get( a ) ) )
 		{
-			return this.create( 'itemPaths', this.itemPaths.create( 'list:remove', a ) );
+			return(
+				this.create(
+					'itemPaths', this.itemPaths.create( 'list:remove', a ),
+					'set:remove', trace
+				)
+			);
 		}
 	}
 
-	return this.create( 'itemPaths', this.itemPaths.create( 'list:append', path ) );
+	return(
+		this.create(
+			'itemPaths', this.itemPaths.create( 'list:append', path ),
+			'set:add', trace
+		)
+	);
 };
 
 

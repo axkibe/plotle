@@ -244,7 +244,8 @@ def.proto._ctrlClick =
 			root.alter(
 				'mark',
 					mark_items.create(
-						'itemPaths', mark.itemPaths.create( 'list:append', this.path )
+						'itemPaths', mark.itemPaths.create( 'list:append', this.path ),
+						'set:add', this.trace
 					)
 			);
 
