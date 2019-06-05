@@ -89,7 +89,9 @@ def.adjust.get =
 {
 	const path = form.path || this.path.append( 'twig' ).append( name );
 
-	const mark = forms_form.concernsMark( this.mark, path );
+	const trace = trace_root.singleton.appendForms.appendForm( name );
+
+	const mark = forms_form.concernsMark( this.mark, path, trace );
 
 	const spaceRef = form.concernsSpaceRef( this.spaceRef );
 
@@ -100,8 +102,6 @@ def.adjust.get =
 	const hasSnapping = form.concernsHasSnapping( this.hasSnapping );
 
 	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
-
-	const trace = trace_root.singleton.appendForms.appendForm( name );
 
 	return(
 		form.create(
@@ -142,12 +142,21 @@ def.static.concernsHover =
 | Returns the mark if the form root concerns about it.
 */
 def.static.concernsMark =
-	( mark ) =>
-	(
+	function(
+		mark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return(
 		mark && mark.containsPath( forms_root.path )
 		? mark
 		: undefined
 	);
+};
 
 
 /*

@@ -93,9 +93,15 @@ def.proto.concernsMark =
 def.static.concernsMark =
 	function(
 		mark,
-		path
+		path,
+		trace
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	return mark && mark.containsPath( path ) ? mark : undefined;
 };
 

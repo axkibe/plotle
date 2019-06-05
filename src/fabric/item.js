@@ -94,9 +94,15 @@ def.proto.concernsHover =
 def.static.concernsMark =
 	function(
 		mark,
-		path
+		path,
+		trace
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	if( !path || !mark ) return;
 
 	if( mark.containsPath( path ) ) return mark;

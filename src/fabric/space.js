@@ -249,6 +249,11 @@ def.static.concernsMark =
 		mark
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
 	return(
 		( mark && mark.containsPath( fabric_space.spacePath ) )
 		? mark
@@ -364,7 +369,7 @@ def.adjust.get =
 	// this is all that's needed for server side
 	if( NODE ) return item.create( 'path', path, 'trace', trace );
 
-	const mark = fabric_item.concernsMark( this.mark, path );
+	const mark = fabric_item.concernsMark( this.mark, path, trace );
 
 	let highlight = !!( mark && mark.containsPath( path ) );
 

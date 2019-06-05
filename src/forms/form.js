@@ -100,9 +100,15 @@ def.proto.concernsHasSnapping =
 def.static.concernsMark =
 	function(
 		mark,
-		path
+		path,
+		trace
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	if( !mark ) return mark;
 
 	return mark.containsPath( path ) ? mark : undefined;
@@ -252,11 +258,11 @@ def.static.adjustGet =
 
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const mark = widget.concernsMark( this.mark, path );
+	const trace = this.trace.appendWidget( name );
+
+	const mark = widget.concernsMark( this.mark, path, trace );
 
 	const hover = widget.concernsHover( this.hover, path );
-
-	const trace = this.trace.appendWidget( name );
 
 	widget =
 		widget.create(

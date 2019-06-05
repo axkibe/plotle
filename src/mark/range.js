@@ -156,6 +156,52 @@ def.lazy.clipboard =
 
 
 /*
+| Returns true if the range encompasses the para
+| specified by the trace
+*/
+def.proto.encompassesPara =
+	function(
+		trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/
+/**/	if( trace.timtype !== trace_para ) throw new Error( );
+/**/}
+
+
+XXXX
+
+	const dp = this.docPath;
+
+	if( path.length <= dp.length ) return path.subPathOf( dp );
+
+	if( path.subPathOf( this.begin.path ) || path.subPathOf( this.end.path ) ) return true;
+
+	const fp = this.front.path;
+
+	const bp = this.back.path;
+
+	const doc = this.doc;
+
+	const fr = doc.rankOf( fp.get( -2 ) );
+
+	const br = doc.rankOf( bp.get( -2 ) );
+
+	// NOTE: this code is untested.
+
+	for( let r = fr + 1; r < br; r++ )
+	{
+		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) ) return true;
+	}
+
+	return false;
+};
+
+
+/*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
@@ -164,7 +210,6 @@ def.proto.containsPath =
 		path
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.length === 0 )	throw new Error( );
