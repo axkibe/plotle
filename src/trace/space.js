@@ -11,7 +11,7 @@ def.extend = './bare';
 
 if( TIM )
 {
-	// path of trace back.
+	// path of trace back
 	def.list = [ './root' ];
 }
 

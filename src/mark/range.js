@@ -33,6 +33,8 @@ if( TIM )
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
+const trace_para = tim.require( '../trace/para' );
+
 
 /*
 | Returns the mark where the caret should show up.
@@ -64,26 +66,28 @@ def.lazy.docPath =
 | The begin or end
 | dependening on which comes first in the doc.
 */
-def.lazy.front =
-	function( )
-{
-	this._normalize( );
+def.lazy.front = function( ) { this._normalize( ); return this.front; };
 
-	return this.front;
-};
+
+/*
+| The begin or end
+| dependening on which comes first in the doc.
+*/
+def.lazy.frontOffset = function( ) { this._normalize( ); return this.frontOffset; };
 
 
 /*
 | The begin or end
 | dependening on which comes last in the doc.
 */
-def.lazy.back =
-	function( )
-{
-	this._normalize( );
+def.lazy.back = function( ) { this._normalize( ); return this.back; };
 
-	return this.back;
-};
+
+/*
+| The begin or end
+| dependening on which comes last in the doc.
+*/
+def.lazy.backOffset = function( ) { this._normalize( ); return this.backOffset; };
 
 
 /*
@@ -156,52 +160,6 @@ def.lazy.clipboard =
 
 
 /*
-| Returns true if the range encompasses the para
-| specified by the trace
-*/
-def.proto.encompassesPara =
-	function(
-		trace
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 ) throw new Error( );
-/**/
-/**/	if( trace.timtype !== trace_para ) throw new Error( );
-/**/}
-
-
-XXXX
-
-	const dp = this.docPath;
-
-	if( path.length <= dp.length ) return path.subPathOf( dp );
-
-	if( path.subPathOf( this.begin.path ) || path.subPathOf( this.end.path ) ) return true;
-
-	const fp = this.front.path;
-
-	const bp = this.back.path;
-
-	const doc = this.doc;
-
-	const fr = doc.rankOf( fp.get( -2 ) );
-
-	const br = doc.rankOf( bp.get( -2 ) );
-
-	// NOTE: this code is untested.
-
-	for( let r = fr + 1; r < br; r++ )
-	{
-		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) ) return true;
-	}
-
-	return false;
-};
-
-
-/*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
@@ -245,10 +203,75 @@ def.proto.containsPath =
 /*
 | True if begin equals end
 */
-def.lazy.empty =
-	function( )
+def.lazy.empty = function( ) { return this.begin.equals( this.end ); };
+
+
+/*
+| Returns true if this mark encompasses the trace.
+*/
+def.proto.encompasses =
+	function(
+		trace
+	)
 {
-	return this.begin.equals( this.end );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	const tPara = trace.tracePara;
+
+	if( tPara ) return this._encompassesPara( tPara );
+
+	return this.beginOffset.hasTrace( trace );
+};
+
+
+/*
+| Returns true if the range encompasses the para
+| specified by the trace
+*/
+def.proto._encompassesPara =
+	function(
+		trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/
+/**/	if( trace.timtype !== trace_para ) throw new Error( );
+/**/}
+
+	trace = trace.tracePara;
+
+	if( !trace ) return;
+
+	const tDoc = this.beginOffset.traceDoc;
+
+	// not even the same doc?
+	if( !tDoc.equals( trace.traceDoc ) ) return;
+
+	const ftp = this.frontOffset.tracePara;
+
+	const btp = this.backOffset.tracePara;
+
+	const tkey = trace.key;
+
+	const doc = this.doc;
+
+	const fr = doc.rankOf( ftp.key );
+
+	const br = doc.rankOf( btp.key );
+
+	// NOTE: this code is untested.
+
+	for( let r = fr; r <= br; r++ )
+	{
+		if( tkey === doc.keys[ r ] ) return true;
+	}
+
+	return false;
 };
 
 
@@ -259,8 +282,10 @@ def.proto._normalize =
 	function( )
 {
 	const begin = this.begin;
-
 	const end = this.end;
+
+	const beginOffset = this.beginOffset;
+	const endOffset = this.endOffset;
 
 	if( begin.path.equals( end.path ) )
 	{
@@ -268,11 +293,17 @@ def.proto._normalize =
 		{
 			tim.aheadValue( this, 'front', begin );
 			tim.aheadValue( this, 'back', end );
+
+			tim.aheadValue( this, 'frontOffset', beginOffset );
+			tim.aheadValue( this, 'backOffset', endOffset );
 		}
 		else
 		{
 			tim.aheadValue( this, 'front', end );
 			tim.aheadValue( this, 'back', begin );
+
+			tim.aheadValue( this, 'frontOffset', endOffset );
+			tim.aheadValue( this, 'backOffset', beginOffset );
 		}
 
 		return;
@@ -294,14 +325,18 @@ def.proto._normalize =
 	if( br < er )
 	{
 		tim.aheadValue( this, 'front', begin );
-
 		tim.aheadValue( this, 'back', end );
+
+		tim.aheadValue( this, 'frontOffset', beginOffset );
+		tim.aheadValue( this, 'backOffset', endOffset );
 	}
 	else
 	{
 		tim.aheadValue( this, 'front', end );
-
 		tim.aheadValue( this, 'back', begin );
+
+		tim.aheadValue( this, 'frontOffset', endOffset );
+		tim.aheadValue( this, 'backOffset', beginOffset );
 	}
 };
 

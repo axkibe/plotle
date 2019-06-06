@@ -146,14 +146,9 @@ def.static.concernsMark =
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
-	if( !mark ) return mark;
+	if( !mark ) return;
 
-	if( mark.timtype === mark_range )
-	{
-		return mark.containsPath( path.limit( 3 ) ) ? mark : undefined;
-	}
-
-	return mark.containsPath( path ) ? mark : undefined;
+	if( mark.encompasses( trace ) ) return mark;
 };
 
 

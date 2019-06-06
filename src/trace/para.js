@@ -39,4 +39,10 @@ def.lazyFuncInt.appendOffset =
 };
 
 
+/*
+| This is the para trace.
+*/
+def.lazy.tracePara = function( ) { return this; };
+
+
 } );

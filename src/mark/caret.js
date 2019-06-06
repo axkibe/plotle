@@ -165,6 +165,12 @@ def.proto.containsPath =
 
 
 /*
+| Returns true if this mark encompasses the trace.
+*/
+def.proto.encompasses = function( trace ) { return this.offset.hasTrace( trace ); };
+
+
+/*
 | The caret with offset = 0.
 */
 def.lazy.zero =
