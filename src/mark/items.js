@@ -24,20 +24,16 @@ const trace_item = tim.require( '../trace/item' );
 
 
 /*
-| Exta checking
+| Returns true if this mark encompasses the trace.
 */
-def.proto._check =
-	function( )
+def.proto.encompasses =
+	function(
+		trace
+	)
 {
-/**/if( CHECK )
-/**/{
-/**/	for( let path of this.itemPaths )
-/**/	{
-/**/		if( path.isEmpty ) throw new Error( );
-/**/
-/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
-/**/	}
-/**/}
+	for( let t of this ) if( t.hasTrace( trace ) ) return true;
+
+	return false;
 };
 
 
@@ -186,6 +182,24 @@ def.proto.toggle =
 			'set:add', trace
 		)
 	);
+};
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	for( let path of this.itemPaths )
+/**/	{
+/**/		if( path.isEmpty ) throw new Error( );
+/**/
+/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
+/**/	}
+/**/}
 };
 
 

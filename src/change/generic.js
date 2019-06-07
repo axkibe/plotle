@@ -15,6 +15,8 @@ def.abstract = true;
 
 const change_list = tim.require( './list' );
 
+const trace_any = tim.require( '../trace/any' );
+
 
 /*
 | Reversivly performs this change on a tree.
@@ -127,7 +129,15 @@ def.proto._transformMarkCaret =
 {
 	const pat = this._transformMarkPat( mark.pat );
 
-	if( pat ) return mark.create( 'pat', pat );
+	if( pat )
+	{
+		return(
+			mark.create(
+				'offset', trace_any.createFromPath( pat.path ).appendOffset( pat.at ),
+				'pat', pat
+			)
+		);
+	}
 };
 
 

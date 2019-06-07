@@ -32,6 +32,16 @@ def.lazyFuncStr.appendPara =
 
 
 /*
+| FIXME remove.
+*/
+def.lazy.toPath =
+	function( )
+{
+	return this.get( this.length - 1 ).toPath.append( 'doc' );
+};
+
+
+/*
 | This is the space trace.
 */
 def.lazy.traceDoc = function( ) { return this; };

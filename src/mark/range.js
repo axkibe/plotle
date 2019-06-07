@@ -284,59 +284,61 @@ def.proto._normalize =
 	const begin = this.begin;
 	const end = this.end;
 
-	const beginOffset = this.beginOffset;
-	const endOffset = this.endOffset;
+	const bto = this.beginOffset;
+	const eto = this.endOffset;
 
-	if( begin.path.equals( end.path ) )
+	const btp = bto.tracePara;
+	const etp = eto.tracePara;
+
+	if( btp.equals( etp ) )
 	{
-		if( begin.at <= end.at )
+		if( bto.at <= eto.at )
 		{
 			tim.aheadValue( this, 'front', begin );
 			tim.aheadValue( this, 'back', end );
 
-			tim.aheadValue( this, 'frontOffset', beginOffset );
-			tim.aheadValue( this, 'backOffset', endOffset );
+			tim.aheadValue( this, 'frontOffset', bto );
+			tim.aheadValue( this, 'backOffset', eto );
 		}
 		else
 		{
 			tim.aheadValue( this, 'front', end );
 			tim.aheadValue( this, 'back', begin );
 
-			tim.aheadValue( this, 'frontOffset', endOffset );
-			tim.aheadValue( this, 'backOffset', beginOffset );
+			tim.aheadValue( this, 'frontOffset', eto );
+			tim.aheadValue( this, 'backOffset', bto );
 		}
 
 		return;
 	}
 
-	const bk = begin.path.get( -2 );
-
-	const ek = end.path.get( -2 );
+	const bKey = btp.key;
+	const eKey = etp.key;
 
 /**/if( CHECK )
 /**/{
-/**/	if( bk === ek )	throw new Error( );
+/**/	if( bKey === eKey ) throw new Error( );
 /**/}
 
-	const br = this.doc.rankOf( bk );
+	const doc = this.doc;
+	const bRank = doc.rankOf( bKey );
+	const eRank = doc.rankOf( eKey );
 
-	const er = this.doc.rankOf( ek );
-
-	if( br < er )
+	if( bRank < eRank )
 	{
 		tim.aheadValue( this, 'front', begin );
 		tim.aheadValue( this, 'back', end );
 
-		tim.aheadValue( this, 'frontOffset', beginOffset );
-		tim.aheadValue( this, 'backOffset', endOffset );
+		tim.aheadValue( this, 'frontOffset', bto );
+		tim.aheadValue( this, 'backOffset', eto );
 	}
 	else
 	{
 		tim.aheadValue( this, 'front', end );
 		tim.aheadValue( this, 'back', begin );
 
-		tim.aheadValue( this, 'frontOffset', endOffset );
-		tim.aheadValue( this, 'backOffset', beginOffset );
+		tim.aheadValue( this, 'frontOffset', eto );
+		tim.aheadValue( this, 'backOffset', bto );
 	}
 };
 

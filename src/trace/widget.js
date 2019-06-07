@@ -61,4 +61,14 @@ def.lazyFuncStr.appendWidget =
 };
 
 
+/*
+| FIXME remove.
+*/
+def.lazy.toPath =
+	function( )
+{
+	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
+};
+
+
 } );

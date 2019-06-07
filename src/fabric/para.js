@@ -97,7 +97,7 @@ const session_uid = tim.require( '../session/uid' );
 const _keyMap =
 	Object.freeze( {
 		backspace : '_keyBackspace',
-		deli      : '_keyDel',
+		del       : '_keyDel',
 		down      : '_keyDown',
 		end       : '_keyEnd',
 		enter     : '_keyEnter',
@@ -147,6 +147,12 @@ def.static.concernsMark =
 /**/}
 
 	if( !mark ) return;
+
+	if( mark.timtype === mark_caret )
+	{
+		// XXX
+		if( mark.containsPath( path ) !== mark.encompasses( trace ) ) throw new Error( );
+	}
 
 	if( mark.encompasses( trace ) ) return mark;
 };

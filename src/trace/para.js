@@ -40,6 +40,16 @@ def.lazyFuncInt.appendOffset =
 
 
 /*
+| FIXME remove.
+*/
+def.lazy.toPath =
+	function( )
+{
+	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
+};
+
+
+/*
 | This is the para trace.
 */
 def.lazy.tracePara = function( ) { return this; };

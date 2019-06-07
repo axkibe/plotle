@@ -31,8 +31,6 @@ const tim_path_list = tim.require( 'tim.js/pathList' );
 
 const mark_items = tim.require( './items' );
 
-const mark_pat = tim.require( './pat' );
-
 
 /*
 | The caret with offset - 1.
@@ -44,24 +42,15 @@ def.lazy.backward =
 
 	if( !pat ) return;
 
-	const c = this.create( 'pat', pat );
+	const c =
+		this.create(
+			'offset', this.offset.backward,
+			'pat', pat
+		);
 
 	tim.aheadValue( c, 'forward', this );
 
 	return c;
-};
-
-
-/*
-| Creation Shortcut.
-*/
-def.static.createPathAt =
-	function(
-		path,
-		at
-	)
-{
-	return mark_caret.create( 'pat', mark_pat.create( 'path', path, 'at', at ) );
 };
 
 
@@ -73,17 +62,59 @@ def.lazy.caret = function( ) { return this.pat; };
 
 
 /*
+| The content the mark puts into the clipboard.
+*/
+def.proto.clipboard = '';
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+def.proto.containsPath =
+	function(
+		path
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )	throw new Error( );
+/**/}
+
+	return path.subPathOf( this.pat.path );
+};
+
+
+/*
+| Returns true if this mark encompasses the trace.
+*/
+def.proto.encompasses = function( trace ) { return this.offset.hasTrace( trace ); };
+
+
+/*
 | The caret with offset + 1.
 */
 def.lazy.forward =
 	function( )
 {
-	const c = this.create( 'pat', this.pat.forward );
+	const c =
+		this.create(
+			'offset', this.offset.forward,
+			'pat', this.pat.forward
+		);
 
 	tim.aheadValue( c, 'backward', this );
 
 	return c;
 };
+
+
+/*
+| A caret mark has a caret.
+|
+| (the text range is the other mark which has this too )
+*/
+def.proto.hasCaret = true;
 
 
 /*
@@ -133,50 +164,31 @@ def.lazy.widgetPath =
 
 
 /*
-| A caret mark has a caret.
-|
-| (the text range is the other mark which has this too )
-*/
-def.proto.hasCaret = true;
-
-
-/*
-| The content the mark puts into the clipboard.
-*/
-def.proto.clipboard = '';
-
-
-/*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-def.proto.containsPath =
-	function(
-		path
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( path.length === 0 )	throw new Error( );
-/**/}
-
-	return path.subPathOf( this.pat.path );
-};
-
-
-/*
-| Returns true if this mark encompasses the trace.
-*/
-def.proto.encompasses = function( trace ) { return this.offset.hasTrace( trace ); };
-
-
-/*
 | The caret with offset = 0.
 */
 def.lazy.zero =
 	function( )
 {
 	return this.create( 'pat', this.pat.zero );
+};
+
+
+/*
+| Extra checking.
+*/
+def.proto._check =
+	function( )
+{
+	let path = this.pat.path;
+
+	if( path.last === 'text' ) path = path.shorten;
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		!this.offset.get( this.offset.length - 1 ).toPath.equals( path )
+/**/	) throw new Error( );
+/**/}
 };
 
 

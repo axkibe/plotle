@@ -35,6 +35,24 @@ if( TIM )
 
 
 /*
+| The offset reference - 1.
+*/
+def.lazy.backward =
+	function( )
+{
+	const at = this.at;
+
+	if( at <= 0 ) return;
+
+	const o = this.create( 'at', this.at - 1 );
+
+	tim.aheadValue( o, 'forward', this );
+
+	return o;
+};
+
+
+/*
 | Returns a trace with a changed offset
 */
 def.proto.changeTo =
@@ -43,6 +61,20 @@ def.proto.changeTo =
 	)
 {
 	return this.get( this.length - 1 ).appendOffset( at );
+};
+
+
+/*
+| The offset trace + 1.
+*/
+def.lazy.forward =
+	function( )
+{
+	const o = this.create( 'at', this.at + 1 );
+
+	tim.aheadValue( o, 'backward', this );
+
+	return o;
 };
 
 

@@ -9,11 +9,19 @@ tim.define( module, ( def, trace_root ) => {
 def.singleton = true;
 
 
+const tim_path = tim.require( 'tim.js/path' );
+
 const trace_discs = tim.require( './discs' );
 
 const trace_forms = tim.require( './forms' );
 
 const trace_space = tim.require( './space' );
+
+
+/*
+| FIXME remove
+*/
+def.lazy.toPath = function( ) { return tim_path.empty; };
 
 
 /*

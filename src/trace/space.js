@@ -20,6 +20,12 @@ const trace_item = tim.require( './item' );
 
 
 /*
+| FIXME remove
+*/
+def.lazy.toPath = function( ) { return this.get( this.length - 1 ).toPath.append( 'space' ); };
+
+
+/*
 | Returns a trace with an item part appended.
 */
 def.lazyFuncStr.appendItem =
