@@ -14,12 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// insert at this path
-		path : { type : 'tim.js/path', json : true },
-
-		// insert this
-		val : { type : 'string', json : true },
-
 		// insert at this place begin
 		at1 : { type : 'integer', json : true },
 
@@ -27,6 +21,12 @@ if( TIM )
 		// must be at1 + val.length
 		// FUTURE have this be a lazy
 		at2 : { type : 'integer', json : true },
+
+		// insert this
+		val : { type : 'string', json : true },
+
+		// insert at this path
+		path : { type : 'tim.js/path', json : true },
 	};
 
 	def.json = 'change_insert';
@@ -65,17 +65,27 @@ const mark_widget = tim.require( '../mark/widget' );
 
 
 /*
-| Exta checking
+| Performs the insertion change on a tree.
 */
-def.proto._check =
-	function( )
+def.proto.changeTree =
+	function(
+		tree
+	)
 {
-	if( this.at1 + this.val.length !== this.at2 )
-	{
-		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
-	}
+	const text = tree.getPath( this.path );
 
-	if( this.at1 < 0 || this.at2 < 0 ) throw error.make( 'insert.at1|at2 negative' );
+	if( typeof( text ) !== 'string' ) throw error.make( 'insert.path signates no string' );
+
+	if( this.at1 > text.length ) throw error.make( 'insert.at1 invalid' );
+
+	return(
+		tree.setPath(
+			this.path,
+			text.substring( 0, this.at1 )
+			+ this.val
+			+ text.substring( this.at1 )
+		)
+	);
 };
 
 
@@ -100,27 +110,17 @@ def.lazy.reversed =
 
 
 /*
-| Performs the insertion change on a tree.
+| Exta checking
 */
-def.proto.changeTree =
-	function(
-		tree
-	)
+def.proto._check =
+	function( )
 {
-	const text = tree.getPath( this.path );
+	if( this.at1 + this.val.length !== this.at2 )
+	{
+		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );
+	}
 
-	if( typeof( text ) !== 'string' ) throw error.make( 'insert.path signates no string' );
-
-	if( this.at1 > text.length ) throw error.make( 'insert.at1 invalid' );
-
-	return(
-		tree.setPath(
-			this.path,
-			text.substring( 0, this.at1 )
-			+ this.val
-			+ text.substring( this.at1 )
-		)
-	);
+	if( this.at1 < 0 || this.at2 < 0 ) throw error.make( 'insert.at1|at2 negative' );
 };
 
 

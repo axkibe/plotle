@@ -8,6 +8,8 @@ tim.define( module, ( def, trace_root ) => {
 
 def.singleton = true;
 
+def.extend = './bare';
+
 
 const tim_path = tim.require( 'tim.js/path' );
 
@@ -55,11 +57,16 @@ def.lazy.appendSpace =
 
 
 /*
-| Root doesn't have back traces.
+| In case of a root trace returns the leaf.
 */
-def.lazy.traceDoc = ( ) => undefined;
-def.lazy.traceItem = ( ) => undefined;
-def.lazy.traceSpace = ( ) => undefined;
+def.proto.graft = ( tree, leaf ) => leaf;
+
+
+/*
+| Picks the traced leaf.
+| In case of a root trace returns the tree.
+*/
+def.proto.pick = ( tree ) => tree;
 
 
 } );

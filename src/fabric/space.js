@@ -254,11 +254,9 @@ def.static.concernsMark =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	return(
-		( mark && mark.containsPath( fabric_space.spacePath ) )
-		? mark
-		: undefined
-	);
+	if( !mark ) return;
+
+	if( mark.encompasses( fabric_space.spaceTrace ) ) return mark;
 };
 
 

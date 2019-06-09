@@ -103,9 +103,9 @@ def.static.concernsMark =
 /**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
-	if( !path || !mark ) return;
+	if( !mark || !trace ) return;
 
-	if( mark.containsPath( path ) ) return mark;
+	if( mark.encompasses( trace ) ) return mark;
 };
 
 

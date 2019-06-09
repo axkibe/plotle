@@ -32,25 +32,49 @@ def.proto.hasTrace =
 /*
 | Default doc tracer.
 */
-def.lazy.traceDoc = function( ) { return this.get( this.length - 1 ).traceDoc; };
+def.lazy.traceDoc =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceDoc;
+};
 
 
 /*
 | Default item tracer.
 */
-def.lazy.traceItem = function( ) { return this.get( this.length - 1 ).traceItem; };
+def.lazy.traceItem =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceItem;
+};
 
 
 /*
 | Default para tracer.
 */
-def.lazy.tracePara = function( ) { return this.get( this.length - 1 ).tracePara; };
+def.lazy.tracePara =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).tracePara;
+};
 
 
 /*
 | Default space tracer.
 */
-def.lazy.traceSpace = function( ) { return this.get( this.length - 1 ).traceSpace; };
+def.lazy.traceSpace =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceSpace;
+};
 
 
 } );

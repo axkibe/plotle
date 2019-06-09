@@ -21,6 +21,12 @@ if( TIM )
 
 
 /*
+| Returns true if this mark encompasses the trace.
+*/
+def.proto.encompasses = function( trace ) { return this.trace.hasTrace( trace ); };
+
+
+/*
 | A widget has no item paths.
 */
 def.lazy.paths = ( ) => undefined;

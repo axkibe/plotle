@@ -65,6 +65,40 @@ def.lazyFuncStr.appendWidget =
 
 
 /*
+| Grafts a new leaf on a tree.
+| In case of a root trace returns the leaf.
+*/
+def.proto.graft =
+	function(
+		tree,
+		leaf
+	)
+{
+	let sub = this.pick( tree );
+
+	sub = sub.create( 'twig:set', this.key, leaf );
+
+	if( this.length === 0 ) return sub;
+
+	return this.last.graft( tree, sub );
+};
+
+
+/*
+| Picks the traced leaf.
+*/
+def.proto.pick =
+	function(
+		tree
+	)
+{
+	if( this.length === 0 ) return tree;
+
+	return this.last.pick( tree ).get( this.key );
+};
+
+
+/*
 | FIXME remove.
 */
 def.lazy.toPath =

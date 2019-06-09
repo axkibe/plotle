@@ -32,6 +32,40 @@ def.lazyFuncStr.appendPara =
 
 
 /*
+| Grafts a new leaf on a tree.
+| In case of a root trace returns the leaf.
+*/
+def.proto.graft =
+	function(
+		tree,
+		leaf
+	)
+{
+	let sub = this.pick( tree );
+
+	sub = sub.create( 'doc', leaf );
+
+	if( this.length === 0 ) return sub;
+
+	return this.last.graft( tree, sub );
+};
+
+
+/*
+| Picks the traced leaf.
+*/
+def.proto.pick =
+	function(
+		tree
+	)
+{
+	if( this.length === 0 ) return tree;
+
+	return this.last.pick( tree ).doc;
+};
+
+
+/*
 | FIXME remove.
 */
 def.lazy.toPath =

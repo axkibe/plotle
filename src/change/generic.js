@@ -31,6 +31,16 @@ def.proto.changeTreeReverse =
 
 
 /*
+| FIXME remove
+*/
+def.lazy.trace =
+	function( )
+{
+	return trace_any.createFromPath( this.path );
+};
+
+
+/*
 | Returns a change, changeList, changeWrap or changeWrapList
 | transformed on this change.
 */
@@ -83,12 +93,6 @@ def.proto._transformChangeList =
 
 	return cList.create( 'list:init', tList );
 };
-
-
-/*
-| Returns a non transform.
-*/
-def.proto._transformSame = ( o ) => o;
 
 
 /*
@@ -155,6 +159,12 @@ def.proto._transformMarkRange =
 
 	if( begin && end ) return mark.create( 'begin', begin, 'end', end );
 };
+
+
+/*
+| Returns a non transform.
+*/
+def.proto._transformSame = ( o ) => o;
 
 
 } );

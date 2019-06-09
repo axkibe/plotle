@@ -11,3 +11,4 @@ FIXME: remove all action: affectZone, affectItem, affects.bla
 FIXME: check all create( ) if replaceable with .empty
 
 FIXME: move the gruga forms in a form directory
+FIXME: click on portal doesn't select

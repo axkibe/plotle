@@ -148,12 +148,6 @@ def.static.concernsMark =
 
 	if( !mark ) return;
 
-	if( mark.timtype === mark_caret )
-	{
-		// XXX
-		if( mark.containsPath( path ) !== mark.encompasses( trace ) ) throw new Error( );
-	}
-
 	if( mark.encompasses( trace ) ) return mark;
 };
 
