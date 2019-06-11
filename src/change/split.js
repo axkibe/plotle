@@ -52,40 +52,13 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
 
+const trace_any = tim.require( '../trace/any' );
 
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
-};
-
-
-/*
-| Returns the inversion to this change.
-*/
-def.lazy.reversed =
-	function( )
-{
-	const inv =
-		change_join.create(
-			'path', this.path,
-			'at1', this.at1,
-			'path2', this.path2
-		);
-
-	tim.aheadValue( inv, 'reversed', this );
-
-	return inv;
-};
+const trace_offset = tim.require( '../trace/offset' );
 
 
 /*
@@ -144,13 +117,51 @@ def.proto.changeTree =
 
 
 /*
+| Returns the inversion to this change.
+*/
+def.lazy.reversed =
+	function( )
+{
+	const inv =
+		change_join.create(
+			'path', this.path,
+			'at1', this.at1,
+			'path2', this.path2
+		);
+
+	tim.aheadValue( inv, 'reversed', this );
+
+	return inv;
+};
+
+
+/*
+| FIXME remove
+*/
+def.lazy.trace2 =
+	function( )
+{
+	return trace_any.createFromPath( this.path2 );
+};
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
+};
+
+
+/*
 | Maps transformables to transform functions
 */
 def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	map.set( mark_pat,    '_transformMarkPat' );
 	map.set( mark_caret,  '_transformMarkCaret' );
 	map.set( mark_range,  '_transformMarkRange' );
 	map.set( mark_items,  '_transformSame' );
@@ -239,23 +250,27 @@ def.proto._transformJoinSplit =
 
 
 /*
-| Transforms a text mark by this split.
+| Transforms an offset.
 */
-def.proto._transformMarkPat =
+def.proto._transformOffset =
 	function(
-		mark
+		offset
 	)
 {
-	if( !this.path.equals( mark.path.chop ) ) return mark;
+/**/if( CHECK )
+/**/{
+/**/	if( offset.timtype !== trace_offset ) throw new Error( );
+/**/}
 
-	if( mark.at < this.at1 ) return mark;
+	// is the offset trace on another paragraph?
+	// since the offset stores para key there is no change
+	// needed even it is below the split
+	if( !this.trace.equals( offset.tracePara ) ) return offset;
 
-	return(
-		mark.create(
-			'path', this.path2.prepend( mark.path.get( 0 ) ),
-			'at', mark.at - this.at1
-		)
-	);
+	// is the offset trace before this split?
+	if( offset.at < this.at1 ) return offset;
+
+	return this.trace2.prependRoot.appendOffset( offset.at - this.at1 );
 };
 
 
@@ -322,4 +337,3 @@ def.proto._transformRemove =
 
 
 } );
-

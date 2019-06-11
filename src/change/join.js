@@ -14,12 +14,12 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// join at this path
-		path : { type : 'tim.js/path', json : true },
-
 		// join at this place
 		// must be length of text
 		at1 : { type : 'integer', json : true },
+
+		// join at this path
+		path : { type : 'tim.js/path', json : true },
 
 		// join this
 		// must be after path
@@ -54,40 +54,13 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
 
+const trace_any = tim.require( '../trace/any' );
 
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-	if( this.at1 < 0 ) throw error.make( 'join.at1 negative' );
-};
-
-
-/*
-| Returns the inversion to this change.
-*/
-def.lazy.reversed =
-	function( )
-{
-	const inv =
-		change_split.create(
-			'path', this.path,
-			'at1', this.at1,
-			'path2', this.path2
-		);
-
-	tim.aheadValue( inv, 'reversed', this );
-
-	return inv;
-};
+const trace_offset = tim.require( '../trace/offset' );
 
 
 /*
@@ -151,13 +124,51 @@ def.proto.changeTree =
 
 
 /*
+| Returns the inversion to this change.
+*/
+def.lazy.reversed =
+	function( )
+{
+	const inv =
+		change_split.create(
+			'path', this.path,
+			'at1', this.at1,
+			'path2', this.path2
+		);
+
+	tim.aheadValue( inv, 'reversed', this );
+
+	return inv;
+};
+
+
+/*
+| FIXME remove
+*/
+def.lazy.trace2 =
+	function( )
+{
+	return trace_any.createFromPath( this.path2 );
+};
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+	if( this.at1 < 0 ) throw error.make( 'join.at1 negative' );
+};
+
+
+/*
 | Maps transformables to transform functions
 */
 def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	map.set( mark_pat,    '_transformMarkPat' );
 	map.set( mark_caret,  '_transformMarkCaret' );
 	map.set( mark_range,  '_transformMarkRange' );
 	map.set( mark_items,  '_transformSame' );
@@ -240,21 +251,24 @@ def.proto._transformJoinSplit =
 
 
 /*
-| Transforms a mark by this join.
+| Transforms an offset.
 */
-def.proto._transformMarkPat =
+def.proto._transformOffset =
 	function(
-		mark
+		offset
 	)
 {
-	if( !this.path2.equals( mark.path.chop ) ) return mark;
+/**/if( CHECK )
+/**/{
+/**/	if( offset.timtype !== trace_offset ) throw new Error( );
+/**/}
 
-	return(
-		mark.create(
-			'path', this.path.prepend( mark.path.get( 0 ) ),
-			'at', mark.at + this.at1
-		)
-	);
+	// is the offset trace on another paragraph?
+	// since the offset stores para key there is no change
+	// needed even it is below the split
+	if( !this.trace.equals( offset.tracePara ) ) return offset;
+
+	return this.trace2.prependRoot.appendOffset( offset.at + this.at1 );
 };
 
 

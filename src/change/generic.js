@@ -131,17 +131,9 @@ def.proto._transformMarkCaret =
 		mark
 	)
 {
-	const pat = this._transformMarkPat( mark.pat );
+	const offset = this._transformOffset( mark.offset );
 
-	if( pat )
-	{
-		return(
-			mark.create(
-				'offset', trace_any.createFromPath( pat.path ).appendOffset( pat.at ),
-				'pat', pat
-			)
-		);
-	}
+	if( offset ) return mark.create( 'offset', offset, 'pat', offset.toMarkPat );
 };
 
 
@@ -153,11 +145,21 @@ def.proto._transformMarkRange =
 		mark
 	)
 {
-	const begin = this._transformMarkPat( mark.begin );
+	const beginOffset = this._transformOffset( mark.beginOffset );
 
-	const end = this._transformMarkPat( mark.end );
+	const endOffset = this._transformOffset( mark.endOffset );
 
-	if( begin && end ) return mark.create( 'begin', begin, 'end', end );
+	if( beginOffset && endOffset )
+	{
+		return(
+			mark.create(
+				'begin', beginOffset.toMarkPat,
+				'beginOffset', beginOffset,
+				'end', endOffset.toMarkPat,
+				'endOffset', endOffset
+			)
+		);
+	}
 };
 
 

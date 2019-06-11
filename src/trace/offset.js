@@ -34,6 +34,9 @@ if( TIM )
 }
 
 
+const mark_pat = tim.require( '../mark/pat' );
+
+
 /*
 | The offset reference - 1.
 */
@@ -75,6 +78,16 @@ def.lazy.forward =
 	tim.aheadValue( o, 'backward', this );
 
 	return o;
+};
+
+
+/*
+| FIXME remove.
+*/
+def.lazy.toMarkPat =
+	function( )
+{
+	return mark_pat.createPathAt( this.last.toPath, this.at );
 };
 
 

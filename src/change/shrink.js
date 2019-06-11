@@ -52,13 +52,13 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
 
 const pathList = tim.require( 'tim.js/pathList' );
+
+const trace_offset = tim.require( '../trace/offset' );
 
 
 /*
@@ -135,7 +135,6 @@ def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	map.set( mark_pat,    '_transformMarkPat' );
 	map.set( mark_caret,  '_transformMarkCaret' );
 	map.set( mark_range,  '_transformMarkRange' );
 	map.set( mark_items,  '_transformMarkItems' );
@@ -190,14 +189,22 @@ def.proto._transformJIRS =
 
 
 /*
-| Transforms a mark by this set.
+| Transforms an offset by this set.
 */
-def.proto._transformMarkPat =
+def.proto._transformOffset =
 	function(
-		mark
+		offset
 	)
 {
-	if( !this.path.subPathOf( mark.path.chop ) ) return mark;
+/**/if( CHECK )
+/**/{
+/**/	if( offset.timtype !== trace_offset ) throw new Error( );
+/**/}
+
+	// is the offset trace on another paragraph?
+	// since the offset stores para key there is no change
+	// needed even it is below the split
+	if( !this.trace.equals( offset.tracePara ) ) return offset;
 };
 
 

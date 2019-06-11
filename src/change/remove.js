@@ -57,11 +57,11 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
+
+const trace_offset = tim.require( '../trace/offset' );
 
 
 /*
@@ -139,7 +139,6 @@ def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	map.set( mark_pat,    '_transformMarkPat' );
 	map.set( mark_caret,  '_transformMarkCaret' );
 	map.set( mark_range,  '_transformMarkRange' );
 	map.set( mark_items,  '_transformSame' );
@@ -196,16 +195,22 @@ def.proto._transformInsert =
 /*
 | Transforms a text mark by this insert.
 */
-def.proto._transformMarkPat =
+def.proto._transformOffset =
 	function(
-		mark
+		offset
 	)
 {
-	if( !this.path.equals( mark.path.chop ) ) return mark;
+/**/if( CHECK )
+/**/{
+/**/	if( offset.timtype !== trace_offset ) throw new Error( );
+/**/}
 
-	if( mark.at < this.at1 ) return mark;
-	else if( mark.at <= this.at2 ) return mark.create( 'at', this.at1 );
-	else return mark.create( 'at', mark.at - this.val.length );
+	// is the offset trace on another paragraph?
+	if( !this.trace.equals( offset.tracePara ) ) return offset;
+
+	if( offset.at < this.at1 ) return offset;
+	else if( offset.at <= this.at2 ) return offset.create( 'at', this.at1 );
+	else return offset.create( 'at', offset.at - this.val.length );
 };
 
 

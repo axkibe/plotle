@@ -20,11 +20,6 @@ const trace_forms = tim.require( './forms' );
 const trace_space = tim.require( './space' );
 
 
-/*
-| FIXME remove
-*/
-def.lazy.toPath = function( ) { return tim_path.empty; };
-
 
 /*
 | Returns a trace with a step to discs root appended.
@@ -63,10 +58,22 @@ def.proto.graft = ( tree, leaf ) => leaf;
 
 
 /*
+| The root trace always has length 0.
+*/
+def.proto.length = 0;
+
+
+/*
 | Picks the traced leaf.
 | In case of a root trace returns the tree.
 */
 def.proto.pick = ( tree ) => tree;
+
+
+/*
+| FIXME remove
+*/
+def.lazy.toPath = function( ) { return tim_path.empty; };
 
 
 } );
