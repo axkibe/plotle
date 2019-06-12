@@ -189,10 +189,12 @@ def.proto._transformOffset =
 /**/if( CHECK )
 /**/{
 /**/	if( offset.timtype !== trace_offset ) throw new Error( );
+/**/
+/**/	if( !offset.traceRoot ) throw new Error( );
 /**/}
 
 	// the insert is on another paragraph or after the offset trace
-	if( !this.trace.equals( offset.tracePara ) || offset.at < this.at1 ) return offset;
+	if( !this.trace.equals( offset.tracePara.chopRoot ) || offset.at < this.at1 ) return offset;
 
 	return offset.create( 'at', offset.at + this.val.length );
 };

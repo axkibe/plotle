@@ -57,8 +57,14 @@ def.lazy.backward =
 /*
 | The mark where the caret is.
 */
-// FIXME return offset
+// FIXME remove
 def.lazy.caret = function( ) { return this.pat; };
+
+
+/*
+| The offset where the caret is.
+*/
+def.lazy.caretOffset = function( ) { return this.offset; };
 
 
 /*
@@ -113,6 +119,7 @@ def.lazy.forward =
 | A caret mark has a caret.
 |
 | (the text range is the other mark which has this too )
+| FIXME remove this is duplicate to caretOffset
 */
 def.proto.hasCaret = true;
 

@@ -32,7 +32,59 @@ const trace_root = tim.require( './root' );
 
 const trace_space = tim.require( './space' );
 
-const trace_widget = tim.require( './trace_widget' );
+const trace_widget = tim.require( './widget' );
+
+
+/*
+| Removes the root entry from the front of trace
+*/
+def.lazy.chopRoot =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.length === 0 ) throw new Error( );
+/**/
+/**/	if( this.first.timtype !== trace_root ) throw new Error( );
+/**/}
+
+	let t = this.get( 1 ).create( 'list:remove', 0 );
+
+	for( let a = 2; a < this.length; a++ )
+	{
+		const tp = this.get( a );
+
+		switch( tp.timtype )
+		{
+			case trace_disc   : t = t.appendDisc( tp.key ); break;
+			case trace_doc    : t = t.appendDoc; break;
+			case trace_field  : t = t.appendField( tp.key ); break;
+			case trace_form   : t = t.appendForm( tp.key ); break;
+			case trace_item   : t = t.appendItem( tp.key ); break;
+			case trace_offset : t = t.appendOffset( tp.key ); break;
+			case trace_para   : t = t.appendPara( tp.key ); break;
+			case trace_widget : t = t.appendWidget( tp.key ); break;
+			default : throw new Error( );
+		}
+	}
+
+	// FIXME make a generic append
+	switch( this.timtype )
+	{
+		case trace_disc   : t = t.appendDisc( this.key ); break;
+		case trace_doc    : t = t.appendDoc; break;
+		case trace_field  : t = t.appendField( this.key ); break;
+		case trace_form   : t = t.appendForm( this.key ); break;
+		case trace_item   : t = t.appendItem( this.key ); break;
+		case trace_offset : t = t.appendOffset( this.key ); break;
+		case trace_para   : t = t.appendPara( this.key ); break;
+		case trace_widget : t = t.appendWidget( this.key ); break;
+		default : throw new Error( );
+	}
+
+	return t;
+};
+
 
 
 /*
@@ -54,6 +106,9 @@ def.proto.hasTrace =
 };
 
 
+/*
+| Adds a root entry infront of the trace.
+*/
 def.lazy.prependRoot =
 	function( )
 {
@@ -68,12 +123,12 @@ def.lazy.prependRoot =
 	{
 		switch( tp.timtype )
 		{
-			case trace_disc   : t = t.appendDisc( ); break;
-			case trace_discs  : t = t.appendDiscs( tp.key ); break;
-			case trace_doc    : t = t.appendDoc( ); break;
+			case trace_disc   : t = t.appendDisc( tp.key ); break;
+			case trace_discs  : t = t.appendDiscs; break;
+			case trace_doc    : t = t.appendDoc; break;
 			case trace_field  : t = t.appendField( tp.key ); break;
 			case trace_form   : t = t.appendForm( tp.key ); break;
-			case trace_forms  : t = t.appendForms( ); break;
+			case trace_forms  : t = t.appendForms; break;
 			case trace_item   : t = t.appendItem( tp.key ); break;
 			case trace_offset : t = t.appendOffset( tp.key ); break;
 			case trace_para   : t = t.appendPara( tp.key ); break;
@@ -82,6 +137,8 @@ def.lazy.prependRoot =
 			default : throw new Error( );
 		}
 	}
+
+	return t;
 };
 
 
@@ -118,6 +175,20 @@ def.lazy.tracePara =
 	if( this.length === 0 ) return;
 
 	return this.get( this.length - 1 ).tracePara;
+};
+
+
+/*
+| Default para tracer.
+*/
+def.lazy.traceRoot =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	const first = this.first;
+
+	if( first.timtype === trace_root ) return first;
 };
 
 

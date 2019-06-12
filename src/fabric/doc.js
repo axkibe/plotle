@@ -363,11 +363,11 @@ def.proto.specialKey =
 def.lazy._caretGlint =
 	function( )
 {
-	const mark = this.mark.pat;
+	const caretOffset = this.mark.caretOffset;
 
 	const transform = this.transform.ortho;
 
-	const key = mark.path.get( -2 );
+	const key = caretOffset.tracePara.key;
 
 	const para = this.get( key );
 
@@ -375,7 +375,7 @@ def.lazy._caretGlint =
 
 	const descend = fs * gleam_font_font.bottomBox;
 
-	let p = para.locateOffsetPoint( mark.at );
+	let p = para.locateOffsetPoint( caretOffset.at );
 
 	const ppos = para.pos;
 

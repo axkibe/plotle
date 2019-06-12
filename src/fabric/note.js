@@ -335,8 +335,7 @@ def.proto.scrollMarkIntoView =
 
 	const sy = this.scrollPos.y;
 
-	// FUTURE, more elegant path getting
-	const para = this.doc.get( mark.caret.path.get( 5 ) );
+	const para = this.doc.get( mark.caretOffset.tracePara.key );
 
 /**/if( CHECK )
 /**/{

@@ -12,9 +12,12 @@ def.abstract = true;
 
 const trace_root = tim.require( './root' );
 
+const trace_space = tim.require( './space' );
+
 
 /*
 | Creates a trace from a tim.js path.
+| FIXME remove
 */
 def.static.createFromPath =
 	function(
@@ -32,6 +35,10 @@ def.static.createFromPath =
 		case 'form' : throw new Error( );
 
 		case 'space' : return trace_any.createFromPathSpace( trace, path.chop );
+
+		case 'twig' : return trace_any.createFromPathSpace( undefined, path );
+
+		default : throw new Error( );
 	}
 };
 
@@ -45,7 +52,14 @@ def.static.createFromPathSpace =
 		path
 	)
 {
-	trace = trace.appendSpace;
+	if( trace )
+	{
+		trace = trace.appendSpace;
+	}
+	else
+	{
+		trace = trace_space.create( );
+	}
 
 	if( path.length === 0 ) return trace;
 

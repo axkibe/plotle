@@ -39,8 +39,14 @@ const trace_para = tim.require( '../trace/para' );
 /*
 | Returns the mark where the caret should show up.
 */
-// FIXME make endOffset
+// FIXME remove
 def.lazy.caret = function( ) { return this.end; };
+
+
+/*
+| The offset where the caret is.
+*/
+def.lazy.caretOffset = function( ) { return this.endOffset; };
 
 
 /*
@@ -94,9 +100,9 @@ def.lazy.backOffset = function( ) { this._normalize( ); return this.backOffset; 
 | Ranges also have caret capabilities.
 |
 | The caretMark is identical to end.
+| FIXME remove this is duplicate to caretOffset
 */
 def.proto.hasCaret = true;
-
 
 
 /*
