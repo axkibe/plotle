@@ -127,28 +127,30 @@ def.lazy.itemPaths =
 def.lazy.clipboard =
 	function( )
 {
-	const front = this.front;
+	const frontOffset = this.frontOffset;
 
-	const back = this.back;
+	const backOffset = this.backOffset;
+
+	const frontTrace = frontOffset.tracePara;
+
+	const backTrace = backOffset.tracePara;
 
 	const doc = this.doc;
 
-	const frontKey = front.path.get( -2 );
+	const frontKey = frontTrace.key;
 
-	const backKey = back.path.get( -2 );
+	const backKey = backTrace.key;
 
-	if( front.path.equals( back.path ) )
+	if( frontTrace.equals( backTrace ) )
 	{
 		const text = doc.get( frontKey ).text;
 
-		return text.substring( front.at, back.at );
+		return text.substring( frontOffset.at, backOffset.at );
 	}
 
-	const frontText = doc.get( frontKey ).text;
+	let text = doc.get( frontKey ).text;
 
-	const backText = doc.get( backKey ).text;
-
-	const buf = [ frontText.substring( front.at, frontText.length ) ];
+	text = text.substring( frontOffset.at, text.length );
 
 	for(
 		let r = doc.rankOf( frontKey ) + 1, rl = doc.rankOf( backKey );
@@ -156,12 +158,10 @@ def.lazy.clipboard =
 		r++
 	)
 	{
-		buf.push( '\n', doc.atRank( r ).text );
+		text += '\n' + doc.atRank( r ).text;
 	}
 
-	buf.push( '\n', backText.substring( 0, back.at ) );
-
-	return buf.join( '' );
+	return text + doc.get( backKey ).text.substring( 0, backOffset.at );
 };
 
 

@@ -35,6 +35,33 @@ const trace_space = tim.require( './space' );
 const trace_widget = tim.require( './widget' );
 
 
+
+/*
+| Appends a generic step.
+*/
+def.proto.appendStep =
+	function(
+		step
+	)
+{
+	switch( step.timtype )
+	{
+		case trace_disc   : return this.appendDisc( step.key );
+		case trace_discs  : return this.appendDiscs;
+		case trace_doc    : return this.appendDoc;
+		case trace_field  : return this.appendField( step.key );
+		case trace_form   : return this.appendForm( step.key );
+		case trace_forms  : return this.appendForms;
+		case trace_item   : return this.appendItem( step.key );
+		case trace_offset : return this.appendOffset( step.key );
+		case trace_para   : return this.appendPara( step.key );
+		case trace_space  : return this.appendSpace;
+		case trace_widget : return this.appendWidget( step.key );
+		default : throw new Error( );
+	}
+};
+
+
 /*
 | Removes the root entry from the front of trace
 */
@@ -52,37 +79,10 @@ def.lazy.chopRoot =
 
 	for( let a = 2; a < this.length; a++ )
 	{
-		const tp = this.get( a );
-
-		switch( tp.timtype )
-		{
-			case trace_disc   : t = t.appendDisc( tp.key ); break;
-			case trace_doc    : t = t.appendDoc; break;
-			case trace_field  : t = t.appendField( tp.key ); break;
-			case trace_form   : t = t.appendForm( tp.key ); break;
-			case trace_item   : t = t.appendItem( tp.key ); break;
-			case trace_offset : t = t.appendOffset( tp.key ); break;
-			case trace_para   : t = t.appendPara( tp.key ); break;
-			case trace_widget : t = t.appendWidget( tp.key ); break;
-			default : throw new Error( );
-		}
+		t = t.appendStep( this.get( a ) );
 	}
 
-	// FIXME make a generic append
-	switch( this.timtype )
-	{
-		case trace_disc   : t = t.appendDisc( this.key ); break;
-		case trace_doc    : t = t.appendDoc; break;
-		case trace_field  : t = t.appendField( this.key ); break;
-		case trace_form   : t = t.appendForm( this.key ); break;
-		case trace_item   : t = t.appendItem( this.key ); break;
-		case trace_offset : t = t.appendOffset( this.key ); break;
-		case trace_para   : t = t.appendPara( this.key ); break;
-		case trace_widget : t = t.appendWidget( this.key ); break;
-		default : throw new Error( );
-	}
-
-	return t;
+	return t.appendStep( this );
 };
 
 
@@ -119,26 +119,9 @@ def.lazy.prependRoot =
 
 	let t = trace_root.singleton;
 
-	for( let tp of this )
-	{
-		switch( tp.timtype )
-		{
-			case trace_disc   : t = t.appendDisc( tp.key ); break;
-			case trace_discs  : t = t.appendDiscs; break;
-			case trace_doc    : t = t.appendDoc; break;
-			case trace_field  : t = t.appendField( tp.key ); break;
-			case trace_form   : t = t.appendForm( tp.key ); break;
-			case trace_forms  : t = t.appendForms; break;
-			case trace_item   : t = t.appendItem( tp.key ); break;
-			case trace_offset : t = t.appendOffset( tp.key ); break;
-			case trace_para   : t = t.appendPara( tp.key ); break;
-			case trace_space  : t = t.appendSpace; break;
-			case trace_widget : t = t.appendWidget( tp.key ); break;
-			default : throw new Error( );
-		}
-	}
+	for( let tp of this ) t = t.appendStep( tp );
 
-	return t;
+	return t.appendStep( this );
 };
 
 

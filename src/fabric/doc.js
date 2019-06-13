@@ -407,29 +407,29 @@ def.lazy._rangeShape =
 /**/	if( mark.timtype !== mark_range ) throw new Error( );
 /**/}
 
-	const front = mark.front;
+	const frontOffset = mark.frontOffset;
 
-	const back = mark.back;
+	const backOffset = mark.backOffset;
 
-	const frontKey = front.path.get( -2 );
+	const frontKey = frontOffset.tracePara.key;
 
-	const backKey = back.path.get( -2 );
+	const backKey = backOffset.tracePara.key;
 
 	const frontPara = this.get( frontKey );
 
-	const frontPos = frontPara.pos;
-
 	const backPara = this.get( backKey );
+
+	const frontPos = frontPara.pos;
 
 	const backPos = backPara.pos;
 
-	let fp = frontPara.locateOffsetPoint( front.at );
+	let fp = frontPara.locateOffsetPoint( frontOffset.at );
 
-	let bp = backPara.locateOffsetPoint( back.at );
+	let bp = backPara.locateOffsetPoint( backOffset.at );
 
-	const fLine = frontPara.locateOffsetLine( front.at );
+	const fLine = frontPara.locateOffsetLine( frontOffset.at );
 
-	const bLine = backPara.locateOffsetLine( back.at );
+	const bLine = backPara.locateOffsetLine( backOffset.at );
 
 	const fontsize = this.fontsize;
 
@@ -574,8 +574,7 @@ def.lazy._rangeShape =
 				+ b2Para.pos.y;
 		}
 
-
-		if( front.at > 0 )
+		if( frontOffset.at > 0 )
 		{
 			const sections =
 			[
