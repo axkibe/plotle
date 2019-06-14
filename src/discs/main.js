@@ -129,7 +129,7 @@ def.adjust.get =
 
 		case 'remove' :
 
-			visible = !!( this.access === 'rw' && this.mark && this.mark.itemPaths );
+			visible = !!( this.access === 'rw' && this.mark && this.mark.itemsMark );
 
 			down = false;
 
@@ -240,23 +240,19 @@ def.proto.pushButton =
 
 	switch( buttonName )
 	{
-		case 'normal' :
-
-			root.showHome( );
-
-			break;
+		case 'normal' : root.showHome( ); break;
 
 		case 'remove' :
 		{
-			const paths = this.mark.itemPaths;
+			const itemsMark = this.mark.itemsMark;
 
 			const change = [ ];
 
 			const ranks = [ ];
 
-			for( let pi of paths )
+			for( let itemTrace of itemsMark )
 			{
-				const rank = root.space.rankOf( pi.get( 2 ) );
+				const rank = root.space.rankOf( itemTrace.key );
 
 				let rc = 0;
 
@@ -269,8 +265,8 @@ def.proto.pushButton =
 
 				change.push(
 					change_shrink.create(
-						'path', pi.chop,
-						'prev', root.space.getPath( pi.chop ),
+						'path', itemTrace.chopRoot.toPath,
+						'prev', itemTrace.pick( root ),
 						'rank', rank - rc
 					)
 				);

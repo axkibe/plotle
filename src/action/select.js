@@ -166,12 +166,10 @@ def.proto.dragStop =
 
 		if( !ctrl || !screen.mark )
 		{
-			mark = mark_items.create( 'itemPaths', paths, 'set:init', traces );
+			mark = mark_items.create( 'set:init', traces );
 		}
 		else
 		{
-			console.log( 'XXX' );
-
 			mark =
 				mark_items.create(
 					'itemPaths', paths.combine( screen.mark.itemPaths ),

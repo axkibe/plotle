@@ -138,12 +138,7 @@ def.lazy.reversed =
 /*
 | FIXME remove
 */
-def.lazy.trace2 =
-	function( )
-{
-	console.log( 'XXX', this.path2 );
-	return trace_any.createFromPath( this.path2 );
-};
+def.lazy.trace2 = function( ) { return trace_any.createFromPath( this.path2 ); };
 
 
 /*

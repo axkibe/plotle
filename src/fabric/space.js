@@ -85,6 +85,8 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const tim_path_list = tim.require( 'tim.js/pathList' );
 
+const trace_item = tim.require( '../trace/item' );
+
 const trace_root = tim.require( '../trace/root' );
 
 const visual_frame = tim.require( '../visual/frame' );
@@ -307,15 +309,13 @@ def.lazy.focus =
 
 	if( !mark ) return;
 
-	const paths = mark.itemPaths;
+	const im = mark.itemsMark;
 
-	if( !paths || paths.length !== 1 ) return;
+	if( !im || im.size !== 1 ) return;
 
-	const path = paths.get( 0 );
+	const trace = im.trivial;
 
-	if( path.length <= 2 ) return; // FUTURE shouldn't be necessary
-
-	return this.get( path.get( 2 ) );
+	return this.get( trace.key );
 };
 
 
@@ -331,9 +331,9 @@ def.adjust.frame =
 
 	if( !mark ) return;
 
-	if( !mark.itemPaths ) return;
+	if( !mark.itemsMark ) return;
 
-	const content = this.getSet( mark.itemPaths );
+	const content = this.getSet( mark.itemsMark );
 
 	if( !content ) return;
 
@@ -446,30 +446,26 @@ def.adjust.get =
 */
 def.proto.getSet =
 	function(
-		paths
+		itemsMark
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( paths.timtype !== tim_path_list ) throw new Error( );
+/**/	if( itemsMark.timtype !== mark_items ) throw new Error( );
 /**/
-/**/	if( paths.length === 0 ) throw new Error( );
+/**/	if( itemsMark.size === 0 ) throw new Error( );
 /**/}
 
 	const items = new Set( );
 
-	for( let a = 0, al = paths.length; a < al; a++ )
+	for( let trace of itemsMark )
 	{
-		const path = paths.get( a );
-
 /**/	if( CHECK )
 /**/	{
-/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
-/**/
-/**/		if( path.get( 1 ) !== 'twig' ) throw new Error( );
+/**/		if( trace.timtype !== trace_item ) throw new Error( );
 /**/	}
 
-		items.add( this.get( path.get( 2 ) ) );
+		items.add( this.get( trace.key ) );
 	}
 
 	return fabric_itemSet.create( 'set:init', items );

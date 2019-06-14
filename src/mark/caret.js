@@ -150,9 +150,11 @@ def.lazy.itemsMark =
 {
 	const offset = this.offset;
 
+	console.log( 'XXX' );
+
 	if( !offset.traceSpace ) return;
 
-	return mark_items.createWithOne( this.path.limit( 3 ), offset.traceItem );
+	return mark_items.createWithOne( this.pat.path.limit( 3 ), offset.traceItem );
 };
 
 

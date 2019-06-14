@@ -206,7 +206,7 @@ def.proto._transformOffset =
 /**/}
 
 	// is the offset trace on another paragraph?
-	if( !this.trace.equals( offset.tracePara.chopRoot ) ) return offset;
+	if( !this.trace.equals( offset.last.chopRoot ) ) return offset;
 
 	if( offset.at < this.at1 ) return offset;
 	else if( offset.at <= this.at2 ) return offset.create( 'at', this.at1 );

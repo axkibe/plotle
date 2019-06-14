@@ -9,18 +9,93 @@ tim.define( module, ( def, mark_items ) => {
 
 if( TIM )
 {
-	def.attributes =
-	{
-		// paths of the items
-		itemPaths : { type : 'tim.js/pathList' }
-	};
-
 	def.set = [ '../trace/item' ];
 }
 
-const pathList = tim.require( 'tim.js/pathList' );
 
 const trace_item = tim.require( '../trace/item' );
+
+
+/*
+| The content the mark puts into the clipboard.
+|
+| FUTURE write something
+*/
+def.proto.clipboard = '';
+
+
+/*
+| Combines the items mark (set) with another one.
+*/
+def.proto.combine =
+	function(
+		imark
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( imark.timtype !== mark_items ) throw new Error( );
+/**/}
+
+	const set = this.clone( );
+
+	for( let t of imark )
+	{
+		if( !this.contains( t ) ) set.add( t );
+	}
+
+	return mark_items.create( 'set:init', set );
+};
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+def.proto.containsPath =
+	function(
+		path
+	)
+{
+	throw new Error( 'XXX' );
+};
+
+
+/*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+def.proto.containsItemTrace =
+	function(
+		itrace
+	)
+{
+	for( let t of this ) if( t.equals( itrace ) ) return true;
+
+	return false;
+};
+
+
+/*
+| Creates the list with one item.
+*/
+def.static.createWithOne =
+	function(
+		path,   // XXX
+		trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
+
+	const traces = new Set( );
+
+	traces.add( trace );
+
+	return mark_items.create( 'set:init', traces );
+};
 
 
 /*
@@ -38,37 +113,16 @@ def.proto.encompasses =
 
 
 /*
-| The content the mark puts into the clipboard.
-|
-| FUTURE write something
-*/
-def.proto.clipboard = '';
-
-
-/*
-| Creates the list with one item.
-*/
-def.static.createWithOne =
-	function(
-		path,
-		trace
-	)
-{
-	// also sets the user mark on this item
-	const paths = pathList.create( 'list:init', [ path ] );
-
-	const traces = new Set( );
-
-	traces.add( trace );
-
-	return mark_items.create( 'itemPaths', paths, 'set:init', traces );
-};
-
-
-/*
 | Item marks do not have a caret.
 */
 def.proto.hasCaret = false;
+
+
+
+/*
+| The items mark of an items mark is itself.
+*/
+def.lazy.itemsMark = function( ) { return this; };
 
 
 /*
@@ -79,78 +133,13 @@ def.proto.widgetPath = undefined;
 
 
 /*
-| Combines the items mark (set) with another one.
-*/
-def.proto.combine =
-	function(
-		imark
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( imark.timtype !== mark_items ) throw new Error( );
-/**/}
-
-	const itemPaths = this.itemPaths.combine( imark.itemPaths );
-
-	const set = this.clone( );
-
-	for( let t of imark )
-	{
-		if( !this.contains( t ) ) set.add( t );
-	}
-
-	return mark_items.create( 'itemPaths', itemPaths, 'set:init', set );
-};
-
-
-/*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-def.proto.containsPath =
-	function(
-		path
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( path.empty ) throw new Error( );
-/**/}
-
-	for( let p of this.itemPaths )
-	{
-		if( path.subPathOf( p ) ) return true;
-	}
-
-	return false;
-};
-
-
-/*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-def.proto.containsItemTrace =
-	function(
-		itrace
-	)
-{
-
-	for( let t of this ) if( t.equals( itrace ) ) return true;
-
-	return false;
-};
-
-
-/*
 | Returns a items-mark with the path added
 | when it isn't part of this mark, or the
 | path removed when it is.
 */
 def.proto.toggle =
 	function(
-		path,
+		path,    // XXXX
 		trace
 	)
 {
@@ -158,30 +147,17 @@ def.proto.toggle =
 /**/{
 /**/	if( path.empty ) throw new Error( );
 /**/
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/
 /**/	if( trace.timtype !== trace_item ) throw new Error( );
 /**/}
 
-	const paths = this.itemPaths;
-
-	for( let a = 0, al = paths.length; a < al; a++ )
+	for( let t of this )
 	{
-		if( path.equals( paths.get( a ) ) )
-		{
-			return(
-				this.create(
-					'itemPaths', this.itemPaths.create( 'list:remove', a ),
-					'set:remove', trace
-				)
-			);
-		}
+		if( trace.equals( t ) ) return this.create( 'set:remove', trace );
 	}
 
-	return(
-		this.create(
-			'itemPaths', this.itemPaths.create( 'list:append', path ),
-			'set:add', trace
-		)
-	);
+	return this.create( 'set:add', trace );
 };
 
 

@@ -88,8 +88,6 @@ const session_uid = tim.require( '../session/uid' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
-
 const trace_root = tim.require( '../trace/root' );
 
 const mark_caret = tim.require( '../mark/caret' );
@@ -284,13 +282,7 @@ def.proto.click =
 
 	// if non of the field were clicked
 	// just focus the portal itself
-	if( !setMark )
-	{
-		setMark =
-			mark_items.create(
-				'itemPaths', tim_path_list.create( 'list:init', [ this.path ] )
-			);
-	}
+	if( !setMark ) setMark = mark_items.createWithOne( this.path, this.trace );
 
 	root.alter( 'mark', setMark );
 

@@ -56,8 +56,6 @@ const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
 
-const pathList = tim.require( 'tim.js/pathList' );
-
 const trace_offset = tim.require( '../trace/offset' );
 
 
@@ -216,31 +214,28 @@ def.proto._transformMarkItems =
 		mark
 	)
 {
-	const paths = mark.itemPaths;
+/**/if( CHECK )
+/**/{
+/**/	if( mark.timtype !== mark_items ) throw new Error( );
+/**/}
 
 	let any = false;
 
-	for( let path of paths )
+	for( let itemTrace of mark )
 	{
-		if( this.path.subPathOf( path.chop ) ) { any = true; break; }
+		if( this.trace.traceItem.equals( itemTrace.chopRoot ) ) { any = true; break; }
 	}
 
 	if( !any ) return mark;
 
-	const a = [ ];
+	const set = new Set( );
 
-	for( let path of paths )
+	for( let itemTrace of mark )
 	{
-		if( !this.path.subPathOf( path.chop ) ) { a.push( path ); }
+		if( this.trace.traceItem.equals( itemTrace.chopRoot ) ) { set.add( itemTrace ); }
 	}
 
-	// XXX FIXME traces
-
-	return(
-		mark_items.create(
-			'itemPaths', pathList.create( 'list:init', a )
-		)
-	);
+	return mark_items.create( 'set:init', set );
 };
 
 

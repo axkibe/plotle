@@ -69,16 +69,26 @@ def.static.createFromPathSpace =
 
 	if( path.length === 0 ) return trace;
 
-	if( path.get( 0 ) === 'twig' )
-	{
+	if( path.get( 0 ) === 'twig' ) throw new Error( );
+	/*{
 		trace = trace.appendField( path.get( 1 ) ); path = path.chop;
 
 		if( path.length !== 0 ) throw new Error( );
 
 		return trace;
 	}
+	*/
 
-	if( path.get( 0 ) !== 'doc' ) throw new Error( );
+	if( path.get( 0 ) !== 'doc' )
+	{
+		trace = trace.appendField( path.get( 0 ) ); path = path.chop;
+
+		if( path.length > 0 && path.get( 0 ) === 'text' ) path = path.chop;
+
+		if( path.length !== 0 ) throw new Error( );
+
+		return trace;
+	}
 
 	trace = trace.appendDoc; path = path.chop;
 

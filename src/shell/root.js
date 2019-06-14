@@ -766,17 +766,17 @@ def.proto.alter =
 	{
 		// issues the markLost( ) calls
 		// used by empty labels to remove themselves
-		const oip = omark.itemPaths;
+		const oim = omark.itemsMark;
 
-		if( oip )
+		if( oim )
 		{
-			const nip = mark && mark.itemPaths;
+			const nim = mark && mark.itemsMark;
 
-			for( let op of oip )
+			for( let itemTrace of oim )
 			{
-				if( nip && nip.contains( op ) ) continue;
+				if( nim && nim.containsItemTrace( itemTrace ) ) continue;
 
-				const item = root.getPath( op );
+				const item = itemTrace.pick( root );
 
 				if( item ) item.markLost( );
 			}

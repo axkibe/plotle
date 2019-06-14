@@ -47,11 +47,7 @@ const action_none = tim.require( '../action/none' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
-const mark_caret = tim.require( '../mark/caret' );
-
 const mark_items = tim.require( '../mark/items' );
-
-const mark_range = tim.require( '../mark/range' );
 
 
 /*
@@ -161,7 +157,7 @@ def.proto.dragStart =
 		mark = mark_items.createWithOne( this.path, this.trace );
 	}
 
-	const items = root.space.getSet( mark.itemPaths );
+	const items = root.space.getSet( mark.itemsMark );
 
 	root.alter(
 		'action',
@@ -236,29 +232,7 @@ def.proto._ctrlClick =
 		return true;
 	}
 
-	switch( mark.timtype )
-	{
-		case mark_items :
-
-			root.alter( 'mark', mark.toggle( this.path, this.trace ) );
-
-			return true;
-
-		case mark_caret :
-		case mark_range :
-
-			root.alter(
-				'mark',
-					mark_items.create(
-						'itemPaths', mark.itemPaths.create( 'list:append', this.path ),
-						'set:add', this.trace
-					)
-			);
-
-			return true;
-
-		default : return true;
-	}
+	root.alter( 'mark', mark.itemsMark.toggle( this.path, this.trace ) );
 };
 
 
