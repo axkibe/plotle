@@ -27,8 +27,6 @@ if( TIM )
 }
 
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
-
 const mark_items = tim.require( './items' );
 
 
@@ -125,22 +123,6 @@ def.proto.hasCaret = true;
 
 
 /*
-| The item paths.
-|
-| This is either undefined or a path list of length === 1
-*/
-def.lazy.itemPaths =
-	function( )
-{
-	const path = this.pat.path;
-
-	if( path.length < 3 || path.get( 0 ) !== 'space' ) return;
-
-	return tim_path_list.create( 'list:append', path.limit( 3 ) );
-};
-
-
-/*
 | The item traces.
 |
 | This is either undefined or mark_items containing the parenting item.
@@ -150,11 +132,9 @@ def.lazy.itemsMark =
 {
 	const offset = this.offset;
 
-	console.log( 'XXX' );
-
 	if( !offset.traceSpace ) return;
 
-	return mark_items.createWithOne( this.pat.path.limit( 3 ), offset.traceItem );
+	return mark_items.createWithOne( offset.traceItem );
 };
 
 

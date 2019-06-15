@@ -179,9 +179,7 @@ def.proto.markForPoint =
 		return(
 			mark_range.create(
 				'doc', this.doc,
-				'begin', mark.pat,
 				'beginOffset', mark.offset,
-				'end', mark_pat.createPathAt( para.textPath, at ),
 				'endOffset', para.trace.appendOffset( at )
 			)
 		);
@@ -189,10 +187,7 @@ def.proto.markForPoint =
 	else if( doRange && mark && mark.timtype === mark_range )
 	{
 		return(
-			mark.create(
-				'end', mark_pat.createPathAt( para.textPath, at ),
-				'endOffset', para.trace.appendOffset( at )
-			)
+			mark.create( 'endOffset', para.trace.appendOffset( at ) )
 		);
 	}
 	else

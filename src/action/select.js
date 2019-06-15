@@ -158,12 +158,11 @@ def.proto.dragStop =
 
 	let mark = pass;
 
-	console.log( 'XXX' );
-
 	if( paths.length > 0 )
 	{
 		paths = tim_path_list.create( 'list:init', paths );
 
+		// FIXME simplify
 		if( !ctrl || !screen.mark )
 		{
 			mark = mark_items.create( 'set:init', traces );
@@ -171,10 +170,8 @@ def.proto.dragStop =
 		else
 		{
 			mark =
-				mark_items.create(
-					'itemPaths', paths.combine( screen.mark.itemPaths ),
-					'set:init', traces
-				).combine( screen.mark.itemsMark );
+				mark_items.create( 'set:init', traces )
+				.combine( screen.mark.itemsMark );
 		}
 	}
 

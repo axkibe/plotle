@@ -15,26 +15,6 @@ if( TIM )
 
 const gleam_rectGroup = tim.require( '../gleam/rectGroup' );
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
-
-
-/*
-| Returns the list of paths of the items.
-| FIXME make it a set.
-*/
-def.lazy.itemPaths =
-	function( )
-{
-	const arr = [ ];
-
-	for( let item of this )
-	{
-		arr.push( item.path );
-	}
-
-	return tim_path_list.create( 'list:init', arr );
-};
-
 
 /*
 | Returns the list of zones of the items.

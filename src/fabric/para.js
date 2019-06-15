@@ -120,7 +120,7 @@ def.lazy.attentionCenter =
 
 	const descend = fs * gleam_font_font.bottomBox;
 
-	const p = this.locateOffsetPoint( this.mark.caret.at );
+	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
 	const s = Math.round( p.y + descend );
 
@@ -408,7 +408,7 @@ def.proto.input =
 
 	let textPath = this.textPath;
 
-	let at = this.mark.caret.at;
+	let at = this.mark.caretOffset.at;
 
 	for( let rx = reg.exec( text ); rx; rx = reg.exec( text ) )
 	{
@@ -505,7 +505,7 @@ def.proto.specialKey =
 {
 	const mark = this.mark;
 
-	let at, begin, beginOffset, retainx;
+	let at, beginOffset, retainx;
 
 	if( ctrl && key === 'a' )
 	{
@@ -517,9 +517,7 @@ def.proto.specialKey =
 			'mark',
 				mark_range.create(
 					'doc', doc,
-					'begin', mark_pat.createPathAt( v0.textPath, 0 ),
 					'beginOffset', v0.trace.appendOffset( 0 ),
-					'end', mark_pat.createPathAt( v1.textPath, v1.text.length ),
 					'endOffset', v1.trace.appendOffset( v1.text.length )
 				)
 		);
@@ -532,38 +530,28 @@ def.proto.specialKey =
 	{
 		case mark_caret :
 
-/**/		if( CHECK )
-/**/		{
-/**/			if( !this.path.subPathOf( mark.caret.path ) ) throw new Error( );
-/**/		}
-
-			at = mark.caret.at;
+			at = mark.caretOffset.at;
 
 			retainx = mark.retainx;
 
-			if( shift ) { begin = mark.pat; beginOffset = mark.offset; }
+			if( shift ) beginOffset = mark.offset;
 
 			break;
 
 		case mark_range :
 
-/**/		if( CHECK )
-/**/		{
-/**/			if( !this.path.subPathOf( mark.caret.path ) ) throw new Error( );
-/**/		}
-
-			at = mark.caret.at;
+			at = mark.caretOffset.at;
 
 			retainx = mark.retainx;
 
-			if( shift ) { begin = mark.begin; beginOffset = mark.beginOffset; }
+			if( shift ) beginOffset = mark.beginOffset;
 
 			break;
 	}
 
 	const keyHandler = _keyMap[ key ];
 
-	if( keyHandler ) { this[ keyHandler ]( doc, at, retainx, begin, beginOffset ); }
+	if( keyHandler ) { this[ keyHandler ]( doc, at, retainx, beginOffset ); }
 };
 
 
@@ -585,7 +573,6 @@ def.proto._keyBackspace =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -636,7 +623,6 @@ def.proto._keyDel =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -685,7 +671,6 @@ def.proto._keyDown =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -700,7 +685,7 @@ def.proto._keyDown =
 	if( cPosLine < flow.length - 1 )
 	{
 		// stays within this para
-		this._setMark( this.getOffsetAt( cPosLine + 1, x ), x, begin, beginOffset, doc );
+		this._setMark( this.getOffsetAt( cPosLine + 1, x ), x, beginOffset, doc );
 
 		return;
 	}
@@ -719,7 +704,7 @@ def.proto._keyDown =
 
 		at = ve.getOffsetAt( 0, x );
 
-		ve._setMark( at, x, begin, beginOffset, doc );
+		ve._setMark( at, x, beginOffset, doc );
 	}
 };
 
@@ -732,23 +717,21 @@ def.proto._keyEnd =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
-	this._setMark( this.text.length, undefined, begin, beginOffset, doc );
+	this._setMark( this.text.length, undefined, beginOffset, doc );
 };
 
 
 /*
-| Enter-key pressed
+| Enter-key pressed.
 */
 def.proto._keyEnter =
 	function(
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -765,6 +748,7 @@ def.proto._keyEnter =
 };
 
 
+
 /*
 | Left arrow pressed.
 */
@@ -773,13 +757,12 @@ def.proto._keyLeft =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
 	if( at > 0 )
 	{
-		this._setMark( at - 1, undefined, begin, beginOffset, doc );
+		this._setMark( at - 1, undefined, beginOffset, doc );
 
 		return;
 	}
@@ -795,11 +778,11 @@ def.proto._keyLeft =
 	{
 		const ve = doc.atRank( r - 1 );
 
-		ve._setMark( ve.text.length, undefined, begin, beginOffset, doc );
+		ve._setMark( ve.text.length, undefined, beginOffset, doc );
 	}
 	else
 	{
-		this._setMark( at, undefined, begin, beginOffset, doc );
+		this._setMark( at, undefined, beginOffset, doc );
 	}
 };
 
@@ -812,11 +795,10 @@ def.proto._keyPageDown =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
-	this._pageUpDown( +1, doc, at, retainx, begin, beginOffset );
+	this._pageUpDown( +1, doc, at, retainx, beginOffset );
 };
 
 
@@ -828,11 +810,10 @@ def.proto._keyPageUp =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
-	this._pageUpDown( -1, doc, at, retainx, begin, beginOffset );
+	this._pageUpDown( -1, doc, at, retainx, beginOffset );
 };
 
 
@@ -844,11 +825,10 @@ def.proto._keyPos1 =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
-	this._setMark( 0, undefined, begin, beginOffset, doc );
+	this._setMark( 0, undefined, beginOffset, doc );
 };
 
 
@@ -860,13 +840,12 @@ def.proto._keyRight =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
 	if( at < this.text.length )
 	{
-		this._setMark( at + 1, undefined, begin, beginOffset, doc );
+		this._setMark( at + 1, undefined, beginOffset, doc );
 
 		return;
 	}
@@ -882,7 +861,7 @@ def.proto._keyRight =
 	{
 		const ve = doc.atRank( r + 1 );
 
-		ve._setMark( 0, undefined, begin, beginOffset, doc );
+		ve._setMark( 0, undefined, beginOffset, doc );
 	}
 };
 
@@ -895,7 +874,6 @@ def.proto._keyUp =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -910,7 +888,7 @@ def.proto._keyUp =
 		// stay within this para
 		at = this.getOffsetAt( cPosLine - 1, x );
 
-		this._setMark( at, x, begin, beginOffset, doc );
+		this._setMark( at, x, beginOffset, doc );
 
 		return;
 	}
@@ -929,7 +907,7 @@ def.proto._keyUp =
 
 		at = ve.getOffsetAt( ve.flow.length - 1, x );
 
-		ve._setMark( at, x, begin, beginOffset, doc );
+		ve._setMark( at, x, beginOffset, doc );
 	}
 };
 
@@ -1008,7 +986,6 @@ def.proto._pageUpDown =
 		doc,
 		at,
 		retainx,
-		begin,
 		beginOffset
 	)
 {
@@ -1035,7 +1012,7 @@ def.proto._pageUpDown =
 
 	at = tpara.getPointOffset( tp.sub( tpos ) );
 
-	tpara._setMark( at, retainx, begin, beginOffset, doc );
+	tpara._setMark( at, retainx, beginOffset, doc );
 };
 
 
@@ -1090,8 +1067,7 @@ def.proto._setMark =
 	function(
 		at,          // position to mark caret (or end of range)
 		retainx,     // retains this x position when moving up/down
-		begin,       // begin when marking a range
-		beginOffset, // begin (offset) when marking a range
+		beginOffset, // begin offset when marking a range
 		doc          // range mark need this
 	)
 {
@@ -1102,13 +1078,11 @@ def.proto._setMark =
 
 	root.alter(
 		'mark',
-			!begin
+			!beginOffset
 			? mark_caret.create( 'offset', offset, 'pat', pat, 'retainx', retainx )
 			: mark_range.create(
 				'doc', doc,
-				'begin', begin,
 				'beginOffset', beginOffset,
-				'end', pat,
 				'endOffset', offset,
 				'retainx', retainx
 			)

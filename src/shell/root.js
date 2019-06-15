@@ -742,7 +742,7 @@ def.proto.alter =
 		{
 			if( space === pass ) space = this.space;
 
-			const markedItem = space.get( mark.begin.path.get( 2 ) );
+			const markedItem = space.get( mark.beginOffset.traceItem.key );
 
 			mark = mark.create( 'doc', markedItem.doc );
 		}
@@ -1503,32 +1503,25 @@ def.proto.removeRange =
 		range
 	)
 {
-	const front = range.front;
+	const frontOffset = range.frontOffset;
 
-	const back = range.back;
+	const backOffset = range.backOffset;
 
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		front.path.get( -1 ) !== 'text' || back.path.get( -1 ) !== 'text'
-/**/		|| front.path.get( 0 ) !== 'space' || back.path.get( 0 ) !== 'space'
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	const frontTracePara = frontOffset.tracePara;
 
-	if ( front.path.equals( back.path ) )
+	const backTracePara = backOffset.tracePara;
+
+	if ( frontTracePara.equals( backTracePara ) )
 	{
 		root.alter(
 			'change',
 			change_remove.create(
-				'path', front.path.chop,
-				'at1', front.at,
-				'at2', back.at,
+				'path', frontTracePara.chopRoot.toPath.append( 'text' ),
+				'at1', frontOffset.at,
+				'at2', backOffset.at,
 				'val',
-					root._actionSpace.getPath( front.path.chop )
-					.substring( front.at, back.at )
+					frontOffset.last.chopRoot.pick( root._actionSpace )
+					.text.substring( frontOffset.at, backOffset.at )
 			)
 		);
 
@@ -1537,17 +1530,17 @@ def.proto.removeRange =
 
 	const change = [ ];
 
-	const k1 = front.path.get( -2 );
+	const k1 = frontOffset.tracePara.key;
 
-	const k2 = back.path.get( -2 );
+	const k2 = backOffset.tracePara.key;
 
-	const pivot = root.space.getPath( front.path.chop.shorten.shorten.shorten );
+	const pivot = frontTracePara.traceDoc.pick( root );
 
 	const r1 = pivot.rankOf( k1 );
 
 	const r2 = pivot.rankOf( k2 );
 
-	let text = root.space.getPath( front.path.chop );
+	let text = pivot.get( k1 ).text;
 
 	let ve;
 
@@ -1557,8 +1550,8 @@ def.proto.removeRange =
 
 		change.push(
 			change_join.create(
-				'path', front.path.chop,
-				'path2', ve.textPath.chop,
+				'path', frontOffset.tracePara.chopRoot.toPath,
+				'path2', ve.trace.toPath,
 				'at1', text.length
 			)
 		);
@@ -1566,13 +1559,13 @@ def.proto.removeRange =
 		text += ve.text;
 	}
 
-	text = text.substring( front.at, text.length - ve.text.length + back.at );
+	text = text.substring( frontOffset.at, text.length - ve.text.length + backOffset.at );
 
 	change.push(
 		change_remove.create(
-			'path', front.path.chop,
-			'at1', front.at,
-			'at2', front.at + text.length,
+			'path', frontOffset.tracePara.chopRoot.toPath,
+			'at1', frontOffset.at,
+			'at2', frontOffset.at + text.length,
 			'val', text
 		)
 	);

@@ -282,7 +282,7 @@ def.proto.click =
 
 	// if non of the field were clicked
 	// just focus the portal itself
-	if( !setMark ) setMark = mark_items.createWithOne( this.path, this.trace );
+	if( !setMark ) setMark = mark_items.createWithOne( this.trace );
 
 	root.alter( 'mark', setMark );
 

@@ -11,19 +11,13 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// begin of the range
-		begin : { type : './pat' },
-
-		// begin of the range
+		// begin offset of the range
 		beginOffset : { type : '../trace/offset' },
 
 		// the document the range belongs to
 		doc : { type : '../fabric/doc' },
 
-		// end of the range
-		end : { type : './pat' },
-
-		// end of the range
+		// end offset of the range
 		endOffset : { type : '../trace/offset' },
 
 		// x-position of the caret kept
@@ -31,94 +25,23 @@ if( TIM )
 	};
 }
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
 
 const trace_para = tim.require( '../trace/para' );
 
-
-/*
-| Returns the mark where the caret should show up.
-*/
-// FIXME remove
-def.lazy.caret = function( ) { return this.end; };
+const mark_items = tim.require( './items' );
 
 
 /*
-| The offset where the caret is.
-*/
-def.lazy.caretOffset = function( ) { return this.endOffset; };
-
-
-/*
-| The doc path.
-*/
-def.lazy.docPath =
-	function( )
-{
-	const beginPath = this.begin.path;
-
-	if( beginPath.length < 4 || beginPath.get( 0 ) !== 'space' ) return;
-
-/**/if( CHECK )
-/**/{
-/**/	if( beginPath.get( 3 ) !== 'doc' ) throw new Error( );
-/**/}
-
-	return beginPath.limit( 4 );
-};
-
-
-/*
-| The begin or end
-| dependening on which comes first in the doc.
-*/
-def.lazy.front = function( ) { this._normalize( ); return this.front; };
-
-
-/*
-| The begin or end
-| dependening on which comes first in the doc.
-*/
-def.lazy.frontOffset = function( ) { this._normalize( ); return this.frontOffset; };
-
-
-/*
-| The begin or end
-| dependening on which comes last in the doc.
-*/
-def.lazy.back = function( ) { this._normalize( ); return this.back; };
-
-
-/*
-| The begin or end
+| The beginOffset or endOffset
 | dependening on which comes last in the doc.
 */
 def.lazy.backOffset = function( ) { this._normalize( ); return this.backOffset; };
 
 
 /*
-| Ranges also have caret capabilities.
-|
-| The caretMark is identical to end.
-| FIXME remove this is duplicate to caretOffset
+| The offset where the caret is.
 */
-def.proto.hasCaret = true;
-
-
-/*
-| The item path.
-|
-| This is either undefined or an path list of length === 1
-*/
-def.lazy.itemPaths =
-	function( )
-{
-	const beginPath = this.begin.path;
-
-	if( beginPath.length < 3 || beginPath.get( 0 ) !== 'space' ) return;
-
-	return tim_path_list.create( 'list:append', beginPath.limit( 3 ) );
-};
+def.lazy.caretOffset = function( ) { return this.endOffset; };
 
 
 /*
@@ -174,42 +97,24 @@ def.proto.containsPath =
 		path
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( path.length === 0 )	throw new Error( );
-/**/}
-
-	const dp = this.docPath;
-
-	if( path.length <= dp.length ) return path.subPathOf( dp );
-
-	if( path.subPathOf( this.begin.path ) || path.subPathOf( this.end.path ) ) return true;
-
-	const fp = this.front.path;
-
-	const bp = this.back.path;
-
-	const doc = this.doc;
-
-	const fr = doc.rankOf( fp.get( -2 ) );
-
-	const br = doc.rankOf( bp.get( -2 ) );
-
-	// NOTE: this code is untested.
-
-	for( let r = fr + 1; r < br; r++ )
-	{
-		if( path.get( dp.length + 1 ) === doc.keyAtRank( r ) ) return true;
-	}
-
-	return false;
+	throw new Error( 'XXX' );
 };
 
 
 /*
-| True if begin equals end
+| The doc path.
 */
-def.lazy.empty = function( ) { return this.begin.equals( this.end ); };
+def.lazy.docPath =
+	function( )
+{
+	throw new Error( 'XXX' );
+};
+
+
+/*
+| True if beginOffset equals endOffset
+*/
+def.lazy.empty = function( ) { return this.beginOffset.equals( this.endOffset ); };
 
 
 /*
@@ -230,6 +135,38 @@ def.proto.encompasses =
 	if( tPara ) return this._encompassesPara( tPara );
 
 	return this.beginOffset.hasTrace( trace );
+};
+
+
+/*
+| The beginOffset or endOffset
+| dependening on which comes first in the doc.
+*/
+def.lazy.frontOffset = function( ) { this._normalize( ); return this.frontOffset; };
+
+
+/*
+| Ranges also have caret capabilities.
+|
+| The caretMark is identical to end.
+| FIXME remove this is duplicate to caretOffset
+*/
+def.proto.hasCaret = true;
+
+
+/*
+| The item traces.
+|
+| This is either undefined or mark_items containing the parenting item.
+*/
+def.lazy.itemsMark =
+	function( )
+{
+	const offset = this.beginOffset;
+
+	if( !offset.traceSpace ) return;
+
+	return mark_items.createWithOne( offset.traceItem );
 };
 
 
@@ -287,9 +224,6 @@ def.proto._encompassesPara =
 def.proto._normalize =
 	function( )
 {
-	const begin = this.begin;
-	const end = this.end;
-
 	const bto = this.beginOffset;
 	const eto = this.endOffset;
 
@@ -300,17 +234,11 @@ def.proto._normalize =
 	{
 		if( bto.at <= eto.at )
 		{
-			tim.aheadValue( this, 'front', begin );
-			tim.aheadValue( this, 'back', end );
-
 			tim.aheadValue( this, 'frontOffset', bto );
 			tim.aheadValue( this, 'backOffset', eto );
 		}
 		else
 		{
-			tim.aheadValue( this, 'front', end );
-			tim.aheadValue( this, 'back', begin );
-
 			tim.aheadValue( this, 'frontOffset', eto );
 			tim.aheadValue( this, 'backOffset', bto );
 		}
@@ -332,17 +260,11 @@ def.proto._normalize =
 
 	if( bRank < eRank )
 	{
-		tim.aheadValue( this, 'front', begin );
-		tim.aheadValue( this, 'back', end );
-
 		tim.aheadValue( this, 'frontOffset', bto );
 		tim.aheadValue( this, 'backOffset', eto );
 	}
 	else
 	{
-		tim.aheadValue( this, 'front', end );
-		tim.aheadValue( this, 'back', begin );
-
 		tim.aheadValue( this, 'frontOffset', eto );
 		tim.aheadValue( this, 'backOffset', bto );
 	}

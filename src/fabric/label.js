@@ -131,7 +131,7 @@ def.static.createGeneric =
 		'mark',
 			mark_caret.create(
 				'pat', mark_pat.createPathAt( mpath, 0 ),
-				'offset', trace.appendPara( '1' ).appendOffset( 0 )
+				'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 )
 			)
 	);
 };

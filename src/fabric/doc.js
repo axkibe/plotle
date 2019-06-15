@@ -92,9 +92,7 @@ def.lazy.attentionCenter =
 {
 	if( !this.mark || !this.mark.hasCaret ) return 0;
 
-	const path = this.mark.caret.path;
-
-	const key = path.get( 5 ); // FUTURE
+	const key = this.mark.caretOffset.tracePara.key;
 
 	return this.get( key ).attentionCenter;
 };
@@ -249,7 +247,7 @@ def.lazy.glint =
 
 	const mark = this.mark;
 
-	if( mark && mark.timtype === mark_range && mark.containsPath( this.path.limit( 3 ) ) )
+	if( mark && mark.timtype === mark_range && mark.encompasses( this.trace ) )
 	{
 		arr.push(
 			gleam_glint_paint.createFacetShape(
@@ -279,9 +277,9 @@ def.proto.input =
 {
 	const mark = this.mark;
 
-	if( !this.mark.hasCaret ) return false;
+	const caretOffset = this.mark.caretOffset;
 
-	const path = this.mark.caret.path;
+	if( !caretOffset ) return false;
 
 	if( mark.timtype === mark_range && !mark.empty )
 	{
@@ -294,7 +292,7 @@ def.proto.input =
 		return true;
 	}
 
-	return this.get( path.get( 5 ) ).input( text );
+	return this.get( caretOffset.last.key ).input( text );
 };
 
 
@@ -305,7 +303,9 @@ def.lazy.isBlank =
 	function( )
 {
 	for( let para of this )
+	{
 		if( !para.isBlank ) return false;
+	}
 
 	return true;
 };
@@ -351,7 +351,7 @@ def.proto.specialKey =
 
 	return(
 		this
-		.get( mark.caret.path.get( 5 ) )
+		.get( mark.caretOffset.last.key )
 		.specialKey( key, this, shift, ctrl )
 	);
 };

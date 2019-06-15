@@ -83,8 +83,6 @@ const result_hover = tim.require( '../result/hover' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
-
 const trace_item = tim.require( '../trace/item' );
 
 const trace_root = tim.require( '../trace/root' );
@@ -369,7 +367,7 @@ def.adjust.get =
 
 	const mark = fabric_item.concernsMark( this.mark, path, trace );
 
-	let highlight = !!( mark && mark.containsPath( path ) );
+	let highlight = !!( mark && mark.encompasses( trace ) );
 
 	if( !highlight && item.timtype ) highlight = this.action.highlightItem( item );
 
@@ -733,7 +731,7 @@ def.proto.specialKey =
 
 	if( mark && mark.hasCaret )
 	{
-		const item = this.get( mark.caret.path.get( 2 ) );
+		const item = this.get( mark.caretOffset.traceItem.key );
 
 		if( item ) item.specialKey( key, shift, ctrl );
 
@@ -748,14 +746,12 @@ def.proto.specialKey =
 			{
 				// selects all items in this space
 
-				let paths = [ ];
+				const set = new Set( );
 
 				// FIXME make this a lazy
-				for( let item of this ) paths.push( item.path );
+				for( let item of this ) set.add( item.trace );
 
-				paths = tim_path_list.create( 'list:init', paths );
-
-				root.alter( 'mark', mark_items.create( 'itemPaths', paths ) );
+				root.alter( 'mark', mark_items.create( 'set:init', set ) );
 
 				return true;
 			}

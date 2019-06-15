@@ -52,19 +52,6 @@ def.proto.combine =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-def.proto.containsPath =
-	function(
-		path
-	)
-{
-	throw new Error( 'XXX' );
-};
-
-
-/*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
 def.proto.containsItemTrace =
 	function(
 		itrace
@@ -81,13 +68,14 @@ def.proto.containsItemTrace =
 */
 def.static.createWithOne =
 	function(
-		path,   // XXX
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/
+/**/	if( trace.timtype !== trace_item ) throw new Error( );
 /**/}
 
 	const traces = new Set( );
@@ -139,15 +127,12 @@ def.proto.widgetPath = undefined;
 */
 def.proto.toggle =
 	function(
-		path,    // XXXX
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.empty ) throw new Error( );
-/**/
-/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( arguments.length !== 1 ) throw new Error( );
 /**/
 /**/	if( trace.timtype !== trace_item ) throw new Error( );
 /**/}
@@ -158,24 +143,6 @@ def.proto.toggle =
 	}
 
 	return this.create( 'set:add', trace );
-};
-
-
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	for( let path of this.itemPaths )
-/**/	{
-/**/		if( path.isEmpty ) throw new Error( );
-/**/
-/**/		if( path.get( 0 ) !== 'space' ) throw new Error( );
-/**/	}
-/**/}
 };
 
 

@@ -154,7 +154,7 @@ def.proto.dragStart =
 
 	if( !mark || mark.timtype !== mark_items )
 	{
-		mark = mark_items.createWithOne( this.path, this.trace );
+		mark = mark_items.createWithOne( this.trace );
 	}
 
 	const items = root.space.getSet( mark.itemsMark );
@@ -227,12 +227,12 @@ def.proto._ctrlClick =
 
 	if( !mark )
 	{
-		root.alter( 'mark', mark_items.createWithOne( this.path, this.trace ) );
+		root.alter( 'mark', mark_items.createWithOne( this.trace ) );
 
 		return true;
 	}
 
-	root.alter( 'mark', mark.itemsMark.toggle( this.path, this.trace ) );
+	root.alter( 'mark', mark.itemsMark.toggle( this.trace ) );
 };
 
 

@@ -151,14 +151,7 @@ def.proto._transformMarkRange =
 
 	if( beginOffset && endOffset )
 	{
-		return(
-			mark.create(
-				'begin', beginOffset.toMarkPat,
-				'beginOffset', beginOffset,
-				'end', endOffset.toMarkPat,
-				'endOffset', endOffset
-			)
-		);
+		return mark.create( 'beginOffset', beginOffset, 'endOffset', endOffset );
 	}
 };
 

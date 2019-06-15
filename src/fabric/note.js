@@ -84,6 +84,8 @@ const shell_settings = tim.require( '../shell/settings' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_root = tim.require( '../trace/root' );
+
 const mark_caret = tim.require( '../mark/caret' );
 
 const widget_scrollbar = tim.require( '../widget/scrollbar' );
@@ -117,7 +119,13 @@ def.static.createGeneric =
 		path.prepend( 'space' )
 		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
 
-	const offset = this.trace.appendDoc.appendPara( '1' ).appendOffset( 0 );
+	const offset =
+		trace_root.singleton
+		.appendSpace
+		.appendItem( key )
+		.appendDoc
+		.appendPara( '1' )
+		.appendOffset( 0 );
 
 	root.alter(
 		'change',
@@ -350,7 +358,7 @@ def.proto.scrollMarkIntoView =
 
 	const descend = fs * gleam_font_font.bottomBox;
 
-	const p = para.locateOffsetPoint( mark.caret.at );
+	const p = para.locateOffsetPoint( mark.caretOffset.at );
 
 	const ppos = para.pos;
 
