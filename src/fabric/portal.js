@@ -581,14 +581,13 @@ def.proto.specialKey =
 def.lazy._facetMoveToButton =
 	function( )
 {
+	let hover = this.hover;
+
+	if( hover && !hover.equals( this.trace.appendField( 'moveToButton' ) ) ) hover = false;
+
 	return(
 		gruga_portal.buttonFacets.getFacet(
-			'hover',
-				this.hover
-				? this.hover.equals(
-					this.path.append( 'moveToButton' )
-				)
-				: false,
+			'hover', !!hover,
 			'focus', this._markSection === 'moveToButton'
 		)
 	);

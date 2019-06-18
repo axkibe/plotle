@@ -14,3 +14,4 @@ FIXME: error dragStartButton when "dragging" on login
 
 FIXME: move the gruga forms in a form directory
 FIXME: click on portal doesn't select
+FIXME: rename hover to hoverTrace
