@@ -7,6 +7,9 @@
 tim.define( module, ( def, mark_caret ) => {
 
 
+def.extend = './base';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -16,10 +19,6 @@ if( TIM )
 
 		// x-position of the caret kept
 		retainx : { type : [ 'undefined', 'number' ] },
-
-		// the mark into a text (path/at)
-		// FIXME remove
-		pat : { type : './pat' },
 
 		// the trace of the caret
 		offset : { type : '../trace/offset' },
@@ -36,27 +35,16 @@ const mark_items = tim.require( './items' );
 def.lazy.backward =
 	function( )
 {
-	const pat = this.pat.backward;
+	const b = this.offset.backward;
 
-	if( !pat ) return;
+	if( !b ) return;
 
-	const c =
-		this.create(
-			'offset', this.offset.backward,
-			'pat', pat
-		);
+	const c = this.create( 'offset', b );
 
 	tim.aheadValue( c, 'forward', this );
 
 	return c;
 };
-
-
-/*
-| The mark where the caret is.
-*/
-// FIXME remove
-def.lazy.caret = function( ) { return this.pat; };
 
 
 /*
@@ -72,24 +60,6 @@ def.proto.clipboard = '';
 
 
 /*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-def.proto.containsPath =
-	function(
-		path
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( path.length === 0 )	throw new Error( );
-/**/}
-
-	return path.subPathOf( this.pat.path );
-};
-
-
-/*
 | Returns true if this mark encompasses the trace.
 */
 def.proto.encompasses = function( trace ) { return this.offset.hasTrace( trace ); };
@@ -101,11 +71,7 @@ def.proto.encompasses = function( trace ) { return this.offset.hasTrace( trace )
 def.lazy.forward =
 	function( )
 {
-	const c =
-		this.create(
-			'offset', this.offset.forward,
-			'pat', this.pat.forward
-		);
+	const c = this.create( 'offset', this.offset.forward );
 
 	tim.aheadValue( c, 'backward', this );
 
@@ -139,17 +105,9 @@ def.lazy.itemsMark =
 
 
 /*
-| The widget's path.
+| The widget the caret is in.
 */
-def.lazy.widgetPath =
-	function( )
-{
-	const path = this.pat.path;
-
-	if( path.length < 5 || path.get( 0 ) !== 'forms' ) return;
-
-	return path.limit( 5 );
-};
+def.lazy.widgetTrace = function( ) { return this.offset.traceWidget; };
 
 
 /*
@@ -158,26 +116,7 @@ def.lazy.widgetPath =
 def.lazy.zero =
 	function( )
 {
-	return this.create( 'pat', this.pat.zero );
-};
-
-
-/*
-| Extra checking.
-*/
-def.proto._check =
-	function( )
-{
-	let path = this.pat.path;
-
-	if( path.last === 'text' ) path = path.shorten;
-
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		!this.offset.get( this.offset.length - 1 ).toPath.equals( path )
-/**/	) throw new Error( );
-/**/}
+	return this.create( 'offset', this.offset.create( 'at', 0 ), 'retainx', undefined );
 };
 
 

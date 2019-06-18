@@ -1,5 +1,5 @@
 /*
-| A bare part of a trace.
+| The base of all traces.
 */
 'use strict';
 
@@ -126,6 +126,30 @@ def.lazy.prependRoot =
 
 
 /*
+| Default forms tracer.
+*/
+def.lazy.traceForms =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceForms;
+};
+
+
+/*
+| Default discs tracer.
+*/
+def.lazy.traceDiscs =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceDiscs;
+};
+
+
+/*
 | Default doc tracer.
 */
 def.lazy.traceDoc =
@@ -184,6 +208,18 @@ def.lazy.traceSpace =
 	if( this.length === 0 ) return;
 
 	return this.get( this.length - 1 ).traceSpace;
+};
+
+
+/*
+| Default widget tracer.
+*/
+def.lazy.traceWidget =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceWidget;
 };
 
 

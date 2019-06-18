@@ -179,7 +179,7 @@ def.proto._transformInsertRemove =
 
 
 /*
-| Transforms a pat mark by this insert.
+| Transforms an offset by this insert.
 */
 def.proto._transformOffset =
 	function(

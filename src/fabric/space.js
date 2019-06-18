@@ -26,7 +26,7 @@ if( TIM )
 		hasGrid : { type : 'boolean', defaultValue : 'true', json: true, },
 
 		// node currently hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// this space has grid snapping
 		// no json thus not saved or transmitted
@@ -233,12 +233,7 @@ def.proto.click =
 | Returns the hover path if the space concerns about a hover.
 */
 def.static.concernsHover =
-	function(
-		hover
-	)
-{
-	return( hover && hover.get( 0 ) === 'space' ? hover : undefined );
-};
+	( hover ) => hover && hover.traceSpace ? hover : undefined;
 
 
 /*
@@ -371,7 +366,7 @@ def.adjust.get =
 
 	if( !highlight && item.timtype ) highlight = this.action.highlightItem( item );
 
-	const hover = item.concernsHover( this.hover, path );
+	const hover = item.concernsHover( this.hover, trace );
 
 	const access = this.access;
 
@@ -583,9 +578,7 @@ def.proto.input =
 
 	if( !mark || !mark.hasCaret ) return false;
 
-	const path = mark.caret.path;
-
-	const item = this.get( path.get( 2 ) );
+	const item = this.get( mark.caretOffset.traceItem.key );
 
 	if( item ) item.input( text );
 };

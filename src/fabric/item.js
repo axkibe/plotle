@@ -80,7 +80,7 @@ def.static.concernsAction =
 */
 def.static.concernsHover =
 def.proto.concernsHover =
-	( hover, path ) => undefined;
+	( hover, trace ) => undefined;
 
 
 /*

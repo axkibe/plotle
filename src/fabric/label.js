@@ -70,8 +70,6 @@ const trace_root = tim.require( '../trace/root' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 
 /*
 | Position and fontsize are directly affected by actions.
@@ -115,10 +113,6 @@ def.static.createGeneric =
 
 	const path = tim_path.empty.append( 'twig' ).append( key );
 
-	const mpath =
-		path.prepend( 'space' )
-		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
-
 	const trace = trace_root.singleton.appendSpace.appendItem( key );
 
 /**/if( CHECK )
@@ -130,7 +124,6 @@ def.static.createGeneric =
 		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
 		'mark',
 			mark_caret.create(
-				'pat', mark_pat.createPathAt( mpath, 0 ),
 				'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 )
 			)
 	);

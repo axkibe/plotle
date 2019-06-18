@@ -7,7 +7,7 @@
 tim.define( module, ( def, trace_offset ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )
@@ -32,9 +32,6 @@ if( TIM )
 		'./widget'
 	];
 }
-
-
-const mark_pat = tim.require( '../mark/pat' );
 
 
 /*
@@ -78,16 +75,6 @@ def.lazy.forward =
 	tim.aheadValue( o, 'backward', this );
 
 	return o;
-};
-
-
-/*
-| FIXME remove.
-*/
-def.lazy.toMarkPat =
-	function( )
-{
-	return mark_pat.createPathAt( this.last.toPath, this.at );
 };
 
 

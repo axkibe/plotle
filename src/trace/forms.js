@@ -3,10 +3,11 @@
 */
 'use strict';
 
+
 tim.define( module, ( def ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )
@@ -29,6 +30,12 @@ def.lazyFuncStr.appendForm =
 {
 	return trace_form.create( 'list:init', this, 'list:append', this, 'key', key );
 };
+
+
+/*
+| This is the forms trace.
+*/
+def.lazy.traceForms = function( ) { return this; };
 
 
 /*

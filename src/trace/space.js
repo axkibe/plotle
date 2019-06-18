@@ -3,10 +3,11 @@
 */
 'use strict';
 
+
 tim.define( module, ( def, trace_space ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )

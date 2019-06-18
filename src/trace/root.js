@@ -3,12 +3,13 @@
 */
 'use strict';
 
+
 tim.define( module, ( def, trace_root ) => {
 
 
 def.singleton = true;
 
-def.extend = './bare';
+def.extend = './base';
 
 
 const tim_path = tim.require( 'tim.js/path' );

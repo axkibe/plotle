@@ -7,7 +7,7 @@
 tim.define( module, ( def ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )

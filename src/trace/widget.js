@@ -7,7 +7,7 @@
 tim.define( module, ( def, trace_widget ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )
@@ -69,6 +69,12 @@ def.lazy.toPath =
 {
 	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
 };
+
+
+/*
+| This is ta widget trace.
+*/
+def.lazy.traceWidget = function( ) { return this; };
 
 
 } );

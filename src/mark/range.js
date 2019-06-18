@@ -7,6 +7,9 @@
 tim.define( module, ( def, mark_range ) => {
 
 
+def.extend = './base';
+
+
 if( TIM )
 {
 	def.attributes =

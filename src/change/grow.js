@@ -52,8 +52,6 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
@@ -139,7 +137,6 @@ def.staticLazy._transformers = ( ) =>
 {
 	const map = new Map( );
 
-	map.set( mark_pat,    '_transformSame' );
 	map.set( mark_caret,  '_transformSame' );
 	map.set( mark_range,  '_transformSame' );
 	map.set( mark_items,  '_transformSame' );

@@ -132,7 +132,7 @@ def.proto.pointingHover =
 {
 	if( !this.tShape.within( p ) ) return;
 
-	return result_hover.cursorNSResize.create( 'path', this.path );
+	return result_hover.cursorNSResize.create( 'trace', this.trace );
 };
 
 

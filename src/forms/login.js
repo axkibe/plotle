@@ -19,8 +19,6 @@ const forms_form = tim.require( './form' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const ref_space = tim.require( '../ref/space' );
 
 const reply_auth = tim.require( '../reply/auth' );
@@ -64,11 +62,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( userInput.path, username.length ),
-					'offset', userInput.trace.appendOffset( username.length )
-				)
+			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( username.length ) )
 		);
 
 		return;
@@ -79,11 +73,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( userInput.path, 0 ),
-					'offset', userInput.trace.appendOffset( 0 )
-				)
+			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( 0 ) )
 		);
 
 		return;
@@ -94,11 +84,7 @@ def.proto.login =
 		this._setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( passInput.path, pass.length ),
-					'offset', passInput.trace.appendOffset( pass.length )
-				)
+			'mark', mark_caret.create( 'offset', passInput.trace.appendOffset( pass.length ) )
 		);
 
 		return;
@@ -134,7 +120,6 @@ def.proto.onAuth =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( userInput.path, userInput.value.length ),
 						'offset', userInput.trace.appendOffset( userInput.value.length )
 					)
 			);
@@ -146,7 +131,6 @@ def.proto.onAuth =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( passInput.path, passInput.value.length ),
 						'offset', passInput.trace.appendOffset( passInput.value.length )
 					)
 			);

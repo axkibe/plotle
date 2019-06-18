@@ -84,8 +84,6 @@ const gruga_font = tim.require( '../gruga/font' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 const session_uid = tim.require( '../session/uid' );
@@ -1071,15 +1069,12 @@ def.proto._setMark =
 		doc          // range mark need this
 	)
 {
-	// FIXME make a lazyFuncInt for mark_pat.
-	const pat = mark_pat.createPathAt( this.textPath, at );
-
 	const offset = this.trace.appendOffset( at );
 
 	root.alter(
 		'mark',
 			!beginOffset
-			? mark_caret.create( 'offset', offset, 'pat', pat, 'retainx', retainx )
+			? mark_caret.create( 'offset', offset, 'retainx', retainx )
 			: mark_range.create(
 				'doc', doc,
 				'beginOffset', beginOffset,

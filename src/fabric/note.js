@@ -76,8 +76,6 @@ const gleam_transform = tim.require( '../gleam/transform' );
 
 const gruga_note = tim.require( '../gruga/note' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const session_uid = tim.require( '../session/uid' );
 
 const shell_settings = tim.require( '../shell/settings' );
@@ -115,10 +113,6 @@ def.static.createGeneric =
 
 	const path = tim_path.empty.append( 'twig' ).append( key );
 
-	const mpath =
-		path.prepend( 'space' )
-		.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
-
 	const offset =
 		trace_root.singleton
 		.appendSpace
@@ -134,11 +128,7 @@ def.static.createGeneric =
 				'path', path,
 				'rank', 0
 			),
-		'mark',
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( mpath, 0 ),
-				'offset', offset
-			)
+		'mark', mark_caret.create( 'offset', offset )
 	);
 };
 

@@ -69,8 +69,6 @@ const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_widget = tim.require( '../mark/widget' );
 
 const widget_scrollbox = tim.require( '../widget/scrollbox' );
@@ -96,22 +94,21 @@ def.proto.concernsHasSnapping =
 /*
 | Returns the mark if a form with 'path' concerns about
 | 'mark'. This is the same for all forms.
+|
+| FIXME is this really necessary as function?
 */
 def.static.concernsMark =
 	function(
 		mark,
-		path,
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	if( !mark ) return mark;
-
-	return mark.containsPath( path ) ? mark : undefined;
+	if( mark && mark.encompasses( trace ) ) return mark;
 };
 
 
@@ -149,11 +146,11 @@ def.proto.cycleFocus =
 {
 	const length = this.length;
 
-	const path = this.mark.widgetPath;
+	const trace = this.mark.widgetTrace;
 
-	if( path.isEmpty ) return;
+	if( !trace ) return;
 
-	let rank = this.rankOf( path.get( 4 ) );
+	let rank = this.rankOf( trace.key );
 
 	const rs = rank;
 
@@ -170,10 +167,7 @@ def.proto.cycleFocus =
 			root.alter(
 				'mark',
 					ve.caretable
-					? mark_caret.create(
-						'pat', mark_pat.createPathAt( ve.path, 0 ),
-						'offset', ve.trace.appendOffset( 0 )
-					)
+					? mark_caret.create( 'offset', ve.trace.appendOffset( 0 ) )
 					: mark_widget.create( 'path', ve.path, 'trace', ve.trace )
 			);
 
@@ -260,9 +254,11 @@ def.static.adjustGet =
 
 	const trace = this.trace.appendWidget( name );
 
-	const mark = widget.concernsMark( this.mark, path, trace );
+	let mark = this.mark;
 
-	const hover = widget.concernsHover( this.hover, path );
+	if( mark && !mark.encompasses( trace ) ) mark = undefined;
+
+	const hover = widget.concernsHover( this.hover, trace );
 
 	widget =
 		widget.create(
@@ -305,14 +301,9 @@ def.lazy.focusedWidget =
 
 	if( !mark ) return;
 
-	const path = mark.widgetPath;
+	const trace = mark.widgetTrace;
 
-/**/if( CHECK )
-/**/{
-/**/	if( path.length === 0 ) throw new Error( );
-/**/}
-
-	return this.get( path.get( 4 ) );
+	return this.get( trace.key );
 };
 
 

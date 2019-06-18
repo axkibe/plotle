@@ -25,8 +25,6 @@ const user_passhash = tim.require( '../user/passhash' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 
 /*
 | Clears all fields.
@@ -68,7 +66,6 @@ def.proto.onRegister =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( userInput.path, userInput.value.length ),
 						'offset', userInput.trace.appendOffset( userInput.value.length )
 					)
 			);
@@ -159,10 +156,7 @@ def.proto.signup =
 
 		root.alter(
 			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( userInput.path, username.length ),
-					'offset', userInput.trace.appendOffset( username.length )
-				)
+				mark_caret.create( 'offset', userInput.trace.appendOffset( username.length ) )
 		);
 
 		return;
@@ -173,11 +167,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( userInput.path, 0 ),
-					'offset', userInput.trace.appendOffset( 0 )
-				)
+			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( 0 ) )
 		);
 
 		return;
@@ -188,11 +178,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( passInput.path, pass.length ),
-					'offset', passInput.trace.appendOffset( pass.length )
-				)
+			'mark', mark_caret.create( 'offset', passInput.trace.appendOffset( pass.length ) )
 		);
 
 		return;
@@ -203,11 +189,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Passwords do not match' );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( pass2Input.path, pass2.length ),
-					'offset', pass2Input.trace.appendOffset( pass2.length )
-				)
+			'mark', mark_caret.create( 'offset', pass2Input.trace.appendOffset( pass2.length ) )
 		);
 
 		return;

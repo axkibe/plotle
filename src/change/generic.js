@@ -133,7 +133,7 @@ def.proto._transformMarkCaret =
 {
 	const offset = this._transformOffset( mark.offset );
 
-	if( offset ) return mark.create( 'offset', offset, 'pat', offset.toMarkPat );
+	if( offset ) return mark.create( 'offset', offset );
 };
 
 

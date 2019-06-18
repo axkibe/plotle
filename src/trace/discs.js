@@ -3,10 +3,11 @@
 */
 'use strict';
 
+
 tim.define( module, ( def ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )
@@ -29,6 +30,12 @@ def.lazyFuncStr.appendDisc =
 {
 	return trace_disc.create( 'list:init', this, 'list:append', this, 'key', key );
 };
+
+
+/*
+| This is the discs trace.
+*/
+def.lazy.traceDiscs = function( ) { return this; };
 
 
 } );

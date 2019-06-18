@@ -71,41 +71,13 @@ const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
-
-/*
-| Returns the mark if the widget with 'path' concerns about the mark.
-*/
-def.proto.concernsMark =
-def.static.concernsMark =
-	function(
-		mark,
-		path,
-		trace
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/}
-
-	return mark && mark.containsPath( path ) ? mark : undefined;
-};
-
 
 /*
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
-	function(
-		hover,
-		path
-	)
-{
-	return hover && path.subPathOf( hover ) ? hover : undefined;
-};
+	( hover, trace ) => hover && hover.hasTrace( trace ) ? hover : undefined;
 
 
 /*
@@ -159,7 +131,7 @@ def.lazy.attentionCenter =
 
 	const descend = fs * gleam_font_font.bottomBox;
 
-	const p = this.locateOffsetPoint( this.mark.caret.at );
+	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
 	const s = Math.round( p.y + descend + 1 );
 
@@ -210,7 +182,7 @@ def.lazy._caretGlint =
 
 	const descend = fs * gleam_font_font.bottomBox;
 
-	const p = this.locateOffsetPoint( this.mark.caret.at );
+	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
 	return(
 		gleam_glint_fill.create(
@@ -381,13 +353,7 @@ def.proto.click =
 
 	const offset = this._getOffsetAt( pp );
 
-	root.alter(
-		'mark',
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( this.path, offset ),
-				'offset', this.trace.appendOffset( offset )
-			)
-	);
+	root.alter( 'mark', mark_caret.create( 'offset', this.trace.appendOffset( offset ) ) );
 
 	return false;
 };
@@ -405,7 +371,7 @@ def.proto.input =
 
 	const value = this.value;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffset.at;
 
 	const maxlen = this.maxlen;
 
@@ -421,11 +387,7 @@ def.proto.input =
 	);
 
 	root.alter(
-		'mark',
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( mark.caret.path, at + text.length ),
-				'offset', this.trace.appendOffset( at + text.length )
-			)
+		'mark', mark_caret.create( 'offset', this.trace.appendOffset( at + text.length ) )
 	);
 };
 
@@ -446,15 +408,11 @@ def.proto.pointingHover =
 		// ctrl
 	)
 {
-	if(
-		!this._tZone.within( p )
-		|| !this._tzShape.within( p.sub( this._tZone.pos ) )
-	)
-	{
-		return;
-	}
+	if( !this._tZone.within( p )
+	|| !this._tzShape.within( p.sub( this._tZone.pos ) )
+	) return;
 
-	return result_hover.create( 'path', this.path, 'cursor', 'text' );
+	return result_hover.cursorText( 'trace', this.trace );
 };
 
 
@@ -545,7 +503,7 @@ def.proto._keyBackspace =
 {
 	const mark = this.mark;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffset.at;
 
 	if( at <= 0 ) return;
 
@@ -563,7 +521,7 @@ def.proto._keyBackspace =
 def.proto._keyDel =
 	function( )
 {
-	const at = this.mark.caret.at;
+	const at = this.mark.caretOffset.at;
 
 	if( at >= this.value.length ) return;
 
@@ -594,16 +552,12 @@ def.proto._keyEnd =
 {
 	const mark = this.mark;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffset.at;
 
 	if( at >= this.value.length ) return;
 
 	root.alter(
-		'mark',
-			mark_caret.create(
-				'pat', mark_caret.createPathAt( mark.caret.path, this.value.length ),
-				'offset', this.trace.appendOffset( this.value.length )
-			)
+		'mark', mark_caret.create( 'offset', this.trace.appendOffset( this.value.length ) )
 	);
 };
 
@@ -616,7 +570,7 @@ def.proto._keyLeft =
 {
 	const mark = this.mark;
 
-	if( mark.caret.at <= 0 ) return;
+	if( mark.caretOffset.at <= 0 ) return;
 
 	root.alter( 'mark', mark.backward );
 };
@@ -630,7 +584,7 @@ def.proto._keyPos1 =
 {
 	const mark = this.mark;
 
-	if( mark.caret.at <= 0 ) return;
+	if( mark.caretOffset.at <= 0 ) return;
 
 	root.alter( 'mark', mark.zero );
 };
@@ -644,7 +598,7 @@ def.proto._keyRight =
 {
 	const mark = this.mark;
 
-	if( mark.caret.at >= this.value.length ) return;
+	if( mark.caretOffset.at >= this.value.length ) return;
 
 	root.alter( 'mark', mark.forward );
 };

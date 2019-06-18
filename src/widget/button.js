@@ -77,36 +77,21 @@ const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Returns the mark if the widget with 'path' concerns about the mark.
-*/
-def.static.concernsMark =
-def.proto.concernsMark =
-	function(
-		mark,
-		path,
-		trace
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/}
-
-	return mark && mark.containsPath( path ) ? mark : undefined;
-};
-
-
-/*
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
 	function(
 		hover,
-		path
+		trace
 	)
 {
-	return hover && path.subPathOf( hover ) ? hover : undefined;
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
+
+	if( hover && hover.traceWidget.equals( trace ) ) return hover;
 };
 
 
@@ -414,12 +399,7 @@ def.proto.pointingHover =
 {
 	if( !this.within( p ) ) return;
 
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'pointer'
-		)
-	);
+	return result_hover.cursorPointer.create( 'trace', this.trace );
 };
 
 

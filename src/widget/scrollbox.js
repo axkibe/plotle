@@ -79,30 +79,15 @@ def.static.concernsHover =
 def.proto.concernsHover =
 	function(
 		hover,
-		path
-	)
-{
-	return hover && path.subPathOf( hover ) ? hover : undefined;
-};
-
-
-/*
-| Returns the mark if the widget with 'path' concerns about the mark.
-*/
-def.proto.concernsMark =
-def.static.concernsMark =
-	function(
-		mark,
-		path,
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	return mark && mark.containsPath( path ) ? mark : undefined;
+	if( hover && hover.traceWidget.equals( trace ) ) return hover;
 };
 
 

@@ -150,25 +150,12 @@ def.static.concernsHover =
 def.proto.concernsHover =
 	function(
 		hover,  // hover path
-		path    // path of the disc
+		trace   // trace of the disc
 	)
 {
+	if( !hover ) return;
 
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 0 ) !== 'discs' || path.get( 1 ) !== 'twig' ) throw new Error( );
-/**/}
-
-	return(
-		(
-			hover
-			&& hover.length > 2
-			&& hover.get( 0 ) === 'discs'
-			&& hover.get( 2 ) === path.get( 2 )
-		)
-		? hover
-		: undefined
-	);
+	return hover.hasTrace( trace );
 };
 
 

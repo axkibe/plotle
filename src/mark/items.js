@@ -7,6 +7,9 @@
 tim.define( module, ( def, mark_items ) => {
 
 
+def.extend = './base';
+
+
 if( TIM )
 {
 	def.set = [ '../trace/item' ];
@@ -111,13 +114,6 @@ def.proto.hasCaret = false;
 | The items mark of an items mark is itself.
 */
 def.lazy.itemsMark = function( ) { return this; };
-
-
-/*
-| The widget's path.
-*/
-def.proto.widgetPath = undefined;
-
 
 
 /*

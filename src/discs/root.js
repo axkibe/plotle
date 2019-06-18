@@ -59,38 +59,6 @@ const show_zoom = tim.require( '../show/zoom' );
 
 
 /*
-| Returns the hover path if the disc root concerns about it.
-*/
-def.static.concernsHover =
-	function(
-		hover
-	)
-{
-	// FUTURE beautify
-	return(
-		hover && hover.get( 0 ) === 'discs'
-		? hover
-		: undefined
-	);
-};
-
-
-/**
-*** Exta checking
-***/
-/**/if( CHECK )
-/**/{
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		const hover = this.hover;
-/**/
-/**/		if( hover && hover.isEmpty ) throw new Error( );
-/**/	};
-/**/}
-
-
-/*
 | Adjusts the discs.
 */
 def.adjust.get =
@@ -101,7 +69,7 @@ def.adjust.get =
 {
 	const ct = this.controlTransform;
 
-	const hover = discs_disc.concernsHover( this.hover, disc.path );
+	const hover = discs_disc.concernsHover( this.hover, disc.trace );
 
 	const show = disc.concernsShow( this.show );
 

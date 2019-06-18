@@ -44,14 +44,6 @@ const layout_label = tim.require( '../layout/label' );
 
 
 /*
-| A label doesn't care about marks.
-*/
-def.proto.concernsMark =
-def.static.concernsMark =
-	( ) => undefined;
-
-
-/*
 | A label doesn't care about hovering.
 */
 def.proto.concernsHover =

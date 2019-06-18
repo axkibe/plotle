@@ -58,10 +58,6 @@ if( TIM )
 }
 
 
-const forms_form = tim.require( './form' );
-
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_root = tim.require( '../trace/root' );
 
 
@@ -91,7 +87,9 @@ def.adjust.get =
 
 	const trace = trace_root.singleton.appendForms.appendForm( name );
 
-	const mark = forms_form.concernsMark( this.mark, path, trace );
+	let mark = this.mark;
+
+	if( mark && !mark.encompasses( trace ) ) mark = undefined;
 
 	const spaceRef = form.concernsSpaceRef( this.spaceRef );
 
@@ -122,21 +120,10 @@ def.adjust.get =
 
 
 /*
-| Path of the form root
-*/
-def.staticLazy.path = ( ) => tim_path.empty.append( 'forms' );
-
-
-/*
 | Returns the hover path if the form root concerns about it.
 */
 def.static.concernsHover =
-	hover =>
-	(
-		hover && hover.get( 0 ) === 'forms'
-		? hover
-		: undefined
-	);
+	( hover ) => hover && hover.traceForms ? hover : undefined;
 
 /*
 | Returns the mark if the form root concerns about it.
@@ -151,11 +138,7 @@ def.static.concernsMark =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	return(
-		mark && mark.containsPath( forms_root.path )
-		? mark
-		: undefined
-	);
+	if( mark && mark.encompasses( trace_root.singleton.appendForms ) ) return mark;
 };
 
 

@@ -7,7 +7,7 @@
 tim.define( module, ( def, trace_form ) => {
 
 
-def.extend = './bare';
+def.extend = './base';
 
 
 if( TIM )

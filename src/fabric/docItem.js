@@ -26,8 +26,6 @@ const result_hover = tim.require( '../result/hover' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 const mark_range = tim.require( '../mark/range' );
 
 
@@ -186,18 +184,11 @@ def.proto.markForPoint =
 	}
 	else if( doRange && mark && mark.timtype === mark_range )
 	{
-		return(
-			mark.create( 'endOffset', para.trace.appendOffset( at ) )
-		);
+		return mark.create( 'endOffset', para.trace.appendOffset( at ) );
 	}
 	else
 	{
-		return(
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( para.textPath, at ),
-				'offset', para.trace.appendOffset( at )
-			)
-		);
+		return mark_caret.create( 'offset', para.trace.appendOffset( at ) );
 	}
 };
 
@@ -238,12 +229,9 @@ def.proto.pointingHover =
 
 	let cursor = 'default';
 
-	switch( action.timtype )
-	{
-		case action_select : cursor = 'text'; break;
-	}
+	if( action.timtype === action_select ) cursor = 'text';
 
-	return result_hover.create( 'path', this.path, 'cursor', cursor );
+	return result_hover.create( 'cursor', cursor, 'trace', this.trace );
 };
 
 

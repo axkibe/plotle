@@ -7,6 +7,9 @@
 tim.define( module, ( def ) => {
 
 
+def.extend = './base';
+
+
 if( TIM )
 {
 	def.attributes =
@@ -27,15 +30,9 @@ def.proto.encompasses = function( trace ) { return this.trace.hasTrace( trace );
 
 
 /*
-| A widget has no item paths.
-*/
-def.lazy.paths = ( ) => undefined;
-
-
-/*
 | The widget's path.
 */
-def.lazy.widgetPath = function( ) { return this.path; };
+def.lazy.widgetTrace = function( ) { return this.trace; };
 
 
 /*

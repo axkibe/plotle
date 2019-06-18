@@ -31,8 +31,8 @@ if( TIM )
 		// the forms
 		forms : { type : '../forms/root' },
 
-		// current hovered item
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		// currently hovered on field/item
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the link to the server
 		link : { type : '../net/link' },
@@ -191,8 +191,6 @@ const gruga_user = tim.require( '../gruga/user' );
 const gruga_welcome = tim.require( '../gruga/welcome' );
 
 const mark_caret = tim.require( '../mark/caret' );
-
-const mark_pat = tim.require( '../mark/pat' );
 
 const mark_range = tim.require( '../mark/range' );
 
@@ -389,23 +387,6 @@ def.static.startup =
 };
 
 
-
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	const hover = this.hover;
-/**/
-/**/	if( hover && hover.isEmpty ) throw new Error( );
-/**/}
-};
-
-
-
 /*
 | Adjusts the disc.
 */
@@ -422,12 +403,16 @@ def.adjust.discs =
 			'offset', gleam_point.zero
 		);
 
+	let hover = this.hover;
+
+	if( hover && !hover.traceDiscs ) hover = undefined;
+
 	return(
 		discs.create(
 			'access', this.access,
 			'action', this.action,
 			'controlTransform', ctransform,
-			'hover', this.hover,
+			'hover', hover,
 			'mark', this._mark,
 			'show', this.show,
 			'spaceRef', this.spaceRef,
@@ -1408,7 +1393,7 @@ def.proto.pointingHover =
 /**/			if( result.timtype !== result_hover ) throw new Error( );
 /**/		}
 
-			root.alter( 'hover', result.path );
+			root.alter( 'hover', result.trace );
 
 			return result.cursor;
 		}
@@ -1421,7 +1406,7 @@ def.proto.pointingHover =
 /**/	if( result.timtype !== result_hover ) throw new Error( );
 /**/}
 
-	root.alter( 'hover', result.path );
+	root.alter( 'hover', result.trace );
 
 	return result.cursor;
 };
@@ -1668,8 +1653,6 @@ def.proto.spawnRelation =
 			'path', path
 		);
 
-	const mpath = path.append( 'doc', ).append( 'twig' ).append( '1' ).append( 'text' );
-
 	let change =
 		change_list.create(
 			'list:append',
@@ -1685,10 +1668,7 @@ def.proto.spawnRelation =
 	root.alter(
 		'change', change,
 		'mark',
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( mpath, 0 ),
-				'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 )
-			)
+			mark_caret.create( 'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 ) )
 	);
 };
 

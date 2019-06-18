@@ -16,7 +16,7 @@ if( TIM )
 	{
 		// node currently hovered upon
 		// no json thus not saved or transmitted
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// owner of the space the portal goes to
 		spaceUser : { type : 'string', json : true },
@@ -94,8 +94,6 @@ const mark_caret = tim.require( '../mark/caret' );
 
 const mark_items = tim.require( '../mark/items' );
 
-const mark_pat = tim.require( '../mark/pat' );
-
 
 /*
 | List of all space fields of the portal
@@ -171,12 +169,12 @@ def.static.concernsHover =
 def.proto.concernsHover =
 	function(
 		hover,
-		path
+		trace
 	)
 {
-	if( !path || !hover ) return;
+	if( !hover ) return;
 
-	if( path.subPathOf( hover ) ) return hover;
+	if( hover.hasTrace( trace ) ) return hover;
 };
 
 
@@ -198,8 +196,6 @@ def.static.createGeneric =
 
 	const path = tim_path.empty.append( 'twig' ).append( key );
 
-	const mpath = path.prepend( 'space' ).append( 'spaceUser' );
-
 	root.alter(
 		'change',
 			change_grow.create(
@@ -209,7 +205,6 @@ def.static.createGeneric =
 			),
 		'mark',
 			mark_caret.create(
-				'pat', mark_pat.createPathAt( mpath, 0 ),
 				'offset',
 					trace_root.singleton
 					.appendSpace
@@ -272,7 +267,6 @@ def.proto.click =
 
 			setMark =
 				mark_caret.create(
-					'pat', mark_pat.createPathAt( this.path.append( field ), offset ),
 					'offset', this.trace.appendField( field ).appendOffset( offset )
 				);
 
@@ -489,13 +483,13 @@ def.proto.pointingHover =
 	{
 		return(
 			result_hover.create(
-				'path', this.path.append( 'moveToButton' ),
+				'trace', this.trace.appendField( 'moveToButton' ),
 				'cursor', 'pointer'
 			)
 		);
 	}
 
-	return result_hover.create( 'cursor', 'default' );
+	return result_hover.cursorDefault;
 };
 
 
@@ -901,7 +895,6 @@ def.proto._keyDown =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'spaceTag' ), offset ),
 						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( offset )
 					)
 			);
@@ -914,7 +907,6 @@ def.proto._keyDown =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'moveToButton' ), 0 ),
 						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
 					)
 			);
@@ -926,7 +918,6 @@ def.proto._keyDown =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'spaceUser' ), 0 ),
 						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( 0 )
 					)
 			);
@@ -954,13 +945,7 @@ def.proto._keyLeft =
 
 		const offset = cycle === 'moveToButton' ? 0 : this[ cycle ].length;
 
-		root.alter(
-			'mark',
-				mark_caret.create(
-					'pat', mark_pat.createPathAt( this.path.append( cycle ), offset ),
-					'offset', offset
-				)
-		);
+		root.alter( 'mark', mark_caret.create( 'offset', offset ) );
 
 		return;
 	}
@@ -1020,11 +1005,7 @@ def.proto._keyEnd =
 	if( at >= value.length ) return;
 
 	root.alter(
-		'mark',
-			mark_caret.create(
-				'pat', mark_pat.createPathAt( mark.caret.path, value.length ),
-				'offset', mark.offset.changeTo( value.length )
-			)
+		'mark', mark_caret.create( 'offset', mark.offset.changeTo( value.length ) )
 	);
 };
 
@@ -1035,8 +1016,6 @@ def.proto._keyEnd =
 def.proto._keyEnter =
 	function( )
 {
-	const mark = this.mark;
-
 	const section = this._markSection;
 
 	if( !fabric_portal.isSection( section ) ) return;
@@ -1055,7 +1034,6 @@ def.proto._keyEnter =
 		root.alter(
 			'mark',
 				mark_caret.create(
-					'pat', mark_pat.createPathAt( mark.caret.path.set( -1, cycle ), 0 ),
 					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
 				)
 		);
@@ -1103,7 +1081,6 @@ def.proto._keyRight =
 		root.alter(
 			'mark',
 				mark_caret.create(
-					'pat', mark_pat.createPathAt( this.path.append( cycle ), 0 ),
 					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
 				)
 		);
@@ -1123,8 +1100,6 @@ def.proto._keyTab =
 		shift
 	)
 {
-	const mark = this.mark;
-
 	const section = this._markSection;
 
 	if( !fabric_portal.isSection( section ) ) return;
@@ -1137,7 +1112,6 @@ def.proto._keyTab =
 	root.alter(
 		'mark',
 			mark_caret.create(
-				'pat', mark_pat.createPathAt( mark.caret.path.set( -1, cycle ), 0 ),
 				'offset', this.trace.appendField( cycle ).appendOffset( 0 )
 			)
 	);
@@ -1163,7 +1137,6 @@ def.proto._keyUp =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'moveToButton' ), 0 ),
 						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
 					)
 			);
@@ -1179,7 +1152,6 @@ def.proto._keyUp =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'spaceUser' ), offset ),
 						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( offset )
 					)
 			);
@@ -1192,7 +1164,6 @@ def.proto._keyUp =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'pat', mark_pat.createPathAt( this.path.append( 'spaceTag' ), 0 ),
 						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( 0 )
 					)
 			);
@@ -1233,7 +1204,7 @@ def.lazy._markSection =
 {
 	const mark = this.mark;
 
-	return mark && mark.hasCaret && mark.caret.path.get( -1 );
+	return mark && mark.hasCaret && mark.caretOffset.last.key;
 };
 
 

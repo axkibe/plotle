@@ -197,7 +197,7 @@ def.adjust.get =
 
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget.concernsHover( this.hover, path );
+	const hover = widget.concernsHover( this.hover, widget.trace );
 
 	return(
 		widget.create(

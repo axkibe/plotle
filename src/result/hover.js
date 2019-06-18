@@ -17,8 +17,8 @@ if( TIM )
 		// the cursor to display
 		cursor : { type : 'string' },
 
-		// the path to the thing being hovered upon
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		// the trace to the entity being hovered upon
+		trace : { type : [ 'undefined', '< ../trace/hover-types' ] },
 	};
 }
 
@@ -35,6 +35,10 @@ def.staticLazy.cursorGrabbing = ( ) => result_hover.create( 'cursor', 'grabbing'
 def.staticLazy.cursorGrab = ( ) => result_hover.create( 'cursor', 'grab' );
 
 def.staticLazy.cursorNSResize = ( ) => result_hover.create( 'cursor', 'ns-resize' );
+
+def.staticLazy.cursorPointer = ( ) => result_hover.create( 'cursor', 'pointer' );
+
+def.staticLazy.cursorText = ( ) => result_hover.create( 'cursor', 'text' );
 
 
 } );
