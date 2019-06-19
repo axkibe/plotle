@@ -17,8 +17,8 @@ if( TIM )
 		// history of all changes
 		_changeWrapList : { type : [ 'undefined', '../change/wrapList' ] },
 
-		// the note
-		_note : { type : [ 'undefined', '../fabric/note' ] }
+		// the space
+		space : { type : [ 'undefined', '../fabric/note' ] }
 	};
 }
 
@@ -30,6 +30,8 @@ const fabric_doc = tim.require( '../fabric/doc' );
 const fabric_note = tim.require( '../fabric/note' );
 
 const fabric_para = tim.require( '../fabric/para' );
+
+const fabric_space = tim.require( '../fabric/space' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
@@ -46,24 +48,22 @@ def.static.init =
 		testpad_repository.create(
 			'seq', 0,
 			'_changeWrapList',  change_wrapList.create( ),
-			'_note',
-				fabric_note.create(
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1', fabric_para.create( 'text', 'a' ),
-//							'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
-//							'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
-//							'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
-						),
-					'zone',
-						gleam_rect.create(
-							'pos', gleam_point.create( 'x', 0, 'y', 0 ),
-							'height', 100,
-							'width', 100
-						),
-					'fontsize', 13,
-					'scrollPos', gleam_point.zero
-				)
+			'space',
+				fabric_space.create(
+					'twig:add', 'note',
+					fabric_note.create(
+						'doc',
+							fabric_doc.create(
+								'twig:add', '1', fabric_para.create( 'text', 'a' ),
+//								'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
+//								'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
+//								'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
+							),
+						'zone', gleam_rect.zero,
+						'fontsize', 13,
+						'scrollPos', gleam_point.zero
+					)
+			)
 		)
 	);
 };
@@ -92,6 +92,10 @@ def.lazy.maxSeq =
 /*
 | Gets a twig.
 */
+/*
+
+FIXME remove
+
 def.proto.get =
 	function(
 		path,
@@ -120,6 +124,7 @@ def.proto.get =
 	// returns the path requested
 	return note.getPath( path, len );
 };
+*/
 
 
 /*
@@ -143,7 +148,7 @@ def.proto.alter =
 		'repository',
 			this.create(
 				'_changeWrapList', cwList.append( cw ),
-				'_note', cw.changeTree( this._note )
+				'space', cw.changeTree( this.space )
 			)
 	);
 };

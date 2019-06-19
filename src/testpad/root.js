@@ -62,14 +62,14 @@ const session_uid = tim.require( '../session/uid' );
 
 const testpad_action = tim.require( './action' );
 
-const tim_path = tim.require( 'tim.js/path' );
+const trace_space = tim.require( '../trace/space' );
 
 
 /*
 | Path to the document.
 */
-def.staticLazy.docPath = ( ) =>
-	tim_path.empty.append( 'note' ).append( 'doc' );
+def.staticLazy.docTrace = ( ) =>
+	trace_space.create( ).appendItem( 'note' ).appendDoc;
 
 
 /*
@@ -138,7 +138,7 @@ def.proto.alter =
 def.lazy.doc =
 	function( )
 {
-	return this.repository.get( testpad_root.docPath.chop );
+	return testpad_root.docTrace.pick( this.repository );
 };
 
 
@@ -402,11 +402,9 @@ def.proto.send =
 
 	if( !action ) { this.beep( ); return; }
 
-	const linePath =
-		testpad_root.docPath
-		.append( 'twig' )
-		.append( doc.getKey( action.line ) )
-		.append( 'text' );
+	const lineTrace =
+		testpad_root.docTrace
+		.appendPara( doc.getKey( action.line ) );
 
 	switch( action.command )
 	{
@@ -415,7 +413,7 @@ def.proto.send =
 			root.alter(
 				change_insert.create(
 					'val', action.value,
-					'path', linePath.chop,
+					'path', lineTrace.toPath,
 					'at1', action.at,
 					'at2', action.at + action.value.length
 				)
@@ -432,7 +430,7 @@ def.proto.send =
 					'val',
 						doc.atRank( action.line ).text
 						.substring( action.at2, action.at ),
-					'path', linePath.chop,
+					'path', lineTrace.toPath,
 					'at1', action.at,
 					'at2', action.at2
 				)
@@ -452,8 +450,10 @@ def.proto.send =
 
 			root.alter(
 				change_split.create(
-					'path', linePath.chop,
-					'path2', linePath.set( -2, session_uid.newUid( ) ).chop,
+					'path', lineTrace.toPath,
+					'path2',
+						testpad_root.docTrace
+						.appendPara( session_uid.newUid( ) ).toPath,
 					'at1', action.at
 				)
 			);
@@ -465,12 +465,9 @@ def.proto.send =
 			root.alter(
 				change_join.create(
 					'path',
-						testpad_root.docPath
-						.append( 'twig' )
-						.append( doc.getKey( action.line - 1 ) )
-						.append( 'text' )
-						.chop,
-					'path2', linePath.chop,
+						testpad_root.docTrace
+						.appendPara( doc.getKey( action.line - 1 ) ),
+					'path2', lineTrace.toPath,
 					'at1', doc.atRank( action.line - 1 ).text.length
 				)
 			);
@@ -480,10 +477,7 @@ def.proto.send =
 		default : throw new Error( );
 	}
 
-	root.create(
-		'action', undefined,
-		'cursorAt', cursorAt
-	)
+	root.create( 'action', undefined, 'cursorAt', cursorAt )
 	.updateSeq( math.maxInteger )
 	.update( );
 };
