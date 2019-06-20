@@ -601,27 +601,18 @@ def.proto.alter =
 
 			case 'userSpaceList' : userSpaceList = arg; continue;
 
+			// a trace
 			default :
 			{
-/**/			if( CHECK )
-/**/			{
-/**/				if( command.timtype !== tim_path ) throw new Error( );
-/**/			}
-
 				const base = command.get( 0 );
 
 				switch( base )
 				{
-					case 'forms' :
-
-						if( CHECK )
-/**/					{
-/**/						if( command.get( 1 ) !== 'twig' ) throw new Error( );
-/**/					}
+					case trace_forms :
 
 						if( forms === pass ) forms = this.forms;
 
-						forms = forms.setPath( command.chop, arg );
+						forms = forms.chopRoot.graft( forms );
 
 						break;
 
@@ -629,14 +620,7 @@ def.proto.alter =
 
 						if( space === pass ) space = this.space;
 
-						if( CHECK )
-/**/					{
-/**/						if( command.get( 1 ) !== 'twig' ) throw new Error( );
-/**/					}
-
-						if( space === pass ) space = this.space;
-
-						space = space.setPath( command.chop, arg );
+						space = space.chopRoot.graft( space );
 
 						break;
 
@@ -1127,10 +1111,7 @@ def.proto.logout =
 
 	// FIXME i don't get it what happens when there are no _visitorCreds
 
-	root.alter(
-		'userSpaceList', undefined,
-		'link', link
-	);
+	root.alter( 'userSpaceList', undefined, 'link', link );
 
 	root.link.auth( user_creds.createVisitor( ) );
 };
@@ -1211,14 +1192,11 @@ def.proto.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.alter(
-				root.forms.get( 'nonExistingSpace' ).path.append( 'nonSpaceRef' ),
+				root.forms.get( 'nonExistingSpace' ).trace.appendField( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 
-			if( root.fallbackSpaceRef )
-			{
-				root.moveToSpace( root.fallbackSpaceRef, false );
-			}
+			if( root.fallbackSpaceRef ) root.moveToSpace( root.fallbackSpaceRef, false );
 
 			root._create( 'show', show_form.nonExistingSpace );
 
@@ -1227,7 +1205,7 @@ def.proto.onAcquireSpace =
 		case 'no access' :
 
 			root.alter(
-				root.forms.get( 'noAccessToSpace' ).path.append( 'nonSpaceRef' ),
+				root.forms.get( 'noAccessToSpace' ).trace.appendField( 'nonSpaceRef' ),
 				request.spaceRef
 			);
 

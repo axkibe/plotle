@@ -16,10 +16,9 @@ if( TIM )
 
 		// history of all changes
 		_changeWrapList : { type : [ 'undefined', '../change/wrapList' ] },
-
-		// the space
-		space : { type : [ 'undefined', '../fabric/note' ] }
 	};
+
+	def.twig = [ '../fabric/note' ];
 }
 
 
@@ -31,100 +30,9 @@ const fabric_note = tim.require( '../fabric/note' );
 
 const fabric_para = tim.require( '../fabric/para' );
 
-const fabric_space = tim.require( '../fabric/space' );
-
 const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
-
-
-/*
-| Creates the start of the repository.
-*/
-def.static.init =
-	function( )
-{
-	return(
-		testpad_repository.create(
-			'seq', 0,
-			'_changeWrapList',  change_wrapList.create( ),
-			'space',
-				fabric_space.create(
-					'twig:add', 'note',
-					fabric_note.create(
-						'doc',
-							fabric_doc.create(
-								'twig:add', '1', fabric_para.create( 'text', 'a' ),
-//								'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
-//								'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
-//								'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
-							),
-						'zone', gleam_rect.zero,
-						'fontsize', 13,
-						'scrollPos', gleam_point.zero
-					)
-			)
-		)
-	);
-};
-
-
-/*
-| Extra checking.
-*/
-def.proto._check =
-	function( )
-{
-	if( this.seq < 0 || this.seq > this._changeWrapList.length ) throw new Error( );
-};
-
-
-/*
-| The maximum sequence number.
-*/
-def.lazy.maxSeq =
-	function( )
-{
-	return this._changeWrapList.length;
-};
-
-
-/*
-| Gets a twig.
-*/
-/*
-
-FIXME remove
-
-def.proto.get =
-	function(
-		path,
-		len
-	)
-{
-	const cwList = this._changeWrapList;
-
-	const cwListLen = cwList.length;
-
-	const seq = this.seq;
-
-	let note = this._note;
-
-	if( seq < 0 || seq > cwListLen ) throw new Error( 'invalid seq' );
-
-	// if the requested seq is not latest,
-	// rewinds stuff
-	for( let a = cwListLen - 1; a >= seq; a-- )
-	{
-		const changeList = cwList.get( a ).changeList;
-
-		note = changeList.changeTreeReverse( note );
-	}
-
-	// returns the path requested
-	return note.getPath( path, len );
-};
-*/
 
 
 /*
@@ -146,12 +54,91 @@ def.proto.alter =
 
 	root.create(
 		'repository',
-			this.create(
-				'_changeWrapList', cwList.append( cw ),
-				'space', cw.changeTree( this.space )
-			)
+			cw.changeTree( this )
+			.create( '_changeWrapList', cwList.append( cw ) )
 	);
 };
+
+
+/*
+| Creates the start of the repository.
+*/
+def.static.init =
+	function( )
+{
+	return(
+		testpad_repository.create(
+			'seq', 0,
+			'_changeWrapList',  change_wrapList.create( ),
+			'twig:add', 'note',
+				fabric_note.create(
+					'doc',
+						fabric_doc.create(
+							'twig:add', '1', fabric_para.create( 'text', 'a' ),
+//							'twig:add', '1', fabric_para.create( 'text', 'Ameno' ),
+//							'twig:add', '2', fabric_para.create( 'text', 'Latire' ),
+//							'twig:add', '3', fabric_para.create( 'text', 'Dorime' )
+						),
+					'zone', gleam_rect.zero,
+					'fontsize', 13,
+					'scrollPos', gleam_point.zero
+				)
+		)
+	);
+};
+
+
+/*
+| Returns the note at the current sequence number.
+*/
+def.lazy.note =
+	function( )
+{
+	const cwList = this._changeWrapList;
+
+	const cwListLen = cwList.length;
+
+	const seq = this.seq;
+
+	let rep = this;
+
+	if( seq < 0 || seq > cwListLen ) throw new Error( 'invalid seq' );
+
+	// if the requested seq is not latest, rewinds stuff
+	for( let a = cwListLen - 1; a >= seq; a-- )
+	{
+		const changeList = cwList.get( a ).changeList;
+
+		rep = changeList.changeTreeReverse( rep );
+	}
+
+	return rep.get( 'note' );
+};
+
+
+/*
+| The maximum sequence number.
+*/
+def.lazy.maxSeq =
+	function( )
+{
+	return this._changeWrapList.length;
+};
+
+
+/*
+| Extra checking.
+*/
+def.proto._check =
+	function( )
+{
+	if( this.seq < 0 || this.seq > this._changeWrapList.length ) throw new Error( );
+
+	if( this.length > 1 ) throw new Error( );
+
+	if( this.length === 1 && this.keys[ 0 ] !== 'note' ) throw new Error( );
+};
+
 
 
 } );

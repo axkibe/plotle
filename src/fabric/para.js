@@ -135,13 +135,12 @@ def.lazy.attentionCenter =
 def.static.concernsMark =
 	function(
 		mark,
-		path,
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
 	if( !mark ) return;

@@ -17,8 +17,7 @@ const gleam_rectGroup = tim.require( '../gleam/rectGroup' );
 
 
 /*
-| Returns the list of zones of the items.
-| FIXME make a set.
+| Returns the group of zones of the items.
 */
 def.lazy.zones =
 	function( )
@@ -27,7 +26,7 @@ def.lazy.zones =
 
 	for( let item of this )
 	{
-		const key = item.path.get( 2 );
+		const key = item.trace.key;
 
 /**/	if( CHECK )
 /**/	{

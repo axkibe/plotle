@@ -203,7 +203,7 @@ def.adjust.get =
 
 		pos = gleam_point.createXY( innerMargin.w, y );
 
-		mark = fabric_para.concernsMark( this.mark, path, trace );
+		mark = fabric_para.concernsMark( this.mark, trace );
 	}
 
 	return(

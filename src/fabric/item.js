@@ -57,8 +57,7 @@ def.proto.ancillary = ( ) => undefined;
 
 
 /*
-| Returns the action if an item with 'path' concerns about
-| the action.
+| Returns the action if an item concerns about it.
 */
 def.static.concernsAction =
 	function(
@@ -68,15 +67,14 @@ def.static.concernsAction =
 {
 	if( action.timtype === action_none ) return action;
 
-	if( !item || !item.path ) return action_none.singleton;
+	if( !item || !item.trace ) return action_none.singleton;
 
 	return action.affectsItem( item ) ? action : action_none.singleton;
 };
 
 
 /*
-| Returns the action if an item with 'path' concerns about
-| the hover.
+| Returns the action if a 'trace'-d item with concerns about a hover.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
@@ -84,19 +82,17 @@ def.proto.concernsHover =
 
 
 /*
-| Returns the mark if an item with 'path' concerns about
-| the mark.
+| Returns the mark if a 'trace'-d item concerns about a mark.
 */
 def.static.concernsMark =
 	function(
 		mark,
-		path,
 		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
 	if( !mark || !trace ) return;

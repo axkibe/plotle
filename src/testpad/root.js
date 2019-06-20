@@ -114,7 +114,6 @@ const isSpecialKey =
 };
 
 
-
 /*
 | Alters the tree.
 */
@@ -132,13 +131,14 @@ def.proto.alter =
 	root.repository.alter( changeWrap );
 };
 
+
 /*
 | Shortcut to doc.
 */
 def.lazy.doc =
 	function( )
 {
-	return testpad_root.docTrace.pick( this.repository );
+	return this.repository.note.doc;
 };
 
 
@@ -164,21 +164,21 @@ def.proto.updateSeq =
 def.proto.update =
 	function( )
 {
-	const elements = this.elements;
+	const elements = root.elements;
 
 	elements.send.disabled =
 	elements.cancel.disabled =
-		!this.action;
+		!root.action;
 
-	elements.now.innerHTML = '' + this.repository.seq;
+	elements.now.innerHTML = '' + root.repository.seq;
 
-	const doc = this.doc;
+	const doc = root.doc;
 
-	const cursorLine = math.limit( 0, this.cursorLine, doc.length - 1 );
+	const cursorLine = math.limit( 0, root.cursorLine, doc.length - 1 );
 
-	const cursorAt = math.limit( 0, this.cursorAt, doc.atRank( cursorLine ).text.length );
+	const cursorAt = math.limit( 0, root.cursorAt, doc.atRank( cursorLine ).text.length );
 
-	elements.pad.innerHTML = this.makeScreen( doc );
+	elements.pad.innerHTML = root.makeScreen( doc );
 
 	root.create(
 		'elements', elements,
@@ -413,7 +413,7 @@ def.proto.send =
 			root.alter(
 				change_insert.create(
 					'val', action.value,
-					'path', lineTrace.toPath,
+					'path', lineTrace.toPath.append( 'text' ),
 					'at1', action.at,
 					'at2', action.at + action.value.length
 				)
@@ -430,7 +430,7 @@ def.proto.send =
 					'val',
 						doc.atRank( action.line ).text
 						.substring( action.at2, action.at ),
-					'path', lineTrace.toPath,
+					'path', lineTrace.toPath.append( 'text' ),
 					'at1', action.at,
 					'at2', action.at2
 				)
@@ -450,10 +450,10 @@ def.proto.send =
 
 			root.alter(
 				change_split.create(
-					'path', lineTrace.toPath,
+					'path', lineTrace.toPath.append( 'text' ),
 					'path2',
 						testpad_root.docTrace
-						.appendPara( session_uid.newUid( ) ).toPath,
+						.appendPara( session_uid.newUid( ) ).toPath.append( 'text' ),
 					'at1', action.at
 				)
 			);
@@ -466,8 +466,9 @@ def.proto.send =
 				change_join.create(
 					'path',
 						testpad_root.docTrace
-						.appendPara( doc.getKey( action.line - 1 ) ),
-					'path2', lineTrace.toPath,
+						.appendPara( doc.getKey( action.line - 1 ) )
+						.toPath.append( 'text' ),
+					'path2', lineTrace.toPath.append( 'text' ),
 					'at1', doc.atRank( action.line - 1 ).text.length
 				)
 			);

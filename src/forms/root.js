@@ -21,7 +21,7 @@ if( TIM )
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },

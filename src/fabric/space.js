@@ -360,7 +360,7 @@ def.adjust.get =
 	// this is all that's needed for server side
 	if( NODE ) return item.create( 'path', path, 'trace', trace );
 
-	const mark = fabric_item.concernsMark( this.mark, path, trace );
+	const mark = fabric_item.concernsMark( this.mark, trace );
 
 	let highlight = !!( mark && mark.encompasses( trace ) );
 

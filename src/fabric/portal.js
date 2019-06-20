@@ -155,7 +155,7 @@ def.lazy.attentionCenter =
 
 	const fieldP = this[ spaceFields[ section ] ].pos;
 
-	const p = this._locateOffset( section, mark.caret.at );
+	const p = this._locateOffset( section, mark.caretOffset.at );
 
 	return ac + p.y + fieldP.y - fs;
 };
@@ -365,8 +365,8 @@ def.proto.input =
 			change_insert.create(
 				'val', line,
 				'path', this.path.append( section ).chop,
-				'at1', mark.caret.at,
-				'at2', mark.caret.at + line.length
+				'at1', mark.caretOffset.at,
+				'at2', mark.caretOffset.at + line.length
 			)
 		);
 	}
@@ -675,7 +675,7 @@ def.lazy._glintCaret =
 
 	const fieldPos = this[ spaceFields[ section ] ].pos;
 
-	const p = this._locateOffset( section, mark.caret.at );
+	const p = this._locateOffset( section, mark.caretOffset.at );
 
 	const pos =
 		p
@@ -854,7 +854,7 @@ def.proto._keyBackspace =
 
 	if( !fabric_portal.isSection( section ) ) return;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffset.at;
 
 	if( at <= 0 ) return;
 
@@ -887,7 +887,7 @@ def.proto._keyDown =
 	{
 		case 'spaceUser' :
 		{
-			const cpos = this._locateOffset( section, mark.caret.at );
+			const cpos = this._locateOffset( section, mark.caretOffset.at );
 
 			const offset = this._getOffsetAt( 'spaceTag', cpos.x + this._fieldSpaceUser.pos.x );
 
@@ -938,7 +938,7 @@ def.proto._keyLeft =
 
 	if( !fabric_portal.isSection( section ) ) return;
 
-	if( mark.caret.at === 0 )
+	if( mark.caretOffset.at === 0 )
 	{
 		const cycle = fabric_portal.antiCycle( section );
 
@@ -969,7 +969,7 @@ def.proto._keyDel =
 
 	if( !fabric_portal.isSection( section ) || section === 'moveToButton' ) return;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffet.at;
 
 	if( at >= value.length ) return;
 
@@ -997,7 +997,7 @@ def.proto._keyEnd =
 
 	if( !fabric_portal.isSection( section ) || section === 'moveToButton' ) return;
 
-	const at = mark.caret.at;
+	const at = mark.caretOffset.at;
 
 	const value = this[ section ];
 
@@ -1073,7 +1073,7 @@ def.proto._keyRight =
 
 	const value = this[ section ];
 
-	if( section === 'moveToButton' || ( value && mark.caret.at >= value.length ) )
+	if( section === 'moveToButton' || ( value && mark.caretOffset.at >= value.length ) )
 	{
 		const cycle = fabric_portal.cycle( section );
 
@@ -1144,7 +1144,7 @@ def.proto._keyUp =
 
 		case 'spaceTag' :
 		{
-			const cpos = this._locateOffset( section, mark.caret.at );
+			const cpos = this._locateOffset( section, mark.caretOffset.at );
 
 			const offset = this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x );
 

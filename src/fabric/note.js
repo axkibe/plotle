@@ -134,7 +134,7 @@ def.static.createGeneric =
 
 
 /*
-| Forwards the path to the doc.
+| Forwards stuff to the doc.
 */
 def.adjust.doc =
 	function(
