@@ -224,6 +224,8 @@ const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_forms = tim.require( '../trace/forms' );
+
 const trace_root = tim.require( '../trace/root' );
 
 const user_creds = tim.require( '../user/creds' );
