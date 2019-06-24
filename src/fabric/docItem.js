@@ -178,17 +178,17 @@ def.proto.markForPoint =
 			mark_range.create(
 				'doc', this.doc,
 				'beginOffset', mark.offset,
-				'endOffset', para.trace.appendOffset( at )
+				'endOffset', para.offsetTrace( at )
 			)
 		);
 	}
 	else if( doRange && mark && mark.timtype === mark_range )
 	{
-		return mark.create( 'endOffset', para.trace.appendOffset( at ) );
+		return mark.create( 'endOffset', para.offsetTrace( at ) );
 	}
 	else
 	{
-		return mark_caret.create( 'offset', para.trace.appendOffset( at ) );
+		return mark_caret.create( 'offset', para.offsetTrace( at ) );
 	}
 };
 

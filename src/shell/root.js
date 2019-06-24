@@ -614,7 +614,7 @@ def.proto.alter =
 
 						if( forms === pass ) forms = this.forms;
 
-						forms = forms.chopRoot.graft( forms );
+						forms = command.chopRoot.graft( forms );
 
 						break;
 
@@ -622,7 +622,7 @@ def.proto.alter =
 
 						if( space === pass ) space = this.space;
 
-						space = space.chopRoot.graft( space );
+						space = command.chopRoot.graft( space );
 
 						break;
 

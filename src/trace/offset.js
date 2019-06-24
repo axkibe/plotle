@@ -29,9 +29,20 @@ if( TIM )
 		'./para',
 		'./root',
 		'./space',
+		'./text',
 		'./widget'
 	];
 }
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'offset(' + this.at + ')';
+};
 
 
 /*
@@ -60,7 +71,7 @@ def.proto.changeTo =
 		at  // offset
 	)
 {
-	return this.get( this.length - 1 ).appendOffset( at );
+	return this.get( this.length - 1 ).appendText.appendOffset( at );
 };
 
 

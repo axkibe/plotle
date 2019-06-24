@@ -24,18 +24,28 @@ if( TIM )
 }
 
 
-const trace_offset = tim.require( './offset' );
+const fabric_para = tim.require( '../fabric/para' );
+
+const trace_text = tim.require( './text' );
 
 
 /*
-| Returns a trace with an offset appended.
+| Returns a trace with a doc part appended.
 */
-def.lazyFuncInt.appendOffset =
-	function(
-		at // offset
-	)
+def.lazy.appendText =
+	function( )
 {
-	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
+	return trace_text.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'para(' + this.key + ')';
 };
 
 
@@ -50,6 +60,13 @@ def.proto.graft =
 	)
 {
 	let sub = this.pick( tree );
+
+	console.log( this );
+
+/**/if( CHECK )
+/**/{
+/**/	if( sub !== fabric_para ) throw new Error( );
+/**/}
 
 	sub = sub.create( 'twig:set', this.key, leaf );
 

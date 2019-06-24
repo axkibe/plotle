@@ -62,7 +62,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username too short, min. 4 characters' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( username.length ) )
+			'mark', mark_caret.create( 'offset', userInput.offsetTrace( username.length ) )
 		);
 
 		return;
@@ -73,7 +73,7 @@ def.proto.login =
 		this._setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( 0 ) )
+			'mark', mark_caret.create( 'offset', userInput.offsetTrace( 0 ) )
 		);
 
 		return;
@@ -84,7 +84,7 @@ def.proto.login =
 		this._setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', passInput.trace.appendOffset( pass.length ) )
+			'mark', mark_caret.create( 'offset', passInput.offsetTrace( pass.length ) )
 		);
 
 		return;
@@ -118,10 +118,7 @@ def.proto.onAuth =
 			const userInput = this.get( 'userInput' );
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', userInput.trace.appendOffset( userInput.value.length )
-					)
+				'mark', mark_caret.create( 'offset', userInput.offsetTrace( userInput.value.length ) )
 			);
 		}
 		else
@@ -129,10 +126,7 @@ def.proto.onAuth =
 			const passInput = this.get( 'passwordInput' );
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', passInput.trace.appendOffset( passInput.value.length )
-					)
+				'mark', mark_caret.create( 'offset', passInput.offsetTrace( passInput.value.length ) )
 			);
 		}
 

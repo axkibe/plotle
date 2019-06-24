@@ -266,7 +266,7 @@ def.proto._transformOffset =
 	// is the offset trace on another paragraph?
 	// since the offset stores para key there is no change
 	// needed even it is below the split
-	if( !this.trace2.equals( offset.tracePara.chopRoot ) ) return offset;
+	if( !this.trace2.equals( offset.last.chopRoot ) ) return offset;
 
 	return this.trace.prependRoot.appendOffset( offset.at + this.at1 );
 };

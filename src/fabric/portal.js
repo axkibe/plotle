@@ -210,6 +210,7 @@ def.static.createGeneric =
 					.appendSpace
 					.appendItem( key )
 					.appendField( 'spaceUser' )
+					.appendText
 					.appendOffset( 0 )
 			)
 	);
@@ -267,7 +268,7 @@ def.proto.click =
 
 			setMark =
 				mark_caret.create(
-					'offset', this.trace.appendField( field ).appendOffset( offset )
+					'offset', this.offsetTrace( field, offset )
 				);
 
 			break;
@@ -457,6 +458,19 @@ def.proto.mousewheel =
 	)
 {
 	return this.pointWithin( p );
+};
+
+
+/*
+| Returns an offset trace into the text.
+*/
+def.proto.offsetTrace =
+	function(
+		field,  // field to trace
+		at      // trace at this offset into the text
+	)
+{
+	return this.trace.appendField( field ).appendText.appendOffset( at );
 };
 
 
@@ -892,10 +906,7 @@ def.proto._keyDown =
 			const offset = this._getOffsetAt( 'spaceTag', cpos.x + this._fieldSpaceUser.pos.x );
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( offset )
-					)
+				'mark', mark_caret.create( 'offset', this.offsetTrace( 'spaceTag', offset ) )
 			);
 
 			break;
@@ -904,10 +915,7 @@ def.proto._keyDown =
 		case 'spaceTag' :
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
-					)
+				'mark', mark_caret.create( 'offset', this.offsetTrace( 'moveToButton', 0 ) )
 			);
 
 			break;
@@ -915,10 +923,7 @@ def.proto._keyDown =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( 0 )
-					)
+				'mark', mark_caret.create( 'offset', this.offsetTrace( 'spaceUser', 0 ) )
 			);
 
 			break;
@@ -1031,10 +1036,7 @@ def.proto._keyEnter =
 	if( cycle )
 	{
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
-				)
+			'mark', mark_caret.create( 'offset', this.offsetTrace( cycle, 0 ) )
 		);
 	}
 	else
@@ -1078,10 +1080,7 @@ def.proto._keyRight =
 		const cycle = fabric_portal.cycle( section );
 
 		root.alter(
-			'mark',
-				mark_caret.create(
-					'offset', this.trace.appendField( cycle ).appendOffset( 0 )
-				)
+			'mark', mark_caret.create( 'offset', this.offsetTrace( cycle, 0 ) )
 		);
 
 		return;
@@ -1108,12 +1107,7 @@ def.proto._keyTab =
 		? fabric_portal.antiCycle( section )
 		: fabric_portal.cycle( section );
 
-	root.alter(
-		'mark',
-			mark_caret.create(
-				'offset', this.trace.appendField( cycle ).appendOffset( 0 )
-			)
-	);
+	root.alter( 'mark', mark_caret.create( 'offset', this.offsetTrace( cycle, 0 ) ) );
 };
 
 
@@ -1136,7 +1130,7 @@ def.proto._keyUp =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'offset', this.trace.appendField( 'moveToButton' ).appendOffset( 0 )
+						'offset', this.offsetTrace( 'moveToButton', 0 )
 					)
 			);
 
@@ -1149,10 +1143,7 @@ def.proto._keyUp =
 			const offset = this._getOffsetAt( 'spaceUser', cpos.x + this._fieldSpaceTag.pos.x );
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', this.trace.appendField( 'spaceUser' ).appendOffset( offset )
-					)
+				'mark', mark_caret.create( 'offset', this.offsetTrace( 'spaceUser', offset ) )
 			);
 
 			break;
@@ -1161,10 +1152,7 @@ def.proto._keyUp =
 		case 'moveToButton' :
 
 			root.alter(
-				'mark',
-					mark_caret.create(
-						'offset', this.trace.appendField( 'spaceTag' ).appendOffset( 0 )
-					)
+				'mark', mark_caret.create( 'offset', this.offsetTrace( 'spaceTag', 0 ) )
 			);
 
 			break;

@@ -98,7 +98,12 @@ def.static.createFromPathSpace =
 
 	trace = trace.appendPara( path.get( 1 ) ); path = path.chop.chop;
 
-	if( path.get( 0 ) === 'text' ) path = path.chop;
+	if( path.get( 0 ) === 'text' )
+	{
+		trace = trace.appendText;
+
+		path = path.chop;
+	}
 
 	if( path.length !== 0 ) throw new Error( );
 

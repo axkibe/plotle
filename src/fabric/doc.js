@@ -292,7 +292,7 @@ def.proto.input =
 		return true;
 	}
 
-	return this.get( caretOffset.last.key ).input( text );
+	return this.get( caretOffset.tracePara.key ).input( text );
 };
 
 
@@ -351,7 +351,7 @@ def.proto.specialKey =
 
 	return(
 		this
-		.get( mark.caretOffset.last.key )
+		.get( mark.caretOffset.tracePara.key )
 		.specialKey( key, this, shift, ctrl )
 	);
 };

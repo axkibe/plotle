@@ -73,6 +73,30 @@ const mark_caret = tim.require( '../mark/caret' );
 
 
 /*
+| Attention center (see shell/root)
+*/
+def.lazy.attentionCenter =
+	function( )
+{
+	const fs = this.font.size;
+
+	const descend = fs * gleam_font_font.bottomBox;
+
+	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
+
+	const s = Math.round( p.y + descend + 1 );
+
+	return this._tZone.pos.y + s - Math.round( fs + descend );
+};
+
+
+/*
+| Inputs can hold a caret.
+*/
+def.proto.caretable = true;
+
+
+/*
 | Returns the hover path if the width with 'path' concerns about the hover.
 */
 def.static.concernsHover =
@@ -115,28 +139,33 @@ def.static.createFromLayout =
 
 
 /*
-| Default distance of text.
+| User clicked.
 */
-def.staticLazy._pitch = ( ) =>
-	gleam_point.createXY( 8, 3 );
+def.proto.click =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	if( !p || !this._tZone.within( p ) ) return;
+
+	const pp = p.sub( this._tZone.pos );
+
+	if( !this._tzShape.within( pp ) ) return;
+
+	const offset = this._getOffsetAt( pp );
+
+	root.alter( 'mark', mark_caret.create( 'offset', this.offsetTrace( offset ) ) );
+
+	return false;
+};
 
 
 /*
-| Attention center (see shell/root)
+| Inputs are focusable
 */
-def.lazy.attentionCenter =
-	function( )
-{
-	const fs = this.font.size;
-
-	const descend = fs * gleam_font_font.bottomBox;
-
-	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
-
-	const s = Math.round( p.y + descend + 1 );
-
-	return this._tZone.pos.y + s - Math.round( fs + descend );
-};
+def.proto.focusable = true;
 
 
 /*
@@ -163,12 +192,137 @@ def.lazy.glint =
 
 
 /*
-| The transformed zone of the button.
+| User input.
 */
-def.lazy._tZone =
-	function( )
+def.proto.input =
+	function(
+		text
+	)
 {
-	return this.zone.transform( this.transform );
+	const mark = this.mark;
+
+	const value = this.value;
+
+	const at = mark.caretOffset.at;
+
+	const maxlen = this.maxlen;
+
+	// cuts of text if larger than this maxlen
+	if( maxlen > 0 && value.length + text.length > maxlen )
+	{
+		text = text.substring( 0, maxlen - value.length );
+	}
+
+	root.alter(
+		this.path.append( 'value' ),
+		value.substring( 0, at ) + text + value.substring( at )
+	);
+
+	root.alter(
+		'mark', mark_caret.create( 'offset', this.offsetTrace( at + text.length ) )
+	);
+};
+
+
+/*
+| Returns the point of a given offset.
+*/
+def.lazyFuncInt.locateOffsetPoint =
+	function(
+		offset // the offset to get the point from.
+	)
+{
+	const font = this.font;
+
+	const pitch = widget_input._pitch;
+
+	const value = this.value;
+
+	if( this.password )
+	{
+		return(
+			gleam_point.create(
+				'x',
+					pitch.x
+					+ ( this._maskWidth + this._maskKern )
+					* offset
+					- 1,
+				'y', Math.round( pitch.y + font.size )
+			)
+		);
+	}
+
+	return(
+		gleam_point.create(
+			'x', Math.round( pitch.x + font.getAdvanceWidth( value.substring( 0, offset ) ) ),
+			'y', Math.round( pitch.y + font.size )
+		)
+	);
+};
+
+
+
+/*
+| Returns an offset trace into the text.
+*/
+def.proto.offsetTrace =
+	function(
+		at
+	)
+{
+	return this.trace.appendText.appendOffset( at );
+};
+
+
+
+/*
+| Mouse hover
+*/
+def.proto.pointingHover =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	if( !this._tZone.within( p )
+	|| !this._tzShape.within( p.sub( this._tZone.pos ) )
+	) return;
+
+	return result_hover.cursorText( 'trace', this.trace );
+};
+
+
+/*
+| User pressed a special key
+*/
+def.proto.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	switch( key )
+	{
+		case 'backspace' : this._keyBackspace( ); break;
+
+		case 'del' : this._keyDel( ); break;
+
+		case 'down' : this._keyDown( ); break;
+
+		case 'end' : this._keyEnd( ); break;
+
+		case 'enter' : this._keyEnter( ); break;
+
+		case 'left' : this._keyLeft( ); break;
+
+		case 'pos1' : this._keyPos1( ); break;
+
+		case 'right' : this._keyRight( ); break;
+
+		case 'up' : this._keyUp( ); break;
+	}
 };
 
 
@@ -195,6 +349,67 @@ def.lazy._caretGlint =
 				)
 		)
 	);
+};
+
+
+/*
+| The widget's facet.
+*/
+def.lazy._facet =
+	function( )
+{
+	return(
+		this.facets.getFacet(
+			'hover', false, // FUTURE
+			'focus', !!this.mark
+		)
+	);
+};
+
+
+/*
+| Returns the offset nearest to point p.
+*/
+def.proto._getOffsetAt =
+	function(
+		p
+	)
+{
+	let mw;
+
+	const pitch = widget_input._pitch;
+
+	const dx = p.x - pitch.x;
+
+	const value = this.value;
+
+	let x1 = 0;
+
+	let x2 = 0;
+
+	const password = this.password;
+
+	const font = this.font;
+
+	if( password ) mw = this._maskWidth + this._maskKern;
+
+	let a;
+
+	for( a = 0; a < value.length; a++ )
+	{
+		x1 = x2;
+
+		x2 =
+			password
+			? a * mw
+			: font.getAdvanceWidth( value.substr( 0, a ) );
+
+		if( x2 >= dx ) break;
+	}
+
+	if( dx - x1 < x2 - dx && a > 0 ) a--;
+
+	return a;
 };
 
 
@@ -253,245 +468,6 @@ def.lazy._glint =
 	);
 
 	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The widget's facet.
-*/
-def.lazy._facet =
-	function( )
-{
-	return(
-		this.facets.getFacet(
-			'hover', false, // FUTURE
-			'focus', !!this.mark
-		)
-	);
-};
-
-
-/*
-| The transformed shape of the button
-| positioned at zero.
-*/
-def.lazy._tzShape =
-	function( )
-{
-	const tZone = this._tZone;
-
-	return(
-		gleam_roundRect.create(
-			'pos', gleam_point.zero,
-			'width', tZone.width,
-			'height', tZone.height,
-			'a', 7,
-			'b', 3
-		)
-	);
-};
-
-
-/*
-| Returns the point of a given offset.
-*/
-def.lazyFuncInt.locateOffsetPoint =
-	function(
-		offset // the offset to get the point from.
-	)
-{
-	const font = this.font;
-
-	const pitch = widget_input._pitch;
-
-	const value = this.value;
-
-	if( this.password )
-	{
-		return(
-			gleam_point.create(
-				'x',
-					pitch.x
-					+ ( this._maskWidth + this._maskKern )
-					* offset
-					- 1,
-				'y', Math.round( pitch.y + font.size )
-			)
-		);
-	}
-
-	return(
-		gleam_point.create(
-			'x', Math.round( pitch.x + font.getAdvanceWidth( value.substring( 0, offset ) ) ),
-			'y', Math.round( pitch.y + font.size )
-		)
-	);
-};
-
-
-/*
-| Inputs can hold a caret.
-*/
-def.proto.caretable = true;
-
-
-/*
-| User clicked.
-*/
-def.proto.click =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	if( !p || !this._tZone.within( p ) ) return;
-
-	const pp = p.sub( this._tZone.pos );
-
-	if( !this._tzShape.within( pp ) ) return;
-
-	const offset = this._getOffsetAt( pp );
-
-	root.alter( 'mark', mark_caret.create( 'offset', this.trace.appendOffset( offset ) ) );
-
-	return false;
-};
-
-
-/*
-| User input.
-*/
-def.proto.input =
-	function(
-		text
-	)
-{
-	const mark = this.mark;
-
-	const value = this.value;
-
-	const at = mark.caretOffset.at;
-
-	const maxlen = this.maxlen;
-
-	// cuts of text if larger than this maxlen
-	if( maxlen > 0 && value.length + text.length > maxlen )
-	{
-		text = text.substring( 0, maxlen - value.length );
-	}
-
-	root.alter(
-		this.path.append( 'value' ),
-		value.substring( 0, at ) + text + value.substring( at )
-	);
-
-	root.alter(
-		'mark', mark_caret.create( 'offset', this.trace.appendOffset( at + text.length ) )
-	);
-};
-
-
-/*
-| Inputs are focusable
-*/
-def.proto.focusable = true;
-
-
-/*
-| Mouse hover
-*/
-def.proto.pointingHover =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	if( !this._tZone.within( p )
-	|| !this._tzShape.within( p.sub( this._tZone.pos ) )
-	) return;
-
-	return result_hover.cursorText( 'trace', this.trace );
-};
-
-
-/*
-| User pressed a special key
-*/
-def.proto.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	switch( key )
-	{
-		case 'backspace' : this._keyBackspace( ); break;
-
-		case 'del' : this._keyDel( ); break;
-
-		case 'down' : this._keyDown( ); break;
-
-		case 'end' : this._keyEnd( ); break;
-
-		case 'enter' : this._keyEnter( ); break;
-
-		case 'left' : this._keyLeft( ); break;
-
-		case 'pos1' : this._keyPos1( ); break;
-
-		case 'right' : this._keyRight( ); break;
-
-		case 'up' : this._keyUp( ); break;
-	}
-};
-
-
-/*
-| Returns the offset nearest to point p.
-*/
-def.proto._getOffsetAt =
-	function(
-		p
-	)
-{
-	let mw;
-
-	const pitch = widget_input._pitch;
-
-	const dx = p.x - pitch.x;
-
-	const value = this.value;
-
-	let x1 = 0;
-
-	let x2 = 0;
-
-	const password = this.password;
-
-	const font = this.font;
-
-	if( password ) mw = this._maskWidth + this._maskKern;
-
-	let a;
-
-	for( a = 0; a < value.length; a++ )
-	{
-		x1 = x2;
-
-		x2 =
-			password
-			? a * mw
-			: font.getAdvanceWidth( value.substr( 0, a ) );
-
-		if( x2 >= dx ) break;
-	}
-
-	if( dx - x1 < x2 - dx && a > 0 ) a--;
-
-	return a;
 };
 
 
@@ -557,7 +533,7 @@ def.proto._keyEnd =
 	if( at >= this.value.length ) return;
 
 	root.alter(
-		'mark', mark_caret.create( 'offset', this.trace.appendOffset( this.value.length ) )
+		'mark', mark_caret.create( 'offset', this.offsetTrace( this.value.length ) )
 	);
 };
 
@@ -614,6 +590,8 @@ def.proto._keyUp =
 
 	return;
 };
+
+
 
 
 /*
@@ -674,6 +652,44 @@ def.lazy._passMask =
 	}
 
 	return pm;
+};
+
+
+/*
+| Default distance of text.
+*/
+def.staticLazy._pitch = ( ) =>
+	gleam_point.createXY( 8, 3 );
+
+
+/*
+| The transformed zone of the button.
+*/
+def.lazy._tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
+};
+
+
+/*
+| The transformed shape of the button
+| positioned at zero.
+*/
+def.lazy._tzShape =
+	function( )
+{
+	const tZone = this._tZone;
+
+	return(
+		gleam_roundRect.create(
+			'pos', gleam_point.zero,
+			'width', tZone.width,
+			'height', tZone.height,
+			'a', 7,
+			'b', 3
+		)
+	);
 };
 
 

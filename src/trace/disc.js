@@ -38,4 +38,14 @@ def.lazyFuncStr.appendWidget =
 };
 
 
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'disc(' + this.key + ')';
+};
+
+
 } );

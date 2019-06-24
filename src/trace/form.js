@@ -23,21 +23,7 @@ if( TIM )
 }
 
 
-const trace_attribute = tim.require( './attribute' );
-
 const trace_widget = tim.require( './widget' );
-
-
-/*
-| Returns a trace with an attribute step appended.
-*/
-def.lazyFuncStr.appendAttribute =
-	function(
-		key // key of the attribute
-	)
-{
-	return trace_attribute.create( 'list:init', this, 'list:append', this, 'key', key );
-};
 
 
 /*
@@ -49,6 +35,16 @@ def.lazyFuncStr.appendWidget =
 	)
 {
 	return trace_widget.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'form(' + this.key + ')';
 };
 
 

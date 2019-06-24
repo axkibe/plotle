@@ -32,6 +32,8 @@ const trace_root = tim.require( './root' );
 
 const trace_space = tim.require( './space' );
 
+const trace_text = tim.require( './text' );
+
 const trace_widget = tim.require( './widget' );
 
 
@@ -56,9 +58,33 @@ def.proto.appendStep =
 		case trace_offset : return this.appendOffset( step.key );
 		case trace_para   : return this.appendPara( step.key );
 		case trace_space  : return this.appendSpace;
+		case trace_text   : return this.appendText;
 		case trace_widget : return this.appendWidget( step.key );
 		default : throw new Error( );
 	}
+};
+
+
+/*
+| Turns the trace into a string (for debugging).
+*/
+def.lazy.asString =
+	function( )
+{
+	let t = 'trace: ';
+
+	let first = true;
+
+	for( let p of this )
+	{
+		if( !first ) t += '->'; else first = false;
+
+		t += p.asStringStep;
+	}
+
+	if( !first ) t += '->';
+
+	return t + this.asStringStep;
 };
 
 

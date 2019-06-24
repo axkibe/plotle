@@ -26,6 +26,8 @@ if( TIM )
 
 const trace_offset = tim.require( './offset' );
 
+const trace_text = tim.require( './text' );
+
 
 /*
 | Returns a trace with an offset appended.
@@ -36,6 +38,26 @@ def.lazyFuncInt.appendOffset =
 	)
 {
 	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
+};
+
+
+/*
+| Returns a trace with a doc part appended.
+*/
+def.lazy.appendText =
+	function( )
+{
+	return trace_text.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'field(' + this.key + ')';
 };
 
 

@@ -119,6 +119,7 @@ def.static.createGeneric =
 		.appendItem( key )
 		.appendDoc
 		.appendPara( '1' )
+		.appendText
 		.appendOffset( 0 );
 
 	root.alter(
@@ -268,7 +269,7 @@ def.proto.mousewheel =
 
 	if( y < 0 ) y = 0;
 
-	root.alter( this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', y ) );
+	root.alter( this.trace.appendScrollPos, this.scrollPos.create( 'y', y ) );
 
 	return true;
 };

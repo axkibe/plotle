@@ -21,6 +21,11 @@ const trace_forms = tim.require( './forms' );
 const trace_space = tim.require( './space' );
 
 
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'root';
+
 
 /*
 | Returns a trace with a step to discs root appended.
@@ -50,6 +55,12 @@ def.lazy.appendSpace =
 {
 	return trace_space.create( 'list:append', this );
 };
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'root';
 
 
 /*

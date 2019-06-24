@@ -167,7 +167,7 @@ def.proto.cycleFocus =
 			root.alter(
 				'mark',
 					ve.caretable
-					? mark_caret.create( 'offset', ve.trace.appendOffset( 0 ) )
+					? mark_caret.create( 'offset', ve.trace.appendText.appendOffset( 0 ) )
 					: mark_widget.create( 'path', ve.path, 'trace', ve.trace )
 			);
 

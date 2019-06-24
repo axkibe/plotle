@@ -35,6 +35,12 @@ def.lazyFuncStr.appendItem =
 
 
 /*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'space';
+
+
+/*
 | Grafts a new leaf on a tree.
 | In case of a root trace returns the leaf.
 */

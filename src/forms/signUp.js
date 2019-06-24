@@ -66,7 +66,7 @@ def.proto.onRegister =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'offset', userInput.trace.appendOffset( userInput.value.length )
+						'offset', userInput.traceOffset( userInput.value.length )
 					)
 			);
 		}
@@ -156,7 +156,9 @@ def.proto.signup =
 
 		root.alter(
 			'mark',
-				mark_caret.create( 'offset', userInput.trace.appendOffset( username.length ) )
+				mark_caret.create(
+					'offset', userInput.offsetTrace( username.length )
+				)
 		);
 
 		return;
@@ -167,7 +169,7 @@ def.proto.signup =
 		this.setErrorMessage( 'Username must not start with "visit"' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', userInput.trace.appendOffset( 0 ) )
+			'mark', mark_caret.create( 'offset', userInput.offsetTrace( 0 ) )
 		);
 
 		return;
@@ -178,7 +180,10 @@ def.proto.signup =
 		this.setErrorMessage( 'Password too short, min. 5 characters' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', passInput.trace.appendOffset( pass.length ) )
+			'mark',
+				mark_caret.create(
+					'offset', passInput.offsetTrace( pass.length )
+				)
 		);
 
 		return;
@@ -189,17 +194,14 @@ def.proto.signup =
 		this.setErrorMessage( 'Passwords do not match' );
 
 		root.alter(
-			'mark', mark_caret.create( 'offset', pass2Input.trace.appendOffset( pass2.length ) )
-		);
+			'mark',
+				mark_caret.create( 'offset', pass2Input.offsetTrace( pass2.length ) ) );
 
 		return;
 	}
 
 	root.link.register(
-		user_creds.create(
-			'name', username,
-			'passhash', user_passhash.calc( pass )
-		),
+		user_creds.create( 'name', username, 'passhash', user_passhash.calc( pass ) ),
 		email,
 		newsletter
 	);

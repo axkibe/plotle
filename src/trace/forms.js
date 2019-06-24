@@ -33,6 +33,12 @@ def.lazyFuncStr.appendForm =
 
 
 /*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'forms';
+
+
+/*
 | This is the forms trace.
 */
 def.lazy.traceForms = function( ) { return this; };

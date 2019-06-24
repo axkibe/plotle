@@ -62,6 +62,16 @@ def.lazyFuncStr.appendWidget =
 
 
 /*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'widget(' + this.key + ')';
+};
+
+
+/*
 | FIXME remove.
 */
 def.lazy.toPath =

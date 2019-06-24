@@ -1,5 +1,7 @@
 /*
 | A paragraph.
+|
+| FIXME consider using offset traces where offset ints are used
 */
 'use strict';
 
@@ -490,6 +492,18 @@ def.lazyFuncInt.locateOffsetLine =
 
 
 /*
+| Returns an offset trace into the text.
+*/
+def.proto.offsetTrace =
+	function(
+		at
+	)
+{
+	return this.trace.appendText.appendOffset( at );
+};
+
+
+/*
 | Handles a special key.
 */
 def.proto.specialKey =
@@ -514,8 +528,8 @@ def.proto.specialKey =
 			'mark',
 				mark_range.create(
 					'doc', doc,
-					'beginOffset', v0.trace.appendOffset( 0 ),
-					'endOffset', v1.trace.appendOffset( v1.text.length )
+					'beginOffset', v0.offsetTrace( 0 ),
+					'endOffset', v1.offsetTrace( v1.text.length )
 				)
 		);
 
@@ -1068,7 +1082,7 @@ def.proto._setMark =
 		doc          // range mark need this
 	)
 {
-	const offset = this.trace.appendOffset( at );
+	const offset = this.offsetTrace( at );
 
 	root.alter(
 		'mark',

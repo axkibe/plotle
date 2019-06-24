@@ -33,6 +33,12 @@ def.lazyFuncStr.appendDisc =
 
 
 /*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'discs';
+
+
+/*
 | This is the discs trace.
 */
 def.lazy.traceDiscs = function( ) { return this; };

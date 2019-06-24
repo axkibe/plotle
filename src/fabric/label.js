@@ -124,7 +124,7 @@ def.static.createGeneric =
 		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
 		'mark',
 			mark_caret.create(
-				'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 )
+				'offset', trace.appendDoc.appendPara( '1' ).appendText.appendOffset( 0 )
 			)
 	);
 };

@@ -53,6 +53,16 @@ def.lazyFuncStr.appendField =
 
 
 /*
+| Returns a trace with a scrollPos appended.
+*/
+def.lazy.appendScrollPos =
+	function( )
+{
+	return trace_scrollPos.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
 | Returns a trace with a widget part appended.
 */
 def.lazyFuncStr.appendWidget =
@@ -61,6 +71,16 @@ def.lazyFuncStr.appendWidget =
 	)
 {
 	return trace_widget.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep =
+	function( )
+{
+	return 'form(' + this.key + ')';
 };
 
 
