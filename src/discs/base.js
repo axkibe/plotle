@@ -27,7 +27,7 @@ if( TIM )
 		facet : { type : '../gleam/facet' },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
@@ -155,7 +155,7 @@ def.proto.concernsHover =
 {
 	if( !hover ) return;
 
-	return hover.hasTrace( trace );
+	if( hover.hasTrace( trace ) ) return hover;
 };
 
 

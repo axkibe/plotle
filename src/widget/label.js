@@ -7,7 +7,7 @@
 tim.define( module, ( def, widget_label ) => {
 
 
-def.extend = './widget';
+def.extend = './base';
 
 
 if( TIM )

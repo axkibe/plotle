@@ -48,7 +48,7 @@ def.proto.graft =
 		leaf
 	)
 {
-	let sub = this.pick( tree );
+	let sub = this.last.pick( tree );
 
 	sub = sub.create( 'doc', leaf );
 

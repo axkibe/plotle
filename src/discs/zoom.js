@@ -7,7 +7,7 @@
 tim.define( module, ( def, discs_zoom ) => {
 
 
-def.extend = './disc';
+def.extend = './base';
 
 
 const action_none = tim.require( '../action/none' );
@@ -26,13 +26,16 @@ def.adjust.get =
 {
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget.concernsHover( this.hover );
+	const trace = widget.trace || this.trace.appendWidget( name );
+
+	const hover = widget.concernsHover( this.hover, trace );
 
 	return(
 		widget.create(
 			'path', path,
 			'hover', hover,
 			'down', discs_zoom._isActiveButton( this.action, name ),
+			'trace', trace,
 			'transform', this.controlTransform
 		)
 	);
@@ -75,17 +78,17 @@ def.proto.dragMove =
 */
 def.proto.dragStartButton =
 	function(
-		path
+		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'zoom' ) throw new Error( );
+/**/	if( trace.traceDisc.key !== 'zoom' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
+	const buttonKey = trace.traceWidget.key;
 
-	switch( buttonName )
+	switch( buttonKey )
 	{
 		case 'zoomIn' :
 
@@ -131,23 +134,23 @@ def.proto.dragStop =
 */
 def.proto.pushButton =
 	function(
-		path
+		trace
 		// shift,
 		// ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'zoom' ) throw new Error( );
+/**/	if( trace.traceDisc.key !== 'zoom' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
+	const buttonKey = trace.traceWidget.key;
 
 	// zoomIn and zoomOut are handled
 	// via "dragging" operations so holding
 	// makes multiple events
 
-	switch( buttonName )
+	switch( buttonKey )
 	{
 		case 'zoomAll' : root.changeSpaceTransformAll( ); return;
 

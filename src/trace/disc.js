@@ -7,17 +7,11 @@
 tim.define( module, ( def ) => {
 
 
-def.extend = './base';
+def.extend = './baseTwigKey';
 
 
 if( TIM )
 {
-	def.attributes =
-	{
-		// key of the disc
-		key : { type : 'string' },
-	};
-
 	// path of trace back.
 	def.list = [ './root', './discs' ];
 }
@@ -46,6 +40,12 @@ def.lazy.asStringStep =
 {
 	return 'disc(' + this.key + ')';
 };
+
+
+/*
+| This is the disc trace.
+*/
+def.lazy.traceDisc = function( ) { return this; };
 
 
 } );

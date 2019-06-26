@@ -21,7 +21,7 @@ if( TIM )
 		controlTransform : { type : '../gleam/transform' },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
@@ -49,7 +49,7 @@ if( TIM )
 }
 
 
-const discs_disc = tim.require( './disc' );
+const discs_base = tim.require( './base' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -69,7 +69,7 @@ def.adjust.get =
 {
 	const ct = this.controlTransform;
 
-	const hover = discs_disc.concernsHover( this.hover, disc.trace );
+	const hover = discs_base.concernsHover( this.hover, disc.trace );
 
 	const show = disc.concernsShow( this.show );
 
@@ -279,35 +279,37 @@ def.proto.click =
 
 
 /*
-| A button of the main disc has been pushed.
+| A button has been pushed.
 */
 def.proto.dragStartButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
-	const discName = path.get( 2 );
-
-	return this.get( discName ).dragStartButton( path, shift, ctrl );
+	return(
+		this.get( trace.traceDisc.key )
+		.dragStartButton( trace, shift, ctrl )
+	);
 };
 
 
 
 /*
-| A button of the main disc has been pushed.
+| A button has been pushed.
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
-	const discName = path.get( 2 );
-
-	return this.get( discName ).pushButton( path, shift, ctrl );
+	return(
+		this.get( trace.traceDisc.key )
+		.pushButton( trace, shift, ctrl )
+	);
 };
 
 

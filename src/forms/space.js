@@ -10,7 +10,7 @@ tim.define( module, ( def ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 if( TIM )
@@ -31,7 +31,7 @@ if( TIM )
 
 const change_set = tim.require( '../change/set' );
 
-const forms_form = tim.require( './form' );
+const forms_base = tim.require( './base' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
@@ -78,7 +78,7 @@ def.adjust.get =
 		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
 
-	return forms_form.adjustGet.call( this, name, widget );
+	return forms_base.adjustGet.call( this, name, widget );
 };
 
 

@@ -10,12 +10,12 @@ tim.define( module, ( def ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 const action_none = tim.require( '../action/none' );
 
-const forms_form = tim.require( './form' );
+const forms_base = tim.require( './base' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
@@ -35,9 +35,9 @@ def.proto.clear =
 	function( )
 {
 	root.alter(
-		this.get( 'userInput' ).path.append( 'value' ), '',
-		this.get( 'passwordInput' ).path.append( 'value' ), '',
-		this.get( 'errorLabel' ).path.append( 'text' ), '',
+		this.get( 'userInput' ).trace.appendText, '',
+		this.get( 'passwordInput' ).trace.appendText, '',
+		this.get( 'errorLabel' ).trace.appendText, '',
 		'mark', undefined
 	);
 };
@@ -53,9 +53,9 @@ def.proto.login =
 
 	const userInput = this.get( 'userInput' );
 
-	const username = userInput.value;
+	const username = userInput.text;
 
-	const pass = passInput.value;
+	const pass = passInput.text;
 
 	if( username.length < 4 )
 	{
@@ -118,7 +118,7 @@ def.proto.onAuth =
 			const userInput = this.get( 'userInput' );
 
 			root.alter(
-				'mark', mark_caret.create( 'offset', userInput.offsetTrace( userInput.value.length ) )
+				'mark', mark_caret.create( 'offset', userInput.offsetTrace( userInput.text.length ) )
 			);
 		}
 		else
@@ -126,7 +126,7 @@ def.proto.onAuth =
 			const passInput = this.get( 'passwordInput' );
 
 			root.alter(
-				'mark', mark_caret.create( 'offset', passInput.offsetTrace( passInput.value.length ) )
+				'mark', mark_caret.create( 'offset', passInput.offsetTrace( passInput.text.length ) )
 			);
 		}
 
@@ -148,19 +148,17 @@ def.proto.onAuth =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'login' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'login' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
-
-	switch( buttonName )
+	switch( trace.traceWidget.key )
 	{
 		case 'loginButton' : this.login( ); break;
 
@@ -214,7 +212,7 @@ def.proto.specialKey =
 		}
 	}
 
-	return forms_form.specialKey.call( this, key, shift, ctrl );
+	return forms_base.specialKey.call( this, key, shift, ctrl );
 };
 
 

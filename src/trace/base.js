@@ -30,6 +30,8 @@ const trace_para = tim.require( './para' );
 
 const trace_root = tim.require( './root' );
 
+const trace_scrollPos = tim.require( './scrollPos' );
+
 const trace_space = tim.require( './space' );
 
 const trace_text = tim.require( './text' );
@@ -48,18 +50,19 @@ def.proto.appendStep =
 {
 	switch( step.timtype )
 	{
-		case trace_disc   : return this.appendDisc( step.key );
-		case trace_discs  : return this.appendDiscs;
-		case trace_doc    : return this.appendDoc;
-		case trace_field  : return this.appendField( step.key );
-		case trace_form   : return this.appendForm( step.key );
-		case trace_forms  : return this.appendForms;
-		case trace_item   : return this.appendItem( step.key );
-		case trace_offset : return this.appendOffset( step.key );
-		case trace_para   : return this.appendPara( step.key );
-		case trace_space  : return this.appendSpace;
-		case trace_text   : return this.appendText;
-		case trace_widget : return this.appendWidget( step.key );
+		case trace_disc      : return this.appendDisc( step.key );
+		case trace_discs     : return this.appendDiscs;
+		case trace_doc       : return this.appendDoc;
+		case trace_field     : return this.appendField( step.key );
+		case trace_form      : return this.appendForm( step.key );
+		case trace_forms     : return this.appendForms;
+		case trace_item      : return this.appendItem( step.key );
+		case trace_offset    : return this.appendOffset( step.key );
+		case trace_para      : return this.appendPara( step.key );
+		case trace_scrollPos : return this.appendScrollPos;
+		case trace_space     : return this.appendSpace;
+		case trace_text      : return this.appendText;
+		case trace_widget    : return this.appendWidget( step.key );
 		default : throw new Error( );
 	}
 };
@@ -152,6 +155,18 @@ def.lazy.prependRoot =
 
 
 /*
+| Default form tracer.
+*/
+def.lazy.traceForm =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceForm;
+};
+
+
+/*
 | Default forms tracer.
 */
 def.lazy.traceForms =
@@ -160,6 +175,18 @@ def.lazy.traceForms =
 	if( this.length === 0 ) return;
 
 	return this.get( this.length - 1 ).traceForms;
+};
+
+
+/*
+| Default disc tracer.
+*/
+def.lazy.traceDisc =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceDisc;
 };
 
 

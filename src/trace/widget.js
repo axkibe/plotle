@@ -7,18 +7,11 @@
 tim.define( module, ( def, trace_widget ) => {
 
 
-def.extend = './base';
+def.extend = './baseTwigKey';
 
 
 if( TIM )
 {
-	def.attributes =
-	{
-		// key of the widget
-		key : { type : 'string' },
-	};
-
-
 	// path of trace back.
 	def.list =
 	[
@@ -36,6 +29,10 @@ if( TIM )
 
 const trace_offset = tim.require( './offset' );
 
+const trace_scrollPos = tim.require( './scrollPos' );
+
+const trace_text = tim.require( './text' );
+
 
 /*
 | Returns a trace with an offset appended.
@@ -46,6 +43,26 @@ def.lazyFuncInt.appendOffset =
 	)
 {
 	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
+};
+
+
+/*
+| Returns a trace with a scrollPos appended.
+*/
+def.lazy.appendScrollPos =
+	function( )
+{
+	return trace_scrollPos.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Returns a trace with a doc part appended.
+*/
+def.lazy.appendText =
+	function( )
+{
+	return trace_text.create( 'list:init', this, 'list:append', this );
 };
 
 
@@ -68,16 +85,6 @@ def.lazy.asStringStep =
 	function( )
 {
 	return 'widget(' + this.key + ')';
-};
-
-
-/*
-| FIXME remove.
-*/
-def.lazy.toPath =
-	function( )
-{
-	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
 };
 
 

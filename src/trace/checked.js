@@ -1,10 +1,10 @@
 /*
-| A trace into a scrollPos.
+| A trace into a 'checked' value.
 */
 'use strict';
 
 
-tim.define( module, ( def, trace_scrollPos ) => {
+tim.define( module, ( def, trace_text ) => {
 
 
 def.extend = './base';
@@ -13,17 +13,20 @@ def.extend = './base';
 if( TIM )
 {
 	// path of trace back.
-	def.list = [ './form', './forms', './item', './root', './space', './widget' ];
+	def.list =
+	[
+		'./form',
+		'./forms',
+		'./root',
+		'./widget'
+	];
 }
-
-
-const gleam_point = tim.require( '../gleam/point' );
 
 
 /*
 | The trace step as string (for debugging).
 */
-def.lazy.asStringStep = ( ) => 'scrollPos';
+def.lazy.asStringStep = ( ) => 'checked';
 
 
 /*
@@ -33,17 +36,17 @@ def.lazy.asStringStep = ( ) => 'scrollPos';
 def.proto.graft =
 	function(
 		tree,
-		pos
+		value
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( pos.timtype !== gleam_point ) throw new Error( );
+/**/	if( typeof( value ) !== 'boolean' ) throw new Error( );
 /**/}
 
 	let sub = this.last.pick( tree );
 
-	sub = sub.create( 'scrollPos', pos );
+	sub = sub.create( 'checked', value );
 
 	return this.last.graft( tree, sub );
 };
@@ -57,7 +60,7 @@ def.proto.pick =
 		tree
 	)
 {
-	return this.last.pick( tree ).scrollPos;
+	return this.last.pick( tree ).value;
 };
 
 
@@ -67,7 +70,7 @@ def.proto.pick =
 def.lazy.toPath =
 	function( )
 {
-	return this.get( this.length - 1 ).toPath.append( 'scrollPos' );
+	return this.get( this.length - 1 ).toPath.append( 'checked' );
 };
 
 

@@ -10,7 +10,7 @@ tim.define( module, ( def ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 const ref_space = tim.require( '../ref/space' );
@@ -33,12 +33,12 @@ def.proto.clear =
 	function( )
 {
 	root.alter(
-		this.get( 'userInput' ).path.append( 'value' ), '',
-		this.get( 'emailInput' ).path.append( 'value' ), '',
-		this.get( 'passwordInput' ).path.append( 'value' ), '',
-		this.get( 'password2Input' ).path.append( 'value' ), '' ,
-		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true,
-		this.get( 'errorLabel' ).path.append( 'text' ), '',
+		this.get( 'userInput' ).trace.appendText, '',
+		this.get( 'emailInput' ).trace.appendText, '',
+		this.get( 'passwordInput' ).trace.appendText, '',
+		this.get( 'password2Input' ).trace.appendText, '' ,
+		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true, // XXX
+		this.get( 'errorLabel' ).trace.appendText, '',
 		'mark', undefined
 	);
 };
@@ -57,7 +57,7 @@ def.proto.onRegister =
 	{
 		const message = reply.message;
 
-		root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
+		this.setErrorMessage( message );
 
 		const userInput = this.get( 'userInput' );
 
@@ -66,7 +66,7 @@ def.proto.onRegister =
 			root.alter(
 				'mark',
 					mark_caret.create(
-						'offset', userInput.traceOffset( userInput.value.length )
+						'offset', userInput.traceOffset( userInput.text.length )
 					)
 			);
 		}
@@ -87,19 +87,17 @@ def.proto.onRegister =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'signUp' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'signUp' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
-
-	switch( buttonName )
+	switch( trace.traceWidget.key )
 	{
 		case 'signupButton' : this.signup( ); break;
 
@@ -124,7 +122,7 @@ def.proto.setErrorMessage =
 		message
 	)
 {
-	root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
+	root.alter( this.get( 'errorLabel' ).trace.appendText, message );
 };
 
 
@@ -136,17 +134,17 @@ def.proto.signup =
 {
 	const userInput = this.get( 'userInput' );
 
-	const username = userInput.value;
+	const username = userInput.text;
 
-	const email = this.get( 'emailInput' ).value;
+	const email = this.get( 'emailInput' ).text;
 
 	const passInput = this.get( 'passwordInput' );
 
 	const pass2Input = this.get( 'password2Input' );
 
-	const pass = passInput.value;
+	const pass = passInput.text;
 
-	const pass2 = pass2Input.value;
+	const pass2 = pass2Input.text;
 
 	const newsletter = this.get( 'newsletterCheckBox' ).checked;
 

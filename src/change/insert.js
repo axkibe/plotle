@@ -72,18 +72,16 @@ def.proto.changeTree =
 		tree
 	)
 {
-	const text = tree.getPath( this.path );
+	const text = this.trace.pick( tree );
 
-	if( typeof( text ) !== 'string' ) throw error.make( 'insert.path signates no string' );
+	if( typeof( text ) !== 'string' ) throw error.make( 'insert.trace yields no string' );
 
 	if( this.at1 > text.length ) throw error.make( 'insert.at1 invalid' );
 
 	return(
-		tree.setPath(
-			this.path,
-			text.substring( 0, this.at1 )
-			+ this.val
-			+ text.substring( this.at1 )
+		this.trace.graft(
+			tree,
+			text.substring( 0, this.at1 ) + this.val + text.substring( this.at1 )
 		)
 	);
 };
@@ -168,7 +166,7 @@ def.proto._transformInsertRemove =
 /**/	if( c.timtype !== change_insert && c.timtype !== change_remove ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( c.path ) ) return c;
+	if( !this.trace.equals( c.trace ) ) return c;
 
 	if( c.at1 < this.at1 ) return c;
 
@@ -214,7 +212,7 @@ def.proto._transformJoinSplit =
 /**/	if( c.timtype !== change_join && c.timtype !== change_split ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( c.path ) ) return c;
+	if( !this.trace.equals( c.trace ) ) return c;
 
 	if( this.at1 > c.at1 )
 	{

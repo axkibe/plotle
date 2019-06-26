@@ -14,8 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// path to the item or widget being scrolled
-		scrollPath : { type : 'tim.js/path' },
+		// trace the item or widget being scrolled
+		scrollTrace : { type : [ '../trace/item', '../trace/widget' ] },
 
 		// mouse down point on start of scrolling
 		startPoint : { type : '../gleam/point' },
@@ -39,7 +39,7 @@ def.proto.affectsItem =
 		item
 	)
 {
-	return this.scrollPath.equals( item.path );
+	return this.scrollTrace.equals( item.trace );
 };
 
 
@@ -61,7 +61,7 @@ def.proto.dragMove =
 	)
 {
 	// item or widget
-	const iow = root.getPath( this.scrollPath );
+	const iow = this.scrollTrace.pick( root );
 
 	const dy =
 		( p.y - this.startPoint.y )
@@ -78,7 +78,7 @@ def.proto.dragMove =
 	if( spos < 0 ) spos = 0;
 
 	root.alter(
-		iow.path.append( 'scrollPos' ),
+		iow.trace.appendScrollPos,
 		iow.scrollPos.create( 'y', spos )
 	);
 };

@@ -7,7 +7,7 @@
 tim.define( module, ( def, widget_scrollbox ) => {
 
 
-def.extend = './widget';
+def.extend = './base';
 
 
 if( TIM )
@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
@@ -87,7 +87,7 @@ def.proto.concernsHover =
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	if( hover && hover.traceWidget.equals( trace ) ) return hover;
+	if( hover && hover.hasTrace( trace ) ) return hover;
 };
 
 
@@ -147,13 +147,20 @@ def.adjust.get =
 {
 	let path = widget.path;
 
+	let trace = widget.trace;
+
 	if( !path && this.path ) path = this.path.append( 'twig' ).append( name );
+
+	if( !trace && this.trace ) trace = this.trace.appendWidget( name );
+
+	const hover = widget.concernsHover( this.hover, trace );
 
 	return(
 		widget.create(
+			'hover', hover,
+			'mark', this.mark,
 			'path', path,
-			'hover', this.hover,
-			'mark', this.mark
+			'trace', trace
 		)
 	);
 };
@@ -301,6 +308,7 @@ def.lazy.scrollbarY =
 				),
 			'scrollPos', this.scrollPos.y,
 			'size', zone.height,
+			'trace', this.trace.appendWidget( 'scrollbarY' ),
 			'transform', this.transform
 		)
 	);
@@ -456,7 +464,7 @@ def.proto.mousewheel =
 
 	if( y < 0 ) y = 0;
 
-	root.alter( this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', y ) );
+	root.alter( this.trace.appendScrollPos, this.scrollPos.create( 'y', y ) );
 };
 
 

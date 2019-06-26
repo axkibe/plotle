@@ -7,7 +7,7 @@
 tim.define( module, ( def, discs_main ) => {
 
 
-def.extend = './disc';
+def.extend = './base';
 
 
 if( TIM )
@@ -197,7 +197,9 @@ def.adjust.get =
 
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget.concernsHover( this.hover, widget.trace );
+	const trace = widget.trace || this.trace.appendWidget( name );
+
+	const hover = widget.concernsHover( this.hover, trace );
 
 	return(
 		widget.create(
@@ -205,6 +207,7 @@ def.adjust.get =
 			'down', down,
 			'path', path,
 			'text', text,
+			'trace', trace,
 			'visible', visible,
 			'transform', this.controlTransform
 		)
@@ -217,28 +220,26 @@ def.adjust.get =
 */
 def.proto.pushButton =
 	function(
-		path
+		trace
 		// shift,
 		// ctrl
 	)
 {
-	const discname = path.get( 2 );
-
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== 'main' ) throw new Error( );
+/**/	if( trace.traceDisc.key !== 'main' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
+	const buttonKey = trace.traceWidget.key;
 
-	if( buttonName === 'login' && this.user && !this.user.isVisitor )
+	if( buttonKey === 'login' && this.user && !this.user.isVisitor )
 	{
 		root.logout( );
 
 		return;
 	}
 
-	switch( buttonName )
+	switch( buttonKey )
 	{
 		case 'normal' : root.showHome( ); break;
 
@@ -298,7 +299,7 @@ def.proto.pushButton =
 		case 'space' :
 		case 'user' :
 
-			root.alter( 'show', show_form[ buttonName ] );
+			root.alter( 'show', show_form[ buttonKey ] );
 
 			break;
 

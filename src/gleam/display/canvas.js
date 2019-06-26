@@ -66,10 +66,15 @@ const gleam_size = tim.require( '../size' );
 
 const shell_settings = tim.require( '../../shell/settings' );
 
+/*
 const createCanvas =
 	NODE
 	? tim.require( 'canvas' ).createCanvas
 	: ( width, height ) => document.createElement( 'canvas' );
+*/
+
+const createCanvas =
+	( width, height ) => document.createElement( 'canvas' );
 
 
 if( TIM )

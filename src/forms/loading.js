@@ -12,7 +12,7 @@ tim.define( module, ( def ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 /*

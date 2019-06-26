@@ -62,19 +62,6 @@ const trace_root = tim.require( '../trace/root' );
 
 
 /*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
-/**/}
-};
-
-
-/*
 | Adjusts forms.
 */
 def.adjust.get =
@@ -85,7 +72,7 @@ def.adjust.get =
 {
 	const path = form.path || this.path.append( 'twig' ).append( name );
 
-	const trace = trace_root.singleton.appendForms.appendForm( name );
+	const trace = forms_root.trace.appendForm( name );
 
 	let mark = this.mark;
 
@@ -101,12 +88,16 @@ def.adjust.get =
 
 	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
 
+	let hover = this.hover;
+
+	if( hover && !hover.hasTrace( trace ) ) hover = undefined;
+
 	return(
 		form.create(
 			'action', this.action,
 			'hasGrid', hasGrid,
 			'hasSnapping', hasSnapping,
-			'hover', this.hover,
+			'hover', hover,
 			'mark', mark,
 			'path', path,
 			'spaceRef', spaceRef,
@@ -138,7 +129,7 @@ def.static.concernsMark =
 /**/	if( arguments.length !== 1 ) throw new Error( );
 /**/}
 
-	if( mark && mark.encompasses( trace_root.singleton.appendForms ) ) return mark;
+	if( mark && mark.encompasses( forms_root.trace ) ) return mark;
 };
 
 
@@ -179,30 +170,24 @@ def.proto.dragStartButton =
 */
 def.proto.pushButton =
 	function(
-		path
+		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		path.length < 3
-/**/		|| path.get( 0 ) !== 'forms'
-/**/		|| path.get( 1 ) !== 'twig'
-/**/		|| !this.get( path.get( 2 ) )
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( !trace.hasTrace( forms_root.trace ) ) throw new Error( );
 /**/}
 
-	return(
-		this.get( path.get( 2 ) ).pushButton(
-			path,
-			false, // FUTURE honor shift / ctrl states
-			false
-		)
-	);
+	// FUTURE honor shift / ctrl states
+	return this.get( trace.traceForm.key ).pushButton( trace, false, false );
 };
+
+
+/*
+| The trace into the forms root.
+*/
+def.staticLazy.trace =
+	( ) => trace_root.singleton.appendForms;
 
 
 /*
@@ -210,38 +195,30 @@ def.proto.pushButton =
 */
 def.proto.toggleCheckbox =
 	function(
-		path
+		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		path.length < 3
-/**/		|| path.get( 0 ) !== 'forms'
-/**/		|| path.get( 1 ) !== 'twig'
-/**/		|| !this.get( path.get( 2 ) )
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( !trace.hasTrace( forms_root.trace ) ) throw new Error( );
 /**/}
 
-	const formKey = path.get( 2 );
+	const form = this.get( trace.traceForm.key );
 
-	const form = this.get( formKey );
+	form.toggleCheckbox( trace );
+};
 
-	if( !form.toggleCheckbox )
-	{
-		const widgetKey = path.get( 4 );
 
-		const checked = form.get( widgetKey ).checked;
-
-		root.alter( path.append( 'checked' ), !checked );
-
-		return;
-	}
-
-	form.toggleCheckbox( path );
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( this.hover && this.hover.isEmpty ) throw new Error( );
+/**/}
 };
 
 

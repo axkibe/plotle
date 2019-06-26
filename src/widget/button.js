@@ -7,7 +7,7 @@
 tim.define( module, ( def, widget_button ) => {
 
 
-def.extend = './widget';
+def.extend = './base';
 
 
 if( TIM )
@@ -24,7 +24,7 @@ if( TIM )
 		font : { type : [ 'undefined', '../gleam/font/font' ] },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// icon shape
 		iconShape : { type : [ '< ../gleam/shape-types', 'undefined' ] },
@@ -77,7 +77,7 @@ const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Returns the hover path if the width with 'path' concerns about the hover.
+| Returns the hover if a 'trace'd button concerns about it.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
@@ -91,7 +91,7 @@ def.proto.concernsHover =
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	if( hover && hover.traceWidget.equals( trace ) ) return hover;
+	if( hover && hover.hasTrace( trace ) ) return hover;
 };
 
 
@@ -175,7 +175,7 @@ def.lazy._glint =
 	const facet =
 		this.facets.getFacet(
 			'down', this.down,
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'hover', !!this.hover,
 			'focus', !!this.mark
 		);
 
@@ -323,7 +323,7 @@ def.proto.click =
 {
 	if( !this.within( p ) ) return;
 
-	root.pushButton( this.path );
+	root.pushButton( this.trace );
 
 	return false;
 };
@@ -346,7 +346,7 @@ def.proto.dragStart =
 
 	if( !this.within( p ) ) return;
 
-	root.dragStartButton( this.path );
+	root.dragStartButton( this.trace );
 
 	return true;
 };
@@ -370,7 +370,7 @@ def.proto.input =
 		text
 	)
 {
-	root.pushButton( this.path );
+	root.pushButton( this.trace );
 
 	return true;
 };
@@ -415,11 +415,11 @@ def.proto.specialKey =
 {
 	switch( key )
 	{
-		case 'down' : root.cycleFormFocus( this.path.get( 2 ), 1 ); return;
+		case 'down' : root.cycleFormFocus( this.trace.traceForm.key, 1 ); return;
 
-		case 'up' : root.cycleFormFocus( this.path.get( 2 ), -1 ); return;
+		case 'up' : root.cycleFormFocus( this.trace.traceForm.key, -1 ); return;
 
-		case 'enter' : root.pushButton( this.path ); return;
+		case 'enter' : root.pushButton( this.trace ); return;
 	}
 };
 

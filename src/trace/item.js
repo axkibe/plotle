@@ -7,17 +7,11 @@
 tim.define( module, ( def, trace_item ) => {
 
 
-def.extend = './base';
+def.extend = './baseTwigKey';
 
 
 if( TIM )
 {
-	def.attributes =
-	{
-		// key of the paragraph
-		key : { type : 'string' },
-	};
-
 	// path of trace back.
 	def.list = [ './root', './space' ];
 }
@@ -26,6 +20,8 @@ if( TIM )
 const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
+
+const trace_scrollPos = tim.require( './scrollPos' );
 
 const trace_widget = tim.require( './widget' );
 
@@ -81,50 +77,6 @@ def.lazy.asStringStep =
 	function( )
 {
 	return 'form(' + this.key + ')';
-};
-
-
-/*
-| Grafts a new leaf on a tree.
-| In case of a root trace returns the leaf.
-*/
-def.proto.graft =
-	function(
-		tree,
-		leaf
-	)
-{
-	let sub = this.pick( tree );
-
-	sub = sub.create( 'twig:set', this.key, leaf );
-
-	if( this.length === 0 ) return sub;
-
-	return this.last.graft( tree, sub );
-};
-
-
-/*
-| Picks the traced leaf.
-*/
-def.proto.pick =
-	function(
-		tree
-	)
-{
-	if( this.length === 0 ) return tree;
-
-	return this.last.pick( tree ).get( this.key );
-};
-
-
-/*
-| FIXME remove.
-*/
-def.lazy.toPath =
-	function( )
-{
-	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
 };
 
 

@@ -7,7 +7,7 @@
 tim.define( module, ( def, discs_create ) => {
 
 
-def.extend = './disc';
+def.extend = './base';
 
 
 const action_createGeneric = tim.require( '../action/createGeneric' );
@@ -28,13 +28,16 @@ def.adjust.get =
 {
 	const path = widget.path || this.path.append( 'twig' ).append( name );
 
-	const hover = widget.concernsHover( this.hover );
+	const trace = widget.trace || this.trace.appendWidget( name );
+
+	const hover = widget.concernsHover( this.hover, trace );
 
 	return(
 		widget.create(
 			'path', path,
 			'hover', hover,
 			'down', this._isActiveButton( name ),
+			'trace', trace,
 			'transform', this.controlTransform
 		)
 	);
@@ -86,17 +89,17 @@ def.proto._isActiveButton =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'create' ) throw new Error( );
+/**/	if( trace.traceDisc.key !== 'create' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
+	const buttonName = trace.traceWidget.key;
 
 	let action;
 
@@ -188,7 +191,7 @@ def.proto.click =
 */
 def.proto.dragStartButton =
 	function(
-		path
+		trace
 	)
 {
 	return false;

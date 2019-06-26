@@ -39,6 +39,36 @@ def.lazy.asStringStep = ( ) => 'forms';
 
 
 /*
+| Grafts a new leaf on a tree.
+| In case of a root trace returns the leaf.
+*/
+def.proto.graft =
+	function(
+		tree,
+		leaf
+	)
+{
+	if( this.length === 0 ) return leaf;
+
+	return tree.create( 'forms', leaf );
+};
+
+
+/*
+| Picks the traced leaf.
+*/
+def.proto.pick =
+	function(
+		tree
+	)
+{
+	if( this.length === 0 ) return tree;
+
+	return this.last.pick( tree ).forms;
+};
+
+
+/*
 | This is the forms trace.
 */
 def.lazy.traceForms = function( ) { return this; };

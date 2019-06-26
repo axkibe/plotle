@@ -13,7 +13,18 @@ def.extend = './base';
 if( TIM )
 {
 	// path of trace back.
-	def.list = [ './doc', './field', './item', './para', './root', './space' ];
+	def.list =
+	[
+		'./doc',
+		'./field',
+		'./form',
+		'./forms',
+		'./item',
+		'./para',
+		'./root',
+		'./space',
+		'./widget'
+	];
 }
 
 
@@ -79,7 +90,7 @@ def.proto.pick =
 def.lazy.toPath =
 	function( )
 {
-	return this.get( this.length - 1 ).toPath.append( this.key );
+	return this.get( this.length - 1 ).toPath.append( 'text' );
 };
 
 

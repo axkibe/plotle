@@ -360,13 +360,13 @@ def.proto.scrollMarkIntoView =
 	if( n < 0 )
 	{
 		root.alter(
-			this.path.append( 'scrollPos' ), this.scrollPos.create( 'y', sy + n )
+			this.trace.appendScrollPos, this.scrollPos.create( 'y', sy + n )
 		);
 	}
 	else if( s > zone.height )
 	{
 		root.alter(
-			this.path.append( 'scrollPos' ),
+			this.trace.appendScrollPos,
 			this.scrollPos.create( 'y', sy + s - zone.height )
 		);
 	}

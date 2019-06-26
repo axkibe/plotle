@@ -10,7 +10,7 @@ tim.define( module, ( def, forms_moveTo ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 if( TIM )
@@ -23,7 +23,7 @@ if( TIM )
 }
 
 
-const forms_form = tim.require( './form' );
+const forms_base = tim.require( './base' );
 
 const gleam_point = tim.require( '../gleam/point' );
 
@@ -66,7 +66,7 @@ def.adjust.get =
 		case 'scrollbox' : widget = this._transformScrollbox( widget ); break;
 	}
 
-	return forms_form.adjustGet.call( this, name, widget );
+	return forms_base.adjustGet.call( this, name, widget );
 };
 
 

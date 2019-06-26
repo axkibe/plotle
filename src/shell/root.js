@@ -224,9 +224,13 @@ const show_zoom = tim.require( '../show/zoom' );
 
 const tim_path = tim.require( 'tim.js/path' );
 
+const trace_discs = tim.require( '../trace/discs' );
+
 const trace_forms = tim.require( '../trace/forms' );
 
 const trace_root = tim.require( '../trace/root' );
+
+const trace_space = tim.require( '../trace/space' );
 
 const user_creds = tim.require( '../user/creds' );
 
@@ -606,23 +610,23 @@ def.proto.alter =
 			// a trace
 			default :
 			{
-				const base = command.get( 0 );
+				const base = command.get( 1 );
 
-				switch( base )
+				switch( base.timtype )
 				{
 					case trace_forms :
 
 						if( forms === pass ) forms = this.forms;
 
-						forms = command.chopRoot.graft( forms );
+						forms = command.chopRoot.graft( forms, arg );
 
 						break;
 
-					case 'space' :
+					case trace_space :
 
 						if( space === pass ) space = this.space;
 
-						space = command.chopRoot.graft( space );
+						space = command.chopRoot.graft( space, arg );
 
 						break;
 
@@ -1005,16 +1009,16 @@ def.proto.dragStart =
 */
 def.proto.dragStartButton =
 	function(
-		path
+		trace
 	)
 {
-	switch( path.get( 0 ) )
+	switch( trace.get( 1 ).timtype )
 	{
-		case 'discs' : return root.discs.dragStartButton( path, false, false );
+		case trace_discs : return root.discs.dragStartButton( trace, false, false );
 
-		case 'forms' : return root.forms.dragStartButton( path, false, false );
+		case trace_forms : return root.forms.dragStartButton( trace, false, false );
 
-		default : throw new Error( 'invalid path' );
+		default : throw new Error( );
 	}
 };
 
@@ -1425,16 +1429,16 @@ def.proto.probeClickDrag =
 */
 def.proto.pushButton =
 	function(
-		path   // path of the button pushed
+		trace   // trace of the button pushed
 	)
 {
-	switch( path.get( 0 ) )
+	switch( trace.get( 1 ).timtype )
 	{
-		case 'discs' : return root.discs.pushButton( path, false, false );
+		case trace_discs : return root.discs.pushButton( trace, false, false );
 
-		case 'forms' : return root.forms.pushButton( path, false, false );
+		case trace_forms : return root.forms.pushButton( trace, false, false );
 
-		default : throw new Error( 'invalid path' );
+		default : throw new Error( );
 	}
 };
 

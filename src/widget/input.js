@@ -7,7 +7,7 @@
 tim.define( module, ( def, widget_input ) => {
 
 
-def.extend = './widget';
+def.extend = './base';
 
 
 if( TIM )
@@ -18,7 +18,7 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// font of the text
 		font : { type : '../gleam/font/font' },
@@ -32,8 +32,8 @@ if( TIM )
 		// true for password input
 		password : { type : 'boolean', defaultValue : 'false' },
 
-		// the value in the input box
-		value : { type : 'string', defaultValue : '""' },
+		// the text in the input box
+		text : { type : 'string', defaultValue : '""' },
 
 		// designed zone
 		zone : { type : '../gleam/rect' },
@@ -97,7 +97,7 @@ def.proto.caretable = true;
 
 
 /*
-| Returns the hover path if the width with 'path' concerns about the hover.
+| Returns the hover trace if the widget concerns about the hover.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
@@ -196,30 +196,30 @@ def.lazy.glint =
 */
 def.proto.input =
 	function(
-		text
+		itext // input text
 	)
 {
 	const mark = this.mark;
 
-	const value = this.value;
+	const text = this.text;
 
 	const at = mark.caretOffset.at;
 
 	const maxlen = this.maxlen;
 
-	// cuts of text if larger than this maxlen
-	if( maxlen > 0 && value.length + text.length > maxlen )
+	// cuts of itext if larger than this maxlen
+	if( maxlen > 0 && text.length + itext.length > maxlen )
 	{
-		text = text.substring( 0, maxlen - value.length );
+		itext = itext.substring( 0, maxlen - text.length );
 	}
 
 	root.alter(
-		this.path.append( 'value' ),
-		value.substring( 0, at ) + text + value.substring( at )
+		this.trace.appendText,
+		text.substring( 0, at ) + itext + text.substring( at )
 	);
 
 	root.alter(
-		'mark', mark_caret.create( 'offset', this.offsetTrace( at + text.length ) )
+		'mark', mark_caret.create( 'offset', this.offsetTrace( at + itext.length ) )
 	);
 };
 
@@ -236,7 +236,7 @@ def.lazyFuncInt.locateOffsetPoint =
 
 	const pitch = widget_input._pitch;
 
-	const value = this.value;
+	const text = this.text;
 
 	if( this.password )
 	{
@@ -254,7 +254,7 @@ def.lazyFuncInt.locateOffsetPoint =
 
 	return(
 		gleam_point.create(
-			'x', Math.round( pitch.x + font.getAdvanceWidth( value.substring( 0, offset ) ) ),
+			'x', Math.round( pitch.x + font.getAdvanceWidth( text.substring( 0, offset ) ) ),
 			'y', Math.round( pitch.y + font.size )
 		)
 	);
@@ -289,7 +289,7 @@ def.proto.pointingHover =
 	|| !this._tzShape.within( p.sub( this._tZone.pos ) )
 	) return;
 
-	return result_hover.cursorText( 'trace', this.trace );
+	return result_hover.cursorText.create( 'trace', this.trace );
 };
 
 
@@ -381,7 +381,7 @@ def.proto._getOffsetAt =
 
 	const dx = p.x - pitch.x;
 
-	const value = this.value;
+	const text = this.text;
 
 	let x1 = 0;
 
@@ -395,14 +395,11 @@ def.proto._getOffsetAt =
 
 	let a;
 
-	for( a = 0; a < value.length; a++ )
+	for( a = 0; a < text.length; a++ )
 	{
 		x1 = x2;
 
-		x2 =
-			password
-			? a * mw
-			: font.getAdvanceWidth( value.substr( 0, a ) );
+		x2 = password ? a * mw : font.getAdvanceWidth( text.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}
@@ -421,7 +418,7 @@ def.lazy._glint =
 {
 	const pitch = widget_input._pitch;
 
-	const value = this.value;
+	const text = this.text;
 
 	const mark = this.mark;
 
@@ -453,7 +450,7 @@ def.lazy._glint =
 			gleam_glint_text.create(
 				'font', font,
 				'p', gleam_point.createXY( pitch.x, font.size + pitch.y ),
-				'text', value
+				'text', text
 			)
 		);
 	}
@@ -484,8 +481,7 @@ def.proto._keyBackspace =
 	if( at <= 0 ) return;
 
 	root.alter(
-		this.path.append( 'value' ),
-			this.value.substring( 0, at - 1 ) + this.value.substring( at ),
+		this.trace.appendText, this.text.substring( 0, at - 1 ) + this.text.substring( at ),
 		'mark', mark.backward
 	);
 };
@@ -499,11 +495,10 @@ def.proto._keyDel =
 {
 	const at = this.mark.caretOffset.at;
 
-	if( at >= this.value.length ) return;
+	if( at >= this.text.length ) return;
 
 	root.alter(
-		this.path.append( 'value' ),
-		this.value.substring( 0, at ) + this.value.substring( at + 1 )
+		this.trace.appendText, this.text.substring( 0, at ) + this.text.substring( at + 1 )
 	);
 };
 
@@ -530,10 +525,10 @@ def.proto._keyEnd =
 
 	const at = mark.caretOffset.at;
 
-	if( at >= this.value.length ) return;
+	if( at >= this.text.length ) return;
 
 	root.alter(
-		'mark', mark_caret.create( 'offset', this.offsetTrace( this.value.length ) )
+		'mark', mark_caret.create( 'offset', this.offsetTrace( this.text.length ) )
 	);
 };
 
@@ -574,7 +569,7 @@ def.proto._keyRight =
 {
 	const mark = this.mark;
 
-	if( mark.caretOffset.at >= this.value.length ) return;
+	if( mark.caretOffset.at >= this.text.length ) return;
 
 	root.alter( 'mark', mark.forward );
 };
@@ -621,7 +616,7 @@ def.lazy._maskWidth =
 def.lazy._passMask =
 	function( )
 {
-	const value = this.value;
+	const text = this.text;
 
 	const size = this.font.size;
 
@@ -640,7 +635,7 @@ def.lazy._passMask =
 
 	const k = this._maskKern;
 
-	for( let a = 0, al = value.length; a < al; a++, x += w + k )
+	for( let a = 0, al = text.length; a < al; a++, x += w + k )
 	{
 		pm.push(
 			gleam_ellipse.create(

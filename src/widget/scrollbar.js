@@ -11,7 +11,7 @@
 tim.define( module, ( def ) => {
 
 
-def.extend = './widget';
+def.extend = './base';
 
 
 if( TIM )
@@ -110,7 +110,7 @@ def.proto.dragStart =
 	root.alter(
 		'action',
 			action_scrolly.create(
-				'scrollPath', this.path.shorten,
+				'scrollTrace', this.trace.last,
 				'startPoint', p,
 				'startPos', this.scrollPos
 			)

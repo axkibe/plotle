@@ -12,7 +12,7 @@ tim.define( module, ( def ) => {
 /*
 | Is a form.
 */
-def.extend = './form';
+def.extend = './base';
 
 
 if( TIM )
@@ -25,7 +25,7 @@ if( TIM )
 }
 
 
-const forms_form = tim.require( './form' );
+const forms_base = tim.require( './base' );
 
 
 /*
@@ -57,7 +57,7 @@ def.adjust.get =
 			break;
 	}
 
-	return forms_form.adjustGet.call( this, name, widget );
+	return forms_base.adjustGet.call( this, name, widget );
 };
 
 

@@ -26,7 +26,7 @@ if( TIM )
 		hasSnapping : { type : 'undefined' },
 
 		// the widget hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
@@ -407,6 +407,28 @@ def.proto.specialKey =
 	}
 
 	widget.specialKey( key, shift, ctrl );
+};
+
+
+
+/*
+| A checkbox has been toggled.
+*/
+def.proto.toggleCheckbox =
+	function(
+		trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( !trace.hasTrace( this.trace ) ) throw new Error( );
+/**/}
+
+	const widgetKey = trace.traceWidget.key;
+
+	const checked = this.get( widgetKey ).checked;
+
+	root.alter( trace.appendChecked, !checked );
 };
 
 

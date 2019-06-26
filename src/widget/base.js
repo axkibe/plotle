@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, widget_widget ) => {
+tim.define( module, ( def ) => {
 
 
 def.abstract = true;
@@ -20,8 +20,8 @@ if( TIM )
 		// the users mark
 		mark : { type : 'undefined' },
 
-		// path of the widget
-		path : { type : [ 'undefined', 'tim.js/path' ] },
+		// FIXME remove
+		path : { type : 'tim.js/path' },
 
 		// trace of the widget
 		trace : { type : '../trace/widget' },
