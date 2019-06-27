@@ -66,19 +66,19 @@ def.adjust.get =
 */
 def.proto.pushButton =
 	function(
-		path
+		trace
 		// shift,
 		// ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'welcome' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'welcome' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
+	const buttonKey = trace.traceWidget.key;
 
-	switch( buttonName )
+	switch( buttonKey )
 	{
 		case 'closeButton' : root.showHome( ); break;
 

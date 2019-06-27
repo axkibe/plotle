@@ -10,34 +10,22 @@ tim.define( module, ( def, trace_bare ) => {
 def.abstract = true;
 
 
+const trace_checked = tim.require( './checked' );
 const trace_disc = tim.require( './disc' );
-
 const trace_discs  = tim.require( './discs' );
-
 const trace_doc = tim.require( './doc' );
-
 const trace_field = tim.require( './field' );
-
 const trace_form = tim.require( './form' );
-
 const trace_forms = tim.require( './forms' );
-
 const trace_item = tim.require( './item' );
-
 const trace_offset = tim.require( './offset' );
-
+const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
 const trace_para = tim.require( './para' );
-
 const trace_root = tim.require( './root' );
-
 const trace_scrollPos = tim.require( './scrollPos' );
-
 const trace_space = tim.require( './space' );
-
 const trace_text = tim.require( './text' );
-
 const trace_widget = tim.require( './widget' );
-
 
 
 /*
@@ -50,19 +38,21 @@ def.proto.appendStep =
 {
 	switch( step.timtype )
 	{
-		case trace_disc      : return this.appendDisc( step.key );
-		case trace_discs     : return this.appendDiscs;
-		case trace_doc       : return this.appendDoc;
-		case trace_field     : return this.appendField( step.key );
-		case trace_form      : return this.appendForm( step.key );
-		case trace_forms     : return this.appendForms;
-		case trace_item      : return this.appendItem( step.key );
-		case trace_offset    : return this.appendOffset( step.key );
-		case trace_para      : return this.appendPara( step.key );
-		case trace_scrollPos : return this.appendScrollPos;
-		case trace_space     : return this.appendSpace;
-		case trace_text      : return this.appendText;
-		case trace_widget    : return this.appendWidget( step.key );
+		case trace_checked     : return this.appendChecked;
+		case trace_disc        : return this.appendDisc( step.key );
+		case trace_discs       : return this.appendDiscs;
+		case trace_doc         : return this.appendDoc;
+		case trace_field       : return this.appendField( step.key );
+		case trace_form        : return this.appendForm( step.key );
+		case trace_forms       : return this.appendForms;
+		case trace_item        : return this.appendItem( step.key );
+		case trace_nonSpaceRef : return this.appendNonSpaceRef;
+		case trace_offset      : return this.appendOffset( step.key );
+		case trace_para        : return this.appendPara( step.key );
+		case trace_scrollPos   : return this.appendScrollPos;
+		case trace_space       : return this.appendSpace;
+		case trace_text        : return this.appendText;
+		case trace_widget      : return this.appendWidget( step.key );
 		default : throw new Error( );
 	}
 };

@@ -23,7 +23,19 @@ if( TIM )
 }
 
 
+const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
+
 const trace_widget = tim.require( './widget' );
+
+
+/*
+| Returns a trace with a nonSpaceRef appended.
+*/
+def.lazy.appendNonSpaceRef =
+	function( )
+{
+	return trace_nonSpaceRef.create( 'list:init', this, 'list:append', this );
+};
 
 
 /*

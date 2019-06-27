@@ -20,9 +20,6 @@ if( TIM )
 		// the users mark
 		mark : { type : 'undefined' },
 
-		// FIXME remove
-		path : { type : 'tim.js/path' },
-
 		// trace of the widget
 		trace : { type : '../trace/widget' },
 
@@ -33,6 +30,14 @@ if( TIM )
 		visible : { type : 'boolean', defaultValue : 'true' },
 	};
 }
+
+/*
+| By default don't concern about hovers.
+*/
+def.static.concernsHover =
+def.proto.concernsHover =
+	( hover, trace ) => undefined;
+
 
 /*
 | Handles a potential dragStart event.

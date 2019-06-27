@@ -101,14 +101,13 @@ def.proto.concernsHover =
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_button ) throw new Error( );
 /**/}
@@ -119,7 +118,6 @@ def.static.createFromLayout =
 			'font', layout.font,
 			'iconShape', layout.iconShape,
 			'iconFacet', layout.iconFacet,
-			'path', path,
 			'shape', layout.shape,
 			'text', layout.text,
 			'textNewline', layout.textNewline,

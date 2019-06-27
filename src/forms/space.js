@@ -87,19 +87,17 @@ def.adjust.get =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'space' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'space' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
-
-	switch( buttonName )
+	switch( trace.traceWidget.key )
 	{
 		case 'closeButton' : root.showHome( ); break;
 
@@ -119,24 +117,15 @@ def.proto.showDisc = true;
 */
 def.proto.toggleCheckbox =
 	function(
-		path
+		trace
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		path.length < 5
-/**/		|| path.get( 0 ) !== 'forms'
-/**/		|| path.get( 1 ) !== 'twig'
-/**/		|| path.get( 2 ) !== 'space'
-/**/		|| path.get( 3 ) !== 'twig'
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	if( trace.traceForm.key !== 'space' ) throw new Error( );
 /**/}
 
-	switch( path.get( 4 ) )
+	switch( trace.traceWidget.key )
 	{
 		case 'gridCheckBox' :
 		{

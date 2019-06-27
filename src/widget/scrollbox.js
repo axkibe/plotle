@@ -58,22 +58,7 @@ const widget_scrollbar = tim.require( './scrollbar' );
 
 
 /*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/	const sp = this.scrollPos;
-/**/
-/**/	if( sp.x < 0 || sp.y < 0 ) throw new Error( );
-/**/}
-};
-
-
-/*
-| Returns the hover path if the width with 'path' concerns about the hover.
+| Returns the hover if a 'trace'd button concerns about it.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
@@ -97,14 +82,13 @@ def.proto.concernsHover =
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_scrollbox ) throw new Error( );
 /**/}
@@ -116,7 +100,6 @@ def.static.createFromLayout =
 		twig[ wKey ] =
 			widget_factory.createFromLayout(
 				layout.get( wKey ),
-				path.append( 'twig' ).append( wKey ),
 				trace.appendWidget( wKey ),
 				transform
 			);
@@ -125,7 +108,6 @@ def.static.createFromLayout =
 	return(
 		widget_scrollbox.create(
 			'twig:init', twig, layout.keys,
-			'path', path,
 			'scrollbarYOffset', layout.scrollbarYOffset,
 			'scrollPos', gleam_point.zero,
 			'trace', trace,
@@ -145,11 +127,7 @@ def.adjust.get =
 		widget
 	)
 {
-	let path = widget.path;
-
 	let trace = widget.trace;
-
-	if( !path && this.path ) path = this.path.append( 'twig' ).append( name );
 
 	if( !trace && this.trace ) trace = this.trace.appendWidget( name );
 
@@ -159,7 +137,6 @@ def.adjust.get =
 		widget.create(
 			'hover', hover,
 			'mark', this.mark,
-			'path', path,
 			'trace', trace
 		)
 	);
@@ -300,7 +277,6 @@ def.lazy.scrollbarY =
 		widget_scrollbar.create(
 			'aperture', zone.height,
 			'max', innerSize.height,
-			'path', this.path.append( 'scrollbarY' ),
 			'pos',
 				zone.pos.add(
 					zone.width + scrollbarYOffset.x,
@@ -465,6 +441,21 @@ def.proto.mousewheel =
 	if( y < 0 ) y = 0;
 
 	root.alter( this.trace.appendScrollPos, this.scrollPos.create( 'y', y ) );
+};
+
+
+/*
+| Exta checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	const sp = this.scrollPos;
+/**/
+/**/	if( sp.x < 0 || sp.y < 0 ) throw new Error( );
+/**/}
 };
 
 

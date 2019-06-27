@@ -15,3 +15,6 @@ FIXME: error dragStartButton when "dragging" on login
 FIXME: move the gruga forms in a form directory
 FIXME: click on portal doesn't select
 FIXME: rename hover to hoverTrace
+
+FIXME: shell/system capture input also when not keyboarding
+:::::: so checkbox/button can be keypress changed on notebook

@@ -1198,7 +1198,7 @@ def.proto.onAcquireSpace =
 		case 'nonexistent' :
 
 			root.alter(
-				root.forms.get( 'nonExistingSpace' ).trace.appendField( 'nonSpaceRef' ),
+				root.forms.get( 'nonExistingSpace' ).trace.appendNonSpaceRef,
 				request.spaceRef
 			);
 
@@ -1211,7 +1211,7 @@ def.proto.onAcquireSpace =
 		case 'no access' :
 
 			root.alter(
-				root.forms.get( 'noAccessToSpace' ).trace.appendField( 'nonSpaceRef' ),
+				root.forms.get( 'noAccessToSpace' ).trace.appendNonSpaceRef,
 				request.spaceRef
 			);
 
@@ -1652,7 +1652,14 @@ def.proto.spawnRelation =
 	root.alter(
 		'change', change,
 		'mark',
-			mark_caret.create( 'offset', trace.appendDoc.appendPara( '1' ).appendOffset( 0 ) )
+			mark_caret.create(
+				'offset',
+					trace
+					.appendDoc
+					.appendPara( '1' )
+					.appendText
+					.appendOffset( 0 )
+			)
 	);
 };
 
@@ -1702,15 +1709,15 @@ def.proto.suggestingKeyboard =
 */
 def.proto.toggleCheckbox =
 	function(
-		path   // path of the button pushed
+		trace  // trace of the checkbox
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 0 ) !== 'forms' ) throw new Error( );
+/**/	if( !trace.traceForms ) throw new Error( );
 /**/}
 
-	root.forms.toggleCheckbox( path, false, false );
+	root.forms.toggleCheckbox( trace, false, false );
 };
 
 
@@ -1875,8 +1882,6 @@ def.static._createFormsRoot =
 
 	let forms = { };
 
-	const formRootPath = tim_path.empty.append( 'forms' );
-
 	// FIXME move this from layout creation to forms.root
 
 	for( let name in formLayouts )
@@ -1884,8 +1889,6 @@ def.static._createFormsRoot =
 		const entry = formLayouts[ name ];
 
 		const layout = entry[ 0 ];
-
-		const formPath = formRootPath.append( 'twig' ).append( name );
 
 		const formTrace = trace_root.singleton.appendForms.appendForm( name );
 
@@ -1895,12 +1898,10 @@ def.static._createFormsRoot =
 		{
 			const wLayout = layout.get( wKey );
 
-			const path = formPath.append( 'twig' ).append( wKey );
-
 			const trace = formTrace.appendWidget( wKey );
 
 			twig[ wKey ] =
-				widget_factory.createFromLayout( wLayout, path, trace, gleam_transform.normal );
+				widget_factory.createFromLayout( wLayout, trace, gleam_transform.normal );
 		}
 
 		forms[ name ] =
@@ -1915,7 +1916,6 @@ def.static._createFormsRoot =
 	let formRoot =
 		forms_root.create(
 			'action', action_none.singleton,
-			'path', formRootPath,
 			'viewSize', viewSize
 		);
 

@@ -26,9 +26,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the form root
-		path : { type : 'tim.js/path' },
-
 		// the reference of current space
 		spaceRef : { type : [ 'undefined', '../ref/space' ] },
 
@@ -70,8 +67,6 @@ def.adjust.get =
 		form
 	)
 {
-	const path = form.path || this.path.append( 'twig' ).append( name );
-
 	const trace = forms_root.trace.appendForm( name );
 
 	let mark = this.mark;
@@ -99,7 +94,6 @@ def.adjust.get =
 			'hasSnapping', hasSnapping,
 			'hover', hover,
 			'mark', mark,
-			'path', path,
 			'spaceRef', spaceRef,
 			'trace', trace,
 			'user', user,
@@ -111,7 +105,7 @@ def.adjust.get =
 
 
 /*
-| Returns the hover path if the form root concerns about it.
+| Returns the hover if the form root concerns about it.
 */
 def.static.concernsHover =
 	( hover ) => hover && hover.traceForms ? hover : undefined;
@@ -158,7 +152,7 @@ def.proto.cycleFocus =
 */
 def.proto.dragStartButton =
 	function(
-		path
+		trace
 	)
 {
 	return false;

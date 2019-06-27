@@ -27,11 +27,23 @@ if( TIM )
 }
 
 
+const trace_checked = tim.require( './checked' );
+
 const trace_offset = tim.require( './offset' );
 
 const trace_scrollPos = tim.require( './scrollPos' );
 
 const trace_text = tim.require( './text' );
+
+
+/*
+| Returns a trace with a checked appended.
+*/
+def.lazy.appendChecked =
+	function( )
+{
+	return trace_checked.create( 'list:init', this, 'list:append', this );
+};
 
 
 /*

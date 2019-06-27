@@ -44,27 +44,18 @@ const layout_label = tim.require( '../layout/label' );
 
 
 /*
-| A label doesn't care about hovering.
-*/
-def.proto.concernsHover =
-def.static.concernsHover =
-	( ) => undefined;
-
-
-/*
 | Creates an actual widget from a layout.
 */
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_label ) throw new Error( );
 /**/}
@@ -76,7 +67,6 @@ def.static.createFromLayout =
 			'color', layout.color,
 			'font', layout.font,
 			'newline', layout.newline,
-			'path', path,
 			'pos', layout.pos,
 			'text', layout.text,
 			'trace', trace,
@@ -84,16 +74,6 @@ def.static.createFromLayout =
 			'visible', true
 		)
 	);
-};
-
-
-/*
-| The transformed position of the label.
-*/
-def.lazy._pos =
-	function( )
-{
-	return this.pos.transform( this.transform );
 };
 
 
@@ -155,6 +135,15 @@ def.proto.pointingHover =
 {
 };
 
+
+/*
+| The transformed position of the label.
+*/
+def.lazy._pos =
+	function( )
+{
+	return this.pos.transform( this.transform );
+};
 
 
 } );

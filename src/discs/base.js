@@ -32,9 +32,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// path of the disc
-		path : { type : 'tim.js/path' },
-
 		// shape of the disc',
 		shape : { type : '../gleam/ellipse' },
 
@@ -82,8 +79,6 @@ const gleam_transform = tim.require( '../gleam/transform' );
 
 const layout_disc = tim.require( '../layout/disc' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_root = tim.require( '../trace/root' );
 
 const widget_factory = tim.require( '../widget/factory' );
@@ -108,8 +103,6 @@ def.static.createFromLayout =
 /**/	if( layout.timtype !== layout_disc ) throw new Error( );
 /**/}
 
-	const path = tim_path.empty.append( 'discs' ).append( 'twig' ).append( key );
-
 	const trace = trace_root.singleton.appendDiscs.appendDisc( key );
 
 	const twig = { };
@@ -119,7 +112,6 @@ def.static.createFromLayout =
 		twig[ wKey ] =
 			widget_factory.createFromLayout(
 				layout.get( wKey ),
-				path.append( 'twig' ).append( wKey ),
 				trace.appendWidget( wKey ),
 				transform
 			);
@@ -131,7 +123,6 @@ def.static.createFromLayout =
 			'action', action_none.singleton,
 			'controlTransform', transform,
 			'facet', layout.facet,
-			'path', path,
 			'shape', layout.shape,
 			'show', this.concernsShow( show ),
 			'size', layout.size,
@@ -143,13 +134,12 @@ def.static.createFromLayout =
 
 
 /*
-| Returns the hover path when a disc
-| is concerned about it.
+| Returns the hover when a 'trace'd disc concerns about it.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
 	function(
-		hover,  // hover path
+		hover,  // hover
 		trace   // trace of the disc
 	)
 {

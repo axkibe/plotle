@@ -55,21 +55,20 @@ def.staticLazy._layoutMap =
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_*
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
 	const widget = widget_factory._layoutMap.get( layout.timtype );
 
 	if( !widget ) throw new Error( );
 
-	return widget.createFromLayout( layout, path, trace, transform );
+	return widget.createFromLayout( layout, trace, transform );
 };
 
 

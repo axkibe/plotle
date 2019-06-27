@@ -108,12 +108,9 @@ def.proto.changeTree =
 		tree
 	)
 {
-	const text = tree.getPath( this.path );
+	const text = this.trace.pick( tree );
 
-	if( typeof( text ) !== 'string' )
-	{
-		throw error.make( 'remove.path signates no string' );
-	}
+	if( typeof( text ) !== 'string' ) throw error.make( 'remove.trace yields no string' );
 
 	const val = text.substring( this.at1, this.at2 );
 
@@ -123,10 +120,9 @@ def.proto.changeTree =
 	}
 
 	return(
-		tree.setPath(
-			this.path,
-			text.substring( 0, this.at1 )
-			+ text.substring( this.at2 )
+		this.trace.graft(
+			tree,
+			text.substring( 0, this.at1 ) + text.substring( this.at2 )
 		)
 	);
 };
@@ -176,7 +172,7 @@ def.proto._transformInsert =
 /**/	if( c.timtype !== change_insert ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( c.path ) ) return c;
+	if( !this.trace.equals( c.trace ) ) return c;
 
 	if( c.at1 < this.at1 ) return c;
 	else if( c.at1 <= this.at2 )
@@ -229,7 +225,7 @@ def.proto._transformRemove =
 /**/	if( c.timtype !== change_remove ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( c.path ) ) return c;
+	if( !this.trace.equals( c.trace ) ) return c;
 
 	const len = this.at2 - this.at1;
 
@@ -311,7 +307,7 @@ def.proto._transformJoinSplit =
 /**/	if( c.timtype !== change_join && c.timtype !== change_split ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( c.path ) ) return c;
+	if( !this.trace.equals( c.trace ) ) return c;
 
 	// text    ttttttttttttt
 	// remove     ' xxxx '

@@ -85,19 +85,19 @@ def.staticLazy.scrollbarYOffset =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'moveTo' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'moveTo' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( -1 );
+	const buttonKey = trace.traceWidget.key;
 
-	const parts = buttonName.split( ':' );
+	const parts = buttonKey.split( ':' );
 
 	root.moveToSpace(
 		ref_space.create( 'username', parts[ 0 ], 'tag',  parts[ 1 ] ),
@@ -215,8 +215,6 @@ def.proto._transformScrollbox =
 				)
 		);
 
-	let sbPath = this.path.append( 'twig' ).append( 'scrollbox' );
-
 	let sbTrace = this.trace.appendWidget( 'scrollbox' );
 
 	const userSpaceList = this.userSpaceList;
@@ -251,7 +249,6 @@ def.proto._transformScrollbox =
 				button =
 					widget_button.createFromLayout(
 						gruga_moveTo.spaceButtonLayout,
-						sbPath.append( 'twig' ).append( fullname ),
 						sbTrace.appendWidget( fullname ),
 						gleam_transform.normal
 					);
@@ -283,7 +280,6 @@ def.proto._transformScrollbox =
 
 	return(
 		sb.create(
-			'path', sbPath,
 			'scrollbarYOffset', forms_moveTo.scrollbarYOffset,
 			'scrollPos', widget_scrollbox.prepareScrollPos( sb.scrollPos, sb.innerSize, zone ),
 			'twig:init', sbTwig, sbRanks,

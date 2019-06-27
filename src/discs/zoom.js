@@ -24,15 +24,12 @@ def.adjust.get =
 		widget
 	)
 {
-	const path = widget.path || this.path.append( 'twig' ).append( name );
-
 	const trace = widget.trace || this.trace.appendWidget( name );
 
 	const hover = widget.concernsHover( this.hover, trace );
 
 	return(
 		widget.create(
-			'path', path,
 			'hover', hover,
 			'down', discs_zoom._isActiveButton( this.action, name ),
 			'trace', trace,

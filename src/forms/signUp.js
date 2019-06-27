@@ -37,7 +37,7 @@ def.proto.clear =
 		this.get( 'emailInput' ).trace.appendText, '',
 		this.get( 'passwordInput' ).trace.appendText, '',
 		this.get( 'password2Input' ).trace.appendText, '' ,
-		this.get( 'newsletterCheckBox' ).path.append( 'checked' ), true, // XXX
+		this.get( 'newsletterCheckBox' ).trace.appendChecked, true,
 		this.get( 'errorLabel' ).trace.appendText, '',
 		'mark', undefined
 	);

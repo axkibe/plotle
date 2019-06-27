@@ -31,9 +31,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the form
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// the reference to the current space
 		spaceRef : { type : 'undefined' },
 
@@ -92,8 +89,8 @@ def.proto.concernsHasSnapping =
 
 
 /*
-| Returns the mark if a form with 'path' concerns about
-| 'mark'. This is the same for all forms.
+| Returns the mark if a 'trace'd form concerns about it.
+| This is the same for all forms.
 |
 | FIXME is this really necessary as function?
 */
@@ -168,7 +165,7 @@ def.proto.cycleFocus =
 				'mark',
 					ve.caretable
 					? mark_caret.create( 'offset', ve.trace.appendText.appendOffset( 0 ) )
-					: mark_widget.create( 'path', ve.path, 'trace', ve.trace )
+					: mark_widget.create( 'trace', ve.trace )
 			);
 
 			break;
@@ -250,8 +247,6 @@ def.static.adjustGet =
 			'offset', this.viewSize.zeroRect.pc
 		);
 
-	const path = widget.path || this.path.append( 'twig' ).append( name );
-
 	const trace = this.trace.appendWidget( name );
 
 	let mark = this.mark;
@@ -264,9 +259,11 @@ def.static.adjustGet =
 		widget.create(
 			'hover', hover,
 			'mark', mark,
-			'path', path,
 			'trace', trace,
-			'transform', this.path.get( 2 ) !== 'moveTo' ? transform : gleam_transform.normal
+			'transform',
+				this.trace.traceForm.key !== 'moveTo'
+				? transform
+				: gleam_transform.normal
 		);
 
 	if( widget.timtype !== widget_scrollbox ) return widget;
@@ -301,9 +298,7 @@ def.lazy.focusedWidget =
 
 	if( !mark ) return;
 
-	const trace = mark.widgetTrace;
-
-	return this.get( trace.key );
+	return this.get( mark.widgetTrace.key );
 };
 
 

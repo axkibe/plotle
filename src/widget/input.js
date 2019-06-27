@@ -110,14 +110,13 @@ def.proto.concernsHover =
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_input ) throw new Error( );
 /**/}
@@ -128,7 +127,6 @@ def.static.createFromLayout =
 			'font', layout.font,
 			'maxlen', layout.maxlen,
 			'password', layout.password,
-			'path', path,
 			'transform', transform,
 			'trace', trace,
 			'visible', true,
@@ -511,7 +509,7 @@ def.proto._keyEnter =
 def.proto._keyDown =
 	function( )
 {
-	root.cycleFormFocus( this.path.get( 2 ), 1 );
+	root.cycleFormFocus( this.trace.traceForm.key, 1 );
 };
 
 
@@ -581,7 +579,7 @@ def.proto._keyRight =
 def.proto._keyUp =
 	function( )
 {
-	root.cycleFormFocus( this.path.get( 2 ), -1 );
+	root.cycleFormFocus( this.trace.traceForm.key, -1 );
 
 	return;
 };

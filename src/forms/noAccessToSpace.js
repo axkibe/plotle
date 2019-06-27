@@ -59,29 +59,21 @@ def.adjust.get =
 */
 def.proto.pushButton =
 	function(
-		path,
+		trace,
 		shift,
 		ctrl
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== 'noAccessToSpace' ) throw new Error( );
+/**/	if( trace.traceForm.key !== 'noAccessToSpace' ) throw new Error( );
 /**/}
 
-	const buttonName = path.get( 4 );
-
-	switch( buttonName )
+	switch( trace.traceWidget.key )
 	{
-		case 'okButton' :
+		case 'okButton' : root.showHome( ); break;
 
-			root.showHome( );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 };
 

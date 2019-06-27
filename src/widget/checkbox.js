@@ -21,7 +21,7 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// component hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
@@ -46,7 +46,7 @@ const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Returns the hover path if the width with 'path' concerns about the hover.
+| Returns the hover if a 'trace'd button concerns about it.
 */
 def.static.concernsHover =
 def.proto.concernsHover =
@@ -60,7 +60,7 @@ def.proto.concernsHover =
 /**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
-	if( hover && hover.traceWidget.equals( trace ) ) return hover;
+	if( hover && hover.hasTrace( trace ) ) return hover;
 };
 
 
@@ -70,14 +70,13 @@ def.proto.concernsHover =
 def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
-		path,       // path of the widget
 		trace,      // trace of the widget
 		transform   // visual transformation
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/
 /**/	if( layout.timtype !== layout_checkbox ) throw new Error( );
 /**/}
@@ -86,7 +85,6 @@ def.static.createFromLayout =
 		widget_checkbox.create(
 			'checked', layout.checked,
 			'facets', layout.facets,
-			'path', path,
 			'trace', trace,
 			'transform', transform,
 			'zone', layout.zone
@@ -105,7 +103,7 @@ def.lazy.glint =
 
 	const facet =
 		this.facets.getFacet(
-			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'hover', !!this.hover,
 			'focus', !!this.mark
 		);
 
@@ -169,7 +167,7 @@ def.proto.focusable = true;
 def.proto.toggle =
 	function( )
 {
-	root.toggleCheckbox( this.path );
+	root.toggleCheckbox( this.trace );
 };
 
 
@@ -234,9 +232,9 @@ def.proto.specialKey =
 {
 	switch( key )
 	{
-		case 'down' : root.cycleFormFocus( this.path.get( 2 ), 1 ); return;
+		case 'down' : root.cycleFormFocus( this.trace.traceForm.key, 1 ); return;
 
-		case 'up' : root.cycleFormFocus( this.path.get( 2 ), -1 ); return;
+		case 'up' : root.cycleFormFocus( this.trace.traceForm.key, -1 ); return;
 
 		case 'enter' : this.toggle( ); return;
 	}
