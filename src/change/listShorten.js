@@ -2,8 +2,6 @@
 | Shortens a list.
 |
 | As reversal of append this drops the last element.
-|
-| FUTURE, path is missing!
 */
 'use strict';
 

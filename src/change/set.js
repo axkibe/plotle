@@ -85,9 +85,7 @@ def.proto.changeTree =
 	)
 {
 	// Stores the old value for history tracking.
-	const prev = tree.getPath( this.path );
-
-	// if( this.val === undefined ) throw new Error( );
+	const prev = this.trace.pick( tree );
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{
@@ -96,7 +94,7 @@ def.proto.changeTree =
 		throw error.make( 'set.prev doesn\'t match' );
 	}
 
-	return tree.setPath( this.path, this.val );
+	return this.trace.graft( tree, this.val );
 };
 
 

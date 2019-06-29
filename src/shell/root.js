@@ -1490,7 +1490,7 @@ def.proto.removeRange =
 				'at2', backOffset.at,
 				'val',
 					frontOffset.last.chopRoot.pick( root._actionSpace )
-					.text.substring( frontOffset.at, backOffset.at )
+					.substring( frontOffset.at, backOffset.at )
 			)
 		);
 
@@ -1739,7 +1739,7 @@ def.proto.update =
 
 	if( mark.timtype === mark_range )
 	{
-		return mark.create( 'doc', root.space.getPath( mark.docPath.chop ) );
+		return mark.create( 'doc', mark.doc.trace.pick( root ) );
 	}
 
 	return mark;

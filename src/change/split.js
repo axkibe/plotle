@@ -71,30 +71,30 @@ def.proto.changeTree =
 {
 	const at1 = this.at1;
 
-	const path = this.path;
+	const trace = this.trace;
 
-	const path2 = this.path2;
+	const trace2 = this.trace2;
 
-	const text = tree.getPath( path );
+	if( !trace2.traceDoc.equals( trace.traceDoc ) )
+	{
+		throw error.make( 'split.trace/2 not on same doc' );
+	}
 
-	if( typeof( text ) !== 'string' ) throw error.make( 'split.path signates no string' );
+	const text = trace.pick( tree );
 
-	let pivot = tree.getPath( path.shorten.shorten.shorten );
+	if( typeof( text ) !== 'string' ) throw error.make( 'split.trace yields no string' );
+
+	let pivot = trace.traceDoc.pick( tree );
 
 	if( !pivot.getKey ) throw error.make( 'split.pivot not ranked' );
 
 	if( at1 > text.length ) throw error.make( 'split.at1 > text.length' );
 
-	if( !path2.shorten.shorten.subPathOf( path ) )
-	{
-		throw error.make( 'split.path2 not a subPath' );
-	}
+	const key = trace.tracePara.key;
 
-	const key = path.get( -2 );
+	const key2 = trace2.tracePara.key;
 
-	const key2 = path2.get( -2 );
-
-	if( pivot.get( key2 ) ) throw error.make( 'split.path2 already exists' );
+	if( pivot.get( key2 ) ) throw error.make( 'split.trace2 already exists' );
 
 	let para1 = pivot.get( key );
 
@@ -112,7 +112,7 @@ def.proto.changeTree =
 			'twig:insert', key2, rank1 + 1, para2
 		);
 
-	return tree.setPath( path.shorten.shorten.shorten, pivot );
+	return trace.traceDoc.graft( tree, pivot );
 };
 
 
@@ -197,7 +197,7 @@ def.proto._transformInsert =
 /**/	if( cx.timtype !== change_insert ) throw new Error( );
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.trace.equals( cx.trace ) ) return cx;
 
 	if( cx.at1 <= this.at1 ) return cx;
 
@@ -230,7 +230,7 @@ def.proto._transformJoinSplit =
 /**/	}
 /**/}
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.trace.equals( cx.trace ) ) return cx;
 
 	if( cx.at1 <= this.at1 ) return cx;
 
@@ -290,7 +290,7 @@ def.proto._transformRemove =
 	// case 1      xxxxx        remove is split
 	// case 2        ' xxxx     remove right
 
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.trace.equals( cx.trace ) ) return cx;
 
 	if( cx.at2 <= this.at1 )
 	{

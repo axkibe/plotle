@@ -21,9 +21,13 @@ const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
 
+const trace_pos = tim.require( './pos' );
+
 const trace_scrollPos = tim.require( './scrollPos' );
 
 const trace_widget = tim.require( './widget' );
+
+const trace_zone = tim.require( './zone' );
 
 
 /*
@@ -59,6 +63,16 @@ def.lazy.appendScrollPos =
 
 
 /*
+| Returns a trace with a scrollPos appended.
+*/
+def.lazy.appendPos =
+	function( )
+{
+	return trace_pos.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
 | Returns a trace with a widget part appended.
 */
 def.lazyFuncStr.appendWidget =
@@ -71,12 +85,22 @@ def.lazyFuncStr.appendWidget =
 
 
 /*
+| Returns a trace with a scrollPos appended.
+*/
+def.lazy.appendZone =
+	function( )
+{
+	return trace_zone.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep =
 	function( )
 {
-	return 'form(' + this.key + ')';
+	return 'item(' + this.key + ')';
 };
 
 

@@ -75,11 +75,9 @@ def.proto.changeTree =
 		tree
 	)
 {
-	if( this.path.get( -2 ) !== 'twig' ) throw error.make( 'grow.path( -2 ) not a twig' );
+	let pivot = this.trace.last.pick( tree );
 
-	let pivot = tree.getPath( this.path.shorten.shorten );
-
-	const key = this.path.get( -1 );
+	const key = this.trace.key;
 
 	const rank = this.rank;
 
@@ -87,11 +85,7 @@ def.proto.changeTree =
 
 	pivot = pivot.create( 'twig:insert', key, rank, this.val );
 
-	return(
-		this.path.length > 2
-		? tree.setPath( this.path.shorten.shorten, pivot )
-		: pivot
-	);
+	return this.trace.last.graft( tree, pivot );
 };
 
 
@@ -122,7 +116,7 @@ def.proto._transformGrowShrink =
 		c
 	)
 {
-	if( !this.path.shorten.equals( c.path.shorten ) ) return c;
+	if( !this.trace.last.equals( c.trace.last ) ) return c;
 
 	if( this.rank > c.rank ) return c;
 

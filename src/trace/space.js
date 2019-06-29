@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back
 	def.list = [ './root' ];
+
+	def.json = 'trace_space';
 }
 
 
@@ -80,6 +82,18 @@ def.lazy.toPath =
 
 	return this.get( this.length - 1 ).toPath.append( 'space' );
 };
+
+
+/*
+| Custom JSON converter.
+*/
+/*
+def.lazy.toJSON =
+	function( )
+{
+	return { muh: 'kuh' };
+}
+*/
 
 
 /*

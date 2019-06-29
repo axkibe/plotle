@@ -71,11 +71,17 @@ def.static.createFromPathSpace =
 
 	if( path.get( 0 ) === 'twig' ) throw new Error( );
 
-	if( path.get( 0 ) !== 'doc' )
+	if( path.get( 0 ) === 'doc' )
 	{
-		trace = trace.appendField( path.get( 0 ) ); path = path.chop;
+		trace = trace.appendDoc; path = path.chop;
 
-		if( path.length > 0 && path.get( 0 ) === 'text' )
+		if( path.length === 0 ) return trace;
+
+		if( path.get( 0 ) !== 'twig' ) throw new Error( );
+
+		trace = trace.appendPara( path.get( 1 ) ); path = path.chop.chop;
+
+		if( path.get( 0 ) === 'text' )
 		{
 			trace = trace.appendText;
 
@@ -87,15 +93,27 @@ def.static.createFromPathSpace =
 		return trace;
 	}
 
-	trace = trace.appendDoc; path = path.chop;
+	if( path.get( 0 ) === 'zone' )
+	{
+		trace = trace.appendZone; path = path.chop;
 
-	if( path.length === 0 ) return trace;
+		if( path.length === 0 ) return trace;
 
-	if( path.get( 0 ) !== 'twig' ) throw new Error( );
+		if( path.get( 0 ) === 'pos' )
+		{
+			trace = trace.appendPos; path = path.chop;
 
-	trace = trace.appendPara( path.get( 1 ) ); path = path.chop.chop;
+			if( path.length === 0 ) return trace;
+		}
 
-	if( path.get( 0 ) === 'text' )
+		if( path.length !== 0 ) throw new Error( );
+
+		return trace;
+	}
+
+	trace = trace.appendField( path.get( 0 ) ); path = path.chop;
+
+	if( path.length > 0 && path.get( 0 ) === 'text' )
 	{
 		trace = trace.appendText;
 

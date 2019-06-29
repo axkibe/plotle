@@ -43,15 +43,11 @@ def.lazy.affectedTwigItems =
 
 	for( let change of this )
 	{
-		const path = change.path;
+		const trace = change.trace.traceItem;
 
-		if( path.length < 2 ) continue;
+		if( !trace ) continue;
 
-		if( path.get( 0 ) !== 'twig' ) continue;
-
-		const iKey = path.get( 1 );
-
-		affected.add( iKey );
+		affected.add( trace.key );
 	}
 
 	return string_set.create( 'set:init', affected );

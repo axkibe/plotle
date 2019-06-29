@@ -4,4 +4,5 @@ node_modules/
 report/*
 jioncode/*
 timcode/*
+.console-history
 .eslint.stamp

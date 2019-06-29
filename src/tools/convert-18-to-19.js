@@ -1,5 +1,5 @@
 /*
-| Converts a v16 repository to v17.
+| Converts a v18 repository to v19.
 */
 'use strict';
 
@@ -9,6 +9,8 @@
 */
 const dry = false;
 
+// diabling for now
+if( dry === false ) return false;
 
 const config =
 {
@@ -16,13 +18,13 @@ const config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'plotle-17'
+		name : 'plotle-18'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'plotle-18'
+		name : 'plotle-19'
 	}
 };
 
@@ -34,11 +36,10 @@ global.NODE = true;
 {
 	require( 'tim.js' );
 
-	const ending = 'src/tool/convert-17-to-18.js';
+	const ending = 'src/tools/convert-18-to-19.js';
 
 	const filename = module.filename;
 
-	// if this filename is not bootstrap.js something is seriously amiss.
 	if( !filename.endsWith( ending ) ) throw new Error( );
 
 	const rootPath = filename.substr( 0, filename.length - ending.length );

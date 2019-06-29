@@ -73,29 +73,32 @@ def.proto.changeTree =
 {
 	const at1 = this.at1;
 
-	const path = this.path;
+	const trace = this.trace;
 
-	const path2 = this.path2;
+	const trace2 = this.trace2;
 
-	const text = tree.getPath( path );
+	if( !trace2.traceDoc.equals( trace.traceDoc ) )
+	{
+		throw error.make( 'split.trace/2 not on same doc' );
+	}
 
-	const text2 = tree.getPath( path2 );
+	const text = trace.pick( tree );
 
-	if( typeof( text ) !== 'string' ) throw error.make( 'join.path signates no string' );
+	const text2 = trace2.pick( tree );
 
-	if( typeof( text2 ) !== 'string' ) throw error.make( 'join.path2 signates no string' );
+	if( typeof( text ) !== 'string' ) throw error.make( 'join.trace yields no string' );
 
-	let pivot = tree.getPath( path.shorten.shorten.shorten );
+	if( typeof( text2 ) !== 'string' ) throw error.make( 'join.trace2 yields no string' );
+
+	let pivot = trace.traceDoc.pick( tree );
 
 	if( !pivot.getKey ) throw error.make( 'join.pivot not ranked' );
 
 	if( at1 !== text.length ) throw error.make( 'join.at1 !== text.length' );
 
-	if( !path2.shorten.shorten.subPathOf( path ) ) throw error.make( 'join.path2 not a subPath' );
+	const key = trace.tracePara.key;
 
-	const key = path.get( -2 );
-
-	const key2 = path2.get( -2 );
+	const key2 = trace2.tracePara.key;
 
 	let para1 = pivot.get( key );
 
@@ -105,9 +108,9 @@ def.proto.changeTree =
 
 	const rank2 = pivot.rankOf( key2 );
 
-	if( rank1 < 0 ) throw error.make( 'join.path has no rank' );
+	if( rank1 < 0 ) throw error.make( 'join.trace has no rank' );
 
-	if( rank2 < 0 ) throw error.make( 'join.path2 has no rank' );
+	if( rank2 < 0 ) throw error.make( 'join.trace2 has no rank' );
 
 	if( rank1 + 1 !== rank2 ) throw error.make( 'join ranks not sequential' );
 
@@ -119,7 +122,7 @@ def.proto.changeTree =
 			'twig:remove', key2
 		);
 
-	return tree.setPath( path.shorten.shorten.shorten, pivot );
+	return trace.traceDoc.graft( tree, pivot );
 };
 
 
@@ -213,7 +216,7 @@ def.proto._transformInsertRemove =
 /**/	if( cx.timtype !== change_insert && cx.timtype !== change_remove ) throw new Error( );
 /**/}
 
-	if( !this.path2.equals( cx.path ) ) return cx;
+	if( !this.trace2.equals( cx.trace ) ) return cx;
 
 	return(
 		cx.create(
@@ -239,7 +242,7 @@ def.proto._transformJoinSplit =
 /**/	if( cx.timtype !== change_join && cx.timtype !== change_split ) throw new Error( );
 /**/}
 
-	if( !this.path2.equals( cx.path ) ) return cx;
+	if( !this.trace2.equals( cx.trace ) ) return cx;
 
 	return(
 		cx.create(

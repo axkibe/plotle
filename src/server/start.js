@@ -21,14 +21,11 @@ Object.defineProperty(
 // running node normaly, TIM is false.
 global.TIM = false;
 
-
 // this is node.
 global.NODE = true;
 
-
 // server checking (first true, later override by config)
 global.CHECK = true;
-
 
 // server isn't a visual
 global.VISUAL = false;

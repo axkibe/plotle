@@ -26,6 +26,7 @@ const trace_scrollPos = tim.require( './scrollPos' );
 const trace_space = tim.require( './space' );
 const trace_text = tim.require( './text' );
 const trace_widget = tim.require( './widget' );
+const trace_zone = tim.require( './zone' );
 
 
 /*
@@ -53,6 +54,7 @@ def.proto.appendStep =
 		case trace_space       : return this.appendSpace;
 		case trace_text        : return this.appendText;
 		case trace_widget      : return this.appendWidget( step.key );
+		case trace_zone        : return this.appendZone;
 		default : throw new Error( );
 	}
 };

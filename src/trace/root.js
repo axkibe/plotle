@@ -11,6 +11,8 @@ def.singleton = true;
 
 def.extend = './base';
 
+def.json = 'trace_root';
+
 
 const tim_path = tim.require( 'tim.js/path' );
 
@@ -59,8 +61,11 @@ def.lazy.appendSpace =
 
 /*
 | The trace step as string (for debugging).
+| And in case of root also for the whole trace.
 */
-def.lazy.asStringStep = ( ) => 'root';
+def.lazy.asString =
+def.lazy.asStringStep =
+	( ) => 'root';
 
 
 /*
