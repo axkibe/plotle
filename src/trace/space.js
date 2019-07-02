@@ -23,6 +23,30 @@ const tim_path = tim.require( 'tim.js/path' );
 
 const trace_item = tim.require( './item' );
 
+const trace_hasGrid = tim.require( './hasGrid' );
+
+const trace_hasSnapping = tim.require( './hasSnapping' );
+
+
+/*
+| Returns a trace with a 'hasGrid' part appended.
+*/
+def.lazy.appendHasGrid =
+	function( )
+{
+	return trace_hasGrid.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Returns a trace with an 'hasSnapping' part appended.
+*/
+def.lazy.appendHasSnapping =
+	function( )
+{
+	return trace_hasSnapping.create( 'list:init', this, 'list:append', this );
+};
+
 
 /*
 | Returns a trace with an item part appended.
@@ -85,21 +109,27 @@ def.lazy.toPath =
 
 
 /*
-| Custom JSON converter.
-*/
-/*
-def.lazy.toJSON =
-	function( )
-{
-	return { muh: 'kuh' };
-}
-*/
-
-
-/*
 | This is the space trace.
 */
 def.lazy.traceSpace = function( ) { return this; };
+
+
+/*
+| JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace_space',
+			trace :
+				this.length > 0
+				? this.last.asJSON.trace.concat( [ '(o)space' ] )
+				: [ ]
+		}
+	);
+};
 
 
 } );

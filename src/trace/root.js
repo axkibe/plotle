@@ -60,6 +60,12 @@ def.lazy.appendSpace =
 
 
 /*
+| JSON converter.
+*/
+def.lazy.asJSON = ( ) => ( { type: 'trace_root', trace: [ ] } );
+
+
+/*
 | The trace step as string (for debugging).
 | And in case of root also for the whole trace.
 */

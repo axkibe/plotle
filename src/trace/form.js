@@ -20,6 +20,8 @@ if( TIM )
 
 	// path of trace back.
 	def.list = [ './root', './forms' ];
+
+	def.json = 'trace_form';
 }
 
 

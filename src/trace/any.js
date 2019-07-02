@@ -36,7 +36,11 @@ def.static.createFromPath =
 
 		case 'space' : return trace_any.createFromPathSpace( trace, path.chop );
 
-		case 'twig' : return trace_any.createFromPathSpace( undefined, path );
+		case 'hasGrid' :
+		case 'hasSnapping' :
+		case 'twig' :
+
+			return trace_any.createFromPathSpace( undefined, path );
 
 		default : throw new Error( );
 	}
@@ -63,7 +67,29 @@ def.static.createFromPathSpace =
 
 	if( path.length === 0 ) return trace;
 
-	if( path.get( 0 ) !== 'twig' ) throw new Error( );
+
+	switch( path.get( 0 ) )
+	{
+		case 'hasGrid' :
+
+			trace = trace.appendHasGrid; path = path.chop;
+
+			if( path.length !== 0 ) throw new Error( );
+
+			return trace;
+
+		case 'hasSnapping' :
+
+			trace = trace.appendHasSnapping; path = path.chop;
+
+			if( path.length !== 0 ) throw new Error( );
+
+			return trace;
+
+		case 'twig' : break;
+
+		default : throw new Error( );
+	}
 
 	trace = trace.appendItem( path.get( 1 ) ); path = path.chop.chop;
 

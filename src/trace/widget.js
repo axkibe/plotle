@@ -24,6 +24,8 @@ if( TIM )
 		'./space',
 		'./widget'
 	];
+
+	def.json = 'trace_widget';
 }
 
 

@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root' ];
+
+	def.json = 'trace_discs';
 }
 
 

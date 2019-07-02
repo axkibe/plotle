@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root', './space', './item' ];
+
+	def.json = 'trace_doc';
 }
 
 
@@ -29,6 +31,21 @@ def.lazyFuncStr.appendPara =
 	)
 {
 	return trace_para.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace_doc',
+			trace : this.last.asJSON.trace.concat( [ '(o)doc' ] )
+		}
+	);
 };
 
 

@@ -18,6 +18,7 @@ if( TIM )
 		key : { type : 'string' },
 	};
 
+	def.json = 'trace_field';
 
 	// path of trace back.
 	def.list = [ './root', './space', './item' ];

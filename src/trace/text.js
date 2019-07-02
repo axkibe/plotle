@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_text ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
@@ -25,6 +24,8 @@ if( TIM )
 		'./space',
 		'./widget'
 	];
+
+	def.json = 'trace_text';
 }
 
 
@@ -42,6 +43,22 @@ def.lazyFuncInt.appendOffset =
 	return trace_offset.create( 'list:init', this, 'list:append', this, 'at', at );
 };
 
+
+/*
+| JSON converter.
+*/
+/*
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace_text',
+			trace : this.last.asJSON.trace.concat( [ '(o)text' ] )
+		}
+	);
+};
+*/
 
 /*
 | The trace step as string (for debugging).
