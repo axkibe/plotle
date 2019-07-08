@@ -62,7 +62,7 @@ def.static.createFromPathSpace =
 	}
 	else
 	{
-		trace = trace_space.create( );
+		trace = trace_space.fakeRoot;
 	}
 
 	if( path.length === 0 ) return trace;

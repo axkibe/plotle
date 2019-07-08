@@ -25,7 +25,7 @@ if( TIM )
 		'./widget'
 	];
 
-	def.json = 'trace_text';
+	def.json = './base';
 }
 
 
@@ -45,20 +45,19 @@ def.lazyFuncInt.appendOffset =
 
 
 /*
-| JSON converter.
+| Custom JSON converter.
 */
-/*
 def.lazy.asJSON =
 	function( )
 {
 	return(
 		{
-			type : 'trace_text',
-			trace : this.last.asJSON.trace.concat( [ '(o)text' ] )
+			type : 'trace',
+			trace : [ '(o)text' ].concat( this.last.asJSON.trace )
 		}
 	);
 };
-*/
+
 
 /*
 | The trace step as string (for debugging).

@@ -20,7 +20,24 @@ if( TIM )
 		'./root',
 		'./widget'
 	];
+
+	def.json = './base';
 }
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)text' ].concat( this.last.asJSON.trace )
+		}
+	);
+};
 
 
 /*

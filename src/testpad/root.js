@@ -69,7 +69,7 @@ const trace_space = tim.require( '../trace/space' );
 | Path to the document.
 */
 def.staticLazy.docTrace = ( ) =>
-	trace_space.create( ).appendItem( 'note' ).appendDoc;
+	trace_space.fakeRoot.appendItem( 'note' ).appendDoc;
 
 
 /*

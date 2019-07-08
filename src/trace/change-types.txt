@@ -1,5 +1,8 @@
 # used by changes, FIXME remove and make changes more specific
 ./doc
 ./item
+./offset
 ./para
+./pos
 ./space
+./text

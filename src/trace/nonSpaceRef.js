@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './form', './forms', './root' ];
+
+	def.json = './base';
 }
 
 
@@ -24,6 +26,21 @@ const ref_space = tim.require( '../ref/space' );
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'nonSpaceRef';
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : this.last.asJSON.trace.concat( [ '(o)nonSpaceRef' ] )
+		}
+	);
+};
 
 
 /*

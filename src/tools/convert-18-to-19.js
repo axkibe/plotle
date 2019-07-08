@@ -55,6 +55,10 @@ const mongodb = require( 'mongodb' );
 
 const ref_space = require( '../ref/space' );
 
+const tim_path = require( 'tim.js/src/path/path' );
+
+const trace_any = require( '../trace/any' );
+
 
 /*
 | Creates a connection to the target.
@@ -92,13 +96,17 @@ const convertJson =
 		obj
 	)
 {
-	for( let key in obj )
-	{
-		if( key === 'ranks' )
-		{
-			obj.keys = obj.ranks;
+	const keys = Object.keys( obj );
 
-			delete obj.ranks;
+	for( let key in keys )
+	{
+		if( key === 'path' )
+		{
+			const path = tim_path.creaetFromJSON( obj.path );
+
+			obj.trace = trace_any.createFromPath( path );
+
+			delete obj.path;
 
 			continue;
 		}

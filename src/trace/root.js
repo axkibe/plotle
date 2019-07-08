@@ -11,7 +11,10 @@ def.singleton = true;
 
 def.extend = './base';
 
-def.json = 'trace_root';
+if( TIM )
+{
+	def.json = './base';
+}
 
 
 const tim_path = tim.require( 'tim.js/path' );
@@ -60,9 +63,9 @@ def.lazy.appendSpace =
 
 
 /*
-| JSON converter.
+| Custom JSON converter.
 */
-def.lazy.asJSON = ( ) => ( { type: 'trace_root', trace: [ ] } );
+def.lazy.asJSON = ( ) => ( { type: 'trace', trace: [ ] } );
 
 
 /*

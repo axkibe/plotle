@@ -209,9 +209,7 @@ def.proto._onAcquireSpace =
 			1000,
 			function( )
 			{
-				root.alter(
-					'link', root.link.create( '_startTimer', undefined )
-				);
+				root.alter( 'link', root.link.create( '_startTimer', undefined ) );
 
 				root.link._update( );
 			}

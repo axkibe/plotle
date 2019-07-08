@@ -21,7 +21,7 @@ if( TIM )
 	// path of trace back.
 	def.list = [ './root', './forms' ];
 
-	def.json = 'trace_form';
+	def.json = './base';
 }
 
 
@@ -49,6 +49,21 @@ def.lazyFuncStr.appendWidget =
 	)
 {
 	return trace_widget.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)form', this.key ].concat( this.last.asJSON.trace )
+		}
+	);
 };
 
 

@@ -37,4 +37,7 @@ global.VISUAL = false;
 	tim.catalog.addRootDir( rootPath, 'plotle', timcodePath );
 }
 
+// loads as console.inspect
+require( 'tim.js/src/inspect' );
+
 require( './root' ).singleton.start( );

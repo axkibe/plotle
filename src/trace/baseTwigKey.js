@@ -19,7 +19,6 @@ if( TIM )
 		// the key of the trace
 		key : { type : 'string' },
 	};
-
 }
 
 

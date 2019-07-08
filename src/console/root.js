@@ -11,14 +11,13 @@ tim.define( module, ( def ) => {
 def.singleton = true;
 
 
-global.util = require( 'util' );
+global.util = tim.require( 'util' );
 
+global.gleam_point = tim.require( '../gleam/point' );
+global.trace_base = tim.require( '../trace/base' );
 global.trace_root = tim.require( '../trace/root' );
-
 global.trace_space = tim.require( '../trace/space' );
-
-// loads as console.inspect
-require( 'tim.js/src/inspect' );
+global.change_set = tim.require( '../change/set' );
 
 
 def.proto.start =

@@ -15,17 +15,21 @@ if( TIM )
 	// path of trace back
 	def.list = [ './root' ];
 
-	def.json = 'trace_space';
+	def.json = './base';
 }
 
 
 const tim_path = tim.require( 'tim.js/path' );
+
+const trace_base = tim.require( './base' );
 
 const trace_item = tim.require( './item' );
 
 const trace_hasGrid = tim.require( './hasGrid' );
 
 const trace_hasSnapping = tim.require( './hasSnapping' );
+
+const trace_root = tim.require( './root' );
 
 
 /*
@@ -61,9 +65,55 @@ def.lazyFuncStr.appendItem =
 
 
 /*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace :
+				this.length > 0
+				? [ '(o)space' ].concat( this.last.asJSON.trace )
+				: [ ]
+		}
+	);
+};
+
+
+/*
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'space';
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)space' ) throw new Error( );
+/**/}
+
+	return(
+		trace_base.createFromJSONTrace( trace, pos + 1, trace_root.singleton )
+		.appendSpace
+	);
+};
+
+
+/*
+| If the trace starts with space as "fake root"
+| instead of tracing to root.space
+*/
+def.staticLazy.fakeRoot = ( ) => trace_space.create( );
 
 
 /*
@@ -112,24 +162,6 @@ def.lazy.toPath =
 | This is the space trace.
 */
 def.lazy.traceSpace = function( ) { return this; };
-
-
-/*
-| JSON converter.
-*/
-def.lazy.asJSON =
-	function( )
-{
-	return(
-		{
-			type : 'trace_space',
-			trace :
-				this.length > 0
-				? this.last.asJSON.trace.concat( [ '(o)space' ] )
-				: [ ]
-		}
-	);
-};
 
 
 } );

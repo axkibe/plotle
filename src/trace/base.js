@@ -4,10 +4,12 @@
 'use strict';
 
 
-tim.define( module, ( def, trace_bare ) => {
+tim.define( module, ( def, trace_base ) => {
 
 
 def.abstract = true;
+
+def.json = 'trace';
 
 
 const trace_checked = tim.require( './checked' );
@@ -21,6 +23,7 @@ const trace_item = tim.require( './item' );
 const trace_offset = tim.require( './offset' );
 const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
 const trace_para = tim.require( './para' );
+const trace_pos = tim.require( './pos' );
 const trace_root = tim.require( './root' );
 const trace_scrollPos = tim.require( './scrollPos' );
 const trace_space = tim.require( './space' );
@@ -50,6 +53,7 @@ def.proto.appendStep =
 		case trace_nonSpaceRef : return this.appendNonSpaceRef;
 		case trace_offset      : return this.appendOffset( step.key );
 		case trace_para        : return this.appendPara( step.key );
+		case trace_pos         : return this.appendPos;
 		case trace_scrollPos   : return this.appendScrollPos;
 		case trace_space       : return this.appendSpace;
 		case trace_text        : return this.appendText;
@@ -106,6 +110,46 @@ def.lazy.chopRoot =
 	return t.appendStep( this );
 };
 
+
+/*
+| Custom JSON creator.
+*/
+def.static.createFromJSON =
+	function(
+		json     // the json object
+	)
+{
+	if( json.type !== 'trace' ) throw new Error( );
+
+	const trace = json.trace;
+
+	if( !Array.isArray( trace ) ) throw new Error( );
+
+	return trace_base.createFromJSONTrace( trace, 0 );
+};
+
+
+/*
+| Used by recursive fromJSON creation.
+*/
+def.static.createFromJSONTrace =
+	function(
+		trace,
+		pos,
+		root   // uses this as root if the trace ends here
+	)
+{
+	if( pos >= trace.length ) return root;
+
+	switch( trace[ pos ] )
+	{
+		case '(o)doc'  : return trace_doc.createFromJSONStep( trace, pos );
+		case '(o)item'  : return trace_item.createFromJSONStep( trace, pos );
+		case '(o)pos'  : return trace_pos.createFromJSONStep( trace, pos );
+		case '(o)space' : return trace_space.createFromJSONStep( trace, pos );
+		default : throw new Error( );
+	}
+};
 
 
 /*

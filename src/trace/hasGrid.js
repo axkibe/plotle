@@ -14,7 +14,24 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root', './space' ];
+
+	def.json = './base';
 }
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)hasGrid' ].concat(this.last.asJSON.trace )
+		}
+	);
+};
 
 
 /*

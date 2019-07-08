@@ -15,7 +15,7 @@ if( TIM )
 	// path of trace back.
 	def.list = [ './root', './space', './item', './doc' ];
 
-	def.json = 'trace_para';
+	def.json = './base';
 }
 
 
@@ -33,15 +33,15 @@ def.lazy.appendText =
 
 
 /*
-| JSON converter.
+| Custom JSON converter.
 */
 def.lazy.asJSON =
 	function( )
 {
 	return(
 		{
-			type : 'trace_para',
-			trace : this.last.asJSON.trace.concat( [ '(o)para', this.key ] )
+			type : 'trace',
+			trace : [ '(o)para', this.key ].concat( this.last.asJSON.trace )
 		}
 	);
 };

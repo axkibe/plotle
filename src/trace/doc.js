@@ -15,9 +15,11 @@ if( TIM )
 	// path of trace back.
 	def.list = [ './root', './space', './item' ];
 
-	def.json = 'trace_doc';
+	def.json = './base';
 }
 
+
+const trace_base = tim.require( './base' );
 
 const trace_para = tim.require( './para' );
 
@@ -35,15 +37,15 @@ def.lazyFuncStr.appendPara =
 
 
 /*
-| JSON converter.
+| Custom JSON converter.
 */
 def.lazy.asJSON =
 	function( )
 {
 	return(
 		{
-			type : 'trace_doc',
-			trace : this.last.asJSON.trace.concat( [ '(o)doc' ] )
+			type : 'trace',
+			trace : [ '(o)doc' ].concat( this.last.asJSON.trace )
 		}
 	);
 };
@@ -53,6 +55,24 @@ def.lazy.asJSON =
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'doc';
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)doc' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendDoc;
+};
 
 
 /*

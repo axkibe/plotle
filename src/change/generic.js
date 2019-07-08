@@ -15,8 +15,6 @@ def.abstract = true;
 
 const change_list = tim.require( './list' );
 
-const trace_any = tim.require( '../trace/any' );
-
 
 /*
 | Reversivly performs this change on a tree.
@@ -27,16 +25,6 @@ def.proto.changeTreeReverse =
 	)
 {
 	return this.reversed.changeTree( tree );
-};
-
-
-/*
-| FIXME remove
-*/
-def.lazy.trace =
-	function( )
-{
-	return trace_any.createFromPath( this.path );
 };
 
 

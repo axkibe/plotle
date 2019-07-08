@@ -18,7 +18,7 @@ if( TIM )
 		key : { type : 'string' },
 	};
 
-	def.json = 'trace_field';
+	def.json = './base';
 
 	// path of trace back.
 	def.list = [ './root', './space', './item' ];
@@ -49,6 +49,21 @@ def.lazy.appendText =
 	function( )
 {
 	return trace_text.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)field', this.key ].concat( this.last.asJSON.trace )
+		}
+	);
 };
 
 

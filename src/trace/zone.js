@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './item', './root', './space' ];
+
+	def.json = './base';
 }
 
 
@@ -70,6 +72,21 @@ def.proto.pick =
 	)
 {
 	return this.last.pick( tree ).zone;
+};
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)zone' ].concat( this.last.asJSON.trace )
+		}
+	);
 };
 
 

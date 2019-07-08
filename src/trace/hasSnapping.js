@@ -14,6 +14,8 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root', './space' ];
+
+	def.json = './base';
 }
 
 
@@ -21,6 +23,21 @@ if( TIM )
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'hasSnapping';
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)hasSnapping' ].concat( this.last.asJSON.trace )
+		}
+	);
+};
 
 
 /*

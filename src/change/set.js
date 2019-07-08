@@ -14,8 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// set at this path
-		path : { type : 'tim.js/path', json : true },
+		// set at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 
 		// value to set
 		val : { type : [ 'undefined', '< ./value-types' ], json : true },
@@ -65,7 +65,7 @@ def.lazy.reversed =
 {
 	const inv =
 		change_set.create(
-			'path', this.path,
+			'trace', this.trace,
 			'val', this.prev,
 			'prev', this.val
 		);
@@ -136,7 +136,7 @@ def.proto._transformChangeSet =
 		cx
 	)
 {
-	if( !this.path.equals( cx.path ) ) return cx;
+	if( !this.trace.equals( cx.trace ) ) return cx;
 
 	if( cx.prev.equalsJSON( this.prev ) ) return cx.create( 'prev', this.val );
 
