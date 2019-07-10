@@ -14,8 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// grow at this path
-		path : { type : [ 'tim.js/path' ] , json : true },
+		// grow at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 
 		// value to grow
 		val : { type : [ '< ./value-types' ], json : true },
@@ -97,7 +97,7 @@ def.lazy.reversed =
 {
 	const inv =
 		change_shrink.create(
-			'path', this.path,
+			'trace', this.trace,
 			'prev', this.val,
 			'rank', this.rank
 		);

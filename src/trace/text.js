@@ -29,6 +29,8 @@ if( TIM )
 }
 
 
+const trace_base = tim.require( './base' );
+
 const trace_offset = tim.require( './offset' );
 
 
@@ -63,6 +65,24 @@ def.lazy.asJSON =
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'text';
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)text' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendText;
+};
 
 
 /*

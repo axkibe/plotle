@@ -18,12 +18,12 @@ if( TIM )
 		// must be length of text
 		at1 : { type : 'integer', json : true },
 
-		// join at this path
-		path : { type : 'tim.js/path', json : true },
+		// join at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 
 		// join this
-		// must be after path
-		path2 : { type : 'tim.js/path', json : true },
+		// must be after trace
+		trace2 : { type : [ '< ../trace/change-types' ], json : true },
 	};
 
 	def.json = 'change_join';
@@ -57,8 +57,6 @@ const mark_items = tim.require( '../mark/items' );
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
-
-const trace_any = tim.require( '../trace/any' );
 
 const trace_offset = tim.require( '../trace/offset' );
 
@@ -134,24 +132,14 @@ def.lazy.reversed =
 {
 	const inv =
 		change_split.create(
-			'path', this.path,
 			'at1', this.at1,
-			'path2', this.path2
+			'trace', this.trace,
+			'trace2', this.trace2
 		);
 
 	tim.aheadValue( inv, 'reversed', this );
 
 	return inv;
-};
-
-
-/*
-| FIXME remove
-*/
-def.lazy.trace2 =
-	function( )
-{
-	return trace_any.createFromPath( this.path2 );
 };
 
 
@@ -220,7 +208,7 @@ def.proto._transformInsertRemove =
 
 	return(
 		cx.create(
-			'path', this.path,
+			'trace', this.trace,
 			'at1', cx.at1 + this.at1,
 			'at2', cx.at2 + this.at1
 		)
@@ -246,7 +234,7 @@ def.proto._transformJoinSplit =
 
 	return(
 		cx.create(
-			'path', this.path,
+			'trace', this.trace,
 			'at1', cx.at1 + this.at1
 		)
 	);

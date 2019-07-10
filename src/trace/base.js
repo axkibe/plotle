@@ -19,6 +19,8 @@ const trace_doc = tim.require( './doc' );
 const trace_field = tim.require( './field' );
 const trace_form = tim.require( './form' );
 const trace_forms = tim.require( './forms' );
+const trace_hasGrid = tim.require( './hasGrid' );
+const trace_hasSnapping = tim.require( './hasSnapping' );
 const trace_item = tim.require( './item' );
 const trace_offset = tim.require( './offset' );
 const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
@@ -143,11 +145,17 @@ def.static.createFromJSONTrace =
 
 	switch( trace[ pos ] )
 	{
-		case '(o)doc'  : return trace_doc.createFromJSONStep( trace, pos );
-		case '(o)item'  : return trace_item.createFromJSONStep( trace, pos );
-		case '(o)pos'  : return trace_pos.createFromJSONStep( trace, pos );
-		case '(o)space' : return trace_space.createFromJSONStep( trace, pos );
-		default : throw new Error( );
+		case '(o)doc'         : return trace_doc.createFromJSONStep( trace, pos );
+		case '(o)field'       : return trace_field.createFromJSONStep( trace, pos );
+		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
+		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
+		case '(o)item'        : return trace_item.createFromJSONStep( trace, pos );
+		case '(o)offset'      : return trace_offset.createFromJSONStep( trace, pos );
+		case '(o)para'        : return trace_para.createFromJSONStep( trace, pos );
+		case '(o)pos'         : return trace_pos.createFromJSONStep( trace, pos );
+		case '(o)space'       : return trace_space.createFromJSONStep( trace, pos );
+		case '(o)text'        : return trace_text.createFromJSONStep( trace, pos );
+		default : throw new Error( trace[ pos ] );
 	}
 };
 

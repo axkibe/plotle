@@ -19,18 +19,19 @@ if( TIM )
 }
 
 
+const trace_base = tim.require( './base' );
+
+
 /*
 | Custom JSON converter.
 */
 def.lazy.asJSON =
 	function( )
 {
-	return(
-		{
-			type : 'trace',
-			trace : [ '(o)hasGrid' ].concat(this.last.asJSON.trace )
-		}
-	);
+	return( {
+		type : 'trace',
+		trace : [ '(o)hasGrid' ].concat(this.last.asJSON.trace )
+	});
 };
 
 
@@ -38,6 +39,24 @@ def.lazy.asJSON =
 | The trace step as string (for debugging).
 */
 def.lazy.asStringStep = ( ) => 'hasGrid';
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)hasGrid' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendHasGrid;
+};
 
 
 /*

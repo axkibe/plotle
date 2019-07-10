@@ -14,14 +14,14 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// the value the tree had
+		prev : { type : [ 'undefined', '< ./value-types' ], json : true },
+
 		// set at this trace
 		trace : { type : [ '< ../trace/change-types' ], json : true },
 
 		// value to set
 		val : { type : [ 'undefined', '< ./value-types' ], json : true },
-
-		// the value the tree had
-		prev : { type : [ 'undefined', '< ./value-types' ], json : true },
 	};
 
 	def.json = 'change_set';

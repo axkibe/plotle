@@ -14,8 +14,8 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// shrinks at this path
-		path : { type : 'tim.js/path', json : true },
+		// shrinks at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 
 		// value the tree had
 		prev : { type : [ '< ./value-types' ], json : true },
@@ -77,7 +77,7 @@ def.lazy.reversed =
 {
 	const inv =
 		change_grow.create(
-			'path', this.path,
+			'trace', this.trace,
 			'val', this.prev,
 			'rank', this.rank
 		);
@@ -97,21 +97,16 @@ def.proto.changeTree =
 	)
 {
 	// Stores the old value for history tracking.
-	const prev = tree.getPath( this.path );
+	const prev = this.trace.pick( tree );
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{
 		throw error.make( 'shrink.prev doesn\'t match' );
 	}
 
-	if( this.path.get( -2 ) !== 'twig' )
-	{
-		throw error.make( 'shrink.path( -2 ) with rank not twig' );
-	}
+	let pivot = this.trace.last.pick( tree );
 
-	let pivot = tree.getPath( this.path.shorten.shorten );
-
-	const key = this.path.get( -1 );
+	const key = this.trace.key;
 
 	const rank = pivot.rankOf( key );
 
@@ -119,10 +114,7 @@ def.proto.changeTree =
 
 	pivot = pivot.create( 'twig:remove', key );
 
-	if( this.path.length > 2 ) tree = tree.setPath( this.path.shorten.shorten, pivot );
-	else tree = pivot;
-
-	return tree;
+	return this.trace.last.graft( tree, pivot );
 };
 
 
@@ -163,7 +155,7 @@ def.proto._transformGrowShrink =
 		c
 	)
 {
-	if( !this.path.shorten.equals( c.path.shorten ) ) return c;
+	if( !this.trace.last.equals( c.trace.last ) ) return c;
 
 	if( this.rank > c.rank ) return c;
 
@@ -180,7 +172,7 @@ def.proto._transformJIRS =
 		cx
 	)
 {
-	if( !this.path.subPathOf( cx.path ) ) return cx;
+	if( !this.trace.hasTrace( cx.trace ) ) return cx;
 
 	// otherwise it is gone!
 };

@@ -14,12 +14,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// removes at this path
-		path : { json : true, type : 'tim.js/path' },
-
-		// source sign
-		val : { json : true, type : 'string' },
-
 		// remove at this place begin
 		at1 : { json : true, type : 'integer' },
 
@@ -27,6 +21,12 @@ if( TIM )
 		// must be at1 + val.length
 		// FUTURE have it lazyEval
 		at2 : { json : true, type : 'integer' },
+
+		// text removed
+		val : { json : true, type : 'string' },
+
+		// removes at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 	};
 
 	def.json = 'change_remove';
@@ -87,7 +87,7 @@ def.lazy.reversed =
 {
 	const inv =
 		change_insert.create(
-			'path', this.path,
+			'trace', this.trace,
 			'val', this.val,
 			'at1', this.at1,
 			'at2', this.at2

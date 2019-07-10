@@ -17,11 +17,11 @@ if( TIM )
 		// insert at this place begin
 		at1 : { type : 'integer', json : true },
 
-		// split at this path
-		path : { type : 'tim.js/path', json : true },
+		// splits at this trace
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 
-		// split created this new/next path
-		path2 : { type : 'tim.js/path', json : true }
+		// the split creates this new/next trace
+		trace2 : { type : [ '< ../trace/change-types' ], json : true },
 	};
 
 	def.json = 'change_split';
@@ -55,8 +55,6 @@ const mark_items = tim.require( '../mark/items' );
 const mark_range = tim.require( '../mark/range' );
 
 const mark_widget = tim.require( '../mark/widget' );
-
-const trace_any = tim.require( '../trace/any' );
 
 const trace_offset = tim.require( '../trace/offset' );
 
@@ -124,21 +122,15 @@ def.lazy.reversed =
 {
 	const inv =
 		change_join.create(
-			'path', this.path,
 			'at1', this.at1,
-			'path2', this.path2
+			'trace', this.trace,
+			'trace2', this.trace2
 		);
 
 	tim.aheadValue( inv, 'reversed', this );
 
 	return inv;
 };
-
-
-/*
-| FIXME remove
-*/
-def.lazy.trace2 = function( ) { return trace_any.createFromPath( this.path2 ); };
 
 
 /*
@@ -205,7 +197,7 @@ def.proto._transformInsert =
 	// in the splitted line
 	return(
 		cx.create(
-			'path', this.path2,
+			'trace', this.trace2,
 			'at1', cx.at1 - this.at1,
 			'at2', cx.at2 - this.at1
 		)
@@ -238,7 +230,7 @@ def.proto._transformJoinSplit =
 	// in the splitted line
 	return(
 		cx.create(
-			'path', this.path2,
+			'trace', this.trace2,
 			'at1', cx.at1 - this.at1
 		)
 	);
@@ -303,7 +295,7 @@ def.proto._transformRemove =
 		// case 2, the remove happend in splited line
 
 		return cx.create(
-			'path', this.path2,
+			'trace', this.trace2,
 			'at1', cx.at1 - this.at1,
 			'at2', cx.at2 - this.at1
 		);
@@ -322,7 +314,7 @@ def.proto._transformRemove =
 					cx.create(
 						'at1', 0,
 						'at2', cx.at2 - this.at1,
-						'path', this.path2,
+						'trace', this.trace2,
 						'val', cx.val.substring( this.at1 - cx.at1 )
 					)
 				]

@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, trace_text ) => {
+tim.define( module, ( def ) => {
 
 
 def.extend = './base';
@@ -20,24 +20,7 @@ if( TIM )
 		'./root',
 		'./widget'
 	];
-
-	def.json = './base';
 }
-
-
-/*
-| Custom JSON converter.
-*/
-def.lazy.asJSON =
-	function( )
-{
-	return(
-		{
-			type : 'trace',
-			trace : [ '(o)text' ].concat( this.last.asJSON.trace )
-		}
-	);
-};
 
 
 /*

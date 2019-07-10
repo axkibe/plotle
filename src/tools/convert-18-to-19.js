@@ -9,9 +9,6 @@
 */
 const dry = false;
 
-// diabling for now
-if( dry === false ) return false;
-
 const config =
 {
 	src :
@@ -164,7 +161,7 @@ const run =
 
 	let o = await srcGlobal.findOne( { _id : 'version' } );
 
-	if( o.version !== 17 ) throw new Error( 'src is not a v17 repository' );
+	if( o.version !== 18 ) throw new Error( 'src is not a v18 repository' );
 
 	console.log( '* connecting to trg' );
 

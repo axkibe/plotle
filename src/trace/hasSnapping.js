@@ -19,6 +19,9 @@ if( TIM )
 }
 
 
+const trace_base = tim.require( './base' );
+
+
 /*
 | The trace step as string (for debugging).
 */
@@ -37,6 +40,24 @@ def.lazy.asJSON =
 			trace : [ '(o)hasSnapping' ].concat( this.last.asJSON.trace )
 		}
 	);
+};
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)hasSnapping' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendHasSnapping;
 };
 
 

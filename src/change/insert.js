@@ -25,8 +25,9 @@ if( TIM )
 		// insert this
 		val : { type : 'string', json : true },
 
-		// insert at this path
-		path : { type : 'tim.js/path', json : true },
+		// insert at this trace
+		// FIXME fix to offset
+		trace : { type : [ '< ../trace/change-types' ], json : true },
 	};
 
 	def.json = 'change_insert';
@@ -95,7 +96,7 @@ def.lazy.reversed =
 {
 	const inv =
 		change_remove.create(
-			'path', this.path,
+			'trace', this.trace,
 			'val', this.val,
 			'at1', this.at1,
 			'at2', this.at2

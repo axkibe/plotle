@@ -14,27 +14,10 @@ if( TIM )
 {
 	// path of trace back.
 	def.list = [ './form', './forms', './item', './root', './space', './widget' ];
-
-	def.json = './base';
 }
 
 
 const gleam_point = tim.require( '../gleam/point' );
-
-
-/*
-| Custom JSON converter.
-*/
-def.lazy.asJSON =
-	function( )
-{
-	return(
-		{
-			type : 'trace',
-			trace : [ '(o)offset', this.at ].concat( this.last.asJSON.trace )
-		}
-	);
-};
 
 
 /*

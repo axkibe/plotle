@@ -37,29 +37,6 @@ const trace_zone = tim.require( './zone' );
 
 
 /*
-| Creates one step from the a JSON.
-*/
-def.static.createFromJSONStep =
-	function(
-		trace, // the json trace
-		pos    // the position in the trace
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( trace[ pos ] !== '(o)item' ) throw new Error( );
-/**/}
-
-	const key = trace[ pos + 1 ];
-
-	return(
-		trace_base.createFromJSONTrace( trace, pos + 2, trace_space.fakeRoot )
-		.appendItem( key )
-	);
-};
-
-
-/*
 | Returns a trace with a doc part appended.
 */
 def.lazy.appendDoc =
@@ -145,6 +122,29 @@ def.lazy.asStringStep =
 	function( )
 {
 	return 'item(' + this.key + ')';
+};
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)item' ) throw new Error( );
+/**/}
+
+	const key = trace[ pos + 1 ];
+
+	return(
+		trace_base.createFromJSONTrace( trace, pos + 2, trace_space.fakeRoot )
+		.appendItem( key )
+	);
 };
 
 

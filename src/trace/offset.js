@@ -37,6 +37,9 @@ if( TIM )
 }
 
 
+const trace_base = tim.require( './base' );
+
+
 /*
 | Custom JSON converter.
 */
@@ -89,6 +92,26 @@ def.proto.changeTo =
 	)
 {
 	return this.get( this.length - 1 ).appendText.appendOffset( at );
+};
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)offset' ) throw new Error( );
+/**/}
+
+	const at = trace[ pos + 1 ];
+
+	return trace_base.createFromJSONTrace( trace, pos + 2 ).appendOffset( at );
 };
 
 
