@@ -46,6 +46,9 @@ if( TIM )
 const DELAY_ALTER = false;
 const DELAY_ACQUIRE = false;
 
+// XXX
+tim.require( '../trace/base' );
+
 const config = tim.require( '../config/intf' );
 
 const fs = tim.require( 'fs' );

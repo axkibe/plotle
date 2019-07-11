@@ -19,6 +19,8 @@ if( TIM )
 }
 
 
+const trace_base = tim.require( './base' );
+
 const trace_pos = tim.require( './pos' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
@@ -87,6 +89,24 @@ def.lazy.asJSON =
 			trace : [ '(o)zone' ].concat( this.last.asJSON.trace )
 		}
 	);
+};
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)zone' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendZone;
 };
 
 

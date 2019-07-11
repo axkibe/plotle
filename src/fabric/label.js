@@ -64,8 +64,6 @@ const gruga_label = tim.require( '../gruga/label' );
 
 const session_uid = tim.require( '../session/uid' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_root = tim.require( '../trace/root' );
 
 const mark_caret = tim.require( '../mark/caret' );
@@ -111,8 +109,6 @@ def.static.createGeneric =
 
 	const key = session_uid.newUid( );
 
-	const path = tim_path.empty.append( 'twig' ).append( key );
-
 	const trace = trace_root.singleton.appendSpace.appendItem( key );
 
 /**/if( CHECK )
@@ -121,7 +117,7 @@ def.static.createGeneric =
 /**/}
 
 	root.alter(
-		'change', change_grow.create( 'val', label, 'path', path, 'rank', 0 ),
+		'change', change_grow.create( 'val', label, 'trace', trace, 'rank', 0 ),
 		'mark',
 			mark_caret.create(
 				'offset', trace.appendDoc.appendPara( '1' ).appendText.appendOffset( 0 )
@@ -199,14 +195,14 @@ def.proto.markLost =
 {
 	if( this.doc.isBlank )
 	{
-		const pc = this.path.chop;
+		const pl = this.trace.last;
 
 		root.alter(
 			'change',
 				change_shrink.create(
-					'path', pc,
-					'prev', root.space.getPath( pc ),
-					'rank', root.space.rankOf( pc.get( 1 ) )
+					'trace', pl,
+					'prev', pl.pick( root ),
+					'rank', root.space.rankOf( pl.traceItem.key )
 				)
 		);
 	}
@@ -264,7 +260,7 @@ def.proto.ancillary =
 
 	const c =
 		change_set.create(
-			'path', this.path.chop.append( 'zone' ),
+			'trace', this.trace.traceItem.appendZone,
 			'prev', zone,
 			'val', zone.create( 'height', height, 'width', width )
 		);

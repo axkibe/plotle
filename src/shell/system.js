@@ -14,22 +14,22 @@ if( TIM )
 	def.attributes =
 	{
 		// the transmitter creator is used to catch errors.
-		transmitter : { type : 'protean' },
+		transmitter : { type : 'function' },
 
 		// used to transmit animation events
-		_animationTransmitter : { type : 'protean' },
+		_animationTransmitter : { type : 'function' },
 
 		// used for blinking the caret
-		_blinkTransmitter : { type : 'protean' },
+		_blinkTransmitter : { type : 'function' },
 
 		// the display
 		_display : { type : 'protean' },
 
 		// used for starting drags after timeout
-		_onAtweenTimeTransmitter : { type : 'protean' },
+		_onAtweenTimeTransmitter : { type : 'function' },
 
 		// used to test the hidden input
-		_testInputTransmitter : { type : 'protean' },
+		_testInputTransmitter : { type : 'function' },
 
 		// if true browser supports the setCapture( ) call
 		// if false needs work around

@@ -18,10 +18,10 @@ if( TIM )
 		at1 : { type : 'integer', json : true },
 
 		// splits at this trace
-		trace : { type : [ '< ../trace/change-types' ], json : true },
+		trace : { type : '../trace/text', json : true },
 
 		// the split creates this new/next trace
-		trace2 : { type : [ '< ../trace/change-types' ], json : true },
+		trace2 : { type : '../trace/text', json : true },
 	};
 
 	def.json = 'change_split';

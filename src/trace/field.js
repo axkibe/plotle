@@ -90,7 +90,7 @@ def.static.createFromJSONStep =
 {
 	if( CHECK )
 /**/{
-/**/	if( trace[ pos ] !== '(o)hasSnapping' ) throw new Error( );
+/**/	if( trace[ pos ] !== '(o)field' ) throw new Error( );
 /**/}
 
 	const key = trace[ pos + 1 ];

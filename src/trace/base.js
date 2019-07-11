@@ -118,7 +118,7 @@ def.lazy.chopRoot =
 */
 def.static.createFromJSON =
 	function(
-		json     // the json object
+		json  // the json object
 	)
 {
 	if( json.type !== 'trace' ) throw new Error( );
@@ -127,7 +127,7 @@ def.static.createFromJSON =
 
 	if( !Array.isArray( trace ) ) throw new Error( );
 
-	return trace_base.createFromJSONTrace( trace, 0 );
+	return trace_base.createFromJSONTrace( trace, 0, trace_space.fakeRoot );
 };
 
 
@@ -155,6 +155,7 @@ def.static.createFromJSONTrace =
 		case '(o)pos'         : return trace_pos.createFromJSONStep( trace, pos );
 		case '(o)space'       : return trace_space.createFromJSONStep( trace, pos );
 		case '(o)text'        : return trace_text.createFromJSONStep( trace, pos );
+		case '(o)zone'        : return trace_zone.createFromJSONStep( trace, pos );
 		default : throw new Error( trace[ pos ] );
 	}
 };

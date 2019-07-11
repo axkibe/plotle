@@ -26,7 +26,7 @@ if( TIM )
 		val : { json : true, type : 'string' },
 
 		// removes at this trace
-		trace : { type : [ '< ../trace/change-types' ], json : true },
+		trace : { type : [ '../trace/field', '../trace/text' ], json : true },
 	};
 
 	def.json = 'change_remove';

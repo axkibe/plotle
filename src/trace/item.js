@@ -25,8 +25,6 @@ const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
 
-const trace_pos = tim.require( './pos' );
-
 const trace_scrollPos = tim.require( './scrollPos' );
 
 const trace_space = tim.require( './space' );
@@ -71,11 +69,13 @@ def.lazy.appendScrollPos =
 /*
 | Returns a trace with a scrollPos appended.
 */
+/* XX
 def.lazy.appendPos =
 	function( )
 {
 	return trace_pos.create( 'list:init', this, 'list:append', this );
 };
+*/
 
 
 /*

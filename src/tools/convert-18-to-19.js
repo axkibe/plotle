@@ -4,6 +4,9 @@
 'use strict';
 
 
+//Error.stackTraceLimit = Infinity;
+
+
 /*
 | If true doesn't do anything to the target.
 */
@@ -95,15 +98,32 @@ const convertJson =
 {
 	const keys = Object.keys( obj );
 
-	for( let key in keys )
+	for( let key of keys )
 	{
 		if( key === 'path' )
 		{
-			const path = tim_path.creaetFromJSON( obj.path );
+			const path = tim_path.createFromJSON( obj.path );
 
-			obj.trace = trace_any.createFromPath( path );
+			obj.trace =
+				JSON.parse( JSON.stringify(
+					trace_any.createFromPath( path )
+				) );
 
 			delete obj.path;
+
+			continue;
+		}
+
+		if( key === 'path2' )
+		{
+			const path2 = tim_path.createFromJSON( obj.path2 );
+
+			obj.trace2 =
+				JSON.parse( JSON.stringify(
+					trace_any.createFromPath( path2 )
+				) );
+
+			delete obj.path2;
 
 			continue;
 		}
@@ -183,7 +203,7 @@ const run =
 
 	console.log( '* creating trg.global' );
 
-	if( !dry ) await trgGlobal.insert( { _id : 'version', version : 18 } );
+	if( !dry ) await trgGlobal.insert( { _id : 'version', version : 19 } );
 
 	console.log( '* converting src.users -> trg.users' );
 

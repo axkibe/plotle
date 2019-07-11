@@ -19,11 +19,11 @@ if( TIM )
 		at1 : { type : 'integer', json : true },
 
 		// join at this trace
-		trace : { type : [ '< ../trace/change-types' ], json : true },
+		trace : { type : '../trace/text', json : true },
 
 		// join this
 		// must be after trace
-		trace2 : { type : [ '< ../trace/change-types' ], json : true },
+		trace2 : { type : '../trace/text', json : true },
 	};
 
 	def.json = 'change_join';

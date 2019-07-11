@@ -1,8 +1,10 @@
 # used by changes, FIXME remove and make changes more specific
 ./doc
+./field
 ./item
 ./offset
 ./para
 ./pos
 ./space
 ./text
+./zone

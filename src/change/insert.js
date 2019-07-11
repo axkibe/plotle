@@ -26,8 +26,7 @@ if( TIM )
 		val : { type : 'string', json : true },
 
 		// insert at this trace
-		// FIXME fix to offset
-		trace : { type : [ '< ../trace/change-types' ], json : true },
+		trace : { type : [ '../trace/field', '../trace/text' ], json : true },
 	};
 
 	def.json = 'change_insert';

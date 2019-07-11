@@ -131,8 +131,8 @@ def.lazy.attentionCenter =
 
 
 /*
-| Returns the mark if an item with 'path' concerns about
-| the mark.
+| Returns the mark if a para with 'trace' concerns about
+| it.
 */
 def.static.concernsMark =
 	function(
@@ -405,7 +405,7 @@ def.proto.input =
 
 	const reg = /([^\n]+)(\n?)/g;
 
-	let textPath = this.textPath;
+	let trace = this.trace.chopRoot;
 
 	let at = this.mark.caretOffset.at;
 
@@ -416,7 +416,7 @@ def.proto.input =
 		changes.push(
 			change_insert.create(
 				'val', line,
-				'path', textPath.chop,
+				'trace', trace.appendText,
 				'at1', at,
 				'at2', at + line.length
 			)
@@ -424,17 +424,17 @@ def.proto.input =
 
 		if( rx[ 2 ] )
 		{
-			const textPath2 = textPath.set( -2, session_uid.newUid( ) );
+			const trace2 = trace.last.appendPara( session_uid.newUid( ) );
 
 			changes.push(
 				change_split.create(
-					'path', textPath.chop,
-					'path2', textPath2.chop,
+					'trace', trace.appendText,
+					'trace2', trace2.appendText,
 					'at1', at + line.length
 				)
 			);
 
-			textPath = textPath2;
+			trace = trace2;
 
 			at = 0;
 		}
@@ -567,16 +567,6 @@ def.proto.specialKey =
 
 
 /*
-| The path to the .text attribute
-*/
-def.lazy.textPath =
-	function( )
-{
-	return this.path.append( 'text' );
-};
-
-
-/*
 | Backspace pressed.
 */
 def.proto._keyBackspace =
@@ -592,7 +582,7 @@ def.proto._keyBackspace =
 		root.alter(
 			'change',
 				change_remove.create(
-					'path', this.textPath.chop,
+					'trace', this.trace.appendText.chopRoot,
 					'at1', at - 1,
 					'at2', at,
 					'val', this.text.substring( at - 1, at )
@@ -617,8 +607,8 @@ def.proto._keyBackspace =
 	root.alter(
 		'change',
 			change_join.create(
-				'path', ve.textPath.chop,
-				'path2', this.textPath.chop,
+				'trace', ve.trace.appendText.chopRoot,
+				'trace2', this.trace.appendText.chopRoot,
 				'at1', ve.text.length
 			),
 		'clearRetainX', true
@@ -642,7 +632,7 @@ def.proto._keyDel =
 		root.alter(
 			'change',
 				change_remove.create(
-					'path', this.textPath.chop,
+					'trace', this.trace.appendText.chopRoot,
 					'at1', at,
 					'at2', at + 1,
 					'val', this.text.substring( at, at + 1 )
@@ -665,8 +655,8 @@ def.proto._keyDel =
 	root.alter(
 		'change',
 			change_join.create(
-				'path', this.textPath.chop,
-				'path2', doc.atRank( r + 1).textPath.chop,
+				'trace', this.trace.chopRoot,
+				'trace2', doc.atRank( r + 1).trace.chopRoot,
 				'at1', this.text.length
 			),
 		'clearRetainX', true
@@ -746,15 +736,13 @@ def.proto._keyEnter =
 		beginOffset
 	)
 {
-	const tpc = this.textPath.chop;
-
 	root.alter(
 		'change',
-		change_split.create(
-			'path', tpc,
-			'path2', tpc.set( -2, session_uid.newUid( ) ),
-			'at1', at
-		)
+			change_split.create(
+				'trace', this.trace.appendText.chopRoot,
+				'trace2', this.trace.last.appendPara( session_uid.newUid( ) ).appendText.chopRoot,
+				'at1', at
+			)
 	);
 };
 

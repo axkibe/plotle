@@ -282,7 +282,7 @@ def.proto._pushChangesAffectedZone =
 
 	changes.push(
 		change_set.create(
-			'path', item.path.chop.append( 'zone' ),
+			'trace', item.trace.appendZone.chopRoot,
 			'val', aZone,
 			'prev', iZone
 		)
@@ -307,7 +307,7 @@ def.proto._pushChangesAffectedPosFs =
 	{
 		changes.push(
 			change_set.create(
-				'path', item.path.chop.append( 'zone' ).append( 'pos' ),
+				'trace', item.trace.appendZone.appendPos.chopRoot,
 				'val', aPos,
 				'prev', iPos
 			)
@@ -327,7 +327,7 @@ def.proto._pushChangesAffectedPosFs =
 	{
 		changes.push(
 			change_set.create(
-				'path', item.path.chop.append( 'fontsize' ),
+				'trace', item.trace.appendFontsize.chopRoot,
 				'val', aFs,
 				'prev', iFs
 			)
@@ -368,7 +368,7 @@ def.proto._pushChangesAffectedj1p =
 
 	changes.push(
 		change_set.create(
-			'path', item.path.chop.append( 'j1' ),
+			'trace', item.trace.appendJ1.chopRoot, // XXX
 			'val', aj,
 			'prev', ij
 		)
@@ -393,7 +393,7 @@ def.proto._pushChangesAffectedj2p =
 
 	changes.push(
 		change_set.create(
-			'path', item.path.chop.append( 'j2' ),
+			'trace', item.trace.appendJ2.chopRoot,
 			'val', aj,
 			'prev', ij
 		)
