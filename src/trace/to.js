@@ -1,10 +1,11 @@
 /*
-| A trace into a 'hasSnapping' setting
+| A trace into a from point.
+| FIXME call them all jp2
 */
 'use strict';
 
 
-tim.define( module, ( def, trace_hasSnapping ) => {
+tim.define( module, ( def ) => {
 
 
 def.extend = './base';
@@ -13,7 +14,7 @@ def.extend = './base';
 if( TIM )
 {
 	// path of trace back.
-	def.list = [ './root', './space' ];
+	def.list = [ './item', './root', './space' ];
 
 	def.json = './base';
 }
@@ -21,7 +22,7 @@ if( TIM )
 
 const trace_base = tim.require( './base' );
 
-const trace_space = tim.require( './space' );
+const gleam_point = tim.require( '../gleam/point' );
 
 
 /*
@@ -33,7 +34,7 @@ def.lazy.asJSON =
 	return(
 		{
 			type : 'trace',
-			trace : [ '(o)hasSnapping' ].concat( this.last.asJSON.trace )
+			trace : [ '(o)to' ].concat( this.last.asJSON.trace )
 		}
 	);
 };
@@ -42,7 +43,7 @@ def.lazy.asJSON =
 /*
 | The trace step as string (for debugging).
 */
-def.lazy.asStringStep = ( ) => 'hasSnapping';
+def.lazy.asStringStep = ( ) => 'to';
 
 
 /*
@@ -56,10 +57,10 @@ def.static.createFromJSONStep =
 {
 	if( CHECK )
 /**/{
-/**/	if( trace[ pos ] !== '(o)hasSnapping' ) throw new Error( );
+/**/	if( trace[ pos ] !== '(o)to' ) throw new Error( );
 /**/}
 
-	return trace_base.createFromJSONTrace( trace, pos + 1, trace_space.fakeRoot ).appendHasSnapping;
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendTo;
 };
 
 
@@ -70,17 +71,17 @@ def.static.createFromJSONStep =
 def.proto.graft =
 	function(
 		tree,
-		val
+		p
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( typeof( val ) !== 'boolean' ) throw new Error( );
+/**/	if( p.timtype !== gleam_point ) throw new Error( );
 /**/}
 
 	let sub = this.last.pick( tree );
 
-	sub = sub.create( 'hasSnapping', val );
+	sub = sub.create( 'to', p );
 
 	return this.last.graft( tree, sub );
 };
@@ -94,17 +95,7 @@ def.proto.pick =
 		tree
 	)
 {
-	return this.last.pick( tree ).hasSnapping;
-};
-
-
-/*
-| FIXME remove.
-*/
-def.lazy.toPath =
-	function( )
-{
-	return this.get( this.length - 1 ).toPath.append( 'hasSnapping' );
+	return this.last.pick( tree ).to;
 };
 
 

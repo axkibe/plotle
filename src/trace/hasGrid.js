@@ -21,6 +21,8 @@ if( TIM )
 
 const trace_base = tim.require( './base' );
 
+const trace_space = tim.require( './space' );
+
 
 /*
 | Custom JSON converter.
@@ -55,7 +57,7 @@ def.static.createFromJSONStep =
 /**/	if( trace[ pos ] !== '(o)hasGrid' ) throw new Error( );
 /**/}
 
-	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendHasGrid;
+	return trace_base.createFromJSONTrace( trace, pos + 1, trace_space.fakeRoot ).appendHasGrid;
 };
 
 

@@ -25,6 +25,10 @@ const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
 
+const trace_jp1 = tim.require( './jp1' );
+
+const trace_jp2 = tim.require( './jp2' );
+
 const trace_scrollPos = tim.require( './scrollPos' );
 
 const trace_space = tim.require( './space' );
@@ -57,6 +61,26 @@ def.lazyFuncStr.appendField =
 
 
 /*
+| Returns a trace with a jp1 part appended.
+*/
+def.lazy.appendJP1 =
+	function( )
+{
+	return trace_jp1.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Returns a trace with a jp1 part appended.
+*/
+def.lazy.appendJP2 =
+	function( )
+{
+	return trace_jp2.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
 | Returns a trace with a scrollPos appended.
 */
 def.lazy.appendScrollPos =
@@ -64,18 +88,6 @@ def.lazy.appendScrollPos =
 {
 	return trace_scrollPos.create( 'list:init', this, 'list:append', this );
 };
-
-
-/*
-| Returns a trace with a scrollPos appended.
-*/
-/* XX
-def.lazy.appendPos =
-	function( )
-{
-	return trace_pos.create( 'list:init', this, 'list:append', this );
-};
-*/
 
 
 /*

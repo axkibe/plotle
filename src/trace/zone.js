@@ -27,18 +27,51 @@ const gleam_rect = tim.require( '../gleam/rect' );
 
 
 /*
-| The trace step as string (for debugging).
-*/
-def.lazy.asStringStep = ( ) => 'zone';
-
-
-/*
 | Returns a trace with a scrollPos appended.
 */
 def.lazy.appendPos =
 	function( )
 {
 	return trace_pos.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Custom JSON converter.
+*/
+def.lazy.asJSON =
+	function( )
+{
+	return(
+		{
+			type : 'trace',
+			trace : [ '(o)zone' ].concat( this.last.asJSON.trace )
+		}
+	);
+};
+
+
+/*
+| The trace step as string (for debugging).
+*/
+def.lazy.asStringStep = ( ) => 'zone';
+
+
+/*
+| Creates one step from the a JSON.
+*/
+def.static.createFromJSONStep =
+	function(
+		trace, // the json trace
+		pos    // the position in the trace
+	)
+{
+	if( CHECK )
+/**/{
+/**/	if( trace[ pos ] !== '(o)zone' ) throw new Error( );
+/**/}
+
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendZone;
 };
 
 
@@ -74,39 +107,6 @@ def.proto.pick =
 	)
 {
 	return this.last.pick( tree ).zone;
-};
-
-
-/*
-| Custom JSON converter.
-*/
-def.lazy.asJSON =
-	function( )
-{
-	return(
-		{
-			type : 'trace',
-			trace : [ '(o)zone' ].concat( this.last.asJSON.trace )
-		}
-	);
-};
-
-
-/*
-| Creates one step from the a JSON.
-*/
-def.static.createFromJSONStep =
-	function(
-		trace, // the json trace
-		pos    // the position in the trace
-	)
-{
-	if( CHECK )
-/**/{
-/**/	if( trace[ pos ] !== '(o)zone' ) throw new Error( );
-/**/}
-
-	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendZone;
 };
 
 

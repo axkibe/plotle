@@ -263,7 +263,7 @@ def.proto.pushButton =
 
 				change.push(
 					change_shrink.create(
-						'path', itemTrace.chopRoot.toPath,
+						'trace', itemTrace.chopRoot,
 						'prev', itemTrace.pick( root ),
 						'rank', rank - rc
 					)

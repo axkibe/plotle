@@ -89,7 +89,10 @@ def.proto.changeTree =
 
 	if( prev !== this.prev && !prev.equalsJSON( this.prev ) )
 	{
-		console.log( 'set.prev mismatch', prev, this.prev );
+		console.log( 'set.prev mismatch' );
+		console.log( 'trace:', this.trace.asString );
+		console.log( 'prev:', prev );
+		console.log( 'this.prev:', this.prev );
 
 		throw error.make( 'set.prev doesn\'t match' );
 	}

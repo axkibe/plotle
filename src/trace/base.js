@@ -22,8 +22,10 @@ const trace_forms = tim.require( './forms' );
 const trace_hasGrid = tim.require( './hasGrid' );
 const trace_hasSnapping = tim.require( './hasSnapping' );
 const trace_item = tim.require( './item' );
-const trace_offset = tim.require( './offset' );
+const trace_jp1 = tim.require( './jp1' );
+const trace_jp2 = tim.require( './jp2' );
 const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
+const trace_offset = tim.require( './offset' );
 const trace_para = tim.require( './para' );
 const trace_pos = tim.require( './pos' );
 const trace_root = tim.require( './root' );
@@ -52,6 +54,8 @@ def.proto.appendStep =
 		case trace_form        : return this.appendForm( step.key );
 		case trace_forms       : return this.appendForms;
 		case trace_item        : return this.appendItem( step.key );
+		case trace_jp1         : return this.appendJP1;
+		case trace_jp2         : return this.appendJP2;
 		case trace_nonSpaceRef : return this.appendNonSpaceRef;
 		case trace_offset      : return this.appendOffset( step.key );
 		case trace_para        : return this.appendPara( step.key );
@@ -143,6 +147,7 @@ def.static.createFromJSONTrace =
 {
 	if( pos >= trace.length ) return root;
 
+	// FIXME make a table
 	switch( trace[ pos ] )
 	{
 		case '(o)doc'         : return trace_doc.createFromJSONStep( trace, pos );
@@ -150,6 +155,8 @@ def.static.createFromJSONTrace =
 		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
 		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
 		case '(o)item'        : return trace_item.createFromJSONStep( trace, pos );
+		case '(o)jp1'         : return trace_jp1.createFromJSONStep( trace, pos );
+		case '(o)jp2'         : return trace_jp2.createFromJSONStep( trace, pos );
 		case '(o)offset'      : return trace_offset.createFromJSONStep( trace, pos );
 		case '(o)para'        : return trace_para.createFromJSONStep( trace, pos );
 		case '(o)pos'         : return trace_pos.createFromJSONStep( trace, pos );

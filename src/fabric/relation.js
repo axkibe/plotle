@@ -107,7 +107,7 @@ def.proto.ancillary =
 	{
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'from' ),
+				'trace', this.trace.appendFrom.chopRoot,
 				'prev', tfrom,
 				'val', from
 			);
@@ -120,7 +120,7 @@ def.proto.ancillary =
 	{
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'to' ),
+				'trace', this.trace.appendTo.chopRoot,
 				'prev', tto,
 				'val', to
 			);

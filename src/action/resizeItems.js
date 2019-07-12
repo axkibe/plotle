@@ -368,7 +368,7 @@ def.proto._pushChangesAffectedj1p =
 
 	changes.push(
 		change_set.create(
-			'trace', item.trace.appendJ1.chopRoot, // XXX
+			'trace', item.trace.appendJP1.chopRoot, // XXX
 			'val', aj,
 			'prev', ij
 		)
@@ -393,7 +393,7 @@ def.proto._pushChangesAffectedj2p =
 
 	changes.push(
 		change_set.create(
-			'trace', item.trace.appendJ2.chopRoot,
+			'trace', item.trace.appendJP2.chopRoot,
 			'val', aj,
 			'prev', ij
 		)

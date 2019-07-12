@@ -15,7 +15,7 @@ if( TIM )
 	def.attributes =
 	{
 		// pos the stoke goes from (absolute point of reference)
-		j1 : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+		j1 : { type : [ 'undefined', '../gleam/point', '../trace/item' ], json : true },
 
 		// ancillary point the stroke goes from
 		jp1 : { type : [ 'undefined', '../gleam/point' ], json : true },
@@ -24,7 +24,7 @@ if( TIM )
 		js1 : { type : 'string', json: true },
 
 		// pos the stoke goes to (absolute point of reference)
-		j2 : { type : [ 'undefined', '../gleam/point', 'tim.js/path' ], json : true },
+		j2 : { type : [ 'undefined', '../gleam/point', '../trace/item' ], json : true },
 
 		// ancillary point the stroke goes to
 		jp2 : { type : [ 'undefined', '../gleam/point' ], json : true },
@@ -55,7 +55,7 @@ const gleam_rect = tim.require( '../gleam/rect' );
 
 const gruga_relation = tim.require( '../gruga/relation' );
 
-const tim_path = tim.require( 'tim.js/path' );
+const trace_item = tim.require( '../trace/item' );
 
 
 /*
@@ -86,16 +86,16 @@ def.proto.ancillary =
 
 	let j2 = this.j2;
 
-	if( j1 && j1.timtype === tim_path )
+	if( j1 && j1.timtype === trace_item )
 	{
-		j1 = space.get( j1.get( 1 ) );
+		j1 = space.get( j1.key );
 
 		if( j1 ) j1 = j1.shape;
 	}
 
-	if( j2 && j2.timtype === tim_path )
+	if( j2 && j2.timtype === trace_item )
 	{
-		j2 = space.get( j2.get( 1 ) );
+		j2 = space.get( j2.key );
 
 		if( j2 ) j2 = j2.shape;
 	}
@@ -105,7 +105,7 @@ def.proto.ancillary =
 		return(
 			change_list.one(
 				change_shrink.create(
-					'path', this.path.chop,
+					'trace', this.trace.chopRoot,
 					'prev', this,
 					'rank', space.rankOf( this.key )
 				)
@@ -131,9 +131,11 @@ def.proto.ancillary =
 
 	if( !j1.equals( this.jp1 ) )
 	{
+		console.log( 'DOING THE SET' );
+
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'jp1' ),
+				'trace', this.trace.appendJP1.chopRoot,
 				'prev', this.jp1,
 				'val', j1
 			);
@@ -146,7 +148,7 @@ def.proto.ancillary =
 	{
 		const ch =
 			change_set.create(
-				'path', this.path.chop.append( 'jp2' ),
+				'trace', this.trace.appendJP2.chopRoot,
 				'prev', this.jp2,
 				'val', j2
 			);

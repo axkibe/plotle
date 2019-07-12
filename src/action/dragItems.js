@@ -14,7 +14,7 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the paths of the items to drag
+		// the items to drag
 		items : { type : [ 'undefined', '../fabric/itemSet' ] },
 
 		// drags the items by this x/y
@@ -61,9 +61,9 @@ def.lazy.changes =
 
 		changes.push(
 			change_set.create(
-				'path', item.path.chop.append( 'zone' ),
+				'trace', item.trace.chopRoot.appendZone,
+				'prev', iZone,
 				'val', aZone,
-				'prev', iZone
 			)
 		);
 	}
@@ -127,7 +127,7 @@ def.proto.normalButtonDown = true;
 /*
 | Mouse hover.
 |
-| Returns a result_hover with hovering path and cursor to show.
+| Returns a result_hover.
 */
 def.proto.pointingHover =
 	function(

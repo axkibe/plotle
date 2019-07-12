@@ -1,7 +1,11 @@
 # used by changes, FIXME remove and make changes more specific
 ./doc
 ./field
+./hasGrid
+./hasSnapping
 ./item
+./jp1
+./jp2
 ./offset
 ./para
 ./pos

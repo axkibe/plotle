@@ -117,7 +117,7 @@ def.static.createGeneric =
 /**/}
 
 	root.alter(
-		'change', change_grow.create( 'val', label, 'trace', trace, 'rank', 0 ),
+		'change', change_grow.create( 'val', label, 'trace', trace.chopRoot, 'rank', 0 ),
 		'mark',
 			mark_caret.create(
 				'offset', trace.appendDoc.appendPara( '1' ).appendText.appendOffset( 0 )

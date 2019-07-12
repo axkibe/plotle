@@ -80,9 +80,7 @@ const session_uid = tim.require( '../session/uid' );
 
 const shell_settings = tim.require( '../shell/settings' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
-const trace_root = tim.require( '../trace/root' );
+const trace_space = tim.require( '../trace/space' );
 
 const mark_caret = tim.require( '../mark/caret' );
 
@@ -111,12 +109,11 @@ def.static.createGeneric =
 
 	const key = session_uid.newUid( );
 
-	const path = tim_path.empty.append( 'twig' ).append( key );
+	const trace = trace_space.fakeRoot.appendItem( key );
 
 	const offset =
-		trace_root.singleton
-		.appendSpace
-		.appendItem( key )
+		trace
+		.prependRoot
 		.appendDoc
 		.appendPara( '1' )
 		.appendText
@@ -126,7 +123,7 @@ def.static.createGeneric =
 		'change',
 			change_grow.create(
 				'val', note,
-				'path', path,
+				'trace', trace,
 				'rank', 0
 			),
 		'mark', mark_caret.create( 'offset', offset )
