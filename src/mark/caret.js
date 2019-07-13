@@ -120,4 +120,17 @@ def.lazy.zero =
 };
 
 
+/*
+| Additional checking.
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	if( !this.offset.traceRoot ) throw new Error( );
+/**/}
+};
+
+
 } );

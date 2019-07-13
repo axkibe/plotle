@@ -224,7 +224,7 @@ def.proto._transformMarkItems =
 
 	for( let itemTrace of mark )
 	{
-		if( this.trace.traceItem.equals( itemTrace.chopRoot ) ) { set.add( itemTrace ); }
+		if( !this.trace.traceItem.equals( itemTrace.chopRoot ) ) { set.add( itemTrace ); }
 	}
 
 	return mark_items.create( 'set:init', set );

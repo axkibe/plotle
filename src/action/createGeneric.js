@@ -220,7 +220,7 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'path', fabric_space.transPath,
+					'trace', fabric_space.transTrace,
 					'transform', screen.transform
 				);
 
@@ -231,7 +231,7 @@ def.proto.dragStart =
 
 			transientItem =
 				model.create(
-					'path', fabric_space.transPath,
+					'trace', fabric_space.transTrace,
 					'zone', model.zone.create( 'pos', ps ),
 					'transform', screen.transform
 				);
@@ -275,7 +275,7 @@ def.proto.dragStop =
 /*
 | Mouse hover.
 |
-| Returns a result_hover with hovering path and cursor to show.
+| Returns a result_hover.
 */
 def.proto.pointingHover =
 	function(

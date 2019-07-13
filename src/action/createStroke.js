@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the joint the stroke goes from
-		j1 : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
+		j1 : { type : [ 'undefined', '../trace/item', '../gleam/point' ] },
 
-		// the item path hovered upon
-		hover : { type : [ 'undefined', 'tim.js/path' ] },
+		// the item trace hovered upon
+		hover : { type : [ 'undefined', '../trace/item' ] },
 
-		// the item path or pos the stroke goes to
-		j2 : { type : [ 'undefined', 'tim.js/path', '../gleam/point' ] },
+		// the item trace or pos the stroke goes to
+		j2 : { type : [ 'undefined', '../trace/item', '../gleam/point' ] },
 
 		// the transient stroke in creation
 		transientItem : { type : [ 'undefined', '< ../fabric/item-types' ] },
@@ -48,24 +48,26 @@ const result_hover = tim.require( '../result/hover' );
 
 const session_uid = tim.require( '../session/uid' );
 
-const tim_path = tim.require( 'tim.js/path' );
+const trace_item = tim.require( '../trace/item' );
+
+const trace_space = tim.require( '../trace/space' );
 
 
 /*
-| Returns true if an entity with path is affected by this action.
+| Returns true if an item is affected by this action.
 */
 def.proto.affectsItem =
 	function(
 		item
 	)
 {
-	let path = item.path;
+	const trace = item.trace;
 
-	if( path.get( 0 ) !== 'space' ) return false;
-
-	path = path.chop;
-
-	return path.equals( this.j1 ) || path.equals( this.j2 ) || path.equals( this.hover );
+	return(
+		trace.equals( this.j1.prependRoot )
+		|| trace.equals( this.j2.prependRoot )
+		|| trace.equals( this.hover )
+	);
 };
 
 
@@ -101,9 +103,9 @@ def.proto.dragMove =
 
 	let j1 = this.j1;
 
-	if( j1.timtype === tim_path )
+	if( j1.timtype === trace_item )
 	{
-		j1 = screen.get( j1.get( 1 ) );
+		j1 = screen.get( j1.key );
 
 		// early aborts the creation if the first item got removed
 		if( !j1 ) { root.alter( 'action', undefined ); return; }
@@ -120,7 +122,7 @@ def.proto.dragMove =
 
 	const line = gleam_line.createConnection( j1, hover ? hover.shape : psrs );
 
-	const j2 = hover ? hover.path.chop : psrs;
+	const j2 = hover ? hover.trace.chopRoot : psrs;
 
 	const transientItem =
 		this.transientItem.create(
@@ -164,7 +166,7 @@ def.proto.dragStart =
 			'j1', j1,
 			'jp1', psrs,
 			'js1', 'none',
-			'path', fabric_space.transPath,
+			'trace', fabric_space.transTrace,
 			'transform', gleam_transform.normal,
 			'j2', j1,
 			'jp2', psrs,
@@ -201,7 +203,7 @@ def.proto.dragStop =
 		'change',
 			change_grow.create(
 				'val', val,
-				'path', tim_path.empty.append( 'twig' ).append( key ),
+				'trace', trace_space.fake_root.appendItem( key ),
 				'rank', 0
 			)
 	);
@@ -218,7 +220,7 @@ def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
 /*
 | Mouse hover.
 |
-| Returns a result_hover with hovering path and cursor to show.
+| Returns a result_hover.
 */
 def.proto.pointingHover =
 	function(
@@ -237,7 +239,7 @@ def.proto.pointingHover =
 	{
 		if( item.pointWithin( p ) )
 		{
-			root.alter( 'action', this.create( 'hover', item.path.chop ) );
+			root.alter( 'action', this.create( 'hover', item.trace ) );
 
 			return result_hover.cursorDefault;
 		}

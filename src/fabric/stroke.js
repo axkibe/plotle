@@ -131,8 +131,6 @@ def.proto.ancillary =
 
 	if( !j1.equals( this.jp1 ) )
 	{
-		console.log( 'DOING THE SET' );
-
 		const ch =
 			change_set.create(
 				'trace', this.trace.appendJP1.chopRoot,

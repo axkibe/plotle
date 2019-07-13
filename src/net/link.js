@@ -66,8 +66,6 @@ const request_update = tim.require( '../request/update' );
 
 const shell_doTracker = tim.require( '../shell/doTracker' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 
 /*
 | Aquires a space from the server
@@ -217,10 +215,7 @@ def.proto._onAcquireSpace =
 
 	root.alter(
 		'space',
-			reply.space.create(
-				'path', tim_path.empty.append( 'space' ),
-				'ref', request.spaceRef
-			),
+			reply.space.create( 'ref', request.spaceRef ),
 		'link',
 			root.link.create(
 				'refMomentSpace',

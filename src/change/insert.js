@@ -25,7 +25,7 @@ if( TIM )
 		// insert this
 		val : { type : 'string', json : true },
 
-		// insert at this trace
+		// inserts at this trace
 		trace : { type : [ '../trace/field', '../trace/text' ], json : true },
 	};
 

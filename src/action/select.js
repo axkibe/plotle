@@ -34,8 +34,6 @@ const gleam_rect = tim.require( '../gleam/rect' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const tim_path_list = tim.require( 'tim.js/pathList' );
-
 const mark_items = tim.require( '../mark/items' );
 
 
@@ -142,26 +140,17 @@ def.proto.dragStop =
 {
 	let action = this.create( 'toPoint', screen.pointToSpaceRS( p, false ) );
 
-	let paths = [ ];
-
 	let traces = new Set( );
 
 	for( let item of screen )
 	{
-		if( action.affectsItem( item ) )
-		{
-			paths.push( item.path );
-
-			traces.add( item.trace );
-		}
+		if( action.affectsItem( item ) ) traces.add( item.trace );
 	}
 
 	let mark = pass;
 
-	if( paths.length > 0 )
+	if( traces.size > 0 )
 	{
-		paths = tim_path_list.create( 'list:init', paths );
-
 		// FIXME simplify
 		if( !ctrl || !screen.mark )
 		{

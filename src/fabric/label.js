@@ -134,8 +134,6 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = this.path;
-
 	const trace = this.trace && this.trace.appendDoc;
 
 	const transform = this.transform;
@@ -147,7 +145,6 @@ def.adjust.doc =
 			'innerMargin', gruga_label.innerMargin,
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
-			'path', path && path.append( 'doc' ),
 			'scrollPos', gleam_point.zero,
 			'transform', transform && transform.ortho,
 			'trace', trace

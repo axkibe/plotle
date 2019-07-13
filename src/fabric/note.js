@@ -139,8 +139,6 @@ def.adjust.doc =
 		doc
 	)
 {
-	const path = this.path && this.path.append( 'doc' );
-
 	const trace = this.trace && this.trace.appendDoc;
 
 	const zone = this.zone;
@@ -153,7 +151,6 @@ def.adjust.doc =
 			'innerMargin', gruga_note.innerMargin,
 			'mark', this.mark,
 			'paraSep', this.fontsize / 2,
-			'path', path,
 			'scrollPos', this.scrollPos,
 			'trace', trace,
 			'transform', this.transform

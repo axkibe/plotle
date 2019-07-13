@@ -86,8 +86,6 @@ const ref_space = tim.require( '../ref/space' );
 
 const session_uid = tim.require( '../session/uid' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_root = tim.require( '../trace/root' );
 
 const mark_caret = tim.require( '../mark/caret' );
@@ -162,7 +160,7 @@ def.lazy.attentionCenter =
 
 
 /*
-| Returns the hover if an item with 'path' concerns about
+| Returns the hover if an item with 'trace' concerns about
 | the hover.
 */
 def.static.concernsHover =
@@ -194,25 +192,11 @@ def.static.createGeneric =
 
 	const key = session_uid.newUid( );
 
-	const path = tim_path.empty.append( 'twig' ).append( key );
+	const trace = trace_root.singleton.appendSpace.appendItem( key );
 
 	root.alter(
-		'change',
-			change_grow.create(
-				'path', path,
-				'val', portal,
-				'rank', 0
-			),
-		'mark',
-			mark_caret.create(
-				'offset',
-					trace_root.singleton
-					.appendSpace
-					.appendItem( key )
-					.appendField( 'spaceUser' )
-					.appendText
-					.appendOffset( 0 )
-			)
+		'change', change_grow.create( 'trace', trace.chopRoot, 'val', portal, 'rank', 0 ),
+		'mark', mark_caret.create( 'offset', trace.appendField( 'spaceUser' ).appendOffset( 0 ) )
 	);
 };
 
@@ -266,10 +250,7 @@ def.proto.click =
 		{
 			const offset = this._getOffsetAt( field, pp.x );
 
-			setMark =
-				mark_caret.create(
-					'offset', this.offsetTrace( field, offset )
-				);
+			setMark = mark_caret.create( 'offset', this.offsetTrace( field, offset ) );
 
 			break;
 		}
@@ -365,7 +346,7 @@ def.proto.input =
 			'change',
 			change_insert.create(
 				'val', line,
-				'path', this.path.append( section ).chop,
+				'trace', this.trace.appendField( section ).chopRoot,
 				'at1', mark.caretOffset.at,
 				'at2', mark.caretOffset.at + line.length
 			)
@@ -470,7 +451,7 @@ def.proto.offsetTrace =
 		at      // trace at this offset into the text
 	)
 {
-	return this.trace.appendField( field ).appendText.appendOffset( at );
+	return this.trace.appendField( field ).appendOffset( at );
 };
 
 
@@ -875,7 +856,7 @@ def.proto._keyBackspace =
 	root.alter(
 		'change',
 		change_remove.create(
-			'path', this.path.append( section ).chop,
+			'trace', this.trace.appendField( section ).chopRoot,
 			'at1', at - 1,
 			'at2', at,
 			'val', this[ section ].substring( at - 1, at )
@@ -949,7 +930,7 @@ def.proto._keyLeft =
 
 		const offset = cycle === 'moveToButton' ? 0 : this[ cycle ].length;
 
-		root.alter( 'mark', mark_caret.create( 'offset', offset ) );
+		root.alter( 'mark', mark_caret.create( 'offset', this.offsetTrace( cycle, offset ) ) );
 
 		return;
 	}
@@ -981,7 +962,7 @@ def.proto._keyDel =
 	root.alter(
 		'change',
 		change_remove.create(
-			'path', this.path.append( section ).chop,
+			'trace', this.trace.appendField( section ).chopRoot,
 			'at1', at,
 			'at2', at + 1,
 			'val', this[ section ].substring( at, at + 1 )

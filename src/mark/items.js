@@ -16,6 +16,7 @@ if( TIM )
 }
 
 
+
 const trace_item = tim.require( '../trace/item' );
 
 
@@ -141,5 +142,20 @@ def.proto.toggle =
 	return this.create( 'set:add', trace );
 };
 
+
+/*
+| Additional checking
+*/
+def.proto._check =
+	function( )
+{
+/**/if( CHECK )
+/**/{
+/**/	for( let trace of this )
+/**/	{
+/**/		if( !trace.traceRoot ) throw new Error( );
+/**/	}
+/**/}
+};
 
 } );

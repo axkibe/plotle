@@ -89,6 +89,18 @@ const connectToTarget =
 
 
 /*
+| Converts these keys.
+*/
+const convertKeys =
+{
+	path  : 'trace',
+	path2 : 'trace2',
+	j1    : 'j1',
+	j2    : 'j2',
+};
+
+
+/*
 | Converts the JSON for a change/list.
 */
 const convertJson =
@@ -100,30 +112,22 @@ const convertJson =
 
 	for( let key of keys )
 	{
-		if( key === 'path' )
-		{
-			const path = tim_path.createFromJSON( obj.path );
+		const cto = convertKeys[ key ];
 
-			obj.trace =
+		if( cto )
+		{
+			const v = obj[ key ];
+
+			if( v.type !== 'path' ) continue;
+
+			const c = tim_path.createFromJSON( v );
+
+			obj[ cto ] =
 				JSON.parse( JSON.stringify(
-					trace_any.createFromPath( path )
+					trace_any.createFromPath( c )
 				) );
 
-			delete obj.path;
-
-			continue;
-		}
-
-		if( key === 'path2' )
-		{
-			const path2 = tim_path.createFromJSON( obj.path2 );
-
-			obj.trace2 =
-				JSON.parse( JSON.stringify(
-					trace_any.createFromPath( path2 )
-				) );
-
-			delete obj.path2;
+			delete obj[ key ];
 
 			continue;
 		}

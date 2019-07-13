@@ -39,10 +39,6 @@ if( TIM )
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the doc
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// the current space transform
 		// no json thus not saved or transmitted
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
@@ -167,9 +163,6 @@ def.proto._ancillaryTo =
 
 /*
 | The item's glint.
-|
-| This cannot be done lazily, since it
-| depends on other items.
 */
 def.lazy.glint =
 	function( )

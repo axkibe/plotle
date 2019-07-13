@@ -162,7 +162,7 @@ def.lazy.fullsize =
 
 
 /*
-| Forwards the path to paras.
+| Forwards the trace to paras.
 */
 def.adjust.get =
 	function(
@@ -174,8 +174,6 @@ def.adjust.get =
 	if( !para ) return;
 
 	let mark, pos, y;
-
-	const path = this.path && this.path.append( 'twig' ).append( key );
 
 	const trace = this.trace && this.trace.appendPara( key );
 
@@ -211,7 +209,6 @@ def.adjust.get =
 			'flowWidth', this.flowWidth,
 			'fontsize', this.fontsize,
 			'mark', mark,
-			'path', path,
 			'pos', pos,
 			'trace', trace,
 			'transform', this.transform

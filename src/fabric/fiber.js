@@ -25,10 +25,6 @@ if( TIM )
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },
 
-		// the path of the fiber
-		// no json thus not saved or transmitted
-		path : { type : [ 'undefined', 'tim.js/path' ] },
-
 		// the current space transform
 		// no json thus not saved or transmitted
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
@@ -39,7 +35,7 @@ if( TIM )
 /*
 | The key of this fiber.
 */
-def.lazy.key = function( ) { return this.path.get( -1 ); };
+def.lazy.key = function( ) { return this.trace.key; };
 
 
 } );

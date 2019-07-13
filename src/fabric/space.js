@@ -81,8 +81,6 @@ const gruga_select = tim.require( '../gruga/select' );
 
 const result_hover = tim.require( '../result/hover' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_item = tim.require( '../trace/item' );
 
 const trace_root = tim.require( '../trace/root' );
@@ -230,7 +228,7 @@ def.proto.click =
 
 
 /*
-| Returns the hover path if the space concerns about a hover.
+| Returns the hover trace if the space concerns about a hover.
 */
 def.static.concernsHover =
 	( hover ) => hover && hover.traceSpace ? hover : undefined;
@@ -353,12 +351,10 @@ def.adjust.get =
 {
 	if( !item ) return;
 
-	const path = fabric_space.spacePath.append( 'twig' ).append( key );
-
 	const trace = fabric_space.spaceTrace.appendItem( key );
 
 	// this is all that's needed for server side
-	if( NODE ) return item.create( 'path', path, 'trace', trace );
+	if( NODE ) return item.create( 'trace', trace );
 
 	const mark = fabric_item.concernsMark( this.mark, trace );
 
@@ -378,7 +374,6 @@ def.adjust.get =
 				'highlight', highlight,
 				'hover', hover,
 				'mark', mark,
-				'path', path,
 				'trace', trace,
 				// FIXME why not just defaultValue?
 				'scrollPos', item.scrollPos || gleam_point.zero,
@@ -393,7 +388,6 @@ def.adjust.get =
 				'highlight', highlight,
 				'hover', hover,
 				'mark', mark,
-				'path', path,
 				'trace', trace,
 				'transform', this.transform
 			);
@@ -435,7 +429,7 @@ def.adjust.get =
 
 
 /*
-| Returns a set of items by a list of paths. // FIXME set of paths
+| Returns a set of items by an itemsMark.
 */
 def.proto.getSet =
 	function(
@@ -480,10 +474,7 @@ def.lazy.glint =
 	// true or undefined -> show grid
 	if( this.hasGrid ) arr.push( this._grid.glint );
 
-	for( let item of this.reverse( ) )
-	{
-		arr.push( item.glint );
-	}
+	for( let item of this.reverse( ) ) arr.push( item.glint );
 
 	const frame = this.frame;
 
@@ -502,19 +493,19 @@ def.lazy.glint =
 
 			// FIXME make a transientItem
 
-			if( action.fromItemPath )
+			if( action.fromItemTrace )
 			{
-				const fromItem = this.get( action.fromItemPath.get( -1 ) );
+				const fromItem = this.get( action.fromItemTrace.key );
 
 				let toItem, toJoint;
 
-				if( action.toItemPath ) toItem = this.get( action.toItemPath.get( -1 ) );
+				if( action.toItemTrace ) toItem = this.get( action.toItemTrace.key );
 
 				const fromJoint = fromItem.shape;
 
 				if(
-					action.toItemPath
-					&& !action.toItemPath.equals( action.fromItemPath )
+					action.toItemTrace
+					&& !action.toItemTrace.equals( action.fromItemTrace )
 				)
 				{
 					// arrow connects two items
@@ -607,15 +598,9 @@ def.proto.mousewheel =
 
 
 /*
-| Adjusts the path attribute to a default.
-*/
-def.adjust.path = ( path ) => path || fabric_space.spacePath;
-
-
-/*
 | Mouse hover.
 |
-| Returns a result_hover with hovering path and cursor to show.
+| Returns a result_hover with hovering trace and cursor to show.
 */
 def.proto.pointingHover =
 	function(
@@ -685,12 +670,6 @@ def.proto.showDisc = true;
 
 
 /*
-| Path of the space.
-*/
-def.staticLazy.spacePath = ( ) => tim_path.empty.append( 'space' );
-
-
-/*
 | Trace of the space.
 */
 def.staticLazy.spaceTrace = ( ) => trace_root.singleton.appendSpace;
@@ -754,11 +733,6 @@ def.proto.specialKey =
 	}
 };
 
-
-/*
-| The path for transientItems
-*/
-def.staticLazy.transPath = ( ) => fabric_space.spacePath.append( ':transient' );
 
 /*
 | The trace for transientItems

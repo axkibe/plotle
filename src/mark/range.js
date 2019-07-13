@@ -92,29 +92,6 @@ def.lazy.clipboard =
 
 
 /*
-| Returns true if an entity of this mark
-| contains 'path'.
-*/
-def.proto.containsPath =
-	function(
-		path
-	)
-{
-	throw new Error( 'XXX' );
-};
-
-
-/*
-| The doc path.
-*/
-def.lazy.docPath =
-	function( )
-{
-	throw new Error( 'XXX' );
-};
-
-
-/*
 | True if beginOffset equals endOffset
 */
 def.lazy.empty = function( ) { return this.beginOffset.equals( this.endOffset ); };

@@ -507,7 +507,11 @@ def.proto._colorStyle =
 /**/		if( CHECK )
 /**/		{
 /**/			// gradient misses gradient[PC|R0|R1]
-/**/			if( !pc || !r1 ) throw new Error( );
+/**/			if( pc.timtype !== gleam_point ) throw new Error( );
+/**/
+/**/			if( typeof( r0 ) !== 'number' ) throw new Error( );
+/**/
+/**/			if( typeof( r1 ) !== 'number' ) throw new Error( );
 /**/		}
 
 			grad =

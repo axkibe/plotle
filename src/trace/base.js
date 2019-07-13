@@ -19,6 +19,7 @@ const trace_doc = tim.require( './doc' );
 const trace_field = tim.require( './field' );
 const trace_form = tim.require( './form' );
 const trace_forms = tim.require( './forms' );
+const trace_from = tim.require( './from' );
 const trace_hasGrid = tim.require( './hasGrid' );
 const trace_hasSnapping = tim.require( './hasSnapping' );
 const trace_item = tim.require( './item' );
@@ -32,6 +33,7 @@ const trace_root = tim.require( './root' );
 const trace_scrollPos = tim.require( './scrollPos' );
 const trace_space = tim.require( './space' );
 const trace_text = tim.require( './text' );
+const trace_to = tim.require( './to' );
 const trace_widget = tim.require( './widget' );
 const trace_zone = tim.require( './zone' );
 
@@ -53,16 +55,18 @@ def.proto.appendStep =
 		case trace_field       : return this.appendField( step.key );
 		case trace_form        : return this.appendForm( step.key );
 		case trace_forms       : return this.appendForms;
+		case trace_from        : return this.appendFrom;
 		case trace_item        : return this.appendItem( step.key );
 		case trace_jp1         : return this.appendJP1;
 		case trace_jp2         : return this.appendJP2;
 		case trace_nonSpaceRef : return this.appendNonSpaceRef;
-		case trace_offset      : return this.appendOffset( step.key );
+		case trace_offset      : return this.appendOffset( step.at );
 		case trace_para        : return this.appendPara( step.key );
 		case trace_pos         : return this.appendPos;
 		case trace_scrollPos   : return this.appendScrollPos;
 		case trace_space       : return this.appendSpace;
 		case trace_text        : return this.appendText;
+		case trace_to          : return this.appendTo;
 		case trace_widget      : return this.appendWidget( step.key );
 		case trace_zone        : return this.appendZone;
 		default : throw new Error( );
@@ -152,6 +156,7 @@ def.static.createFromJSONTrace =
 	{
 		case '(o)doc'         : return trace_doc.createFromJSONStep( trace, pos );
 		case '(o)field'       : return trace_field.createFromJSONStep( trace, pos );
+		case '(o)from'        : return trace_from.createFromJSONStep( trace, pos );
 		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
 		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
 		case '(o)item'        : return trace_item.createFromJSONStep( trace, pos );
@@ -162,6 +167,7 @@ def.static.createFromJSONTrace =
 		case '(o)pos'         : return trace_pos.createFromJSONStep( trace, pos );
 		case '(o)space'       : return trace_space.createFromJSONStep( trace, pos );
 		case '(o)text'        : return trace_text.createFromJSONStep( trace, pos );
+		case '(o)to'          : return trace_to.createFromJSONStep( trace, pos );
 		case '(o)zone'        : return trace_zone.createFromJSONStep( trace, pos );
 		default : throw new Error( trace[ pos ] );
 	}

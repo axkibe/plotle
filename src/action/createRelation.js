@@ -15,13 +15,13 @@ if( TIM )
 	def.attributes =
 	{
 		// the item the relation goes from
-		fromItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+		fromItemTrace : { type : [ 'undefined', '../trace/item' ] },
 
 		// offset when panning during creation
 		offset : { type : [ 'undefined', '../gleam/point' ] },
 
 		// the item the relation goes to
-		toItemPath : { type : [ 'undefined', 'tim.js/path' ] },
+		toItemTrace : { type : [ 'undefined', '../trace/item' ] },
 
 		// the arrow destination while its floating
 		toPoint : { type : [ 'undefined', '../gleam/point' ] },
@@ -44,16 +44,16 @@ const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Returns true if an entity with path is affected by this action.
+| Returns true if an item is affected by this action.
 */
 def.proto.affectsItem =
 	function(
 		item
 	)
 {
-	const path = item.path;
+	const trace = item.trace;
 
-	return path.equals( this.fromItemPath ) || path.equals( this.toItemPath );
+	return trace.equals( this.fromItemTrace ) || trace.equals( this.toItemTrace );
 };
 
 
@@ -94,13 +94,13 @@ def.proto.dragMove =
 	{
 		if( item.tZone.within( p ) )
 		{
-			root.alter( 'action', this.create( 'toItemPath', item.path ) );
+			root.alter( 'action', this.create( 'toItemTrace', item.trace ) );
 
 			return;
 		}
 	}
 
-	root.alter( 'action', this.create( 'toItemPath', undefined, 'toPoint', p ) );
+	root.alter( 'action', this.create( 'toItemTrace', undefined, 'toPoint', p ) );
 };
 
 
@@ -131,7 +131,7 @@ def.proto.dragStart =
 		root.alter(
 			'action',
 				this.create(
-					'fromItemPath', item.path,
+					'fromItemTrace', item.trace,
 					'relationState', 'hadSelect',
 					'toPoint', p
 				)
@@ -182,11 +182,11 @@ def.proto.dragStop =
 	{
 		case 'hadSelect' :
 
-			if( this.toItemPath )
+			if( this.toItemTrace )
 			{
 				root.spawnRelation(
-					screen.get( this.fromItemPath.get( -1 ) ),
-					screen.get( this.toItemPath.get( -1 ) )
+					screen.get( this.fromItemTrace.key ),
+					screen.get( this.toItemTrace.key )
 				);
 			}
 
@@ -222,7 +222,7 @@ def.proto.highlightItem = function( item ) { return this.affectsItem( item ); };
 /*
 | Mouse hover.
 |
-| Returns a result_hover with hovering path and cursor to show.
+| Returns a result_hover with hovering trace and cursor to show.
 */
 def.proto.pointingHover =
 	function(
@@ -245,13 +245,13 @@ def.proto.pointingHover =
 
 			if( item.pointWithin( p ) )
 			{
-				root.alter( 'action', this.create( 'fromItemPath', item.path ) );
+				root.alter( 'action', this.create( 'fromItemTrace', item.trace ) );
 
 				return result_hover.cursorDefault;
 			}
 		}
 
-		root.alter( 'action', this.create( 'fromItemPath', undefined ) );
+		root.alter( 'action', this.create( 'fromItemTrace', undefined ) );
 
 		return result_hover.cursorDefault;
 	}

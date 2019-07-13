@@ -222,8 +222,6 @@ const show_normal = tim.require( '../show/normal' );
 
 const show_zoom = tim.require( '../show/zoom' );
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_discs = tim.require( '../trace/discs' );
 
 const trace_forms = tim.require( '../trace/forms' );
@@ -258,7 +256,7 @@ const notAnimationFinish =
 | Adjusts the current action.
 |
 | Makes sure the action has not any removed items in them.
-| If so the paths are removed from its itemPathsList.
+| If so the trace are removed from its itemTraceSet.
 |
 | If no item is left, action is set to none.
 |
@@ -1485,7 +1483,7 @@ def.proto.removeRange =
 		root.alter(
 			'change',
 			change_remove.create(
-				'path', frontTracePara.chopRoot.toPath.append( 'text' ),
+				'trace', frontTracePara.chopRoot.appendText,
 				'at1', frontOffset.at,
 				'at2', backOffset.at,
 				'val',
@@ -1519,8 +1517,8 @@ def.proto.removeRange =
 
 		change.push(
 			change_join.create(
-				'path', frontOffset.tracePara.chopRoot.toPath,
-				'path2', ve.trace.toPath,
+				'trace', frontOffset.tracePara.chopRoot,
+				'trace2', ve.trace,
 				'at1', text.length
 			)
 		);
@@ -1532,7 +1530,7 @@ def.proto.removeRange =
 
 	change.push(
 		change_remove.create(
-			'path', frontOffset.tracePara.chopRoot.toPath,
+			'trace', frontOffset.tracePara.chopRoot,
 			'at1', frontOffset.at,
 			'at2', frontOffset.at + text.length,
 			'val', text
@@ -1614,8 +1612,6 @@ def.proto.spawnRelation =
 
 	const key = session_uid.newUid( );
 
-	const path = tim_path.empty.append( 'space' ).append( 'twig' ).append( key );
-
 	const trace = trace_root.singleton.appendSpace.appendItem( key );
 
 	const val =
@@ -1632,19 +1628,15 @@ def.proto.spawnRelation =
 					fabric_para.create( 'text', 'relates to' )
 				),
 			'fontsize', 20,
-			'item1key', item1.path.get( -1 ),
-			'item2key', item2.path.get( -1 ),
-			'path', path
+			'item1key', item1.trace.key,
+			'item2key', item2.trace.key,
+			'trace', trace
 		);
 
 	let change =
 		change_list.create(
 			'list:append',
-			change_grow.create(
-				'val', val,
-				'path', path.chop,
-				'rank', 0
-			)
+			change_grow.create( 'val', val, 'trace', trace.chopRoot, 'rank', 0 )
 		);
 
 	change = change.appendList( val.ancillary( root.space ) );
