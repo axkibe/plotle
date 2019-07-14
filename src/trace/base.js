@@ -17,6 +17,7 @@ const trace_disc = tim.require( './disc' );
 const trace_discs  = tim.require( './discs' );
 const trace_doc = tim.require( './doc' );
 const trace_field = tim.require( './field' );
+const trace_fontsize = tim.require( './fontsize' );
 const trace_form = tim.require( './form' );
 const trace_forms = tim.require( './forms' );
 const trace_from = tim.require( './from' );
@@ -53,6 +54,7 @@ def.proto.appendStep =
 		case trace_discs       : return this.appendDiscs;
 		case trace_doc         : return this.appendDoc;
 		case trace_field       : return this.appendField( step.key );
+		case trace_fontsize    : return this.appendFontsize;
 		case trace_form        : return this.appendForm( step.key );
 		case trace_forms       : return this.appendForms;
 		case trace_from        : return this.appendFrom;
@@ -156,6 +158,7 @@ def.static.createFromJSONTrace =
 	{
 		case '(o)doc'         : return trace_doc.createFromJSONStep( trace, pos );
 		case '(o)field'       : return trace_field.createFromJSONStep( trace, pos );
+		case '(o)fontsize'    : return trace_fontsize.createFromJSONStep( trace, pos );
 		case '(o)from'        : return trace_from.createFromJSONStep( trace, pos );
 		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
 		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
@@ -319,6 +322,18 @@ def.lazy.traceSpace =
 	if( this.length === 0 ) return;
 
 	return this.get( this.length - 1 ).traceSpace;
+};
+
+
+/*
+| Default space tracer.
+*/
+def.lazy.traceText =
+	function( )
+{
+	if( this.length === 0 ) return;
+
+	return this.get( this.length - 1 ).traceText;
 };
 
 

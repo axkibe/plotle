@@ -1,5 +1,5 @@
 /*
-| A trace into a scrollPos.
+| A trace into a fontsize.
 */
 'use strict';
 
@@ -21,8 +21,6 @@ if( TIM )
 
 const trace_base = tim.require( './base' );
 
-const gleam_point = tim.require( '../gleam/point' );
-
 
 /*
 | Custom JSON converter.
@@ -33,7 +31,7 @@ def.lazy.asJSON =
 	return(
 		{
 			type : 'trace',
-			trace : [ '(o)jp1' ].concat( this.last.asJSON.trace )
+			trace : [ '(o)fontsize' ].concat( this.last.asJSON.trace )
 		}
 	);
 };
@@ -42,7 +40,7 @@ def.lazy.asJSON =
 /*
 | The trace step as string (for debugging).
 */
-def.lazy.asStringStep = ( ) => 'jp1';
+def.lazy.asStringStep = ( ) => 'fontsize';
 
 
 /*
@@ -56,10 +54,10 @@ def.static.createFromJSONStep =
 {
 	if( CHECK )
 /**/{
-/**/	if( trace[ pos ] !== '(o)jp1' ) throw new Error( );
+/**/	if( trace[ pos ] !== '(o)fontsize' ) throw new Error( );
 /**/}
 
-	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendJP1;
+	return trace_base.createFromJSONTrace( trace, pos + 1 ).appendFontsize;
 };
 
 
@@ -70,17 +68,17 @@ def.static.createFromJSONStep =
 def.proto.graft =
 	function(
 		tree,
-		p
+		val
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( p !== undefined && p.timtype !== gleam_point ) throw new Error( );
+/**/	if( typeof( val ) !== 'number' ) throw new Error( );
 /**/}
 
 	let sub = this.last.pick( tree );
 
-	sub = sub.create( 'jp1', p );
+	sub = sub.create( 'fontsize', val );
 
 	return this.last.graft( tree, sub );
 };
@@ -94,7 +92,17 @@ def.proto.pick =
 		tree
 	)
 {
-	return this.last.pick( tree ).jp1;
+	return this.last.pick( tree ).fontsize;
+};
+
+
+/*
+| FIXME remove.
+*/
+def.lazy.toPath =
+	function( )
+{
+	return this.get( this.length - 1 ).toPath.append( 'fontsize' );
 };
 
 

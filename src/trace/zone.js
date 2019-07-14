@@ -4,7 +4,7 @@
 'use strict';
 
 
-tim.define( module, ( def, trace_zone ) => {
+tim.define( module, ( def ) => {
 
 
 def.extend = './base';

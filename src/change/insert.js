@@ -113,6 +113,9 @@ def.lazy.reversed =
 def.proto._check =
 	function( )
 {
+	// changes need to use space as fake root
+	if( this.trace.traceRoot ) throw error.make( 'trace has wrong root' );
+
 	if( this.at1 + this.val.length !== this.at2 )
 	{
 		throw error.make( 'insert.at1 + insert.val.length !== insert.at2' );

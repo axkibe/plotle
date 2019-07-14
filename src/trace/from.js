@@ -76,7 +76,7 @@ def.proto.graft =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( p.timtype !== gleam_point ) throw new Error( );
+/**/	if( p !== undefined && p.timtype !== gleam_point ) throw new Error( );
 /**/}
 
 	let sub = this.last.pick( tree );

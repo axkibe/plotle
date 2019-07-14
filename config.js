@@ -14,6 +14,7 @@ module.exports = ( set ) => {
 | Shortcut for development mode switching several options below
 */
 const devel = true;
+//const devel = false;
 
 
 /*

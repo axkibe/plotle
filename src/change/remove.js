@@ -76,6 +76,9 @@ def.proto._check =
 	}
 
 	if( this.at1 < 0 || this.at2 < 0 ) throw error.make( 'remove.at1|at2 negative' );
+
+	// changes need to use space as fake root
+	if( this.trace.traceRoot ) throw error.make( 'trace has wrong root' );
 };
 
 

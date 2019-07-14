@@ -1517,8 +1517,8 @@ def.proto.removeRange =
 
 		change.push(
 			change_join.create(
-				'trace', frontOffset.tracePara.chopRoot,
-				'trace2', ve.trace,
+				'trace', frontOffset.traceText.chopRoot,
+				'trace2', ve.trace.appendText.chopRoot,
 				'at1', text.length
 			)
 		);
@@ -1530,7 +1530,7 @@ def.proto.removeRange =
 
 	change.push(
 		change_remove.create(
-			'trace', frontOffset.tracePara.chopRoot,
+			'trace', frontOffset.traceText.chopRoot,
 			'at1', frontOffset.at,
 			'at2', frontOffset.at + text.length,
 			'val', text

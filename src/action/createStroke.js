@@ -64,8 +64,8 @@ def.proto.affectsItem =
 	const trace = item.trace;
 
 	return(
-		trace.equals( this.j1.prependRoot )
-		|| trace.equals( this.j2.prependRoot )
+		trace.chopRoot.equals( this.j1 )
+		|| trace.chopRoot.equals( this.j2 )
 		|| trace.equals( this.hover )
 	);
 };
@@ -203,7 +203,7 @@ def.proto.dragStop =
 		'change',
 			change_grow.create(
 				'val', val,
-				'trace', trace_space.fake_root.appendItem( key ),
+				'trace', trace_space.fakeRoot.appendItem( key ),
 				'rank', 0
 			)
 	);

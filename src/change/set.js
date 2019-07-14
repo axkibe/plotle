@@ -102,6 +102,17 @@ def.proto.changeTree =
 
 
 /*
+| Extra checking.
+*/
+def.proto._check =
+	function( )
+{
+	// changes need to use space as fake root
+	if( this.trace.traceRoot ) throw error.make( 'trace has wrong root' );
+};
+
+
+/*
 | Maps transformables to transform functions
 */
 def.staticLazy._transformers = ( ) =>

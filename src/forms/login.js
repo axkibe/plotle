@@ -177,7 +177,7 @@ def.proto._setErrorMessage =
 		message
 	)
 {
-	root.alter( this.get( 'errorLabel' ).path.append( 'text' ), message );
+	root.alter( this.get( 'errorLabel' ).trace.appendText, message );
 };
 
 

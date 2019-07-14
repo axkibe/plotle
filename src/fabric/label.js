@@ -257,7 +257,7 @@ def.proto.ancillary =
 
 	const c =
 		change_set.create(
-			'trace', this.trace.traceItem.appendZone,
+			'trace', this.trace.traceItem.appendZone.chopRoot,
 			'prev', zone,
 			'val', zone.create( 'height', height, 'width', width )
 		);

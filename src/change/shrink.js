@@ -66,6 +66,9 @@ def.proto._check =
 	function( )
 {
 	if( this.rank !== undefined && this.rank < 0 ) throw error.make( 'set.rank negative' );
+
+	// changes need to use space as fake root
+	if( this.trace.traceRoot ) throw error.make( 'trace has wrong root' );
 };
 
 

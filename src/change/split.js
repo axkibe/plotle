@@ -140,6 +140,12 @@ def.proto._check =
 	function( )
 {
 	if( this.at1 < 0 ) throw error.make( 'split.at1 negative' );
+
+	// changes need to use space as fake root
+	if( this.trace.traceRoot ) throw error.make( 'trace has wrong root' );
+
+	// changes need to use space as fake root
+	if( this.trace2.traceRoot ) throw error.make( 'trace2 has wrong root' );
 };
 
 

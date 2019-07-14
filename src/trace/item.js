@@ -25,6 +25,8 @@ const trace_doc = tim.require( './doc' );
 
 const trace_field = tim.require( './field' );
 
+const trace_fontsize = tim.require( './fontsize' );
+
 const trace_from = tim.require( './from' );
 
 const trace_jp1 = tim.require( './jp1' );
@@ -61,6 +63,16 @@ def.lazyFuncStr.appendField =
 	)
 {
 	return trace_field.create( 'list:init', this, 'list:append', this, 'key', key );
+};
+
+
+/*
+| Returns a trace with a from part appended.
+*/
+def.lazy.appendFontsize =
+	function( )
+{
+	return trace_fontsize.create( 'list:init', this, 'list:append', this );
 };
 
 
