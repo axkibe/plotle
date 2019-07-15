@@ -96,10 +96,4 @@ def.proto.length = 0;
 def.proto.pick = ( tree ) => tree;
 
 
-/*
-| FIXME remove
-*/
-def.lazy.toPath = function( ) { return tim_path.empty; };
-
-
 } );

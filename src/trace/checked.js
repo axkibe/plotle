@@ -64,14 +64,4 @@ def.proto.pick =
 };
 
 
-/*
-| FIXME remove.
-*/
-def.lazy.toPath =
-	function( )
-{
-	return this.get( this.length - 1 ).toPath.append( 'checked' );
-};
-
-
 } );

@@ -74,10 +74,4 @@ def.proto.pick =
 def.lazy.traceForms = function( ) { return this; };
 
 
-/*
-| FIXME remove
-*/
-def.lazy.toPath = function( ) { return this.get( this.length - 1 ).toPath.append( 'forms' ); };
-
-
 } );

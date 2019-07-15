@@ -78,16 +78,6 @@ def.lazy.asStringStep =
 
 
 /*
-| FIXME remove
-*/
-def.lazy.toPath =
-	function( )
-{
-	return this.get( this.length - 1 ).toPath.append( 'twig' ).append( this.key );
-};
-
-
-/*
 | This is the form trace.
 */
 def.lazy.traceForm = function( ) { return this; };

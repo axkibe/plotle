@@ -147,18 +147,6 @@ def.proto.pick =
 
 
 /*
-| FIXME remove
-*/
-def.lazy.toPath =
-	function( )
-{
-	if( this.length === 0 ) return tim_path.empty;
-
-	return this.get( this.length - 1 ).toPath.append( 'space' );
-};
-
-
-/*
 | This is the space trace.
 */
 def.lazy.traceSpace = function( ) { return this; };
