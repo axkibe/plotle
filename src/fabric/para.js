@@ -655,8 +655,8 @@ def.proto._keyDel =
 	root.alter(
 		'change',
 			change_join.create(
-				'trace', this.trace.chopRoot,
-				'trace2', doc.atRank( r + 1).trace.chopRoot,
+				'trace', this.trace.appendText.chopRoot,
+				'trace2', doc.atRank( r + 1).trace.appendText.chopRoot,
 				'at1', this.text.length
 			),
 		'clearRetainX', true
