@@ -33,7 +33,7 @@ const change_set = tim.require( '../change/set' );
 
 const forms_base = tim.require( './base' );
 
-const tim_path = tim.require( 'tim.js/path' );
+const trace_space = tim.require( '../trace/space' );
 
 
 /*
@@ -133,7 +133,7 @@ def.proto.toggleCheckbox =
 
 			const change =
 				change_set.create(
-					'path', tim_path.empty.append( 'hasGrid' ),
+					'trace', trace_space.fakeRoot.appendHasGrid,
 					'val', !prev,
 					'prev', prev
 				);
@@ -149,7 +149,7 @@ def.proto.toggleCheckbox =
 
 			const change =
 				change_set.create(
-					'path', tim_path.empty.append( 'hasSnapping' ),
+					'trace', trace_space.fakeRoot.appendHasSnapping,
 					'val', !prev,
 					'prev', prev
 				);

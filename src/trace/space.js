@@ -19,8 +19,6 @@ if( TIM )
 }
 
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_base = tim.require( './base' );
 
 const trace_item = tim.require( './item' );

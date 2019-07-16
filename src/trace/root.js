@@ -17,8 +17,6 @@ if( TIM )
 }
 
 
-const tim_path = tim.require( 'tim.js/path' );
-
 const trace_discs = tim.require( './discs' );
 
 const trace_forms = tim.require( './forms' );
