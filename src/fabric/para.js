@@ -277,10 +277,7 @@ def.inherit._pane =
 
 	if( !itransform || !ttransform ) return false;
 
-	return(
-		inherit.alikeVisually( this )
-		&& itransform.zoom === ttransform.zoom
-	);
+	return inherit.alikeVisually( this ) && itransform.zoom === ttransform.zoom;
 };
 
 
@@ -1053,7 +1050,8 @@ def.lazy._pane =
 				gleam_size.createWH(
 					transform.scale( this.flow.width ) + 1,
 					transform.scale( this.height ) + 1
-				)
+				),
+			'tag', 'para(' + this.key + ')'
 		)
 	);
 };

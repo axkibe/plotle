@@ -146,7 +146,8 @@ def.lazy.glint =
 			'pane',
 				gleam_glint_pane.create(
 					'glint', this._glint,
-					'size', zone.size
+					'size', zone.size,
+					'tag', 'button(' + this.trace.key + ')'
 				),
 			'pos', zone.pos,
 		)

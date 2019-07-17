@@ -10,6 +10,7 @@
 
 tim.define( module, ( def, gleam_display_canvas ) => {
 
+
 const gleam_border = tim.require( '../border' );
 
 const gleam_borderList = tim.require( '../borderList' );
@@ -81,6 +82,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// debugging tag (TODO remove)
+		tag : { type : 'string' },
+
 		// if set the canvas is opaque and has a background
 		background : { type : [ 'undefined', 'string' ] },
 
@@ -161,15 +165,16 @@ def.proto._check =
 */
 def.static.createAroundHTMLCanvas =
 	function(
-		canvas,    // the canvas to create around
-		size,      // the size of the canvas
-		glint,     // the content
-		background // the background
+		canvas,     // the canvas to create around
+		size,       // the size of the canvas
+		glint,      // the content
+		background, // the background
+		tag         // debugging tag
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 5 ) throw new Error( );
 /**/}
 
 	const height = size.height;
@@ -189,7 +194,8 @@ def.static.createAroundHTMLCanvas =
 			'background', background,
 			'canvas', canvas,
 			'glint', glint,
-			'size', size
+			'size', size,
+			'tag', tag
 		)
 	);
 };
@@ -200,10 +206,16 @@ def.static.createAroundHTMLCanvas =
 */
 def.static.createNewCanvas =
 	function(
-		size,
-		glint
+		size,     // size of the canvas
+		glint,    // glint to draw
+		tag       // debugging tag
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
 	const canvas = createCanvas( size.width, size.height );
 
 	return(
@@ -211,7 +223,8 @@ def.static.createNewCanvas =
 			canvas,
 			size,
 			glint,
-			undefined  // transparent background
+			undefined,  // transparent background
+			tag         // debugging tag
 		)
 	);
 };
@@ -251,26 +264,23 @@ def.static.resize =
 | A hidden helper canvas used by within( )
 */
 def.staticLazy.helper = ( ) =>
-	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass );
+	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass, 'helper' );
 
 
 /*
 | Ensures mono causal chain of canvas.
 */
-/**///if( CHECK ) // FUTURE have lazy timcode variants...
-/**/{
-/**/	def.lazy._expired = ( ) => true;
-/**/
-/**/	def.inherit._expired =
-/**/		function( inherit )
-/**/	{
-/**/		if( tim.hasLazyValueSet( inherit, '_expired' ) ) throw new Error( );
-/**/
-/**/    	inherit._expired;
-/**/
-/**/		return false;
-/**/	};
-/**/}
+def.lazy._expired = ( ) => true;
+
+def.inherit._expired =
+	function( inherit )
+{
+	if( tim.hasLazyValueSet( inherit, '_expired' ) ) throw new Error( );
+
+	inherit._expired;
+
+	return false;
+};
 
 
 /*
@@ -282,19 +292,13 @@ def.lazy._cx =
 {
 	const cx =
 		this.background
-		? this.canvas.getContext( '2d', { alpha: false } )
-		: this.canvas.getContext( '2d' );
+		? this.canvas.getContext( '2d', { alpha: false,  desynchronized: true } )
+		: this.canvas.getContext( '2d', { desynchronized: true } );
 
 	cx.imageSmoothingEnabled = false;
 
 	return cx;
 };
-
-
-/*
-| Set when the canvas has been rendered.
-*/
-def.lazy._rendered = ( ) => true;
 
 
 /*
@@ -367,12 +371,10 @@ def.proto.within =
 /*
 | Renders the display.
 */
-def.proto.render =
+def.lazy.render =
 	function( )
 {
 	const size = this.size;
-
-	if( tim.hasLazyValueSet( this, '_rendered' ) ) return;
 
 	if( this.background )
 	{
@@ -387,7 +389,8 @@ def.proto.render =
 
 	this._renderGlint( this.glint, gleam_point.zero );
 
-	this._rendered;
+	// dummy so the render is defined
+	return true;
 };
 
 
@@ -685,15 +688,16 @@ def.proto._renderText =
 
 	const rotate = glint.rotate;
 
+	const font = glint.font.round;
+
 	if( rotate === undefined )
 	{
 		gleam_intern_opentype.drawText(
 			glint.text,
 			round( p.x + offset.x ),
 			round( p.y + offset.y ),
-			glint.font,
+			font,
 			glint.color,
-			round( glint.font.size ),
 			glint.align,
 			glint.base,
 			this._cx
@@ -724,9 +728,8 @@ def.proto._renderText =
 		glint.text,
 		round( ( x * t1 + y * t2 ) / det ),
 		round( ( y * t1 - x * t2 ) / det ),
-		glint.font,
+		font,
 		glint.color,
-		round( glint.font.size ),
 		glint.align,
 		glint.base,
 		this._cx
@@ -878,9 +881,9 @@ def.proto._renderWindow =
 	}
 	else
 	{
-		const cd = pane._canvasDisplay;
+		const cd = pane.canvasDisplay;
 
-		cd.render( );
+		cd.render;
 
 		cx.drawImage( cd.canvas, round( x + pane.offset.x ), round( y + pane.offset.y ) );
 	}

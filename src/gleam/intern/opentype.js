@@ -96,15 +96,16 @@ def.static.drawText =
 		y,     // y
 		font,  // font to draw it in
 		color, // the color to draw in
-		size,  // the actual size to draw
 		align, // horizontal align
 		base,  // vertial align
 		cx     // canvas context to draw it on.
 	)
 {
+	const size = font.size;
+
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 9 ) throw new Error( );
+/**/	if( arguments.length !== 8 ) throw new Error( );
 /**/
 /**/	if( color.timtype !== gleam_color ) throw new Error( );
 /**/
@@ -235,11 +236,11 @@ def.static.drawText =
 		}
 
 		glyphCacheSet[ index ] =
-			{
-				canvas : canvas,
-				x1 : x1,
-				y1 : y1
-			};
+		{
+			canvas : canvas,
+			x1 : x1,
+			y1 : y1
+		};
 	}
 };
 

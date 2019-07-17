@@ -168,6 +168,7 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'glint', this.doc.glint,
 						'size', tZone.enlarge1.size,
+						'tag', 'label(' + this.trace.key + ')'
 					),
 				'pos', tZone.enlarge1.pos
 			)

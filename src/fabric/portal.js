@@ -300,7 +300,8 @@ def.lazy.glint =
 				'pane',
 					gleam_glint_pane.create(
 						'glint', this._innerGlint,
-						'size', zone.size
+						'size', zone.size,
+						'tag', 'portal(' + this.trace.key + ')'
 					),
 				'pos', zone.pos
 			)

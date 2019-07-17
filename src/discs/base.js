@@ -274,7 +274,8 @@ def.lazy.glint =
 			'pane',
 				gleam_glint_pane.create(
 					'glint', gleam_glint_list.create( 'list:init', a ),
-					'size', zone.size
+					'size', zone.size,
+					'tag', 'disc(' + this.key + ')'
 				),
 			'pos', zone.pos
 		)

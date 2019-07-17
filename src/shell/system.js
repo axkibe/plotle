@@ -1352,7 +1352,8 @@ def.static.init =
 			canvas,
 			gleam_size.wh( window.innerWidth, window.innerHeight ),
 			pass,
-			'rgb( 251, 251, 251 )'  // background
+			'rgb( 251, 251, 251 )',  // background
+			'root', // debug tag
 		);
 
 	system =

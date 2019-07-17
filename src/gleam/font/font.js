@@ -1,7 +1,5 @@
 /*
 | A font style.
-|
-| FIXME family is ignored?
 */
 'use strict';
 
@@ -50,6 +48,23 @@ def.proto.transform =
 	)
 {
 	return this.family.get( this.size * transform.zoom );
+};
+
+
+
+/*
+| Returns the font with rounded size.
+*/
+def.lazy.round =
+	function( )
+{
+	const size = this.size;
+
+	const rsize = Math.round( size );
+
+	if( rsize === size ) return this;
+
+	return this.family.get( rsize );
 };
 
 

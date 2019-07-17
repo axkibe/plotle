@@ -58,14 +58,15 @@ def.static.maxUndo = 1000;
 | Only applicable if opentype is true
 */
 def.static.glyphCacheLimit = 250;
-//glyphCacheLimit : Number.POSITIVE_INFINITY,
+//def.static.glyphCacheLimit = Number.POSITIVE_INFINITY;
 
 /*
 | Maximum size of a glint graphic cache
-| in width * size
+| in width * height
 */
 def.static.glintCacheLimit = 32767;
-//glintCacheLimit : Number.POSITIVE_INFINITY,
+//def.static.glintCacheLimit = 1073741823;
+//def.static.glintCacheLimit = Number.POSITIVE_INFINITY;
 
 
 /*

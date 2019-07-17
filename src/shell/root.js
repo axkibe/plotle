@@ -448,7 +448,7 @@ def.lazy.draw =
 
 	display = display.create( 'glint', gleam_glint_list.create( 'list:init', a ) );
 
-	display.render( );
+	display.render;
 
 	root._create( '_display', display );
 

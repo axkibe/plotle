@@ -174,6 +174,7 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'glint', this._innerGlint,
 						'size', tZone.add1_5.size,
+						'tag', 'note(' + this.key + ')'
 					),
 				'pos', tZone.add1_5.pos
 			)
