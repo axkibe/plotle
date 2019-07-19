@@ -17,11 +17,8 @@ if( TIM )
 		// vertical alignment
 		base : { type : 'string', defaultValue : '"alphabetic"' },
 
-		// color of the text
-		color : { type : '../color', defaultValue : 'require( "../color" ).black' },
-
-		// the font to display the text in
-		font : { type : '../font/font' },
+		// the font family, size and color to display the text in
+		fontFace : { type : '../font/face' },
 
 		// where to draw it
 		p : { type : '../point' },

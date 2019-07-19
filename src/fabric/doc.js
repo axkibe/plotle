@@ -53,7 +53,7 @@ const fabric_para = tim.require( './para' );
 
 const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_font_font = tim.require( '../gleam/font/font' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
@@ -155,7 +155,7 @@ def.lazy.fullsize =
 		height += flow.height;
 	}
 
-	height += Math.round( fs * gleam_font_font.bottomBox );
+	height += Math.round( fs * gleam_font_root.bottomBox );
 
 	return gleam_size.wh( width, height );
 };
@@ -370,7 +370,7 @@ def.lazy._caretGlint =
 
 	const fs = this.fontsize;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	let p = para.locateOffsetPoint( caretOffset.at );
 
@@ -430,7 +430,7 @@ def.lazy._rangeShape =
 
 	const fontsize = this.fontsize;
 
-	const descend = Math.round( fontsize * gleam_font_font.bottomBox );
+	const descend = Math.round( fontsize * gleam_font_root.bottomBox );
 
 	const ascend = Math.round( fontsize );
 

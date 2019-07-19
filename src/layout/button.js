@@ -15,7 +15,7 @@ if( TIM )
 		facets : { type : '../gleam/facetList' },
 
 		// font of the text
-		font : { type : [ 'undefined', '../gleam/font/font' ] },
+		fontFace : { type : [ 'undefined', '../gleam/font/face' ] },
 
 		// icon shape
 		iconShape : { type : [ '< ../gleam/shape-types', 'undefined' ] },

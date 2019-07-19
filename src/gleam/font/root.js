@@ -17,9 +17,17 @@ const font_family = tim.require( './family' );
 
 
 /*
-| The dynamic pool
+| The cache pool
 */
 let pool;
+
+
+/*
+| Factor to add to the bottom of font height.
+| FUTURE remove
+*/
+def.static.bottomBox = 0.25;
+
 
 
 if( NODE )

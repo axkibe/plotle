@@ -21,7 +21,7 @@ if( TIM )
 		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// font of the text
-		font : { type : '../gleam/font/font' },
+		fontFace : { type : '../gleam/font/face' },
 
 		// the users mark
 		mark : { type : [ 'undefined', '< ../mark/visual-types' ] },
@@ -45,7 +45,7 @@ const gleam_ellipse = tim.require( '../gleam/ellipse' );
 
 const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_font_font = tim.require( '../gleam/font/font' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
@@ -78,9 +78,9 @@ const mark_caret = tim.require( '../mark/caret' );
 def.lazy.attentionCenter =
 	function( )
 {
-	const fs = this.font.size;
+	const fs = this.fontFace.size.size;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
@@ -124,7 +124,7 @@ def.static.createFromLayout =
 	return(
 		widget_input.create(
 			'facets', layout.facets,
-			'font', layout.font,
+			'fontFace', layout.fontFace,
 			'maxlen', layout.maxlen,
 			'password', layout.password,
 			'transform', transform,
@@ -231,7 +231,7 @@ def.lazyFuncInt.locateOffsetPoint =
 		offset // the offset to get the point from.
 	)
 {
-	const font = this.font;
+	const fontsize = this.fontFace.size;
 
 	const pitch = widget_input._pitch;
 
@@ -240,21 +240,19 @@ def.lazyFuncInt.locateOffsetPoint =
 	if( this.password )
 	{
 		return(
-			gleam_point.create(
-				'x',
-					pitch.x
-					+ ( this._maskWidth + this._maskKern )
-					* offset
-					- 1,
-				'y', Math.round( pitch.y + font.size )
+			gleam_point.createXY(
+				pitch.x
+				+ ( this._maskWidth + this._maskKern ) * offset
+				- 1,
+				Math.round( pitch.y + fontsize.size )
 			)
 		);
 	}
 
 	return(
-		gleam_point.create(
-			'x', Math.round( pitch.x + font.getAdvanceWidth( text.substring( 0, offset ) ) ),
-			'y', Math.round( pitch.y + font.size )
+		gleam_point.createXY(
+			Math.round( pitch.x + fontsize.getAdvanceWidth( text.substring( 0, offset ) ) ),
+			Math.round( pitch.y + fontsize.size )
 		)
 	);
 };
@@ -331,9 +329,9 @@ def.proto.specialKey =
 def.lazy._caretGlint =
 	function( )
 {
-	const fs = this.font.size;
+	const fs = this.fontFace.size.size;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
@@ -388,7 +386,7 @@ def.proto._getOffsetAt =
 
 	const password = this.password;
 
-	const font = this.font;
+	const fontsize = this.fontFace.size;
 
 	if( password ) mw = this._maskWidth + this._maskKern;
 
@@ -398,7 +396,7 @@ def.proto._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = password ? a * mw : font.getAdvanceWidth( text.substr( 0, a ) );
+		x2 = password ? a * mw : fontsize.getAdvanceWidth( text.substr( 0, a ) );
 
 		if( x2 >= dx ) break;
 	}
@@ -429,7 +427,7 @@ def.lazy._glint =
 			)
 		];
 
-	const font = this.font;
+	const fontFace = this.fontFace;
 
 	if( this.password )
 	{
@@ -447,8 +445,8 @@ def.lazy._glint =
 	{
 		arr.push(
 			gleam_glint_text.create(
-				'font', font,
-				'p', gleam_point.createXY( pitch.x, font.size + pitch.y ),
+				'fontFace', fontFace,
+				'p', gleam_point.createXY( pitch.x, fontFace.size.size + pitch.y ),
 				'text', text
 			)
 		);
@@ -594,7 +592,7 @@ def.proto._keyUp =
 def.lazy._maskKern =
 	function( )
 {
-	return Math.round( this.font.size * 0.15 );
+	return Math.round( this.fontFace.size.size * 0.15 );
 };
 
 
@@ -604,7 +602,7 @@ def.lazy._maskKern =
 def.lazy._maskWidth =
 	function( )
 {
-	return Math.round( this.font.size * 0.5 );
+	return Math.round( this.fontFace.size.size * 0.5 );
 };
 
 
@@ -617,7 +615,7 @@ def.lazy._passMask =
 {
 	const text = this.text;
 
-	const size = this.font.size;
+	const size = this.fontFace.size.size;
 
 	const pm = [ ];
 

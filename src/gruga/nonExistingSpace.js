@@ -34,7 +34,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 22 ),
+				'fontFace', gruga_font.standard( 22 ),
 				'pos', gleam_point.createXY( 0, -120 ),
 				'text', '',
 			),
@@ -43,7 +43,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'text', 'Do you want to create it?',
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'pos', gleam_point.createXY( 0, -50 )
 			),
 		'twig:add',
@@ -57,7 +57,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'No',
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -71,7 +71,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'Yes',
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

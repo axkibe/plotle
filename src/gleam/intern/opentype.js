@@ -10,80 +10,10 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
+const font_token = tim.require( '../font/token' );
 const gleam_color = tim.require( '../color' );
-
 const shell_settings = tim.require( '../../shell/settings' );
-
-
-const opentypeOptions =
-	Object.freeze( {
-		kerning: true,
-		features: {
-			liga: true,
-			rlig: true
-		},
-		script: 'latn'
-	} );
-
-const opentypeOptionsHinting =
-	Object.freeze( {
-		hinting: true,
-		kerning: true,
-		features: {
-			liga: true,
-			rlig: true
-		},
-		script: 'latn'
-	} );
-
-
 const round = Math.round;
-
-
-/*
-| Gets the cap height for a font.
-*/
-function getCapHeight( font )
-{
-	const chars = 'HIKLEFJMNTZBDPRAGOQSUVWXY';
-
-	for( let c of chars )
-	{
-		const idx = font.charToGlyphIndex( c );
-
-		if( idx <= 0 ) continue;
-
-		return font.glyphs.get( idx ).getMetrics( ).yMax;
-	}
-}
-
-
-/*
-| Returns the width of a glyph array.
-*/
-const getWidth =
-	function(
-		glyphs,     // glyph array
-		font,       // font
-		fontScale   // font scale
-	)
-{
-	let w = 0;
-
-	for( let a = 0, al = glyphs.length; a < al; a++ )
-	{
-		const glyph = glyphs[ a ];
-
-		if( glyph.advanceWidth ) w += glyph.advanceWidth * fontScale;
-
-		if( a + 1 < al )
-		{
-			w += font.getKerningValue( glyph, glyphs[ a + 1 ] ) * fontScale;
-		}
-	}
-
-	return w;
-};
 
 
 /*
@@ -91,28 +21,29 @@ const getWidth =
 */
 def.static.drawText =
 	function(
-		text,  // text to draw
-		x,     // x
-		y,     // y
-		font,  // font to draw it in
-		color, // the color to draw in
-		align, // horizontal align
-		base,  // vertial align
-		cx     // canvas context to draw it on.
+		text,      // text to draw
+		x,         // x
+		y,         // y
+		fontFace,  // the fontFace to draw with
+		align,     // horizontal align
+		base,      // vertial align
+		cx         // canvas context to draw it on.
 	)
 {
-	const size = font.size;
+	const color = fontFace.color;
+
+	const size = fontFace.size.size;
 
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 8 ) throw new Error( );
+/**/	if( arguments.length !== 7 ) throw new Error( );
 /**/
 /**/	if( color.timtype !== gleam_color ) throw new Error( );
 /**/
 /**/	if( size !== Math.floor( size ) ) throw new Error( );
 /**/}
 
-	const otFont = font.family.opentype;
+	const otFont = fontFace.size.family.opentype;
 
 	const glyphCache = otFont.glyphCache;
 
@@ -126,17 +57,20 @@ def.static.drawText =
 
 	const fontScale = 1 / otFont.unitsPerEm * size;
 
-	const options = size >= 8 ? opentypeOptionsHinting : opentypeOptions;
+	const options = fontFace.size._options;
 
 	const glyphs = otFont.stringToGlyphs( text, options );
 
+	// XXX
+	const token = font_token.create( 'size', fontFace.size, 'text', text );
+
 	switch( align )
 	{
-		case 'center' : x -= getWidth( glyphs, otFont, fontScale ) / 2; break;
+		case 'center' : x -= token.width * fontScale / 2; break;
 
 		case 'left' : break;
 
-		case 'right' : x -= getWidth( glyphs, otFont, fontScale ); break;
+		case 'right' : x -= token.width * fontScale; break;
 
 		default : throw new Error( );
 	}
@@ -145,19 +79,7 @@ def.static.drawText =
 	{
 		case 'alphabetic' : break;
 
-		case 'middle' :
-		{
-			let capheight = otFont.capheight;
-
-			if( !capheight )
-			{
-				otFont.capheight = capheight = getCapHeight( otFont );
-			}
-
-			y += capheight * fontScale / 2 - 0.5;
-
-			break;
-		}
+		case 'middle' : y += fontFace.size.family.capheight * fontScale / 2 - 0.5; break;
 
 		default : throw new Error( );
 	}

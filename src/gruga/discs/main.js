@@ -181,7 +181,7 @@ def.staticLazy.layout =
 		'twig:add', 'create',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', gruga_font.standard( 13 ),
+				'fontFace', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'new',
 				'visible', false,
@@ -199,7 +199,7 @@ def.staticLazy.layout =
 		'twig:add', 'moveTo',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', gruga_font.standard( 13 ),
+				'fontFace', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'go',
 				'visible', false,
@@ -217,7 +217,7 @@ def.staticLazy.layout =
 		'twig:add', 'space',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', gruga_font.standard( 13 ),
+				'fontFace', gruga_font.standard( 13 ),
 				'shape',
 					gleam_ellipse.createPosSize(
 						gleam_point.createXY( -60, 0 ),
@@ -230,7 +230,7 @@ def.staticLazy.layout =
 		'twig:add', 'user',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', gruga_font.standard( 12 ),
+				'fontFace', gruga_font.standard( 12 ),
 				'shape',
 					gleam_ellipse.createPosSize(
 						gleam_point.createXY( -70, 0 ),
@@ -243,7 +243,7 @@ def.staticLazy.layout =
 		'twig:add', 'login',
 			layout_button.create(
 				'facets', buttonFacets,
-				'font', gruga_font.standard( 13 ),
+				'fontFace', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'log\nin',
 				'textNewline', 14,
@@ -253,10 +253,10 @@ def.staticLazy.layout =
 		'twig:add', 'signUp',
 			layout_button.create(
 				'facets', buttonFacets,
+				'fontFace', gruga_font.standard( 13 ),
 				'shape', 'ellipse',
 				'text', 'sign\nup',
 				'textNewline', 14,
-				'font', gruga_font.standard( 13 ),
 				'visible', false,
 				'zone', gleam_rect.createPosSize( signupButtonPos, buttonSize )
 			)

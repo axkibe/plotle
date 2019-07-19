@@ -68,7 +68,7 @@ const flow_line = tim.require( '../flow/line' );
 
 const flow_token = tim.require( '../flow/token' );
 
-const gleam_font_font = tim.require( '../gleam/font/font' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 
@@ -118,7 +118,7 @@ def.lazy.attentionCenter =
 {
 	const fs = this.fontsize;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
@@ -166,7 +166,7 @@ def.lazy.flow =
 	// 0 means infinite
 	const flowWidth = this.flowWidth;
 
-	const font = this.font;
+	const fontSize = this.font.size;
 
 	// FUTURE go into subnodes
 	const text = this.text;
@@ -177,9 +177,9 @@ def.lazy.flow =
 	// current x positon, and current x including last tokens width
 	let x = 0;
 
-	let y = font.size;
+	let y = fontSize.size;
 
-	const space = font.getAdvanceWidth( ' ' );
+	const space = fontSize.createToken( ' ' ).advanceWidth;
 
 	const lines = [ ];
 
@@ -195,7 +195,7 @@ def.lazy.flow =
 		// a token is a word plus following hard spaces
 		const tokenText = ca[ 1 ] + ca[ 3 ];
 
-		const w = font.getAdvanceWidth( tokenText );
+		const w = fontSize.createToken( tokenText ).advanceWidth;
 
 		if( flowWidth > 0 && x + w > flowWidth )
 		{
@@ -214,7 +214,7 @@ def.lazy.flow =
 
 				currentLineList = [ ];
 
-				y += font.size * ( 1 + gleam_font_font.bottomBox );
+				y += fontSize.size * ( 1 + gleam_font_root.bottomBox );
 
 				currentLineOffset = ca.index;
 			}
@@ -290,7 +290,7 @@ def.proto.getOffsetAt =
 		x    // x coordinate
 	)
 {
-	const font = this.font;
+	const fontSize = this.font.size;
 
 	const flow = this.flow;
 
@@ -325,7 +325,7 @@ def.proto.getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = font.getAdvanceWidth( text.substr( 0, a ) );
+		x2 = fontSize.createToken( text.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}
@@ -386,7 +386,7 @@ def.lazy.glint =
 def.lazy.height =
 	function( )
 {
-	return this.flow.height + Math.round( this.fontsize * gleam_font_font.bottomBox );
+	return this.flow.height + Math.round( this.fontsize * gleam_font_root.bottomBox );
 };
 
 
@@ -916,7 +916,7 @@ def.proto._locateOffset =
 		offset    // the offset to get the point from.
 	)
 {
-	const font = this.font;
+	const fontSize = this.font.size;
 
 	const text = this.text;
 
@@ -951,18 +951,17 @@ def.proto._locateOffset =
 		const token = line.get( tokenN );
 
 		p =
-			gleam_point.create(
-				'x',
-					Math.round(
-						token.x
-						+ font.getAdvanceWidth( text.substring( token.offset, offset ) )
-					),
-				'y', line.y
+			gleam_point.createXY(
+				Math.round(
+					token.x
+					+ fontSize.createToken( text.substring( token.offset, offset ) ).advanceWidth
+				),
+				line.y
 			);
 	}
 	else
 	{
-		p = gleam_point.create( 'x', 0, 'y', line.y );
+		p = gleam_point.createXY( 0, line.y );
 	}
 
 	tim.aheadFunctionInteger( this, 'locateOffsetLine', offset, lineN );
@@ -1031,7 +1030,7 @@ def.lazy._pane =
 		{
 			a.push(
 				gleam_glint_text.create(
-					'font', tFont,
+					'fontFace', tFont,
 					'p',
 						gleam_point.createXY(
 							transform.x( token.x ),

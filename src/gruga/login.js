@@ -10,8 +10,6 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const gleam_color = tim.require( '../gleam/color' );
-
 const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
@@ -42,37 +40,36 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'text', 'Log In',
-				'font', gruga_font.standard( 22 ),
+				'fontFace', gruga_font.standard( 22 ),
 				'pos', gleam_point.createXY( -225, -112 )
 			),
 		'twig:add',
 		'usernameLabel',
 			layout_label.create(
 				'text', 'username',
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'pos', gleam_point.createXY( -175, -49 )
 			),
 		'twig:add',
 		'passwordLabel',
 			layout_label.create(
 				'text', 'password',
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'pos', gleam_point.createXY( -175, -9 )
 			),
 		'twig:add',
 		'errorLabel',
 			layout_label.create(
 				'align', 'center',
-				'color', gleam_color.red,
 				'text', '',
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standardRed( 14 ),
 				'pos', gleam_point.createXY( -20, -83 )
 			),
 		'twig:add',
 		'userInput',
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -86,7 +83,7 @@ def.staticLazy.layout = ( ) =>
 			layout_input.create(
 				'facets', gruga_genericInput.facets,
 				'password', true,
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'maxlen', 100,
 				'zone',
 					gleam_rect.create(
@@ -105,7 +102,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 70, 70 )
 					),
 				'text', 'log in',
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -118,7 +115,7 @@ def.staticLazy.layout = ( ) =>
 						gleam_size.wh( 50, 50 )
 					),
 				'text', 'close',
-				'font', gruga_font.standard( 14 ),
+				'fontFace', gruga_font.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

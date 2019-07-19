@@ -105,7 +105,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 22 ),
+				'fontFace', gruga_font.standard( 22 ),
 				'pos', gleam_point.zero,
 				'text', 'go to another space',
 			),
@@ -127,7 +127,7 @@ def.staticLazy.layout = ( ) =>
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'plotle\nhome',
 						'textNewline', 25,
-						'font', gruga_font.standard( 14 ),
+						'fontFace', gruga_font.standard( 14 ),
 						'shape', 'ellipse'
 				),
 				'twig:add',
@@ -137,7 +137,7 @@ def.staticLazy.layout = ( ) =>
 						'zone', gruga_moveTo._buttonSize,
 						'text', 'plotle\nsandbox',
 						'textNewline', 25,
-						'font', gruga_font.standard( 14 ),
+						'fontFace', gruga_font.standard( 14 ),
 						'shape', 'ellipse'
 					)
 		)
@@ -150,7 +150,7 @@ def.staticLazy.layout = ( ) =>
 def.staticLazy.spaceButtonLayout = ( ) =>
 	layout_button.create(
 		'facets', gruga_moveTo._portalButtonFacets,
-		'font', gruga_font.standard( 14 ),
+		'fontFace', gruga_font.standard( 14 ),
 		'shape', 'ellipse',
 		'textNewline', 25,
 		'zone', gruga_moveTo._buttonSize

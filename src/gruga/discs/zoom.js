@@ -140,7 +140,7 @@ def.staticLazy.layout =
 		'zoomAll',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomAll.shape,
 				'iconFacet', gruga_iconZoomAll.facet,
 				'shape', 'ellipse',
@@ -150,7 +150,7 @@ def.staticLazy.layout =
 		'zoomIn',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomIn.shape,
 				'iconFacet', gruga_iconZoomIn.facet,
 				'shape', 'ellipse',
@@ -160,7 +160,7 @@ def.staticLazy.layout =
 		'zoomOut',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomOut.shape,
 				'iconFacet', gruga_iconZoomOut.facet,
 				'shape', 'ellipse',
@@ -170,7 +170,7 @@ def.staticLazy.layout =
 		'zoomHome',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'iconShape', gruga_iconZoomHome.shape,
 				'iconFacet', gruga_iconZoomHome.facet,
 				'shape', 'ellipse',

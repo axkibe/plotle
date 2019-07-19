@@ -688,7 +688,7 @@ def.proto._renderText =
 
 	const rotate = glint.rotate;
 
-	const font = glint.font.round;
+	const fontFace = glint.fontFace.roundSize;
 
 	if( rotate === undefined )
 	{
@@ -696,8 +696,7 @@ def.proto._renderText =
 			glint.text,
 			round( p.x + offset.x ),
 			round( p.y + offset.y ),
-			font,
-			glint.color,
+			fontFace,
 			glint.align,
 			glint.base,
 			this._cx
@@ -728,8 +727,7 @@ def.proto._renderText =
 		glint.text,
 		round( ( x * t1 + y * t2 ) / det ),
 		round( ( y * t1 - x * t2 ) / det ),
-		font,
-		glint.color,
+		fontFace,
 		glint.align,
 		glint.base,
 		this._cx

@@ -140,7 +140,7 @@ def.staticLazy.layout =
 		'createNote',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Note',
 				'zone', gleam_rect.createPosSize( noteButtonPos, genericButtonSize )
@@ -149,7 +149,7 @@ def.staticLazy.layout =
 		'createLabel',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Label',
 				'zone', gleam_rect.createPosSize( labelButtonPos, genericButtonSize )
@@ -158,7 +158,7 @@ def.staticLazy.layout =
 		'createLine',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Line',
 				'textNewline', 20,
@@ -168,7 +168,7 @@ def.staticLazy.layout =
 		'createArrow',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Arrow',
 				'textNewline', 20,
@@ -178,7 +178,7 @@ def.staticLazy.layout =
 		'createRelation',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
@@ -188,7 +188,7 @@ def.staticLazy.layout =
 		'createPortal',
 			layout_button.create(
 				'facets', genericButtonFacets,
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'shape', 'ellipse',
 				'text', 'Portal',
 				'zone', gleam_rect.createPosSize( portalButtonPos, genericButtonSize )

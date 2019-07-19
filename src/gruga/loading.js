@@ -27,14 +27,14 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 28 ),
+				'fontFace', gruga_font.standard( 28 ),
 				'pos', gleam_point.createXY( 0, -56 ),
 				'text', 'loading'
 			),
 		'twig:add', 'spaceText',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 28 ),
+				'fontFace', gruga_font.standard( 28 ),
 				'pos', gleam_point.zero,
 				'text', 'plotle:home'
 			)

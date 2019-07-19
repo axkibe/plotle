@@ -18,11 +18,8 @@ if( TIM )
 		// vertical alignment
 		base : { type : 'string', defaultValue : '"alphabetic"' },
 
-		// color of the label
-		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
-
-		// font of the text
-		font : { type : [ 'undefined', '../gleam/font/font' ] },
+		// the fontFace of the text
+		fontFace : { type : [ 'undefined', '../gleam/font/face' ] },
 
 		// vertical distance of newline
 		newline : { type : [ 'undefined', 'number' ] },

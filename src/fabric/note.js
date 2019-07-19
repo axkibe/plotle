@@ -45,45 +45,25 @@ if( TIM )
 
 
 const change_grow = tim.require( '../change/grow' );
-
 const fabric_doc = tim.require( './doc' );
-
 const fabric_para = tim.require( './para' );
-
-const gleam_font_font = tim.require( '../gleam/font/font' );
-
+const gleam_font_root = tim.require( '../gleam/font/root' );
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
 const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_roundRect = tim.require( '../gleam/roundRect' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const gruga_note = tim.require( '../gruga/note' );
-
 const session_uid = tim.require( '../session/uid' );
-
 const shell_settings = tim.require( '../shell/settings' );
-
 const trace_space = tim.require( '../trace/space' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const widget_scrollbar = tim.require( '../widget/scrollbar' );
 
 
@@ -339,7 +319,7 @@ def.proto.scrollMarkIntoView =
 
 	const fs = this.doc.font.size;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	const p = para.locateOffsetPoint( mark.caretOffset.at );
 

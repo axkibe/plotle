@@ -20,11 +20,8 @@ if( TIM )
 		// vertical alignment
 		base : { type : 'string', defaultValue : '"alphabetic"' },
 
-		// color of the label
-		color : { type : '../gleam/color', defaultValue : 'require( "../gleam/color" ).black' },
-
-		// font of the text
-		font : { type : [ 'undefined', '../gleam/font/font' ] },
+		// font family, size and color of the text
+		fontFace : { type : [ 'undefined', '../gleam/font/face' ] },
 
 		// vertical distance of newline
 		newline : { type : [ 'undefined', 'number' ] },
@@ -64,8 +61,7 @@ def.static.createFromLayout =
 		widget_label.create(
 			'align', layout.align,
 			'base', layout.base,
-			'color', layout.color,
-			'font', layout.font,
+			'fontFace', layout.fontFace,
 			'newline', layout.newline,
 			'pos', layout.pos,
 			'text', layout.text,
@@ -89,7 +85,7 @@ def.lazy.glint =
 		gleam_glint_text.create(
 			'align', this.align,
 			'base', this.base,
-			'font', this.font,
+			'fontFace', this.fontFace,
 			'p', this._pos,
 			'text', this.text
 		)

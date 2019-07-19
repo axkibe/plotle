@@ -20,8 +20,8 @@ if( TIM )
 		// style facets
 		facets : { type : '../gleam/facetList' },
 
-		// font of the text
-		font : { type : [ 'undefined', '../gleam/font/font' ] },
+		// font familiy, size and color of the text
+		fontFace : { type : [ 'undefined', '../gleam/font/face' ] },
 
 		// component hovered upon
 		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
@@ -115,7 +115,7 @@ def.static.createFromLayout =
 	return(
 		widget_button.create(
 			'facets', layout.facets,
-			'font', layout.font,
+			'fontFace', layout.fontFace,
 			'iconShape', layout.iconShape,
 			'iconFacet', layout.iconFacet,
 			'shape', layout.shape,
@@ -158,10 +158,10 @@ def.lazy.glint =
 /*
 | The font of the button label.
 */
-def.lazy._font =
+def.lazy._tFont =
 	function( )
 {
-	return this.font.create( 'size', this.transform.scale( this.font.size ) );
+	return this.fontFace.transform( this.transform );
 };
 
 
@@ -186,7 +186,7 @@ def.lazy._glint =
 	{
 		let newline = this.textNewline;
 
-		const font = this._font;
+		const fontFace = this._tFont;
 
 		if( newline === undefined )
 		{
@@ -194,7 +194,7 @@ def.lazy._glint =
 				gleam_glint_text.create(
 					'align', 'center',
 					'base', 'middle',
-					'font', font,
+					'fontFace', fontFace,
 					'p', this._pc,
 					'rotate', this.textRotation,
 					'text', text
@@ -217,7 +217,7 @@ def.lazy._glint =
 					gleam_glint_text.create(
 						'align', 'center',
 						'base', 'middle',
-						'font', font,
+						'fontFace', fontFace,
 						'p', this._pc.add( 0, y ),
 						'text', text[ t ]
 					)

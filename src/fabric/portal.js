@@ -50,7 +50,7 @@ const gleam_ellipse = tim.require( '../gleam/ellipse' );
 
 const gleam_facet = tim.require( '../gleam/facet' );
 
-const gleam_font_font = tim.require( '../gleam/font/font' );
+const gleam_font_root = tim.require( '../gleam/font/root' );
 
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 
@@ -147,9 +147,9 @@ def.lazy.attentionCenter =
 		return ac + this._moveToButtonShape.pos.y;
 	}
 
-	const font = this._fontFor( section );
+	const fontFace = this._fontFaceFor( section );
 
-	const fs = font.size;
+	const fs = fontFace.size.size;
 
 	const fieldP = this[ spaceFields[ section ] ].pos;
 
@@ -593,18 +593,18 @@ def.lazy._facetMoveToButton =
 /*
 | Returns the font for 'section'.
 */
-def.proto._fontFor =
+def.proto._fontFaceFor =
 	function(
 		section
 	)
 {
 	switch( section )
 	{
-		case 'spaceUser' : return this._fontSpaceUser;
+		case 'spaceUser' : return this._fontFaceSpaceUser;
 
-		case 'spaceTag' : return this._fontSpaceTag;
+		case 'spaceTag' : return this._fontFaceSpaceTag;
 
-		case 'moveTo' : return this._fontMoveTo;
+		case 'moveTo' : return this._fontFaceMoveTo;
 
 		default : throw new Error( );
 	}
@@ -634,19 +634,19 @@ def.lazy._fieldSpaceUser =
 /*
 | Font for moveToButton.
 */
-def.lazy._fontMoveTo = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceMoveTo = ( ) => gruga_font.standard( 13 );
 
 
 /*
 | Font for spaceTag.
 */
-def.lazy._fontSpaceTag = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceSpaceTag = ( ) => gruga_font.standard( 13 );
 
 
 /*
 | Font for spaceUser.
 */
-def.lazy._fontSpaceUser = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceSpaceUser = ( ) => gruga_font.standard( 13 );
 
 
 /*
@@ -663,11 +663,11 @@ def.lazy._glintCaret =
 
 	if( !fabric_portal.isSection( section ) || section === 'moveToButton' ) return;
 
-	const font = this._fontFor( section );
+	const fontFace = this._fontFaceFor( section );
 
-	const fs = font.size;
+	const fs = fontFace.size.size;
 
-	const descend = fs * gleam_font_font.bottomBox;
+	const descend = fs * gleam_font_root.bottomBox;
 
 	const fieldPos = this[ spaceFields[ section ] ].pos;
 
@@ -712,7 +712,7 @@ def.proto._getOffsetAt =
 
 	let x2 = 0;
 
-	const font = this._fontFor( section );
+	const fontFace = this._fontFaceFor( section );
 
 	let a;
 
@@ -722,7 +722,7 @@ def.proto._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = font.getAdvanceWidth( value.substr( 0, a ) );
+		x2 = fontFace.size.createToken( value.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}
@@ -772,19 +772,19 @@ def.lazy._innerGlint =
 				'shape', fieldSpaceTag.shape.transform( ot )
 			),
 			gleam_glint_text.create(
-				'font', this._tFontSpaceUser,
+				'fontFace', this._tFontFaceSpaceUser,
 				'p', fieldSpaceUser.pos.transform( ot ),
 				'text', fieldSpaceUser.text
 			),
 			gleam_glint_text.create(
-				'font', this._tFontSpaceTag,
+				'fontFace', this._tFontFaceSpaceTag,
 				'p', fieldSpaceTag.pos.transform( ot ),
 				'text', fieldSpaceTag.text
 			),
 			gleam_glint_text.create(
 				'align', 'center',
 				'base', 'middle',
-				'font', this._tFontMoveTo,
+				'fontFace', this._tFontFaceMoveTo,
 				'p', orthoMoveToButtonShape.pc,
 				'text', 'move to'
 			)
@@ -1152,13 +1152,13 @@ def.proto._locateOffset =
 	)
 {
 	// FUTURE cache position
-	const font = this._fontFor( section );
+	const fontFace = this._fontFaceFor( section );
 
 	const text = this[ section ];
 
 	return(
 		gleam_point.createXY(
-			Math.round( font.getAdvanceWidth( text.substring( 0, offset ) ) ),
+			Math.round( fontFace.createToken( text.substring( 0, offset ) ) ).advanceWidth,
 			0
 		)
 	);
@@ -1247,22 +1247,16 @@ def.proto._prepareField =
 
 	const text = this[ section ];
 
-	const font = this._fontFor( section );
+	const fontSize = this._fontFaceFor( section ).size;
 
-	const width = font.getAdvanceWidth( text );
+	const width = fontSize.createToken( text ).advanceWidth;
 
-	const height = font.size + 2;
+	const height = fontSize.size + 2;
 
 	const pos =
 		baseP
-		? gleam_point.create(
-			'x', ( zone.width - width ) / 2,
-			'y', baseP.y + 23
-		)
-		: gleam_point.create(
-			'x', ( zone.width - width ) / 2,
-			'y', zone.height / 2 - 30
-		);
+		? gleam_point.createXY( ( zone.width - width ) / 2, baseP.y + 23 )
+		: gleam_point.createXY( ( zone.width - width ) / 2, zone.height / 2 - 30 );
 
 	const shape =
 		gleam_roundRect.create(
@@ -1299,30 +1293,30 @@ def.proto._prepareField =
 /*
 | Font for spaceUser.
 */
-def.lazy._tFontSpaceUser =
+def.lazy._tFontFaceSpaceUser =
 	function( )
 {
-	return this._fontSpaceUser.transform( this.transform );
+	return this._fontFaceSpaceUser.transform( this.transform );
 };
 
 
 /*
 | Font for spaceTag.
 */
-def.lazy._tFontSpaceTag =
+def.lazy._tFontFaceSpaceTag =
 	function( )
 {
-	return this._fontSpaceTag.transform( this.transform );
+	return this._fontFaceSpaceTag.transform( this.transform );
 };
 
 
 /*
 | Font for moveToButton.
 */
-def.lazy._tFontMoveTo =
+def.lazy._tFontFaceMoveTo =
 	function( )
 {
-	return this._fontMoveTo.transform( this.transform );
+	return this._fontFaceMoveTo.transform( this.transform );
 };
 
 

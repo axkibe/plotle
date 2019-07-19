@@ -33,29 +33,29 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 22 ),
+				'fontFace', gruga_font.standard( 22 ),
 				'pos', gleam_point.createXY( 0, -120 ),
 				'text', 'welcome'
 			),
 		'twig:add', 'message1',
 			layout_label.create(
 				'align', 'center',
-				'font', gruga_font.standard( 16 ),
+				'fontFace', gruga_font.standard( 16 ),
 				'pos', gleam_point.createXY( 0, -50 ),
 				'text', 'Your registration was successful :-)'
 			),
 		'twig:add', 'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
+				'fontFace', gruga_font.standard( 14 ),
+				'shape', 'ellipse',
+				'text', 'close',
 				'zone',
 					gleam_rect.create(
 						'pos', gleam_point.createXY( 180, 38 ),
 						'width', 50,
 						'height', 50
-					),
-				'text', 'close',
-				'font', gruga_font.standard( 14 ),
-				'shape', 'ellipse'
+					)
 			)
 	);
 

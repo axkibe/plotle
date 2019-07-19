@@ -14,8 +14,8 @@ if( TIM )
 		// style facets
 		facets : { type : '../gleam/facetList' },
 
-		// font of the text
-		font : { type : '../gleam/font/font' },
+		// fontFace of the text
+		fontFace : { type : '../gleam/font/face' },
 
 		// maximum input length
 		maxlen : { type : 'integer' },
