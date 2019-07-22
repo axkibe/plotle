@@ -31,5 +31,24 @@ if( TIM )
 	};
 }
 
+const font_token = tim.require( '../font/token' );
+
+
+/*
+| Returns the font_token
+|
+| FIXME, actually make it an attribute
+*/
+def.lazy.token =
+	function( )
+{
+	return(
+		font_token.create(
+			'size', this.fontFace.size.roundSize,
+			'text', this.text
+		)
+	);
+};
+
 
 } );

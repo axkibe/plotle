@@ -12,60 +12,33 @@ tim.define( module, ( def, gleam_display_canvas ) => {
 
 
 const gleam_border = tim.require( '../border' );
-
 const gleam_borderList = tim.require( '../borderList' );
-
 const gleam_color = tim.require( '../color' );
-
 const gleam_constants = tim.require( '../constants' );
-
 const gleam_ellipse = tim.require( '../ellipse' );
-
 const gleam_facet = tim.require( '../facet' );
-
 const gleam_glint_border = tim.require( '../glint/border' );
-
 const gleam_glint_fill = tim.require( '../glint/fill' );
-
 const gleam_glint_list = tim.require( '../glint/list' );
-
 const gleam_glint_mask = tim.require( '../glint/mask' );
-
 const gleam_glint_text = tim.require( '../glint/text' );
-
 const gleam_glint_paint = tim.require( '../glint/paint' );
-
 const gleam_glint_window = tim.require( '../glint/window' );
-
 const gleam_glint_zoomGrid = tim.require( '../glint/zoomGrid' );
-
 const gleam_gradient_askew = tim.require( '../gradient/askew' );
-
 const gleam_gradient_radial = tim.require( '../gradient/radial' );
-
-const gleam_intern_opentype = tim.require( '../intern/opentype' );
-
 const gleam_line = tim.require( '../line' );
-
 const gleam_point = tim.require( '../point' );
-
 const gleam_rect = tim.require( '../rect' );
-
 const gleam_roundRect = tim.require( '../roundRect' );
-
 const gleam_shape = tim.require( '../shape' );
-
 const gleam_shapeList = tim.require( '../shapeList' );
-
 const gleam_shape_line = tim.require( '../shape/line' );
-
 const gleam_shape_round = tim.require( '../shape/round' );
-
 const gleam_shape_start = tim.require( '../shape/start' );
-
 const gleam_size = tim.require( '../size' );
-
 const shell_settings = tim.require( '../../shell/settings' );
+
 
 /*
 const createCanvas =
@@ -692,11 +665,10 @@ def.proto._renderText =
 
 	if( rotate === undefined )
 	{
-		gleam_intern_opentype.drawText(
-			glint.text,
+		glint.token.draw(
 			round( p.x + offset.x ),
 			round( p.y + offset.y ),
-			fontFace,
+			fontFace.color,
 			glint.align,
 			glint.base,
 			this._cx
@@ -723,11 +695,10 @@ def.proto._renderText =
 
 	const y = p.y + offset.y;
 
-	gleam_intern_opentype.drawText(
-		glint.text,
+	glint.token.draw(
 		round( ( x * t1 + y * t2 ) / det ),
 		round( ( y * t1 - x * t2 ) / det ),
-		fontFace,
+		fontFace.color,
 		glint.align,
 		glint.base,
 		this._cx

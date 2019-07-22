@@ -1,5 +1,7 @@
 /*
 | Shell global settings.
+|
+| FIXME remove (it should all be in config!)
 */
 'use strict';
 
