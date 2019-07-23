@@ -204,10 +204,14 @@ def.proto.dragStart =
 	{
 		case 'zone' :
 		{
-			model  =
-				model.create(
-					'zone', gleam_rect.createPosSize( ps, model.minSize )
-				);
+			if( model.minSize )
+			{
+				model = model.create( 'zone', gleam_rect.createPosSize( ps, model.minSize ) );
+			}
+			else
+			{
+				model = model.create( 'zone', model.zone.create( 'pos', ps ) );
+			}
 
 			if( itemTim === fabric_portal )
 			{
@@ -226,17 +230,6 @@ def.proto.dragStart =
 
 			break;
 		}
-
-		case 'pos/fontsize' :
-
-			transientItem =
-				model.create(
-					'trace', fabric_space.transTrace,
-					'zone', model.zone.create( 'pos', ps ),
-					'transform', screen.transform
-				);
-
-			break;
 
 		default : throw new Error( );
 

@@ -55,6 +55,8 @@ def.lazy.changes =
 
 	for( let item of this.items )
 	{
+		if( item.positioning !== 'zone' ) continue;
+
 		const iZone = item.zone;
 
 		const aZone = iZone.add( moveBy );

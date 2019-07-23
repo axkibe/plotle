@@ -161,11 +161,13 @@ def.proto._transformHeadline =
 		headline   // the headline widget
 	)
 {
+	const size = headline.fontFace.size.size;
+
 	// content height
-	const ch = headline.font.size * 2 + 160 + this._rows * 160;
+	const ch = size * 2 + 160 + this._rows * 160;
 
 	// if below minimum content is no longer vertical centered and scrolling is needed.
-	const y = Math.max( this.viewSize.height / 2 - ch / 2, 10 + headline.font.size );
+	const y = Math.max( this.viewSize.height / 2 - ch / 2, 10 + size );
 
 	return(
 		headline.create(

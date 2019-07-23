@@ -320,7 +320,7 @@ def.proto.mousewheel =
 */
 def.static.positioning =
 def.proto.positioning =
-	'pos/fontsize';
+	'zone';
 
 
 /*

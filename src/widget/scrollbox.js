@@ -203,8 +203,9 @@ def.lazy.glint =
 			'pane',
 				gleam_glint_pane.create(
 					'glint', gleam_glint_list.create( 'list:init', arr ),
+					'offset', this.scrollPos.negate,
 					'size', zone.size,
-					'offset', this.scrollPos.negate
+					'tag', 'scrollbox(' + this.trace.key + ')'
 				),
 			'pos', zone.pos
 		);
