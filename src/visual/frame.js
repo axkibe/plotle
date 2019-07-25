@@ -19,46 +19,154 @@ if( TIM )
 
 		// current transform of the frame
 		transform : { type : '../gleam/transform' },
+
+		// current view size
+		viewSize : { type : '../gleam/size' },
 	};
 }
 
 
 const action_dragItems = tim.require( '../action/dragItems' );
-
 const action_resizeItems = tim.require( '../action/resizeItems' );
-
 const compass = tim.require( '../compass/root' );
-
 const gleam_ellipse = tim.require( '../gleam/ellipse' );
-
+const gleam_glint_border = tim.require( '../gleam/glint/border' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
+const gleam_line = tim.require( '../gleam/line' );
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_roundRect = tim.require( '../gleam/roundRect' );
-
 const gleam_shapeList = tim.require( '../gleam/shapeList' );
-
 const gruga_frame = tim.require( '../gruga/frame' );
-
 const result_hover = tim.require( '../result/hover' );
 
 
 /*
-| Stancil for handles.
+| Checks if the frame has been clicked.
 */
-def.staticLazy.handle = ( ) =>
-	gleam_ellipse.create(
-		'pos', gleam_point.zero,
-		'width', gruga_frame.handleSize,
-		'height', gruga_frame.handleSize
+def.proto.click =
+	function(
+		p,        // cursor point
+		shift,    // true if shift key was pressed
+		ctrl      // true if ctrl key was pressed
+	)
+{
+	// ctrl-clicks are not swallowed.
+	if( ctrl ) return false;
+
+	// not been clicked, pass through
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+
+	// it has been clicked, yet do nothing.
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device held down.
+*/
+def.proto.dragStart =
+	function(
+		p,      // cursor point
+		shift,  // true if shift key was pressed
+		ctrl    // true if ctrl key was pressed
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
+
+	if( this.access !== 'rw' ) return;
+
+	const zone = this.zone;
+
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+
+	let com, pBase;
+
+	if( this._shapeHandleNw.within( p ) )
+	{
+		com = compass.nw;
+		pBase = zone.pse;
+	}
+	else if( this._shapeHandleNe.within( p ) )
+	{
+		com = compass.ne;
+		pBase = zone.psw;
+	}
+	else if( this._shapeHandleSe.within( p ) )
+	{
+		com = compass.se;
+		pBase = zone.pos;
+	}
+	else if( this._shapeHandleSw.within( p ) )
+	{
+		com = compass.sw;
+		pBase = zone.pne;
+	}
+	else if( !this.proportional )
+	{
+		if( this._shapeHandleN.within( p ) )
+		{
+			com = compass.n;
+			pBase = zone.ps;
+		}
+		else if( this._shapeHandleE.within( p ) )
+		{
+			com = compass.e;
+			pBase = zone.pw;
+		}
+		else if( this._shapeHandleS.within( p ) )
+		{
+			com = compass.s;
+			pBase = zone.pn;
+		}
+		else if( this._shapeHandleW.within( p ) )
+		{
+			com = compass.w;
+			pBase = zone.pe;
+		}
+	}
+
+	const dp = p.detransform( this.transform );
+
+	if( com )
+	{
+		root.alter(
+			'action',
+				action_resizeItems.create(
+					'items', this.content,
+					'startZone', zone,
+					'startZones', this.content.zones,
+					'proportional', this.proportional,
+					'resizeDir', com,
+					'startPoint', dp,
+					'pBase', pBase,
+					'scaleX', 1,
+					'scaleY', 1
+				)
+		);
+
+		return true;
+	}
+
+	root.alter(
+		'action',
+			action_dragItems.create(
+				'items', this.content,
+				'moveBy', gleam_point.zero,
+				'startPoint', dp,
+				// FIXME move this.zone logic into itemSet
+				// so it becomes this.content.zone
+				'startZone', this.zone
+			)
 	);
+
+	return true;
+};
 
 
 /*
@@ -76,6 +184,44 @@ def.lazy.glint =
 	);
 };
 
+
+/*
+| Stancil for handles.
+*/
+def.staticLazy.handle = ( ) =>
+	gleam_ellipse.create(
+		'pos', gleam_point.zero,
+		'width', gruga_frame.handleSize,
+		'height', gruga_frame.handleSize
+	);
+
+
+/*
+| Mouse hover.
+|
+| Returns true if the pointing device hovers over anything.
+*/
+def.proto.pointingHover =
+	function(
+		p
+	)
+{
+	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+
+	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
+	else if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
+	else if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
+	else if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
+	else if( !this.proportional )
+	{
+		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
+		if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
+		if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
+		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
+	}
+
+	return result_hover.cursorGrab;
+};
 
 
 /*
@@ -159,22 +305,25 @@ def.lazy.zone =
 };
 
 
+
 /*
-| The shape used as mask for the inner contents of the frame.
+| The shape of the frame body.
 */
-def.lazy._shapeMask =
+def.lazy._frameBodyShape =
 	function( )
 {
-	const arr = [ ];
+	const oZone = this._outerZone;
 
-	for( let ca of this.content )
-	{
-		arr.push( ca.tShape.border( -12 ) );
-	}
-
-	return gleam_shapeList.create( 'list:init', arr );
+	return(
+		gleam_roundRect.create(
+			'pos', oZone.pos,
+			'width', oZone.width,
+			'height', oZone.height,
+			'a', gruga_frame.handleSize / 2,
+			'b', gruga_frame.handleSize / 2
+		)
+	);
 };
-
 
 
 /*
@@ -183,11 +332,12 @@ def.lazy._shapeMask =
 def.lazy._glintFrame =
 	function( )
 {
-	const handleFacet = gruga_frame.handleFacet;
+	//const handleFacet = gruga_frame.handleFacet;
 
 	const glintFrameBody =
 		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._frameBodyShape );
 
+	/*
 	const glintHandleNe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNe );
 
 	const glintHandleNw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNw );
@@ -195,8 +345,6 @@ def.lazy._glintFrame =
 	const glintHandleSe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSe );
 
 	const glintHandleSw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSw );
-
-	let arr;
 
 	if( this.proportional )
 	{
@@ -219,26 +367,104 @@ def.lazy._glintFrame =
 				glintHandleN,  glintHandleE,  glintHandleS,  glintHandleW
 			];
 	}
+	*/
 
-	return gleam_glint_list.create( 'list:init', arr );
+	const tZone = this._tZone;
+
+	const a = [ glintFrameBody ];
+
+	{
+		const iGuide = gruga_frame.innerGuide;
+		const oGuide = gruga_frame.outerGuide;
+
+		const pn = tZone.pn;
+		const pos = tZone.pos;
+		const pse = tZone.pse;
+		const pw = tZone.pw;
+
+		a.push(
+			// north guide
+			gleam_glint_border.createFacetShape(
+				oGuide,
+				gleam_line.createP1P2(
+					pos.create( 'x', 0 ),
+					pos.create( 'x', this.viewSize.width )
+				)
+			),
+			// south guide
+			gleam_glint_border.createFacetShape(
+				oGuide,
+				gleam_line.createP1P2(
+					pse.create( 'x', 0 ),
+					pse.create( 'x', this.viewSize.width )
+				)
+			),
+			// west guide
+			gleam_glint_border.createFacetShape(
+				oGuide,
+				gleam_line.createP1P2(
+					pos.create( 'y', 0 ),
+					pos.create( 'y', this.viewSize.height )
+				)
+			),
+			// east guide
+			gleam_glint_border.createFacetShape(
+				oGuide,
+				gleam_line.createP1P2(
+					pse.create( 'y', 0 ),
+					pse.create( 'y', this.viewSize.height )
+				)
+			),
+			// vertical guide
+			gleam_glint_border.createFacetShape(
+				iGuide,
+				gleam_line.createP1P2(
+					pn.create( 'y', 0 ),
+					pn.create( 'y', this.viewSize.height )
+				)
+			),
+			// horizontal guide
+			gleam_glint_border.createFacetShape(
+				iGuide,
+				gleam_line.createP1P2(
+					pw.create( 'x', 0 ),
+					pw.create( 'x', this.viewSize.width )
+				)
+			)
+		);
+	}
+
+	return gleam_glint_list.create( 'list:init', a );
 };
 
 
 /*
-| The shape of the frame body.
+| Outer zone.
+|
+| Framed objects plus frame width.
 */
-def.lazy._frameBodyShape =
+def.lazy._outerZone =
 	function( )
 {
-	const oZone = this._outerZone;
+	const fw = gruga_frame.width;
+
+	const tZone = this._tZone;
+
+	const hw = tZone.width / 2;
+
+	const hh = tZone.height / 2;
+
+	const min = gruga_frame.handleSize / 2 * ( this.proportional ? 2.5 : 3.5 );
 
 	return(
-		gleam_roundRect.create(
-			'pos', oZone.pos,
-			'width', oZone.width,
-			'height', oZone.height,
-			'a', gruga_frame.handleSize / 2,
-			'b', gruga_frame.handleSize / 2
+		gleam_rect.create(
+			'pos',
+				tZone.pc.add(
+					Math.min( -hw - fw, -min ),
+					Math.min( -hh - fw, -min )
+				),
+			'width', 2 * Math.max( hw + fw, min ),
+			'height', 2 * Math.max( hh + fw, min )
 		)
 	);
 };
@@ -373,188 +599,29 @@ def.lazy._shapeHandleW =
 
 
 /*
-| Outer zone.
-|
-| Framed objects plus frame width.
+| The shape used as mask for the inner contents of the frame.
 */
-def.lazy._outerZone =
+def.lazy._shapeMask =
 	function( )
 {
-	const fw = gruga_frame.width;
+	const arr = [ ];
 
-	const tZone = this.zone.transform( this.transform );
+	for( let ca of this.content )
+	{
+		arr.push( ca.tShape.border( -1 ) );
+	}
 
-	const hw = tZone.width / 2;
-
-	const hh = tZone.height / 2;
-
-	const min = gruga_frame.handleSize / 2 * ( this.proportional ? 2.5 : 3.5 );
-
-	return(
-		gleam_rect.create(
-			'pos',
-				tZone.pc.add(
-					Math.min( -hw - fw, -min ),
-					Math.min( -hh - fw, -min )
-				),
-			'width', 2 * Math.max( hw + fw, min ),
-			'height', 2 * Math.max( hh + fw, min )
-		)
-	);
+	return gleam_shapeList.create( 'list:init', arr );
 };
 
 
 /*
-| Checks if the frame has been clicked.
+| Transformed zone.
 */
-def.proto.click =
-	function(
-		p,        // cursor point
-		shift,    // true if shift key was pressed
-		ctrl      // true if ctrl key was pressed
-	)
+def.lazy._tZone =
+	function( )
 {
-	// ctrl-clicks are not swallowed.
-	if( ctrl ) return false;
-
-	// not been clicked, pass through
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
-
-	// it has been clicked, yet do nothing.
-	return true;
-};
-
-
-/*
-| Starts an operation with the pointing device held down.
-*/
-def.proto.dragStart =
-	function(
-		p,      // cursor point
-		shift,  // true if shift key was pressed
-		ctrl    // true if ctrl key was pressed
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/}
-
-	if( this.access !== 'rw' ) return;
-
-	const zone = this.zone;
-
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
-
-	let com, pBase;
-
-	if( this._shapeHandleNw.within( p ) )
-	{
-		com = compass.nw;
-		pBase = zone.pse;
-	}
-	else if( this._shapeHandleNe.within( p ) )
-	{
-		com = compass.ne;
-		pBase = zone.psw;
-	}
-	else if( this._shapeHandleSe.within( p ) )
-	{
-		com = compass.se;
-		pBase = zone.pos;
-	}
-	else if( this._shapeHandleSw.within( p ) )
-	{
-		com = compass.sw;
-		pBase = zone.pne;
-	}
-	else if( !this.proportional )
-	{
-		if( this._shapeHandleN.within( p ) )
-		{
-			com = compass.n;
-			pBase = zone.ps;
-		}
-		else if( this._shapeHandleE.within( p ) )
-		{
-			com = compass.e;
-			pBase = zone.pw;
-		}
-		else if( this._shapeHandleS.within( p ) )
-		{
-			com = compass.s;
-			pBase = zone.pn;
-		}
-		else if( this._shapeHandleW.within( p ) )
-		{
-			com = compass.w;
-			pBase = zone.pe;
-		}
-	}
-
-	const dp = p.detransform( this.transform );
-
-	if( com )
-	{
-		root.alter(
-			'action',
-				action_resizeItems.create(
-					'items', this.content,
-					'startZone', zone,
-					'startZones', this.content.zones,
-					'proportional', this.proportional,
-					'resizeDir', com,
-					'startPoint', dp,
-					'pBase', pBase,
-					'scaleX', 1,
-					'scaleY', 1
-				)
-		);
-
-		return true;
-	}
-
-	root.alter(
-		'action',
-			action_dragItems.create(
-				'items', this.content,
-				'moveBy', gleam_point.zero,
-				'startPoint', dp,
-				// FIXME move this.zone logic into itemSet
-				// so it becomes this.content.zone
-				'startZone', this.zone
-			)
-	);
-
-	return true;
-};
-
-
-/*
-| Mouse hover.
-|
-| Returns true if the pointing device hovers over anything.
-*/
-def.proto.pointingHover =
-	function(
-		p
-	)
-{
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
-
-	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
-	else if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
-	else if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
-	else if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
-	else if( !this.proportional )
-	{
-		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
-		if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
-		if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
-		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
-	}
-
-	return result_hover.cursorGrab;
+	return this.zone.transform( this.transform );
 };
 
 

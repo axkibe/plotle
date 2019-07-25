@@ -334,7 +334,8 @@ def.adjust.frame =
 		frame.create(
 			'access', this.access,
 			'content', content,
-			'transform', this.transform
+			'transform', this.transform,
+			'viewSize', this.viewSize
 		)
 	);
 };

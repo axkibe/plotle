@@ -19,7 +19,6 @@ if( TIM )
 
 
 const gleam_point = tim.require( './point' );
-
 const gleam_rect = tim.require( './rect' );
 
 
@@ -75,21 +74,28 @@ def.static.createConnection =
 
 
 /*
+| Creation shortcut.
+*/
+def.static.createP1P2 =
+	function(
+		p1,
+		p2
+	)
+{
+	return gleam_line.create( 'p1', p1, 'p2', p2 );
+};
+
+
+/*
 | The point at center.
 */
 def.lazy.pc =
 	function( )
 {
 	const p1 = this.p1;
-
 	const p2 = this.p2;
 
-	return(
-		gleam_point.create(
-			'x', ( p1.x + p2.x ) / 2,
-			'y', ( p1.y + p2.y ) / 2
-		)
-	);
+	return gleam_point.createXY( ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 );
 };
 
 
