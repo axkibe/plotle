@@ -11,39 +11,22 @@ def.abstract = true;
 
 
 const gleam_border = tim.require( '../../gleam/border' );
-
 const gleam_borderList = tim.require( '../../gleam/borderList' );
-
 const gleam_color = tim.require( '../../gleam/color' );
-
 const gleam_ellipse = tim.require( '../../gleam/ellipse' );
-
 const gleam_facet = tim.require( '../../gleam/facet' );
-
 const gleam_facetList = tim.require( '../../gleam/facetList' );
-
 const gleam_gradient_colorStop = tim.require( '../../gleam/gradient/colorStop' );
-
 const gleam_gradient_radial = tim.require( '../../gleam/gradient/radial' );
-
 const gleam_point = tim.require( '../../gleam/point' );
-
 const gleam_rect = tim.require( '../../gleam/rect' );
-
 const gleam_size = tim.require( '../../gleam/size' );
-
 const gruga_font = tim.require( '../font' );
-
-const gruga_iconNormal = tim.require( '../iconNormal' );
-
-const gruga_iconRemove = tim.require( '../iconRemove' );
-
-const gruga_iconSelect = tim.require( '../iconSelect' );
-
-const gruga_iconZoom = tim.require( '../iconZoom' );
-
+const gruga_iconNormal = tim.require( '../icons/normal' );
+const gruga_iconRemove = tim.require( '../icons/remove' );
+const gruga_iconSelect = tim.require( '../icons/select' );
+const gruga_iconZoom = tim.require( '../icons/zoom' );
 const layout_button = tim.require( '../../layout/button' );
-
 const layout_disc = tim.require( '../../layout/disc' );
 
 

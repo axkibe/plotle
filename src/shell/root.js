@@ -97,141 +97,73 @@ if( TIM )
 
 
 const animation_root = tim.require( '../animation/root' );
-
 const animation_transform = tim.require( '../animation/transform' );
-
 const action_none = tim.require( '../action/none' );
-
 const action_select = tim.require( '../action/select' );
-
 const change_grow = tim.require( '../change/grow' );
-
 const change_join = tim.require( '../change/join' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_remove = tim.require( '../change/remove' );
-
 const change_wrap = tim.require( '../change/wrap' );
-
 const discs_root = tim.require( '../discs/root' );
-
 const discs_create = tim.require( '../discs/create' );
-
 const discs_main = tim.require( '../discs/main' );
-
 const discs_zoom = tim.require( '../discs/zoom' );
-
 const fabric_doc = tim.require( '../fabric/doc' );
-
 const fabric_para = tim.require( '../fabric/para' );
-
 const fabric_relation = tim.require( '../fabric/relation' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const forms_loading = tim.require( '../forms/loading' );
-
 const forms_login = tim.require( '../forms/login' );
-
 const forms_moveTo = tim.require( '../forms/moveTo' );
-
 const forms_noAccessToSpace = tim.require( '../forms/noAccessToSpace' );
-
 const forms_nonExistingSpace = tim.require( '../forms/nonExistingSpace' );
-
 const forms_root = tim.require( '../forms/root' );
-
 const forms_signUp = tim.require( '../forms/signUp' );
-
 const forms_space = tim.require( '../forms/space' );
-
 const forms_user = tim.require( '../forms/user' );
-
 const forms_welcome = tim.require( '../forms/welcome' );
-
 const gleam_display_canvas = tim.require( '../gleam/display/canvas' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_line = tim.require( '../gleam/line' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const gruga_controls = tim.require( '../gruga/controls' );
-
 const gruga_discs_create = tim.require( '../gruga/discs/create' );
-
 const gruga_discs_main = tim.require( '../gruga/discs/main' );
-
 const gruga_discs_zoom = tim.require( '../gruga/discs/zoom' );
-
-const gruga_loading = tim.require( '../gruga/loading' );
-
-const gruga_login = tim.require( '../gruga/login' );
-
-const gruga_moveTo = tim.require( '../gruga/moveTo' );
-
-const gruga_noAccessToSpace = tim.require( '../gruga/noAccessToSpace' );
-
-const gruga_nonExistingSpace = tim.require( '../gruga/nonExistingSpace' );
-
+const gruga_forms_loading = tim.require( '../gruga/forms/loading' );
+const gruga_forms_login = tim.require( '../gruga/forms/login' );
+const gruga_forms_moveTo = tim.require( '../gruga/forms/moveTo' );
+const gruga_forms_noAccessToSpace = tim.require( '../gruga/forms/noAccessToSpace' );
+const gruga_forms_nonExistingSpace = tim.require( '../gruga/forms/nonExistingSpace' );
+const gruga_forms_signUp = tim.require( '../gruga/forms/signUp' );
+const gruga_forms_space = tim.require( '../gruga/forms/space' );
+const gruga_forms_user = tim.require( '../gruga/forms/user' );
+const gruga_forms_welcome = tim.require( '../gruga/forms/welcome' );
 const gruga_relation = tim.require( '../gruga/relation' );
-
-const gruga_signUp = tim.require( '../gruga/signUp' );
-
-const gruga_space = tim.require( '../gruga/space' );
-
-const gruga_user = tim.require( '../gruga/user' );
-
-const gruga_welcome = tim.require( '../gruga/welcome' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_range = tim.require( '../mark/range' );
-
 const math = tim.require( '../math/root' );
-
 const net_channel = tim.require( '../net/channel' );
-
 const net_link = tim.require( '../net/link' );
-
 const ref_space = tim.require( '../ref/space' );
-
-const result_hover = tim.require( '../result/hover' );
-
 const reply_auth = tim.require( '../reply/auth' );
-
 const reply_error = tim.require( '../reply/error' );
-
+const result_hover = tim.require( '../result/hover' );
 const session_uid = tim.require( '../session/uid' );
-
 const shell_doTracker = tim.require( './doTracker' );
-
 const shell_settings = tim.require( './settings' );
-
 const show_create = tim.require( '../show/create' );
-
 const show_form = tim.require( '../show/form' );
-
 const show_normal = tim.require( '../show/normal' );
-
 const show_zoom = tim.require( '../show/zoom' );
-
 const trace_discs = tim.require( '../trace/discs' );
-
 const trace_forms = tim.require( '../trace/forms' );
-
 const trace_root = tim.require( '../trace/root' );
-
 const trace_space = tim.require( '../trace/space' );
-
 const user_creds = tim.require( '../user/creds' );
-
 const widget_factory = tim.require( '../widget/factory' );
 
 
@@ -1861,15 +1793,24 @@ def.static._createFormsRoot =
 {
 	const formLayouts =
 	{
-		loading : [ gruga_loading.layout, forms_loading ],
-		login : [ gruga_login.layout, forms_login ],
-		moveTo : [ gruga_moveTo.layout, forms_moveTo ],
-		noAccessToSpace : [ gruga_noAccessToSpace.layout, forms_noAccessToSpace ],
-		nonExistingSpace : [ gruga_nonExistingSpace.layout, forms_nonExistingSpace ],
-		signUp : [ gruga_signUp.layout, forms_signUp ],
-		space : [ gruga_space.layout, forms_space ],
-		user : [ gruga_user.layout, forms_user ],
-		welcome : [ gruga_welcome.layout, forms_welcome ],
+		loading :
+			[ gruga_forms_loading.layout, forms_loading ],
+		login :
+			[ gruga_forms_login.layout, forms_login ],
+		moveTo :
+			[ gruga_forms_moveTo.layout, forms_moveTo ],
+		noAccessToSpace :
+			[ gruga_forms_noAccessToSpace.layout, forms_noAccessToSpace ],
+		nonExistingSpace :
+			[ gruga_forms_nonExistingSpace.layout, forms_nonExistingSpace ],
+		signUp :
+			[ gruga_forms_signUp.layout, forms_signUp ],
+		space :
+			[ gruga_forms_space.layout, forms_space ],
+		user :
+			[ gruga_forms_user.layout, forms_user ],
+		welcome :
+			[ gruga_forms_welcome.layout, forms_welcome ],
 	};
 
 	let forms = { };

@@ -11,39 +11,22 @@ def.abstract = true;
 
 
 const gleam_border = tim.require( '../../gleam/border' );
-
 const gleam_borderList = tim.require( '../../gleam/borderList' );
-
 const gleam_color = tim.require( '../../gleam/color' );
-
 const gleam_ellipse = tim.require( '../../gleam/ellipse' );
-
 const gleam_facet = tim.require( '../../gleam/facet' );
-
 const gleam_facetList = tim.require( '../../gleam/facetList' );
-
 const gleam_gradient_colorStop = tim.require( '../../gleam/gradient/colorStop' );
-
 const gleam_gradient_radial = tim.require( '../../gleam/gradient/radial' );
-
 const gleam_point = tim.require( '../../gleam/point' );
-
 const gleam_rect = tim.require( '../../gleam/rect' );
-
 const gleam_size = tim.require( '../../gleam/size' );
-
 const gruga_font = tim.require( '../font' );
-
-const gruga_iconZoomAll = tim.require( '.././iconZoomAll' );
-
-const gruga_iconZoomHome = tim.require( '.././iconZoomHome' );
-
-const gruga_iconZoomIn = tim.require( '.././iconZoomIn' );
-
-const gruga_iconZoomOut = tim.require( '.././iconZoomOut' );
-
+const gruga_icons_zoomAll = tim.require( '.././icons/zoomAll' );
+const gruga_icons_zoomHome = tim.require( '.././icons/zoomHome' );
+const gruga_icons_zoomIn = tim.require( '.././icons/zoomIn' );
+const gruga_icons_zoomOut = tim.require( '.././icons/zoomOut' );
 const layout_button = tim.require( '../../layout/button' );
-
 const layout_disc = tim.require( '../../layout/disc' );
 
 
@@ -141,8 +124,8 @@ def.staticLazy.layout =
 			layout_button.create(
 				'facets', genericButtonFacets,
 				'fontFace', gruga_font.standard( 16 ),
-				'iconShape', gruga_iconZoomAll.shape,
-				'iconFacet', gruga_iconZoomAll.facet,
+				'iconShape', gruga_icons_zoomAll.shape,
+				'iconFacet', gruga_icons_zoomAll.facet,
 				'shape', 'ellipse',
 				'zone', gleam_rect.createPosSize( zoomAllButtonPos, genericButtonSize )
 			),
@@ -151,8 +134,8 @@ def.staticLazy.layout =
 			layout_button.create(
 				'facets', genericButtonFacets,
 				'fontFace', gruga_font.standard( 16 ),
-				'iconShape', gruga_iconZoomIn.shape,
-				'iconFacet', gruga_iconZoomIn.facet,
+				'iconShape', gruga_icons_zoomIn.shape,
+				'iconFacet', gruga_icons_zoomIn.facet,
 				'shape', 'ellipse',
 				'zone', gleam_rect.createPosSize( zoomInButtonPos, genericButtonSize )
 			),
@@ -161,8 +144,8 @@ def.staticLazy.layout =
 			layout_button.create(
 				'facets', genericButtonFacets,
 				'fontFace', gruga_font.standard( 16 ),
-				'iconShape', gruga_iconZoomOut.shape,
-				'iconFacet', gruga_iconZoomOut.facet,
+				'iconShape', gruga_icons_zoomOut.shape,
+				'iconFacet', gruga_icons_zoomOut.facet,
 				'shape', 'ellipse',
 				'zone', gleam_rect.createPosSize( zoomOutButtonPos, genericButtonSize )
 			),
@@ -171,8 +154,8 @@ def.staticLazy.layout =
 			layout_button.create(
 				'facets', genericButtonFacets,
 				'fontFace', gruga_font.standard( 16 ),
-				'iconShape', gruga_iconZoomHome.shape,
-				'iconFacet', gruga_iconZoomHome.facet,
+				'iconShape', gruga_icons_zoomHome.shape,
+				'iconFacet', gruga_icons_zoomHome.facet,
 				'shape', 'ellipse',
 				'zone', gleam_rect.createPosSize( zoomHomeButtonPos, genericButtonSize )
 			)

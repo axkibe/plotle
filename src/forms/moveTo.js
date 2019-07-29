@@ -24,21 +24,13 @@ if( TIM )
 
 
 const forms_base = tim.require( './base' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
-const gruga_moveTo = tim.require( '../gruga/moveTo' );
-
+const gruga_forms_moveTo = tim.require( '../gruga/forms/moveTo' );
 const gruga_scrollbar = tim.require( '../gruga/scrollbar' );
-
 const ref_space = tim.require( '../ref/space' );
-
 const widget_button = tim.require( '../widget/button' );
-
 const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
 
@@ -110,6 +102,7 @@ def.proto.pushButton =
 | The disc is shown while a form is shown.
 */
 def.proto.showDisc = true;
+
 
 /*
 | Width available to the form.
@@ -250,7 +243,7 @@ def.proto._transformScrollbox =
 			{
 				button =
 					widget_button.createFromLayout(
-						gruga_moveTo.spaceButtonLayout,
+						gruga_forms_moveTo.spaceButtonLayout,
 						sbTrace.appendWidget( fullname ),
 						gleam_transform.normal
 					);

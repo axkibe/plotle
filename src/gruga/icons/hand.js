@@ -27,21 +27,14 @@
 tim.define( module, ( def ) => {
 
 
-const gleam_point = require( '../gleam/point' );
-
-const gleam_shape_line = require( '../gleam/shape/line' );
-
-const gleam_shape_round = require( '../gleam/shape/round' );
-
-const gleam_shape_start = require( '../gleam/shape/start' );
-
-const gleam_border = require( '../gleam/border' );
-
-const gleam_color = require( '../gleam/color' );
-
-const gleam_facet = require( '../gleam/facet' );
-
-const gleam_shape = require( '../gleam/shape' );
+const gleam_point = require( '../../gleam/point' );
+const gleam_shape_line = require( '../../gleam/shape/line' );
+const gleam_shape_round = require( '../../gleam/shape/round' );
+const gleam_shape_start = require( '../../gleam/shape/start' );
+const gleam_border = require( '../../gleam/border' );
+const gleam_color = require( '../../gleam/color' );
+const gleam_facet = require( '../../gleam/facet' );
+const gleam_shape = require( '../../gleam/shape' );
 
 
 def.lazyStatic.facet = ( ) =>
@@ -128,4 +121,3 @@ def.staticLazy.shape =
 
 
 } );
-

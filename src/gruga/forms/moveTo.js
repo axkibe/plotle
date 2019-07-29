@@ -10,27 +10,17 @@ tim.define( module, ( def, gruga_moveTo ) => {
 def.abstract = true;
 
 
-const gleam_border = tim.require( '../gleam/border' );
-
-const gleam_color = tim.require( '../gleam/color' );
-
-const gleam_facet = tim.require( '../gleam/facet' );
-
-const gleam_facetList = tim.require( '../gleam/facetList' );
-
-const gleam_point = tim.require( '../gleam/point' );
-
-const gleam_rect = tim.require( '../gleam/rect' );
-
-const gruga_font = tim.require( '../gruga/font' );
-
-const layout_button = tim.require( '../layout/button' );
-
-const layout_form = tim.require( '../layout/form' );
-
-const layout_label = tim.require( '../layout/label' );
-
-const layout_scrollbox = tim.require( '../layout/scrollbox' );
+const gleam_border = tim.require( '../../gleam/border' );
+const gleam_color = tim.require( '../../gleam/color' );
+const gleam_facet = tim.require( '../../gleam/facet' );
+const gleam_facetList = tim.require( '../../gleam/facetList' );
+const gleam_point = tim.require( '../../gleam/point' );
+const gleam_rect = tim.require( '../../gleam/rect' );
+const gruga_font = tim.require( '../../gruga/font' );
+const layout_button = tim.require( '../../layout/button' );
+const layout_form = tim.require( '../../layout/form' );
+const layout_label = tim.require( '../../layout/label' );
+const layout_scrollbox = tim.require( '../../layout/scrollbox' );
 
 
 /*

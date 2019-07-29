@@ -10,15 +10,15 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const gleam_point = tim.require( '../gleam/point' );
-const gleam_rect = tim.require( '../gleam/rect' );
-const gruga_font = tim.require( '../gruga/font' );
-const gruga_genericButton = tim.require( '../gruga/genericButton' );
-const gruga_genericCheckbox = tim.require( '../gruga/genericCheckbox' );
-const layout_button = tim.require( '../layout/button' );
-const layout_checkbox = tim.require( '../layout/checkbox' );
-const layout_form = tim.require( '../layout/form' );
-const layout_label = tim.require( '../layout/label' );
+const gleam_point = tim.require( '../../gleam/point' );
+const gleam_rect = tim.require( '../../gleam/rect' );
+const gruga_font = tim.require( '../../gruga/font' );
+const gruga_genericButton = tim.require( '../../gruga/genericButton' );
+const gruga_genericCheckbox = tim.require( '../../gruga/genericCheckbox' );
+const layout_button = tim.require( '../../layout/button' );
+const layout_checkbox = tim.require( '../../layout/checkbox' );
+const layout_form = tim.require( '../../layout/form' );
+const layout_label = tim.require( '../../layout/label' );
 
 
 /*

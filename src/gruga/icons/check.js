@@ -20,18 +20,12 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const gleam_color = tim.require( '../gleam/color' );
-
-const gleam_facet = tim.require( '../gleam/facet' );
-
-const gleam_point = tim.require( '../gleam/point' );
-
-const gleam_shape = tim.require( '../gleam/shape' );
-
-const gleam_shape_line = tim.require( '../gleam/shape/line' );
-
-const gleam_shape_start = tim.require( '../gleam/shape/start' );
-
+const gleam_color = tim.require( '../../gleam/color' );
+const gleam_facet = tim.require( '../../gleam/facet' );
+const gleam_point = tim.require( '../../gleam/point' );
+const gleam_shape = tim.require( '../../gleam/shape' );
+const gleam_shape_line = tim.require( '../../gleam/shape/line' );
+const gleam_shape_start = tim.require( '../../gleam/shape/start' );
 
 
 def.staticLazy.facet = ( ) =>

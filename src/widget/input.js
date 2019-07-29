@@ -231,11 +231,11 @@ def.lazyFuncInt.locateOffsetPoint =
 		offset // the offset to get the point from.
 	)
 {
-	const fontsize = this.fontFace.size;
+	const fontSize = this.fontFace.size;
 
 	const pitch = widget_input._pitch;
 
-	const text = this.text;
+	const text = this.text.substring( 0, offset );
 
 	if( this.password )
 	{
@@ -244,15 +244,15 @@ def.lazyFuncInt.locateOffsetPoint =
 				pitch.x
 				+ ( this._maskWidth + this._maskKern ) * offset
 				- 1,
-				Math.round( pitch.y + fontsize.size )
+				Math.round( pitch.y + fontSize.size )
 			)
 		);
 	}
 
 	return(
 		gleam_point.createXY(
-			Math.round( pitch.x + fontsize.getAdvanceWidth( text.substring( 0, offset ) ) ),
-			Math.round( pitch.y + fontsize.size )
+			Math.round( pitch.x + fontSize.createToken( text ).advanceWidth ),
+			Math.round( pitch.y + fontSize.size )
 		)
 	);
 };
@@ -386,7 +386,7 @@ def.proto._getOffsetAt =
 
 	const password = this.password;
 
-	const fontsize = this.fontFace.size;
+	const fontSize = this.fontFace.size;
 
 	if( password ) mw = this._maskWidth + this._maskKern;
 
@@ -396,7 +396,7 @@ def.proto._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = password ? a * mw : fontsize.getAdvanceWidth( text.substr( 0, a ) );
+		x2 = password ? a * mw : fontSize.createToken( text.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}

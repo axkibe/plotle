@@ -45,7 +45,7 @@ def.proto.combine =
 
 	for( let t of imark )
 	{
-		if( !this.contains( t ) ) set.add( t );
+		if( !this.containsItemTrace( t ) ) set.add( t );
 	}
 
 	return mark_items.create( 'set:init', set );

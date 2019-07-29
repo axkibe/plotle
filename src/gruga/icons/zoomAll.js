@@ -23,19 +23,13 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-const gleam_point = tim.require( '../gleam/point' );
-
-const gleam_shape_line = tim.require( '../gleam/shape/line' );
-
-const gleam_shape_start = tim.require( '../gleam/shape/start' );
-
-const gleam_border = tim.require( '../gleam/border' );
-
-const gleam_color = tim.require( '../gleam/color' );
-
-const gleam_facet = tim.require( '../gleam/facet' );
-
-const gleam_shape = tim.require( '../gleam/shape' );
+const gleam_point = tim.require( '../../gleam/point' );
+const gleam_shape_line = tim.require( '../../gleam/shape/line' );
+const gleam_shape_start = tim.require( '../../gleam/shape/start' );
+const gleam_border = tim.require( '../../gleam/border' );
+const gleam_color = tim.require( '../../gleam/color' );
+const gleam_facet = tim.require( '../../gleam/facet' );
+const gleam_shape = tim.require( '../../gleam/shape' );
 
 
 def.staticLazy.facet = ( ) =>
@@ -52,21 +46,13 @@ def.staticLazy.shape =
 	function( )
 {
 	const c = gleam_point.zero;
-
 	const s = 8;
-
 	const t = s - 1;
-
 	const u = s - 3;
-
 	const n = t - 1;
-
 	const p = 3;
-
 	const v = 1;
-
 	const w = 2;
-
 	const z = 1;
 
 	return( gleam_shape.create(
@@ -128,5 +114,3 @@ def.staticLazy.shape =
 
 
 } );
-
-

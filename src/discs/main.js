@@ -27,21 +27,13 @@ if( TIM )
 
 
 const action_none = tim.require( '../action/none' );
-
 const action_select = tim.require( '../action/select' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_shrink = tim.require( '../change/shrink' );
-
 const result_hover = tim.require( '../result/hover' );
-
 const show_create = tim.require( '../show/create' );
-
 const show_form = tim.require( '../show/form' );
-
 const show_normal = tim.require( '../show/normal' );
-
 const show_zoom = tim.require( '../show/zoom' );
 
 
