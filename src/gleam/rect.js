@@ -540,8 +540,6 @@ def.proto.sub =
 
 /*
 | Returns true if point is within this rect.
-|
-| FIXME check if this border stuff can be removed.
 */
 def.proto.within =
 	function(

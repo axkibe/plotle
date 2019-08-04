@@ -29,7 +29,6 @@ if( TIM )
 const action_dragItems = tim.require( '../action/dragItems' );
 const action_resizeItems = tim.require( '../action/resizeItems' );
 const compass = tim.require( '../compass/root' );
-const gleam_ellipse = tim.require( '../gleam/ellipse' );
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
@@ -57,7 +56,10 @@ def.proto.click =
 	)
 {
 	// ctrl-clicks are not swallowed.
-	if( ctrl ) return false;
+	if( ctrl ) return;
+
+	// swallows clicks on the extender
+	if( this._shapeExtender.within( p ) ) return;
 
 	// not even near pass trough?
 	if( !this._outerZone.within( p ) ) return;
@@ -100,13 +102,15 @@ def.proto.dragStart =
 
 	const zone = this.zone;
 
+	const wex = this._shapeExtender.within( p );
+
 	// if not even near or within the mask, pass through
-	if( !this._outerZone.within( p ) || this._shapeMask.within( p ) ) return;
+	if( !wex && !this._outerZone.within( p ) || this._shapeMask.within( p ) ) return;
 
 	let com, pBase;
 
 	// dradding the inner body starts to drag the items
-	if( this._tZone.within( p ) )
+	if( wex || this._tZone.within( p ) )
 	{
 		const dp = p.detransform( this.transform );
 
@@ -182,18 +186,6 @@ def.lazy.glint =
 
 
 /*
-| Stancil for handles.
-| FIXME remove
-*/
-def.staticLazy.handle = ( ) =>
-	gleam_ellipse.create(
-		'pos', gleam_point.zero,
-		'width', gruga_frame.handleSize,
-		'height', gruga_frame.handleSize
-	);
-
-
-/*
 | Mouse hover.
 |
 | Returns true if the pointing device hovers over anything.
@@ -205,7 +197,10 @@ def.proto.pointingHover =
 {
 	if( !this._outerZone.within( p ) || this._shapeMask.within( p ) ) return;
 
-	if( this._tZone.within( p ) ) return result_hover.cursorGrab;
+	if( this._tZone.within( p ) || this._shapeExtender.within( p ) )
+	{
+		return result_hover.cursorGrab;
+	}
 
 	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
 	if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
@@ -390,7 +385,7 @@ def.lazy._glintFrame =
 	}
 
 	a.push(
-		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._shapeHandleExtender )
+		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._shapeExtender )
 	);
 
 	return gleam_glint_list.create( 'list:init', a );
@@ -409,29 +404,20 @@ def.lazy._outerZone =
 
 	const tZone = this._tZone;
 
-	const hw = tZone.width / 2;
-
-	const hh = tZone.height / 2;
-
-	const min = gruga_frame.handleSize / 2 * ( this.proportional ? 2.5 : 3.5 );
-
 	return(
 		gleam_rect.create(
-			'pos',
-				tZone.pc.add(
-					Math.min( -hw - fw, -min ),
-					Math.min( -hh - fw, -min )
-				),
-			'width', 2 * Math.max( hw + fw, min ),
-			'height', 2 * Math.max( hh + fw, min )
+			'pos', tZone.pos.add( -fw, -fw ),
+			'width', tZone.width + 2 * fw,
+			'height', tZone.height + 2 * fw
 		)
 	);
 };
 
+
 /*
 | Extender handle shape.
 */
-def.lazy._shapeHandleExtender =
+def.lazy._shapeExtender =
 	function( )
 {
 	const oz = this._outerZone;
