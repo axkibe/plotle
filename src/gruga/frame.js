@@ -4,17 +4,24 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, gruga_frame ) => {
 
 
 def.abstract = true;
 
 
 const gleam_border = tim.require( '../gleam/border' );
-
 const gleam_color = tim.require( '../gleam/color' );
-
 const gleam_facet = tim.require( '../gleam/facet' );
+
+
+def.static.extenderWidth = 34;
+
+
+/*
+| The rounding of the borders
+*/
+def.static.extenderRounding = 57;
 
 
 /*
@@ -22,9 +29,37 @@ const gleam_facet = tim.require( '../gleam/facet' );
 */
 def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
-		'fill', gleam_color.rgba( 255, 245, 200, 0.9 ),
+		'fill', gleam_color.rgba( 255, 250, 230, 0.9 ),
 		'border', gleam_border.create( 'color', gleam_color.rgba( 255, 220, 157, 0.9 ) )
 	);
+
+
+/*
+| The frame handle facet on corners.
+*/
+def.staticLazy.handleFacetCorner = ( ) =>
+	gleam_facet.create( 'fill', gleam_color.rgba( 255, 220, 157, 0.9 ) );
+
+
+/*
+| The frame handle facet side arbitrary scaling.
+*/
+def.staticLazy.handleFacetSideArbitrary = ( ) =>
+	gleam_facet.create( 'fill', gleam_color.rgba( 255, 245, 200, 0.9 ) );
+
+
+/*
+| The frame handle facet side proportinal scaling
+*/
+def.staticLazy.handleFacetSideProportional = ( ) =>
+	gleam_facet.create( 'fill', gleam_color.rgba( 255, 240, 194, 0.9 ) );
+
+
+/*
+| The handles size
+| FIXME remove
+*/
+def.static.handleSize = 53;
 
 
 /*
@@ -44,24 +79,17 @@ def.staticLazy.outerGuide = ( ) =>
 		'border', gleam_border.create( 'color', gleam_color.rgba( 255, 220, 157, 0.9 ) )
 	);
 
-/*
-| The frame handle facet.
-*/
-def.staticLazy.handleFacet = ( ) =>
-	gleam_facet.create(
-		'fill', gleam_color.rgba( 255, 220, 157, 0.955 )
-	);
 
 /*
-| The frames width.
+| The rounding of the borders
 */
-def.static.width = 36;
+def.static.rounding = 28;
 
 
 /*
-| The handles size
+| The frame width.
 */
-def.static.handleSize = 53;
+def.static.width = 46;
 
 
 } );

@@ -37,8 +37,11 @@ const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
 const gleam_line = tim.require( '../gleam/line' );
 const gleam_point = tim.require( '../gleam/point' );
 const gleam_rect = tim.require( '../gleam/rect' );
-const gleam_roundRect = tim.require( '../gleam/roundRect' );
+const gleam_shape = tim.require( '../gleam/shape' );
 const gleam_shapeList = tim.require( '../gleam/shapeList' );
+const gleam_shape_start = tim.require( '../gleam/shape/start' );
+const gleam_shape_line = tim.require( '../gleam/shape/line' );
+const gleam_shape_round = tim.require( '../gleam/shape/round' );
 const gruga_frame = tim.require( '../gruga/frame' );
 const result_hover = tim.require( '../result/hover' );
 
@@ -56,11 +59,25 @@ def.proto.click =
 	// ctrl-clicks are not swallowed.
 	if( ctrl ) return false;
 
-	// not been clicked, pass through
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+	// not even near pass trough?
+	if( !this._outerZone.within( p ) ) return;
 
-	// it has been clicked, yet do nothing.
-	return true;
+	// in the mask? pass through
+	if( this._shapeMask.within( p ) ) return;
+
+	// anything of the frame is clicked? absorbs it
+	if( this._tZone.within( p )
+		|| this._shapeHandleNw.within( p )
+		|| this._shapeHandleN.within( p )
+		|| this._shapeHandleNe.within( p )
+		|| this._shapeHandleE.within( p )
+		|| this._shapeHandleSe.within( p )
+		|| this._shapeHandleS.within( p )
+		|| this._shapeHandleSw.within( p )
+		|| this._shapeHandleW.within( p )
+	) return true;
+
+	// otherwise pass through
 };
 
 
@@ -83,85 +100,64 @@ def.proto.dragStart =
 
 	const zone = this.zone;
 
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+	// if not even near or within the mask, pass through
+	if( !this._outerZone.within( p ) || this._shapeMask.within( p ) ) return;
 
 	let com, pBase;
 
-	if( this._shapeHandleNw.within( p ) )
+	// dradding the inner body starts to drag the items
+	if( this._tZone.within( p ) )
 	{
-		com = compass.nw;
-		pBase = zone.pse;
-	}
-	else if( this._shapeHandleNe.within( p ) )
-	{
-		com = compass.ne;
-		pBase = zone.psw;
-	}
-	else if( this._shapeHandleSe.within( p ) )
-	{
-		com = compass.se;
-		pBase = zone.pos;
-	}
-	else if( this._shapeHandleSw.within( p ) )
-	{
-		com = compass.sw;
-		pBase = zone.pne;
-	}
-	else if( !this.proportional )
-	{
-		if( this._shapeHandleN.within( p ) )
-		{
-			com = compass.n;
-			pBase = zone.ps;
-		}
-		else if( this._shapeHandleE.within( p ) )
-		{
-			com = compass.e;
-			pBase = zone.pw;
-		}
-		else if( this._shapeHandleS.within( p ) )
-		{
-			com = compass.s;
-			pBase = zone.pn;
-		}
-		else if( this._shapeHandleW.within( p ) )
-		{
-			com = compass.w;
-			pBase = zone.pe;
-		}
-	}
+		const dp = p.detransform( this.transform );
 
-	const dp = p.detransform( this.transform );
-
-	if( com )
-	{
 		root.alter(
 			'action',
-				action_resizeItems.create(
+				action_dragItems.create(
 					'items', this.content,
-					'startZone', zone,
-					'startZones', this.content.zones,
-					'proportional', this.proportional,
-					'resizeDir', com,
+					'moveBy', gleam_point.zero,
 					'startPoint', dp,
-					'pBase', pBase,
-					'scaleX', 1,
-					'scaleY', 1
+					// FIXME move this.zone logic into itemSet
+					// so it becomes this.content.zone
+					'startZone', this.zone
 				)
 		);
 
 		return true;
 	}
 
+	if( this._shapeHandleNw.within( p ) )
+	{ com = compass.nw; pBase = zone.pse; }
+	else if( this._shapeHandleNe.within( p ) )
+	{ com = compass.ne; pBase = zone.psw; }
+	else if( this._shapeHandleSe.within( p ) )
+	{ com = compass.se; pBase = zone.pos; }
+	else if( this._shapeHandleSw.within( p ) )
+	{ com = compass.sw; pBase = zone.pne; }
+	else if( this._shapeHandleN.within( p ) )
+	{ com = compass.n; pBase = zone.ps; }
+	else if( this._shapeHandleE.within( p ) )
+	{ com = compass.e; pBase = zone.pw; }
+	else if( this._shapeHandleS.within( p ) )
+	{ com = compass.s; pBase = zone.pn; }
+	else if( this._shapeHandleW.within( p ) )
+	{ com = compass.w; pBase = zone.pe; }
+
+	if( !com ) return;
+
+	const dp = p.detransform( this.transform );
+
 	root.alter(
 		'action',
-			action_dragItems.create(
+			action_resizeItems.create(
 				'items', this.content,
-				'moveBy', gleam_point.zero,
+				'startZone', zone,
+				'startZones', this.content.zones,
+				'proportional', this.proportional,
+				'resizeDir', com,
 				'startPoint', dp,
-				// FIXME move this.zone logic into itemSet
-				// so it becomes this.content.zone
-				'startZone', this.zone
+				'pBase', pBase,
+				'scaleX', 1,
+				'scaleY', 1
 			)
 	);
 
@@ -187,6 +183,7 @@ def.lazy.glint =
 
 /*
 | Stancil for handles.
+| FIXME remove
 */
 def.staticLazy.handle = ( ) =>
 	gleam_ellipse.create(
@@ -206,21 +203,18 @@ def.proto.pointingHover =
 		p
 	)
 {
-	if( !this._frameBodyShape.within( p ) || this._shapeMask.within( p ) ) return;
+	if( !this._outerZone.within( p ) || this._shapeMask.within( p ) ) return;
+
+	if( this._tZone.within( p ) ) return result_hover.cursorGrab;
 
 	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
-	else if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
-	else if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
-	else if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
-	else if( !this.proportional )
-	{
-		if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
-		if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
-		if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
-		if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
-	}
-
-	return result_hover.cursorGrab;
+	if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
+	if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
+	if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
+	if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
+	if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
+	if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
+	if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
 };
 
 
@@ -268,11 +262,8 @@ def.lazy.zone =
 			const pos = cZone.pos;
 
 			ny = pos.y;
-
 			wx = pos.x;
-
 			sy = pos.y + cZone.height;
-
 			ex = pos.x + cZone.width;
 
 			continue;
@@ -305,73 +296,37 @@ def.lazy.zone =
 };
 
 
-
-/*
-| The shape of the frame body.
-*/
-def.lazy._frameBodyShape =
-	function( )
-{
-	const oZone = this._outerZone;
-
-	return(
-		gleam_roundRect.create(
-			'pos', oZone.pos,
-			'width', oZone.width,
-			'height', oZone.height,
-			'a', gruga_frame.handleSize / 2,
-			'b', gruga_frame.handleSize / 2
-		)
-	);
-};
-
-
 /*
 | The frame glint holding all stuff unmasked.
 */
 def.lazy._glintFrame =
 	function( )
 {
-	//const handleFacet = gruga_frame.handleFacet;
+	const hfc = gruga_frame.handleFacetCorner;
 
 	const glintFrameBody =
-		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._frameBodyShape );
+		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._tZone );
 
-	/*
-	const glintHandleNe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNe );
+	const glintHandleNe = gleam_glint_paint.createFacetShape( hfc, this._shapeHandleNe );
+	const glintHandleNw = gleam_glint_paint.createFacetShape( hfc, this._shapeHandleNw );
+	const glintHandleSe = gleam_glint_paint.createFacetShape( hfc, this._shapeHandleSe );
+	const glintHandleSw = gleam_glint_paint.createFacetShape( hfc, this._shapeHandleSw );
 
-	const glintHandleNw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleNw );
+	const a = [ glintFrameBody, glintHandleNe, glintHandleNw, glintHandleSe, glintHandleSw ];
 
-	const glintHandleSe = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSe );
+	const hfs =
+		this.proportional
+		? gruga_frame.handleFacetSideProportional
+		: gruga_frame.handleFacetSideArbitrary;
 
-	const glintHandleSw = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleSw );
+	const glintHandleE = gleam_glint_paint.createFacetShape( hfs, this._shapeHandleE );
+	const glintHandleN = gleam_glint_paint.createFacetShape( hfs, this._shapeHandleN );
+	const glintHandleS = gleam_glint_paint.createFacetShape( hfs, this._shapeHandleS );
+	const glintHandleW = gleam_glint_paint.createFacetShape( hfs, this._shapeHandleW );
 
-	if( this.proportional )
-	{
-		arr = [ glintFrameBody, glintHandleNw, glintHandleNe, glintHandleSe, glintHandleSw ];
-	}
-	else
-	{
-		const glintHandleE = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleE );
-
-		const glintHandleN = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleN );
-
-		const glintHandleS = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleS );
-
-		const glintHandleW = gleam_glint_paint.createFacetShape( handleFacet, this._shapeHandleW );
-
-		arr =
-			[
-				glintFrameBody,
-				glintHandleNw, glintHandleNe, glintHandleSe, glintHandleSw,
-				glintHandleN,  glintHandleE,  glintHandleS,  glintHandleW
-			];
-	}
-	*/
+	a.push( glintHandleN, glintHandleE, glintHandleS, glintHandleW );
 
 	const tZone = this._tZone;
-
-	const a = [ glintFrameBody ];
 
 	{
 		const iGuide = gruga_frame.innerGuide;
@@ -434,6 +389,10 @@ def.lazy._glintFrame =
 		);
 	}
 
+	a.push(
+		gleam_glint_paint.createFacetShape( gruga_frame.facet, this._shapeHandleExtender )
+	);
+
 	return gleam_glint_list.create( 'list:init', a );
 };
 
@@ -469,130 +428,264 @@ def.lazy._outerZone =
 	);
 };
 
+/*
+| Extender handle shape.
+*/
+def.lazy._shapeHandleExtender =
+	function( )
+{
+	const oz = this._outerZone;
+	const tz = this._tZone;
+
+	const r = gruga_frame.rounding;
+	const ew = gruga_frame.extenderWidth;
+	const er = gruga_frame.extenderRounding;
+
+	return(
+		gleam_shape.create(
+			'pc', tz.pos,
+			'list:init',
+			[
+			// starts at nw corner
+			gleam_shape_start.createP(
+				gleam_point.createXY( oz.pos.x - ew, oz.pos.y - ew + er )
+			),
+			// goes around nw corner
+			gleam_shape_round.createP(
+				gleam_point.createXY( oz.pos.x - ew + er, oz.pos.y - ew )
+			),
+			// north line
+			gleam_shape_line.createP(
+				gleam_point.createXY( oz.pne.x + ew - er, oz.pne.y - ew )
+			),
+			// goes around ne corner
+			gleam_shape_round.createP(
+				gleam_point.createXY( oz.pne.x + ew, oz.pne.y - ew + er )
+			),
+			// east line
+			gleam_shape_line.createP(
+				gleam_point.createXY( oz.pse.x + ew, oz.pse.y + ew - er )
+			),
+			// goes around se corner
+			gleam_shape_round.createP(
+				gleam_point.createXY( oz.pse.x + ew - er, oz.pse.y + ew )
+			),
+			// south line
+			gleam_shape_line.createP(
+				gleam_point.createXY( oz.psw.x - ew + er, oz.psw.y + ew )
+			),
+			// goes around sw corner
+			gleam_shape_round.createP(
+				gleam_point.createXY( oz.psw.x - ew, oz.psw.y + ew - er )
+			),
+			// back to start for outer
+			gleam_shape_line.createP(
+				gleam_point.createXY( oz.pos.x - ew, oz.pos.y - ew + er )
+			),
+			// flies to inner, ne point of NW handle
+			gleam_shape_line.createPFly( gleam_point.createXY( oz.pos.x + r, oz.pos.y ) ),
+			// follows the NW handle
+			gleam_shape_round.createPCcw( gleam_point.createXY( oz.pos.x, oz.pos.y + r ) ),
+			// goes to SW handle
+			gleam_shape_line.createP( gleam_point.createXY( oz.psw.x, oz.psw.y - r ) ),
+			// follows the SW handle
+			gleam_shape_round.createPCcw( gleam_point.createXY( oz.psw.x + r, oz.psw.y ) ),
+			// goes to SE handle
+			gleam_shape_line.createP( gleam_point.createXY( oz.pse.x - r, oz.pse.y ) ),
+			// follows the SE handle
+			gleam_shape_round.createPCcw( gleam_point.createXY( oz.pse.x, oz.pse.y -r ) ),
+			// goes to NE handle
+			gleam_shape_line.createP( gleam_point.createXY( oz.pne.x, oz.pne.y + r ) ),
+			// follows the NE handle
+			gleam_shape_round.createPCcw( gleam_point.createXY( oz.pne.x - r, oz.pne.y ) ),
+			// goes to NW handle
+			gleam_shape_line.createP( gleam_point.createXY( oz.pos.x + r, oz.pos.y ) ),
+			// follows the NW handle
+			gleam_shape_round.createPCcw( gleam_point.createXY( oz.pos.x, oz.pos.y + r ) ),
+			// closes to upper left corner
+			gleam_shape_line.closeFly
+			]
+		)
+	);
+};
 
 /*
-| Handle glint in N.
+| North handle shape.
 */
 def.lazy._shapeHandleN =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
+	const oz = this._outerZone;
+	const tz = this._tZone;
 
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.pn.add( -gruga_frame.handleSize / 2, 0 )
+		gleam_rect.create(
+			'pos', gleam_point.createXY( tz.pos.x, oz.pos.y ),
+			'width', tz.width,
+			'height', gruga_frame.width
 		)
 	);
 };
 
 
 /*
-| Handle glint in Ne.
+| North-east handle shape.
 */
 def.lazy._shapeHandleNe =
 	function( )
 {
+	const oz = this._outerZone;
+	const tz = this._tZone;
+	const r = gruga_frame.rounding;
+
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.pne.add( -gruga_frame.handleSize, 0 )
+		gleam_shape.create(
+			'pc', tz.pos,
+			'list:init',
+			[
+			gleam_shape_start.createP( gleam_point.createXY( tz.pne.x, oz.pne.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.pne.x - r, oz.pne.y ) ),
+			gleam_shape_round.createP( gleam_point.createXY( oz.pne.x, oz.pne.y + r ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.pne.x, tz.pne.y ) ),
+			gleam_shape_line.createP( tz.pne ),
+			gleam_shape_line.close
+			]
 		)
 	);
 };
 
 
 /*
-| Handle glint in Nw.
+| North-west handle shape.
 */
 def.lazy._shapeHandleNw =
 	function( )
 {
-	return visual_frame.handle.create( 'pos', this._outerZone.pos );
+	const oz = this._outerZone;
+	const tz = this._tZone;
+	const r = gruga_frame.rounding;
+
+	return(
+		gleam_shape.create(
+			'pc', tz.pos,
+			'list:init',
+			[
+			gleam_shape_start.createP( gleam_point.createXY( oz.pos.x, tz.pos.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.pos.x, oz.pos.y + r ) ),
+			gleam_shape_round.createP( gleam_point.createXY( oz.pos.x + r, oz.pos.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( tz.pos.x, oz.pos.y ) ),
+			gleam_shape_line.createP( tz.pos ),
+			gleam_shape_line.close
+			]
+		)
+	);
 };
 
 
 /*
-| Handle glint in E.
+| East handle shape.
 */
 def.lazy._shapeHandleE =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
+	const tz = this._tZone;
 
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.pe.add( -gruga_frame.handleSize, -gruga_frame.handleSize / 2 )
+		gleam_rect.create(
+			'pos', tz.pne,
+			'width', gruga_frame.width,
+			'height', tz.height
 		)
 	);
 };
 
 
 /*
-| Handle glint in S.
+| South handle shape.
 */
 def.lazy._shapeHandleS =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
+	const tz = this._tZone;
 
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.ps.add( -gruga_frame.handleSize / 2, -gruga_frame.handleSize ),
+		gleam_rect.create(
+			'pos', tz.psw,
+			'width', tz.width,
+			'height', gruga_frame.width
 		)
 	);
 };
 
 
 /*
-| Handle glint in Se.
+| South-east handle shape.
 */
 def.lazy._shapeHandleSe =
 	function( )
 {
+	const oz = this._outerZone;
+	const tz = this._tZone;
+	const r = gruga_frame.rounding;
+
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.pse.add( -gruga_frame.handleSize, -gruga_frame.handleSize )
+		gleam_shape.create(
+			'pc', tz.pos,
+			'list:init',
+			[
+			gleam_shape_start.createP( gleam_point.createXY( oz.pse.x, tz.pse.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.pse.x, oz.pse.y - r ) ),
+			gleam_shape_round.createP( gleam_point.createXY( oz.pse.x - r, oz.pse.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( tz.pse.x, oz.pse.y ) ),
+			gleam_shape_line.createP( tz.pse ),
+			gleam_shape_line.close
+			]
 		)
 	);
 };
 
 
 /*
-| Handle glint in Sw.
+| South-west handle shape.
 */
 def.lazy._shapeHandleSw =
 	function( )
 {
+	const oz = this._outerZone;
+	const tz = this._tZone;
+	const r = gruga_frame.rounding;
+
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.psw.add( 0, -gruga_frame.handleSize )
+		gleam_shape.create(
+			'pc', tz.pos,
+			'list:init',
+			[
+			gleam_shape_start.createP( gleam_point.createXY( tz.psw.x, oz.psw.y ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.psw.x + r, oz.psw.y ) ),
+			gleam_shape_round.createP( gleam_point.createXY( oz.psw.x, oz.psw.y - r ) ),
+			gleam_shape_line.createP( gleam_point.createXY( oz.psw.x, tz.psw.y ) ),
+			gleam_shape_line.createP( tz.psw ),
+			gleam_shape_line.close
+			]
 		)
 	);
 };
 
 
 /*
-| Handle glint in W.
+| West handle shape.
 */
 def.lazy._shapeHandleW =
 	function( )
 {
-/**/if( CHECK )
-/**/{
-/**/	if( this.proportional ) throw new Error( );
-/**/}
+	const oz = this._outerZone;
+	const tz = this._tZone;
 
 	return(
-		visual_frame.handle.create(
-			'pos', this._outerZone.pw.add( 0, -gruga_frame.handleSize / 2 ),
+		gleam_rect.create(
+			'pos', gleam_point.createXY( oz.pos.x, tz.pos.y ),
+			'width', gruga_frame.width,
+			'height', tz.height
 		)
 	);
 };

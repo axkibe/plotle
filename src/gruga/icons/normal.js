@@ -36,10 +36,7 @@ const gleam_shape_start = tim.require( '../../gleam/shape/start' );
 def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
 		'fill', gleam_color.black,
-		'border',
-			gleam_border.create(
-				'color', gleam_color.rgb( 128, 0, 0 )
-			)
+		'border', gleam_border.create( 'color', gleam_color.rgb( 128, 0, 0 ) )
 	);
 
 
@@ -51,14 +48,14 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			gleam_shape_start.create( 'p', ap ), // A
-			gleam_shape_line.create( 'p', ap.add(  11,  10 ) ), // B
-			gleam_shape_line.create( 'p', ap.add(   6,  11 ) ), // C
-			gleam_shape_line.create( 'p', ap.add(   9,  17 ) ), // D
-			gleam_shape_line.create( 'p', ap.add(   7,  18 ) ), // E
-			gleam_shape_line.create( 'p', ap.add(   4,  12 ) ), // F
-			gleam_shape_line.create( 'p', ap.add(   0,  15 ) ), // G
-			gleam_shape_line.create( 'close', true )
+			gleam_shape_start.createP( ap ), // A
+			gleam_shape_line.createP( ap.add(  11,  10 ) ), // B
+			gleam_shape_line.createP( ap.add(   6,  11 ) ), // C
+			gleam_shape_line.createP( ap.add(   9,  17 ) ), // D
+			gleam_shape_line.createP( ap.add(   7,  18 ) ), // E
+			gleam_shape_line.createP( ap.add(   4,  12 ) ), // F
+			gleam_shape_line.createP( ap.add(   0,  15 ) ), // G
+			gleam_shape_line.close
 		],
 		'pc', gleam_point.zero
 	) );
@@ -66,4 +63,3 @@ def.staticLazy.shape =
 
 
 } );
-

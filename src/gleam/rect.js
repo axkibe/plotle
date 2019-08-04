@@ -13,15 +13,6 @@
 tim.define( module, ( def, gleam_rect ) => {
 
 
-const gleam_point = tim.require( './point' );
-
-const gleam_size = tim.require( './size' );
-
-const gleam_margin = tim.require( './margin' );
-
-const gleam_transform = tim.require( './transform' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -38,6 +29,12 @@ if( TIM )
 
 	def.json = 'rect';
 }
+
+
+const gleam_point = tim.require( './point' );
+const gleam_size = tim.require( './size' );
+const gleam_margin = tim.require( './margin' );
+const gleam_transform = tim.require( './transform' );
 
 
 /*
