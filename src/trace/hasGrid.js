@@ -1,5 +1,5 @@
 /*
-| A trace into a 'hasGrid' setting
+| A trace into a 'hasGrid' setting.
 */
 'use strict';
 

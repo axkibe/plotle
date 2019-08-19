@@ -17,6 +17,9 @@ if( TIM )
 		// space has grid
 		hasGrid : { type : [ 'undefined', 'boolean' ] },
 
+		// space has guides
+		hasGuides : { type : [ 'undefined', 'boolean' ] },
+
 		// space has snapping on grid
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
@@ -79,6 +82,8 @@ def.adjust.get =
 
 	const hasGrid = form.concernsHasGrid( this.hasGrid );
 
+	const hasGuides = form.concernsHasGuides( this.hasGuides );
+
 	const hasSnapping = form.concernsHasSnapping( this.hasSnapping );
 
 	const userSpaceList = form.concernsUserSpaceList( this.userSpaceList );
@@ -91,6 +96,7 @@ def.adjust.get =
 		form.create(
 			'action', this.action,
 			'hasGrid', hasGrid,
+			'hasGuides', hasGuides,
 			'hasSnapping', hasSnapping,
 			'hover', hover,
 			'mark', mark,

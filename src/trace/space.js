@@ -25,6 +25,8 @@ const trace_item = tim.require( './item' );
 
 const trace_hasGrid = tim.require( './hasGrid' );
 
+const trace_hasGuides = tim.require( './hasGuides' );
+
 const trace_hasSnapping = tim.require( './hasSnapping' );
 
 const trace_root = tim.require( './root' );
@@ -37,6 +39,16 @@ def.lazy.appendHasGrid =
 	function( )
 {
 	return trace_hasGrid.create( 'list:init', this, 'list:append', this );
+};
+
+
+/*
+| Returns a trace with a 'hasGuides' part appended.
+*/
+def.lazy.appendHasGuides =
+	function( )
+{
+	return trace_hasGuides.create( 'list:init', this, 'list:append', this );
 };
 
 

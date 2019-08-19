@@ -408,11 +408,14 @@ def.adjust.forms =
 		forms
 	)
 {
+	const space = this.space;
+
 	return(
 		forms.create(
 			'action', this.action,
-			'hasGrid', this.space && this.space.hasGrid,
-			'hasSnapping', this.space && this.space.hasSnapping,
+			'hasGrid', space && space.hasGrid,
+			'hasGuides', space && space.hasGuides,
+			'hasSnapping', space && space.hasSnapping,
 			'hover', forms_root.concernsHover( this.hover ),
 			'mark', forms_root.concernsMark( this._mark ),
 			'spaceRef', this.spaceRef,

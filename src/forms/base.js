@@ -18,11 +18,12 @@ if( TIM )
 		action : { type : [ '< ../action/types' ] },
 
 		// space has grid
-		// FIXME rename spaceHasGrid
 		hasGrid : { type : 'undefined' },
 
+		// space has guides
+		hasGuides : { type : 'undefined' },
+
 		// space has snapping
-		// FIXME rename spaceHasSnapping
 		hasSnapping : { type : 'undefined' },
 
 		// the widget hovered upon
@@ -36,7 +37,8 @@ if( TIM )
 
 		// trace of the form
 		// FIXME remove undefined
-		trace : { type : [ 'undefined', '../trace/form' ] },
+		// XXX trace : { type : [ 'undefined', '../trace/form' ] },
+		trace : { type : '../trace/form' },
 
 		// currently logged in user
 		user : { type : 'undefined' },
@@ -72,10 +74,30 @@ const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
 
 /*
+| Returns the attention center.
+*/
+def.lazy.attentionCenter =
+	function( )
+{
+	const focus = this.focusedWidget;
+
+	if( focus ) return focus.attentionCenter;
+};
+
+
+/*
 | By default forms don't care about 'hasGrid'.
 */
 def.static.concernsHasGrid =
 def.proto.concernsHasGrid =
+	( ) => undefined;
+
+
+/*
+| By default forms don't care about 'hasGuides'.
+*/
+def.static.concernsHasGuides =
+def.proto.concernsHasGuides =
 	( ) => undefined;
 
 
@@ -273,18 +295,6 @@ def.static.adjustGet =
 	if( sp !== pass ) widget = widget.create( 'scrollPos', sp );
 
 	return widget;
-};
-
-
-/*
-| Returns the attention center.
-*/
-def.lazy.attentionCenter =
-	function( )
-{
-	const focus = this.focusedWidget;
-
-	if( focus ) return focus.attentionCenter;
 };
 
 

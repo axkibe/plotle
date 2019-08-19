@@ -22,6 +22,7 @@ const trace_form = tim.require( './form' );
 const trace_forms = tim.require( './forms' );
 const trace_from = tim.require( './from' );
 const trace_hasGrid = tim.require( './hasGrid' );
+const trace_hasGuides = tim.require( './hasGuides' );
 const trace_hasSnapping = tim.require( './hasSnapping' );
 const trace_item = tim.require( './item' );
 const trace_jp1 = tim.require( './jp1' );
@@ -161,6 +162,7 @@ def.static.createFromJSONTrace =
 		case '(o)fontsize'    : return trace_fontsize.createFromJSONStep( trace, pos );
 		case '(o)from'        : return trace_from.createFromJSONStep( trace, pos );
 		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
+		case '(o)hasGuides'   : return trace_hasGuides.createFromJSONStep( trace, pos );
 		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
 		case '(o)item'        : return trace_item.createFromJSONStep( trace, pos );
 		case '(o)jp1'         : return trace_jp1.createFromJSONStep( trace, pos );

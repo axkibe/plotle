@@ -22,14 +22,15 @@ if( TIM )
 		frame : { type : [ 'undefined', '../visual/frame' ] },
 
 		// this space has a grid.
-		// no json thus not saved or transmitted
 		hasGrid : { type : 'boolean', defaultValue : 'true', json: true, },
+
+		// this space has guides.
+		hasGuides : { type : 'boolean', defaultValue : 'true', json: true, },
 
 		// node currently hovered upon
 		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
 		// this space has grid snapping
-		// no json thus not saved or transmitted
 		hasSnapping : { type : 'boolean', defaultValue : 'true', json: true },
 
 		// reference to this space
@@ -334,6 +335,7 @@ def.adjust.frame =
 		frame.create(
 			'access', this.access,
 			'content', content,
+			'hasGuides', this.hasGuides,
 			'transform', this.transform,
 			'viewSize', this.viewSize
 		)

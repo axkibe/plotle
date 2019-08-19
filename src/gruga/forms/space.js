@@ -67,6 +67,23 @@ def.staticLazy.layout = ( ) =>
 				'fontFace', gruga_font.standard( 16 ),
 				'pos', gleam_point.createXY( -25, -15 )
 			),
+		'twig:add', 'guidesCheckBox',
+			layout_checkbox.create(
+				'facets', gruga_genericCheckbox.facets,
+				'checked', false,
+				'zone',
+					gleam_rect.create(
+						'pos', gleam_point.createXY( -52, 6 ),
+						'width', 16,
+						'height', 15
+					)
+			),
+		'twig:add', 'guidesMessage',
+			layout_label.create(
+				'text', 'selection guides',
+				'fontFace', gruga_font.standard( 16 ),
+				'pos', gleam_point.createXY( -25, 20 )
+			),
 		'twig:add', 'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,

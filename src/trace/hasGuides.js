@@ -1,10 +1,10 @@
 /*
-| A trace into a 'hasSnapping' setting.
+| A trace into a 'hasGuides' setting.
 */
 'use strict';
 
 
-tim.define( module, ( def, trace_hasSnapping ) => {
+tim.define( module, ( def, trace_hasGuides ) => {
 
 
 def.extend = './base';
@@ -30,19 +30,17 @@ const trace_space = tim.require( './space' );
 def.lazy.asJSON =
 	function( )
 {
-	return(
-		{
-			type : 'trace',
-			trace : [ '(o)hasSnapping' ].concat( this.last.asJSON.trace )
-		}
-	);
+	return( {
+		type : 'trace',
+		trace : [ '(o)hasGuides' ].concat(this.last.asJSON.trace )
+	});
 };
 
 
 /*
 | The trace step as string (for debugging).
 */
-def.lazy.asStringStep = ( ) => 'hasSnapping';
+def.lazy.asStringStep = ( ) => 'hasGuides';
 
 
 /*
@@ -56,10 +54,10 @@ def.static.createFromJSONStep =
 {
 	if( CHECK )
 /**/{
-/**/	if( trace[ pos ] !== '(o)hasSnapping' ) throw new Error( );
+/**/	if( trace[ pos ] !== '(o)hasGuides' ) throw new Error( );
 /**/}
 
-	return trace_base.createFromJSONTrace( trace, pos + 1, trace_space.fakeRoot ).appendHasSnapping;
+	return trace_base.createFromJSONTrace( trace, pos + 1, trace_space.fakeRoot ).appendHasGuides;
 };
 
 
@@ -80,7 +78,7 @@ def.proto.graft =
 
 	let sub = this.last.pick( tree );
 
-	sub = sub.create( 'hasSnapping', val );
+	sub = sub.create( 'hasGuides', val );
 
 	return this.last.graft( tree, sub );
 };
@@ -94,7 +92,7 @@ def.proto.pick =
 		tree
 	)
 {
-	return this.last.pick( tree ).hasSnapping;
+	return this.last.pick( tree ).hasGuides;
 };
 
 

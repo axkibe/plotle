@@ -20,6 +20,9 @@ if( TIM )
 		// space has grid
 		hasGrid : { type : [ 'undefined', 'boolean' ] },
 
+		// space has guides
+		hasGuides : { type : [ 'undefined', 'boolean' ] },
+
 		// space has snapping
 		hasSnapping : { type : [ 'undefined', 'boolean' ] },
 
@@ -43,6 +46,13 @@ def.static.concernsHasGrid =
 def.proto.concernsHasGrid =
 	( hasGrid ) => hasGrid;
 
+
+/*
+| Does care about hasGuides.
+*/
+def.static.concernsHasGuides =
+def.proto.concernsHasGuides =
+	( hasGuides ) => hasGuides;
 
 /*
 | Does care about hasSnapping.
@@ -74,6 +84,8 @@ def.adjust.get =
 		case 'headline' : widget = widget.create( 'text', this.spaceRef.fullname ); break;
 
 		case 'gridCheckBox' : widget = widget.create( 'checked', this.hasGrid ); break;
+
+		case 'guidesCheckBox' : widget = widget.create( 'checked', this.hasGuides ); break;
 
 		case 'snappingCheckBox' : widget = widget.create( 'checked', this.hasSnapping ); break;
 	}
@@ -134,6 +146,22 @@ def.proto.toggleCheckbox =
 			const change =
 				change_set.create(
 					'trace', trace_space.fakeRoot.appendHasGrid,
+					'val', !prev,
+					'prev', prev
+				);
+
+			root.alter( 'change', change );
+
+			return;
+		}
+
+		case 'guidesCheckBox' :
+		{
+			const prev = root.space.hasGuides;
+
+			const change =
+				change_set.create(
+					'trace', trace_space.fakeRoot.appendHasGuides,
 					'val', !prev,
 					'prev', prev
 				);

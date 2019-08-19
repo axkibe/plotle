@@ -17,6 +17,9 @@ if( TIM )
 		// content of the frame
 		content : { type : '../fabric/itemSet' },
 
+		// should show guides
+		hasGuides : { type : 'boolean' },
+
 		// current transform of the frame
 		transform : { type : '../gleam/transform' },
 
@@ -323,6 +326,7 @@ def.lazy._glintFrame =
 
 	const tZone = this._tZone;
 
+	if( this.hasGuides )
 	{
 		const iGuide = gruga_frame.innerGuide;
 		const oGuide = gruga_frame.outerGuide;

@@ -4,6 +4,7 @@
 ./fontsize
 ./from
 ./hasGrid
+./hasGuides
 ./hasSnapping
 ./item
 ./jp1
