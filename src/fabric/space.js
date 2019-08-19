@@ -25,7 +25,7 @@ if( TIM )
 		hasGrid : { type : 'boolean', defaultValue : 'true', json: true, },
 
 		// this space has guides.
-		hasGuides : { type : 'boolean', defaultValue : 'true', json: true, },
+		hasGuides : { type : 'boolean', defaultValue : 'false', json: true, },
 
 		// node currently hovered upon
 		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
