@@ -525,9 +525,10 @@ def.lazy.glint =
 					const arrow =
 						gleam_arrow.create(
 							'joint1', fromJoint,
-							'joint2', toJoint,
 							'end1', 'none',
-							'end2', 'arrow'
+							'joint2', toJoint,
+							'end2', 'arrow',
+							'arrowSize', gruga_relation.arrowSize
 						);
 
 					arr.push(

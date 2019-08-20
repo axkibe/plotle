@@ -55,7 +55,7 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// debugging tag (TODO remove)
+		// debugging tag
 		tag : { type : 'string' },
 
 		// if set the canvas is opaque and has a background

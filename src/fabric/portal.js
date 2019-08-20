@@ -714,6 +714,8 @@ def.proto._getOffsetAt =
 
 	const fontFace = this._fontFaceFor( section );
 
+	const fontSize = fontFace.size;
+
 	let a;
 
 	const al = value.length;
@@ -722,7 +724,7 @@ def.proto._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = fontFace.size.createToken( value.substr( 0, a ) ).advanceWidth;
+		x2 = fontSize.createToken( value.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}
@@ -1152,13 +1154,13 @@ def.proto._locateOffset =
 	)
 {
 	// FUTURE cache position
-	const fontFace = this._fontFaceFor( section );
+	const fontSize = this._fontFaceFor( section ).size;
 
 	const text = this[ section ];
 
 	return(
 		gleam_point.createXY(
-			Math.round( fontFace.createToken( text.substring( 0, offset ) ) ).advanceWidth,
+			Math.round( fontSize.createToken( text.substring( 0, offset ) ).advanceWidth ),
 			0
 		)
 	);

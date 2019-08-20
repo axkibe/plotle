@@ -36,8 +36,6 @@ if( TIM )
 		spaceRef : { type : 'undefined' },
 
 		// trace of the form
-		// FIXME remove undefined
-		// XXX trace : { type : [ 'undefined', '../trace/form' ] },
 		trace : { type : '../trace/form' },
 
 		// currently logged in user

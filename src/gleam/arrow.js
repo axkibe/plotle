@@ -15,13 +15,14 @@ const gleam_shape_line = tim.require( './shape/line' );
 
 const gleam_shape_start = tim.require( './shape/start' );
 
-const gruga_relation = tim.require( '../gruga/relation' );
-
 
 if( TIM )
 {
 	def.attributes =
 	{
+		// arrow size
+		arrowSize : { type : 'number' },
+
 		// "none" or "arrow"
 		end1 : { type : 'string' },
 
@@ -45,10 +46,11 @@ if( TIM )
 */
 def.static.getArrowShape =
 	function(
-		joint1,  // point/shape for the arrow to go from
-		end1,    // 'none' or 'arrow'
-		joint2,  // point/shape for the arrow to go to
-		end2     // 'none' or 'arrow'
+		joint1,    // point/shape for the arrow to go from
+		end1,      // 'none' or 'arrow'
+		joint2,    // point/shape for the arrow to go to
+		end2,      // 'none' or 'arrow'
+		arrowSize  // size of the arrow
 	)
 {
 	const line = gleam_line.createConnection( joint1, joint2 );
@@ -92,7 +94,7 @@ def.static.getArrowShape =
 
 			// arrow span
 			// the arrow is formed as hexagon piece
-			const ms = 2 / Math.sqrt(3) * gruga_relation.arrowSize;
+			const ms = 2 / Math.sqrt(3) * arrowSize;
 
 			const arrowBase =
 				p2.add(
@@ -105,16 +107,16 @@ def.static.getArrowShape =
 				gleam_shape_line.create(
 					'p',
 						p2.add(
-							-gruga_relation.arrowSize * Math.cos( d + ad ),
-							-gruga_relation.arrowSize * Math.sin( d + ad )
+							-arrowSize * Math.cos( d + ad ),
+							-arrowSize * Math.sin( d + ad )
 						)
 				),
 				gleam_shape_line.create( 'p', p2 ),
 				gleam_shape_line.create(
 					'p',
 						p2.add(
-							-gruga_relation.arrowSize * Math.cos( d - ad ),
-							-gruga_relation.arrowSize * Math.sin( d - ad )
+							-arrowSize * Math.cos( d - ad ),
+							-arrowSize * Math.sin( d - ad )
 						)
 				),
 				gleam_shape_line.create( 'p', arrowBase )
@@ -149,7 +151,13 @@ def.static.getArrowShape =
 def.lazy.shape =
 	function( )
 {
-	return	gleam_arrow.getArrowShape( this.joint1, this.end1, this.joint2, this.end2 );
+	return(
+		gleam_arrow.getArrowShape(
+			this.joint1, this.end1,
+			this.joint2, this.end2,
+			this.arrowSize
+		)
+	);
 };
 
 

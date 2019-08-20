@@ -46,7 +46,7 @@ if( TIM )
 const DELAY_ALTER = false;
 const DELAY_ACQUIRE = false;
 
-// XXX
+// FUTURE still some dependency conflict in tim.js
 tim.require( '../trace/base' );
 
 const config = tim.require( '../config/intf' );

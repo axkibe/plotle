@@ -53,7 +53,7 @@ const gleam_point = tim.require( '../gleam/point' );
 
 const gleam_rect = tim.require( '../gleam/rect' );
 
-const gruga_relation = tim.require( '../gruga/relation' );
+const gruga_stroke = tim.require( '../gruga/stroke' );
 
 const trace_item = tim.require( '../trace/item' );
 
@@ -62,16 +62,6 @@ const trace_item = tim.require( '../trace/item' );
 | The zone is directly affected by actions.
 */
 def.proto.actionAffects = 'j1j2';
-
-
-/*
-| The attention center.
-*/
-def.lazy.attentionCenter =
-	function( )
-{
-	return this.zone.pc.y;
-};
 
 
 /*
@@ -160,6 +150,16 @@ def.proto.ancillary =
 
 
 /*
+| The attention center.
+*/
+def.lazy.attentionCenter =
+	function( )
+{
+	return this.zone.pc.y;
+};
+
+
+/*
 | Checks if the item is being clicked and reacts.
 */
 def.proto.click =
@@ -188,7 +188,7 @@ def.proto.dragStart =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	// FIXME make it more coherent what don't care means
+	// TODO make it more coherent what don't care means
 	// false or undefined
 	return false;
 };
@@ -203,8 +203,7 @@ def.proto.dragStart =
 def.lazy.glint =
 	function( )
 {
-	// FIXME remove gruga_relation dependency
-	return gleam_glint_paint.createFacetShape( gruga_relation.facet, this.tShape );
+	return gleam_glint_paint.createFacetShape( gruga_stroke.facet, this.tShape );
 };
 
 
@@ -254,9 +253,10 @@ def.lazy.shape =
 	return(
 		gleam_arrow.create(
 			'joint1', this.jp1,
-			'joint2', this.jp2,
 			'end1', this.js1,
-			'end2', this.js2
+			'joint2', this.jp2,
+			'end2', this.js2,
+			'arrowSize', gruga_stroke.arrowSize
 		).shape
 	);
 };

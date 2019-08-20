@@ -212,7 +212,7 @@ def.proto._getArrowGlint =
 	if( !to ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( this.shape, 'none', to, 'arrow' )
+		gleam_arrow.getArrowShape( this.shape, 'none', to, 'arrow', gruga_relation.arrowSize )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );
@@ -230,7 +230,7 @@ def.proto._getConnectionGlint =
 	if( !from ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( from, 'none', this.shape, 'none' )
+		gleam_arrow.getArrowShape( from, 'none', this.shape, 'none', gruga_relation.arrowSize )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );
