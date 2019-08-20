@@ -13,8 +13,7 @@ module.exports = ( set ) => {
 /*
 | Shortcut for development mode switching several options below
 */
-const devel = true;
-//const devel = false;
+const devel = false;
 
 
 /*
@@ -43,6 +42,7 @@ set( 'admin', 'axel' );
 
 // set( 'network', 'listen', '[IP]' );
 
+
 /*
 | The protocol used by the main server.
 |
@@ -50,6 +50,7 @@ set( 'admin', 'axel' );
 */
 
 // set( 'network', 'main', 'protocol', 'http' );
+set( 'network', 'main', 'protocol', 'https' );
 
 /*
 | The port to listen on.
@@ -66,6 +67,9 @@ set( 'admin', 'axel' );
 */
 
 // set( 'network', 'redirect', 'protocol', '' );
+set( 'network', 'redirect', 'protocol', 'http' );
+set( 'network', 'redirect', 'port', 80 );
+set( 'network', 'redirect', 'destination', 'https://' );
 
 /*
 | Port for the redirector to listen on
@@ -94,9 +98,9 @@ set( 'admin', 'axel' );
 | No defaults.
 */
 
-// set( 'https', 'cert', '[PATH TO CERT]' );
-// set( 'https', 'key', '[PATH TO KEY]' );
-
+// the location of the https certificate
+set( 'https', 'cert', '/etc/letsencrypt/live/plotle.org/cert.pem' );
+set( 'https', 'key', '/etc/letsencrypt/live/plotle.org/privkey.pem' );
 
 /*
 |* DATABASE BACKEND
