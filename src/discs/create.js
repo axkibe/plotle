@@ -184,18 +184,6 @@ def.proto.click =
 
 
 /*
-| A button has been dragStarted.
-*/
-def.proto.dragStartButton =
-	function(
-		trace
-	)
-{
-	return false;
-};
-
-
-/*
 | Stop of a dragging operation.
 */
 def.proto.dragStop =

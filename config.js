@@ -13,7 +13,7 @@ module.exports = ( set ) => {
 /*
 | Shortcut for development mode switching several options below
 */
-const devel = false;
+const devel = true;
 
 
 /*
@@ -49,8 +49,8 @@ set( 'admin', 'axel' );
 | Default: http
 */
 
-// set( 'network', 'main', 'protocol', 'http' );
-set( 'network', 'main', 'protocol', 'https' );
+set( 'network', 'main', 'protocol', 'http' );
+// set( 'network', 'main', 'protocol', 'https' );
 
 /*
 | The port to listen on.
@@ -67,9 +67,9 @@ set( 'network', 'main', 'protocol', 'https' );
 */
 
 // set( 'network', 'redirect', 'protocol', '' );
-set( 'network', 'redirect', 'protocol', 'http' );
-set( 'network', 'redirect', 'port', 80 );
-set( 'network', 'redirect', 'destination', 'https://' );
+// set( 'network', 'redirect', 'protocol', 'http' );
+// set( 'network', 'redirect', 'port', 80 );
+// set( 'network', 'redirect', 'destination', 'https://' );
 
 /*
 | Port for the redirector to listen on
@@ -99,8 +99,8 @@ set( 'network', 'redirect', 'destination', 'https://' );
 */
 
 // the location of the https certificate
-set( 'https', 'cert', '/etc/letsencrypt/live/plotle.org/cert.pem' );
-set( 'https', 'key', '/etc/letsencrypt/live/plotle.org/privkey.pem' );
+// set( 'https', 'cert', '[PATH TO CERT]' );
+// set( 'https', 'key', ''[PATH TO KEY]' );
 
 /*
 |* DATABASE BACKEND
@@ -110,7 +110,7 @@ set( 'https', 'key', '/etc/letsencrypt/live/plotle.org/privkey.pem' );
 
 // set( 'database', 'host', '127.0.0.1' );
 // set( 'database', 'port', 27017 );
-// set( 'database', 'name', 'plotle-15' );
+// set( 'database', 'name', 'plotle-19' );
 
 
 /*
@@ -195,7 +195,9 @@ set( 'shell', 'bundle', 'enable', !devel );
 | If true the server will die on invalid commands.
 */
 
-set( 'server', 'sensitive', devel );
+// XXX
+//set( 'server', 'sensitive', devel );
+set( 'server', 'sensitive', false );
 
 /*
 | Server will check for changed ressources on every request.
@@ -220,15 +222,5 @@ set( 'server', 'report', !devel );
 
 // set( 'server', 'whileList', '[ADDRESSES]' );
 
-
-/*
-|* WEINRE DEBUGGING
-|* ================
-|* Activates all hacks needed to debug the client with weinre.
-|* Defaults to false (deactiveted)
-|* Set the address of the weinre server to enable
-'*/
-
-// set( 'weinre', '[WEINRE SERVER' ] );
 
 };

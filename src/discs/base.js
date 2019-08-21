@@ -250,6 +250,18 @@ def.proto.dragStart =
 
 
 /*
+| A button has been dragStarted.
+*/
+def.proto.dragStartButton =
+	function(
+		trace
+	)
+{
+	return false;
+};
+
+
+/*
 | The discs glint.
 */
 def.lazy.glint =
