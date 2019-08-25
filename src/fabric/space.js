@@ -94,6 +94,20 @@ const mark_items = tim.require( '../mark/items' );
 
 
 /*
+| A mark of all items.
+*/
+def.lazy.allItemsMark =
+	function( )
+{
+	const set = new Set( );
+
+	for( let item of this ) set.add( item.trace );
+
+	return mark_items.create( 'set:init', set );
+};
+
+
+/*
 | Gathers the ancillary changes for a changeList.
 |
 | Returns the ancillary changes.
@@ -365,36 +379,15 @@ def.adjust.get =
 
 	if( !highlight && item.timtype ) highlight = this.action.highlightItem( item );
 
-	const hover = item.concernsHover( this.hover, trace );
-
-	const access = this.access;
-
-	if( item === fabric_note || item.timtype === fabric_note )
-	{
-		item =
-			item.create(
-				'access', access,
-				'highlight', highlight,
-				'hover', hover,
-				'mark', mark,
-				'trace', trace,
-				// FIXME why not just defaultValue?
-				'scrollPos', item.scrollPos || gleam_point.zero,
-				'transform', this.transform
-			);
-	}
-	else
-	{
-		item =
-			item.create(
-				'access', access,
-				'highlight', highlight,
-				'hover', hover,
-				'mark', mark,
-				'trace', trace,
-				'transform', this.transform
-			);
-	}
+	item =
+		item.create(
+			'access', this.access,
+			'highlight', highlight,
+			'hover', item.concernsHover( this.hover, trace ),
+			'mark', mark,
+			'trace', trace,
+			'transform', this.transform
+		);
 
 	if( item.timtype === fabric_note )
 	{
@@ -420,12 +413,15 @@ def.adjust.get =
 
 	let highlight2 = highlight;
 
-	// FIXME take scrollPos into redo
+	// TODO take scrollPos into recreate
 
 	// checks if the highlight feature has changed on the created item
 	if( !highlight2 && item.timtype ) highlight2 = this.action.highlightItem( item );
 
-	if( highlight2 !== highlight ) item = item.create( 'highlight', highlight2 );
+	if( highlight2 !== highlight )
+	{
+		item = item.create( 'highlight', highlight2 );
+	}
 
 	return item;
 };
@@ -494,7 +490,7 @@ def.lazy.glint =
 
 		case action_createRelation :
 
-			// FIXME make a transientItem
+			// TODO make a transientItem
 
 			if( action.fromItemTrace )
 			{
@@ -666,7 +662,6 @@ def.proto.scrollMarkIntoView =
 };
 
 
-
 /*
 | The disc is shown while a space is shown.
 */
@@ -719,18 +714,9 @@ def.proto.specialKey =
 		switch( key )
 		{
 			case 'a' :
-			{
 				// selects all items in this space
-
-				const set = new Set( );
-
-				// FIXME make this a lazy
-				for( let item of this ) set.add( item.trace );
-
-				root.alter( 'mark', mark_items.create( 'set:init', set ) );
-
+				root.alter( 'mark', this.allItemsMark );
 				return true;
-			}
 		}
 
 		return true;

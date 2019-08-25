@@ -1855,12 +1855,12 @@ def.static._createFormsRoot =
 			'viewSize', viewSize
 		);
 
-	// FUTURE do a twig:init instead
+	// FUTURE do a group:init instead
 	for( let key of Object.keys( forms ) )
 	{
 		formRoot =
 			formRoot.create(
-				'twig:add', key,
+				'group:set', key,
 				forms[ key ].create( 'viewSize', viewSize )
 			);
 	}

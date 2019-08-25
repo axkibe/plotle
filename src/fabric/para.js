@@ -1,7 +1,7 @@
 /*
 | A paragraph.
 |
-| FIXME consider using offset traces where offset ints are used
+| TODO consider using offset traces where offset ints are used
 */
 'use strict';
 
@@ -533,28 +533,17 @@ def.proto.specialKey =
 		return true;
 	}
 
-	// FIXME unify
-	switch( mark.timtype )
+	if( mark.caretOffset )
 	{
-		case mark_caret :
+		at = mark.caretOffset.at;
 
-			at = mark.caretOffset.at;
+		retainx = mark.retainx;
 
-			retainx = mark.retainx;
-
-			if( shift ) beginOffset = mark.offset;
-
-			break;
-
-		case mark_range :
-
-			at = mark.caretOffset.at;
-
-			retainx = mark.retainx;
-
-			if( shift ) beginOffset = mark.beginOffset;
-
-			break;
+		if( shift )
+		{
+			if( mark.timtype === mark_range ) beginOffset = mark.beginOffset;
+			else beginOffset = mark.offset;
+		}
 	}
 
 	const keyHandler = _keyMap[ key ];

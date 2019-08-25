@@ -25,10 +25,7 @@ if( TIM )
 		{
 			type : './shell/bundle',
 			defaultValue : 'require( "./shell/bundle" ).create( )'
-		},
-
-		// if set uses a weinre debugging server
-		weinre : { type : [ 'string', 'null' ], defaultValue : 'null' },
+		}
 	};
 }
 

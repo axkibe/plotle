@@ -9,16 +9,9 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-const config = tim.require( '../config/intf' );
-
 const hash_sha1 = tim.require( '../hash/sha1' );
 
 const stringList = tim.require( 'tim.js/stringList' );
-
-
-// FIXME this isn't so nice
-let opentypeHash;
-let opentypeMinHash;
 
 
 /*
@@ -29,7 +22,7 @@ def.static.opentype =
 		resource       // the resource
 	)
 {
-	opentypeHash = hash_sha1.calc( resource.data + '' );
+	const opentypeHash = hash_sha1.calc( resource.data + '' );
 
 	root.create(
 		'inventory',
@@ -39,6 +32,8 @@ def.static.opentype =
 				)
 			)
 	);
+
+	return opentypeHash;
 };
 
 
@@ -50,7 +45,7 @@ def.static.opentypeMin =
 		resource       // the resource
 	)
 {
-	opentypeMinHash = hash_sha1.calc( resource.data + '' );
+	const opentypeMinHash = hash_sha1.calc( resource.data + '' );
 
 	root.create(
 		'inventory',
@@ -60,6 +55,8 @@ def.static.opentypeMin =
 				)
 			)
 	);
+
+	return opentypeMinHash;
 };
 
 
@@ -68,8 +65,10 @@ def.static.opentypeMin =
 */
 def.static.develHtml =
 	function(
-		resource       // the resource
-		//bundleFilePath, // the file path of the bundle resource
+		resource,       // the resource
+		bundleFilePath, // the file path of the bundle resource
+		opentypeHash,   // hash of opentype
+		opentypeMinHash // hash of minimized opentype
 	)
 {
 	const devels = [ ];
@@ -101,18 +100,6 @@ def.static.develHtml =
 			devels.join( '\n' )
 		);
 
-	const weinre = config.get( 'shell', 'weinre' );
-
-	if( weinre )
-	{
-		data =
-			data.replace(
-				/<!--WEINRE.*>/,
-				'<script src="http://' + weinre + '/target/target-script-min.js" defer>'
-				+ '</script>'
-			);
-	}
-
 	data =
 		data.replace(
 			/<!--OPENTYPE.*>/,
@@ -138,6 +125,8 @@ def.static.testPadHtml =
 	function(
 		resource       // the resource
 		//bundleFilePath, // the file path of the bundle resource
+		//opentypeHash,   // hash of opentype
+		//opentypeMinHash // hash of minimized opentype
 	)
 {
 	const devels = [ ];
@@ -167,18 +156,6 @@ def.static.testPadHtml =
 			devels.join( '\n' )
 		);
 
-	const weinre = config.get( 'shell', 'weinre' );
-
-	if( weinre )
-	{
-		data =
-			data.replace(
-				/<!--WEINRE.*>/,
-				'<script src="http://' + weinre + '/target/target-script-min.js" defer>'
-				+ '</script>'
-			);
-	}
-
 	root.create(
 		'inventory',
 			root.inventory.updateResource(
@@ -193,8 +170,10 @@ def.static.testPadHtml =
 */
 def.static.indexHtml =
 	function(
-		resource,       // the resource
-		bundleFilePath  // the file path of the bundle resource
+		resource,        // the resource
+		bundleFilePath,  // the file path of the bundle resource
+		opentypeHash,    // hash of opentype
+		opentypeMinHash  // hash of minimized opentype
 	)
 {
 	let data = resource.data + '';

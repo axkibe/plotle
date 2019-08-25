@@ -147,8 +147,7 @@ def.proto.shellGlobals =
 			NODE : false,
 			TIM : false,
 			FAILSCREEN : config.get( 'shell', mode, 'failScreen' ),
-			VISUAL : target === 'shell',
-			WEINRE : config.get( 'shell', 'weinre' )
+			VISUAL : target === 'shell'
 		} )
 	);
 };
@@ -415,18 +414,31 @@ def.proto.prepareInventory =
 	// post processing
 	let inv = root.inventory;
 
+	let opentypeHash, opentypeMinHash;
+
 	for( let a = 0, al = inv.length; a < al; a++ )
 	{
 		const resource = inv.atRank( a );
 
-		if( !resource.postProcessor || !resource.data ) continue;
+		const pp = resource.postProcessor;
 
-		if( !server_postProcessor[ resource.postProcessor ] )
+		if( !pp || !resource.data ) continue;
+
+		if( !server_postProcessor[ pp ] ) throw new Error( 'invalid postProcessor: ' + pp );
+
+		const r =
+			server_postProcessor[ pp ](
+				resource,
+				bundleFilePath,
+				opentypeHash,
+				opentypeMinHash
+			);
+
+		switch( pp )
 		{
-			throw new Error( 'invalid postProcessor: ' + resource.postProcessor );
+			case 'opentype' : opentypeHash = r; break;
+			case 'opentypeMin' : opentypeMinHash = r; break;
 		}
-
-		server_postProcessor[ resource.postProcessor ]( resource, bundleFilePath );
 	}
 
 	inv = root.inventory;
@@ -688,20 +700,7 @@ def.proto.requestListener =
 		// delivers uncompressed
 		result.writeHead( 200, header );
 
-		let data = resource.data;
-
-		// weinre can't cope with strict mode
-		// so its disabled when weinre is enabled
-		// FUTURE remove weinre support
-		if( config.get( 'shell', 'weinre' ) )
-		{
-			data =
-				( '' + data )
-				.replace( /'use strict'/, '\'not strict\'' )
-				.replace( /"use strict"/, '"not strict"' );
-		}
-
-		result.end( data, resource.coding );
+		result.end( resource.data, resource.coding );
 	}
 };
 

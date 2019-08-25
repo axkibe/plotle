@@ -69,7 +69,7 @@ const transmitter =
 	{
 		if( failScreen ) return;
 
-		if( !FAILSCREEN && !WEINRE )
+		if( !FAILSCREEN )
 		{
 			func.apply( this, arguments );
 
@@ -100,7 +100,8 @@ const transmitter =
 		}
 		catch( e )
 		{
-			try {
+			try
+			{
 				const message =
 					'OOPS! Internal failure, '
 					+ e.name + ': '
@@ -110,16 +111,9 @@ const transmitter =
 					+ '\n\n'
 					+ 'Please report to axkibe@gmail.com';
 
-				if( !WEINRE )
-				{
-					system.failScreen( message );
-				}
-				else
-				{
-					console.log( message );
-				}
+				system.failScreen( message );
 			}
-			catch ( ee )
+			catch( ee )
 			{
 				console.log( 'error in error:' + ee );
 			}
@@ -1425,15 +1419,7 @@ def.static.startup = function( )
 
 	const init = transmitter( shell_system.init, true );
 
-	if( !WEINRE )
-	{
-		init( );
-	}
-	else
-	{
-		// gives weinre a moment to set itself up
-		window.setTimeout( init, 1500 );
-	}
+	init( );
 };
 
 

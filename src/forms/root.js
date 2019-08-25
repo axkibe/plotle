@@ -42,8 +42,7 @@ if( TIM )
 		viewSize : { type : '../gleam/size' }
 	};
 
-	// FIXME make it a group
-	def.twig =
+	def.group =
 	[
 		'./loading',
 		'./login',

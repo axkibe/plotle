@@ -958,7 +958,7 @@ def.proto._keyDel =
 
 	if( !fabric_portal.isSection( section ) || section === 'moveToButton' ) return;
 
-	const at = mark.caretOffet.at;
+	const at = mark.caretOffset.at;
 
 	if( at >= value.length ) return;
 
