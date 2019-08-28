@@ -147,35 +147,20 @@ def.static.createFromJSON =
 */
 def.static.createFromJSONTrace =
 	function(
-		trace,
-		pos,
+		trace, // the json trace to create from
+		pos,   // the current position in the trace
 		root   // uses this as root if the trace ends here
 	)
 {
 	if( pos >= trace.length ) return root;
 
-	// FIXME make a table
-	switch( trace[ pos ] )
-	{
-		case '(o)doc'         : return trace_doc.createFromJSONStep( trace, pos );
-		case '(o)field'       : return trace_field.createFromJSONStep( trace, pos );
-		case '(o)fontsize'    : return trace_fontsize.createFromJSONStep( trace, pos );
-		case '(o)from'        : return trace_from.createFromJSONStep( trace, pos );
-		case '(o)hasGrid'     : return trace_hasGrid.createFromJSONStep( trace, pos );
-		case '(o)hasGuides'   : return trace_hasGuides.createFromJSONStep( trace, pos );
-		case '(o)hasSnapping' : return trace_hasSnapping.createFromJSONStep( trace, pos );
-		case '(o)item'        : return trace_item.createFromJSONStep( trace, pos );
-		case '(o)jp1'         : return trace_jp1.createFromJSONStep( trace, pos );
-		case '(o)jp2'         : return trace_jp2.createFromJSONStep( trace, pos );
-		case '(o)offset'      : return trace_offset.createFromJSONStep( trace, pos );
-		case '(o)para'        : return trace_para.createFromJSONStep( trace, pos );
-		case '(o)pos'         : return trace_pos.createFromJSONStep( trace, pos );
-		case '(o)space'       : return trace_space.createFromJSONStep( trace, pos );
-		case '(o)text'        : return trace_text.createFromJSONStep( trace, pos );
-		case '(o)to'          : return trace_to.createFromJSONStep( trace, pos );
-		case '(o)zone'        : return trace_zone.createFromJSONStep( trace, pos );
-		default : throw new Error( trace[ pos ] );
-	}
+	const type = trace[ pos ];
+
+	const timtype = trace_base._jsonMap[ type ];
+
+	if( !timtype ) throw new Error( type );
+
+	return timtype.createFromJSONStep( trace, pos );
 };
 
 
@@ -349,6 +334,31 @@ def.lazy.traceWidget =
 
 	return this.get( this.length - 1 ).traceWidget;
 };
+
+
+/*
+| Maps trace step types.
+*/
+def.staticLazy._jsonMap = ( ) =>
+( {
+	'(o)doc'         : trace_doc,
+	'(o)field'       : trace_field,
+	'(o)fontsize'    : trace_fontsize,
+	'(o)from'        : trace_from,
+	'(o)hasGrid'     : trace_hasGrid,
+	'(o)hasGuides'   : trace_hasGuides,
+	'(o)hasSnapping' : trace_hasSnapping,
+	'(o)item'        : trace_item,
+	'(o)jp1'         : trace_jp1,
+	'(o)jp2'         : trace_jp2,
+	'(o)offset'      : trace_offset,
+	'(o)para'        : trace_para,
+	'(o)pos'         : trace_pos,
+	'(o)space'       : trace_space,
+	'(o)text'        : trace_text,
+	'(o)to'          : trace_to,
+	'(o)zone'        : trace_zone,
+} );
 
 
 } );

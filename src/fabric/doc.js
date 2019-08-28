@@ -50,37 +50,21 @@ if( TIM )
 
 
 const fabric_para = tim.require( './para' );
-
 const gleam_facet = tim.require( '../gleam/facet' );
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
-
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_line = tim.require( '../gleam/line' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_shape = tim.require( '../gleam/shape' );
-
 const gleam_shapeList = tim.require( '../gleam/shapeList' );
-
 const gleam_shape_line = tim.require( '../gleam/shape/line' );
-
 const gleam_shape_start = tim.require( '../gleam/shape/start' );
-
 const gleam_size = tim.require( '../gleam/size' );
-
-const gruga_font = tim.require( '../gruga/font' );
-
+const gruga_fontFace = tim.require( '../gruga/fontFace' );
 const gruga_selection = tim.require( '../gruga/selection' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_range = tim.require( '../mark/range' );
 
 
@@ -119,7 +103,7 @@ def.adjust.clipsize =
 def.lazy.font =
 	function( )
 {
-	return gruga_font.standard( this.fontsize );
+	return gruga_fontFace.standard( this.fontsize );
 };
 
 

@@ -12,7 +12,7 @@ def.abstract = true;
 
 const gleam_point = tim.require( '../../gleam/point' );
 const gleam_rect = tim.require( '../../gleam/rect' );
-const gruga_font = tim.require( '../../gruga/font' );
+const gruga_fontFace = tim.require( '../../gruga/fontFace' );
 const gruga_genericButton = tim.require( '../../gruga/genericButton' );
 const gruga_genericCheckbox = tim.require( '../../gruga/genericCheckbox' );
 const layout_button = tim.require( '../../layout/button' );
@@ -29,7 +29,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'fontFace', gruga_font.standard( 22 ),
+				'fontFace', gruga_fontFace.standard( 22 ),
 				'pos', gleam_point.createXY( 0, -120 ),
 				'text', ''
 			),
@@ -47,7 +47,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'gridMessage',
 			layout_label.create(
 				'text', 'show grid',
-				'fontFace', gruga_font.standard( 16 ),
+				'fontFace', gruga_fontFace.standard( 16 ),
 				'pos', gleam_point.createXY( -25, -50 )
 			),
 		'twig:add', 'snappingCheckBox',
@@ -64,7 +64,7 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'snappingMessage',
 			layout_label.create(
 				'text', 'snap to grid',
-				'fontFace', gruga_font.standard( 16 ),
+				'fontFace', gruga_fontFace.standard( 16 ),
 				'pos', gleam_point.createXY( -25, -15 )
 			),
 		'twig:add', 'guidesCheckBox',
@@ -81,13 +81,13 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'guidesMessage',
 			layout_label.create(
 				'text', 'selection guides',
-				'fontFace', gruga_font.standard( 16 ),
+				'fontFace', gruga_fontFace.standard( 16 ),
 				'pos', gleam_point.createXY( -25, 20 )
 			),
 		'twig:add', 'closeButton',
 			layout_button.create(
 				'facets', gruga_genericButton.facets,
-				'fontFace', gruga_font.standard( 14 ),
+				'fontFace', gruga_fontFace.standard( 14 ),
 				'text', 'close',
 				'shape', 'ellipse',
 				'zone',

@@ -53,41 +53,23 @@ if( TIM )
 }
 
 const change_insert = tim.require( '../change/insert' );
-
 const change_join = tim.require( '../change/join' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_remove = tim.require( '../change/remove' );
-
 const change_split = tim.require( '../change/split' );
-
 const flow_block = tim.require( '../flow/block' );
-
 const flow_line = tim.require( '../flow/line' );
-
 const flow_token = tim.require( '../flow/token' );
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_size = tim.require( '../gleam/size' );
-
-const gruga_font = tim.require( '../gruga/font' );
-
+const gruga_fontFace = tim.require( '../gruga/fontFace' );
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_range = tim.require( '../mark/range' );
-
 const session_uid = tim.require( '../session/uid' );
 
 
@@ -257,7 +239,7 @@ def.lazy.flow =
 def.lazy.font =
 	function( )
 {
-	return gruga_font.standard( this.fontsize );
+	return gruga_fontFace.standard( this.fontsize );
 };
 
 
@@ -1078,7 +1060,7 @@ def.proto._setMark =
 def.lazy._tFont =
 	function( )
 {
-	return gruga_font.standard( this.transform.scale( this.fontsize ), 'a' );
+	return gruga_fontFace.standard( this.transform.scale( this.fontsize ), 'a' );
 };
 
 

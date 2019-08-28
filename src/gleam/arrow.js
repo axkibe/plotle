@@ -8,11 +8,8 @@ tim.define( module, ( def, gleam_arrow ) => {
 
 
 const gleam_line = tim.require( './line' );
-
 const gleam_shape = tim.require( './shape' );
-
 const gleam_shape_line = tim.require( './shape/line' );
-
 const gleam_shape_start = tim.require( './shape/start' );
 
 
@@ -64,25 +61,15 @@ def.static.getArrowShape =
 	// FUTURE, allow arrows on p1.
 	switch( end1 )
 	{
-		case 'none':
+		case 'none': sections.push( gleam_shape_start.create( 'p', p1 ) ); break;
 
-			sections.push( gleam_shape_start.create( 'p', p1 ) );
-
-			break;
-
-		default :
-
-			// unknown arrow end
-			throw new Error( );
+		// unknown arrow end
+		default : throw new Error( );
 	}
 
 	switch( end2 )
 	{
-		case 'none' :
-
-			sections.push( gleam_shape_line.create( 'p', p2 ) );
-
-			break;
+		case 'none' : sections.push( gleam_shape_line.create( 'p', p2 ) ); break;
 
 		case 'arrow' :
 		{
@@ -129,12 +116,7 @@ def.static.getArrowShape =
 		default : throw new Error( );
 	}
 
-	sections.push(
-		gleam_shape_line.create(
-			'close', true,
-			'fly', true
-		)
-	);
+	sections.push( gleam_shape_line.closeFly );
 
 	return(
 		gleam_shape.create(

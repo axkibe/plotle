@@ -76,7 +76,7 @@ const gleam_roundRect = tim.require( '../gleam/roundRect' );
 
 const gleam_transform = tim.require( '../gleam/transform' );
 
-const gruga_font = tim.require( '../gruga/font' );
+const gruga_fontFace = tim.require( '../gruga/fontFace' );
 
 const gruga_portal = tim.require( '../gruga/portal' );
 
@@ -634,19 +634,19 @@ def.lazy._fieldSpaceUser =
 /*
 | Font for moveToButton.
 */
-def.lazy._fontFaceMoveTo = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceMoveTo = ( ) => gruga_fontFace.standard( 13 );
 
 
 /*
 | Font for spaceTag.
 */
-def.lazy._fontFaceSpaceTag = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceSpaceTag = ( ) => gruga_fontFace.standard( 13 );
 
 
 /*
 | Font for spaceUser.
 */
-def.lazy._fontFaceSpaceUser = ( ) => gruga_font.standard( 13 );
+def.lazy._fontFaceSpaceUser = ( ) => gruga_fontFace.standard( 13 );
 
 
 /*
@@ -1156,14 +1156,11 @@ def.proto._locateOffset =
 	// FUTURE cache position
 	const fontSize = this._fontFaceFor( section ).size;
 
-	const text = this[ section ];
+	const text = this[ section ].substring( 0, offset );
 
-	return(
-		gleam_point.createXY(
-			Math.round( fontSize.createToken( text.substring( 0, offset ) ).advanceWidth ),
-			0
-		)
-	);
+	const token = fontSize.createToken( text );
+
+	return gleam_point.createXY( token.advanceWidth, 0 );
 };
 
 

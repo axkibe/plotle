@@ -15,6 +15,9 @@ const gleam_color = tim.require( '../gleam/color' );
 const gleam_facet = tim.require( '../gleam/facet' );
 
 
+/*
+| With of the extender.
+*/
 def.static.extenderWidth = 34;
 
 
@@ -53,13 +56,6 @@ def.staticLazy.handleFacetSideArbitrary = ( ) =>
 */
 def.staticLazy.handleFacetSideProportional = ( ) =>
 	gleam_facet.create( 'fill', gleam_color.rgba( 255, 240, 194, 0.9 ) );
-
-
-/*
-| The handles size
-| FIXME remove
-*/
-def.static.handleSize = 53;
 
 
 /*

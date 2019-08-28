@@ -12,7 +12,7 @@ def.abstract = true;
 
 const gleam_point = tim.require( '../../gleam/point' );
 const gleam_rect = tim.require( '../../gleam/rect' );
-const gruga_font = tim.require( '../font' );
+const gruga_fontFace = tim.require( '../fontFace' );
 const gruga_genericButton = tim.require( '../genericButton' );
 const layout_button = tim.require( '../../layout/button' );
 const layout_form = tim.require( '../../layout/form' );
@@ -28,7 +28,7 @@ def.staticLazy.layout = ( ) =>
 		'headline',
 			layout_label.create(
 				'align', 'center',
-				'fontFace', gruga_font.standard( 22 ),
+				'fontFace', gruga_fontFace.standard( 22 ),
 				'pos', gleam_point.createXY( 0, -120 ),
 				'text', '',
 			),
@@ -37,7 +37,7 @@ def.staticLazy.layout = ( ) =>
 			layout_label.create(
 				'align', 'center',
 				'text', 'Do you want to create it?',
-				'fontFace', gruga_font.standard( 16 ),
+				'fontFace', gruga_fontFace.standard( 16 ),
 				'pos', gleam_point.createXY( 0, -50 )
 			),
 		'twig:add',
@@ -51,7 +51,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'No',
-				'fontFace', gruga_font.standard( 14 ),
+				'fontFace', gruga_fontFace.standard( 14 ),
 				'shape', 'ellipse'
 			),
 		'twig:add',
@@ -65,7 +65,7 @@ def.staticLazy.layout = ( ) =>
 						'height', 75
 					),
 				'text', 'Yes',
-				'fontFace', gruga_font.standard( 14 ),
+				'fontFace', gruga_fontFace.standard( 14 ),
 				'shape', 'ellipse'
 			)
 	);

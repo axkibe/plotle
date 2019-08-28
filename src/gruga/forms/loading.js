@@ -11,7 +11,7 @@ def.abstract = true;
 
 
 const gleam_point = tim.require( '../../gleam/point' );
-const gruga_font = tim.require( '../font' );
+const gruga_fontFace = tim.require( '../fontFace' );
 const layout_form = tim.require( '../../layout/form' );
 const layout_label = tim.require( '../../layout/label' );
 
@@ -24,14 +24,14 @@ def.staticLazy.layout = ( ) =>
 		'twig:add', 'headline',
 			layout_label.create(
 				'align', 'center',
-				'fontFace', gruga_font.standard( 28 ),
+				'fontFace', gruga_fontFace.standard( 28 ),
 				'pos', gleam_point.createXY( 0, -56 ),
 				'text', 'loading'
 			),
 		'twig:add', 'spaceText',
 			layout_label.create(
 				'align', 'center',
-				'fontFace', gruga_font.standard( 28 ),
+				'fontFace', gruga_fontFace.standard( 28 ),
 				'pos', gleam_point.zero,
 				'text', 'plotle:home'
 			)

@@ -389,38 +389,47 @@ def.adjust.get =
 			'transform', this.transform
 		);
 
+	let scrollPos = item.scrollPos;
+	let scrollPos2 = scrollPos;
+
 	if( item.timtype === fabric_note )
 	{
 		const aperture = item.zone.height - gruga_note.innerMargin.y;
 
 		const dHeight = item.doc.fullsize.height;
 
-		let scrollPos = item.scrollPos;
-
 		if( dHeight < aperture )
 		{
-			scrollPos = scrollPos.create( 'y', 0 );
-
-			item = item.create( 'scrollPos', scrollPos );
+			scrollPos2 = scrollPos2.create( 'y', 0 );
 		}
 		else if( scrollPos.y > dHeight - aperture )
 		{
-			scrollPos = scrollPos.create( 'y', dHeight - aperture );
-
-			item = item.create( 'scrollPos', scrollPos );
+			scrollPos2 = scrollPos2.create( 'y', dHeight - aperture );
 		}
 	}
 
 	let highlight2 = highlight;
 
-	// TODO take scrollPos into recreate
-
 	// checks if the highlight feature has changed on the created item
 	if( !highlight2 && item.timtype ) highlight2 = this.action.highlightItem( item );
 
-	if( highlight2 !== highlight )
+	if(
+		highlight2 !== highlight
+		|| scrollPos2 !== scrollPos
+	)
 	{
-		item = item.create( 'highlight', highlight2 );
+		if( item.timtype === fabric_note )
+		{
+			item =
+				item.create(
+					'highlight', highlight2,
+					'scrollPos', scrollPos2
+				);
+		}
+		else
+		{
+			item = item.create( 'highlight', highlight2 );
+		}
 	}
 
 	return item;

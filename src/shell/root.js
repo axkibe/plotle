@@ -1757,7 +1757,7 @@ def.static._createDiscsRoot =
 			'controlTransform', gleam_transform.normal,
 			'show', show,
 			'viewSize', viewSize,
-			'twig:add', 'main',
+			'group:set', 'main',
 				discs_main.createFromLayout(
 					gruga_discs_main.layout,
 					'main',
@@ -1765,7 +1765,7 @@ def.static._createDiscsRoot =
 					show,
 					viewSize
 				),
-			'twig:add', 'create',
+			'group:set', 'create',
 				discs_create.createFromLayout(
 					gruga_discs_create.layout,
 					'create',
@@ -1773,7 +1773,7 @@ def.static._createDiscsRoot =
 					show,
 					viewSize
 				),
-			'twig:add', 'zoom',
+			'group:set', 'zoom',
 				discs_zoom.createFromLayout(
 					gruga_discs_zoom.layout,
 					'zoom',

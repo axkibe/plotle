@@ -1,12 +1,10 @@
 /*
 | Default font of the theme.
-|
-| FIXME rename gruga_fontFace
 */
 'use strict';
 
 
-tim.define( module, ( def, gruga_font ) => {
+tim.define( module, ( def, gruga_fontFace ) => {
 
 
 def.abstract = true;
@@ -29,7 +27,7 @@ def.staticLazy.standardFamily = ( ) => gleam_font_root.get( 'DejaVuSans-Regular'
 def.static.standard =
 	( size ) =>
 	(
-		gruga_font.standardFamily
+		gruga_fontFace.standardFamily
 		.createSize( size )
 		.createFace( gleam_color.black )
 	);
@@ -41,7 +39,7 @@ def.static.standard =
 def.static.standardRed =
 	( size ) =>
 	(
-		gruga_font.standardFamily
+		gruga_fontFace.standardFamily
 		.createSize( size )
 		.createFace( gleam_color.red )
 	);

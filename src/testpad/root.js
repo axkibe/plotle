@@ -45,23 +45,14 @@ if( TIM )
 
 
 const change_insert = tim.require( '../change/insert' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_join = tim.require( '../change/join' );
-
 const change_remove = tim.require( '../change/remove' );
-
 const change_split = tim.require( '../change/split' );
-
 const change_wrap = tim.require( '../change/wrap' );
-
 const math = tim.require( '../math/root' );
-
 const session_uid = tim.require( '../session/uid' );
-
 const testpad_action = tim.require( './action' );
-
 const trace_space = tim.require( '../trace/space' );
 
 
@@ -87,31 +78,20 @@ const _bind =
 
 /*
 | Returns true if a keyCode is known to be a "special key".
-| FUTURE make this a table.
 */
-const isSpecialKey =
-	function( keyCode )
-{
-	switch( keyCode )
-	{
-		case  8 : // backspace
-		case 13 : // return
-		case 27 : // esc
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-		case 46 : // del
-
-			return true;
-
-		default :
-
-			return false;
-	}
-};
+def.staticLazy._specialKeys = ( ) =>
+	new Set( [
+		8,    // backspace
+		13,   // return
+		27,   // esc
+		35,   // end
+		36,   // pos1
+		37,   // left
+		38,   // up
+		39,   // right
+		40,   // down
+		46,   // down
+	] );
 
 
 /*
@@ -178,7 +158,14 @@ def.proto.update =
 
 	const cursorAt = math.limit( 0, root.cursorAt, doc.atRank( cursorLine ).text.length );
 
-	elements.pad.innerHTML = root.makeScreen( doc );
+	elements.pad.innerHTML =
+		testpad_root._makeScreen(
+			doc,
+			this.action,
+			this.haveFocus,
+			cursorLine,
+			cursorAt
+		);
 
 	root.create(
 		'elements', elements,
@@ -331,7 +318,7 @@ def.proto.onKeyDown =
 		event
 	)
 {
-	if( isSpecialKey( event.keyCode ) )
+	if( testpad_root._specialKeys.has( event.keyCode ) )
 	{
 		event.preventDefault( );
 
@@ -413,7 +400,7 @@ def.proto.send =
 			root.alter(
 				change_insert.create(
 					'val', action.value,
-					'path', lineTrace.toPath.append( 'text' ),
+					'trace', lineTrace.appendText,
 					'at1', action.at,
 					'at2', action.at + action.value.length
 				)
@@ -430,7 +417,7 @@ def.proto.send =
 					'val',
 						doc.atRank( action.line ).text
 						.substring( action.at2, action.at ),
-					'path', lineTrace.toPath.append( 'text' ),
+					'trace', lineTrace.appendText,
 					'at1', action.at,
 					'at2', action.at2
 				)
@@ -450,10 +437,10 @@ def.proto.send =
 
 			root.alter(
 				change_split.create(
-					'path', lineTrace.toPath.append( 'text' ),
-					'path2',
+					'trace', lineTrace.appendText,
+					'trace2',
 						testpad_root.docTrace
-						.appendPara( session_uid.newUid( ) ).toPath.append( 'text' ),
+						.appendPara( session_uid.newUid( ) ).appendText,
 					'at1', action.at
 				)
 			);
@@ -464,11 +451,11 @@ def.proto.send =
 
 			root.alter(
 				change_join.create(
-					'path',
+					'trace',
 						testpad_root.docTrace
 						.appendPara( doc.getKey( action.line - 1 ) )
-						.toPath.append( 'text' ),
-					'path2', lineTrace.toPath.append( 'text' ),
+						.appendText,
+					'trace2', lineTrace.appendText,
 					'at1', doc.atRank( action.line - 1 ).text.length
 				)
 			);
@@ -531,13 +518,9 @@ def.proto.testInput =
 	function( )
 {
 	const action = root.action;
-
 	const cursorLine = root.cursorLine;
-
 	const cursorAt = root.cursorAt;
-
 	const elements = root.elements;
-
 	const text = elements.input.value;
 
 	elements.input.value = '';
@@ -807,13 +790,15 @@ def.proto.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-def.proto.makeScreen =
+def.static._makeScreen =
 	function(
-		doc
+		doc,
+		action,
+		haveFocus,
+		cursorLine,
+		cursorAt
 	)
 {
-	const action = this.action;
-
 	const lines = [ ];
 
 	// splits up the doc into
@@ -843,31 +828,27 @@ def.proto.makeScreen =
 	}
 
 	// inserts the cursor
-	if( this.haveFocus )
+	if( haveFocus )
 	{
-		const cLine = this.cursorLine;
+		const cText = lines[ cursorLine ];
 
-		const cText = lines[ cLine ];
+		const cLen = lines[ cursorLine ].length;
 
-		let cAt = this.cursorAt;
-
-		const cLen = lines[ cLine ].length;
-
-		if( cAt >= cText.length )
+		if( cursorAt >= cText.length )
 		{
-			cAt = cText.length;
+			cursorAt = cText.length;
 
-			lines[ cLine ][ cAt ] = ' ';
+			lines[ cursorLine ][ cursorAt ] = ' ';
 		}
 
-		lines[ cLine ][ cAt ] =
+		lines[ cursorLine ][ cursorAt ] =
 			'<span id="cursor">'
-			+ lines[ cLine ][ cAt ]
+			+ lines[ cursorLine ][ cursorAt ]
 			+ '</span>';
 
-		if( cAt === cLen )
+		if( cursorAt === cLen )
 		{
-			lines[ cLine ].push( ' ' );
+			lines[ cursorLine ].push( ' ' );
 		}
 	}
 
@@ -909,34 +890,21 @@ def.proto.makeScreen =
 
 			if( action.at > action.at2 )
 			{
-				throw new Error(
-					'Invalid remove action'
-				);
+				throw new Error( 'Invalid remove action' );
 			}
 
-			lines[ action.line ].splice(
-				action.at,
-				0,
-				'<span id="remove">'
-			);
+			lines[ action.line ].splice( action.at, 0, '<span id="remove">' );
 
-			lines[ action.line ].splice(
-				action.at2 + 1,
-				0,
-				'</span>'
-			);
+			lines[ action.line ].splice( action.at2 + 1, 0, '</span>' );
 
 			break;
 
 		default :
 
-			throw new Error(
-				'Unknown action.command: ' + action.command
-			);
+			throw new Error( 'Unknown action.command: ' + action.command );
 	}
 
 	// transforms lines to a HTML string
-
 	for( let a = 0, al = lines.length; a < al; a++ )
 	{
 		lines[ a ] = lines[ a ].join( '' );

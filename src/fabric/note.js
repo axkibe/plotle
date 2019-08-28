@@ -317,7 +317,7 @@ def.proto.scrollMarkIntoView =
 
 	const imargin = this.doc.innerMargin;
 
-	const fs = this.doc.font.size;
+	const fs = this.doc.font.size.size;
 
 	const descend = fs * gleam_font_root.bottomBox;
 
