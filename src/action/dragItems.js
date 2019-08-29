@@ -31,13 +31,9 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_set = tim.require( '../change/set' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

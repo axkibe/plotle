@@ -12,9 +12,7 @@ tim.define( module, ( def ) => {
 */
 def.abstract = true;
 
-
 def.extend = './fiber';
-
 
 if( TIM )
 {
@@ -40,13 +38,9 @@ if( TIM )
 
 
 const action_createRelation = tim.require( '../action/createRelation' );
-
 const action_dragItems = tim.require( '../action/dragItems' );
-
 const action_none = tim.require( '../action/none' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const mark_items = tim.require( '../mark/items' );
 
 

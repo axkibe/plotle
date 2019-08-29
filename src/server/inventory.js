@@ -12,17 +12,13 @@ if( TIM )
 	def.twig = [ './resource' ];
 }
 
+const fs = tim.require( 'fs' );
+const util = tim.require( 'util' );
 
 const config = tim.require( '../config/intf' );
 
-const fs = require( 'fs' );
-
-const util = require( 'util' );
-
 const fsRealpath = util.promisify( fs.realpath );
-
 const fsReadFile = util.promisify( fs.readFile );
-
 const fsStat = util.promisify( fs.stat );
 
 const readOptions = Object.freeze( { encoding : 'utf8' } );

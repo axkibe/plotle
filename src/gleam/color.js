@@ -31,6 +31,12 @@ def.staticLazy.black = ( ) => gleam_color.rgb( 0, 0, 0 );
 
 
 /*
+| Light gray
+*/
+def.staticLazy.lightGray = ( ) => gleam_color.rgb( 244, 244, 244 );
+
+
+/*
 | Red.
 */
 def.staticLazy.red = ( ) => gleam_color.rgb( 255, 0, 0 );

@@ -29,7 +29,6 @@ if( TIM )
 	def.json = 'database_userSkid';
 }
 
-
 const user_info = tim.require( '../user/info' );
 
 

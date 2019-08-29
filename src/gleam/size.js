@@ -9,11 +9,6 @@
 tim.define( module, ( def, gleam_size ) => {
 
 
-const gleam_point = tim.require( './point' );
-
-const gleam_rect = tim.require( './rect' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -23,6 +18,9 @@ if( TIM )
 		width : { type : 'number' },
 	};
 }
+
+const gleam_point = tim.require( './point' );
+const gleam_rect = tim.require( './rect' );
 
 
 /*

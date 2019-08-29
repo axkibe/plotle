@@ -9,13 +9,11 @@ tim.define( module, ( def, trace_nonSpaceRef ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
 	def.list = [ './form', './forms', './root' ];
 }
-
 
 const ref_space = tim.require( '../ref/space' );
 

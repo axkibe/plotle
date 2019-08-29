@@ -20,7 +20,6 @@ if( TIM )
 
 
 const trace_base = tim.require( './base' );
-
 const trace_space = tim.require( './space' );
 
 

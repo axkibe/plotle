@@ -26,7 +26,6 @@
 
 tim.define( module, ( def ) => {
 
-
 const gleam_point = require( '../../gleam/point' );
 const gleam_shape_line = require( '../../gleam/shape/line' );
 const gleam_shape_round = require( '../../gleam/shape/round' );

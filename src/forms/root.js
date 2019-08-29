@@ -56,7 +56,6 @@ if( TIM )
 	];
 }
 
-
 const trace_root = tim.require( '../trace/root' );
 
 

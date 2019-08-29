@@ -9,7 +9,6 @@ tim.define( module, ( def, widget_label ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -34,9 +33,7 @@ if( TIM )
 	};
 }
 
-
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
-
 const layout_label = tim.require( '../layout/label' );
 
 

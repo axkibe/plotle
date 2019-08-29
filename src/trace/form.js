@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_form ) => {
 
 def.extend = './baseTwigKey';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -24,9 +23,7 @@ if( TIM )
 	def.json = './base';
 }
 
-
 const trace_nonSpaceRef = tim.require( './nonSpaceRef' );
-
 const trace_widget = tim.require( './widget' );
 
 

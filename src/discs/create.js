@@ -9,11 +9,8 @@ tim.define( module, ( def, discs_create ) => {
 
 def.extend = './base';
 
-
 const action_createGeneric = tim.require( '../action/createGeneric' );
-
 const action_createRelation = tim.require( '../action/createRelation' );
-
 const action_createStroke = tim.require( '../action/createStroke' );
 
 

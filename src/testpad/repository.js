@@ -23,15 +23,10 @@ if( TIM )
 
 
 const change_wrapList = tim.require( '../change/wrapList' );
-
 const fabric_doc = tim.require( '../fabric/doc' );
-
 const fabric_note = tim.require( '../fabric/note' );
-
 const fabric_para = tim.require( '../fabric/para' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
 
 

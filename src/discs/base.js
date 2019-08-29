@@ -60,27 +60,16 @@ if( TIM )
 	def.twig = [ '< ../widget/types' ];
 }
 
-
 const action_none = tim.require( '../action/none' );
-
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
 const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const layout_disc = tim.require( '../layout/disc' );
-
 const trace_root = tim.require( '../trace/root' );
-
 const widget_factory = tim.require( '../widget/factory' );
 
 

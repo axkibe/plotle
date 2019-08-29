@@ -31,33 +31,19 @@ if( TIM )
 
 
 const change_grow = tim.require( './grow' );
-
 const change_insert = tim.require( './insert' );
-
 const change_list = tim.require( './list' );
-
 const change_remove = tim.require( './remove' );
-
 const change_set = tim.require( './set' );
-
 const change_shrink = tim.require( './shrink' );
-
 const change_split = tim.require( './split' );
-
 const change_wrap = tim.require( './wrap' );
-
 const change_wrapList = tim.require( './wrapList' );
-
 const error = tim.require( './error' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_items = tim.require( '../mark/items' );
-
 const mark_range = tim.require( '../mark/range' );
-
 const mark_widget = tim.require( '../mark/widget' );
-
 const trace_offset = tim.require( '../trace/offset' );
 
 
@@ -171,10 +157,10 @@ def.staticLazy._transformers = ( ) =>
 	map.set( mark_items,  '_transformSame' );
 	map.set( mark_widget, '_transformSame' );
 
-	// FUTURE might be para
+	// TODO might be para
 	map.set( change_set,  '_transformSame' );
 
-	// FUTURE change ranks
+	// TODO change ranks
 	// but right now this can never happen
 	// since for text split/join is excl. used
 	// and grow/shrink excl. for items

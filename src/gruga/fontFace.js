@@ -9,9 +9,7 @@ tim.define( module, ( def, gruga_fontFace ) => {
 
 def.abstract = true;
 
-
 const gleam_color = tim.require( '../gleam/color' );
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
 
 

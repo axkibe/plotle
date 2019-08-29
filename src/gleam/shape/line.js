@@ -9,13 +9,6 @@
 tim.define( module, ( def, gleam_shape_line ) => {
 
 
-const gleam_constants = tim.require( '../constants' );
-
-const gleam_point = tim.require( '../point' );
-
-const gleam_transform = tim.require( '../transform' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -31,8 +24,9 @@ if( TIM )
 	};
 }
 
-
-const e = gleam_constants.epsilon;
+const gleam_constants = tim.require( '../constants' );
+const gleam_point = tim.require( '../point' );
+const gleam_transform = tim.require( '../transform' );
 
 
 /*
@@ -101,6 +95,8 @@ def.proto.getProjection =
 		pc   // central point of shape
 	)
 {
+	const e = gleam_constants.epsilon;
+
 	const la1 = p.y - pc.y;
 
 	const lb1 = pc.x - p.x;

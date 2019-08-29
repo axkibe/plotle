@@ -9,7 +9,6 @@ tim.define( module, ( def, widget_button ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -54,25 +53,15 @@ if( TIM )
 
 
 const action_none = tim.require( '../action/none' );
-
 const gleam_ellipse = tim.require( '../gleam/ellipse' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const layout_button = tim.require( '../layout/button' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

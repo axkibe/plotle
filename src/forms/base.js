@@ -53,21 +53,13 @@ if( TIM )
 
 
 const action_none = tim.require( '../action/none' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const gruga_formFacet = tim.require( '../gruga/formFacet' );
-
 const result_hover = tim.require( '../result/hover' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_widget = tim.require( '../mark/widget' );
-
 const widget_scrollbox = tim.require( '../widget/scrollbox' );
 
 

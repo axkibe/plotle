@@ -9,7 +9,6 @@ tim.define( module, ( def, action_createRelation ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -26,7 +25,7 @@ if( TIM )
 		// the arrow destination while its floating
 		toPoint : { type : [ 'undefined', '../gleam/point' ] },
 
-		// FUTURE make a defined state list
+		// TODO make a defined state list
 		// the state of the relation creation
 		relationState : { type : 'string' },
 
@@ -37,9 +36,7 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

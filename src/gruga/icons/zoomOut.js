@@ -14,7 +14,6 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_point = tim.require( '../../gleam/point' );
 const gleam_shape_line = tim.require( '../../gleam/shape/line' );
 const gleam_shape_start = tim.require( '../../gleam/shape/start' );

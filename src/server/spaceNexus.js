@@ -12,7 +12,6 @@ if( TIM )
 	def.group = [ './spaceBox' ];
 }
 
-
 const config = tim.require( '../config/intf' );
 
 

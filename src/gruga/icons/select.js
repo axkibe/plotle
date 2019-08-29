@@ -25,7 +25,6 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_border = tim.require( '../../gleam/border' );
 const gleam_borderList = tim.require( '../../gleam/borderList' );
 const gleam_color = tim.require( '../../gleam/color' );

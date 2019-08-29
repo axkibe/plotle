@@ -49,39 +49,24 @@ const DELAY_ACQUIRE = false;
 // FUTURE still some dependency conflict in tim.js
 tim.require( '../trace/base' );
 
-const config = tim.require( '../config/intf' );
-
 const fs = tim.require( 'fs' );
+const terser = tim.require( 'terser' );
+const url = tim.require( 'url' );
+const util = tim.require( 'util' );
 
+const config = tim.require( '../config/intf' );
 const hash_sha1 = tim.require( '../hash/sha1' );
-
 const log = tim.require( './log' );
-
 const ref_space = tim.require( '../ref/space' );
-
 const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
-
 const server_maxAge = tim.require( './maxAge' );
-
 const server_postProcessor = tim.require( './postProcessor' );
-
 const server_requestHandler = tim.require( './requestHandler' );
-
 const server_roster = tim.require( './roster' );
-
 const server_resource = tim.require( './resource' );
-
 const server_spaceBox = tim.require( './spaceBox' );
-
-const terser = require( 'terser' );
-
 const timspec_twig = tim.require( 'tim.js/timspecTwig' );
-
 const tim_path = tim.require( 'tim.js/path' );
-
-const url = require( 'url' );
-
-const util = require( 'util' );
 
 const fsStat = util.promisify( fs.stat );
 

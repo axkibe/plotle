@@ -11,21 +11,13 @@ def.abstract = true;
 
 def.extend = './item';
 
-
 const action_none = tim.require( '../action/none' );
-
 const action_select = tim.require( '../action/select' );
-
 const fabric_item = tim.require( './item' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const math = tim.require( '../math/root' );
-
 const result_hover = tim.require( '../result/hover' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_range = tim.require( '../mark/range' );
 
 

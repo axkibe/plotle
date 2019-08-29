@@ -18,7 +18,6 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_border = tim.require( '../../gleam/border' );
 const gleam_color = tim.require( '../../gleam/color' );
 const gleam_facet = tim.require( '../../gleam/facet' );

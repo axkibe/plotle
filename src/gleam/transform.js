@@ -19,7 +19,6 @@ if( TIM )
 	};
 }
 
-
 const gleam_point = tim.require( './point' );
 
 

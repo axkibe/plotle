@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_item ) => {
 
 def.extend = './baseTwigKey';
 
-
 if( TIM )
 {
 	// path of trace back.
@@ -20,27 +19,16 @@ if( TIM )
 
 
 const trace_base = tim.require( './base' );
-
 const trace_doc = tim.require( './doc' );
-
 const trace_field = tim.require( './field' );
-
 const trace_fontsize = tim.require( './fontsize' );
-
 const trace_from = tim.require( './from' );
-
 const trace_jp1 = tim.require( './jp1' );
-
 const trace_jp2 = tim.require( './jp2' );
-
 const trace_scrollPos = tim.require( './scrollPos' );
-
 const trace_space = tim.require( './space' );
-
 const trace_to = tim.require( './to' );
-
 const trace_widget = tim.require( './widget' );
-
 const trace_zone = tim.require( './zone' );
 
 

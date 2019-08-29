@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_pos ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
@@ -20,7 +19,6 @@ if( TIM )
 
 
 const gleam_point = tim.require( '../gleam/point' );
-
 const trace_base = tim.require( './base' );
 
 

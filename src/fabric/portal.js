@@ -41,56 +41,31 @@ if( TIM )
 
 
 const change_grow = tim.require( '../change/grow' );
-
 const change_insert = tim.require( '../change/insert' );
-
 const change_remove = tim.require( '../change/remove' );
-
 const gleam_ellipse = tim.require( '../gleam/ellipse' );
-
 const gleam_facet = tim.require( '../gleam/facet' );
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
-
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
 const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_roundRect = tim.require( '../gleam/roundRect' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const gruga_fontFace = tim.require( '../gruga/fontFace' );
-
 const gruga_portal = tim.require( '../gruga/portal' );
-
-const result_hover = tim.require( '../result/hover' );
-
-const ref_space = tim.require( '../ref/space' );
-
-const session_uid = tim.require( '../session/uid' );
-
-const trace_root = tim.require( '../trace/root' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_items = tim.require( '../mark/items' );
+const result_hover = tim.require( '../result/hover' );
+const ref_space = tim.require( '../ref/space' );
+const session_uid = tim.require( '../session/uid' );
+const trace_root = tim.require( '../trace/root' );
 
 
 /*
@@ -1153,7 +1128,7 @@ def.proto._locateOffset =
 		offset     // the offset to get the point from.
 	)
 {
-	// FUTURE cache position
+	// TODO cache position
 	const fontSize = this._fontFaceFor( section ).size;
 
 	const text = this[ section ].substring( 0, offset );
@@ -1204,9 +1179,6 @@ def.lazy._moveToButtonShape =
 		)
 	);
 };
-
-
-
 
 
 /*

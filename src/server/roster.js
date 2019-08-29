@@ -11,9 +11,7 @@ def.abstract = true;
 
 
 const server_resource = tim.require( './resource' );
-
 const server_resourceList = tim.require( './resourceList' );
-
 const stringList = tim.require( 'tim.js/stringList' );
 
 

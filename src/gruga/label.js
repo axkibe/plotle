@@ -9,13 +9,9 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_facet = tim.require( '../gleam/facet' );
-
 const gleam_facetList = tim.require( '../gleam/facetList' );
-
 const gleam_margin = tim.require( '../gleam/margin' );
-
 const gruga_highlight = tim.require( './highlight' );
 
 

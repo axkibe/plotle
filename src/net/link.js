@@ -39,31 +39,18 @@ if( TIM )
 
 
 const change_wrapList = tim.require( '../change/wrapList' );
-
 const reply_auth = tim.require( '../reply/auth' );
-
 const reply_acquire = tim.require( '../reply/acquire' );
-
 const reply_error = tim.require( '../reply/error' );
-
 const reply_register = tim.require( '../reply/register' );
-
 const reply_update = tim.require( '../reply/update' );
-
 const ref_moment = tim.require( '../ref/moment' );
-
 const ref_momentList = tim.require( '../ref/momentList' );
-
 const request_acquire = tim.require( '../request/acquire' );
-
 const request_alter = tim.require( '../request/alter' );
-
 const request_auth = tim.require( '../request/auth' );
-
 const request_register = tim.require( '../request/register' );
-
 const request_update = tim.require( '../request/update' );
-
 const shell_doTracker = tim.require( '../shell/doTracker' );
 
 
@@ -459,7 +446,7 @@ def.proto._gotUpdateSpace =
 		report = report.append( changeWrap );
 	}
 
-	// FUTURE why is it once changeWrapList then report??
+	// TODO why is it once changeWrapList then report??
 
 	// transforms the postbox by the updated stuff
 	// postbox = changeWrapList.transform( postbox );
@@ -487,7 +474,7 @@ def.proto._gotUpdateSpace =
 		'space', space
 	);
 
-	// FUTURE move to "markJockey"
+	// TODO move to "markJockey"
 	if( report.length > 0 )
 	{
 		const mark = root.update( report );

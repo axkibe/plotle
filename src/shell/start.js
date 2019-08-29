@@ -9,9 +9,7 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
-
 const shell_system = tim.require( './system' );
 
 

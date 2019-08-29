@@ -9,15 +9,12 @@ tim.define( module, ( def ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
 	def.list = [ './item', './root', './space' ];
-
 	def.json = './base';
 }
-
 
 const trace_base = tim.require( './base' );
 

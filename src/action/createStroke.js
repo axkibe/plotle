@@ -33,23 +33,14 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const change_grow = tim.require( '../change/grow' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const fabric_stroke = tim.require( '../fabric/stroke' );
-
 const gleam_line = tim.require( '../gleam/line' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const result_hover = tim.require( '../result/hover' );
-
 const session_uid = tim.require( '../session/uid' );
-
 const trace_item = tim.require( '../trace/item' );
-
 const trace_space = tim.require( '../trace/space' );
 
 

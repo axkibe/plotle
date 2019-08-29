@@ -26,14 +26,11 @@ if( TIM )
 	};
 }
 
+const mongodb = tim.require( 'mongodb' );
 
 const log = tim.require( '../server/log' );
-
 const config = tim.require( '../config/intf' );
-
 const ref_space = tim.require( '../ref/space' );
-
-const mongodb = require( 'mongodb' );
 
 
 /*

@@ -10,11 +10,6 @@
 tim.define( module, ( def, gleam_facet ) => {
 
 
-const gleam_border = tim.require( './border' );
-
-const gleam_color = tim.require( './color' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -42,6 +37,10 @@ if( TIM )
 
 	def.group = [ 'boolean' ];
 }
+
+
+const gleam_border = tim.require( './border' );
+const gleam_color = tim.require( './color' );
 
 
 /*

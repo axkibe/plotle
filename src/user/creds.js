@@ -7,9 +7,6 @@
 tim.define( module, ( def, user_creds ) => {
 
 
-const session_uid = tim.require( '../session/uid' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -24,6 +21,7 @@ if( TIM )
 	def.json = 'user_creds';
 }
 
+const session_uid = tim.require( '../session/uid' );
 
 /*
 | Creates a user tim from the local storage.

@@ -9,7 +9,6 @@ tim.define( module, ( def ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =

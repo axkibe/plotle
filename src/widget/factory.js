@@ -9,25 +9,15 @@ tim.define( module, ( def, widget_factory ) => {
 
 def.abstract = true;
 
-
 const layout_button = tim.require( '../layout/button' );
-
 const layout_checkbox = tim.require( '../layout/checkbox' );
-
 const layout_input = tim.require( '../layout/input' );
-
 const layout_label = tim.require( '../layout/label' );
-
 const layout_scrollbox = tim.require( '../layout/scrollbox' );
-
 const widget_button = tim.require( './button' );
-
 const widget_checkbox = tim.require( './checkbox' );
-
 const widget_input = tim.require( './input' );
-
 const widget_label = tim.require( './label' );
-
 const widget_scrollbox = tim.require( './scrollbox' );
 
 

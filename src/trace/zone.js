@@ -18,11 +18,8 @@ if( TIM )
 	def.json = './base';
 }
 
-
 const trace_base = tim.require( './base' );
-
 const trace_pos = tim.require( './pos' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
 
 

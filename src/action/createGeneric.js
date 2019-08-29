@@ -33,19 +33,12 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const fabric_label = tim.require( '../fabric/label' );
-
 const fabric_note = tim.require( '../fabric/note' );
-
 const fabric_portal = tim.require( '../fabric/portal' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

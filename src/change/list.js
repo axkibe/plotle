@@ -27,9 +27,7 @@ if( TIM )
 
 
 const change_wrap = tim.require( './wrap' );
-
 const change_wrapList = tim.require( './wrapList' );
-
 const string_set = tim.require( 'tim.js/stringSet' );
 
 

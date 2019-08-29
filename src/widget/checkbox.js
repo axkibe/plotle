@@ -9,7 +9,6 @@ tim.define( module, ( def, widget_checkbox ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -30,7 +29,6 @@ if( TIM )
 		zone : { type : '../gleam/rect' },
 	};
 }
-
 
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );

@@ -27,7 +27,6 @@ if( TIM )
 	};
 }
 
-
 const gleam_display_canvas = tim.require( '../display/canvas' );
 
 

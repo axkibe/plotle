@@ -9,7 +9,6 @@ tim.define( module, ( def ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -24,9 +23,7 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

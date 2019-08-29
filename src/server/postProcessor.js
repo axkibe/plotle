@@ -10,7 +10,6 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 const hash_sha1 = tim.require( '../hash/sha1' );
-
 const stringList = tim.require( 'tim.js/stringList' );
 
 

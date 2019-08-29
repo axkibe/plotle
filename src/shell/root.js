@@ -167,7 +167,6 @@ const user_creds = tim.require( '../user/creds' );
 const widget_factory = tim.require( '../widget/factory' );
 
 
-
 /*
 | When animations are turned off, but the action has
 | an finishAnimation a time is used instead an this
@@ -1350,7 +1349,7 @@ def.proto.probeClickDrag =
 		if( bubble !== undefined ) return bubble;
 	}
 
-//	FUTURE
+//	TODO
 //	return screen.probeClickDrag( p, shift, ctrl );
 
 	return 'atween';

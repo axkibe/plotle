@@ -27,7 +27,6 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const result_hover = tim.require( '../result/hover' );
 
 

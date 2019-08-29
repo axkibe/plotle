@@ -1,7 +1,7 @@
 /*
 | Holds an manages all users.
 |
-| FUTURE move database interaction into here.
+| TODO move database interaction into here.
 */
 'use strict';
 
@@ -24,15 +24,10 @@ if( TIM )
 
 
 const change_listAppend = tim.require( '../change/listAppend' );
-
 const dynamic_refSpaceList = tim.require( '../dynamic/refSpaceList' );
-
 const user_info = tim.require( '../user/info' );
-
 const database_userSkid = tim.require( '../database/userSkid' );
-
 const ref_space = tim.require( '../ref/space' );
-
 const ref_spaceList = tim.require( '../ref/spaceList' );
 
 

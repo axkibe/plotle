@@ -42,15 +42,10 @@ if( TIM )
 | Currently only canvas is supported as display backend.
 */
 const gleam_impl = tim.require( '../gleam/display/canvas' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_size = tim.require( '../gleam/size' );
-
 const math = tim.require( '../math/root' );
-
 const shell_root = tim.require( '../shell/root' );
-
 const shell_settings = tim.require( '../shell/settings' );
 
 

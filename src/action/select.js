@@ -27,14 +27,10 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
-
 const fabric_space = tim.require( '../fabric/space' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
-const result_hover = tim.require( '../result/hover' );
-
 const mark_items = tim.require( '../mark/items' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*

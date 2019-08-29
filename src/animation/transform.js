@@ -8,7 +8,6 @@ tim.define( module, ( def, animation_transform ) => {
 
 
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
 
 

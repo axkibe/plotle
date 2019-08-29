@@ -22,7 +22,6 @@ if( TIM )
 	};
 }
 
-
 const forms_base = tim.require( './base' );
 
 

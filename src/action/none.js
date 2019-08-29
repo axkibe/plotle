@@ -9,7 +9,6 @@ tim.define( module, ( def, action_none ) => {
 
 def.singleton = true;
 
-
 def.extend = './base';
 
 
@@ -26,7 +25,6 @@ def.proto.dragMove =
 {
 	// ignored
 };
-
 
 
 /*

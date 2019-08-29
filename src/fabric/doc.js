@@ -9,7 +9,6 @@ tim.define( module, ( def, fabric_doc ) => {
 
 def.extend = './fiber';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -154,7 +153,8 @@ def.adjust.get =
 		para
 	)
 {
-	// FUTURE why?
+	// changes can check if the para already exists
+	// thus they try to get an unexisting one.
 	if( !para ) return;
 
 	let mark, pos, y;
@@ -167,10 +167,7 @@ def.adjust.get =
 
 		const rank = this.rankOf( key );
 
-/**/	if( CHECK )
-/**/	{
-/**/		if( rank < 0 ) throw new Error( );
-/**/	}
+/**/	if( CHECK && rank < 0 ) throw new Error( );
 
 		if( rank > 0 )
 		{
@@ -266,7 +263,7 @@ def.proto.input =
 	{
 		root.removeRange( mark );
 
-		// FUTURE this is an akward workaround
+		// TODO this is an akward workaround
 
 		root.input( text );
 
@@ -322,7 +319,7 @@ def.proto.specialKey =
 
 				root.removeRange( mark );
 
-				// FUTURE this is a bit akward
+				// TODO this is a bit akward
 
 				root.specialKey( key, shift, ctrl );
 
@@ -404,9 +401,9 @@ def.lazy._rangeShape =
 
 	const backPos = backPara.pos;
 
-	let fp = frontPara.locateOffsetPoint( frontOffset.at );
+	const fp = frontPara.locateOffsetPoint( frontOffset.at ).add( frontPos );
 
-	let bp = backPara.locateOffsetPoint( backOffset.at );
+	const bp = backPara.locateOffsetPoint( backOffset.at ).add( backPos );
 
 	const fLine = frontPara.locateOffsetLine( frontOffset.at );
 
@@ -423,12 +420,6 @@ def.lazy._rangeShape =
 	const rx = this.clipsize.width - innerMargin.e;
 
 	const lx = innerMargin.w;
-
-	// FUTURE do not create points
-
-	fp = fp.add( frontPos.x, frontPos.y );
-
-	bp = bp.add( backPos.x, backPos.y );
 
 	const frontFlow = frontPara.flow;
 

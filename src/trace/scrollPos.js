@@ -9,13 +9,11 @@ tim.define( module, ( def, trace_scrollPos ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
 	def.list = [ './form', './forms', './item', './root', './space', './widget' ];
 }
-
 
 const gleam_point = tim.require( '../gleam/point' );
 

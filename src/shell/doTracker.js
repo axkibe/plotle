@@ -7,11 +7,6 @@
 tim.define( module, ( def, shell_doTracker ) => {
 
 
-const change_wrapList = tim.require( '../change/wrapList' );
-
-const shell_settings = tim.require( '../shell/settings' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -23,6 +18,9 @@ if( TIM )
 		_redo : { type : [ 'undefined', '../change/wrapList' ] }
 	};
 }
+
+const change_wrapList = tim.require( '../change/wrapList' );
+const shell_settings = tim.require( '../shell/settings' );
 
 
 /*

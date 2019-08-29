@@ -42,34 +42,20 @@ if( TIM )
 
 
 const gleam_ellipse = tim.require( '../gleam/ellipse' );
-
 const gleam_facet = tim.require( '../gleam/facet' );
-
 const gleam_font_root = tim.require( '../gleam/font/root' );
-
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
-
 const gleam_glint_fill = tim.require( '../gleam/glint/fill' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_text = tim.require( '../gleam/glint/text' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_roundRect = tim.require( '../gleam/roundRect' );
-
 const layout_input = tim.require( '../layout/input' );
-
-const result_hover = tim.require( '../result/hover' );
-
 const mark_caret = tim.require( '../mark/caret' );
+const result_hover = tim.require( '../result/hover' );
 
 
 /*
@@ -357,7 +343,7 @@ def.lazy._facet =
 {
 	return(
 		this.facets.getFacet(
-			'hover', false, // FUTURE
+			'hover', !!this.hover,
 			'focus', !!this.mark
 		)
 	);

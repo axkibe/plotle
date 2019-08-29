@@ -24,7 +24,6 @@ if( TIM )
 
 
 const font_face = tim.require( './face' );
-
 const font_token = tim.require( './token' );
 
 

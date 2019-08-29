@@ -10,11 +10,6 @@
 tim.define( module, ( def, gleam_shape_round ) => {
 
 
-const gleam_point = tim.require( '../point' );
-
-const gleam_transform = tim.require( '../transform' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -29,6 +24,9 @@ if( TIM )
 		close : { type : [ 'undefined', 'boolean' ] }
 	};
 }
+
+const gleam_point = tim.require( '../point' );
+const gleam_transform = tim.require( '../transform' );
 
 
 /*

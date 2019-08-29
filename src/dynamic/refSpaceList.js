@@ -30,11 +30,8 @@ if( TIM )
 
 
 const change_list = tim.require( '../change/list' );
-
 const change_wrap = tim.require( '../change/wrap' );
-
 const ref_moment = tim.require( '../ref/moment' );
-
 const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
 
 

@@ -29,7 +29,6 @@ if( TIM )
 
 
 const net_requestWrap = tim.require( './requestWrap' );
-
 const net_requestWrapList = tim.require( './requestWrapList' );
 
 

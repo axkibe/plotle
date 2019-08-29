@@ -9,11 +9,6 @@
 tim.define( module, ( def, gleam_shape_start ) => {
 
 
-const gleam_point = tim.require( '../point' );
-
-const gleam_transform = tim.require( '../transform' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -22,6 +17,9 @@ if( TIM )
 		p : { type : [ '../point' ] }
 	};
 }
+
+const gleam_point = tim.require( '../point' );
+const gleam_transform = tim.require( '../transform' );
 
 
 /*

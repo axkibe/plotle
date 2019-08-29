@@ -9,25 +9,15 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_border = tim.require( '../gleam/border' );
-
 const gleam_borderList = tim.require( '../gleam/borderList' );
-
 const gleam_color = tim.require( '../gleam/color' );
-
 const gleam_facet = tim.require( '../gleam/facet' );
-
 const gleam_facetList = tim.require( '../gleam/facetList' );
-
 const gleam_gradient_askew = tim.require( '../gleam/gradient/askew' );
-
 const gleam_gradient_colorStop = tim.require( '../gleam/gradient/colorStop' );
-
 const gleam_margin = tim.require( '../gleam/margin' );
-
 const gleam_size = tim.require( '../gleam/size' );
-
 const gruga_highlight = tim.require( '../gruga/highlight' );
 
 

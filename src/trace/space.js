@@ -20,15 +20,10 @@ if( TIM )
 
 
 const trace_base = tim.require( './base' );
-
 const trace_item = tim.require( './item' );
-
 const trace_hasGrid = tim.require( './hasGrid' );
-
 const trace_hasGuides = tim.require( './hasGuides' );
-
 const trace_hasSnapping = tim.require( './hasSnapping' );
-
 const trace_root = tim.require( './root' );
 
 

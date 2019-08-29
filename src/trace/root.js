@@ -16,7 +16,6 @@ if( TIM )
 	def.json = './base';
 }
 
-
 const trace_discs = tim.require( './discs' );
 const trace_forms = tim.require( './forms' );
 const trace_space = tim.require( './space' );

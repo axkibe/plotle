@@ -26,9 +26,7 @@ if( TIM )
 
 
 const trace_base = tim.require( './base' );
-
 const trace_offset = tim.require( './offset' );
-
 const trace_text = tim.require( './text' );
 
 

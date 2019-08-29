@@ -7,12 +7,6 @@
 tim.define( module, ( def, gleam_arrow ) => {
 
 
-const gleam_line = tim.require( './line' );
-const gleam_shape = tim.require( './shape' );
-const gleam_shape_line = tim.require( './shape/line' );
-const gleam_shape_start = tim.require( './shape/start' );
-
-
 if( TIM )
 {
 	def.attributes =
@@ -33,6 +27,11 @@ if( TIM )
 		joint2 : { type : [ '< ./shape-types', './point' ] },
 	};
 }
+
+const gleam_line = tim.require( './line' );
+const gleam_shape = tim.require( './shape' );
+const gleam_shape_line = tim.require( './shape/line' );
+const gleam_shape_start = tim.require( './shape/start' );
 
 
 /*
@@ -58,7 +57,7 @@ def.static.getArrowShape =
 
 	const sections = [ ];
 
-	// FUTURE, allow arrows on p1.
+	// TODO allow arrows on p1.
 	switch( end1 )
 	{
 		case 'none': sections.push( gleam_shape_start.create( 'p', p1 ) ); break;

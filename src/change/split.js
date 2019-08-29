@@ -27,35 +27,20 @@ if( TIM )
 	def.json = 'change_split';
 }
 
-
 const change_grow = tim.require( './grow' );
-
 const change_insert = tim.require( './insert' );
-
 const change_join = tim.require( './join' );
-
 const change_list = tim.require( './list' );
-
 const change_remove = tim.require( './remove' );
-
 const change_shrink = tim.require( './shrink' );
-
 const change_set = tim.require( './set' );
-
 const change_wrap = tim.require( './wrap' );
-
 const change_wrapList = tim.require( './wrapList' );
-
 const error = tim.require( './error' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const mark_items = tim.require( '../mark/items' );
-
 const mark_range = tim.require( '../mark/range' );
-
 const mark_widget = tim.require( '../mark/widget' );
-
 const trace_offset = tim.require( '../trace/offset' );
 
 

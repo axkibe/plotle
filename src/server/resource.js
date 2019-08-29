@@ -67,14 +67,11 @@ if( TIM )
 	};
 }
 
+const zlib = tim.require( 'zlib' );
+const util = tim.require( 'util' );
 
 const server_fileTypes = tim.require( './fileTypes' );
-
 const stringList = tim.require( 'tim.js/stringList' );
-
-const zlib = require( 'zlib' );
-
-const util = require( 'util' );
 
 const gzip = util.promisify( zlib.gzip );
 

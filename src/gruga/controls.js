@@ -9,7 +9,6 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
 const gleam_size = tim.require( '../gleam/size' );
 
 
@@ -25,4 +24,3 @@ def.staticLazy.designSize = ( ) =>
 
 
 } );
-

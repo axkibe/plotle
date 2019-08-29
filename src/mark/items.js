@@ -15,8 +15,6 @@ if( TIM )
 	def.set = [ '../trace/item' ];
 }
 
-
-
 const trace_item = tim.require( '../trace/item' );
 
 

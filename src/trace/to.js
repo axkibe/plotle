@@ -21,7 +21,6 @@ if( TIM )
 
 
 const trace_base = tim.require( './base' );
-
 const gleam_point = tim.require( '../gleam/point' );
 
 

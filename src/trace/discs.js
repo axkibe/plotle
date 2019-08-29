@@ -9,13 +9,11 @@ tim.define( module, ( def ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root' ];
 }
-
 
 const trace_disc = tim.require( './disc' );
 

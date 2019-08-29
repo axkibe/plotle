@@ -9,9 +9,7 @@ tim.define( module, ( def, discs_zoom ) => {
 
 def.extend = './base';
 
-
 const action_none = tim.require( '../action/none' );
-
 const action_zoomButton = tim.require( '../action/zoomButton' );
 
 

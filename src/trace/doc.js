@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_doc ) => {
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	// path of trace back.
@@ -18,9 +17,7 @@ if( TIM )
 	def.json = './base';
 }
 
-
 const trace_base = tim.require( './base' );
-
 const trace_para = tim.require( './para' );
 
 

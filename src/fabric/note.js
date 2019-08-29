@@ -11,7 +11,6 @@ tim.define( module, ( def, fabric_note ) => {
 
 def.extend = './docItem';
 
-
 if( TIM )
 {
 	def.attributes =
@@ -41,8 +40,6 @@ if( TIM )
 		alikeIgnoringTransform : { ignores : { 'transform' : true } }
 	};
 }
-
-
 
 const change_grow = tim.require( '../change/grow' );
 const fabric_doc = tim.require( './doc' );

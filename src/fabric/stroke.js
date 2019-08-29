@@ -36,25 +36,15 @@ if( TIM )
 	def.json = 'stroke';
 }
 
-
 const change_list = tim.require( '../change/list' );
-
 const change_set = tim.require( '../change/set' );
-
 const change_shrink = tim.require( '../change/shrink' );
-
 const gleam_arrow = tim.require( '../gleam/arrow' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_line = tim.require( '../gleam/line' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gruga_stroke = tim.require( '../gruga/stroke' );
-
 const trace_item = tim.require( '../trace/item' );
 
 

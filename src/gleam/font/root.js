@@ -24,7 +24,7 @@ let pool;
 
 /*
 | Factor to add to the bottom of font height.
-| FUTURE remove
+| TODO remove
 */
 def.static.bottomBox = 0.25;
 
@@ -49,7 +49,7 @@ if( NODE )
 			{
 				if( err )
 				{
-					// FUTURE make proper error presentation
+					// TODO make proper error presentation
 					console.log( 'Font "' + name + '" could not be loaded: ' + err );
 
 					callback( err );
@@ -85,7 +85,7 @@ else
 			{
 				if( err )
 				{
-					// FUTURE make proper error presentation
+					// TODO make proper error presentation
 					console.log( 'Font "' + name + '" could not be loaded: ' + err );
 
 					return;

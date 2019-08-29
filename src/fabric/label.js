@@ -33,40 +33,23 @@ if( TIM )
 
 
 const change_grow = tim.require( '../change/grow' );
-
 const change_list = tim.require( '../change/list' );
-
 const change_set = tim.require( '../change/set' );
-
 const change_shrink = tim.require( '../change/shrink' );
-
 const fabric_doc = tim.require( './doc' );
-
 const fabric_para = tim.require( './para' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
-
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gleam_size = tim.require( '../gleam/size' );
-
 const gleam_transform = tim.require( '../gleam/transform' );
-
 const gruga_label = tim.require( '../gruga/label' );
-
-const session_uid = tim.require( '../session/uid' );
-
-const trace_root = tim.require( '../trace/root' );
-
 const mark_caret = tim.require( '../mark/caret' );
+const session_uid = tim.require( '../session/uid' );
+const trace_root = tim.require( '../trace/root' );
 
 
 /*

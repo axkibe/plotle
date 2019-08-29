@@ -11,7 +11,6 @@ def.abstract = true;
 
 def.extend = './base';
 
-
 if( TIM )
 {
 	def.attributes =

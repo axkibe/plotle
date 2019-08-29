@@ -9,7 +9,6 @@ tim.define( module, ( def, trace_widget ) => {
 
 def.extend = './baseTwigKey';
 
-
 if( TIM )
 {
 	// path of trace back.
@@ -26,13 +25,9 @@ if( TIM )
 	];
 }
 
-
 const trace_checked = tim.require( './checked' );
-
 const trace_offset = tim.require( './offset' );
-
 const trace_scrollPos = tim.require( './scrollPos' );
-
 const trace_text = tim.require( './text' );
 
 

@@ -9,21 +9,13 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
-
-const compass_nw = tim.require( './nw' );
-
-const compass_n = tim.require( './n' );
-
 const compass_ne = tim.require( './ne' );
-
+const compass_nw = tim.require( './nw' );
+const compass_n = tim.require( './n' );
 const compass_e = tim.require( './e' );
-
 const compass_se = tim.require( './se' );
-
 const compass_s = tim.require( './s' );
-
 const compass_sw = tim.require( './sw' );
-
 const compass_w = tim.require( './w' );
 
 

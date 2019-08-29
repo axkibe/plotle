@@ -14,17 +14,11 @@ def.extend = './base';
 
 
 const action_none = tim.require( '../action/none' );
-
 const forms_base = tim.require( './base' );
-
 const mark_caret = tim.require( '../mark/caret' );
-
 const ref_space = tim.require( '../ref/space' );
-
 const reply_auth = tim.require( '../reply/auth' );
-
 const user_creds = tim.require( '../user/creds' );
-
 const user_passhash = tim.require( '../user/passhash' );
 
 

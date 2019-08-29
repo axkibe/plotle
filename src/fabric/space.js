@@ -49,47 +49,26 @@ if( TIM )
 
 
 const action_createGeneric = tim.require( '../action/createGeneric' );
-
 const action_createRelation = tim.require( '../action/createRelation' );
-
 const action_createStroke = tim.require( '../action/createStroke' );
-
 const action_pan = tim.require( '../action/pan' );
-
 const action_select = tim.require( '../action/select' );
-
 const fabric_item = tim.require( './item' );
-
 const fabric_itemSet = tim.require( './itemSet' );
-
 const fabric_note = tim.require( './note' );
-
 const gleam_arrow = tim.require( '../gleam/arrow' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const gleam_glint_paint = tim.require( '../gleam/glint/paint' );
-
 const gruga_note = tim.require( '../gruga/note' );
-
 const gleam_point = tim.require( '../gleam/point' );
-
 const gleam_rect = tim.require( '../gleam/rect' );
-
 const gruga_relation = tim.require( '../gruga/relation' );
-
 const gruga_select = tim.require( '../gruga/select' );
-
 const result_hover = tim.require( '../result/hover' );
-
 const trace_item = tim.require( '../trace/item' );
-
 const trace_root = tim.require( '../trace/root' );
-
 const visual_frame = tim.require( '../visual/frame' );
-
 const visual_grid = tim.require( '../visual/grid' );
-
 const mark_items = tim.require( '../mark/items' );
 
 
@@ -119,7 +98,7 @@ def.proto.ancillary =
 {
 	let change;
 
-	// FUTURE for( let key of affectedTwigItems )
+	// TODO for( let key of affectedTwigItems )
 	for( let item of this )
 	{
 		let ia = item.ancillary( this );

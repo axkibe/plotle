@@ -29,9 +29,8 @@ if( TIM )
 }
 
 
-const trace_para = tim.require( '../trace/para' );
-
 const mark_items = tim.require( './items' );
+const trace_para = tim.require( '../trace/para' );
 
 
 /*

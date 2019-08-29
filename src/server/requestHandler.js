@@ -12,45 +12,25 @@ tim.define( module, ( def, server_requestHandler ) => {
 */
 def.abstract = true;
 
-
-const config = tim.require( '../config/intf' );
-
 const change_dynamic = tim.require( '../change/dynamic' );
-
 const change_wrapList = tim.require( '../change/wrapList' );
-
+const config = tim.require( '../config/intf' );
 const log = tim.require( './log' );
-
 const ref_space = tim.require( '../ref/space' );
-
 const ref_userSpaceList = tim.require( '../ref/userSpaceList' );
-
 const reply_acquire = tim.require( '../reply/acquire' );
-
 const reply_alter = tim.require( '../reply/alter' );
-
 const reply_auth = tim.require( '../reply/auth' );
-
 const reply_error = tim.require( '../reply/error' );
-
 const reply_register = tim.require( '../reply/register' );
-
 const reply_update = tim.require( '../reply/update' );
-
 const request_acquire = tim.require( '../request/acquire' );
-
 const request_alter = tim.require( '../request/alter' );
-
 const request_auth = tim.require( '../request/auth' );
-
 const request_register = tim.require( '../request/register' );
-
 const request_update = tim.require( '../request/update' );
-
 const server_spaceNexus = tim.require( './spaceNexus' );
-
 const server_upSleep = tim.require( './upSleep' );
-
 const user_info = tim.require( '../user/info' );
 
 

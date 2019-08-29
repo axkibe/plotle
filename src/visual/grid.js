@@ -22,9 +22,7 @@ if( TIM )
 	};
 }
 
-
 const gleam_glint_zoomGrid = tim.require( '../gleam/glint/zoomGrid' );
-
 const gleam_point = tim.require( '../gleam/point' );
 
 

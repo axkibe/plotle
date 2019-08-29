@@ -26,9 +26,7 @@ if( TIM )
 
 
 const gleam_display_canvas = tim.require( './display/canvas' );
-
 const gleam_shape_start = tim.require( './shape/start' );
-
 const gleam_transform = tim.require( './transform' );
 
 

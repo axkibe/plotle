@@ -30,7 +30,6 @@ if( TIM )
 	def.json = 'database_changeSkid';
 }
 
-
 const change_wrap = tim.require( '../change/wrap' );
 
 

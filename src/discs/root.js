@@ -49,11 +49,8 @@ if( TIM )
 
 
 const discs_base = tim.require( './base' );
-
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-
 const show_create = tim.require( '../show/create' );
-
 const show_zoom = tim.require( '../show/zoom' );
 
 

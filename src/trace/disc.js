@@ -9,13 +9,11 @@ tim.define( module, ( def ) => {
 
 def.extend = './baseTwigKey';
 
-
 if( TIM )
 {
 	// path of trace back.
 	def.list = [ './root', './discs' ];
 }
-
 
 const trace_widget = tim.require( './widget' );
 

@@ -34,7 +34,7 @@ if( TIM )
 
 
 /**
-*** Exta checking
+*** Exta checking. FIXME
 ***/
 /**/if( CHECK )
 /**/{

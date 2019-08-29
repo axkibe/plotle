@@ -21,7 +21,6 @@ if( TIM )
 	def.json = 'point';
 }
 
-
 const gleam_transform = tim.require( './transform' );
 
 

@@ -36,7 +36,6 @@ if( TIM )
 	def.json = './base';
 }
 
-
 const trace_base = tim.require( './base' );
 
 

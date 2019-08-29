@@ -11,7 +11,6 @@ def.abstract = true;
 
 def.json = 'trace';
 
-
 const trace_checked = tim.require( './checked' );
 const trace_disc = tim.require( './disc' );
 const trace_discs  = tim.require( './discs' );

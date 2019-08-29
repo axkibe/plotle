@@ -9,7 +9,6 @@ tim.define( module, ( def ) => {
 
 def.singleton = true;
 
-
 if( TIM )
 {
 	// there aren't any attributes,
