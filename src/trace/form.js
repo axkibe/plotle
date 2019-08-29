@@ -7,7 +7,7 @@
 tim.define( module, ( def, trace_form ) => {
 
 
-def.extend = './baseTwigKey';
+def.extend = './baseGroupKey';
 
 if( TIM )
 {
