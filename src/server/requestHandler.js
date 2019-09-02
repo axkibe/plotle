@@ -13,7 +13,6 @@ tim.define( module, ( def, server_requestHandler ) => {
 def.abstract = true;
 
 const change_dynamic = tim.require( '../change/dynamic' );
-const change_wrapList = tim.require( '../change/wrapList' );
 const config = tim.require( '../config/intf' );
 const log = tim.require( './log' );
 const ref_space = tim.require( '../ref/space' );
@@ -404,19 +403,10 @@ def.static.conveyUpdate =
 
 				if( seq >= boxSeq ) continue;
 
-				const chgA = [ ];
-
-				// FIXME make a getChangeWraps function to spaceBox
-				for( let c = seq; c < boxSeq; c++ )
-				{
-					chgA.push( spaceBox.getChangeWrap( c ) );
-				}
-
 				arr.push(
 					change_dynamic.create(
 						'seq', seq,
-						'changeWrapList',
-							change_wrapList.create( 'list:init', chgA ),
+						'changeWrapList', spaceBox.getChangeWrapsUp2Current( seq ),
 						'refDynamic', dynRef
 					)
 				);
