@@ -24,7 +24,7 @@ if( TIM )
 		fontsize : { type : 'number', json : true },
 
 		// the point the relation goes from
-		from : { type : [ 'undefined', '../gleam/point' ], json : true },
+		jp1 : { type : [ 'undefined', '../gleam/point' ], json : true },
 
 		// the item is highlighted
 		// no json thus not saved or transmitted
@@ -44,7 +44,7 @@ if( TIM )
 		transform : { type : [ 'undefined', '../gleam/transform' ] },
 
 		// the point the relation goes to
-		to : { type : [ 'undefined', '../gleam/point' ], json : true },
+		jp2 : { type : [ 'undefined', '../gleam/point' ], json : true },
 
 		// the items zone
 		zone : { type : '../gleam/rect', json : true },
@@ -89,36 +89,36 @@ def.proto.ancillary =
 
 	const item2 = space.get( this.item2key );
 
-	const from = item1 && this._ancillaryFrom( item1 );
+	const jp1 = item1 && this._ancillaryJP1( item1 );
 
-	const to = item2 && this._ancillaryTo( item2 );
+	const jp2 = item2 && this._ancillaryJP2( item2 );
 
 	let ancillary = fabric_label.ancillary.call( this, space );
 
-	const tfrom = this.from;
+	const tjp1 = this.jp1;
 
-	const tto = this.to;
+	const tjp2 = this.jp2;
 
-	if( ( tfrom && !tfrom.equals( from ) ) || ( from && !from.equals( tfrom ) ) )
+	if( ( tjp1 && !tjp1.equals( jp1 ) ) || ( jp1 && !jp1.equals( tjp1 ) ) )
 	{
 		const ch =
 			change_set.create(
-				'trace', this.trace.appendFrom.chopRoot,
-				'prev', tfrom,
-				'val', from
+				'trace', this.trace.appendJP1.chopRoot,
+				'prev', tjp1,
+				'val', jp1
 			);
 
 		if( !ancillary ) ancillary = change_list.one( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
-	if( ( tto && !tto.equals( to ) ) || ( to && !to.equals( tto ) ) )
+	if( ( tjp2 && !tjp2.equals( jp2 ) ) || ( jp2 && !jp2.equals( tjp2 ) ) )
 	{
 		const ch =
 			change_set.create(
-				'trace', this.trace.appendTo.chopRoot,
-				'prev', tto,
-				'val', to
+				'trace', this.trace.appendJP2.chopRoot,
+				'prev', tjp2,
+				'val', jp2
 			);
 
 		if( !ancillary ) ancillary = change_list.one( ch );
@@ -130,9 +130,9 @@ def.proto.ancillary =
 
 
 /*
-| Calculates the from point.
+| Calculates the jp1 point.
 */
-def.proto._ancillaryFrom =
+def.proto._ancillaryJP1 =
 	function(
 		item
 	)
@@ -148,7 +148,7 @@ def.proto._ancillaryFrom =
 /*
 | Calculates the to point.
 */
-def.proto._ancillaryTo =
+def.proto._ancillaryJP2 =
 	function(
 		item
 	)
@@ -189,30 +189,30 @@ def.lazy.glint =
 		arr.push( gleam_glint_paint.createFacetShape( facet, this.tShape ) );
 	}
 
-	let fromGlint = this._getConnectionGlint( );
+	let j1Glint = this._getJ1Glint( );
 
-	let toGlint = this._getArrowGlint( );
+	let j2Glint = this._getJ2Glint( );
 
-	if( fromGlint ) arr.push( fromGlint );
+	if( j1Glint ) arr.push( j1Glint );
 
-	if( toGlint ) arr.push( toGlint );
+	if( j2Glint ) arr.push( j2Glint );
 
 	return gleam_glint_list.create( 'list:init', arr );
 };
 
 
 /*
-| Returns the glint of an arrow to a shape.
+| Returns the glint of a connection to a shape.
 */
-def.proto._getArrowGlint =
+def.proto._getJ1Glint =
 	function( )
 {
-	const to = this.to;
+	const jp1 = this.jp1;
 
-	if( !to ) return;
+	if( !jp1 ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( this.shape, 'none', to, 'arrow', gruga_relation.arrowSize )
+		gleam_arrow.getArrowShape( jp1, 'none', this.shape, 'none', gruga_relation.arrowSize )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );
@@ -220,17 +220,17 @@ def.proto._getArrowGlint =
 
 
 /*
-| Returns the glint of a connection to a shape.
+| Returns the glint of an arrow to a shape.
 */
-def.proto._getConnectionGlint =
+def.proto._getJ2Glint =
 	function( )
 {
-	const from = this.from;
+	const jp2 = this.jp2;
 
-	if( !from ) return;
+	if( !jp2 ) return;
 
 	const arrowShape =
-		gleam_arrow.getArrowShape( from, 'none', this.shape, 'none', gruga_relation.arrowSize )
+		gleam_arrow.getArrowShape( this.shape, 'none', jp2, 'arrow', gruga_relation.arrowSize )
 		.transform( this.transform );
 
 	return gleam_glint_paint.createFacetShape( gruga_relation.facet, arrowShape );

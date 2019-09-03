@@ -110,7 +110,7 @@ set( 'network', 'main', 'protocol', 'http' );
 
 // set( 'database', 'host', '127.0.0.1' );
 // set( 'database', 'port', 27017 );
-// set( 'database', 'name', 'plotle-19' );
+// set( 'database', 'name', 'plotle-20' );
 
 
 /*
