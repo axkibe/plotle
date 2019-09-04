@@ -82,7 +82,6 @@ def.lazy.forward =
 | A caret mark has a caret.
 |
 | (the text range is the other mark which has this too )
-| FIXME remove this is duplicate to caretOffset
 */
 def.proto.hasCaret = true;
 

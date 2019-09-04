@@ -123,8 +123,6 @@ def.proto.dragStart =
 					'items', this.content,
 					'moveBy', gleam_point.zero,
 					'startPoint', dp,
-					// FIXME move this.zone logic into itemSet
-					// so it becomes this.content.zone
 					'startZone', this.zone
 				)
 		);
@@ -237,60 +235,7 @@ def.lazy.proportional =
 def.lazy.zone =
 	function( )
 {
-	const content = this.content;
-
-	const size = content.size;
-
-/**/if( CHECK )
-/**/{
-/**/	if ( !( size > 0 ) ) throw new Error( );
-/**/}
-
-	let cZone, ny, wx, sy, ex;
-
-	for( let item of content )
-	{
-		if( !cZone )
-		{
-			// first iteration
-			cZone = item.zone;
-
-			if( size === 1 ) return cZone;
-
-			const pos = cZone.pos;
-
-			ny = pos.y;
-			wx = pos.x;
-			sy = pos.y + cZone.height;
-			ex = pos.x + cZone.width;
-
-			continue;
-		}
-
-		cZone = item.zone;
-
-		const pos = cZone.pos;
-
-		const cex = pos.x + cZone.width;
-
-		const csy = pos.y + cZone.height;
-
-		if( pos.x < wx ) wx = pos.x;
-
-		if( cex > ex ) ex = cex;
-
-		if( pos.y < ny ) ny = pos.y;
-
-		if( csy > sy ) sy = csy;
-	}
-
-	return(
-		gleam_rect.create(
-			'pos', gleam_point.createXY( wx, ny ),
-			'width', ex - wx,
-			'height', sy - ny
-		)
-	);
+	return this.content.zone;
 };
 
 

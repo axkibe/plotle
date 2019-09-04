@@ -1,4 +1,4 @@
-FIXME: instead of tim.aheadValue make the attributes setable
+TODO: instead of tim.aheadValue make the attributes setable
 FIXME: after signup the new own homespace is not in the 'go' spaces list
 FIXME: disable showgrid/snapgrid if no access
 
@@ -12,7 +12,6 @@ FIXME: check all create( ) if replaceable with .empty
 
 FIXME: error dragStartButton when "dragging" on login
 
-FIXME: move the gruga forms in a form directory
 FIXME: click on portal doesn't select
 FIXME: rename hover to hoverTrace
 

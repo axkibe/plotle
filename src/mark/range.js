@@ -128,7 +128,6 @@ def.lazy.frontOffset = function( ) { this._normalize( ); return this.frontOffset
 | Ranges also have caret capabilities.
 |
 | The caretMark is identical to end.
-| FIXME remove this is duplicate to caretOffset
 */
 def.proto.hasCaret = true;
 
