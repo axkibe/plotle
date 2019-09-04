@@ -19,7 +19,6 @@ const trace_field = tim.require( './field' );
 const trace_fontsize = tim.require( './fontsize' );
 const trace_form = tim.require( './form' );
 const trace_forms = tim.require( './forms' );
-const trace_from = tim.require( './from' );
 const trace_hasGrid = tim.require( './hasGrid' );
 const trace_hasGuides = tim.require( './hasGuides' );
 const trace_hasSnapping = tim.require( './hasSnapping' );
@@ -34,7 +33,6 @@ const trace_root = tim.require( './root' );
 const trace_scrollPos = tim.require( './scrollPos' );
 const trace_space = tim.require( './space' );
 const trace_text = tim.require( './text' );
-const trace_to = tim.require( './to' );
 const trace_widget = tim.require( './widget' );
 const trace_zone = tim.require( './zone' );
 
@@ -57,7 +55,6 @@ def.proto.appendStep =
 		case trace_fontsize    : return this.appendFontsize;
 		case trace_form        : return this.appendForm( step.key );
 		case trace_forms       : return this.appendForms;
-		case trace_from        : return this.appendFrom;
 		case trace_item        : return this.appendItem( step.key );
 		case trace_jp1         : return this.appendJP1;
 		case trace_jp2         : return this.appendJP2;
@@ -68,7 +65,6 @@ def.proto.appendStep =
 		case trace_scrollPos   : return this.appendScrollPos;
 		case trace_space       : return this.appendSpace;
 		case trace_text        : return this.appendText;
-		case trace_to          : return this.appendTo;
 		case trace_widget      : return this.appendWidget( step.key );
 		case trace_zone        : return this.appendZone;
 		default : throw new Error( );
@@ -343,7 +339,6 @@ def.staticLazy._jsonMap = ( ) =>
 	'(o)doc'         : trace_doc,
 	'(o)field'       : trace_field,
 	'(o)fontsize'    : trace_fontsize,
-	'(o)from'        : trace_from,
 	'(o)hasGrid'     : trace_hasGrid,
 	'(o)hasGuides'   : trace_hasGuides,
 	'(o)hasSnapping' : trace_hasSnapping,
@@ -355,7 +350,6 @@ def.staticLazy._jsonMap = ( ) =>
 	'(o)pos'         : trace_pos,
 	'(o)space'       : trace_space,
 	'(o)text'        : trace_text,
-	'(o)to'          : trace_to,
 	'(o)zone'        : trace_zone,
 } );
 

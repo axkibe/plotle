@@ -22,12 +22,10 @@ const trace_base = tim.require( './base' );
 const trace_doc = tim.require( './doc' );
 const trace_field = tim.require( './field' );
 const trace_fontsize = tim.require( './fontsize' );
-const trace_from = tim.require( './from' );
 const trace_jp1 = tim.require( './jp1' );
 const trace_jp2 = tim.require( './jp2' );
 const trace_scrollPos = tim.require( './scrollPos' );
 const trace_space = tim.require( './space' );
-const trace_to = tim.require( './to' );
 const trace_widget = tim.require( './widget' );
 const trace_zone = tim.require( './zone' );
 
@@ -65,16 +63,6 @@ def.lazy.appendFontsize =
 
 
 /*
-| Returns a trace with a from part appended.
-*/
-def.lazy.appendFrom =
-	function( )
-{
-	return trace_from.create( 'list:init', this, 'list:append', this );
-};
-
-
-/*
 | Returns a trace with a jp1 part appended.
 */
 def.lazy.appendJP1 =
@@ -101,16 +89,6 @@ def.lazy.appendScrollPos =
 	function( )
 {
 	return trace_scrollPos.create( 'list:init', this, 'list:append', this );
-};
-
-
-/*
-| Returns a trace with a to part appended.
-*/
-def.lazy.appendTo =
-	function( )
-{
-	return trace_to.create( 'list:init', this, 'list:append', this );
 };
 
 

@@ -121,9 +121,9 @@ const convertJson =
 
 		if( key === 'trace' || key === 'trace2' )
 		{
-			const trace = v.trace;
+			const trace = v.trace || v;
 
-			for( let step in trace )
+			for( let step = 0, tl = trace.length; step < tl; step++ )
 			{
 				const sv = trace[ step ];
 
@@ -132,6 +132,26 @@ const convertJson =
 					case '(o)from' : trace[ step ] = '(o)jp1'; break;
 
 					case '(o)to' : trace[ step ] = '(o)jp2'; break;
+
+					case '(o)field' :
+
+						// Fixing something that should never
+						// have happened
+
+						if( trace[ step + 1 ] === 'from' )
+						{
+							trace[ step ] = '(o)jp1';
+							trace.splice( step + 1, 1 );
+						}
+						else if( trace[ step + 1 ] === 'to' )
+						{
+							trace[ step ] = '(o)jp2';
+							trace.splice( step + 1, 1 );
+						}
+
+						tl--;
+
+						break;
 				}
 			}
 

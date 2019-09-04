@@ -2,7 +2,6 @@
 ./doc
 ./field
 ./fontsize
-./from
 ./hasGrid
 ./hasGuides
 ./hasSnapping
@@ -14,5 +13,4 @@
 ./pos
 ./space
 ./text
-./to
 ./zone
