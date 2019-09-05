@@ -32,24 +32,23 @@ if( TIM )
 	};
 }
 
+const checkAlign = Object.freeze( { left: true, center: true, right: true } );
 
-/**
-*** Exta checking. FIXME
-***/
+const checkBase = Object.freeze( { alphabetic: true, middle: true } );
+
+/*
+| Exta checking.
+*/
+def.proto._check =
+	function( )
+{
 /**/if( CHECK )
 /**/{
-/**/	const checkAlign = Object.freeze( { left: true, center: true, right: true } );
+/**/	if( !checkAlign[ this.align ] ) throw new Error( );
 /**/
-/**/	const checkBase = Object.freeze( { alphabetic: true, middle: true } );
-/**/
-/**/	def.proto._check =
-/**/		function( )
-/**/	{
-/**/		if( !checkAlign[ this.align ] ) throw new Error( );
-/**/
-/**/		if( !checkBase[ this.base ] ) throw new Error( );
-/**/	};
+/**/	if( !checkBase[ this.base ] ) throw new Error( );
 /**/}
+};
 
 
 } );

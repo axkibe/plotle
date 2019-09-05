@@ -118,19 +118,6 @@ def.proto.transform =
 
 
 /*
-| Shortcut for creating a list with one entry.
-| FIXME remove again
-*/
-def.static.one =
-	function(
-		ch
-	)
-{
-	return change_list.create( 'list:init', [ ch ] );
-};
-
-
-/*
 | Returns a change list with reversed changes.
 */
 def.lazy.reversed =

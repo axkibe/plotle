@@ -1001,13 +1001,12 @@ def.lazy._pane =
 		{
 			a.push(
 				gleam_glint_text.create(
-					'fontFace', tFont,
+					'token', tFont.size.roundSize.createToken( token.text ),
 					'p',
 						gleam_point.createXY(
 							transform.x( token.x ),
 							transform.y( line.y )
-						),
-					'text', token.text
+						)
 				)
 			);
 		}

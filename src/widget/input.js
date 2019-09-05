@@ -431,9 +431,8 @@ def.lazy._glint =
 	{
 		arr.push(
 			gleam_glint_text.create(
-				'fontFace', fontFace,
-				'p', gleam_point.createXY( pitch.x, fontFace.size.size + pitch.y ),
-				'text', text
+				'token', fontFace.size.roundSize.createToken( text ),
+				'p', gleam_point.createXY( pitch.x, fontFace.size.size + pitch.y )
 			)
 		);
 	}

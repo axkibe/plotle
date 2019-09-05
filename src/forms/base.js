@@ -104,7 +104,7 @@ def.proto.concernsHasSnapping =
 | Returns the mark if a 'trace'd form concerns about it.
 | This is the same for all forms.
 |
-| FIXME is this really necessary as function?
+| TODO is this really necessary as function?
 */
 def.static.concernsMark =
 	function(

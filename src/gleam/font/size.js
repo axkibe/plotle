@@ -88,18 +88,6 @@ def.proto.createToken =
 
 
 /*
-| Applies a transformation to this font.
-*/
-def.proto.transform =
-	function(
-		transform
-	)
-{
-	return this.family.createSize( this.size * transform.zoom );
-};
-
-
-/*
 | Returns the font with rounded size.
 */
 def.lazy.roundSize =
@@ -112,6 +100,18 @@ def.lazy.roundSize =
 	if( rsize === size ) return this;
 
 	return this.family.createSize( rsize );
+};
+
+
+/*
+| Applies a transformation to this font.
+*/
+def.proto.transform =
+	function(
+		transform
+	)
+{
+	return this.family.createSize( this.size * transform.zoom );
 };
 
 

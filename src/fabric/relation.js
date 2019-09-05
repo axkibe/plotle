@@ -108,7 +108,7 @@ def.proto.ancillary =
 				'val', jp1
 			);
 
-		if( !ancillary ) ancillary = change_list.one( ch );
+		if( !ancillary ) ancillary = change_list.createWithElements( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
@@ -121,7 +121,7 @@ def.proto.ancillary =
 				'val', jp2
 			);
 
-		if( !ancillary ) ancillary = change_list.one( ch );
+		if( !ancillary ) ancillary = change_list.createWithElements( ch );
 		else ancillary = ancillary.append( ch );
 	}
 

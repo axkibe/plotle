@@ -451,9 +451,7 @@ def.proto._colorStyle =
 
 	switch( style.timtype )
 	{
-		case gleam_color :
-
-			return style.css;
+		case gleam_color : return style.css;
 
 		case gleam_gradient_askew :
 
@@ -661,14 +659,12 @@ def.proto._renderText =
 
 	const rotate = glint.rotate;
 
-	const fontFace = glint.fontFace.roundSize;
-
 	if( rotate === undefined )
 	{
 		glint.token.draw(
 			round( p.x + offset.x ),
 			round( p.y + offset.y ),
-			fontFace.color,
+			glint.color,
 			glint.align,
 			glint.base,
 			this._cx
@@ -698,7 +694,7 @@ def.proto._renderText =
 	glint.token.draw(
 		round( ( x * t1 + y * t2 ) / det ),
 		round( ( y * t1 - x * t2 ) / det ),
-		fontFace.color,
+		glint.color,
 		glint.align,
 		glint.base,
 		this._cx

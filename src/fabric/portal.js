@@ -749,21 +749,27 @@ def.lazy._innerGlint =
 				'shape', fieldSpaceTag.shape.transform( ot )
 			),
 			gleam_glint_text.create(
-				'fontFace', this._tFontFaceSpaceUser,
 				'p', fieldSpaceUser.pos.transform( ot ),
-				'text', fieldSpaceUser.text
+				'token',
+					this._tFontFaceSpaceUser.size.roundSize.createToken(
+						fieldSpaceUser.text
+					)
 			),
 			gleam_glint_text.create(
-				'fontFace', this._tFontFaceSpaceTag,
 				'p', fieldSpaceTag.pos.transform( ot ),
-				'text', fieldSpaceTag.text
+				'token',
+					this._tFontFaceSpaceTag.size.roundSize.createToken(
+						fieldSpaceTag.text
+					)
 			),
 			gleam_glint_text.create(
 				'align', 'center',
 				'base', 'middle',
-				'fontFace', this._tFontFaceMoveTo,
 				'p', orthoMoveToButtonShape.pc,
-				'text', 'move to'
+				'token',
+					this._tFontFaceMoveTo.size.roundSize.createToken(
+						'move to'
+					)
 			)
 		];
 

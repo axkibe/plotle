@@ -82,9 +82,9 @@ def.lazy.glint =
 		gleam_glint_text.create(
 			'align', this.align,
 			'base', this.base,
-			'fontFace', this.fontFace,
+			'color', this.fontFace.color,
 			'p', this._pos,
-			'text', this.text
+			'token', this.fontFace.size.roundSize.createToken( this.text )
 		)
 	);
 };

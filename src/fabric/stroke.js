@@ -83,7 +83,7 @@ def.proto.ancillary =
 	if( !j1 || !j2 )
 	{
 		return(
-			change_list.one(
+			change_list.createWithElements(
 				change_shrink.create(
 					'trace', this.trace.chopRoot,
 					'prev', this,
@@ -118,7 +118,7 @@ def.proto.ancillary =
 				'val', j1
 			);
 
-		if( !ancillary ) ancillary = change_list.one( ch );
+		if( !ancillary ) ancillary = change_list.createWithElements( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
@@ -131,7 +131,7 @@ def.proto.ancillary =
 				'val', j2
 			);
 
-		if( !ancillary ) ancillary = change_list.one( ch );
+		if( !ancillary ) ancillary = change_list.createWithElements( ch );
 		else ancillary = ancillary.append( ch );
 	}
 

@@ -17,38 +17,18 @@ if( TIM )
 		// vertical alignment
 		base : { type : 'string', defaultValue : '"alphabetic"' },
 
-		// the font family, size and color to display the text in
-		fontFace : { type : '../font/face' },
-
 		// where to draw it
 		p : { type : '../point' },
 
-		// text to display
-		text : { type : 'string' },
+		// color to draw the text with
+		color : { type : '../color', defaultValue : 'require( "../color" ).black' },
+
+		// the token to display
+		token : { type : '../font/token' },
 
 		// if defined, rotation in radiant
 		rotate : { type : [ 'undefined', 'number' ] },
 	};
 }
-
-const font_token = tim.require( '../font/token' );
-
-
-/*
-| Returns the font_token
-|
-| FIXME, actually make it an attribute
-*/
-def.lazy.token =
-	function( )
-{
-	return(
-		font_token.create(
-			'size', this.fontFace.size.roundSize,
-			'text', this.text
-		)
-	);
-};
-
 
 } );

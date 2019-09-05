@@ -183,10 +183,9 @@ def.lazy._glint =
 				gleam_glint_text.create(
 					'align', 'center',
 					'base', 'middle',
-					'fontFace', fontFace,
+					'token', fontFace.size.roundSize.createToken( text ),
 					'p', this._pc,
 					'rotate', this.textRotation,
-					'text', text
 				)
 			);
 		}
@@ -206,9 +205,8 @@ def.lazy._glint =
 					gleam_glint_text.create(
 						'align', 'center',
 						'base', 'middle',
-						'fontFace', fontFace,
+						'token', fontFace.size.roundSize.createToken( text[ t ] ),
 						'p', this._pc.add( 0, y ),
-						'text', text[ t ]
 					)
 				);
 			}

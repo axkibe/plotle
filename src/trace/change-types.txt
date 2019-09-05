@@ -1,4 +1,4 @@
-# used by changes, FIXME remove and make changes more specific
+# used by changes, TODO remove and make changes more specific
 ./doc
 ./field
 ./fontsize
