@@ -101,6 +101,7 @@ if( TIM )
 
 const animation_root = tim.require( '../animation/root' );
 const animation_transform = tim.require( '../animation/transform' );
+const action_createGeneric = tim.require( '../action/createGeneric' );
 const action_none = tim.require( '../action/none' );
 const action_select = tim.require( '../action/select' );
 const change_grow = tim.require( '../change/grow' );
@@ -167,10 +168,7 @@ const notAnimationFinish =
 | If so the trace are removed from its itemTraceSet.
 |
 | If no item is left, action is set to none.
-|
-| FIXME rebuild into alter( )
 */
-/*
 def.adjust.action =
 	function(
 		action
@@ -178,10 +176,24 @@ def.adjust.action =
 {
 	switch( action.timtype )
 	{
-		case action_none : return action;
+		case action_createGeneric :
+		{
+			const dpr = this.devicePixelRatio;
+			const ti = action.transientItem;
 
+			if( !ti || ti.devicePixelRatio === dpr ) return action;
+
+			return action.create( 'transientItem', ti.create( 'devicePixelRatio', dpr ) );
+		}
+
+		default : return action;
+
+		/*
 		case action_dragItems :
 		case action_resizeItems :
+
+			// FIXME!
+			break;
 		{
 			const space = this.space;
 
@@ -236,12 +248,9 @@ def.adjust.action =
 
 				return action;
 			}
-		}
+		}*/
 	}
-
-	return action;
 };
-*/
 
 
 /*

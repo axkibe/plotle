@@ -16,6 +16,9 @@ if( TIM )
 
 		// family of the font
 		family : { type : './family' },
+
+		// fontFace cache
+		_fontFaceCache : { type : 'protean', defaultValue: '{}' },
 	};
 }
 
@@ -64,7 +67,16 @@ def.proto.createFace =
 		color
 	)
 {
-	return font_face.create( 'color', color, 'fontSize', this );
+	const ffc = this._fontFaceCache;
+	const css = color.css;
+
+	let ff = ffc[ css ];
+
+	if( ff ) return ff;
+
+	ff = ffc[ css ] = font_face.create( 'color', color, 'fontSize', this );
+
+	return ff;
 };
 
 

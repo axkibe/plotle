@@ -305,7 +305,6 @@ def.proto.scrollMarkIntoView =
 	if( !mark || !mark.hasCaret ) return;
 
 	const sy = this.scrollPos.y;
-
 	const para = this.doc.get( mark.caretOffset.tracePara.key );
 
 /**/if( CHECK )
@@ -314,19 +313,12 @@ def.proto.scrollMarkIntoView =
 /**/}
 
 	const zone = this.zone;
-
 	const imargin = this.doc.innerMargin;
-
-	const fs = this.doc.font.size.size;
-
+	const fs = this.doc.font.fontSize.size;
 	const descend = fs * gleam_font_root.bottomBox;
-
 	const p = para.locateOffsetPoint( mark.caretOffset.at );
-
 	const ppos = para.pos;
-
 	const s = ppos.y + p.y + descend + imargin.s;
-
 	const n = ppos.y + p.y - fs - imargin.n;
 
 	if( n < 0 )

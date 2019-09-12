@@ -107,13 +107,9 @@ def.proto.dragMove =
 	if( !this.startPoint ) return;
 
 	const transform = screen.transform;
-
 	const ps = screen.pointToSpaceRS( p, !ctrl );
-
 	let zone = gleam_rect.createArbitrary( this.startPoint, ps );
-
 	let model = this.itemTim.model;
-
 	let transientItem = this.transientItem;
 
 	switch( this.itemType )
@@ -186,11 +182,8 @@ def.proto.dragStart =
 	if( screen.timtype !== fabric_space ) return;
 
 	const itemTim = this.itemTim;
-
 	let model = itemTim.model;
-
 	const ps = screen.pointToSpaceRS( p, !ctrl );
-
 	let transientItem;
 
 	switch( itemTim.positioning )

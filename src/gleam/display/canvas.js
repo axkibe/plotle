@@ -1108,22 +1108,23 @@ def.proto._sketchGenericShape =
 
 			if( border !== 0 )
 			{
-				pnx =
-					( shape.nogrid ? this._noround : this._round )( p.x + ox )
-					+ (
-						p.x > pc.x
-						? -border
-						: ( p.x < pc.x ? border : 0 )
-					)
+				if( shape.nogrid )
+				{
+					pnx = this._noround( p.x + ox );
+					pny = this._noround( p.y + oy );
+				}
+				else
+				{
+					pnx = this._round( p.x + ox );
+					pny = this._round( p.y + oy );
+				}
+
+				pnx +=
+					( p.x > pc.x ? -border : ( p.x < pc.x ? border : 0 ) )
 					+ shift;
 
-				pny =
-					( shape.nogrid ? this._noround : this._round )( p.y + oy )
-					+ (
-						p.y > pc.y
-						? -border
-						: ( p.y < pc.y ? border : 0 )
-					)
+				pny +=
+					+ ( p.y > pc.y ? -border : ( p.y < pc.y ? border : 0 ) )
 					+ shift;
 			}
 			else

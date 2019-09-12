@@ -124,7 +124,7 @@ def.lazy.attentionCenter =
 
 	const fontFace = this._fontFaceFor( section );
 
-	const fs = fontFace.size.size;
+	const fs = fontFace.fontSize.size;
 
 	const fieldP = this[ spaceFields[ section ] ].pos;
 
@@ -632,21 +632,15 @@ def.lazy._glintCaret =
 	function( )
 {
 	const mark = this.mark;
-
 	const ot = this.transform.ortho;
-
 	const section = this._markSection;
 
 	if( !fabric_portal.isSection( section ) || section === 'moveToButton' ) return;
 
 	const fontFace = this._fontFaceFor( section );
-
-	const fs = fontFace.size.size;
-
+	const fs = fontFace.fontSize.size;
 	const descend = fs * gleam_font_root.bottomBox;
-
 	const fieldPos = this[ spaceFields[ section ] ].pos;
-
 	const p = this._locateOffset( section, mark.caretOffset.at );
 
 	const pos =
@@ -681,11 +675,9 @@ def.proto._getOffsetAt =
 	)
 {
 	const dx = x - this[ spaceFields[ section ] ].pos.x;
-
 	const value = this[ section ];
 
 	let x1 = 0;
-
 	let x2 = 0;
 
 	const fontFace = this._fontFaceFor( section );
