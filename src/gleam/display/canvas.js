@@ -1011,8 +1011,6 @@ def.proto._sketchGenericShape =
 	const oy = offset.y;
 	const pc = shape.pc;
 
-	console.log( 'XXX', this );
-
 	let section = shape.get( 0 );
 	let p = section.p;
 
