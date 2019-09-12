@@ -75,14 +75,15 @@ def.static.createFromLayout =
 	function(
 		layout,     // of type layout_label
 		trace,      // trace of the widget
-		transform   // visual transformation
+		transform,  // visual transformation
+		devicePixelRatio  // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/	if( layout.timtype !== layout_scrollbox ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	const twig = { };
@@ -93,18 +94,20 @@ def.static.createFromLayout =
 			widget_factory.createFromLayout(
 				layout.get( wKey ),
 				trace.appendWidget( wKey ),
-				transform
+				transform,
+				devicePixelRatio
 			);
 	}
 
 	return(
 		widget_scrollbox.create(
-			'twig:init', twig, layout.keys,
+			'devicePixelRatio', devicePixelRatio,
 			'scrollbarYOffset', layout.scrollbarYOffset,
 			'scrollPos', gleam_point.zero,
 			'trace', trace,
 			'transform', transform,
-			'zone', layout.zone
+			'zone', layout.zone,
+			'twig:init', twig, layout.keys
 		)
 	);
 };
@@ -194,6 +197,7 @@ def.lazy.glint =
 		gleam_glint_window.create(
 			'pane',
 				gleam_glint_pane.create(
+					'devicePixelRatio', this.devicePixelRatio,
 					'glint', gleam_glint_list.create( 'list:init', arr ),
 					'offset', this.scrollPos.negate,
 					'size', zone.size,

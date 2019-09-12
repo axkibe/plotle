@@ -187,6 +187,7 @@ def.adjust.get =
 
 	return(
 		para.create(
+			'devicePixelRatio', this.devicePixelRatio,
 			'flowWidth', this.flowWidth,
 			'fontsize', this.fontsize,
 			'mark', mark,

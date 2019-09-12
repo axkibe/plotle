@@ -23,6 +23,9 @@ if( TIM )
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// facet of the disc
 		facet : { type : '../gleam/facet' },
 
@@ -67,6 +70,7 @@ const gleam_glint_list = tim.require( '../gleam/glint/list' );
 const gleam_glint_pane = tim.require( '../gleam/glint/pane' );
 const gleam_glint_window = tim.require( '../gleam/glint/window' );
 const gleam_rect = tim.require( '../gleam/rect' );
+const gleam_size = tim.require( '../gleam/size' );
 const gleam_transform = tim.require( '../gleam/transform' );
 const layout_disc = tim.require( '../layout/disc' );
 const trace_root = tim.require( '../trace/root' );
@@ -78,18 +82,20 @@ const widget_factory = tim.require( '../widget/factory' );
 */
 def.static.createFromLayout =
 	function(
-		layout,     // of type layout_disc
-		key,        // key of the disc
-		transform,  // visual transformation
-		show,       // currently show disc/form
-		viewSize    // viewSize
+		layout,          // of type layout_disc
+		key,             // key of the disc
+		transform,       // visual transformation
+		show,            // currently show disc/form
+		viewSize,        // viewSize
+		devicePixelRatio // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 5 ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 6 ) throw new Error( );
 /**/	if( layout.timtype !== layout_disc ) throw new Error( );
+/**/	if( viewSize.timtype !== gleam_size ) throw new Error( );
+/**/    if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	const trace = trace_root.singleton.appendDiscs.appendDisc( key );
@@ -102,7 +108,8 @@ def.static.createFromLayout =
 			widget_factory.createFromLayout(
 				layout.get( wKey ),
 				trace.appendWidget( wKey ),
-				transform
+				transform,
+				devicePixelRatio
 			);
 	}
 
@@ -111,6 +118,7 @@ def.static.createFromLayout =
 			'twig:init', twig, layout.keys,
 			'action', action_none.singleton,
 			'controlTransform', transform,
+			'devicePixelRatio', devicePixelRatio,
 			'facet', layout.facet,
 			'shape', layout.shape,
 			'show', this.concernsShow( show ),
@@ -274,6 +282,7 @@ def.lazy.glint =
 		gleam_glint_window.create(
 			'pane',
 				gleam_glint_pane.create(
+					'devicePixelRatio', devicePixelRatio,
 					'glint', gleam_glint_list.create( 'list:init', a ),
 					'size', zone.size,
 					'tag', 'disc(' + this.key + ')'

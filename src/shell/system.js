@@ -560,7 +560,8 @@ def.proto._onResize =
 		gleam_size.create(
 			'width', window.innerWidth,
 			'height', window.innerHeight
-		)
+		),
+		window.devicePixelRatio || 1
 	);
 };
 
@@ -1342,6 +1343,7 @@ def.static.init =
 			gleam_size.wh( window.innerWidth, window.innerHeight ),
 			pass,
 			'rgb( 251, 251, 251 )',  // background
+			window.devicePixelRatio || 1,
 			'root', // debug tag
 		);
 
@@ -1358,23 +1360,15 @@ def.static.init =
 
 	// hidden input that forwards all events
 	hiddenInput = document.getElementById( 'input' );
-
 	hiddenInput.onblur = systemTransmitter( '_onInputBlur' );
-
 	hiddenInput.autocomplete = 'off';
 
 	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
-
 	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
-
 	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
-
 	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
-
 	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
-
 	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
-
 	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
@@ -1384,17 +1378,11 @@ def.static.init =
 	window.scrollTo( 0, 0 );
 
 	window.onresize = systemTransmitter( '_onResize' );
-
 	window.onfocus = systemTransmitter( '_onSystemFocus' );
-
 	window.onblur = systemTransmitter( '_onSystemBlur' );
-
 	document.onkeyup = systemTransmitter( '_onKeyUp' );
-
 	document.onkeydown = systemTransmitter( '_onKeyDown' );
-
 	document.onkeypress = systemTransmitter( '_onKeyPress' );
-
 	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
 
 	system.restartBlinker( );
@@ -1406,10 +1394,10 @@ def.static.init =
 /*
 | System starts up ( pages loades )
 */
-def.static.startup = function( )
+def.static.startup =
+	function( )
 {
 	window.root = undefined;
-
 	window.system = undefined;
 
 	const init = transmitter( shell_system.init, true );

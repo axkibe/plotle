@@ -115,7 +115,7 @@ def.proto.send =
 
 	xhr.wrap = this;
 
-	xhr.open( 'POST', '/mm', true );
+	xhr.open( 'POST', '/x', true );
 
 	xhr.setRequestHeader(
 		'content-type',

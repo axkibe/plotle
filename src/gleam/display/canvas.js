@@ -3,7 +3,7 @@
 |
 | FUTURE: Remove the 'border' stuff
 |
-| FIXME shift and border should be affected by window.ratio as well
+| FIXME shift and border should be affected by device pixel ratio as well
 */
 'use strict';
 
@@ -55,82 +55,26 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// debugging tag
-		tag : { type : 'string' },
-
 		// if set the canvas is opaque and has a background
 		background : { type : [ 'undefined', 'string' ] },
+
+		// the html canvas
+		// FIXME make private
+		canvas : { type : 'protean' },
+
+		// display's current pixel ratio
+		devicePixelRatio : { type : 'number' },
 
 		// the glint list to display
 		glint : { type : [ 'undefined', '../glint/list' ] },
 
 		// the size of the display
-		size : { type : [ '../size' ] },
+		size : { type : '../size' },
 
-		// the html canvas
-		canvas : { type : [ 'protean' ] },
+		// debugging tag
+		tag : { type : 'string' },
 	};
 }
-
-
-/*
-| Ratio of canvas backing store to display.
-| In case hiDPI canvas this can be > 1.
-*/
-// FIXME window might change this..
-let ratio;
-
-if( !NODE )
-{
-	ratio = window.devicePixelRatio || 1;
-}
-else
-{
-	ratio = 1;
-}
-
-
-/*
-| Rounds a value and adapts it to screen ratio.
-*/
-const round = val => Math.round( val * ratio );
-
-const noround = val => val * ratio;
-
-
-/*
-| Exta checking
-*/
-def.proto._check =
-	function( )
-{
-/**/if( CHECK )
-/**/{
-/**/
-/**/	const canvas = this.canvas;
-/**/
-/**/	const height = this.size.height;
-/**/
-/**/	const width = this.size.width;
-/**/
-/**/	if( !NODE )
-/**/	{
-/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.1 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/
-/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/
-/**/	if( canvas.height !== round( height ) ) throw new Error( );
-/**/
-/**/	if( canvas.width !== round( width ) ) throw new Error( );
-/**/}
-};
 
 
 /*
@@ -138,16 +82,17 @@ def.proto._check =
 */
 def.static.createAroundHTMLCanvas =
 	function(
-		canvas,     // the canvas to create around
-		size,       // the size of the canvas
-		glint,      // the content
-		background, // the background
-		tag         // debugging tag
+		canvas,           // the canvas to create around
+		size,             // the size of the canvas
+		glint,            // the content
+		background,       // the background
+		devicePixelRatio, // display's device pixel ratio
+		tag               // debugging tag
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 5 ) throw new Error( );
+/**/	if( arguments.length !== 6 ) throw new Error( );
 /**/}
 
 	const height = size.height;
@@ -159,14 +104,15 @@ def.static.createAroundHTMLCanvas =
 		canvas.style.width = width + 'px';
 	}
 
-	canvas.height = round( height );
-	canvas.width = round( width );
+	canvas.height = Math.round( height * devicePixelRatio );
+	canvas.width = Math.round( width * devicePixelRatio );
 
 	return(
 		gleam_display_canvas.create(
 			'background', background,
 			'canvas', canvas,
 			'glint', glint,
+			'devicePixelRatio', devicePixelRatio,
 			'size', size,
 			'tag', tag
 		)
@@ -179,14 +125,15 @@ def.static.createAroundHTMLCanvas =
 */
 def.static.createNewCanvas =
 	function(
-		size,     // size of the canvas
-		glint,    // glint to draw
-		tag       // debugging tag
+		size,             // size of the canvas
+		glint,            // glint to draw
+		devicePixelRatio, // display's device pixel ratio
+		tag               // debugging tag
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
 	const canvas = createCanvas( size.width, size.height );
@@ -197,39 +144,47 @@ def.static.createNewCanvas =
 			size,
 			glint,
 			undefined,  // transparent background
+			devicePixelRatio,
 			tag         // debugging tag
 		)
 	);
 };
 
 
-def.static.resize =
+/*
+| Resizes the canvas.
+*/
+def.proto.resize =
 	function(
-		canvas,
-		size
+		size,             // new size
+		devicePixelRatio  // display's (changed?) device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 2 ) throw new Error( );
-/**/
-/**/	if( canvas.timtype !== gleam_display_canvas ) throw new Error( );
-/**/
 /**/	if( size.timtype !== gleam_size ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	const height = size.height;
 	const width = size.width;
 
-	const cv = canvas.canvas;
+	const cv = this.canvas;
 
 	cv.style.height = height + 'px';
 	cv.style.width = width + 'px';
 
-	cv.height = round( height );
-	cv.width = round( width );
+	cv.height = Math.round( height * devicePixelRatio );
+	cv.width =  Math.round( width * devicePixelRatio );
 
-	return canvas.create( 'size', size, 'canvas', cv );
+	return(
+		this.create(
+			'canvas', cv,
+			'devicePixelRatio', devicePixelRatio,
+			'size', size
+		)
+	);
 };
 
 
@@ -237,7 +192,7 @@ def.static.resize =
 | A hidden helper canvas used by within( )
 */
 def.staticLazy.helper = ( ) =>
-	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass, 'helper' );
+	gleam_display_canvas.createNewCanvas( gleam_size.wh( 10, 10 ), pass, 1, 'helper' );
 
 
 /*
@@ -337,7 +292,7 @@ def.proto.within =
 		default : throw new Error( );
 	}
 
-	return this._cx.isPointInPath( round( p.x ), round( p.y ) );
+	return this._cx.isPointInPath( this._round( p.x ), this._round( p.y ) );
 };
 
 
@@ -353,11 +308,11 @@ def.lazy.render =
 	{
 		this._cx.fillStyle = this.background;
 
-		this._cx.fillRect( 0, 0, round( size.width ), round( size.height ) );
+		this._cx.fillRect( 0, 0, this._round( size.width ), this._round( size.height ) );
 	}
 	else
 	{
-		this._cx.clearRect( 0, 0, round( size.width ), round( size.height ) );
+		this._cx.clearRect( 0, 0, this._round( size.width ), this._round( size.height ) );
 	}
 
 	this._renderGlint( this.glint, gleam_point.zero );
@@ -417,22 +372,27 @@ def.proto._borders  =
 
 
 /*
-| Draws a fill.
+| Exta checking
 */
-def.proto._fill  =
-	function(
-		fill,   // the gleam_border
-		shape,  // a shape to sketch
-		offset
-	)
+def.proto._check =
+	function( )
 {
-	const cx = this._cx;
-
-	this._sketch( shape, 0, offset, 0 );
-
-	cx.fillStyle = this._colorStyle( fill, shape, offset );
-
-	cx.fill( );
+/**/if( CHECK )
+/**/{
+/**/
+/**/	const canvas = this.canvas;
+/**/	const height = this.size.height;
+/**/	const width = this.size.width;
+/**/
+/**/	if( !NODE )
+/**/	{
+/**/		if( Math.abs( parseFloat( canvas.style.height ) - height ) > 0.1 ) throw new Error( );
+/**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 ) throw new Error( );
+/**/	}
+/**/
+/**/	if( canvas.height !== this._round( height ) ) throw new Error( );
+/**/	if( canvas.width !== this._round( width ) ) throw new Error( );
+/**/}
 };
 
 
@@ -462,10 +422,10 @@ def.proto._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					round( shape.pos.x + offset.x ),
-					round( shape.pos.y + offset.y ),
-					round( shape.pos.x + shape.width / 10 + offset.x ),
-					round( shape.pos.y + shape.width + offset.y )
+					this._round( shape.pos.x + offset.x ),
+					this._round( shape.pos.y + offset.y ),
+					this._round( shape.pos.x + shape.width / 10 + offset.x ),
+					this._round( shape.pos.y + shape.width + offset.y )
 				);
 
 			break;
@@ -473,9 +433,7 @@ def.proto._colorStyle =
 		case gleam_gradient_radial :
 		{
 			const r0 = shape.gradientR0 || 0;
-
 			const r1 = shape.gradientR1;
-
 			const pc = shape.gradientPC || shape.pc;
 
 /**/		if( CHECK )
@@ -490,12 +448,12 @@ def.proto._colorStyle =
 
 			grad =
 				this._cx.createRadialGradient(
-					round( pc.x + offset.x ),
-					round( pc.y + offset.y ),
-					round( r0 ),
-					round( pc.x + offset.x ),
-					round( pc.y + offset.y ),
-					round( r1 )
+					this._round( pc.x + offset.x ),
+					this._round( pc.y + offset.y ),
+					this._round( r0 ),
+					this._round( pc.x + offset.x ),
+					this._round( pc.y + offset.y ),
+					this._round( r1 )
 				);
 
 			break;
@@ -510,6 +468,38 @@ def.proto._colorStyle =
 	}
 
 	return grad;
+};
+
+
+/*
+| Draws a fill.
+*/
+def.proto._fill  =
+	function(
+		fill,   // the gleam_border
+		shape,  // a shape to sketch
+		offset
+	)
+{
+	const cx = this._cx;
+
+	this._sketch( shape, 0, offset, 0 );
+
+	cx.fillStyle = this._colorStyle( fill, shape, offset );
+
+	cx.fill( );
+};
+
+
+/*
+| Fixes a value by device pixel ratio.
+*/
+def.proto._noround =
+	function(
+		v
+	)
+{
+	return v * this.devicePixelRatio;
 };
 
 
@@ -542,17 +532,13 @@ def.proto._renderGlint =
 		case gleam_glint_border :
 
 			this._cx.beginPath( );
-
 			this._borders( glint.facet.border, glint.shape, offset );
-
 			break;
 
 		case gleam_glint_fill :
 
 			this._cx.beginPath( );
-
 			this._fill( glint.facet.fill, glint.shape, offset );
-
 			break;
 
 		case gleam_glint_list : this._renderGlintList( glint, offset ); break;
@@ -589,9 +575,8 @@ def.proto._renderMask =
 
 	const cx = this._cx;
 
-	const h = round( this.size.height );
-
-	const w = round( this.size.width );
+	const h = this._round( this.size.height );
+	const w = this._round( this.size.width );
 
 	cx.save( );
 
@@ -662,9 +647,8 @@ def.proto._renderText =
 	if( rotate === undefined )
 	{
 		glint.token.draw(
-			round( p.x + offset.x ),
-			round( p.y + offset.y ),
-			glint.color,
+			this._round( p.x + offset.x ),
+			this._round( p.y + offset.y ),
 			glint.align,
 			glint.base,
 			this._cx
@@ -692,9 +676,8 @@ def.proto._renderText =
 	const y = p.y + offset.y;
 
 	glint.token.draw(
-		round( ( x * t1 + y * t2 ) / det ),
-		round( ( y * t1 - x * t2 ) / det ),
-		glint.color,
+		this._round( ( x * t1 + y * t2 ) / det ),
+		this._round( ( y * t1 - x * t2 ) / det ),
 		glint.align,
 		glint.base,
 		this._cx
@@ -734,7 +717,7 @@ def.proto._renderZoomGrid =
 	const light = 224;
 	const heavy = 160;
 
-	let weight = round( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
+	let weight = this._round( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
 
 	let xw0 = false;
 	let yw0 = false;
@@ -761,7 +744,7 @@ def.proto._renderZoomGrid =
 			if( xw || yw ) cx.fillStyle = cLight;
 			else cx.fillStyle = cHeavy;
 
-			cx.fillRect( round( x ), round( y ), 2, 2 );
+			cx.fillRect( this._round( x ), this._round( y ), 2, 2 );
 		}
 	}
 };
@@ -782,23 +765,16 @@ def.proto._renderWindow =
 /**/}
 
 	const cx = this._cx;
-
 	const pane = glint.pane;
-
 	const size = pane.size;
-
 	const pos = glint.pos;
-
 	const h = this.size.height;
-
 	const w = this.size.width;
 
 	let x = offset.x + pos.x;
-
 	let y = offset.y + pos.y;
 
 	const rw = size.width;
-
 	const rh = size.height;
 
 	if( x > w || y > h || x + rw < 0 || y + rh < 0 )
@@ -810,26 +786,20 @@ def.proto._renderWindow =
 
 	if( rh * rw > shell_settings.glintCacheLimit )
 	{
-		const x2 = round( x + rw );
+		const x2 = this._round( x + rw );
+		const y2 = this._round( y + rh );
 
-		const y2 = round( y + rh );
-
-		x = round( x );
-
-		y = round( y );
+		x = this._round( x );
+		y = this._round( y );
 
 		cx.save( );
 
 		cx.beginPath( );
 
 		cx.moveTo( x, y );
-
 		cx.lineTo( x2, y );
-
 		cx.lineTo( x2, y2 );
-
 		cx.lineTo( x, y2 );
-
 		cx.lineTo( x, y );
 
 		cx.clip( );
@@ -850,8 +820,24 @@ def.proto._renderWindow =
 
 		cd.render;
 
-		cx.drawImage( cd.canvas, round( x + pane.offset.x ), round( y + pane.offset.y ) );
+		cx.drawImage(
+			cd.canvas,
+			this._round( x + pane.offset.x ),
+			this._round( y + pane.offset.y )
+		);
 	}
+};
+
+
+/*
+| Rounds a value (respecting device pixel ratio)
+*/
+def.proto._round =
+	function(
+		v
+	)
+{
+	return Math.round( v * this.devicePixelRatio );
 };
 
 
@@ -883,13 +869,13 @@ def.proto._sketchLine =
 	const p2 = line.p2;
 
 	cx.moveTo(
-		round( p1.x + ox ) + shift,
-		round( p1.y + oy ) + shift
+		this._round( p1.x + ox ) + shift,
+		this._round( p1.y + oy ) + shift
 	);
 
 	cx.lineTo(
-		round( p2.x + ox ) + shift,
-		round( p2.y + oy ) + shift
+		this._round( p2.x + ox ) + shift,
+		this._round( p2.y + oy ) + shift
 	);
 };
 
@@ -909,22 +895,15 @@ def.proto._sketchRect =
 
 	const pos = rect.pos;
 
-	const wx = round( pos.x + offset.x ) + border + shift;
-
-	const ny = round( pos.y + offset.y ) + border + shift;
-
-	const ex = round( pos.x + rect.width + offset.x ) - border + shift;
-
-	const sy = round( pos.y + rect.height + offset.y ) - border + shift;
+	const wx = this._round( pos.x + offset.x ) + border + shift;
+	const ny = this._round( pos.y + offset.y ) + border + shift;
+	const ex = this._round( pos.x + rect.width + offset.x ) - border + shift;
+	const sy = this._round( pos.y + rect.height + offset.y ) - border + shift;
 
 	cx.moveTo( wx, ny );
-
 	cx.lineTo( ex, ny );
-
 	cx.lineTo( ex, sy );
-
 	cx.lineTo( wx, sy );
-
 	cx.lineTo( wx, ny );
 };
 
@@ -1047,12 +1026,10 @@ def.proto._sketchGenericShape =
 
 	let p = section.p;
 
-	const r = shape.nogrid ? noround : round;
-
 	// start point x/y
 
 	let psx =
-		r( p.x + ox )
+		( shape.nogrid ? this._noround : this._round )( p.x + ox )
 		+ (
 			p.x > pc.x
 			?  -border
@@ -1061,7 +1038,7 @@ def.proto._sketchGenericShape =
 		+ shift;
 
 	let psy =
-		r( p.y + oy )
+		( shape.nogrid ? this._noround : this._round )( p.y + oy )
 		+ (
 			p.y > pc.y
 			?  -border
@@ -1120,7 +1097,7 @@ def.proto._sketchGenericShape =
 			if( border !== 0 )
 			{
 				pnx =
-					r( p.x + ox )
+					( shape.nogrid ? this._noround : this._round )( p.x + ox )
 					+ (
 						p.x > pc.x
 						? -border
@@ -1129,7 +1106,7 @@ def.proto._sketchGenericShape =
 					+ shift;
 
 				pny =
-					r( p.y + oy )
+					( shape.nogrid ? this._noround : this._round )( p.y + oy )
 					+ (
 						p.y > pc.y
 						? -border
@@ -1139,8 +1116,8 @@ def.proto._sketchGenericShape =
 			}
 			else
 			{
-				pnx = r( p.x + ox ) + shift;
-				pny = r( p.y + oy ) + shift;
+				pnx = ( shape.nogrid ? this._noround : this._round )( p.x + ox ) + shift;
+				pny = ( shape.nogrid ? this._noround : this._round )( p.y + oy ) + shift;
 			}
 		}
 
@@ -1163,9 +1140,7 @@ def.proto._sketchGenericShape =
 				}
 
 				let dx = pnx - cpx;
-
 				let dy = pny - cpy;
-
 				let dxy = dx * dy;
 
 				if( !section.ccw )
@@ -1194,10 +1169,8 @@ def.proto._sketchGenericShape =
 				break;
 			}
 
-			default :
-
-				// unknown hull section.
-				throw new Error( );
+			// unknown hull section.
+			default : throw new Error( );
 		}
 
 		cpx = pnx;

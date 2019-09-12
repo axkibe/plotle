@@ -64,12 +64,9 @@ const result_hover = tim.require( '../result/hover' );
 def.lazy.attentionCenter =
 	function( )
 {
-	const fs = this.fontFace.size.size;
-
+	const fs = this.fontFace.fontSize.size;
 	const descend = fs * gleam_font_root.bottomBox;
-
 	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
-
 	const s = Math.round( p.y + descend + 1 );
 
 	return this._tZone.pos.y + s - Math.round( fs + descend );
@@ -80,46 +77,6 @@ def.lazy.attentionCenter =
 | Inputs can hold a caret.
 */
 def.proto.caretable = true;
-
-
-/*
-| Returns the hover trace if the widget concerns about the hover.
-*/
-def.static.concernsHover =
-def.proto.concernsHover =
-	( hover, trace ) => hover && hover.hasTrace( trace ) ? hover : undefined;
-
-
-/*
-| Creates an actual widget from a layout.
-*/
-def.static.createFromLayout =
-	function(
-		layout,     // of type layout_label
-		trace,      // trace of the widget
-		transform   // visual transformation
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/
-/**/	if( layout.timtype !== layout_input ) throw new Error( );
-/**/}
-
-	return(
-		widget_input.create(
-			'facets', layout.facets,
-			'fontFace', layout.fontFace,
-			'maxlen', layout.maxlen,
-			'password', layout.password,
-			'transform', transform,
-			'trace', trace,
-			'visible', true,
-			'zone', layout.zone
-		)
-	);
-};
 
 
 /*
@@ -147,6 +104,48 @@ def.proto.click =
 
 
 /*
+| Returns the hover trace if the widget concerns about the hover.
+*/
+def.static.concernsHover =
+def.proto.concernsHover =
+	( hover, trace ) => hover && hover.hasTrace( trace ) ? hover : undefined;
+
+
+/*
+| Creates an actual widget from a layout.
+*/
+def.static.createFromLayout =
+	function(
+		layout,           // of type layout_label
+		trace,            // trace of the widget
+		transform,        // visual transformation
+		devicePixelRatio  // display's device pixel ratio
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( layout.timtype !== layout_input ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
+/**/}
+
+	return(
+		widget_input.create(
+			'devicePixelRatio', devicePixelRatio,
+			'facets', layout.facets,
+			'fontFace', layout.fontFace,
+			'maxlen', layout.maxlen,
+			'password', layout.password,
+			'transform', transform,
+			'trace', trace,
+			'visible', true,
+			'zone', layout.zone
+		)
+	);
+};
+
+
+/*
 | Inputs are focusable
 */
 def.proto.focusable = true;
@@ -166,6 +165,7 @@ def.lazy.glint =
 		gleam_glint_window.create(
 			'pane',
 				gleam_glint_pane.create(
+					'devicePixelRatio', this.devicePixelRatio,
 					'glint', this._glint,
 					'size', zone.size,
 					'tag', 'input(' + this.trace.key + ')'
@@ -217,7 +217,7 @@ def.lazyFuncInt.locateOffsetPoint =
 		offset // the offset to get the point from.
 	)
 {
-	const fontSize = this.fontFace.size;
+	const fontFace = this.fontFace;
 
 	const pitch = widget_input._pitch;
 
@@ -230,15 +230,15 @@ def.lazyFuncInt.locateOffsetPoint =
 				pitch.x
 				+ ( this._maskWidth + this._maskKern ) * offset
 				- 1,
-				Math.round( pitch.y + fontSize.size )
+				Math.round( pitch.y + fontFace.fontSize.size )
 			)
 		);
 	}
 
 	return(
 		gleam_point.createXY(
-			Math.round( pitch.x + fontSize.createToken( text ).advanceWidth ),
-			Math.round( pitch.y + fontSize.size )
+			Math.round( pitch.x + fontFace.createToken( text ).advanceWidth ),
+			Math.round( pitch.y + fontFace.fontSize.size )
 		)
 	);
 };
@@ -289,21 +289,13 @@ def.proto.specialKey =
 	switch( key )
 	{
 		case 'backspace' : this._keyBackspace( ); break;
-
 		case 'del' : this._keyDel( ); break;
-
 		case 'down' : this._keyDown( ); break;
-
 		case 'end' : this._keyEnd( ); break;
-
 		case 'enter' : this._keyEnter( ); break;
-
 		case 'left' : this._keyLeft( ); break;
-
 		case 'pos1' : this._keyPos1( ); break;
-
 		case 'right' : this._keyRight( ); break;
-
 		case 'up' : this._keyUp( ); break;
 	}
 };
@@ -315,10 +307,8 @@ def.proto.specialKey =
 def.lazy._caretGlint =
 	function( )
 {
-	const fs = this.fontFace.size.size;
-
+	const fs = this.fontFace.fontSize.size;
 	const descend = fs * gleam_font_root.bottomBox;
-
 	const p = this.locateOffsetPoint( this.mark.caretOffset.at );
 
 	return(
@@ -367,7 +357,6 @@ def.proto._getOffsetAt =
 	const text = this.text;
 
 	let x1 = 0;
-
 	let x2 = 0;
 
 	const password = this.password;
@@ -400,10 +389,9 @@ def.lazy._glint =
 	function( )
 {
 	const pitch = widget_input._pitch;
-
 	const text = this.text;
-
 	const mark = this.mark;
+	const dpr = this.devicePixelRatio;
 
 	const arr =
 		[
@@ -431,8 +419,10 @@ def.lazy._glint =
 	{
 		arr.push(
 			gleam_glint_text.create(
-				'token', fontFace.size.roundSize.createToken( text ),
-				'p', gleam_point.createXY( pitch.x, fontFace.size.size + pitch.y )
+				'devicePixelRatio', dpr,
+				'fontFace', fontFace,
+				'text', text,
+				'p', gleam_point.createXY( pitch.x, fontFace.fontSize.size + pitch.y )
 			)
 		);
 	}
@@ -457,7 +447,6 @@ def.proto._keyBackspace =
 	function( )
 {
 	const mark = this.mark;
-
 	const at = mark.caretOffset.at;
 
 	if( at <= 0 ) return;
@@ -504,7 +493,6 @@ def.proto._keyEnd =
 	function( )
 {
 	const mark = this.mark;
-
 	const at = mark.caretOffset.at;
 
 	if( at >= this.text.length ) return;
@@ -577,7 +565,7 @@ def.proto._keyUp =
 def.lazy._maskKern =
 	function( )
 {
-	return Math.round( this.fontFace.size.size * 0.15 );
+	return Math.round( this.fontFace.fontSize.size * 0.15 );
 };
 
 
@@ -587,7 +575,7 @@ def.lazy._maskKern =
 def.lazy._maskWidth =
 	function( )
 {
-	return Math.round( this.fontFace.size.size * 0.5 );
+	return Math.round( this.fontFace.fontSize.size * 0.5 );
 };
 
 
@@ -599,22 +587,14 @@ def.lazy._passMask =
 	function( )
 {
 	const text = this.text;
-
-	const size = this.fontFace.size.size;
-
+	const size = this.fontFace.fontSize.size;
 	const pm = [ ];
-
 	const pitch = widget_input._pitch;
-
 	let x = pitch.x;
-
 	const y = pitch.y + Math.round( size * 0.7 );
-
 	const w = this._maskWidth;
-
 	//h = size * 0.32,
 	const h = w;
-
 	const k = this._maskKern;
 
 	for( let a = 0, al = text.length; a < al; a++, x += w + k )

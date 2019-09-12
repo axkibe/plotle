@@ -20,6 +20,9 @@ if( TIM )
 		// the current transform of controls
 		controlTransform : { type : '../gleam/transform' },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// the widget hovered upon
 		hover : { type : [ 'undefined', '< ../trace/hover-types' ] },
 
@@ -48,10 +51,67 @@ if( TIM )
 }
 
 
+const action_none = tim.require( '../action/none' );
 const discs_base = tim.require( './base' );
+const discs_create = tim.require( '../discs/create' );
+const discs_main = tim.require( '../discs/main' );
+const discs_zoom = tim.require( '../discs/zoom' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
+const gleam_transform = tim.require( '../gleam/transform' );
+const gruga_discs_create = tim.require( '../gruga/discs/create' );
+const gruga_discs_main = tim.require( '../gruga/discs/main' );
+const gruga_discs_zoom = tim.require( '../gruga/discs/zoom' );
 const show_create = tim.require( '../show/create' );
 const show_zoom = tim.require( '../show/zoom' );
+
+
+/*
+| Creates the discs root.
+*/
+def.static.createFromLayout =
+	function(
+		viewSize,          // size of the view (screen)
+		show,              // form or space to show
+		devicePixelRatio   // display's device pixel ratio
+	)
+{
+	return(
+		discs_root.create(
+			'action', action_none.singleton,
+			'controlTransform', gleam_transform.normal,
+			'devicePixelRatio', devicePixelRatio,
+			'show', show,
+			'viewSize', viewSize,
+			'group:set', 'main',
+				discs_main.createFromLayout(
+					gruga_discs_main.layout,
+					'main',
+					gleam_transform.normal,
+					show,
+					viewSize,
+					devicePixelRatio
+				),
+			'group:set', 'create',
+				discs_create.createFromLayout(
+					gruga_discs_create.layout,
+					'create',
+					gleam_transform.normal,
+					show,
+					viewSize,
+					devicePixelRatio
+				),
+			'group:set', 'zoom',
+				discs_zoom.createFromLayout(
+					gruga_discs_zoom.layout,
+					'zoom',
+					gleam_transform.normal,
+					show,
+					viewSize,
+					devicePixelRatio
+				)
+		)
+	);
+};
 
 
 /*
@@ -78,6 +138,7 @@ def.adjust.get =
 			'access', this.access,
 			'action', this.action,
 			'controlTransform', ct,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hover', hover,
 			'mark', this.mark,
 			'show', show,

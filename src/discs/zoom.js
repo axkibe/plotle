@@ -28,8 +28,9 @@ def.adjust.get =
 
 	return(
 		widget.create(
-			'hover', hover,
+			'devicePixelRatio', this.devicePixelRatio,
 			'down', discs_zoom._isActiveButton( this.action, name ),
+			'hover', hover,
 			'trace', trace,
 			'transform', this.controlTransform
 		)

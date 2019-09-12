@@ -328,6 +328,7 @@ def.adjust.frame =
 		frame.create(
 			'access', this.access,
 			'content', content,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hasGuides', this.hasGuides,
 			'transform', this.transform,
 			'viewSize', this.viewSize
@@ -361,6 +362,7 @@ def.adjust.get =
 	item =
 		item.create(
 			'access', this.access,
+			'devicePixelRatio', this.devicePixelRatio,
 			'highlight', highlight,
 			'hover', item.concernsHover( this.hover, trace ),
 			'mark', mark,

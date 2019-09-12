@@ -19,6 +19,9 @@ if( TIM )
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// the discs
 		discs : { type : '../discs/root' },
 
@@ -106,42 +109,17 @@ const change_list = tim.require( '../change/list' );
 const change_remove = tim.require( '../change/remove' );
 const change_wrap = tim.require( '../change/wrap' );
 const discs_root = tim.require( '../discs/root' );
-const discs_create = tim.require( '../discs/create' );
-const discs_main = tim.require( '../discs/main' );
-const discs_zoom = tim.require( '../discs/zoom' );
 const fabric_doc = tim.require( '../fabric/doc' );
 const fabric_para = tim.require( '../fabric/para' );
 const fabric_relation = tim.require( '../fabric/relation' );
 const fabric_space = tim.require( '../fabric/space' );
-const forms_loading = tim.require( '../forms/loading' );
-const forms_login = tim.require( '../forms/login' );
-const forms_moveTo = tim.require( '../forms/moveTo' );
-const forms_noAccessToSpace = tim.require( '../forms/noAccessToSpace' );
-const forms_nonExistingSpace = tim.require( '../forms/nonExistingSpace' );
 const forms_root = tim.require( '../forms/root' );
-const forms_signUp = tim.require( '../forms/signUp' );
-const forms_space = tim.require( '../forms/space' );
-const forms_user = tim.require( '../forms/user' );
-const forms_welcome = tim.require( '../forms/welcome' );
-const gleam_display_canvas = tim.require( '../gleam/display/canvas' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 const gleam_line = tim.require( '../gleam/line' );
 const gleam_point = tim.require( '../gleam/point' );
 const gleam_rect = tim.require( '../gleam/rect' );
 const gleam_transform = tim.require( '../gleam/transform' );
 const gruga_controls = tim.require( '../gruga/controls' );
-const gruga_discs_create = tim.require( '../gruga/discs/create' );
-const gruga_discs_main = tim.require( '../gruga/discs/main' );
-const gruga_discs_zoom = tim.require( '../gruga/discs/zoom' );
-const gruga_forms_loading = tim.require( '../gruga/forms/loading' );
-const gruga_forms_login = tim.require( '../gruga/forms/login' );
-const gruga_forms_moveTo = tim.require( '../gruga/forms/moveTo' );
-const gruga_forms_noAccessToSpace = tim.require( '../gruga/forms/noAccessToSpace' );
-const gruga_forms_nonExistingSpace = tim.require( '../gruga/forms/nonExistingSpace' );
-const gruga_forms_signUp = tim.require( '../gruga/forms/signUp' );
-const gruga_forms_space = tim.require( '../gruga/forms/space' );
-const gruga_forms_user = tim.require( '../gruga/forms/user' );
-const gruga_forms_welcome = tim.require( '../gruga/forms/welcome' );
 const gruga_relation = tim.require( '../gruga/relation' );
 const mark_caret = tim.require( '../mark/caret' );
 const mark_range = tim.require( '../mark/range' );
@@ -164,7 +142,6 @@ const trace_forms = tim.require( '../trace/forms' );
 const trace_root = tim.require( '../trace/root' );
 const trace_space = tim.require( '../trace/space' );
 const user_creds = tim.require( '../user/creds' );
-const widget_factory = tim.require( '../widget/factory' );
 
 
 /*
@@ -288,7 +265,6 @@ def.static.startup =
 {
 /**/if( CHECK )
 /**/{
-/**/	// singleton
 /**/	if( root ) throw new Error( );
 /**/}
 
@@ -300,8 +276,11 @@ def.static.startup =
 
 	if( !userCreds ) userCreds = user_creds.createVisitor( );
 
+	const dpr = display.devicePixelRatio;
+
 	shell_root._create(
 		'action', action_none.singleton,
+		'devicePixelRatio', display.devicePixelRatio,
 		'doTracker', shell_doTracker.create( ),
 		'link',
 			net_link.create(
@@ -311,8 +290,8 @@ def.static.startup =
 		'show', show,
 		'spaceTransform', gleam_transform.normal,
 		'viewSize', display.size,
-		'discs', shell_root._createDiscsRoot( viewSize, show ),
-		'forms', shell_root._createFormsRoot( viewSize ),
+		'discs', discs_root.createFromLayout( viewSize, show, dpr ),
+		'forms', forms_root.createFromLayout( viewSize, dpr ),
 		'_animation', animation_root.create( ),
 		'_display', display,
 		'_systemFocus', true
@@ -347,6 +326,7 @@ def.adjust.discs =
 			'access', this.access,
 			'action', this.action,
 			'controlTransform', ctransform,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hover', hover,
 			'mark', this._mark,
 			'show', this.show,
@@ -412,6 +392,7 @@ def.adjust.forms =
 	return(
 		forms.create(
 			'action', this.action,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hasGrid', space && space.hasGrid,
 			'hasGuides', space && space.hasGuides,
 			'hasSnapping', space && space.hasSnapping,
@@ -444,6 +425,7 @@ def.adjust.space =
 		space.create(
 			'access', this.access,
 			'action', this.action,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hover', hover,
 			'mark', mark,
 			'transform', this.spaceTransform,
@@ -474,33 +456,19 @@ def.proto.alter =
 	)
 {
 	let action = pass;
-
 	let change = pass;
-
 	let changeWrap;
-
 	let clearRetainX;
-
 	let doTracker = pass;
-
 	let forms = pass;
-
 	let hover = pass;
-
 	let link = pass;
-
 	let mark = pass;
-
 	let omark;
-
 	let show = pass;
-
 	let space = pass;
-
 	let spaceTransform = pass;
-
 	let userSpaceList = pass;
-
 	let userCreds = pass;
 
 	for( let a = 0, al = arguments.length; a < al; a += 2 )
@@ -512,31 +480,18 @@ def.proto.alter =
 		switch( command )
 		{
 			case 'action' : action = arg; continue;
-
 			case 'change' : change = arg; continue;
-
 			case 'changeWrap' : changeWrap = arg; continue;
-
 			case 'clearRetainX' : clearRetainX = arg; continue;
-
 			case 'doTracker' : doTracker = arg; continue;
-
 			case 'forms' : forms = arg; continue;
-
 			case 'hover' : hover = arg; continue;
-
 			case 'link' : link = arg; continue;
-
 			case 'mark' : mark = arg; continue;
-
 			case 'show' : show = arg; continue;
-
 			case 'space' : space = arg; continue;
-
 			case 'spaceTransform' : spaceTransform = arg; continue;
-
 			case 'userCreds' : userCreds = arg; continue;
-
 			case 'userSpaceList' : userSpaceList = arg; continue;
 
 			// a trace
@@ -1480,12 +1435,22 @@ def.proto.removeRange =
 */
 def.proto.resize =
 	function(
-		size    // of type gleam_size
+		size,            // of type gleam_size
+		devicePixelRatio // display's (changed?) device pixel ratio
 	)
 {
+	if( root.devicePixelRatio !== devicePixelRatio )
+	{
+		console.log(
+			'devicePixelRatio changed from' + root.devicePixelRatio
+			+ 'to' + devicePixelRatio
+		);
+	}
+
 	root._create(
-		'_display', gleam_display_canvas.resize( root._display, size ),
-		'viewSize', size
+		'devicePixelRatio', devicePixelRatio,
+		'viewSize', size,
+		'_display', root._display.resize( size, devicePixelRatio ),
 	);
 };
 
@@ -1739,134 +1704,6 @@ def.proto._changeTransformTo =
 		if( root.action.finishAnimation ) system.setTimer( time, notAnimationFinish );
 	}
 };
-
-
-/*
-| Creates the discs root.
-*/
-def.static._createDiscsRoot =
-	function(
-		viewSize,
-		show
-	)
-{
-	return(
-		discs_root.create(
-			'action', action_none.singleton,
-			'controlTransform', gleam_transform.normal,
-			'show', show,
-			'viewSize', viewSize,
-			'group:set', 'main',
-				discs_main.createFromLayout(
-					gruga_discs_main.layout,
-					'main',
-					gleam_transform.normal,
-					show,
-					viewSize
-				),
-			'group:set', 'create',
-				discs_create.createFromLayout(
-					gruga_discs_create.layout,
-					'create',
-					gleam_transform.normal,
-					show,
-					viewSize
-				),
-			'group:set', 'zoom',
-				discs_zoom.createFromLayout(
-					gruga_discs_zoom.layout,
-					'zoom',
-					gleam_transform.normal,
-					show,
-					viewSize
-				)
-		)
-	);
-};
-
-
-/*
-| Creates the forms root.
-*/
-def.static._createFormsRoot =
-	function(
-		viewSize
-	)
-{
-	const formLayouts =
-	{
-		loading :
-			[ gruga_forms_loading.layout, forms_loading ],
-		login :
-			[ gruga_forms_login.layout, forms_login ],
-		moveTo :
-			[ gruga_forms_moveTo.layout, forms_moveTo ],
-		noAccessToSpace :
-			[ gruga_forms_noAccessToSpace.layout, forms_noAccessToSpace ],
-		nonExistingSpace :
-			[ gruga_forms_nonExistingSpace.layout, forms_nonExistingSpace ],
-		signUp :
-			[ gruga_forms_signUp.layout, forms_signUp ],
-		space :
-			[ gruga_forms_space.layout, forms_space ],
-		user :
-			[ gruga_forms_user.layout, forms_user ],
-		welcome :
-			[ gruga_forms_welcome.layout, forms_welcome ],
-	};
-
-	let forms = { };
-
-	// FIXME move this from layout creation to forms.root
-
-	for( let name in formLayouts )
-	{
-		const entry = formLayouts[ name ];
-
-		const layout = entry[ 0 ];
-
-		const formTrace = trace_root.singleton.appendForms.appendForm( name );
-
-		const twig = { };
-
-		for( let wKey of layout.keys )
-		{
-			const wLayout = layout.get( wKey );
-
-			const trace = formTrace.appendWidget( wKey );
-
-			twig[ wKey ] =
-				widget_factory.createFromLayout( wLayout, trace, gleam_transform.normal );
-		}
-
-		forms[ name ] =
-			entry[ 1 ].create(
-				'action', action_none.singleton,
-				'trace', formTrace,
-				'viewSize', viewSize,
-				'twig:init', twig, layout.keys
-			);
-	}
-
-	let formRoot =
-		forms_root.create(
-			'action', action_none.singleton,
-			'viewSize', viewSize
-		);
-
-	// FUTURE do a group:init instead
-	for( let key of Object.keys( forms ) )
-	{
-		formRoot =
-			formRoot.create(
-				'group:set', key,
-				forms[ key ].create( 'viewSize', viewSize )
-			);
-	}
-
-	return formRoot;
-};
-
 
 
 /*

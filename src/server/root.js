@@ -40,13 +40,13 @@ if( TIM )
 }
 
 
-// FUTURE remove
+// used for debugging the change engine
 //const DELAY_ALTER = 5000;
 //const DELAY_ACQUIRE = 5000;
 const DELAY_ALTER = false;
 const DELAY_ACQUIRE = false;
 
-// FUTURE still some dependency conflict in tim.js
+// TODO still some dependency conflict in tim.js
 tim.require( '../trace/base' );
 
 const fs = tim.require( 'fs' );
@@ -498,7 +498,7 @@ def.proto.wake =
 {
 	const upSleeps = root.upSleeps;
 
-	// FUTURE cache change lists
+	// TODO cache change lists
 	// to answer the same to multiple clients.
 	for( let key of upSleeps.keys )
 	{
@@ -580,24 +580,9 @@ def.proto.requestListener =
 
 	log.log( request.connection.remoteAddress, red.href );
 
-/*
-	FUTURE
-	if( config.whiteList )
-	{
-		if( !config.whiteList[ request.connection.remoteAddress ] )
-		{
-			log.log( request.connection.remoteAddress, 'not in whitelist!' );
-
-			root.webError( result, 403, 'Forbidden' );
-
-			return;
-		}
-	}
-*/
-
 	const pathname = red.pathname.replace( /^[/]+/g, '' );
 
-	if( pathname === 'mm' ) return root.webAjax( request, red, result );
+	if( pathname === 'x' ) return root.webAjax( request, red, result );
 
 	let resource = root.inventory.get( pathname );
 
@@ -735,18 +720,15 @@ def.proto.webAjax =
 			return;
 		}
 
-		// FUTURE REMOVE
 		if( DELAY_ALTER && cmd.type === 'request_alter' )
 		{
 			log.log( 'DELAYING ALTER');
-
 			await wait( DELAY_ALTER );
 		}
 
 		if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 		{
 			log.log( 'DELAYING ACQUIRE');
-
 			await wait( DELAY_ACQUIRE );
 		}
 

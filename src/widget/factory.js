@@ -9,6 +9,7 @@ tim.define( module, ( def, widget_factory ) => {
 
 def.abstract = true;
 
+const gleam_transform = tim.require( '../gleam/transform' );
 const layout_button = tim.require( '../layout/button' );
 const layout_checkbox = tim.require( '../layout/checkbox' );
 const layout_input = tim.require( '../layout/input' );
@@ -44,21 +45,24 @@ def.staticLazy._layoutMap =
 */
 def.static.createFromLayout =
 	function(
-		layout,     // of type layout_*
-		trace,      // trace of the widget
-		transform   // visual transformation
+		layout,           // of type layout_*
+		trace,            // trace of the widget
+		transform,        // visual transformation
+		devicePixelRatio  // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	const widget = widget_factory._layoutMap.get( layout.timtype );
 
 	if( !widget ) throw new Error( );
 
-	return widget.createFromLayout( layout, trace, transform );
+	return widget.createFromLayout( layout, trace, transform, devicePixelRatio );
 };
 
 

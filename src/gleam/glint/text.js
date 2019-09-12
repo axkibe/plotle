@@ -17,18 +17,29 @@ if( TIM )
 		// vertical alignment
 		base : { type : 'string', defaultValue : '"alphabetic"' },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// where to draw it
 		p : { type : '../point' },
 
-		// color to draw the text with
-		color : { type : '../color', defaultValue : 'require( "../color" ).black' },
-
-		// the token to display
-		token : { type : '../font/token' },
-
 		// if defined, rotation in radiant
 		rotate : { type : [ 'undefined', 'number' ] },
+
+		// the font face to display
+		fontFace : { type : '../font/face' },
+
+		// the text to display
+		text : { type : 'string' },
 	};
 }
+
+
+def.lazy.token =
+	function( )
+{
+	return this.fontFace.roundResize( this.devicePixelRatio ).createToken( this.text );
+};
+
 
 } );

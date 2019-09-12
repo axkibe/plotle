@@ -14,6 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// display's current pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// component hovered upon
 		hover : { type : 'undefined' },
 

@@ -123,6 +123,7 @@ def.adjust.doc =
 
 	return(
 		( doc || this.doc ).create(
+			'devicePixelRatio', this.devicePixelRatio,
 			'flowWidth', 0,
 			'fontsize', this.fontsize,
 			'innerMargin', gruga_label.innerMargin,
@@ -149,6 +150,7 @@ def.lazy.glint =
 			gleam_glint_window.create(
 				'pane',
 					gleam_glint_pane.create(
+						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this.doc.glint,
 						'size', tZone.enlarge1.size,
 						'tag', 'label(' + this.trace.key + ')'

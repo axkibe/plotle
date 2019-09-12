@@ -17,6 +17,9 @@ if( TIM )
 		// content of the frame
 		content : { type : '../fabric/itemSet' },
 
+		// display's device pixel ratio
+		devicePixelRatio: { type : 'number' },
+
 		// should show guides
 		hasGuides : { type : 'boolean' },
 

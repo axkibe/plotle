@@ -29,8 +29,9 @@ def.adjust.get =
 
 	return(
 		widget.create(
-			'hover', hover,
 			'down', this._isActiveButton( name ),
+			'devicePixelRatio', this.devicePixelRatio,
+			'hover', hover,
 			'trace', trace,
 			'transform', this.controlTransform
 		)

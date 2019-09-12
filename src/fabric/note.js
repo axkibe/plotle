@@ -123,6 +123,7 @@ def.adjust.doc =
 	return(
 		doc.create(
 			'clipsize', zone.size,
+			'devicePixelRatio', this.devicePixelRatio,
 			'flowWidth', zone.width - gruga_note.innerMargin.x,
 			'fontsize', this.fontsize,
 			'innerMargin', gruga_note.innerMargin,
@@ -149,6 +150,7 @@ def.lazy.glint =
 			gleam_glint_window.create(
 				'pane',
 					gleam_glint_pane.create(
+						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this._innerGlint,
 						'size', tZone.add1_5.size,
 						'tag', 'note(' + this.key + ')'
@@ -280,6 +282,7 @@ def.lazy.scrollbarY =
 	return(
 		widget_scrollbar.create(
 			'aperture', aperture,
+			'devicePixelRatio', this.devicePixelRatio,
 			'max', dHeight,
 			'pos', zone.pos.add( zone.width, gruga_note.vScrollbarDis ),
 			'scrollPos', this.scrollPos.y,

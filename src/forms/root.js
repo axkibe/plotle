@@ -14,6 +14,9 @@ if( TIM )
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// space has grid
 		hasGrid : { type : [ 'undefined', 'boolean' ] },
 
@@ -56,7 +59,109 @@ if( TIM )
 	];
 }
 
+
+const action_none = tim.require( '../action/none' );
+const forms_loading = tim.require( './loading' );
+const forms_login = tim.require( './login' );
+const forms_moveTo = tim.require( './moveTo' );
+const forms_noAccessToSpace = tim.require( './noAccessToSpace' );
+const forms_nonExistingSpace = tim.require( './nonExistingSpace' );
+const forms_signUp = tim.require( './signUp' );
+const forms_space = tim.require( './space' );
+const forms_user = tim.require( './user' );
+const forms_welcome = tim.require( './welcome' );
+const gleam_size = tim.require( '../gleam/size' );
+const gleam_transform = tim.require( '../gleam/transform' );
+const gruga_forms_loading = tim.require( '../gruga/forms/loading' );
+const gruga_forms_login = tim.require( '../gruga/forms/login' );
+const gruga_forms_moveTo = tim.require( '../gruga/forms/moveTo' );
+const gruga_forms_noAccessToSpace = tim.require( '../gruga/forms/noAccessToSpace' );
+const gruga_forms_nonExistingSpace = tim.require( '../gruga/forms/nonExistingSpace' );
+const gruga_forms_signUp = tim.require( '../gruga/forms/signUp' );
+const gruga_forms_space = tim.require( '../gruga/forms/space' );
+const gruga_forms_user = tim.require( '../gruga/forms/user' );
+const gruga_forms_welcome = tim.require( '../gruga/forms/welcome' );
 const trace_root = tim.require( '../trace/root' );
+const widget_factory = tim.require( '../widget/factory' );
+
+
+/*
+| Creates the forms root.
+*/
+def.static.createFromLayout =
+	function(
+		viewSize,         // display's view size
+		devicePixelRatio  // display's device pixel ratio
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( viewSize.timtype !== gleam_size ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
+/**/}
+
+	const formLayouts =
+	{
+		loading : [ gruga_forms_loading.layout, forms_loading ],
+		login : [ gruga_forms_login.layout, forms_login ],
+		moveTo : [ gruga_forms_moveTo.layout, forms_moveTo ],
+		noAccessToSpace : [ gruga_forms_noAccessToSpace.layout, forms_noAccessToSpace ],
+		nonExistingSpace : [ gruga_forms_nonExistingSpace.layout, forms_nonExistingSpace ],
+		signUp : [ gruga_forms_signUp.layout, forms_signUp ],
+		space : [ gruga_forms_space.layout, forms_space ],
+		user : [ gruga_forms_user.layout, forms_user ],
+		welcome : [ gruga_forms_welcome.layout, forms_welcome ],
+	};
+
+	let forms = { };
+
+	// FIXME move this from layout creation to forms.root
+
+	for( let name in formLayouts )
+	{
+		const entry = formLayouts[ name ];
+
+		const layout = entry[ 0 ];
+
+		const formTrace = trace_root.singleton.appendForms.appendForm( name );
+
+		const twig = { };
+
+		for( let wKey of layout.keys )
+		{
+			const wLayout = layout.get( wKey );
+
+			const trace = formTrace.appendWidget( wKey );
+
+			twig[ wKey ] =
+				widget_factory.createFromLayout(
+					wLayout,
+					trace,
+					gleam_transform.normal,
+					devicePixelRatio
+				);
+		}
+
+		forms[ name ] =
+			entry[ 1 ].create(
+				'action', action_none.singleton,
+				'devicePixelRatio', devicePixelRatio,
+				'trace', formTrace,
+				'viewSize', viewSize,
+				'twig:init', twig, layout.keys
+			);
+	}
+
+	return(
+		forms_root.create(
+			'action', action_none.singleton,
+			'devicePixelRatio', devicePixelRatio,
+			'group:init', forms,
+			'viewSize', viewSize
+		)
+	);
+};
 
 
 /*
@@ -93,6 +198,7 @@ def.adjust.get =
 	return(
 		form.create(
 			'action', this.action,
+			'devicePixelRatio', this.devicePixelRatio,
 			'hasGrid', hasGrid,
 			'hasGuides', hasGuides,
 			'hasSnapping', hasSnapping,

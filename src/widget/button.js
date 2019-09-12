@@ -89,20 +89,22 @@ def.proto.concernsHover =
 */
 def.static.createFromLayout =
 	function(
-		layout,     // of type layout_label
-		trace,      // trace of the widget
-		transform   // visual transformation
+		layout,           // of type layout_label
+		trace,            // trace of the widget
+		transform,        // visual transformation
+		devicePixelRatio  // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/	if( layout.timtype !== layout_button ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	return(
 		widget_button.create(
+			'devicePixelRatio', devicePixelRatio,
 			'facets', layout.facets,
 			'fontFace', layout.fontFace,
 			'iconShape', layout.iconShape,
@@ -134,6 +136,7 @@ def.lazy.glint =
 		gleam_glint_window.create(
 			'pane',
 				gleam_glint_pane.create(
+					'devicePixelRatio', this.devicePixelRatio,
 					'glint', this._glint,
 					'size', zone.size,
 					'tag', 'button(' + this.trace.key + ')'
@@ -183,9 +186,11 @@ def.lazy._glint =
 				gleam_glint_text.create(
 					'align', 'center',
 					'base', 'middle',
-					'token', fontFace.size.roundSize.createToken( text ),
+					'devicePixelRatio', this.devicePixelRatio,
+					'fontFace', fontFace,
 					'p', this._pc,
 					'rotate', this.textRotation,
+					'text', text
 				)
 			);
 		}
@@ -205,8 +210,10 @@ def.lazy._glint =
 					gleam_glint_text.create(
 						'align', 'center',
 						'base', 'middle',
-						'token', fontFace.size.roundSize.createToken( text[ t ] ),
+						'devicePixelRatio', this.devicePixelRatio,
+						'fontFace', fontFace,
 						'p', this._pc.add( 0, y ),
+						'text', text[ t ]
 					)
 				);
 			}

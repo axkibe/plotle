@@ -42,22 +42,24 @@ const layout_label = tim.require( '../layout/label' );
 */
 def.static.createFromLayout =
 	function(
-		layout,     // of type layout_label
-		trace,      // trace of the widget
-		transform   // visual transformation
+		layout,           // of type layout_label
+		trace,            // trace of the widget
+		transform,        // visual transformation
+		devicePixelRatio  // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/	if( layout.timtype !== layout_label ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	return(
 		widget_label.create(
 			'align', layout.align,
 			'base', layout.base,
+			'devicePixelRatio', devicePixelRatio,
 			'fontFace', layout.fontFace,
 			'newline', layout.newline,
 			'pos', layout.pos,
@@ -82,9 +84,10 @@ def.lazy.glint =
 		gleam_glint_text.create(
 			'align', this.align,
 			'base', this.base,
-			'color', this.fontFace.color,
+			'devicePixelRatio', this.devicePixelRatio,
+			'fontFace', this.fontFace,
 			'p', this._pos,
-			'token', this.fontFace.size.roundSize.createToken( this.text )
+			'text', this.text
 		)
 	);
 };

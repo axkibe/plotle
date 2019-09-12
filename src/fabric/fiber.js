@@ -21,6 +21,10 @@ if( TIM )
 		// no json thus not saved or transmitted
 		access : { type : [ 'undefined', 'string' ] },
 
+		// the display's device pixel ratio
+		// no json thus not saved or transmitted
+		devicePixelRatio : { type : [ 'undefined', 'number' ] },
+
 		// the users mark
 		// no json thus not saved or transmitted
 		mark : { type : [ 'undefined', '< ../mark/visual-types'] },

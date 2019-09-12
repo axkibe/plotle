@@ -16,15 +16,11 @@ if( TIM )
 
 		// family of the font
 		family : { type : './family' },
-
-		// token cache
-		_tokenCache : { type : 'protean', defaultValue: '{}' },
 	};
 }
 
 
 const font_face = tim.require( './face' );
-const font_token = tim.require( './token' );
 
 
 const opentypeOptions =
@@ -68,22 +64,7 @@ def.proto.createFace =
 		color
 	)
 {
-	return font_face.create( 'color', color, 'size', this );
-};
-
-
-def.proto.createToken =
-	function(
-		text
-	)
-{
-	const tc = this._tokenCache;
-
-	let tv = tc[ text ];
-
-	if( tv ) return tv;
-
-	return( tc[ text ] = font_token.create( 'size', this, 'text', text ) );
+	return font_face.create( 'color', color, 'fontSize', this );
 };
 
 

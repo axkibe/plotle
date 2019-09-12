@@ -11,15 +11,15 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// size of the font
-		size : { type : './size' },
+		// face of the font
+		fontFace : { type : './face' },
 
+		// text to draw
 		text : { type : 'string' },
 	};
 }
 
 
-const gleam_color = tim.require( '../color' );
 const shell_settings = tim.require( '../../shell/settings' );
 const round = Math.round;
 
@@ -30,7 +30,9 @@ const round = Math.round;
 def.lazy.advanceWidth =
 	function( )
 {
-	return this.size.family.opentype.getAdvanceWidth( this.text, this.size.size );
+	const fontSize = this.fontFace.fontSize;
+
+	return fontSize.family.opentype.getAdvanceWidth( this.text, fontSize.size );
 };
 
 
@@ -41,28 +43,23 @@ def.proto.draw =
 	function(
 		x,         // x
 		y,         // y
-		color,     // the fontFace to draw with
 		align,     // horizontal align
 		base,      // vertial align
 		cx         // canvas context to draw it on.
 	)
 {
-	const fontSize = this.size;
-
+	const fontFace = this.fontFace;
+	const fontSize = fontFace.fontSize;
 	const size = fontSize.size;
+	const otFont = this._opentype( );
+	const glyphCache = otFont.glyphCache;
+	const color = fontFace.color;
 
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 6 ) throw new Error( );
-/**/
-/**/	if( color.timtype !== gleam_color ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 5 ) throw new Error( );
 /**/	if( size !== Math.floor( size ) ) throw new Error( );
 /**/}
-
-	const otFont = this._opentype( );
-
-	const glyphCache = otFont.glyphCache;
 
 	let glyphCacheColor = glyphCache[ color.css ];
 
@@ -73,28 +70,21 @@ def.proto.draw =
 	if( !glyphCacheSet ) glyphCacheSet = glyphCacheColor[ size ] = { };
 
 	const fontScale = 1 / otFont.unitsPerEm * size;
-
 	const options = fontSize._options;
-
 	const glyphs = this._glyphs;
 
 	switch( align )
 	{
 		case 'center' : x -= this.width * fontScale / 2; break;
-
 		case 'left' : break;
-
 		case 'right' : x -= this.width * fontScale; break;
-
 		default : throw new Error( );
 	}
 
 	switch( base )
 	{
 		case 'alphabetic' : break;
-
 		case 'middle' : y += fontSize.family.capheight * fontScale / 2 - 0.5; break;
-
 		default : throw new Error( );
 	}
 
@@ -114,6 +104,8 @@ def.proto.draw =
 		if( size >= shell_settings.glyphCacheLimit )
 		{
 			const path = glyph.getPath( round( x ), round( y ), size, options, otFont );
+
+			path.fill = color.css;
 
 			path.draw( cx );
 
@@ -139,11 +131,8 @@ def.proto.draw =
 		const bb = path.getBoundingBox( );
 
 		let x1 = Math.floor( bb.x1 );
-
 		let y1 = Math.floor( bb.y1 );
-
 		let x2 = Math.ceil( bb.x2 );
-
 		let y2 = Math.ceil( bb.y2 );
 
 		let canvas;
@@ -159,6 +148,8 @@ def.proto.draw =
 			const cvx = canvas.getContext( '2d' );
 
 			cvx.translate( -x1, -y1 );
+
+			path.fill = color.css;
 
 			path.draw( cvx );
 
@@ -213,14 +204,22 @@ def.lazy.width =
 def.lazy._glyphs =
 	function( )
 {
-	return this._opentype( ).stringToGlyphs( this.text, this.size._options );
+	const fontSize = this.fontFace.fontSize;
+
+	return this._opentype( ).stringToGlyphs( this.text, fontSize._options );
 };
 
 
 /*
 | The opentype implementation.
+|
+| Can't do lazy, because it would be immuted, and opentype doesn't like that.
 */
-def.proto._opentype = function( ) { return this.size.family.opentype; };
+def.proto._opentype =
+	function( )
+{
+	return this.fontFace.fontSize.family.opentype;
+};
 
 
 } );

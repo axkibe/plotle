@@ -274,6 +274,7 @@ def.lazy.glint =
 			gleam_glint_window.create(
 				'pane',
 					gleam_glint_pane.create(
+						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this._innerGlint,
 						'size', zone.size,
 						'tag', 'portal(' + this.trace.key + ')'
@@ -689,8 +690,6 @@ def.proto._getOffsetAt =
 
 	const fontFace = this._fontFaceFor( section );
 
-	const fontSize = fontFace.size;
-
 	let a;
 
 	const al = value.length;
@@ -699,7 +698,7 @@ def.proto._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = fontSize.createToken( value.substr( 0, a ) ).advanceWidth;
+		x2 = fontFace.createToken( value.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}
@@ -717,17 +716,12 @@ def.lazy._innerGlint =
 	function( )
 {
 	const ot = this.transform.ortho;
-
 	const mark = this.mark;
-
 	const facet = gruga_portal.facets.getFacet( );
-
 	const fieldSpaceUser = this._fieldSpaceUser;
-
 	const fieldSpaceTag = this._fieldSpaceTag;
-
 	const orthoMoveToButtonShape = this._orthoMoveToButtonShape;
-
+	const dpr = this.devicePixelRatio;
 	const inputFacet =
 		gruga_portal.inputFacets.getFacet(
 			'hover', false,
@@ -749,27 +743,24 @@ def.lazy._innerGlint =
 				'shape', fieldSpaceTag.shape.transform( ot )
 			),
 			gleam_glint_text.create(
+				'devicePixelRatio', dpr,
+				'fontFace', this._tFontFaceSpaceUser,
 				'p', fieldSpaceUser.pos.transform( ot ),
-				'token',
-					this._tFontFaceSpaceUser.size.roundSize.createToken(
-						fieldSpaceUser.text
-					)
+				'text', fieldSpaceUser.text
 			),
 			gleam_glint_text.create(
+				'devicePixelRatio', dpr,
+				'fontFace', this._tFontFaceSpaceTag,
 				'p', fieldSpaceTag.pos.transform( ot ),
-				'token',
-					this._tFontFaceSpaceTag.size.roundSize.createToken(
-						fieldSpaceTag.text
-					)
+				'text', fieldSpaceTag.text
 			),
 			gleam_glint_text.create(
 				'align', 'center',
 				'base', 'middle',
+				'devicePixelRatio', dpr,
+				'fontFace', this._tFontFaceMoveTo,
 				'p', orthoMoveToButtonShape.pc,
-				'token',
-					this._tFontFaceMoveTo.size.roundSize.createToken(
-						'move to'
-					)
+				'text', 'move to'
 			)
 		];
 
@@ -777,7 +768,7 @@ def.lazy._innerGlint =
 	{
 		const glintCaret = this._glintCaret;
 
-		if( glintCaret ) arr[ 6 ] = this._glintCaret;
+		if( glintCaret ) arr.push( glintCaret );
 	}
 
 	const tzs = this._zeroShape.transform( ot );
@@ -1135,11 +1126,11 @@ def.proto._locateOffset =
 	)
 {
 	// TODO cache position
-	const fontSize = this._fontFaceFor( section ).size;
+	const fontFace = this._fontFaceFor( section );
 
 	const text = this[ section ].substring( 0, offset );
 
-	const token = fontSize.createToken( text );
+	const token = fontFace.createToken( text );
 
 	return gleam_point.createXY( token.advanceWidth, 0 );
 };
@@ -1224,11 +1215,11 @@ def.proto._prepareField =
 
 	const text = this[ section ];
 
-	const fontSize = this._fontFaceFor( section ).size;
+	const fontFace = this._fontFaceFor( section );
 
-	const width = fontSize.createToken( text ).advanceWidth;
+	const width = fontFace.createToken( text ).advanceWidth;
 
-	const height = fontSize.size + 2;
+	const height = fontFace.fontSize.size + 2;
 
 	const pos =
 		baseP

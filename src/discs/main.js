@@ -194,6 +194,7 @@ def.adjust.get =
 	return(
 		widget.create(
 			'hover', hover,
+			'devicePixelRatio', this.devicePixelRatio,
 			'down', down,
 			'text', text,
 			'trace', trace,

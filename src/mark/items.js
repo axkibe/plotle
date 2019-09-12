@@ -21,7 +21,7 @@ const trace_item = tim.require( '../trace/item' );
 /*
 | The content the mark puts into the clipboard.
 |
-| FUTURE write something
+| TODO write something
 */
 def.proto.clipboard = '';
 

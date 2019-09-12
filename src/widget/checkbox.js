@@ -62,21 +62,23 @@ def.proto.concernsHover =
 */
 def.static.createFromLayout =
 	function(
-		layout,     // of type layout_label
-		trace,      // trace of the widget
-		transform   // visual transformation
+		layout,           // of type layout_label
+		trace,            // trace of the widget
+		transform,        // visual transformation
+		devicePixelRatio  // display's device pixel ratio
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
-/**/
+/**/	if( arguments.length !== 4 ) throw new Error( );
 /**/	if( layout.timtype !== layout_checkbox ) throw new Error( );
+/**/	if( typeof( devicePixelRatio ) !== 'number' ) throw new Error( );
 /**/}
 
 	return(
 		widget_checkbox.create(
 			'checked', layout.checked,
+			'devicePixelRatio', devicePixelRatio,
 			'facets', layout.facets,
 			'trace', trace,
 			'transform', transform,

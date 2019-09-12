@@ -15,9 +15,30 @@ if( TIM )
 		color : { type : '../color' },
 
 		// size of the font
-		size : { type : './size' },
+		fontSize : { type : './size' },
+
+		// token cache
+		_tokenCache : { type : 'protean', defaultValue: '{}' },
 	};
 }
+
+
+const font_token = tim.require( './token' );
+
+
+def.proto.createToken =
+	function(
+		text
+	)
+{
+	const tc = this._tokenCache;
+
+	let tv = tc[ text ];
+
+	if( tv ) return tv;
+
+	return( tc[ text ] = font_token.create( 'fontFace', this, 'text', text ) );
+};
 
 
 /*
@@ -28,7 +49,23 @@ def.proto.transform =
 		transform
 	)
 {
-	return this.size.transform( transform ).createFace( this.color );
+	return this.fontSize.transform( transform ).createFace( this.color );
+};
+
+
+/*
+| Resizes this font by factor and rounds the result.
+*/
+def.proto.roundResize =
+	function(
+		factor
+	)
+{
+	if( factor === 1 ) return this.roundSize;
+
+	const fs = this.fontSize;
+
+	return fs.create( 'size', Math.round( fs.size * factor ) ).createFace( this.color );
 };
 
 
@@ -38,7 +75,7 @@ def.proto.transform =
 def.lazy.roundSize =
 	function( )
 {
-	return this.size.roundSize.createFace( this.color );
+	return this.fontSize.roundSize.createFace( this.color );
 };
 
 

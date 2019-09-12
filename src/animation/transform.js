@@ -61,13 +61,11 @@ def.proto.getTransform =
 	)
 {
 	const end = this.end;
-
 	const endTransform = this.endTransform;
 
 	if( time >= end ) return endTransform;
 
 	const begin = this.begin;
-
 	const beginTransform = this.beginTransform;
 
 	if( time <= begin ) return beginTransform;
@@ -75,11 +73,9 @@ def.proto.getTransform =
 	const ratio = ( time - begin ) / ( end - begin );
 
 	const beginOffset = beginTransform.offset;
-
 	const endOffset = endTransform.offset;
 
 	const beginZoom = beginTransform.zoom;
-
 	const endZoom = endTransform.zoom;
 
 	return(

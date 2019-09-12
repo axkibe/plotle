@@ -173,6 +173,7 @@ def.lazy.glint =
 		gleam_glint_window.create(
 			'pane',
 				gleam_glint_pane.create(
+					'devicePixelRatio', this.devicePixelRatio,
 					'glint', this.doc.glint,
 					'size', tZone.enlarge1.size,
 					'tag', 'relation(' + this.trace.key + ')'

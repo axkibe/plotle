@@ -17,6 +17,9 @@ if( TIM )
 		// current action
 		action : { type : [ '< ../action/types' ] },
 
+		// display's device pixel ratio
+		devicePixelRatio : { type : 'number' },
+
 		// space has grid
 		hasGrid : { type : 'undefined' },
 
@@ -244,7 +247,7 @@ def.proto.dragStop =
 
 /*
 | Transforms widgets.
-| FUTURE proper inherit
+| TODO proper inherit
 */
 def.adjust.get =
 def.static.adjustGet =

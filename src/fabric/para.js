@@ -147,10 +147,10 @@ def.lazy.flow =
 	// width the flow can fill
 	// 0 means infinite
 	const flowWidth = this.flowWidth;
+	const fontFace = this.fontFace;
+	const fontSize = fontFace.fontSize;
 
-	const fontSize = this.font.size;
-
-	// FUTURE go into subnodes
+	// TODO go into subnodes
 	const text = this.text;
 
 	// width really used.
@@ -158,10 +158,9 @@ def.lazy.flow =
 
 	// current x positon, and current x including last tokens width
 	let x = 0;
-
 	let y = fontSize.size;
 
-	const space = fontSize.createToken( ' ' ).advanceWidth;
+	const space = fontFace.createToken( ' ' ).advanceWidth;
 
 	const lines = [ ];
 
@@ -176,8 +175,7 @@ def.lazy.flow =
 	{
 		// a token is a word plus following hard spaces
 		const tokenText = ca[ 1 ] + ca[ 3 ];
-
-		const w = fontSize.createToken( tokenText ).advanceWidth;
+		const w = fontFace.createToken( tokenText ).advanceWidth;
 
 		if( flowWidth > 0 && x + w > flowWidth )
 		{
@@ -203,7 +201,7 @@ def.lazy.flow =
 			else
 			{
 				// horizontal overflow
-				// ('HORIZONTAL OVERFLOW'); // FUTURE
+				// ('HORIZONTAL OVERFLOW'); // TODO
 			}
 		}
 
@@ -234,9 +232,9 @@ def.lazy.flow =
 
 
 /*
-| The font for this para.
+| The font face for this para.
 */
-def.lazy.font =
+def.lazy.fontFace =
 	function( )
 {
 	return gruga_fontFace.standard( this.fontsize );
@@ -272,7 +270,7 @@ def.proto.getOffsetAt =
 		x    // x coordinate
 	)
 {
-	const fontSize = this.font.size;
+	const fontFace = this.fontFace;
 
 	const flow = this.flow;
 
@@ -307,7 +305,7 @@ def.proto.getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 = fontSize.createToken( text.substr( 0, a ) ).advanceWidth;
+		x2 = fontFace.createToken( text.substr( 0, a ) ).advanceWidth;
 
 		if( x2 >= dx ) break;
 	}
@@ -887,7 +885,7 @@ def.proto._locateOffset =
 		offset    // the offset to get the point from.
 	)
 {
-	const fontSize = this.font.size;
+	const fontFace = this.fontFace;
 
 	const text = this.text;
 
@@ -925,7 +923,7 @@ def.proto._locateOffset =
 			gleam_point.createXY(
 				Math.round(
 					token.x
-					+ fontSize.createToken( text.substring( token.offset, offset ) ).advanceWidth
+					+ fontFace.createToken( text.substring( token.offset, offset ) ).advanceWidth
 				),
 				line.y
 			);
@@ -944,7 +942,7 @@ def.proto._locateOffset =
 /*
 | User pressed page up or down
 |
-| FUTURE maintain relative scroll pos
+| TODO maintain relative scroll pos
 */
 def.proto._pageUpDown =
 	function(
@@ -989,9 +987,9 @@ def.proto._pageUpDown =
 def.lazy._pane =
 	function( )
 {
-	const tFont = this._tFont;
-
+	const tFontFace = this._tFontFace;
 	const transform = this.transform.ortho;
+	const dpr = this.devicePixelRatio;
 
 	const a = [ ];
 
@@ -1001,7 +999,9 @@ def.lazy._pane =
 		{
 			a.push(
 				gleam_glint_text.create(
-					'token', tFont.size.roundSize.createToken( token.text ),
+					'devicePixelRatio', dpr,
+					'fontFace', tFontFace,
+					'text', token.text,
 					'p',
 						gleam_point.createXY(
 							transform.x( token.x ),
@@ -1014,6 +1014,7 @@ def.lazy._pane =
 
 	return(
 		gleam_glint_pane.create(
+			'devicePixelRatio', this.devicePixelRatio,
 			'glint', gleam_glint_list.create( 'list:init', a ),
 			'size',
 				gleam_size.createWH(
@@ -1056,7 +1057,7 @@ def.proto._setMark =
 /*
 | The font for current transform.
 */
-def.lazy._tFont =
+def.lazy._tFontFace =
 	function( )
 {
 	return gruga_fontFace.standard( this.transform.scale( this.fontsize ), 'a' );

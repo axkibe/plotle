@@ -154,7 +154,7 @@ def.proto._transformHeadline =
 		headline   // the headline widget
 	)
 {
-	const size = headline.fontFace.size.size;
+	const size = headline.fontFace.fontSize.size;
 
 	// content height
 	const ch = size * 2 + 160 + this._rows * 160;
@@ -245,7 +245,8 @@ def.proto._transformScrollbox =
 					widget_button.createFromLayout(
 						gruga_forms_moveTo.spaceButtonLayout,
 						sbTrace.appendWidget( fullname ),
-						gleam_transform.normal
+						gleam_transform.normal,
+						this.devicePixelRatio
 					);
 			}
 
