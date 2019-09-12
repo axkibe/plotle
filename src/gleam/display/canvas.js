@@ -262,7 +262,6 @@ def.proto.within =
 		case gleam_roundRect :
 
 			this._cx.beginPath( );
-
 			this._sketchGenericShape( shape.shape, 0, gleam_point.zero, 0 );
 
 			break;
@@ -284,7 +283,6 @@ def.proto.within =
 		case gleam_shape :
 
 			this._cx.beginPath( );
-
 			this._sketchGenericShape( shape, 0, gleam_point.zero, 0 );
 
 			break;
@@ -961,31 +959,26 @@ def.proto._sketch =
 		case gleam_roundRect :
 
 			this._sketchGenericShape( shape.shape, border, offset, shift );
-
 			return;
 
 		case gleam_line :
 
 			this._sketchLine( shape, border, offset, shift );
-
 			return;
 
 		case gleam_rect :
 
 			this._sketchRect( shape, border, offset, shift );
-
 			return;
 
 		case gleam_shape :
 
 			this._sketchGenericShape( shape, border, offset, shift );
-
 			return;
 
 		case gleam_shapeList :
 
 			for( let s of shape ) this._sketch( s, border, offset, shift );
-
 			return;
 
 		default : throw new Error( );
@@ -1018,6 +1011,8 @@ def.proto._sketchGenericShape =
 	const oy = offset.y;
 	const pc = shape.pc;
 
+	console.log( 'XXX', this );
+
 	let section = shape.get( 0 );
 	let p = section.p;
 
@@ -1047,7 +1042,7 @@ def.proto._sketchGenericShape =
 	else
 	{
 		psx =
-			this._noround( p.x + ox )
+			this._round( p.x + ox )
 			+ (
 				p.x > pc.x
 				?  -border
@@ -1056,7 +1051,7 @@ def.proto._sketchGenericShape =
 			+ shift;
 
 		psy =
-			this._noround( p.y + oy )
+			this._round( p.y + oy )
 			+ (
 				p.y > pc.y
 				?  -border
