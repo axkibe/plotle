@@ -1006,45 +1006,64 @@ def.proto._sketchGenericShape =
 	)
 {
 	const cx = this._cx;
-
 	const magic = gleam_constants.magic;
 
 /**/if( CHECK )
 /**/{
 /**/	if( shape.length === undefined || shape.length === 0 )	throw new Error( );
-/**/
 /**/	if( shape.get( 0 ).timtype !== gleam_shape_start ) throw new Error( );
 /**/}
 
 	const ox = offset.x;
-
 	const oy = offset.y;
-
 	const pc = shape.pc;
 
 	let section = shape.get( 0 );
-
 	let p = section.p;
 
 	// start point x/y
+	let psx, psy;
+	// FIXME deduplicated
+	if( shape.nogrid )
+	{
+		psx =
+			this._noround( p.x + ox )
+			+ (
+				p.x > pc.x
+				?  -border
+				: ( p.x < pc.x ? border : 0 )
+			)
+			+ shift;
 
-	let psx =
-		( shape.nogrid ? this._noround : this._round )( p.x + ox )
-		+ (
-			p.x > pc.x
-			?  -border
-			: ( p.x < pc.x ? border : 0 )
-		)
-		+ shift;
+		psy =
+			this._noround( p.y + oy )
+			+ (
+				p.y > pc.y
+				?  -border
+				: ( p.y < pc.y ? border : 0 )
+			)
+			+ shift;
+	}
+	else
+	{
+		psx =
+			this._noround( p.x + ox )
+			+ (
+				p.x > pc.x
+				?  -border
+				: ( p.x < pc.x ? border : 0 )
+			)
+			+ shift;
 
-	let psy =
-		( shape.nogrid ? this._noround : this._round )( p.y + oy )
-		+ (
-			p.y > pc.y
-			?  -border
-			: ( p.y < pc.y ? border : 0 )
-		)
-		+ shift;
+		psy =
+			this._noround( p.y + oy )
+			+ (
+				p.y > pc.y
+				?  -border
+				: ( p.y < pc.y ? border : 0 )
+			)
+			+ shift;
+	}
 
 	const al = shape.length;
 
