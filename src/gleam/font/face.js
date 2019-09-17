@@ -63,9 +63,11 @@ def.proto.roundResize =
 {
 	if( factor === 1 ) return this.roundSize;
 
-	const fs = this.fontSize;
+	let fs = this.fontSize;
 
-	return fs.create( 'size', Math.round( fs.size * factor ) ).createFace( this.color );
+	fs = fs.family.createSize( Math.round( fs.size * factor ) );
+
+	return fs.createFace( this.color );
 };
 
 

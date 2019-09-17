@@ -982,6 +982,7 @@ def.proto._pageUpDown =
 
 /*
 | The para's pane.
+|
 | It is independent of it's pos.
 */
 def.lazy._pane =

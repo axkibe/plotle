@@ -714,25 +714,21 @@ def.lazy._innerGlint =
 	const fieldSpaceTag = this._fieldSpaceTag;
 	const orthoMoveToButtonShape = this._orthoMoveToButtonShape;
 	const dpr = this.devicePixelRatio;
-	const inputFacet =
-		gruga_portal.inputFacets.getFacet(
-			'hover', false,
-			'focus', false
-		);
+	const inputFacet = gruga_portal.inputFacets.getFacet( 'hover', false, 'focus', false );
 
 	const arr =
 		[
-			gleam_glint_paint.create(
-				'facet', this._facetMoveToButton,
-				'shape', orthoMoveToButtonShape
+			gleam_glint_paint.createFacetShape(
+				this._facetMoveToButton,
+				orthoMoveToButtonShape
 			),
-			gleam_glint_paint.create(
-				'facet', inputFacet,
-				'shape', fieldSpaceUser.shape.transform( ot )
+			gleam_glint_paint.createFacetShape(
+				inputFacet,
+				fieldSpaceUser.shape.transform( ot )
 			),
-			gleam_glint_paint.create(
-				'facet', inputFacet,
-				'shape', fieldSpaceTag.shape.transform( ot )
+			gleam_glint_paint.createFacetShape(
+				inputFacet,
+				fieldSpaceTag.shape.transform( ot )
 			),
 			gleam_glint_text.create(
 				'devicePixelRatio', dpr,
@@ -769,20 +765,14 @@ def.lazy._innerGlint =
 		gleam_glint_list.create(
 			'list:init',
 			[
-				gleam_glint_fill.create(
-					'facet', facet,
-					'shape', tzs
-				),
+				gleam_glint_fill.createFacetShape( facet, tzs ),
 				// masks the portals content
 				gleam_glint_mask.create(
 					'glint', gleam_glint_list.create( 'list:init', arr ),
 					'shape', tzs
 				),
 				// puts the border on top of everything else
-				gleam_glint_border.create(
-					'facet', facet,
-					'shape', tzs
-				)
+				gleam_glint_border.createFacetShape( facet, tzs )
 			]
 		)
 	);

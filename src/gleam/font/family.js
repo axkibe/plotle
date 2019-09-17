@@ -18,7 +18,7 @@ if( TIM )
 		opentype : { type : [ 'undefined', 'protean' ] },
 
 		// the size pool
-		_pool : { type : 'protean', defaultValue : '{ }' },
+		_pool : { type : 'protean', defaultValue : 'new Map( )' },
 	};
 }
 
@@ -34,11 +34,14 @@ def.proto.createSize =
 		size
 	)
 {
-	let font = this._pool[ size ];
+	const pool = this._pool;
+	let font = pool.get( size  );
 
 	if( font ) return font;
 
-	font = this._pool[ size ] = gleam_font_size.create( 'family', this, 'size', size );
+	font = gleam_font_size.create( 'family', this, 'size', size );
+
+	pool.set( size, font );
 
 	return font;
 };

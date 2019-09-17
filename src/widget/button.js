@@ -148,157 +148,6 @@ def.lazy.glint =
 
 
 /*
-| The font of the button label.
-*/
-def.lazy._tFont =
-	function( )
-{
-	return this.fontFace.transform( this.transform );
-};
-
-
-/*
-| The button's inner glint.
-*/
-def.lazy._glint =
-	function( )
-{
-	const facet =
-		this.facets.getFacet(
-			'down', this.down,
-			'hover', !!this.hover,
-			'focus', !!this.mark
-		);
-
-	const arr = [ gleam_glint_paint.createFacetShape( facet, this._tzShape ) ];
-
-	let text = this.text;
-
-	if( text )
-	{
-		let newline = this.textNewline;
-
-		const fontFace = this._tFont;
-
-		if( newline === undefined )
-		{
-			arr.push(
-				gleam_glint_text.create(
-					'align', 'center',
-					'base', 'middle',
-					'devicePixelRatio', this.devicePixelRatio,
-					'fontFace', fontFace,
-					'p', this._pc,
-					'rotate', this.textRotation,
-					'text', text
-				)
-			);
-		}
-		else
-		{
-			newline = this.transform.scale( newline );
-
-			text = text.split( '\n' );
-
-			const tlen = text.length;
-
-			let y = -( tlen - 1 ) / 2 * newline;
-
-			for( let t = 0; t < tlen; t++, y += newline )
-			{
-				arr.push(
-					gleam_glint_text.create(
-						'align', 'center',
-						'base', 'middle',
-						'devicePixelRatio', this.devicePixelRatio,
-						'fontFace', fontFace,
-						'p', this._pc.add( 0, y ),
-						'text', text[ t ]
-					)
-				);
-			}
-		}
-	}
-
-	if( this.iconShape )
-	{
-		arr.push(
-			gleam_glint_paint.createFacetShape( this.iconFacet, this._iconShape )
-		);
-	}
-
-	return gleam_glint_list.create( 'list:init', arr );
-};
-
-
-/*
-| The transformed zone of the button.
-*/
-def.lazy._tZone =
-	function( )
-{
-	return this.zone.transform( this.transform );
-};
-
-
-
-/*
-| The transformed iconShape.
-*/
-def.lazy._iconShape =
-	function( )
-{
-	return(
-		this.iconShape
-		.transform(
-			gleam_transform.create(
-				'offset', this.zone.zeroPos.pc,
-				'zoom', 1
-			)
-		)
-		.transform( this.transform )
-	);
-};
-
-
-/*
-| The shape of the button
-| transformed and zero positioned.
-*/
-def.lazy._tzShape =
-	function( )
-{
-	switch( this.shape )
-	{
-		case 'ellipse' :
-		{
-			const tZone = this._tZone;
-
-			return(
-				gleam_ellipse.create(
-					'pos', gleam_point.zero,
-					'width', tZone.width - 1,
-					'height', tZone.height - 1
-				)
-			);
-		}
-
-		default : return this.shape.transform( this.transform );
-	}
-};
-
-
-/*
-| The key of this widget.
-*/
-def.lazy._pc =
-	function( )
-{
-	return this._tZone.zeroPos.pc;
-};
-
-
-/*
 | Buttons are focusable.
 */
 def.proto.focusable = true;
@@ -432,6 +281,155 @@ def.proto.within =
 		&& this._tzShape.within( p.sub( this._tZone.pos ) )
 	);
 };
+
+
+/*
+| The button's inner glint.
+*/
+def.lazy._glint =
+	function( )
+{
+	const facet =
+		this.facets.getFacet(
+			'down', this.down,
+			'hover', !!this.hover,
+			'focus', !!this.mark
+		);
+
+	const a = [ gleam_glint_paint.createFacetShape( facet, this._tzShape ) ];
+
+	let text = this.text;
+
+	if( text )
+	{
+		let newline = this.textNewline;
+
+		const fontFace = this._tFont;
+
+		if( newline === undefined )
+		{
+			a.push(
+				gleam_glint_text.create(
+					'align', 'center',
+					'base', 'middle',
+					'devicePixelRatio', this.devicePixelRatio,
+					'fontFace', fontFace,
+					'p', this._pc,
+					'rotate', this.textRotation,
+					'text', text
+				)
+			);
+		}
+		else
+		{
+			newline = this.transform.scale( newline );
+
+			text = text.split( '\n' );
+
+			const tlen = text.length;
+
+			let y = -( tlen - 1 ) / 2 * newline;
+
+			for( let t = 0; t < tlen; t++, y += newline )
+			{
+				a.push(
+					gleam_glint_text.create(
+						'align', 'center',
+						'base', 'middle',
+						'devicePixelRatio', this.devicePixelRatio,
+						'fontFace', fontFace,
+						'p', this._pc.add( 0, y ),
+						'text', text[ t ]
+					)
+				);
+			}
+		}
+	}
+
+	if( this.iconShape )
+	{
+		a.push( gleam_glint_paint.createFacetShape( this.iconFacet, this._iconShape ) );
+	}
+
+	return gleam_glint_list.create( 'list:init', a );
+};
+
+
+/*
+| The transformed iconShape.
+*/
+def.lazy._iconShape =
+	function( )
+{
+	return(
+		this.iconShape
+		.transform(
+			gleam_transform.create(
+				'offset', this.zone.zeroPos.pc,
+				'zoom', 1
+			)
+		)
+		.transform( this.transform )
+	);
+};
+
+
+/*
+| The transformed center point of this widget.
+*/
+def.lazy._pc =
+	function( )
+{
+	return this._tZone.zeroPos.pc;
+};
+
+
+/*
+| The font of the button label.
+*/
+def.lazy._tFont =
+	function( )
+{
+	return this.fontFace.transform( this.transform );
+};
+
+
+/*
+| The transformed zone of the button.
+*/
+def.lazy._tZone =
+	function( )
+{
+	return this.zone.transform( this.transform );
+};
+
+
+/*
+| The shape of the button
+| transformed and zero positioned.
+*/
+def.lazy._tzShape =
+	function( )
+{
+	switch( this.shape )
+	{
+		case 'ellipse' :
+		{
+			const tZone = this._tZone;
+
+			return(
+				gleam_ellipse.create(
+					'pos', gleam_point.zero,
+					'width', tZone.width - 1,
+					'height', tZone.height - 1
+				)
+			);
+		}
+
+		default : return this.shape.transform( this.transform );
+	}
+};
+
 
 
 } );

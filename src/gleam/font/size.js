@@ -72,7 +72,15 @@ def.proto.createFace =
 
 	let ff = ffc[ css ];
 
-	if( ff ) return ff;
+	if( ff )
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( ff.fontSize.size !== this.size ) throw new Error( );
+/**/	}
+
+		return ff;
+	}
 
 	ff = ffc[ css ] = font_face.create( 'color', color, 'fontSize', this );
 
