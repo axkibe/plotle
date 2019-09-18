@@ -9,13 +9,13 @@
 tim.define( module, ( def, gleam_shape_line ) => {
 
 
+def.extend = './base';
+
+
 if( TIM )
 {
 	def.attributes =
 	{
-		// connect to
-		p : { type : [ 'undefined', '../point' ] },
-
 		// true if this closes the shape
 		close : { type : [ 'undefined', 'boolean' ] },
 
@@ -26,7 +26,6 @@ if( TIM )
 
 const gleam_constants = tim.require( '../constants' );
 const gleam_point = tim.require( '../point' );
-const gleam_transform = tim.require( '../transform' );
 
 
 /*
@@ -96,25 +95,17 @@ def.proto.getProjection =
 	)
 {
 	const e = gleam_constants.epsilon;
-
 	const la1 = p.y - pc.y;
-
 	const lb1 = pc.x - p.x;
-
 	const lc1 = la1 * pc.x + lb1 * pc.y;
-
 	const la2 = pn.y - pp.y;
-
 	const lb2 = pp.x - pn.x;
-
 	const lc2 = la2 * pp.x + lb2 * pp.y;
-
 	const det = la1 * lb2 - la2 * lb1;
 
 	if( det === 0 ) return;
 
 	const pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
-
 	const piy = ( la1 * lc2 - la2 * lc1 ) / det;
 
 	if(
@@ -131,28 +122,6 @@ def.proto.getProjection =
 	{
 		return gleam_point.createXY( pix, piy );
 	}
-};
-
-
-/*
-| Returns a transformed shape section.
-*/
-def.proto.transform =
-	function(
-		transform
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
-/**/}
-
-	return(
-		this.p !== undefined
-		? this.create( 'p', this.p.transform( transform ) )
-		: this
-	);
 };
 
 

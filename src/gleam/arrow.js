@@ -60,7 +60,7 @@ def.static.getArrowShape =
 	// TODO allow arrows on p1.
 	switch( end1 )
 	{
-		case 'none': sections.push( gleam_shape_start.create( 'p', p1 ) ); break;
+		case 'none': sections.push( gleam_shape_start.createP( p1 ) ); break;
 
 		// unknown arrow end
 		default : throw new Error( );
@@ -68,7 +68,7 @@ def.static.getArrowShape =
 
 	switch( end2 )
 	{
-		case 'none' : sections.push( gleam_shape_line.create( 'p', p2 ) ); break;
+		case 'none' : sections.push( gleam_shape_line.createP( p2 ) ); break;
 
 		case 'arrow' :
 		{
@@ -89,23 +89,21 @@ def.static.getArrowShape =
 				);
 
 			sections.push(
-				gleam_shape_line.create( 'p', arrowBase ),
-				gleam_shape_line.create(
-					'p',
-						p2.add(
-							-arrowSize * Math.cos( d + ad ),
-							-arrowSize * Math.sin( d + ad )
-						)
+				gleam_shape_line.createP( arrowBase ),
+				gleam_shape_line.createP(
+					p2.add(
+						-arrowSize * Math.cos( d + ad ),
+						-arrowSize * Math.sin( d + ad )
+					)
 				),
-				gleam_shape_line.create( 'p', p2 ),
-				gleam_shape_line.create(
-					'p',
-						p2.add(
-							-arrowSize * Math.cos( d - ad ),
-							-arrowSize * Math.sin( d - ad )
-						)
+				gleam_shape_line.createP( p2 ),
+				gleam_shape_line.createP(
+					p2.add(
+						-arrowSize * Math.cos( d - ad ),
+						-arrowSize * Math.sin( d - ad )
+					)
 				),
-				gleam_shape_line.create( 'p', arrowBase )
+				gleam_shape_line.createP( arrowBase )
 			);
 
 			break;
@@ -117,12 +115,7 @@ def.static.getArrowShape =
 
 	sections.push( gleam_shape_line.closeFly );
 
-	return(
-		gleam_shape.create(
-			'list:init', sections,
-			'pc', line.pc
-		)
-	);
+	return gleam_shape.create( 'list:init', sections, 'pc', line.pc );
 };
 
 

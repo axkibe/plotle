@@ -9,17 +9,10 @@
 tim.define( module, ( def, gleam_shape_start ) => {
 
 
-if( TIM )
-{
-	def.attributes =
-	{
-		// starts here
-		p : { type : [ '../point' ] }
-	};
-}
+def.extend = './base';
+
 
 const gleam_point = tim.require( '../point' );
-const gleam_transform = tim.require( '../transform' );
 
 
 /*
@@ -36,24 +29,6 @@ def.static.createP =
 def.static.createXY =
 	( x, y ) =>
 	gleam_shape_start.create( 'p', gleam_point.createXY( x, y ) );
-
-
-/*
-| Returns the shape section repositioned to a view.
-*/
-def.proto.transform =
-	function(
-		transform
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
-/**/}
-
-	return this.create( 'p', this.p.transform( transform ) );
-};
 
 
 } );

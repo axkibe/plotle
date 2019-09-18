@@ -11,11 +11,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// x coordinate
-		x : { json : true, type : 'number' },
+		// x-coordinate
+		x : { type : 'number', json : true },
 
-		// y coordinate
-		y : { json : true, type : 'number' },
+		// y-coordinate
+		y : { type : 'number', json : true },
 	};
 
 	def.json = 'point';
@@ -122,11 +122,8 @@ def.proto.border =
 	)
 {
 	const x = this.x;
-
 	const y = this.y;
-
 	const cx = pc.x;
-
 	const cy = pc.y;
 
 	return(

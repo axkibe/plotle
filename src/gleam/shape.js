@@ -15,6 +15,7 @@ if( TIM )
 		nogrid : { type : [ 'undefined', 'boolean'] },
 
 		// center point
+		// FIXME remove
 		pc : { type : '../gleam/point' },
 
 		// radial gradient radius

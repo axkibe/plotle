@@ -635,14 +635,14 @@ def.lazy._shapeHandleW =
 def.lazy._shapeMask =
 	function( )
 {
-	const arr = [ ];
+	const a = [ ];
 
 	for( let ca of this.content )
 	{
-		arr.push( ca.tShape.border( -1 ) );
+		a.push( ca.tShape.border( -1 ) );
 	}
 
-	return gleam_shapeList.create( 'list:init', arr );
+	return gleam_shapeList.create( 'list:init', a );
 };
 
 

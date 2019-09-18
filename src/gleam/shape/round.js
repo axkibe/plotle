@@ -6,17 +6,16 @@
 'use strict';
 
 
-
 tim.define( module, ( def, gleam_shape_round ) => {
+
+
+def.extend = './base';
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		// connect to
-		p : { type : [ 'undefined', '../point' ] },
-
 		// if true do it counter-clockwise
 		ccw : { type : [ 'undefined', 'boolean' ] },
 
@@ -26,7 +25,6 @@ if( TIM )
 }
 
 const gleam_point = tim.require( '../point' );
-const gleam_transform = tim.require( '../transform' );
 
 
 /*
@@ -67,28 +65,6 @@ def.static.createXY =
 
 
 /*
-| Returns a transformed shape section.
-*/
-def.proto.transform =
-	function(
-		transform
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( transform.timtype !== gleam_transform ) throw new Error( );
-/**/}
-
-	return(
-		this.p !== undefined
-		? this.create( 'p', this.p.transform( transform ) )
-		: this
-	);
-};
-
-
-/*
 | Gets the source of a projection to p.
 |
 | Returns the projection intersection in
@@ -104,64 +80,40 @@ def.proto.getProjection =
 	)
 {
 	const dx = pn.x - pp.x;
-
 	const dy = pn.y - pp.y;
-
 	const dxy = dx * dy;
-
 	let a, b;
-
 	let cx, cy;
 
 	if( dxy > 0 )
 	{
 		cx = pp.x;
-
 		cy = pn.y;
-
 		a  = Math.abs( pn.x - cx );
-
 		b  = Math.abs( pp.y - cy );
 	}
 	else
 	{
 		cx = pn.x;
-
 		cy = pp.y;
-
 		a = Math.abs( pp.x - cx );
-
 		b = Math.abs( pn.y - cy );
 	}
 
 	if(
 		( p.x < cx || dy <= 0 ) && ( p.x > cx || dy >= 0 )
-		||
-		( p.y < cy || dx >= 0 ) && ( p.y > cy || dx <= 0 )
-	)
-	{
-		return;
-	}
+		|| ( p.y < cy || dx >= 0 ) && ( p.y > cy || dx <= 0 )
+	) return;
 
 	if( p.x === pc.x )
 	{
-		if( p.y > cy )
-		{
-			return gleam_point.createXY( cx, cy + b );
-		}
-		else if( p.y < cy )
-		{
-			return gleam_point.createXY( cx, cy - b );
-		}
-		else if( p.y === cy )
-		{
-			return gleam_point.createXY( cx, cy );
-		}
+		if( p.y > cy ) return gleam_point.createXY( cx, cy + b );
+		else if( p.y < cy ) return gleam_point.createXY( cx, cy - b );
+		else if( p.y === cy ) return gleam_point.createXY( cx, cy );
 	}
 	else
 	{
 		const k = ( p.y - pc.y ) / ( p.x - pc.x );
-
 		const d = ( pc.y - cy ) - k * ( pc.x - cx );
 
 		// x^2 / a^2 + y^2 / b^2 = 1
@@ -171,44 +123,28 @@ def.proto.getProjection =
 		// x^2 ( 1 / a^2 + k^2 / b^2 ) + x ( 2 * k * d / b^2 ) + d^2 / b^2 - 1 = 0
 
 		const qa = 1 / (a * a) + k * k / ( b * b );
-
 		const qb = 2 * k * d / ( b * b );
-
 		const qc = d * d / ( b * b ) - 1;
-
 		let x, y;
 
 		if ( p.x > cx )
 		{
-			x =
-				( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) )
-				/ ( 2 * qa );
+			x = ( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
 		}
 		else
 		{
-			x =
-				( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) )
-				/ ( 2 * qa );
+			x = ( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
 		}
-		// x =
-		//      Math.sqrt(
-		//         1 / ( 1 / ( a * a ) + k * k / ( b * b ) )
-		//      );
+		// x = Math.sqrt(  1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
 
 		y = k * x + d;
-
 		x += cx;
-
 		y += cy;
 
 		if(
 			( ( y >= cy && p.y >= cy ) || ( y <= cy && p.y <= cy ) )
-			&&
-			( ( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx ) )
-		)
-		{
-			return gleam_point.createXY( x, y );
-		}
+			&& ( ( x >= cx && p.x >= cx ) || ( x <= cx && p.x <= cx ) )
+		) return gleam_point.createXY( x, y );
 	}
 };
 
