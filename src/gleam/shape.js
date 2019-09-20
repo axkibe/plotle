@@ -45,16 +45,13 @@ def.proto.border =
 	)
 {
 	const a = [ ];
-
 	const pc = this.pc;
 
 	for( let section of this )
 	{
 		if( section.close ) { a.push( section ); continue; }
 
-		a.push(
-			section.create( 'p', section.p.border( pc, d ) )
-		);
+		a.push( section.create( 'p', section.p.border( pc, d ) ) );
 	}
 
 	return this.create( 'list:init', a );
@@ -79,11 +76,8 @@ def.proto.getProjection =
 /**/}
 
 	let pstart = this.get( 0 ).p;
-
 	let pp = pstart;
-
 	let pn;
-
 	let first = true;
 
 	for( let section of this )
@@ -99,7 +93,6 @@ def.proto.getProjection =
 		if( section.close )
 		{
 			pn = pstart;
-
 			pstart = undefined;
 		}
 		else

@@ -21,7 +21,7 @@ const trace_form = tim.require( './form' );
 /*
 | Returns a trace with an item part appended.
 */
-def.lazyFuncStr.appendForm =
+def.lazyFunc.appendForm =
 	function(
 		key // name of the form
 	)

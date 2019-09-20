@@ -130,7 +130,7 @@ def.lazy.glint =
 {
 	if( !this.visible ) return;
 
-	const zone = this._tZone.enlarge1;
+	const zone = this._tZone.funnel( 1 );
 
 	return(
 		gleam_glint_window.create(

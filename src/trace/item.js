@@ -43,7 +43,7 @@ def.lazy.appendDoc =
 /*
 | Returns a trace with a field part appended.
 */
-def.lazyFuncStr.appendField =
+def.lazyFunc.appendField =
 	function(
 		key
 	)
@@ -95,7 +95,7 @@ def.lazy.appendScrollPos =
 /*
 | Returns a trace with a widget part appended.
 */
-def.lazyFuncStr.appendWidget =
+def.lazyFunc.appendWidget =
 	function(
 		key
 	)

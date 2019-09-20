@@ -14,25 +14,9 @@ if( TIM )
 {
 	def.attributes =
 	{
-		border :
-		{
-			type :
-			[
-				'undefined',
-				'./border',
-				'./borderList',
-			]
-		},
-		fill :
-		{
-			type :
-			[
-				'undefined',
-				'./color',
-				'./gradient/askew',
-				'./gradient/radial',
-			]
-		}
+		border : { type : [ 'undefined', './border', './borderList' ] },
+
+		fill : { type : [ 'undefined', './color', './gradient/askew', './gradient/radial' ] }
 	};
 
 	def.group = [ 'boolean' ];

@@ -43,7 +43,7 @@ def.staticLazy.facets = ( ) =>
 				gleam_borderList.create(
 					'list:append',
 					gleam_border.create(
-						'distance', 1,
+						'distance', -1,
 						'color', gleam_color.rgb( 255, 188, 87 )
 					),
 					'list:append',
@@ -92,4 +92,3 @@ def.static.vScrollbarDis = 5;
 
 
 } );
-

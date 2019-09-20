@@ -175,10 +175,10 @@ def.lazy.glint =
 				gleam_glint_pane.create(
 					'devicePixelRatio', this.devicePixelRatio,
 					'glint', this.doc.glint,
-					'size', tZone.enlarge1.size,
+					'size', tZone.size.funnel( 1 ),
 					'tag', 'relation(' + this.trace.key + ')'
 				),
-			'pos', tZone.enlarge1.pos
+			'pos', tZone.pos
 		);
 
 	const arr = [ wg ];

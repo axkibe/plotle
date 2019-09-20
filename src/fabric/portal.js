@@ -267,7 +267,7 @@ def.static.cycle =
 def.lazy.glint =
 	function( )
 {
-	const zone = this.tZone.add1_5;
+	const zone = this.tZone.funnel( 1.5 );
 
 	const arr =
 		[

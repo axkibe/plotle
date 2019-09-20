@@ -92,7 +92,7 @@ def.staticLazy.layout =
 					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
-							'distance', 1,
+							'distance', -1,
 							'color', gleam_color.rgb( 255, 94, 44 )
 						),
 						'list:append',

@@ -44,7 +44,7 @@ def.lazy.appendChecked =
 /*
 | Returns a trace with an offset appended.
 */
-def.lazyFuncInt.appendOffset =
+def.lazyFunc.appendOffset =
 	function(
 		at // offset
 	)
@@ -76,7 +76,7 @@ def.lazy.appendText =
 /*
 | Returns a trace with a sub-widget appended.
 */
-def.lazyFuncStr.appendWidget =
+def.lazyFunc.appendWidget =
 	function(
 		key // key of the sub widget
 	)

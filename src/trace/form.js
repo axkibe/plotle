@@ -40,7 +40,7 @@ def.lazy.appendNonSpaceRef =
 /*
 | Returns a trace with a widget step appended.
 */
-def.lazyFuncStr.appendWidget =
+def.lazyFunc.appendWidget =
 	function(
 		key // key of the widget
 	)

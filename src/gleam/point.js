@@ -128,8 +128,8 @@ def.proto.border =
 
 	return(
 		gleam_point.createXY(
-			x + ( x > cx ?  -d : ( x < cx ? d : 0 ) ),
-			y + ( y > cy ?  -d : ( y < cy ? d : 0 ) )
+			x + ( x > cx ? d : ( x < cx ? -d : 0 ) ),
+			y + ( y > cy ? d : ( y < cy ? -d : 0 ) )
 		)
 	);
 };

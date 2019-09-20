@@ -24,7 +24,7 @@ const trace_para = tim.require( './para' );
 /*
 | Returns a trace with a para appended.
 */
-def.lazyFuncStr.appendPara =
+def.lazyFunc.appendPara =
 	function(
 		key // key of the para
 	)

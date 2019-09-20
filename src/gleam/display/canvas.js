@@ -337,9 +337,7 @@ def.proto._border =
 	this._sketch( shape, border.distance, offset, 0.5 );
 
 	cx.strokeStyle = this._colorStyle( border.color, shape, offset );
-
 	cx.lineWidth = border.width;
-
 	cx.stroke( );
 };
 
@@ -377,7 +375,6 @@ def.proto._check =
 {
 /**/if( CHECK )
 /**/{
-/**/
 /**/	const canvas = this.canvas;
 /**/	const height = this.size.height;
 /**/	const width = this.size.width;
@@ -893,10 +890,10 @@ def.proto._sketchRect =
 
 	const pos = rect.pos;
 
-	const wx = this._round( pos.x + offset.x ) + border + shift;
-	const ny = this._round( pos.y + offset.y ) + border + shift;
-	const ex = this._round( pos.x + rect.width + offset.x ) - border + shift;
-	const sy = this._round( pos.y + rect.height + offset.y ) - border + shift;
+	const wx = this._round( pos.x + offset.x ) - border + shift;
+	const ny = this._round( pos.y + offset.y ) - border + shift;
+	const ex = this._round( pos.x + rect.width + offset.x ) + border + shift;
+	const sy = this._round( pos.y + rect.height + offset.y ) + border + shift;
 
 	cx.moveTo( wx, ny );
 	cx.lineTo( ex, ny );
@@ -916,22 +913,18 @@ def.proto._paint =
 		offset  // offset everything by this
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( facet.timtype !== gleam_facet ) throw new Error( );
 /**/}
 
 	const border = facet.border;
-
 	const fill = facet.fill;
-
 	const cx = this._cx;
 
 	cx.beginPath( );
 
 	if( fill ) this._fill( fill, shape, offset );
-
 	if( border ) this._borders( border, shape, offset );
 };
 
@@ -947,7 +940,6 @@ def.proto._sketch =
 		shift   // possibly shift by 0.5
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 4 ) throw new Error( );
@@ -1016,47 +1008,23 @@ def.proto._sketchGenericShape =
 
 	// start point x/y
 	let psx, psy;
-	// FIXME deduplicated
+
 	if( shape.nogrid )
 	{
-		psx =
-			this._noround( p.x + ox )
-			+ (
-				p.x > pc.x
-				?  -border
-				: ( p.x < pc.x ? border : 0 )
-			)
-			+ shift;
-
-		psy =
-			this._noround( p.y + oy )
-			+ (
-				p.y > pc.y
-				?  -border
-				: ( p.y < pc.y ? border : 0 )
-			)
-			+ shift;
+		psx = this._noround( p.x + ox );
+		psy = this._noround( p.y + oy );
 	}
 	else
 	{
-		psx =
-			this._round( p.x + ox )
-			+ (
-				p.x > pc.x
-				?  -border
-				: ( p.x < pc.x ? border : 0 )
-			)
-			+ shift;
-
-		psy =
-			this._round( p.y + oy )
-			+ (
-				p.y > pc.y
-				?  -border
-				: ( p.y < pc.y ? border : 0 )
-			)
-			+ shift;
+		psx = this._round( p.x + ox );
+		psy = this._round( p.y + oy );
 	}
+
+	psx += ( p.x > pc.x ? border : ( p.x < pc.x ? -border : 0 ) );
+	psy += ( p.y > pc.y ? border : ( p.y < pc.y ? -border : 0 ) );
+
+	psx += shift;
+	psy += shift;
 
 	const al = shape.length;
 
@@ -1106,40 +1074,25 @@ def.proto._sketchGenericShape =
 		{
 			p = section.p;
 
-			if( border !== 0 )
+			if( shape.nogrid )
 			{
-				if( shape.nogrid )
-				{
-					pnx = this._noround( p.x + ox );
-					pny = this._noround( p.y + oy );
-				}
-				else
-				{
-					pnx = this._round( p.x + ox );
-					pny = this._round( p.y + oy );
-				}
-
-				pnx +=
-					( p.x > pc.x ? -border : ( p.x < pc.x ? border : 0 ) )
-					+ shift;
-
-				pny +=
-					+ ( p.y > pc.y ? -border : ( p.y < pc.y ? border : 0 ) )
-					+ shift;
+				pnx = this._noround( p.x + ox );
+				pny = this._noround( p.y + oy );
 			}
 			else
 			{
-				if( shape.nogrid )
-				{
-					pnx = this._noround( p.x + ox ) + shift;
-					pny = this._noround( p.y + oy ) + shift;
-				}
-				else
-				{
-					pnx = this._round( p.x + ox ) + shift;
-					pny = this._round( p.y + oy ) + shift;
-				}
+				pnx = this._round( p.x + ox );
+				pny = this._round( p.y + oy );
 			}
+
+			if( border !== 0 )
+			{
+				pnx += p.x > pc.x ? border : ( p.x < pc.x ? -border : 0 );
+				pny += p.y > pc.y ? border : ( p.y < pc.y ? -border : 0 );
+			}
+
+			pnx += shift;
+			pny += shift;
 		}
 
 		switch( section.timtype )

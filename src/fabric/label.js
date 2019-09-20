@@ -152,10 +152,10 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this.doc.glint,
-						'size', tZone.enlarge1.size,
+						'size', tZone.funnel( 1 ).size,
 						'tag', 'label(' + this.trace.key + ')'
 					),
-				'pos', tZone.enlarge1.pos
+				'pos', tZone.funnel( 1 ).pos
 			)
 		];
 
@@ -323,7 +323,7 @@ def.proto.scrollMarkIntoView = ( ) => undefined;
 /*
 | The item's shape.
 */
-def.lazy.shape = function( ){ return this.zone.shrink1; };
+def.lazy.shape = function( ){ return this.zone.funnel( -1 ); };
 
 
 } );

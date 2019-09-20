@@ -48,29 +48,20 @@ def.lazy.pc =
 
 
 /*
-| A size tim increased by one height and width.
+| A size tim enlarged or shrinked by p in height and width.
 */
-def.lazy.enlarge1 =
-	function( )
+def.lazyFunc.funnel =
+	function(
+		p
+	)
 {
-	const result = this.add( 1, 1 );
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( p ) !== 'number' ) throw new Error( );
+/**/}
 
-	tim.aheadValue( result, 'shrink1', this );
-
-	return result;
-};
-
-
-/*
-| A size tim decreased by one height and width.
-*/
-def.lazy.shrink1 =
-	function( )
-{
-	const result = this.add( -1, -1 );
-
-	tim.aheadValue( result, 'enlarge1', this );
-
+	const result = this.add( p, p );
+	tim.aheadValue( result, 'funnel', -p, this );
 	return result;
 };
 

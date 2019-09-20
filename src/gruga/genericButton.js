@@ -25,7 +25,7 @@ def.staticLazy.facets = ( ) =>
 				'fill', gleam_color.rgba( 255, 255, 240, 0.7 ),
 				'border',
 					gleam_border.create(
-						'distance', 1,
+						'distance', -1,
 						'width', 2,
 						'color', gleam_color.rgba( 196, 94, 44, 0.7 )
 					)
@@ -36,7 +36,7 @@ def.staticLazy.facets = ( ) =>
 				'fill', gleam_color.rgba( 255, 235, 210, 0.7 ),
 				'border',
 					gleam_border.create(
-						'distance', 1,
+						'distance', -1,
 						'width', 2,
 						'color', gleam_color.rgba( 196, 94, 44, 0.7 )
 					)
@@ -49,13 +49,13 @@ def.staticLazy.facets = ( ) =>
 					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
-							'distance', 2,
+							'distance', -2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'list:append',
 						gleam_border.create(
-							'distance', 1,
+							'distance', -1,
 							'width', 2,
 							'color', gleam_color.rgba( 196, 94, 44, 0.7 )
 						)
@@ -69,13 +69,13 @@ def.staticLazy.facets = ( ) =>
 					gleam_borderList.create(
 						'list:append',
 						gleam_border.create(
-							'distance', 2,
+							'distance', -2,
 							'width', 1.5,
 							'color', gleam_color.rgb( 255, 99, 188 )
 						),
 						'list:append',
 						gleam_border.create(
-							'distance', 1,
+							'distance', -1,
 							'width', 2,
 							'color', gleam_color.rgba( 196, 94, 44, 0.7 )
 						)

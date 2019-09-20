@@ -275,7 +275,7 @@ def.lazy.glint =
 
 	a.push( gleam_glint_border.createFacetShape( this.facet, this.tShape ) );
 
-	const zone = this.tZone.enlarge1;
+	const zone = this.tZone.funnel( 1 );
 
 	// FUTURE GLINT inherit
 	return(

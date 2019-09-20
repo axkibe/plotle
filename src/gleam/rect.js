@@ -228,20 +228,27 @@ def.lazy.zeroPos =
 
 
 /*
-| A rect larger by 1.
+| Expands( or shrinks ) the rect by w
 */
-def.lazy.enlarge1 =
-	function( )
+def.lazyFunc.funnel =
+	function(
+		p
+	)
 {
-	const enlarge1 =
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( p ) !== 'number' ) throw new Error( );
+/**/}
+
+	const r =
 		this.create(
-			'width', this.width + 1,
-			'height', this.height + 1
+			'height', this.height + 2 * p,
+			'width', this.width + 2 * p,
+			'pos', this.pos.add( -p, -p )
 		);
 
-	tim.aheadValue( enlarge1, 'shrink1', this );
-
-	return enlarge1;
+	tim.aheadFunction( r, 'funnel', -p, this );
+	return r;
 };
 
 
@@ -257,24 +264,6 @@ def.lazy.add1_5 =
 			'height', this.height + 1.5
 		)
 	);
-};
-
-
-/*
-| A rect smaller by 1.
-*/
-def.lazy.shrink1 =
-	function( )
-{
-	const shrink1 =
-		this.create(
-			'width', this.width - 1,
-			'height', this.height - 1
-		);
-
-	tim.aheadValue( shrink1, 'enlarge1', this );
-
-	return shrink1;
 };
 
 
@@ -342,16 +331,16 @@ def.proto.baseScaleXY =
 /*
 | Returns a shape bordering this shape by d.
 */
-def.proto.border =
+def.lazyFunc.border =
 	function(
 		d // distance to border
 	)
 {
 	return(
 		this.create(
-			'pos', this.pos.add(d, d),
-			'width', this.width - 2 * d,
-			'height', this.height - 2 * d
+			'pos', this.pos.add( -d, -d),
+			'width', this.width + 2 * d,
+			'height', this.height + 2 * d
 		)
 	);
 };

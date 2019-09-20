@@ -437,7 +437,7 @@ def.lazy.isBlank =
 /*
 | Locates the line number of a given offset.
 */
-def.lazyFuncInt.locateOffsetPoint =
+def.lazyFunc.locateOffsetPoint =
 	function(
 		offset
 	)
@@ -454,7 +454,7 @@ def.lazyFuncInt.locateOffsetPoint =
 /*
 | Locates the line number of a given offset.
 */
-def.lazyFuncInt.locateOffsetLine =
+def.lazyFunc.locateOffsetLine =
 	function(
 		offset
 	)
@@ -886,9 +886,7 @@ def.proto._locateOffset =
 	)
 {
 	const fontFace = this.fontFace;
-
 	const text = this.text;
-
 	const flow = this.flow;
 
 	// determines which line this offset belongs to
@@ -903,9 +901,7 @@ def.proto._locateOffset =
 	}
 
 	const line = flow.get( lineN );
-
 	let tokenN;
-
 	const lLen = line.length - 1;
 
 	for( tokenN = 0; tokenN < lLen; tokenN++ )
@@ -933,9 +929,8 @@ def.proto._locateOffset =
 		p = gleam_point.createXY( 0, line.y );
 	}
 
-	tim.aheadFunctionInteger( this, 'locateOffsetLine', offset, lineN );
-
-	tim.aheadFunctionInteger( this, 'locateOffsetPoint', offset, p );
+	tim.aheadFunction( this, 'locateOffsetLine', offset, lineN );
+	tim.aheadFunction( this, 'locateOffsetPoint', offset, p );
 };
 
 

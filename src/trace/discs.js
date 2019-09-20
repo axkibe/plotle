@@ -21,7 +21,7 @@ const trace_disc = tim.require( './disc' );
 /*
 | Returns a trace with an item part appended.
 */
-def.lazyFuncStr.appendDisc =
+def.lazyFunc.appendDisc =
 	function(
 		key // key of the dic
 	)

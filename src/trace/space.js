@@ -60,7 +60,7 @@ def.lazy.appendHasSnapping =
 /*
 | Returns a trace with an item part appended.
 */
-def.lazyFuncStr.appendItem =
+def.lazyFunc.appendItem =
 	function(
 		key // key of the item
 	)

@@ -42,13 +42,11 @@ def.staticLazy.facet = ( ) =>
 			gleam_borderList.create(
 				'list:init',
 				[
-					gleam_border.create(
-						'color', gleam_color.rgb( 0, 0, 0 )
-					),
+					gleam_border.create( 'color', gleam_color.black ),
 					gleam_border.create(
 						'color', gleam_color.rgb( 128, 0, 0 ),
 						'width', 1.2,
-						'distance', 0.1
+						'distance', -0.1
 					)
 				]
 			)
@@ -73,25 +71,15 @@ def.staticLazy.shape =
 	const ce = 4;
 
 	const pn = pc.add( 0, -hs );
-
 	const pe = pc.add( hs, 0 );
-
 	const pnw = pc.add( -hs, -hs );
-
 	const pne = pc.add(  hs, -hs );
-
 	const pse = pc.add(  hs,  hs );
-
 	const psw = pc.add( -hs,  hs );
-
 	const ps = pc.add( 0, hs );
-
 	const pw = pc.add( -hs, 0 );
-
 	const start = gleam_shape_start;
-
 	const line = gleam_shape_line;
-
 	const round = gleam_shape_round;
 
 	return( gleam_shape.create(

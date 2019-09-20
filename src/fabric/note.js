@@ -152,10 +152,10 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this._innerGlint,
-						'size', tZone.add1_5.size,
+						'size', tZone.funnel( 1.5 ).size,
 						'tag', 'note(' + this.key + ')'
 					),
-				'pos', tZone.add1_5.pos
+				'pos', tZone.funnel( 1.5 ).pos
 			)
 		];
 
