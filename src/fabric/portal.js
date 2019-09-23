@@ -267,7 +267,7 @@ def.static.cycle =
 def.lazy.glint =
 	function( )
 {
-	const zone = this.tZone.funnel( 1.5 );
+	const zone = this.tZone;
 
 	const arr =
 		[
@@ -276,7 +276,7 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this._innerGlint,
-						'size', zone.size,
+						'size', zone.size.funnel( 2 ),
 						'tag', 'portal(' + this.trace.key + ')'
 					),
 				'pos', zone.pos

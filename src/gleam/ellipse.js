@@ -11,13 +11,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// position
-		pos : { type : './point' },
-
-		width : { type : 'number' },
-
-		height : { type : 'number' },
-
 		// center for gradient
 		gradientPC : { type : [ 'undefined', './point' ] },
 
@@ -26,6 +19,15 @@ if( TIM )
 
 		// outer radius for circle gradients
 		gradientR1 : { type : [ 'undefined', 'number' ] },
+
+		// height of the ellipse
+		height : { type : 'number' },
+
+		// width of the ellipse
+		width : { type : 'number' },
+
+		// position
+		pos : { type : './point' },
 	};
 }
 
@@ -34,6 +36,22 @@ const gleam_shape = tim.require( './shape' );
 const gleam_shape_round = tim.require( './shape/round' );
 const gleam_shape_start = tim.require( './shape/start' );
 const gleam_transform = tim.require( './transform' );
+
+
+/*
+| Returns a moved ellipse.
+*/
+def.proto.add =
+	function(
+		p
+	)
+{
+	return(
+		( p.x === 0 && p.y === 0 )
+		? this
+		: this.create( 'pos', this.pos.add( p.x, p.y ) )
+	);
+};
 
 
 /*
@@ -47,9 +65,9 @@ def.static.createPosSize =
 {
 	return(
 		gleam_ellipse.create(
+			'height', size.height,
 			'pos', pos,
-			'width', size.width,
-			'height', size.height
+			'width', size.width
 		)
 	);
 };
@@ -70,6 +88,18 @@ def.adjust.gradientPC =
 /*
 | Gradient inner radius.
 */
+def.adjust.gradientR0 =
+	function(
+		gradientR0
+	)
+{
+	return gradientR0 || 0;
+};
+
+
+/*
+| Gradient inner radius.
+*/
 def.adjust.gradientR1 =
 	function(
 		gradientR1
@@ -78,18 +108,6 @@ def.adjust.gradientR1 =
 	if( gradientR1 !== undefined ) return gradientR1;
 
 	return Math.max( this.width, this.height );
-};
-
-
-/*
-| Gradient inner radius.
-*/
-def.adjust.gradientR0 =
-	function(
-		gradientR0
-	)
-{
-	return gradientR0 || 0;
 };
 
 
@@ -166,30 +184,14 @@ def.lazy.shape =
 
 
 /*
-| Returns a moved ellipse.
+| Returns a shape funneled by d.
 */
-def.proto.add =
+def.proto.funnel =
 	function(
-		p
+		d // distance
 	)
 {
-	return(
-		( p.x === 0 && p.y === 0 )
-		? this
-		: this.create( 'pos', this.pos.add( p.x, p.y ) )
-	);
-};
-
-
-/*
-| Returns a shape bordering this shape by d.
-*/
-def.proto.border =
-	function(
-		d // distance to border
-	)
-{
-	return this.shape.border( d );
+	return this.shape.funnel( d );
 };
 
 

@@ -24,11 +24,27 @@ def.static.createP =
 
 
 /*
+| Shortcut to create a start at p with funnel direction
+*/
+def.static.createPFun =
+	( p, fdir ) =>
+	gleam_shape_start.create( 'p', p, 'funnelDir', fdir );
+
+
+/*
 | Shortcut to create a start at xy.
 */
 def.static.createXY =
 	( x, y ) =>
 	gleam_shape_start.create( 'p', gleam_point.createXY( x, y ) );
+
+
+/*
+| Shortcut to create a start at xy.
+*/
+def.static.createXYFun =
+	( x, y, fdir ) =>
+	gleam_shape_start.create( 'p', gleam_point.createXY( x, y ), 'funnelDir', fdir );
 
 
 } );

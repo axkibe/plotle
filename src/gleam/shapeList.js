@@ -21,16 +21,18 @@ const gleam_transform = tim.require( './transform' );
 | +/- distance. See gleam_shape.border for further
 | explanation.
 */
-def.proto.border =
+def.lazyFunc.funnel =
 	function(
-		d // distance to border
+		d // distance
 	)
 {
 	const a = [ ];
 
-	for( let shape of this ) a.push( shape.border( d ) );
+	for( let shape of this ) a.push( shape.funnel( d ) );
 
-	return( this.create( 'list:init', a ) );
+	const r = this.create( 'list:init', a );
+	tim.aheadFunction( r, 'funnel', -d, this );
+	return r;
 };
 
 

@@ -87,6 +87,19 @@ def.static.createP1P2 =
 
 
 /*
+| Expands( or shrinks ) the rect by d.
+| FIXME, actually funnel this?
+*/
+def.lazyFunc.funnel =
+	function(
+		d   // distance to funnel
+	)
+{
+	return this;
+};
+
+
+/*
 | The point at center.
 */
 def.lazy.pc =

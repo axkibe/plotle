@@ -18,8 +18,8 @@ if( TIM )
 		// FIXME allow "close"
 		p : { type : [ '../point', 'undefined' ] },
 
-		// grows the border in this direction
-		border : { type : [ '<../../compass/dir-types', 'undefined' ] },
+		// funnels into this direction
+		funnelDir : { type : [ '<../../compass/dir-types', 'undefined' ] },
 	};
 }
 

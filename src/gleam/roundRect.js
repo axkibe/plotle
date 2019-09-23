@@ -131,14 +131,14 @@ def.proto.add =
 
 
 /*
-| Returns a shape bordering this shape by d.
+| Returns a shape funneled by d.
 */
-def.proto.border =
+def.proto.funnel =
 	function(
 		d // distance to border
 	)
 {
-	return this.shape.border( d );
+	return this.shape.funnel( d );
 };
 
 

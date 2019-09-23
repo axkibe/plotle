@@ -639,7 +639,7 @@ def.lazy._shapeMask =
 
 	for( let ca of this.content )
 	{
-		a.push( ca.tShape.border( 10 ) );
+		a.push( ca.tShape.funnel( 1 ) );
 	}
 
 	return gleam_shapeList.create( 'list:init', a );

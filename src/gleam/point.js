@@ -114,6 +114,7 @@ def.proto.baseScaleXY =
 | Returns a border bordering this point.
 |
 | See gleam_shape.border for further explanation.
+| XXX remove
 */
 def.proto.border =
 	function(

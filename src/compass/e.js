@@ -20,7 +20,13 @@ def.proto.from = ( rect ) => rect.pe;
 
 
 /*
-| Has x component.
+| Funnels point (p) by distance (d).
+*/
+def.proto.funnelPoint = ( p, d ) => p.add( d, 0 );
+
+
+/*
+| Has x-component.
 */
 def.proto.hasX = true;
 
@@ -35,6 +41,8 @@ def.lazy.opposite = ( ) => compass_root.w;
 | Cursor resize hovering for this dir.
 */
 def.lazy.resizeHoverCursor = ( ) => result_hover.create( 'cursor', 'e-resize' );
+
+
 
 
 } );

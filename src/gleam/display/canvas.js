@@ -238,7 +238,6 @@ def.proto.within =
 		shape
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 2 ) throw new Error( );
@@ -262,7 +261,7 @@ def.proto.within =
 		case gleam_roundRect :
 
 			this._cx.beginPath( );
-			this._sketchGenericShape( shape.shape, 0, gleam_point.zero, 0 );
+			this._sketchGenericShape( shape.shape, gleam_point.zero, 0 );
 
 			break;
 
@@ -283,7 +282,7 @@ def.proto.within =
 		case gleam_shape :
 
 			this._cx.beginPath( );
-			this._sketchGenericShape( shape, 0, gleam_point.zero, 0 );
+			this._sketchGenericShape( shape, gleam_point.zero, 0 );
 
 			break;
 
@@ -334,7 +333,7 @@ def.proto._border =
 
 	cx.beginPath( );
 
-	this._sketch( shape, border.distance, offset, 0.5 );
+	this._sketch( shape.funnel( border.distance ), offset, 0.5 );
 
 	cx.strokeStyle = this._colorStyle( border.color, shape, offset );
 	cx.lineWidth = border.width;
@@ -357,7 +356,6 @@ def.proto._borders  =
 		case gleam_borderList :
 
 			for( let b of border ) this._border( b, shape, offset );
-
 			break;
 
 		case gleam_border : this._border( border, shape, offset ); break;
@@ -477,11 +475,8 @@ def.proto._fill  =
 	)
 {
 	const cx = this._cx;
-
-	this._sketch( shape, 0, offset, 0 );
-
+	this._sketch( shape, offset, 0 );
 	cx.fillStyle = this._colorStyle( fill, shape, offset );
-
 	cx.fill( );
 };
 
@@ -562,7 +557,6 @@ def.proto._renderMask =
 		offset
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( glint.timtype !== gleam_glint_mask ) throw new Error();
@@ -592,7 +586,7 @@ def.proto._renderMask =
 				cx.lineTo( 0, 0 );
 			}
 
-			this._sketch( sa, 0, offset, 0.5 );
+			this._sketch( sa, offset, 0.5 );
 
 			cx.clip( );
 		}
@@ -610,7 +604,7 @@ def.proto._renderMask =
 			cx.lineTo( 0, 0 );
 		}
 
-		this._sketch( shape, 0, offset, 0.5 );
+		this._sketch( shape, offset, 0.5 );
 
 		cx.clip( );
 	}
@@ -753,7 +747,6 @@ def.proto._renderWindow =
 		offset
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( glint.timtype !== gleam_glint_window ) throw new Error( );
@@ -842,25 +835,20 @@ def.proto._round =
 def.proto._sketchLine =
 	function(
 		line,
-		border,
 		offset,
 		shift
 	)
 {
-
 /**/if( CHECK )
 /**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/	if( line.timtype !== gleam_line ) throw new Error( );
 /**/}
 
 	const cx = this._cx;
-
 	const ox = offset.x;
-
 	const oy = offset.y;
-
 	const p1 = line.p1;
-
 	const p2 = line.p2;
 
 	cx.moveTo(
@@ -881,19 +869,24 @@ def.proto._sketchLine =
 def.proto._sketchRect =
 	function(
 		rect,
-		border,
 		offset,
 		shift
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( rect.timtype !== gleam_rect ) throw new Error( );
+/**/	if( offset.timtype !== gleam_point) throw new Error( );
+/**/	if( typeof( shift ) !== 'number' ) throw new Error( );
+/**/}
+
 	const cx = this._cx;
-
 	const pos = rect.pos;
-
-	const wx = this._round( pos.x + offset.x ) - border + shift;
-	const ny = this._round( pos.y + offset.y ) - border + shift;
-	const ex = this._round( pos.x + rect.width + offset.x ) + border + shift;
-	const sy = this._round( pos.y + rect.height + offset.y ) + border + shift;
+	const wx = this._round( pos.x + offset.x ) + shift;
+	const ny = this._round( pos.y + offset.y ) + shift;
+	const ex = this._round( pos.x + rect.width + offset.x ) + shift;
+	const sy = this._round( pos.y + rect.height + offset.y ) + shift;
 
 	cx.moveTo( wx, ny );
 	cx.lineTo( ex, ny );
@@ -935,14 +928,13 @@ def.proto._paint =
 def.proto._sketch =
 	function(
 		shape,  // shape to sketch
-		border, // additional border
 		offset, // offset by this
 		shift   // possibly shift by 0.5
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/}
 
 	switch( shape.timtype )
@@ -950,27 +942,27 @@ def.proto._sketch =
 		case gleam_ellipse :
 		case gleam_roundRect :
 
-			this._sketchGenericShape( shape.shape, border, offset, shift );
+			this._sketchGenericShape( shape.shape, offset, shift );
 			return;
 
 		case gleam_line :
 
-			this._sketchLine( shape, border, offset, shift );
+			this._sketchLine( shape, offset, shift );
 			return;
 
 		case gleam_rect :
 
-			this._sketchRect( shape, border, offset, shift );
+			this._sketchRect( shape, offset, shift );
 			return;
 
 		case gleam_shape :
 
-			this._sketchGenericShape( shape, border, offset, shift );
+			this._sketchGenericShape( shape, offset, shift );
 			return;
 
 		case gleam_shapeList :
 
-			for( let s of shape ) this._sketch( s, border, offset, shift );
+			for( let s of shape ) this._sketch( s, offset, shift );
 			return;
 
 		default : throw new Error( );
@@ -985,27 +977,24 @@ def.proto._sketch =
 def.proto._sketchGenericShape =
 	function(
 		shape,  // shape to sketch
-		border, // additional border
 		offset, // offset by this
 		shift   // possibly shift by 0.5
 	)
 {
-	const cx = this._cx;
-	const magic = gleam_constants.magic;
-
 /**/if( CHECK )
 /**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
 /**/	if( shape.length === undefined || shape.length === 0 )	throw new Error( );
 /**/	if( shape.get( 0 ).timtype !== gleam_shape_start ) throw new Error( );
 /**/}
 
+	const cx = this._cx;
+	const magic = gleam_constants.magic;
 	const ox = offset.x;
 	const oy = offset.y;
-	const pc = shape.pc;
 
 	let section = shape.get( 0 );
 	let p = section.p;
-
 	// start point x/y
 	let psx, psy;
 
@@ -1019,9 +1008,6 @@ def.proto._sketchGenericShape =
 		psx = this._round( p.x + ox );
 		psy = this._round( p.y + oy );
 	}
-
-	psx += ( p.x > pc.x ? border : ( p.x < pc.x ? -border : 0 ) );
-	psy += ( p.y > pc.y ? border : ( p.y < pc.y ? -border : 0 ) );
 
 	psx += shift;
 	psy += shift;
@@ -1083,12 +1069,6 @@ def.proto._sketchGenericShape =
 			{
 				pnx = this._round( p.x + ox );
 				pny = this._round( p.y + oy );
-			}
-
-			if( border !== 0 )
-			{
-				pnx += p.x > pc.x ? border : ( p.x < pc.x ? -border : 0 );
-				pny += p.y > pc.y ? border : ( p.y < pc.y ? -border : 0 );
 			}
 
 			pnx += shift;

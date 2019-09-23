@@ -32,29 +32,48 @@ const gleam_transform = tim.require( './transform' );
 
 
 /*
-| Returns a shape bordering this shape by
+| Returns a shape funneled this shape by
 | +/- distance.
 
 | It is kind of a zoom to or from central point, but it isn't
 | a real scale/zoom, since the border distance is for example
 | always 1 regardless how far from central point away.
 */
-def.proto.border =
+def.lazyFunc.funnel =
 	function(
-		d // distance to border
+		d // distance
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( d ) !== 'number' ) throw new Error( );
+/**/}
+
+	if( d === 0 ) return this;
+
 	const a = [ ];
 	const pc = this.pc;
 
 	for( let section of this )
 	{
-		if( section.close ) { a.push( section ); continue; }
+		if( section.close )
+		{
+			// FIXME handle closing funnels different than starting ones
+			if( section.funnelDir ) throw new Error( 'FIXME' );
 
+			a.push( section );
+			continue;
+		}
+
+		// XXX
 		a.push( section.create( 'p', section.p.border( pc, d ) ) );
 	}
 
-	return this.create( 'list:init', a );
+	const r = this.create( 'list:init', a );
+
+	tim.aheadFunction( r, 'funnel', -d, this );
+
+	return r;
 };
 
 

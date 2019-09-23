@@ -49,6 +49,13 @@ def.static.createP =
 	gleam_shape_round.create( 'p', p );
 
 /*
+| Shortcut to create a round to p with funnelDir.
+*/
+def.static.createPFun =
+	( p, fdir ) =>
+	gleam_shape_round.create( 'p', p, 'funnelDir', fdir );
+
+/*
 | Shortcut to create a counter clockwise round to p.
 */
 def.static.createPCcw =
@@ -57,11 +64,26 @@ def.static.createPCcw =
 
 
 /*
+| Shortcut to create a counter clockwise round to p with funnel dir.
+*/
+def.static.createPCcwFun =
+	( p, fdir ) =>
+	gleam_shape_round.create( 'ccw', true, 'p', p, 'funnelDir', fdir );
+
+
+/*
 | Shortcut to create a round to xy.
 */
 def.static.createXY =
 	( x, y ) =>
 	gleam_shape_round.create( 'p', gleam_point.createXY( x, y ) );
+
+/*
+| Shortcut to create a round to xy with funnel dir.
+*/
+def.static.createXYFun =
+	( x, y, fdir ) =>
+	gleam_shape_round.create( 'p', gleam_point.createXY( x, y ), 'funnelDir', fdir );
 
 
 /*

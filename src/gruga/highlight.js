@@ -19,11 +19,10 @@ def.staticLazy.facet = ( ) =>
 		'group:init', { highlight : true },
 		'border',
 			gleam_border.create(
-				'width', 3,
 				'color', gleam_color.rgba( 255, 170, 0, 0.45 ),
-				'distance', 1
+				'distance', 1,
+				'width', 3
 			)
 	);
 
 } );
-

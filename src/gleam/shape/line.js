@@ -53,11 +53,27 @@ def.static.createP =
 
 
 /*
+| Shortcut to create a line to p with funnel direction.
+*/
+def.static.createPFun =
+	( p, fdir ) =>
+	gleam_shape_line.create( 'p', p, 'funnelDir', fdir );
+
+
+/*
 | Shortcut to create a fly-line to p.
 */
 def.static.createPFly =
 	( p ) =>
 	gleam_shape_line.create( 'fly', true, 'p', p );
+
+
+/*
+| Shortcut to create a fly-line to p.
+*/
+def.static.createPFlyFun =
+	( p, fdir ) =>
+	gleam_shape_line.create( 'fly', true, 'p', p, 'funnelDir', fdir );
 
 
 /*
@@ -69,13 +85,22 @@ def.static.createXY =
 
 
 /*
+| Shortcut to create a line to xy.
+*/
+def.static.createXYFun =
+	( x, y, fdir ) =>
+	gleam_shape_line.create( 'p', gleam_point.createXY( x, y ), 'funnelDir', fdir );
+
+
+/*
 | Shortcut to create a fly-line to xy.
 */
-def.static.createXYFly =
-	( x, y ) =>
+def.static.createXYFlyFun =
+	( x, y, fdir ) =>
 	gleam_shape_line.create(
 		'fly', true,
-		'p', gleam_point.createXY( x, y )
+		'p', gleam_point.createXY( x, y ),
+		'funnelDir', fdir
 	);
 
 

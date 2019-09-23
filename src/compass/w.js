@@ -20,6 +20,12 @@ def.proto.from = ( rect ) => rect.pw;
 
 
 /*
+| Funnels point (p) by distance (d).
+*/
+def.proto.funnelPoint = ( p, d ) => p.add( -d, 0 );
+
+
+/*
 | Has x component.
 */
 def.proto.hasX = true;
