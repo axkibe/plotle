@@ -1,5 +1,5 @@
 /*
-| North-west.
+| North-west, 135°
 */
 'use strict';
 
@@ -9,8 +9,20 @@ tim.define( module, ( def ) => {
 
 def.singleton = true;
 
-const compass_root = tim.require( './root' );
-const result_hover = tim.require( '../result/hover' );
+const angle = tim.require( './root' );
+const result_hover = tim.require( '../../result/hover' );
+
+
+/*
+| One intermediate cardinal step counter clockwise.
+*/
+def.lazy.ccw = ( ) => angle.w;
+
+
+/*
+| One intermediate cardinal step clockwise.
+*/
+def.lazy.cw = ( ) => angle.n;
 
 
 /*
@@ -46,7 +58,7 @@ def.proto.hasN = true;
 /*
 | Opposite direction.
 */
-def.lazy.opposite = ( ) => compass_root.sw;
+def.lazy.opposite = ( ) => angle.se;
 
 
 /*

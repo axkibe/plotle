@@ -59,6 +59,51 @@ def.proto.actionAffects = 'posfs';
 
 
 /*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.static.ancillary =
+def.proto.ancillary =
+	function(
+		space  // space including other items dependend upon
+	)
+{
+	const zone = this.zone;
+	const as = this.ancillarySize;
+	const width = as.width;
+	const height = as.height;
+
+	// no ancillary changes needed
+	if( width === zone.width && height === zone.height ) return;
+
+	const c =
+		change_set.create(
+			'trace', this.trace.traceItem.appendZone.chopRoot,
+			'prev', zone,
+			'val', zone.create( 'height', height, 'width', width )
+		);
+
+	return change_list.create( 'list:init', [ c ] );
+};
+
+
+/*
+| Computed size of the label.
+*/
+def.lazy.ancillarySize =
+	function( )
+{
+	const height = this.doc.fullsize.height + 2;
+
+	return(
+		gleam_size.wh(
+			Math.max( this.doc.fullsize.width + 4, height / 4 ),
+			height
+		)
+	);
+};
+
+
+/*
 | User wants to create a new label.
 */
 def.static.createGeneric =
@@ -69,17 +114,11 @@ def.static.createGeneric =
 	)
 {
 	const model = fabric_label.model;
-
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
-
 	const fs = model.doc.fontsize * zone.height / model.zone.height;
-
 	const resized = model.create( 'fontsize', fs );
-
 	const ti = action.transientItem;
-
 	const pos = ti.zone.pos;
-
 	const label =
 		resized.create(
 			'zone',
@@ -91,7 +130,6 @@ def.static.createGeneric =
 		);
 
 	const key = session_uid.newUid( );
-
 	const trace = trace_root.singleton.appendSpace.appendItem( key );
 
 /**/if( CHECK )
@@ -117,8 +155,7 @@ def.adjust.doc =
 		doc
 	)
 {
-	const trace = this.trace && this.trace.appendDoc;
-
+	const trace = this.trace;
 	const transform = this.transform;
 
 	return(
@@ -131,7 +168,7 @@ def.adjust.doc =
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'scrollPos', gleam_point.zero,
 			'transform', transform && transform.ortho,
-			'trace', trace
+			'trace', trace && trace.appendDoc
 		)
 	);
 };
@@ -144,7 +181,6 @@ def.lazy.glint =
 	function( )
 {
 	const tZone = this.tZone;
-
 	const a =
 		[
 			gleam_glint_window.create(
@@ -152,10 +188,10 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this.doc.glint,
-						'size', tZone.funnel( 1 ).size,
+						'size', tZone.size.funnel( 1 ),
 						'tag', 'label(' + this.trace.key + ')'
 					),
-				'pos', tZone.funnel( 1 ).pos
+				'pos', tZone.pos
 			)
 		];
 
@@ -202,54 +238,6 @@ def.proto.minScaleX = ( zone ) => 0;
 | Returns the minimum y-scale factor this item could go through.
 */
 def.proto.minScaleY = ( zone ) => 0;
-
-
-/*
-| Computed height of the label.
-*/
-def.lazy.ancillarySize =
-	function( )
-{
-	const height = this.doc.fullsize.height + 2;
-
-	return(
-		gleam_size.wh(
-			Math.max( this.doc.fullsize.width + 4, height / 4 ),
-			height
-		)
-	);
-};
-
-
-/*
-| The changes needed for secondary data to adapt to primary.
-*/
-def.static.ancillary =
-def.proto.ancillary =
-	function(
-		space  // space including other items dependend upon
-	)
-{
-	const zone = this.zone;
-
-	const as = this.ancillarySize;
-
-	const width = as.width;
-
-	const height = as.height;
-
-	// no ancillary changes needed
-	if( width === zone.width && height === zone.height ) return;
-
-	const c =
-		change_set.create(
-			'trace', this.trace.traceItem.appendZone.chopRoot,
-			'prev', zone,
-			'val', zone.create( 'height', height, 'width', width )
-		);
-
-	return change_list.create( 'list:init', [ c ] );
-};
 
 
 /*

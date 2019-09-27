@@ -152,10 +152,10 @@ def.lazy.glint =
 					gleam_glint_pane.create(
 						'devicePixelRatio', this.devicePixelRatio,
 						'glint', this._innerGlint,
-						'size', tZone.funnel( 1.5 ).size,
+						'size', tZone.size.funnel( 1 ),
 						'tag', 'note(' + this.key + ')'
 					),
-				'pos', tZone.funnel( 1.5 ).pos
+				'pos', tZone.pos
 			)
 		];
 
@@ -373,15 +373,6 @@ def.proto._check =
 /**/		&& ( this.scrollPos.x < 0 || this.scrollPos.y < 0 )
 /**/	) throw new Error( );
 /**/}
-};
-
-
-/*
-| The item's glint.
-*/
-def.lazy._glint =
-	function( )
-{
 };
 
 

@@ -19,7 +19,7 @@ if( TIM )
 		p : { type : [ '../point', 'undefined' ] },
 
 		// funnels into this direction
-		funnelDir : { type : [ '<../../compass/dir-types', 'undefined' ] },
+		funnelDir : { type : [ '<../angle/dir-types', 'undefined' ] },
 	};
 }
 

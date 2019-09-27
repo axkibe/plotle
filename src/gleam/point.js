@@ -21,6 +21,7 @@ if( TIM )
 	def.json = 'point';
 }
 
+const angle = tim.require( './angle/root' );
 const gleam_transform = tim.require( './transform' );
 
 
@@ -153,6 +154,49 @@ def.proto.detransform =
 	)
 {
 	return gleam_point.createXY( transform.dex( this.x ), transform.dey( this.y ) );
+};
+
+
+/*
+| Returns the angle direction (n,s,e,w,ne,se,sw,nw) to
+| another point;
+*/
+def.proto.angleDirTo =
+	function(
+		p
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( p.timtype !== gleam_point ) throw new Error( );
+/**/}
+
+	const tx = this.x;
+	const ty = this.y;
+	const px = p.x;
+	const py = p.y;
+
+	if( px === tx )
+	{
+		if( py === ty ) return;
+		else if( py > ty ) return angle.s;
+		else return angle.n;
+	}
+
+	if( py === ty )
+	{
+		if( px > tx ) return angle.e;
+		else return angle.w;
+	}
+
+	if( py < ty )
+	{
+		if( px > tx ) return angle.ne;
+		else return angle.nw;
+	}
+
+	if( px > tx ) return angle.se;
+	else return angle.sw;
 };
 
 

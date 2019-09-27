@@ -42,13 +42,13 @@ if( TIM )
 }
 
 
+const angle = tim.require( './angle/root' );
 const gleam_display_canvas = tim.require( './display/canvas' );
 const gleam_shape = tim.require( './shape' );
 const gleam_shape_line = tim.require( './shape/line' );
 const gleam_shape_round = tim.require( './shape/round' );
 const gleam_shape_start = tim.require( './shape/start' );
 const gleam_transform = tim.require( './transform' );
-
 
 /*
 | Point in the center.
@@ -67,13 +67,9 @@ def.lazy.shape =
 	function( )
 {
 	const a = this.a;
-
 	const b = this.b;
-
 	const h = this.height;
-
 	const p = this.pos;
-
 	const w = this.width;
 
 	if( b * 2 + 0.1 >= h )
@@ -82,12 +78,12 @@ def.lazy.shape =
 			gleam_shape.create(
 				'list:init',
 				[
-					gleam_shape_start.createP( p.add( 0 , b ) ),
-					gleam_shape_round.createP( p.add( a , 0 ) ),
-					gleam_shape_line.createP( p.add( w - a , 0 ) ),
-					gleam_shape_round.createP( p.add( w , b ) ),
-					gleam_shape_round.createP( p.add( w - a , h ) ),
-					gleam_shape_line.createP( p.add( a , h ) ),
+					gleam_shape_start.createPFun( p.add( 0 , b ), angle.w ),
+					gleam_shape_round.createPFun( p.add( a , 0 ), angle.n ),
+					gleam_shape_line.createPFun( p.add( w - a , 0 ), angle.n ),
+					gleam_shape_round.createPFun( p.add( w , b ), angle.e ),
+					gleam_shape_round.createPFun( p.add( w - a , h ), angle.s ),
+					gleam_shape_line.createPFun( p.add( a , h ), angle.s ),
 					gleam_shape_round.close
 				],
 				'pc', this.pc
@@ -99,14 +95,14 @@ def.lazy.shape =
 		gleam_shape.create(
 			'list:init',
 			[
-				gleam_shape_start.createP( p.add( 0 , b ) ),
-				gleam_shape_round.createP( p.add( a , 0 ) ),
-				gleam_shape_line.createP( p.add( w - a , 0 ) ),
-				gleam_shape_round.createP( p.add( w , b ) ),
-				gleam_shape_line.createP( p.add( w , h - b ) ),
-				gleam_shape_round.createP( p.add( w - a , h ) ),
-				gleam_shape_line.createP( p.add( a , h ) ),
-				gleam_shape_round.createP( p.add( 0 , h - b ) ),
+				gleam_shape_start.createPFun( p.add( 0 , b ), angle.w ),
+				gleam_shape_round.createPFun( p.add( a , 0 ), angle.n ),
+				gleam_shape_line.createPFun( p.add( w - a , 0 ), angle.n ),
+				gleam_shape_round.createPFun( p.add( w , b ), angle.e ),
+				gleam_shape_line.createPFun( p.add( w , h - b ), angle.e ),
+				gleam_shape_round.createPFun( p.add( w - a , h ), angle.s ),
+				gleam_shape_line.createPFun( p.add( a , h ), angle.s ),
+				gleam_shape_round.createPFun( p.add( 0 , h - b ), angle.w ),
 				gleam_shape_line.close
 			],
 			'pc', this.pc

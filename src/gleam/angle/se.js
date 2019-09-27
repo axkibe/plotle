@@ -1,5 +1,5 @@
 /*
-| South-east.
+| South-east, 315°
 */
 'use strict';
 
@@ -9,8 +9,20 @@ tim.define( module, ( def ) => {
 
 def.singleton = true;
 
-const compass_root = tim.require( './root' );
-const result_hover = tim.require( '../result/hover' );
+const angle = tim.require( './root' );
+const result_hover = tim.require( '../../result/hover' );
+
+
+/*
+| One intermediate cardinal step counter clockwise.
+*/
+def.lazy.ccw = ( ) => angle.e;
+
+
+/*
+| One intermediate cardinal step clockwise.
+*/
+def.lazy.cw = ( ) => angle.s;
 
 
 /*
@@ -40,7 +52,7 @@ def.proto.hasY = true;
 /*
 | Opposite direction.
 */
-def.lazy.opposite = ( ) => compass_root.nw;
+def.lazy.opposite = ( ) => angle.nw;
 
 
 /*

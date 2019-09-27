@@ -50,11 +50,8 @@ def.static.getArrowShape =
 	)
 {
 	const line = gleam_line.createConnection( joint1, joint2 );
-
 	const p1 = line.p1;
-
 	const p2 = line.p2;
-
 	const sections = [ ];
 
 	// TODO allow arrows on p1.
@@ -115,7 +112,7 @@ def.static.getArrowShape =
 
 	sections.push( gleam_shape_line.closeFly );
 
-	return gleam_shape.create( 'list:init', sections, 'pc', line.pc );
+	return gleam_shape.create( 'list:init', sections, 'pc', line.pc ).addFunnelDirs;
 };
 
 

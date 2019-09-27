@@ -28,7 +28,7 @@ if( TIM )
 		proportional : { type : [ 'undefined', 'boolean' ] },
 
 		// resize to this direction
-		resizeDir : { type : [ '< ../compass/dir-types' ] },
+		resizeDir : { type : [ '< ../gleam/angle/dir-types' ] },
 
 		// scale x by this factor
 		scaleX : { type : [ 'undefined', 'number' ] },

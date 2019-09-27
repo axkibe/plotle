@@ -34,7 +34,7 @@ if( TIM )
 
 const action_dragItems = tim.require( '../action/dragItems' );
 const action_resizeItems = tim.require( '../action/resizeItems' );
-const compass = tim.require( '../compass/root' );
+const angle = tim.require( '../gleam/angle/root' );
 const gleam_glint_border = tim.require( '../gleam/glint/border' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
 const gleam_glint_mask = tim.require( '../gleam/glint/mask' );
@@ -107,7 +107,6 @@ def.proto.dragStart =
 	if( this.access !== 'rw' ) return;
 
 	const zone = this.zone;
-
 	const wex = this._shapeExtender.within( p );
 
 	// if not even near or within the mask, pass through
@@ -134,32 +133,33 @@ def.proto.dragStart =
 	}
 
 	if( this._shapeHandleNw.within( p ) )
-	{ com = compass.nw; pBase = zone.pse; }
+	{ com = angle.nw; pBase = zone.pse; }
 	else if( this._shapeHandleNe.within( p ) )
-	{ com = compass.ne; pBase = zone.psw; }
+	{ com = angle.ne; pBase = zone.psw; }
 	else if( this._shapeHandleSe.within( p ) )
-	{ com = compass.se; pBase = zone.pos; }
+	{ com = angle.se; pBase = zone.pos; }
 	else if( this._shapeHandleSw.within( p ) )
-	{ com = compass.sw; pBase = zone.pne; }
+	{ com = angle.sw; pBase = zone.pne; }
 	else if( this._shapeHandleN.within( p ) )
-	{ com = compass.n; pBase = zone.ps; }
+	{ com = angle.n; pBase = zone.ps; }
 	else if( this._shapeHandleE.within( p ) )
-	{ com = compass.e; pBase = zone.pw; }
+	{ com = angle.e; pBase = zone.pw; }
 	else if( this._shapeHandleS.within( p ) )
-	{ com = compass.s; pBase = zone.pn; }
+	{ com = angle.s; pBase = zone.pn; }
 	else if( this._shapeHandleW.within( p ) )
-	{ com = compass.w; pBase = zone.pe; }
+	{ com = angle.w; pBase = zone.pe; }
 
 	if( !com ) return;
 
 	const dp = p.detransform( this.transform );
+	const content = this.content;
 
 	root.alter(
 		'action',
 			action_resizeItems.create(
-				'items', this.content,
+				'items', content,
 				'startZone', zone,
-				'startZones', this.content.zones,
+				'startZones', content.zones,
 				'proportional', this.proportional,
 				'resizeDir', com,
 				'startPoint', dp,
@@ -206,14 +206,14 @@ def.proto.pointingHover =
 		return result_hover.cursorGrab;
 	}
 
-	if( this._shapeHandleNw.within( p ) ) return compass.nw.resizeHoverCursor;
-	if( this._shapeHandleNe.within( p ) ) return compass.ne.resizeHoverCursor;
-	if( this._shapeHandleSe.within( p ) ) return compass.se.resizeHoverCursor;
-	if( this._shapeHandleSw.within( p ) ) return compass.sw.resizeHoverCursor;
-	if( this._shapeHandleN.within( p ) ) return compass.n.resizeHoverCursor;
-	if( this._shapeHandleE.within( p ) ) return compass.e.resizeHoverCursor;
-	if( this._shapeHandleS.within( p ) ) return compass.s.resizeHoverCursor;
-	if( this._shapeHandleW.within( p ) ) return compass.w.resizeHoverCursor;
+	if( this._shapeHandleNw.within( p ) ) return angle.nw.resizeHoverCursor;
+	if( this._shapeHandleNe.within( p ) ) return angle.ne.resizeHoverCursor;
+	if( this._shapeHandleSe.within( p ) ) return angle.se.resizeHoverCursor;
+	if( this._shapeHandleSw.within( p ) ) return angle.sw.resizeHoverCursor;
+	if( this._shapeHandleN.within( p ) ) return angle.n.resizeHoverCursor;
+	if( this._shapeHandleE.within( p ) ) return angle.e.resizeHoverCursor;
+	if( this._shapeHandleS.within( p ) ) return angle.s.resizeHoverCursor;
+	if( this._shapeHandleW.within( p ) ) return angle.w.resizeHoverCursor;
 };
 
 

@@ -31,6 +31,8 @@ if( TIM )
 	};
 }
 
+
+const angle = tim.require( './angle/root' );
 const gleam_display_canvas = tim.require( './display/canvas' );
 const gleam_shape = tim.require( './shape' );
 const gleam_shape_round = tim.require( './shape/round' );
@@ -76,25 +78,13 @@ def.static.createPosSize =
 /*
 | The center point of gradient.
 */
-def.adjust.gradientPC =
-	function(
-		gradientPC
-	)
-{
-	return gradientPC || this.pc;
-};
+def.adjust.gradientPC = function( gradientPC ) { return gradientPC || this.pc; };
 
 
 /*
 | Gradient inner radius.
 */
-def.adjust.gradientR0 =
-	function(
-		gradientR0
-	)
-{
-	return gradientR0 || 0;
-};
+def.adjust.gradientR0 = function( gradientR0 ) { return gradientR0 || 0; };
 
 
 /*
@@ -134,31 +124,19 @@ def.lazy.pe =
 /*
 | North point.
 */
-def.lazy.pn =
-	function( )
-{
-	return this.pos.add( this.width / 2, 0 );
-};
+def.lazy.pn = function( ) { return this.pos.add( this.width / 2, 0 ); };
 
 
 /*
 | South point.
 */
-def.lazy.ps =
-	function( )
-{
-	return this.pos.add( this.width / 2, this.height );
-};
+def.lazy.ps = function( ) { return this.pos.add( this.width / 2, this.height ); };
 
 
 /*
 | West point.
 */
-def.lazy.pw =
-	function( )
-{
-	return this.pos.add( 0, this.height / 2 );
-};
+def.lazy.pw = function( ) { return this.pos.add( 0, this.height / 2 ); };
 
 
 /*
@@ -171,10 +149,10 @@ def.lazy.shape =
 		gleam_shape.create(
 			'list:init',
 			[
-				gleam_shape_start.createP( this.pw ),
-				gleam_shape_round.createP( this.pn ),
-				gleam_shape_round.createP( this.pe ),
-				gleam_shape_round.createP( this.ps ),
+				gleam_shape_start.createPFun( this.pw, angle.w ),
+				gleam_shape_round.createPFun( this.pn, angle.n ),
+				gleam_shape_round.createPFun( this.pe, angle.e ),
+				gleam_shape_round.createPFun( this.ps, angle.s ),
 				gleam_shape_round.close
 			],
 			'pc', this.pc
