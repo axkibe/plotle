@@ -26,7 +26,7 @@ if( TIM )
 const change_listAppend = tim.require( '../change/listAppend' );
 const dynamic_refSpaceList = tim.require( '../dynamic/refSpaceList' );
 const user_info = tim.require( '../user/info' );
-const database_userSkid = tim.require( '../database/userSkid' );
+const database_userInfoSkid = tim.require( '../database/userInfoSkid' );
 const ref_space = tim.require( '../ref/space' );
 const ref_spaceList = tim.require( '../ref/spaceList' );
 
@@ -220,7 +220,7 @@ def.proto.register =
 
 	await root.repository.users.insert(
 		JSON.parse( JSON.stringify(
-			database_userSkid.createFromUser( userInfo )
+			database_userInfoSkid.createFromUser( userInfo )
 		) )
 	);
 
@@ -251,7 +251,7 @@ def.proto.getByName =
 
 	if( !val ) return;
 
-	userInfo = database_userSkid.createFromJSON( val ).asUser;
+	userInfo = database_userInfoSkid.createFromJSON( val ).asUser;
 
 	root.create(
 		'userNexus', this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )

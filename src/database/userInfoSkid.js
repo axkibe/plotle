@@ -1,12 +1,10 @@
 /*
 | A user on a skid for database storage.
-|
-| FIXME rename userInfoSkid
 */
 'use strict';
 
 
-tim.define( module, ( def, database_userSkid ) => {
+tim.define( module, ( def, database_userInfoSkid ) => {
 
 
 if( TIM )
@@ -26,6 +24,7 @@ if( TIM )
 		news : { type : [ 'boolean', 'string' ], json : true },
 	};
 
+	// FIXME rename "userInfoSkid"
 	def.json = 'database_userSkid';
 }
 
@@ -33,7 +32,7 @@ const user_info = tim.require( '../user/info' );
 
 
 /*
-| Creates a database_userSkid from a user_info.
+| Creates a database_userInfoSkid from a user_info.
 */
 def.static.createFromUser =
 	function(
@@ -41,7 +40,7 @@ def.static.createFromUser =
 	)
 {
 	const dus =
-		database_userSkid.create(
+		database_userInfoSkid.create(
 			'_id', user.name,
 			'passhash', user.passhash,
 			'mail', user.mail,

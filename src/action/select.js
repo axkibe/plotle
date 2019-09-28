@@ -147,16 +147,11 @@ def.proto.dragStop =
 
 	if( traces.size > 0 )
 	{
-		// FIXME simplify
-		if( !ctrl || !screen.mark )
+		mark = mark_items.create( 'set:init', traces );
+
+		if( ctrl && screen.mark )
 		{
-			mark = mark_items.create( 'set:init', traces );
-		}
-		else
-		{
-			mark =
-				mark_items.create( 'set:init', traces )
-				.combine( screen.mark.itemsMark );
+			mark = mark.combine( screen.mark.itemsMark );
 		}
 	}
 
