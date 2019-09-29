@@ -1011,7 +1011,7 @@ def.proto.logout =
 		return;
 	}
 
-	// FIXME i don't get it what happens when there are no _visitorCreds
+	// TODO i don't get it what happens when there are no _visitorCreds
 
 	root.alter( 'userSpaceList', undefined, 'link', link );
 

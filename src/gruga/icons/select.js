@@ -108,7 +108,7 @@ def.staticLazy.shape =
 			round.create( 'p', psw.add(   0 , -cs ) ),
 			line.create(  'p', pw.add(    0 ,  hd ), 'fly', true ),
 			line.create(  'p', pw.add(    0 , -hd ) ),
-			line.create(  'close', true, 'fly', true )
+			line.closeFly
 		],
 		'pc', pc
 	) );

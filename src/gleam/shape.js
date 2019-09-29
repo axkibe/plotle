@@ -68,11 +68,12 @@ def.lazyFunc.funnel =
 
 	for( let section of this )
 	{
-/**/	if( CHECK && section.close && section.funnelDir ) throw new Error( );
-
 		const p = section.p;
 
-		if( !p ) { a.push( section ); continue; }
+		// FIXME integrate in if below
+/**/	if( CHECK && p === 'close' && section.funnelDir ) throw new Error( );
+
+		if( p === 'close' ) { a.push( section ); continue; }
 
 		const funnelDir = section.funnelDir;
 
@@ -111,8 +112,8 @@ def.lazy.addFunnelDirs =
 		let pp = prev.p;
 		const cp = cur.p;
 
-		if( prev.close ) { pp = this.get( 0 ).p; }
-		if( next.close ) { np = this.get( 0 ).p; }
+		if( pp === 'close' ) pp = this.get( 0 ).p;
+		if( np === 'close' ) np = this.get( 0 ).p;
 
 		let r1 = atan2( cp.y - pp.y, pp.x - cp.x );
 		let r2 = atan2( cp.y - np.y, np.x - cp.x );
@@ -179,7 +180,7 @@ def.proto.getProjection =
 
 		if( first ) { first = false; continue; }
 
-		if( section.close )
+		if( section.p === 'close' )
 		{
 			pn = pstart;
 			pstart = undefined;

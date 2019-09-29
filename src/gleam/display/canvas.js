@@ -1049,7 +1049,9 @@ def.proto._sketchGenericShape =
 
 		nextSect = a + 1 < al ? shape.get( a + 1 ) : shape.get( 0 );
 
-		if( section.close )
+		p = section.p;
+
+		if( p === 'close' )
 		{
 			pnx = psx;
 			pny = psy;
@@ -1058,8 +1060,6 @@ def.proto._sketchGenericShape =
 		}
 		else
 		{
-			p = section.p;
-
 			if( shape.nogrid )
 			{
 				pnx = this._noround( p.x + ox );

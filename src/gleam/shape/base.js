@@ -15,8 +15,8 @@ if( TIM )
 	def.attributes =
 	{
 		// starts here
-		// FIXME allow "close"
-		p : { type : [ '../point', 'undefined' ] },
+		// point the shape goes to or "close" to return to beginning
+		p : { type : [ '../point', 'string' ] },
 
 		// funnels into this direction
 		funnelDir : { type : [ '<../angle/dir-types', 'undefined' ] },
@@ -41,7 +41,7 @@ def.proto.transform =
 /**/	if( transform.timtype !== gleam_transform ) throw new Error( );
 /**/}
 
-	if( this.p === undefined ) return this;
+	if( this.p === 'close' ) return this;
 
 	return this.create( 'p', this.p.transform( transform ) );
 };

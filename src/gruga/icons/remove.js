@@ -61,57 +61,23 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			gleam_shape_start.create(
-				'p', pnw                  // A
-			),
-			gleam_shape_line.create(
-				'p', pnw.add(  aw,   0 )  // B
-			),
-			gleam_shape_line.create(
-				'p', pc.add(    0, -ch )  // C
-			),
-			gleam_shape_line.create(
-				'p', pne.add( -aw,   0 )  // D
-			),
-			gleam_shape_line.create(
-				'p', pne                  // E
-			),
-			gleam_shape_line.create(
-				'p', pne.add(   0,  ah )  // F
-			),
-			gleam_shape_line.create(
-				'p', pc.add(   cw,   0 )  // G
-			),
-			gleam_shape_line.create(
-				'p', pse.add(   0, -ah )  // H
-			),
-			gleam_shape_line.create(
-				'p', pse                  // I
-			),
-			gleam_shape_line.create(
-				'p', pse.add( -aw,   0 )  // J
-			),
-			gleam_shape_line.create(
-				'p', pc.add(    0,  ch )  // K
-			),
-			gleam_shape_line.create(
-				'p', psw.add(  aw,   0 )  // L
-			),
-			gleam_shape_line.create(
-				'p', psw                  // M
-			),
-			gleam_shape_line.create(
-				'p', psw.add(   0, -ah )  // N
-			),
-			gleam_shape_line.create(
-				'p', pc.add(  -cw,   0 )  // O
-			),
-			gleam_shape_line.create(
-				'p', pnw.add(   0,  ah )  // P
-			),
-			gleam_shape_line.create(
-				'close', true             // A
-			)
+			gleam_shape_start.createP( pnw ),                // A
+			gleam_shape_line.createP( pnw.add(  aw,   0 ) ), // B
+			gleam_shape_line.createP( pc.add(    0, -ch ) ), // C
+			gleam_shape_line.createP( pne.add( -aw,   0 ) ), // D
+			gleam_shape_line.createP( pne ),                 // E
+			gleam_shape_line.createP( pne.add(   0,  ah ) ), // F
+			gleam_shape_line.createP( pc.add(   cw,   0 ) ), // G
+			gleam_shape_line.createP( pse.add(   0, -ah ) ), // H
+			gleam_shape_line.createP( pse ),                 // I
+			gleam_shape_line.createP( pse.add( -aw,   0 ) ), // J
+			gleam_shape_line.createP( pc.add(    0,  ch ) ), // K
+			gleam_shape_line.createP( psw.add(  aw,   0 ) ), // L
+			gleam_shape_line.createP( psw ),                 // M
+			gleam_shape_line.createP( psw.add(   0, -ah ) ), // N
+			gleam_shape_line.createP( pc.add(  -cw,   0 ) ), // O
+			gleam_shape_line.createP( pnw.add(   0,  ah ) ), // P
+			gleam_shape_line.close                           // A
 		],
 		'pc', pc
 	) );

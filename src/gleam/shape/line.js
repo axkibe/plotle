@@ -16,9 +16,6 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// true if this closes the shape
-		close : { type : [ 'undefined', 'boolean' ] },
-
 		// true if this line does not draw a border
 		fly : { type : [ 'undefined', 'boolean' ] },
 	};
@@ -31,7 +28,7 @@ const gleam_point = tim.require( '../point' );
 /*
 | Shortcut to create a closing line.
 */
-def.staticLazy.close = ( ) => gleam_shape_line.create( 'close', true );
+def.staticLazy.close = ( ) => gleam_shape_line.create( 'p', 'close' );
 
 
 /*
@@ -39,7 +36,7 @@ def.staticLazy.close = ( ) => gleam_shape_line.create( 'close', true );
 */
 def.staticLazy.closeFly = ( ) =>
 	gleam_shape_line.create(
-		'close', true,
+		'p', 'close',
 		'fly', true
 	);
 
@@ -82,6 +79,14 @@ def.static.createPFlyFun =
 def.static.createXY =
 	( x, y ) =>
 	gleam_shape_line.create( 'p', gleam_point.createXY( x, y ) );
+
+
+/*
+| Shortcut to create a fly-line to xy.
+*/
+def.static.createXYFly =
+	( x, y ) =>
+	gleam_shape_line.create( 'fly', true, 'p', gleam_point.createXY( x, y ) );
 
 
 /*

@@ -18,9 +18,6 @@ if( TIM )
 	{
 		// if true do it counter-clockwise
 		ccw : { type : [ 'undefined', 'boolean' ] },
-
-		// true if this closes the shape
-		close : { type : [ 'undefined', 'boolean' ] }
 	};
 }
 
@@ -31,14 +28,14 @@ const gleam_point = tim.require( '../point' );
 | Shortcut to create a round to close.
 */
 def.staticLazy.close = ( ) =>
-	gleam_shape_round.create( 'close', true );
+	gleam_shape_round.create( 'p', 'close' );
 
 
 /*
 | Shortcut to create a count clockwise round to close.
 */
 def.staticLazy.closeCcw = ( ) =>
-	gleam_shape_round.create( 'ccw', true, 'close', true );
+	gleam_shape_round.create( 'ccw', true, 'p', 'close' );
 
 
 /*
