@@ -18,7 +18,6 @@ if( TIM )
 		nogrid : { type : [ 'undefined', 'boolean'] },
 
 		// center point
-		// FIXME remove
 		pc : { type : '../gleam/point' },
 	};
 
@@ -69,14 +68,15 @@ def.lazyFunc.funnel =
 	for( let section of this )
 	{
 		const p = section.p;
+		if( p === 'close' )
+		{
+/**/		if( CHECK && section.funnelDir ) throw new Error( );
 
-		// FIXME integrate in if below
-/**/	if( CHECK && p === 'close' && section.funnelDir ) throw new Error( );
-
-		if( p === 'close' ) { a.push( section ); continue; }
+			a.push( section );
+			continue;
+		}
 
 		const funnelDir = section.funnelDir;
-
 		if( !funnelDir )
 		{
 			// FIXME remove
@@ -88,9 +88,7 @@ def.lazyFunc.funnel =
 	}
 
 	const r = this.create( 'list:init', a );
-
 	tim.aheadFunction( r, 'funnel', -d, this );
-
 	return r;
 };
 

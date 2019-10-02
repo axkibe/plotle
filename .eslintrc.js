@@ -12,7 +12,7 @@ module.exports = {
         "NODE": true,
         "TIM": true,
         "VISUAL": true,
-        "WEINRE": true,
+        "config": true,
         "opentype": true,
         "pass": true,
         "root": true,

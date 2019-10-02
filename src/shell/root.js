@@ -192,7 +192,7 @@ def.adjust.action =
 		case action_dragItems :
 		case action_resizeItems :
 
-			// FIXME!
+			// TODO!
 			break;
 		{
 			const space = this.space;
@@ -720,7 +720,7 @@ def.proto.changeSpaceTransformPoint =
 				),
 			'zoom', zoom
 		),
-		shell_settings.animationZoomStepTime
+		config.animation.zoomStepTime
 	);
 };
 
@@ -744,36 +744,22 @@ def.proto.changeSpaceTransformAll =
 	function( )
 {
 	const space = root._actionSpace;
-
 	const allItemsZone = space.allItemsZone;
-
 	// center
 	const cx = allItemsZone.pc.x;
-
 	const cy = allItemsZone.pc.y;
-
 	const ex = allItemsZone.pos.x;
-
 	const ny = allItemsZone.pos.y;
-
 	const sy = allItemsZone.pse.y;
-
 	const wx = allItemsZone.pse.x;
-
 	const discWidth = root.discs.get( 'main' ).tZone.width;
-
 	const vsx = root.viewSize.width - discWidth;
-
 	const vsy = root.viewSize.height;
-
 	const vsx2 = vsx / 2;
-
 	const vsy2 = vsy / 2;
-
 	const zoomMin = shell_settings.zoomMin;
 
 	let exp;
-
 	let z;
 
 	for( exp = shell_settings.zoomMax; exp > zoomMin; exp-- )
@@ -783,11 +769,8 @@ def.proto.changeSpaceTransformAll =
 		const extra = 10 / z;
 
 		if( ex + extra > cx + vsx2 / z ) continue;
-
 		if( wx - extra < cx - vsx2 / z ) continue;
-
 		if( sy + extra > cy + vsy2 / z ) continue;
-
 		if( ny - extra < cy - vsy2 / z ) continue;
 
 		break;
@@ -799,7 +782,7 @@ def.proto.changeSpaceTransformAll =
 			'offset', gleam_point.createXY( vsx2 - cx * z + discWidth, vsy2 - cy * z ),
 			'zoom', z
 		),
-		shell_settings.animationZoomAllHomeTime
+		config.animation.zoomAllHomeTime
 	);
 };
 
@@ -813,7 +796,7 @@ def.proto.changeSpaceTransformHome =
 	root._changeTransformTo(
 		0,
 		gleam_transform.normal,
-		shell_settings.animationZoomAllHomeTime
+		config.animation.zoomAllHomeTime
 	);
 };
 
@@ -829,7 +812,6 @@ def.proto.click =
 	)
 {
 	const screen = root._currentScreen;
-
 	const bubble = root.discs.click( p, shift, ctrl );
 
 	// if bubble === false do not bubble
@@ -1691,7 +1673,7 @@ def.proto._changeTransformTo =
 		time         // time of animation
 	)
 {
-	if( shell_settings.animation )
+	if( config.animation.enable )
 	{
 		root._create(
 			'_transformExponent', exp,

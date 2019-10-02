@@ -25,7 +25,6 @@ const devel = true;
 | The admin user.
 | Note: you'll have to register the admin user using 'sign up' in the shell.
 */
-
 set( 'admin', 'axel' );
 
 
@@ -39,7 +38,6 @@ set( 'admin', 'axel' );
 |
 | Default: null -> listens on all networks.
 */
-
 // set( 'network', 'listen', '[IP]' );
 
 
@@ -48,7 +46,6 @@ set( 'admin', 'axel' );
 |
 | Default: http
 */
-
 set( 'network', 'main', 'protocol', 'http' );
 // set( 'network', 'main', 'protocol', 'https' );
 
@@ -57,7 +54,6 @@ set( 'network', 'main', 'protocol', 'http' );
 |
 | Default: 0 -> 8833 when http, 443 when https
 */
-
 // set( 'network', 'main', 'port', 0 );
 
 /*
@@ -65,7 +61,6 @@ set( 'network', 'main', 'protocol', 'http' );
 |
 | Default: '' -> no redirect
 */
-
 // set( 'network', 'redirect', 'protocol', '' );
 // set( 'network', 'redirect', 'protocol', 'http' );
 // set( 'network', 'redirect', 'port', 80 );
@@ -76,7 +71,6 @@ set( 'network', 'main', 'protocol', 'http' );
 |
 | Default: 80
 */
-
 // set( 'network', 'redirect', 'port', '80' );
 
 /*
@@ -84,7 +78,6 @@ set( 'network', 'main', 'protocol', 'http' );
 |
 | Default: 'https://'
 */
-
 // set( 'network', 'redirect', 'destination', 'https://' );
 
 
@@ -97,7 +90,6 @@ set( 'network', 'main', 'protocol', 'http' );
 | The location of the https certificate..
 | No defaults.
 */
-
 // the location of the https certificate
 // set( 'https', 'cert', '[PATH TO CERT]' );
 // set( 'https', 'key', ''[PATH TO KEY]' );
@@ -107,7 +99,6 @@ set( 'network', 'main', 'protocol', 'http' );
 |* ================
 |* mongodb database connection
 '*/
-
 // set( 'database', 'host', '127.0.0.1' );
 // set( 'database', 'port', 27017 );
 // set( 'database', 'name', 'plotle-20' );
@@ -118,9 +109,7 @@ set( 'network', 'main', 'protocol', 'http' );
 |* ============
 |* the / and /index.html access and options active there.
 '*/
-
 set( 'shell', 'bundle', 'enable', !devel );
-
 // set( 'shell', 'bundle', 'check', false );
 
 /*
@@ -131,7 +120,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 |
 | Default: on for bundle
 */
-
 // set( 'shell', 'bundle', 'failScreen', true );
 
 /*
@@ -139,7 +127,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 |
 | Default: enabled
 */
-
 // set( 'shell', 'bundle', 'sourceMap', true );
 
 /*
@@ -147,7 +134,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 |
 | Default: enabled
 */
-
 // set( 'shell', 'bundle', 'minify', true );
 
 /*
@@ -155,7 +141,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 |
 | Default: disabled
 */
-
 // set( 'shell', 'bundle', 'beautify', false );
 
 
@@ -164,7 +149,6 @@ set( 'shell', 'bundle', 'enable', !devel );
 |* ===========
 |* the /devel.html access and options active there.
 '*/
-
 // set( 'shell', 'devel', 'enable', true );
 // set( 'shell', 'devel', 'check', true );
 
@@ -176,8 +160,31 @@ set( 'shell', 'bundle', 'enable', !devel );
 |
 | Default: off for devel
 */
-
 // set( 'shell', 'devel', 'failScreen', false );
+
+
+/*
+|* SHELL ANIMATIONS
+|* ===========
+|* animation settings.
+'*/
+
+/*
+| Enables/disables animations.
+*/
+// set( 'shell', 'animation', 'enable', true );
+
+
+/*
+| Milliseconds for zoom animation to all/home.
+*/
+// set( 'shell', 'animation', 'zoomAllHomeTime', 120 );
+
+
+/*
+| Milliseconds for zoom animation in single in or out steps.
+*/
+// set( 'shell', 'animation', 'zoomStepTime', 40 );
 
 
 /*
@@ -219,7 +226,6 @@ set( 'server', 'report', !devel );
 /*
 | If set, accepts only connections from these addresses
 */
-
 // set( 'server', 'whileList', '[ADDRESSES]' );
 
 

@@ -122,12 +122,11 @@ def.proto.shellGlobals =
 /**/if( CHECK )
 /**/{
 /**/	if( mode !== 'bundle' && mode !== 'devel' ) throw new Error( );
-/**/
 /**/	if( target !== 'shell' && target !== 'testpad' ) throw new Error( );
 /**/}
 
 	return(
-		Object.freeze ( {
+		Object.freeze( {
 			CHECK: config.get( 'shell', mode, 'check' ),
 			NODE : false,
 			TIM : false,
@@ -159,7 +158,37 @@ def.proto.shellGlobalsResource =
 		server_resource.create(
 			'data', text,
 			'filePath', 'global-' + target + '.js',
-			'inBundle', true,
+			'inBundle', true,  // FIXME only when shell target?
+			'inTestPad', target === 'testpad'
+		)
+	);
+};
+
+
+/*
+| The shell config as resource.
+*/
+def.proto.shellConfigResource =
+	function(
+		target   // 'shell' or 'testpad'
+	)
+{
+	let t = [ ];
+	t.push(
+		'var config = Object.freeze( { ',
+		'  animation : Object.freeze( {',
+		'    enable : ' + config.get( 'shell', 'animation', 'enable' ) + ',',
+		'    zoomAllHomeTime : ' + config.get( 'shell', 'animation', 'zoomAllHomeTime' ) + ',',
+		'    zoomStepTime : ' + config.get( 'shell', 'animation', 'zoomStepTime' ) + ',',
+		'  } ),',
+		'} );',
+	);
+
+	return(
+		server_resource.create(
+			'data', t.join( '\n' ),
+			'filePath', 'config-' + target + '.js',
+			'inBundle', target === 'shell',
 			'inTestPad', target === 'testpad'
 		)
 	);
@@ -183,9 +212,7 @@ def.proto.buildBundle =
 		for( let resource of root.inventory )
 		{
 			if( !resource.inBundle ) continue;
-
 			if( resource.filePath === 'global-shell.js' ) continue;
-
 			if( resource.filePath === 'global-testpad.js' ) continue;
 
 			code[ resource.aliases.get( 0 ) ] = resource.data + '';
@@ -196,7 +223,6 @@ def.proto.buildBundle =
 		const options =
 		{
 			compress : { ecma : 6, global_defs : globals, },
-
 			output : { beautify : config.get( 'shell', 'bundle', 'beautify' ) },
 		};
 
@@ -260,9 +286,10 @@ def.proto.prepareInventory =
 		root.inventory
 		.updateResource( root.shellGlobalsResource( 'shell' ) )
 		.updateResource( root.shellGlobalsResource( 'testpad' ) )
+		.updateResource( root.shellConfigResource( 'shell' ) )
 	);
 
-	// prepares ressources from the roster
+	// prepares resources from the roster
 	for( let resource of server_roster.roster )
 	{
 		if( resource.devel && !devel ) continue;
@@ -317,9 +344,7 @@ def.proto.prepareInventory =
 		for( let filename of walk.keys )
 		{
 			const ts = tim.catalog.getByRealpath( filename );
-
 			const filePath = ts.path.chop.filepath;
-
 			let resource = root.inventory.get( server_resource.filePathAlias( filePath ) );
 
 			if( resource )
@@ -355,7 +380,6 @@ def.proto.prepareInventory =
 	if( config.get( 'shell', 'bundle', 'enable' ) )
 	{
 		const bundle = this.buildBundle( );
-
 		const hash = hash_sha1.calc( bundle.code );
 
 		// calculates the hash for the bundle
@@ -447,7 +471,6 @@ def.proto.createSpace =
 		spaceRef
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
@@ -589,7 +612,6 @@ def.proto.requestListener =
 	if( !resource )
 	{
 		root.webError( result, 404, 'Bad Request' );
-
 		return;
 	}
 
@@ -598,7 +620,6 @@ def.proto.requestListener =
 	if( resource.inBundle && !devel )
 	{
 		root.webError( result, 404, 'Bad Request' );
-
 		return;
 	}
 

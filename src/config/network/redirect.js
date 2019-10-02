@@ -1,5 +1,6 @@
 /*
 | The redirect server.
+|
 | This is done to redirect http to https requests.
 */
 'use strict';

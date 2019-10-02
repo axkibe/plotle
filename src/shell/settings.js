@@ -12,28 +12,10 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-/*
-| If false don't do any animations.
-*/
-def.static.animation = true;
-
-
-/*
-| Milliseconds for zoom animation to all/home.
-*/
-def.static.animationZoomAllHomeTime = 120;
-
-
-/*
-| Milliseconds for zoom animation in single in or out steps.
-*/
-def.static.animationZoomStepTime = 40;
-
 // blink speed of the caret.
 // Note currently not blinking, but used to check
 // the input box.
 def.static.caretBlinkSpeed = 530;
-
 
 // milliseconds after mouse down, dragging starts
 def.static.dragtime = 400;
@@ -69,7 +51,6 @@ def.static.glyphCacheLimit = 250;
 def.static.glintCacheLimit = 32767;
 //def.static.glintCacheLimit = 1073741823;
 //def.static.glintCacheLimit = Number.POSITIVE_INFINITY;
-
 
 /*
 | Pixels to scroll on a wheel event

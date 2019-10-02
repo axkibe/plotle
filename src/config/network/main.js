@@ -1,7 +1,7 @@
 /*
 | The main(default) server.
 |
-| This is to be configured via config.js
+| To be configured via config.js
 */
 'use strict';
 

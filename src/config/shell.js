@@ -1,7 +1,7 @@
 /*
 | Manages the server config.
 |
-| This is to be configured via config.js
+| To be configured via config.js
 */
 'use strict';
 
@@ -13,11 +13,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// the /devel.html access
-		devel :
+		// animation settings
+		animation :
 		{
-			type : './shell/devel',
-			defaultValue : 'require( "./shell/devel" ).create( )'
+			type : './shell/animation',
+			defaultValue : 'require( "./shell/animation" ).create( )'
 		},
 
 		// the / or /index.html access
@@ -25,7 +25,14 @@ if( TIM )
 		{
 			type : './shell/bundle',
 			defaultValue : 'require( "./shell/bundle" ).create( )'
-		}
+		},
+
+		// the /devel.html access
+		devel :
+		{
+			type : './shell/devel',
+			defaultValue : 'require( "./shell/devel" ).create( )'
+		},
 	};
 }
 
