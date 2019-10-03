@@ -14,6 +14,7 @@ if( TIM )
 	def.attributes =
 	{
 		// if false to server tells each client is told not to cache http requests.
+		// FIXME move to http/s
 		cache : { type : 'boolean', defaultValue : 'false' },
 
 		// if true enables checking code on server.
@@ -26,6 +27,7 @@ if( TIM )
 		sensitive : { type : 'boolean', defaultValue : 'false' },
 
 		// server will check for changed resources on every request.
+		// FIXME rename
 		update : { type : 'boolean', defaultValue : 'true' },
 	};
 }

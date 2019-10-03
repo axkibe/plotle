@@ -12,26 +12,6 @@ tim.define( module, ( def ) => {
 def.abstract = true;
 
 
-// blink speed of the caret.
-// Note currently not blinking, but used to check
-// the input box.
-def.static.caretBlinkSpeed = 530;
-
-// milliseconds after mouse down, dragging starts
-def.static.dragtime = 400;
-
-// pixels after mouse down and move, dragging starts
-def.static.dragbox = 10;
-
-/*
-| Zooming settings.
-*/
-def.static.zoomBase = 1.1;
-
-def.static.zoomMin = -150;
-
-def.static.zoomMax = 150;
-
 /*
 | Max. number of undo events queued.
 */

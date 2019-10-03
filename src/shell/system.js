@@ -19,17 +19,14 @@ if( TIM )
 		// used to transmit animation events
 		_animationTransmitter : { type : 'function' },
 
-		// used for blinking the caret
-		_blinkTransmitter : { type : 'function' },
+		// used for checking input
+		_checkInputTransmitter : { type : 'function' },
 
 		// the display
 		_display : { type : 'protean' },
 
 		// used for starting drags after timeout
 		_onAtweenTimeTransmitter : { type : 'function' },
-
-		// used to test the hidden input
-		_testInputTransmitter : { type : 'function' },
 
 		// if true browser supports the setCapture( ) call
 		// if false needs work around
@@ -46,7 +43,6 @@ const gleam_point = tim.require( '../gleam/point' );
 const gleam_size = tim.require( '../gleam/size' );
 const math = tim.require( '../math/root' );
 const shell_root = tim.require( '../shell/root' );
-const shell_settings = tim.require( '../shell/settings' );
 
 
 /*
@@ -71,7 +67,6 @@ const transmitter =
 			if( !nosteering )
 			{
 				system._repeatHover( );
-
 				system._steerAttention( );
 			}
 
@@ -87,7 +82,6 @@ const transmitter =
 			if( !nosteering )
 			{
 				system._repeatHover( );
-
 				system._steerAttention( );
 			}
 
@@ -125,9 +119,9 @@ let animating = false;
 
 
 /*
-| Timer used for blinking
+| Timer used for checking input
 */
-let blinkTimer;
+let checkInputTimer;
 
 
 /*
@@ -258,10 +252,7 @@ const systemTransmitter =
 {
 	return(
 		transmitter(
-			function( )
-			{
-				system[ funcName ].apply( system, arguments );
-			},
+			function( ) { return system[ funcName ].apply( system, arguments ); },
 			true
 		)
 	);
@@ -271,21 +262,14 @@ const systemTransmitter =
 /*
 | Cancels an interval timer.
 */
-def.proto.cancelInterval =
-	function( id )
-{
-	return window.clearInterval( id );
-};
+def.proto.cancelInterval = ( id ) => window.clearInterval( id );
 
 
 /*
 | Cancels a single timer.
 */
-def.proto.cancelTimer =
-	function( id )
-{
-	return window.clearTimeout( id );
-};
+def.proto.cancelTimer = ( id ) => window.clearTimeout( id );
+
 
 /*
 | If not already animating, start doing so.
@@ -294,9 +278,7 @@ def.proto.doAnimation =
 	function( )
 {
 	if( animating ) return;
-
 	animating = true;
-
 	window.requestAnimationFrame( this._animationTransmitter );
 };
 
@@ -310,25 +292,15 @@ def.proto.failScreen =
 	)
 {
 	if( failScreen ) return;
-
 	failScreen = true;
-
 	const body = document.body;
-
 	body.removeChild( canvas );
-
 	body.removeChild( hiddenInput );
-
 	const divWrap = document.createElement( 'div' );
-
 	const divContent = document.createElement( 'div' );
-
 	const divMessage = document.createElement( 'div' );
-
 	const butReload = document.createElement( 'button' );
-
 	body.appendChild( divWrap );
-
 	body.style.backgroundColor = 'rgb(250, 245, 206)';
 
 	document.getElementById( 'viewport' ).content =
@@ -352,27 +324,7 @@ def.proto.failScreen =
 	butReload.textContent = 'Reload';
 	butReload.style.width = '100%';
 	butReload.style.marginTop = '20px';
-
-	butReload.onclick =
-		function( )
-	{
-		location.reload( );
-	};
-};
-
-
-/*
-| (Re)Starts the blink timer
-*/
-def.proto.restartBlinker =
-	function( )
-{
-	// double uses the blink timer
-	this._testInput( );
-
-	if( blinkTimer ) clearInterval( blinkTimer );
-
-	blinkTimer = setInterval( this._blinkTransmitter, shell_settings.caretBlinkSpeed );
+	butReload.onclick = ( ) => location.reload( );
 };
 
 
@@ -385,9 +337,7 @@ def.proto.setInput =
 	)
 {
 	inputVal = text;
-
 	hiddenInput.value = '__' + text;
-
 	hiddenInput.setSelectionRange( 2, 2 + text.length );
 };
 
@@ -455,31 +405,13 @@ def.proto._animation =
 };
 
 
-/*
-| Blinks the caret
-*/
-def.proto._blink =
-	function( )
-{
-	if( failScreen ) return;
-
-	// also looks into the hidden input field,
-	// maybe the user pasted something using the browser menu
-	this._testInput( );
-};
-
-
 const _resetAtweenState =
 	function( )
 {
 	atweenTimer = undefined;
-
 	atweenShift = false;
-
 	atweenCtrl = false;
-
 	atweenPos = undefined;
-
 	atweenMove = undefined;
 };
 
@@ -499,7 +431,6 @@ def.proto._onAtweenTime =
 	pointingState = 'drag';
 
 	root.dragStart( atweenPos, atweenShift, atweenCtrl );
-
 	root.dragMove( atweenMove, atweenShift, atweenCtrl );
 
 	_resetAtweenState( );
@@ -572,15 +503,9 @@ def.proto._onResize =
 def.proto._captureEvents =
 	function( )
 {
-	if( this._useCapture )
-	{
-		canvas.setCapture( canvas );
-
-		return;
-	}
+	if( this._useCapture ) { canvas.setCapture( canvas ); return; }
 
 	document.onmouseup = canvas.onmouseup;
-
 	document.onmousemove = canvas.onmousemove;
 };
 
@@ -612,11 +537,8 @@ def.proto._onKeyPress =
 	)
 {
 	const ew = event.which;
-
 	const kcode = event.keyCode;
-
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	if(
@@ -631,9 +553,8 @@ def.proto._onKeyPress =
 
 	lastSpecialKey = -1;
 
-	this._testInput( );
-
-	this.setTimer( 0, this._testInputTransmitter );
+	this._checkInput( );
+	this.setTimer( 0, this._checkInputTransmitter );
 
 	return true;
 };
@@ -645,7 +566,7 @@ def.proto._onKeyPress =
 def.proto._onKeyUp =
 	function( event )
 {
-	this._testInput( );
+	this._checkInput( );
 
 	this._releaseSpecialKey(
 		event.keyCode,
@@ -693,11 +614,9 @@ def.proto._onMouseDown =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	this._probeClickDrag( p, shift, ctrl );
-
 	this._pointingHover( p, shift, ctrl );
 
 	return false;
@@ -723,30 +642,17 @@ def.proto._probeClickDrag =
 		case 'atween' :
 
 			atweenPos = p;
-
 			atweenMove = p;
-
 			atweenShift = shift;
-
 			atweenCtrl = ctrl;
-
 			atweenTimer =
-				this.setTimer(
-					shell_settings.dragtime,
-					this._onAtweenTimeTransmitter
-				);
+				this.setTimer( config.dragTime, this._onAtweenTimeTransmitter );
 
 			return;
 
-		case 'drag' :
+		case 'drag' : root.dragStart( p, shift, ctrl ); return;
 
-			root.dragStart( p, shift, ctrl );
-
-			return;
-
-		case false :
-
-			return;
+		case false : return;
 
 		default : throw new Error( );
 	}
@@ -765,14 +671,10 @@ def.proto._pointingHover =
 	)
 {
 	hoverP = p;
-
 	hoverShift = shift;
-
 	hoverCtrl = ctrl;
 
-	this._setCursor(
-		root.pointingHover( p, shift, ctrl )
-	);
+	this._setCursor( root.pointingHover( p, shift, ctrl ) );
 };
 
 
@@ -792,25 +694,19 @@ def.proto._setCursor =
 		case 'grab' :
 
 			canvas.style.cursor = '';
-
 			canvas.className = 'grab';
-
 			break;
 
 		case 'grabbing' :
 
 			canvas.style.cursor = '';
-
 			canvas.className = 'grabbing';
-
 			break;
 
 		default :
 
 			canvas.style.cursor = cursor;
-
 			canvas.className = '';
-
 			break;
 	}
 };
@@ -844,20 +740,15 @@ def.proto._onMouseMove =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
-		case false :
-
-			this._pointingHover( p, shift, ctrl );
-
-			break;
+		case false : this._pointingHover( p, shift, ctrl ); break;
 
 		case 'atween' :
 		{
-			const dragbox = shell_settings.dragbox;
+			const dragbox = config.dragBox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
@@ -866,17 +757,11 @@ def.proto._onMouseMove =
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atweenTimer );
-
 				pointingState = 'drag';
-
 				root.dragStart( atweenPos, shift, ctrl );
-
 				root.dragMove( p, shift, ctrl );
-
 				system._repeatHover( );
-
 				_resetAtweenState( );
-
 				this._captureEvents( );
 			}
 			else
@@ -891,14 +776,10 @@ def.proto._onMouseMove =
 		case 'drag':
 
 			root.dragMove( p, shift, ctrl );
-
 			system._repeatHover( );
-
 			break;
 
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
 	return true;
@@ -924,48 +805,33 @@ def.proto._onMouseUp =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
 	{
-		case false :
-
-			break;
+		case false : break;
 
 		case 'atween' :
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			clearTimeout( atweenTimer );
-
 			root.click( atweenPos, shift, ctrl );
-
 			this._pointingHover( atweenPos, shift, ctrl );
-
 			this._steerAttention( );
-
 			_resetAtweenState( );
-
 			pointingState = false;
-
 			break;
 
 		case 'drag' :
 
 			root.dragStop( p, shift, ctrl );
-
 			this._pointingHover( p, shift, ctrl );
-
 			this._steerAttention( );
-
 			pointingState = false;
-
 			break;
 
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
 	return false;
@@ -1001,18 +867,15 @@ def.proto._onMouseWheel =
 	else
 	{
 		console.log( 'invalid wheel event' );
-
 		return;
 	}
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	root.mousewheel( p, dir, shift, ctrl );
 
 	this._pointingHover( p, shift, ctrl );
-
 	this._steerAttention( );
 };
 
@@ -1037,7 +900,6 @@ def.proto._onTouchStart =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	this._probeClickDrag( p, shift, ctrl );
@@ -1066,7 +928,6 @@ def.proto._onTouchMove =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
@@ -1079,7 +940,7 @@ def.proto._onTouchMove =
 
 		case 'atween':
 		{
-			const dragbox = shell_settings.dragbox;
+			const dragbox = config.dragBox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
@@ -1088,17 +949,11 @@ def.proto._onTouchMove =
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atweenTimer );
-
 				pointingState = 'drag';
-
 				root.dragStart( atweenPos, shift, ctrl );
-
 				root.dragMove( p, shift, ctrl );
-
 				system._repeatHover( );
-
 				_resetAtweenState( );
-
 				this._captureEvents( );
 			}
 			else
@@ -1113,15 +968,10 @@ def.proto._onTouchMove =
 		case 'drag':
 
 			root.dragMove( p, shift, ctrl );
-
 			system._repeatHover( );
-
 			break;
 
-		default :
-
-			throw new Error( );
-
+		default : throw new Error( );
 	}
 
 	return true;
@@ -1150,7 +1000,6 @@ def.proto._onTouchEnd =
 		);
 
 	const shift = event.shiftKey;
-
 	const ctrl = event.ctrlKey || event.metaKey;
 
 	switch( pointingState )
@@ -1163,17 +1012,11 @@ def.proto._onTouchEnd =
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-
 			clearTimeout( atweenTimer );
-
 			root.click( p, shift, ctrl );
-
 			this._pointingHover( p, shift, ctrl );
-
 			this._steerAttention( );
-
 			_resetAtweenState( );
-
 			pointingState = false;
 
 			break;
@@ -1181,18 +1024,12 @@ def.proto._onTouchEnd =
 		case 'drag' :
 
 			root.dragStop( p, shift, ctrl );
-
 			this._pointingHover( p, shift, ctrl );
-
 			this._steerAttention( );
-
 			pointingState = false;
-
 			break;
 
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
 
 	return false;
@@ -1205,15 +1042,9 @@ def.proto._onTouchEnd =
 def.proto._releaseEvents =
 	function( )
 {
-	if ( this._useCapture )
-	{
-		document.releaseCapture( canvas );
-
-		return;
-	}
+	if ( this._useCapture ) { document.releaseCapture( canvas ); return; }
 
 	document.onmouseup = undefined;
-
 	document.onmousemove = undefined;
 };
 
@@ -1236,9 +1067,7 @@ def.proto._specialKey =
 	if( !key ) return true;
 
 	root.specialKey( key, shift, ctrl );
-
 	system._repeatHover( );
-
 	system._steerAttention( );
 
 	return false;
@@ -1263,69 +1092,27 @@ def.proto._releaseSpecialKey =
 	if( !key ) return;
 
 	root.releaseSpecialKey( key, shift, ctrl );
-
 	system._repeatHover( );
-
 	system._steerAttention( );
 };
 
 
 
 /*
-| Tests if the hidden input field got data
+| Checks if the hidden input field got data.
 */
-def.proto._testInput =
+def.proto._checkInput =
 	function( )
 {
-	if( !root ) return;
+	if( !root || failScreen ) return;
 
 	let text = hiddenInput.value;
-
 	if( text === '__' + inputVal ) return;
-
 	// works around opera quirks inserting CR characters
 	text = text.replace( /\r/g, '' );
-
 	root.input( text.substr( 2 ) );
-
 	system._repeatHover( );
-
 	system._steerAttention( );
-};
-
-
-/*
-| This is mainly used on the iPad.
-|
-| Checks if the virtual keyboard should be suggested
-| and if takes care the caret is scrolled into
-| visible screen area.
-*/
-def.proto._steerAttention =
-	function( )
-{
-	let ac = root.attentionCenter;
-
-	if( ac === undefined )
-	{
-		hiddenInput.style.top = '0';
-
-		window.scrollTo( 0, 0 );
-
-		hiddenInput.blur( );
-	}
-	else
-	{
-		ac = math.limit( 0, ac, root.viewSize.height - 15 );
-
-		hiddenInput.style.top = ac + 'px';
-
-		const clipboard = root.clipboard;
-
-		system.setInput( clipboard );
-
-		hiddenInput.focus( );
-	}
 };
 
 
@@ -1351,10 +1138,9 @@ def.static.init =
 		shell_system.create(
 			'transmitter', transmitter,
 			'_animationTransmitter', systemTransmitter( '_animation' ),
-			'_blinkTransmitter', systemTransmitter( '_blink' ),
+			'_checkInputTransmitter', systemTransmitter( '_checkInput' ),
 			'_display', display,
 			'_onAtweenTimeTransmitter', systemTransmitter( '_onAtweenTime' ),
-			'_testInputTransmitter', systemTransmitter( '_testInput' ),
 			'_useCapture', !!canvas.setCapture
 		);
 
@@ -1385,7 +1171,7 @@ def.static.init =
 	document.onkeypress = systemTransmitter( '_onKeyPress' );
 	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
 
-	system.restartBlinker( );
+	system._restartCheckTimer( );
 
 	shell_root.startup( system._display );
 };
@@ -1403,6 +1189,50 @@ def.static.startup =
 	const init = transmitter( shell_system.init, true );
 
 	init( );
+};
+
+
+/*
+| (Re)Starts the check timer
+*/
+def.proto._restartCheckTimer =
+	function( )
+{
+	this._checkInput( );
+
+	if( checkInputTimer ) clearInterval( checkInputTimer );
+
+	// checks every half second.
+	checkInputTimer = setInterval( this._checkInputTransmitter, 500 );
+};
+
+
+/*
+| This is mainly used on the iPad.
+|
+| Checks if the virtual keyboard should be suggested
+| and if takes care the caret is scrolled into
+| visible screen area.
+*/
+def.proto._steerAttention =
+	function( )
+{
+	let ac = root.attentionCenter;
+
+	if( ac === undefined )
+	{
+		hiddenInput.style.top = '0';
+		window.scrollTo( 0, 0 );
+		hiddenInput.blur( );
+	}
+	else
+	{
+		ac = math.limit( 0, ac, root.viewSize.height - 15 );
+		hiddenInput.style.top = ac + 'px';
+		const clipboard = root.clipboard;
+		system.setInput( clipboard );
+		hiddenInput.focus( );
+	}
 };
 
 

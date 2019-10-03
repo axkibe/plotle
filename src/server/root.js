@@ -181,6 +181,11 @@ def.proto.shellConfigResource =
 		'    zoomAllHomeTime : ' + config.get( 'shell', 'animation', 'zoomAllHomeTime' ) + ',',
 		'    zoomStepTime : ' + config.get( 'shell', 'animation', 'zoomStepTime' ) + ',',
 		'  } ),',
+		'  dragBox : ' + config.get( 'shell', 'dragBox' ) + ',',
+		'  dragTime : ' + config.get( 'shell', 'dragTime' ) + ',',
+		'  zoomBase : ' + config.get( 'shell', 'zoomBase' ) + ',',
+		'  zoomMax : ' + config.get( 'shell', 'zoomMax' ) + ',',
+		'  zoomMin : ' + config.get( 'shell', 'zoomMin' ) + ',',
 		'} );',
 	);
 

@@ -33,6 +33,17 @@ if( TIM )
 			type : './shell/devel',
 			defaultValue : 'require( "./shell/devel" ).create( )'
 		},
+
+		// milliseconds after mouse down, dragging starts
+		dragTime : { type : 'number', defaultValue : '400' },
+
+		// pixels after mouse down and move, dragging starts
+		dragBox : { type : 'number', defaultValue : '10' },
+
+
+		// zooming settings
+		zoomMin : { type : 'number', defaultValue : '-150' },
+		zoomMax : { type : 'number', defaultValue : '150' },
 	};
 }
 

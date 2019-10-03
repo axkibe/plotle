@@ -696,18 +696,9 @@ def.proto.changeSpaceTransformPoint =
 	)
 {
 	const st = this.spaceTransform;
-
 	const offset = st.offset;
-
-	const e1 =
-		math.limit(
-			shell_settings.zoomMin,
-			this._transformExponent + de,
-			shell_settings.zoomMax
-		);
-
+	const e1 = math.limit( config.zoomMin, this._transformExponent + de, config.zoomMax );
 	const zoom = Math.pow( 1.1, e1 );
-
 	const h = 1 / st.zoom - 1 / zoom;
 
 	this._changeTransformTo(
