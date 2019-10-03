@@ -40,6 +40,8 @@ if( TIM )
 		// pixels after mouse down and move, dragging starts
 		dragBox : { type : 'number', defaultValue : '10' },
 
+		// max. number of undo events queued.
+		maxUndo : { type : 'number', defaultValue : '1000' },
 
 		// zooming settings
 		zoomMin : { type : 'number', defaultValue : '-150' },

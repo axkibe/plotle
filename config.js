@@ -1,5 +1,7 @@
 /*
 | Central configuration file.
+|
+| See src/config/* for all possible options.
 */
 
 module.exports = ( set ) => {

@@ -13,11 +13,6 @@ def.abstract = true;
 
 
 /*
-| Max. number of undo events queued.
-*/
-def.static.maxUndo = 1000;
-
-/*
 | Do not cache the glyph for fonts larger than this.
 | Only applicable if opentype is true
 */

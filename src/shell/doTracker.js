@@ -20,7 +20,6 @@ if( TIM )
 }
 
 const change_wrapList = tim.require( '../change/wrapList' );
-const shell_settings = tim.require( '../shell/settings' );
 
 
 /*
@@ -53,7 +52,7 @@ def.proto.track =
 
 	undo = undo.append( changeWrap );
 
-	if( undo.length > shell_settings.maxUndo ) undo = undo.remove( 0 );
+	if( undo.length > config.maxUndo ) undo = undo.remove( 0 );
 
 	return this.create( '_undo', undo, '_redo', change_wrapList.create( ) );
 };
