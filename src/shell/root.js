@@ -133,7 +133,6 @@ const reply_error = tim.require( '../reply/error' );
 const result_hover = tim.require( '../result/hover' );
 const session_uid = tim.require( '../session/uid' );
 const shell_doTracker = tim.require( './doTracker' );
-const shell_settings = tim.require( './settings' );
 const show_create = tim.require( '../show/create' );
 const show_form = tim.require( '../show/form' );
 const show_normal = tim.require( '../show/normal' );
@@ -748,12 +747,12 @@ def.proto.changeSpaceTransformAll =
 	const vsy = root.viewSize.height;
 	const vsx2 = vsx / 2;
 	const vsy2 = vsy / 2;
-	const zoomMin = shell_settings.zoomMin;
+	const zoomMin = config.zoomMin;
 
 	let exp;
 	let z;
 
-	for( exp = shell_settings.zoomMax; exp > zoomMin; exp-- )
+	for( exp = config.zoomMax; exp > zoomMin; exp-- )
 	{
 		z = Math.pow( 1.1, exp );
 

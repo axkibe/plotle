@@ -40,8 +40,18 @@ if( TIM )
 		// pixels after mouse down and move, dragging starts
 		dragBox : { type : 'number', defaultValue : '10' },
 
+		// maximum size of a glint graphic cache
+		// in width * height
+		glintCacheLimit : { type : 'number', defaultValue: '32767' },
+
+		// glyphs for fonts larger than this won't be cached
+		glyphCacheLimit : { type : 'number', defaultValue : '250' },
+
 		// max. number of undo events queued.
 		maxUndo : { type : 'number', defaultValue : '1000' },
+
+		// pixels to scroll on a wheel event
+		textWheelSpeed : { type : 'number', defaultValue : '60' },
 
 		// zooming settings
 		zoomMin : { type : 'number', defaultValue : '-150' },

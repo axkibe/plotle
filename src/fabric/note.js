@@ -58,7 +58,6 @@ const gleam_roundRect = tim.require( '../gleam/roundRect' );
 const gleam_transform = tim.require( '../gleam/transform' );
 const gruga_note = tim.require( '../gruga/note' );
 const session_uid = tim.require( '../session/uid' );
-const shell_settings = tim.require( '../shell/settings' );
 const trace_space = tim.require( '../trace/space' );
 const mark_caret = tim.require( '../mark/caret' );
 const widget_scrollbar = tim.require( '../widget/scrollbar' );
@@ -81,13 +80,9 @@ def.static.createGeneric =
 	)
 {
 	const zone = gleam_rect.createArbitrary( action.startPoint, dp );
-
 	const note = action.transientItem.create( 'zone', zone );
-
 	const key = session_uid.newUid( );
-
 	const trace = trace_space.fakeRoot.appendItem( key );
-
 	const offset =
 		trace
 		.prependRoot
@@ -117,7 +112,6 @@ def.adjust.doc =
 	)
 {
 	const trace = this.trace && this.trace.appendDoc;
-
 	const zone = this.zone;
 
 	return(
@@ -239,8 +233,7 @@ def.proto.mousewheel =
 {
 	if( !this.pointWithin( p ) ) return false;
 
-	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
-
+	let y = this.scrollPos.y - dir * config.textWheelSpeed;
 	if( y < 0 ) y = 0;
 
 	root.alter( this.trace.appendScrollPos, this.scrollPos.create( 'y', y ) );
@@ -270,11 +263,8 @@ def.lazy.scrollbarY =
 	function( )
 {
 	const dHeight = this.doc.fullsize.height;
-
 	const zone = this.zone;
-
 	const aperture = zone.height - gruga_note.innerMargin.y;
-
 	const trace = this.trace;
 
 	if( dHeight <= aperture ) return;
@@ -344,7 +334,6 @@ def.lazy.shape =
 	function( )
 {
 	const zone = this.zone;
-
 	const cr = gruga_note.cornerRadius;
 
 	return(
@@ -383,9 +372,7 @@ def.lazy._innerGlint =
 	function( )
 {
 	const doc = this.doc;
-
 	const facet = gruga_note.facets.getFacet( );
-
 	const tOrthoShape = this._zeroShape.transform( this.transform.ortho );
 
 	return(
@@ -424,7 +411,6 @@ def.lazy._zeroShape =
 	function( )
 {
 	const zone = this.zone;
-
 	const cr = gruga_note.cornerRadius;
 
 	return(

@@ -37,18 +37,9 @@ const gleam_shape_line = tim.require( '../shape/line' );
 const gleam_shape_round = tim.require( '../shape/round' );
 const gleam_shape_start = tim.require( '../shape/start' );
 const gleam_size = tim.require( '../size' );
-const shell_settings = tim.require( '../../shell/settings' );
 
 
-/*
-const createCanvas =
-	NODE
-	? tim.require( 'canvas' ).createCanvas
-	: ( width, height ) => document.createElement( 'canvas' );
-*/
-
-const createCanvas =
-	( width, height ) => document.createElement( 'canvas' );
+const createCanvas = ( ) => document.createElement( 'canvas' );
 
 
 if( TIM )
@@ -136,7 +127,7 @@ def.static.createNewCanvas =
 /**/	if( arguments.length !== 4 ) throw new Error( );
 /**/}
 
-	const canvas = createCanvas( size.width, size.height );
+	const canvas = createCanvas( );
 
 	return(
 		gleam_display_canvas.createAroundHTMLCanvas(
@@ -772,7 +763,7 @@ def.proto._renderWindow =
 		return;
 	}
 
-	if( rh * rw > shell_settings.glintCacheLimit )
+	if( rh * rw > config.glintCacheLimit )
 	{
 		const x2 = this._round( x + rw );
 		const y2 = this._round( y + rh );

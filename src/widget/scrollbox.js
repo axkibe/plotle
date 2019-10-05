@@ -44,7 +44,6 @@ const gleam_glint_window = tim.require( '../gleam/glint/window' );
 const gleam_point = tim.require( '../gleam/point' );
 const gleam_size = tim.require( '../gleam/size' );
 const layout_scrollbox = tim.require( '../layout/scrollbox' );
-const shell_settings = tim.require( '../shell/settings' );
 const widget_factory = tim.require( './factory' );
 const widget_scrollbar = tim.require( './scrollbar' );
 
@@ -433,8 +432,7 @@ def.proto.mousewheel =
 		if( bubble ) return bubble;
 	}
 
-	let y = this.scrollPos.y - dir * shell_settings.textWheelSpeed;
-
+	let y = this.scrollPos.y - dir * config.textWheelSpeed;
 	if( y < 0 ) y = 0;
 
 	root.alter( this.trace.appendScrollPos, this.scrollPos.create( 'y', y ) );

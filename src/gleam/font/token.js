@@ -20,7 +20,6 @@ if( TIM )
 }
 
 
-const shell_settings = tim.require( '../../shell/settings' );
 const round = Math.round;
 
 
@@ -31,7 +30,6 @@ def.lazy.advanceWidth =
 	function( )
 {
 	const fontSize = this.fontFace.fontSize;
-
 	return fontSize.family.opentype.getAdvanceWidth( this.text, fontSize.size );
 };
 
@@ -95,34 +93,25 @@ def.proto.draw =
 		if( glyph )
 		{
 			if( glyph.advanceWidth ) x += glyph.advanceWidth * fontScale;
-
 			x += otFont.getKerningValue( glyph, glyphs[ a ] ) * fontScale;
 		}
 
 		glyph = glyphs[ a ];
 
-		if( size >= shell_settings.glyphCacheLimit )
+		if( size >= config.glyphCacheLimit )
 		{
 			const path = glyph.getPath( round( x ), round( y ), size, options, otFont );
-
 			path.fill = color.css;
-
 			path.draw( cx );
-
 			continue;
 		}
 
 		const index = glyph.index;
-
 		const cg = glyphCacheSet[ index ];
 
 		if( cg )
 		{
-			if( cg.canvas )
-			{
-				cx.drawImage( cg.canvas, round( x + cg.x1 ), round( y + cg.y1 ) );
-			}
-
+			if( cg.canvas ) cx.drawImage( cg.canvas, round( x + cg.x1 ), round( y + cg.y1 ) );
 			continue;
 		}
 
@@ -140,34 +129,25 @@ def.proto.draw =
 		if( x2 - x1 > 0 && y2 - y1 > 0 )
 		{
 			canvas = document.createElement( 'canvas' );
-
 			canvas.width = x2 - x1;
-
 			canvas.height = y2 - y1;
-
 			const cvx = canvas.getContext( '2d' );
-
 			cvx.translate( -x1, -y1 );
-
 			path.fill = color.css;
-
 			path.draw( cvx );
-
 			cx.drawImage( canvas, round( x + x1 ), round( y + y1 ) );
 		}
 		else
 		{
-			canvas = undefined; // FIXME remove
-
 			x1 = x2 = y1 = y2 = 0;
 		}
 
 		glyphCacheSet[ index ] =
-		{
-			canvas : canvas,
-			x1 : x1,
-			y1 : y1
-		};
+			Object.freeze( {
+				canvas : canvas,
+				x1 : x1,
+				y1 : y1
+			} );
 	}
 };
 
@@ -182,7 +162,6 @@ def.lazy.width =
 	let w = 0;
 
 	const otFont = this._opentype( );
-
 	const glyphs = this._glyphs;
 
 	for( let a = 0, al = glyphs.length; a < al; a++ )
