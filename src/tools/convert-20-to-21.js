@@ -149,8 +149,10 @@ const run =
 	{
 		console.log( ' * ' + o._id );
 
-		if( o.type !== 'database_userSkid' ) throw new Error( );
 		o.type = 'userInfoSkid';
+		delete o.code;
+		delete o.icom;
+		if( o.news === 'init' ) o.news = false;
 
 		if( !dry ) await trgUsers.insert( o );
 	}
