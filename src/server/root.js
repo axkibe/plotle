@@ -175,6 +175,7 @@ def.proto.shellConfigResource =
 {
 	let t = [ ];
 	t.push(
+		'"use strict"',
 		'var config = Object.freeze( { ',
 		'  animation : Object.freeze( {',
 		'    enable : ' + config.get( 'shell', 'animation', 'enable' ) + ',',

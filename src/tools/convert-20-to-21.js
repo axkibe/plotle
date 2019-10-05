@@ -48,7 +48,7 @@ global.NODE = true;
 
 
 const mongodb = require( 'mongodb' );
-//const ref_space = require( '../ref/space' );
+const ref_space = require( '../ref/space' );
 
 
 /*
@@ -84,6 +84,36 @@ const usage =
 	function( )
 {
 	console.log( 'USAGE node : ' + module.filename + ' [dry or wet]' );
+};
+
+
+/*
+| Converts a space.
+*/
+const convertSpace =
+	async function(
+		srcConnection,
+		trgConnection,
+		spaceRef
+	)
+{
+	console.log( 'loading and replaying "' + spaceRef.fullname + '"' );
+
+	const srcChanges = await srcConnection.collection( 'changes:' + spaceRef.fullname );
+	const cursor =
+		( await srcChanges.find( { }, { sort : '_id' },) )
+		.batchSize( 100 );
+	const trgChanges =
+		await trgConnection.collection( 'changes:' + spaceRef.fullname );
+
+	for(
+		let o = await cursor.nextObject( );
+		o;
+		o = await cursor.nextObject( )
+	)
+	{
+		if( !dry ) { await trgChanges.insert( o ); }
+	}
 };
 
 
@@ -169,8 +199,8 @@ const run =
 	{
 		if( !dry ) await trgSpaces.insert( o );
 
-		//const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
-		//await convertSpace( srcConnection, trgConnection, spaceRef );
+		const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
+		await convertSpace( srcConnection, trgConnection, spaceRef );
 	}
 
 	console.log( '* closing connections' );
