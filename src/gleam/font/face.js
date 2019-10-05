@@ -18,7 +18,10 @@ if( TIM )
 		fontSize : { type : './size' },
 
 		// token cache
-		_tokenCache : { type : 'protean', defaultValue: '{}' },
+		// note that albeit only strings are used as keys,
+		// a normal {} object cannot be used as map as for example
+		// "constructor" is already defined :-/
+		_tokenCache : { type : 'protean', defaultValue: 'new Map( )' },
 	};
 }
 
@@ -32,12 +35,11 @@ def.proto.createToken =
 	)
 {
 	const tc = this._tokenCache;
-
-	let tv = tc[ text ];
-
+	let tv = tc.get( text );
 	if( tv ) return tv;
-
-	return( tc[ text ] = font_token.create( 'fontFace', this, 'text', text ) );
+	tv = font_token.create( 'fontFace', this, 'text', text );
+	tc.set( text, tv );
+	return tv;
 };
 
 
