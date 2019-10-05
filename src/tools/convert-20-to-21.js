@@ -40,13 +40,9 @@ global.NODE = true;
 	require( 'tim.js' );
 	const ending = 'src/tools/convert-' + fromVersion + '-to-' + toVersion + '.js';
 	const filename = module.filename;
-
 	if( !filename.endsWith( ending ) ) throw new Error( );
-
 	const rootPath = filename.substr( 0, filename.length - ending.length );
-	// timcode path is one level up
 	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode/';
-
 	tim.catalog.addRootDir( rootPath, 'convert', timcodePath );
 }
 
@@ -80,101 +76,6 @@ const connectToTarget =
 	return await connector.open( );
 };
 
-
-/*
-| Converts the JSON for a change/list.
-*/
-/*
-const convertJson =
-	function(
-		obj
-	)
-{
-	const keys = Object.keys( obj );
-
-	for( let key of keys )
-	{
-		const v = obj[ key ];
-
-		if( key === 'trace' || key === 'trace2' )
-		{
-			const trace = v.trace || v;
-
-			for( let step = 0, tl = trace.length; step < tl; step++ )
-			{
-				const sv = trace[ step ];
-
-				switch( sv )
-				{
-					case '(o)from' : trace[ step ] = '(o)jp1'; break;
-
-					case '(o)to' : trace[ step ] = '(o)jp2'; break;
-
-					case '(o)field' :
-
-						// Fixing something that should never
-						// have happened
-
-						if( trace[ step + 1 ] === 'from' )
-						{
-							trace[ step ] = '(o)jp1';
-							trace.splice( step + 1, 1 );
-						}
-						else if( trace[ step + 1 ] === 'to' )
-						{
-							trace[ step ] = '(o)jp2';
-							trace.splice( step + 1, 1 );
-						}
-
-						tl--;
-
-						break;
-				}
-			}
-
-			continue;
-		}
-
-		if( typeof( v ) === 'object' ) convertJson( obj[ key ] );
-	}
-};
-*/
-
-
-/*
-| Converts a space.
-*/
-/*
-const convertSpace =
-	async function(
-		srcConnection,
-		trgConnection,
-		spaceRef
-	)
-{
-	console.log( 'loading and replaying "' + spaceRef.fullname + '"' );
-
-	const srcChanges = await srcConnection.collection( 'changes:' + spaceRef.fullname );
-
-	const cursor =
-		( await srcChanges.find( { }, { sort : '_id' },) )
-		.batchSize( 100 );
-
-	const trgChanges =
-		await trgConnection.collection( 'changes:' + spaceRef.fullname );
-
-	for(
-		let o = await cursor.nextObject( );
-		o;
-		o = await cursor.nextObject( )
-	)
-	{
-		convertJson( o );
-
-		if( !dry ) { await trgChanges.insert( o ); }
-	}
-};
-*/
 
 /*
 | Prints out usage info.
@@ -247,6 +148,9 @@ const run =
 	)
 	{
 		console.log( ' * ' + o._id );
+
+		if( o.type !== 'database_userSkid' ) throw new Error( );
+		o.type = 'userInfoSkid';
 
 		if( !dry ) await trgUsers.insert( o );
 	}

@@ -24,8 +24,7 @@ if( TIM )
 		news : { type : [ 'boolean', 'string' ], json : true },
 	};
 
-	// FIXME rename "userInfoSkid"
-	def.json = 'database_userSkid';
+	def.json = 'userInfoSkid';
 }
 
 const user_info = tim.require( '../user/info' );
