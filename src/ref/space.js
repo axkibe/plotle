@@ -53,4 +53,14 @@ def.lazy.fullname =
 };
 
 
+/*
+| Key for the changes in database.
+*/
+def.lazy.dbChangesKey =
+	function( )
+{
+	return 'changes:' + this.fullname;
+};
+
+
 } );

@@ -20,9 +20,6 @@ if( TIM )
 		// reference to the space
 		spaceRef : { type : '../ref/space' },
 
-		// changes database collection
-		_changesDB : { type : 'protean' },
-
 		// changeWraps cached in RAM
 		_changeWraps : { type : '../change/wrapList' },
 
@@ -129,13 +126,9 @@ def.proto.getChangeWrapsUp2Current =
 	)
 {
 	const a = [ ];
-
 	const cseq = this.seq;
 
-	for( let c = seq; c < cseq; c++ )
-	{
-		a.push( this.getChangeWrap( c ) );
-	}
+	for( let c = seq; c < cseq; c++ ) a.push( this.getChangeWrap( c ) );
 
 	return change_wrapList.create( 'list:init', a );
 };
@@ -150,15 +143,15 @@ def.static.loadSpace =
 	)
 {
 	let seq = 1;
-
 	let space = fabric_space.create( );
 
-	const changesDB =
-		await root.repository.collection( 'changes:' + spaceRef.fullname );
+	const sRows = await root.repository.spaceChangeSeqs( spaceRef.dbChangesKey );
 
-	const cursor =
-		( await changesDB.find( { }, { sort : '_id' } ) )
-		.batchSize( 100 );
+	console.log( 'SROWS', sRows );
+
+	throw new Error( 'FIXME' );
+
+	/*
 
 	for( let o = await cursor.nextObject( ); o; o = await cursor.nextObject( ) )
 	{
@@ -181,6 +174,7 @@ def.static.loadSpace =
 			'_changesOffset', seq
 		)
 	);
+	*/
 };
 
 

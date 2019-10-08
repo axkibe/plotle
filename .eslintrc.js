@@ -33,6 +33,7 @@ module.exports = {
             "unix"
         ],
         "no-console": "off",
+        "no-empty": [ "error", { "allowEmptyCatch": true } ],
         "no-trailing-spaces": "error",
         "no-unused-vars": [
             "error",

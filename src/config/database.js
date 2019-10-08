@@ -13,14 +13,11 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// host of the database
-		host : { type : 'string', defaultValue : '"localhost"' },
-
-		// port of the database
-		port : { type : 'integer', defaultValue : '27017' },
+		// url of the database
+		url : { type : 'string', defaultValue : '"http://localhost:5984"' },
 
 		// name of the dabase
-		name : { type : 'string', defaultValue : '"plotle-21"' },
+		name : { type : 'string', defaultValue : '"plotle-22"' },
 	};
 }
 

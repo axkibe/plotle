@@ -86,14 +86,14 @@ def.proto.loadSpaces =
 {
 	log.log( 'loading and replaying all spaces' );
 
-	const cursor = await root.repository.spaces.find( { }, { sort: '_id' } );
+	const spaceIDs = await root.repository.spaceIDs( );
 
-	for(
-		let o = await cursor.nextObject( );
-		o;
-		o = await cursor.nextObject( )
-	)
+	for( let sRow of spaceIDs )
 	{
+/**/	if( CHECK && sRow.id !== sRow.key ) throw new Error( );
+
+		const id = sRow.id;
+		const o = await root.repository.spaceMeta( id );
 		const spaceRef = ref_space.create( 'username', o.username, 'tag', o.tag );
 
 		log.log( 'loading and replaying "' + spaceRef.fullname + '"' );

@@ -1,6 +1,6 @@
 /*
-| Linkloom connector using the mongodb driver
-| to access an plotle repository.
+| Connector using the nano driver
+| to access a plotle repository on couchDB.
 */
 'use strict';
 
@@ -8,39 +8,128 @@
 tim.define( module, ( def, database_repository ) => {
 
 
-const dbVersion = 21;
+const dbVersion = 22;
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		// the mongoDB connection
-		_connection : { type : 'protean' },
-
-		// the users collection
-		users : { type : 'protean' },
-
-		// the spaces collection
-		spaces : { type : 'protean' },
+		// the nano connection
+		_db : { type : 'protean' },
 	};
 }
 
-const mongodb = tim.require( 'mongodb' );
+const nano = tim.require( 'nano' );
 
 const log = tim.require( '../server/log' );
 const config = tim.require( '../config/intf' );
-const ref_space = tim.require( '../ref/space' );
+
+
+/*
+| Returns a repository object with
+| an active connection.
+*/
+def.static.connect =
+	async function( )
+{
+	const url = config.get( 'database', 'url' );
+	const name = config.get( 'database', 'name' );
+
+	log.log( 'connecting database ' + url + ' ' + name );
+
+	const connection = await nano( url );
+	const db = await database_repository._checkRepository( name, connection );
+
+	return database_repository.create( '_db', db );
+};
+
+
+/*
+| Returns all space IDs from the 'spaces/id' view.
+*/
+def.proto.spaceIDs =
+	async function( )
+{
+	const r = await this._db.view( 'spaces', 'id' );
+	return r.rows;
+};
+
+
+def.proto.spaceChangeSeqs =
+	async function(
+		dbChangesKey
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/	if( dbChangesKey.substr( 0, 8 ) !== 'changes:' ) throw new Error( );
+/**/}
+
+	const r = await this._db.view( dbChangesKey, 'seq' );
+	return r.rows;
+};
+
+
+/*
+| Returns the meta data of a space with a given id.
+*/
+def.proto.spaceMeta =
+	async function(
+		id
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/	if( id.substr( 0, 7 ) !== 'spaces:' ) throw new Error( );
+/**/}
+
+	return await this._db.get( id );
+};
+
+
+/*
+| Ensures the repository schema version fits this server.
+| Returns the nano db handle.
+*/
+def.static._checkRepository =
+	async function(
+		name,      // name of the database
+		connection // nano connection
+	)
+{
+	log.log( 'checking repository schema version' );
+
+	let db;
+	try{ db = await connection.use( name ); }
+	catch( e ) { return await database_repository.initRepository( connection ); }
+
+	const version = await db.get( 'version' );
+
+	if( version.version !== dbVersion )
+	{
+		throw new Error(
+			'Wrong repository schema version, expected '
+			+ dbVersion + ', but got ' + version.version
+		);
+	}
+
+	return db;
+};
 
 
 /*
 | Initializes a new repository.
 */
-const initRepository =
+def.static._initRepository =
 	async function(
 		connection
 	)
 {
+	throw new Error( 'XXX FIXME!' );
+	/*
 	const spaces = await connection.collection( 'spaces' );
 
 	log.log( 'found no repository, initializing a new one' );
@@ -76,101 +165,7 @@ const initRepository =
 			version : dbVersion,
 		}
 	);
-};
-
-
-/*
-| Ensures the repository schema version fits this server.
-*/
-const checkRepository =
-	async function(
-		connection
-	)
-{
-	log.log( 'checking repository schema version' );
-
-	const global = await connection.collection( 'global' );
-
-	const version = await global.findOne( { _id : 'version' } );
-
-	if( version )
-	{
-		if( version.version !== dbVersion )
-		{
-			throw new Error(
-				'Wrong repository schema version, expected '
-				+ dbVersion + ', but got ' + version.version
-			);
-		}
-	}
-	else
-	{
-		// otherwise initializes the database repository
-		await initRepository( connection );
-	}
-};
-
-
-/*
-| Returns a repository object with
-| an active connection.
-*/
-def.static.connect =
-	async function( )
-{
-	const host = config.get( 'database', 'host' );
-
-	const port = config.get( 'database', 'port' );
-
-	const name = config.get( 'database', 'name' );
-
-	log.log( 'connecting database ' + host + ':' + port + ' ' + name );
-
-	const server = new mongodb.Server( host, port, { } );
-
-	const connector = new mongodb.Db( name, server, { w : 1 } );
-
-	const connection = await connector.open( );
-
-	const users = await connection.collection( 'users' );
-
-	const spaces = await connection.collection( 'spaces' );
-
-	// checking repo version:
-
-	await checkRepository( connection );
-
-	return(
-		database_repository.create(
-			'_connection', connection,
-			'users', users,
-			'spaces', spaces
-		)
-	);
-};
-
-
-/*
-| Returns a collection.
-|
-| FUTURE let it return a tim.
-*/
-def.proto.collection =
-	async function(
-		name
-	)
-{
-	return await this._connection.collection( name );
-};
-
-
-/*
-| Closes the connection.
-*/
-def.proto.close =
-	function( )
-{
-	this._connection.close( );
+	*/
 };
 
 
