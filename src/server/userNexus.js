@@ -1,24 +1,18 @@
 /*
-| Holds an manages all users.
-|
-| TODO move database interaction into here.
+| Holds and manages all user infos.
 */
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, server_userNexus ) => {
 
 
 if( TIM )
 {
 	def.attributes =
 	{
-		_cache :
-		{
-			// table of all cached user infos
-			type : '../user/infoGroup',
-			defaultValue : 'require( "../user/infoGroup" ).create( )'
-		}
+		// table of all cached user infos
+		_cache : { type : '../user/infoGroup' }
 	};
 }
 
@@ -29,6 +23,7 @@ const user_info = tim.require( '../user/info' );
 const database_userInfoSkid = tim.require( '../database/userInfoSkid' );
 const ref_space = tim.require( '../ref/space' );
 const ref_spaceList = tim.require( '../ref/spaceList' );
+const user_infoGroup = tim.require( '../user/infoGroup' );
 
 
 /*
@@ -66,10 +61,7 @@ def.proto.addUserSpaceRef =
 		if( r.equals( spaceRef ) ) throw new Error( );
 	}
 
-	dsl =
-		dsl.alter(
-			change_listAppend.create( 'val', spaceRef )
-		);
+	dsl = dsl.alter( change_listAppend.create( 'val', spaceRef ) );
 
 	userInfo = userInfo.create( 'spaceList', dsl );
 
@@ -79,6 +71,28 @@ def.proto.addUserSpaceRef =
 				'_cache', this._cache.create( 'group:set', username, userInfo )
 			)
 	);
+};
+
+
+/*
+| Creates the user nexus from database.
+*/
+def.static.createFromRepository =
+	async function(
+		repository
+	)
+{
+	const rows = await repository.getUserNames( );
+	let cache = user_infoGroup.create( );
+
+	for( let r of rows )
+	{
+		const e = await repository.getUser( r.key );
+		const ui = database_userInfoSkid.createFromJSON( e );
+		cache = cache.set( ui.name, ui.asUser );
+	}
+
+	return server_userNexus.create( '_cache', cache );
 };
 
 
@@ -93,13 +107,9 @@ def.proto.createVisitor =
 	if( userCreds.name !== 'visitor' ) return;
 
 	let nextVisitor = root.nextVisitor;
-
 	let name;
 
-	do
-	{
-		name = 'visitor-' + ( ++nextVisitor );
-	}
+	do name = 'visitor-' + ( ++nextVisitor );
 	while( this._cache.get( name ) );
 
 	root.create(
@@ -140,29 +150,20 @@ def.proto.getUserSpaceList =
 	if( spaceList ) return spaceList;
 
 	const arr = [ ];
+	const spaceIDs = await root.repository.getSpaceIDs( );
 
-	const cursor = await root.repository.spaces.find( { }, { sort: '_id' } );
-
-	for(
-		let o = await cursor.nextObject( );
-		o;
-		o = await cursor.nextObject( )
-	)
+	for( let row of spaceIDs )
 	{
-		if( o.username !== userInfo.name ) continue;
+		const id = row.id;
+		const p = id.split( ':' );
+		if( p[ 0 ] !== 'spaces' ) throw new Error( );
+		if( p[ 1 ] !== userInfo.name ) continue;
 
-		arr.push(
-			ref_space.create(
-				'username', o.username,
-				'tag', o.tag
-			)
-		);
+		arr.push( ref_space.create( 'username', p[ 1 ], 'tag', p[ 2 ] ) );
 	}
 
 	const userSpaceList =
-		dynamic_refSpaceList.create(
-			'current', ref_spaceList.create( 'list:init', arr )
-		);
+		dynamic_refSpaceList.create( 'current', ref_spaceList.create( 'list:init', arr ) );
 
 	root.create(
 		'userNexus',
@@ -170,9 +171,7 @@ def.proto.getUserSpaceList =
 				'_cache',
 					root.userNexus._cache.set(
 						userInfo.name,
-						userInfo.create(
-							'spaceList', userSpaceList
-						)
+						userInfo.create( 'spaceList', userSpaceList )
 					)
 			)
 	);
@@ -194,16 +193,12 @@ def.proto.register =
 /**/	if( userInfo.timtype !== user_info ) throw new Error( );
 /**/}
 
-	if( userInfo.spaceList )
-	{
-		throw new Error( 'registered user had "spaceList" set' );
-	}
+	if( userInfo.spaceList ) throw new Error( 'registered user had "spaceList" set' );
 
 	// user already registered and in cache
 	if( this._cache.get( userInfo.name ) ) return false;
 
-	const val =
-		await root.repository.users.findOne( { _id : userInfo.name } );
+	const val = await root.repository.users.findOne( { _id : userInfo.name } );
 
 	// user already registered
 	if( val ) return false;
@@ -220,7 +215,7 @@ def.proto.register =
 
 	await root.repository.users.insert(
 		JSON.parse( JSON.stringify(
-			database_userInfoSkid.createFromUser( userInfo )
+			database_userInfoSkid.createFromUserInfo( userInfo )
 		) )
 	);
 
@@ -233,31 +228,16 @@ def.proto.register =
 
 
 /*
-| Tests if a user is already the cache.
+| Returns
 |
 | If so returns the matching user info.
 */
 def.proto.getByName =
-	async function(
+	function(
 		username
 	)
 {
-	let userInfo = this._cache.get( username );
-
-	if( userInfo ) return userInfo;
-
-	// else the user is to be loaded from the database
-	const val = await root.repository.users.findOne( { _id : username } );
-
-	if( !val ) return;
-
-	userInfo = database_userInfoSkid.createFromJSON( val ).asUser;
-
-	root.create(
-		'userNexus', this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
-	);
-
-	return userInfo;
+	return this._cache.get( username );
 };
 
 
@@ -271,12 +251,9 @@ def.proto.testUserCreds =
 		userCreds
 	)
 {
-	const userInfo = await this.getByName( userCreds.name );
-
+	const userInfo = this.getByName( userCreds.name );
 	if( !userInfo ) return false;
-
 	if( userInfo.passhash !== userCreds.passhash ) return false;
-
 	return userInfo;
 };
 

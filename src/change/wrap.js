@@ -12,14 +12,14 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// change id
-		cid : { json : true, type : 'string' },
-
 		// change list
-		changeList : { json : true, type : './list' },
+		changeList : { type : './list', json : true },
+
+		// change id
+		cid : { type : 'string', json : true },
 
 		// sequence number
-		seq : { json : true, type : [ 'undefined', 'number' ] },
+		seq : { type : [ 'undefined', 'number' ], json : true },
 	};
 
 	def.json = 'change_wrap';

@@ -6,6 +6,7 @@
 
 Error.stackTraceLimit = 15;
 //Error.stackTraceLimit = Infinity;
+process.on( 'unhandledRejection', err => { throw err; } );
 
 
 /*
@@ -50,41 +51,27 @@ global.VISUAL = false;
 	tim.catalog.addRootDir( rootPath, 'plotle', timcodePath );
 }
 
+const constants = require( 'constants' );
+const util = require( 'util' );
 
 const config = require( '../config/intf' );
-
 require( '../../config' )( config.set );
-
 
 // Server checking.
 global.CHECK = config.get( 'server', 'check' );
 
-
+require( '../trace/base' ); // TODO working around cycle issues
 const log = require( './log' );
-
 const database_repository = require( '../database/repository' );
-
 const fs = require( 'fs' );
-
-const http = require( 'http' );
-
-const https = require( 'https' );
-
-const constants = require( 'constants' );
-
 const gleam_font_root = require( '../gleam/font/root' );
-
+const http = require( 'http' );
+const https = require( 'https' );
 const server_root = require( './root' );
-
 const server_inventory = require( './inventory' );
-
 const server_spaceNexus = require( './spaceNexus' );
-
 const server_upSleepGroup = require( './upSleepGroup' );
-
 const server_userNexus = require( './userNexus' );
-
-const util = require( 'util' );
 
 
 /*
@@ -115,35 +102,25 @@ const startMainServer =
 			log.log( 'starting server @ https://' + ( listen || '*' ) + '/:' + port );
 
 			const cert = ( fs.readFileSync( config.get( 'https', 'cert' ) ) ) + '';
-
 			const key = ( fs.readFileSync( config.get( 'https', 'key' ) ) ) + '';
-
 			const options =
 			{
 				secureOptions: constants.SSL_OP_NO_SSLv3 | constants.SSL_OP_NO_SSLv2,
 				cert: cert,
 				key: key
 			};
-
 			const server = https.createServer( options, handler );
-
 			const promise = util.promisify( server.listen.bind( server ) );
-
 			await promise( port, listen );
-
 			return;
 		}
 
 		case 'http' :
 		{
 			log.log( 'starting server @ http://' + ( listen || '*' ) + '/:' + port );
-
 			const server = http.createServer( handler );
-
 			const promise = util.promisify( server.listen.bind( server ) );
-
 			await promise( port, listen );
-
 			return;
 		}
 
@@ -159,36 +136,25 @@ const startRedirectServer =
 	async function( )
 {
 	const protocol = config.get( 'network', 'redirect', 'protocol' );
-
 	if( protocol === '' ) return;
-
 	if( protocol !== 'http' ) throw new Error( );
-
 	const port = config.get( 'network', 'redirect', 'port' );
-
 	const destination = config.get( 'network', 'redirect', 'destination' );
-
 	const listen = config.get( 'network', 'listen' );
-
 	log.log( 'starting redirect @ http://' + ( listen || '*' ) + '/:' + port );
 
 	const handler =
 		( request, result ) =>
 	{
 		result.writeHead(
-			307,
-			{
-				Location: destination + request.headers.host + request.url,
-			}
+			307, { Location: destination + request.headers.host + request.url }
 		);
 
 		result.end( 'go use https' );
 	};
 
 	const server = http.createServer( handler );
-
 	const promise = util.promisify( server.listen.bind( server ) );
-
 	await promise( port, listen );
 };
 
@@ -200,28 +166,27 @@ const startup =
 	async function( )
 {
 	{
-		// FIXIME have gleam_font_root use async
+		// TODO have gleam_font_root use async
 		const promise = util.promisify( gleam_font_root.load );
-
 		await promise( 'DejaVuSans-Regular' );
 	}
+
+	const repository = await database_repository.connect( );
+	const userNexus = await server_userNexus.createFromRepository( repository );
 
 	server_root.create(
 		'inventory', server_inventory.create( ),
 		'nextSleepID', 1,
-		'repository', await database_repository.connect( ),
+		'repository', repository,
 		'spaces', server_spaceNexus.create( ),
 		'upSleeps', server_upSleepGroup.create( ),
 		'nextVisitor', 1000,
-		'userNexus', server_userNexus.create( )
+		'userNexus', userNexus
 	);
 
 	await root.prepareInventory( );
-
 	await root.loadSpaces( );
-
 	await startMainServer( );
-
 	await startRedirectServer( );
 
 	log.log( 'server running' );

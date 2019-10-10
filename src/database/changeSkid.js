@@ -11,26 +11,33 @@ if( TIM )
 {
 	def.attributes =
 	{
-		// sequence number
-		_id : { type : 'number', json : true },
-
 		// change id
 		cid : { type : 'string', json : true },
+
+		// the date the change was issued
+		date : { type : 'integer', json : true },
+
+		// sequence number
+		seq : { type : 'number', json : true },
 
 		// change list
 		changeList : { type : '../change/list', json : true },
 
+		// database table
+		table : { type : 'string', json : true },
+
 		// the user who issued the change
 		user : { type : 'string', json : true },
 
-		// the date the change was issued
-		date : { type : 'integer', json : true }
+		// database id
+		_id : { type : 'string', json : true },
 	};
 
 	def.json = 'database_changeSkid';
 }
 
 const change_wrap = tim.require( '../change/wrap' );
+const ref_space = tim.require( '../ref/space' );
 
 
 /*
@@ -39,19 +46,30 @@ const change_wrap = tim.require( '../change/wrap' );
 def.static.createFromChangeWrap =
 	function(
 		changeWrap, // the change wrap to turn into a skid
-		user,       // the user that sent the changeWrap
+		spaceRef,   // the space this takes place in
+		username,   // the username that sends the changeWrap
 		seq         // if defined assign this seq to changeWrap.
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length < 3 || arguments.length > 4 ) throw new Error( );
+/**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
+/**/	if( typeof( user ) !== 'string' ) throw new Error( );
+/**/}
+
 	if( !changeWrap.changeList ) return;
+	if( seq === undefined ) seq = changeWrap.seq;
 
 	const cs =
 		self.create(
-			'_id', seq === undefined ? changeWrap.seq : seq,
+			'_id', spaceRef.dbChangesKey + ':' + seq,
 			'cid', changeWrap.cid,
 			'changeList', changeWrap.changeList,
-			'user', user,
-			'date', Date.now( )
+			'user', username,
+			'date', Date.now( ),
+			'seq', seq,
+			'table', spaceRef.dbChangesKey
 		);
 
 	tim.aheadValue( cs, 'asChangeWrap', changeWrap );

@@ -32,7 +32,6 @@ if( TIM )
 
 const change_wrapList = tim.require( '../change/wrapList' );
 const database_changeSkid = tim.require( '../database/changeSkid' );
-const database_changeSkidList = tim.require( '../database/changeSkidList' );
 const fabric_space = tim.require( '../fabric/space' );
 
 
@@ -44,35 +43,32 @@ const fabric_space = tim.require( '../fabric/space' );
 def.proto.appendChanges =
 	function(
 		changeWrapList,
-		user
+		username
 	)
 {
 /**/if( CHECK )
 /**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/	if( changeWrapList.length === 0 ) throw new Error( );
+/**/	if( typeof( username ) !== 'string' ) throw new Error( );
 /**/}
 
 	const tree = changeWrapList.changeTree( this.space );
 
-	const changeSkidList =
-		database_changeSkidList.createFromChangeWrapList( changeWrapList, user, this.seq );
-
-	// saves the changeSkid in the database
-	this._changesDB.insert(
-		JSON.parse( JSON.stringify( changeSkidList ) ).list,
-		( error ) => { if( error ) throw new Error( 'Database error' ); }
-	);
+	// saves the changees in the database
+	root.repository.sendChanges( changeWrapList, this.spaceRef, username, this.seq );
 
 	return(
 		this.create(
-			'seq', this.seq + changeSkidList.length,
+			'seq', this.seq + changeWrapList.length,
 			'space', tree,
 			'_changeWraps',
 				this._changeWraps
-				.appendList( changeSkidList.asChangeWrapList )
+				.appendList( changeWrapList )
 		)
 	);
 };
+
 
 
 /*
@@ -83,20 +79,13 @@ def.static.createSpace =
 		spaceRef
 	)
 {
-	await root.repository.spaces.insert(
-		{
-			_id : spaceRef.fullname,
-			username: spaceRef.username,
-			tag : spaceRef.tag
-		}
-	);
+	await root.repository.createSpace( spaceRef );
 
 	return(
 		self.create(
 			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
 			'seq', 1,
-			'_changesDB', await root.repository.collection( 'changes:' + spaceRef.fullname ),
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', 1
 		)
@@ -145,22 +134,14 @@ def.static.loadSpace =
 	let seq = 1;
 	let space = fabric_space.create( );
 
-	const sRows = await root.repository.spaceChangeSeqs( spaceRef.dbChangesKey );
+	const sRows = await root.repository.getSpaceChangeSeqs( spaceRef.dbChangesKey );
 
-	console.log( 'SROWS', sRows );
-
-	throw new Error( 'FIXME' );
-
-	/*
-
-	for( let o = await cursor.nextObject( ); o; o = await cursor.nextObject( ) )
+	for( let r of sRows )
 	{
+		const o = await root.repository.getChange( r.id );
 		const changeSkid = database_changeSkid.createFromJSON( o );
-
-		if( changeSkid._id !== seq ) throw new Error( 'sequence mismatch' );
-
+		if( changeSkid.seq !== seq ) throw new Error( 'sequence mismatch' );
 		seq++;
-
 		space = changeSkid.changeTree( space );
 	}
 
@@ -169,12 +150,10 @@ def.static.loadSpace =
 			'space', space,
 			'spaceRef', spaceRef,
 			'seq', seq,
-			'_changesDB', changesDB,
 			'_changeWraps', change_wrapList.create( 'list:init', [ ] ),
 			'_changesOffset', seq
 		)
 	);
-	*/
 };
 
 

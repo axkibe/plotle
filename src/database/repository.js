@@ -24,7 +24,46 @@ const nano = tim.require( 'nano' );
 
 const log = tim.require( '../server/log' );
 const config = tim.require( '../config/intf' );
+const change_wrapList = tim.require( '../change/wrapList' );
+const database_changeSkidList = tim.require( '../database/changeSkidList' );
+const database_userInfoSkid = tim.require( './userInfoSkid' );
+const ref_space = tim.require( '../ref/space' );
 
+
+/*
+| Ensures the repository schema version fits this server.
+| Returns the nano db handle.
+*/
+def.static.checkRepository =
+	async function(
+		name,      // name of the database
+		connection // nano connection
+	)
+{
+	log.log( 'checking repository schema version' );
+
+	let db;
+	try
+	{
+		db = await connection.use( name );
+	}
+	catch( e )
+	{
+		return await database_repository.initRepository( connection, dbVersion, name );
+	}
+
+	const version = await db.get( 'version' );
+
+	if( version.version !== dbVersion )
+	{
+		throw new Error(
+			'Wrong repository schema version, expected '
+			+ dbVersion + ', but got ' + version.version
+		);
+	}
+
+	return database_repository.create( '_db', db );
+};
 
 /*
 | Returns a repository object with
@@ -39,16 +78,75 @@ def.static.connect =
 	log.log( 'connecting database ' + url + ' ' + name );
 
 	const connection = await nano( url );
-	const db = await database_repository._checkRepository( name, connection );
 
-	return database_repository.create( '_db', db );
+	return await database_repository.checkRepository( name, connection );
 };
 
 
 /*
+| Establishes a space in the database.
+*/
+def.proto.establishSpace =
+	async function(
+		spaceRef
+	)
+{
+	// creates a changes view for this space
+	await this._db.insert( {
+			_id: '_design/changes:' + name,
+			views :
+			{
+				seq :
+				{
+					map :
+						'function( doc )'
+						+ ' {'
+						+   ' if( doc.table === "changes:' + spaceRef.fullname + '" )'
+						+     ' emit( doc.seq );'
+						+ ' }'
+				}
+			},
+			language : 'javascript'
+	} );
+
+	// inserts the space in the "spaces" table
+	await this._db.insert( {
+			_id : 'spaces:' + spaceRef.fullname,
+			username : spaceRef.username,
+			tag : spaceRef.tag,
+			table : 'spaces'
+	} );
+};
+
+
+/*
+| Establishes the users table.
+*/
+def.proto.establishUsersTable =
+	async function( )
+{
+	await this._db.insert( {
+		'_id': '_design/users',
+		'views' :
+		{
+			'name' :
+			{
+				'map' :
+					'function( doc )'
+					+ ' {'
+					+   ' if( doc.table === "users" )'
+					+     ' emit( doc.name );'
+					+ ' }'
+			}
+		},
+		'language' : 'javascript'
+	} );
+};
+
+/*
 | Returns all space IDs from the 'spaces/id' view.
 */
-def.proto.spaceIDs =
+def.proto.getSpaceIDs =
 	async function( )
 {
 	const r = await this._db.view( 'spaces', 'id' );
@@ -56,7 +154,7 @@ def.proto.spaceIDs =
 };
 
 
-def.proto.spaceChangeSeqs =
+def.proto.getSpaceChangeSeqs =
 	async function(
 		dbChangesKey
 	)
@@ -73,9 +171,55 @@ def.proto.spaceChangeSeqs =
 
 
 /*
+| Returns the userinfo for a username.
+*/
+def.proto.getUser =
+	async function(
+		name
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/}
+
+	return await this._db.get( 'users:' + name );
+};
+
+
+/*
+| Returns all space IDs from the 'spaces/id' view.
+*/
+def.proto.getUserNames =
+	async function( )
+{
+	const r = await this._db.view( 'users', 'name' );
+	return r.rows;
+};
+
+
+/*
 | Returns the meta data of a space with a given id.
 */
-def.proto.spaceMeta =
+def.proto.getChange =
+	async function(
+		id
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 ) throw new Error( );
+/**/	if( id.substr( 0, 8 ) !== 'changes:' ) throw new Error( );
+/**/}
+
+	return await this._db.get( id );
+};
+
+
+/*
+| Returns the meta data of a space with a given id.
+*/
+def.proto.getSpaceMeta =
 	async function(
 		id
 	)
@@ -91,81 +235,129 @@ def.proto.spaceMeta =
 
 
 /*
-| Ensures the repository schema version fits this server.
-| Returns the nano db handle.
+| Initializes a new repository.
+| FIXME rename establishRepository.
 */
-def.static._checkRepository =
+def.static.initRepository =
 	async function(
-		name,      // name of the database
-		connection // nano connection
+		connection,   // the couchDB nano connection
+		version,      // repository version
+		name,         // database name to use
+		bare          // if "bare" doesn't init default spaces
 	)
 {
-	log.log( 'checking repository schema version' );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length < 3 ) throw new Error( );
+/**/	if( arguments.length < 4 ) throw new Error( );
+/**/	if( typeof( version ) !== 'number' ) throw new Error( );
+/**/	if( bare !== undefined && bare !== 'bare' ) throw new Error( );
+/**/}
 
-	let db;
-	try{ db = await connection.use( name ); }
-	catch( e ) { return await database_repository.initRepository( connection ); }
+	await connection.db.create( name );
+	let db = await connection.db.use( name );
 
-	const version = await db.get( 'version' );
+	await db.insert( { _id : 'version', version : version } );
 
-	if( version.version !== dbVersion )
+	const repository = database_repository.create( '_db', db );
+
+	if( !bare )
 	{
-		throw new Error(
-			'Wrong repository schema version, expected '
-			+ dbVersion + ', but got ' + version.version
-		);
+		repository.establishSpace( ref_space.plotleHome );
+		repository.establishSpace( ref_space.plotleSandbox );
 	}
 
-	return db;
+	return repository;
 };
 
 
 /*
-| Initializes a new repository.
+| Saves a list of changeWraps into the database.
+|
+| Similar to sendChanges, but waits for the database answer.
 */
-def.static._initRepository =
+def.proto.saveChanges =
 	async function(
-		connection
+		changeWrapList,
+		spaceRef,
+		username,
+		seq
 	)
 {
-	throw new Error( 'XXX FIXME!' );
-	/*
-	const spaces = await connection.collection( 'spaces' );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( changeWrapList.timtype !== change_wrapList ) throw new Error( );
+/**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
+/**/	if( typeof( username ) !== 'string' ) throw new Error( );
+/**/	if( typeof( seq ) !== 'number' ) throw new Error( );
+/**/}
 
-	log.log( 'found no repository, initializing a new one' );
-
-	const initSpaces =
-		[
-			ref_space.create( 'username', 'plotle', 'tag', 'home' ),
-			ref_space.create( 'username', 'plotle', 'tag', 'sandbox' )
-		];
-
-	for( let s = 0, sl = initSpaces.length; s < sl; s++ )
-	{
-		const sr = initSpaces[ s ];
-
-		log.log( '  initializing space ' + sr.fullname );
-
-		await spaces.insert(
-			{
-				_id : sr.fullname,
-				username : sr.username,
-				tag : sr.tag
-			}
+	const changeSkidList =
+		database_changeSkidList.createFromChangeWrapList(
+			changeWrapList,
+			spaceRef,
+			username,
+			seq
 		);
-	}
 
-	log.log( '  initializing global.version' );
+	const list = JSON.parse( JSON.stringify( changeSkidList ) ).list;
 
-	const global = await connection.collection( 'global' );
+	await this._db.bulk( list );
+};
 
-	await global.insert(
-		{
-			_id : 'version',
-			version : dbVersion,
-		}
+
+/*
+| Saves a user in the database.
+*/
+def.proto.saveUser =
+	async function(
+		userInfo
+	)
+{
+	// creates a changes view for this space
+	await this._db.insert(
+		JSON.parse( JSON.stringify(
+			database_userInfoSkid.createFromUserInfo( userInfo )
+		) )
 	);
-	*/
+};
+
+
+/*
+| Sends a list of changeWraps into the database.
+|
+| This returns immediately, so for the caller this is send&pray.
+*/
+def.proto.sendChanges =
+	function(
+		changeWrapList,
+		spaceRef,
+		username,
+		seq
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 ) throw new Error( );
+/**/	if( changeWrapList.timtype !== change_wrapList ) throw new Error( );
+/**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
+/**/	if( typeof( username ) !== 'string' ) throw new Error( );
+/**/	if( typeof( seq ) !== 'number' ) throw new Error( );
+/**/}
+
+	const changeSkidList =
+		database_changeSkidList.createFromChangeWrapList(
+			changeWrapList,
+			spaceRef,
+			username,
+			seq
+		);
+
+	const list = JSON.parse( JSON.stringify( changeSkidList ) ).list;
+
+	this._db.bulk( list )
+	.catch( ( error ) => { if( error ) throw error; } );
 };
 
 

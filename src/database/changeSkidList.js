@@ -22,7 +22,7 @@ if( TIM )
 
 const change_wrapList = tim.require( '../change/wrapList' );
 const database_changeSkid = tim.require( './changeSkid' );
-
+const ref_space = tim.require( '../ref/space' );
 
 /*
 | Creates a changeSkid from a changeWrap.
@@ -30,20 +30,25 @@ const database_changeSkid = tim.require( './changeSkid' );
 def.static.createFromChangeWrapList =
 	function(
 		changeWrapList, // the change wrap list to turn into a skid list
-		user,           // the user that sent the changeWrapList
+		spaceRef,       // the space this takes place in
+		username,       // the username that sends the changeWrapList
 		seq             // if defined assign this seq as start to changeSkidList
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length < 3 || arguments.length > 4 ) throw new Error( );
+/**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
+/**/	if( typeof( username ) !== 'string' ) throw new Error( );
+/**/}
+
 	const list = [ ];
 
 	for( let cw of changeWrapList )
 	{
 		if( !cw ) continue;
-
-		const cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
-
+		const cs = database_changeSkid.createFromChangeWrap( cw, username, seq++ );
 		if( !cs ) continue;
-
 		list.push( cs );
 	}
 
@@ -58,9 +63,7 @@ def.lazy.asChangeWrapList =
 	function( )
 {
 	const list = [ ];
-
 	for( let cs of this ) list.push( cs.asChangeWrap );
-
 	return change_wrapList.create( 'list:init', list );
 };
 

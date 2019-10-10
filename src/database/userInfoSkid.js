@@ -11,17 +11,23 @@ if( TIM )
 {
 	def.attributes =
 	{
+		// the users email
+		mail : { type : 'string', defaultValue : '""', json : true },
+
 		// the username
-		_id : { type : 'string', json : true },
+		name : { type : 'string', json : true },
+
+		// true if the user checked okay with news emails
+		news : { type : [ 'boolean', 'string' ], json : true },
 
 		// password hash
 		passhash : { type : 'string', json : true },
 
-		// the users email
-		mail : { type : 'string', defaultValue : '""', json : true },
+		// database table, must be "users"
+		table : { type : 'string', defaultValue : '"users"', json : true },
 
-		// true if the user checked okay with news emails
-		news : { type : [ 'boolean', 'string' ], json : true },
+		// database id
+		_id : { type : 'string', json : true },
 	};
 
 	def.json = 'userInfoSkid';
@@ -33,22 +39,23 @@ const user_info = tim.require( '../user/info' );
 /*
 | Creates a database_userInfoSkid from a user_info.
 */
-def.static.createFromUser =
+def.static.createFromUserInfo =
 	function(
 		user
 	)
 {
-	const dus =
+	const skid =
 		database_userInfoSkid.create(
-			'_id', user.name,
-			'passhash', user.passhash,
+			'_id', 'users:' + user.name,
 			'mail', user.mail,
-			'news', user.news
+			'name', user.name,
+			'news', user.news,
+			'passhash', user.passhash
 		);
 
-	tim.aheadValue( dus, 'asUser', user );
+	tim.aheadValue( skid, 'asUser', user );
 
-	return dus;
+	return skid;
 };
 
 
@@ -57,10 +64,10 @@ def.lazy.asUser =
 {
 	return(
 		user_info.create(
-			'name', this._id,
-			'passhash', this.passhash,
 			'mail', this.mail,
-			'news', this.news
+			'name', this.name,
+			'news', this.news,
+			'passhash', this.passhash
 		)
 	);
 };

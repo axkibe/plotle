@@ -5,7 +5,8 @@
 'use strict';
 
 
-//Error.stackTraceLimit = Infinity;
+Error.stackTraceLimit = Infinity;
+process.on( 'unhandledRejection', err => { throw err; } );
 
 
 /*
@@ -49,9 +50,13 @@ global.NODE = true;
 
 const mongodb = require( 'mongodb' );
 const nano = require( 'nano' );
-const ref_space = require( '../ref/space' );
 const fs = require( 'fs' );
 const util = require( 'util' );
+
+require( '../trace/base' ); // TODO working around cycle issues
+const ref_space = require( '../ref/space' );
+const repository = require( '../database/repository' );
+const user_info = require( '../user/info' );
 
 const readFile = util.promisify( fs.readFile );
 
@@ -123,7 +128,7 @@ const connectToTarget =
 const usage =
 	function( )
 {
-	console.log( 'USAGE node : ' + module.filename + ' [dry or wet]' );
+	console.log( 'USAGE: node ' + module.filename + ' [dry or wet]' );
 };
 
 
@@ -202,39 +207,18 @@ const run =
 	if( wet )
 	{
 		const name = config.trg.name;
+
 		try{ await targetConnection.db.destroy( name ); } catch( e ) { }
-		await targetConnection.db.create( name );
-		target = await targetConnection.db.use( name );
+
+		target = await repository.initRepository( targetConnection, toVersion, name, 'bare' );
 	}
 
 	const srcUsers = await srcConnection.collection( 'users' );
 	const srcSpaces = await srcConnection.collection( 'spaces' );
 
-	console.log( '* creating target global' );
-
-	if( wet ) await target.insert( { _id : 'version', version : toVersion } );
-
 	console.log( '* converting src.users -> trg.users' );
-	{
-		const view =
-		{
-			'_id': '_design/users',
-			'views' :
-			{
-				'name' :
-				{
-					'map' :
-						'function( doc )'
-						+ ' {'
-						+   ' if( doc.table === "users" )'
-						+     ' emit( doc.name );'
-						+ ' }'
-				}
-			},
-			'language' : 'javascript'
-		};
-		if( wet ) await target.insert( view );
-	}
+
+	if( wet ) await target.establishUsersTable( );
 
 	let cursor = await srcUsers.find( );
 	for(
@@ -243,12 +227,15 @@ const run =
 		o = await cursor.nextObject( )
 	)
 	{
-		console.log( ' * ' + o._id );
-		o.name = o._id;
-		o.table = 'users';
-		o._id = 'users:' + o._id;
+		const ui =
+			user_info.create(
+				'mail', o.mail,
+				'news', o.news,
+				'name', o._id,
+				'passhash', o.passhash
+			);
 
-		if( wet ) await target.insert( o );
+		if( wet ) await target.saveUser( ui );
 	}
 
 	console.log( '* copying src.spaces -> trg.spaces' );
@@ -273,7 +260,9 @@ const run =
 			},
 			'language' : 'javascript'
 		};
-		if( wet ) await target.insert( view );
+
+		// XXX
+		if( wet ) await target._db.insert( view );
 	}
 
 	for(
@@ -282,15 +271,16 @@ const run =
 		o = await cursor.nextObject( )
 	)
 	{
-		o.table = 'spaces';
 		const name = o.username + ':' + o.tag;
+		o.table = 'spaces';
 		o._id = 'spaces:' + name;
 
-		if( wet ) await target.insert( o );
+		// XXX
+		if( wet ) await target._db.insert( o );
 
 		const view =
 		{
-			'_id': '_design/spaces:' + name,
+			'_id': '_design/changes:' + name,
 			'views' :
 			{
 				'seq' :
@@ -306,10 +296,12 @@ const run =
 			'language' : 'javascript'
 		};
 
-		if( wet ) await target.insert( view );
+		// XXX
+		if( wet ) await target._db.insert( view );
 
 		const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
-		await convertSpace( srcConnection, target, spaceRef );
+		// XXX
+		await convertSpace( srcConnection, target._db, spaceRef );
 	}
 
 	console.log( '* closing connections' );

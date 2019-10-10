@@ -416,12 +416,10 @@ def.static.conveyUpdate =
 
 			case ref_userSpaceList :
 			{
-				const userInfo = await root.userNexus.getByName( dynRef.username );
-
+				const userInfo = root.userNexus.getByName( dynRef.username );
 				if( !userInfo ) continue;
 
 				const userSpaceList = await root.userNexus.getUserSpaceList( userInfo );
-
 				const changeWraps = userSpaceList.changeWraps;
 
 				if( seq - 1 < changeWraps.length )
