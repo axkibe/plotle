@@ -23,9 +23,6 @@ if( TIM )
 		// password hash
 		passhash : { type : 'string', json : true },
 
-		// database table, must be "users"
-		table : { type : 'string', defaultValue : '"users"', json : true },
-
 		// database id
 		_id : { type : 'string', json : true },
 	};

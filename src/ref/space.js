@@ -40,7 +40,7 @@ def.staticLazy.plotleHome = ( ) =>
 | Reference to plotle sandbox space.
 */
 def.staticLazy.plotleSandbox = ( ) =>
-	ref_space.createUsernameag( 'plotle', 'sandbox' );
+	ref_space.createUsernameTag( 'plotle', 'sandbox' );
 
 
 /*

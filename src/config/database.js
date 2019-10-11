@@ -14,10 +14,13 @@ if( TIM )
 	def.attributes =
 	{
 		// url of the database
-		url : { type : 'string', defaultValue : '"http://localhost:5984"' },
+		url : { type : 'string', defaultValue : '"http://admin:PASSWORD@localhost:5984"' },
 
 		// name of the dabase
 		name : { type : 'string', defaultValue : '"plotle-22"' },
+
+		// password file for database
+		passfile : { type : 'string', defaultValue : '""' },
 	};
 }
 

@@ -20,14 +20,20 @@ if( TIM )
 	};
 }
 
+const fs = require( 'fs' );
 const nano = tim.require( 'nano' );
+const util = require( 'util' );
 
 const log = tim.require( '../server/log' );
 const config = tim.require( '../config/intf' );
+const change_wrap = tim.require( '../change/wrap' );
 const change_wrapList = tim.require( '../change/wrapList' );
+const database_changeSkid = tim.require( '../database/changeSkid' );
 const database_changeSkidList = tim.require( '../database/changeSkidList' );
 const database_userInfoSkid = tim.require( './userInfoSkid' );
 const ref_space = tim.require( '../ref/space' );
+
+const readFile = util.promisify( fs.readFile );
 
 
 /*
@@ -42,17 +48,17 @@ def.static.checkRepository =
 {
 	log.log( 'checking repository schema version' );
 
-	let db;
+	const db = await connection.use( name );
+	let version;
+
 	try
 	{
-		db = await connection.use( name );
+		version = await db.get( 'version' );
 	}
 	catch( e )
 	{
-		return await database_repository.initRepository( connection, dbVersion, name );
+		return await database_repository.establishRepository( connection, dbVersion, name );
 	}
-
-	const version = await db.get( 'version' );
 
 	if( version.version !== dbVersion )
 	{
@@ -72,14 +78,72 @@ def.static.checkRepository =
 def.static.connect =
 	async function( )
 {
-	const url = config.get( 'database', 'url' );
+	let url = config.get( 'database', 'url' );
 	const name = config.get( 'database', 'name' );
+	const passfile = config.get( 'database', 'passfile' );
 
-	log.log( 'connecting database ' + url + ' ' + name );
+	let logUrl;
 
+	if( passfile !== '' )
+	{
+		const dbadminpass = await database_repository.readPassFile( passfile );
+		if( url.indexOf( 'PASSWORD' ) < 0 )
+		{
+			throw new Error( 'passfile configured but no PASSWORD in url' );
+		}
+		logUrl = url.replace( 'PASSWORD', 'XXXXXX' );
+		url = url.replace( 'PASSWORD', dbadminpass );
+	}
+	else
+	{
+		if( url.indexOf( 'PASSWORD' ) >= 0 )
+		{
+			throw new Error( 'PASSWORD in url but no passfile configured' );
+		}
+		logUrl = url;
+	}
+
+	log.log( 'connecting database ' + logUrl + ' ' + name );
 	const connection = await nano( url );
-
 	return await database_repository.checkRepository( name, connection );
+};
+
+
+/*
+| Initializes a new repository.
+*/
+def.static.establishRepository =
+	async function(
+		connection,   // the couchDB nano connection
+		version,      // repository version
+		name,         // database name to use
+		bare          // if "bare" doesn't init default spaces
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length < 3 ) throw new Error( );
+/**/	if( arguments.length > 4 ) throw new Error( );
+/**/	if( typeof( version ) !== 'number' ) throw new Error( );
+/**/	if( bare !== undefined && bare !== 'bare' ) throw new Error( );
+/**/}
+
+	await connection.db.create( name );
+	let db = await connection.db.use( name );
+
+	await db.insert( { _id : 'version', version : version } );
+
+	const repository = database_repository.create( '_db', db );
+	await repository.establishUsersTable( );
+	await repository.establishSpacesTable( );
+
+	if( !bare )
+	{
+		await repository.establishSpace( ref_space.plotleHome );
+		await repository.establishSpace( ref_space.plotleSandbox );
+	}
+
+	return repository;
 };
 
 
@@ -91,30 +155,58 @@ def.proto.establishSpace =
 		spaceRef
 	)
 {
+	const id = 'changes:' + spaceRef.fullname;
+
 	// creates a changes view for this space
 	await this._db.insert( {
-			_id: '_design/changes:' + name,
-			views :
+		_id: '_design/changes:' + spaceRef.fullname,
+		views :
+		{
+			seq :
 			{
-				seq :
-				{
-					map :
-						'function( doc )'
-						+ ' {'
-						+   ' if( doc.table === "changes:' + spaceRef.fullname + '" )'
-						+     ' emit( doc.seq );'
-						+ ' }'
-				}
-			},
-			language : 'javascript'
+				map :
+					'function( doc )'
+					+ ' {'
+					+   ' if( doc._id.substr( 0, ' + ( id.length + 1 ) + ' ) === "' + id + ':" )'
+					+     ' emit( doc.seq );'
+					+ ' }'
+			}
+		},
+		language : 'javascript'
 	} );
 
 	// inserts the space in the "spaces" table
 	await this._db.insert( {
 			_id : 'spaces:' + spaceRef.fullname,
 			username : spaceRef.username,
-			tag : spaceRef.tag,
-			table : 'spaces'
+			tag : spaceRef.tag
+	} );
+};
+
+
+/*
+| Establishes the spaces table in the database.
+*/
+def.proto.establishSpacesTable =
+	async function(
+		spaceRef
+	)
+{
+	await this._db.insert( {
+		_id: '_design/spaces',
+		views :
+		{
+			id :
+			{
+				map :
+					'function( doc )'
+					+ ' {'
+					+   ' if( doc._id.substr( 0, 7 ) === "spaces:" )'
+					+     ' emit( doc._id );'
+					+ ' }'
+			}
+		},
+		language : 'javascript'
 	} );
 };
 
@@ -126,20 +218,20 @@ def.proto.establishUsersTable =
 	async function( )
 {
 	await this._db.insert( {
-		'_id': '_design/users',
-		'views' :
+		_id: '_design/users',
+		views :
 		{
-			'name' :
+			name :
 			{
-				'map' :
+				map :
 					'function( doc )'
 					+ ' {'
-					+   ' if( doc.table === "users" )'
+					+   ' if( doc._id.substr( 0, 6 ) === "users:" )'
 					+     ' emit( doc.name );'
 					+ ' }'
 			}
 		},
-		'language' : 'javascript'
+		language : 'javascript'
 	} );
 };
 
@@ -162,7 +254,7 @@ def.proto.getSpaceChangeSeqs =
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
-/**/	if( dbChangesKey.substr( 0, 8 ) !== 'changes:' ) throw new Error( );
+/**/	if( !dbChangesKey.startsWith( 'changes:' ) ) throw new Error( );
 /**/}
 
 	const r = await this._db.view( dbChangesKey, 'seq' );
@@ -209,7 +301,7 @@ def.proto.getChange =
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
-/**/	if( id.substr( 0, 8 ) !== 'changes:' ) throw new Error( );
+/**/	if( !id.startsWith( 'changes:' ) ) throw new Error( );
 /**/}
 
 	return await this._db.get( id );
@@ -227,7 +319,7 @@ def.proto.getSpaceMeta =
 /**/if( CHECK )
 /**/{
 /**/	if( arguments.length !== 1 ) throw new Error( );
-/**/	if( id.substr( 0, 7 ) !== 'spaces:' ) throw new Error( );
+/**/	if( !id.startsWith( 'spaces:' ) ) throw new Error( );
 /**/}
 
 	return await this._db.get( id );
@@ -235,75 +327,65 @@ def.proto.getSpaceMeta =
 
 
 /*
-| Initializes a new repository.
-| FIXME rename establishRepository.
+| Reads a password file.
 */
-def.static.initRepository =
+def.static.readPassFile =
 	async function(
-		connection,   // the couchDB nano connection
-		version,      // repository version
-		name,         // database name to use
-		bare          // if "bare" doesn't init default spaces
+		filepath
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length < 3 ) throw new Error( );
-/**/	if( arguments.length < 4 ) throw new Error( );
-/**/	if( typeof( version ) !== 'number' ) throw new Error( );
-/**/	if( bare !== undefined && bare !== 'bare' ) throw new Error( );
-/**/}
+	let pass;
 
-	await connection.db.create( name );
-	let db = await connection.db.use( name );
+	try { pass = '' + await readFile( filepath ); }
+	catch( e ) { throw new Error( 'Cannot read "' + filepath + '"' ); }
 
-	await db.insert( { _id : 'version', version : version } );
+	// removes newline if present
+	if( pass[ pass.length - 1 ] === '\n' ) pass = pass.substr( 0, pass.length - 1 );
 
-	const repository = database_repository.create( '_db', db );
-
-	if( !bare )
+	if( pass.indexOf( '\n' ) >= 0 )
 	{
-		repository.establishSpace( ref_space.plotleHome );
-		repository.establishSpace( ref_space.plotleSandbox );
+		throw new Error( 'too many lines in "' + filepath + '"' );
 	}
 
-	return repository;
+	return pass;
 };
 
 
 /*
-| Saves a list of changeWraps into the database.
+| Saves a changeWrap into the database.
 |
-| Similar to sendChanges, but waits for the database answer.
+| Similar to sendChanges, but waits for the database answer
+| And saves only one changeWrap.
 */
-def.proto.saveChanges =
+def.proto.saveChange =
 	async function(
-		changeWrapList,
+		changeWrap,
 		spaceRef,
 		username,
-		seq
+		seq,
+		date
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 4 ) throw new Error( );
-/**/	if( changeWrapList.timtype !== change_wrapList ) throw new Error( );
+/**/	if( arguments.length !== 5 ) throw new Error( );
+/**/	if( changeWrap.timtype !== change_wrap ) throw new Error( );
 /**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
 /**/	if( typeof( username ) !== 'string' ) throw new Error( );
 /**/	if( typeof( seq ) !== 'number' ) throw new Error( );
+/**/	if( typeof( date ) !== 'number' ) throw new Error( );
 /**/}
 
-	const changeSkidList =
-		database_changeSkidList.createFromChangeWrapList(
-			changeWrapList,
+	const changeSkid =
+		database_changeSkid.createFromChangeWrap(
+			changeWrap,
 			spaceRef,
 			username,
-			seq
+			seq,
+			date
 		);
 
-	const list = JSON.parse( JSON.stringify( changeSkidList ) ).list;
-
-	await this._db.bulk( list );
+	await this._db.insert( JSON.parse( JSON.stringify( changeSkid ) ) );
 };
 
 
@@ -356,7 +438,7 @@ def.proto.sendChanges =
 
 	const list = JSON.parse( JSON.stringify( changeSkidList ) ).list;
 
-	this._db.bulk( list )
+	this._db.bulk( { docs: list } )
 	.catch( ( error ) => { if( error ) throw error; } );
 };
 

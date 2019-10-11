@@ -40,6 +40,7 @@ def.static.createFromChangeWrapList =
 /**/	if( arguments.length < 3 || arguments.length > 4 ) throw new Error( );
 /**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
 /**/	if( typeof( username ) !== 'string' ) throw new Error( );
+/**/	if( typeof( seq ) !== 'number' ) throw new Error( );
 /**/}
 
 	const list = [ ];
@@ -47,7 +48,7 @@ def.static.createFromChangeWrapList =
 	for( let cw of changeWrapList )
 	{
 		if( !cw ) continue;
-		const cs = database_changeSkid.createFromChangeWrap( cw, username, seq++ );
+		const cs = database_changeSkid.createFromChangeWrap( cw, spaceRef, username, seq++ );
 		if( !cs ) continue;
 		list.push( cs );
 	}

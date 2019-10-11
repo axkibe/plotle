@@ -79,7 +79,7 @@ def.static.createSpace =
 		spaceRef
 	)
 {
-	await root.repository.createSpace( spaceRef );
+	await root.repository.establishSpace( spaceRef );
 
 	return(
 		self.create(

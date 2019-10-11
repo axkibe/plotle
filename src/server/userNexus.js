@@ -28,8 +28,6 @@ const user_infoGroup = tim.require( '../user/infoGroup' );
 
 /*
 | Adds the reference of a space being owned by an user.
-|
-| The user must be loaded in cache for this to work.
 */
 def.proto.addUserSpaceRef =
 	function(
@@ -42,7 +40,6 @@ def.proto.addUserSpaceRef =
 /**/}
 
 	const username = spaceRef.username;
-
 	let userInfo = this._cache.get( username );
 
 /**/if( CHECK )
@@ -195,13 +192,8 @@ def.proto.register =
 
 	if( userInfo.spaceList ) throw new Error( 'registered user had "spaceList" set' );
 
-	// user already registered and in cache
-	if( this._cache.get( userInfo.name ) ) return false;
-
-	const val = await root.repository.users.findOne( { _id : userInfo.name } );
-
 	// user already registered
-	if( val ) return false;
+	if( this._cache.get( userInfo.name ) ) return false;
 
 	userInfo =
 		userInfo.create(
@@ -213,15 +205,8 @@ def.proto.register =
 		this.create( '_cache', this._cache.set( userInfo.name, userInfo ) )
 	);
 
-	await root.repository.users.insert(
-		JSON.parse( JSON.stringify(
-			database_userInfoSkid.createFromUserInfo( userInfo )
-		) )
-	);
-
-	await root.createSpace(
-		ref_space.create( 'username', userInfo.name, 'tag', 'home' )
-	);
+	await root.repository.saveUser( userInfo );
+	await root.createSpace( ref_space.create( 'username', userInfo.name, 'tag', 'home' ) );
 
 	return true;
 };

@@ -487,9 +487,7 @@ def.proto.createSpace =
 
 	const spaceBox = await server_spaceBox.createSpace( spaceRef );
 
-	root.create(
-		'spaces', root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
-	);
+	root.create( 'spaces', root.spaces.create( 'group:set', spaceRef.fullname, spaceBox ) );
 
 	root.userNexus.addUserSpaceRef( spaceRef );
 

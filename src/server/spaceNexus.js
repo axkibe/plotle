@@ -29,15 +29,12 @@ def.static.testAccess =
 		switch( spaceRef.tag )
 		{
 			case 'sandbox' : return 'rw';
-
 			case 'home' : return user.name === config.get( 'admin' ) ? 'rw' : 'ro';
-
 			default : return 'no';
 		}
 	}
 
 	if( user.isVisitor ) return 'no';
-
 	if( user.name === spaceRef.username ) return 'rw';
 
 	return 'no';

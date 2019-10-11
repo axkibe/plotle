@@ -50,40 +50,13 @@ global.NODE = true;
 
 const mongodb = require( 'mongodb' );
 const nano = require( 'nano' );
-const fs = require( 'fs' );
-const util = require( 'util' );
 
 require( '../trace/base' ); // TODO working around cycle issues
+const change_list = require( '../change/list' );
+const change_wrap = require( '../change/wrap' );
 const ref_space = require( '../ref/space' );
 const repository = require( '../database/repository' );
 const user_info = require( '../user/info' );
-
-const readFile = util.promisify( fs.readFile );
-
-
-/*
-| Reads a password file.
-*/
-const readPassFile =
-	async function(
-		filepath
-	)
-{
-	let pass;
-
-	try { pass = '' + await readFile( filepath ); }
-	catch( e ) { throw new Error( 'Cannot read "' + filepath + '"' ); }
-
-	// removes newline if present
-	if( pass[ pass.length - 1 ] === '\n' ) pass = pass.substr( 0, pass.length - 1 );
-
-	if( pass.indexOf( '\n' ) >= 0 )
-	{
-		throw new Error( 'too many lines in "' + filepath + '"' );
-	}
-
-	return pass;
-};
 
 
 /*
@@ -110,7 +83,7 @@ const connectToTarget =
 
 	if( passfile )
 	{
-		let dbadminpass = await readPassFile( passfile );
+		const dbadminpass = await repository.readPassFile( passfile );
 		if( url.indexOf( 'PASSWORD' ) < 0 )
 		{
 			throw new Error( 'passfile given but no PASSWORD in url' );
@@ -157,11 +130,14 @@ const convertSpace =
 		o = await cursor.nextObject( )
 	)
 	{
-		o.seq = o._id;
-		o.table = table;
-		o._id = o.table + ':' + o._id;
+		const cl = change_list.createFromJSON( o.changeList );
+		const cw = change_wrap.create(
+			'changeList', cl,
+			'cid', o.cid,
+			'seq', o._id
+		);
 
-		if( wet ) { await target.insert( o ); }
+		if( wet ) { await target.saveChange( cw, spaceRef, o.user, cw.seq, o.date ); }
 	}
 };
 
@@ -201,16 +177,16 @@ const run =
 	console.log( '* connecting to target' );
 	const targetConnection = await connectToTarget( );
 
-	console.log( '* destroying & creating target' );
-
 	let target;
 	if( wet )
 	{
 		const name = config.trg.name;
 
+		console.log( '* destroying possible preexisting target' );
 		try{ await targetConnection.db.destroy( name ); } catch( e ) { }
 
-		target = await repository.initRepository( targetConnection, toVersion, name, 'bare' );
+		console.log( '* establishing target' );
+		target = await repository.establishRepository( targetConnection, toVersion, name, 'bare' );
 	}
 
 	const srcUsers = await srcConnection.collection( 'users' );
@@ -218,14 +194,8 @@ const run =
 
 	console.log( '* converting src.users -> trg.users' );
 
-	if( wet ) await target.establishUsersTable( );
-
 	let cursor = await srcUsers.find( );
-	for(
-		o = await cursor.nextObject( );
-		o !== null;
-		o = await cursor.nextObject( )
-	)
+	for( o = await cursor.nextObject( ); o !== null; o = await cursor.nextObject( ) )
 	{
 		const ui =
 			user_info.create(
@@ -242,29 +212,6 @@ const run =
 
 	cursor = await srcSpaces.find( { }, { sort: '_id' } );
 
-	{
-		const view =
-		{
-			'_id': '_design/spaces',
-			'views' :
-			{
-				'id' :
-				{
-					'map' :
-						'function( doc )'
-						+ ' {'
-						+   ' if( doc.table === "spaces" )'
-						+     ' emit( doc._id );'
-						+ ' }'
-				}
-			},
-			'language' : 'javascript'
-		};
-
-		// XXX
-		if( wet ) await target._db.insert( view );
-	}
-
 	for(
 		o = await cursor.nextObject( );
 		o !== null;
@@ -275,33 +222,10 @@ const run =
 		o.table = 'spaces';
 		o._id = 'spaces:' + name;
 
-		// XXX
-		if( wet ) await target._db.insert( o );
-
-		const view =
-		{
-			'_id': '_design/changes:' + name,
-			'views' :
-			{
-				'seq' :
-				{
-					'map' :
-						'function( doc )'
-						+ ' {'
-						+   ' if( doc.table === "changes:' + name + '" )'
-						+     ' emit( doc.seq );'
-						+ ' }'
-				}
-			},
-			'language' : 'javascript'
-		};
-
-		// XXX
-		if( wet ) await target._db.insert( view );
-
 		const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
-		// XXX
-		await convertSpace( srcConnection, target._db, spaceRef );
+		if( wet ) await target.establishSpace( spaceRef );
+
+		await convertSpace( srcConnection, target, spaceRef );
 	}
 
 	console.log( '* closing connections' );
@@ -310,4 +234,4 @@ const run =
 };
 
 
-run( ).catch( ( error ) => { console.error( error ); } );
+run( );

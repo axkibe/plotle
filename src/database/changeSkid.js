@@ -23,9 +23,6 @@ if( TIM )
 		// change list
 		changeList : { type : '../change/list', json : true },
 
-		// database table
-		table : { type : 'string', json : true },
-
 		// the user who issued the change
 		user : { type : 'string', json : true },
 
@@ -48,18 +45,20 @@ def.static.createFromChangeWrap =
 		changeWrap, // the change wrap to turn into a skid
 		spaceRef,   // the space this takes place in
 		username,   // the username that sends the changeWrap
-		seq         // if defined assign this seq to changeWrap.
+		seq,        // if defined assign this seq to changeWrap.
+		date        // if defined use this date
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length < 3 || arguments.length > 4 ) throw new Error( );
+/**/	if( arguments.length < 3 || arguments.length > 5 ) throw new Error( );
 /**/	if( spaceRef.timtype !== ref_space ) throw new Error( );
-/**/	if( typeof( user ) !== 'string' ) throw new Error( );
+/**/	if( typeof( username ) !== 'string' ) throw new Error( );
 /**/}
 
 	if( !changeWrap.changeList ) return;
 	if( seq === undefined ) seq = changeWrap.seq;
+	if( date === undefined ) date = Date.now( );
 
 	const cs =
 		self.create(
@@ -67,9 +66,8 @@ def.static.createFromChangeWrap =
 			'cid', changeWrap.cid,
 			'changeList', changeWrap.changeList,
 			'user', username,
-			'date', Date.now( ),
-			'seq', seq,
-			'table', spaceRef.dbChangesKey
+			'date', date,
+			'seq', seq
 		);
 
 	tim.aheadValue( cs, 'asChangeWrap', changeWrap );
