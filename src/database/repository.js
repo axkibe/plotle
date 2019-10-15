@@ -8,9 +8,6 @@
 tim.define( module, ( def, database_repository ) => {
 
 
-const dbVersion = 22;
-
-
 if( TIM )
 {
 	def.attributes =
@@ -42,11 +39,15 @@ const readFile = util.promisify( fs.readFile );
 */
 def.static.checkRepository =
 	async function(
-		name,      // name of the database
-		connection // nano connection
+		name,       // name of the database
+		connection, // nano connection
+		establish   // if true establishes a repository if check fails
 	)
 {
-	log.log( 'checking repository schema version' );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/}
 
 	const db = await connection.use( name );
 	let version;
@@ -57,14 +58,27 @@ def.static.checkRepository =
 	}
 	catch( e )
 	{
-		return await database_repository.establishRepository( connection, dbVersion, name );
+		if( establish )
+		{
+			return(
+				await database_repository.establishRepository(
+					connection,
+					database_repository.dbVersion,
+					name
+				)
+			);
+		}
+		else
+		{
+			throw e;
+		}
 	}
 
-	if( version.version !== dbVersion )
+	if( version.version !== database_repository.dbVersion )
 	{
 		throw new Error(
 			'Wrong repository schema version, expected '
-			+ dbVersion + ', but got ' + version.version
+			+ database_repository.dbVersion + ', but got ' + version.version
 		);
 	}
 
@@ -107,6 +121,12 @@ def.static.connect =
 	const connection = await nano( url );
 	return await database_repository.checkRepository( name, connection );
 };
+
+
+/*
+| Database version expected.
+*/
+def.static.dbVersion = 22;
 
 
 /*

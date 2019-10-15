@@ -1,5 +1,5 @@
 /*
-| maximum integer variable.
+| Math tools.
 */
 'use strict';
 
@@ -24,13 +24,11 @@ def.static.limit =
 /**/{
 /**/	if( min > max ) throw new Error( );
 /**/}
-
 	if( val < min ) return min;
-
 	if( val > max ) return max;
-
 	return val;
 };
+
 
 /*
 | Maximum integer variable.

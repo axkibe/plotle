@@ -8,13 +8,8 @@ Error.stackTraceLimit = Infinity;
 process.on( 'unhandledRejection', err => { throw err; } );
 
 
-const dbVersion = 22;
-const dbConfig =
-{
-	name : 'plotle-' + dbVersion,
-	url : 'http://127.0.0.1:5984',
-};
-
+// Versions of dump files created
+const dumpVersion = 1;
 global.CHECK = true;
 global.NODE = true;
 
@@ -29,14 +24,24 @@ global.NODE = true;
 	tim.catalog.addRootDir( rootPath, 'dump', timcodePath );
 }
 
+const fs = require( 'fs' );
 const nano = require( 'nano' );
+const JsonFaucet = require( '../stream/JsonFaucet' );
 
 require( '../trace/base' ); // TODO working around cycle issues
-const change_list = require( '../change/list' );
-const change_wrap = require( '../change/wrap' );
-const ref_space = require( '../ref/space' );
+//const change_list = require( '../change/list' );
+//const change_wrap = require( '../change/wrap' );
+//const ref_space = require( '../ref/space' );
 const repository = require( '../database/repository' );
-const user_info = require( '../user/info' );
+//const user_info = require( '../user/info' );
+
+
+const dbConfig =
+{
+	name : 'plotle-' + repository.dbVersion,
+	url : 'http://127.0.0.1:5984',
+};
+
 
 /*
 | Prints out usage info.
@@ -44,7 +49,7 @@ const user_info = require( '../user/info' );
 const usage =
 	function( )
 {
-	console.log( 'USAGE: node ' + module.filename + ' [FILENAME]' );
+	console.error( 'USAGE: node ' + module.filename + ' [FILENAME]' );
 };
 
 
@@ -96,18 +101,42 @@ const run =
 	if( process.argv.length !== 3 ) { usage( ); return; }
 
 	const filename = process.argv[ 2 ];
-	const connection = await nano( dbConfig.url );
-	const db = await repository.checkRepository( dbConfig.name, connection );
+//	const faucet = new JsonFaucet( { indent : '  ' } );
+	const faucet = new JsonFaucet( { indent : '__' } );
 
+	if( filename === '-' )
+	{
+		faucet.pipe( process.stdout );
+	}
+	else
+	{
+		const ws = fs.createWriteStream( filename );
+		faucet.pipe( ws );
+	}
+
+	await faucet.beginDocument( );
+	await faucet.attribute( 'dbVersion', repository.dbVersion  );
+	await faucet.attribute( 'dumpVersion', dumpVersion );
+
+	const connection = await nano( dbConfig.url );
+	const db = await repository.checkRepository( dbConfig.name, connection, false );
 
 	// users
 	{
+		await faucet.attribute( 'users' );
+		await faucet.beginArray( );
 		const rows = await db.getUserNames( );
 		for( let r of rows )
 		{
 			const o = await db.getUser( r.key );
-			console.inspect( o );
+			await faucet.beginObject( );
+			await faucet.attribute( 'name', o.name );
+			await faucet.attribute( 'news', o.news );
+			await faucet.attribute( 'mail', o.mail );
+			await faucet.attribute( 'passhash', o.passhash );
+			await faucet.endObject( );
 		}
+		await faucet.endArray( );
 	}
 
 	/*
@@ -147,7 +176,7 @@ const run =
 	console.log( '* closing connections' );
 	srcConnection.close( );
 	*/
-	console.log( 'done' );
+	await faucet.endDocument( '\n' );
 };
 
 

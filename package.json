@@ -1,7 +1,7 @@
 {
-  "name": "linkloom",
-  "version": "1.32",
-  "description": "plot your document",
+  "name": "plotle",
+  "version": "1.49",
+  "description": "plot your documents",
   "author": "Axel Kittenberger <axkibe@gmail.com",
   "license": "MIT",
   "repository": {
