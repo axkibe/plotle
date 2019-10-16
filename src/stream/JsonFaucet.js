@@ -18,8 +18,8 @@ class JsonFaucet extends Readable
 		if( !indent ) indent = false;
 		this._indent = indent;
 		// current indent level and beautiful vs. compact spacing
-		if( indent ) { this._ci = ''; this._sp = ' ' }
-		else { this._ci = undefined; this._sp = ''; }
+		if( indent ) { this._ci = ''; this._space = ' '; }
+		else { this._ci = undefined; this._space = ''; }
 		this._stack = [ ];
 	}
 
@@ -37,7 +37,7 @@ class JsonFaucet extends Readable
 	{
 		this._check( '-obj', '+obj' );
 		await this._comma( );
-		const sp = this._sp;
+		const sp = this._space;
 		await this._push( JSON.stringify( name ) + sp + ':' );
 		if( arguments.length > 1 ) await this._push( sp + JSON.stringify( obj ) );
 		else this._stack.push( 'attr' );
@@ -48,9 +48,9 @@ class JsonFaucet extends Readable
 	*/
 	async beginArray( )
 	{
-		this._check( '-arr', '+arr', 'attr' );
+		this._check( 'attr', '-arr', '+arr' );
 		await this._comma( );
-		await this._push( this._sp + '[' );
+		await this._push( '[' );
 		const st = this._stack;
 		st.push( '-arr' );
 	}
@@ -84,12 +84,12 @@ class JsonFaucet extends Readable
 	*/
 	async endArray( )
 	{
-		this._check( '-arr', '+arr' );
+		const last = this._check( '-arr', '+arr' );
+		await this._indentL( last );
 		await  this._push( ']' );
 		const st = this._stack;
 		st.pop( );
-		const last = st[ st.length - 1 ];
-		if( last === 'attr' ) st.pop( );
+		if( st[ st.length - 1 ] === 'attr' ) st.pop( );
 	}
 
 	/*
@@ -99,9 +99,10 @@ class JsonFaucet extends Readable
 		suffix // if defined puts this on the end ( like a newline )
 	)
 	{
-		this._check( '-obj', '+obj' );
+		const last = this._check( '-obj', '+obj' );
 		if( this._stack.length > 1 ) throw new Error( 'JsonFaucet: unexpected end.' );
 		this._stack = undefined;
+		await this._indentL( last );
 		await this._push( '}' );
 		if( suffix ) await this._push( suffix );
 	}
@@ -111,12 +112,12 @@ class JsonFaucet extends Readable
 	*/
 	async endObject( )
 	{
-		this._check( '-obj', '+obj' );
-		await  this._push( '}' );
+		const last = this._check( '-obj', '+obj' );
+		await this._indentL( last );
+		await this._push( '}' );
 		const st = this._stack;
 		st.pop( );
-		const last = st[ st.length - 1 ];
-		if( last === 'attr' ) st.pop( );
+		if( st[ st.length - 1 ] === 'attr' ) st.pop( );
 	}
 
 	//////////////
@@ -147,33 +148,43 @@ class JsonFaucet extends Readable
 	async _comma( )
 	{
 		const st = this._stack;
-		const l = st[ st.length - 1];
+		const l = st[ st.length - 1 ];
 		switch( l[ 0 ] )
 		{
 			case '-' :
 				st[ st.length - 1 ] = '+' + st[ st.length - 1 ].substr( 1 );
-				this._indentR( );
+				await this._indentR( );
 				break;
 			case '+' :
 				await this._push( ',' );
-				await this._indentC( );
+				await this._indentC( '\n' );
+				break;
+			default :
+				await this._push( this._space );
 				break;
 		}
 	}
 
 	// pushes current indent level onto stream.
-	async _indentC( )
+	async _indentC( prefix )
 	{
 		if( !this._indent ) return;
-		await this._push( '\n' + this._ci );
+		await this._push( prefix + this._ci );
 	}
 
 	// decreased indent level and pushes it onto stream.
-	async _indentL( )
+	async _indentL( last )
 	{
 		if( !this._indent ) return;
-		this._ci = this._ci.substr( this._indent.length );
-		await this._indentC( );
+		if( last[ 0 ] === '-' )
+		{
+			await this._push( this._space );
+		}
+		else
+		{
+			this._ci = this._ci.substr( this._indent.length );
+			await this._indentC( '\n' );
+		}
 	}
 
 	// increased indent level and pushes it onto stream.
@@ -181,7 +192,7 @@ class JsonFaucet extends Readable
 	{
 		if( !this._indent ) return;
 		this._ci += this._indent;
-		await this._indentC( );
+		await this._indentC( '\n' );
 	}
 
 	// push respecting flow control.

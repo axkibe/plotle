@@ -147,9 +147,9 @@ def.proto.getUserSpaceList =
 	if( spaceList ) return spaceList;
 
 	const arr = [ ];
-	const spaceIDs = await root.repository.getSpaceIDs( );
+	const spaceIds = await root.repository.getSpaceIds( );
 
-	for( let row of spaceIDs )
+	for( let row of spaceIds )
 	{
 		const id = row.id;
 		const p = id.split( ':' );

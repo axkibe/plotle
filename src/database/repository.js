@@ -68,10 +68,7 @@ def.static.checkRepository =
 				)
 			);
 		}
-		else
-		{
-			throw e;
-		}
+		else { throw e; }
 	}
 
 	if( version.version !== database_repository.dbVersion )
@@ -256,9 +253,9 @@ def.proto.establishUsersTable =
 };
 
 /*
-| Returns all space IDs from the 'spaces/id' view.
+| Returns all space Ids from the 'spaces/id' view.
 */
-def.proto.getSpaceIDs =
+def.proto.getSpaceIds =
 	async function( )
 {
 	const r = await this._db.view( 'spaces', 'id' );
@@ -300,7 +297,7 @@ def.proto.getUser =
 
 
 /*
-| Returns all space IDs from the 'spaces/id' view.
+| Returns all user names.
 */
 def.proto.getUserNames =
 	async function( )

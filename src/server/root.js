@@ -17,10 +17,10 @@ if( TIM )
 		// the servers inventory of resources
 		inventory : { type : './inventory' },
 
-		// ID for next upsleep
-		nextSleepID : { type : 'integer' },
+		// id for next upsleep
+		nextSleepId : { type : 'integer' },
 
-		// next visitors ID
+		// next visitors id
 		nextVisitor : { type : 'integer' },
 
 		// the database backend
@@ -86,9 +86,9 @@ def.proto.loadSpaces =
 {
 	log.log( 'loading and replaying all spaces' );
 
-	const spaceIDs = await root.repository.getSpaceIDs( );
+	const spaceIds = await root.repository.getSpaceIds( );
 
-	for( let sRow of spaceIDs )
+	for( let sRow of spaceIds )
 	{
 /**/	if( CHECK && sRow.id !== sRow.key ) throw new Error( );
 
@@ -502,19 +502,17 @@ def.proto.createSpace =
 */
 def.proto.closeSleep =
 	function(
-		sleepID
+		sleepId
 	)
 {
-	const sleep = root.upSleeps.get( sleepID );
+	const sleep = root.upSleeps.get( sleepId );
 
 	// maybe it just had expired at the same time
 	if( !sleep ) return;
 
 	clearTimeout( sleep.timer );
 
-	root.create(
-		'upSleeps', root.upSleeps.remove( sleepID )
-	);
+	root.create( 'upSleeps', root.upSleeps.remove( sleepId ) );
 };
 
 
@@ -723,7 +721,7 @@ def.proto.webAjax =
 	}
 
 	request.on(
-		'close', ( ) => { if( result.sleepID ) root.closeSleep( result.sleepID ); }
+		'close', ( ) => { if( result.sleepId ) root.closeSleep( result.sleepId ); }
 	);
 
 	request.on(

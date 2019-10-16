@@ -278,20 +278,15 @@ const serveUpdate =
 	if( asw ) return asw;
 
 	// if not an immediate answer, the request is put to sleep
-	const sleepID = '' + root.nextSleepID;
+	const sleepId = '' + root.nextSleepId;
 
-	const timer =
-		setTimeout(
-			server_requestHandler.expireUpdateSleep,
-			60000,
-			sleepID
-		);
+	const timer = setTimeout( server_requestHandler.expireUpdateSleep, 60000, sleepId );
 
 	root.create(
-		'nextSleepID', root.nextSleepID + 1,
+		'nextSleepId', root.nextSleepId + 1,
 		'upSleeps',
 			root.upSleeps.set(
-				sleepID,
+				sleepId,
 				server_upSleep.create(
 					'moments', moments,
 					'result', result,
@@ -300,7 +295,7 @@ const serveUpdate =
 			)
 	);
 
-	result.sleepID = sleepID;
+	result.sleepId = sleepId;
 };
 
 
@@ -510,17 +505,15 @@ def.static.testUpdate =
 */
 def.static.expireUpdateSleep =
 	function(
-		sleepID
+		sleepId
 	)
 {
-	const sleep = root.upSleeps.get( sleepID );
+	const sleep = root.upSleeps.get( sleepId );
 
 	// maybe it just had expired already
 	if( !sleep ) return;
 
-	root.create(
-		'upSleeps', root.upSleeps.remove( sleepID )
-	);
+	root.create( 'upSleeps', root.upSleeps.remove( sleepId ) );
 
 	const asw = reply_update.create( );
 

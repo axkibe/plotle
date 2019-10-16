@@ -10,6 +10,8 @@ process.on( 'unhandledRejection', err => { throw err; } );
 
 // Versions of dump files created
 const dumpVersion = 1;
+//const indent = '__';
+const indent = false;
 global.CHECK = true;
 global.NODE = true;
 
@@ -31,7 +33,7 @@ const JsonFaucet = require( '../stream/JsonFaucet' );
 require( '../trace/base' ); // TODO working around cycle issues
 //const change_list = require( '../change/list' );
 //const change_wrap = require( '../change/wrap' );
-//const ref_space = require( '../ref/space' );
+const ref_space = require( '../ref/space' );
 const repository = require( '../database/repository' );
 //const user_info = require( '../user/info' );
 
@@ -54,45 +56,6 @@ const usage =
 
 
 /*
-| Converts a space.
-*/
-/*
-const convertSpace =
-	async function(
-		srcConnection,
-		target,
-		spaceRef
-	)
-{
-	console.log( 'converting "' + spaceRef.fullname + '"' );
-
-	const table = 'changes:' + spaceRef.fullname;
-
-	const srcChanges = await srcConnection.collection( table );
-	const cursor =
-		( await srcChanges.find( { }, { sort : '_id' },) )
-		.batchSize( 100 );
-
-	for(
-		let o = await cursor.nextObject( );
-		o;
-		o = await cursor.nextObject( )
-	)
-	{
-		const cl = change_list.createFromJSON( o.changeList );
-		const cw = change_wrap.create(
-			'changeList', cl,
-			'cid', o.cid,
-			'seq', o._id
-		);
-
-		if( wet ) { await target.saveChange( cw, spaceRef, o.user, cw.seq, o.date ); }
-	}
-};
-*/
-
-
-/*
 | The main runner.
 */
 const run =
@@ -101,8 +64,7 @@ const run =
 	if( process.argv.length !== 3 ) { usage( ); return; }
 
 	const filename = process.argv[ 2 ];
-//	const faucet = new JsonFaucet( { indent : '  ' } );
-	const faucet = new JsonFaucet( { indent : '__' } );
+	const faucet = new JsonFaucet( { indent : indent } );
 
 	if( filename === '-' )
 	{
@@ -124,58 +86,54 @@ const run =
 	// users
 	{
 		await faucet.attribute( 'users' );
-		await faucet.beginArray( );
+		await faucet.beginObject( );
 		const rows = await db.getUserNames( );
 		for( let r of rows )
 		{
 			const o = await db.getUser( r.key );
+			await faucet.attribute( o.name );
 			await faucet.beginObject( );
-			await faucet.attribute( 'name', o.name );
 			await faucet.attribute( 'news', o.news );
 			await faucet.attribute( 'mail', o.mail );
 			await faucet.attribute( 'passhash', o.passhash );
 			await faucet.endObject( );
 		}
-		await faucet.endArray( );
+		await faucet.endObject( );
 	}
 
-	/*
-	for( o = await cursor.nextObject( ); o !== null; o = await cursor.nextObject( ) )
+	// spaces
 	{
-		const ui =
-			user_info.create(
-				'mail', o.mail,
-				'news', o.news,
-				'name', o._id,
-				'passhash', o.passhash
-			);
+		const rows = await db.getSpaceIds( );
+		await faucet.attribute( 'spaces' );
+		await faucet.beginObject( );
+		for( let r of rows )
+		{
+			const ref = ref_space.createFromDbId( r.id );
+			await faucet.attribute( ref.fullname );
+			await faucet.beginArray( );
 
-		if( wet ) await target.saveUser( ui );
+			const seqs = await db.getSpaceChangeSeqs( ref.dbChangesKey );
+			let cs = 1;
+			for( let s of seqs )
+			{
+				const key = s.key;
+				if( key !== cs ) throw new Error( );
+				const id = s.id;
+				const o = await db.getChange( id );
+				await faucet.beginObject( );
+				await faucet.attribute( 'cid', o.cid );
+				await faucet.attribute( 'date', o.date );
+				await faucet.attribute( 'user', o.user );
+				await faucet.attribute( 'changeList', o.changeList );
+				await faucet.endObject( );
+				cs++;
+			}
+
+
+			await faucet.endArray( );
+		}
+		await faucet.endObject( );
 	}
-
-	console.log( '* copying src.spaces -> trg.spaces' );
-
-	cursor = await srcSpaces.find( { }, { sort: '_id' } );
-
-	for(
-		o = await cursor.nextObject( );
-		o !== null;
-		o = await cursor.nextObject( )
-	)
-	{
-		const name = o.username + ':' + o.tag;
-		o.table = 'spaces';
-		o._id = 'spaces:' + name;
-
-		const spaceRef = ref_space.createUsernameTag( o.username, o.tag );
-		if( wet ) await target.establishSpace( spaceRef );
-
-		await convertSpace( srcConnection, target, spaceRef );
-	}
-
-	console.log( '* closing connections' );
-	srcConnection.close( );
-	*/
 	await faucet.endDocument( '\n' );
 };
 

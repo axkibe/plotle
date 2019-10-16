@@ -176,7 +176,7 @@ const startup =
 
 	server_root.create(
 		'inventory', server_inventory.create( ),
-		'nextSleepID', 1,
+		'nextSleepId', 1,
 		'repository', repository,
 		'spaces', server_spaceNexus.create( ),
 		'upSleeps', server_upSleepGroup.create( ),

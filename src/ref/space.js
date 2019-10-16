@@ -30,6 +30,26 @@ def.static.createUsernameTag = ( username, tag ) =>
 
 
 /*
+| Creates the referance from a database id.
+*/
+def.static.createFromDbId =
+	function(
+		id
+	)
+{
+	if( CHECK )
+	{
+		if( arguments.length !== 1 ) throw new Error( );
+		if( typeof( id ) !== 'string' ) throw new Error( );
+	}
+
+	const ar = id.split( ':' );
+	if( ar[ 0 ] !== 'spaces' ) throw new Error( );
+	return ref_space.createUsernameTag( ar[ 1 ], ar[ 2 ] );
+};
+
+
+/*
 | Reference to plotles home space.
 */
 def.staticLazy.plotleHome = ( ) =>
