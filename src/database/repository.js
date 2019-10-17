@@ -39,37 +39,17 @@ const readFile = util.promisify( fs.readFile );
 */
 def.static.checkRepository =
 	async function(
-		name,       // name of the database
 		connection, // nano connection
-		establish   // if true establishes a repository if check fails
+		name        // name of the database
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( arguments.length !== 3 ) throw new Error( );
+/**/	if( arguments.length !== 2 ) throw new Error( );
 /**/}
 
 	const db = await connection.use( name );
-	let version;
-
-	try
-	{
-		version = await db.get( 'version' );
-	}
-	catch( e )
-	{
-		if( establish )
-		{
-			return(
-				await database_repository.establishRepository(
-					connection,
-					database_repository.dbVersion,
-					name
-				)
-			);
-		}
-		else { throw e; }
-	}
+	const version = await db.get( 'version' );
 
 	if( version.version !== database_repository.dbVersion )
 	{
@@ -116,7 +96,20 @@ def.static.connect =
 
 	log.log( 'connecting database ' + logUrl + ' ' + name );
 	const connection = await nano( url );
-	return await database_repository.checkRepository( name, connection );
+	let db;
+	try
+	{
+		db = await database_repository.checkRepository( connection, name );
+	}
+	catch( e )
+	{
+		db =
+			database_repository.establishRepository(
+				connection, name, database_repository.dbVersion
+			);
+	}
+
+	return db;
 };
 
 
@@ -132,8 +125,8 @@ def.static.dbVersion = 22;
 def.static.establishRepository =
 	async function(
 		connection,   // the couchDB nano connection
-		version,      // repository version
 		name,         // database name to use
+		version,      // repository version
 		bare          // if "bare" doesn't init default spaces
 	)
 {

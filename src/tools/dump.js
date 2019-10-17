@@ -66,22 +66,15 @@ const run =
 	const filename = process.argv[ 2 ];
 	const faucet = new JsonFaucet( { indent : indent } );
 
-	if( filename === '-' )
-	{
-		faucet.pipe( process.stdout );
-	}
-	else
-	{
-		const ws = fs.createWriteStream( filename );
-		faucet.pipe( ws );
-	}
+	if( filename === '-' ) faucet.pipe( process.stdout );
+	else faucet.pipe( fs.createWriteStream( filename ) );
 
 	await faucet.beginDocument( );
 	await faucet.attribute( 'dbVersion', repository.dbVersion  );
 	await faucet.attribute( 'dumpVersion', dumpVersion );
 
 	const connection = await nano( dbConfig.url );
-	const db = await repository.checkRepository( dbConfig.name, connection, false );
+	const db = await repository.checkRepository( connection, dbConfig.name );
 
 	// users
 	{
