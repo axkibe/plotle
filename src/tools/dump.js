@@ -10,8 +10,8 @@ process.on( 'unhandledRejection', err => { throw err; } );
 
 // Versions of dump files created
 const dumpVersion = 1;
-//const indent = '__';
-const indent = false;
+const indent = '__';
+//const indent = false;
 global.CHECK = true;
 global.NODE = true;
 
