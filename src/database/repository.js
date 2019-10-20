@@ -33,46 +33,12 @@ const ref_space = tim.require( '../ref/space' );
 const readFile = util.promisify( fs.readFile );
 
 
-/*
-| Ensures the repository schema version fits this server.
-| Returns the nano db handle.
-*/
-def.static.checkRepository =
+def.static.buildUrl =
 	async function(
-		connection, // nano connection
-		name        // name of the database
+		url,
+		passfile
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 2 ) throw new Error( );
-/**/}
-
-	const db = await connection.use( name );
-	const version = await db.get( 'version' );
-
-	if( version.version !== database_repository.dbVersion )
-	{
-		throw new Error(
-			'Wrong repository schema version, expected '
-			+ database_repository.dbVersion + ', but got ' + version.version
-		);
-	}
-
-	return database_repository.create( '_db', db );
-};
-
-/*
-| Returns a repository object with
-| an active connection.
-*/
-def.static.connect =
-	async function( )
-{
-	let url = config.get( 'database', 'url' );
-	const name = config.get( 'database', 'name' );
-	const passfile = config.get( 'database', 'passfile' );
-
 	let logUrl;
 
 	if( passfile !== '' )
@@ -94,15 +60,76 @@ def.static.connect =
 		logUrl = url;
 	}
 
-	log.log( 'connecting database ' + logUrl + ' ' + name );
-	const connection = await nano( url );
-	let db;
+	return(
+		Object.freeze( {
+			logUrl : logUrl,
+			url : url
+		} )
+	);
+};
+
+
+
+/*
+| Ensures the repository schema version fits this server.
+| Returns the nano db handle.
+*/
+def.static.checkRepository =
+	async function(
+		connection, // nano connection
+		name        // name of the database
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/}
+
+	const db = await connection.use( name );
+	let version;
+
 	try
 	{
-		db = await database_repository.checkRepository( connection, name );
+		version = await db.get( 'version' );
 	}
 	catch( e )
 	{
+		if( e.error === 'not_found' ) return e;
+		else throw e;
+	}
+
+	if( version.version !== database_repository.dbVersion )
+	{
+		throw new Error(
+			'Wrong repository schema version, expected '
+			+ database_repository.dbVersion + ', but got ' + version.version
+		);
+	}
+
+	return database_repository.create( '_db', db );
+};
+
+/*
+| Returns a repository object with
+| an active connection.
+*/
+def.static.connect =
+	async function( )
+{
+	const name = config.get( 'database', 'name' );
+	const { url, logUrl } =
+		await database_repository.buildUrl(
+			config.get( 'database', 'url' ),
+			config.get( 'database', 'passfile' )
+		);
+
+	log.log( 'connecting database ' + logUrl + ' ' + name );
+	const connection = await nano( url );
+	let db = await database_repository.checkRepository( connection, name );
+
+	if( db.error === 'not_found' )
+	{
+		log.log( 'not found, establishing a new one!' );
 		db =
 			database_repository.establishRepository(
 				connection, name, database_repository.dbVersion

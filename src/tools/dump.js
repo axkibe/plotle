@@ -28,6 +28,7 @@ global.NODE = true;
 
 const fs = require( 'fs' );
 const nano = require( 'nano' );
+const util = require( 'util' );
 const JsonFaucet = require( '../stream/JsonFaucet' );
 
 require( '../trace/base' ); // TODO working around cycle issues
@@ -37,6 +38,7 @@ const ref_space = require( '../ref/space' );
 const repository = require( '../database/repository' );
 //const user_info = require( '../user/info' );
 
+const access = util.promisify( fs.access );
 
 const dbConfig =
 {
@@ -51,7 +53,7 @@ const dbConfig =
 const usage =
 	function( )
 {
-	console.error( 'USAGE: node ' + module.filename + ' [FILENAME]' );
+	console.error( 'USAGE: node ' + module.filename + ' [FILENAME] [--OVERWRITE]' );
 };
 
 
@@ -61,13 +63,47 @@ const usage =
 const run =
 	async function( )
 {
-	if( process.argv.length !== 3 ) { usage( ); return; }
+	let overwrite;
+	let filename;
+	{
+		const argv = process.argv;
+		if( argv.length < 3 || argv.length > 4 ) { usage( ); return; }
+		for( let a = 2; a < argv.length; a++ )
+		{
+			const arg = argv[ a ];
+			if( arg === '--OVERWRITE' )
+			{
+				if( overwrite ) { usage( ); return; }
+				overwrite = true;
+				continue;
+			}
 
-	const filename = process.argv[ 2 ];
+			if( arg[ 0 ] === '-' ) { usage( ); return; }
+			if( filename ) { usage( ); return; }
+			filename = arg;
+		}
+	}
+
 	const faucet = new JsonFaucet( { indent : indent } );
 
 	if( filename === '-' ) faucet.pipe( process.stdout );
-	else faucet.pipe( fs.createWriteStream( filename ) );
+	else
+	{
+		if( !overwrite )
+		{
+			let notthere;
+			try { await access( filename, fs.constants.F_OK ); }
+			catch( e ) { notthere = true; }
+
+			if( !notthere )
+			{
+				console.error( 'Error: File exists and no overwrite requested.' );
+				return;
+			}
+		}
+
+		faucet.pipe( fs.createWriteStream( filename ) );
+	}
 
 	await faucet.beginDocument( );
 	await faucet.attribute( 'dbVersion', repository.dbVersion  );

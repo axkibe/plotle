@@ -26,6 +26,7 @@ global.NODE = true;
 }
 
 const fs = require( 'fs' );
+const nano = require( 'nano' );
 const JsonDrain = require( '../stream/JsonDrain' );
 const await = require( '../hack/await' );
 
@@ -35,13 +36,12 @@ const repository = require( '../database/repository' );
 //const user_info = require( '../user/info' );
 
 
-/*
 const dbConfig =
 {
 	name : 'plotle-' + repository.dbVersion,
 	url : 'http://127.0.0.1:5984',
+	passfle : './dbadminpass'
 };
-*/
 
 
 /*
@@ -122,8 +122,9 @@ const loadSpaces =
 		drain
 	)
 {
-	const spaces = await drain.retrieve( );
-	console.inspect( 'SPACES', spaces );
+	//const spaces = await drain.retrieve( );
+	await drain.retrieve( );
+	//console.inspect( 'SPACES', spaces );
 };
 
 
@@ -132,7 +133,8 @@ const loadSpaces =
 */
 const passLoad =
 	async function(
-		filename
+		filename,   // filename to load from
+		db          // database to load to
 	)
 {
 	const drain = new JsonDrain( fs.createReadStream( filename ) );
@@ -185,7 +187,33 @@ const run =
 	}
 
 	await passCheckVersion( filename );
-	await passLoad( filename );
+
+	const { url, logUrl } = await repository.buildUrl( dbConfig.url, dbConfig.passfile );
+	console.log( 'Connecting to ' + logUrl );
+
+	const connection = await nano( url );
+	let db = await repository.checkRepository( connection, dbConfig.name );
+	if( db.error !== 'not_found' )
+	{
+		if( !destroy )
+		{
+			console.log( 'Repository found, would need to be destroyed for loading!' );
+			return;
+		}
+
+		console.log( '* destroying repository' );
+		await connection.db.destroy( dbConfig.name );
+		db = await repository.checkRepository( connection, dbConfig.name );
+		if( db.error !== 'not_found' )
+		{
+			console.log( 'Repository destroyed, but it is still there?!' );
+			return;
+		}
+
+		db = repository.establishRepository( connection, dbConfig.name, repository.dbVersion );
+	}
+
+	await passLoad( filename, db );
 	console.log( '* done' );
 };
 
