@@ -31,7 +31,10 @@ const JsonDrain = require( '../stream/JsonDrain' );
 const await = require( '../hack/await' );
 
 require( '../trace/base' ); // TODO working around cycle issues
-//const ref_space = require( '../ref/space' );
+const change_list = require( '../change/list' );
+const change_wrap = require( '../change/wrap' );
+const ref_space = require( '../ref/space' );
+const userInfo = require( '../user/info' );
 const repository = require( '../database/repository' );
 //const user_info = require( '../user/info' );
 
@@ -39,8 +42,8 @@ const repository = require( '../database/repository' );
 const dbConfig =
 {
 	name : 'plotle-' + repository.dbVersion,
-	url : 'http://127.0.0.1:5984',
-	passfle : './dbadminpass'
+	url : 'http://admin:PASSWORD@127.0.0.1:5984',
+	passfile : './dbadminpass'
 };
 
 
@@ -107,11 +110,28 @@ const passCheckVersion =
 */
 const loadUsers =
 	async function(
-		drain
+		drain,
+		db
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( db.timtype !== repository ) throw new Error( );
+/**/}
+
 	const users = await drain.retrieve( );
-	console.inspect( 'USERS', users );
+	for( let name in users )
+	{
+		const o = users[ name ];
+		const ui = userInfo.create(
+			'name', name,
+			'passhash', o.passhash,
+			'mail', o.mail,
+			'news', o.news
+		);
+		await db.saveUser( ui );
+	}
 };
 
 /*
@@ -119,12 +139,35 @@ const loadUsers =
 */
 const loadSpaces =
 	async function(
-		drain
+		drain,
+		db
 	)
 {
-	//const spaces = await drain.retrieve( );
-	await drain.retrieve( );
-	//console.inspect( 'SPACES', spaces );
+	for(;;)
+	{
+		const chunk = await drain.next( );
+		if( chunk.object === 'end' ) break;
+		const name = chunk.attribute;
+		const ni = name.split( ':' );
+		const rs = ref_space.createUsernameTag( ni[ 0 ], ni[ 1 ] );
+		console.log( '* loading ' + rs.fullname );
+		await db.establishSpace( rs );
+		for( let seq = 1 ;; seq++ )
+		{
+			const chunk = await drain.next( );
+			if( chunk.array === 'end' ) break;
+			const co = await drain.retrieve( );
+			const cl = change_list.createFromJSON( co.changeList );
+			const cw =
+				change_wrap.create(
+					'changeList', cl,
+					'cid', co.cid,
+					'seq', seq
+				);
+			await db.saveChange( cw, rs, co.user, seq, co.date );
+			if( seq % 100 === 0 ) console.log( seq );
+		}
+	}
 };
 
 
@@ -137,6 +180,13 @@ const passLoad =
 		db          // database to load to
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 ) throw new Error( );
+/**/	if( typeof( filename ) !== 'string' ) throw new Error( );
+/**/	if( db.timtype !== repository ) throw new Error( );
+/**/}
+
 	const drain = new JsonDrain( fs.createReadStream( filename ) );
 	{
 		const start = await drain.next( );
@@ -152,8 +202,8 @@ const passLoad =
 		{
 			case 'dbVersion' : continue;
 			case 'dumpVersion' : continue;
-			case 'users' : await loadUsers( drain ); continue;
-			case 'spaces' : await loadSpaces( drain ); continue;
+			case 'users' : await loadUsers( drain, db ); continue;
+			case 'spaces' : await loadSpaces( drain, db ); continue;
 		}
 	}
 };
@@ -209,9 +259,15 @@ const run =
 			console.log( 'Repository destroyed, but it is still there?!' );
 			return;
 		}
-
-		db = repository.establishRepository( connection, dbConfig.name, repository.dbVersion );
 	}
+
+	db =
+		await repository.establishRepository(
+			connection,
+			dbConfig.name,
+			repository.dbVersion,
+			'bare'
+		);
 
 	await passLoad( filename, db );
 	console.log( '* done' );
