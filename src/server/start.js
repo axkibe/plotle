@@ -62,6 +62,7 @@ global.CHECK = config.get( 'server', 'check' );
 
 require( '../trace/base' ); // TODO working around cycle issues
 const log = require( './log' );
+const database_pouchdb = require( '../database/pouchdb' );
 const database_repository = require( '../database/repository' );
 const fs = require( 'fs' );
 const gleam_font_root = require( '../gleam/font/root' );
@@ -170,6 +171,8 @@ const startup =
 		const promise = util.promisify( gleam_font_root.load );
 		await promise( 'DejaVuSans-Regular' );
 	}
+
+	if( config.get( 'database', 'pouchdb', 'enable' ) ) await database_pouchdb.start( );
 
 	const repository = await database_repository.connect( );
 	const userNexus = await server_userNexus.createFromRepository( repository );

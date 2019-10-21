@@ -53,7 +53,7 @@ const dbConfig =
 const usage =
 	function( )
 {
-	console.error( 'USAGE: node ' + module.filename + ' [FILENAME] [--DESTROY]' );
+	console.error( 'USAGE: node ' + module.filename + ' [FILENAME] [--destroy]' );
 };
 
 
@@ -223,7 +223,7 @@ const run =
 		for( let a = 2; a < argv.length; a++ )
 		{
 			const arg = argv[ a ];
-			if( arg === '--DESTROY' )
+			if( arg === '--destroy' )
 			{
 				if( destroy ) { usage( ); return; }
 				destroy = true;

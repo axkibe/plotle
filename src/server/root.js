@@ -339,27 +339,19 @@ def.proto.prepareInventory =
 	// prepares resources for the testpad
 	{
 		const entry = '../testpad/root';
-
 		require( entry );
-
 		const srts =
 			tim.catalog.getByRelativePath(
 				module.filename,
 				tim_path.createFromString( entry )
 			);
-
 		const walk = timspec_twig.createByDependencyWalk( srts );
-
 		for( let filename of walk.keys )
 		{
 			const ts = tim.catalog.getByRealpath( filename );
 			const filePath = ts.path.chop.filepath;
 			let resource = root.inventory.get( server_resource.filePathAlias( filePath ) );
-
-			if( resource )
-			{
-				resource = resource.create( 'inTestPad', true );
-			}
+			if( resource ) resource = resource.create( 'inTestPad', true );
 			else
 			{
 				resource =
@@ -404,28 +396,22 @@ def.proto.prepareInventory =
 			);
 
 		let mapResource;
-
 		if( config.get( 'shell', 'bundle', 'sourceMap' ) )
 		{
 			const sourceMapPath = 'source-' + hash + '.map';
-
 			mapResource =
 				server_resource.create(
 					'filePath', sourceMapPath,
 					'maxage', 'long',
 					'data', bundle.map
 				);
-
 			bundleResource = bundleResource.create( 'sourceMap', mapResource );
 		}
 
 		// registers the bundle as resource
 		let inventory = root.inventory.updateResource( bundleResource );
-
 		if( mapResource ) inventory = inventory.updateResource( mapResource );
-
 		root.create( 'inventory', inventory );
-
 		log.log( 'bundle:', bundleFilePath );
 	}
 
@@ -437,13 +423,9 @@ def.proto.prepareInventory =
 	for( let a = 0, al = inv.length; a < al; a++ )
 	{
 		const resource = inv.atRank( a );
-
 		const pp = resource.postProcessor;
-
 		if( !pp || !resource.data ) continue;
-
 		if( !server_postProcessor[ pp ] ) throw new Error( 'invalid postProcessor: ' + pp );
-
 		const r =
 			server_postProcessor[ pp ](
 				resource,
@@ -451,7 +433,6 @@ def.proto.prepareInventory =
 				opentypeHash,
 				opentypeMinHash
 			);
-
 		switch( pp )
 		{
 			case 'opentype' : opentypeHash = r; break;

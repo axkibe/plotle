@@ -17,7 +17,11 @@ if( TIM )
 		admin : { type : [ 'null', 'string' ], defaultValue : 'null' },
 
 		// database settings
-		database : { type : './database', defaultValue : 'require( "./database" ).create( )' },
+		database :
+		{
+			type : './database/main',
+			defaultValue : 'require( "./database/main" ).create( )'
+		},
 
 		// https settings
 		https : { type : './https', defaultValue : 'require( "./https" ).create( )' },

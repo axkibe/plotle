@@ -43,7 +43,7 @@ const access = util.promisify( fs.access );
 const dbConfig =
 {
 	name : 'plotle-' + repository.dbVersion,
-	url : 'http://127.0.0.1:5984',
+	url : 'http://127.0.0.1:8834',
 };
 
 
@@ -53,7 +53,7 @@ const dbConfig =
 const usage =
 	function( )
 {
-	console.error( 'USAGE: node ' + module.filename + ' [FILENAME] [--OVERWRITE]' );
+	console.error( 'USAGE: node ' + module.filename + ' [FILENAME] [--overwrite]' );
 };
 
 
@@ -71,7 +71,7 @@ const run =
 		for( let a = 2; a < argv.length; a++ )
 		{
 			const arg = argv[ a ];
-			if( arg === '--OVERWRITE' )
+			if( arg === '--overwrite' )
 			{
 				if( overwrite ) { usage( ); return; }
 				overwrite = true;
