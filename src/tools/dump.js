@@ -26,10 +26,12 @@ global.NODE = true;
 	tim.catalog.addRootDir( rootPath, 'dump', timcodePath );
 }
 
+const config = require( '../config/intf' );
 const fs = require( 'fs' );
 const nano = require( 'nano' );
 const util = require( 'util' );
 const JsonFaucet = require( '../stream/JsonFaucet' );
+const database_pouchdb = require( '../database/pouchdb' );
 
 require( '../trace/base' ); // TODO working around cycle issues
 //const change_list = require( '../change/list' );
@@ -39,13 +41,6 @@ const repository = require( '../database/repository' );
 //const user_info = require( '../user/info' );
 
 const access = util.promisify( fs.access );
-
-const dbConfig =
-{
-	name : 'plotle-' + repository.dbVersion,
-	url : 'http://127.0.0.1:8834',
-};
-
 
 /*
 | Prints out usage info.
@@ -65,6 +60,7 @@ const run =
 {
 	let overwrite;
 	let filename;
+	require( '../../config' )( config.set );
 	{
 		const argv = process.argv;
 		if( argv.length < 3 || argv.length > 4 ) { usage( ); return; }
@@ -84,8 +80,10 @@ const run =
 		}
 	}
 
-	const faucet = new JsonFaucet( { indent : indent } );
+	let pouchdb;
+	if( config.get( 'database', 'pouchdb', 'enable' ) ) pouchdb = await database_pouchdb.start( );
 
+	const faucet = new JsonFaucet( { indent : indent } );
 	if( filename === '-' ) faucet.pipe( process.stdout );
 	else
 	{
@@ -98,6 +96,7 @@ const run =
 			if( !notthere )
 			{
 				console.error( 'Error: File exists and no overwrite requested.' );
+				if( pouchdb ) pouchdb.shutdown( );
 				return;
 			}
 		}
@@ -109,8 +108,10 @@ const run =
 	await faucet.attribute( 'dbVersion', repository.dbVersion  );
 	await faucet.attribute( 'dumpVersion', dumpVersion );
 
-	const connection = await nano( dbConfig.url );
-	const db = await repository.checkRepository( connection, dbConfig.name );
+	const url = config.get( 'database', 'url' );
+	const name = config.get( 'database', 'name' );
+	const connection = await nano( url );
+	const db = await repository.checkRepository( connection, name );
 
 	// users
 	{
@@ -164,6 +165,8 @@ const run =
 		await faucet.endObject( );
 	}
 	await faucet.endDocument( '\n' );
+
+	if( pouchdb ) pouchdb.shutdown( );
 };
 
 

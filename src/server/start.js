@@ -35,19 +35,11 @@ global.VISUAL = false;
 // Registers with tim.js
 {
 	require( 'tim.js' );
-
 	const ending = 'src/server/start.js';
-
 	const filename = module.filename;
-
-	// if this filename is not bootstrap.js something is seriously amiss.
 	if( !filename.endsWith( ending ) ) throw new Error( );
-
 	const rootPath = filename.substr( 0, filename.length - ending.length );
-
-	// timcode path is one level up
 	const timcodePath = rootPath.substr( 0, rootPath.lastIndexOf( '/' ) ) + '/timcode/';
-
 	tim.catalog.addRootDir( rootPath, 'plotle', timcodePath );
 }
 

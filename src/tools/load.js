@@ -13,6 +13,9 @@ const dumpVersion = 1;
 global.CHECK = true;
 global.NODE = true;
 
+//const wait =
+//	( time ) => new Promise( ( resolve ) => { setTimeout( ( ) => resolve( ), time ); } );
+
 
 // registers with tim.js
 {
@@ -28,23 +31,15 @@ global.NODE = true;
 const fs = require( 'fs' );
 const nano = require( 'nano' );
 const JsonDrain = require( '../stream/JsonDrain' );
-const await = require( '../hack/await' );
 
 require( '../trace/base' ); // TODO working around cycle issues
+const config = require( '../config/intf' );
 const change_list = require( '../change/list' );
 const change_wrap = require( '../change/wrap' );
 const ref_space = require( '../ref/space' );
 const userInfo = require( '../user/info' );
 const repository = require( '../database/repository' );
-//const user_info = require( '../user/info' );
-
-
-const dbConfig =
-{
-	name : 'plotle-' + repository.dbVersion,
-	url : 'http://admin:PASSWORD@127.0.0.1:5984',
-	passfile : './dbadminpass'
-};
+const database_pouchdb = require( '../database/pouchdb' );
 
 
 /*
@@ -217,6 +212,7 @@ const run =
 {
 	let destroy;
 	let filename;
+	require( '../../config' )( config.set );
 	{
 		const argv = process.argv;
 		if( argv.length < 3 || argv.length > 4 ) { usage( ); return; }
@@ -236,27 +232,36 @@ const run =
 		}
 	}
 
-	await passCheckVersion( filename );
+	let pouchdb;
+	if( config.get( 'database', 'pouchdb', 'enable' ) ) pouchdb = await database_pouchdb.start( );
 
-	const { url, logUrl } = await repository.buildUrl( dbConfig.url, dbConfig.passfile );
-	console.log( 'Connecting to ' + logUrl );
+	await passCheckVersion( filename );
+	let url = config.get( 'database', 'url' );
+	const dbName = config.get( 'database', 'name' );
+	const passfile = config.get( 'database', 'passfile' );
+
+	const builtUrl = await repository.buildUrl( url, passfile );
+	url = builtUrl.url;
+	console.log( 'Connecting to ' + builtUrl.logUrl );
 
 	const connection = await nano( url );
-	let db = await repository.checkRepository( connection, dbConfig.name );
+	let db = await repository.checkRepository( connection, dbName );
 	if( db.error !== 'not_found' )
 	{
 		if( !destroy )
 		{
 			console.log( 'Repository found, would need to be destroyed for loading!' );
+			if( pouchdb ) pouchdb.shutdown( );
 			return;
 		}
 
 		console.log( '* destroying repository' );
-		await connection.db.destroy( dbConfig.name );
-		db = await repository.checkRepository( connection, dbConfig.name );
+		await connection.db.destroy( dbName );
+		db = await repository.checkRepository( connection, dbName );
 		if( db.error !== 'not_found' )
 		{
 			console.log( 'Repository destroyed, but it is still there?!' );
+			if( pouchdb ) pouchdb.shutdown( );
 			return;
 		}
 	}
@@ -264,14 +269,14 @@ const run =
 	db =
 		await repository.establishRepository(
 			connection,
-			dbConfig.name,
+			dbName,
 			repository.dbVersion,
 			'bare'
 		);
 
 	await passLoad( filename, db );
+	if( pouchdb ) pouchdb.shutdown( );
 	console.log( '* done' );
 };
 
 run( );
-await.defaults( );

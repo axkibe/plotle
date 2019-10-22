@@ -5,10 +5,22 @@
 'use strict';
 
 
-tim.define( module, ( def ) => {
+tim.define( module, ( def, database_pouchdb ) => {
 
-def.abstract = true;
 
+if( TIM )
+{
+	def.attributes =
+	{
+		// the express app
+		_app : { type : 'function' },
+
+		// the express server (returned by listen)
+		_server : { type : 'protean' },
+	};
+}
+
+const killable = tim.require( 'killable' );
 const pouchdb = tim.require( 'pouchdb' );
 const express = tim.require( 'express' );
 const expressPouchDB = tim.require( 'express-pouchdb' );
@@ -16,8 +28,12 @@ const expressPouchDB = tim.require( 'express-pouchdb' );
 const config = tim.require( '../config/intf' );
 const log = tim.require( '../server/log' );
 
+
+/*
+| Starts a pouchdb server.
+*/
 def.static.start =
-	async function( )
+	function( )
 {
 	log.log( 'starting pouchdb server' );
 	const app = express( );
@@ -27,9 +43,22 @@ def.static.start =
 	log.log( '  host: ' + host );
 	log.log( '  dir: ' + dir );
 	log.log( '  port: ' + port );
-	app.listen( port, host );
+	const server = app.listen( port, host );
+	killable( server );
 	const db = pouchdb.defaults( { prefix: dir } );
 	app.use( '/', expressPouchDB( db ) );
+	return database_pouchdb.create( '_app', app, '_server', server );
+};
+
+
+/*
+| Shuts down a pouchdb server.
+*/
+def.proto.shutdown =
+	function( )
+{
+	log.log( 'shutting down pouchdb server' );
+	this._server.kill( );
 };
 
 

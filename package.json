@@ -12,6 +12,7 @@
     "canvas": "^2.4.1",
     "express": "^4.17.1",
     "express-pouchdb": "^4.2.0",
+    "killable": "^1.0.1",
     "nano": "^8.1.0",
     "npm-check-updates": "^2.15.0",
     "opentype.js": "^0.11.0",
