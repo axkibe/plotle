@@ -311,7 +311,7 @@ def.proto.scrollMarkIntoView = ( ) => undefined;
 /*
 | The item's shape.
 */
-def.lazy.shape = function( ){ return this.zone.funnel( -1 ); };
+def.lazy.shape = function( ){ return this.zone; };
 
 
 } );

@@ -23,6 +23,7 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
+const angle = tim.require( '../../gleam/angle/root' );
 const gleam_border = tim.require( '../../gleam/border' );
 const gleam_color = tim.require( '../../gleam/color' );
 const gleam_facet = tim.require( '../../gleam/facet' );
@@ -47,13 +48,13 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			gleam_shape_start.createP( ap ), // A
-			gleam_shape_line.createP( ap.add(  11,  10 ) ), // B
-			gleam_shape_line.createP( ap.add(   6,  11 ) ), // C
-			gleam_shape_line.createP( ap.add(   9,  17 ) ), // D
-			gleam_shape_line.createP( ap.add(   7,  18 ) ), // E
-			gleam_shape_line.createP( ap.add(   4,  12 ) ), // F
-			gleam_shape_line.createP( ap.add(   0,  15 ) ), // G
+			gleam_shape_start.createPFun( ap,                angle.nw ), // A
+			gleam_shape_line.createPFun( ap.add(  11,  10 ), angle.se ), // B
+			gleam_shape_line.createPFun( ap.add(   6,  11 ), angle.se ), // C
+			gleam_shape_line.createPFun( ap.add(   9,  17 ), angle.se ), // D
+			gleam_shape_line.createPFun( ap.add(   7,  18 ), angle.sw ), // E
+			gleam_shape_line.createPFun( ap.add(   4,  12 ), angle.s  ), // F
+			gleam_shape_line.createPFun( ap.add(   0,  15 ), angle.sw ), // G
 			gleam_shape_line.close
 		],
 		'pc', gleam_point.zero

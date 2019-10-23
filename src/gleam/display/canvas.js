@@ -280,7 +280,7 @@ def.proto.within =
 		default : throw new Error( );
 	}
 
-	return this._cx.isPointInPath( this._round( p.x ), this._round( p.y ) );
+	return this._cx.isPointInPath( this._pixel( p.x ), this._pixel( p.y ) );
 };
 
 
@@ -295,12 +295,11 @@ def.lazy.render =
 	if( this.background )
 	{
 		this._cx.fillStyle = this.background;
-
-		this._cx.fillRect( 0, 0, this._round( size.width ), this._round( size.height ) );
+		this._cx.fillRect( 0, 0, this._pixel( size.width ), this._pixel( size.height ) );
 	}
 	else
 	{
-		this._cx.clearRect( 0, 0, this._round( size.width ), this._round( size.height ) );
+		this._cx.clearRect( 0, 0, this._pixel( size.width ), this._pixel( size.height ) );
 	}
 
 	this._renderGlint( this.glint, gleam_point.zero );
@@ -321,11 +320,8 @@ def.proto._border =
 	)
 {
 	const cx = this._cx;
-
 	cx.beginPath( );
-
 	this._sketch( shape.funnel( border.distance ), offset, 0.5 );
-
 	cx.strokeStyle = this._colorStyle( border.color, shape, offset );
 	cx.lineWidth = border.width;
 	cx.stroke( );
@@ -374,8 +370,8 @@ def.proto._check =
 /**/		if( Math.abs( parseFloat( canvas.style.width ) - width ) > 0.1 ) throw new Error( );
 /**/	}
 /**/
-/**/	if( canvas.height !== this._round( height ) ) throw new Error( );
-/**/	if( canvas.width !== this._round( width ) ) throw new Error( );
+/**/	if( canvas.height !== this._pixel( height ) ) throw new Error( );
+/**/	if( canvas.width !== this._pixel( width ) ) throw new Error( );
 /**/}
 };
 
@@ -406,10 +402,10 @@ def.proto._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					this._round( shape.pos.x + offset.x ),
-					this._round( shape.pos.y + offset.y ),
-					this._round( shape.pos.x + shape.width / 10 + offset.x ),
-					this._round( shape.pos.y + shape.width + offset.y )
+					this._pixel( shape.pos.x + offset.x ),
+					this._pixel( shape.pos.y + offset.y ),
+					this._pixel( shape.pos.x + shape.width / 10 + offset.x ),
+					this._pixel( shape.pos.y + shape.width + offset.y )
 				);
 
 			break;
@@ -424,20 +420,18 @@ def.proto._colorStyle =
 /**/		{
 /**/			// gradient misses gradient[PC|R0|R1]
 /**/			if( pc.timtype !== gleam_point ) throw new Error( );
-/**/
 /**/			if( typeof( r0 ) !== 'number' ) throw new Error( );
-/**/
 /**/			if( typeof( r1 ) !== 'number' ) throw new Error( );
 /**/		}
 
 			grad =
 				this._cx.createRadialGradient(
-					this._round( pc.x + offset.x ),
-					this._round( pc.y + offset.y ),
-					this._round( r0 ),
-					this._round( pc.x + offset.x ),
-					this._round( pc.y + offset.y ),
-					this._round( r1 )
+					this._pixel( pc.x + offset.x ),
+					this._pixel( pc.y + offset.y ),
+					this._pixel( r0 ),
+					this._pixel( pc.x + offset.x ),
+					this._pixel( pc.y + offset.y ),
+					this._pixel( r1 )
 				);
 
 			break;
@@ -469,18 +463,6 @@ def.proto._fill  =
 	this._sketch( shape, offset, 0 );
 	cx.fillStyle = this._colorStyle( fill, shape, offset );
 	cx.fill( );
-};
-
-
-/*
-| Fixes a value by device pixel ratio.
-*/
-def.proto._noround =
-	function(
-		v
-	)
-{
-	return v * this.devicePixelRatio;
 };
 
 
@@ -555,8 +537,8 @@ def.proto._renderMask =
 
 	const cx = this._cx;
 
-	const h = this._round( this.size.height );
-	const w = this._round( this.size.width );
+	const h = this._pixel( this.size.height );
+	const w = this._pixel( this.size.width );
 
 	cx.save( );
 
@@ -627,8 +609,8 @@ def.proto._renderText =
 	if( rotate === undefined )
 	{
 		glint.token.draw(
-			this._round( p.x + offset.x ),
-			this._round( p.y + offset.y ),
+			this._pixel( p.x + offset.x ),
+			this._pixel( p.y + offset.y ),
 			glint.align,
 			glint.base,
 			this._cx
@@ -656,8 +638,8 @@ def.proto._renderText =
 	const y = p.y + offset.y;
 
 	glint.token.draw(
-		this._round( ( x * t1 + y * t2 ) / det ),
-		this._round( ( y * t1 - x * t2 ) / det ),
+		this._pixel( ( x * t1 + y * t2 ) / det ),
+		this._pixel( ( y * t1 - x * t2 ) / det ),
 		glint.align,
 		glint.base,
 		this._cx
@@ -697,7 +679,7 @@ def.proto._renderZoomGrid =
 	const light = 224;
 	const heavy = 160;
 
-	let weight = this._round( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
+	let weight = this._pixel( ( light - heavy ) * ( 2 - 2 * grid ) ) + heavy;
 
 	let xw0 = false;
 	let yw0 = false;
@@ -724,7 +706,7 @@ def.proto._renderZoomGrid =
 			if( xw || yw ) cx.fillStyle = cLight;
 			else cx.fillStyle = cHeavy;
 
-			cx.fillRect( this._round( x ), this._round( y ), 2, 2 );
+			cx.fillRect( this._pixel( x ), this._pixel( y ), 2, 2 );
 		}
 	}
 };
@@ -765,11 +747,11 @@ def.proto._renderWindow =
 
 	if( rh * rw > config.glintCacheLimit )
 	{
-		const x2 = this._round( x + rw );
-		const y2 = this._round( y + rh );
+		const x2 = this._pixel( x + rw );
+		const y2 = this._pixel( y + rh );
 
-		x = this._round( x );
-		y = this._round( y );
+		x = this._pixel( x );
+		y = this._pixel( y );
 
 		cx.save( );
 
@@ -801,22 +783,25 @@ def.proto._renderWindow =
 
 		cx.drawImage(
 			cd.canvas,
-			this._round( x + pane.offset.x ),
-			this._round( y + pane.offset.y )
+			this._pixel( x + pane.offset.x ),
+			this._pixel( y + pane.offset.y )
 		);
 	}
 };
 
 
 /*
-| Rounds a value (respecting device pixel ratio)
+| Moves a value onto pixel grid.
+| Ronds the value and respects the device pixel ratio)
 */
-def.proto._round =
+def.proto._pixel =
 	function(
-		v
+		v,      // the value to round
+		noround // do not do rounding
 	)
 {
-	return Math.round( v * this.devicePixelRatio );
+	if( !noround ) return Math.round( v * this.devicePixelRatio );
+	return v * this.devicePixelRatio;
 };
 
 
@@ -843,13 +828,13 @@ def.proto._sketchLine =
 	const p2 = line.p2;
 
 	cx.moveTo(
-		this._round( p1.x + ox ) + shift,
-		this._round( p1.y + oy ) + shift
+		this._pixel( p1.x + ox ) + shift,
+		this._pixel( p1.y + oy ) + shift
 	);
 
 	cx.lineTo(
-		this._round( p2.x + ox ) + shift,
-		this._round( p2.y + oy ) + shift
+		this._pixel( p2.x + ox ) + shift,
+		this._pixel( p2.y + oy ) + shift
 	);
 };
 
@@ -874,10 +859,10 @@ def.proto._sketchRect =
 
 	const cx = this._cx;
 	const pos = rect.pos;
-	const wx = this._round( pos.x + offset.x ) + shift;
-	const ny = this._round( pos.y + offset.y ) + shift;
-	const ex = this._round( pos.x + rect.width + offset.x ) + shift;
-	const sy = this._round( pos.y + rect.height + offset.y ) + shift;
+	const wx = this._pixel( pos.x + offset.x ) + shift;
+	const ny = this._pixel( pos.y + offset.y ) + shift;
+	const ex = this._pixel( pos.x + rect.width + offset.x ) + shift;
+	const sy = this._pixel( pos.y + rect.height + offset.y ) + shift;
 
 	cx.moveTo( wx, ny );
 	cx.lineTo( ex, ny );
@@ -989,19 +974,8 @@ def.proto._sketchGenericShape =
 	// start point x/y
 	let psx, psy;
 
-	if( shape.nogrid )
-	{
-		psx = this._noround( p.x + ox );
-		psy = this._noround( p.y + oy );
-	}
-	else
-	{
-		psx = this._round( p.x + ox );
-		psy = this._round( p.y + oy );
-	}
-
-	psx += shift;
-	psy += shift;
+	psx = this._pixel( p.x + ox, shape.nogrid ) + shift;
+	psy = this._pixel( p.y + oy, shape.nogrid ) + shift;
 
 	const al = shape.length;
 
@@ -1051,19 +1025,8 @@ def.proto._sketchGenericShape =
 		}
 		else
 		{
-			if( shape.nogrid )
-			{
-				pnx = this._noround( p.x + ox );
-				pny = this._noround( p.y + oy );
-			}
-			else
-			{
-				pnx = this._round( p.x + ox );
-				pny = this._round( p.y + oy );
-			}
-
-			pnx += shift;
-			pny += shift;
+			pnx = this._pixel( p.x + ox, shape.nogrid ) + shift;
+			pny = this._pixel( p.y + oy, shape.nogrid ) + shift;
 		}
 
 		switch( section.timtype )
@@ -1110,7 +1073,6 @@ def.proto._sketchGenericShape =
 						pny
 					);
 				}
-
 				break;
 			}
 

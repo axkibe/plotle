@@ -93,11 +93,8 @@ def.proto.baseScaleXY =
 	if( scaleX === 1 && scaleY === 1 ) return this.add( ax, ay );
 
 	const x = this.x;
-
 	const y = this.y;
-
 	const bx = pBase.x;
-
 	const by = pBase.y;
 
 	if( x === bx && y === by ) return this.add( ax, ay );
@@ -112,37 +109,9 @@ def.proto.baseScaleXY =
 
 
 /*
-| Returns a border bordering this point.
-|
-| See gleam_shape.border for further explanation.
-| XXX remove
-*/
-def.proto.border =
-	function(
-		pc,  // center point to border relatively to
-		d    // distance to border
-	)
-{
-	const x = this.x;
-	const y = this.y;
-	const cx = pc.x;
-	const cy = pc.y;
-
-	return(
-		gleam_point.createXY(
-			x + ( x > cx ? d : ( x < cx ? -d : 0 ) ),
-			y + ( y > cy ? d : ( y < cy ? -d : 0 ) )
-		)
-	);
-};
-
-
-/*
 | Shortcut to create a point by x/y values.
 */
-def.static.createXY =
-	( x, y ) =>
-	gleam_point.create( 'x', x, 'y', y );
+def.static.createXY = ( x, y ) => gleam_point.create( 'x', x, 'y', y );
 
 
 /*
@@ -207,9 +176,7 @@ def.lazy.negate =
 	function( )
 {
 	const p = gleam_point.createXY( -this.x, -this.y );
-
 	tim.aheadValue( p, 'negate', this );
-
 	return p;
 };
 

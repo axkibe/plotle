@@ -48,7 +48,7 @@ def.static.buildUrl =
 		{
 			throw new Error( 'passfile configured but no PASSWORD in url' );
 		}
-		logUrl = url.replace( 'PASSWORD', 'XXXXXX' );
+		logUrl = url.replace( 'PASSWORD', '######' );
 		url = url.replace( 'PASSWORD', dbadminpass );
 	}
 	else

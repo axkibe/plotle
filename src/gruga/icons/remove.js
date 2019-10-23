@@ -1,13 +1,13 @@
 /*
 | The "remove" icon.
 |
-| NW**B   D**E
+|  A**B   D**E
 |  P***   ***F
 |    ***C***
 |     O***G
 |    ***K***
 |  N***   ***H
-|  M**L   J**SE
+|  M**L   J**I
 |
 */
 'use strict';
@@ -18,6 +18,7 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
+const angle = tim.require( '../../gleam/angle/root' );
 const gleam_border = tim.require( '../../gleam/border' );
 const gleam_color = tim.require( '../../gleam/color' );
 const gleam_facet = tim.require( '../../gleam/facet' );
@@ -41,19 +42,13 @@ def.staticLazy.shape =
 	function( )
 {
 	const pc = gleam_point.zero;
-
 	const pnw = pc.add( -6, -6 );
-
 	const pse = pc.add(  6,  6 );
-
 	const pne = pc.add( pse.x, pnw.y );
-
 	const psw = pc.add( pnw.x, pse.y );
-
 	// arm with and height
 	const aw = 2;
 	const ah = 2;
-
 	// center point width/height
 	const cw = 2;
 	const ch = 2;
@@ -61,23 +56,23 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			gleam_shape_start.createP( pnw ),                // A
-			gleam_shape_line.createP( pnw.add(  aw,   0 ) ), // B
-			gleam_shape_line.createP( pc.add(    0, -ch ) ), // C
-			gleam_shape_line.createP( pne.add( -aw,   0 ) ), // D
-			gleam_shape_line.createP( pne ),                 // E
-			gleam_shape_line.createP( pne.add(   0,  ah ) ), // F
-			gleam_shape_line.createP( pc.add(   cw,   0 ) ), // G
-			gleam_shape_line.createP( pse.add(   0, -ah ) ), // H
-			gleam_shape_line.createP( pse ),                 // I
-			gleam_shape_line.createP( pse.add( -aw,   0 ) ), // J
-			gleam_shape_line.createP( pc.add(    0,  ch ) ), // K
-			gleam_shape_line.createP( psw.add(  aw,   0 ) ), // L
-			gleam_shape_line.createP( psw ),                 // M
-			gleam_shape_line.createP( psw.add(   0, -ah ) ), // N
-			gleam_shape_line.createP( pc.add(  -cw,   0 ) ), // O
-			gleam_shape_line.createP( pnw.add(   0,  ah ) ), // P
-			gleam_shape_line.close                           // A
+			gleam_shape_start.createPFun( pnw,                angle.nw ), // A
+			gleam_shape_line.createPFun( pnw.add(  aw,   0 ), angle.ne ), // B
+			gleam_shape_line.createPFun( pc.add(    0, -ch ), angle.n  ), // C
+			gleam_shape_line.createPFun( pne.add( -aw,   0 ), angle.nw ), // D
+			gleam_shape_line.createPFun( pne,                 angle.ne ), // E
+			gleam_shape_line.createPFun( pne.add(   0,  ah ), angle.se ), // F
+			gleam_shape_line.createPFun( pc.add(   cw,   0 ), angle.e  ), // G
+			gleam_shape_line.createPFun( pse.add(   0, -ah ), angle.ne ), // H
+			gleam_shape_line.createPFun( pse,                 angle.se ), // I
+			gleam_shape_line.createPFun( pse.add( -aw,   0 ), angle.sw ), // J
+			gleam_shape_line.createPFun( pc.add(    0,  ch ), angle.s  ), // K
+			gleam_shape_line.createPFun( psw.add(  aw,   0 ), angle.se ), // L
+			gleam_shape_line.createPFun( psw,                 angle.sw ), // M
+			gleam_shape_line.createPFun( psw.add(   0, -ah ), angle.nw ), // N
+			gleam_shape_line.createPFun( pc.add(  -cw,   0 ), angle.w  ), // O
+			gleam_shape_line.createPFun( pnw.add(   0,  ah ), angle.sw ), // P
+			gleam_shape_line.close                                        // A
 		],
 		'pc', pc
 	) );

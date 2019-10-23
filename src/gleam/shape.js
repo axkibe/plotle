@@ -39,7 +39,6 @@ const pi2 = 2 * pi;
 /*
 | Splits funnel dirs below this angle
 */
-//const SPLIT_ANGLE = 0.55;
 const SPLIT_ANGLE = 0.01;
 
 /*
@@ -63,28 +62,17 @@ def.lazyFunc.funnel =
 	if( d === 0 ) return this;
 
 	const a = [ ];
-	const pc = this.pc;
-
 	for( let section of this )
 	{
 		const p = section.p;
 		if( p === 'close' )
 		{
 /**/		if( CHECK && section.funnelDir ) throw new Error( );
-
 			a.push( section );
 			continue;
 		}
 
-		const funnelDir = section.funnelDir;
-		if( !funnelDir )
-		{
-			// FIXME remove
-			a.push( section.create( 'p', p.border( pc, d ) ) );
-			continue;
-		}
-
-		a.push( section.create( 'p', funnelDir.funnelPoint( p, d ) ) );
+		a.push( section.create( 'p', section.funnelDir.funnelPoint( p, d ) ) );
 	}
 
 	const r = this.create( 'list:init', a );
@@ -139,7 +127,6 @@ def.lazy.addFunnelDirs =
 
 		list.push( cur.create( 'funnelDir', dir ) );
 	}
-
 	list.push( this.last );
 
 	return this.create( 'list:init', list );
@@ -178,15 +165,8 @@ def.proto.getProjection =
 
 		if( first ) { first = false; continue; }
 
-		if( section.p === 'close' )
-		{
-			pn = pstart;
-			pstart = undefined;
-		}
-		else
-		{
-			pn = section.p;
-		}
+		if( section.p === 'close' ) { pn = pstart; pstart = undefined; }
+		else { pn = section.p; }
 
 		const pi = section.getProjection( p, pn, pp, pc );
 

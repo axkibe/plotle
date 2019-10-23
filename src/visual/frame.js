@@ -353,7 +353,6 @@ def.lazy._outerZone =
 	function( )
 {
 	const fw = gruga_frame.width;
-
 	const tZone = this._tZone;
 
 	return(

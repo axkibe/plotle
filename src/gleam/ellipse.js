@@ -96,7 +96,6 @@ def.adjust.gradientR1 =
 	)
 {
 	if( gradientR1 !== undefined ) return gradientR1;
-
 	return Math.max( this.width, this.height );
 };
 

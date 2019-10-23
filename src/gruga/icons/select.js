@@ -25,6 +25,7 @@ tim.define( module, ( def ) => {
 
 def.abstract = true;
 
+const angle = tim.require( '../../gleam/angle/root' );
 const gleam_border = tim.require( '../../gleam/border' );
 const gleam_borderList = tim.require( '../../gleam/borderList' );
 const gleam_color = tim.require( '../../gleam/color' );
@@ -58,17 +59,10 @@ def.staticLazy.shape =
 {
 	const pc = gleam_point.zero;
 
-	// half dash line
-	const hd = 2;
-
-	// half size
-	const hs = 8;
-
-	// corner size
-	const cs = 3;
-
-	// corner extension
-	const ce = 4;
+	const hd = 2; // half dash line
+	const hs = 8; // half size
+	const cs = 3; // corner size
+	const ce = 4; // corner extension
 
 	const pn = pc.add( 0, -hs );
 	const pe = pc.add( hs, 0 );
@@ -85,29 +79,29 @@ def.staticLazy.shape =
 	return( gleam_shape.create(
 		'list:init',
 		[
-			start.create( 'p', pnw.add(   0 ,  ce ) ),
-			line.create(  'p', pnw.add(   0,   cs ) ),
-			round.create( 'p', pnw.add(  cs ,  0  ) ),
-			line.create(  'p', pnw.add(  ce,   0  ) ),
-			line.create(  'p', pn.add(  -hd ,  0  ), 'fly', true ),
-			line.create(  'p', pn.add(   hd ,  0  ) ),
-			line.create(  'p', pne.add( -ce ,  0  ), 'fly', true ),
-			line.create(  'p', pne.add( -cs ,  0  ) ),
-			round.create( 'p', pne.add(   0 ,  cs ) ),
-			line.create(  'p', pne.add(   0 ,  ce ) ),
-			line.create(  'p', pe.add(    0 , -hd ), 'fly', true ),
-			line.create(  'p', pe.add(    0 ,  hd ) ),
-			line.create(  'p', pse.add(   0 , -ce ), 'fly', true ),
-			line.create(  'p', pse.add(   0 , -cs ) ),
-			round.create( 'p', pse.add( -cs ,  0  ) ),
-			line.create(  'p', pse.add( -ce ,  0  ) ),
-			line.create(  'p', ps.add(   hd ,  0  ), 'fly', true ),
-			line.create(  'p', ps.add(  -hd ,  0  ) ),
-			line.create(  'p', psw.add(  ce ,  0  ), 'fly', true ),
-			line.create(  'p', psw.add(  cs ,  0  ) ),
-			round.create( 'p', psw.add(   0 , -cs ) ),
-			line.create(  'p', pw.add(    0 ,  hd ), 'fly', true ),
-			line.create(  'p', pw.add(    0 , -hd ) ),
+			start.createPFun(   pnw.add(   0 ,  ce ), angle.w ),
+			line.createPFun(    pnw.add(   0,   cs ), angle.w ),
+			round.createPFun(   pnw.add(  cs ,  0  ), angle.n ),
+			line.createPFun(    pnw.add(  ce,   0  ), angle.n ),
+			line.createPFlyFun( pn.add(  -hd ,  0  ), angle.n ),
+			line.createPFun(    pn.add(   hd ,  0  ), angle.n ),
+			line.createPFlyFun( pne.add( -ce ,  0  ), angle.n ),
+			line.createPFun(    pne.add( -cs ,  0  ), angle.n ),
+			round.createPFun(   pne.add(   0 ,  cs ), angle.e ),
+			line.createPFun(    pne.add(   0 ,  ce ), angle.e ),
+			line.createPFlyFun( pe.add(    0 , -hd ), angle.e ),
+			line.createPFun(    pe.add(    0 ,  hd ), angle.e ),
+			line.createPFlyFun( pse.add(   0 , -ce ), angle.e ),
+			line.createPFun(    pse.add(   0 , -cs ), angle.e ),
+			round.createPFun(   pse.add( -cs ,  0  ), angle.s ),
+			line.createPFun(    pse.add( -ce ,  0  ), angle.s ),
+			line.createPFlyFun( ps.add(   hd ,  0  ), angle.s ),
+			line.createPFun(    ps.add(  -hd ,  0  ), angle.s ),
+			line.createPFlyFun( psw.add(  ce ,  0  ), angle.s ),
+			line.createPFun(    psw.add(  cs ,  0  ), angle.s ),
+			round.createPFun(   psw.add(   0 , -cs ), angle.w ),
+			line.createPFlyFun( pw.add(    0 ,  hd ), angle.w ),
+			line.createPFun(    pw.add(    0 , -hd ), angle.w ),
 			line.closeFly
 		],
 		'pc', pc
