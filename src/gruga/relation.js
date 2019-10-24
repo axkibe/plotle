@@ -18,6 +18,7 @@ const gleam_point = tim.require( '../gleam/point' );
 
 /*
 | Default relation arrows facet.
+| FIXME remove
 */
 def.staticLazy.facet = ( ) =>
 	gleam_facet.create(
@@ -39,7 +40,6 @@ def.staticLazy.facet = ( ) =>
 
 /*
 | Offset for creation.
-|
 | FUTURE calculate dynamically
 */
 def.staticLazy.spawnOffset = ( ) =>
@@ -49,6 +49,7 @@ def.staticLazy.spawnOffset = ( ) =>
 
 /*
 | Size of the arrow.
+| FIXME remove
 */
 def.static.arrowSize = 12;
 

@@ -63,20 +63,17 @@ def.proto.ancillary =
 	)
 {
 	let j1 = this.j1;
-
 	let j2 = this.j2;
 
 	if( j1 && j1.timtype === trace_item )
 	{
 		j1 = space.get( j1.key );
-
 		if( j1 ) j1 = j1.shape;
 	}
 
 	if( j2 && j2.timtype === trace_item )
 	{
 		j2 = space.get( j2.key );
-
 		if( j2 ) j2 = j2.shape;
 	}
 
@@ -93,42 +90,55 @@ def.proto.ancillary =
 		);
 	}
 
-	if( j1.timtype !== gleam_point || j2.timtype !== gleam_point )
+	return this.ancillaryByJPS( j1, j2 );
+};
+
+
+/*
+| The changes needed for secondary data to adapt to primary.
+*/
+def.proto.ancillaryByJPS =
+	function(
+		jps1,  // joint1: point or shape
+		jps2,  // joint2: point or shape
+	)
+{
+	if( jps1.timtype !== gleam_point || jps2.timtype !== gleam_point )
 	{
-		const line = gleam_line.createConnection( j1, j2 );
-
-		j1 = line.p1;
-
-		j2 = line.p2;
+		// FIXME try assign object notation
+		const line = gleam_line.createConnection( jps1, jps2 );
+		jps1 = line.p1;
+		jps2 = line.p2;
 	}
 
 	let ancillary;
 
 /**/if( CHECK )
 /**/{
-		if( j1.timtype !== gleam_point || j2.timtype !== gleam_point ) throw new Error( );
+		if( jps1.timtype !== gleam_point ) throw new Error( );
+		if( jps2.timtype !== gleam_point ) throw new Error( );
 /**/}
 
-	if( !j1.equals( this.jp1 ) )
+	if( !jps1.equals( this.jp1 ) )
 	{
 		const ch =
 			change_set.create(
 				'trace', this.trace.appendJP1.chopRoot,
 				'prev', this.jp1,
-				'val', j1
+				'val', jps1
 			);
 
 		if( !ancillary ) ancillary = change_list.createWithElements( ch );
 		else ancillary = ancillary.append( ch );
 	}
 
-	if( !j2.equals( this.jp2 ) )
+	if( !jps2.equals( this.jp2 ) )
 	{
 		const ch =
 			change_set.create(
 				'trace', this.trace.appendJP2.chopRoot,
 				'prev', this.jp2,
-				'val', j2
+				'val', jps2
 			);
 
 		if( !ancillary ) ancillary = change_list.createWithElements( ch );
@@ -142,11 +152,7 @@ def.proto.ancillary =
 /*
 | The attention center.
 */
-def.lazy.attentionCenter =
-	function( )
-{
-	return this.zone.pc.y;
-};
+def.lazy.attentionCenter = function( ) { return this.zone.pc.y; };
 
 
 /*
@@ -158,8 +164,7 @@ def.proto.click =
 		shift,   // true if shift key was held down
 		ctrl     // true if ctrl or meta key was held down
 	)
-{
-};
+{ };
 
 
 /*
@@ -243,8 +248,8 @@ def.lazy.shape =
 	return(
 		gleam_arrow.create(
 			'joint1', this.jp1,
-			'end1', this.js1,
 			'joint2', this.jp2,
+			'end1', this.js1,
 			'end2', this.js2,
 			'arrowSize', gruga_stroke.arrowSize
 		).shape

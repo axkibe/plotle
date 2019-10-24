@@ -114,6 +114,16 @@ def.static.createPosSize =
 		'height', size.height
 	);
 
+/*
+| Shortcut to create a rect by specifying position and size.
+*/
+def.static.createPosWidthHeight =
+	( pos, width, height ) =>
+	gleam_rect.create(
+		'pos', pos,
+		'width', width,
+		'height', height
+	);
 
 /*
 | Point in the center.

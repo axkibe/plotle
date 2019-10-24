@@ -37,7 +37,6 @@ if( TIM )
 }
 
 
-const action_createRelation = tim.require( '../action/createRelation' );
 const action_dragItems = tim.require( '../action/dragItems' );
 const action_none = tim.require( '../action/none' );
 const gleam_point = tim.require( '../gleam/point' );
@@ -92,29 +91,6 @@ def.static.concernsMark =
 	if( !mark || !trace ) return;
 
 	if( mark.encompasses( trace ) ) return mark;
-};
-
-
-/*
-| A createRelation action stops.
-*/
-def.proto.createRelationStop =
-	function(
-		p
-	)
-{
-	const action = this.action;
-
-/**/if( CHECK )
-/**/{
-/**/	if( action.timtype !== action_createRelation ) throw new Error( );
-/**/}
-
-	if( !this.tZone.within( p ) ) return false;
-
-	root.spawnRelation( root.space.get( action.fromItemPath.get( -1 ) ), this );
-
-	return true;
 };
 
 

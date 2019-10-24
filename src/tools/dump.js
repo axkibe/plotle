@@ -108,8 +108,11 @@ const run =
 	await faucet.attribute( 'dbVersion', repository.dbVersion  );
 	await faucet.attribute( 'dumpVersion', dumpVersion );
 
-	const url = config.get( 'database', 'url' );
+	let url = config.get( 'database', 'url' );
 	const name = config.get( 'database', 'name' );
+	const passfile = config.get( 'database', 'passfile' );
+	const builtUrl = await repository.buildUrl( url, passfile );
+	url = builtUrl.url;
 	const connection = await nano( url );
 	const db = await repository.checkRepository( connection, name );
 

@@ -104,24 +104,17 @@ const animation_transform = tim.require( '../animation/transform' );
 const action_createGeneric = tim.require( '../action/createGeneric' );
 const action_none = tim.require( '../action/none' );
 const action_select = tim.require( '../action/select' );
-const change_grow = tim.require( '../change/grow' );
 const change_join = tim.require( '../change/join' );
 const change_list = tim.require( '../change/list' );
 const change_remove = tim.require( '../change/remove' );
 const change_wrap = tim.require( '../change/wrap' );
 const discs_root = tim.require( '../discs/root' );
-const fabric_doc = tim.require( '../fabric/doc' );
-const fabric_para = tim.require( '../fabric/para' );
-const fabric_relation = tim.require( '../fabric/relation' );
 const fabric_space = tim.require( '../fabric/space' );
 const forms_root = tim.require( '../forms/root' );
 const gleam_glint_list = tim.require( '../gleam/glint/list' );
-const gleam_line = tim.require( '../gleam/line' );
 const gleam_point = tim.require( '../gleam/point' );
-const gleam_rect = tim.require( '../gleam/rect' );
 const gleam_transform = tim.require( '../gleam/transform' );
 const gruga_controls = tim.require( '../gruga/controls' );
-const gruga_relation = tim.require( '../gruga/relation' );
 const mark_caret = tim.require( '../mark/caret' );
 const mark_range = tim.require( '../mark/range' );
 const math = tim.require( '../math/root' );
@@ -131,7 +124,6 @@ const ref_space = tim.require( '../ref/space' );
 const reply_auth = tim.require( '../reply/auth' );
 const reply_error = tim.require( '../reply/error' );
 const result_hover = tim.require( '../result/hover' );
-const session_uid = tim.require( '../session/uid' );
 const shell_doTracker = tim.require( './doTracker' );
 const show_create = tim.require( '../show/create' );
 const show_form = tim.require( '../show/form' );
@@ -139,7 +131,6 @@ const show_normal = tim.require( '../show/normal' );
 const show_zoom = tim.require( '../show/zoom' );
 const trace_discs = tim.require( '../trace/discs' );
 const trace_forms = tim.require( '../trace/forms' );
-const trace_root = tim.require( '../trace/root' );
 const trace_space = tim.require( '../trace/space' );
 const user_creds = tim.require( '../user/creds' );
 
@@ -1476,65 +1467,6 @@ def.proto.showHome =
 		'show', root._actionSpace ? show_normal.singleton : show_form.loading
 	);
 };
-
-/*
-| Creates a new relation by specifing its relates.
-*/
-def.proto.spawnRelation =
-	function(
-		item1,
-		item2
-	)
-{
-	const line = gleam_line.createConnection( item1.shape, item2.shape );
-
-	const pos = line.pc.sub( gruga_relation.spawnOffset );
-
-	const key = session_uid.newUid( );
-
-	const trace = trace_root.singleton.appendSpace.appendItem( key );
-
-	const val =
-		fabric_relation.create(
-			'zone',
-				gleam_rect.create(
-					'pos', pos,
-					'width', 0,
-					'height', 0
-				),
-			'doc',
-				fabric_doc.create(
-					'twig:add', '1',
-					fabric_para.create( 'text', 'relates to' )
-				),
-			'fontsize', 20,
-			'item1key', item1.trace.key,
-			'item2key', item2.trace.key,
-			'trace', trace
-		);
-
-	let change =
-		change_list.create(
-			'list:append',
-			change_grow.create( 'val', val, 'trace', trace.chopRoot, 'rank', 0 )
-		);
-
-	change = change.appendList( val.ancillary( root.space ) );
-
-	root.alter(
-		'change', change,
-		'mark',
-			mark_caret.create(
-				'offset',
-					trace
-					.appendDoc
-					.appendPara( '1' )
-					.appendText
-					.appendOffset( 0 )
-			)
-	);
-};
-
 
 /*
 | User is pressing a special key.

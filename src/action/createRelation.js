@@ -36,8 +36,20 @@ if( TIM )
 
 
 const action_none = tim.require( './none' );
+const change_list = tim.require( '../change/list' );
+const change_grow = tim.require( '../change/grow' );
+const fabric_doc = tim.require( '../fabric/doc' );
+const fabric_label = tim.require( '../fabric/label' );
+const fabric_para = tim.require( '../fabric/para' );
+const fabric_stroke = tim.require( '../fabric/stroke' );
 const fabric_space = tim.require( '../fabric/space' );
+const gleam_line = tim.require( '../gleam/line' );
+const gleam_rect = tim.require( '../gleam/rect' );
+const gruga_relation = tim.require( '../gruga/relation' );
+const mark_caret = tim.require( '../mark/caret' );
 const result_hover = tim.require( '../result/hover' );
+const session_uid = tim.require( '../session/uid' );
+const trace_root = tim.require( '../trace/root' );
 
 
 /*
@@ -49,7 +61,6 @@ def.proto.affectsItem =
 	)
 {
 	const trace = item.trace;
-
 	return trace.equals( this.fromItemTrace ) || trace.equals( this.toItemTrace );
 };
 
@@ -92,7 +103,6 @@ def.proto.dragMove =
 		if( item.tZone.within( p ) )
 		{
 			root.alter( 'action', this.create( 'toItemTrace', item.trace ) );
-
 			return;
 		}
 	}
@@ -124,7 +134,6 @@ def.proto.dragStart =
 	for( let item of screen )
 	{
 		if( !item.pointWithin( p ) ) continue;
-
 		root.alter(
 			'action',
 				this.create(
@@ -133,7 +142,6 @@ def.proto.dragStart =
 					'toPoint', p
 				)
 		);
-
 		return;
 	}
 
@@ -146,22 +154,6 @@ def.proto.dragStart =
 			)
 	);
 };
-
-
-/*
-| A createRelation action stops.
-*/
-def.proto.createRelationStop =
-	function(
-		p
-	)
-{
-	if( !this.tZone.within( p ) ) return false;
-
-
-	return true;
-};
-
 
 
 /*
@@ -179,29 +171,23 @@ def.proto.dragStop =
 	{
 		case 'hadSelect' :
 
-			if( this.toItemTrace )
-			{
-				root.spawnRelation(
-					screen.get( this.fromItemTrace.key ),
-					screen.get( this.toItemTrace.key )
-				);
-			}
-
+			if( this.toItemTrace ) this._spawnRelation( screen );
 			root.alter(
 				'action',
 				shift
 				? action_createRelation.create( 'relationState', 'start' )
 				: action_none.singleton
 			);
-
 			return;
 
-		case 'start' : root.alter( 'action', action_none.singleton ); return;
+		case 'start' :
+
+			root.alter( 'action', action_none.singleton );
+			return;
 
 		case 'pan' :
 
 			root.alter( 'action', this.create( 'relationState', 'start' ) );
-
 			return;
 
 		default : throw new Error( );
@@ -239,24 +225,90 @@ def.proto.pointingHover =
 		for( let a = 0, al = screen.length; a < al; a++ )
 		{
 			const item = screen.atRank( a );
-
 			if( item.pointWithin( p ) )
 			{
 				root.alter( 'action', this.create( 'fromItemTrace', item.trace ) );
-
 				return result_hover.cursorDefault;
 			}
 		}
 
 		root.alter( 'action', this.create( 'fromItemTrace', undefined ) );
-
 		return result_hover.cursorDefault;
 	}
 
 	// otherwise forwards the pointingHover to the screen like action_none
-
 	return screen.pointingHover( p, shift, ctrl );
 };
+
+
+/*
+| Creates a new relation by specifing its relates.
+*/
+def.proto._spawnRelation =
+	function(
+		screen
+	)
+{
+	const item1 = screen.get( this.fromItemTrace.key );
+	const item2 = screen.get( this.toItemTrace.key );
+
+	const line = gleam_line.createConnection( item1.shape, item2.shape );
+	const pos = line.pc.sub( gruga_relation.spawnOffset );
+
+	const traceSpace = trace_root.singleton.appendSpace;
+	const traceLabel = traceSpace.appendItem( session_uid.newUid( ) );
+	const traceLine = traceSpace.appendItem( session_uid.newUid( ) );
+	const traceArrow = traceSpace.appendItem( session_uid.newUid( ) );
+
+	const valLabel =
+		fabric_label.create(
+			'zone', gleam_rect.createPosWidthHeight( pos, 0, 0 ),
+			'doc',
+				fabric_doc.create(
+					'twig:add', '1',
+					fabric_para.create( 'text', 'relates to' )
+				),
+			'fontsize', 20,
+			'trace', traceLabel
+		);
+
+	const valLine =
+		fabric_stroke.create(
+			'j1', item1.trace,
+			'j2', traceLabel,
+			'js1', 'none',
+			'js2', 'none',
+			'trace', traceLine
+		);
+
+	const valArrow =
+		fabric_stroke.create(
+			'j1', traceLabel,
+			'j2', item2.trace,
+			'js1', 'none',
+			'js2', 'arrow',
+			'trace', traceArrow
+		);
+
+	let change =
+		change_list.createWithElements(
+			change_grow.create( 'val', valLabel, 'trace', traceLabel.chopRoot, 'rank', 0 ),
+			change_grow.create( 'val', valLine, 'trace', traceLine.chopRoot, 'rank', 0 ),
+			change_grow.create( 'val', valArrow, 'trace', traceArrow.chopRoot, 'rank', 0 ),
+		)
+		.appendList( valLine.ancillaryByJPS( item1.shape, valLabel.shape ) )
+		.appendList( valArrow.ancillaryByJPS( valLabel.shape, item2.shape ) );
+
+	root.alter(
+		'change', change,
+		'mark',
+			mark_caret.create(
+				'offset', traceLabel.appendDoc.appendPara( '1' ).appendText.appendOffset( 0 )
+			)
+	);
+};
+
+
 
 
 } );
