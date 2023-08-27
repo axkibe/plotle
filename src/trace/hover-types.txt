@@ -1,4 +1,0 @@
-# possible of hover results
-./field
-./item
-./widget

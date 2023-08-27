@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-while true; do
-	echo "-------------START--------------" | tee log
-	authbind node src/server/start.js | tee log || true;
-done

@@ -1,5 +1,0 @@
-# possible sections of a shape
-
-./line
-./round
-./start

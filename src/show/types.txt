@@ -1,6 +1,0 @@
-# All show types
-
-./create
-./form
-./normal
-./zoom
